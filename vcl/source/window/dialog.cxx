@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:19:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ static void ImplMouseAutoPos( Dialog* pDialog )
 
 void Dialog::ImplInitData()
 {
-    mbDialog            = TRUE;
+    mpWindowImpl->mbDialog            = TRUE;
 
     mpDialogParent      = NULL;
     mpResult            = NULL;
@@ -359,13 +359,13 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
     // Now, all Dialogs are per default system windows !!!
     if ( pParent && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE) )
     {
-        if ( !pParent->mpFrameWindow->IsVisible() )
+        if ( !pParent->mpWindowImpl->mpFrameWindow->IsVisible() )
             pParent = NULL;
         else
         {
-            if ( pParent->mpFrameWindow->IsDialog() )
+            if ( pParent->mpWindowImpl->mpFrameWindow->IsDialog() )
             {
-                Size aOutSize = pParent->mpFrameWindow->GetOutputSizePixel();
+                Size aOutSize = pParent->mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
                 if ( (aOutSize.Width() < 210) ||(aOutSize.Height() < 160) )
                     nStyle |= WB_SYSTEMWINDOW;
             }
@@ -374,7 +374,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 */
 
     if ( !pParent || (nStyle & WB_SYSTEMWINDOW) ||
-         (pParent->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
+         (pParent->mpWindowImpl->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
          (nSysWinMode & SYSTEMWINDOW_MODE_DIALOG) )
     {
         // create window with a small border ?
@@ -382,28 +382,28 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
         {
             ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_FRAME );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
-            pBorderWin->mpClientWindow = this;
-            pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
-            mpBorderWindow  = pBorderWin;
-            mpRealParent    = pParent;
+            pBorderWin->mpWindowImpl->mpClientWindow = this;
+            pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+            mpWindowImpl->mpBorderWindow  = pBorderWin;
+            mpWindowImpl->mpRealParent    = pParent;
         }
         else
         {
-            mbFrame         = TRUE;
-            mbOverlapWin    = TRUE;
+            mpWindowImpl->mbFrame         = TRUE;
+            mpWindowImpl->mbOverlapWin    = TRUE;
             SystemWindow::ImplInit( pParent, nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) | WB_CLOSEABLE, NULL );
             // Now set all style bits
-            mnStyle = nStyle;
+            mpWindowImpl->mnStyle = nStyle;
         }
     }
     else
     {
         ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER );
         SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
-        pBorderWin->mpClientWindow = this;
-        pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
-        mpBorderWindow  = pBorderWin;
-        mpRealParent    = pParent;
+        pBorderWin->mpWindowImpl->mpClientWindow = this;
+        pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+        mpWindowImpl->mpBorderWindow  = pBorderWin;
+        mpWindowImpl->mpRealParent    = pParent;
     }
 
     SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
@@ -431,8 +431,8 @@ void Dialog::ImplCenterDialog()
     Size        aDeskSize = aDeskRect.GetSize();
     Size        aWinSize = GetSizePixel();
     Window *pWindow = this;
-    while ( pWindow->mpBorderWindow )
-        pWindow = pWindow->mpBorderWindow;
+    while ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow = pWindow->mpWindowImpl->mpBorderWindow;
     Point       aWinPos( ((aDeskSize.Width() - aWinSize.Width()) / 2) + aDeskPos.X(),
                          ((aDeskSize.Height() - aWinSize.Height()) / 2) + aDeskPos.Y() );
 
@@ -536,7 +536,7 @@ void Dialog::StateChanged( StateChangedType nType )
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
-        //if ( IsDefaultPos() && !mbFrame )
+        //if ( IsDefaultPos() && !mpWindowImpl->mbFrame )
         //    ImplCenterDialog();
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
@@ -583,7 +583,7 @@ BOOL Dialog::Close()
         return FALSE;
     ImplRemoveDel( &aDelData );
 
-    if ( mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
+    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() && !IsInExecute() )
         return FALSE;
 
     mbInClose = TRUE;
@@ -803,7 +803,7 @@ void Dialog::SetModalInputMode( BOOL bModal )
         if ( pParent )
         {
             // #103716# dialogs should always be modal to the whole frame window
-            mpDialogParent = pParent->mpFrameWindow;
+            mpDialogParent = pParent->mpWindowImpl->mpFrameWindow;
 
             // #115933# disable the whole frame hierarchie, useful if our parent
             // is a modeless dialog
@@ -812,7 +812,7 @@ void Dialog::SetModalInputMode( BOOL bModal )
             {
                 pFrame->EnableInput( FALSE, TRUE, TRUE, this );
                 if( pFrame->GetParent() )
-                    pFrame = pFrame->GetParent()->mpFrameWindow;
+                    pFrame = pFrame->GetParent()->mpWindowImpl->mpFrameWindow;
                 else
                     pFrame = NULL;
             }
@@ -833,7 +833,7 @@ void Dialog::SetModalInputMode( BOOL bModal )
             {
                 pFrame->EnableInput( TRUE, TRUE, TRUE, this );
                 if( pFrame->GetParent() )
-                    pFrame = pFrame->GetParent()->mpFrameWindow;
+                    pFrame = pFrame->GetParent()->mpWindowImpl->mpFrameWindow;
                 else
                     pFrame = NULL;
             }
@@ -859,12 +859,12 @@ void Dialog::SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs )
     if ( bSubModalDialogs )
     {
         Window* pOverlap = ImplGetFirstOverlapWindow();
-        pOverlap = pOverlap->mpFirstOverlap;
+        pOverlap = pOverlap->mpWindowImpl->mpFirstOverlap;
         while ( pOverlap )
         {
             if ( pOverlap->IsDialog() )
                 ((Dialog*)pOverlap)->SetModalInputMode( bModal, TRUE );
-            pOverlap = pOverlap->mpNext;
+            pOverlap = pOverlap->mpWindowImpl->mpNext;
         }
     }
 
@@ -885,7 +885,7 @@ void Dialog::GrabFocusToFirstControl()
     {
         // Wenn schon ein Child-Fenster mal den Focus hatte,
         // dann dieses bevorzugen
-        pFocusControl = ImplGetFirstOverlapWindow()->mpLastFocusWindow;
+        pFocusControl = ImplGetFirstOverlapWindow()->mpWindowImpl->mpLastFocusWindow;
         // Control aus der Dialog-Steuerung suchen
         if ( pFocusControl )
             pFocusControl = ImplFindDlgCtrlWindow( pFocusControl );
