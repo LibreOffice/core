@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:30:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,9 @@ enum SwDocumentSettingsPropertyHandles
     // OD 2004-03-17 #i11860#
     HANDLE_USE_FORMER_OBJECT_POSITIONING,
     // FME 2004-04-22 #108724#, #i13832#, #i24135#
-    HANDLE_USE_FORMER_TEXT_WRAPPING
+    HANDLE_USE_FORMER_TEXT_WRAPPING,
+    // #i20158#: OASIS file format
+    HANDLE_CHANGES_PASSWORD
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -220,6 +222,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("UseFormerObjectPositioning"), HANDLE_USE_FORMER_OBJECT_POSITIONING,   CPPUTYPE_BOOLEAN,           0,   0},
         // FME 2004-04-22 #108724#, #i13832#, #i24135#
         { RTL_CONSTASCII_STRINGPARAM("UseFormerTextWrapping"),      HANDLE_USE_FORMER_TEXT_WRAPPING,        CPPUTYPE_BOOLEAN,           0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("RedlineProtectionKey"),      HANDLE_CHANGES_PASSWORD,        CPPUTYPE_SEQINT8,           0,   0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -603,6 +606,21 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->SetUseFormerTextWrapping( bTmp );
         }
         break;
+        case HANDLE_CHANGES_PASSWORD:
+        {
+            Sequence <sal_Int8> aNew;
+            if(rValue >>= aNew)
+            {
+                mpDoc->SetRedlinePasswd(aNew);
+                if(aNew.getLength())
+                {
+                    sal_uInt16 eMode = mpDoc->GetRedlineMode();
+                    eMode = eMode|REDLINE_ON;
+                    mpDoc->SetRedlineMode( eMode );
+                }
+            }
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -820,6 +838,11 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Bool bTmp = mpDoc->IsFormerTextWrapping();
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_CHANGES_PASSWORD:
+        {
+            rValue <<= mpDoc->GetRedlinePasswd();
         }
         break;
         default:
