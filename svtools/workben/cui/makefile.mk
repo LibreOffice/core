@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:45:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=cuidem
 LIBTARGET=NO
 
@@ -70,16 +70,13 @@ TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
 OBJFILES=   $(OBJ)$/loadlib.obj  
 
 APP4TARGET=     dllver
-.IF "$(GUI)" != "MAC"
 APP4STDLIBS= \
             $(SVMEMLIB) \
             $(SVTOOLLIB) \
@@ -90,13 +87,6 @@ APP4STDLIBS= \
             $(SALLIB)
 .IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
 APP4STDLIBS+= $(CPPULIB)
-.ENDIF
-.ELSE
-APP4STDLIBS=$(SOLARBINDIR)$/TL$(UPD)$(DLLPOSTFIX).DLL \
-            $(SOLARBINDIR)$/VCL$(UPD)$(DLLPOSTFIX).DLL \
-            $(SOLARBINDIR)$/SVT$(UPD)$(DLLPOSTFIX).DLL
-APP4LIBS = $(SOLARLIBDIR)$/SALMAIN.MAC.LIB \
-            $(SOLARLIBDIR)$/NOSHAREDMAIN.LIB
 .ENDIF
 APP4OBJS=       $(OBJ)$/loadlib.obj
 
