@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ooo.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:08:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 10:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,17 +150,9 @@ ModalDialog RID_DEFAULTABOUT
         Text[ en-US ] ="Copyright 2000-2004 Sun Microsystems Inc.\nThis product has been created by " OOO_VENDOR " based on OpenOffice.org using the " OOO_LICENSE ".\nOpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html.";
         WordBreak = TRUE ;
     };
-    String ABOUT_STR_DEVELOPER
-    {
-        Text = "" ;
-    };
     StringArray ABOUT_STR_DEVELOPER_ARY
     {
         OOO_CONTRIBUTOR_LIST
-    };
-    String ABOUT_STR_COPYRIGHT_ADABAS
-    {
-        Text =  "" ;
     };
     String ABOUT_STR_ACCEL
     {
