@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 10:23:32 $
+ *  last change: $Author: oj $ $Date: 2000-11-30 15:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,12 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     i = 1;
     for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
-        setParameter(i,xParameter,*aIter);
+    {
+        if(aIter->isNull())
+            xParameter->setNull(i,aIter->getTypeKind());
+        else
+            setParameter(i,xParameter,*aIter);
+    }
 
     m_bInserted = xPrep->executeUpdate() > 0;
     // TODO set the bookmark in the insert row
@@ -525,6 +530,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/29 10:23:32  oj
+    #80219# wrong use of keys
+
     Revision 1.7  2000/11/14 13:28:20  oj
     change for rowset when getRow returns 0
 
