@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImageProducerSupplier.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:00 $
+ *  last change:$Date: 2003-09-08 10:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.form;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.XImageProducer;
 import com.sun.star.form.XImageProducerSupplier;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.form.XImageProducerSupplier</code>
