@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:17:46 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
-#include <drafts/com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_BROWSE_BROWSENODETYPES_HPP_
+#include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
-#include <drafts/com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_SCRIPTFRAMEWORKERRORTYPE_HPP_
+#include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLEMENTATIONENTRY_HXX_
@@ -128,7 +128,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star::script;
 using namespace ::sf_misc;
 
 //.........................................................................
@@ -165,10 +165,11 @@ namespace basprov
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
             if ( !pNames )
             {
-                static Sequence< ::rtl::OUString > aNames(3);
-                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.ScriptProviderForBasic" ) );
-                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.LanguageScriptProvider" ) );
-                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "drafts.com.sun.star.script.provider.ScriptProvider" ) );
+                static Sequence< ::rtl::OUString > aNames(4);
+                aNames.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.ScriptProviderForBasic" ) );
+                aNames.getArray()[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.LanguageScriptProvider" ) );
+                aNames.getArray()[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.provider.ScriptProvider" ) );
+                aNames.getArray()[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.browse.BrowseNode" ) );
                 pNames = &aNames;
             }
         }
