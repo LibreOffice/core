@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdropcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 
 #include "targetdropcontext.hxx"
 
@@ -66,8 +69,10 @@ using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
+extern rtl_StandardModuleCount g_moduleCount;
 TargetDropContext::TargetDropContext( DropTarget* p)
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pDropTarget= p;
     p->acquire();
 }
@@ -75,6 +80,7 @@ TargetDropContext::TargetDropContext( DropTarget* p)
 TargetDropContext::~TargetDropContext()
 {
     m_pDropTarget->release();
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL TargetDropContext::acceptDrop( sal_Int8 dropOperation )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,9 @@
 #ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
 #include <com/sun/star/awt/MouseEvent.hpp>
 #endif
-
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 
 #include "source.hxx"
 #include "globals.hxx"
@@ -94,6 +96,7 @@ using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
 
+extern rtl_StandardModuleCount g_moduleCount;
 
 //--> TRA
 
@@ -111,10 +114,12 @@ DragSource::DragSource( const Reference<XMultiServiceFactory>& sf):
     m_hAppWindow(0),
     m_MouseButton(0)
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 DragSource::~DragSource()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
   // XInitialization
@@ -242,6 +247,10 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
 /* [in] */ BOOL fEscapePressed,
 /* [in] */ DWORD grfKeyState)
 {
+#if DBG_CONSOLE_OUT
+    printf("\nDragSource::QueryContinueDrag");
+#endif
+
     HRESULT retVal= S_OK; // default continue DnD
 
     if (fEscapePressed)
@@ -266,9 +275,7 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
     sal_Int8 userAction= fEscapePressed ? ACTION_NONE : dndOleKeysToAction( grfKeyState, -1 );
     static_cast<SourceContext*>(m_currentContext.get())->fire_dropActionChanged( dropAction, userAction);
 
-#if DBG_CONSOLE_OUT
-    printf("\nDragSource::QueryContinueDrag");
-#endif
+
     return retVal;
 }
 
@@ -276,7 +283,7 @@ HRESULT STDMETHODCALLTYPE DragSource::GiveFeedback(
 /* [in] */ DWORD dwEffect)
 {
 #if DBG_CONSOLE_OUT
-    printf("\nDragSource::GiveFeedback");
+    printf("\nDragSource::GiveFeedback %d", dwEffect);
 #endif
 
     return DRAGDROP_S_USEDEFAULTCURSORS;

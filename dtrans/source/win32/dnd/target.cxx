@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:16:52 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 
 #include <stdio.h>
 #include "target.hxx"
@@ -87,7 +90,7 @@ extern Reference< XTransferable > g_XTransferable;
 
 //<-- TRA
 
-
+extern rtl_StandardModuleCount g_moduleCount;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
 DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
@@ -102,20 +105,17 @@ DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
     m_threadIdWindow(0),
     m_threadIdTarget(0),
     m_hOleThread(0),
-    m_nLastDropAction()
+    m_nLastDropAction(0)
 
 
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 
 DropTarget::~DropTarget()
 {
-    if( m_oleThreadId)
-    {
-        if( m_oleThreadId == CoGetCurrentProcess() )
-            OleUninitialize();
-    }
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 
 }
 // called from WeakComponentImplHelperX::dispose
@@ -127,17 +127,32 @@ DropTarget::~DropTarget()
 // the IDropTarget object will live on. MEMORY LEAK
 void SAL_CALL DropTarget::disposing()
 {
-    // Call RevokeDragDrop and wait for the OLE thread to die;
-    PostThreadMessage( m_threadIdTarget, WM_REVOKEDRAGDROP, (WPARAM)this, 0);
-    WaitForSingleObject( m_hOleThread, INFINITE);
-    CloseHandle( m_hOleThread);
-    //OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
-    m_hWnd= NULL;
+    HRESULT hr= S_OK;
+    if( m_threadIdTarget)
+    {
+        // Call RevokeDragDrop and wait for the OLE thread to die;
+        PostThreadMessage( m_threadIdTarget, WM_REVOKEDRAGDROP, (WPARAM)this, 0);
+        WaitForSingleObject( m_hOleThread, INFINITE);
+        CloseHandle( m_hOleThread);
+        //OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
+    }
+    else
+    {
+        hr= RevokeDragDrop( m_hWnd);
+        m_hWnd= 0;
+    }
     if( m_pDropTarget)
     {
         CoLockObjectExternal( m_pDropTarget, FALSE, TRUE);
         m_pDropTarget->Release();
     }
+
+    if( m_oleThreadId)
+    {
+        if( m_oleThreadId == CoGetCurrentProcess() )
+            OleUninitialize();
+    }
+
 }
 
 #ifdef DEBUG
@@ -187,7 +202,7 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
                                             &m_evtThreadReady, 0, &m_threadIdTarget);
             WaitForSingleObject( m_evtThreadReady, INFINITE);
             CloseHandle( m_evtThreadReady);
-            PostThreadMessage( m_threadIdTarget, WM_REGISTERDRAGDROP, (WPARAM)this, 0);
+            PostThreadMessage( m_threadIdTarget, WM_REGISTERDRAGDROP, (WPARAM)static_cast<DropTarget*>(this), 0);
         }
 
     }
@@ -274,6 +289,7 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
                 RevokeDragDrop( pTarget-> m_hWnd);
                 // Detach this thread from the window thread
                 BOOL bSuccess= AttachThreadInput( threadId, pTarget->m_threadIdWindow, FALSE);
+                pTarget->m_hWnd= 0;
                 break;
             }
             TranslateMessage(  &msg);
@@ -339,8 +355,10 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
     {
         // Intersection of pdwEffect and the allowed actions ( setDefaultActions)
         m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
-//      m_userAction= m_nCurrentDropAction;
-        m_nLastDropAction= m_nCurrentDropAction;
+        // m_nLastDropAction has to be set by a listener. If no listener calls
+        //XDropTargetDragContext::acceptDrag and specifies an action then pdwEffect
+        // will be DROPEFFECT_NONE throughout
+        m_nLastDropAction= ACTION_NONE;
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );
@@ -395,13 +413,8 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
                                    POINTL pt,
                                    DWORD  *pdwEffect)
 {
-#if DBG_CONSOLE_OUT
-    printf("\nDropTarget::DragOver");
-#endif
     if( m_bActive)
     {
-
-        // A listener can change this value during fire_dragOver
         m_nCurrentDropAction= getFilteredActions( grfKeyState, *pdwEffect);
 
         if( m_nCurrentDropAction)
@@ -421,7 +434,6 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             // XDropTargetDragContext::acceptDrag function. But this is not important
             // because in the afterwards fired dragOver event the action reflects
             // grgKeyState again.
-            sal_Int8 tmpAction= m_nLastDropAction;
             if( m_nLastDropAction != m_nCurrentDropAction)
                 fire_dropActionChanged( e);
 
@@ -436,8 +448,6 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             // On drop the target should present the user a dialog from which the user may change the action.
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
             // set the last action to the current if listener has not changed the value yet
-            if( tmpAction == m_nLastDropAction)
-                m_nLastDropAction= m_nCurrentDropAction;
             *pdwEffect= dndActionsToSingleDropEffect( m_nLastDropAction & allowedActions);
         }
         else
@@ -445,6 +455,9 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
             *pdwEffect= DROPEFFECT_NONE;
         }
     }
+#if DBG_CONSOLE_OUT
+    printf("\nDropTarget::DragOver %d", *pdwEffect );
+#endif
     return S_OK;
 }
 
@@ -459,7 +472,7 @@ HRESULT DropTarget::DragLeave( void)
         m_currentData=0;
         m_currentDragContext= 0;
         m_currentDropContext= 0;
-        m_nLastDropAction= -1;
+        m_nLastDropAction= 0;
 
         if( m_nDefaultActions != ACTION_NONE)
         {
@@ -514,6 +527,9 @@ HRESULT DropTarget::Drop( IDataObject  *pDataObj,
             *pdwEffect= DROPEFFECT_NONE;
 
         m_currentData= 0;
+        m_currentDragContext= 0;
+        m_currentDropContext= 0;
+        m_nLastDropAction= 0;
     }
     return S_OK;
 }
@@ -636,7 +652,6 @@ void DropTarget::_acceptDrag( sal_Int8 dragOperation, const Reference<XDropTarge
 {
     if( context == m_currentDragContext)
     {
-//      m_nCurrentDropAction= dragOperation;
         m_nLastDropAction= dragOperation;
     }
 }
@@ -645,7 +660,6 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
 {
     if(context == m_currentDragContext)
     {
-//      m_nCurrentDropAction= ACTION_NONE;
         m_nLastDropAction= ACTION_NONE;
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idroptarget.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 16:00:53 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,18 @@
  ************************************************************************/
 #include "idroptarget.hxx"
 #include <oleidl.h>
-
+#include <rtl/unload.h>
+extern rtl_StandardModuleCount g_moduleCount;
 
 IDropTargetImpl::IDropTargetImpl( DropTarget& pTarget): m_nRefCount( 0),
                                     m_rDropTarget( pTarget)
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 }
 
 IDropTargetImpl::~IDropTargetImpl()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 

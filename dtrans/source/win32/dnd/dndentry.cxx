@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndentry.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:35:40 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using namespace ::com::sun::star::lang;
 
-
+rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
 Reference< XInterface > SAL_CALL createDragSource( const Reference< XMultiServiceFactory >& rServiceManager )
 {
@@ -97,6 +97,10 @@ Reference< XInterface > SAL_CALL createDropTarget( const Reference< XMultiServic
 
 extern "C"
 {
+sal_Bool SAL_CALL component_canUnload( TimeValue *pTime )
+{
+    return g_moduleCount.canUnload( &g_moduleCount , pTime );
+}
 
 //----------------------------------------------------------------------
 // component_getImplementationEnvironment
@@ -160,7 +164,8 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createDragSource,
-            aSNS);
+            aSNS,
+            &g_moduleCount.modCnt);
 
     }
     else if( pSrvManager && ( 0 == rtl_str_compare( pImplName, DNDTARGET_IMPL_NAME ) ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,16 @@
  *
  ************************************************************************/
 
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 
 #include "targetdragcontext.hxx"
 
-
+extern rtl_StandardModuleCount g_moduleCount;
 TargetDragContext::TargetDragContext( DropTarget* p)
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     m_pDropTarget= p;
     p->acquire();
 }
@@ -72,6 +76,7 @@ TargetDragContext::TargetDragContext( DropTarget* p)
 TargetDragContext::~TargetDragContext()
 {
     m_pDropTarget->release();
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )

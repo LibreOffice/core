@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 17:12:56 $
+ *  last change: $Author: jl $ $Date: 2001-07-20 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,13 @@
 
 #include "sourcecontext.hxx"
 
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
+
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
+extern rtl_StandardModuleCount g_moduleCount;
 
 SourceContext::SourceContext( DragSource* pSource,
                              const Reference<XDragSourceListener>& listener):
@@ -75,6 +80,7 @@ SourceContext::SourceContext( DragSource* pSource,
         m_pDragSource( pSource),
         m_dragSource( static_cast<XDragSource*>( m_pDragSource) )
 {
+    g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
 #ifdef DEBUG
     if( listener.is())
 #endif
@@ -83,6 +89,7 @@ SourceContext::SourceContext( DragSource* pSource,
 
 SourceContext::~SourceContext()
 {
+    g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
 void SAL_CALL SourceContext::addDragSourceListener(
