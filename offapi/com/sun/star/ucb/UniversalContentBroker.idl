@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UniversalContentBroker.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-31 08:47:41 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 09:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/lang/XComponent.idl>
 #endif
 
+#ifndef __com_sun_star_ucb_XCommandProcessor_idl__
+#include <com/sun/star/ucb/XCommandProcessor.idl>
+#endif
+
 #ifndef __com_sun_star_ucb_XContentProviderManager_idl__
 #include <com/sun/star/ucb/XContentProviderManager.idl>
 #endif
@@ -89,32 +93,34 @@ module com { module sun { module star { module ucb {
 /** The <type>UniversalContentBroker</type> is a one-instance service that
     provides access to a set of various contents.
 
-    If the instance is created with a single boolean argument of value true,
+    <p>If the instance is created with a single boolean argument of value true,
     the newly instantiated broker is also configured:  The
     <type>Configuration</type> service is used to access the
     <type>XContentProviderConfiguration</type> stored under key
     "ContentProviderServices".  Each content provider service mentioned there
     is registered at the broker.
 
-    If the instance is created without arguments, or with a single boolean
+    <p>If the instance is created without arguments, or with a single boolean
     argument of value false, the newly instatiated broker is not configured.
 */
 service UniversalContentBroker
 {
     //-------------------------------------------------------------------------
     /** must be implemented to make it possible to resolve cyclic object
-        references. Those references i.e. may occure if content provider
-        implementations hold references to the Broker. The Broker itself
-        always holds its providers.
-        If the Broker shall be released, <member>XComponent::dispose</member>
-        must be called at the Broker. The implementation of this method must
-        call <member>XEventListener::disposing</member> on the registered
-        listeners ( the providers holding the Broker must be those listeners )
-        and release the appropriate object references. At the other hand, the
+        references.
+
+        <p>Those references i.e. may occure if content provider implementations
+        hold references to the Broker. The Broker itself always holds its
+        providers. If the Broker shall be released,
+        <member>XComponent::dispose</member> must be called at the Broker.
+        The implementation of this method must call
+        <member>XEventListener::disposing</member> on the registered listeners
+        ( the providers holding the Broker must be those listeners ) and
+        release the appropriate object references. At the other hand, the
         implementation of <member>XEventListener::disposing</member> must
         release its appropriate references.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::lang::XComponent;
 
@@ -122,14 +128,14 @@ service UniversalContentBroker
     /** provides access to all kind of contents provided by the registered
         content providers.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::ucb::XContentProvider;
 
     //-------------------------------------------------------------------------
     /** provides access to a set of content providers registered with the UCB.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::ucb::XContentProviderManager;
 
@@ -137,27 +143,65 @@ service UniversalContentBroker
     /** creates <type>XContentIdentifier</type> implementation objects for
         all kind of contents provided by the UCB.
 
-        This interface is required.
+        <p>This interface is required.
       */
     interface com::sun::star::ucb::XContentIdentifierFactory;
 
     //-------------------------------------------------------------------------
     /** supports the configuration of a newly created broker.
 
-        If the method <member>XInitialization::initialize</member> is called
+        <p>If the method <member>XInitialization::initialize</member> is called
         with a single boolean argument of value true, the newly instantiated
         broker is also configured:  The <type>Configuration</type> service is
         used to access the <type>XContentProviderConfiguration</type> stored
         under key "ContentProviderServices".  Each content provider service
         mentioned there is registered at the broker.
 
-        If the method <member>XInitialization::initialize</member> is called
+        <p>If the method <member>XInitialization::initialize</member> is called
         with a single boolean argument of value false, the newly instatiated
         broker is not configured.
 
-        This interface is required.
+        <p>This interface is required.
      */
     interface com::sun::star::lang::XInitialization;
+
+    //-------------------------------------------------------------------------
+    /** enables the caller to let the Content Broker execute commands.
+
+        <p><pre>
+        =======================================================================
+        Commands:
+        =======================================================================
+
+        [return type]
+            [command name]
+                [parameter type and name]
+
+        -----------------------------------------------------------------------
+        Requiered commands:
+        -----------------------------------------------------------------------
+
+        // This command obtains an interface which allows to query
+        // information on commands supported by the Content Broker.
+
+        <type>XCommandInfo</type>
+            getCommandInfo
+                void
+
+        // This command transfers Contents from one location to another.
+        // Additionally, it can be used to create a link to a Content.
+        // The implementation must be able to handle Contents provided
+        // by any Content Provider. This is different from the command
+        // 'transfer' that can be supported by a Content. That command
+        // typically can only handle Contents provided by one Content Provider.
+
+        void
+            globalTransfer
+                <type>GlobalTransferCommandArgument</type>
+        </pre>
+     */
+    [optional] interface com::sun::star::ucb::XCommandProcessor;
+
 };
 
 //=============================================================================
