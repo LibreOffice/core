@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: dl $ $Date: 2000-11-30 15:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,13 @@ TabDialog TAB_PARAGRAPH
                 Text[ korean ] = "µé¿© ¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girintiler ve aralýklar";
                 Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                PageResID = RID_SVXPAGE_PARA_ASIAN ;
+                Text = "Asiatische Typography" ;
+                Text [ ENGLISH ] = "Asian typography" ;
             };
             PageItem
             {

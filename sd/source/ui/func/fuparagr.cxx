@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: dl $ $Date: 2000-11-30 15:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,6 @@
 
 #pragma hdrstop
 
-
-// Ext-Absatz-Tab-Page
-#define ITEMID_HYPHENZONE       SID_ATTR_PARA_HYPHENZONE
-#define ITEMID_FMTBREAK         SID_ATTR_PARA_PAGEBREAK
-#define ITEMID_FMTSPLIT         SID_ATTR_PARA_SPLIT
-#define ITEMID_WIDOWS           SID_ATTR_PARA_WIDOWS
-#define ITEMID_ORPHANS          SID_ATTR_PARA_ORPHANS
-
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -84,11 +76,6 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
-#include <svx/hyznitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/orphitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/editdata.hxx>
 
@@ -125,26 +112,11 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         pView->GetAttributes( aEditAttr );
         SfxItemPool *pPool =  aEditAttr.GetPool();
         SfxItemSet aNewAttr( *pPool,
-                                EE_ITEMS_START, EE_ITEMS_END,
-                                SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
-                                SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
-                                SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
-                                SID_ATTR_PARA_SPLIT, SID_ATTR_PARA_SPLIT,
-                                SID_ATTR_PARA_WIDOWS, SID_ATTR_PARA_WIDOWS,
-                                SID_ATTR_PARA_ORPHANS, SID_ATTR_PARA_ORPHANS,
-                                0 );
+                             EE_ITEMS_START, EE_ITEMS_END,
+                             SID_ATTR_TABSTOP_OFFSET, SID_ATTR_TABSTOP_OFFSET,
+                             0 );
 
         aNewAttr.Put( aEditAttr );
-
-        // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-        // Muss natuerlich noch geaendert werden
-        // aNewAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
-
-        aNewAttr.Put( SvxHyphenZoneItem() );
-        aNewAttr.Put( SvxFmtBreakItem() );
-        aNewAttr.Put( SvxFmtSplitItem() );
-        aNewAttr.Put( SvxWidowsItem() );
-        aNewAttr.Put( SvxOrphansItem() );
 
         // linker Rand als Offset
         const long nOff = ( (SvxLRSpaceItem&)aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
@@ -154,7 +126,6 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aNewAttr.Put( aOff );
 
         SdParagraphDlg* pDlg = new SdParagraphDlg( NULL, &aNewAttr );
-
 
         USHORT nResult = pDlg->Execute();
 
@@ -180,7 +151,6 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
     // invalidieren der Slots
     static USHORT SidArray[] = {
-//                          SID_ATTR_TABSTOP,  // Neu
                             SID_ATTR_PARA_ADJUST_LEFT,
                             SID_ATTR_PARA_ADJUST_RIGHT,
                             SID_ATTR_PARA_ADJUST_CENTER,
@@ -188,7 +158,7 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             SID_ATTR_PARA_LINESPACE_10,
                             SID_ATTR_PARA_LINESPACE_15,
                             SID_ATTR_PARA_LINESPACE_20,
-                            SID_ATTR_PARA_LRSPACE, // Neu
+                            SID_ATTR_PARA_LRSPACE,
                             SID_PARASPACE_INCREASE,
                             SID_PARASPACE_DECREASE,
                             0 };
