@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:08:19 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "¾ã­¶(~E)";
         Text[ arabic ] = "ÕİÍÉ ßÇãáÉ";
         Text[ greek ] = "Ïëüêëçñç óåëßäá";
-        Text[ korean ] = "ÀüÃ¼ ÂÊ";
+        Text[ korean ] = "ÀüÃ¼ ÂÊ(~E)";
         Text[ turkish ] = "~Tam sayfa";
     };
     RadioButton BTN_SINGLE
@@ -122,7 +122,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "³æ­Ó¶K¼Ğ(~S)";
         Text[ arabic ] = "ÈØÇŞÉ ÚäæäÉ ãİÑÏÉ";
         Text[ greek ] = "Ìåìïíùìİíç åôéêİôá";
-        Text[ korean ] = "°¢ ¶óº§";
+        Text[ korean ] = "°¢ ¶óº§(~S)";
         Text[ turkish ] = "Tek Eti~ket";
     };
     FixedText TXT_COL
@@ -150,7 +150,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_traditional ] = "Äæ(~M)";
         Text[ arabic ] = "ÚãæÏ";
         Text[ greek ] = "ÓôŞëç";
-        Text[ korean ] = "¿­";
+        Text[ korean ] = "¿­(~M)";
         Text[ turkish ] = "~Sütun";
     };
     NumericField FLD_COL
@@ -186,7 +186,7 @@ TabPage TP_LAB_PRT
         Text[ chinese_simplified ] = "ĞĞ(~W)";
         Text[ russian ] = "Ñòğîêà";
         Text[ polish ] = "Wiersz";
-        Text[ japanese ] = "s(~Wj";
+        Text[ japanese ] = "s(~W)";
         Text[ chinese_traditional ] = "¦æ(~W)";
         Text[ arabic ] = "Õİ";
         Text[ greek ] = "ÃñáììŞ";
@@ -221,14 +221,14 @@ TabPage TP_LAB_PRT
         Text [ french ] = "~Synchroniser le contenu" ;
         Text [ dutch ] = "Inhoud ~synchroniseren" ;
         Text [ portuguese ] = "~Sincronizar conteúdos" ;
-        Text[ chinese_simplified ] = "ÄÚÈİÍ¬²½»¯(~S)";
+        Text[ chinese_simplified ] = "ÄÚÈİÍ¬²½»¯(~Z)";
         Text[ russian ] = "Ñèíõğîíèçàöèÿ ñîäåğæèìîãî";
         Text[ polish ] = "Synchronizacja treœci";
-        Text[ japanese ] = "“à—e‚ğ“¯Šú‚³‚¹‚é(~S)";
-        Text[ chinese_traditional ] = "¤º®e¦P¨B¤Æ(~S)";
+        Text[ japanese ] = "“à—e‚ğ“¯Šú‚³‚¹‚é(~Z)";
+        Text[ chinese_traditional ] = "¤º®e¦P¨B¤Æ(~Z)";
         Text[ arabic ] = "ÊÒÇãä ÇáãÍÊæíÇÊ";
         Text[ greek ] = "Óõã÷ñïíéóìüò ğåñéå÷ïìİíùí";
-        Text[ korean ] = "³»¿ë µ¿±âÈ­";
+        Text[ korean ] = "³»¿ë µ¿±âÈ­(~Z)";
         Text[ turkish ] = "İçeriği çoğalt";
     };
     GroupBox GB_DONTKNOW
