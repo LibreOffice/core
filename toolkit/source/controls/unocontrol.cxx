@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:47:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,15 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( sal_Bool bAcceptE
             osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
             pWW = lcl_GetDefaultWindow();
         }
-        xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
+        try
+        {
+            xMe->createPeer( NULL, pWW->GetComponentInterface( sal_True ) );
+        }
+        catch( const Exception& )
+        {
+            mbCreatingCompatiblePeer = sal_False;
+            throw;
+        }
         xCompatiblePeer = getPeer();
         setPeer( xCurrentPeer );
 
@@ -565,22 +573,24 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
 
 void UnoControl::disposing( const EventObject& rEvt ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::ClearableMutexGuard aGuard( GetMutex() );
     // bei "Multible Inheritance" nicht unterschiedliche Typen vergleichen.
 
-    if( mxModel.get() == Reference< XControlModel >(rEvt.Source,UNO_QUERY).get() )
+    if ( maAccessibleContext.get() == rEvt.Source )
     {
-        // #62337# Ohne Model wollen wir nicht weiterleben
+        // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
+        maAccessibleContext = NULL;
+    }
+    else if( mxModel.get() == Reference< XControlModel >(rEvt.Source,UNO_QUERY).get() )
+    {
+        // #62337# if the model dies, it does not make sense for us to live ...
         Reference< XControl >  xThis = this;
+
+        aGuard.clear();
         xThis->dispose();
 
         DBG_ASSERT( !mxModel.is(), "UnoControl::disposing: invalid dispose behaviour!" );
         mxModel.clear();
-    }
-    else if ( maAccessibleContext.get() == rEvt.Source )
-    {
-        // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
-        maAccessibleContext = NULL;
     }
 }
 
