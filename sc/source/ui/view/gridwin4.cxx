@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <svx/editview.hxx>
 #include <svx/fhgtitem.hxx>
 #include <svx/scripttypeitem.hxx>
-#include <so3/ipenv.hxx>
 #include <sfx2/printer.hxx>
 
 #ifdef MAC
@@ -347,12 +346,15 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 {
     ScDocShell* pDocSh = pViewData->GetDocShell();
+
+    //TODO/LATER: how to get environment? Do we need that?!
+    /*
     SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
     if (pEnv && pEnv->GetRectsChangedLockCount())
     {
         Invalidate(rRect);
         return;
-    }
+    }*/
 
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
