@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2002-02-19 11:38:40 $
+#   last change: $Author: vg $ $Date: 2003-04-17 13:34:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,10 +65,6 @@ PRJNAME=sw
 
 TARGET=core
 
-PROJECTPCH=core_pch
-PDBTARGET=core_pch
-PROJECTPCHSOURCE=.\core_1st\core_pch
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -79,58 +75,8 @@ PROJECTPCHSOURCE=.\core_1st\core_pch
 RC_SUBDIRS=
 .ENDIF
 
-.IF "$(GUI)" != "WNT"
-.IF "$(GUI)" != "MAC"
-.IF "$(COM)" != "BLC"
-.IF "$(COM)" != "WTC"
-LIBFLAGS=/NOI /NOE /PAGE:256
-.ENDIF
-.ENDIF
-.ENDIF
-.ENDIF
-
-.IF "$(COM)"=="WTC"
-LIBFLAGS=$(LIBFLAGS) /p=256
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
-# fuer VC++/NT andere Label als die Verzeichnisnamen
-.IF "$(RC_SUBDIRS)" == ""
-SWSUBDIRS= \
-    core_1st \
-    access \
-    attr \
-    bastyp \
-    crsr \
-    doc \
-    docnode \
-    draw \
-    edit \
-    fields \
-    frmedt \
-    graphic \
-    layout \
-    ole \
-    para \
-    sw3io \
-    swg \
-    text \
-    tox \
-    txtnode \
-       unocore \
-    undo \
-    view
-
-.IF "$(PRODUCT)" == ""
-SWSUBDIRS+= \
-    except
-.ENDIF
-.IF "$(COM)$(GUI)"=="MSCWIN"
-SWSUBDIRS+= \
-    rtlfix
-.ENDIF
-.ENDIF
 
 SUBLIBS1= \
         $(SLB)$/access.lib \
@@ -166,20 +112,6 @@ SUBLIBS2+= \
 
 #-------------------------------------------------------------------------
 
-.IF "$(L10N-framework)" == ""
-.IF "$(RC_SUBDIRS)" == ""
-.IF "$(depend)" == ""
-core:						\
-    core_1st				\
-    $(SWSUBDIRS)				\
-    ALLTAR
-.ELSE
-core:
-    @+echo Doing nothing in source\core
-.ENDIF
-.ENDIF
-.ENDIF          # "$(L10N-framework)" == ""
-
 ################################################################
 
 LIB1TARGET=$(SLB)$/core1.lib
@@ -196,161 +128,4 @@ LIB2FILES= \
 
 #-------------------------------------------------------------------------
 
-.IF "$(dbutil)" != ""
-dbutilx="dbutil=true"
-.ENDIF
-.IF "$(debug)" != ""
-.IF "$(debug)" != "D_FORCE_OPT"
-dbutilx="debug=true"
-.ENDIF
-.ENDIF
 
-#-------------------------------------------------------------------------
-
-.IF "$(CALLTARGETS)"!="core"
-.IF "$(DOPLD)$(dopld)" == ""
-
-.IF "$(RC_SUBDIRS)" == ""
-#rule lib / subdir
-$(LB)$/%.lib : %
-    @echo @
-
-core_1st .SETDIR=core_1st:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-attr .SETDIR=attr:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-bastyp .SETDIR=bastyp:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-crsr .SETDIR=crsr:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-doc .SETDIR=doc:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-docnode .SETDIR=docnode:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-draw .SETDIR=draw:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-edit .SETDIR=edit:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-except .SETDIR=except:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-fields .SETDIR=fields:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-frmedt .SETDIR=frmedt:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-graphic .SETDIR=graphic:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-layout .SETDIR=layout:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-.IF "$(SOLAR_JAVA)" != ""
-javascrp .SETDIR=javascrp:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-.ENDIF
-
-ole .SETDIR=ole:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-para .SETDIR=para:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-rtlfix .SETDIR=rtlfix:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-sw3io .SETDIR=sw3io:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-swg .SETDIR=swg:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-text .SETDIR=text:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-tox .SETDIR=tox:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-txtnode .SETDIR=txtnode:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-undo .SETDIR=undo:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-unocore .SETDIR=unocore:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-view .SETDIR=view:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-access .SETDIR=access:
-        @echo $@
-        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
-
-.ENDIF
-.ELSE
-core_1st:
-    @echo nix
-.ENDIF
-.ENDIF
-
-kill:
-    +-$(RM) $(SLB)$/core1.lib
-    +-$(RM) $(SLB)$/core2.lib
-
-attr  : core_1st
-bastyp  : core_1st
-crsr  : core_1st
-doc  : core_1st
-docnode  : core_1st
-draw  : core_1st
-edit  : core_1st
-fields  : core_1st
-frmedt  : core_1st
-graphic  : core_1st
-layout  : core_1st
-ole  : core_1st
-para  : core_1st
-sw3io  : core_1st
-swg  : core_1st
-text  : core_1st
-tox  : core_1st
-txtnode  : core_1st
-unocore  : core_1st
-undo  : core_1st
-view : core_1st
-access : core_1st
