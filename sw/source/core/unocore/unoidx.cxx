@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2000-11-02 15:03:34 $
+ *  last change: $Author: os $ $Date: 2000-11-07 11:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,12 @@
 #endif
 #ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
+#endif
+#ifndef _SHELLRES_HXX
+#include <shellres.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -419,7 +425,45 @@ void SwXDocumentIndex::setPropertyValue(const OUString& rPropertyName,
         SfxItemSet* pAttrSet = 0;
         switch(pMap->nWID)
         {
-            case WID_IDX_TITLE  :    pTOXBase->SetTitle(lcl_AnyToString(aValue)); break;
+            case WID_IDX_TITLE  :
+            {
+                OUString sNewName;
+                aValue >>= sNewName;
+                ShellResource* pShellRes = ViewShell::GetShellRes();
+                switch(eTOXType)
+                {
+                    case TOX_CONTENT :
+                        if(!sNewName.compareToAscii("Table of Contents"))
+                            sNewName = pShellRes->aTOXContentName;
+                    break;
+                    case TOX_INDEX  :
+                        if(!sNewName.compareToAscii("Alphabetical Index"))
+                            sNewName = pShellRes->aTOXIndexName;
+                    break;
+                    case TOX_USER:
+                        if(!sNewName.compareToAscii("User-Defined"))
+                            sNewName = pShellRes->aTOXUserName;
+                    break;
+                    case TOX_ILLUSTRATIONS:
+                        if(!sNewName.compareToAscii("Illustration Index"))
+                            sNewName = pShellRes->aTOXIllustrationsName;
+                    break;
+                    case TOX_OBJECTS:
+                        if(!sNewName.compareToAscii("Table of Objects"))
+                            sNewName = pShellRes->aTOXObjectsName;
+                    break;
+                    case TOX_TABLES:
+                        if(!sNewName.compareToAscii("Index of Tables"))
+                            sNewName = pShellRes->aTOXTablesName;
+                    break;
+                    case TOX_AUTHORITIES:
+                        if(!sNewName.compareToAscii("Bibliography"))
+                            sNewName = pShellRes->aTOXAuthoritiesName;
+                    break;
+                }
+                pTOXBase->SetTitle(sNewName);
+            }
+            break;
             case WID_LEVEL      :
                 pTOXBase->SetLevel(lcl_AnyToInt16(aValue));
             break;
@@ -628,8 +672,44 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
         switch(pMap->nWID)
         {
             case WID_IDX_TITLE  :
+            {
                 bBOOL = sal_False;
-                aRet <<= OUString(pTOXBase->GetTitle());
+                OUString uRet(pTOXBase->GetTitle());
+                //I18N
+                ShellResource* pShellRes = ViewShell::GetShellRes();
+                switch(eTOXType)
+                {
+                    case TOX_CONTENT :
+                        if(!uRet.compareTo(pShellRes->aTOXContentName))
+                            uRet = C2U("Table of Contents");
+                    break;
+                    case TOX_INDEX  :
+                        if(!uRet.compareTo(pShellRes->aTOXIndexName))
+                            uRet = C2U("Alphabetical Index");
+                    break;
+                    case TOX_USER:
+                        if(!uRet.compareTo(pShellRes->aTOXUserName))
+                            uRet = C2U("User-Defined");
+                    break;
+                    case TOX_ILLUSTRATIONS:
+                        if(!uRet.compareTo(pShellRes->aTOXIllustrationsName))
+                            uRet = C2U("Illustration Index");
+                    break;
+                    case TOX_OBJECTS:
+                        if(!uRet.compareTo(pShellRes->aTOXObjectsName))
+                            uRet = C2U("Table of Objects");
+                    break;
+                    case TOX_TABLES:
+                        if(!uRet.compareTo(pShellRes->aTOXTablesName))
+                            uRet = C2U("Index of Tables");
+                    break;
+                    case TOX_AUTHORITIES:
+                        if(!uRet.compareTo(pShellRes->aTOXAuthoritiesName))
+                            uRet = C2U("Bibliography");
+                    break;
+                }
+                aRet <<= uRet;
+            }
             break;
             case WID_LEVEL      :
                 bBOOL = sal_False;
@@ -1031,7 +1111,7 @@ void SwXDocumentIndex::setName(const OUString& rName) throw( RuntimeException )
     sal_Bool bExcept = sal_False;
     if(!sNewName.Len())
         bExcept = sal_True;
-    else if(bIsDescriptor)
+    if(bIsDescriptor)
     {
         pProps->GetTOXBase().SetTOXName(sNewName);
     }
