@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:38:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@ static ImageList* pImageListHiBig=0;
 static ImageList* pImageList;
 static ImageList* pHiImageList;
 static SfxImageManager_Impl* pGlobalConfig=NULL;
-static nRef=0;
-static nGlobalRef=0;
+static int nRef=0;
+static int nGlobalRef=0;
 
 // we need a static list of all pImp instances, so all operations that should change all instances can be performed
 // which operations ?!
@@ -458,8 +458,10 @@ void SfxImageManager_Impl::LoadBitmap( Bitmap& rBmp, SotStorage& rStorage, const
         // every string followed by a slash is a directory
         USHORT nTokenCount = rURL.GetTokenCount( '/' );
 
+        USHORT nToken;
+
         // open directories
-        for ( USHORT nToken=0; nToken<nTokenCount-1; nToken++ )
+        for ( nToken = 0; nToken < nTokenCount-1; nToken++ )
             xBitmapStorage = xBitmapStorage->OpenSotStorage( rURL.GetToken( nToken, '/' ), STREAM_STD_READ );
 
         // now get the stream
