@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 08:54:15 $
+ *  last change: $Author: os $ $Date: 2001-04-25 06:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,7 @@ private:
     USHORT          nRelStep;
     BOOL            bRelativeMode;
     BOOL            bRelative;
-#if SUPD>629
     BOOL            bNegativeEnabled;
-#endif
 
 protected:
     void            Modify();
@@ -100,9 +98,7 @@ public:
     BOOL            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( BOOL bRelative = FALSE );
     BOOL            IsRelative() const { return bRelative; }
-#if SUPD>629
-    BOOL            EnableNegativeMode() {bNegativeEnabled = TRUE;}
-#endif
+    void            EnableNegativeMode() {bNegativeEnabled = TRUE;}
 };
 
 
