@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:57:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 14:56:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,7 +1448,7 @@ public:
 
         //PageDescriptor-Schnittstelle
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }
-    const SwPageDesc& GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
+    const SwPageDesc& GetPageDesc( const sal_uInt16 i ) const { return *aPageDescs[i]; }
     SwPageDesc* FindPageDescByName( const String& rName,
                                     sal_uInt16* pPos = 0 ) const;
 
@@ -2206,6 +2206,74 @@ public:
      */
     void SetMarkedNumLevel(SwNumRule & rNumRule, BYTE nLevel, BOOL bValue);
     // <- #i27615#
+
+    // Change a format undoable.
+    void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
+    void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
+
+    // Change a TOX undoable.
+    void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
+
+    // #111827#
+    /**
+       Returns a textual description of a PaM.
+
+       @param rPaM     the PaM to describe
+
+       If rPaM only spans one paragraph the result is:
+
+            '<text in the PaM>'
+
+       <text in the PaM> is shortened to nUndoStringLength characters.
+
+       If rPaM spans more than one paragraph the result is:
+
+            paragraphs                               (STR_PARAGRAPHS)
+
+       @return the textual description of rPaM
+     */
+    String GetPaMDescr(const SwPaM & rPaM) const;
+
+    // -> #111840#
+
+    /**
+        Checks if there is a character at a certain position.
+
+        @param rPos       position to search at
+
+        @retval TRUE      there is a character at \a rPos
+        @retval FALSE     else
+    */
+    static BOOL IsChar(const SwPosition & rPos);
+
+    /**
+       Returns the character at a certain position.
+
+       @param rPos        position to search at
+
+       @return the character at the given position
+    */
+    static xub_Unicode GetChar(const SwPosition & rPos);
+
+    /**
+       Returns the field at a certain position.
+
+       @param rPos        position to search at
+
+       @return     pointer to field at the given position or NULL in case no field is found
+    */
+    static SwField * GetField(const SwPosition & rPos);
+
+    /**
+       Returns the field at a certain position.
+
+       @param rPos        position to search at
+
+       @return     pointer to field at the given position or NULL in case no field is found
+    */
+    static SwTxtFld * GetTxtFld(const SwPosition & rPos);
+
+    // <- #111840#
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
