@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stortree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 21:03:26 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#define _STORE_STORTREE_CXX "$Revision: 1.2 $"
+#define _STORE_STORTREE_CXX "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -187,7 +187,6 @@ void OStoreBTreeNodeData::insert (sal_uInt16 i, const T& t)
 void OStoreBTreeNodeData::remove (sal_uInt16 i)
 {
     sal_uInt16 n = usageCount();
-    sal_uInt16 m = capacityCount();
     if (i < n)
     {
         // shift left.
