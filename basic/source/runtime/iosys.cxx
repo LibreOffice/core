@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:36:40 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,10 +793,10 @@ SbError SbiStream::Close()
     return nError;
 }
 
-SbError SbiStream::Read( ByteString& rBuf, USHORT n )
+SbError SbiStream::Read( ByteString& rBuf, USHORT n, bool bForceReadingPerByte )
 {
     nExpandOnWriteTo = 0;
-    if( IsText() )
+    if( !bForceReadingPerByte && IsText() )
     {
         pStrm->ReadLine( rBuf );
         nLine++;
