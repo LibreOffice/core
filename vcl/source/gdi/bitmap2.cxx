@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-28 13:10:36 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,7 +1155,7 @@ BOOL Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, BOOL bRLE4 )
     ULONG       nSaveIndex;
     ULONG       nCount;
     ULONG       nBufCount;
-    BYTE*       pBuf = new BYTE[ nWidth << 1 ];
+    BYTE*       pBuf = new BYTE[ ( nWidth << 1 ) + 2 ];
     BYTE*       pTmp;
     BYTE        cPix;
     BYTE        cLast;
