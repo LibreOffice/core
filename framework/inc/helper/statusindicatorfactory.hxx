@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-19 12:00:27 $
+ *  last change: $Author: as $ $Date: 2002-04-24 09:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,13 @@ struct IndicatorInfo
             return( m_xIndicator == xIndicator );
         }
 
+        //---------------------------------------------------------------------------------------------------------
+        // norm nValue to fit range of 0..100%
+        sal_Int32 calcPercentage()
+        {
+            return ::std::min( (( m_nValue * 100 )/ ::std::max( m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 );
+        }
+
     public:
         css::uno::Reference< css::task::XStatusIndicator >      m_xIndicator  ;
         ::rtl::OUString                                         m_sText       ;
@@ -295,7 +302,8 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
     //-------------------------------------------------------------------------------------------------------------
     private:
         void implts_recalcLayout();
-        void reschedule();
+        void impl_reschedule();
+        sal_uInt32 impl_get10ThSec();
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

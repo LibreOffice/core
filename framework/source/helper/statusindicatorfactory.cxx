@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-01-09 15:17:11 $
+ *  last change: $Author: as $ $Date: 2002-04-24 09:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,13 +154,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
-
-sal_uInt32 Get10ThSec()
-{
-    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
-
-    return n10Ticks / CLOCKS_PER_SEC;
-}
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
 
@@ -460,38 +453,40 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
 
     try
     {
-
         vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Create status indicator window to shared it for all created indictaor objects by this factory.
+        sal_Bool bNew = sal_False;
         if( m_pStatusBar == NULL )
+        {
             m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
+            bNew = sal_True;
+        }
 
+        // force repaint!
         Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
         if ( pParentWindow )
         {
-//            WinBits nParentWinBits = pParentWindow->GetStyle();
-//            pParentWindow->SetStyle( nParentWinBits & ~WB_CLIPCHILDREN );
-
-//            OutputDevice* pOutDev = (OutputDevice*)pParentWindow;
-//            pOutDev->SetBackgroundBrush( Brush( Color( COL_WHITE )) );
-
             pParentWindow->Invalidate( INVALIDATE_CHILDREN );
             pParentWindow->Flush();
         }
 
-        m_xParentWindow->setVisible   ( sal_True      );
-        implts_recalcLayout();
-        m_pStatusBar->Show();
-        m_pStatusBar->StartProgressMode( sText );
-        m_nStartTime = Get10ThSec();
+        if(bNew)
+        {
+            m_xParentWindow->setVisible( sal_True );
+            implts_recalcLayout();
+            m_pStatusBar->Show();
+            m_pStatusBar->StartProgressMode( sText );
+        }
+
+        m_nStartTime = impl_get10ThSec();
     }
     catch( css::uno::RuntimeException& )
     {
     }
 
     aLock.unlock();
-    reschedule();
+    impl_reschedule();
 }
 
 /*-************************************************************************************************************//**
@@ -534,23 +529,16 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
         {
             vos::OGuard aGuard( Application::GetSolarMutex() );
 
-            m_pStatusBar->EndProgressMode();
-
             IndicatorStack::reverse_iterator pInfo = m_aStack.rbegin();
             if( pInfo != m_aStack.rend() )
             {
-                m_xActiveIndicator        = pInfo->m_xIndicator;
-                m_pStatusBar->StartProgressMode( pInfo->m_sText );
+                m_xActiveIndicator = pInfo->m_xIndicator;
+                m_pStatusBar->SetProgressValue( (USHORT)pInfo->m_nValue );
+                m_pStatusBar->SetText( pInfo->m_sText );
             }
             else
             {
-                Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
-                if ( pParentWindow )
-                {
-//                    WinBits nParentWinBits = pParentWindow->GetStyle();
-//                    pParentWindow->SetStyle( nParentWinBits | WB_CLIPCHILDREN );
-                }
-
+                m_pStatusBar->EndProgressMode();
                 m_pStatusBar->Show( sal_False );
 
                 // Destroy shared status indicator.
@@ -568,7 +556,7 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
     }
 
     aLock.unlock();
-    reschedule();
+    impl_reschedule();
 }
 
 /*-************************************************************************************************************//**
@@ -613,6 +601,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
         {
             vos::OGuard aGuard( Application::GetSolarMutex() );
             m_pStatusBar->SetProgressValue( 0 );
+            m_pStatusBar->SetText( String() );
         }
         catch( css::uno::RuntimeException& )
         {
@@ -620,7 +609,7 @@ void StatusIndicatorFactory::reset( const css::uno::Reference< css::task::XStatu
     }
 
     aLock.unlock();
-    reschedule();
+    impl_reschedule();
 }
 
 //*****************************************************************************************************************
@@ -650,7 +639,7 @@ void StatusIndicatorFactory::setText( const css::uno::Reference< css::task::XSta
     }
 
     aLock.unlock();
-    reschedule();
+    impl_reschedule();
 }
 
 //*****************************************************************************************************************
@@ -666,14 +655,14 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
 
     IndicatorStack::iterator pItem = ::std::find( m_aStack.begin(), m_aStack.end(), xChild );
 
-    USHORT nOldPercentage = (USHORT)( ::std::min( (( pItem->m_nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
+    USHORT nOldPercentage = (USHORT)pItem->calcPercentage();
     pItem->m_nValue = nValue;
 
     if( xChild == m_xActiveIndicator )
     {
         try
         {
-            USHORT nNewPercentage = (USHORT)( ::std::min( (( nValue * 100 )/ ::std::max( pItem->m_nRange, (sal_Int32)1 ) ), (sal_Int32)100 ));
+            USHORT nNewPercentage = (USHORT)pItem->calcPercentage();
 
             // Set new value only if its new! StatusBar implementation redraws despite the fact
             // that the value isn't new!!!
@@ -690,12 +679,12 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
 
     // We start rescheduling only after 1 second - this code was successfully introduced by the sfx2
     // implementation of the progress bar.
-    sal_Bool bReschedule = (( Get10ThSec() - m_nStartTime ) > TIMEOUT_START_RESCHEDULE );
+    sal_Bool bReschedule = (( impl_get10ThSec() - m_nStartTime ) > TIMEOUT_START_RESCHEDULE );
 
     aLock.unlock();
 
     if ( bReschedule )
-        reschedule();
+        impl_reschedule();
 }
 
 /*-************************************************************************************************************//**
@@ -710,15 +699,35 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     @onerror    -
     @threadsafe yes
 *//*-*************************************************************************************************************/
-
-void StatusIndicatorFactory::reschedule()
+void StatusIndicatorFactory::impl_reschedule()
 {
+    ResetableGuard aGlobalLock( LockHelper::getGlobalLock() );
     if ( m_nInReschedule == 0 )
     {
         ++m_nInReschedule;
+        aGlobalLock.unlock();
         Application::Reschedule();
+        aGlobalLock.lock();
         --m_nInReschedule;
     }
+}
+
+/*-************************************************************************************************************//**
+    @interface  -
+    @short
+    @descr
+
+
+    @param      -
+    @return     -
+
+    @onerror    -
+    @threadsafe yes
+*//*-*************************************************************************************************************/
+sal_uInt32 StatusIndicatorFactory::impl_get10ThSec()
+{
+    sal_uInt32 n10Ticks = 10 * (sal_uInt32)clock();
+    return n10Ticks / CLOCKS_PER_SEC;
 }
 
 /*-************************************************************************************************************//**
@@ -751,7 +760,7 @@ void StatusIndicatorFactory::implts_recalcLayout()
         {
             if( m_pStatusBar != NULL )
             {
-                css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
+                css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize(); // bug on toolkit! They doesn't use solar mutex by herself so we do it here.
                 Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
 
                 m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
