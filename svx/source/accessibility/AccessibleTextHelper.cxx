@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-25 08:35:13 $
+ *  last change: $Author: thb $ $Date: 2002-07-31 09:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,7 +831,7 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::UpdateVisibleData()
     {
-        // send CHILD_EVENT to affected children
+        // send ACCESSIBLE_VISIBLE_DATA_EVENT to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
         ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
@@ -1267,7 +1267,7 @@ namespace accessibility
     {
         i -= GetStartIndex();
 
-        if( 0 > i || i > getAccessibleChildCount() ||
+        if( 0 > i || i >= getAccessibleChildCount() ||
             GetTextForwarder().GetParagraphCount() <= i )
         {
             throw lang::IndexOutOfBoundsException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid child index")), mxFrontEnd);
