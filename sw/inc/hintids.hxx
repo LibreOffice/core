@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:57:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>          // for sal_Unicode
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 // fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
@@ -408,7 +412,7 @@ inline const SfxPoolItem* GetDfltAttr( USHORT nWhich )
 }
 #endif
 
-USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
+SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
 
 // return for the given TextAttribut without an end the correct character.
 // This function returns
