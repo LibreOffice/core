@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-20 09:59:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-29 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,6 @@ void Legend::setAnchorAndRelposFromProperty( const uno::Any & rValue )
     chart2::LegendPosition ePos;
     if( rValue >>= ePos )
     {
-        m_aAnchor.AnchorHolder = uno::Reference< layout::XAnchor >();
-
         // shift legend about 2% into the primary direction
         m_aRelativePosition.Primary   = 0.02;
         m_aRelativePosition.Secondary = 0.0;
