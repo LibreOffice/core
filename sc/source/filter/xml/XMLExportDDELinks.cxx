@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SHEET_XDDELINK_HPP_
 #include <com/sun/star/sheet/XDDELink.hpp>
@@ -154,15 +157,15 @@ void ScXMLExportDDELinks::WriteCell(const sal_Bool bEmpty, const sal_Bool bStrin
 
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
 {
-    sal_Int32 nRowCount;
-    sal_Int32 nColCount;
-    ScMatrix* pMatrix = NULL;
-    sal_uInt16 nuRow, nuCol;
-    if (rExport.GetDocument() &&
-        rExport.GetDocument()->GetDdeLinkResultDimension(static_cast<USHORT>(nPos), nuCol, nuRow, pMatrix))
+    const ScMatrix* pMatrix = NULL;
+    if (rExport.GetDocument())
+        pMatrix = rExport.GetDocument()->GetDdeLinkResultMatrix( static_cast<USHORT>(nPos) );
+    if (pMatrix)
     {
-        nRowCount = nuRow;
-        nColCount = nuCol;
+        USHORT nuCol, nuRow;
+        pMatrix->GetDimensions( nuCol, nuRow );
+        sal_Int32 nRowCount = nuRow;
+        sal_Int32 nColCount = nuCol;
         SvXMLElementExport aTableElem(rExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True);
         rtl::OUStringBuffer sBuffer;
         if (nColCount > 1)
@@ -183,16 +186,29 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             SvXMLElementExport aElemRow(rExport, XML_NAMESPACE_TABLE, XML_TABLE_ROW, sal_True, sal_True);
             for(sal_Int32 nColumn = 0; nColumn < nColCount; nColumn++)
             {
+                BOOL bIsString = FALSE;
+                const MatValue* pMatVal = pMatrix->Get( static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow), bIsString );
+
                 if (nColumn == 0)
-                    bPrevEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow),
-                                                                        sPrevValue, fPrevValue, bPrevString);
+                {
+                    bPrevEmpty = !pMatVal;
+                    bPrevString = bIsString;
+                    if( bIsString )
+                        sPrevValue = pMatVal->GetString();
+                    else
+                        fPrevValue = pMatVal->fVal;
+                }
                 else
                 {
                     double fValue;
                     String sValue;
-                    sal_Bool bString(sal_True);
-                    sal_Bool bEmpty = rExport.GetDocument()->GetDdeLinkResult(pMatrix, static_cast<USHORT>(nColumn), static_cast<USHORT>(nRow),
-                                                                        sValue, fValue, bString);
+                    sal_Bool bEmpty = !pMatVal;
+                    sal_Bool bString = bIsString;
+                    if( bIsString )
+                        sValue = pMatVal->GetString();
+                    else
+                        fValue = pMatVal->fVal;
+
                     if (CellsEqual(bPrevEmpty, bPrevString, sPrevValue, fPrevValue,
                                 bEmpty, bString, sValue, fValue))
                         nRepeatColsCount++;
@@ -237,7 +253,7 @@ void ScXMLExportDDELinks::WriteDDELinks(uno::Reference<sheet::XSpreadsheetDocume
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_TOPIC, xDDELink->getTopic());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_DDE_ITEM, xDDELink->getItem());
                             rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_AUTOMATIC_UPDATE, XML_TRUE);
-                            sal_uInt16 nMode;
+                            BYTE nMode;
                             if (rExport.GetDocument() &&
                                 rExport.GetDocument()->GetDdeLinkMode(nDDELink, nMode))
                             {
