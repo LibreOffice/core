@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1581,7 +1581,7 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     HTML_TOKEN_IDS eTokenId = (HTML_TOKEN_IDS)pInfo->nToken;
 #endif
     BOOL bSetLastToken = TRUE;
@@ -2841,7 +2841,7 @@ ScHTMLTable* ScHTMLQueryParser::GetTable( ScHTMLTableId nTableId ) const
 
 void ScHTMLQueryParser::ProcessToken( const ImportInfo& rInfo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     HTML_TOKEN_IDS eTokenId = static_cast< HTML_TOKEN_IDS >( rInfo.nToken );
 #endif
     switch( rInfo.nToken )
@@ -3037,7 +3037,7 @@ void ScHTMLQueryParser::PreOff( const ImportInfo& rInfo )
 
 IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     HTML_TOKEN_IDS eTokenId = static_cast< HTML_TOKEN_IDS >( pInfo->nToken );
 #endif
     switch( pInfo->eState )
