@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Decompressor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:05:06 $
+ *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,17 @@
  *
  *
  ************************************************************************/
+#ifndef _XMLSEARCH_DB_BLOCK_HXX_
+#include <db/Block.hxx>
+#endif
 #ifndef _XMLSEARCH_UTIL_DECOMPRESSOR_HXX_
 #include <util/Decompressor.hxx>
 #endif
+#ifndef _XMLSEARCH_UTIL_COMPRESSORITERATOR_HXX_
+#include <util/CompressorIterator.hxx>
+#endif
+
+
 
 using namespace xmlsearch;
 using namespace xmlsearch::util;
@@ -200,11 +208,6 @@ sal_Int32 Decompressor::countZeroes() throw( excep::XmlSearchException )
 }
 
 
-#ifndef _XMLSEARCH_UTIL_COMPRESSORITERATOR_HXX_
-#include <util/CompressorIterator.hxx>
-#endif
-
-
 bool Decompressor::readNext( sal_Int32 k,CompressorIterator* it) throw( excep::XmlSearchException )
 {
   if( read() != 0 )
@@ -230,16 +233,6 @@ bool Decompressor::readNext( sal_Int32 k,CompressorIterator* it) throw( excep::X
     else
       ++count;
 }
-
-
-
-
-// extern sal_Int32 getInteger_( const sal_Int8* );
-
-
-#ifndef _XMLSEARCH_DB_BLOCK_HXX_
-#include <db/Block.hxx>
-#endif
 
 
 sal_Int32 StreamDecompressor::getNextByte()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConceptData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@
 #ifndef _XMLSEARCH_QE_QUERY_HXX_
 #include <qe/Query.hxx>
 #endif
-#include <stdio.h>
+#ifndef _XMLSEARCH_QE_DOCGENERATOR_HXX_
+#include <qe/DocGenerator.hxx>
+#endif
+
 
 using namespace xmlsearch::qe;
 
@@ -109,11 +112,6 @@ void ConceptData::addLast( ConceptData* r )
     else
         next_ = r;
 }
-
-
-#ifndef _XMLSEARCH_QE_DOCGENERATOR_HXX_
-#include <qe/DocGenerator.hxx>
-#endif
 
 
 void ConceptData::generateFillers( std::vector< RoleFiller* >& array, sal_Int32 pos )

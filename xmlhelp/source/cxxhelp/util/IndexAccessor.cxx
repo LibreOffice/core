@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IndexAccessor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:13 $
+ *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,19 @@
  *
  *
  ************************************************************************/
-#ifdef ABIDEBUG
-#include <abidebug.hxx>
-#endif
-#ifndef _XMLSEARCH_UTIL_INDEXACCESSOR_HXX_
-#include <util/IndexAccessor.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#ifndef _XMLSEARCH_UTIL_INDEXACCESSOR_HXX_
+#include <util/IndexAccessor.hxx>
+#endif
 #ifndef _XMLEARCH_UTIL_RANDOMACCESSSTREAM_HXX_
 #include <util/RandomAccessStream.hxx>
 #endif
+
 
 using namespace xmlsearch::util;
 
@@ -96,8 +97,7 @@ public:
         sal_uInt64 nbytesread;
         osl::FileBase::RC err = file_.read( (void*)(data), sal_uInt64(num),nbytesread );
 
-        if( err != osl::FileBase::E_None )
-            printf( "Bytes requested = %d, Bytes read = %d\n",num,sal_Int32( nbytesread ) );
+        OSL_ASSERT( err == osl::FileBase::E_None );
 
         return sal_Int32( nbytesread );
     }
@@ -148,8 +148,8 @@ RandomAccessStreamImpl::RandomAccessStreamImpl( const rtl::OUString& aPath,const
 
     if( file_.open( flags ) != osl::FileBase::E_None )
     {
-        printf( "RandomAccessStreamImpl closed" );
         file_.close();
+        OSL_ASSERT( false );
     }
 }
 

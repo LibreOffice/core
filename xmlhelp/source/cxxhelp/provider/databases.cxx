@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 13:16:11 $
+ *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <berkeleydb/db_cxx.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
@@ -74,13 +75,17 @@
 #ifndef _URLPARAMETER_HXX_
 #include <provider/urlparameter.hxx>
 #endif
-#include <berkeleydb/db_cxx.h>
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 
 using namespace chelp;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;
 using namespace com::sun::star::container;
-
+using namespace com::sun::star::i18n;
+using namespace com::sun::star::lang;
 
 
 Databases::Databases( const rtl::OUString& instPath,
@@ -326,6 +331,30 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
 }
 
 
+
+rtl::OUString Databases::country( const rtl::OUString& Language )
+{
+    sal_Int32 idx;
+    if( ( idx = Language.indexOf( '-' ) ) != -1 ||
+        ( idx = Language.indexOf( '_' ) ) != -1 )
+        return Language.copy( 1+idx );
+
+    return rtl::OUString();
+}
+
+
+
+rtl::OUString Databases::variant( const rtl::OUString& System )
+{
+    if( System.compareToAscii( "WIN" ) == 0 ||
+        System.compareToAscii( "MAC" ) )
+        return System;
+    else
+        return rtl::OUString::createFromAscii( "POSIX" );
+}
+
+
+
 Db* Databases::getBerkeley( const rtl::OUString& Database,
                             const rtl::OUString& Language,
                             bool helpText )
@@ -356,6 +385,35 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
 
         table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 );
         m_aDatabases[ key ] = table;
+    }
+
+    return it->second;
+}
+
+
+
+Reference< XCollator >
+Databases::getCollator( const rtl::OUString& Language,
+                        const rtl::OUString& System )
+{
+    rtl::OUString key = Language;
+
+    osl::MutexGuard aGuard( m_aMutex );
+
+    CollatorTable::iterator it =
+        m_aCollatorTable.insert( CollatorTable::value_type( key,0 ) ).first;
+
+    if( ! it->second.is() )
+    {
+        it->second =
+            Reference< XCollator > (
+                m_xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ),
+                UNO_QUERY );
+
+        it->second->loadDefaultCollator( Locale( lang( Language ),
+                                                 country( Language ),
+                                                 rtl::OUString() ),
+                                         0 );
     }
 
     return it->second;
@@ -406,21 +464,26 @@ Sequence< rtl::OUString >& KeywordInfo::insertId( sal_Int32 index,rtl::OUString 
 }
 
 
-struct comp
+
+KeywordInfo::Compare::Compare( const Reference< XCollator >& xCollator )
+    : m_xCollator( xCollator )
 {
-    int operator()( const rtl::OUString& l,const rtl::OUString& r )
-    {
-        if( l <= r )
-            return 1;
-        else
-            return 0;
-    }
-};
+}
 
 
-void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_ )
+int KeywordInfo::Compare::operator()( const rtl::OUString& l,const rtl::OUString& r )
 {
-    std::sort( listKey_.begin(),listKey_.end(),comp() );
+    if( m_xCollator.is() )
+        return ( m_xCollator->compareString( l,r ) <= 0 ) ? 1 : 0;
+    else
+        return ( l <= r ) ? 1 : 0;
+}
+
+
+
+void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_,Compare& comp )
+{
+    std::sort( listKey_.begin(),listKey_.end(),comp );
     listKey.realloc( listKey_.size() );
     listId.realloc( listKey_.size() );
     listAnchor.realloc( listKey_.size() );
@@ -486,7 +549,8 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
             }
         }
 
-        info->sort( listKey_ );
+        info->sort( listKey_,KeywordInfo::Compare( getCollator( Language,
+                                                                rtl::OUString() ) ) );
         cursor->close();
         table.close( 0 );
 

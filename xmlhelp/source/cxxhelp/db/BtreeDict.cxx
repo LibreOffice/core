@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BtreeDict.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-06 14:48:47 $
+ *  last change: $Author: abi $ $Date: 2001-06-18 12:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,12 @@
  *
  *
  ************************************************************************/
+#ifndef INCLUDED_STL_VECTOR
+#include <vector>
+#define INCLUDED_STL_VECTOR
+#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
-#ifndef __SGI_STL_VECTOR
-#include <stl/vector>
 #endif
 #ifndef _XMLSEARCH_DB_BTREEDICT_HXX_
 #include <db/BtreeDict.hxx>
@@ -94,8 +95,8 @@
 const sal_Int32 xmlsearch::db::BtreeDict::ENTHEADERLEN = 6;
 const sal_Int32 xmlsearch::db::BtreeDict::BLOCKSIZE = 2048;
 const sal_Int32 xmlsearch::db::BtreeDict::HEADERLEN = 8;
-const sal_Int32 xmlsearch::db::BtreeDict::DATALEN
-= xmlsearch::db::BtreeDict::BLOCKSIZE - xmlsearch::db::BtreeDict::HEADERLEN;
+const sal_Int32 xmlsearch::db::BtreeDict::DATALEN =
+xmlsearch::db::BtreeDict::BLOCKSIZE - xmlsearch::db::BtreeDict::HEADERLEN;
 
 const sal_Int32 xmlsearch::db::BtreeDict::nBlocksLimit = 64;
 const sal_Int32 xmlsearch::db::BtreeDict::MaxKeyLength = 255;
