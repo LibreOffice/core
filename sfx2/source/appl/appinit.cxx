@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2000-12-05 11:48:37 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 09:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,55 +220,6 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
 //====================================================================
 
-static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
-{
-    Reference< XMultiServiceFactory >
-        xServiceFactory(comphelper::getProcessServiceFactory());
-    if (!xServiceFactory.is())
-    {
-        DBG_ERROR("configureUcb(): No XMultiServiceFactory");
-        return false;
-    }
-
-    rtl::OUString aPipe;
-    vos::OSecurity().getUserIdent(aPipe);
-
-    rtl::OUStringBuffer aPortal;
-    if (rPortalConnect.getLength() != 0)
-    {
-        aPortal.append(sal_Unicode(','));
-        aPortal.append(rPortalConnect);
-    }
-
-    Sequence< Any > aArgs(6);
-    aArgs[0]
-        <<= rtl::OUString::createFromAscii(bServer ?
-                                               UCB_CONFIGURATION_KEY1_SERVER :
-                                               UCB_CONFIGURATION_KEY1_LOCAL);
-    aArgs[1]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
-    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
-    aArgs[3] <<= aPipe;
-    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
-    aArgs[5] <<= aPortal.makeStringAndClear();
-
-    bool bSuccess = false;
-    try
-    {
-        bSuccess
-            = xServiceFactory->
-                  createInstanceWithArguments(
-                          rtl::OUString(
-                              RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.ucb.UniversalContentBroker")),
-                          aArgs).
-                      is()
-                  != false;
-    }
-    catch (Exception const &) {}
-    return bSuccess;
-}
-
 //====================================================================
 
 FASTBOOL SfxApplication::Initialize_Impl()
@@ -445,13 +396,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     // get CHAOS item pool...
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
-
-    if (!configureUcb(pAppData_Impl->bServer, pAppData_Impl->aPortalConnect))
-    {
-        DBG_ERROR("SfxApplication::Initialize_Impl(): Can't configure UCB");
-        exit(-1);
-        return FALSE;
-    }
 
     InsertLateInitHdl( LINK(this, SfxApplication,LateInitNewMenu_Impl) );
     InsertLateInitHdl( LINK(this, SfxApplication,LateInitWizMenu_Impl) );
