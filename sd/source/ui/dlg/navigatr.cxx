@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:59:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 16:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,6 @@ SdNavigatorWin::SdNavigatorWin(
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
     aToolbox.SetDropdownClickHdl( LINK(this, SdNavigatorWin, DropdownClickToolBoxHdl) );
-    pBindings->GetImageManager()->RegisterToolBox( &aToolbox, SFX_TOOLBOX_CHANGEOUTSTYLE );
 
     // TreeListBox
     // set position below toolbox
@@ -209,8 +208,6 @@ SdNavigatorWin::SdNavigatorWin(
 
 SdNavigatorWin::~SdNavigatorWin()
 {
-    pBindings->GetImageManager()->ReleaseToolBox( &aToolbox );
-
     delete pNavigatorCtrlItem;
     delete pPageNameCtrlItem;
 
