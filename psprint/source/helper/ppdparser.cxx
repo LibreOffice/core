@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@ struct std::hash< const psp::PPDKey* >
 #include <tools/urlobj.hxx>
 #include <tools/stream.hxx>
 #include <osl/mutex.hxx>
+#include <osl/file.hxx>
+#include <osl/process.h>
+#include <osl/thread.h>
 
 #define PRINTER_PPDDIR "driver"
 
@@ -94,51 +97,112 @@ using namespace rtl;
 #define DBG_ASSERT( x, y )
 #endif
 
-::std::list< PPDParser* > PPDParser::aAllParsers;
-
+std::list< PPDParser* > PPDParser::aAllParsers;
+std::hash_map< OUString, OUString, OUStringHash >* PPDParser::pAllPPDFiles = NULL;
 static String aEmptyString;
 
-static String GetPPDFile( const String& rFile )
+void PPDParser::scanPPDDir( const String& rDir )
 {
-    INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-    SvFileStream aStream( aPPD.PathToFileName(), STREAM_READ );
-    // someone might enter a full qualified name here
-    if( ! aStream.IsOpen() )
-    {
-        // check installation directories
-        String aFile( aPPD.GetName() );
-        String aPathList( getPrinterPath() );
-        int nTokenCount = aPathList.GetTokenCount( ':' );
-        for( int i = 0; i < nTokenCount && ! aStream.IsOpen(); i++ )
-        {
-            aPPD = INetURLObject( aPathList.GetToken( i, ':' ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            aPPD.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINTER_PPDDIR ) ) );
-            aPPD.Append( aFile );
+    static const sal_Char* pSuffixes[] = { "PS", "PPD" };
+    static const int nSuffixLens[] = { 2, 3 };
+    const int nSuffixes = sizeof(pSuffixes)/sizeof(pSuffixes[0]);
 
-            aStream.Open( aPPD.PathToFileName(), STREAM_READ );
-            // append .PS if necessary
-            if( ! aStream.IsOpen() )
+    osl::Directory aDir( rDir );
+    aDir.open();
+    osl::DirectoryItem aItem;
+    bool bWas = false;
+
+    INetURLObject aPPDDir(rDir);
+    while( aDir.getNextItem( aItem ) == osl::FileBase::E_None )
+    {
+        osl::FileStatus aStatus( FileStatusMask_FileName            |
+                                 FileStatusMask_Type
+                                 );
+        if( aItem.getFileStatus( aStatus ) == osl::FileBase::E_None &&
+            ( aStatus.getFileType() == osl::FileStatus::Regular ||
+              aStatus.getFileType() == osl::FileStatus::Link ) )
+        {
+            INetURLObject aPPDFile = aPPDDir;
+            aPPDFile.Append( aStatus.getFileName() );
+            String aExt = aPPDFile.getExtension();
+            // match extension
+            for( int nSuffix = 0; nSuffix < nSuffixes; nSuffix++ )
             {
-                aPPD.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "PS" ) ) );
-                aStream.Open( aPPD.PathToFileName(), STREAM_READ );
-                // append .PPD
-                if( ! aStream.IsOpen() )
+                if( aExt.EqualsIgnoreCaseAscii( pSuffixes[nSuffix] ) )
                 {
-                    aPPD.setExtension( String( RTL_CONSTASCII_USTRINGPARAM( "PPD" ) ) );
-                    aStream.Open( aPPD.PathToFileName(), STREAM_READ );
+                    (*pAllPPDFiles)[ aPPDFile.getBase() ] = aPPDFile.PathToFileName();
+                    break;
                 }
             }
         }
     }
+    aDir.close();
+}
+
+void PPDParser::initPPDFiles()
+{
+    if( pAllPPDFiles )
+        return;
+
+    pAllPPDFiles = new std::hash_map< OUString, OUString, OUStringHash >();
+
+    // check installation directories
+    std::list< OUString > aPathList;
+    psp::getPrinterPathList( aPathList, PRINTER_PPDDIR );
+    for( std::list< OUString >::const_iterator ppd_it = aPathList.begin(); ppd_it != aPathList.end(); ++ppd_it )
+    {
+        INetURLObject aPPDDir( *ppd_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+        scanPPDDir( aPPDDir.GetMainURL( INetURLObject::NO_DECODE ) );
+    }
+    if( pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() )
+    {
+        // last try: search in directory of executable (mainly for setup)
+        OUString aExe;
+        if( osl_getExecutableFile( &aExe.pData ) == osl_Process_E_None )
+        {
+            INetURLObject aDir( aExe );
+            aDir.removeSegment();
+#ifdef DEBUG
+            fprintf( stderr, "scanning last chance dir: %s\n", OUStringToOString( aDir.GetMainURL( INetURLObject::NO_DECODE ), osl_getThreadTextEncoding() ).getStr() );
+#endif
+            scanPPDDir( aDir.GetMainURL( INetURLObject::NO_DECODE ) );
+#ifdef DEBUG
+            fprintf( stderr, "SGENPRT %s\n", pAllPPDFiles->find( OUString( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) ) == pAllPPDFiles->end() ? "not found" : "found" );
+#endif
+        }
+    }
+}
+
+String PPDParser::getPPDFile( const String& rFile )
+{
+    INetURLObject aPPD( rFile, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+    // someone might enter a full qualified name here
+    SvFileStream aStream( aPPD.PathToFileName(), STREAM_READ );
+    if( ! aStream.IsOpen() )
+    {
+        initPPDFiles();
+        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it =
+            pAllPPDFiles->find( aPPD.getBase() );
+        if( it == pAllPPDFiles->end() )
+        {
+            // a new file ? rehash
+            delete pAllPPDFiles; pAllPPDFiles = NULL;
+            initPPDFiles();
+            it = pAllPPDFiles->find( aPPD.getBase() );
+            // note this is optimized for office start where
+            // no new files occur and initPPDFiles is called only once
+        }
+        if( it != pAllPPDFiles->end() )
+            aStream.Open( it->second, STREAM_READ );
+    }
 
     String aRet;
-
     if( aStream.IsOpen() )
     {
         ByteString aLine;
         aStream.ReadLine( aLine );
         if( aLine.Search( "*PPD-Adobe" ) == 0 )
-            aRet = aPPD.PathToFileName();
+            aRet = aStream.GetFileName();
         else
         {
             // our *Include hack does usually not begin
@@ -147,7 +211,7 @@ static String GetPPDFile( const String& rFile )
             while( aLine.Search( "*Include" ) != 0 && --nLines )
                 aStream.ReadLine( aLine );
             if( nLines )
-                aRet = aPPD.PathToFileName();
+                aRet = aStream.GetFileName();
         }
     }
 
@@ -156,7 +220,7 @@ static String GetPPDFile( const String& rFile )
 
 String PPDParser::getPPDPrinterName( const String& rFile )
 {
-    String aPath = GetPPDFile( rFile );
+    String aPath = getPPDFile( rFile );
     String aName;
 
     // read in the file
@@ -181,7 +245,7 @@ String PPDParser::getPPDPrinterName( const String& rFile )
                 aCurLine.EraseLeadingChars( '"' );
                 aCurLine.EraseTrailingChars( '"' );
                 aStream.Close();
-                aStream.Open( GetPPDFile( aCurLine ), STREAM_READ );
+                aStream.Open( getPPDFile( aCurLine ), STREAM_READ );
                 continue;
             }
             if( aCurLine.CompareToAscii( "*ModelName:", 11 ) == COMPARE_EQUAL )
@@ -201,7 +265,7 @@ const PPDParser* PPDParser::getParser( String aFile )
     static ::osl::Mutex aMutex;
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
 
-    aFile = GetPPDFile( aFile );
+    aFile = getPPDFile( aFile );
     if( ! aFile.Len() )
         return NULL;
 
@@ -221,6 +285,8 @@ void PPDParser::freeAll()
         delete aAllParsers.front();
         aAllParsers.pop_front();
     }
+    delete pAllPPDFiles;
+    pAllPPDFiles = NULL;
 }
 
 PPDParser::PPDParser( const String& rFile ) :
@@ -261,7 +327,7 @@ PPDParser::PPDParser( const String& rFile ) :
                 aCurLine.EraseLeadingChars( '"' );
                 aCurLine.EraseTrailingChars( '"' );
                 aStream.Close();
-                aStream.Open( GetPPDFile( aCurLine ), STREAM_READ );
+                aStream.Open( getPPDFile( aCurLine ), STREAM_READ );
                 continue;
             }
             aLines.push_back( aCurLine );
@@ -620,7 +686,7 @@ void PPDParser::parseOpenUI( const String& rLine )
     if( keyit == m_aKeys.end() )
     {
         pKey = new PPDKey( aKey );
-        m_aKeys[ aKey ] = pKey;
+        insertKey( aKey, pKey );
     }
     else
         pKey = keyit->second;
