@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:16:39 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 17:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ private: //member
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XDataSequence >         m_xData_ZValues;
 
+    ::com::sun::star::uno::Sequence< double >                     m_XValues_Double;
     ::com::sun::star::uno::Sequence< double >                     m_YValues_Double;
 
     ::com::sun::star::uno::Sequence< sal_Int32 >                  m_aAttributedDataPointIndexList;

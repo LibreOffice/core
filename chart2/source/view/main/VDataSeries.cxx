@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 16:06:19 $
+ *  last change: $Author: iha $ $Date: 2003-11-13 17:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@ VDataSeries::VDataSeries()
     , m_xData_YValues(NULL)
     , m_xData_ZValues(NULL)
 
+    , m_XValues_Double()
+    , m_YValues_Double()
+
     , m_apCaption_Series(NULL)
     , m_apLabelPropNames_Series(NULL)
     , m_apLabelPropValues_Series(NULL)
@@ -204,6 +207,7 @@ VDataSeries::VDataSeries( uno::Reference< XDataSeries > xDataSeries )
                 if( aRole.equals(C2U("x-values")) )
                 {
                     m_xData_XValues = xDataSequence;
+                    initDoubleValues( m_XValues_Double, m_xData_XValues );
                 }
                 else if( aRole.equals(C2U("values")) )
                 {
@@ -274,14 +278,22 @@ sal_Int32 VDataSeries::getTotalPointCount() const
     return m_nPointCount;
 }
 
+double lcl_mkRandomNumber()
+{
+    // return  number between 0 and 100 with two digits precision
+    return floor(( rand() * 100.0 ) / ( RAND_MAX + 1.0 )) / 10.0;
+}
+
 double VDataSeries::getX( sal_Int32 index ) const
 {
     if(m_xData_XValues.is())
     {
-        return 1; //@todo
+        if( 0<=index && index<m_XValues_Double.getLength() )
+            return m_XValues_Double[index];
     }
     else
     {
+        return lcl_mkRandomNumber(); //@todo remove this test
         return index;
     }
 }
