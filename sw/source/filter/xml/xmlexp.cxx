@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-29 17:19:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-30 14:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ void SwXMLExport::_ExportFontDecls()
     SvXMLExport::_ExportFontDecls();
 }
 
-#define NUM_EXPORTED_VIEW_SETTINGS 9
+#define NUM_EXPORTED_VIEW_SETTINGS 10
 void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
@@ -518,6 +518,11 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowRedlineChanges") );
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
+
+    sal_Bool bRecordRedlineChanges = IsRedlineOn ( pDoc->GetRedlineMode() );
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "RecordRedlineChanges") );
+    pValue[nIndex++].Value.setValue( &bRecordRedlineChanges, ::getBooleanCppuType() );
 
     sal_Bool bShowHead = pDoc->IsHeadInBrowse();
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ShowHeaderWhileBrowsing") );
@@ -694,6 +699,7 @@ void SwXMLExport::_ExportContent()
     {
         if (xPropSet.is())
         {
+            OUString sTwoDigitYear(RTL_CONSTASCII_USTRINGPARAM("TwoDigitYear"));
             // record old mode
             Any aAny = xPropSet->getPropertyValue(sShowChanges);
             bRedlineModeValue = *(sal_Bool*)aAny.getValue();
@@ -703,35 +709,20 @@ void SwXMLExport::_ExportContent()
             sal_Bool bTmp = sal_False;
             aAny.setValue(&bTmp, ::getBooleanCppuType());
             xPropSet->setPropertyValue(sShowChanges, aAny);
-        }
-    }
 
-    /*
-    if( GetModel().is() )
-    {
-        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-        Reference < XText > xText = xTextDoc->getText();
-        Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-        if( xTextTunnel.is() )
-        {
-            SwXText *pText = (SwXText *)xTextTunnel->getSomething(
-                                                SwXText::getUnoTunnelId() );
-            ASSERT( pText, "SwXText missing" );
-            if( pText )
+            aAny = xPropSet->getPropertyValue( sTwoDigitYear );
+            sal_Int16 nYear;
+            aAny >>= nYear;
+            if (nYear != 1930 )
             {
-                SwDoc *pDoc = pText->GetDoc();
-                sal_uInt16 nYear2000 = pDoc->GetDocOptions().GetYear2000();
-                if (nYear2000 != 1930)
-                {
-                    rtl::OUStringBuffer sBuffer;
-                    GetMM100UnitConverter().convertNumber(sBuffer, nYear2000);
-                    AddAttribute(XML_NAMESPACE_TABLE, sXML_null_year, sBuffer.makeStringAndClear());
-                }
+                rtl::OUStringBuffer sBuffer;
+                GetMM100UnitConverter().convertNumber(sBuffer, nYear);
+                AddAttribute(XML_NAMESPACE_TABLE, sXML_null_year, sBuffer.makeStringAndClear());
+                SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, sXML_calculation_settings, sal_True, sal_True);
             }
         }
     }
-    */
+
     GetTextParagraphExport()->exportTrackedChanges( sal_False );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
