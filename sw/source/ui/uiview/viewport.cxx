@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 10:49:32 $
+ *  last change: $Author: os $ $Date: 2001-07-09 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,7 +1124,12 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             bShowH = bShowV = bHAuto = FALSE;
         break;
     }
-
+    SwDocShell* pDocSh = GetDocShell();
+    BOOL bIsPreview = pDocSh->IsPreview();
+    if( bIsPreview )
+    {
+        bShowH = bShowV = bHAuto = FALSE;
+    }
     if ( bShowH != StatHScrollbar() )
         bShowH ? CreateHScrollbar() : KillHScrollbar();
     if ( pHScrollbar )
@@ -1179,9 +1184,9 @@ void __EXPORT SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 
         //Damit auch beim outplace editing die Seitenbreite sofort
         //angepasst wird.
-        if ( GetDocShell()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-            GetDocShell()->SetVisArea(
-                            GetDocShell()->SfxInPlaceObject::GetVisArea() );
+        if ( pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+            pDocSh->SetVisArea(
+                            pDocSh->SfxInPlaceObject::GetVisArea() );
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
              !pWrtShell->IsBrowseMode() )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType() );

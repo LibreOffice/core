@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
+ *  last change: $Author: os $ $Date: 2001-07-09 10:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,6 +868,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
             aUsrPref.SetZoomType( SVX_ZOOM_PERCENT );
             aUsrPref.SetZoom( 100 );
         }
+        if(pDocSh->IsPreview())
+            aUsrPref.SetZoomType( SVX_ZOOM_WHOLEPAGE );
         pWrtShell = new SwWrtShell( rDoc, pEditWin, *this, 0, &aUsrPref );
     }
 
@@ -1185,6 +1187,8 @@ void SwView::ReadUserData( const String &rUserData, sal_Bool bBrowse )
 
 void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rSequence, sal_Bool bBrowse )
 {
+    if(GetDocShell()->IsPreview())
+        return;
     sal_Int32 nLength = rSequence.getLength();
     if (nLength && (!pWrtShell->IsNewLayout() || pWrtShell->IsBrowseMode() || bBrowse) )
     {
