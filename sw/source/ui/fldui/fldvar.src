@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:31:00 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_simplified ] = "×Ö¶ÎÀàĞÍ(~T)";
         Text[ russian ] = "Òèï ïîëÿ";
         Text[ polish ] = "Typ pola";
-        Text[ japanese ] = "Ì¨°ÙÄŞ‚Ìí—Ş(~T)";
+        Text[ japanese ] = "Ì¨°ÙÄŞÀ²Ìß(~T)";
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
@@ -235,7 +235,7 @@ TabPage TP_FLD_VAR
         Text[ chinese_simplified ] = "°´ÕÂ±àºÅ";
         Text[ russian ] = "Íóìåğàöèÿ ïî ãëàâàì";
         Text[ polish ] = "Numeracja wed³ug rozdzia³ów ";
-        Text[ japanese ] = "Í‚Ì”Ô†•t‚¯";
+        Text[ japanese ] = "Í”Ô†•t‚¯";
         Text[ chinese_traditional ] = "«ö³¹½s¸¹";
         Text[ arabic ] = "ÊÑŞíã İÕæá";
         Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
