@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-25 16:42:13 $
+ *  last change: $Author: cmc $ $Date: 2002-04-26 14:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,11 @@ void SwRTFParser::NextToken( int nToken )
         if( !bReadNoTbl )
         {
             if( !pTableNode )           // Tabelle nicht mehr vorhanden ?
-                NewTblLine();           // evt. Line copieren
+            {
+                if (RTF_TROWD != GetNextToken())
+                    NewTblLine();           // evt. Line copieren
+                SkipToken(-1);
+            }
             else
             {
                 // Crsr nicht mehr in der Tabelle ?
