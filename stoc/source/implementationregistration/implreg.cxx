@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-11 16:39:08 $
+ *  last change: $Author: dbo $ $Date: 2002-11-18 13:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,50 +334,41 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
 //*************************************************************************
 //  static searchImplForLink
 //
-static OUString searchImplForLink(const Reference < XRegistryKey > & xRootKey,
-                                 const OUString& linkName,
-                                  const OUString& implName) throw ( InvalidRegistryException )
+static OUString searchImplForLink(
+    const Reference < XRegistryKey > & xRootKey,
+    const OUString& linkName,
+    const OUString& implName )
+    throw ( InvalidRegistryException )
 {
-    OUString ret;
+    const StringPool & pool = spool();
+    Reference < XRegistryKey > xKey = xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
+    if (xKey.is())
+    {
+        Sequence< Reference < XRegistryKey > > subKeys( xKey->openKeys() );
+        const Reference < XRegistryKey > * pSubKeys = subKeys.getConstArray();
+        OUString key_name( pool.slash_UNO + linkName );
 
-//      try
-//      {
-        const StringPool & pool = spool();
-        Reference < XRegistryKey > xKey = xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
-        if (xKey.is())
+        for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
         {
-            Sequence< Reference < XRegistryKey > > subKeys = xKey->openKeys();
-
-            const Reference < XRegistryKey > * pSubKeys = subKeys.getConstArray();
-            Reference < XRegistryKey > xImplKey;
-
-            for (sal_Int32 i = 0; i < subKeys.getLength(); i++)
+            try
             {
-                xImplKey = pSubKeys[i];
-
-                try
+                Reference < XRegistryKey > xImplKey( pSubKeys[i] );
+                if (xImplKey->getKeyType( key_name ) == RegistryKeyType_LINK)
                 {
-                    if (xImplKey->getKeyType( pool.slash_UNO + linkName) == RegistryKeyType_LINK)
+                    OUString oldImplName = xImplKey->getKeyName().copy(strlen("/IMPLEMENTATIONS/"));
+                    if (implName != oldImplName)
                     {
-                        OUString oldImplName = xImplKey->getKeyName().copy(strlen("/IMPLEMENTATIONS/"));
-                        if (implName != oldImplName)
-                        {
-                            ret = oldImplName;
-                            break;
-                        }
+                        return oldImplName;
                     }
                 }
-                catch(InvalidRegistryException&)
-                {
-                }
+            }
+            catch(InvalidRegistryException&)
+            {
             }
         }
-//      }
-//      catch(InvalidRegistryException&)
-//      {
-//      }
+    }
 
-    return ret;
+    return OUString();
 }
 
 //*************************************************************************
