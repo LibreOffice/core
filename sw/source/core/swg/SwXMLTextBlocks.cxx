@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:28:29 $
+ *  last change: $Author: mtg $ $Date: 2001-02-23 14:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -923,15 +923,29 @@ void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPacka
         rPackageName.SetChar( nPos, rPackageName.GetChar( nPos ) & 0x0f );
         ++nPos;
     }
-    if (xBlkRoot.Is() || 0 == OpenFile ( TRUE ) )
+#if 0
+    /*
+     * We can assume that if the package name we generate is already in the storage,
+     * then we are over-writing it...*/
+    if (xBlkRoot.Is() || 0 == OpenFile ( FALSE ) )
     {
+        if ( xBlkRoot->IsContained( rPackageName ) )
+        {
+            xBlkRoot->Remove ( rPackageName  );
+            xBlkRoot->Commit();
+        }
+
+        /*
         ULONG nIdx=0;
         while ( xBlkRoot->IsContained( rPackageName ))
         {
             ++nIdx;
             rPackageName += String::CreateFromInt32( nIdx );
         }
+        */
     }
+#endif
+
 }
 ULONG SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
                                 const String& rText )
