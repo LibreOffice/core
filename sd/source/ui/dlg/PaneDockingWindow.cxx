@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:42:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,30 +91,15 @@ PaneDockingWindow::PaneDockingWindow (
 {
     SetBackground (Wallpaper());
 
-    ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
-        pBindings->GetDispatcher()->GetFrame()));
-    msTitle = rBase.GetPaneManager().GetWindowTitle (mePane);
-    rBase.GetPaneManager().SetWindow (mePane, this);
+    InitializeTitleToolBox();
 
-    // Initialize the title tool box.
-    mpTitleToolBox.reset (new ToolBox(this));
-    mpTitleToolBox->SetSelectHdl (
-        LINK(this, PaneDockingWindow, ToolboxSelectHandler));
-    mpTitleToolBox->SetOutStyle (TOOLBOX_STYLE_FLAT);
-    mpTitleToolBox->SetBackground (Wallpaper (
-        GetSettings().GetStyleSettings().GetDialogColor()));
-    mpTitleToolBox->Show();
-
-    // Get the closer bitmap and set it as right most button.
-    Bitmap aBitmap (SdResId (BMP_CLOSE_DOC));
-    Bitmap aBitmapHC (SdResId (BMP_CLOSE_DOC_H));
-    Image aImage = Image (aBitmap, Color (COL_LIGHTMAGENTA));
-    Image aImageHC = Image (aBitmapHC, Color (BMP_COLOR_HIGHCONTRAST));
-    mpTitleToolBox->InsertItem (1,
-        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark()
-        ? aImageHC
-        : aImage);
-    mpTitleToolBox->ShowItem (1);
+    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+        pBindings->GetDispatcher()->GetFrame());
+    if (pBase != NULL)
+    {
+        msTitle = pBase->GetPaneManager().GetWindowTitle (mePane);
+        pBase->GetPaneManager().SetWindow (mePane, this);
+    }
 }
 
 
@@ -122,11 +107,12 @@ PaneDockingWindow::PaneDockingWindow (
 
 PaneDockingWindow::~PaneDockingWindow (void)
 {
-    ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
-        GetBindings().GetDispatcher()->GetFrame()));
+    ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+        GetBindings().GetDispatcher()->GetFrame());
     // Tell the ViewShellBase that the window of this slide sorter is not
     // available anymore.
-    rBase.GetPaneManager().SetWindow (mePane, NULL);
+    if (pBase != NULL)
+        pBase->GetPaneManager().SetWindow (mePane, NULL);
 }
 
 
@@ -166,19 +152,22 @@ void PaneDockingWindow::Resize (void)
     }
 
     // Place the view shell.
-    ViewShellBase& rBase (*ViewShellBase::GetViewShellBase(
+    ViewShellBase* pBase (ViewShellBase::GetViewShellBase(
         GetBindings().GetDispatcher()->GetFrame()));
-    ViewShell* pViewShell = rBase.GetPaneManager().GetViewShell (mePane);
-    if (pViewShell != NULL)
+    if (pBase != NULL)
     {
-        ::sd::Window* pWindow = pViewShell->GetActiveWindow();
-        if (nTitleBarHeight < aToolBoxSize.Height())
-            nTitleBarHeight = aToolBoxSize.Height();
-        aWindowSize.Height() -= nTitleBarHeight;
-        pViewShell->Resize(
-            Point(maBorder.Left(),nTitleBarHeight+maBorder.Top()),
-            Size (aWindowSize.Width()-maBorder.Left()-maBorder.Right(),
-                aWindowSize.Height()-maBorder.Top()-maBorder.Bottom()));
+        ViewShell* pViewShell = pBase->GetPaneManager().GetViewShell (mePane);
+        if (pViewShell != NULL)
+        {
+            ::sd::Window* pWindow = pViewShell->GetActiveWindow();
+            if (nTitleBarHeight < aToolBoxSize.Height())
+                nTitleBarHeight = aToolBoxSize.Height();
+            aWindowSize.Height() -= nTitleBarHeight;
+            pViewShell->Resize(
+                Point(maBorder.Left(),nTitleBarHeight+maBorder.Top()),
+                Size (aWindowSize.Width()-maBorder.Left()-maBorder.Right(),
+                    aWindowSize.Height()-maBorder.Top()-maBorder.Bottom()));
+        }
     }
 }
 
@@ -270,6 +259,37 @@ void PaneDockingWindow::Paint (const Rectangle& rRectangle)
 
 
 
+void PaneDockingWindow::InitializeTitleToolBox (void)
+{
+    if (mpTitleToolBox.get() == NULL)
+    {
+        // Initialize the title tool box.
+        mpTitleToolBox.reset (new ToolBox(this));
+        mpTitleToolBox->SetSelectHdl (
+            LINK(this, PaneDockingWindow, ToolboxSelectHandler));
+        mpTitleToolBox->SetOutStyle (TOOLBOX_STYLE_FLAT);
+        mpTitleToolBox->SetBackground (Wallpaper (
+            GetSettings().GetStyleSettings().GetDialogColor()));
+        mpTitleToolBox->Show();
+    }
+    else
+        mpTitleToolBox->Clear();
+
+    // Get the closer bitmap and set it as right most button.
+    Bitmap aBitmap (SdResId (BMP_CLOSE_DOC));
+    Bitmap aBitmapHC (SdResId (BMP_CLOSE_DOC_H));
+    Image aImage = Image (aBitmap, Color (COL_LIGHTMAGENTA));
+    Image aImageHC = Image (aBitmapHC, Color (BMP_COLOR_HIGHCONTRAST));
+    mpTitleToolBox->InsertItem (1,
+        GetSettings().GetStyleSettings().GetMenuBarColor().IsDark()
+        ? aImageHC
+        : aImage);
+    mpTitleToolBox->ShowItem (1);
+}
+
+
+
+
 USHORT PaneDockingWindow::AddMenu (
     const String& rsMenuName,
     const Link& rCallback)
@@ -297,9 +317,12 @@ IMPL_LINK(PaneDockingWindow, ToolboxSelectHandler, ToolBox*, pToolBox)
     if (nId == 1)
     {
         EndTracking();
+        SfxBoolItem aVisibility (mnChildWindowId, FALSE);
         GetBindings().GetDispatcher()->Execute (
             mnChildWindowId,
-            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
+            &aVisibility,
+            NULL);
     }
 
     return 0;
