@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:53 $
+ *  last change: $Author: nn $ $Date: 2000-10-19 18:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,7 @@
 
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
-#ifndef _BTBXCTL_HXX //autogen
-#include <basctl/btbxctl.hxx>
-#endif
-#ifndef _TBXCTL_HXX //autogen
-#include <svx/tbxctl.hxx>
-#endif
 
-#include <segmentc.hxx>
 #include "scitems.hxx"      // fuer tbxctrls etc.
 #include "scmod.hxx"
 #include "scresid.hxx"
@@ -105,6 +98,7 @@
 // Controls
 
 #include <svx/tbxalign.hxx>
+#include <svx/tbxctl.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/tbcontrl.hxx>
@@ -118,13 +112,7 @@
 #include <svx/fntszctl.hxx>
 
 #include "tbinsert.hxx"
-/*
-#include <basicsh.hxx>      // TbxControls
-#include <tbxctrls.hxx>
-#include <tbxctl.hxx>
-#include <stbctrls.hxx>
-#include <mnuctrls.hxx>
-*/
+
 // Child-Windows
 #include "reffact.hxx"
 #include "navipi.hxx"
@@ -140,12 +128,7 @@
 #include "dwfunctr.hxx"
 #include "acredlin.hxx"
 
-
-SEG_EOFGLOBALS()
-
 //------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(scdll_01)
 
 ScResId::ScResId( USHORT nId ) :
     ResId( nId, SC_MOD()->GetResMgr() )
@@ -153,8 +136,6 @@ ScResId::ScResId( USHORT nId ) :
 }
 
 //------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(scdll_02)
 
 void ScDLL::Init()
 {
@@ -234,7 +215,6 @@ void ScDLL::Init()
     SvxFrameToolBoxControl          ::RegisterControl(SID_ATTR_BORDER,          pMod);
     SvxFrameLineStyleToolBoxControl ::RegisterControl(SID_FRAME_LINESTYLE,      pMod);
     SvxFrameLineColorToolBoxControl ::RegisterControl(SID_FRAME_LINECOLOR,      pMod);
-    TbxControls                     ::RegisterControl(SID_CHOOSE_CONTROLS,      pMod);
 
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
@@ -298,8 +278,6 @@ void ScDLL::Init()
     //  StarOne Services are now handled in the registry
 }
 
-#pragma SEG_FUNCDEF(scdll_03)
-
 void ScDLL::Exit()
 {
     // called directly befor unloading the DLL
@@ -321,8 +299,6 @@ void ScDLL::Exit()
 //------------------------------------------------------------------
 
 #define TEXT_WIDTH(s)   rStatusBar.GetTextWidth((s))
-
-#pragma SEG_FUNCDEF(scdll_04)
 
 void ScDLL::FillStatusBar(StatusBar &rStatusBar)
 {
@@ -367,157 +343,5 @@ void ScDLL::FillStatusBar(StatusBar &rStatusBar)
 }
 
 #undef TEXT_WIDTH
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.47  2000/09/17 14:08:54  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.46  2000/09/04 13:50:01  tbe
-    basicide, isetbrw, si, vcdlged from svx to basctl
-
-    Revision 1.45  2000/08/31 16:38:18  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.44  2000/08/03 19:02:30  nn
-    pluginmenu
-
-    Revision 1.43  2000/04/17 13:26:28  nn
-    unicode changes
-
-    Revision 1.42  1999/06/28 13:30:46  NN
-    #67287# StarOne services no longer registered here
-
-
-      Rev 1.41   28 Jun 1999 15:30:46   NN
-   #67287# StarOne services no longer registered here
-
-      Rev 1.40   02 Jun 1999 21:38:20   ANK
-   #66547# SubShells
-
-      Rev 1.39   16 Mar 1999 14:17:08   NN
-   #62845# GlobalSettings unter richtigem Service-Namen registrieren
-
-      Rev 1.38   04 Mar 1999 21:14:50   NN
-   #62191# kein unsigned mehr
-
-      Rev 1.37   22 Feb 1999 20:52:34   ANK
-   #47158# Erweiterungen fuer neue DrawForm-Shell
-
-      Rev 1.36   02 Feb 1999 20:23:22   NN
-   #53308# TF_ONE51: AutoFormate wiederbelebt
-
-      Rev 1.35   26 Jan 1999 14:42:32   NN
-   #53308# TF_ONE51-includes
-
-      Rev 1.34   18 Dec 1998 16:11:54   NN
-   #53308# TF_ONE51 Umstellung
-
-      Rev 1.33   15 Dec 1998 15:57:42   ANK
-   #60209# Anwenden der neuen statische Methode GetDefItemWidth bei StatusbarControls
-
-      Rev 1.32   03 Dec 1998 20:02:28   ANK
-   #58683# Groesse hat wieder sib_autosize
-
-      Rev 1.31   02 Nov 1998 16:53:10   ANK
-   #58683# Statusbar-Eintrag 'Groesse' jetzt veraenderbar in der Breite
-
-      Rev 1.30   23 Oct 1998 12:31:58   NN
-   #58244# Registrierung von ein paar EditEngine-Feldern ist schon in der Ofa
-
-      Rev 1.29   02 Oct 1998 14:10:22   NN
-   #53308# Services fuer StarOne registrieren
-
-      Rev 1.28   11 Sep 1998 14:23:02   ER
-   #42680# Feldbefehle erweitert fuer Titel/Pfad/Dateiname
-
-      Rev 1.27   14 Apr 1998 17:32:44   MBA
-   Eingabezeile innerhalb der Task
-
-      Rev 1.26   09 Apr 1998 22:12:52   ANK
-   Redlining Erweiterungen
-
-      Rev 1.25   13 Mar 1998 13:51:58   ANK
-   Erweiterungen
-
-      Rev 1.24   08 Mar 1998 20:37:22   ANK
-   Redlining Dialog
-
-      Rev 1.23   10 Feb 1998 15:24:44   TJ
-   inlude wg. internal compiler error
-
-      Rev 1.22   06 Feb 1998 14:15:52   HJS
-   includes
-
-      Rev 1.21   23 Jan 1998 19:02:34   NN
-   include
-
-      Rev 1.20   05 Dec 1997 20:06:30   ANK
-   Includes geaendert
-
-      Rev 1.19   25 Nov 1997 11:32:26   TJ
-   includes
-
-      Rev 1.18   14 Oct 1997 19:53:52   ANK
-   Neue Funktionsbox
-
-      Rev 1.17   06 Aug 1997 15:41:58   TRI
-   VCL: Anpassungen
-
-      Rev 1.16   30 Jun 1997 12:28:14   NN
-   Feldbefehle nach Svx verschoben
-
-      Rev 1.15   04 Jun 1997 12:53:04   ER
-   363 MUSS: SIDs
-
-      Rev 1.14   23 May 1997 20:26:38   NN
-   RegisterChildWindow fuer ScFormulaDlgWrapper
-
-      Rev 1.13   21 Apr 1997 18:28:50   NN
-   im ScDLL::Exit kein ScGlobal::Clear
-
-      Rev 1.12   18 Apr 1997 13:09:28   NN
-   im Exit kein ScModuleDummy anlegen
-
-      Rev 1.11   25 Mar 1997 10:43:04   NN
-   #37851# SvxURLField schon in der OffApp registriert
-
-      Rev 1.10   08 Feb 1997 19:07:48   NN
-   Zeichenfunktionen und Ausrichtung sind jetzt Svx-Controller
-
-      Rev 1.9   28 Jan 1997 10:00:06   NN
-   PutItem(SID_ATTR_METRIC) am Module
-
-      Rev 1.8   20 Dec 1996 15:54:32   NN
-   #34679# Menue und Accelerator mit Config-IDs
-
-      Rev 1.7   13 Dec 1996 18:59:50   NN
-   SvxSearchDialogWrapper nicht mehr registrieren
-
-      Rev 1.6   24 Nov 1996 15:23:48   NN
-   ScGlobal::Clear rufen
-
-      Rev 1.5   22 Nov 1996 11:55:02   ER
-   #33275# signal() Wrapper an der App wg. BLC-Dummbatz
-
-      Rev 1.4   18 Nov 1996 18:59:00   ER
-   new: ScColRowNameRangesDlg
-
-      Rev 1.3   14 Nov 1996 22:01:10   NN
-   RegisterChildWindowContext fuer Navigator
-
-      Rev 1.2   14 Nov 1996 14:18:52   NN
-   vor dem Anlegen des ScModule nur die VersionMaps initialisieren
-
-      Rev 1.1   06 Nov 1996 14:18:34   NN
-   ScModule mit ObjectFactory vom ModuleDummy konstruieren
-
-      Rev 1.0   05 Nov 1996 14:33:12   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
 
