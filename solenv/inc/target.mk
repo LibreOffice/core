@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 13:14:55 $
+#   last change: $Author: mh $ $Date: 2000-11-10 09:08:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2843,7 +2843,7 @@ $(MISC)$/$(PRJNAME).hid : $(RESLIB1SRSFILES)
     @+if exist $@ del $@
     @$(TOUCH) $@
     @+if exist $(SRS)\*.hid type $(SRS)\*.hid >> $@
-    @+if exist $(MISC)\*.lst r:\bat\slothid.bat $(MISC)\*.lst $@ $(INPATH)
+    @+if exist $(MISC)\*.lst $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
 
 .IF "$(linkinc)"!=""
 .IF "$(GUI)"=="WNT"
