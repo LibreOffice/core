@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:52:13 $
+#   last change: $Author: as $ $Date: 2000-12-12 10:23:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ SHL2STDLIBS=	$(CPPULIB)							\
                 $(TKLIB)							\
                 $(SVLIB)							\
                 $(COMPHELPERLIB)					\
-                $(SVLLIB)
+                $(SVLLIB)							\
+                $(SOTLIB)
 
 SHL2DEF=		$(MISC)$/$(SHL2TARGET).def
 
