@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2002-01-30 14:54:05 $
+#   last change: $Author: ka $ $Date: 2002-02-05 13:10:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,11 +138,13 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
 EXCEPTIONSFILES= \
         $(SLO)$/sdoutl.obj  \
         $(SLO)$/drviews1.obj \
-        $(SLO)$/drviews5.obj \
         $(SLO)$/drviews8.obj \
         $(SLO)$/drviewsa.obj \
         $(SLO)$/outlnvsh.obj \
-        $(SLO)$/slidvish.obj
+        $(SLO)$/slidvish.obj	
+
+EXCEPTIONSNOOPTFILES=\
+        $(SLO)$/drviews5.obj	
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
@@ -202,16 +204,6 @@ SLOFILES =	\
         $(SLO)$/unmodpg.obj	\
         $(SLO)$/drgrfob.obj
 
-
-.IF "$(GUI)" == "WIN"
-NOOPTFILES=\
-    $(SLO)$/drviews5.obj
-.ENDIF
-
-.IF "$(GUI)" == "WNT"
-NOOPTFILES=\
-    $(SLO)$/drviews5.obj
-.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
