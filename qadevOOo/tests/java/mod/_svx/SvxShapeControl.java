@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-10 09:20:55 $
+ *  last change:$Date: 2003-05-27 13:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._svx;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyle;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
@@ -98,7 +99,7 @@ public class SvxShapeControl extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -150,7 +151,7 @@ public class SvxShapeControl extends TestCase {
 
             oObj = oShape ;
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
             oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Line");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;
         }
