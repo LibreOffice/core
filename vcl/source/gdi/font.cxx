@@ -2,9 +2,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:56 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_FONT_CXX
-
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
@@ -110,11 +108,11 @@ Impl_Font::Impl_Font() :
 // -----------------------------------------------------------------------
 
 Impl_Font::Impl_Font( const Impl_Font& rImplFont ) :
-    maColor( rImplFont.maColor ),
-    maFillColor( rImplFont.maFillColor ),
     maName( rImplFont.maName ),
     maStyleName( rImplFont.maStyleName ),
-    maSize( rImplFont.maSize )
+    maSize( rImplFont.maSize ),
+    maColor( rImplFont.maColor ),
+    maFillColor( rImplFont.maFillColor )
 {
     mnRefCount          = 1;
     meCharSet           = rImplFont.meCharSet;
@@ -158,11 +156,7 @@ Font::Font()
 {
     DBG_CTOR( Font, NULL );
 
-#ifdef WIN
-    static Impl_Font _near aStaticImplFont;
-#else
     static Impl_Font aStaticImplFont;
-#endif
     // RefCount == 0 fuer statische Objekte
     aStaticImplFont.mnRefCount = 0;
     mpImplFont = &aStaticImplFont;
@@ -609,19 +603,16 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm.ReadByteString( rImpl_Font.maName, rIStm.GetStreamCharSet() );
     rIStm.ReadByteString( rImpl_Font.maStyleName, rIStm.GetStreamCharSet() );
     rIStm >> rImpl_Font.maSize;
-//  rIStm >> rImpl_Font.maColor;                                    // removed since SUPD396
-//  rIStm >> rImpl_Font.maFillColor;                                // removed since SUPD396
 
     rIStm >> nTmp16; rImpl_Font.meCharSet = (rtl_TextEncoding) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meFamily = (FontFamily) nTmp16;
     rIStm >> nTmp16; rImpl_Font.mePitch = (FontPitch) nTmp16;
-//  rIStm >> nTmp16; rImpl_Font.meAlign = (FontAlign) nTmp16;       // removed since SUPD396
     rIStm >> nTmp16; rImpl_Font.meWeight = (FontWeight) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meUnderline = (FontUnderline) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meStrikeout = (FontStrikeout) nTmp16;
     rIStm >> nTmp16; rImpl_Font.meItalic = (FontItalic) nTmp16;
-    rIStm >> nTmp16; rImpl_Font.meLanguage = (LanguageType) nTmp16; // new since SUPD 396
-    rIStm >> nTmp16; rImpl_Font.meWidthType = (FontWidth) nTmp16;   // new since SUPD 396
+    rIStm >> nTmp16; rImpl_Font.meLanguage = (LanguageType) nTmp16;
+    rIStm >> nTmp16; rImpl_Font.meWidthType = (FontWidth) nTmp16;
 
     rIStm >> rImpl_Font.mnOrientation;
 
@@ -629,7 +620,6 @@ SvStream& operator>>( SvStream& rIStm, Impl_Font& rImpl_Font )
     rIStm >> bTmp; rImpl_Font.mbOutline = bTmp;
     rIStm >> bTmp; rImpl_Font.mbShadow = bTmp;
     rIStm >> nTmp8; rImpl_Font.mnKerning = nTmp8;
-//  rIStm >> bTmp; rImpl_Font.mbTransparent = bTmp;                 // removed since SUPD396
 
     if( aCompat.GetVersion() >= 2 )
     {
@@ -652,19 +642,16 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteByteString( rImpl_Font.maName, rOStm.GetStreamCharSet() );
     rOStm.WriteByteString( rImpl_Font.maStyleName, rOStm.GetStreamCharSet() );
     rOStm << rImpl_Font.maSize;
-//  rOStm << rImpl_Font.maColor;                // removed since SUPD396
-//  rOStm << rImpl_Font.maFillColor;            // removed since SUPD396
 
     rOStm << (UINT16) GetStoreCharSet( rImpl_Font.meCharSet, rOStm.GetVersion() );
     rOStm << (UINT16) rImpl_Font.meFamily;
     rOStm << (UINT16) rImpl_Font.mePitch;
-//  rOStm << (UINT16) rImpl_Font.meAlign;       // removed since SUPD396
     rOStm << (UINT16) rImpl_Font.meWeight;
     rOStm << (UINT16) rImpl_Font.meUnderline;
     rOStm << (UINT16) rImpl_Font.meStrikeout;
     rOStm << (UINT16) rImpl_Font.meItalic;
-    rOStm << (UINT16) rImpl_Font.meLanguage;    // new since SUPD 396
-    rOStm << (UINT16) rImpl_Font.meWidthType;   // new since SUPD 396
+    rOStm << (UINT16) rImpl_Font.meLanguage;
+    rOStm << (UINT16) rImpl_Font.meWidthType;
 
     rOStm << rImpl_Font.mnOrientation;
 
@@ -672,7 +659,6 @@ SvStream& operator<<( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm << (BOOL) rImpl_Font.mbOutline;
     rOStm << (BOOL) rImpl_Font.mbShadow;
     rOStm << (BYTE) rImpl_Font.mnKerning;
-//  rOStm << (BOOL) rImpl_Font.mbTransparent;   // removed since SUPD396
 
     // new in version 2
     rOStm << (BYTE)     rImpl_Font.meRelief;
