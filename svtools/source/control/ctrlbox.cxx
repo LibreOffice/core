@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2002-07-19 09:43:19 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 11:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
             aPos.Y() += ( rUDEvt.GetRect().GetHeight() - aImageSize.Height() ) / 2;
             rUDEvt.GetDevice()->Push();
             rUDEvt.GetDevice()->SetFillColor( pData->aColor );
-            rUDEvt.GetDevice()->SetLineColor( COL_BLACK );
+            rUDEvt.GetDevice()->SetLineColor( rUDEvt.GetDevice()->GetTextColor() );
             rUDEvt.GetDevice()->DrawRect( Rectangle( aPos, aImageSize ) );
             rUDEvt.GetDevice()->Pop();
             ListBox::DrawEntry( rUDEvt, FALSE, TRUE, FALSE );
