@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:46:06 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,8 @@ class ScChangeAction;
 class ScChangeViewSettings;
 class ScDocument;
 class ScAddress;
-
+class ScRange;
+class ScMarkData;
 
 enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
 
@@ -111,6 +112,9 @@ public:
     static USHORT GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos );
 
     static sal_Int32 GetTransliterationType( USHORT nSlotID );
+
+    static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
+    static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
 };
 
 // ---------------------------------------------------------------------------
