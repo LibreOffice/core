@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 21:59:39 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7886,7 +7886,7 @@ String RID_SVXITEMS_CHARROTATE
     Text[ polish ] = "znaki obrócono o $(ARG1)°";
     Text[ portuguese_brazilian ] = "character rotated by $(ARG1)?";
     Text[ japanese ] = "•¶Žš‚ð $(ARG1)° ‰ñ“]";
-    Text[ korean ] = " $(ARG1)?È¸ÀüµÈ ¹®ÀÚ";
+    Text[ korean ] = "$(ARG1)?È¸ÀüµÈ ¹®ÀÚ";
     Text[ chinese_simplified ] = "×Ö·ûÐý×ª $(ARG1)";
     Text[ chinese_traditional ] = "¦r¤¸±ÛÂà $(ARG1)¢X";
     Text[ turkish ] = "character rotated by $(ARG1)°";
@@ -8131,7 +8131,7 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ dutch ] = "Uitlijning op midden";
     Text[ french ] = "Alignement du texte centré";
     Text[ spanish ] = "Alineación de texto centrada";
-    Text[ italian ] = "Allineamento tel testo al centro";
+    Text[ italian ] = "Allineamento del testo al centro";
     Text[ danish ] = "text alignment center";
     Text[ swedish ] = "Textjustering centrerat";
     Text[ polish ] = "Wyœrodkowanie tekstu";
@@ -8172,4 +8172,5 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
