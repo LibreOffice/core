@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-19 15:46:56 $
+ *  last change: $Author: gt $ $Date: 2004-07-23 09:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
 #include <xmlsecurity/macrosecurity.hxx>
+#include <xmlsecurity/baseencoding.hxx>
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -231,13 +232,31 @@ void DocumentDigitalSignatures::manageTrustedSources(  ) throw (::com::sun::star
 
 void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SvtSecurityOptions aSecOpts;
+
+    SvtSecurityOptions::Certificate aNewCert;
+    aNewCert[ 0 ] = GetContentPart( Author->getIssuerName(), String::CreateFromAscii( "CN" ) );
+    aNewCert[ 1 ] = GetHexString( Author->getIssuerUniqueID(), " " );
+    aNewCert[ 2 ] = baseEncode( Author->getEncoded(), BASE64 );
+
+    uno::Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = aSecOpts.GetTrustedAuthors();
+    sal_Int32 nCnt = aTrustedAuthors.getLength();
+    aTrustedAuthors.realloc( nCnt + 1 );
+    aTrustedAuthors[ nCnt ] = aNewCert;
+
+    aSecOpts.SetTrustedAuthors( aTrustedAuthors );
 }
 
 void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SvtSecurityOptions  aSecOpt;
+    SvtSecurityOptions aSecOpt;
 
-//  aSecOpt.AddSecureURL( Location );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSecURLs = aSecOpt.GetSecureURLs();
+    sal_Int32 nCnt = aSecOpt.getLength();
+    aSecOpt.realloc( nCnt + 1 );
+    aSecOpt[ nCnt ] = Location;
+
+    aSecOpt.SetSecureURLs( )
 }
 
 
