@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-14 10:09:00 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,8 @@ void SfxTopWindow_Impl::StateChanged( StateChangedType nStateChange )
     {
         SetSizePixel( GetParent()->GetOutputSizePixel() );
         DoResize();
+        if ( pFrame->GetCurrentViewFrame() )
+            pFrame->GetCurrentViewFrame()->GetBindings().GetWorkWindow_Impl()->ShowChilds_Impl();
     }
     else
         Window::StateChanged( nStateChange );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-14 10:07:31 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -865,6 +865,9 @@ SfxChild_Impl* SfxWorkWindow::FindChild_Impl( const Window& rWindow ) const
 void SfxWorkWindow::ShowChilds_Impl()
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
+
+    if ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() )
+        return;
 
     SfxChild_Impl *pCli = 0;
     for ( USHORT nPos = 0; nPos < pChilds->Count(); ++nPos )
