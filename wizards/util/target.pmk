@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: va $ $Date: 2002-04-15 12:48:21 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:18:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,4 +70,5 @@ TOOLS_ALL_TARGET                = basicsrvtools
 WEBWIZARD_ALL_TARGET            = basicsrvweb
 DEPOT_ALL_TARGET                = basicsrvdepot
 STANDARD_ALL_TARGET             = basicsrvstandard
+LAUNCHER_ALL_TARGET             = basicsrvlauncher
 
