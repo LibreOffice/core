@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:05:58 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,9 @@ static void lcl_html_setEvents(
 {
     // Erstmal muss die Anzahl der Events ermittelt werden ...
     sal_Int32 nEvents = 0;
-    for( sal_uInt16 i=0; HTML_ET_END != aEventTypeTable[i]; i++ )
+    sal_uInt16 i;
+
+    for( i = 0; HTML_ET_END != aEventTypeTable[i]; i++ )
     {
         const SvxMacro *pMacro = rMacroTbl.Get( aEventTypeTable[i] );
         // Solange nicht alle Events implementiert sind, enthaelt die
@@ -2667,7 +2669,9 @@ void SwHTMLParser::EndSelect()
         Sequence<OUString> aValueList( (sal_Int32)nEntryCnt );
         OUString *pStrings = aList.getArray();
         OUString *pValues = aValueList.getArray();
-        for( sal_uInt16 i=0; i<nEntryCnt; i++ )
+        sal_uInt16 i;
+
+        for( i = 0; i < nEntryCnt; i++ )
         {
             String sText( *pFormImpl->GetStringList()[i] );
             sText.EraseTrailingChars();
