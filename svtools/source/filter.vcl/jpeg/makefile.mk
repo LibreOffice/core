@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: thb $ $Date: 2001-08-14 13:49:41 $
+#   last change: $Author: sj $ $Date: 2002-08-19 15:03:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ CFLAGS=$(CFLAGS) -Od
 # --- Files --------------------------------------------------------
 
 
-SLOFILES=	$(SLO)$/jpeg.obj
+SLOFILES=	$(SLO)$/jpegc.obj \
+            $(SLO)$/jpeg.obj
 
 .INCLUDE :  target.mk

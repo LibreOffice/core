@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:30:24 $
+ *  last change: $Author: sj $ $Date: 2002-08-19 15:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 extern "C"
 {
-    #include "jpeg/jpeg.h"
+    #include "jpeg.h"
 }
 
 #define _JPEGPRIVATE
