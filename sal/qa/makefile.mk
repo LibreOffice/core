@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:46:14 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:18:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,12 +62,11 @@
 PRJ=..
 
 PRJNAME=sal
-TARGET=tests
+TARGET=qa
+TESTDIR=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 .IF "$(OS)" == "WNT"
 REGEXP="s/^[\#].*$$//"
@@ -78,7 +77,8 @@ REGEXP='s/^[\#].*$$//'
 DEPOBJFILES = \
             $(SLO)$/rtl_String_Utils.obj \
             $(SLO)$/rtl_OString.obj \
-            $(SLO)$/rtl_OUString.obj
+            $(SLO)$/rtl_OUString.obj \
+            $(SLO)$/rtl_OUStringBuffer.obj
 
 SHL1OBJS = \
             $(SLO)$/rtl_String_Utils.obj \
@@ -89,14 +89,20 @@ SHL1STDLIBS+=\
             $(SALLIB) \
             $(SALHELPERLIB)
 
+SHL1VERSIONMAP = $(MISC)$/$(SHL1TARGET).map
 SHL1DEPN=
 SHL1IMPLIB= i$(SHL1TARGET)
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= $(MISC)$/$(SHL1TARGET).exp
 
+#-------------------------------------------------------------------------------
 
+.IF "$(COM)"=="GCC"
+NOOPTFILES= \
+    $(SLO)$/rtl_String_Utils.obj \
+   $(SLO)$/rtl_OUString.obj
+.ENDIF
 
 SHL2OBJS = \
             $(SLO)$/rtl_String_Utils.obj \
@@ -107,12 +113,13 @@ SHL2STDLIBS+=\
             $(SALLIB) \
             $(SALHELPERLIB)
 
+SHL2VERSIONMAP = $(MISC)$/$(SHL2TARGET).map
 SHL2DEPN=
 SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
-DEF2EXPORTFILE= $(MISC)$/$(SHL2TARGET).exp
+#-------------------------------------------------------------------------------
 
 #SHL2OBJS = \
 #            $(SLO)$/rtl_String_Utils.obj \
@@ -144,27 +151,43 @@ DEF3EXPORTFILE = $(MISC)$/$(SHL3TARGET).exp
 #SHL1IMPLIB= i$(SHL1TARGET)
 #SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
-#DEF1NAME    =$(SHL1TARGET)
-#DEF1EXPORTFILE= $(MISC)$/$(SHL1TARGET).exp
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-#$(MISC)$/$(SHL1TARGET).exp : sce$/$(SHL1TARGET).sce
-#    +$(TYPE) $< | sed $(REGEXP) | sed "s/^/test_/" | sed "/test_./ w $@"
-#$(MISC)$/$(SHL2TARGET).exp : sce$/$(SHL2TARGET).sce
-#    +$(TYPE) $< | sed $(REGEXP) | sed "s/^/test_/" | sed "/test_./ w $@"
+$(MISC)$/$(SHL1TARGET).map : sce$/$(SHL1TARGET).sce
+        +$(RM)  $(MISC)$/$(SHL1TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL1TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL1TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL1TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL1TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL1TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL1TARGET).map
+        +$(RM) $(MISC)$/$(SHL1TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL1TARGET).map
 
-$(MISC)$/$(SHL1TARGET).exp : sce$/$(SHL1TARGET).sce
-    +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL1TARGET).tst
-    +$(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $@"
+$(MISC)$/$(SHL2TARGET).map : sce$/$(SHL2TARGET).sce
+        +$(RM)  $(MISC)$/$(SHL2TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL2TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL2TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL2TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL2TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL2TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL2TARGET).map
+        +$(RM) $(MISC)$/$(SHL2TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL2TARGET).map
 
-$(MISC)$/$(SHL2TARGET).exp : sce$/$(SHL2TARGET).sce
-    +$(TYPE) $< | sed $(REGEXP) > $@
-    +$(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL2TARGET).tst
-    +$(TYPE) $(MISC)$/$(SHL2TARGET).tst | sed "/test_./ w $@"
+$(MISC)$/$(SHL3TARGET).map : sce$/$(SHL3TARGET).sce
+        +$(RM)  $(MISC)$/$(SHL3TARGET).tst
+        +$(RM)  $(MISC)$/$(SHL3TARGET).map
+        +$(TYPE) $< | sed $(REGEXP) > $@
+        +$(TYPE) $@ | sed "s/^/test_/" >> $(MISC)$/$(SHL3TARGET).tst
+        +$(TYPE) mapHeader > $(MISC)$/$(SHL3TARGET).map
+        +$(TYPE) $(MISC)$/$(SHL3TARGET).tst | sed "/test_./ w $(MISC)$/$(SHL3TARGET).map1"
+        +$(TYPE) $(MISC)$/$(SHL3TARGET).map1 | sed "s/.*/&;/" >> $(MISC)$/$(SHL3TARGET).map
+        +$(RM) $(MISC)$/$(SHL3TARGET).map1
+        +$(TYPE) mapFooter >> $(MISC)$/$(SHL3TARGET).map
 
 $(MISC)$/$(SHL3TARGET).exp : sce$/$(SHL3TARGET).sce
     +$(TYPE) $< | sed $(REGEXP) > $@
@@ -172,8 +195,19 @@ $(MISC)$/$(SHL3TARGET).exp : sce$/$(SHL3TARGET).sce
     +$(TYPE) $(MISC)$/$(SHL3TARGET).tst | sed "/test_./ w $@"
 
 cleanup:
-    +$(RM) sce$/$(SHL1TARGET).exp
-    +$(RM) sce$/$(SHL2TARGET).exp
-    +$(RM) sce$/$(SHL1TARGET).tst
-
+    +$(RM) $(MISCX)$/$(SHL1TARGET).map
+    +$(RM) $(MISCX)$/$(SHL2TARGET).map
+    +$(RM) $(MISCX)$/$(SHL3TARGET).map
+    +$(RM) $(MISCX)$/$(SHL1TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL2TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL3TARGET).tst
+    +$(RM) $(MISCX)$/$(SHL1TARGET).def
+    +$(RM) $(MISCX)$/$(SHL2TARGET).def
+    +$(RM) $(MISCX)$/$(SHL3TARGET).def
+    +$(RM) sce$/$(SHL1TARGET).out
+    +$(RM) sce$/$(SHL2TARGET).out
+    +$(RM) sce$/$(SHL3TARGET).out
+    +$(RM) sce$/$(SHL1TARGET).qadev
+    +$(RM) sce$/$(SHL2TARGET).qadev
+    +$(RM) sce$/$(SHL3TARGET).qadev
 
