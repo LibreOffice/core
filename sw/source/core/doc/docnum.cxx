@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:21:10 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -228,10 +227,15 @@ void SwDoc::PropagateOutlineRule()
             {
                 SwTxtNode * pTxtNode = ((SwTxtNode *) pClient);
 
-                const SwPaM aPam(*pTxtNode);
-                SetNumRule(aPam, *GetOutlineNumRule());
+                SwNumRule * pCurNumRule = pTxtNode->GetNumRule();
 
-                pTxtNode->SetLevel(pColl->GetOutlineLevel());
+                if (pCurNumRule == NULL)
+                {
+                    const SwPaM aPam(*pTxtNode);
+                    SetNumRule(aPam, *GetOutlineNumRule());
+
+                    pTxtNode->SetLevel(pColl->GetOutlineLevel());
+                }
 
                 pClient = aIter.Next();
             }
@@ -2576,15 +2580,15 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
         /* Get the current node. */
         SwTxtNode * pTxtNode = rNumRuleInfo.GetList().GetObject(nUpdatePos);
 
+        /* Get old numbering of the current node. */
+        const SwNodeNum * pOldNum = pTxtNode->GetNum(); // #115901#
+
         if (pTxtNode->MayBeNumbered())
         {
             /* If the current node has a conditional paragraph style,
                ensure the current node gets the resulting style. */
             if( RES_CONDTXTFMTCOLL == pTxtNode->GetFmtColl()->Which() )
                 pTxtNode->ChkCondColl();
-
-            /* Get old numbering of the current node. */
-            const SwNodeNum * pOldNum = pTxtNode->GetNum(); // #115901#
 
             // #111955# fixed loop due to not increasing nUpdatePos when
             // pOldNum == 0
@@ -2706,6 +2710,15 @@ void lcl_UpdateNumRuleRange( SwNumRule & rRule,
             else if (! pOldNum)
             {
                 ASSERT(0, "No number!");
+            }
+        }
+        else
+        {
+            if (pOldNum)
+            {
+                BYTE nLevel = pOldNum->GetRealLevel();
+
+                lcl_NodeNumReset(aNum, rRule, nLevel + 1, bInitializedLevels);
             }
         }
 
@@ -3058,6 +3071,16 @@ void SwDoc::UpdateNumRuleOld( SwNumRule & rRule, ULONG nUpdPos )
                     }
 
                     pStt->UpdateNum( aNum );
+                }
+                else
+                {
+                    for ( int nSubLvl = GetRealLevel(nLevel)+1;
+                          nSubLvl < MAXLEVEL; ++nSubLvl)
+                    {
+                        aNum.GetLevelVal()[ nSubLvl ] = 0;
+                        nInitLevels |= ( 1 << nSubLvl );
+                    }
+
                 }
             }
 
