@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-17 08:49:52 $
+ *  last change: $Author: os $ $Date: 2001-06-27 15:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _FONTCFG_HXX
 #include <fontcfg.hxx>
 #endif
-
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -119,11 +121,9 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 SwStdFontConfig::SwStdFontConfig() :
     utl::ConfigItem(C2U("Office.Writer"))
 {
-#if defined(UNX)
-    const String sDefFont(C2S("times"));
-#else
-    const String sDefFont(C2S("Times New Roman"));
-#endif
+    LanguageType eLang = ::GetSystemLanguage();
+    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_SERIF, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
+
     for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
         sDefaultFonts[i] = sDefFont;
 
@@ -174,43 +174,31 @@ SwStdFontConfig::~SwStdFontConfig()
 BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
 {
     BOOL bSame;
-#if defined(UNX)
-    const sal_Char* cStd = "times";
-#else
-    const sal_Char* cStd = "Times New Roman";
-#endif
+    LanguageType eLang = ::GetSystemLanguage();
+    String sDefFont(OutputDevice::GetDefaultFont(DEFAULTFONT_SERIF, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName());
     switch( nFontType )
     {
         case FONT_STANDARD:
         case FONT_STANDARD_CJK:
-            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd);
+            bSame = sDefaultFonts[nFontType] == sDefFont;
         break;
         case FONT_OUTLINE :
         case FONT_OUTLINE_CJK :
-#if defined(UNX)
-            bSame = sDefaultFonts[nFontType].EqualsAscii("helvetica");
-#elif defined(WNT) || defined(WIN)
-            bSame = sDefaultFonts[nFontType].EqualsAscii("Arial");
-#elif defined(MAC)
-            bSame = sDefaultFonts[nFontType].EqualsAscii("Helvetica");
-#elif defined(PM20)
-            bSame = sDefaultFonts[nFontType].EqualsAscii("Helvetica");
-#else
-#error Defaultfont fuer diese Plattform?
-#endif
+            bSame = sDefaultFonts[nFontType] ==
+                OutputDevice::GetDefaultFont(DEFAULTFONT_SANS_UNICODE, eLang, DEFAULTFONT_FLAGS_ONLYONE).GetName();
         break;
         case FONT_LIST    :
         case FONT_CAPTION :
         case FONT_INDEX   :
-            bSame = sDefaultFonts[nFontType].EqualsAscii(cStd) &&
-                    sDefaultFonts[FONT_STANDARD].EqualsAscii(cStd);
+            bSame = sDefaultFonts[nFontType] == sDefFont &&
+                    sDefaultFonts[FONT_STANDARD] == sDefFont;
         break;
         case FONT_LIST_CJK    :
         case FONT_CAPTION_CJK :
         case FONT_INDEX_CJK   :
         {
-            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK].EqualsAscii(cStd);
-            bSame = b1 && sDefaultFonts[nFontType].EqualsAscii(cStd);
+            BOOL b1 = sDefaultFonts[FONT_STANDARD_CJK] == sDefFont;
+            bSame = b1 && sDefaultFonts[nFontType] == sDefFont;
         }
         break;
     }
