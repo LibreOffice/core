@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:49:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:00:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,21 +301,21 @@ TabPage TP_NUMPARA
         Disable = TRUE ;
         Text [ portuguese ] = "~Começar em" ;
         Text [ english_us ] = "S~tart with" ;
-        Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
+        Text [ portuguese_brazilian ] = "Iniciar com:" ;
         Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "~Begynd med" ;
         Text [ italian ] = "Ini~zia con" ;
         Text [ spanish ] = "~Empezar con" ;
         Text [ french ] = "Commencer avec" ;
         Text [ dutch ] = "~Beginnen met" ;
-        Text[ chinese_simplified ] = "å¼€å§‹ä»(~S)";
+        Text[ chinese_simplified ] = "å¼€å§‹ä»(~T)";
         Text[ russian ] = "Íà÷àòü ñ";
         Text[ polish ] = "Zacznij od";
-        Text[ japanese ] = "é–‹å§‹ç•ªå·(~S)";
-        Text[ chinese_traditional ] = "é–‹å§‹å¾(~S)";
+        Text[ japanese ] = "é–‹å§‹ç•ªå·(~T)";
+        Text[ chinese_traditional ] = "é–‹å§‹å¾(~T)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
         Text[ greek ] = "¸íáñîç áğü:";
-        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~S):";
+        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~T):";
         Text[ turkish ] = "~Bunla başla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comença ~amb:";
@@ -466,8 +466,8 @@ TabPage TP_NUMPARA
         Text[ japanese ] = "é–‹å§‹ç•ªå·(~S)";
         Text[ chinese_traditional ] = "é–‹å§‹å¾(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
-        Text[ greek ] = "¸íáñîç ì~å:";
-        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~T):";
+        Text[ greek ] = "¸íáñ~îç áğü";
+        Text[ korean ] = "ì‹œì‘ ë²ˆí˜¸(~S):";
         Text[ turkish ] = "~Bununla başla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comença ~amb:";
@@ -496,6 +496,7 @@ TabPage TP_NUMPARA
     };
 };
  // ********************************************************************** EOF
+
 
 
 
