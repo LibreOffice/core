@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-21 14:22:27 $
+ *  last change: $Author: lla $ $Date: 2002-06-27 08:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,15 +184,21 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
     // apply reordering if requested
-    static char aGcpClass[2] = { 0, 0 };
+
+    // static char aGcpClass[2] = { 0, 0 };
+    // LLA: #100683# gpf in setup, looks like memory overwriter
+    //      we set lpClass to size of nMaxGlyphCount
+    char *pGcpClass = new char[nMaxGlyphCount];
+    memset(pGcpClass, 0, sizeof(char) * nMaxGlyphCount ); // clear mem
+
     if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
     {
         if( nMaxGlyphCount > 1 )
             aGCP.lpOrder = mpChars2Glyphs = new UINT[ nMaxGlyphCount ];
-        aGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
+        pGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
             GCPCLASS_PREBOUNDLTR : GCPCLASS_PREBOUNDRTL;
         nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
-        aGCP.lpClass = aGcpClass;
+        aGCP.lpClass = pGcpClass;
     }
 
     DWORD nRC;
@@ -216,6 +222,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
+    delete [] pGcpClass;
 
     // cache essential layout properties
     mnGlyphCount = aGCP.nMaxFit;
