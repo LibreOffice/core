@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:54:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ SdrGrafObj::SdrGrafObj():
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
-    bCopyToPoolOnAfterRead = FALSE;
+    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -265,7 +265,7 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
-    bCopyToPoolOnAfterRead = FALSE;
+    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -288,7 +288,7 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), 20000 );
     nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     bNoShear = TRUE;
-    bCopyToPoolOnAfterRead = FALSE;
+    //BFS01bCopyToPoolOnAfterRead = FALSE;
 
     // #111096#
     mbGrafAnimationAllowed = sal_True;
@@ -903,7 +903,7 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrGrafObj::ImpDoPaintGrafObjShadow( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
 {
     const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
 
@@ -987,7 +987,8 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( ExtOutputDevice& rOut, const SdrPaintI
                 // shadow for the whole rectangle
                 pOutDev->SetFillColor(aShadowColor);
                 pOutDev->SetLineColor();
-                Polygon aOutputPoly(XOutCreatePolygon(GetXPoly(), pOutDev));
+//BFS09             Polygon aOutputPoly(XOutCreatePolygon(GetXPoly(), pOutDev));
+                Polygon aOutputPoly(XOutCreatePolygon(GetXPoly()));
                 aOutputPoly.Move(nXDist, nYDist);
 
                 if(0 != nShadowTransparence && 100 > nShadowTransparence)
@@ -1007,7 +1008,7 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( ExtOutputDevice& rOut, const SdrPaintI
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrGrafObj::ImpDoPaintGrafObj( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+void SdrGrafObj::ImpDoPaintGrafObj( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
 {
     const sal_Bool bDoPaintFilling(IsObjectTransparent());
     const sal_Bool bDoPaintLine(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue());
@@ -1022,7 +1023,7 @@ void SdrGrafObj::ImpDoPaintGrafObj( ExtOutputDevice& rOut, const SdrPaintInfoRec
 
 //////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrGrafObj::DoPaintObject( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
 {
     sal_Bool bRetval(sal_False);
 
@@ -1442,275 +1443,275 @@ const GDIMetaFile* SdrGrafObj::GetGDIMetaFile() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SdrGrafObj::WriteData(SvStream& rOut) const
-{
-    ForceSwapIn();
-    SdrRectObj::WriteData( rOut );
-
-    // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-    SdrDownCompat aCompat( rOut, STREAM_WRITE );
-
-#ifdef DBG_UTIL
-    aCompat.SetID( "SdrGrafObj" );
-#endif
-
-    GraphicType eType( pGraphic->GetType() );
-    BOOL        bHasGraphic( !aFileName.Len() && eType != GRAPHIC_NONE );
-
-    // dieses Flag wird ab V11 rausgeschrieben
-    rOut << bHasGraphic;
-
-    if(bHasGraphic)
-    {
-        // Graphik ist nicht gelinkt: ggf. komprimiert speichern:
-        // seit V11 eingapackt
-        SdrDownCompat aGrafCompat(rOut, STREAM_WRITE);
-        BOOL bZCompr(pModel && pModel->IsSaveCompressed() && eType == GRAPHIC_BITMAP);
-        BOOL bNCompr(pModel && pModel->IsSaveNative());
-        const UINT16 nOldComprMode(rOut.GetCompressMode());
-        UINT16 nNewComprMode(nOldComprMode);
-
-#ifdef DBG_UTIL
-        aGrafCompat.SetID( "SdrGrafObj(Graphic)" );
-#endif
-
-        if(pModel->IsSwapGraphics() && (pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC))
-        {
-            ((SdrGrafObj*)this)->pGraphic->SetUserData();
-            ((SdrGrafObj*)this)->nGrafStreamPos = rOut.Tell();
-        }
-
-        if(bZCompr)
-            nNewComprMode |= COMPRESSMODE_ZBITMAP;
-
-        if(bNCompr)
-            nNewComprMode |= COMPRESSMODE_NATIVE;
-
-        rOut.SetCompressMode( nNewComprMode );
-        rOut << pGraphic->GetGraphic();
-        rOut.SetCompressMode( nOldComprMode );
-    }
-
-    rOut << aCropRect;
-    rOut << BOOL(bMirrored);
-
-    rOut.WriteByteString(aName);
-
-    String aRelFileName;
-
-    if( aFileName.Len() )
-    {
-        aRelFileName = INetURLObject::AbsToRel( aFileName,
-                                                INetURLObject::WAS_ENCODED,
-                                                INetURLObject::DECODE_UNAMBIGUOUS );
-    }
-
-    rOut.WriteByteString( aRelFileName );
-
-    // UNICODE: rOut << aFilterName;
-    rOut.WriteByteString(aFilterName);
-
-    // ab V11
-    rOut << (BOOL)( aFileName.Len() != 0 );
-
-    SfxItemPool* pPool = GetItemPool();
-
-    if(pPool)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-
-        pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_GRAF));
-    }
-    else
-        rOut << UINT16( SFX_ITEMS_NULL );
-
-    ForceSwapOut();
-}
-
-// -----------------------------------------------------------------------------
-
-void SdrGrafObj::ReadDataTilV10( const SdrObjIOHeader& rHead, SvStream& rIn )
-{
-    Graphic aGraphic;
-
-    // Import von allem mit Version <= 10
-    rIn >> aGraphic;
-
-    ULONG nError = rIn.GetError();
-
-    // Ist die Graphik defekt, oder wurde nur eine leere Graphik eingelesen? (was bei gelinkten Graphiken der Fall ist)
-    if( nError != 0)
-        rIn.ResetError();
-
-    if( rHead.GetVersion() >= 6)
-        rIn >> aCropRect;
-
-    if(rHead.GetVersion() >= 8)
-    {
-        // UNICODE: rIn>>aFileName;
-        rIn.ReadByteString(aFileName);
-    }
-
-    if(rHead.GetVersion() >= 9)
-    {
-        // UNICODE: rIn >> aFilterName;
-        rIn.ReadByteString(aFilterName);
-    }
-    else
-        aFilterName = String( RTL_CONSTASCII_USTRINGPARAM( "BMP - MS Windows" ) );
-
-    if( aFileName.Len() )
-    {
-        String aFileURLStr;
-
-        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aFileURLStr ) )
-        {
-            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURLStr, STREAM_READ | STREAM_SHARE_DENYNONE );
-
-            if( pIStm )
-            {
-                GraphicFilter*  pFilter = GetGrfFilter();
-                USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileURLStr, *pIStm );
-
-                SetGraphicLink( aFileURLStr, aFilterName );
-
-                delete pIStm;
-            }
-        }
-    }
-    else if( nError != 0 )
-        rIn.SetError(nError);
-
-
-    if( !rIn.GetError() )
-        pGraphic->SetGraphic( aGraphic );
-}
+//BFS01void SdrGrafObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 ForceSwapIn();
+//BFS01 SdrRectObj::WriteData( rOut );
+//BFS01
+//BFS01 // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01 SdrDownCompat aCompat( rOut, STREAM_WRITE );
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID( "SdrGrafObj" );
+//BFS01#endif
+//BFS01
+//BFS01 GraphicType eType( pGraphic->GetType() );
+//BFS01 BOOL        bHasGraphic( !aFileName.Len() && eType != GRAPHIC_NONE );
+//BFS01
+//BFS01 // dieses Flag wird ab V11 rausgeschrieben
+//BFS01 rOut << bHasGraphic;
+//BFS01
+//BFS01 if(bHasGraphic)
+//BFS01 {
+//BFS01     // Graphik ist nicht gelinkt: ggf. komprimiert speichern:
+//BFS01     // seit V11 eingapackt
+//BFS01     SdrDownCompat aGrafCompat(rOut, STREAM_WRITE);
+//BFS01     BOOL bZCompr(pModel && pModel->IsSaveCompressed() && eType == GRAPHIC_BITMAP);
+//BFS01     BOOL bNCompr(pModel && pModel->IsSaveNative());
+//BFS01     const UINT16 nOldComprMode(rOut.GetCompressMode());
+//BFS01     UINT16 nNewComprMode(nOldComprMode);
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01     aGrafCompat.SetID( "SdrGrafObj(Graphic)" );
+//BFS01#endif
+//BFS01
+//BFS01     if(pModel->IsSwapGraphics() && (pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC))
+//BFS01     {
+//BFS01         ((SdrGrafObj*)this)->pGraphic->SetUserData();
+//BFS01         ((SdrGrafObj*)this)->nGrafStreamPos = rOut.Tell();
+//BFS01     }
+//BFS01
+//BFS01     if(bZCompr)
+//BFS01         nNewComprMode |= COMPRESSMODE_ZBITMAP;
+//BFS01
+//BFS01     if(bNCompr)
+//BFS01         nNewComprMode |= COMPRESSMODE_NATIVE;
+//BFS01
+//BFS01     rOut.SetCompressMode( nNewComprMode );
+//BFS01     rOut << pGraphic->GetGraphic();
+//BFS01     rOut.SetCompressMode( nOldComprMode );
+//BFS01 }
+//BFS01
+//BFS01 rOut << aCropRect;
+//BFS01 rOut << BOOL(bMirrored);
+//BFS01
+//BFS01 rOut.WriteByteString(aName);
+//BFS01
+//BFS01 String aRelFileName;
+//BFS01
+//BFS01 if( aFileName.Len() )
+//BFS01 {
+//BFS01     aRelFileName = INetURLObject::AbsToRel( aFileName,
+//BFS01                                             INetURLObject::WAS_ENCODED,
+//BFS01                                             INetURLObject::DECODE_UNAMBIGUOUS );
+//BFS01 }
+//BFS01
+//BFS01 rOut.WriteByteString( aRelFileName );
+//BFS01
+//BFS01 // UNICODE: rOut << aFilterName;
+//BFS01 rOut.WriteByteString(aFilterName);
+//BFS01
+//BFS01 // ab V11
+//BFS01 rOut << (BOOL)( aFileName.Len() != 0 );
+//BFS01
+//BFS01 SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01 if(pPool)
+//BFS01 {
+//BFS01     const SfxItemSet& rSet = GetObjectItemSet();
+//BFS01
+//BFS01     pPool->StoreSurrogate(rOut, &rSet.Get(SDRATTRSET_GRAF));
+//BFS01 }
+//BFS01 else
+//BFS01     rOut << UINT16( SFX_ITEMS_NULL );
+//BFS01
+//BFS01 ForceSwapOut();
+//BFS01}
 
 // -----------------------------------------------------------------------------
 
-#ifdef WNT
-#pragma optimize ("",off)
-#endif
-
-void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
-{
-    if( rIn.GetError() )
-        return;
-
-    SdrRectObj::ReadData( rHead, rIn );
-
-    SdrDownCompat   aCompat( rIn, STREAM_READ );
-    FASTBOOL        bDelayedLoad = ( pModel != NULL ) && pModel->IsSwapGraphics();
-
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrGrafObj");
-#endif
-
-    pGraphic->SetUserData();
-    nGrafStreamPos = GRAFSTREAMPOS_INVALID;
-
-    if( rHead.GetVersion() < 11 )
-        ReadDataTilV10( rHead, rIn );
-    else
-    {
-        String  aFileNameRel;
-        BOOL    bHasGraphic;
-        BOOL    bTmp;
-        BOOL    bGraphicLink;
-
-        rIn >> bHasGraphic;
-
-        if( bHasGraphic )
-        {
-            SdrDownCompat aGrafCompat( rIn,STREAM_READ );
-
-#ifdef DBG_UTIL
-            aGrafCompat.SetID("SdrGrafObj(Graphic)");
-#endif
-
-            nGrafStreamPos = rIn.Tell();
-
-            if( !bDelayedLoad )
-            {
-                Graphic aGraphic;
-                rIn >> aGraphic;
-                pGraphic->SetGraphic( aGraphic );
-            }
-            else
-                pGraphic->SetSwapState();
-
-            // Ist die Grafik defekt, oder wurde nur eine leere Graphik eingelesen?
-            // Daran soll mein Read jedoch nicht scheitern.
-            if( rIn.GetError() != 0 )
-                rIn.ResetError();
-        }
-
-        rIn >> aCropRect;
-        rIn >> bTmp; bMirrored = bTmp;
-
-        rIn.ReadByteString(aName);
-        // #85414# since there seems to be some documents wich have an illegal
-        // character inside the name of a graphic object we have to fix this
-        // here on load time or it will crash our xml later.
-        const xub_StrLen nLen = aName.Len();
-        for( xub_StrLen nIndex = 0; nIndex < nLen; nIndex++ )
-        {
-            if( aName.GetChar( nIndex ) < ' ' )
-                aName.SetChar( nIndex, '?' );
-        }
-
-        rIn.ReadByteString(aFileNameRel);
-
-        if( aFileNameRel.Len() )
-        {
-            aFileName = ::URIHelper::SmartRelToAbs( aFileNameRel, FALSE,
-                                                    INetURLObject::WAS_ENCODED,
-                                                    INetURLObject::DECODE_UNAMBIGUOUS );
-        }
-        else
-            aFileName.Erase();
-
-        // UNICODE: rIn >> aFilterName;
-        rIn.ReadByteString(aFilterName);
-
-        rIn >> bGraphicLink;                    // auch dieses Flag ist neu in V11
-
-        if( aCompat.GetBytesLeft() > 0 )
-        {
-            SfxItemPool* pPool = GetItemPool();
-
-            if( pPool )
-            {
-                sal_uInt16 nSetID = SDRATTRSET_GRAF;
-                const SdrGrafSetItem* pGrafAttr = (const SdrGrafSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
-                if(pGrafAttr)
-                    SetObjectItemSet(pGrafAttr->GetItemSet());
-                    ImpSetAttrToGrafInfo();
-            }
-            else
-            {
-                UINT16 nSuroDummy;
-                rIn >> nSuroDummy;
-            }
-        }
-        else
-            bCopyToPoolOnAfterRead = TRUE;
-
-        if( bGraphicLink && aFileName.Len() )
-        {
-            SetGraphicLink( aFileName, aFilterName );
-
-            if( !bDelayedLoad )
-                ImpUpdateGraphicLink();
-        }
-    }
-}
+//BFS01void SdrGrafObj::ReadDataTilV10( const SdrObjIOHeader& rHead, SvStream& rIn )
+//BFS01{
+//BFS01 Graphic aGraphic;
+//BFS01
+//BFS01 // Import von allem mit Version <= 10
+//BFS01 rIn >> aGraphic;
+//BFS01
+//BFS01 ULONG nError = rIn.GetError();
+//BFS01
+//BFS01 // Ist die Graphik defekt, oder wurde nur eine leere Graphik eingelesen? (was bei gelinkten Graphiken der Fall ist)
+//BFS01 if( nError != 0)
+//BFS01     rIn.ResetError();
+//BFS01
+//BFS01 if( rHead.GetVersion() >= 6)
+//BFS01     rIn >> aCropRect;
+//BFS01
+//BFS01 if(rHead.GetVersion() >= 8)
+//BFS01 {
+//BFS01     // UNICODE: rIn>>aFileName;
+//BFS01     rIn.ReadByteString(aFileName);
+//BFS01 }
+//BFS01
+//BFS01 if(rHead.GetVersion() >= 9)
+//BFS01 {
+//BFS01     // UNICODE: rIn >> aFilterName;
+//BFS01     rIn.ReadByteString(aFilterName);
+//BFS01 }
+//BFS01 else
+//BFS01     aFilterName = String( RTL_CONSTASCII_USTRINGPARAM( "BMP - MS Windows" ) );
+//BFS01
+//BFS01 if( aFileName.Len() )
+//BFS01 {
+//BFS01     String aFileURLStr;
+//BFS01
+//BFS01     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aFileURLStr ) )
+//BFS01     {
+//BFS01         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aFileURLStr, STREAM_READ | STREAM_SHARE_DENYNONE );
+//BFS01
+//BFS01         if( pIStm )
+//BFS01         {
+//BFS01             GraphicFilter*  pFilter = GetGrfFilter();
+//BFS01             USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileURLStr, *pIStm );
+//BFS01
+//BFS01             SetGraphicLink( aFileURLStr, aFilterName );
+//BFS01
+//BFS01             delete pIStm;
+//BFS01         }
+//BFS01     }
+//BFS01 }
+//BFS01 else if( nError != 0 )
+//BFS01     rIn.SetError(nError);
+//BFS01
+//BFS01
+//BFS01 if( !rIn.GetError() )
+//BFS01     pGraphic->SetGraphic( aGraphic );
+//BFS01}
 
 // -----------------------------------------------------------------------------
 
-#ifdef WNT
-#pragma optimize ("",on)
-#endif
+//BFS01#ifdef WNT
+//BFS01#pragma optimize ("",off)
+//BFS01#endif
+
+//BFS01void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
+//BFS01{
+//BFS01 if( rIn.GetError() )
+//BFS01     return;
+//BFS01
+//BFS01 SdrRectObj::ReadData( rHead, rIn );
+//BFS01
+//BFS01 SdrDownCompat   aCompat( rIn, STREAM_READ );
+//BFS01 FASTBOOL        bDelayedLoad = ( pModel != NULL ) && pModel->IsSwapGraphics();
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrGrafObj");
+//BFS01#endif
+//BFS01
+//BFS01 pGraphic->SetUserData();
+//BFS01 nGrafStreamPos = GRAFSTREAMPOS_INVALID;
+//BFS01
+//BFS01 if( rHead.GetVersion() < 11 )
+//BFS01     ReadDataTilV10( rHead, rIn );
+//BFS01 else
+//BFS01 {
+//BFS01     String  aFileNameRel;
+//BFS01     BOOL    bHasGraphic;
+//BFS01     BOOL    bTmp;
+//BFS01     BOOL    bGraphicLink;
+//BFS01
+//BFS01     rIn >> bHasGraphic;
+//BFS01
+//BFS01     if( bHasGraphic )
+//BFS01     {
+//BFS01         SdrDownCompat aGrafCompat( rIn,STREAM_READ );
+//BFS01
+//BFS01#ifdef DBG_UTIL
+//BFS01         aGrafCompat.SetID("SdrGrafObj(Graphic)");
+//BFS01#endif
+//BFS01
+//BFS01         nGrafStreamPos = rIn.Tell();
+//BFS01
+//BFS01         if( !bDelayedLoad )
+//BFS01         {
+//BFS01             Graphic aGraphic;
+//BFS01             rIn >> aGraphic;
+//BFS01             pGraphic->SetGraphic( aGraphic );
+//BFS01         }
+//BFS01         else
+//BFS01             pGraphic->SetSwapState();
+//BFS01
+//BFS01         // Ist die Grafik defekt, oder wurde nur eine leere Graphik eingelesen?
+//BFS01         // Daran soll mein Read jedoch nicht scheitern.
+//BFS01         if( rIn.GetError() != 0 )
+//BFS01             rIn.ResetError();
+//BFS01     }
+//BFS01
+//BFS01     rIn >> aCropRect;
+//BFS01     rIn >> bTmp; bMirrored = bTmp;
+//BFS01
+//BFS01     rIn.ReadByteString(aName);
+//BFS01     // #85414# since there seems to be some documents wich have an illegal
+//BFS01     // character inside the name of a graphic object we have to fix this
+//BFS01     // here on load time or it will crash our xml later.
+//BFS01     const xub_StrLen nLen = aName.Len();
+//BFS01     for( xub_StrLen nIndex = 0; nIndex < nLen; nIndex++ )
+//BFS01     {
+//BFS01         if( aName.GetChar( nIndex ) < ' ' )
+//BFS01             aName.SetChar( nIndex, '?' );
+//BFS01     }
+//BFS01
+//BFS01     rIn.ReadByteString(aFileNameRel);
+//BFS01
+//BFS01     if( aFileNameRel.Len() )
+//BFS01     {
+//BFS01         aFileName = ::URIHelper::SmartRelToAbs( aFileNameRel, FALSE,
+//BFS01                                                 INetURLObject::WAS_ENCODED,
+//BFS01                                                 INetURLObject::DECODE_UNAMBIGUOUS );
+//BFS01     }
+//BFS01     else
+//BFS01         aFileName.Erase();
+//BFS01
+//BFS01     // UNICODE: rIn >> aFilterName;
+//BFS01     rIn.ReadByteString(aFilterName);
+//BFS01
+//BFS01     rIn >> bGraphicLink;                    // auch dieses Flag ist neu in V11
+//BFS01
+//BFS01     if( aCompat.GetBytesLeft() > 0 )
+//BFS01     {
+//BFS01         SfxItemPool* pPool = GetItemPool();
+//BFS01
+//BFS01         if( pPool )
+//BFS01         {
+//BFS01             sal_uInt16 nSetID = SDRATTRSET_GRAF;
+//BFS01             const SdrGrafSetItem* pGrafAttr = (const SdrGrafSetItem*)pPool->LoadSurrogate(rIn, nSetID, 0);
+//BFS01             if(pGrafAttr)
+//BFS01                 SetObjectItemSet(pGrafAttr->GetItemSet());
+//BFS01                 ImpSetAttrToGrafInfo();
+//BFS01         }
+//BFS01         else
+//BFS01         {
+//BFS01             UINT16 nSuroDummy;
+//BFS01             rIn >> nSuroDummy;
+//BFS01         }
+//BFS01     }
+//BFS01     else
+//BFS01         bCopyToPoolOnAfterRead = TRUE;
+//BFS01
+//BFS01     if( bGraphicLink && aFileName.Len() )
+//BFS01     {
+//BFS01         SetGraphicLink( aFileName, aFilterName );
+//BFS01
+//BFS01         if( !bDelayedLoad )
+//BFS01                ImpUpdateGraphicLink();
+//BFS01     }
+//BFS01 }
+//BFS01}
+
+// -----------------------------------------------------------------------------
+
+//BFS01#ifdef WNT
+//BFS01#pragma optimize ("",on)
+//BFS01#endif
 
 // -----------------------------------------------------------------------------
 
@@ -1839,16 +1840,16 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
 
 // -----------------------------------------------------------------------------
 
-void SdrGrafObj::AfterRead()
-{
-    SdrRectObj::AfterRead();
-
-    if( bCopyToPoolOnAfterRead )
-    {
-        ImpSetGrafInfoToAttr();
-        bCopyToPoolOnAfterRead = FALSE;
-    }
-}
+//BFS01void SdrGrafObj::AfterRead()
+//BFS01{
+//BFS01 SdrRectObj::AfterRead();
+//BFS01
+//BFS01 if( bCopyToPoolOnAfterRead )
+//BFS01 {
+//BFS01     ImpSetGrafInfoToAttr();
+//BFS01     bCopyToPoolOnAfterRead = FALSE;
+//BFS01 }
+//BFS01}
 
 // -----------------------------------------------------------------------------
 
