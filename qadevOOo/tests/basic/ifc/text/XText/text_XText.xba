@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: text_XText.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:54:35 $ 
+'*  last change:$Date: 2003-08-07 15:05:36 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -110,17 +110,17 @@ On Error Goto ErrHndl
         i1 = count(oCollection)
         Out.Log("Before inserting we have " + i1 + " elements.")
     
-        if isArray(aAddons) then                                    
-            Out.Log("Calling beforeInsertTextContent() ...")
-            beforeInsertTextContent()
-        endif
+'        if isArray(aAddons) then                                    
+'            Out.Log("Calling beforeInsertTextContent() ...")
+'            beforeInsertTextContent()
+'        endif
 
         oObj.insertTextContent(oCursor, oInstance, false)
 
-        if isArray(aAddons) then 
-            Out.Log("Calling afterInsertTextContent() ...")
-            afterInsertTextContent()
-        endif
+'        if isArray(aAddons) then 
+'            Out.Log("Calling afterInsertTextContent() ...")
+'            afterInsertTextContent()
+'        endif
 
         i2 = count(oCollection)
         Out.Log("After inserting we have " + i2 + " elements.")
@@ -132,17 +132,17 @@ On Error Goto ErrHndl
         i1 = count(oCollection)
         Out.Log("Before removing we have " + i1 + " elements.")
 
-        if (isArray(aAddons)) then 
-            Out.Log("Calling beforeRemoveTextContent() ...")
-            beforeRemoveTextContent()
-        endif
+'        if (isArray(aAddons)) then 
+'           Out.Log("Calling beforeRemoveTextContent() ...")
+'            beforeRemoveTextContent()
+'        endif
 
         oObj.removeTextContent(oInstance)
 
-        if (isArray(aAddons)) then 
-            Out.Log("Calling afterRemoveTextContent() ...")
-            afterRemoveTextContent()
-        endif
+'        if (isArray(aAddons)) then 
+'            Out.Log("Calling afterRemoveTextContent() ...")
+'            afterRemoveTextContent()
+'        endif
 
         i2 = count(oCollection)
         Out.Log("After removing we have " + i2 + " elements.")
