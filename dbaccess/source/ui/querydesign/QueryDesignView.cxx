@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 08:12:34 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,10 @@ OQueryDesignView::OQueryDesignView(Window* _pParent, OQueryController* _pControl
     m_pSelectionBox->Show();
     // Splitter einrichten
     if(getController()->getSplitPos() != -1)
+    {
         m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),getController()->getSplitPos() ) );
+        m_aSplitter.SetSplitPosPixel(getController()->getSplitPos());
+    }
     m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
     m_aSplitter.Show();
 

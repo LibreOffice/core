@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:35:07 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,15 +311,15 @@ BOOL OTableWindowListBox::Drop( const DropEvent& rDEvt )
     const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
     if( !rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_JOIN_EXCHANGE_FORMAT))) )
         return FALSE;
-/*
+
     // die Beschreibung des Ziels
     OJoinExchangeData jxdDest(this);
     // die Quelle
     OJoinExchangeData jxdSource = ((OJoinExchObj*)&xDataObj)->GetSourceDescription();
     // Verbindung anlegen
-    Window* pParent = GetTabWin()->GetParent();
-    ((OQueryTableView*)pParent)->AddConnection(jxdSource, jxdDest);
-*/
+    OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
+    pCont->AddConnection(jxdSource, jxdDest);
+
     return TRUE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 08:12:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void OQueryController::dispose()
 {
     if(isModified())
     {
-        QueryBox aQry(getView(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+        QueryBox aQry(getView(), ModuleRes(QUERY_DESIGN_SAVEMODIFIED));
         switch (aQry.Execute())
         {
             case RET_YES:
@@ -323,10 +323,10 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_BROWSER_SAVEASDOC:
-            aReturn.bEnabled = m_xConnection.is() && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size());
+            aReturn.bEnabled = m_xConnection.is() && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
             break;
         case ID_BROWSER_SAVEDOC:
-            aReturn.bEnabled = m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size());
+            aReturn.bEnabled = m_xConnection.is() && m_bModified && (!m_bDesign || (m_vTableFieldDesc.size() && m_vTableData.size()));
             break;
         case SID_PRINTDOCDIRECT:
             break;
@@ -826,6 +826,8 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
         getView()->initialize();
+        getUndoMgr()->Clear();
+        setModified(sal_False);
     }
     catch(SQLException&)
     {
