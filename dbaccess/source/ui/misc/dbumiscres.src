@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:29:45 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,7 +514,7 @@ String STR_MISSING_TABLES_XDROP
     Text[ polish ] = "Tabeli nie mo�na usun��, poniewa� nie jest ona os�ugiwana przez po��czenie z baz� danych.";
     Text[ portuguese_brazilian ] = "The table can't be dropped, 'cause the database connection does not support this.";
     Text[ japanese ] = "ﾃｰﾌﾞﾙはﾃﾞｰﾀﾍﾞｰｽの接続がこれを支援しないため削除できません。";
-    Text[ korean ] = "데이터베이스 연결에서 지원되지 않기 때문에 테이블을 삭제할 수 없습니다";
+    Text[ korean ] = "데이터베이스 연결에서 지원되지 않기 때문에 시트을 삭제할 수 없습니다";
     Text[ chinese_simplified ] = "因为数据库的连接不支持这个功能而无法删除这个表格。";
     Text[ chinese_traditional ] = "因為資料庫連線不支援這個動作而無法刪除這個表格。";
     Text[ turkish ] = "The table can't be dropped, 'cause the database connection does not support this.";
@@ -542,7 +542,7 @@ String STR_BUTTON_TEXT_ALL
     Text[ polish ] = "~Wszystkie";
     Text[ portuguese_brazilian ] = "~All";
     Text[ japanese ] = "すべて(~A)";
-    Text[ korean ] = "전체(~A)";
+    Text[ korean ] = "모두(~A)";
     Text[ chinese_simplified ] = "全部(~A)";
     Text[ chinese_traditional ] = "全部(~A)";
     Text[ turkish ] = "~All";
@@ -553,6 +553,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.39  2001/10/25 20:29:45  kz
+ *  Merge SRC641: 25.10.01 - 22:28:48
+ *
  *  Revision 1.38  2001/10/22 20:43:27  kz
  *  Merge SRC641: 22.10.01 - 22:43:55
  *
@@ -627,6 +630,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
