@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMouseMotionListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,18 +76,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XMouseMotionListener
 /** makes it possible to receive mouse motion events on a window.
  */
 interface XMouseMotionListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseMotionListener::mouseDragged
-    /** gets invoked when a mouse button is pressed on a window and then
+    /** is invoked when a mouse button is pressed on a window and then
         dragged.
-
-
 
         <p>Mouse drag events will continue to be delivered to
         the window where the first event originated until the mouse button is
@@ -98,8 +94,7 @@ interface XMouseMotionListener: com::sun::star::lang::XEventListener
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XMouseMotionListener::mouseMoved
-    /** gets invoked when the mouse button has been moved on a window
+    /** is invoked when the mouse button has been moved on a window
         (with no buttons down).
      */
     void mouseMoved( [in] com::sun::star::awt::MouseEvent e );

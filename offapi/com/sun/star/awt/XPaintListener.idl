@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPaintListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XPaintListener
 /** makes it possible to receive paint events.
  */
 interface XPaintListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XPaintListener::windowPaint
-    /** gets called when a region of the window became invalid, for example,
-        because another window was moved away.
+    /** is invoked when a region of the window became invalid, e.g. when
+        another window has been moved away.
      */
     [oneway] void windowPaint( [in] com::sun::star::awt::PaintEvent e );
 
