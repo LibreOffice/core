@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtconv.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-09 09:02:36 $
+ *  last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ void Help()
     fprintf( stdout, "\n" );
     fprintf( stdout, "txtconv converts textfiles from or to UTF-8\n" );
     fprintf( stdout, "\n" );
-    fprintf( stdout, "Syntax: txtconv (-t|-f charset) filename\n" );
+    fprintf( stdout, "Syntax: txtconv -t|-f charset filename (destinationfile)\n" );
     fprintf( stdout, "Switches: -t   => conversion from charset to UTF-8\n" );
     fprintf( stdout, "          -f   => conversion from UTF-8 to charset\n" );
     fprintf( stdout, "\n" );
@@ -102,7 +102,7 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
-    if ( argc != 4 ) {
+    if (( argc != 4 ) && ( argc != 5 )) {
         Help();
         exit ( 0 );
     }
@@ -137,10 +137,21 @@ int _cdecl main( int argc, char *argv[] )
             exit ( 2 );
         }
 
+        String sOutput;
+        SvFileStream aOutput;
+        if ( argc == 5 ) {
+            sOutput= String( argv[ 4 ], RTL_TEXTENCODING_ASCII_US );
+            aOutput.Open( sOutput, STREAM_STD_WRITE | STREAM_TRUNC );
+            if ( !aOutput.IsOpen()) {
+                fprintf( stderr, "\nERROR: Could not open output file %s!\n\n", argv[ 4 ]);
+                exit ( 3 );
+            }
+        }
+
         String sGSI( argv[ 3 ], RTL_TEXTENCODING_ASCII_US );
         SvFileStream aGSI( sGSI, STREAM_STD_READ );
         if ( !aGSI.IsOpen()) {
-            fprintf( stderr, "\nERROR: Could not open file %s!\n\n", ByteString( argv[ 3 ] ).GetBuffer());
+            fprintf( stderr, "\nERROR: Could not open input file %s!\n\n", argv[ 3 ]);
             exit ( 3 );
         }
 
@@ -153,10 +164,15 @@ int _cdecl main( int argc, char *argv[] )
             else
                 sGSILine = UTF8Converter::ConvertFromUTF8( sGSILine, nEncoding );
 
-            fprintf( stdout, "%s\n", sGSILine.GetBuffer());
+            if ( aOutput.IsOpen())
+                aOutput.WriteLine( sGSILine );
+            else
+                fprintf( stdout, "%s\n", sGSILine.GetBuffer());
         }
 
         aGSI.Close();
+        if ( aOutput.IsOpen())
+            aOutput.Close();
     }
     else {
         Help();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srciter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-21 15:44:33 $
+ *  last change: $Author: nf $ $Date: 2001-05-22 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ SourceTreeIterator::SourceTreeIterator(
 {
     pRootDirectory = SourceDirectory::CreateRootDirectory(
         rRootDirectory, rVersion, TRUE );
+    fprintf( stderr, "\n" );
 }
 
 /*****************************************************************************/
