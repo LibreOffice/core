@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:39:35 $
+ *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,13 @@
 #include "xmlimprt.hxx"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
 #include <com/sun/star/table/XColumnRowRange.hpp>
 #endif
@@ -104,64 +111,86 @@ void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
     aShapes.push_back(aShape);
 }
 
-void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet)
+void ScMyShapeResizer::ResizeShapes()
 {
     if (aShapes.size())
     {
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
+        uno::Reference<table::XCellRange> xTableRow;
+        uno::Reference<sheet::XSpreadsheet> xSheet;
+        uno::Reference<table::XTableRows> xTableRows;
+        sal_Int32 nOldRow(-1);
+        sal_Int32 nOldSheet(-1);
+        Rectangle* pRect = NULL;
         ScMyToResizeShapes::iterator aItr = aShapes.begin();
-        uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
-        if (xColumnRowRange.is())
+        uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
+        if ( xSpreadDoc.is() )
         {
-            uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
-            if (xTableRows.is())
+            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+            uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
+            if ( xIndex.is() )
             {
-                uno::Reference<table::XCellRange> xTableRow;
-                sal_Int32 nOldRow(-1);
-                Rectangle* pRect = NULL;
                 while (aItr != aShapes.end())
                 {
-                    if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
+                    if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
                     {
-                        nOldRow = aItr->aEndCell.Row;
-                        uno::Any aRow = xTableRows->getByIndex(aItr->aEndCell.Row);
-                        aRow >>= xTableRow;
-                    }
-                    if (xTableRow.is())
-                    {
-                        uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
-                        if (xRowProperties.is())
+                        nOldSheet = aItr->aEndCell.Sheet;
+                        uno::Any aTable = xIndex->getByIndex(nOldSheet);
+                        if (aTable>>=xSheet)
                         {
-                            uno::Any aAny = xRowProperties->getPropertyValue(sRowHeight);
-                            sal_Int32 nHeight;
-                            if (aAny >>= nHeight)
+                            uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
+                            if (xColumnRowRange.is())
                             {
-                                Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
-                                    static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
-                                awt::Point aRefPoint;
-                                aRefPoint.X = aRec.Left();
-                                aRefPoint.Y = aRec.Top();
-                                pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
-                                    static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
-                                    static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
-                                sal_Int32 Y (nHeight - aItr->nEndY);
-                                aItr->nEndX += pRect->Left();
-                                Y = pRect->Bottom() - Y;
-                                awt::Point aPoint = aItr->xShape->getPosition();
-                                awt::Size aOldSize = aItr->xShape->getSize();
-                                awt::Size aSize(aOldSize);
-                                aPoint.X += aRefPoint.X;
-                                aPoint.Y += aRefPoint.Y;
-                                aSize.Width = aItr->nEndX - aPoint.X;
-                                aSize.Height = Y - aPoint.Y;
-                                aItr->xShape->setPosition(aPoint);
-                                if( (aSize.Width != aOldSize.Width) ||
-                                    (aSize.Height != aOldSize.Height) )
-                                    aItr->xShape->setSize(aSize);
-                                delete pRect;
+                                xTableRows = xColumnRowRange->getRows();
                             }
                         }
                     }
+                    if (xTableRows.is())
+                    {
+                        if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
+                        {
+                            nOldRow = aItr->aEndCell.Row;
+                            uno::Any aRow = xTableRows->getByIndex(nOldRow);
+                            aRow >>= xTableRow;
+                        }
+                        if (xTableRow.is())
+                        {
+                            uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
+                            if (xRowProperties.is())
+                            {
+                                uno::Any aAny = xRowProperties->getPropertyValue(sRowHeight);
+                                sal_Int32 nHeight;
+                                if (aAny >>= nHeight)
+                                {
+                                    Rectangle aRec = rImport.GetDocument()->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
+                                        static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
+                                    awt::Point aRefPoint;
+                                    aRefPoint.X = aRec.Left();
+                                    aRefPoint.Y = aRec.Top();
+                                    pRect = new Rectangle(rImport.GetDocument()->GetMMRect(
+                                        static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
+                                        static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
+                                    sal_Int32 Y (nHeight - aItr->nEndY);
+                                    aItr->nEndX += pRect->Left();
+                                    Y = pRect->Bottom() - Y;
+                                    awt::Point aPoint = aItr->xShape->getPosition();
+                                    awt::Size aOldSize = aItr->xShape->getSize();
+                                    awt::Size aSize(aOldSize);
+                                    aPoint.X += aRefPoint.X;
+                                    aPoint.Y += aRefPoint.Y;
+                                    aSize.Width = aItr->nEndX - aPoint.X;
+                                    aSize.Height = Y - aPoint.Y;
+                                    aItr->xShape->setPosition(aPoint);
+                                    if( (aSize.Width != aOldSize.Width) ||
+                                        (aSize.Height != aOldSize.Height) )
+                                        aItr->xShape->setSize(aSize);
+                                    delete pRect;
+                                }
+                            }
+                        }
+                    }
+                    else
+                        DBG_ERROR("something wents wrong");
                     aItr = aShapes.erase(aItr);
                 }
             }

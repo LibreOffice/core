@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:45:55 $
+ *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,6 +1576,13 @@ ScXMLImport::~ScXMLImport()
         xActionLockable->removeActionLock();
     if (pChangeTrackingImportHelper)
         delete pChangeTrackingImportHelper;
+
+    if (getImportFlags() & IMPORT_CONTENT)
+    {
+        pDoc->CompileXML();
+        aTables.UpdateRowHeights();
+        aTables.ResizeShapes();
+    }
 }
 
 void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )

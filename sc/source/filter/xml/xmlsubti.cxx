@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-22 12:18:09 $
+ *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,7 +658,9 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 void ScMyTables::UpdateRowHeights()
 {
     // update automatic row heights
-    ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, nCurrentSheet );
+    sal_Int16 nTableCount(rImport.GetDocument()->GetTableCount());
+    for (sal_Int16 i = 0; i < nTableCount; i++)
+        ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
 }
 
 void ScMyTables::DeleteTable()
@@ -673,8 +675,6 @@ void ScMyTables::DeleteTable()
     }
     if (nTableCount == 0) // only set the styles if all subtables are importet and the table is finished
         rImport.GetStylesImportHelper()->SetStylesToRanges(rImport);
-    UpdateRowHeights();
-    aResizeShapes.ResizeShapes(xCurrentSheet);
     if (bProtection)
     {
         uno::Sequence<sal_Int8> aPass;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 15:55:29 $
+ *  last change: $Author: sab $ $Date: 2001-06-01 10:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public:
                     com::sun::star::table::CellAddress& rStartAddress,
                     com::sun::star::table::CellAddress& rEndAddress,
                     sal_Int32 nEndX, sal_Int32 nEndY);
-    void    ResizeShapes(::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xSheet);
+    void    ResizeShapes();
 };
 
 #endif
