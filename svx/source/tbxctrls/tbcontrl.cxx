@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:32:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,14 +2016,14 @@ void SvxTbxButtonColorUpdater_Impl::Update( const Color& rColor )
                     if( maBmpSize.Width() <= 16 )
                         maUpdRect = Rectangle( Point( 0,12 ), Size( maBmpSize.Width(), 4 ) );
                     else
-                        maUpdRect = Rectangle( Point( 1,19 ), Size( 24,6 ) );
+                        maUpdRect = Rectangle( Point( 1, maBmpSize.Height() - 7 ), Size( maBmpSize.Width() - 2 ,6 ) );
                 }
                 else
                 {
                     if( maBmpSize.Width() <= 16 )
                         maUpdRect = Rectangle( Point( 7, 7 ), Size( 8, 8 ) );
                     else
-                        maUpdRect = Rectangle( Point( 14, 14 ), Size( 11, 11 ) );
+                        maUpdRect = Rectangle( Point( maBmpSize.Width() - 12, maBmpSize.Height() - 12 ), Size( 11, 11 ) );
                 }
 
                 pBmpAcc->DrawRect( maUpdRect );
