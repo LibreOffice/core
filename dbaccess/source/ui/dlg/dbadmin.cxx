@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 08:41:31 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 15:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1307,8 +1307,6 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             }
             _pTabPage->disableConnectionURL();
             break;
-        default:
-            OSL_ENSURE(0,"Wrong DetailPage!");
     }
     if(nPageId != USHORT(-1))
     {
@@ -2653,6 +2651,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.56  2001/06/01 08:41:31  oj
+ *  #87149# changed order for tabpages
+ *
  *  Revision 1.55  2001/05/31 11:37:57  oj
  *  #87149# correct ldap protocol
  *
