@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:26:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,11 +414,13 @@ public class Dataimport extends ReportWizard{
         }
     setLayoutSectionsInvisible(GroupFieldCount);
     CurReportDocument.breakLinkofTextSections();
-    Object oTextTable= CurReportDocument.xTextTablesSupplier.getTextTables().getByName("FirstVisibleTextTable");
-    if (CorrBreakValue != null)
+    if (CurReportDocument.xTextTablesSupplier.getTextTables().hasByName("FirstVisibleTextTable")){
+        Object oTextTable = CurReportDocument.xTextTablesSupplier.getTextTables().getByName("FirstVisibleTextTable");
+        if (CorrBreakValue != null)
         Tools.setUNOPropertyValue(oTextTable, "BreakType", CorrBreakValue);
-    if (CorrPageDescName != "")
+        if (CorrPageDescName != "")
         Tools.setUNOPropertyValue(oTextTable, "PageDescName", CorrPageDescName);
+    }
     }
     catch( com.sun.star.uno.Exception exception ){
         exception.printStackTrace(System.out);
