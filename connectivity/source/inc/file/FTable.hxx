@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
+            ~OFileTable( );
 
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
