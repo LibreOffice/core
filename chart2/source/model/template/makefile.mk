@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: bm $ $Date: 2004-01-12 14:33:48 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 13:37:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,10 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE: settings.mk
+
+# i26518 the gcc-3.0.4 requires to enhance the template-depth
+# this seems to be a compiler issue, so we recommend not to use 3.0.x anymore
+# CFLAGS+=-ftemplate-depth-128
 
 # --- export library -------------------------------------------------
 
