@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-30 14:03:39 $
+ *  last change: $Author: cl $ $Date: 2001-08-01 15:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,7 +1226,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                         OSL_ENSURE( xCompareFac.is(), "got no XAnyCompareFactory" );
                         if( xCompareFac.is() )
                         {
-                            Reference< XAnyCompare > xNumRuleCompare =
+                            xNumRuleCompare =
                                 xCompareFac->createAnyCompareByName(
                                     OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             "NumberingRules" ) ) );
