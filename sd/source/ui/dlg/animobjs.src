@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-15 13:04:33 $
+ *  last change: $Author: kz $ $Date: 2002-08-02 20:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,6 +1033,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Say�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quantitat";
+        Text[ thai ] = "ตัวเลข";
     };
     FixedText FI_COUNT
     {
@@ -1069,6 +1070,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imatge";
         Text[ finnish ] = "Kuva";
+        Text[ thai ] = "ภาพ";
     };
     RadioButton RBT_GROUP
     {
@@ -1082,7 +1084,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ french ] = "Objet de groupe" ;
         Text [ dutch ] = "Groepsobject" ;
         Text [ swedish ] = "Gruppobjekt" ;
-        Text [ danish ] = "Gruppeobjekt" ;
+        Text [ danish ] = "~Gruppeobjekt" ;
         Text [ portuguese_brazilian ] = "Gruppenobjekt" ;
         Text [ portuguese ] = "Objecto de grupo" ;
         Text[ chinese_simplified ] = "分组对象";
@@ -1097,6 +1099,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Agrupa l'objecte";
         Text[ finnish ] = "Ryhm�objekti";
+        Text[ thai ] = "จัดกลุ่มวัตถุ";
     };
     RadioButton RBT_BITMAP
     {
@@ -1110,7 +1113,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ spanish ] = "Objeto bitmap" ;
         Text [ french ] = "Objet bitmap" ;
         Text [ swedish ] = "Bitmapobjekt" ;
-        Text [ danish ] = "Bitmapobjekt" ;
+        Text [ danish ] = "~Bitmapobjekt" ;
         Text [ portuguese_brazilian ] = "Bitmapobjekt" ;
         Text [ portuguese ] = "Objecto de bitmap" ;
         Text[ chinese_simplified ] = "位图对象";
@@ -1125,6 +1128,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objecte de mapa de bits";
         Text[ finnish ] = "Bittikarttaobjekti";
+        Text[ thai ] = "วัตถุบิทแมป";
     };
     FixedText FT_ADJUSTMENT
     {
@@ -1156,6 +1160,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Hizalama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alineament";
+        Text[ thai ] = "จัดตำแหน่ง";
     };
     ListBox LB_ADJUSTMENT
     {
@@ -1324,7 +1329,7 @@ DockingWindow FLT_WIN_ANIMATION
         };
     StringList [ chinese_simplified ] =
     {
-            < "向左/向上" ; Default ; > ;
+            < "左/上" ; Default ; > ;
         < "向左" ; Default ; > ;
         < "向左/向上" ; Default ; > ;
         < "向上" ; Default ; > ;
@@ -1454,6 +1459,18 @@ DockingWindow FLT_WIN_ANIMATION
         < "Dreta" ; Default ; > ;
         < "Part inferior dreta" ; Default ; > ;
     };
+    StringList [ thai ] =
+    {
+         < "บนซ้าย" ; Default ; > ;
+        < "ซ้าย" ; Default ; > ;
+        < "ล่างซ้าย" ; Default ; > ;
+        < "บน" ; Default ; > ;
+        < "ตรงกลาง" ; Default ; > ;
+        < "ล่าง" ; Default ; > ;
+        < "บนขวา" ; Default ; > ;
+        < "ขวา" ; Default ; > ;
+        < "ล่างขวา" ; Default ; > ;
+    };
     };
     PushButton BTN_CREATE_GROUP
     {
@@ -1483,6 +1500,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea";
         Text[ finnish ] = "Luo";
+        Text[ thai ] = "สร้าง";
     };
     FixedLine GRP_ANIMATION_GROUP
     {
@@ -1512,6 +1530,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Canland�rma grubu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Grup d'animaci�";
+        Text[ thai ] = "จัดกลุ่มการเคลื่อนไหว";
     };
     Text[ chinese_simplified ] = "动画";
     Text[ russian ] = "��������";
@@ -1524,5 +1543,6 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ turkish ] = "Canland�rma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animaci�";
+    Text[ thai ] = "เคลื่อนไหว";
 };
 
