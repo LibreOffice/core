@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-02 14:52:56 $
+ *  last change: $Author: cp $ $Date: 2001-11-06 18:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,8 +720,9 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
                       XNClientWindow,      aClientWindow,
                       NULL );
 
-        XSetICFocus( maContext );
     }
+    if ( mbUseable && (maContext != NULL) )
+        XSetICFocus( maContext );
 }
 
 void
@@ -812,7 +813,7 @@ SalI18N_InputContext::EndExtTextInput( USHORT nFlags )
                                            XNPreeditState, preedit_state,
                                            0);
         if (is_preedit_state) {
-            XSetICValues(maContext,
+             XSetICValues(maContext,
                          XNPreeditAttributes, preedit_attr,
                          XNPreeditState, XIMPreeditDisable,
                          NULL);
