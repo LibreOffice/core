@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 12:55:56 $
+#   last change: $Author: rt $ $Date: 2004-09-20 09:54:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,6 +108,7 @@ SLOFILES = \
         $(SLO)$/swwait.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/docst.obj    \
         $(SLO)$/swmodule.obj \
         $(SLO)$/swmodul1.obj \
         $(SLO)$/docsh2.obj
