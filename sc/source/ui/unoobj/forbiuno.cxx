@@ -2,9 +2,9 @@
  *
  *  $RCSfile: forbiuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:34:23 $
+ *  last change: $Author: nn $ $Date: 2001-08-24 17:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,18 @@ vos::ORef<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
     vos::ORef<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )
-        xRet = pDocSh->GetDocument()->GetForbiddenCharacters();
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        xRet = pDoc->GetForbiddenCharacters();
+        if ( !xRet.isValid() )
+        {
+            //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
+            //  so changes can be stored.
+
+            xRet = new SvxForbiddenCharactersTable( pDoc->GetServiceManager() );
+            pDoc->SetForbiddenCharacters( xRet );
+        }
+    }
     return xRet;
 }
 
