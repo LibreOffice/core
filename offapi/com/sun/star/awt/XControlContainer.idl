@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControlContainer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** Provides access to the controls within an
     <type>UnoControlContainer</type>.
  */
-interface XControlContainer: com::sun::star::uno::XInterface
+published interface XControlContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
