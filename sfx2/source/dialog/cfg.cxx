@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:57 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,11 +479,7 @@ void SfxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                 while ( pSfxSlot )
                 {
                     USHORT nId = pSfxSlot->GetSlotId();
-#ifdef UNX
-                    if ( nId != SID_DESKTOPMODE && ( pSfxSlot->GetMode() & nMode ) )
-#else
                     if ( pSfxSlot->GetMode() & nMode )
-#endif
                     {
                         bActiveEntries = sal_True;
                         break;
@@ -616,11 +612,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
                 while ( pSfxSlot )
                 {
                     USHORT nId = pSfxSlot->GetSlotId();
-#ifdef UNX
-                    if ( nId != SID_DESKTOPMODE && ( pSfxSlot->GetMode() & nMode ) )
-#else
                     if ( pSfxSlot->GetMode() & nMode )
-#endif
                     {
                         String aName = pSlotPool->GetSlotName_Impl( *pSfxSlot );
                         if ( aName.Len() && !pFunctionListBox->GetEntry_Impl( nId ) )
