@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: is $ $Date: 2004-05-24 18:10:32 $
+#   last change: $Author: is $ $Date: 2004-05-26 17:08:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,13 +68,6 @@ TARGET=util
 SHARED_COM_SDK_PATH*:=.
 
 INSTALLDIR=$(OUT)
-
-SEARCH_DIR:=.
-.IF "$(BUILD_SPECIAL)"!=""
-.IF "$(GUI)"=="WNT"
-SEARCH_DIR=r:\solenv\inst\ooo\$(OUTPATH)
-.ENDIF
-.ENDIF
 
 .INCLUDE: target.mk
 
