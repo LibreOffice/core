@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:34:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,13 @@ using namespace ::com::sun::star::uno;
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OIndexColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 // -----------------------------------------------------------------------------
 OIndexColumn::OIndexColumn(sal_Bool _bCase) : OColumn(_bCase),  m_IsAscending(sal_True)

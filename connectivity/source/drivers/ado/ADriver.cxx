@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:08 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,11 @@ sal_Bool SAL_CALL ODriver::supportsService( const ::rtl::OUString& _rServiceName
 {
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 
 // --------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CResultSet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,13 +104,13 @@ Sequence< ::rtl::OUString > SAL_CALL OCalcResultSet::getSupportedServiceNames(  
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OCalcResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw( RuntimeException)
 {
-     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCalcResultSet::queryInterface( const Type & rType ) throw(RuntimeException)

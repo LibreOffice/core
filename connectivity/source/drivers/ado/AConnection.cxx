@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 using namespace dbtools;
@@ -194,7 +197,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         else
             ADOS::ThrowException(*m_pAdoConnection,*this);
         if(m_pAdoConnection->get_State() != adStateOpen)
-            throw SQLException();
+            ::dbtools::throwFunctionSequenceException(*this);
 
         ADOProperties* pProps=m_pAdoConnection->get_Properties();
         if(pProps)
@@ -214,7 +217,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
         //bErg = TRUE;
     }
     else
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
 
     osl_decrementInterlockedCount( &m_refCount );
 }

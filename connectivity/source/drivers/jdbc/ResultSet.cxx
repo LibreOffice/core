@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:37:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,6 +1771,7 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
                             const ::com::sun::star::uno::Any& rValue )
                                 throw (::com::sun::star::lang::IllegalArgumentException)
 {
+    sal_Bool bRet = sal_False;
     switch(nHandle)
     {
         case PROPERTY_ID_CURSORNAME:
@@ -1779,13 +1780,14 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
             throw ::com::sun::star::lang::IllegalArgumentException();
             break;
         case PROPERTY_ID_FETCHDIRECTION:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            bRet = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchDirection());
+            break;
         case PROPERTY_ID_FETCHSIZE:
-            return ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
+            bRet = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, getFetchSize());
         default:
             ;
     }
-    return sal_False;
+    return bRet;
 }
 // -------------------------------------------------------------------------
 void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(

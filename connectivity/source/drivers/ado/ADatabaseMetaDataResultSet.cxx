@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:30:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 
 #include <oledb.h>
 
-
+using namespace dbtools;
 using namespace connectivity::ado;
 using namespace cppu;
 using namespace ::comphelper;
@@ -188,7 +188,12 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) : columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
+#if SUPD > 630
+            columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+#else
+                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
+#endif
             break;
     return i;
 }
@@ -200,7 +205,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -243,7 +248,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResult
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -256,7 +261,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::getBoolean( sal_Int32 columnIndex 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -273,7 +278,7 @@ sal_Int8 SAL_CALL ODatabaseMetaDataResultSet::getByte( sal_Int32 columnIndex ) t
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -295,7 +300,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -312,7 +317,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -329,7 +334,7 @@ double SAL_CALL ODatabaseMetaDataResultSet::getDouble( sal_Int32 columnIndex ) t
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -346,7 +351,7 @@ float SAL_CALL ODatabaseMetaDataResultSet::getFloat( sal_Int32 columnIndex ) thr
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -363,7 +368,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -386,7 +391,7 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     return 0;
 }
@@ -398,7 +403,7 @@ sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) 
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -412,7 +417,7 @@ Reference< XResultSetMetaData > SAL_CALL ODatabaseMetaDataResultSet::getMetaData
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     if(!m_xMetaData.is())
         m_xMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
@@ -426,7 +431,7 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -440,7 +445,7 @@ Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 colum
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -452,7 +457,7 @@ Reference< XBlob > SAL_CALL ODatabaseMetaDataResultSet::getBlob( sal_Int32 colum
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -465,7 +470,7 @@ Reference< XRef > SAL_CALL ODatabaseMetaDataResultSet::getRef( sal_Int32 columnI
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return NULL;
@@ -478,7 +483,7 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getObject( sal_Int32 columnIndex, const
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     return Any();
@@ -491,7 +496,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -514,7 +519,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -536,7 +541,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -554,7 +559,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     ADO_GETFIELD(columnIndex);
@@ -571,7 +576,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     VARIANT_BOOL bIsAtEOF;
     m_pRecordSet->get_EOF(&bIsAtEOF);
@@ -584,7 +589,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     return m_nRowPos == 1;
 }
@@ -595,7 +600,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isLast(  ) throw(SQLException, Run
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     return sal_True;
 }
@@ -606,7 +611,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::beforeFirst(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     if(first())
         previous();
@@ -618,7 +623,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::afterLast(  ) throw(SQLException, Runt
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     if(last())
         next();
@@ -724,7 +729,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowDeleted(  ) throw(SQLException,
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -736,7 +741,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowInserted(  ) throw(SQLException
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -749,7 +754,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException,
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     RecordStatusEnum eRec;
     m_pRecordSet->get_Status((sal_Int32*)&eRec);
@@ -797,7 +802,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::wasNull(  ) throw(SQLException, Ru
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     return m_aValue.isNull();
 }
@@ -808,7 +813,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::refreshRow(  ) throw(SQLException, Run
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     m_pRecordSet->Resync(adAffectCurrent,adResyncAllValues);
 }
@@ -820,7 +825,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::cancel(  ) throw(RuntimeException)
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
 
     if(!m_pRecordSet)
-        throw SQLException();
+        throwFunctionSequenceException(*this);
 
     m_pRecordSet->Cancel();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:57 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,12 +154,14 @@ jclass java_sql_Driver::getMyClass()
     if( !theClass )
     {
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-        if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Driver");
-        OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
-        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-        t.pEnv->DeleteLocalRef( tempClass );
-        saveClassRef( globClass );
+        if( t.pEnv )
+        {
+            jclass tempClass = t.pEnv->FindClass("java/sql/Driver");
+            OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
+            jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+            t.pEnv->DeleteLocalRef( tempClass );
+            saveClassRef( globClass );
+        }
     }
     return theClass;
 }

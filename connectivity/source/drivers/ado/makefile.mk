@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-14 11:40:04 $
+#   last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/Aolevariant.obj							\
         $(SLO)$/Awrapado.obj							\
         $(SLO)$/ADatabaseMetaData.obj					\
         $(SLO)$/AColumn.obj								\

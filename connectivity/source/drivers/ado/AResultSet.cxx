@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:30:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,13 +136,13 @@ using namespace com::sun::star::sdbc;
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
+    Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
@@ -157,7 +157,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  ORes
     osl_incrementInterlockedCount( &m_refCount );
     OSL_ENSURE(_pRecordSet,"No RecordSet !");
     if(!_pRecordSet)
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
@@ -175,7 +175,7 @@ OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
     osl_incrementInterlockedCount( &m_refCount );
     OSL_ENSURE(_pRecordSet,"No RecordSet !");
     if(!_pRecordSet)
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
     m_pRecordSet->AddRef();
     VARIANT_BOOL bIsAtBOF;
     CHECK_RETURN(m_pRecordSet->get_BOF(&bIsAtBOF))
@@ -231,7 +231,12 @@ sal_Int32 SAL_CALL OResultSet::findColumn( const ::rtl::OUString& columnName ) t
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
     for(;i<=nLen;++i)
-        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) : columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+        if(xMeta->isCaseSensitive(i) ? columnName == xMeta->getColumnName(i) :
+#if SUPD > 630
+            columnName.equalsIgnoreAsciiCase(xMeta->getColumnName(i)))
+#else
+                columnName.equalsIgnoreCase(xMeta->getColumnName(i)))
+#endif
             break;
     return i;
 }
@@ -608,7 +613,7 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 
 
     if(!row)                 // absolute with zero not allowed
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
 
     sal_Bool bCheck = sal_True;
     if(row < 0)
@@ -1035,7 +1040,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
     bookmark >>= nPos;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
 
     return SUCCEEDED(m_pRecordSet->Move(0,m_aBookmarks[nPos]));
 }
@@ -1051,7 +1056,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     nPos += rows;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(*this);
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
 }
 //------------------------------------------------------------------------------

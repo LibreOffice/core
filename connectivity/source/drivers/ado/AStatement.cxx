@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:26:59 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 #define CHECK_RETURN(x)                                                 \
@@ -548,7 +548,7 @@ sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeExcepti
 {
     sal_Int32 nRet=-1;
     if(!m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet))
-        throw SQLException();
+        ::dbtools::throwFunctionSequenceException(NULL);
     return nRet;
 }
 //------------------------------------------------------------------------------

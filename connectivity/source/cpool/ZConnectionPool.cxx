@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 10:33:42 $
+ *  last change: $Author: oj $ $Date: 2001-05-17 09:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,14 +197,13 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OConnectionPool::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     Sequence< ::rtl::OUString > aSupported(getSupportedServiceNames());
     const ::rtl::OUString* pSupported = aSupported.getConstArray();
-    for (sal_Int32 i=0; i<aSupported.getLength(); ++i, ++pSupported)
-        if (pSupported->equals(_rServiceName))
-            return sal_True;
+    const ::rtl::OUString* pEnd = pSupported + aSupported.getLength();
+    for (;pSupported != pEnd && !pSupported->equals(_rServiceName); ++pSupported)
+        ;
 
-    return sal_False;
+    return pSupported != pEnd;
 }
 
 //--------------------------------------------------------------------------
