@@ -92,7 +92,7 @@
         <supported-service>com.sun.star.form.component.ImageButton</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
-        <supported-service>com.sun.star.awt.UnoControlImageButtonModel</supported-service>
+        <supported-service>com.sun.star.awt.UnoControlImageControlModel</supported-service>
         <supported-service>com.sun.star.awt.UnoControlModel</supported-service>
     </component-description>
     <component-description>
