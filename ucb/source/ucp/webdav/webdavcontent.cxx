@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:42:00 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 #define BUG_110335 1
-
 /**************************************************************************
                                 TODO
  **************************************************************************
@@ -638,7 +637,6 @@ uno::Any SAL_CALL Content::execute(
 //      {
             try
             {
-                osl::MutexGuard aGuard( m_aMutex );
                 m_xResAccess->DESTROY( Environment );
             }
             catch ( DAVException const & e )
@@ -743,8 +741,6 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
 {
 //  if ( m_bTransient )
 //      @@@ ???
-
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !Name.getLength() )
         throw lang::IllegalArgumentException();
@@ -858,8 +854,6 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
            beans::NotRemoveableException,
            uno::RuntimeException )
 {
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     // @@@ Need real command environment here, but where to get it from?
     //     XPropertyContainer interface should be replaced by
     //     XCommandProcessor commands!
@@ -1185,31 +1179,46 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     std::auto_ptr< ContentProperties > xProps;
+    std::auto_ptr< ContentProperties > xCachedProps;
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+    rtl::OUString aEscapedTitle;
     bool bHasAll = false;
+    uno::Reference< lang::XMultiServiceFactory >       xSMgr;
+    uno::Reference< star::ucb::XContentIdentifier >    xIdentifier;
+    rtl::Reference< ::ucb::ContentProviderImplHelper > xProvider;
 
-    // First, ask cache...
-    if ( m_xCachedProps.get() )
     {
-        std::vector< rtl::OUString > aMissingProps;
-        if ( m_xCachedProps->containsAllNames( rProperties, aMissingProps ) )
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        aEscapedTitle = NeonUri::unescape( m_aEscapedTitle );
+        xSMgr.set( m_xSMgr );
+        xIdentifier.set( m_xIdentifier );
+        xProvider.set( m_xProvider.getBodyPtr() );
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+
+        // First, ask cache...
+        if ( m_xCachedProps.get() )
         {
-            // All properties are already in cache! No server access needed.
-            bHasAll = true;
-            xProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
-        }
-    }
+            xCachedProps.reset( new ContentProperties( *m_xCachedProps.get() ) );
 
-    if ( !xProps.get() )
-    {
-        // No server access for just created (not yet committed) objects.
-        // Only a minimal set of properties supported at this stage.
-        if ( m_bTransient )
-            xProps.reset( new ContentProperties( NeonUri::unescape(
-                                                    m_aEscapedTitle ),
-                                                 m_bCollection ) );
+            std::vector< rtl::OUString > aMissingProps;
+            if ( xCachedProps->containsAllNames( rProperties, aMissingProps ) )
+            {
+                // All properties are already in cache! No server access needed.
+                bHasAll = true;
+                xProps.reset( new ContentProperties( *xCachedProps.get() ) );
+            }
+        }
+
+        if ( !xProps.get() )
+        {
+            // No server access for just created (not yet committed) objects.
+            // Only a minimal set of properties supported at this stage.
+            if ( m_bTransient )
+                xProps.reset( new ContentProperties( aEscapedTitle,
+                                                     m_bCollection ) );
+        }
     }
 
     if ( !xProps.get() )
@@ -1219,8 +1228,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if ( ( rProperties.getLength() == 1 ) &&
              rProperties[ 0 ].Name.equalsAsciiL(
                                 RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-            xProps.reset( new ContentProperties( NeonUri::unescape(
-                                                    m_aEscapedTitle ) ) );
+            xProps.reset( new ContentProperties( aEscapedTitle ) );
     }
 
     if ( !xProps.get() )
@@ -1234,8 +1242,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         if ( rType == UNKNOWN )
         {
             xProps.reset(
-                new ContentProperties(
-                    NeonUri::unescape( m_aEscapedTitle ) ) );
+                new ContentProperties( aEscapedTitle ) );
         }
 
         if ( !xProps.get() )
@@ -1256,7 +1263,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
                     try
                     {
-                        m_xResAccess->PROPFIND(
+                        xResAccess->PROPFIND(
                             DAVZERO, aPropNames, resources, xEnv );
                     }
                     catch ( DAVException const & e )
@@ -1305,7 +1312,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         try
                         {
                             DAVResource resource;
-                            m_xResAccess->HEAD( aHeaderNames, resource, xEnv );
+                            xResAccess->HEAD( aHeaderNames, resource, xEnv );
 
                             if ( xProps.get() )
                             {
@@ -1322,8 +1329,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                             if ( rType == NON_DAV )
                                 xProps->addProperties( aMissingProps,
                                                        ContentProperties(
-                                                        NeonUri::unescape(
-                                                            m_aEscapedTitle ),
+                                                        aEscapedTitle,
                                                         false ) );
                         }
                         catch ( DAVException const & e )
@@ -1348,14 +1354,12 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 if ( rType == DAV )
                 {
                     xProps.reset(
-                        new ContentProperties(
-                            NeonUri::unescape( m_aEscapedTitle ) ) );
+                        new ContentProperties( aEscapedTitle ) );
                 }
                 else
                 {
                     xProps.reset(
-                        new ContentProperties(
-                            NeonUri::unescape( m_aEscapedTitle ), false ) );
+                        new ContentProperties( aEscapedTitle, false ) );
                 }
             }
         }
@@ -1364,13 +1368,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 //    OSL_ENSURE( xProps.get(), "Content::getPropertyValues - no properties!" );
 
     // All values obtained? If not, is there something valueable in the cache?
-    if ( !bHasAll && m_xCachedProps.get() )
+    if ( !bHasAll && xCachedProps.get() )
     {
         std::vector< rtl::OUString > aMissingProps;
         if ( !xProps->containsAllNames( rProperties, aMissingProps ) )
         {
             // Add props contained in cache...
-            xProps->addProperties( aMissingProps, *m_xCachedProps );
+            xProps->addProperties( aMissingProps, *xCachedProps );
         }
     }
 
@@ -1400,13 +1404,11 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
     }
 
-    return getPropertyValues( m_xSMgr,
+    return getPropertyValues( xSMgr,
                               rProperties,
                               *xProps,
-                              rtl::Reference<
-                                ::ucb::ContentProviderImplHelper >(
-                                    m_xProvider.getBodyPtr() ),
-                              m_xIdentifier->getContentIdentifier() );
+                              xProvider,
+                              xIdentifier->getContentIdentifier() );
 }
 
 //=========================================================================
@@ -1415,7 +1417,21 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
-      osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    uno::Reference< lang::XMultiServiceFactory >    xSMgr;
+    uno::Reference< star::ucb::XContentIdentifier > xIdentifier;
+    rtl::Reference< ContentProvider >               xProvider;
+    sal_Bool bTransient;
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        xProvider.set( m_pProvider );
+        xIdentifier.set( m_xIdentifier );
+        bTransient = m_bTransient;
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        xSMgr.set( m_xSMgr );
+    }
 
     uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
@@ -1450,7 +1466,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         const rtl::OUString & rName = rValue.Name;
 
         beans::Property aTmpProp;
-        m_pProvider->getProperty( rName, aTmpProp );
+        xProvider->getProperty( rName, aTmpProp );
 
         if ( aTmpProp.Attributes & beans::PropertyAttribute::READONLY )
         {
@@ -1500,13 +1516,13 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 // No empty titles!
                 if ( aNewValue.getLength() > 0 )
                 {
-                    NeonUri aURI( m_xIdentifier->getContentIdentifier() );
+                    NeonUri aURI( xIdentifier->getContentIdentifier() );
                        aOldTitle = aURI.GetPathBaseNameUnescaped();
 
                     if ( aNewValue != aOldTitle )
                       {
                         // modified title -> modified URL -> exchange !
-                        if ( !m_bTransient )
+                        if ( !bTransient )
                             bExchange = sal_True;
 
                         // new value will be set later...
@@ -1663,12 +1679,12 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
     } // for
 
-    if ( !m_bTransient && aProppatchValues.size() )
+    if ( !bTransient && aProppatchValues.size() )
     {
         try
         {
             // Set property values at server.
-            m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
+            xResAccess->PROPPATCH( aProppatchValues, xEnv );
 
             std::vector< ProppatchValue >::const_iterator it
                 = aProppatchValues.begin();
@@ -1724,9 +1740,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
           aNewURL += NeonUri::escapeSegment( aNewTitle );
 
         uno::Reference< star::ucb::XContentIdentifier > xNewId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aNewURL );
-        uno::Reference< star::ucb::XContentIdentifier > xOldId
-            = m_xIdentifier;
+            = new ::ucb::ContentIdentifier( xSMgr, aNewURL );
+        uno::Reference< star::ucb::XContentIdentifier > xOldId = xIdentifier;
 
         try
         {
@@ -1734,7 +1749,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             NeonUri targetURI( xNewId->getContentIdentifier() );
             targetURI.SetScheme( rtl::OUString::createFromAscii( "http" ) );
 
-            m_xResAccess->MOVE(
+            xResAccess->MOVE(
                 sourceURI.GetPath(), targetURI.GetURI(), sal_False, xEnv );
             // @@@ Should check for resources that could not be moved
             //     (due to source access or target overwrite) and send
@@ -1746,10 +1761,9 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             // @@@ Existing content should be checked to see if it has
             //     been overwritten at the target
 
-            aGuard.clear();
             if ( exchangeIdentity( xNewId ) )
             {
-                m_xResAccess->setURL( aNewURL );
+                xResAccess->setURL( aNewURL );
 
 // DAV resources store all additional props on server!
 //              // Adapt Additional Core Properties.
@@ -1780,6 +1794,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( aNewTitle.getLength() )
     {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
         aEvent.PropertyName = rtl::OUString::createFromAscii( "Title" );
         aEvent.OldValue     = uno::makeAny( aOldTitle );
         aEvent.NewValue     = uno::makeAny( aNewTitle );
@@ -1792,7 +1808,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( nChanged > 0 )
     {
-        aGuard.clear();
           aChanges.realloc( nChanged );
           notifyPropertiesChange( aChanges );
     }
@@ -1867,8 +1882,6 @@ uno::Any Content::open(
             // Unreachable
         }
 
-        osl::MutexGuard aGuard( m_aMutex );
-
         rtl::OUString aURL = m_xIdentifier->getContentIdentifier();
         uno::Reference< io::XOutputStream > xOut
             = uno::Reference< io::XOutputStream >( rArg.Sink, uno::UNO_QUERY );
@@ -1877,19 +1890,32 @@ uno::Any Content::open(
             // PUSH: write data
             try
             {
-                // throw away previously cached headers.
-                m_xCachedProps.reset();
+                std::auto_ptr< DAVResourceAccess > xResAccess;
+
+                {
+                    osl::MutexGuard aGuard( m_aMutex );
+
+                    // throw away previously cached headers.
+                    m_xCachedProps.reset();
+
+                    xResAccess.reset(
+                        new DAVResourceAccess( *m_xResAccess.get() ) );
+                }
 
                 DAVResource aResource;
                 std::vector< rtl::OUString > aHeaders;
-//                    // Obtain list containing all HTTP headers that can
-//                    // be mapped to UCB properties.
-//                    ContentProperties::getMappableHTTPHeaders( aHeaders );
+//                // Obtain list containing all HTTP headers that can
+//                // be mapped to UCB properties.
+//                ContentProperties::getMappableHTTPHeaders( aHeaders );
 
-                m_xResAccess->GET( xOut, aHeaders, aResource, xEnv );
+                xResAccess->GET( xOut, aHeaders, aResource, xEnv );
 
-                // cache headers.
-                m_xCachedProps.reset( new ContentProperties( aResource ) );
+                {
+                    osl::MutexGuard aGuard( m_aMutex );
+
+                    // cache headers.
+                    m_xCachedProps.reset( new ContentProperties( aResource ) );
+                }
             }
             catch ( DAVException const & e )
             {
@@ -1907,9 +1933,12 @@ uno::Any Content::open(
                 // PULL: wait for client read
                 try
                 {
-#ifdef BUG_110335
-                    // throw away previously cached headers.
-                    m_xCachedProps.reset();
+                    {
+                        osl::MutexGuard aGuard( m_aMutex );
+
+                        // throw away previously cached headers.
+                        m_xCachedProps.reset();
+                    }
 
                     DAVResourceAccessThread * th =
                         new DAVResourceAccessThread(
@@ -1926,26 +1955,12 @@ uno::Any Content::open(
                         throw e;
                     }
 
-                    m_xCachedProps.reset(
-                        new ContentProperties( th->getResource() ) );
-#else
-                    // throw away previously cached headers.
-                    m_xCachedProps.reset();
+                    {
+                        osl::MutexGuard aGuard( m_aMutex );
 
-                    DAVResource aResource;
-                    std::vector< rtl::OUString > aHeaders;
-//                        // Obtain list containing all HTTP headers that can
-//                        // be mapped to UCB properties.
-//                        ContentProperties::getMappableHTTPHeaders( aHeaders );
-
-                    uno::Reference< io::XInputStream > xIn
-                        = m_xResAccess->GET( aHeaders, aResource, xEnv );
-
-                    // cache headers.
-                    m_xCachedProps.reset( new ContentProperties( aResource ) );
-
-                    xDataSink->setInputStream( xIn );
-#endif
+                        m_xCachedProps.reset(
+                            new ContentProperties( th->getResource() ) );
+                    }
                 }
                 catch ( DAVException const & e )
                 {
@@ -1984,8 +1999,6 @@ void Content::post(
     {
         try
         {
-            osl::MutexGuard aGuard( m_aMutex );
-
             uno::Reference< io::XInputStream > xResult
                 = m_xResAccess->POST( rArg.MediaType,
                                       rArg.Referer,
@@ -2006,8 +2019,6 @@ void Content::post(
         {
             try
             {
-                osl::MutexGuard aGuard( m_aMutex );
-
                 m_xResAccess->POST( rArg.MediaType,
                                     rArg.Referer,
                                     rArg.Source,
@@ -2092,11 +2103,22 @@ void Content::insert(
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    sal_Bool bTransient, bCollection;
+    rtl::OUString aEscapedTitle;
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        bTransient    = m_bTransient;
+        bCollection   = m_bCollection;
+        aEscapedTitle = m_aEscapedTitle;
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+    }
 
     // Check, if all required properties are present.
 
-    if ( m_aEscapedTitle.getLength() == 0 )
+    if ( aEscapedTitle.getLength() == 0 )
     {
         OSL_ENSURE( sal_False, "Content::insert - Title missing!" );
 
@@ -2129,7 +2151,7 @@ void Content::insert(
         */
 
         // ==> Complain on PUT, continue on MKCOL.
-        if ( !m_bTransient || ( m_bTransient && !m_bCollection  ) )
+        if ( !bTransient || ( bTransient && !bCollection  ) )
         {
             star::ucb::UnsupportedNameClashException aEx(
                 rtl::OUString::createFromAscii(
@@ -2157,7 +2179,7 @@ void Content::insert(
                     case ucbhelper::CONTINUATION_UNKNOWN:
                         // Not handled; throw.
                         throw aEx;
-//                        break;
+//                            break;
 
                     case ucbhelper::CONTINUATION_APPROVE:
                         // Continue -> Overwrite.
@@ -2170,7 +2192,7 @@ void Content::insert(
                                     rtl::OUString(),
                                     uno::Reference< uno::XInterface >(),
                                     aExAsAny );
-//                        break;
+//                            break;
 
                     default:
                         OSL_ENSURE( sal_False,
@@ -2181,7 +2203,7 @@ void Content::insert(
                                         "Unknown interaction selection!" ),
                                     uno::Reference< uno::XInterface >(),
                                     aExAsAny );
-//                        break;
+//                            break;
                 }
             }
             else
@@ -2192,27 +2214,27 @@ void Content::insert(
         }
     }
 
-    if ( m_bTransient )
+    if ( bTransient )
     {
         // Assemble new content identifier...
         rtl::OUString aURL = getParentURL();
         if ( aURL.lastIndexOf( '/' ) != ( aURL.getLength() - 1 ) )
             aURL += rtl::OUString::createFromAscii( "/" );
 
-        aURL += m_aEscapedTitle;
+        aURL += aEscapedTitle;
 
         try
         {
-            m_xResAccess->setURL( aURL );
+            xResAccess->setURL( aURL );
 
-            if ( m_bCollection )
-                m_xResAccess->MKCOL( Environment );
+            if ( bCollection )
+                xResAccess->MKCOL( Environment );
             else
-                m_xResAccess->PUT( xInputStream, Environment );
+                xResAccess->PUT( xInputStream, Environment );
           }
         catch ( DAVException const & e )
         {
-            if ( m_bCollection )
+            if ( bCollection )
             {
                 if ( e.getStatus() == SC_METHOD_NOT_ALLOWED )
                 {
@@ -2225,7 +2247,7 @@ void Content::insert(
                         // Destroy old resource.
                         try
                         {
-                            m_xResAccess->DESTROY( Environment );
+                            xResAccess->DESTROY( Environment );
                         }
                         catch ( DAVException const & e )
                         {
@@ -2262,11 +2284,17 @@ void Content::insert(
             // Unreachable
           }
 
-        m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_xIdentifier = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        }
 
-        aGuard.clear();
           inserted();
-          m_bTransient = sal_False;
+
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_bTransient = sal_False;
+        }
     }
     else
     {
@@ -2283,7 +2311,7 @@ void Content::insert(
 
         try
         {
-            m_xResAccess->PUT( xInputStream, Environment );
+            xResAccess->PUT( xInputStream, Environment );
           }
         catch ( DAVException const & e )
         {
@@ -2299,8 +2327,22 @@ void Content::transfer(
         const uno::Reference< star::ucb::XCommandEnvironment >& Environment )
     throw( uno::Exception )
 {
+    uno::Reference< lang::XMultiServiceFactory >    xSMgr;
+    uno::Reference< star::ucb::XContentIdentifier > xIdentifier;
+    uno::Reference< star::ucb::XContentProvider >   xProvider;
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+        xSMgr.set( m_xSMgr );
+        xIdentifier.set( m_xIdentifier );
+        xProvider.set( m_xProvider.getBodyPtr() );
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+    }
+
     NeonUri sourceURI( rArgs.SourceURL );
-    NeonUri targetURI( m_xIdentifier->getContentIdentifier() );
+    NeonUri targetURI( xIdentifier->getContentIdentifier() );
 
     try
     {
@@ -2367,7 +2409,7 @@ void Content::transfer(
 
         targetURI.AppendPath( aTitle );
 
-        rtl::OUString aTargetURL = m_xIdentifier->getContentIdentifier();
+        rtl::OUString aTargetURL = xIdentifier->getContentIdentifier();
         if ( ( aTargetURL.lastIndexOf( '/' ) + 1 )
                 != aTargetURL.getLength() )
             aTargetURL += rtl::OUString::createFromAscii( "/" );
@@ -2375,24 +2417,22 @@ void Content::transfer(
         aTargetURL += aTitle;
 
         uno::Reference< star::ucb::XContentIdentifier > xTargetId
-            = new ::ucb::ContentIdentifier( m_xSMgr, aTargetURL );
+            = new ::ucb::ContentIdentifier( xSMgr, aTargetURL );
 
-        osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
-
-        DAVResourceAccess aSourceAccess( m_xSMgr,
-                                         m_xResAccess->getSessionFactory(),
+        DAVResourceAccess aSourceAccess( xSMgr,
+                                         xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
 
         if ( rArgs.MoveData == sal_True )
         {
             uno::Reference< star::ucb::XContentIdentifier > xId
-                = new ::ucb::ContentIdentifier( m_xSMgr, rArgs.SourceURL );
+                = new ::ucb::ContentIdentifier( xSMgr, rArgs.SourceURL );
 
             // Note: The static cast is okay here, because its sure that
-            //       m_xProvider is always the WebDAVContentProvider.
+            //       xProvider is always the WebDAVContentProvider.
             rtl::Reference< Content > xSource
                 = static_cast< Content * >(
-                    m_xProvider->queryContent( xId ).get() );
+                    xProvider->queryContent( xId ).get() );
 
             // [RFC 2518] - WebDAV
             // If a resource exists at the destination and the Overwrite
@@ -2442,12 +2482,10 @@ void Content::transfer(
         }
 
         // Note: The static cast is okay here, because its sure that
-        //       m_xProvider is always the WebDAVContentProvider.
+        //       xProvider is always the WebDAVContentProvider.
         rtl::Reference< Content > xTarget
             = static_cast< Content * >(
-                    m_xProvider->queryContent( xTargetId ).get() );
-
-        aGuard.clear();
+                    xProvider->queryContent( xTargetId ).get() );
 
         // Announce transfered content in its new folder.
         xTarget->inserted();
@@ -2770,6 +2808,8 @@ void Content::cancelCommandExecution(
 //=========================================================================
 const rtl::OUString Content::getBaseURI()
 {
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
     // First, try to obtain value of response header "Content-Location".
     if ( m_xCachedProps.get() )
     {
@@ -2802,92 +2842,103 @@ const Content::ResourceType & Content::getResourceType(
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
     throw ( uno::Exception )
 {
-    if ( m_eResourceType == UNKNOWN )
+    std::auto_ptr< DAVResourceAccess > xResAccess;
+    ResourceType eResourceType;
+
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        if ( m_eResourceType == UNKNOWN )
+
+        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        eResourceType = m_eResourceType;
+    }
+
+    if ( eResourceType == UNKNOWN )
+    {
+        const rtl::OUString & rURL = xResAccess->getURL();
+        const rtl::OUString aScheme(
+            rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
+
+        if ( aScheme.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) ) )
         {
-            const rtl::OUString & rURL = m_xResAccess->getURL();
-            const rtl::OUString aScheme(
-                rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
+            eResourceType = FTP;
+        }
+        else
+        {
+            try
+            {
+                DAVCapabilities caps;
+                xResAccess->OPTIONS( caps, xEnv );
 
-            if ( aScheme.equalsAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM( FTP_URL_SCHEME ) ) )
-            {
-                m_eResourceType = FTP;
-            }
-            else
-            {
-                try
+                if ( caps.class1 )
                 {
-                    DAVCapabilities caps;
-                    m_xResAccess->OPTIONS( caps, xEnv );
-
-                    if ( caps.class1 )
-                    {
-                        // DAV resource
-                        m_eResourceType = DAV;
-                    }
-                    else
-                    {
-                        // HTTP (non-DAV) resource
-                        m_eResourceType = NON_DAV;
-                    }
+                    // DAV resource
+                    eResourceType = DAV;
                 }
-                catch ( DAVException const & e )
+                else
                 {
-                    if ( shouldAccessNetworkAfterException( e ) )
+                    // HTTP (non-DAV) resource
+                    eResourceType = NON_DAV;
+                }
+            }
+            catch ( DAVException const & e )
+            {
+                if ( shouldAccessNetworkAfterException( e ) )
+                {
+                    // OPTIONS is an optional HTTP method. Server can reply
+                    // with an error message. Last chance: try a PROPFIND
+                    // obtain resourcetype property. If it succeeds, we know
+                    // the resource is DAV enabled. If not, try a HEAD
+                    // (mandatory method). If this succeeds, it's an
+                    // existing HTTP resource.
+
+                    try
                     {
-                        // OPTIONS is an optional HTTP method. Server can reply
-                        // with an error message. Last chance: try a PROPFIND
-                        // obtain resourcetype property. If it succeeds, we know
-                        // the resource is DAV enabled. If not, try a HEAD
-                        // (mandatory method). If this succeeds, it's an
-                        // existing HTTP resource.
+                        std::vector< rtl::OUString > aPropNames;
+                        aPropNames.push_back( DAVProperties::RESOURCETYPE );
+                        std::vector< DAVResource > resources;
+                        xResAccess->PROPFIND(
+                            DAVZERO, aPropNames, resources, xEnv );
 
-                        try
+                        eResourceType = DAV;
+                    }
+                    catch ( DAVException const & e )
+                    {
+                        if ( shouldAccessNetworkAfterException( e ) )
                         {
-                            std::vector< rtl::OUString > aPropNames;
-                            aPropNames.push_back( DAVProperties::RESOURCETYPE );
-                            std::vector< DAVResource > resources;
-                            m_xResAccess->PROPFIND(
-                                DAVZERO, aPropNames, resources, xEnv );
-
-                            m_eResourceType = DAV;
-                        }
-                        catch ( DAVException const & e )
-                        {
-                            if ( shouldAccessNetworkAfterException( e ) )
+                            try
                             {
-                                try
-                                {
-                                    std::vector< rtl::OUString > aHeaderNames;
-                                    DAVResource resource;
-                                    m_xResAccess->HEAD(
-                                        aHeaderNames, resource, xEnv );
+                                std::vector< rtl::OUString > aHeaderNames;
+                                DAVResource resource;
+                                xResAccess->HEAD(
+                                    aHeaderNames, resource, xEnv );
 
-                                    m_eResourceType = NON_DAV;
-                                }
-                                catch ( DAVException const & e )
-                                {
-                                    cancelCommandExecution( e, xEnv );
-                                    // Unreachable
-                                }
+                                eResourceType = NON_DAV;
                             }
-                            else
+                            catch ( DAVException const & e )
                             {
                                 cancelCommandExecution( e, xEnv );
                                 // Unreachable
                             }
                         }
-                    }
-                    else
-                    {
-                        cancelCommandExecution( e, xEnv );
-                        // Unreachable
+                        else
+                        {
+                            cancelCommandExecution( e, xEnv );
+                            // Unreachable
+                        }
                     }
                 }
+                else
+                {
+                    cancelCommandExecution( e, xEnv );
+                    // Unreachable
+                }
             }
+        }
+
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_eResourceType = eResourceType;
         }
     }
     return m_eResourceType;
