@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-07 12:31:40 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_traditional ] = "½uΊέ";
         Text[ arabic ] = "δεΗνΗΚ ΗαΞΨ";
         Text[ greek ] = "Άκρα γραμμής";
-        Text[ korean ] = "Ό±ΐΗ Ύη³΅";
+        Text[ korean ] = "Ό± ³΅";
         Text[ turkish ] = "Ηizgi uηlarύ";
         Text[ language_user1 ] = " ";
     };
@@ -498,7 +498,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_traditional ] = "½uΊέ¦P¨B¤Ζ(~N)";
         Text[ arabic ] = "ΚÒΗγδ ΗαδεΗνΗΚ";
         Text[ greek ] = "Συγχρονισμός άκρων";
-        Text[ korean ] = "µΏ±βΘ­ ³΅(~Z)";
+        Text[ korean ] = "µΏ±βΘ­ ΑΎ·α(~Z)";
         Text[ turkish ] = "Uη~larύ eώitle";
         Text[ language_user1 ] = " ";
     };
@@ -651,7 +651,7 @@ TabPage RID_SVXPAGE_LINE
                     Text[ chinese_traditional ] = "±qΐΙ®Χ...";
                     Text[ arabic ] = "...γδ γαέ";
                     Text[ greek ] = "Από αρχείο...";
-                    Text[ korean ] = "ΖΔΐΟ·Ξ ΊΞΕΝ...";
+                    Text[ korean ] = "... ΖΔΐΟ·Ξ ΊΞΕΝ ";
                     Text[ turkish ] = "Dosyadan...";
                     Text[ language_user1 ] = " ";
                 };
@@ -842,7 +842,7 @@ TabPage RID_SVXPAGE_LINE
         Text[ chinese_traditional ] = "¦P¨B¤Ζ";
         Text[ arabic ] = "ΚÒΗγδ";
         Text[ greek ] = "Ανα~λογικά";
-        Text[ korean ] = "Ίρΐ²ΐ―Αφ";
+        Text[ korean ] = "Α¶Α¤";
         Text[ turkish ] = "Orantύlύ";
         Text[ language_user1 ] = " ";
     };
@@ -1160,7 +1160,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         StringList [ korean ] =
         {
                 < "Α΅" ; Default ; > ;
-            < "΄λ½¬" ; Default ; > ;
+            < "΄λ½Γ" ; Default ; > ;
         };
         StringList [ turkish ] =
         {
@@ -1361,14 +1361,14 @@ TabPage RID_SVXPAGE_LINE_DEF
         Text [ spanish ] = "Ajustar al ancho de la lνnea" ;
         Text [ english_us ] = "~Fit to line width" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ΣλΟίΏνµΔ±Θΐύ(~F)";
+        Text[ chinese_simplified ] = "ΊΝΟίΏν¶ΤΣ¦(~F)";
         Text[ russian ] = "Βϋπξβνÿςό οξ ψθπθνε λθνθθ";
         Text[ polish ] = "Dopasuj do szerokoci linii";
         Text[ japanese ] = "ό•‚Ι‡‚ν‚Ή‚ι(~F)";
-        Text[ chinese_traditional ] = "¥H½uΌe¬°·Η(~F)";
+        Text[ chinese_traditional ] = "©M½uΌeΉοΐ³(~F)";
         Text[ arabic ] = "γαΗΑγΙ Ϊαμ ΪΡΦ ΗαΞΨζΨ";
         Text[ greek ] = "Προσαρμογή στο πλάτος γραμμής";
-        Text[ korean ] = "Ό± ³ΚΊρ °νΑ¤(~F)";
+        Text[ korean ] = "Ό± ³ΚΊρΏ΅ ΈΒΓγ(~F)";
         Text[ turkish ] = "Ηizgi~ geniώliπine uydur";
         Text[ language_user1 ] = " ";
     };
@@ -1537,7 +1537,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ chinese_traditional ] = "Έό¤J½u±ψΌΛ¦΅¦Cªν!";
         QuickHelpText[ arabic ] = "ΚΝγνα ήΗΖγΙ ΓδγΗΨ ΗαΞΨ";
         QuickHelpText[ greek ] = "Φόρτωση λίστας με στυλ γραμμών";
-        QuickHelpText[ korean ] = "Load Line Styles";
+        QuickHelpText[ korean ] = "Ό± ΐ―Ηό ·Ξµε!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienstiltabelle laden";
@@ -1580,7 +1580,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ chinese_traditional ] = "«O¦s½u±ψΌΛ¦΅¦Cªν";
         QuickHelpText[ arabic ] = "ΝέΩ ήΗΖγΙ ΓδγΗΨ ΗαΞΨ";
         QuickHelpText[ greek ] = "Αποθήκευση λίστας με στυλ γραμμών";
-        QuickHelpText[ korean ] = "Save Line Styles";
+        QuickHelpText[ korean ] = "Ό± ΐ―Ηό µµΗ¥ ΐϊΐε!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienstiltabelle sichern";
@@ -1708,7 +1708,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ chinese_traditional ] = "±z―ΰ°χ³zΉL·sΌWΏοΎά¤@­Σª«¥σ¨Σ«Ψ¥ί·sªΊ½uΊέ΅C";
         Text[ arabic ] = "νγίδί ΗαΝΥζα Ϊαμ δεΗνΗΚ ΜΟνΟΙ ααΞΨ Ϊδ ΨΡνή ΕΟΡΗΜ ίΗΖδ γΝΟΟ";
         Text[ greek ] = "Για να δημιουργήσετε νέες 'αρχές' γραμμής, προσθέστε ένα επιλεγμένο αντικείμενο";
-        Text[ korean ] = "»υ·ΞΏξ ΐ―ΗόΐΗ Θ­»μΗ¥Έ¦ ΈΈµι±βΐ§ΗΟΏ© Ό±ΕΓµΘ °³ΓΌΈ¦ Γί°΅";
+        Text[ korean ] = "Ό±ΕΓµΘ °³ΓΌΈ¦ Γί°΅ΗΟΏ© »υ·ΞΏξ Ό± ³΅ΐ» ΈΈµι±β";
         Text[ turkish ] = "Seηilen bir nesneyi ekleyerek yeni ηizgi uηlarύ elde edebilirsiniz.";
         Text[ language_user1 ] = " ";
     };
@@ -1737,7 +1737,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ chinese_traditional ] = "½uΊέ";
         Text[ arabic ] = "δεΗνΙ ΗαΞΨ";
         Text[ greek ] = "Τέλος γραμμής";
-        Text[ korean ] = "Ό±ΐΗ Ύη³΅";
+        Text[ korean ] = "Ό± ³΅";
         Text[ turkish ] = "Ηizgi ucu";
         Text[ language_user1 ] = " ";
     };
@@ -1882,7 +1882,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ chinese_traditional ] = "Έό¤J½uΊέ¦Cªν!";
         QuickHelpText[ arabic ] = "ΚΝγνα ήΗΖγΙ δεΗνΗΚ ΗαΞΨ";
         QuickHelpText[ greek ] = "Φόρτωση λίστας με άκρα γραμμών";
-        QuickHelpText[ korean ] = "Load Arrow Styles";
+        QuickHelpText[ korean ] = "Ό± ³΅ µµΗ¥ ·Ξµε!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienendentabelle laden";
@@ -1925,7 +1925,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ chinese_traditional ] = "«O¦s½uΊέ¦Cªν";
         QuickHelpText[ arabic ] = "ΝέΩ ήΗΖγΙ δεΗνΗΚ ΗαΞΨ";
         QuickHelpText[ greek ] = "Αποθήκευση λίστας με άκρα γραμμών";
-        QuickHelpText[ korean ] = "Save Arrow Styles";
+        QuickHelpText[ korean ] = "Ό± ³΅ µµΗ¥ ΐϊΐε!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Linienendentabelle sichern";
@@ -1974,7 +1974,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Text[ chinese_traditional ] = "©wΈq½uΊέ";
     Text[ arabic ] = "ΚΪννδ δεΗνΗΚ ΗαΞΨ";
     Text[ greek ] = "Ορισμός ακρών γραμμής";
-    Text[ korean ] = "Ό±ΐΗ Ύη³΅ Α¤ΐΗ";
+    Text[ korean ] = "Ό± ³΅ Α¤ΐΗ";
     Text[ turkish ] = "Ηizgi uηlarύnύ tanύmla";
     Text[ language_user1 ] = " ";
 };
@@ -2085,7 +2085,7 @@ TabDialog RID_SVXDLG_LINE
                 Text[ chinese_traditional ] = "½uΊέ";
                 Text[ arabic ] = "δεΗνΗΚ ΗαΞΨ";
                 Text[ greek ] = "Άκρα γραμμής";
-                Text[ korean ] = "Ό±ΐΗ Ύη³΅";
+                Text[ korean ] = "Ό± ³΅";
                 Text[ turkish ] = "Ηizgi uηlarύ";
                 Text[ language_user1 ] = " ";
             };
