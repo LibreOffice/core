@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-06 14:51:28 $
+ *  last change: $Author: sab $ $Date: 2001-02-28 17:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,11 @@ extern uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedSer
 extern OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// meta import
+extern uno::Sequence< OUString > SAL_CALL XMLMetaImportComponent_getSupportedServiceNames() throw();
+extern OUString SAL_CALL XMLMetaImportComponent_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL XMLMetaImportComponent_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // writer autotext event export
 extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
@@ -163,7 +168,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, SchXMLExport_getImplementationName(), SchXMLExport_getSupportedServiceNames() );
 
             // meta
-            writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
+            writeInfo( pKey, XMLMetaImportComponent_getImplementationName(), XMLMetaImportComponent_getSupportedServiceNames() );
             writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
 
             // writer auto text events
@@ -236,6 +241,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 XMLMetaExportComponent_getImplementationName(),
                 XMLMetaExportComponent_createInstance,
                 XMLMetaExportComponent_getSupportedServiceNames() );
+        }
+        else if ( XMLMetaImportComponent_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                XMLMetaImportComponent_getImplementationName(),
+                XMLMetaImportComponent_createInstance,
+                XMLMetaImportComponent_getSupportedServiceNames() );
         }
         else if( XMLAutoTextEventExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {

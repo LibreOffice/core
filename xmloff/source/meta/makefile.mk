@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-06 14:48:10 $
+#   last change: $Author: sab $ $Date: 2001-02-28 17:47:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ ALL: $(INCCOM)$/rscrev.hxx ALLTAR
 SLOFILES =	\
         $(SLO)$/xmlmetae.obj \
         $(SLO)$/xmlmetai.obj \
-        $(SLO)$/MetaExportComponent.obj
+        $(SLO)$/MetaExportComponent.obj \
+        $(SLO)$/MetaImportComponent.obj
 
 # --- Tagets -------------------------------------------------------
 
