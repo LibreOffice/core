@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:58:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,11 +213,12 @@ public:
 
 class AddressMultiLineEdit : public MultiLineEdit, public SfxListener
 {
-    Link            m_aSelectionLink;
+    Link                            m_aSelectionLink;
+    SwCustomizeAddressBlockDialog*  m_pParentDialog;
 protected:
     long            PreNotify( NotifyEvent& rNEvt );
 public:
-    AddressMultiLineEdit(Window* pParent, const ResId& rResId);
+    AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParent, const ResId& rResId);
     ~AddressMultiLineEdit();
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -243,13 +244,31 @@ public:
     Dialog is used to create custom address blocks as well as
     custom greeting lines
   -----------------------------------------------------------------------*/
+class SwRestrictedComboBox : public ComboBox
+{
+    String sForbiddenChars;
+
+protected:
+    virtual void KeyInput( const KeyEvent& );
+    virtual void        Modify();
+public:
+    SwRestrictedComboBox(Window* pParent, const ResId& rResId):
+        ComboBox( pParent, rResId ){}
+
+    ~SwRestrictedComboBox();
+
+    void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
+
+};
 class SwCustomizeAddressBlockDialog : public SfxModalDialog
 {
     friend class DDListBox;
+    friend class AddressMultiLineEdit;
 public:
     enum DialogType
     {
-        ADDRESSBLOCK,
+        ADDRESSBLOCK_NEW,
+        ADDRESSBLOCK_EDIT,
         GREETING_FEMALE,
         GREETING_MALE
     };
@@ -268,7 +287,7 @@ private:
     ImageButton             m_aDownIB;
 
     FixedText               m_aFieldFT;
-    ComboBox                m_aFieldCB;
+    SwRestrictedComboBox    m_aFieldCB;
 
     FixedInfo               m_aPreviewFI;
     SwAddressPreview        m_aPreviewWIN;
@@ -299,6 +318,7 @@ private:
     bool            HasItem_Impl(sal_Int32 nUserData);
     sal_Int32       GetSelectedItem_Impl();
     void            UpdateImageButtons_Impl();
+    void            MoveFocus( Window* pMember, bool bNext );
 
 public:
     SwCustomizeAddressBlockDialog(Window* pParent, SwMailMergeConfigItem& rConfig, DialogType);
