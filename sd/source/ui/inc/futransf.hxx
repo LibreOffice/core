@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futransf.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,32 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUTRANSF_HXX
-#define _SD_FUTRANSF_HXX
+#ifndef SD_FU_TRANSFORM_HXX
+#define SD_FU_TRANSFORM_HXX
 
 #ifndef _SVX_RETENUM_HXX
 #include <svx/rectenum.hxx>
 #endif
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuTransform : public FuPoor
+namespace sd {
+
+class FuTransform
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuTransform(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuTransform() {}
+    FuTransform (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuTransform (void) {}
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
@@ -86,5 +92,7 @@ class FuTransform : public FuPoor
     Point   GetPoint( Rectangle aRect, RECT_POINT eRP );
 };
 
-#endif      // _SD_FUTRANSF_HXX
+} // end of namespace sd
+
+#endif
 
