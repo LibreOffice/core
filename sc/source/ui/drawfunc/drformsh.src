@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:31:03 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ String RID_POPUP_DRAWFORM
                 Text[ portuguese ] = "Menu instantвneo para objectos de formulбrio";
                 Text[ russian ] = "Всплывающее меню для объектов формуляра";
                 Text[ dutch ] = "Popup-menu voor formulierobjecten";
-                Text[ french ] = "Menu Pop-Up pour les objets de formulaire";
+                Text[ french ] = "Menu Pop-up pour les objets de formulaire";
                 Text[ spanish ] = "Menъ emergente para objetos de formulario";
                 Text[ italian ] = "Menu popup degli oggetti per formulario";
                 Text[ danish ] = "Popup-menu for formularobjekter";
