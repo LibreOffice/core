@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-04-27 10:20:41 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 11:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,6 +1590,16 @@ void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell
             OUSTRING sTemp ;
             if ( ( rProp.Value >>= sTemp ) == sal_True )
                 aReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, String( sTemp ) ) );
+            else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
+                throw ILLEGALARGUMENTEXCEPTION();
+        }
+
+        // Unpacked-Property?
+        else if ( rProp.Name.compareToAscii( "Unpacked" ) == 0 )
+        {
+            sal_Bool bTemp ;
+            if ( ( rProp.Value >>= bTemp ) == sal_True )
+                aReq.AppendItem( SfxBoolItem( SID_PACK, !bTemp ) );
             else if ( rProp.Value.getValueType() != ::getCppuVoidType() )
                 throw ILLEGALARGUMENTEXCEPTION();
         }
