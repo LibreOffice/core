@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-29 19:13:38 $
+ *  last change: $Author: pb $ $Date: 2001-11-06 11:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2012,19 +2012,17 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
     if( !EntryReallyHit(pEntry,aPos,nY))
         return;
 
-//#if defined(MAC) || defined(OV_DEBUG)
     SvLBoxItem* pXItem = pView->GetItem( pEntry, aPos.X() );
     if( pXItem )
     {
         SvLBoxTab* pXTab = pView->GetTab( pEntry, pXItem );
-        if( !rMEvt.IsMod1() && !rMEvt.IsMod2() && pXTab->IsEditable() )
+        if ( !rMEvt.IsMod1() && !rMEvt.IsMod2() && rMEvt.IsLeft() && pXTab->IsEditable() )
             nFlags |= F_START_EDITTIMER;
 #ifndef MAC
-        if( !pView->IsSelected( pEntry ))
+        if ( !pView->IsSelected( pEntry ) )
             nFlags &= ~F_START_EDITTIMER;
 #endif
     }
-//#endif
 
 
     if( (rMEvt.GetClicks() % 2) == 0 )
