@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-06 17:03:12 $
+#   last change: $Author: vg $ $Date: 2003-12-16 11:43:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,7 +159,9 @@ PYCONFIG=$(MISC)$/build$/pyconfig.h
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
+.IF "$(L10N_framework)"==""
 ALLTAR : $(PYCONFIG) $(PYTHONCORESHL) $(PYVERSIONFILE) $(PYTHONCORELINK1) $(PYTHONCORELINK2)
+.ENDIF          # "$(L10N_framework)"==""
 
 $(MISC)$/convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     +$(CONVERT) unx $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$(DSP_DIR)
