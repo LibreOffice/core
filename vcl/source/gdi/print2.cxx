@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-05-28 16:57:12 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 11:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,11 @@ void Printer::GetPreparedMetaFile( const GDIMetaFile& rInMtf, GDIMetaFile& rOutM
                                 {
                                     pAction->Execute( &aMapVDev );
                                     pAction->Execute( &aPaintVDev );
+                                }
+                                else if( META_GRADIENT_ACTION == nType )
+                                {
+                                    MetaGradientAction* pGradientAction = (MetaGradientAction*) pAction;
+                                    DrawGradientEx( &aPaintVDev, pGradientAction->GetRect(), pGradientAction->GetGradient() );
                                 }
                                 else
                                     pAction->Execute( &aPaintVDev );
