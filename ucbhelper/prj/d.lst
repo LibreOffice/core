@@ -33,6 +33,7 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\simplenameclashresolverequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simplenameclashresolverequest.hxx
 ..\inc\ucbhelper\simpleioerrorrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\simpleioerrorrequest.hxx
 ..\inc\ucbhelper\cancelcommandexecution.hxx %_DEST%\inc%_EXT%\ucbhelper\cancelcommandexecution.hxx
+..\inc\ucbhelper\handleinteractionrequest.hxx %_DEST%\inc%_EXT%\ucbhelper\handleinteractionrequest.hxx
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
