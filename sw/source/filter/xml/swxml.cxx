@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 09:37:50 $
+ *  last change: $Author: dvo $ $Date: 2001-04-02 11:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
 #include <sfx2/docfile.hxx>
@@ -114,11 +120,17 @@
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
 #endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _XMLGRHLP_HXX
 #include <svx/xmlgrhlp.hxx>
 #endif
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
 #endif
 
 #ifndef _XMLIMP_HXX
@@ -389,6 +401,66 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
 
+
+    // create and prepare the XPropertySet that gets passed through
+    // the components, and the XStatusIndicator that shows progress to
+    // the user.
+
+    // create XPropertySet with three properties for status indicator
+    comphelper::PropertyMapEntry aInfoMap[] =
+    {
+        { "ProgressRange", sizeof("ProgressRange")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressMax", sizeof("ProgressMax")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressCurrent", sizeof("ProgressCurrent")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet(
+                comphelper::GenericPropertySet_CreateInstance(
+                            new comphelper::PropertySetInfo( aInfoMap ) ) );
+
+    // create XStatusIndicator
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    if ( !SW_MOD()->IsEmbeddedLoadSave() )
+    {
+        uno::Reference<frame::XModel> xModel( pDocSh->GetModel() );
+        if (xModel.is())
+        {
+            uno::Reference<frame::XController> xController(
+                xModel->getCurrentController());
+            if( xController.is())
+            {
+                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+                if( xFrame.is())
+                {
+                    uno::Reference<task::XStatusIndicatorFactory> xFactory(
+                        xFrame, uno::UNO_QUERY );
+                    if( xFactory.is())
+                    {
+                        xStatusIndicator = xFactory->createStatusIndicator();
+                    }
+                }
+            }
+        }
+    }
+
+    // set progress range and start status indicator
+    sal_Int32 nProgressRange(1000000);
+    if (xStatusIndicator.is())
+    {
+        OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Loading ..."));
+        xStatusIndicator->start(sLoading, nProgressRange);
+    }
+    uno::Any aProgRange;
+    aProgRange <<= nProgressRange;
+    OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
+    xInfoSet->setPropertyValue(sProgressRange, aProgRange);
+
     // filter argument to prevent multiple switching of redline mode
     OUString sPreserveRedlineMode(
         RTL_CONSTASCII_USTRINGPARAM("PreserveRedlineMode"));
@@ -398,13 +470,18 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
     aValue.Value.setValue( &bTmp, ::getBooleanCppuType() );
 
     // prepare filter arguments
-    Sequence<Any> aFilterArgs( 3 );
+    Sequence<Any> aFilterArgs( 5 );
     Any *pArgs = aFilterArgs.getArray();
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
     *pArgs++ <<= aValue;            // redline mode, as prepared above
-    Sequence<Any> aEmptyArgs( 1 );
-    aEmptyArgs[0] <<= aValue;           // redline mode, as prepared above
+    *pArgs++ <<= xStatusIndicator;
+    *pArgs++ <<= xInfoSet;
+    Sequence<Any> aEmptyArgs( 3 );
+    pArgs = aEmptyArgs.getArray();
+    *pArgs++ <<= aValue;            // redline mode, as prepared above
+    *pArgs++ <<= xStatusIndicator;
+    *pArgs++ <<= xInfoSet;
 
     // prepare for special modes
     sal_uInt16 nStyleFamilyMask = 0U;
@@ -504,6 +581,11 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
     rDoc.RemoveLink();
+
+    if (xStatusIndicator.is())
+    {
+        xStatusIndicator->end();
+    }
 
     return nRet;
 }

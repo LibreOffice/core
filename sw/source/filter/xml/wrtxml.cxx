@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 13:45:17 $
+ *  last change: $Author: dvo $ $Date: 2001-04-02 11:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,17 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
 #include <com/sun/star/container/XIndexContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
 #endif
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
@@ -291,15 +300,80 @@ sal_uInt32 SwXMLWriter::_Write()
         }
     }
 
+    // create and prepare the XPropertySet that gets passed through
+    // the components, and the XStatusIndicator that shows progress to
+    // the user.
+
+    // create XPropertySet with three properties for status indicator
+    comphelper::PropertyMapEntry aInfoMap[] =
+    {
+        { "ProgressRange", sizeof("ProgressRange")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressMax", sizeof("ProgressMax")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "ProgressCurrent", sizeof("ProgressCurrent")-1, 0,
+              &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet(
+                comphelper::GenericPropertySet_CreateInstance(
+                            new comphelper::PropertySetInfo( aInfoMap ) ) );
+
+    // create XStatusIndicator
+    uno::Reference<task::XStatusIndicator> xStatusIndicator;
+    if (bShowProgress)
+    {
+        uno::Reference<frame::XModel> xModel( pDoc->GetDocShell()->GetModel());
+        if (xModel.is())
+        {
+            uno::Reference<frame::XController> xController(
+                xModel->getCurrentController());
+            if( xController.is())
+            {
+                uno::Reference<frame::XFrame> xFrame( xController->getFrame());
+                if( xFrame.is())
+                {
+                    uno::Reference<task::XStatusIndicatorFactory> xFactory(
+                        xFrame, uno::UNO_QUERY );
+                    if( xFactory.is())
+                    {
+                        xStatusIndicator = xFactory->createStatusIndicator();
+                    }
+                }
+            }
+        }
+
+        // set progress range and start status indicator
+        sal_Int32 nProgressRange(1000000);
+        if (xStatusIndicator.is())
+        {
+            OUString sLoading(RTL_CONSTASCII_USTRINGPARAM("Saving ..."));
+            xStatusIndicator->start(sLoading, nProgressRange);
+        }
+        uno::Any aProgRange;
+        aProgRange <<= nProgressRange;
+        OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
+        xInfoSet->setPropertyValue(sProgressRange, aProgRange);
+    }
 
     // filter arguments
     // - graphics + object resolver for styles + content
+    // - status indicator
+    // - info property set
     // - else empty
-    Sequence < Any > aFilterArgs( 2 );
+    Sequence < Any > aFilterArgs( 4 );
     Any *pArgs = aFilterArgs.getArray();
     *pArgs++ <<= xGraphicResolver;
     *pArgs++ <<= xObjectResolver;
-    Sequence < Any > aEmptyArgs( 0 );
+    *pArgs++ <<= xStatusIndicator;
+    *pArgs++ <<= xInfoSet;
+    Sequence < Any > aEmptyArgs( 2 );
+    pArgs = aEmptyArgs.getArray();
+    *pArgs++ <<= xStatusIndicator;
+    *pArgs++ <<= xInfoSet;
 
     //Get model
     Reference< lang::XComponent > xModelComp(
@@ -365,6 +439,11 @@ sal_uInt32 SwXMLWriter::_Write()
         SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
     xObjectResolver = 0;
 
+    if (xStatusIndicator.is())
+    {
+        xStatusIndicator->end();
+    }
+
     return 0;
 }
 sal_uInt32 SwXMLWriter::WriteStream()
@@ -403,11 +482,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.22 2001-03-19 13:45:17 mtg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.23 2001-04-02 11:26:14 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/03/19 13:45:17  mtg
+      added support for export of settings.xml
+
       Revision 1.21  2001/03/09 14:58:43  dvo
       - fixed: unnecessary attext.xml stream removed (this is handled in core/swg)
 
