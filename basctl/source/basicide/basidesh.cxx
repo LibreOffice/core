@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:19:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,7 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                         // Nicht nur bei Error/Break oder explizitem anhalten,
                         // falls durch einen Programmierfehler das Update abgeschaltet ist.
                         BasicIDE::BasicStopped();
-                        UpdateModulWindowLayout();  // Leer machen...
+                        UpdateModulWindowLayout( true );    // Leer machen...
                     }
 
                     IDEBaseWindow* pWin = aIDEWindowTable.First();
