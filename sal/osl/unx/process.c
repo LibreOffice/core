@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:34:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ typedef struct {
     const sal_Char*  m_pszArgs[MAX_ARGS + 1];
     oslProcessOption m_options;
     const sal_Char*  m_pszDir;
-    const sal_Char*  m_pszEnv[MAX_ENVS + 1];
+    sal_Char*        m_pszEnv[MAX_ENVS + 1];
     uid_t            m_uid;
     gid_t            m_gid;
     sal_Char*        m_name;
@@ -1073,7 +1073,6 @@ static void ChildStatusProc(void *pData)
     else
     {   /* Parent  */
         int   status;
-        Pipe* rpipe;
 
         close(channel[1]);
 
@@ -2136,8 +2135,8 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
 
 oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir)
 {
-    oslProcessError osl_error = osl_Process_E_None;
-    char            buffer[PATH_MAX];
+    oslProcessError osl_error = osl_Process_E_Unknown;
+    char buffer[PATH_MAX];
 
     OSL_PRECOND(ppustrWorkingDir, "osl_getProcessWorkingDir: invalid parameter");
 
@@ -2152,11 +2151,11 @@ oslProcessError SAL_CALL osl_getProcessWorkingDir(rtl_uString **ppustrWorkingDir
             osl_getThreadTextEncoding(),
             OSTRING_TO_OUSTRING_CVTFLAGS);
 
-        osl_error = osl_getFileURLFromSystemPath(ustrTmp, ppustrWorkingDir);
+        if (osl_getFileURLFromSystemPath(ustrTmp, ppustrWorkingDir) == osl_File_E_None)
+            osl_error = osl_Process_E_None;
 
         rtl_uString_release(ustrTmp);
     }
-
     return osl_error;
 }
 
