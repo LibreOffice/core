@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:05:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ ModalDialog DLG_PRINT_WARNINGS
     Text [ spanish ] = "Advertencia opciones de impresión" ;
     Text [ french ] = "Avertissement options d'impression" ;
     Text [ dutch ] = "Waarschuwing afdrukopties" ;
-    Text [ portuguese_brazilian ] = "Aviso sobre Opções de Impressão" ;
+    Text [ portuguese_brazilian ] = "Aviso sobre as opções de impressão" ;
     Text[ chinese_simplified ] = "æ‰“å°é€‰é¡¹çš„è­¦å‘Š";
     Text[ russian ] = "Ïğåäóïğåæäåíèå: ïàğàìåòğû ïå÷àòè";
     Text[ polish ] = "Opcje wydruku - ostrze¿enie";
@@ -284,6 +284,7 @@ ModalDialog DLG_PRINT_WARNINGS
     Text[ hindi ] = "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€ à¤›à¤¾à¤ªà¤¨à¤¾ à¤µà¤¿à¤•à¤²à¥à¤ª";
     Text[ slovak ] = "Varovanie - nastavenie tlaÄe";
 };
+
 
 
 
