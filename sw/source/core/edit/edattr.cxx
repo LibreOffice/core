@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-18 12:49:26 $
+ *  last change: $Author: fme $ $Date: 2002-11-22 13:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,6 +530,7 @@ const SwScriptInfo* lcl_GetScriptInfo( const SwTxtNode& rTNd )
             if ( pScriptInfo )
             {
                 if ( STRING_LEN != pScriptInfo->GetInvalidity() )
+
                     pScriptInfo = 0;
                 else break;
             }
@@ -571,10 +572,16 @@ USHORT SwEditShell::GetScriptType( USHORT nFlags ) const
                             nPos = aIdx.GetIndex();
                     }
 
-                    const USHORT nScript = pScriptInfo ?
-                                           pScriptInfo->ScriptType( nPos ) :
-                                           pBreakIt->xBreak->
-                                           getScriptType( pTNd->GetTxt(), nPos );
+                    USHORT nScript;
+
+                    if ( pTNd->GetTxt().Len() )
+                    {
+                        nScript = pScriptInfo ?
+                                  pScriptInfo->ScriptType( nPos ) :
+                                  pBreakIt->xBreak->getScriptType( pTNd->GetTxt(), nPos );
+                    }
+                    else
+                        nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 
                     if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE ))
                         nRet |= lcl_SetScriptFlags( nScript );
