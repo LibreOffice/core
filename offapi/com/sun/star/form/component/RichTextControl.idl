@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: RichTextControl.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:31:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_form_component_RichTextControl_idl__
+#define __com_sun_star_form_component_RichTextControl_idl__
+
+#ifndef __com_sun_star_awt_UnoControlEditModel_idl__
+#include <com/sun/star/awt/UnoControlEditModel.idl>
+#endif
+
+#ifndef __com_sun_star_form_FormControlModel_idl__
+#include <com/sun/star/form/FormControlModel.idl>
+#endif
+
+#ifndef __com_sun_star_text_TextRange_idl__
+#include <com/sun/star/text/TextRange.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module form {  module component {
+
+//=============================================================================
+
+/** specifies a component which extends the <type scope="com::sun::star::awt">UnoControlEditModel</type>
+    with capabilities to display and input formatted text.
+*/
+service RichTextControl
+{
+    service com::sun::star::awt::UnoControlEditModel;
+
+    service com::sun::star::form::FormControlModel;
+
+    /** specifies capabilities to provide rich text, as opposed to the simple text provided by the
+        <type scope="com::sun::star::awt">UnoControlEditModel</type>
+    */
+    service com::sun::star::text::TextRange;
+
+    /** specifies whether text should be automatically wrapped to fit into the control.
+
+        <p>If set to <TRUE/>, users need to manually press the enter key to insert a line break.
+        If set to <FALSE/>, text is automatically wrapped at the control border.</p>
+    */
+    [property] boolean HardLineBreaks;
+
+    /** specifies whether the control should display the text including all its formatting.
+
+        <p>If this is set to <FALSE/>, the control will act as ordinary
+        <type scope="com::sun::star::awt">UnoControlEditModel</type>.</p>
+
+        <p>If the property is set to <TRUE/>, the control will ignore the following properties:
+        <ul>
+            <li><member scope="com::sun::star::awt">UnoControlEditModel::EchoChar</member></li>
+            <li><member scope="com::sun::star::awt">UnoControlEditModel::MaxTextLen</member></li>
+            <li><member scope="com::sun::star::awt">UnoControlEditModel::MultiLine</member></li>
+            <li><member scope="com::sun::star::awt">UnoControlEditModel::Align</member></li>
+        </ul>
+        </p>
+    */
+    [property] boolean RichText;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
