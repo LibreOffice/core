@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,27 +71,18 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
-//--------------------------------------------------------------------------------------------------
-static inline bool isEventElement( sal_Int32 nUid, OUString const & rLocalName ) throw ()
-{
-    return ((XMLNS_SCRIPT_UID == nUid &&
-             (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ) ||
-              rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("listener-event") ))) ||
-            (XMLNS_DIALOGS_UID == nUid &&
-             rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") )));
-}
-
 // progessmeter
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ProgressBarElement::createChildContext(
+Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+        return new EventElement(
+            nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -108,7 +99,7 @@ void ProgressBarElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -138,13 +129,13 @@ void ProgressBarElement::endElement()
 
 // scrollbar
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ScrollBarElement::createChildContext(
+Reference< xml::input::XElement > ScrollBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -163,7 +154,7 @@ void ScrollBarElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -200,13 +191,13 @@ void ScrollBarElement::endElement()
 
 // fixedline
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > FixedLineElement::createChildContext(
+Reference< xml::input::XElement > FixedLineElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -225,7 +216,7 @@ void FixedLineElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -252,13 +243,13 @@ void FixedLineElement::endElement()
 
 // patternfield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > PatternFieldElement::createChildContext(
+Reference< xml::input::XElement > PatternFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -277,7 +268,7 @@ void PatternFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -321,13 +312,13 @@ void PatternFieldElement::endElement()
 
 // formattedfield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > FormattedFieldElement::createChildContext(
+Reference< xml::input::XElement > FormattedFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -346,7 +337,7 @@ void FormattedFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -390,8 +381,10 @@ void FormattedFieldElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin") ),
                                _xAttributes );
 
-    OUString sDefault( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("value-default") ) ) );
+    OUString sDefault(
+        _xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("value-default") ) ) );
     if (sDefault.getLength())
     {
         double d = sDefault.toDouble();
@@ -416,14 +409,18 @@ void FormattedFieldElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier") ),
         makeAny( _pImport->getNumberFormatsSupplier() ) );
 
-    OUString sFormat( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
+    OUString sFormat(
+        _xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("format-code") ) ) );
     if (sFormat.getLength())
     {
         lang::Locale locale;
 
-        OUString sLocale( _xAttributes->getValueByUidName(
-            XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
+        OUString sLocale(
+            _xAttributes->getValueByUidName(
+                _pImport->XMLNS_DIALOGS_UID,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("format-locale") ) ) );
         if (sLocale.getLength())
         {
             // split locale
@@ -483,13 +480,13 @@ void FormattedFieldElement::endElement()
 
 // timefield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > TimeFieldElement::createChildContext(
+Reference< xml::input::XElement > TimeFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -508,7 +505,7 @@ void TimeFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -555,13 +552,13 @@ void TimeFieldElement::endElement()
 
 // numericfield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > NumericFieldElement::createChildContext(
+Reference< xml::input::XElement > NumericFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -580,7 +577,7 @@ void NumericFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -633,13 +630,13 @@ void NumericFieldElement::endElement()
 
 // datefield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > DateFieldElement::createChildContext(
+Reference< xml::input::XElement > DateFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -658,7 +655,7 @@ void DateFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -711,13 +708,13 @@ void DateFieldElement::endElement()
 
 // currencyfield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > CurrencyFieldElement::createChildContext(
+Reference< xml::input::XElement > CurrencyFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -736,7 +733,7 @@ void CurrencyFieldElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -795,13 +792,13 @@ void CurrencyFieldElement::endElement()
 
 // filecontrol
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > FileControlElement::createChildContext(
+Reference< xml::input::XElement > FileControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -820,7 +817,7 @@ void FileControlElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -849,13 +846,13 @@ void FileControlElement::endElement()
 
 // imagecontrol
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ImageControlElement::createChildContext(
+Reference< xml::input::XElement > ImageControlElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -874,7 +871,7 @@ void ImageControlElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -900,13 +897,13 @@ void ImageControlElement::endElement()
 
 // textfield
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > TextElement::createChildContext(
+Reference< xml::input::XElement > TextElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -925,7 +922,7 @@ void TextElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -960,13 +957,13 @@ void TextElement::endElement()
 
 // edit
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > TextFieldElement::createChildContext(
+Reference< xml::input::XElement > TextFieldElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -986,7 +983,7 @@ void TextFieldElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlEditModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1026,7 +1023,10 @@ void TextFieldElement::endElement()
                                   OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
                                   _xAttributes );
     OUString aValue;
-    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("echochar") ), _xAttributes ) &&
+    if (getStringAttr( &aValue,
+                       OUString( RTL_CONSTASCII_USTRINGPARAM("echochar") ),
+                       _xAttributes,
+                       _pImport->XMLNS_DIALOGS_UID ) &&
         aValue.getLength() > 0)
     {
         OSL_ENSURE( aValue.getLength() == 1, "### more than one character given for echochar!" );
@@ -1045,17 +1045,17 @@ void TextFieldElement::endElement()
 
 // titledbox
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > TitledBoxElement::createChildContext(
+Reference< xml::input::XElement > TitledBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (XMLNS_DIALOGS_UID != nUid)
+    else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1064,28 +1064,33 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
     // title
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
     {
-        getStringAttr( &_label, OUString( RTL_CONSTASCII_USTRINGPARAM("value") ), xAttributes );
+        getStringAttr( &_label,
+                       OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                       xAttributes,
+                       _pImport->XMLNS_DIALOGS_UID );
 
-        return new ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
+        return new ElementBase(
+            _pImport->XMLNS_DIALOGS_UID,
+            rLocalName, xAttributes, this, _pImport );
     }
     // radio
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
     {
         // dont create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
-        Reference< xml::XImportContext > xRet(
+        Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
         _radios.push_back( xRet );
         return xRet;
     }
     // event
-    else if (isEventElement( nUid, rLocalName ))
+    else if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
-        return BulletinBoardElement::createChildContext( nUid, rLocalName, xAttributes );
+        return BulletinBoardElement::startChildElement( nUid, rLocalName, xAttributes );
     }
 }
 //__________________________________________________________________________________________________
@@ -1098,7 +1103,7 @@ void TitledBoxElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1123,15 +1128,16 @@ void TitledBoxElement::endElement()
     // create radios AFTER group box!
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
-        Reference< xml::XImportContext > xRadio( _radios[ nPos ] );
-        Reference< xml::sax2::XExtendedAttributes > xAttributes( xRadio->getAttributes() );
+        Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
+        Reference< xml::input::XAttributes > xAttributes(
+            xRadio->getAttributes() );
 
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
+        Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
         if (xStyle.is())
         {
             StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1150,7 +1156,10 @@ void TitledBoxElement::endElement()
 
         sal_Int16 nVal = 0;
         sal_Bool bChecked;
-        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ) &&
+        if (getBoolAttr( &bChecked,
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
+                         xAttributes,
+                         _pImport->XMLNS_DIALOGS_UID ) &&
             bChecked)
         {
             nVal = 1;
@@ -1158,7 +1167,7 @@ void TitledBoxElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        vector< Reference< xml::XImportContext > > * radioEvents =
+        vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
         // avoid ring-reference:
@@ -1174,13 +1183,13 @@ void TitledBoxElement::endElement()
 
 // radio
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > RadioElement::createChildContext(
+Reference< xml::input::XElement > RadioElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -1196,12 +1205,12 @@ Reference< xml::XImportContext > RadioElement::createChildContext(
 
 // radiogroup
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > RadioGroupElement::createChildContext(
+Reference< xml::input::XElement > RadioGroupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1212,7 +1221,7 @@ Reference< xml::XImportContext > RadioGroupElement::createChildContext(
     {
         // dont create radios here, => titledbox must be inserted first due to radio grouping,
         // possible predecessors!
-        Reference< xml::XImportContext > xRet(
+        Reference< xml::input::XElement > xRet(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
         _radios.push_back( xRet );
         return xRet;
@@ -1230,15 +1239,16 @@ void RadioGroupElement::endElement()
 {
     for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
     {
-        Reference< xml::XImportContext > xRadio( _radios[ nPos ] );
-        Reference< xml::sax2::XExtendedAttributes > xAttributes( xRadio->getAttributes() );
+        Reference< xml::input::XElement > xRadio( _radios[ nPos ] );
+        Reference< xml::input::XAttributes > xAttributes(
+            xRadio->getAttributes() );
 
         ControlImportContext ctx(
             _pImport, getControlId( xAttributes ),
             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
         Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
+        Reference< xml::input::XElement > xStyle( getStyle( xAttributes ) );
         if (xStyle.is())
         {
             StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1257,7 +1267,10 @@ void RadioGroupElement::endElement()
 
         sal_Int16 nVal = 0;
         sal_Bool bChecked;
-        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ) &&
+        if (getBoolAttr( &bChecked,
+                         OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
+                         xAttributes,
+                         _pImport->XMLNS_DIALOGS_UID ) &&
             bChecked)
         {
             nVal = 1;
@@ -1265,7 +1278,7 @@ void RadioGroupElement::endElement()
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
 
-        vector< Reference< xml::XImportContext > > * radioEvents =
+        vector< Reference< xml::input::XElement > > * radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
         ctx.importEvents( *radioEvents );
         // avoid ring-reference:
@@ -1281,12 +1294,12 @@ void RadioGroupElement::endElement()
 
 // menupopup
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > MenuPopupElement::createChildContext(
+Reference< xml::input::XElement > MenuPopupElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1295,21 +1308,27 @@ Reference< xml::XImportContext > MenuPopupElement::createChildContext(
     // menuitem
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("menuitem") ))
     {
-        OUString aValue( xAttributes->getValueByUidName(
-            XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("value") ) ) );
+        OUString aValue(
+            xAttributes->getValueByUidName(
+                _pImport->XMLNS_DIALOGS_UID,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("value") ) ) );
         OSL_ENSURE( aValue.getLength(), "### menuitem has no value?" );
         if (aValue.getLength())
         {
             _itemValues.push_back( aValue );
 
-            OUString aSel( xAttributes->getValueByUidName(
-                XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("selected") ) ) );
+            OUString aSel(
+                xAttributes->getValueByUidName(
+                    _pImport->XMLNS_DIALOGS_UID,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("selected") ) ) );
             if (aSel.getLength() && aSel.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
             {
                 _itemSelected.push_back( _itemValues.size() -1 );
             }
         }
-        return new ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
+        return new ElementBase(
+            _pImport->XMLNS_DIALOGS_UID,
+            rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -1345,17 +1364,17 @@ Sequence< sal_Int16 > MenuPopupElement::getSelectedItems()
 
 // menulist
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > MenuListElement::createChildContext(
+Reference< xml::input::XElement > MenuListElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (XMLNS_DIALOGS_UID != nUid)
+    else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1383,7 +1402,7 @@ void MenuListElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1429,17 +1448,17 @@ void MenuListElement::endElement()
 
 // combobox
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ComboBoxElement::createChildContext(
+Reference< xml::input::XElement > ComboBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (XMLNS_DIALOGS_UID != nUid)
+    else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1467,7 +1486,7 @@ void ComboBoxElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1518,13 +1537,13 @@ void ComboBoxElement::endElement()
 
 // checkbox
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > CheckBoxElement::createChildContext(
+Reference< xml::input::XElement > CheckBoxElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -1544,7 +1563,7 @@ void CheckBoxElement::endElement()
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1562,13 +1581,19 @@ void CheckBoxElement::endElement()
                               _xAttributes );
 
     sal_Bool bTriState = sal_False;
-    if (getBoolAttr( &bTriState, OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ), _xAttributes ))
+    if (getBoolAttr( &bTriState,
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ),
+                     _xAttributes,
+                     _pImport->XMLNS_DIALOGS_UID ))
     {
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("TriState") ),
                                          makeAny( bTriState ) );
     }
     sal_Bool bChecked = sal_False;
-    if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), _xAttributes ))
+    if (getBoolAttr( &bChecked,
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
+                     _xAttributes,
+                     _pImport->XMLNS_DIALOGS_UID ))
     {
         // has "checked" attribute
         sal_Int16 nVal = (bChecked ? 1 : 0);
@@ -1592,13 +1617,13 @@ void CheckBoxElement::endElement()
 
 // button
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ButtonElement::createChildContext(
+Reference< xml::input::XElement > ButtonElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
@@ -1617,7 +1642,7 @@ void ButtonElement::endElement()
         _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -1650,7 +1675,11 @@ void ButtonElement::endElement()
     // State
     sal_Bool bChecked;
     if (getBoolAttr(
-        &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), _xAttributes ) && bChecked)
+            &bChecked,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ),
+            _xAttributes,
+            _pImport->XMLNS_DIALOGS_UID ) &&
+        bChecked)
     {
         sal_Int16 nVal = 1;
         ctx.getControlModel()->setPropertyValue(
@@ -1667,12 +1696,12 @@ void ButtonElement::endElement()
 
 // bulletinboard
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
+Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1788,19 +1817,22 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
 //__________________________________________________________________________________________________
 BulletinBoardElement::BulletinBoardElement(
     OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
     SAL_THROW( () )
     : ControlElement( rLocalName, xAttributes, pParent, pImport )
 {
-    OUString aValue( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) ) );
+    OUString aValue(
+        _xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) ) );
     if (aValue.getLength())
     {
         _nBasePosX += toInt32( aValue );
     }
     aValue = _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
+        _pImport->XMLNS_DIALOGS_UID,
+        OUString( RTL_CONSTASCII_USTRINGPARAM("top") ) );
     if (aValue.getLength())
     {
         _nBasePosY += toInt32( aValue );
@@ -1811,9 +1843,9 @@ BulletinBoardElement::BulletinBoardElement(
 
 // style
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > StyleElement::createChildContext(
+Reference< xml::input::XElement > StyleElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
@@ -1824,9 +1856,11 @@ Reference< xml::XImportContext > StyleElement::createChildContext(
 void StyleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    Reference< xml::sax2::XExtendedAttributes > xStyle;
-    OUString aStyleId( _xAttributes->getValueByUidName(
-        XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
+    Reference< xml::input::XAttributes > xStyle;
+    OUString aStyleId(
+        _xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
     if (aStyleId.getLength())
     {
         _pImport->addStyle( aStyleId, this );
@@ -1843,12 +1877,12 @@ void StyleElement::endElement()
 
 // styles
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > StylesElement::createChildContext(
+Reference< xml::input::XElement > StylesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1871,17 +1905,17 @@ Reference< xml::XImportContext > StylesElement::createChildContext(
 
 // window
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > WindowElement::createChildContext(
+Reference< xml::input::XElement > WindowElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     // event
-    if (isEventElement( nUid, rLocalName ))
+    if (_pImport->isEventElement( nUid, rLocalName ))
     {
         return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
-    else if (XMLNS_DIALOGS_UID != nUid)
+    else if (_pImport->XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1908,10 +1942,11 @@ Reference< xml::XImportContext > WindowElement::createChildContext(
 void WindowElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    Reference< beans::XPropertySet > xProps( _pImport->_xDialogModel, UNO_QUERY );
-    ImportContext ctx( xProps, getControlId( _xAttributes ) );
+    Reference< beans::XPropertySet > xProps(
+        _pImport->_xDialogModel, UNO_QUERY_THROW );
+    ImportContext ctx( _pImport, xProps, getControlId( _xAttributes ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
