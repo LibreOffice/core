@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-22 11:26:58 $
+ *  last change: $Author: cl $ $Date: 2001-06-22 13:51:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,6 +1694,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
 
             pPage->SetSize( pSdPage->GetSize() );
             pPage->SetOrientation( pSdPage->GetOrientation() );
+            ((SdPage*)pPage)->SetLayoutName( ( (SdPage*)pSdPage )->GetLayoutName() );
 
             mpModel->SetModified();
         }
