@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:29:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ private:
     ::com::sun::star::presentation::ClickAction     GetActualClickAction();
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
-    void                    SetEditText( String& rStr );
+    void                    SetEditText( String const & rStr );
     String                  GetEditText( BOOL bURL = FALSE );
     USHORT                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     USHORT                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
