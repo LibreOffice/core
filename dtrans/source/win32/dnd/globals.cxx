@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-23 09:39:43 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
 
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
-sal_Int8 dndOleKeysToAction( DWORD grfKeyState)
+sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
 {
     sal_Int8 ret= 0;
 
@@ -86,7 +86,23 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState)
         !(grfKeyState & MK_ALT)    &&
         !(grfKeyState & MK_RBUTTON) )
     {
-        ret= ACTION_MOVE;
+        if( nSourceActions & ACTION_MOVE )
+        {
+            ret= ACTION_MOVE;
+        }
+
+        else if( nSourceActions & ACTION_COPY )
+        {
+            ret= ACTION_COPY;
+        }
+
+        else if( nSourceActions & ACTION_LINK )
+        {
+            ret= ACTION_LINK;
+        }
+
+        else
+            ret = 0;
     }
     else if ( grfKeyState & MK_CONTROL &&
               !(grfKeyState & MK_SHIFT) )

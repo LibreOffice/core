@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-23 09:39:43 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 // is not considered relevant in a drag operation. Contrarily the file explorer
 // gives that button a special meaning: the user has to select the effect from
 // a context menu on drop.
-sal_Int8 dndOleKeysToAction( DWORD grfKeyState);
+sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 sourceActions);
 
 // The function maps a windows DROPEFFECTs to actions
 // ( com::sun::star::datatransfer::dnd::DNDConstants).

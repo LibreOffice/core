@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-23 09:39:59 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,10 +262,8 @@ HRESULT STDMETHODCALLTYPE DragSource::QueryContinueDrag(
     // fire dropActionChanged event.
     // this is actually done by the context, which also detects whether the action
     // changed at all
-    sal_Int8 dropAction= fEscapePressed ? ACTION_NONE :
-                  ( m_sourceActions & dndOleKeysToAction( grfKeyState));
-    sal_Int8 userAction= fEscapePressed ? ACTION_NONE :
-                  dndOleKeysToAction( grfKeyState);
+    sal_Int8 dropAction= fEscapePressed ? ACTION_NONE : dndOleKeysToAction( grfKeyState, m_sourceActions);
+    sal_Int8 userAction= fEscapePressed ? ACTION_NONE : dndOleKeysToAction( grfKeyState, -1 );
     static_cast<SourceContext*>(m_currentContext.get())->fire_dropActionChanged( dropAction, userAction);
 
 #if DBG_CONSOLE_OUT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-23 09:39:59 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 07:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
     if( m_bActive )
     {
         // Intersection of pdwEffect and the allowed actions ( setDefaultActions)
-        m_nListenerDropAction= getFilteredActions( grfKeyState);
+        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
         m_userAction= m_nListenerDropAction;
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
@@ -302,7 +302,7 @@ HRESULT DropTarget::DragOver( DWORD grfKeyState,
     {
 
         // A listener can change this value during fire_dragOver
-        m_nListenerDropAction= getFilteredActions( grfKeyState);
+        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
 
         if( m_nListenerDropAction)
         {
@@ -381,7 +381,7 @@ HRESULT DropTarget::Drop( IDataObject  *pDataObj,
 
         m_bDropComplete= sal_False;
 
-        m_nListenerDropAction= getFilteredActions( grfKeyState);
+        m_nListenerDropAction= getFilteredActions( grfKeyState, *pdwEffect);
         m_currentDropContext= static_cast<XDropTargetDropContext*>( new TargetDropContext( static_cast<DropTarget*>(this ))  );
         if( m_nListenerDropAction)
         {
@@ -555,9 +555,9 @@ void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
 // default actions are returned. If setDefaultActions has not been called
 // beforehand the the default actions comprise all possible actions.
 // params: grfKeyState - the modifier keys and mouse buttons currently pressed
-inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState)
+inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState, DWORD dwEffect)
 {
-    sal_Int8 actions= dndOleKeysToAction( grfKeyState);
+    sal_Int8 actions= dndOleKeysToAction( grfKeyState, dndOleDropEffectsToActions( dwEffect));
     return actions &  m_nDefaultActions;
 }
 
