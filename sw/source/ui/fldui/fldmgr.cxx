@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:20:11 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,13 +1637,27 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
 
 void SwFldMgr::UpdateCurFld(ULONG nFormat,
                             const String& rPar1,
-                            const String& rPar2)
+                            const String& rPar2,
+                            SwField * _pTmpFld) // #111840#
 {
     // Format aendern
     ASSERT(pCurFld, "kein Feld an der CursorPos");
 
-    SwFieldType* pType   = pCurFld->GetTyp();
-    const USHORT nTypeId = pCurFld->GetTypeId();
+    bool bDelete = false;
+    SwField * pTmpFld = pCurFld->Copy();
+
+    if (NULL != _pTmpFld)
+    {
+        pTmpFld = _pTmpFld;
+    }
+    else
+    {
+        pTmpFld = pCurFld->Copy();
+        bDelete = true;
+    }
+
+    SwFieldType* pType   = pTmpFld->GetTyp();
+    const USHORT nTypeId = pTmpFld->GetTypeId();
 
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     DBG_ASSERT(pSh, "no SwWrtShell found")
@@ -1674,13 +1688,13 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             nByte = Max(USHORT(1), nByte);
             nByte = Min(nByte, USHORT(MAXLEVEL));
             nByte -= 1;
-            ((SwChapterField*)pCurFld)->SetLevel((BYTE)nByte);
+            ((SwChapterField*)pTmpFld)->SetLevel((BYTE)nByte);
             bSetPar2 = FALSE;
             break;
         }
 
         case TYP_SCRIPTFLD:
-            ((SwScriptField*)pCurFld)->SetCodeURL((BOOL)nFormat);
+            ((SwScriptField*)pTmpFld)->SetCodeURL((BOOL)nFormat);
             break;
 
         case TYP_NEXTPAGEFLD:
@@ -1725,10 +1739,10 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         case TYP_GETREFFLD:
             {
                 bSetPar2 = FALSE;
-                ((SwGetRefField*)pCurFld)->SetSubType( (USHORT)rPar2.ToInt32() );
+                ((SwGetRefField*)pTmpFld)->SetSubType( (USHORT)rPar2.ToInt32() );
                 USHORT nPos = rPar2.Search( '|' );
                 if( STRING_NOTFOUND != nPos )
-                    ((SwGetRefField*)pCurFld)->SetSeqNo( (USHORT)rPar2.Copy( nPos + 1 ).ToInt32());
+                    ((SwGetRefField*)pTmpFld)->SetSeqNo( (USHORT)rPar2.Copy( nPos + 1 ).ToInt32());
             }
             break;
         case TYP_DROPDOWN:
@@ -1738,8 +1752,8 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
             OUString* pArray = aEntries.getArray();
             for(xub_StrLen nToken = 0; nToken < nTokenCount; nToken++)
                 pArray[nToken] = sPar2.GetToken(nToken, DB_DELIM);
-            ((SwDropDownField*)pCurFld)->SetItems(aEntries);
-            ((SwDropDownField*)pCurFld)->SetName(sPar1);
+            ((SwDropDownField*)pTmpFld)->SetItems(aEntries);
+            ((SwDropDownField*)pTmpFld)->SetName(sPar1);
             bSetPar1 = bSetPar2 = FALSE;
         }
         break;
@@ -1747,12 +1761,12 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
 
     // Format setzen
     // Format wegen NumberFormatter vor SetPar2 einstellen!
-    pCurFld->ChangeFormat(nFormat);
+    pTmpFld->ChangeFormat(nFormat);
 
     if(bSetPar1)
-        pCurFld->SetPar1( sPar1 );
+        pTmpFld->SetPar1( sPar1 );
     if( bSetPar2 )
-        pCurFld->SetPar2( sPar2 );
+        pTmpFld->SetPar2( sPar2 );
 
     // Update anschmeissen
     if(nTypeId == TYP_DDEFLD ||
@@ -1763,7 +1777,10 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         pSh->SetModified();
     }
     else
-        pSh->SwEditShell::UpdateFlds(*pCurFld);
+        pSh->SwEditShell::UpdateFlds(*pTmpFld);
+
+    if (bDelete)
+        delete pTmpFld;
 
     pSh->EndAllAction();
 }
