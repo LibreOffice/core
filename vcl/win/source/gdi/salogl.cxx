@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:52:03 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <tools/svwin.h>
 #endif
 
-#define _SV_SALOGL_CXX
-
 #ifndef _SV_SALOGL_H
 #include <salogl.h>
 #endif
@@ -72,9 +70,7 @@
 #include <salgdi.h>
 #endif
 
-#ifdef WIN
-#define __OPENGL_CALL _far _pascal
-#elif defined WNT
+#ifdef WNT
 #define __OPENGL_CALL __stdcall
 #else
 #define __OPENGL_CALL
