@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:34:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,6 +739,20 @@ BYTE lcl_WhichPunctuation( xub_Unicode cChar )
     return SwScriptInfo::SPECIAL_LEFT;
 }
 
+sal_Bool lcl_IsMonoSpaceFont( const OutputDevice* pOut )
+{
+    if ( ! pOut )
+        return sal_False;
+
+    const String aStr1( xub_Unicode( 0x3008 ) );
+    const String aStr2( xub_Unicode( 0x307C ) );
+#ifndef PRODUCT
+    const long nWidth1 = pOut->GetTextWidth( aStr1 );
+    const long nWidth2 = pOut->GetTextWidth( aStr2 );
+#endif
+    return pOut->GetTextWidth( aStr1 ) == pOut->GetTextWidth( aStr2 );
+}
+
 // ER 09.07.95 20:34
 // mit -Ox Optimierung stuerzt's unter win95 ab
 // JP 12.07.95: unter WNT auch (i386);       Alpha ??
@@ -1062,7 +1076,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
                 // Kana Compression
                 if ( SW_CJK == nActual && rInf.GetKanaComp() &&
-                     pSI && pSI->CountCompChg() )
+                     pSI && pSI->CountCompChg() &&
+                     lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
                 {
                     pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                                    rInf.GetKanaComp(),
@@ -1280,7 +1295,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
             // Kana Compression
-            if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
+            if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+                 pSI && pSI->CountCompChg() &&
+                 lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
             {
                 Point aTmpPos( aPos );
                 pSI->Compress( pScrArray, rInf.GetIdx(), rInf.GetLen(),
@@ -1803,7 +1820,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
     }
 
-    BOOL bCompress = rInf.GetKanaComp() && nLn;
+    BOOL bCompress = rInf.GetKanaComp() && nLn &&
+                     lcl_IsMonoSpaceFont( rInf.GetpOut() );
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
@@ -1940,7 +1958,9 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         const BYTE nActual = rInf.GetFont()->GetActual();
 
         // Kana Compression
-        if ( SW_CJK == nActual && rInf.GetKanaComp() && pSI && pSI->CountCompChg() )
+        if ( SW_CJK == nActual && rInf.GetKanaComp() &&
+             pSI && pSI->CountCompChg() &&
+             lcl_IsMonoSpaceFont( rInf.GetpOut() ) )
         {
             pSI->Compress( pKernArray, rInf.GetIdx(), rInf.GetLen(),
                            rInf.GetKanaComp(),
@@ -2205,11 +2225,12 @@ SwCacheObj *SwFntAccess::NewObj( )
 
 xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 {
-    BOOL bCompress = SW_CJK==GetActual() && rInf.GetKanaComp() && rInf.GetLen();
+     ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+
+    BOOL bCompress = SW_CJK==GetActual() && rInf.GetKanaComp() && rInf.GetLen() &&
+                     lcl_IsMonoSpaceFont( rInf.GetpOut() );
     ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
-
-     ChgFnt( rInf.GetShell(), rInf.GetpOut() );
 
     USHORT nTxtBreak = 0;
     long nKern = 0;
