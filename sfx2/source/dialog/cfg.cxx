@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:27:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:32:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1840,10 +1840,6 @@ void SfxConfigDialog::PageCreated( USHORT nId, SfxTabPage& rPage )
 {
     switch ( nId )
     {
-        case TP_CONFIG_OBJECTBAR :
-            if ( nObjectBar )
-                ((SfxObjectBarConfigPage&)rPage).SetObjectBarId( nObjectBar );
-            break;
         case TP_CONFIG_ACCEL:
             if ( pMacroInfo )
                 ((SfxAcceleratorConfigPage&)rPage).SelectMacro( pMacroInfo );
@@ -1907,7 +1903,7 @@ SfxTabPage *CreateStatusBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 */
 SfxTabPage *CreateObjectBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
-    return new SfxObjectBarConfigPage( pParent, rSet );
+    return NULL;
 }
 
 SfxTabPage *CreateEventConfigPage( Window *pParent, const SfxItemSet& rSet )
