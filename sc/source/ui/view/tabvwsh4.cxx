@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:58:18 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@
 #ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
 #endif
+#include "sc.hrc" //CHINA001
+#include "scabstdlg.hxx" //CHINA001
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1135,7 +1137,13 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
 
 SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions )
 {
-    return ScTpPrintOptions::Create( pParent, rOptions );
+    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+    //CHINA001 return ScTpPrintOptions::Create( pParent, rOptions );
+    ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
+    if ( ScTpPrintOptionsCreate )
+        return  (*ScTpPrintOptionsCreate)( pParent, rOptions);
+    return 0;
 }
 
 void __EXPORT ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
