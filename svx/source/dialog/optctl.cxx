@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 14:05:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
 
 #ifndef _SVX_OPTCTL_HXX
 #include "optctl.hxx"
