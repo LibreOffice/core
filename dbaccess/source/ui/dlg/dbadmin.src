@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:27:18 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,11 +366,11 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ greek ] = "ĞáñÜìåôñïé ÷ñŞóôç";
         Text[ dutch ] = "Gebruikersinstellingen";
         Text[ french ] = "Paramètres d'utilisateur";
-        Text[ spanish ] = "Configuración personalizada";
+        Text[ spanish ] = "Configuración de usuario";
         Text[ italian ] = "Impostazioni utente";
         Text[ danish ] = "Brugerindstillinger";
         Text[ swedish ] = "Användarinställningar";
-        Text[ polish ] = "Ustawienia u¿ytkownika";
+        Text[ polish ] = "Ustawienia indywidualne";
         Text[ portuguese_brazilian ] = "User settings";
         Text[ japanese ] = "Õ°»Ş°İ’è";
         Text[ korean ] = "»ç¿ëÀÚ ¼³Á¤";
@@ -378,6 +378,8 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ chinese_traditional ] = "¦Û­q³]©w";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı ayarları";
+        Text[ finnish ] = "User Settings";
+        Text[ catalan ] = "User Settings";
     };
     String STR_PAGETITLE_TEXT
     {
@@ -2940,7 +2942,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ portuguese ] = "É necessário guardar a fonte de dados para poder gerir os respectivos $objects$.\nNo entanto, os parâmetros actuais não permitem guardar as modificações (há conflito de nomes).\n\nNão é possível gerir $objects$ enquanto estes conflitos não fo";
     Message[ russian ] = "Äëÿ óïğàâëåíèÿ $objects$ èñòî÷íèêà äàííûõ íåîáõîäèìî ıòîò èñòî÷íèê äàííûõ ñîõğàíèòü.\nÎäíàêî òåêóùèå íàñòğîéêè íå ïîçâîëÿşò ñîõğàíèòü èçìåíå";
     Message[ greek ] = "Ãéá íá åßíáé äõíáôŞ ç äéá÷åßñéóç ôùí åñùôçìÜôùí ìéáò ğñïİëåõóçò äåäïìİíùí, áõôŞ èá ğñİğåé ğñşôá íá áğïèçêåõôåß.\nÏé ôñİ÷ïõóåò åéóáãùãİò äå";
-    Message[ dutch ] = "Om de STR_QUERY_OBJECTS van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de STR_DOCUMENT_OBJECTS niet beheren zolang deze ";
+    Message[ dutch ] = "Om de $objects$ van een gegevensbron te beheren moet deze opgeslagen zijn.\nMaar met de actuele instellingen is het opslaan van wijzigingen niet mogelijk (moeilijkheden met naamgeving).\n\nU kunt de $objects$ niet beheren zolang deze moeilijkheden niet ";
     Message[ french ] = "Vous devez enregistrer la source de données afin de pouvoir en gérer les $objects$.\nLes paramètres actifs ne permettent cependant pas d'enregistrer les modifications car il y a des conflits de noms.\n\nTant que ces conflits persisteront et que les m";
     Message[ spanish ] = "Para administrar $objects$ de una fuente de datos, esta debe guardarse.\nLas entradas actuales, sin embargo, no permiten guardar las modificaciones (existen conflictos con los nombres).\n\nNo podrá administrar $objects$ mientras no solucione estos conf";
     Message[ italian ] = "Per gestire i contenuti ($objects$) di una sorgente dati è necessario prima salvare la sorgente dati.\nLe indicazioni attuali non permettono di salvare la ricerca in quanto genera un conflitto di nomi.\n\nFintanto non avete risolto il conflitto fra i n";
@@ -3256,6 +3258,9 @@ String STR_ADDRESSBOOK_LDAP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.60  2001/06/25 08:27:18  oj
+ *  #88699# new control for ldap rowcount
+ *
  *  Revision 1.59  2001/06/21 21:43:36  kz
  *  Merge SRC633: 21.06.01 - 23:42:48
  *
@@ -3324,6 +3329,7 @@ String STR_ADDRESSBOOK_LDAP
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
