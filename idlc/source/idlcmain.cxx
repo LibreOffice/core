@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-26 14:15:36 $
+ *  last change: $Author: jsc $ $Date: 2002-11-13 17:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@ int SAL_CALL main( int argc, char** argv )
     try
     {
         if (!options.initOptions(argc, argv))
-            exit(1);
+           exit(1);
     }
     catch( IllegalArgument& e)
     {
         fprintf(stderr, "Illegal argument: %s\n%s",
-                e.m_message.getStr(),
-                options.prepareVersion().getStr());
+            e.m_message.getStr(),
+            options.prepareVersion().getStr());
         exit(99);
     }
 
@@ -85,16 +85,18 @@ int SAL_CALL main( int argc, char** argv )
 
     const StringVector& files = options.getInputFiles();
     sal_Int32   nFiles = files.size();
-    sal_Int32   nErrors = 0;
+    sal_Int32 nErrors = 0;
     for ( sal_Int32 i=0; i < nFiles; i++ )
     {
         OString sysFileName( convertToAbsoluteSystemPath(files[i]) );
 
         fprintf(stdout, "%s: compile '%s' ... \n",
-                options.getProgramName().getStr(), files[i].getStr());
+            options.getProgramName().getStr(), files[i].getStr());
         nErrors = compileFile(sysFileName);
         if ( nErrors )
         {
+            OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
+            OString sysOutputName;
             if ( options.isValid("-O") )
             {
                 OString sysOutputName = convertToAbsoluteSystemPath(options.getOption("-O"));
@@ -103,13 +105,12 @@ int SAL_CALL main( int argc, char** argv )
                 if ( c != '/' )
                     sysOutputName += OString::valueOf('/');
 
-                OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
                 sysOutputName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
-                removeIfExists(sysOutputName);
             } else
             {
-                removeIfExists(sysFileName);
+                sysOutputName = strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
             }
+            removeIfExists(sysOutputName);
         } else
             nErrors = produceFile(sysFileName);
 
@@ -121,13 +122,14 @@ int SAL_CALL main( int argc, char** argv )
     if ( nErrors > 0 )
     {
         fprintf(stdout, "%s: detected %d errors in file '%s'%s",
-                options.getProgramName().getStr(), nErrors,
-                files[i].getStr(), options.prepareVersion().getStr());
+            options.getProgramName().getStr(), nErrors,
+            files[i].getStr(), options.prepareVersion().getStr());
     } else
     {
         fprintf(stdout, "%s: returned successful%s",
-                options.getProgramName().getStr(),
-                options.prepareVersion().getStr());
+            options.getProgramName().getStr(),
+            options.prepareVersion().getStr());
     }
     exit(nErrors);
+    return 0;
 }
