@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dtrans.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:27:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,12 @@ void B3dTransformationSet::CalcViewport()
 
     // Mit den neuen Werten Projektion und ViewPort setzen
     Matrix4D aNewProjection;
-    double fDistPart = (fFarBound - fNearBound) * SMALL_DVALUE;
+
+    // #i36281#
+    // OpenGL needs a little more rough additional size to not let
+    // the front face vanish. Changed from SMALL_DVALUE to 0.000001,
+    // which is 1/10000th, comared with 1/tenth of a million from SMALL_DVALUE.
+    const double fDistPart((fFarBound - fNearBound) * 0.0001);
 
     // Near, Far etwas grosszuegiger setzen, um falsches,
     // zu kritisches clippen zu verhindern
