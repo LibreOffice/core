@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:58:26 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,11 +138,11 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
     {
         OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
         if(!m_aCollection.Append(pTable->getImpl()))
-            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+            ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
         m_aCollection.Refresh();
     }
     else
-        throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),static_cast<XTypeProvider*>(this),OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -150,7 +150,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     if ( !m_aCollection.Delete(_sElementName) )
-        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
