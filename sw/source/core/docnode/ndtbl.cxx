@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:30:08 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2353,32 +2353,9 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
 {
     ASSERT( pBoxFrm, "GetTabRows called without pBoxFrm" )
 
-    SwTabFrm* pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
-    const SwTableBox* pBox = pBoxFrm->GetTabBox();
-    SwFrm* pFrm = pTab->GetNextLayoutLeaf();
-
-    //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
-    SWRECTFN( pTab )
-    const SwPageFrm* pPage = pTab->FindPageFrm();
-
-    rFill.SetRight( (pTab->Prt().*fnRect->fnGetHeight)() );
-    long nLeftMin;
-    if ( bVert )
-    {
-        nLeftMin = pTab->GetPrtLeft() - pPage->Frm().Left() + DOCUMENTBORDER;
-        rFill.SetLeft    ( LONG_MAX );
-        rFill.SetRightMax( rFill.GetRight() );
-
-    }
-    else
-    {
-        nLeftMin = pTab->GetPrtTop() - pPage->Frm().Top() + DOCUMENTBORDER;
-        rFill.SetLeft    ( 0 );
-        rFill.SetRightMax( LONG_MAX );
-    }
-    rFill.SetLeftMin ( nLeftMin );
-
-    // get boxes for current column:
+    // --> FME 2005-01-06 #i39552# Collection of the boxes of the current
+    // column has to be done at the beginning of this function, because
+    // the table may be formatted in ::GetTblSel.
     const SwFrm* pCntnt = pBoxFrm->ContainsCntnt();
     SwSelBoxes aBoxes;
     if ( pCntnt && pCntnt->IsTxtFrm() )
@@ -2387,6 +2364,27 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
         const SwCursor aTmpCrsr( aPos );
         ::GetTblSel( aTmpCrsr, aBoxes, TBLSEARCH_COL );
     }
+    // <--
+
+    SwTabFrm* pTab = ((SwFrm*)pBoxFrm)->ImplFindTabFrm();
+    const SwTableBox* pBox = pBoxFrm->GetTabBox();
+    SwFrm* pFrm = pTab->GetNextLayoutLeaf();
+
+    //Fix-Punkte setzen, LeftMin in Dokumentkoordinaten die anderen relativ.
+    SWRECTFN( pTab )
+    const SwPageFrm* pPage = pTab->FindPageFrm();
+    const long nLeftMin  = DOCUMENTBORDER +
+                           ( bVert ?
+                             pTab->GetPrtLeft() - pPage->Frm().Left() :
+                             pTab->GetPrtTop() - pPage->Frm().Top() );
+    const long nLeft     = bVert ? LONG_MAX : 0;
+    const long nRight    = (pTab->Prt().*fnRect->fnGetHeight)();
+    const long nRightMax = bVert ? nRight : LONG_MAX;
+
+    rFill.SetLeftMin( nLeftMin );
+    rFill.SetLeft( nLeft );
+    rFill.SetRight( nRight );
+    rFill.SetRightMax( nRightMax );
 
     typedef std::map< long, std::pair< long, long >, FuzzyCompare > BoundaryMap;
     BoundaryMap aBoundaries;
