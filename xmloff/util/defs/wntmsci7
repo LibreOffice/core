@@ -9337,3 +9337,9 @@ _real@8@4003a000000000000000
 ?lower_bound@?$_Rb_tree@JU?$pair@$$CBJJ@_STL@@U?$_S1st@U?$pair@$$CBJJ@_STL@@@2@Ultint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@2@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBJJ@_STL@@U?$_N_Tr@U?$pair@$$CBJJ@_STL@@@2@@2@ABJ@Z
 ?lower_bound@?$_Rb_tree@V?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@U?$pair@$$CBV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@V?$map@JJUltint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@@_STL@@U?$_S1st@U?$pair@$$CBV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@V?$map@JJUltint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@@_STL@@@7@UXShapeCompareHelper@@V?$allocator@U?$pair@$$CBV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@V?$map@JJUltint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@@_STL@@@7@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@V?$map@JJUltint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@@_STL@@U?$_N_Tr@U?$pair@$$CBV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@V?$map@JJUltint32@@V?$allocator@U?$pair@$$CBJJ@_STL@@@_STL@@@_STL@@@_STL@@@2@@2@ABV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@@Z
 ?exportText@SchXMLExportHelper@@AAEXABVOUString@rtl@@@Z
+??_C@_0CM@LAPE@o?3?2CFG636?2wntmsci7?2inc?2svtools?1p@
+??_C@_0CD@DBOC@o?3?2CFG636?2wntmsci7?2inc?2vos?1ref?4i@
+??_C@_0DF@CKLG@o?3?2CFG636?2wntmsci7?2inc?2com?1sun?1s@
+??_C@_0DM@KDMO@O?3?2CFG636?2src?2xmloff?2source?2text@
+??_C@_0DF@FAPE@O?3?2CFG636?2src?2xmloff?2source?2form@
+??_C@_0DJ@EKHE@O?3?2CFG636?2src?2xmloff?2source?2form@
