@@ -2,9 +2,9 @@
  *
  *  $RCSfile: static_types.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:16:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,12 +415,14 @@ void SAL_CALL typelib_static_sequence_type_init(
 }
 
 //##################################################################################################
-void SAL_CALL typelib_static_compound_type_init(
+namespace {
+
+void init(
     typelib_TypeDescriptionReference ** ppRef,
     typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
     typelib_TypeDescriptionReference * pBaseType,
-    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
-    SAL_THROW_EXTERN_C()
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
+    sal_Bool * pParameterizedTypes)
 {
     OSL_ENSURE( typelib_TypeClass_STRUCT == eTypeClass ||
                  typelib_TypeClass_EXCEPTION == eTypeClass, "### unexpected type class!" );
@@ -453,6 +455,11 @@ void SAL_CALL typelib_static_compound_type_init(
                     pComp->nMembers = nMembers;
                     pComp->pMemberOffsets = new sal_Int32[ nMembers ];
                     pComp->ppTypeRefs = new typelib_TypeDescriptionReference *[ nMembers ];
+                    if (pParameterizedTypes != 0) {
+                        reinterpret_cast< typelib_StructTypeDescription * >(
+                            pComp)->pParameterizedTypes
+                            = new sal_Bool[nMembers];
+                    }
                     for ( sal_Int32 i = 0 ; i < nMembers; ++i )
                     {
                         ::typelib_typedescriptionreference_acquire(
@@ -464,6 +471,12 @@ void SAL_CALL typelib_static_compound_type_init(
                         nOffset = newAlignedSize( nOffset, pTD->nSize, pTD->nAlignment );
                         pComp->pMemberOffsets[i] = nOffset - pTD->nSize;
                         TYPELIB_DANGER_RELEASE( pTD );
+
+                        if (pParameterizedTypes != 0) {
+                            reinterpret_cast< typelib_StructTypeDescription * >(
+                                pComp)->pParameterizedTypes[i]
+                                = pParameterizedTypes[i];
+                        }
                     }
                 }
 
@@ -484,6 +497,30 @@ void SAL_CALL typelib_static_compound_type_init(
 #endif
         }
     }
+}
+
+}
+
+void SAL_CALL typelib_static_compound_type_init(
+    typelib_TypeDescriptionReference ** ppRef,
+    typelib_TypeClass eTypeClass, const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference * pBaseType,
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C()
+{
+    init(ppRef, eTypeClass, pTypeName, pBaseType, nMembers, ppMembers, 0);
+}
+
+void SAL_CALL typelib_static_struct_type_init(
+    typelib_TypeDescriptionReference ** ppRef, const sal_Char * pTypeName,
+    typelib_TypeDescriptionReference * pBaseType,
+    sal_Int32 nMembers, typelib_TypeDescriptionReference ** ppMembers,
+    sal_Bool * pParameterizedTypes )
+    SAL_THROW_EXTERN_C()
+{
+    init(
+        ppRef, typelib_TypeClass_STRUCT, pTypeName, pBaseType, nMembers,
+        ppMembers, pParameterizedTypes);
 }
 
 //##################################################################################################
