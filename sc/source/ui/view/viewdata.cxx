@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: nn $ $Date: 2002-10-16 16:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,16 +890,6 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     BOOL bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
-    nEditCol = nNewX;
-    nEditRow = nNewY;
-    const ScMergeAttr* pMergeAttr = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-    nEditEndCol = nEditCol;
-    if (pMergeAttr->GetColMerge() > 1)
-        nEditEndCol += pMergeAttr->GetColMerge() - 1;
-    nEditEndRow = nEditRow;
-    if (pMergeAttr->GetRowMerge() > 1)
-        nEditEndRow += pMergeAttr->GetRowMerge() - 1;
-
     Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
                                         pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
                                             GetEditArea( pPattern, TRUE );
@@ -914,6 +904,17 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
     if ( bActive && eWhich == GetActivePart() )
     {
+        //  modify members nEditCol etc. only if also extending for needed area
+        nEditCol = nNewX;
+        nEditRow = nNewY;
+        const ScMergeAttr* pMergeAttr = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
+        nEditEndCol = nEditCol;
+        if (pMergeAttr->GetColMerge() > 1)
+            nEditEndCol += pMergeAttr->GetColMerge() - 1;
+        nEditEndRow = nEditRow;
+        if (pMergeAttr->GetRowMerge() > 1)
+            nEditEndRow += pMergeAttr->GetRowMerge() - 1;
+
         long nSizeXPix;
         if (bBreak && !bAsianVertical)
             nSizeXPix = aPixRect.GetWidth();    // Papersize -> kein H-Scrolling
