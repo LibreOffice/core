@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:03:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,30 +924,15 @@ BOOL SwEditShell::DontExpandFmt()
     return bRet;
 }
 
-
 SvNumberFormatter* SwEditShell::GetNumberFormatter()
 {
     return GetDoc()->GetNumberFormatter();
-}
-
-
-void SwEditShell::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
-{
-    GetDoc()->Summary( pExtDoc, nLevel, nPara, bImpress );
 }
 
 BOOL SwEditShell::RemoveInvisibleContent()
 {
     StartAllAction();
     BOOL bRet = GetDoc()->RemoveInvisibleContent();
-    EndAllAction();
-    return bRet;
-}
-
-BOOL SwEditShell::EmbedAllLinks()
-{
-    StartAllAction();
-    BOOL bRet = GetDoc()->EmbedAllLinks();
     EndAllAction();
     return bRet;
 }
@@ -1067,13 +1052,6 @@ void SwEditShell::SetLineNumberInfo(const SwLineNumberInfo& rInfo)
     EndAllAction();
 }
 
-BOOL SwEditShell::GenerateHTMLDoc( const String& rPath,
-                                const SwTxtFmtColl* pSplitColl )
-{
-    SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-    return GetDoc()->GenerateHTMLDoc( rPath, pSplitColl );
-}
-
 USHORT SwEditShell::GetLinkUpdMode(BOOL bDocSettings) const
 {
     return bDocSettings ? GetDoc()->_GetLinkUpdMode(): GetDoc()->GetLinkUpdMode();
@@ -1132,15 +1110,6 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     }
     return sRet;
 }
-
-#ifdef USED
-SwExtTextInput* SwEditShell::GetExtTextInput() const
-{
-    const SwPosition& rPos = *GetCrsr()->GetPoint();
-    return GetDoc()->GetExtTextInput( rPos.nNode.GetNode(),
-                                         rPos.nContent.GetIndex() );
-}
-#endif
 
 void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 {
