@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
+#   last change: $Author: hjs $ $Date: 2002-03-28 18:22:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -505,12 +505,13 @@ LIBSTLPORTST=stlport_vc6_static.lib
 
 .IF "$(USE_SHELL)"=="4nt"
 LIBMGR=lib $(NOLOGO)
+IMPLIB=lib
 .ELSE			# "$(USE_SHELL)"=="4nt"
 LIBMGR=lib_w $(NOLOGO)
+IMPLIB=lib_w
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 LIBFLAGS=
 
-IMPLIB=lib_w
 IMPLIBFLAGS=-machine:IX86
 
 MAPSYM=
