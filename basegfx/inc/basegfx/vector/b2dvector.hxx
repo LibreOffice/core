@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,17 @@ namespace basegfx
         A 2D Vector perpendicular to the one given in parameter rVec
     */
     B2DVector getPerpendicular( const B2DVector& rNormalizedVec );
+
+    /** Calculate a perpendicular 2D Vector to the given one,
+        normalize the given one as preparation
+
+        @param rVec
+        The source 2D Vector
+
+        @return
+        A normalized 2D Vector perpendicular to the one given in parameter rVec
+    */
+    B2DVector getNormalizedPerpendicular( const B2DVector& rVec );
 
     /** Test two vectors which need not to be normalized for parallelism
 
