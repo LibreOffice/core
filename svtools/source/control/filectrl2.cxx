@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-04 09:00:26 $
+ *  last change: $Author: mt $ $Date: 2002-08-22 13:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ void FileControl::ImplBrowseFile( )
         {
             // transform the system notation text into a file URL
             ::rtl::OUString sSystemNotation = GetText(), sFileURL;
-            osl_getFileURLFromSystemPath( sSystemNotation.pData, &sFileURL.pData );
+            oslFileError nError = osl_getFileURLFromSystemPath( sSystemNotation.pData, &sFileURL.pData );
+            if ( nError == osl_File_E_INVAL )
+                sFileURL = GetText();   // #97709# Maybe URL is already a file URL...
 
             // initially set this directory
             xFilePicker->setDisplayDirectory( sFileURL );
@@ -143,6 +145,9 @@ void FileControl::ImplBrowseFile( )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/09/04 09:00:26  fs
+ *  initial checkin - exception enabled parts of filectrl.cxx
+ *
  *
  *  Revision 1.0 03.09.01 17:45:21  fs
  ************************************************************************/
