@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:31:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,14 +177,10 @@
 #include "DrawViewShell.hxx"
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
-#include "PreviewWindow.hxx"
 #include "headerfooterdlg.hxx"
 #include "masterlayoutdlg.hxx"
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
-#ifndef SD_PREVIEW_WINDOW_HXX
-#include "PreviewWindow.hxx"
-#endif
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
@@ -233,10 +229,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_GRAYSCALE:
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
-        case SID_PREVIEW_QUALITY_COLOR:
-        case SID_PREVIEW_QUALITY_GRAYSCALE:
-        case SID_PREVIEW_QUALITY_BLACKWHITE:
-        case SID_PREVIEW_QUALITY_CONTRAST:
             // Do nothing.
             break;
         default:
@@ -579,11 +571,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         case SID_OUTPUT_QUALITY_GRAYSCALE:
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
-
-        case SID_PREVIEW_QUALITY_COLOR:
-        case SID_PREVIEW_QUALITY_GRAYSCALE:
-        case SID_PREVIEW_QUALITY_BLACKWHITE:
-        case SID_PREVIEW_QUALITY_CONTRAST:
         {
             ExecReq( rReq );
             break;
