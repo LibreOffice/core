@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 10:05:07 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 12:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,19 +425,35 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
                 aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
 
                 LocaleDataWrapper aLocaleInfo( ::comphelper::getProcessServiceFactory(), aLocale );
+                if ( !sBankSymbol.getLength() )
+                    sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
-                ::rtl::OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                 // look for the currency entry (for this language) which has the given bank symbol
                 Sequence< Currency > aAllCurrencies = aLocaleInfo.getAllCurrencies();
                 const Currency* pAllCurrencies      =                       aAllCurrencies.getConstArray();
                 const Currency* pAllCurrenciesEnd   =   pAllCurrencies  +   aAllCurrencies.getLength();
-                for ( ;pAllCurrencies != pAllCurrenciesEnd; ++pAllCurrencies )
-                    if ( pAllCurrencies->BankSymbol == sBankSymbol )
+
+                ::rtl::OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                if ( !sBankSymbol.getLength() )
+                {
+                    DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: no currencies at all!" );
+                    if ( pAllCurrencies != pAllCurrenciesEnd )
                     {
+                        sBankSymbol = pAllCurrencies->BankSymbol;
                         sCurrencySymbol = pAllCurrencies->Symbol;
-                        break;
                     }
-                DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: did not find the given bank symbol!" );
+                }
+
+                if ( sBankSymbol.getLength() )
+                {
+                    for ( ;pAllCurrencies != pAllCurrenciesEnd; ++pAllCurrencies )
+                        if ( pAllCurrencies->BankSymbol == sBankSymbol )
+                        {
+                            sCurrencySymbol = pAllCurrencies->Symbol;
+                            break;
+                        }
+                    DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: did not find the given bank symbol!" );
+                }
 
                 aDefault <<= sCurrencySymbol;
             }
