@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 13:11:34 $
+ *  last change: $Author: rt $ $Date: 2004-11-17 08:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,17 @@ protected:
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
     ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
-    USHORT      nActiveCategory;
+    USHORT      nActiveCategoryRID;
 
     virtual BOOL    Close();
     virtual void    GetFocus();
 
-    void            ApplyImageLists();
+    void            ApplyImageLists( USHORT nCategoryRID );
 
     DECL_LINK( CategoryClickHdl, ToolBox* );
     DECL_LINK( CmdSelectHdl, ToolBox* );
+
+    const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
