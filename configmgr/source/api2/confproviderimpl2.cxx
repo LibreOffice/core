@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-19 17:34:11 $
+ *  last change: $Author: jb $ $Date: 2000-12-20 21:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,19 @@ namespace configmgr
     using configuration::RootTree;
 
     //=============================================================================
+
+    // special handling while we don't get proper notification: don't cache user 'nobody'
+    static void implHack_nobodyNotCached(OOptions& _rOptions)
+    {
+        static OUString c_aNobody = OUString::createFromAscii("nobody");
+
+        if (_rOptions.getUser() == c_aNobody)
+        {
+            CFG_TRACE_INFO_NI("config provider: User is 'nobody' -> disabling cache");
+            _rOptions.setNoCache();
+        }
+    }
+    //=============================================================================
     //= OConfigurationProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------------
@@ -155,6 +168,7 @@ namespace configmgr
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
         if (bNoCache) CFG_TRACE_INFO_NI("config provider: extracted from the args: Ignore cache for request");
 
+        implHack_nobodyNotCached(*xOptions);
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         try
@@ -230,6 +244,7 @@ namespace configmgr
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
         if (bNoCache) CFG_TRACE_INFO_NI("config provider: extracted from the args: Ignore cache for request");
 
+        implHack_nobodyNotCached(*xOptions);
         // create the access object
         uno::Reference< uno::XInterface > xReturn;
         try
