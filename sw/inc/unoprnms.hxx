@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-21 12:00:40 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE_COMPLEX              
 
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_AUTO_KERNING                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_UNDERLINE                       ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_UNDERLINE_COLOR                     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_UNDERLINE_HAS_COLOR                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ESCAPEMENT                      ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_CASE_MAP                        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SHADOWED                        ;
@@ -183,6 +185,13 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FLASH                       
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_KERNING                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_COLOR                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_TRANSPARENT        ;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_IS_ON;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_PREFIX;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_COMBINE_SUFFIX;
+
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_EMPHASIZE;
+
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LINE_SPACING                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_TOP_MARGIN              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_BOTTOM_MARGIN             ;
