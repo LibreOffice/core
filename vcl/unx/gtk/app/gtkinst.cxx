@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 12:09:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ extern "C"
         return true;
     }
 
-    SalInstance* create_SalInstance( oslModule pModule )
+    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
         const gchar* pVersion = gtk_check_version( 2, 2, 0 );
         if( pVersion )
