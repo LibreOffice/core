@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rcid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:41:23 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #define RC_CFGITEMS                 (RC_BASE + 3350)
 #define RC_LINGU                    (RC_BASE + 3450)
 #define RC_ACCESS                   (RC_BASE + 3550)
+#define RC_UNDO                     (RC_BASE + 3750)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -145,7 +146,7 @@
 
 // Unsere Shell
 #define RC_WRTSH_BEGIN              RC_WRTSH
-#define RC_WRTSH_END                (RC_WRTSH_BEGIN + 199)
+#define RC_WRTSH_END                (RC_WRTSH_BEGIN + 49)
 
 // Verzeichnisse
 #define RC_INDEX_BEGIN              RC_INDEX
@@ -281,5 +282,9 @@
 // Accessibility
 #define RC_ACCESS_BEGIN             RC_ACCESS
 #define RC_ACCESS_END               (RC_ACCESS + 99)
+
+// Undos
+#define RC_UNDO_BEGIN               RC_UNDO
+#define RC_UNDO_END                 (RC_UNDO + 199)
 
 #endif
