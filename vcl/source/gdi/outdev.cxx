@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:45:04 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,7 @@ OutputDevice::OutputDevice() :
     mp3DContext         = NULL;
     mpPDFWriter         = NULL;
     mpAlphaVDev         = NULL;
+    mpExtOutDevData     = NULL;
     mnOutOffX           = 0;
     mnOutOffY           = 0;
     mnOutWidth          = 0;
