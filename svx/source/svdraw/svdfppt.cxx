@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-07 16:09:44 $
+ *  last change: $Author: sj $ $Date: 2001-09-10 11:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1167,7 +1167,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             pTObj = new SdrRectObj( eTextKind );
             pTObj->SetModel( pSdrModel );
-            pTObj->SetSnapRect( rTextRect );
             if ( nTextRotationAngle )
             {
                 double a = nTextRotationAngle * nPi180;
@@ -1363,8 +1362,8 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             aSet.Put( SdrTextRightDistItem( nTextRight ) );
             aSet.Put( SdrTextUpperDistItem( nTextTop ) );
             aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-
-            pTObj->SetItemSet(aSet);
+            pTObj->SetItemSet( aSet );
+            pTObj->SetSnapRect( rTextRect );
             pTObj = ReadObjText( &aTextObj, pTObj, rData.pPage );
             if ( pTObj )
             {   // rotate text with shape ?
