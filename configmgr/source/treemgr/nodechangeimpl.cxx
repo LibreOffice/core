@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,7 @@ bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange) const
     rChange.setBase( NodeID(this->getBaseTree().getBodyPtr(), this->getBaseNode()) );
     rChange.setAccessor(this->getPathToChangingNode());
     rChange.setTarget( NodeID(this->getAffectedTree().getBodyPtr(), this->getAffectedNode()) );
+    rChange.setChanging( NodeID(this->getChangingTree().getBodyPtr(), this->getChangingNode()) );
 
     return true;
 }
