@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-22 13:53:00 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,10 @@ Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
     if(!pRet->isValid())
     {
         ::comphelper::disposeComponent(xRet);
-        throw SQLException(::rtl::OUString::createFromAscii("Invalid DBase file found!"),m_rParent,_rName,1000,Any());
+        String sMessage = pRet->getInvalidityMessage();
+        if (!sMessage.Len())
+            sMessage = String::CreateFromAscii("Invalid DBase file found!");
+        throw SQLException(sMessage, m_rParent, _rName, 1000, Any());
     }
 
     return xRet;

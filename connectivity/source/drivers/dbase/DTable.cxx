@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-22 13:53:00 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 09:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,8 +168,9 @@ void ODbaseTable::readHeader()
         m_bValid = sal_False;
         ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
         sMessage += getEntry();
-        sMessage += ::rtl::OUString::createFromAscii("' is no valid (or recognized) dBase file.");
-        throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+        sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
+        m_sInvalidityMessage = sMessage;
+        m_bValid = sal_False;
     }
     else
     {
@@ -194,8 +195,9 @@ void ODbaseTable::readHeader()
                 // no dbase file
                 ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
                 sMessage += getEntry();
-                sMessage += ::rtl::OUString::createFromAscii(" is no valid (or recognized) dBase file.");
-                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
+                sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
+                m_sInvalidityMessage = sMessage;
+                m_bValid = sal_False;
             }
         }
     }
@@ -1103,13 +1105,23 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         if (aName.getLength() > nMaxFieldLength)
         {
+<<<<<<< DTable.cxx
+            String sError;
+            sError.AppendAscii("Invalid length (>");
+            sError += String::CreateFromInt32(nMaxFieldLength);
+            sError.AppendAscii(") for field name ");
+            sError += aName.getStr();
+            throwGenericSQLException(sError, static_cast<XNamed*>(this));
+            break;
+=======
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
             sMsg += aName;
             sMsg += ::rtl::OUString::createFromAscii("!");
             throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+>>>>>>> 1.27
         }
 
-        ByteString aCol(aName.getStr(),gsl_getSystemTextEncoding());
+        ByteString aCol(aName.getStr(), getConnection()->getTextEncoding());
         (*m_pFileStream) << aCol.GetBuffer();
         m_pFileStream->Write(aBuffer, 11 - aCol.Len());
 
@@ -1811,7 +1823,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
                     String aString;
                     SolarMath::DoubleToString(aString,n,'F',nScale,'.');
-                    ByteString aDefaultValue(aString,gsl_getSystemTextEncoding());
+                    ByteString aDefaultValue(aString, getConnection()->getTextEncoding());
                     BOOL bValidLength   = sal_False;
                     if (aDefaultValue.Len() <= nLen)
                     {
@@ -1822,14 +1834,15 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     }
                     if (!bValidLength)
                     {
-//                      String strError(SdbResId(STR_DBF_INVALID_FIELD_VALUE));
-//                      strError.SearchAndReplace(String::CreateFromAscii("$name$"), pColumn->GetName());
-//
-//                      String strDetailedInformation(SdbResId(STR_DBF_INVALID_FIELD_VALUE_DECIMAL));
-//                      strDetailedInformation.SearchAndReplace(String::CreateFromAscii("$name$"), pColumn->GetName());
-//                      strDetailedInformation.SearchAndReplace(String::CreateFromAscii("#length#"), nPrecision);
-//                      strDetailedInformation.SearchAndReplace(String::CreateFromAscii("#scale#"), nScale);
-//                      aStatus.Set(SDB_STAT_ERROR, String::CreateFromAscii("S1000"), aStatus.CreateErrorMessage(strError), 0, strDetailedInformation);
+                        String sError;
+                        sError.AppendAscii("The ");
+                        sError += aColName.getStr();
+                        sError.AppendAscii(" column has been defined as a \"Decimal\" type, the max. length is ");
+                        sError += String::CreateFromInt32(nPrecision);
+                        sError.AppendAscii(" characters (with ");
+                        sError += String::CreateFromInt32(nScale);
+                        sError.AppendAscii(" decimal places).\n\nThe specified value is longer than the number of digits allowed.");
+                        throwGenericSQLException(sError, static_cast<XNamed*>(this));
                     }
                 } break;
                 case DataType::BIT:
