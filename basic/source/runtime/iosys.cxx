@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-11 16:09:45 $
+ *  last change: $Author: tbe $ $Date: 2001-07-24 12:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -380,14 +381,14 @@ BOOL hasUno( void )
         }
         else
         {
-            Reference< XContentProvider > xFileProvider( xSMgr->createInstance( OUString::createFromAscii
-                    ( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
-            if( !xFileProvider.is() )
+            Reference< XContentProviderManager > xManager( xSMgr->createInstance( ::rtl::OUString::createFromAscii
+                    ( "com.sun.star.ucb.UniversalContentBroker" ) ), UNO_QUERY );
+
+            if ( !( xManager.is() && xManager->queryContentProvider( ::rtl::OUString::createFromAscii( "file" ) ).is() ) )
             {
                 // No UCB
                 bRetVal = FALSE;
             }
-
         }
     }
     return bRetVal;
