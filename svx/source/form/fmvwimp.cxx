@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:38 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,13 +350,18 @@ sal_Int32 SAL_CALL FmXPageViewWinRec::getCount(void) throw( ::com::sun::star::un
     if (xIndex.is() && xIndex->getCount())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController;
-        for (sal_Int32 n = xIndex->getCount(); n--; )
+
+        for (sal_Int32 n = xIndex->getCount(); n-- && !xController.is(); )
         {
             xIndex->getByIndex(n) >>= xController;
             if ((::com::sun::star::awt::XTabControllerModel*)xModel.get() == (::com::sun::star::awt::XTabControllerModel*)xController->getModel().get())
                 return xController;
             else
-                return getControllerSearchChilds(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xController, ::com::sun::star::uno::UNO_QUERY), xModel);
+            {
+                xController = getControllerSearchChilds(::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xController, ::com::sun::star::uno::UNO_QUERY), xModel);
+                if ( xController.is() )
+                    return xController;
+            }
         }
     }
     return ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > ();
