@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:02:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
@@ -150,7 +150,7 @@ typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControl
                                     ,   ::com::sun::star::awt::XView
                                     ,   ::com::sun::star::beans::XPropertiesChangeListener
                                     ,   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::drafts::com::sun::star::accessibility::XAccessible
+                                    ,   ::com::sun::star::accessibility::XAccessible
                                     ,   ::com::sun::star::util::XModeChangeBroadcaster
                                     >   UnoControl_Base;
 
@@ -276,7 +276,7 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XAccessible
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XModeChangeBroadcaster
     virtual void SAL_CALL addModeChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModeChangeListener >& _rxListener ) throw (::com::sun::star::uno::RuntimeException);
