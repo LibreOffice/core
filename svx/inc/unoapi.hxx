@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-21 13:03:17 $
+ *  last change: $Author: cl $ $Date: 2001-02-23 21:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ class SvxShape;
 class SdrObject;
 class SvxNumBulletItem;
 class SfxItemPool;
+class String;
 
 /** creates a StarOffice API wrapper with the given type and inventor
     Deprecated: This will be replaced with a function returning XShape.
@@ -117,6 +118,16 @@ sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
     Returns false if conversion is not supported.
 */
 sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+
+/** if the given name is a predefined name for the current language it is replaced by
+    the corresponding api name.
+*/
+void SvxUnogetApiNameForItem( const sal_Int16 nWhich, const String& rInternalName, rtl::OUString& rApiName ) throw();
+
+/** if the given name is a predefined api name it is replaced by the predefined name
+    for the current language.
+*/
+void SvxUnogetInternalNameForItem( const sal_Int16 nWhich, const rtl::OUString& rApiName, String& rInternalName ) throw();
 
 #endif _SVX_UNOAPI_HXX_
 
