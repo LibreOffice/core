@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-18 08:03:28 $
+ *  last change: $Author: hr $ $Date: 2002-08-27 12:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,11 @@
 #include <tools/postwin.h>
 #endif
 
-#if defined UNX && ! defined MACOSX
+// [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
+// unx for both quartz and X11 graphics, but we include svunx.h only if we're
+// building X11 graphics layers.
+
+#if defined UNX && ! defined QUARTZ
 #include <svunx.h>
 #endif
 
