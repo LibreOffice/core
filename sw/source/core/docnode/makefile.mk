@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:55:41 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:50:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,36 +65,13 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=docnode
 
-AUTOSEG=true
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
-
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-        ndindex.cxx \
-        ndcopy.cxx \
-        ndnotxt.cxx \
-        ndnum.cxx \
-        ndsect.cxx \
-        ndtbl.cxx \
-        ndtbl1.cxx \
-        node.cxx \
-        node2lay.cxx \
-        nodes.cxx \
-        section.cxx \
-        swbaslnk.cxx
-
-
 
 SLOFILES =	\
         $(SLO)$/ndindex.obj \
