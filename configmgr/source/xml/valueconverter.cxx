@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-15 12:42:08 $
+ *  last change: $Author: lla $ $Date: 2001-05-16 09:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ template <class Type>
 bool convertListToSequence(StringList const& aStringList, uno::Sequence< Type >& rSequence, OValueConverter const& rConverter)
         CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
 {
-    uno::TypeClass const aElementTypeClass = ::getCppuType(static_cast<uno::Sequence<Type> const*>(0)).getTypeClass();
+    uno::TypeClass const aElementTypeClass = ::getCppuType(static_cast<Type const*>(0)).getTypeClass();
 
     rSequence.realloc(aStringList.size());
 
