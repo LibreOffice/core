@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 15:37:04 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 20:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ ModalDialog DLG_BREAK
         Text [ portuguese ] = "Alterar número de página" ;
         Text [ finnish ] = "~Muuta sivunumero" ;
         Text [ danish ] = "Modificer sidetal" ;
-        Text [ french ] = "Modifier ~no. de page" ;
+        Text [ french ] = "Modifier le numéro de page" ;
         Text [ swedish ] = "~Ändra sidnummer" ;
         Text [ dutch ] = "~Paginanummer wijzigen" ;
         Text [ spanish ] = "Cam~biar número de página" ;
@@ -421,6 +421,7 @@ ModalDialog DLG_BREAK
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar salto";
 };
+
 
 
 
