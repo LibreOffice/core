@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolypolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 
 #ifndef _BGFX_POLYGON_B3DPOLYGON_HXX
 #include <basegfx/polygon/b3dpolygon.hxx>
+#endif
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <vector>
@@ -216,11 +220,10 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace { struct DefaultPolyPolygon : public rtl::Static<ImplB3DPolyPolygon, DefaultPolyPolygon> {}; }
+
 namespace basegfx
 {
-    // init static default Polygon
-    static ImplB3DPolyPolygon maStaticDefaultPolyPolygon;
-
     void B3DPolyPolygon::implForceUniqueCopy()
     {
         if(mpPolyPolygon->getRefCount())
@@ -231,7 +234,7 @@ namespace basegfx
     }
 
     B3DPolyPolygon::B3DPolyPolygon()
-    :   mpPolyPolygon(&maStaticDefaultPolyPolygon)
+    :   mpPolyPolygon(&DefaultPolyPolygon::get())
     {
         mpPolyPolygon->incRefCount();
     }
@@ -376,7 +379,7 @@ namespace basegfx
             delete mpPolyPolygon;
         }
 
-        mpPolyPolygon = &maStaticDefaultPolyPolygon;
+        mpPolyPolygon = &DefaultPolyPolygon::get();
         mpPolyPolygon->incRefCount();
     }
 

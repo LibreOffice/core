@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpolygon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
 #include <basegfx/matrix/b3dhommatrix.hxx>
+#endif
+
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
 #endif
 
 #include <vector>
@@ -425,11 +429,10 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////
 
+namespace { struct DefaultPolygon : public rtl::Static< ImplB3DPolygon, DefaultPolygon > {}; }
+
 namespace basegfx
 {
-    // init static default Polygon
-    static ImplB3DPolygon maStaticDefaultPolygon;
-
     void B3DPolygon::implForceUniqueCopy()
     {
         if(mpPolygon->getRefCount())
@@ -440,7 +443,7 @@ namespace basegfx
     }
 
     B3DPolygon::B3DPolygon()
-    :   mpPolygon(&maStaticDefaultPolygon)
+    :   mpPolygon(&DefaultPolygon::get())
     {
         mpPolygon->incRefCount();
     }
@@ -621,7 +624,7 @@ namespace basegfx
             delete mpPolygon;
         }
 
-        mpPolygon = &maStaticDefaultPolygon;
+        mpPolygon = &DefaultPolygon::get();
         mpPolygon->incRefCount();
     }
 
