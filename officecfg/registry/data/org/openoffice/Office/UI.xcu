@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-25 08:26:20 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@
                         <value xml:lang="sk">Textové dokumenty</value>
                         <value xml:lang="he">‮מסמכי טקסט‬</value>
                         <value xml:lang="hi-IN">Text documents</value>
+                        <value xml:lang="hu">Szöveges dokumentumok</value>
+                        <value xml:lang="sl">Dokumenti z besedilom</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">HTML (StarWriter);MS WinWord 2.x (W4W);MS WinWord 6.0;MS Word 95;MS Word 95 Vorlage;MS Word 97;MS Word 97 Vorlage;StarOffice XML (Writer);StarWriter 3.0;StarWriter 3.0 Vorlage/Template;StarWriter 4.0;StarWriter 4.0 Vorlage/Template;StarWriter 5.0;StarWriter 5.0 Vorlage/Template;writer_StarOffice_XML_Writer_Template;Text</value>
@@ -107,13 +109,13 @@
                         <value xml:lang="x-comment">Table documents</value>
                         <value xml:lang="pt">Table documents</value>
                         <value xml:lang="ru">Документы электронных таблиц</value>
-                        <value xml:lang="el">Table documents</value>
+                        <value xml:lang="el">Υπολογιστικά φύλλα</value>
                         <value xml:lang="nl">Werkbladdocumenten</value>
                         <value xml:lang="fr">Classeurs</value>
                         <value xml:lang="es">Hojas de cálculo</value>
                         <value xml:lang="fi">Table documents</value>
                         <value xml:lang="it">Fogli elettronici</value>
-                        <value xml:lang="da">Table documents</value>
+                        <value xml:lang="da">Regneark</value>
                         <value xml:lang="sv">Tabelldokument</value>
                         <value xml:lang="pl">Arkusze kalkulacyjne</value>
                         <value xml:lang="pt-BR">Planilhas</value>
@@ -129,6 +131,8 @@
                         <value xml:lang="sk">Zošity</value>
                         <value xml:lang="he">‮גליונות עבודה‬</value>
                         <value xml:lang="hi-IN">Spreadsheets</value>
+                        <value xml:lang="hu">Munkafüzetek</value>
+                        <value xml:lang="sl">Preglednice</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarCalc 1.0;StarCalc 3.0;StarCalc 4.0;StarCalc 5.0;StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template;MS Excel 97;MS Excel 97 Vorlage/Template;MS Excel 95;MS Excel 5.0/95;MS Excel 4.0;MS Excel 95 Vorlage/Template;;MS Excel 4.0 Vorlage/Template;StarOffice XML (Calc);calc_StarOffice_XML_Calc_Template;Text - txt - csv (StarCalc)</value>
@@ -164,6 +168,8 @@
                         <value xml:lang="sk">Prezentácie</value>
                         <value xml:lang="he">‮מצגות‬</value>
                         <value xml:lang="hi-IN">Presentations</value>
+                        <value xml:lang="hu">Bemutatók</value>
+                        <value xml:lang="sl">Predstavitve</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">impress_StarOffice_XML_Draw;impress_StarOffice_XML_Impress_Template;MS PowerPoint 97;MS PowerPoint 97 Vorlage;StarImpress 4.0;StarImpress 4.0 Vorlage;StarImpress 5.0;StarImpress 5.0 (packed);StarImpress 5.0 Vorlage;StarOffice XML (Impress)</value>
@@ -199,6 +205,8 @@
                         <value xml:lang="sk">Kresby</value>
                         <value xml:lang="he">‮שרטוטים‬</value>
                         <value xml:lang="hi-IN">Drawings</value>
+                        <value xml:lang="hu">Rajzok</value>
+                        <value xml:lang="sl">Risbe</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">draw_StarOffice_XML_Draw_Template;SGV - StarDraw 2.0;StarDraw 3.0;StarDraw 3.0 Vorlage;StarDraw 5.0;StarDraw 5.0 Vorlage;StarOffice XML (Draw)</value>
@@ -212,7 +220,7 @@
                         <value xml:lang="x-comment">web pages</value>
                         <value xml:lang="pt">Web pages</value>
                         <value xml:lang="ru">Web-страницы</value>
-                        <value xml:lang="el">Web pages</value>
+                        <value xml:lang="el">Σελίδες Web</value>
                         <value xml:lang="nl">Webpagina&apos;s</value>
                         <value xml:lang="fr">Pages Web</value>
                         <value xml:lang="es">Páginas web</value>
@@ -234,6 +242,8 @@
                         <value xml:lang="sk">Webové stránky</value>
                         <value xml:lang="he">‮דפי רשת‬</value>
                         <value xml:lang="hi-IN">Web pages</value>
+                        <value xml:lang="hu">Weboldalak</value>
+                        <value xml:lang="sl">Spletne strani</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">HTML;StarWriter/Web 4.0 Vorlage/Template;StarWriter/Web 5.0 Vorlage/Template;writer_web_StarOffice_XML_Writer_Web_Template</value>
@@ -269,6 +279,8 @@
                         <value xml:lang="sk">Hlavné dokumenty</value>
                         <value xml:lang="he">‮מסמכי אב‬</value>
                         <value xml:lang="hi-IN">Master documents</value>
+                        <value xml:lang="hu">Fődokumentumok</value>
+                        <value xml:lang="sl">Glavni dokumenti</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter 4.0 (StarWriter/GlobalDocument)/GlobalDocument;StarWriter 5.0 (StarWriter/GlobalDocument)/GlobalDocument;writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value>
@@ -282,13 +294,13 @@
                         <value xml:lang="x-comment">Formulas</value>
                         <value xml:lang="pt">Formulas</value>
                         <value xml:lang="ru">Формулы</value>
-                        <value xml:lang="el">Formulas</value>
+                        <value xml:lang="el">Τύποι</value>
                         <value xml:lang="nl">Formules</value>
                         <value xml:lang="fr">Formules</value>
                         <value xml:lang="es">Fórmulas</value>
                         <value xml:lang="fi">Formulas</value>
                         <value xml:lang="it">Formule</value>
-                        <value xml:lang="da">Formulas</value>
+                        <value xml:lang="da">Formler</value>
                         <value xml:lang="sv">Formler</value>
                         <value xml:lang="pl">Formuły</value>
                         <value xml:lang="pt-BR">Fórmulas</value>
@@ -302,6 +314,8 @@
                         <value xml:lang="sk">Vzorce</value>
                         <value xml:lang="ca">Fórmules</value>
                         <value xml:lang="th">สูตร</value>
+                        <value xml:lang="hu">Képletek</value>
+                        <value xml:lang="sl">Formule</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math)</value>
@@ -341,6 +355,8 @@
                         <value xml:lang="sk">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="he">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="hi-IN">Microsoft Word 6.0 / 95</value>
+                        <value xml:lang="hu">Microsoft Word 6.0 / 95</value>
+                        <value xml:lang="sl">Microsoft Word 6.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MS Word 95;MS WinWord 6.0</value>
@@ -376,6 +392,8 @@
                         <value xml:lang="sk">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="he">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="hi-IN">StarWriter 3.0 - 5.0</value>
+                        <value xml:lang="hu">StarWriter 3.0 - 5.0</value>
+                        <value xml:lang="sl">StarWriter 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter 5.0;StarWriter 4.0;StarWriter 3.0</value>
@@ -389,7 +407,7 @@
                         <value xml:lang="x-comment">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="ru">StarWriter 3.0 - 5.0 Шаблоны</value>
-                        <value xml:lang="el">StarWriter 3.0 - 5.0 Templates</value>
+                        <value xml:lang="el">StarWriter 3.0 - 5.0 Πρότυπα</value>
                         <value xml:lang="nl">StarWriter 3.0 - 5.0 Sjablonen</value>
                         <value xml:lang="fr">StarWriter 3.0 - 5.0 Modèles</value>
                         <value xml:lang="es">StarWriter 3.0 - 5.0 Plantillas</value>
@@ -411,6 +429,8 @@
                         <value xml:lang="sk">Šablóny StarWriter 3.0 - 5.0</value>
                         <value xml:lang="he"> ‮תבניות‬StarWriter 3.0 - 5.0</value>
                         <value xml:lang="hi-IN">StarWriter 3.0 - 5.0 Templates</value>
+                        <value xml:lang="hu">StarWriter 3.0 - 5.0-sablonok</value>
+                        <value xml:lang="sl">StarWriter 3.0 - 5.0 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter 5.0 Vorlage/Template;StarWriter 4.0 Vorlage/Template;StarWriter 3.0 Vorlage/Template</value>
@@ -446,6 +466,8 @@
                         <value xml:lang="sk">Text</value>
                         <value xml:lang="he">‮טקסט‬</value>
                         <value xml:lang="hi-IN">Text</value>
+                        <value xml:lang="hu">Szöveg</value>
+                        <value xml:lang="sl">Besedilo</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">Text;Text DOS;Text Mac;Text Unix</value>
@@ -481,6 +503,8 @@
                         <value xml:lang="sk">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="he">‮Microsoft Excel 4.x - 5.0 / 95‬</value>
                         <value xml:lang="hi-IN">Microsoft Excel 4.x - 5.0 / 95</value>
+                        <value xml:lang="hu">Microsoft Excel 4.x - 5.0 / 95</value>
+                        <value xml:lang="sl">Microsoft Excel 4.x - 5.0 / 95</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MS Excel 95;MS Excel 5.0/95;MS Excel 4.0</value>
@@ -494,7 +518,7 @@
                         <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="ru">Microsoft Excel 4.x - 5.0 / 95 Шаблоны</value>
-                        <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+                        <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95 Πρότυπα</value>
                         <value xml:lang="nl">Microsoft Excel 4.x - 5.0 / 95 Sjablonen</value>
                         <value xml:lang="fr">Microsoft Excel 4.x - 5.0 / 95 Modèles</value>
                         <value xml:lang="es">Microsoft Excel 4.x - 5.0 / 95 Plantillas</value>
@@ -516,6 +540,8 @@
                         <value xml:lang="sk">Šablóny Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="he">‮תבניות Microsoft Excel 4.x - 5.0 / 95‬</value>
                         <value xml:lang="hi-IN">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+                        <value xml:lang="hu">Microsoft Excel 4.x - 5.0 / 95-sablonok</value>
+                        <value xml:lang="sl">Microsoft Excel 4.x - 5.0 / 95 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MS Excel 95 Vorlage/Template;MS Excel 5.0/95 Vorlage/Template;MS Excel 4.0 Vorlage/Template</value>
@@ -551,6 +577,8 @@
                         <value xml:lang="sk">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="he">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="hi-IN">StarCalc 3.0 - 5.0</value>
+                        <value xml:lang="hu">StarCalc 3.0 - 5.0</value>
+                        <value xml:lang="sl">StarCalc 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarCalc 3.0;StarCalc 4.0;StarCalc 5.0</value>
@@ -564,7 +592,7 @@
                         <value xml:lang="x-comment">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="ru">StarCalc 3.0 - 5.0 Шаблоны</value>
-                        <value xml:lang="el">StarCalc 3.0 - 5.0 Templates</value>
+                        <value xml:lang="el">StarCalc 3.0 - 5.0 Πρότυπα</value>
                         <value xml:lang="nl">StarCalc 3.0 - 5.0 Sjablonen</value>
                         <value xml:lang="fr">StarCalc 3.0 - 5.0 Modèles</value>
                         <value xml:lang="es">StarCalc 3.0 - 5.0 Plantillas</value>
@@ -586,6 +614,8 @@
                         <value xml:lang="sk">Šablóny StarCalc 3.0 - 5.0</value>
                         <value xml:lang="he">‮תבניות StarCalc 3.0 - 5.0‬</value>
                         <value xml:lang="hi-IN">StarCalc 3.0 - 5.0 Templates</value>
+                        <value xml:lang="hu">StarCalc 3.0 - 5.0-sablonok</value>
+                        <value xml:lang="sl">StarCalc 3.0 - 5.0 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarCalc 3.0 Vorlage/Template;StarCalc 4.0 Vorlage/Template;StarCalc 5.0 Vorlage/Template</value>
@@ -621,6 +651,8 @@
                         <value xml:lang="sk">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="he">‮StarDraw 3.0 / 5.0 (StarImpress)‬</value>
                         <value xml:lang="hi-IN">StarDraw 3.0 / 5.0 (StarImpress)</value>
+                        <value xml:lang="hu">StarDraw 3.0 / 5.0 (StarImpress)</value>
+                        <value xml:lang="sl">StarDraw 3.0 / 5.0 (StarImpress)</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarDraw 5.0 (StarImpress);StarDraw 3.0 (StarImpress)</value>
@@ -634,7 +666,7 @@
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="ru">StarDraw 3.0 / 5.0 (StarImpress)</value>
-                        <value xml:lang="el">StarDraw 3.0 / 5.0 (StarImpress)</value>
+                        <value xml:lang="el">StarDraw 3.0 / 5.0 Πρότυπα (StarImpress)</value>
                         <value xml:lang="nl">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="fr">StarDraw 3.0 / 5.0 Modèles (StarImpress)</value>
                         <value xml:lang="es">StarDraw 3.0 / 5.0 Plantillas (StarImpress)</value>
@@ -656,6 +688,8 @@
                         <value xml:lang="sk">Šablóny StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="he">‮תבניות StarDraw 3.0 / 5.0 (StarImpress)‬</value>
                         <value xml:lang="hi-IN">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+                        <value xml:lang="hu">StarDraw 3.0 / 5.0-sablonok (StarImpress)</value>
+                        <value xml:lang="sl">StarDraw 3.0 / 5.0 Predloge (StarImpress)</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarDraw 5.0 Vorlage (StarImpress);StarDraw 3.0 Vorlage (StarImpress)</value>
@@ -691,6 +725,8 @@
                         <value xml:lang="sk">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="he">‮StarImpress 4.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarImpress 4.0 / 5.0</value>
+                        <value xml:lang="hu">StarImpress 4.0 / 5.0</value>
+                        <value xml:lang="sl">StarImpress 4.0 / 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarImpress 4.0;StarImpress 5.0;StarImpress 5.0 (packed)</value>
@@ -704,7 +740,7 @@
                         <value xml:lang="x-comment">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="ru">StarImpress 4.0 / 5.0 Шаблоны</value>
-                        <value xml:lang="el">StarImpress 4.0 / 5.0 Templates</value>
+                        <value xml:lang="el">StarImpress 4.0 / 5.0 Πρότυπα</value>
                         <value xml:lang="nl">StarImpress 4.0 / 5.0 Sjablonen</value>
                         <value xml:lang="fr">StarImpress 4.0 / 5.0 Modèles</value>
                         <value xml:lang="es">StarImpress 4.0 / 5.0 Plantillas</value>
@@ -726,6 +762,9 @@
                         <value xml:lang="ks">Šablóny StarImpress 4.0 / 5.0</value>
                         <value xml:lang="he">‮תבניות StarImpress 4.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarImpress 4.0 / 5.0 Templates</value>
+                        <value xml:lang="hu">StarImpress 4.0 / 5.0-sablonok</value>
+                        <value xml:lang="sk">StarImpress 4.0 / 5.0 Templates</value>
+                        <value xml:lang="sl">StarImpress 4.0 / 5.0 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarImpress 4.0 Vorlage;StarImpress 5.0 Vorlage</value>
@@ -761,6 +800,8 @@
                         <value xml:lang="sk">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="he">‮StarDraw 3.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarDraw 3.0 / 5.0</value>
+                        <value xml:lang="hu">StarDraw 3.0 / 5.0</value>
+                        <value xml:lang="sl">StarDraw 3.0 / 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarDraw 5.0;StarDraw 3.0</value>
@@ -774,13 +815,13 @@
                         <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Vorlagen</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 Templates</value>
                         <value xml:lang="ru">StarDraw 3.0 / 5.0 Шаблоны</value>
-                        <value xml:lang="el">StarDraw 3.0 / 5.0 Templates</value>
+                        <value xml:lang="el">StarDraw 3.0 / 5.0 Πρότυπα</value>
                         <value xml:lang="nl">StarDraw 3.0 / 5.0 Sjablonen</value>
                         <value xml:lang="fr">StarDraw 3.0 / 5.0 Modèles</value>
                         <value xml:lang="es">StarDraw 3.0 / 5.0 - Plantillas</value>
                         <value xml:lang="fi">StarDraw 3.0 / 5.0 Templates</value>
                         <value xml:lang="it">StarDraw 3.0 / 5.0 Modelli</value>
-                        <value xml:lang="da">StarDraw 3.0 / 5.0 Templates</value>
+                        <value xml:lang="da">StarDraw 3.0 / 5.0-skabeloner</value>
                         <value xml:lang="sv">StarDraw 3.0/5.0 mallar</value>
                         <value xml:lang="pl">StarDraw 3.0 / 5.0 Szablony</value>
                         <value xml:lang="pt-BR">StarDraw 3.0 / 5.0 Templates</value>
@@ -796,6 +837,8 @@
                         <value xml:lang="sk">Šablóny StarDraw 3.0 / 5.0</value>
                         <value xml:lang="he">‮תבניות StarDraw 3.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarDraw 3.0 / 5.0 Templates</value>
+                        <value xml:lang="hu">StarDraw 3.0 / 5.0-sablonok</value>
+                        <value xml:lang="sl">StarDraw 3.0 / 5.0 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarDraw 5.0 Vorlage;StarDraw 3.0 Vorlage</value>
@@ -809,7 +852,7 @@
                         <value xml:lang="x-comment">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="ru">StarWriter/Web 4.0 / 5.0 Шаблоны</value>
-                        <value xml:lang="el">StarWriter/Web 4.0 / 5.0 Templates</value>
+                        <value xml:lang="el">StarWriter/Web 4.0 / 5.0 Πρότυπα</value>
                         <value xml:lang="nl">StarWriter/Web 4.0 / 5.0 Sjablonen</value>
                         <value xml:lang="fr">StarWriter/Web 4.0 / 5.0 Modèles</value>
                         <value xml:lang="es">StarWriter/Web 4.0 / 5.0 - Plantillas</value>
@@ -831,6 +874,8 @@
                         <value xml:lang="sk">Šablóny StarWriter/Web 4.0 / 5.0</value>
                         <value xml:lang="he">‮תבניות StarWriter/Web 4.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarWriter/Web 4.0 / 5.0 Templates</value>
+                        <value xml:lang="hu">StarWriter/Web 4.0 / 5.0-sablonok</value>
+                        <value xml:lang="sl">StarWriter/Web 4.0 / 5.0 Predloge</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter/Web 5.0 Vorlage/Template;StarWriter/Web 4.0 Vorlage/Template</value>
@@ -866,6 +911,8 @@
                         <value xml:lang="sk">StarWriter/Web 3.0 - 5.0</value>
                         <value xml:lang="he">‮StarWriter/Web 3.0 - 5.0‬</value>
                         <value xml:lang="hi-IN">StarWriter/Web 3.0 - 5.0</value>
+                        <value xml:lang="hu">StarWriter/Web 3.0 - 5.0</value>
+                        <value xml:lang="sl">StarWriter/Web 3.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter 5.0 (StarWriter/Web);StarWriter 4.0 (StarWriter/Web);StarWriter 3.0 (StarWriter/Web)</value>
@@ -879,7 +926,7 @@
                         <value xml:lang="x-comment">Text (StarWriter/Web)</value>
                         <value xml:lang="pt">Text (StarWriter/Web)</value>
                         <value xml:lang="ru">Текст (StarWriter/Web)</value>
-                        <value xml:lang="el">Text (StarWriter/Web)</value>
+                        <value xml:lang="el">Κεμενο (StarWriter/Web)</value>
                         <value xml:lang="nl">Tekst (StarWriter/Web)</value>
                         <value xml:lang="fr">Texte (StarWriter/Web)</value>
                         <value xml:lang="es">Texto (StarWriter/Web)</value>
@@ -901,6 +948,8 @@
                         <value xml:lang="sk">Text (StarWriter/Web)</value>
                         <value xml:lang="he">‮טקסט (StarWriter/Web)‬</value>
                         <value xml:lang="hi-IN">Text (StarWriter/Web)</value>
+                        <value xml:lang="hu">Szöveg (StarWriter/Web)</value>
+                        <value xml:lang="sl">Besedilo (StarWriter/Web)</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">Text (StarWriter/Web);Text DOS (StarWriter/Web);Text Mac (StarWriter/Web);Text Unix (StarWriter/Web)</value>
@@ -920,7 +969,7 @@
                         <value xml:lang="es">StarWriter 4.0 / 5.0 - Documentos maestros</value>
                         <value xml:lang="fi">StarWriter4.0/ 5.0 Master Documents</value>
                         <value xml:lang="it">StarWriter 4.0 / 5.0 Documenti master</value>
-                        <value xml:lang="da">StarWriter4.0/ 5.0 Master Documents</value>
+                        <value xml:lang="da">StarWriter 4.0/ 5.0 hoveddokumenter</value>
                         <value xml:lang="sv">StarWriter 4.0/5.0 samlingsdokument</value>
                         <value xml:lang="pl">StarWriter4.0/ 5.0 - Dokumenty główne</value>
                         <value xml:lang="pt-BR">StarWriter 4.0 / 5.0 Master Documents</value>
@@ -936,6 +985,8 @@
                         <value xml:lang="sk">Hlavné dokumenty StarWriter 4.0 / 5.0</value>
                         <value xml:lang="he">‮מסמך אב StarWriter 4.0 / 5.0‬</value>
                         <value xml:lang="hi-IN">StarWriter 4.0 / 5.0 Master Documents</value>
+                        <value xml:lang="hu">StarWriter 4.0 / 5.0-fődokumentumok</value>
+                        <value xml:lang="sl">StarWriter 4.0 / 5.0 Glavni dokumenti</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarWriter 5.0/GlobalDocument;StarWriter 4.0/GlobalDocument</value>
@@ -971,6 +1022,8 @@
                         <value xml:lang="sk">StarMath 2.0 - 5.0</value>
                         <value xml:lang="he">‮StarMath 2.0 - 5.0‬</value>
                         <value xml:lang="hi-IN">StarMath 2.0 - 5.0</value>
+                        <value xml:lang="hu">StarMath 2.0 - 5.0</value>
+                        <value xml:lang="sl">StarMath 2.0 - 5.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">StarMath 5.0;StarMath 4.0;StarMath 3.0;StarMath 2.0</value>
@@ -1006,6 +1059,8 @@
                         <value xml:lang="sk">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="he">‮WordPerfect (Win) 6.0 - 7.0‬</value>
                         <value xml:lang="hi-IN">WordPerfect (Win) 6.0 - 7.0</value>
+                        <value xml:lang="hu">WordPerfect (Win) 6.0 - 7.0</value>
+                        <value xml:lang="sl">WordPerfect (Win) 6.0 - 7.0</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">WordPerfect (Win) 6.0 (W4W);WordPerfect (Win) 6.1 (W4W);WordPerfect (Win) 7.0 (W4W)</value>
@@ -1254,6 +1309,7 @@
         </node>
     </node>
 </oor:component-data>
+
 
 
 
