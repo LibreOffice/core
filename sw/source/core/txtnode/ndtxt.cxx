@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:26:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 15:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,6 +1066,20 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 
         if( rNds.IsDocNodes() )
             rNds.UpdateOutlineNode( *this, nOldLevel, nNewLevel );
+    }
+
+    const SfxPoolItem * pItem = NULL;
+    if (SFX_ITEM_SET ==
+        pNewColl->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem))
+    {
+        SwNumRule * pRule =
+            GetDoc()->FindNumRulePtr(((SwNumRuleItem *) pItem)->GetValue());
+
+        if (pRule)
+        {
+            SwPaM aPam(*this);
+            GetDoc()->SetNumRule(aPam, *pRule);
+        }
     }
 
     // Update beim Level 0 noch die Fussnoten !!
@@ -3026,13 +3040,23 @@ const SwNodeNum * SwTxtNode::GetNum() const
     return pNdNum;
 }
 
-SwNodeNum * SwTxtNode::_GetOutlineNum() const
+BOOL SwTxtNode::IsOutline() const
 {
-    SwNodeNum * pResult = NULL;
+    BOOL bResult = FALSE;
     const SwNumRule * pRule = GetNumRule();
 
     if (pRule && pRule->IsOutlineRule())
-        pResult = pNdNum;
+        bResult = TRUE;
+
+    return bResult;
+}
+
+SwNodeNum * SwTxtNode::_GetOutlineNum() const
+{
+    const SwNodeNum * pResult = NULL;
+
+    if (IsOutline())
+        pResult = GetNum();
 
     return pResult;
 }
@@ -3040,6 +3064,16 @@ SwNodeNum * SwTxtNode::_GetOutlineNum() const
 const SwNodeNum * SwTxtNode::GetOutlineNum() const
 {
     return _GetOutlineNum();
+}
+
+const SwNodeNum * SwTxtNode::GetNumNoOutline() const
+{
+    const SwNodeNum * pResult = NULL;
+
+    if (! IsOutline())
+        pResult = GetNum();
+
+    return pResult;
 }
 
 BYTE SwTxtNode::GetOutlineLevel() const
@@ -3075,3 +3109,4 @@ void SwTxtNode::SetOutlineLevel(BYTE nLevel)
             ((SwTxtFmtColl *) pFmtColl)->SetOutlineLevel(nLevel);
     }
 }
+
