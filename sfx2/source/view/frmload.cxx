@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-01 14:21:42 $
+ *  last change: $Author: mba $ $Date: 2001-02-02 16:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,11 +350,10 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
 
     if ( pFactory )
     {
+        bLoadDone = sal_False;
         pMatcher = new SfxFilterMatcher( pFactory->GetFilterContainer() );
         pLoader->SetFilterMatcher( pMatcher );
         pLoader->Start();
-
-        bLoadDone = sal_False;
         while( bLoadDone == sal_False )
         {
             Application::Yield();
