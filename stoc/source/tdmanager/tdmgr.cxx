@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:34:15 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ using namespace std;
 using namespace cppu;
 using namespace rtl;
 using namespace osl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::reflection;
@@ -462,6 +463,7 @@ sal_Bool SAL_CALL ManagerImpl::has( const Any & rElement )
     }
     return sal_False;
 }
+
 //__________________________________________________________________________________________________
 void SAL_CALL ManagerImpl::insert( const Any & rElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException)
@@ -481,6 +483,93 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             OUString( RTL_CONSTASCII_USTRINGPARAM("provider already inserted!") ),
             (XWeak *)(OWeakObject *)this );
     }
+
+    if (! _aProviders.empty())
+    {
+        // check whether all types are compatible, if possible:
+        Reference<reflection::XTypeDescriptionEnumerationAccess> xTDEnumAccess(
+            xElem, UNO_QUERY );
+        OSL_ENSURE( xTDEnumAccess.is(),
+                    "### providers ought to implement "
+                    "reflection::XTypeDescriptionEnumerationAccess!" );
+        if (xTDEnumAccess.is())
+        {
+            try
+            {
+                TypeClass ar [] = {
+                    TypeClass_ENUM, TypeClass_TYPEDEF, TypeClass_SEQUENCE,
+                    TypeClass_STRUCT, TypeClass_EXCEPTION,
+                    /* TypeClass_UNION, TypeClass_ARRAY not supported */
+                    TypeClass_INTERFACE,
+                    TypeClass_SERVICE,
+                    TypeClass_INTERFACE_METHOD, TypeClass_INTERFACE_ATTRIBUTE,
+                    TypeClass_PROPERTY, TypeClass_CONSTANT, TypeClass_CONSTANTS,
+                    TypeClass_SINGLETON
+                };
+                Reference<reflection::XTypeDescriptionEnumeration> xTDEnum(
+                    xTDEnumAccess->createTypeDescriptionEnumeration(
+                        OUString() /* all modules */,
+                        Sequence<TypeClass>( ar, ARLEN(ar) ),
+                        reflection::TypeDescriptionSearchDepth_INFINITE ) );
+
+                while (xTDEnum->hasMoreElements())
+                {
+                    Reference<reflection::XTypeDescription> xNewTD;
+                    try
+                    {
+                        xNewTD = xTDEnum->nextTypeDescription();
+                    }
+                    catch (container::NoSuchElementException & exc)
+                    {
+                        throw lang::IllegalArgumentException(
+                            OUSTR("NoSuchElementException occured: ") +
+                            exc.Message, static_cast<OWeakObject *>(this),
+                            -1 /* unknown */ );
+                    }
+
+                    try
+                    {
+                        OUString newName( xNewTD->getName() );
+                        Reference<reflection::XTypeDescription> xExistingTD(
+                            getByHierarchicalName( newName ), UNO_QUERY );
+                        OSL_ASSERT( xExistingTD.is() );
+                        // existing, check whether compatible:
+                        if (xExistingTD.is())
+                        {
+                            try
+                            {
+                                check( xNewTD, xExistingTD );
+                            }
+                            catch (IncompatibleTypeException & exc)
+                            {
+                                throw lang::IllegalArgumentException(
+                                    OUSTR("Rejecting types due to "
+                                          "incompatibility!  ") + exc.m_cause,
+                                    static_cast<OWeakObject *>(this), 0 );
+                            }
+                        }
+                    }
+                    catch (container::NoSuchElementException &)
+                    {
+                        // type not in: ok
+                    }
+                }
+            }
+            catch (reflection::NoSuchTypeNameException & exc)
+            {
+                throw lang::IllegalArgumentException(
+                    OUSTR("NoSuchTypeNameException occured: ") + exc.Message,
+                    static_cast<OWeakObject *>(this), -1 /* unknown */ );
+            }
+            catch (reflection::InvalidTypeNameException & exc)
+            {
+                throw lang::IllegalArgumentException(
+                    OUSTR("InvalidTypeNameException occured: ") + exc.Message,
+                    static_cast<OWeakObject *>(this), -1 /* unknown */ );
+            }
+        }
+    }
+
     _aProviders.push_back( xElem );
     Reference< XComponent > xComp( xElem, UNO_QUERY );
     if (xComp.is())
