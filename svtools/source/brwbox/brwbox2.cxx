@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:04:52 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,20 +399,12 @@ void BrowseBox::DrawCursor()
 {
     short nCursorHideCount = GetCursorHideCount();
     BOOL bReallyHide = FALSE;
-#if SUPD<655
     if ( SMART_CURSOR_HIDE == bHideCursor )
-#else
-    if ( hcSmart == m_eHideCursorMode )
-#endif
     {
         if ( !GetSelectRowCount() && !GetSelectColumnCount() )
             bReallyHide = TRUE;
     }
-#if SUPD<655
     else if ( HARD_CURSOR_HIDE == bHideCursor )
-#else
-    else if ( hcAlways == m_eHideCursorMode )
-#endif
     {
         bReallyHide = TRUE;
     }

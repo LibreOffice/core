@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-02 14:43:19 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,9 +204,7 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         RTL_CONSTASCII_USTRINGPARAM("/FontColor")       ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/Links")           ,sal_True,
         RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,sal_True,
-#if SUPD<658
         RTL_CONSTASCII_USTRINGPARAM("/Anchor")          ,sal_False,
-#endif
         RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),sal_True,
@@ -229,10 +227,8 @@ uno::Sequence< OUString> ColorConfig_Impl::GetPropertyNames(const rtl::OUString&
         RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,sal_True,
-#if SUPD<664
         RTL_CONSTASCII_USTRINGPARAM("/DrawDrawing")     ,sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/DrawFill")        ,sal_False,
-#endif
         RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  sal_False,
         RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  sal_False,
@@ -570,9 +566,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         0, // FONTCOLOR
         0xcc, // LINKS
         0x80, // LINKSVISITED
-#if SUPD<658
         0, // ANCHOR
-#endif
         0xff0000, // SPELL
         0xc0c0c0, // WRITERTEXTGRID
         0xc0c0c0, // WRITERFIELDSHADIN
@@ -595,10 +589,8 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         COL_LIGHTRED, // CALCREFERENCE
         0xffffc0, // CALCNOTESBACKGROUND
         0xc0c0c0, // DRAWGRID
-#if SUPD<664
         0, // DRAWDRAWING
         0xb8ff, // DRAWFILL
-#endif
         COL_GREEN, // BASICIDENTIFIER,
         COL_GRAY,// BASICCOMMENT   ,
         COL_LIGHTRED,// BASICNUMBER    ,
@@ -619,9 +611,7 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
             break;
 
         case SPELL :
-#if SUPD<664
         case DRAWDRAWING :
-#endif
         {
             const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
                 aRet = rStyleSettings.GetHighContrastMode() ?
@@ -629,12 +619,10 @@ Color ColorConfig::GetDefaultColor(ColorConfigEntry eEntry)
         }
         break;
 
-#if SUPD<664
         case DRAWFILL            :
                 aRet = /*rStyleSettings.GetHighContrastMode() ?
                     rStyleSettings.OutlineMode??? : */  aAutoColors[eEntry];
         break;
-#endif
 
         case FONTCOLOR :
             aRet = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
