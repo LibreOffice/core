@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
+ *  last change: $Author: fs $ $Date: 2001-09-06 12:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ DBTreeView::~DBTreeView()
             m_pTreeListBox->GetModel()->RemoveView(m_pTreeListBox);
             m_pTreeListBox->DisconnectFromModel();
         }
-        delete m_pTreeListBox;
+        Window* pDeleteIt = m_pTreeListBox;
+        m_pTreeListBox = NULL;
+        delete pDeleteIt;
     }
     DBG_DTOR(DBTreeView,NULL);
 }
