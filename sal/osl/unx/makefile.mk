@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2001-03-12 15:51:33 $
+#   last change: $Author: hr $ $Date: 2001-03-16 15:15:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,17 +154,13 @@ $(SLO)$/interlck.obj: $(SLO)$/interlck.o
 $(OBJ)$/interlck.obj: $(OBJ)$/interlck.o
      touch $(OBJ)$/interlck.obj
 
-$(SLO)$/interlck.o: $(MISC)$/interlck_sparc_x86.s
+$(SLO)$/interlck.o: $(MISC)$/interlck_x86.s
         /usr/ccs/bin/as -P -q -o $@ $<
 
-$(OBJ)$/interlck.o: $(MISC)$/interlck_sparc_x86.s
+$(OBJ)$/interlck.o: $(MISC)$/interlck_x86.s
         /usr/ccs/bin/as -P -q -o $@ $<
 
-$(MISC)$/interlck_sparc_x86.s: asm/interlck_sparc_x86.s
+$(MISC)$/interlck_x86.s: asm/interlck_x86.s
     +tr -d "\015" < $< > $@
 
-#$(SLO)$/interlck.obj: asm/interlck_x86.s
-#		/usr/ccs/bin/as -P -o $(SLO)$/interlck.o asm/interlck_x86.s ; touch $(SLO)$/interlck.obj
-#$(OBJ)$/interlck.obj: asm/interlck_x86.s
-#		/usr/ccs/bin/as -P -o $(OBJ)$/interlck.o asm/interlck_x86.s ; touch $(OBJ)$/interlck.obj
 .ENDIF
