@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformattertxtfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:11:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,14 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
                                     const bool _bInclObj );
 
         /** method to determine first anchored object, whose 'anchor is moved
-            forward', anchored at the anchor text frame
+            forward'.
 
             'anchor (of an object) is moved forward', if the anchor frame
             respectively the anchor character of the object isn't on the
             proposed page frame. Instead its on a following page
+            OD 2004-10-04 #i26945# - For at-character anchored objects,
+            it has also to be checked, if the anchor character is in a follow
+            text frame, which would move to the next page.
 
             @author OD
 
@@ -143,6 +146,26 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
         SwAnchoredObject* _GetFirstObjWithMovedFwdAnchor(
                                     const sal_Int16 _nWrapInfluenceOnPosition,
                                     sal_uInt32& _noToPageNum );
+
+        /** method to check the conditions, if 'anchor is moved forward'
+
+            OD 2004-10-11 #i26945#
+
+            @author OD
+
+            @param _nIdxOfCollected
+            input parameter - index of collected anchored object, for which the
+            conditions have to be checked.
+
+            @param _noToPageNum
+            output parameter - number of page frame, the 'anchor' of the returned
+            anchored object is.
+
+            @return boolean
+            indicating, if 'anchor is moved forward'
+        */
+        bool _CheckMovedFwdCondition( const sal_uInt32 _nIdxOfCollected,
+                                      sal_uInt32& _noToPageNum );
     protected:
 
         virtual SwFrm& GetAnchorFrm();
