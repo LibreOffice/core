@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:48:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,21 +1191,9 @@ void SfxViewFrame::SetObjectShell_Impl
         SetRestoreView_Impl( sal_False ); */
 
     SwitchToViewShell_Impl( !IsRestoreView_Impl() ? (sal_uInt16) 0 : GetCurViewId() );
-
-    // was so in Activate passiert w"are
-    GetObjectShell();
-#if SUPD<635
-    if ( SfxViewFrame::Current() == this )
-    {
-        // ggf. Config-Manager aktivieren
-        SfxConfigManager *pCfgMgr = rObjSh.GetConfigManager();
-        if ( pCfgMgr )
-            pCfgMgr->Activate( SFX_CFGMANAGER() );
-    }
-#endif
-
-    if ( !rObjSh.IsLoading() )
-        rObjSh.PostActivateEvent_Impl( this );
+    rObjSh.PostActivateEvent_Impl( this );
+    if ( Current() == this )
+        SFX_APP()->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, &rObjSh ) );
 
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_TITLECHANGED) );
     Notify( rObjSh, SfxSimpleHint(SFX_HINT_DOCCHANGED) );
@@ -1668,14 +1656,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
             }
 
-            case SFX_EVENT_LOADFINISHED:
-            {
-                // Ein fertig geladenes Dokument kann das Event nicht selbst ausl"osen,
-                // weil es nicht wei\s, ob schon eine View erzeugt wurde
-                xObjSh->PostActivateEvent_Impl( this );
-                break;
-            }
-
             case SFX_EVENT_TOGGLEFULLSCREENMODE:
             {
                 if ( GetFrame()->OwnsBindings_Impl() )
@@ -1684,33 +1664,6 @@ void SfxViewFrame::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-#if 0   // (dv)
-    else if ( &rBC == (SfxBroadcaster*) (CntAnchor*) pImp->xAnchor )
-    {
-        CntAnchorHint* pCHint = PTR_CAST(CntAnchorHint, &rHint);
-        if ( pCHint )
-        {
-            CntAction eAction = pCHint->GetAction();
-            switch( eAction )
-            {
-                case CNT_ACTION_EXCHANGED :
-                {
-                    SfxMedium* pMedium = GetObjectShell()->GetMedium();
-                    pMedium->RefreshName_Impl();
-                    Reference< XController >  xController =
-                        GetFrame()->GetFrameInterface()->getController();
-                    Reference< XModel >  xModel = xController->getModel();
-                    if ( xModel.is() )
-                        xModel->attachResource( S2U( pMedium->GetName() ), xModel->getArgs() );
-                    UpdateTitle();
-                    pBindings->Invalidate( SID_CURRENT_URL, sal_True, sal_False );
-                    pBindings->Update( SID_CURRENT_URL );
-                    break;
-                }
-            }
-        }
-    }
-#endif  // (dv)
 }
 
 //------------------------------------------------------------------------
@@ -2217,8 +2170,6 @@ void SfxViewFrame::Show()
     // hat oder wenn er keine Component enth"alt
     if ( &GetWindow() == &GetFrame()->GetWindow() || !GetFrame()->HasComponent() )
         GetWindow().Show();
-    GetFrame()->GetWindow().Show();
-
     GetFrame()->GetWindow().Show();
 
     SfxViewFrame* pCurrent = SfxViewFrame::Current();
@@ -3691,17 +3642,17 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         sal_Int32 nIndex = aTmp.SearchBackward( sal_Unicode( '/' ));
                         if (( nIndex != STRING_NOTFOUND ) && (( nIndex+1 ) < aTmp.Len() ))
                         {
-                            aTmp.Erase( 0, nIndex+1 );
+                            aTmp.Erase( 0, (USHORT) nIndex+1 );
                             nIndex = aTmp.SearchBackward( sal_Unicode( '.' ));
                             if ( nIndex != STRING_NOTFOUND )
-                                aTmp.Erase( nIndex );
+                                aTmp.Erase( (USHORT) nIndex );
                             String aSUPDStr( String::CreateFromInt32( SUPD ));
                             nIndex = aTmp.SearchCharBackward( aSUPDStr.GetBuffer(), aSUPDStr.Len() );
                             if (( nIndex != STRING_NOTFOUND ) &&
                                 (( nIndex+aSUPDStr.Len() ) < aTmp.Len() ))
                             {
                                 nIndex += aSUPDStr.Len();
-                                aTmp.Erase( nIndex );
+                                aTmp.Erase( (USHORT) nIndex );
                             }
                         }
 
