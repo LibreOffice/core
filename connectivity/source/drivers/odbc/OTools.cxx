@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:10:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -702,7 +702,7 @@ void OTools::GetInfo(OConnection* _pConnection,
     char aValue[512];
     SQLSMALLINT nValueLen=0;
     OTools::ThrowException(_pConnection,
-        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,aValue,sizeof aValue,&nValueLen),
+        (*(T3SQLGetInfo)_pConnection->getOdbcFunction(ODBC3SQLGetInfo))(_aConnectionHandle,_nInfo,aValue,(sizeof aValue)-1,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 
     _rValue = ::rtl::OUString(aValue,nValueLen,_nTextEncoding);
