@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,6 +1182,20 @@ void ListBox::SetEntryData( USHORT nPos, void* pNewData )
 void* ListBox::GetEntryData( USHORT nPos ) const
 {
     return mpImplLB->GetEntryList()->GetEntryData( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+}
+
+// -----------------------------------------------------------------------
+
+void ListBox::SetEntryFlags( USHORT nPos, long nFlags )
+{
+    mpImplLB->SetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount(), nFlags );
+}
+
+// -----------------------------------------------------------------------
+
+long ListBox::GetEntryFlags( USHORT nPos ) const
+{
+    return mpImplLB->GetEntryList()->GetEntryFlags( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
 }
 
 // -----------------------------------------------------------------------
