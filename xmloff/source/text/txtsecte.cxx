@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtsecte.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,18 @@ using ::com::sun::star::container::XIndexReplace;
 using ::com::sun::star::container::XNamed;
 using ::com::sun::star::lang::XServiceInfo;
 
+Reference<XText> lcl_findXText(const Reference<XTextSection>& rSect)
+{
+    Reference<XText> xText;
+
+    Reference<XTextContent> xTextContent(rSect, UNO_QUERY);
+    if (xTextContent.is())
+    {
+        xText = xTextContent->getAnchor()->getText();
+    }
+
+    return xText;
+}
 
 void XMLTextParagraphExport::exportListAndSectionChange(
     Reference<XTextSection> & rPrevSection,
@@ -196,6 +208,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         }
         // else: no current section
 
+        // check for document index
+        // TODO: replace by real index export
         if (xPropSet->getPropertySetInfo()->hasPropertyByName(sDocumentIndex))
         {
             Any aAny = xPropSet->getPropertyValue(sDocumentIndex);
@@ -208,21 +222,32 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             }
         }
     }
-    // else: no current section
 
+
+    exportListAndSectionChange(rPrevSection, xNextSection,
+                               rPrevRule, rNextRule, bAutoStyles);
+}
+
+void XMLTextParagraphExport::exportListAndSectionChange(
+    Reference<XTextSection> & rPrevSection,
+    const Reference<XTextSection> & rNextSection,
+    const XMLTextNumRuleInfo& rPrevRule,
+    const XMLTextNumRuleInfo& rNextRule,
+    sal_Bool bAutoStyles)
+{
     // careful: exportListChange may only be called for (!bAutoStyles)
     // I'd like a cleaner solution! Maybe export all section styles upfront.
     if ( bAutoStyles )
     {
-        if ( xNextSection.is() )
+        if ( rNextSection.is() )
         {
-            pSectionExport->ExportSectionStart( xNextSection, bAutoStyles );
+            pSectionExport->ExportSectionStart( rNextSection, bAutoStyles );
         }
     }
     else
     {
         // old != new? -> start/equal?
-        if (rPrevSection != xNextSection)
+        if (rPrevSection != rNextSection)
         {
             // a new section started, or an old one gets closed!
 
@@ -240,7 +265,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             }
 
             vector<Reference<XTextSection> > aNewStack;
-            aCurrent = xNextSection;
+            aCurrent = rNextSection;
             while(aCurrent.is())
             {
                 aNewStack.push_back(aCurrent);
@@ -252,6 +277,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 aOldStack.rbegin();
             vector<Reference<XTextSection> > ::reverse_iterator aNew =
                 aNewStack.rbegin();
+            // compare bottom sections and skip equal section
             while ( (aOld != aOldStack.rend()) &&
                     (aNew != aNewStack.rend()) &&
                     (*aOld) == (*aNew) )
@@ -266,7 +292,6 @@ void XMLTextParagraphExport::exportListAndSectionChange(
                 pSectionExport->ExportSectionEnd(*aOld, bAutoStyles);
                 aOld++;
             }
-
             while (aNew != aNewStack.rend())
             {
                 pSectionExport->ExportSectionStart(*aNew, bAutoStyles);
@@ -284,5 +309,6 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     }
 
     // save old section (old numRule gets saved in calling method
-    rPrevSection = xNextSection;
+    rPrevSection = rNextSection;
 }
+

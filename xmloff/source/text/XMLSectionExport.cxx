@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ void XMLSectionExport::ExportSectionEnd(
     // TODO: end element section dependent
 
     // export end of element
+    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
     GetExport().GetDocHandler()->endElement(
         GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
                                                     sSection) );
@@ -467,6 +468,7 @@ void XMLSectionExport::ExportRegularSectionStart(
         GetExport().GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TEXT,
                                                     sSection),
         GetExport().GetXAttrList() );
+    GetExport().GetDocHandler()->ignorableWhitespace( GetExport().sWS );
     GetExport().ClearAttrList();
 
     // data source

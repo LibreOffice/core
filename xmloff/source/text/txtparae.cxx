@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-16 16:37:44 $
+ *  last change: $Author: dvo $ $Date: 2000-11-17 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,18 +854,30 @@ void XMLTextParagraphExport::exportText(
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
 
-    exportTextContentEnumeration( xParaEnum, bAutoStyles );
+    Reference < XPropertySet > xPropertySet( rText, UNO_QUERY );
+    Reference < XTextSection > xBaseSection;
+    if (xPropertySet.is())
+    {
+        if (xPropertySet->getPropertySetInfo()->
+            hasPropertyByName( sTextSection ))
+        {
+            Any aAny = xPropertySet->getPropertyValue(sTextSection);
+            aAny >>= xBaseSection;
+        }
+    }
+    exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection );
 }
 
 void XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        const Reference < XTextSection > & rBaseSection)
 {
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
 
     sal_Bool bHasContent sal_False;
-    Reference<XTextSection> xCurrentTextSection;
+    Reference<XTextSection> xCurrentTextSection = rBaseSection;
 
     while( rContEnum->hasMoreElements() )
     {
@@ -934,8 +946,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
         aNextNumInfo.Reset();
 
         // close open lists and sections; no new styles
-        Reference<XTextContent> xEmpty;
-        exportListAndSectionChange( xCurrentTextSection, xEmpty,
+        exportListAndSectionChange( xCurrentTextSection, rBaseSection,
                                     aPrevNumInfo, aNextNumInfo,
                                     bAutoStyles );
     }
@@ -948,6 +959,9 @@ void XMLTextParagraphExport::exportParagraph(
     sal_Int8 nOutlineLevel = -1;
 
     Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
+    Reference< XPropertySetInfo > xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    Any aAny;
 
     if( bAutoStyles )
     {
@@ -955,10 +969,7 @@ void XMLTextParagraphExport::exportParagraph(
     }
     else
     {
-        Reference< XPropertySetInfo > xPropSetInfo =
-            xPropSet->getPropertySetInfo();
         OUString sStyle;
-        Any aAny;
         if( xPropSetInfo->hasPropertyByName( sParaStyleName ) )
         {
             aAny = xPropSet->getPropertyValue( sParaStyleName );
@@ -1009,10 +1020,17 @@ void XMLTextParagraphExport::exportParagraph(
     if( xCEA.is() )
         xContentEnum = xCEA->createContentEnumeration( sTextContentService );
 
+    Reference < XTextSection > xSection;
+    if (xPropSetInfo->hasPropertyByName(sTextSection))
+    {
+        aAny = xPropSet->getPropertyValue(sTextSection);
+        aAny >>= xSection;
+    }
+
     if( bAutoStyles )
     {
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles );
+            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection);
         exportTextRangeEnumeration( xTextEnum, bAutoStyles );
     }
     else
@@ -1022,7 +1040,7 @@ void XMLTextParagraphExport::exportParagraph(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, pElem,
                                   sal_True, sal_False );
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles );
+            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection);
         exportTextRangeEnumeration( xTextEnum, bAutoStyles );
     }
 }
@@ -1077,8 +1095,11 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 if( xCEA.is() )
                     xContentEnum = xCEA->createContentEnumeration(
                                                     sTextContentService );
+                // frames are never in sections
+                Reference<XTextSection> xSection;
                 if( xContentEnum.is() )
-                    exportTextContentEnumeration( xContentEnum, bAutoStyles );
+                    exportTextContentEnumeration( xContentEnum, bAutoStyles,
+                                                  xSection );
                 bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sFootnote))
