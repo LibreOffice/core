@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-28 08:05:24 $
+ *  last change: $Author: aw $ $Date: 2001-08-31 09:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1520,13 +1520,19 @@ void SdrCircObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     if(rIn.GetError())
         return;
 
+    // #91764# remember eKind, it will be deleted during SdrRectObj::ReadData(...)
+    // but needs to be known to decide to jump over angles or not. Deletion happens
+    // cause of fix #89025# wich is necessary, too.
+    SdrObjKind eRememberedKind = eKind;
+
     SdrRectObj::ReadData(rHead,rIn);
     SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
 #ifdef DBG_UTIL
     aCompat.SetID("SdrCircObj");
 #endif
 
-    if(eKind != OBJ_CIRC)
+    // #91764# use remembered eKind here
+    if(eRememberedKind != OBJ_CIRC)
     {
         rIn >> nStartWink;
         rIn >> nEndWink;
