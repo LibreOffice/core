@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-15 06:59:39 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,6 +366,7 @@ public:
 
     virtual void        Resize();
     virtual long        PreNotify( NotifyEvent& rNEvt );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     void                SetDoubleClickHdl( const Link& rLink );
     inline void         SetSelectFactoryHdl( const Link& rLink ) { aSelectFactoryLink = rLink; }
@@ -396,7 +397,9 @@ public:
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
 
+class SvtMiscOptions;
 class SfxHelpWindow_Impl;
+
 class SfxHelpTextWindow_Impl : public Window
 {
 private:
@@ -419,8 +422,10 @@ private:
     Image                   aIndexOffImage;
 
     sal_Bool                HasSelection() const;
+    void                    InitToolBoxImages();
 
     DECL_LINK(              SelectHdl, Timer* );
+    DECL_LINK(              NotifyHdl, SvtMiscOptions* );
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -429,6 +434,7 @@ public:
     virtual void            Resize();
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual void            GetFocus();
+    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
 
     inline ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             getFrame() const { return xFrame; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:15:01 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,12 @@
 #ifndef _SVTOOLS_IMAGEMGR_HXX
 #include <svtools/imagemgr.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
+#endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
 
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
@@ -225,6 +231,8 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define COLSET_ID           1
 #define INDEXWIN_ID         2
 #define TEXTWIN_ID          3
+
+#define TOOLBOX_OFFSET      3
 
 #define TBI_INDEX           1001
 #define TBI_BACKWARD        1002
@@ -1790,6 +1798,20 @@ long SfxHelpIndexWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 
 // -----------------------------------------------------------------------
 
+void SfxHelpIndexWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
+           ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
+         ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
 {
     if ( !pCPage )
@@ -1968,40 +1990,21 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
 
-    aToolBox.InsertItem( TBI_INDEX, aIndexOffImage );
-    aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOffText );
+    aToolBox.InsertItem( TBI_INDEX, aIndexOffText );
     aToolBox.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
     aToolBox.InsertSeparator();
-    aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
-    aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
+    aToolBox.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
     aToolBox.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
-    aToolBox.InsertItem( TBI_FORWARD, Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
-    aToolBox.SetQuickHelpText( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
+    aToolBox.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
     aToolBox.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
-    aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
-    aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
+    aToolBox.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
     aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
     aToolBox.InsertSeparator();
-    aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
-    aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
+    aToolBox.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
     aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-    aToolBox.InsertItem( TBI_BOOKMARKS, Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
-    aToolBox.SetQuickHelpText( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
+    aToolBox.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
     aToolBox.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-
-/*!!! pb: searchdialog problem not fixable til 6.0 final
-    aToolBox.InsertItem( TBI_SEARCHDIALOG, Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
-    aToolBox.SetQuickHelpText( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ) );
-    aToolBox.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
-*/
-
-    Size a3Size = LogicToPixel( Size( 0, 3 ), MAP_APPFONT );
-    Size a14Size = LogicToPixel( Size( 0, 14 ), MAP_APPFONT );
-    Size aSize = aToolBox.CalcWindowSizePixel();
-    long nY = a3Size.Height() + ( ( a14Size.Height() - aSize.Height() ) / 2 );
-    aSize.Height() += nY + 3;
-    aToolBox.SetPosSizePixel( Point( 0, nY ), aSize );
-    aToolBox.SetOutStyle( TOOLBOX_STYLE_FLAT );
+    InitToolBoxImages();
     aToolBox.Show();
 
     aSelectTimer.SetTimeoutHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
@@ -2010,6 +2013,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     char* pEnv = getenv( "help_debug" );
     if ( pEnv )
         bIsDebug = sal_True;
+
+    SvtMiscOptions().AddListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -2019,6 +2024,7 @@ SfxHelpTextWindow_Impl::~SfxHelpTextWindow_Impl()
     sfx2::RemoveFromTaskPaneList( &aToolBox );
 
     bIsInClose = sal_True;
+    SvtMiscOptions().RemoveListener( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -2059,6 +2065,46 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpTextWindow_Impl::InitToolBoxImages()
+{
+    sal_Bool bLarge = ( SvtMiscOptions().GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+
+    aIndexOnImage = Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_INDEX_ON : IMG_HELP_TOOLBOX_L_INDEX_ON
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_ON : IMG_HELP_TOOLBOX_INDEX_ON ) );
+    aIndexOffImage = Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_INDEX_OFF : IMG_HELP_TOOLBOX_L_INDEX_OFF
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) );
+    aToolBox.SetItemImage( TBI_INDEX, bIsIndexOn ? aIndexOffImage : aIndexOnImage );
+
+    aToolBox.SetItemImage( TBI_BACKWARD, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_PREV : IMG_HELP_TOOLBOX_L_PREV
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_PREV : IMG_HELP_TOOLBOX_PREV ) ) );
+    aToolBox.SetItemImage( TBI_FORWARD, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_NEXT : IMG_HELP_TOOLBOX_L_NEXT
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_NEXT : IMG_HELP_TOOLBOX_NEXT ) ) );
+    aToolBox.SetItemImage( TBI_START, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_START : IMG_HELP_TOOLBOX_L_START
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_START : IMG_HELP_TOOLBOX_START ) ) );
+    aToolBox.SetItemImage( TBI_PRINT, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_PRINT : IMG_HELP_TOOLBOX_L_PRINT
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_PRINT : IMG_HELP_TOOLBOX_PRINT ) ) );
+    aToolBox.SetItemImage( TBI_BOOKMARKS, Image( SfxResId(
+        bLarge ? bHiContrast ? IMG_HELP_TOOLBOX_HCL_BOOKMARKS : IMG_HELP_TOOLBOX_L_BOOKMARKS
+               : bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
+
+    Size aSize = aToolBox.CalcWindowSizePixel();
+    aSize.Height() += TOOLBOX_OFFSET;
+    aToolBox.SetPosSizePixel( Point( 0, TOOLBOX_OFFSET ), aSize );
+
+    SvtMiscOptions aMiscOptions;
+    if ( aMiscOptions.GetToolboxStyle() != aToolBox.GetOutStyle() )
+        aToolBox.SetOutStyle( aMiscOptions.GetToolboxStyle() );
 }
 
 // -----------------------------------------------------------------------
@@ -2105,6 +2151,16 @@ IMPL_LINK( SfxHelpTextWindow_Impl, SelectHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpTextWindow_Impl, NotifyHdl, SvtMiscOptions*, pOptions )
+{
+    InitToolBoxImages();
+    Resize();
+    aToolBox.Invalidate();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpTextWindow_Impl::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
@@ -2112,7 +2168,7 @@ void SfxHelpTextWindow_Impl::Resize()
     aSize.Width() = aWinSize.Width();
     aToolBox.SetSizePixel( aSize );
 
-    long nToolBoxHeight = aSize.Height();
+    long nToolBoxHeight = aSize.Height() + TOOLBOX_OFFSET;
     aSize = aWinSize;
     aSize.Height() -= nToolBoxHeight;
     pTextWin->SetPosSizePixel( Point( 0, nToolBoxHeight  ), aSize );
@@ -2129,38 +2185,45 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
         Window* pCmdWin = rNEvt.GetWindow();
 
-        if ( //pCmdEvt->IsMouseEvent() &&
-             pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
+        if ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && pCmdWin != this && pCmdWin != &aToolBox )
         {
-            // link at current mouse position ?
-            Point aPos = pCmdEvt->GetMousePosPixel();
+            sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetMenuColor().IsDark();
+            Point aPos;
+            if ( pCmdEvt->IsMouseEvent() )
+                aPos = pCmdEvt->GetMousePosPixel();
+            else
+                aPos = Point( pTextWin->GetPosPixel().X() + 20, 20 );
             aPos.Y() += pTextWin->GetPosPixel().Y();
             PopupMenu aMenu;
             if ( bIsIndexOn )
-                aMenu.InsertItem( TBI_INDEX, aIndexOffText, aIndexOffImage );
+                aMenu.InsertItem( TBI_INDEX, aIndexOffText, Image( SfxResId(
+                    bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_OFF : IMG_HELP_TOOLBOX_INDEX_OFF ) ) );
             else
-                aMenu.InsertItem( TBI_INDEX, aIndexOnText, aIndexOnImage );
+                aMenu.InsertItem( TBI_INDEX, aIndexOnText, Image( SfxResId(
+                    bHiContrast ? IMG_HELP_TOOLBOX_HC_INDEX_ON : IMG_HELP_TOOLBOX_INDEX_ON ) ) );
             aMenu.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ), Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
+            aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_PREV : IMG_HELP_TOOLBOX_PREV ) ) );
             aMenu.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
             aMenu.EnableItem( TBI_BACKWARD, pHelpWin->HasHistoryPredecessor() );
-            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ), Image( SfxResId( IMG_HELP_TOOLBOX_NEXT ) ) );
+            aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_NEXT : IMG_HELP_TOOLBOX_NEXT ) ) );
             aMenu.SetHelpId( TBI_FORWARD, HID_HELP_TOOLBOXITEM_FORWARD );
             aMenu.EnableItem( TBI_FORWARD, pHelpWin->HasHistorySuccessor() );
-            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ), Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
+            aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_START : IMG_HELP_TOOLBOX_START ) ) );
             aMenu.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ), Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
+            aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_PRINT : IMG_HELP_TOOLBOX_PRINT ) ) );
             aMenu.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
-            aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ), Image( SfxResId( IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
+            aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_BOOKMARKS : IMG_HELP_TOOLBOX_BOOKMARKS ) ) );
             aMenu.SetHelpId( TBI_BOOKMARKS, HID_HELP_TOOLBOXITEM_BOOKMARKS );
-/*!!! pb: searchdialog problem not fixable til 6.0 final
-            aMenu.InsertItem( TBI_SEARCHDIALOG, String( SfxResId( STR_HELP_BUTTON_SEARCHDIALOG ) ), Image( SfxResId( IMG_HELP_TOOLBOX_SEARCHDIALOG ) ) );
-            aMenu.SetHelpId( TBI_SEARCHDIALOG, HID_HELP_TOOLBOXITEM_SEARCHDIALOG );
-*/
             aMenu.InsertSeparator();
-            aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ), Image( SfxResId( IMG_HELP_TOOLBOX_COPY ) ) );
+            aMenu.InsertItem( TBI_COPY, GET_SLOT_NAME( SID_COPY ),
+                Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );
             aMenu.SetHelpId( TBI_COPY, SID_COPY );
             aMenu.EnableItem( TBI_COPY, HasSelection() );
 
@@ -2217,18 +2280,33 @@ void SfxHelpTextWindow_Impl::GetFocus()
 
 // -----------------------------------------------------------------------
 
+void SfxHelpTextWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if ( ( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) ||
+           ( rDCEvt.GetType() == DATACHANGED_DISPLAY ) ) &&
+         ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetFaceColor() ) );
+        InitToolBoxImages();
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpTextWindow_Impl::ToggleIndex( sal_Bool bOn )
 {
     bIsIndexOn = bOn;
     if ( bIsIndexOn )
     {
         aToolBox.SetItemImage( TBI_INDEX, aIndexOffImage );
-        aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOffText );
+        aToolBox.SetItemText( TBI_INDEX, aIndexOffText );
     }
     else
     {
         aToolBox.SetItemImage( TBI_INDEX, aIndexOnImage );
-        aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOnText );
+        aToolBox.SetItemText( TBI_INDEX, aIndexOnText );
     }
 }
 

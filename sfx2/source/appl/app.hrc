@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-01 16:54:16 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,36 @@
 #define STR_HELP_BUTTON_ADDBOOKMARK             (RID_SFX_APP_START+140)
 #define STR_HELP_BUTTON_INDEX_OFF               (RID_SFX_APP_START+141)
 #define STR_HELP_BUTTON_SEARCHDIALOG            (RID_SFX_APP_START+142)
+
+#define IMG_HELP_TOOLBOX_HC_INDEX_ON            (RID_SFX_APP_START+150)
+#define IMG_HELP_TOOLBOX_HC_INDEX_OFF           (RID_SFX_APP_START+151)
+#define IMG_HELP_TOOLBOX_HC_START               (RID_SFX_APP_START+152)
+#define IMG_HELP_TOOLBOX_HC_PREV                (RID_SFX_APP_START+153)
+#define IMG_HELP_TOOLBOX_HC_NEXT                (RID_SFX_APP_START+154)
+#define IMG_HELP_TOOLBOX_HC_PRINT               (RID_SFX_APP_START+155)
+#define IMG_HELP_TOOLBOX_HC_BOOKMARKS           (RID_SFX_APP_START+156)
+#define IMG_HELP_TOOLBOX_HC_SEARCHDIALOG        (RID_SFX_APP_START+157)
+#define IMG_HELP_TOOLBOX_HC_COPY                (RID_SFX_APP_START+158)
+
+#define IMG_HELP_TOOLBOX_L_INDEX_ON             (RID_SFX_APP_START+160)
+#define IMG_HELP_TOOLBOX_L_INDEX_OFF            (RID_SFX_APP_START+161)
+#define IMG_HELP_TOOLBOX_L_START                (RID_SFX_APP_START+162)
+#define IMG_HELP_TOOLBOX_L_PREV                 (RID_SFX_APP_START+163)
+#define IMG_HELP_TOOLBOX_L_NEXT                 (RID_SFX_APP_START+164)
+#define IMG_HELP_TOOLBOX_L_PRINT                (RID_SFX_APP_START+165)
+#define IMG_HELP_TOOLBOX_L_BOOKMARKS            (RID_SFX_APP_START+166)
+#define IMG_HELP_TOOLBOX_L_SEARCHDIALOG         (RID_SFX_APP_START+167)
+#define IMG_HELP_TOOLBOX_L_COPY                 (RID_SFX_APP_START+168)
+
+#define IMG_HELP_TOOLBOX_HCL_INDEX_ON           (RID_SFX_APP_START+170)
+#define IMG_HELP_TOOLBOX_HCL_INDEX_OFF          (RID_SFX_APP_START+171)
+#define IMG_HELP_TOOLBOX_HCL_START              (RID_SFX_APP_START+172)
+#define IMG_HELP_TOOLBOX_HCL_PREV               (RID_SFX_APP_START+173)
+#define IMG_HELP_TOOLBOX_HCL_NEXT               (RID_SFX_APP_START+174)
+#define IMG_HELP_TOOLBOX_HCL_PRINT              (RID_SFX_APP_START+175)
+#define IMG_HELP_TOOLBOX_HCL_BOOKMARKS          (RID_SFX_APP_START+176)
+#define IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG       (RID_SFX_APP_START+177)
+#define IMG_HELP_TOOLBOX_HCL_COPY               (RID_SFX_APP_START+178)
 
 #endif // #ifndef _SFX_APP_HRC
 

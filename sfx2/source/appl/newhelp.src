@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:15:26 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 08:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ Window WIN_HELP_INDEX
                 Text[ arabic ] = "���������";
                 Text[ finnish ] = "Contents";
                 Text[ catalan ] = "Contents";
+                Text[ thai ] = "เนื้อหา";
             };
             PageItem
             {
@@ -140,6 +141,7 @@ Window WIN_HELP_INDEX
                 Text[ arabic ] = "����";
                 Text[ catalan ] = "�ndice";
                 Text[ finnish ] = "Hakemisto";
+                Text[ thai ] = "ดัชนี";
             };
             PageItem
             {
@@ -167,6 +169,7 @@ Window WIN_HELP_INDEX
                 Text[ catalan ] = "Buscar";
                 Text[ finnish ] = "Etsi";
                 Text[ language_user1 ] = "pb: the correct english text here must be 'Search' (said VK and FPE)";
+                Text[ thai ] = "หา";
             };
             PageItem
             {
@@ -193,6 +196,7 @@ Window WIN_HELP_INDEX
                 Text[ turkish ] = "Bookmarks";
                 Text[ arabic ] = "Bookmarks";
                 Text[ catalan ] = "Bookmarks";
+                Text[ thai ] = "ตัวคั่น";
             };
         };
     };
@@ -229,6 +233,7 @@ TabPage TP_HELP_INDEX
         Text[ arabic ] = "����� �����";
         Text[ catalan ] = "~T�rmino de b�squeda";
         Text[ finnish ] = "~Etsitt�v� termi";
+        Text[ thai ] = "~ค้นหาเงื่อนไข";
     };
     ComboBox CB_INDEX
     {
@@ -261,6 +266,7 @@ TabPage TP_HELP_INDEX
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Visualizar";
         Text[ finnish ] = "~N�yt�";
+        Text[ thai ] = "แ~สดงผล";
     };
 };
 
@@ -295,6 +301,7 @@ TabPage TP_HELP_SEARCH
         Text[ arabic ] = "����� �����";
         Text[ catalan ] = "~T�rmino de b�squeda";
         Text[ finnish ] = "E~tsitt�v� termi";
+        Text[ thai ] = "ค้~นหาเงื่อนไข";
     };
     ComboBox ED_SEARCH
     {
@@ -328,6 +335,7 @@ TabPage TP_HELP_SEARCH
         Text[ arabic ] = "���";
         Text[ catalan ] = "Buscar";
         Text[ finnish ] = "~Etsi";
+        Text[ thai ] = "~หา";
     };
     CheckBox CB_FULLWORDS
     {
@@ -354,6 +362,7 @@ TabPage TP_HELP_SEARCH
         Text[ turkish ] = "~Complete words only";
         Text[ arabic ] = "~Complete words only";
         Text[ catalan ] = "~Complete words only";
+        Text[ thai ] = "คำที่~สมบูรณ์เท่านั้น";
     };
     CheckBox CB_SCOPE
     {
@@ -380,6 +389,7 @@ TabPage TP_HELP_SEARCH
         Text[ arabic ] = "~Search headings only";
         Text[ catalan ] = "~Search headings only";
         Text[ finnish ] = "Etsi ~vain otsikoista";
+        Text[ thai ] = "หาใน~ส่วนหัวอย่างเดียว";
     };
     ListBox LB_RESULT
     {
@@ -412,6 +422,7 @@ TabPage TP_HELP_SEARCH
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Visualizar";
         Text[ finnish ] = "~N�yt�";
+        Text[ thai ] = "แ~สดงผล";
     };
 };
 
@@ -446,6 +457,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ turkish ] = "Bookmarks";
         Text[ arabic ] = "Bookmarks";
         Text[ catalan ] = "Bookmarks";
+        Text[ thai ] = "~ตัวคั่น";
     };
     ListBox LB_BOOKMARKS
     {
@@ -479,6 +491,7 @@ TabPage TP_HELP_BOOKMARKS
         Text[ arabic ] = "���";
         Text[ catalan ] = "~Visualizar";
         Text[ finnish ] = "~N�yt�";
+        Text[ thai ] = "แ~สดงผล";
     };
 };
 
@@ -598,6 +611,7 @@ String STR_HELP_WINDOW_TITLE
     Text[ arabic ] = "%PRODUCTNAME ������";
     Text[ catalan ] = "%PRODUCTNAME Ayuda";
     Text[ finnish ] = " Ohjelman %PRODUCTNAME ohje";
+    Text[ thai ] = "ตัวช่วยเหลือ%PRODUCTNAME ";
 };
 String STR_HELP_BUTTON_INDEX_ON
 {
@@ -622,6 +636,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text[ arabic ] = "����";
     Text[ catalan ] = "�ndice";
     Text[ finnish ] = "Hakemisto";
+    Text[ thai ] = "แสดงการนำทางบานหน้าต่าง";
 };
 String STR_HELP_BUTTON_INDEX_OFF
 {
@@ -646,6 +661,7 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text[ turkish ] = "Hide navigation area";
     Text[ arabic ] = "Hide navigation area";
     Text[ catalan ] = "Hide navigation area";
+    Text[ thai ] = "ซ่อนการนำทางบานหน้าต่าง";
 };
 String STR_HELP_BUTTON_START
 {
@@ -670,6 +686,7 @@ String STR_HELP_BUTTON_START
     Text[ arabic ] = "���� �����";
     Text[ catalan ] = "P�gina de inicio";
     Text[ finnish ] = "Ensimm�inen sivu";
+    Text[ thai ] = "หน้าแรก";
 };
 String STR_HELP_BUTTON_PREV
 {
@@ -694,6 +711,7 @@ String STR_HELP_BUTTON_PREV
     Text[ arabic ] = "������ �������";
     Text[ catalan ] = "P�gina anterior";
     Text[ finnish ] = "Edellinen sivu";
+    Text[ thai ] = "หน้าก่อน";
 };
 String STR_HELP_BUTTON_NEXT
 {
@@ -718,6 +736,7 @@ String STR_HELP_BUTTON_NEXT
     Text[ arabic ] = "������ �������";
     Text[ catalan ] = "P�gina siguiente";
     Text[ finnish ] = "Seuraava sivu";
+    Text[ thai ] = "หน้าถัดไป";
 };
 String STR_HELP_BUTTON_PRINT
 {
@@ -742,6 +761,7 @@ String STR_HELP_BUTTON_PRINT
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
+    Text[ thai ] = "พิมพ์...";
 };
 String STR_HELP_BUTTON_ADDBOOKMARK
 {
@@ -766,6 +786,7 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text[ turkish ] = "Add to bookmarks";
     Text[ arabic ] = "Add to bookmarks";
     Text[ catalan ] = "Add to bookmarks";
+    Text[ thai ] = "เพิ่มถึงตัวคั่น...";
 };
 String STR_HELP_BUTTON_SEARCHDIALOG
 {
@@ -790,6 +811,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text[ turkish ] = "Find...";
     Text[ arabic ] = "Find...";
     Text[ catalan ] = "Find...";
+    Text[ thai ] = "หา...";
 };
 String STR_HELP_BUTTON_SOURCEVIEW
 {
@@ -816,6 +838,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "HTML Source";
     Text[ finnish ] = "HTML-l�hde";
+    Text[ thai ] = "แหล่ง HTML ";
 };
 
 String STR_HELP_FIRST_MESSAGE
@@ -841,6 +864,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ arabic ] = "Help is started...";
     Text[ catalan ] = "Help is started...";
     Text[ finnish ] = "Ohjetoiminto k�ynnistet��n";
+    Text[ thai ] = "เริ่มตัวช่วย...";
 };
 String STR_HELP_FIRST_HTML
 {
@@ -886,6 +910,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         GROUP = TRUE ;
         LEFT = TRUE ;
         TEXT[ catalan ] = "Bookmark:";
+        TEXT[ thai ] = "ตัวคั่น:";
     };
     Edit ED_BOOKMARK_TITLE
     {
@@ -939,6 +964,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ turkish ] = "Rename bookmark";
         TEXT[ arabic ] = "Rename bookmark";
         TEXT[ catalan ] = "Rename bookmark";
+        TEXT[ thai ] = "เปลี่ยนชื่อตัวคั่น";
     };
     TEXT[ english_us ] = "Add to Bookmarks";
     TEXT[ portuguese ] = "Adicionar marcador";
@@ -960,6 +986,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ turkish ] = "Add to Bookmarks";
     TEXT[ arabic ] = "Add to Bookmarks";
     TEXT[ catalan ] = "Add to Bookmarks";
+    TEXT[ thai ] = "เพิ่มถึงตัวคั่น";
 };
 
 Menu MENU_HELP_BOOKMARKS
@@ -992,6 +1019,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ turkish ] = "New...";
             Text[ arabic ] = "New...";
             Text[ catalan ] = "New...";
+            Text[ thai ] = "แสดงผล";
         };
         MenuItem
         {
@@ -1023,6 +1051,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ turkish ] = "Rename...";
             Text[ arabic ] = "Rename...";
             Text[ catalan ] = "Rename...";
+            Text[ thai ] = "เปลี่ยนชื่อ...";
         };
         MenuItem
         {
@@ -1050,6 +1079,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ turkish ] = "Delete";
             Text[ arabic ] = "Delete";
             Text[ catalan ] = "Delete";
+            Text[ thai ] = "ลบ";
         };
     };
 };
@@ -1080,14 +1110,144 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ turkish ] = "No themes found.";
     MESSAGE[ arabic ] = "No themes found.";
     MESSAGE[ catalan ] = "No themes found.";
+    MESSAGE[ thai ] = "ไม่พบหัวข้อ";
 };
 
+Image IMG_HELP_TOOLBOX_HC_INDEX_ON
+{
+    ImageBitmap = Bitmap { File = "indexon_small_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_small_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_START
+{
+    ImageBitmap = Bitmap { File = "sch06303.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_PREV
+{
+    ImageBitmap = Bitmap { File = "sch06301.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_NEXT
+{
+    ImageBitmap = Bitmap { File = "sch06300.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_PRINT
+{
+    ImageBitmap = Bitmap { File = "sch05504.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_BOOKMARKS
+{
+    ImageBitmap = Bitmap { File = "favourite_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_SEARCHDIALOG
+{
+    ImageBitmap = Bitmap { File = "search_small_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HC_COPY
+{
+    ImageBitmap = Bitmap { File = "sch05711.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
 
+Image IMG_HELP_TOOLBOX_L_INDEX_ON
+{
+    ImageBitmap = Bitmap { File = "indexon_big.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_big.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_START
+{
+    ImageBitmap = Bitmap { File = "lc06303.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_PREV
+{
+    ImageBitmap = Bitmap { File = "lc06301.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_NEXT
+{
+    ImageBitmap = Bitmap { File = "lc06300.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_PRINT
+{
+    ImageBitmap = Bitmap { File = "lc05504.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_BOOKMARKS
+{
+    ImageBitmap = Bitmap { File = "favourite.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
+{
+    ImageBitmap = Bitmap { File = "search_large.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_L_COPY
+{
+    ImageBitmap = Bitmap { File = "lc05711.bmp" ; };
+    MASKCOLOR_GREY
+};
 
-
-
-
-
-
-
+Image IMG_HELP_TOOLBOX_HCL_INDEX_ON
+{
+    ImageBitmap = Bitmap { File = "indexon_big_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_big_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_START
+{
+    ImageBitmap = Bitmap { File = "lch06303.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_PREV
+{
+    ImageBitmap = Bitmap { File = "lch06301.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_NEXT
+{
+    ImageBitmap = Bitmap { File = "lch06300.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_PRINT
+{
+    ImageBitmap = Bitmap { File = "lch05504.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_BOOKMARKS
+{
+    ImageBitmap = Bitmap { File = "favourite_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG
+{
+    ImageBitmap = Bitmap { File = "search_large_h.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
+Image IMG_HELP_TOOLBOX_HCL_COPY
+{
+    ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
+    MASKCOLOR_MAGENTA
+};
 
