@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-09-19 09:00:07 $
+ *  last change: $Author: tbe $ $Date: 2001-09-20 09:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,9 +626,14 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     if( !xISP.is() )
         return;
 
+    Reference< XComponentContext > xContext;
+    Reference< XPropertySet > xProps( xMSF, UNO_QUERY );
+    OSL_ASSERT( xProps.is() );
+    OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
+
     // Create a DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
-    ::xmlscript::importDialogModel( xInput, xDialogModel );
+    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
     if( !xDialogModel.is() )
         return;
 
