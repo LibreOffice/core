@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:45:21 $
+ *  last change: $Author: fs $ $Date: 2001-07-23 06:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,6 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_IMAGECONTROL, "com.sun.star.form.co
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField");
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms");
-IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_INTERNATIONAL_INFO, "com.sun.star.deprecated.International");
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_DATA_ENGINE, "com.sun.star.data.DatabaseEngine");
 IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberFormatter");
@@ -287,7 +286,6 @@ namespace frm { \
 
 DECLARE_SERVICE_INFO(OFormsCollection)
 DECLARE_SERVICE_INFO(ODatabaseForm)
-DECLARE_SERVICE_INFO(OInternationalInfo)
 
 //---------------------------------------------------------------------------------------
 
@@ -457,7 +455,6 @@ void ensureClassInfos()
     // = various
     REGISTER_CLASS1(OFormsCollection, FRM_SUN_FORMS_COLLECTION);
     REGISTER_CLASS4(ODatabaseForm, FRM_COMPONENT_FORM, FRM_SUN_COMPONENT_FORM, FRM_SUN_COMPONENT_HTMLFORM, FRM_SUN_COMPONENT_DATAFORM);
-    REGISTER_CLASS1(OInternationalInfo, FRM_SUN_INTERNATIONAL_INFO);
 
 }
 

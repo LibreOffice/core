@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fs $ $Date: 2001-05-18 14:48:32 $
+#   last change: $Author: fs $ $Date: 2001-07-23 06:26:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,7 @@ SLOFILES=	$(SLO)$/limitedformats.obj \
             $(SLO)$/property.obj \
             $(SLO)$/services.obj \
             $(SLO)$/InterfaceContainer.obj \
-            $(SLO)$/ids.obj \
-            $(SLO)$/InternationalHack.obj \
+            $(SLO)$/ids.obj
 
 # --- Targets ----------------------------------
 
