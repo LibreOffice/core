@@ -35,3 +35,6 @@ sd.AccessibleDrawDocumentView::com::sun::star::accessibility::XAccessibleEventBr
 
 ### i26264 ###
 sd.SdXImpressDocument::com::sun::star::view::XPrintable
+
+### i27847 ###
+sd.SdXImpressDocument::com::sun::star::lang::XComponent
