@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-15 09:36:14 $
+ *  last change: $Author: sb $ $Date: 2002-08-28 14:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,6 +1120,37 @@ main()
                            getStr());
                 bSuccess = false;
             }
+        }
+    }
+
+    if (true)
+    {
+        struct Test
+        {
+            char const * m_pInput;
+            char const * m_pOutput;
+        };
+        static Test const aTest[]
+            = { { "file:///abc", "file:///abc" },
+                { "file://localhost/abc", "file:///abc" },
+                { "file://LocalHost/abc", "file:///abc" },
+                { "file://LOCALHOST/abc", "file:///abc" },
+                { "file://127.0.0.1/abc", "file://127.0.0.1/abc" },
+                { "file://xxx.yyy-zzz/abc", "file://xxx.yyy-zzz/abc" },
+                { "file://xxx_yyy/abc", "file://xxx_yyy/abc" },
+                { "file://!%23$%&'()-.@^_{}~/abc",
+                  "file://!%23$%25&'()-.@%5E_%7B%7D~/abc" } };
+        for (int i = 0; i < sizeof aTest / sizeof aTest[0]; ++i)
+        {
+            INetURLObject aUrl(aTest[i].m_pInput);
+            if (aUrl.HasError() != (aTest[i].m_pOutput == 0)
+                || aUrl.GetMainURL().CompareToAscii(aTest[i].m_pOutput) != 0)
+                printf("BAD %s -> %s != %s\n",
+                       aTest[i].m_pInput,
+                       aUrl.HasError() ? "<none>"
+                       : ByteString(aUrl.GetMainURL(),
+                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
         }
     }
 
