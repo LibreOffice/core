@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:19:12 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,54 +83,75 @@ int SAL_CALL main( int argc, char** argv )
 
     setIdlc(&options);
 
-    const StringVector& files = options.getInputFiles();
-    sal_Int32   nFiles = files.size();
     sal_Int32 nErrors = 0;
-    sal_Int32 i;
-    for ( i=0; i < nFiles; i++ )
-    {
-        OString sysFileName( convertToAbsoluteSystemPath(files[i]) );
-
-        fprintf(stdout, "%s: compile '%s' ... \n",
-            options.getProgramName().getStr(), files[i].getStr());
-        nErrors = compileFile(sysFileName);
-
-        if ( idlc()->getWarningCount() )
-            fprintf(stdout, "%s: detected %d warnings compiling file '%s'\n",
-                    options.getProgramName().getStr(), idlc()->getWarningCount(),
-                    files[i].getStr(), options.prepareVersion().getStr());
-
-        if ( nErrors )
-        {
-            OString strippedFileName(sysFileName.copy(sysFileName.lastIndexOf(SEPARATOR) + 1));
-            OString sysOutputName;
-            if ( options.isValid("-O") )
-            {
-                OString sysOutputName = convertToAbsoluteSystemPath(options.getOption("-O"));
-                sal_Char c = sysOutputName.getStr()[sysOutputName.getLength()-1];
-
-                if ( c != '/' )
-                    sysOutputName += OString::valueOf('/');
-
-                sysOutputName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
-            } else
-            {
-                sysOutputName = strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
+    if (options.readStdin()) {
+        fprintf(
+            stdout, "%s: compile stdin...\n",
+            options.getProgramName().getStr());
+        nErrors = compileFile(0);
+        if (idlc()->getWarningCount() > 0) {
+            fprintf(
+                stdout, "%s: detected %d warnings compiling stdin\n",
+                options.getProgramName().getStr(), idlc()->getWarningCount());
+        }
+        if (nErrors > 0) {
+            OString outputPathname;
+            if (options.isValid("-O")) {
+                OString outputPathname = convertToAbsoluteSystemPath(
+                    options.getOption("-O"));
+                if (outputPathname[outputPathname.getLength() - 1] != '/') {
+                    outputPathname += "/";
+                }
             }
-            removeIfExists(sysOutputName);
-        } else
-            nErrors = produceFile(sysFileName);
-
+            outputPathname += "stdin.urd";
+            removeIfExists(outputPathname);
+        } else {
+            nErrors = produceFile("stdin");
+        }
         idlc()->reset();
-        if ( nErrors > 0 )
-            break;
+    }
+    StringVector const & files = options.getInputFiles();
+    for (StringVector::const_iterator i(files.begin());
+         i != files.end() && nErrors == 0; ++i)
+    {
+        fprintf(
+            stdout, "%s: compile file %s...\n",
+            options.getProgramName().getStr(), i->getStr());
+        OString pathname(convertToAbsoluteSystemPath(*i));
+        nErrors = compileFile(&pathname);
+        if (idlc()->getWarningCount() > 0) {
+            fprintf(
+                stdout, "%s: detected %d warnings compiling file %s\n",
+                options.getProgramName().getStr(), idlc()->getWarningCount(),
+                i->getStr());
+        }
+        sal_Int32 n = pathname.lastIndexOf(SEPARATOR) + 1;
+        OString filenameBase(
+            pathname.copy(
+                n, pathname.getLength() - n - RTL_CONSTASCII_LENGTH(".idl")));
+        if (nErrors > 0) {
+            OString outputPathname;
+            if (options.isValid("-O")) {
+                OString outputPathname = convertToAbsoluteSystemPath(
+                    options.getOption("-O"));
+                if (outputPathname[outputPathname.getLength() - 1] != '/') {
+                    outputPathname += "/";
+                }
+            }
+            outputPathname += filenameBase;
+            outputPathname += ".urd";
+            removeIfExists(outputPathname);
+        } else {
+            nErrors = produceFile(filenameBase);
+        }
+        idlc()->reset();
     }
 
     if ( nErrors > 0 )
     {
-        fprintf(stdout, "%s: detected %d errors in file '%s'%s",
+        fprintf(stdout, "%s: detected %d errors%s",
             options.getProgramName().getStr(), nErrors,
-            files[i].getStr(), options.prepareVersion().getStr());
+            options.prepareVersion().getStr());
     } else
     {
         fprintf(stdout, "%s: returned successful%s",
