@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:25:14 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 08:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,12 @@ void SfxURLToolBoxControl_Impl::StateChanged
         String aRep( pURL->GetValue() );
         INetURLObject aURL( aRep );
         INetProtocol eProt = aURL.GetProtocol();
-        pURLBox->SetText( aURL.GetURLNoPass() );
+        if ( eProt == INET_PROT_FILE )
+        {
+            pURLBox->SetText( aURL.PathToFileName() );
+        }
+        else
+            pURLBox->SetText( aURL.GetURLNoPass() );
     }
 }
 
