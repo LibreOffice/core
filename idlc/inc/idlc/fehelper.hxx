@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:43:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <idlc/astinterface.hxx>
 #endif
 
+#include <vector>
+
 class FeDeclarator
 {
 public:
@@ -101,7 +103,9 @@ typedef ::std::list< FeDeclarator* > FeDeclList;
 class FeInheritanceHeader
 {
 public:
-    FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits);
+    FeInheritanceHeader(
+        NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits,
+        std::vector< rtl::OString > * typeParameters);
 
     virtual ~FeInheritanceHeader()
     {
@@ -116,12 +120,16 @@ public:
     AstDeclaration* getInherits()
         { return m_pInherits; }
 
+    std::vector< rtl::OString > const & getTypeParameters() const
+    { return m_typeParameters; }
+
 private:
     void initializeInherits(::rtl::OString* pinherits);
 
     NodeType        m_nodeType;
     ::rtl::OString* m_pName;
     AstDeclaration* m_pInherits;
+    std::vector< rtl::OString > m_typeParameters;
 };
 
 #endif // _IDLC_FEHELPER_HXX_

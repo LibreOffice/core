@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astinterface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:40:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ public:
         { return m_bForwardedInSameFile; }
 
     void setDefined() { m_bIsDefined = true; }
-    sal_Bool isDefined()
+    sal_Bool isDefined() const
         { return m_bIsDefined; }
 
     bool usesSingleInheritance() const { return m_bSingleInheritance; }
@@ -122,7 +122,7 @@ public:
         AstInterface const * ifc, bool optional) const;
 
     void addInheritedInterface(
-        AstInterface const * ifc, bool optional,
+        AstType const * ifc, bool optional,
         rtl::OUString const & documentation);
 
     DoubleMemberDeclarations checkMemberClashes(
