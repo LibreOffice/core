@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:03:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ portuguese_brazilian ] = "Search key";
             Text[ japanese ] = "ŒŸõ·°";
             Text[ korean ] = "°Ë»ö ¿ë¾î";
-            Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ";
+            Text[ chinese_simplified ] = "ËÑÑ°ÌõÄ¿";
             Text[ chinese_traditional ] = "·j´M¶µ¥Ø";
             Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
             Text[ turkish ] = "Arama ölçütü";
@@ -489,6 +489,7 @@ ToolBox RID_BIB_TOOLBAR
     };
     Scroll = TRUE ;
 };
+
 
 
 
