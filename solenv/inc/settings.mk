@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.164 $
+#   $Revision: 1.165 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-16 15:42:17 $
+#   last change: $Author: vg $ $Date: 2005-02-24 15:01:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 MKFILENAME:=SETTINGS.MK
 
 # check for new dmake features
@@ -1327,6 +1326,10 @@ STDSHL=$(STDSHLCUIST)
 .ENDIF
 
 .EXPORT : PICSWITCH
+
+.IF "$(USE_SYSTEM_STL)"=="YES"
+LIBSTLPORT=""
+.ENDIF
 
 .IF "$(NO_DEFAULT_STL)"==""
 STDLIB+=$(LIBSTLPORT)
