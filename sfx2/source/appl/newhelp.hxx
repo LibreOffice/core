@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:03:35 $
+ *  last change: $Author: pb $ $Date: 2001-06-21 13:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,13 +278,14 @@ class SfxHelpWindow_Impl : public SplitWindow
 {
 private:
     ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
-                        xWindow;
+                                xWindow;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XStatusListener >
+                                xOpenListener;
 
     SfxHelpIndexWindow_Impl*    pIndexWin;
     SfxHelpTextWindow_Impl*     pTextWin;
     HelpInterceptor_Impl*       pHelpInterceptor;
     HelpListener_Impl*          pHelpListener;
-    OpenStatusListener_Impl*    pOpenListener;
 
     sal_Int32           nExpandWidth;
     sal_Int32           nCollapseWidth;

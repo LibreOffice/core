@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:03:35 $
+ *  last change: $Author: pb $ $Date: 2001-06-21 13:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& E
     m_bSuccess = Event.IsEnabled;
     m_bFinished = sal_True;
     m_aOpenLink.Call( this );
-    m_xDispatch->removeStatusListener( this, ::com::sun::star::util::URL() );
+    m_xDispatch->removeStatusListener( this, Event.FeatureURL );
     m_aURL.Erase();
 }
 
@@ -189,7 +189,9 @@ void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& E
 
 void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
 {
-    m_xDispatch->removeStatusListener( this, ::com::sun::star::util::URL() );
+    URL aURL;
+    aURL.Complete = m_aURL;
+    m_xDispatch->removeStatusListener( this, aURL );
 }
 
 // -----------------------------------------------------------------------
@@ -1157,7 +1159,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         {
             if ( !IsWait() )
                 EnterWait();
-            pOpenListener->AddListener( xDisp, aURL );
+            ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
             xDisp->dispatch( aURL, Sequence < PropertyValue >() );
         }
     }
@@ -1196,7 +1198,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin        ( NULL ),
     pHelpInterceptor( new HelpInterceptor_Impl() ),
     pHelpListener   ( new HelpListener_Impl( pHelpInterceptor ) ),
-    pOpenListener   ( new OpenStatusListener_Impl ),
     nExpandWidth    ( 0 ),
     nCollapseWidth  ( 0 ),
     nHeight         ( 0 ),
@@ -1205,7 +1206,10 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     bIndex          ( sal_True )
 
 {
-    pHelpInterceptor->InitWaiter( pOpenListener, this );
+    OpenStatusListener_Impl* pOpenListener = new OpenStatusListener_Impl;
+    xOpenListener = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
+
+    pHelpInterceptor->InitWaiter( (OpenStatusListener_Impl*)xOpenListener.get(), this );
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->Show();
@@ -1217,7 +1221,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin->Show();
     pHelpInterceptor->setInterception( pTextWin->getFrame() );
     pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
-    pOpenListener->SetOpenHdl( LINK( this, SfxHelpWindow_Impl, OpenDoneHdl ) );
+    ( (OpenStatusListener_Impl*)xOpenListener.get() )->SetOpenHdl( LINK( this, SfxHelpWindow_Impl, OpenDoneHdl ) );
     LoadConfig();
 }
 
@@ -1285,7 +1289,7 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 aArgs[0].Value <<= bReadOnly;
                 if ( !IsWait() )
                     EnterWait();
-                pOpenListener->AddListener( xDisp, aURL );
+                ( (OpenStatusListener_Impl*)xOpenListener.get() )->AddListener( xDisp, aURL );
                 xDisp->dispatch( aURL, aArgs );
             }
             break;
