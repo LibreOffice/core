@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nametreenode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:20:23 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ inline void
 NameTreeNode<ITEM_ID>::Add_Name( const String &      i_sName,
                                  item_id             i_nId )
 {
-    LocalNames().insert( Map_LocalNames::value_type(i_sName, i_nId) );
+    LocalNames().insert( typename Map_LocalNames::value_type(i_sName, i_nId) );
 }
 
 
