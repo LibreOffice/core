@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-02 16:37:45 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,10 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+
 #include <comphelper/processfactory.hxx>
 
 #include "unoctitm.hxx"
@@ -299,8 +303,14 @@ void SAL_CALL SfxStatusDispatcher::dispatch( const ::com::sun::star::util::URL&,
 {
 }
 
-SFX_IMPL_XINTERFACE_1( SfxStatusDispatcher, OWeakObject, ::com::sun::star::frame::XDispatch )
-SFX_IMPL_XTYPEPROVIDER_1( SfxStatusDispatcher, ::com::sun::star::frame::XDispatch )
+void SAL_CALL SfxStatusDispatcher::dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
+{
+}
+
+SFX_IMPL_XINTERFACE_1( SfxStatusDispatcher, OWeakObject, ::com::sun::star::frame::XNotifyingDispatch )
+SFX_IMPL_XTYPEPROVIDER_1( SfxStatusDispatcher, ::com::sun::star::frame::XNotifyingDispatch )
 //IMPLNAME "com.sun.star.comp.sfx2.StatusDispatcher",
 
 SfxStatusDispatcher::SfxStatusDispatcher()
@@ -328,7 +338,7 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const ::com::sun::star:
 }
 
 SFX_IMPL_XINTERFACE_1( SfxOfficeDispatch, SfxStatusDispatcher, ::com::sun::star::lang::XUnoTunnel )
-SFX_IMPL_XTYPEPROVIDER_2( SfxOfficeDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XUnoTunnel )
+SFX_IMPL_XTYPEPROVIDER_2( SfxOfficeDispatch, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::lang::XUnoTunnel )
 
 
 //-------------------------------------------------------------------------
@@ -416,7 +426,16 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aU
 {
     // ControllerItem is the Impl class
     if ( pControllerItem )
-        pControllerItem->dispatch( aURL, aArgs );
+        pControllerItem->dispatch( aURL, aArgs, ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchResultListener >() );
+}
+
+void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const ::com::sun::star::util::URL& aURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    // ControllerItem is the Impl class
+    if ( pControllerItem )
+        pControllerItem->dispatch( aURL, aArgs, rListener );
 }
 
 void SAL_CALL SfxOfficeDispatch::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & aListener, const ::com::sun::star::util::URL& aURL) throw ( ::com::sun::star::uno::RuntimeException )
@@ -473,7 +492,9 @@ void SfxDispatchController_Impl::UnBindController()
     }
 }
 
-void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw ( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
     if ( pDispatch && aURL == aDispatchURL )
     {
@@ -484,62 +505,95 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             pBindings->LEAVEREGISTRATIONS();
         }
 
-        SfxAllItemSet aSet( SFX_APP()->GetPool() );
-        TransformParameters( GetId(), aArgs, aSet );
-//        aSet.Put( SfxBoolItem( SID_INTERCEPTOR, sal_False ) );
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
         SfxCallMode nCall = SFX_CALLMODE_SLOT;
         sal_Int32 nCount = aArgs.getLength();
         const ::com::sun::star::beans::PropertyValue* pPropsVal = aArgs.getConstArray();
-        for ( sal_Int32 n=0; n<nCount; n++ )
+        if ( rListener.is() )
+            nCall = SFX_CALLMODE_SYNCHRON;
+        else
         {
-            const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-            String aName = rProp.Name;
-            sal_Bool bTemp ;
-            if ( aName.EqualsAscii("SynchronMode") && (rProp.Value >>= bTemp) )
+            for ( sal_Int32 n=0; n<nCount; n++ )
             {
-                nCall = SFX_CALLMODE_SYNCHRON;
-                break;
+                const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
+                String aName = rProp.Name;
+                sal_Bool bTemp ;
+                if ( aName.EqualsAscii("SynchronMode") && (rProp.Value >>= bTemp) )
+                {
+                    nCall = SFX_CALLMODE_SYNCHRON;
+                    break;
+                }
             }
         }
 
+        sal_Bool bSuccess = sal_False;
+        sal_Bool bFailure = sal_False;
+        const SfxPoolItem* pItem = NULL;
         if ( pDispatcher->GetBindings() )
         {
             // execute using bindings, enables support for toggle/enum etc.
-            if ( pDispatcher->IsLocked( GetId() ) )
-                return;
-
-            SfxShell *pShell = 0;
-            const SfxSlot *pSlot = 0;
-            if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
-                    SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
+            if ( !pDispatcher->IsLocked( GetId() ) )
             {
-                if ( aSet.Count() )
+                SfxShell *pShell = 0;
+                const SfxSlot *pSlot = 0;
+                if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
+                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL) ) )
                 {
-                    SfxRequest aReq( GetId(), nCall, aSet );
-                    pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
-                }
-                else
-                {
-                    SfxRequest aReq( GetId(), nCall, SFX_APP()->GetPool() );
-                    pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                    SfxAllItemSet aSet( pShell->GetPool() );
+                    TransformParameters( GetId(), aArgs, aSet );
+                    if ( aSet.Count() )
+                    {
+                        SfxRequest aReq( GetId(), nCall, aSet );
+                        pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                        pItem = aReq.GetReturnValue();
+                        bSuccess = aReq.IsDone() || pItem != NULL;
+                        bFailure = aReq.IsCancelled();
+                    }
+                    else
+                    {
+                        SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
+                        pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
+                        pItem = aReq.GetReturnValue();
+                        bSuccess = aReq.IsDone() || pItem != NULL;
+                        bFailure = aReq.IsCancelled();
+                    }
                 }
             }
         }
         else
         {
+            SfxAllItemSet aSet( SFX_APP()->GetPool() );
+            TransformParameters( GetId(), aArgs, aSet );
             if ( aSet.Count() )
-                pDispatcher->Execute( GetId(), nCall, aSet );
+                pItem = pDispatcher->Execute( GetId(), nCall, aSet );
             else
                 // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
-                pDispatcher->Execute( GetId(), nCall );
+                pItem = pDispatcher->Execute( GetId(), nCall );
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
             const SfxPoolItem* pState=0;
             SfxItemState eState = pDispatcher->QueryState( GetId(), pState );
             StateChanged( GetId(), eState, pState );
+            bSuccess = (pItem != NULL);
+        }
+
+        if ( rListener.is() )
+        {
+            ::com::sun::star::frame::DispatchResultEvent aEvent;
+            aEvent.DispatchURL = aURL;
+            if ( bSuccess )
+                aEvent.State = com::sun::star::frame::DispatchResultState::SUCCESS;
+            else if ( bFailure )
+                aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
+            else
+                aEvent.State = com::sun::star::frame::DispatchResultState::DONTKNOW;
+
+            if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
+                pItem->QueryValue( aEvent.Result );
+
+            rListener->dispatchFinished( aEvent );
         }
     }
 }
