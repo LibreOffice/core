@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 12:38:12 $
+ *  last change: $Author: mba $ $Date: 2001-03-22 11:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
         return 0;
 
     // Sub-Stream "offnen
-    SvStorage *pStor = GetStorage();
+    SvStorage *pStor = HasName() ? GetStorage() : NULL;
     SvStorageStreamRef xStream = pStor ? pStor->OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ), STREAM_STD_READ ) : 0;
     if ( !xStream )
         return 0;
