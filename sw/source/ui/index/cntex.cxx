@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:32:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,13 +430,17 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     long nTokenIndex = 0;
                     long nParamCount = 2;
                     sal_Bool bTabRightAligned = sal_False;
-                    SwFormTokenEnumerator aTokenEnum(pForm->GetPattern(nCurrLevel));
-                    while(aTokenEnum.HasNextToken())
+
+                    // #i24377#
+                    SwFormTokens aPattern = pForm->GetPattern(nCurrLevel);
+                    SwFormTokens::iterator aIt = aPattern.begin();
+
+                    while(aIt != aPattern.end())
                     {
                         if( aSequPropVals.getLength() <= nTokenIndex)
                             aSequPropVals.realloc(nTokenIndex + 10);
 
-                        SwFormToken aToken = aTokenEnum.GetNextToken();
+                        SwFormToken aToken = *aIt; // #i24377#
                         switch(aToken.eTokenType)
                         {
                             case TOKEN_ENTRY_NO     :
@@ -513,6 +517,8 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     beans::PropertyValues* pValues = aSequPropVals.getArray();
                         pValues[nTokenIndex] = aPropVals;
                         nTokenIndex++;
+
+                        aIt++; // #i24377#
                     }
                     aSequPropVals.realloc(nTokenIndex);
 
