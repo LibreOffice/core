@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:41:36 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@
 
 namespace dbaccess
 {
-    typedef ::std::pair<sal_Int32,sal_Int32>    TPositionTypePair;
+    typedef ::std::pair<sal_Int32,::rtl::OUString>          TTypeDefaultValuePair;
+    typedef ::std::pair<sal_Int32,TTypeDefaultValuePair>    TPositionTypePair;
     DECLARE_STL_MAP(::rtl::OUString, TPositionTypePair,::comphelper::UStringMixLess,OColumnNamePos);
 
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
