@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 14:05:53 $
+ *  last change: $Author: mib $ $Date: 2000-11-08 09:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,11 +354,12 @@ class SwXMLTableCellContext_Impl : public SvXMLImportContext
     sal_uInt32                  nRowSpan;
     sal_uInt32                  nColSpan;
 
-    sal_Bool                    bHasContent;
+    sal_Bool                    bHasTextContent : 1;
+    sal_Bool                    bHasTableContent : 1;
 
     SwXMLTableContext *GetTable() { return (SwXMLTableContext *)&xMyTable; }
 
-    sal_Bool HasContent() const { return bHasContent; }
+    sal_Bool HasContent() const { return bHasTextContent || bHasTableContent; }
     inline void InsertContentIfNotThere();
     inline void InsertContent( SwXMLTableContext *pTable );
 
@@ -387,7 +388,8 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
     xMyTable( pTable ),
     nRowSpan( 1UL ),
     nColSpan( 1UL ),
-    bHasContent( sal_False )
+    bHasTextContent( sal_False ),
+    bHasTableContent( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -427,11 +429,11 @@ SwXMLTableCellContext_Impl::~SwXMLTableCellContext_Impl()
 
 inline void SwXMLTableCellContext_Impl::InsertContentIfNotThere()
 {
-    if( !bHasContent )
+    if( !HasContent() )
     {
         GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan,
                                 GetTable()->InsertTableSection() );
-        bHasContent = sal_True;
+        bHasTextContent = sal_True;
     }
 }
 
@@ -439,7 +441,7 @@ inline void SwXMLTableCellContext_Impl::InsertContent(
                                                 SwXMLTableContext *pTable )
 {
     GetTable()->InsertCell( aStyleName, nRowSpan, nColSpan, 0, pTable );
-    bHasContent = sal_True;
+    bHasTableContent = sal_True;
 }
 
 SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
@@ -477,7 +479,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
 
 void SwXMLTableCellContext_Impl::EndElement()
 {
-    if( bHasContent )
+    if( bHasTextContent )
     {
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
@@ -487,7 +489,7 @@ void SwXMLTableCellContext_Impl::EndElement()
                 sal_True );
         }
     }
-    else
+    else if( !bHasTableContent )
     {
         InsertContentIfNotThere();
     }
@@ -1232,6 +1234,12 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol )
 SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
                                              SwTableLine *pUpper )
 {
+    // The topmost table is the only table that maintains the two members
+    // pBox1 and bFirstSection.
+    if( xParentTable.Is() )
+        return ((SwXMLTableContext *)&xParentTable)->NewTableBox( pStNd,
+                                                                  pUpper );
+
     SwTableBox *pBox;
 
     if( pBox1 &&
@@ -1983,6 +1991,11 @@ void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 const SwStartNode *SwXMLTableContext::InsertTableSection(
                                             const SwStartNode *pPrevSttNd )
 {
+    // The topmost table is the only table that maintains the two members
+    // pBox1 and bFirstSection.
+    if( xParentTable.Is() )
+        return ((SwXMLTableContext *)&xParentTable)->InsertTableSection( pPrevSttNd );
+
     const SwStartNode *pStNd;
     Reference<XUnoTunnel> xCrsrTunnel( GetImport().GetTextImport()->GetCursor(),
                                        UNO_QUERY);
