@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:48:08 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 22:02:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,7 +326,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "ι ηΆΌ";
             Text[ arabic ] = "Ρήγ ΗαΥέΝΙ";
             Text[ greek ] = "Αριθμός σελίδας";
-            Text[ korean ] = "μª½ λ²νΈ";
+            Text[ korean ] = "νμ΄μ§€ λ²νΈ";
             Text[ turkish ] = "Sayfa numarasύ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Nϊmero de pαgina";
@@ -354,7 +354,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "ι ζ•Έ";
             Text[ arabic ] = "ΪΟΟ ΗαΥέΝΗΚ";
             Text[ greek ] = "Σύνολο σελιδών";
-            Text[ korean ] = "μª½ μ";
+            Text[ korean ] = "νμ΄μ§€ μ";
             Text[ turkish ] = "Sayfa sayύsύ";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Contar pαginas";
@@ -680,7 +680,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ε€ε";
         Text[ arabic ] = "δΨΗή";
         Text[ greek ] = "Ενότητα";
-        Text[ korean ] = "κµ¬μ—­";
+        Text[ korean ] = "μμ—­";
         Text[ turkish ] = "Bφlόm";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Area";
@@ -811,7 +811,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ιΈε–";
         Text[ arabic ] = "ΚΝΟνΟ";
         Text[ greek ] = "Επιλογή";
-        Text[ korean ] = "λ§ν‚Ή";
+        Text[ korean ] = "μ„ νƒ ν‘μ‹";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selecciσn";
@@ -864,7 +864,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ζι†’";
         Text[ arabic ] = "ΪαΗγΙ ΚΠίνΡ";
         Text[ greek ] = "Υπενθύμιση";
-        Text[ korean ] = "λ§μ»¤";
+        Text[ korean ] = "ν‘μ‹μ";
         Text[ turkish ] = "Anύmsatύcύ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Marca";
@@ -916,7 +916,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ι‡θ¤‡ζε°‹";
         Text[ arabic ] = "ΚίΡΗΡ ΗαΘΝΛ";
         Text[ greek ] = "Επανάληψη αναζήτησης";
-        Text[ korean ] = "μ°ΎκΈ°γ€€λ°λ³µ";
+        Text[ korean ] = "μ°ΎκΈ° λ°λ³µ";
         Text[ turkish ] = "Aramayύ yinele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Repetir bϊsqueda";
@@ -968,7 +968,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ε·¥δ½θ΅¨ε…¬εΌ";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα";
         Text[ greek ] = "Τύπος πίνακα";
-        Text[ korean ] = "ν…μ΄λΈ” μ–‘μ‹";
+        Text[ korean ] = "ν‘ μμ‹";
         Text[ turkish ] = "Tablo formόlό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fσrmula de tabla";
@@ -994,7 +994,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_traditional ] = "ι―θª¤η„ε·¥δ½θ΅¨ε…¬εΌ";
         Text[ arabic ] = "ΥνΫΙ ΜΟζα ΞΗΨΖΙ";
         Text[ greek ] = "Λανθασμένος τύπος πίνακα";
-        Text[ korean ] = "ν‹€λ¦° ν…μ΄λΈ” μ–‘μ‹";
+        Text[ korean ] = "μλª»λ ν‘ μμ‹";
         Text[ turkish ] = "Hatalύ tablo formόlό";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fσrmula errσnea de tabla";
@@ -1016,7 +1016,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ chinese_traditional ] = "η€θ¦½";
     Text[ arabic ] = "ΗαγαΗΝΙ";
     Text[ greek ] = "Μετακίνηση";
-    Text[ korean ] = "λ„¤λΉ„κ²μ΄μ…";
+    Text[ korean ] = "νƒμƒ‰";
     Text[ turkish ] = "Dolaώma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegaciσn";
@@ -1216,7 +1216,7 @@ String STR_IMGBTN_REG_DOWN
     Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ε€ε";
     Text[ arabic ] = "ΗαδΨΗή ΗαΚΗαν";
     Text[ greek ] = "Επόμενη ενότητα";
-    Text[ korean ] = "λ‹¤μ κµ¬μ—­";
+    Text[ korean ] = "λ‹¤μ μμ—­";
     Text[ turkish ] = "Sonraki bφlόm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Area siguiente";
@@ -1352,7 +1352,7 @@ String STR_IMGBTN_SEL_DOWN
     Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ιΈε–";
     Text[ arabic ] = "ΗαΚΝΟνΟ ΗαΚΗαν";
     Text[ greek ] = "Επόμενη επιλογή";
-    Text[ korean ] = "λ‹¤μ λ§ν‚Ή";
+    Text[ korean ] = "λ‹¤μ μ„ νƒ ν‘μ‹";
     Text[ turkish ] = "Φnceki seηim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selecciσn siguiente";
@@ -1406,7 +1406,7 @@ String STR_IMGBTN_MARK_DOWN
     Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ζι†’";
     Text[ arabic ] = "ΪαΗγΙ ΗαΚΠίνΡ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενη υπενθύμιση";
-    Text[ korean ] = "λ‹¤μ λ§μ»¤";
+    Text[ korean ] = "λ‹¤μ ν‘μ‹μ";
     Text[ turkish ] = "Sonraki anύmsatύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca siguiente";
@@ -1519,7 +1519,7 @@ String STR_IMGBTN_TBL_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹θ΅¨ζ Ό";
     Text[ arabic ] = "ΗαΜΟζα ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενος πίνακας";
-    Text[ korean ] = "μ΄μ „ ν…μ΄λΈ”";
+    Text[ korean ] = "μ΄μ „ μ‹νΈ";
     Text[ turkish ] = "Φnceki tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla anterior";
@@ -1649,7 +1649,7 @@ String STR_IMGBTN_REG_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ε€ε";
     Text[ arabic ] = "ΗαδΨΗή ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη ενότητα";
-    Text[ korean ] = "μ΄μ „ κµ¬μ—­";
+    Text[ korean ] = "μ΄μ „ μμ—­";
     Text[ turkish ] = "Φnceki Bφlόm";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Area anterior";
@@ -1675,7 +1675,7 @@ String STR_IMGBTN_BKM_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ζ›Έη±¤";
     Text[ arabic ] = "ΗαΕΤΗΡΙ ΗαγΡΜΪνΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενο σημάδι κειμένου";
-    Text[ korean ] = "μ΄μ „  μ±…κ°ν”Ό";
+    Text[ korean ] = "μ΄μ „ μ±…κ°ν”Ό";
     Text[ turkish ] = "Φnceki metin iώareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca de texto anterior";
@@ -1781,7 +1781,7 @@ String STR_IMGBTN_SEL_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ιΈε–";
     Text[ arabic ] = "ΗαΚΝΟνΟ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη επιλογή";
-    Text[ korean ] = "μ΄μ „ λ§ν‚Ή";
+    Text[ korean ] = "μ΄μ „ μ„ νƒ ν‘μ‹";
     Text[ turkish ] = "Sonraki seηim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selecciσn anterior";
@@ -1834,7 +1834,7 @@ String STR_IMGBTN_MARK_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ζι†’";
     Text[ arabic ] = "ΪαΗγΙ ΗαΚΠίνΡ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενη υπενθύμιση";
-    Text[ korean ] = "μ΄μ „ λ§μ»¤";
+    Text[ korean ] = "μ΄μ „ ν‘μ‹μ";
     Text[ turkish ] = "Φnceki anύmsatύcύ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marca anterior";
@@ -1938,7 +1938,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ε·¥δ½θ΅¨ε…¬εΌ";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος τύπος πίνακα";
-    Text[ korean ] = "μ΄μ „ ν…μ΄λΈ” μ–‘μ‹";
+    Text[ korean ] = "μ΄μ „ ν‘ μμ‹";
     Text[ turkish ] = "Φnceki tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fσrmula de tabla anterior";
@@ -1964,7 +1964,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ε·¥δ½θ΅¨ε…¬εΌ";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος τύπος πίνακα";
-    Text[ korean ] = "λ‹¤μ ν…μ΄λΈ” μ–‘μ‹";
+    Text[ korean ] = "λ‹¤μ ν‘ μμ‹";
     Text[ turkish ] = "Sonraki tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Siguiente fσrmula de tabla";
@@ -1990,7 +1990,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ chinese_traditional ] = "δΈδΈ€ε€‹ι―θª¤η„ε·¥δ½θ΅¨ε…¬εΌ";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΣΗΘήΙ";
     Text[ greek ] = "Προηγούμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "ν‹€λ¦° μ΄μ „ ν…μ΄λΈ” μ–‘μ‹";
+    Text[ korean ] = "ν‹€λ¦° μ΄μ „ ν‘ μμ‹";
     Text[ turkish ] = "Φnceki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fσrmula de tabla anterior errσnea";
@@ -2016,7 +2016,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ chinese_traditional ] = "δΈ‹δΈ€ε€‹ι―θª¤η„ε·¥δ½θ΅¨ε…¬εΌ";
     Text[ arabic ] = "ΥνΫΙ ΗαΜΟζα ΗαΞΗΨΖΙ ΗαΚΗανΙ";
     Text[ greek ] = "Επόμενος λανθασμένος τύπος πίνακα";
-    Text[ korean ] = "ν‹€λ¦° λ‹¤μ ν…μ΄λΈ” μ–‘μ‹";
+    Text[ korean ] = "ν‹€λ¦° λ‹¤μ ν‘ μμ‹";
     Text[ turkish ] = "Sonraki hatalύ tablo formόlό";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Siguiente fσrmula errσnea de tabla";
@@ -2059,6 +2059,7 @@ ImageButton BTN_NAVI
         Text[ finnish ] = "Siirtyminen";
     };
 };
+
 
 
 
