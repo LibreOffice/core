@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-02 18:27:08 $
+ *  last change: $Author: sb $ $Date: 2002-04-09 08:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,6 +1026,11 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             }
 #endif
         }
+    }
+    else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
+    {
+        osl::Guard< vos::IMutex > aGuard(Application::GetSolarMutex());
+        pChildWindow = new WorkWindow(0, Parent);
     }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer;
