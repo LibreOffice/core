@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-04 18:42:20 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,9 @@ namespace accessibility
 
         // dealing with single paragraphs (release reference, return reference etc)
         void Release( sal_uInt32 nPara );
+        /// Set focus to given child
+        void SetFocus( sal_Int32 nChild );
+
         void FireEvent( sal_uInt32 nPara,
                         const sal_Int16 nEventId,
                         const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(),
@@ -234,10 +237,18 @@ namespace accessibility
                            SvxEditSourceAdapter&                                                                            rEditSource,
                            sal_uInt32                                                                                       nParagraphIndex );
 
-        WeakChild GetChild( sal_uInt32 nParagraphIndex );
+        WeakChild GetChild( sal_uInt32 nParagraphIndex ) const;
 
         // forwarder to all paragraphs
+        /// Make all children active and editable (or off)
+        void SetActive( sal_Bool bActive = sal_True );
+        /// Set state of all children
+        void SetState( const sal_Int16 nStateId );
+        /// Unset state of all children
+        void UnSetState( const sal_Int16 nStateId );
+        /// Set offset to edit engine for all children
         void SetEEOffset        ( const Point& rOffset );
+        /// Change edit source on all living children
         void SetEditSource      ( SvxEditSourceAdapter* pEditSource );
 
         // forwarder to given paragraphs
@@ -336,8 +347,27 @@ namespace accessibility
         }
 
     private:
+        /// Set state on given child
+        void SetState( sal_Int32 nChild, const sal_Int16 nStateId );
+        /// Unset state on given child
+        void UnSetState( sal_Int32 nChild, const sal_Int16 nStateId );
+        /// Init child with default state (as stored in previous SetFocus and SetActive calls)
+        void InitChild( AccessibleEditableTextPara&     rChild,
+                        SvxEditSourceAdapter&           rEditSource,
+                        sal_Int32                       nChild,
+                        sal_uInt32                      nParagraphIndex ) const;
+
         // vector the size of the paragraph number of the underlying EditEngine
         VectorOfChildren maChildren;
+
+        // cache EE offset for child creation
+        Point maEEOffset;
+
+        // which child currently has the focus (-1 for none)
+        sal_Int32 mnFocusedChild;
+
+        // whether children are active and editable
+        sal_Bool mbActive;
     };
 
 } // end of namespace accessibility

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-10 17:24:32 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,9 @@ namespace accessibility
     void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (::com::sun::star::uno::RuntimeException)
     {
 #ifdef DBG_UTIL
+        // precondition: solar mutex locked
+        DBG_TESTSOLARMUTEX();
+
         mpImpl->CheckInvariants();
 
         mpImpl->SetEditSource( pEditSource );
@@ -375,6 +378,9 @@ namespace accessibility
     void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
     {
 #ifdef DBG_UTIL
+        // precondition: solar mutex locked
+        DBG_TESTSOLARMUTEX();
+
         mpImpl->CheckInvariants();
 
         mpImpl->SetOffset( rPoint );
@@ -403,6 +409,9 @@ namespace accessibility
     void AccessibleStaticTextBase::UpdateChildren() throw (::com::sun::star::uno::RuntimeException)
     {
 #ifdef DBG_UTIL
+        // precondition: solar mutex locked
+        DBG_TESTSOLARMUTEX();
+
         mpImpl->CheckInvariants();
 
         mpImpl->UpdateChildren();
