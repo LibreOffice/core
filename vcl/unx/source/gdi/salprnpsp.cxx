@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: svesik $ $Date: 2001-07-13 17:33:09 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 13:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,7 @@ SalPrinter::~SalPrinter()
 static inline String getTmpName()
 {
     char tmpNam[ L_tmpnam ];
-#if defined(IRIX)
+#if defined( FREEBSD ) || defined (IRIX)
     mkstemp ( tmpNam );
 #else
     tmpnam_r( tmpNam );
