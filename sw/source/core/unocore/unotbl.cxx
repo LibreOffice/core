@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 17:55:06 $
+ *  last change: $Author: mtg $ $Date: 2001-10-01 10:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2512,7 +2512,7 @@ void SwXTextTable::removeEventListener(const uno::Reference< XEventListener > & 
 
   -----------------------------------------------------------------------*/
 uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
-    throw( uno::RuntimeException )
+    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XCell >  aRef;
@@ -2526,7 +2526,7 @@ uno::Reference< table::XCell >  SwXTextTable::getCellByPosition(sal_Int32 nColum
             aRef = pXCell;
     }
     if(!aRef.is())
-        throw uno::RuntimeException();
+        throw lang::IndexOutOfBoundsException();
     return aRef;
 
 }
@@ -2574,7 +2574,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
   -----------------------------------------------------------------------*/
 uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_Int32 nLeft, sal_Int32 nTop,
                 sal_Int32 nRight, sal_Int32 nBottom)
-                throw( uno::RuntimeException )
+    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XCellRange >  aRef;
@@ -2597,7 +2597,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
         }
     }
     if(!aRef.is())
-        throw uno::RuntimeException();
+        throw lang::IndexOutOfBoundsException();
     return aRef;
 }
 /*-- 11.12.98 12:42:47---------------------------------------------------
@@ -3619,7 +3619,7 @@ SwXCellRange::~SwXCellRange()
 
   -----------------------------------------------------------------------*/
 uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColumn, sal_Int32 nRow)
-                                            throw( uno::RuntimeException )
+    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XCell >  aRet;
@@ -3636,7 +3636,7 @@ uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColum
         }
     }
     if(!aRet.is())
-        throw uno::RuntimeException();
+        throw lang::IndexOutOfBoundsException();
     return aRet;
 }
 /*-- 11.12.98 14:27:34---------------------------------------------------
@@ -3644,7 +3644,7 @@ uno::Reference< table::XCell >  SwXCellRange::getCellByPosition(sal_Int32 nColum
   -----------------------------------------------------------------------*/
 uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
         sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom)
-        throw( uno::RuntimeException )
+    throw( uno::RuntimeException, lang::IndexOutOfBoundsException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XCellRange >  aRet;
@@ -3691,7 +3691,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
         }
     }
     if(!aRet.is())
-        throw uno::RuntimeException();
+        throw lang::IndexOutOfBoundsException();
     return aRet;
 
 }
