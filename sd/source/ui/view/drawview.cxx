@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,6 @@ void SdDrawView::SetPixelMode(BOOL bOn)
         pDoc->SetScaleUnit(eMapUnit);
         pDoc->SetUIUnit(eFieldUnit);
         pDoc->GetItemPool().SetDefaultMetric(eSfxMapUnit);
-        SFX_APP()->GetOptions().SetMetric(eFieldUnit);
 
         MapMode aMapMode = pDocSh->GetFrame()->GetWindow().GetMapMode();
         aMapMode.SetMapUnit(eMapUnit);

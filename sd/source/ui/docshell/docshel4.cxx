@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:43 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
 #endif
 
 #pragma hdrstop
@@ -590,9 +593,12 @@ BOOL SdDrawDocShell::Save()
     }
 
     // komprimiert/native speichern?
-    BOOL bSaveCompressed = SFX_APP()->GetOptions().IsSaveGraphicsCompressed();
+    SvtSaveOptions                          aOptions;
+    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
+    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
+    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
+
     pDoc->SetSaveCompressed( bSaveCompressed );
-    BOOL bSaveNative = SFX_APP()->GetOptions().IsSaveOriginalGraphics();
     pDoc->SetSaveNative( bSaveNative );
 
     if( bRet )
@@ -713,9 +719,12 @@ BOOL SdDrawDocShell::SaveAs( SvStorage * pStor )
         }
     }
     // komprimiert/native speichern?
-    BOOL bSaveCompressed = SFX_APP()->GetOptions().IsSaveGraphicsCompressed();
+    SvtSaveOptions                          aOptions;
+    const SvtSaveOptions::SaveGraphicsMode  eSaveMode( aOptions.GetSaveGraphicsMode() );
+    const BOOL                              bSaveCompressed = ( SvtSaveOptions::SaveGraphicsCompressed == eSaveMode );
+    const BOOL                              bSaveNative = ( SvtSaveOptions::SaveGraphicsOriginal == eSaveMode );
+
     pDoc->SetSaveCompressed( bSaveCompressed );
-    BOOL bSaveNative = SFX_APP()->GetOptions().IsSaveOriginalGraphics();
     pDoc->SetSaveNative( bSaveNative );
 
     if (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,8 +696,10 @@ SvxRuler* SdDrawViewShell::CreateHRuler(SdWindow* pWin, BOOL bIsFirst)
 
     // Metric ...
     UINT16 nMetric = pDoc->GetUIUnit();
+
     if( nMetric == 0xffff )
-        nMetric = SFX_APP()->GetOptions().GetMetric(); // Metric der Applikation
+        nMetric = GetModuleFieldUnit();
+
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
     // ... und auch DefTab am Lineal einstellen
@@ -727,10 +729,12 @@ SvxRuler* SdDrawViewShell::CreateVRuler(SdWindow* pWin)
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
     // Metric am Lineal einstellen
-    SdOptions* pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
-    UINT16 nMetric = pOptions->GetMetric();
+    SdOptions*  pOptions = SD_MOD()->GetSdOptions( pDoc->GetDocumentType() );
+    UINT16      nMetric = pOptions->GetMetric();
+
     if( nMetric == 0xffff )
-        nMetric = SFX_APP()->GetOptions().GetMetric(); // Metric der Applikation
+        nMetric = GetModuleFieldUnit();
+
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleY());

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-11 10:23:07 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,22 @@
 #ifndef _SFX_SAVEOPT_HXX //autogen
 #include <sfx2/saveopt.hxx>
 #endif
+#ifndef _SFXMODULE_HXX
+#include <sfx2/module.hxx>
+#endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
+#endif
+#ifndef _SFXSIDS_HRC
+#include <sfx2/sfxsids.hrc>
 #endif
 #ifndef _SVX_OPTGRID_HXX //autogen
 #include <svx/optgrid.hxx>
 #endif
+#ifndef _SVX_DLGUTIL_HXX
+#include <svx/dlgutil.hxx>
+#endif
+
 
 // -----------------
 // - Option ranges -
@@ -206,7 +216,7 @@ public:
     BOOL    IsDragStripes() const { Init(); return (BOOL) bDragStripes; }
     BOOL    IsHandlesBezier() const { Init(); return (BOOL) bHandlesBezier; }
     BOOL    IsHelplines() const { Init(); return (BOOL) bHelplines; }
-    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? SFX_APP()->GetOptions().GetMetric() : nMetric ); }
+    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? GetModuleFieldUnit() : nMetric ); }
     UINT16  GetDefTab() const { Init(); return nDefTab; }
 
     void    SetRulerVisible( BOOL bOn = TRUE ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
