@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-19 13:53:10 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 11:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,22 +68,16 @@ import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.AccessibleRole;
-import drafts.com.sun.star.accessibility.AccessibleStateType;
-import drafts.com.sun.star.accessibility.XAccessible;
-import drafts.com.sun.star.accessibility.XAccessibleContext;
-import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import drafts.com.sun.star.accessibility.*;
 
 /**
 */
-public class AccessibleObjectFactory implements XGlobalFocusListener {
+public class AccessibleObjectFactory extends java.awt.FocusTraversalPolicy {
 
     // This type is needed for conversions from/to uno Any
-    public static final Type XAccessibleType = new Type(XAccessible.class);
     public static boolean autoPopulate = true;
 
     java.util.Hashtable objectList = new java.util.Hashtable();
-    XAccessibilityInformationProvider infoProvider;
 
     private static AccessibleObjectFactory defaultFactory = new AccessibleObjectFactory();
 
@@ -97,48 +91,42 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
         return defaultFactory;
     }
 
-    /** Sets a new AccessibleInformationProvider to be used by this factory object */
-    public void setInformationProvider(XAccessibilityInformationProvider provider) {
-        infoProvider = provider;
-//      provider.setGlobalFocusListener(this);
+    /** Returns the Component that should receive the focus after aComponent */
+    public java.awt.Component getComponentAfter(java.awt.Container focusCycleRoot,
+        java.awt.Component aComponent) {
+        return null;
     }
 
-    /** Returns the AccessibleInformationProvider currently used by this factory object */
-    public XAccessibilityInformationProvider getInformationProvider() {
-        return infoProvider;
+    /** Returns the Component that should receive the focus before aComponent */
+    public java.awt.Component getComponentBefore(java.awt.Container focusCycleRoot,
+        java.awt.Component aComponent) {
+        return null;
     }
 
-    public AccessibleObject getAccessibleObject(XAccessible xAccessible, boolean create, Accessible parent) {
-        AccessibleObject o = null;
+    /** Returns the default Component to focus */
+        public java.awt.Component getDefaultComponent(java.awt.Container focusCycleRoot) {
+        return null;
+    }
 
-        if(xAccessible != null) {
-            // Retrieve unique id for the original UNO object to be used as a hash key
-            String oid = UnoRuntime.generateOid(xAccessible);
+    /** Returns the first Component in the traversal cycle */
+    public java.awt.Component getFirstComponent(java.awt.Container focusCycleRoot) {
+        return null;
+    }
 
-            // Check if we already have a wrapper object for this context
-            synchronized (objectList) {
-                WeakReference r = (WeakReference) objectList.get(oid);
-                if(r != null) {
-                    o = (AccessibleObject) r.get();
-                }
-            }
-
-            if( o == null && create ) {
-                o = new AccessibleObject(xAccessible, parent);
-
-                // Add the newly created object to the cache list
-                synchronized (objectList) {
-                    objectList.put(oid, new WeakReference(o));
-                    if( Build.DEBUG ) {
-//                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
-                    }
-                }
-            }
+    /** Returns the Component that should receive the focus when a Window is made visible for the first time */
+    public java.awt.Component getInitialComponent(java.awt.Window window) {
+        if (window instanceof NativeFrame) {
+            return ((NativeFrame) window).getInitialComponent();
         }
-
-        return o;
+        return null;
     }
 
+    /** Returns the last Component in the traversal cycle */
+    public java.awt.Component getLastComponent(java.awt.Container focusCycleRoot) {
+        return null;
+    }
+
+/*
     public AccessibleUNOComponent createAccessibleContext(XAccessibleContext xAccessibleContext) {
         AccessibleUNOComponent ac = null;
 
@@ -149,21 +137,10 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                 XAccessibleStateSet xStateSet = null;
 
                 switch(role) {
-                    case AccessibleRole.CHECKBOX:
-                        ac = new AccessibleButton(
-                            javax.accessibility.AccessibleRole.CHECK_BOX,
-                            javax.accessibility.AccessibleState.CHECKED,
-                            xAccessibleContext
-                            );
-                        break;
-                    case AccessibleRole.COMBOBOX:
-                        ac = new AccessibleComboBox(xAccessibleContext);
-                        break;
                     case AccessibleRole.LIST:
                         ac = new AccessibleList(xAccessibleContext);
                         break;
                     case AccessibleRole.MENUBAR:
-                    case AccessibleRole.PAGETABLIST:
                     case AccessibleRole.POPUPMENU:
                         ac = new AccessibleContainer(
                             AccessibleRoleMap.toAccessibleRole(role),
@@ -214,29 +191,12 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                     case AccessibleRole.PARAGRAPH:
                         ac = new AccessibleParagraph(xAccessibleContext);
                         break;
-                    case AccessibleRole.PUSHBUTTON:
-                        ac = new AccessibleButton(
-                            javax.accessibility.AccessibleRole.PUSH_BUTTON,
-                            javax.accessibility.AccessibleState.SELECTED,
-                            xAccessibleContext
-                            );
-                        break;
-                    case AccessibleRole.RADIOBUTTON:
-                        ac = new AccessibleButton(
-                            javax.accessibility.AccessibleRole.RADIO_BUTTON,
-                            javax.accessibility.AccessibleState.CHECKED,
-                            xAccessibleContext
-                            );
-                        break;
                     case AccessibleRole.SCROLLBAR:
                         ac = new AccessibleScrollBar(xAccessibleContext);
                         break;
-                    case AccessibleRole.SEPARATOR:
-                        ac = new AccessibleSeparator(xAccessibleContext);
-                        break;
                     case AccessibleRole.TABLE:
                         xStateSet = xAccessibleContext.getAccessibleStateSet();
-                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.MANAGES_DESCENDANT)) {
+                        if(xStateSet != null && ! xStateSet.contains(AccessibleStateType.CHILDREN_TRANSIENT)) {
                             ac = new AccessibleTextTable(xAccessibleContext);
                         } else {
                             ac = new AccessibleSpreadsheet(xAccessibleContext);
@@ -255,16 +215,9 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                     case AccessibleRole.FOOTER:
                     case AccessibleRole.FOOTNOTE:
                     case AccessibleRole.HEADER:
-                    case AccessibleRole.LAYEREDPANE:
-                    case AccessibleRole.OPTIONPANE:
-                    case AccessibleRole.PAGETAB:
+                    case AccessibleRole.PAGETABLIST:
                     case AccessibleRole.PANEL:
-                    case AccessibleRole.ROOTPANE:
-                    case AccessibleRole.SCROLLPANE:
-                    case AccessibleRole.SPLITPANE:
-                    case AccessibleRole.STATUSBAR:
                     case AccessibleRole.TOOLBAR:
-                    case AccessibleRole.WINDOW:
                         ac = new AccessibleWindow(
                             AccessibleRoleMap.toAccessibleRole(role),
                             xAccessibleContext
@@ -275,10 +228,6 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                             System.out.println("Unmapped role: " + AccessibleRoleMap.toAccessibleRole(role)
                              + " (id = " + role + ")");
                         }
-                        ac = new AccessibleWindow(
-                            AccessibleRoleMap.toAccessibleRole(role),
-                            xAccessibleContext
-                        );
                         break;
                 }
 
@@ -288,152 +237,364 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                     listener = (AccessibleEventListener) ac;
                 }
 
-                /* The accessible event broadcaster will never be removed by a removeEventListener
-                 * call. This requires that the UNO accessibility objects get activly destructed
-                 * using dispose().
-                 */
-                ac.initialize(infoProvider.getAccessibleContextInfo(xAccessibleContext, listener));
-            }
-
-            catch(com.sun.star.uno.RuntimeException e) {
-            }
-        }
-
-        if( Build.DEBUG && ac == null ) {
-            System.out.println("AccessibleObjectFactory: returning null object");
-        }
-        return ac;
-    }
-/*
-    public AccessibleObject removeAccessibleObject(XAccessible xAccessible) {
-        XAccessibleContext xAccessibleContext = null;
-
-        if(xAccessible == null) {
-            return null;
-        }
-
-        // Save the round trip to C++ UNO if possible
-        if(xAccessible instanceof XAccessibleContext) {
-            xAccessibleContext = (XAccessibleContext) xAccessible;
-        } else {
-            xAccessibleContext = xAccessible.getAccessibleContext();
-        }
-
-        // Ensure that we really got an UNO accessible context
-        if(xAccessibleContext == null) {
-            return null;
-        }
-
-        // Retrieve unique id for the original UNO object to be used as a hash key
-        String oid = UnoRuntime.generateOid(xAccessibleContext);
-        AccessibleObject o = null;
-        // Check if we already have a wrapper object for this context
-        synchronized (objectList) {
-            // Do not remove the object from the list, may need to recycle
-            // them as long as they are do garbage collected
-            WeakReference r = (WeakReference) objectList.get(oid);
-            if(r != null) {
-                o = (AccessibleObject) r.get();
-            }
-        }
-
-        // FIXME create dummy for objects not found.
-
-        return null;
     }
 */
-    public static XAccessible toXAccessible(Object any) {
-        if(AnyConverter.isObject(any)) {
-            try {
-                return (XAccessible) AnyConverter.toObject(XAccessibleType, any);
-            }
+    private java.awt.EventQueue eventQueue = java.awt.Toolkit.getDefaultToolkit().getSystemEventQueue();
 
-            catch(com.sun.star.lang.IllegalArgumentException e) {
-                // FIXME: output
-            }
-        }
-
-        return null;
+    public java.awt.EventQueue getEventQueue() {
+        return eventQueue;
     }
 
-    public java.lang.Object[] getAccessibleObjectSet(java.lang.Object o) {
-        java.lang.Object[] list = null;
+    public java.awt.Component getAccessibleComponent(XAccessible xAccessible) {
+        java.awt.Component c = null;
+        if (xAccessible != null) {
+            // Retrieve unique id for the original UNO object to be used as a hash key
+            String oid = UnoRuntime.generateOid(xAccessible);
 
-        if( o instanceof java.lang.Object[] ) {
-            list = (java.lang.Object[]) o;
-        } else if( o instanceof com.sun.star.uno.Any && AnyConverter.isArray(o) ) {
-            try {
-                list = (java.lang.Object[]) AnyConverter.toArray(o);
-            }
-
-            catch(com.sun.star.lang.IllegalArgumentException e) {
-                // this should never happen
-            }
-        }
-
-        if( list != null ) {
-            java.util.ArrayList set = new java.util.ArrayList(list.length);
-
-            for(int i=0; i<list.length; i++) {
-                AccessibleObject ao = getAccessibleObject(toXAccessible(list[i]), true,  null);
-                if( ao != null ) {
-                    set.add(ao);
+            // Check if we already have a wrapper object for this context
+            synchronized (objectList) {
+                WeakReference r = (WeakReference) objectList.get(oid);
+                if(r != null) {
+                    c = (java.awt.Component) r.get();
                 }
             }
-
-            set.trimToSize();
-            return set.toArray();
         }
-
-        return null;
+        return c;
     }
 
-    public void releaseAccessibleObject(AccessibleObject o) {
-        synchronized (objectList) {
-            objectList.remove(o.toString());
-            if( Build.DEBUG ) {
-                System.out.println("Object cache now contains " + objectList.size() + " objects.");
-            }
-        }
-    }
-
-    // Traverses the accessibility hierarchy to ensure global focus event notifications
-    public static void populate(javax.accessibility.AccessibleContext ac) {
-        // ignore objects that have transient state
-        if( ac != null ) {
-            AccessibleStateSet as = ac.getAccessibleStateSet();
-            if( null != as &&
-                !as.contains(javax.accessibility.AccessibleState.TRANSIENT) &&
-                !as.contains(AccessibleStateTypeMap.get(AccessibleStateType.MANAGES_DESCENDANT))
-            )
-            {
-                int n = ac.getAccessibleChildrenCount();
-                for( int i = 0; i < n; i++ ) {
-                    Accessible a = ac.getAccessibleChild(i);
-                    if( a != null ) {
-                        populate(a.getAccessibleContext());
+    /**
+    * returns the child component that has the initial input focus
+    */
+    protected void populateContainer(java.awt.Container parent, XAccessibleContext parentAC, java.awt.Window frame) {
+        if (parentAC != null) {
+            try {
+                int childCount = parentAC.getAccessibleChildCount();
+                for (int i=0; i<childCount; i++) {
+                    XAccessible child = parentAC.getAccessibleChild(i);
+                    if (child != null) {
+                        XAccessibleContext childAC = child.getAccessibleContext();
+                        java.awt.Component c = createAccessibleComponent(child, childAC, frame);
+                        if (c != null) {
+                            if (c instanceof java.awt.Container) {
+                                populateContainer((java.awt.Container) c, childAC, frame);
+                            }
+                            parent.add(c);
+                        }
+                    } else if (Build.DEBUG) {
+                        System.err.println("ignoring not accessible child " + i);
                     }
                 }
             }
+
+            catch (java.lang.Exception e) {
+                System.err.println("Exception caught: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
-    /*
-    * XGlobalFocusListener
-    */
-
-    public void focusGained(XAccessible xAccessible) {
-        AccessibleObject ao = getAccessibleObject(xAccessible, true, null);
-        if( ao != null ) {
-            ao.processFocusGained();
+    protected java.awt.Component createAccessibleComponent(XAccessible xAccessible) {
+        if (xAccessible != null) {
+            try {
+                XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+                if (xAccessibleContext != null) {
+                    java.awt.Component c = createAccessibleComponentImpl(xAccessible,
+                        xAccessibleContext.getAccessibleRole(), (XAccessibleComponent)
+                        UnoRuntime.queryInterface(XAccessibleComponent.class,xAccessibleContext),
+                        xAccessibleContext.getAccessibleStateSet());
+                    if (c != null) {
+                        if (c instanceof java.awt.Container) {
+                            populateContainer(((java.awt.Container) c), xAccessibleContext, null);
+                        }
+                        return c;
+                    }
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
         }
+        return null;
     }
 
-    public void focusLost(XAccessible xAccessible) {
-        AccessibleObject ao = getAccessibleObject(xAccessible, false, null);
-        if( ao != null ) {
-            ao.processFocusLost();
+    protected java.awt.Component createAccessibleComponent(XAccessible xAccessible, XAccessibleContext xAccessibleContext,
+        java.awt.Window frame) {
+        if (xAccessibleContext != null) {
+            try {
+                XAccessibleStateSet xAccessibleStateSet = xAccessibleContext.getAccessibleStateSet();
+                java.awt.Component c = createAccessibleComponentImpl(xAccessible,
+                    xAccessibleContext.getAccessibleRole(), (XAccessibleComponent)
+                    UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext),
+                    xAccessibleStateSet);
+                if (c != null) {
+                    // Set this component as initial component
+                    if (xAccessibleStateSet.contains(AccessibleStateType.FOCUSED)) {
+                        if (frame instanceof Dialog) {
+                            ((Dialog) frame).setInitialComponent(c);
+                        } else if (frame instanceof Frame) {
+                            ((Frame) frame).setInitialComponent(c);
+                        }
+                    }
+                    return c;
+                }
+            } catch (com.sun.star.uno.RuntimeException e) {
+                System.err.println("Exception caught: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
+        return null;
+    }
+
+    protected java.awt.Component createAccessibleComponentImpl(XAccessible xAccessible, short role,
+        XAccessibleComponent xAccessibleComponent, XAccessibleStateSet xAccessibleStateSet) {
+        java.awt.Component c = null;
+        switch (role) {
+            case AccessibleRole.CANVAS:
+                c = new Container(javax.accessibility.AccessibleRole.CANVAS,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.CHECKBOX:
+                c = new CheckBox(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.COMBOBOX:
+                // There is a different understanding of combo boxes in VCL than in Java:
+                // the Java combo boxes correspond to the VCL DropDown[Combo|List]Boxes,
+                // while all Combo-/ListBoxes if VCL return the role COMBOBOX
+                XAccessibleAction xAccessibleAction = (XAccessibleAction)
+                    UnoRuntime.queryInterface(XAccessibleAction.class, xAccessibleComponent);
+                if (xAccessibleAction != null && xAccessibleAction.getAccessibleActionCount() > 0) {
+//                  c = new ComboBox(xAccessible, xAccessibleComponent, xAccessibleAction);
+                    c = new Container(javax.accessibility.AccessibleRole.COMBO_BOX,
+                        xAccessible, xAccessibleComponent);
+                } else {
+                    c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                        xAccessible, xAccessibleComponent);
+                }
+                break;
+            case AccessibleRole.DOCUMENT:
+                c = new Container(javax.accessibility.AccessibleRole.CANVAS,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.EMBEDDED_OBJECT:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.ENDNOTE:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.FILLER:
+                c = new Container(javax.accessibility.AccessibleRole.FILLER,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.FOOTNOTE:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.FOOTER:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.GRAPHIC:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.HEADER:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.ICON:
+                c = new Icon(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.LABEL:
+                c = new Label(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.LAYEREDPANE:
+                c = new Container(javax.accessibility.AccessibleRole.LAYERED_PANE,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.LIST:
+                c = new List(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.MENU:
+                c = new Menu(xAccessible, xAccessibleComponent);
+                // !!! FIXME !!!
+                // Menu items are always visible, but change SHOWING state
+//              if (!xAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
+//                  c.setVisible(false);
+//              }
+                break;
+            case AccessibleRole.MENUBAR:
+                c = new MenuBar(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.MENUITEM:
+                c = new MenuItem(xAccessible, xAccessibleComponent);
+                c.setFocusable(false);
+                // Menu items are always visible, but change SHOWING state
+//              if (!xAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
+//                  c.setVisible(false);
+//              }
+                break;
+            case AccessibleRole.POPUPMENU:
+                c = new PopupMenu(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.OPTIONPANE:
+                c = new Container(javax.accessibility.AccessibleRole.OPTION_PANE,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.PAGETAB:
+                c = new Container(javax.accessibility.AccessibleRole.PAGE_TAB,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.PAGETABLIST:
+                c = new PageTabList(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.PARAGRAPH:
+            case AccessibleRole.HEADING:
+                c = new TextComponent(xAccessible, xAccessibleComponent, true);
+                break;
+            case AccessibleRole.PANEL:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.PUSHBUTTON:
+                c = new Button(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.RADIOBUTTON:
+                c = new RadioButton(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.ROOTPANE:
+                c = new Container(javax.accessibility.AccessibleRole.ROOT_PANE,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.SCROLLBAR:
+                if (xAccessibleStateSet.contains(AccessibleStateType.VERTICAL)) {
+                    c = new ScrollBar(xAccessible, xAccessibleComponent,
+                        javax.swing.SwingConstants.VERTICAL);
+                } else {
+                    c = new ScrollBar(xAccessible, xAccessibleComponent);
+                }
+                break;
+            case AccessibleRole.SCROLLPANE:
+                c = new Container(javax.accessibility.AccessibleRole.SCROLL_PANE,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.SEPARATOR:
+                if (xAccessibleStateSet.contains(AccessibleStateType.VERTICAL)) {
+                    c = new Separator(xAccessible, xAccessibleComponent,
+                        javax.swing.SwingConstants.VERTICAL);
+                } else {
+                    c = new Separator(xAccessible, xAccessibleComponent);
+                }
+                break;
+            case AccessibleRole.SHAPE:
+                c = new Container(javax.accessibility.AccessibleRole.CANVAS,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.SPLITPANE:
+                c = new Container(javax.accessibility.AccessibleRole.SPLIT_PANE,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.STATUSBAR:
+                c = new Container(javax.accessibility.AccessibleRole.STATUS_BAR,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.TABLE:
+                c = new Table(xAccessible, xAccessibleComponent,
+                    xAccessibleStateSet.contains(AccessibleStateType.MULTISELECTABLE));
+                break;
+            case AccessibleRole.TEXT:
+                c = new TextComponent(xAccessible, xAccessibleComponent,
+                    xAccessibleStateSet.contains(AccessibleStateType.MULTILINE));
+                break;
+            case AccessibleRole.TEXT_FRAME:
+                c = new Container(javax.accessibility.AccessibleRole.PANEL,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.TOGGLEBUTTON:
+                c = new ToggleButton(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.TOOLBAR:
+                c = new Container(javax.accessibility.AccessibleRole.TOOL_BAR,
+                    xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.TREE:
+                c = new Tree(xAccessible, xAccessibleComponent);
+                break;
+            case AccessibleRole.VIEWPORT:
+                c = new Container(javax.accessibility.AccessibleRole.VIEWPORT,
+                    xAccessible, xAccessibleComponent);
+                break;
+            default:
+                System.err.println("Unmapped accessible object " + role);
+                System.err.println("usually mapped to " + AccessibleRoleAdapter.getAccessibleRole(role));
+                c = new Container(AccessibleRoleAdapter.getAccessibleRole(role),
+                    xAccessible, xAccessibleComponent);
+                break;
+        }
+        if (c != null) {
+            // Add the newly created object to the cache list
+            synchronized (objectList) {
+                objectList.put(c.toString(), new WeakReference(c));
+                if (Build.DEBUG) {
+//                  System.out.println("Object cache now contains " + objectList.size() + " objects.");
+                }
+            }
+            // Set the boundings of the component if it is visible ..
+            if (xAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
+                com.sun.star.awt.Rectangle r = xAccessibleComponent.getBounds();
+                c.setBounds(r.X, r.Y, r.Width, r.Height);
+            } else {
+                c.setVisible(false);
+            }
+            // Set the components' enabled enabled..
+            if (!xAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
+                c.setEnabled(false);
+            }
+        }
+
+        return c;
+    }
+
+/*
+    protected java.? createTransientObject()
+*/
+    public java.awt.Window getTopWindow(XAccessible xAccessible) {
+        XAccessibleContext xAccessibleContext = xAccessible.getAccessibleContext();
+
+        if (xAccessibleContext != null) {
+            short role = xAccessibleContext.getAccessibleRole();
+            XAccessibleStateSet xAccessibleStateSet = xAccessibleContext.getAccessibleStateSet();
+            XAccessibleComponent xAccessibleComponent = (XAccessibleComponent)
+                UnoRuntime.queryInterface(XAccessibleComponent.class, xAccessibleContext);
+
+            java.awt.Window w;
+            if (role == AccessibleRole.DIALOG) {
+                w = new Dialog(new Application(),
+                    xAccessibleContext.getAccessibleName(),
+                    xAccessibleStateSet.contains(AccessibleStateType.MODAL),
+                    xAccessibleComponent);
+            } else if (role == AccessibleRole.FRAME) {
+                w = new Frame(xAccessibleContext.getAccessibleName(),
+                    xAccessibleComponent);
+            } else if (role == AccessibleRole.WINDOW) {
+                w = new Window(new Application(), xAccessibleComponent);
+            } else {
+                if (Build.DEBUG) {
+                    System.err.println("invalid role for toplevel window: " + role);
+                }
+                w = new Window(new Application(), xAccessibleComponent);
+//              return null;
+            }
+            populateContainer(w, xAccessibleContext, w);
+            w.setFocusTraversalPolicy(this);
+            w.setVisible(true);
+            // Post window gained focus event to let the frame/dialog become active
+            if (xAccessibleStateSet.contains(AccessibleStateType.ACTIVE)) {
+                getEventQueue().postEvent(new java.awt.event.WindowEvent(w, java.awt.event.WindowEvent.WINDOW_GAINED_FOCUS));
+            }
+            return w;
+        }
+
+        return null;
     }
 }
 

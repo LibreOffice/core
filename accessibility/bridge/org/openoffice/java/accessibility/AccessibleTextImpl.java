@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextImpl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-08 06:48:02 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 11:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,280 +61,367 @@
 
 package org.openoffice.java.accessibility;
 
-import java.text.BreakIterator;
-import java.util.Locale;
-import javax.accessibility.AccessibleContext;
-import javax.accessibility.AccessibleComponent;
+import com.sun.star.awt.*;
+import com.sun.star.style.*;
+import com.sun.star.uno.*;
+import drafts.com.sun.star.accessibility.*;
+
 import javax.accessibility.AccessibleText;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-import org.openoffice.accessibility.internal.*;
-
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Rectangle;
-import com.sun.star.uno.UnoRuntime;
-
-import drafts.com.sun.star.accessibility.XAccessibleText;
-
-/** This class mapps the methods of a AccessibleText the corresponding UNO
-    XAccessibleText methods with two exceptions: because the gnome java
-    accessbridge relies on the behavior of the java word iterator that
-    handles punctuation characters as word (see java docu for details),
-    for objects not implementing AccessibleEditableText, the iteration
-    is done locally. Also the character attributes are calculated through
-    the AccessibleContext interface ..
-*/
+/** The GenericAccessibleEditableText mapps the calls to the java AccessibleEditableText
+ *  interface to the corresponding methods of the UNO XAccessibleEditableText interface.
+ */
 public class AccessibleTextImpl implements javax.accessibility.AccessibleText {
-    XAccessibleText unoAccessibleText;
+    XAccessibleText unoObject;
 
-    AccessibleContext context;
-    String text;
+    final static double toPointFactor = 1 / (7/10 + 34.5);
 
-    public AccessibleTextImpl(XAccessibleText xText, AccessibleContext ac) {
-        unoAccessibleText = xText;
-        context = ac;
-
-        if( unoAccessibleText != null ) {
-            text = unoAccessibleText.getText();
-        } else {
-            text = "";
-        }
+    /** Creates new GenericAccessibleEditableText object */
+    public AccessibleTextImpl(XAccessibleText xAccessibleText) {
+        unoObject = xAccessibleText;
     }
 
-    public void update() {
-        if( unoAccessibleText != null ) {
-            text = unoAccessibleText.getText();
-        }
-    }
-
-    /*
-    * AccessibleText
-    */
-
-    /** Returns the string after a given index */
-    public java.lang.String getAfterIndex(int part, int index) {
-        BreakIterator bi;
-        int start;
-        int end;
-
+    protected static short toTextType(int part) {
+        short type = 0;
         switch (part) {
             case AccessibleText.CHARACTER:
-                start = index + 1;
-                end = index + 2;
+                type = AccessibleTextType.CHARACTER;
                 break;
             case AccessibleText.WORD:
-                bi = BreakIterator.getWordInstance(context.getLocale());
-                bi.setText(text);
-                start = bi.following(index);
-                end = bi.next();
+                type = AccessibleTextType.WORD;
                 break;
             case AccessibleText.SENTENCE:
-                bi = BreakIterator.getSentenceInstance(context.getLocale());
-                bi.setText(text);
-                start = bi.following(index);
-                end = bi.next();
+                type = AccessibleTextType.SENTENCE;
                 break;
             default:
-                throw new IllegalArgumentException();
+                break;
         }
+        return type;
+    }
 
-        // Ensure start is in valid range
-        if( start < 0 ) {
-            start = 0;
+    /** Returns the string after a given index */
+    public String getAfterIndex(int part, int index) {
+        short type = toTextType(part);
+        if (type > 0) {
+            try {
+                // FIXME: Workaround for a bug in the office that an empty string is returned
+                // when asking for the word at the position of a blank
+                String s = unoObject.getTextBehindIndex(index, type);
+                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                    s = " ";
+                }
+                return s;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
         }
-
-        // Ensure end is in valid range
-        if( end > text.length() ) {
-            end = text.length();
-        }
-
-        return text.substring(start, end);
+        return null;
     }
 
     /** Returns the zero-based offset of the caret */
     public int getCaretPosition() {
-        // A fixed text does not really have a caret
-        return -1;
+        try {
+//          if (Build.DEBUG) {
+//              System.err.println(this + "getCaretPosition() returns " + unoObject.getCaretPosition());
+//          }
+            return unoObject.getCaretPosition();
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return -1;
+        }
     }
 
     /** Returns the start offset within the selected text */
     public int getSelectionStart() {
-        // In fixed text nothing can be selected, so return the caret position as specified
-        // in AccessibleText docu.
-        return getCaretPosition();
+        try {
+            int index = unoObject.getSelectionStart();
+            if (index == -1) {
+                index = getCaretPosition();
+            }
+            return index;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return -1;
+        }
+    }
+
+    protected static void setAttribute(javax.swing.text.MutableAttributeSet as, com.sun.star.beans.PropertyValue property) {
+        try {
+            // Map alignment attribute
+            if (property.Name.equals("ParaAdjust")) {
+                ParagraphAdjust adjust = (ParagraphAdjust)
+                    AnyConverter.toObject(new Type(ParagraphAdjust.class), property.Value);
+
+                if (adjust.equals(ParagraphAdjust.LEFT)) {
+                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_LEFT);
+                } else if (adjust.equals(ParagraphAdjust.RIGHT)) {
+                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_RIGHT);
+                } else if (adjust.equals(ParagraphAdjust.CENTER)) {
+                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_CENTER);
+                } else if (adjust.equals(ParagraphAdjust.BLOCK) || adjust.equals(ParagraphAdjust.STRETCH)) {
+                    StyleConstants.setAlignment(as, StyleConstants.ALIGN_JUSTIFIED);
+                }
+
+            // Map background color
+            } else if (property.Name.equals("CharBackColor")) {
+                StyleConstants.setBackground(as, new java.awt.Color(AnyConverter.toInt(property.Value)));
+
+            // FIXME: BidiLevel
+
+            // Set bold attribute
+            } else if (property.Name.equals("CharWeight")) {
+                boolean isBold = AnyConverter.toFloat(property.Value) > 125;
+                StyleConstants.setBold(as, isBold);
+
+            // FIXME: Java 1.4 ComponentAttribute, ComponentElementName, ComposedTextAttribute
+
+            // Set FirstLineIndent attribute
+            } else if (property.Name.equals("ParaFirstLineIndent")) {
+                StyleConstants.setFirstLineIndent(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+
+            // Set font family attribute
+            } else if (property.Name.equals("CharFontPitch")) {
+                if (AnyConverter.toShort (property.Value) == 2) {
+                    StyleConstants.setFontFamily(as, "Proportional");
+                }
+
+            // Set font size attribute
+            } else if (property.Name.equals("CharHeight")) {
+                StyleConstants.setFontSize(as, (int) AnyConverter.toFloat(property.Value));
+
+            // Map foreground color
+            } else if (property.Name.equals("CharColor")) {
+                StyleConstants.setForeground(as, new java.awt.Color(AnyConverter.toInt(property.Value)));
+
+            // FIXME: IconAttribute, IconElementName
+
+            // Set italic attribute
+            } else if (property.Name.equals("CharPosture")) {
+                boolean isItalic = (FontSlant.ITALIC == (FontSlant)
+                    AnyConverter.toObject(new Type(FontSlant.class), property.Value));
+
+                StyleConstants.setItalic(as, isItalic);
+
+            // Set left indent attribute
+            } else if (property.Name.equals("ParaLeftMargin")) {
+                StyleConstants.setLeftIndent(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+
+            // Set right indent attribute
+            } else if (property.Name.equals("ParaRightMargin")) {
+                StyleConstants.setRightIndent(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+            }
+
+            // Set line spacing attribute
+            else if (property.Name.equals("ParaLineSpacing")) {
+                StyleConstants.setLineSpacing(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+            }
+
+            // FIXME: Java 1.4 NameAttribute, Orientation, ResolveAttribute
+
+            // Set space above attribute
+            else if (property.Name.equals("ParaTopMargin")) {
+                StyleConstants.setSpaceAbove(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+            }
+
+            // Set space below attribute
+            else if (property.Name.equals("ParaBottomMargin")) {
+                StyleConstants.setSpaceBelow(as, (float) (toPointFactor * AnyConverter.toInt(property.Value)));
+
+            // Set strike through attribute
+            } else if (property.Name.equals("CharStrikeout")) {
+                boolean isStrikeThrough = (FontStrikeout.NONE != AnyConverter.toShort(property.Value));
+                StyleConstants.setStrikeThrough(as, isStrikeThrough);
+
+            // Set sub-/superscript attribute
+            } else if (property.Name.equals("CharEscapement")) {
+                short value = AnyConverter.toShort(property.Value);
+                if (value > 0) {
+                    StyleConstants.setSuperscript(as, true);
+                } else if (value < 0) {
+                    StyleConstants.setSubscript(as, true);
+                }
+
+            // Set tabset attribute
+            } else if (property.Name.equals("ParaTabStops")) {
+                TabStop[] unoTabStops = (TabStop[]) AnyConverter.toArray(property.Value);
+                java.util.ArrayList tabStops = new java.util.ArrayList(unoTabStops.length);
+
+                for (int index2 = 0; index2 < unoTabStops.length; index2++) {
+                    float pos = (float) (toPointFactor * unoTabStops[index2].Position);
+
+                    if (unoTabStops[index2].Alignment.equals(TabAlign.LEFT)) {
+                        tabStops.add(new javax.swing.text.TabStop(pos,
+                            javax.swing.text.TabStop.ALIGN_LEFT,
+                            javax.swing.text.TabStop.LEAD_NONE)
+                        );
+                    }
+                    else if (unoTabStops[index2].Alignment.equals(TabAlign.CENTER)) {
+                        tabStops.add(new javax.swing.text.TabStop(pos,
+                            javax.swing.text.TabStop.ALIGN_CENTER,
+                            javax.swing.text.TabStop.LEAD_NONE)
+                        );
+                    }
+                    else if (unoTabStops[index2].Alignment.equals(TabAlign.RIGHT)) {
+                        tabStops.add(new javax.swing.text.TabStop(pos,
+                            javax.swing.text.TabStop.ALIGN_RIGHT,
+                            javax.swing.text.TabStop.LEAD_NONE)
+                        );
+                    }
+                    else if (unoTabStops[index2].Alignment.equals(TabAlign.DECIMAL)) {
+                        tabStops.add(new javax.swing.text.TabStop(pos,
+                            javax.swing.text.TabStop.ALIGN_DECIMAL,
+                            javax.swing.text.TabStop.LEAD_NONE)
+                        );
+                    }
+                    else {
+                        tabStops.add(new javax.swing.text.TabStop(pos));
+                    }
+                }
+
+                StyleConstants.setTabSet(as, new javax.swing.text.TabSet((javax.swing.text.TabStop[]) tabStops.toArray()));
+
+            // Set underline attribute
+            } else if (property.Name.equals("CharUnderline")) {
+                boolean isUnderline = (FontUnderline.NONE != AnyConverter.toShort(property.Value));
+                StyleConstants.setUnderline(as, isUnderline);
+            }
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            if (Build.DEBUG) {
+                System.err.println(e.getMessage());
+            }
+        }
     }
 
     /** Returns the AttributSet for a given character at a given index */
-    public javax.swing.text.AttributeSet getCharacterAttribute(int index) {
-        if( index > 0 && index < getCharCount() ) {
-            SimpleAttributeSet as = new SimpleAttributeSet();
-            AccessibleComponent ac = context.getAccessibleComponent();
-
-            // Fixed text has always the default colors
-            StyleConstants.setBackground(as, ac.getBackground());
-            StyleConstants.setForeground(as, ac.getForeground());
-
-            // Retrieve the information by querying the UI font
-            java.awt.Font f = ac.getFont();
-            if(f != null) {
-                StyleConstants.setFontFamily(as, f.getFamily());
-                StyleConstants.setFontSize(as, f.getSize());
-                StyleConstants.setBold(as, f.isBold());
-                StyleConstants.setItalic(as, f.isItalic());
+    public javax.swing.text.AttributeSet getCharacterAttribute(int param) {
+        try {
+            com.sun.star.beans.PropertyValue[] propertyValues = unoObject.getCharacterAttributes(param);
+            javax.swing.text.SimpleAttributeSet attributeSet = new javax.swing.text.SimpleAttributeSet();
+            if (null != propertyValues) {
+                for (int index = 0; index < propertyValues.length; index++) {
+                    setAttribute(attributeSet, propertyValues[index]);
+                }
             }
-
-            // Retrieve the real character attributes from the live object
-    //      StyleConstants.setUnderline(as, 0 != (attributes & CharacterAttributes.UNDERLINE));
-
-            return as;
+            return attributeSet;
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            if (Build.DEBUG) {
+                System.err.println(e.getMessage());
+            }
+            return null;
         }
-
-        return null;
     }
 
-    /** Given a point in local ccordinates, return the zero-based index of the character under that point */
+    /** Given a point in local coordinates, return the zero-based index of the character under that point */
     public int getIndexAtPoint(java.awt.Point point) {
-        int ret = -1;
-
         try {
-            if( unoAccessibleText != null ) {
-                ret = unoAccessibleText.getIndexAtPoint(new Point( point.x, point.y ));
-            }
-        }
-
-        catch(com.sun.star.uno.RuntimeException e) {
-            if( Build.DEBUG ) {
+//          if (Build.DEBUG) {
+//              System.err.println(this + "getIndexAtPoint(" + point.x + ", " + point.y + ") returns " +
+//                  unoObject.getIndexAtPoint(new Point(point.x, point.y)));
+//          }
+            return unoObject.getIndexAtPoint(new Point(point.x, point.y));
+        } catch (com.sun.star.uno.RuntimeException e) {
+            if (Build.DEBUG) {
                 System.err.println("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
                 System.err.println(e.getMessage());
             }
+            return -1;
         }
-
-        catch(Exception e) {
-            if( Build.DEBUG ) {
-                System.err.println("Exception caught for getIndexAtPoint(" + point.x + ", " + point.y + ")");
-                System.err.println(e.getMessage());
-            }
-        }
-
-        return ret;
     }
 
     /** Returns the end offset within the selected text */
     public int getSelectionEnd() {
-        // In fixed text nothing can be selected, so return the caret position as specified
-        // in AccessibleText docu.
-        return getCaretPosition();
+        try {
+            int index = unoObject.getSelectionEnd();
+            if (index == -1) {
+                index = getCaretPosition();
+            }
+            return index;
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return -1;
+        }
     }
 
     /** Returns the string before a given index */
     public java.lang.String getBeforeIndex(int part, int index) {
-        BreakIterator bi;
-        int start;
-        int end;
-
-        switch (part) {
-            case AccessibleText.CHARACTER:
-                start = index - 1;
-                end = index;
-                break;
-            case AccessibleText.WORD:
-                bi = BreakIterator.getWordInstance(context.getLocale());
-                bi.setText(text);
-                end = bi.preceding(index);
-                start = bi.previous();
-                break;
-            case AccessibleText.SENTENCE:
-                bi = BreakIterator.getSentenceInstance(context.getLocale());
-                bi.setText(text);
-                end = bi.preceding(index);
-                start = bi.previous();
-                break;
-            default:
-                throw new IllegalArgumentException();
+        short type = toTextType(part);
+        if (type > 0) {
+            try {
+                // FIXME: Workaround for a bug in the office that an empty string is returned
+                // when asking for the word at the position of a blank
+                String s = unoObject.getTextBeforeIndex(index, type);
+                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                    s = " ";
+                }
+                return s;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
         }
-
-        // Ensure start is in valid range
-        if( start < 0 ) {
-            start = 0;
-        }
-
-        // Ensure end is in valid range
-        if( end > text.length() ) {
-            end = text.length();
-        }
-
-        return text.substring(start, end);
+        return null;
     }
 
     /** Returns the string at a given index */
-        public java.lang.String getAtIndex(int part, int index) {
-        BreakIterator bi;
-        int start;
-        int end;
-
-        switch (part) {
-            case AccessibleText.CHARACTER:
-                start = index;
-                end = index + 1;
-                break;
-            case AccessibleText.WORD:
-                bi = BreakIterator.getWordInstance(context.getLocale());
-                bi.setText(text);
-                end = bi.following(index);
-                start = bi.previous();
-                break;
-            case AccessibleText.SENTENCE:
-                bi = BreakIterator.getSentenceInstance(context.getLocale());
-                bi.setText(text);
-                end = bi.following(index);
-                start = bi.previous();
-                break;
-            default:
-                throw new IllegalArgumentException();
+    public java.lang.String getAtIndex(int part, int index) {
+        short type = toTextType(part);
+        if (type > 0) {
+            try {
+//              if (Build.DEBUG) {
+//                  System.err.println(this + "getAtIndex(" + part + "," + index + ") returns " + unoObject.getTextAtIndex(index, type));
+//              }
+                // FIXME: Workaround for a bug in the office that an empty string is returned
+                // when asking for the word at the position of a blank
+                String s = unoObject.getTextAtIndex(index, type);
+                if ((part == AccessibleText.WORD) && (s.length() == 0)) {
+                    s = " ";
+                }
+                return s;
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
         }
-
-        // Ensure start is in valid range
-        if( start < 0 ) {
-            start = 0;
-        }
-
-        // Ensure end is in valid range
-        if( end > text.length() ) {
-            end = text.length();
-        }
-
-        return text.substring(start, end);
+        return null;
     }
 
     /** Returns the number of characters (valid indicies) */
     public int getCharCount() {
-        return text.length();
+        try {
+            return unoObject.getCharacterCount();
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
+        return 0;
     }
 
     /** Returns the portion of the text that is selected */
     public java.lang.String getSelectedText() {
-        // Nothing selected
+        try {
+            return unoObject.getSelectedText();
+        } catch (com.sun.star.uno.RuntimeException e) {
+        }
         return null;
     }
 
     /** Determines the bounding box of the character at the given index into the string */
     public java.awt.Rectangle getCharacterBounds(int index) {
-        if( index < text.length() ) {
-            try {
-                Rectangle unoRect = unoAccessibleText.getCharacterBounds(index);
-                return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
-            }
-
-            catch ( com.sun.star.lang.IndexOutOfBoundsException exception ) {
-                // FIXME: The java AccessBridge currently does not handle such exceptions gracefully
-                //          throw new IndexOutOfBoundsException( exception.getMessage() );
-            }
-
-            catch ( NullPointerException e ) {
-            }
+        try {
+            Rectangle unoRect = unoObject.getCharacterBounds(index);
+            return new java.awt.Rectangle(unoRect.X, unoRect.Y, unoRect.Width, unoRect.Height);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+        } catch (com.sun.star.uno.RuntimeException e) {
         }
+        return null;
+    }
 
-        return new java.awt.Rectangle();
+    public String toString() {
+        try {
+            XAccessibleContext unoAccessibleContext = (XAccessibleContext)
+                UnoRuntime.queryInterface(XAccessibleContext.class, unoObject);
+            if (unoAccessibleContext != null) {
+                return "[" + AccessibleRoleAdapter.getAccessibleRole(unoAccessibleContext.getAccessibleRole()) + "] " +
+                    unoAccessibleContext.getAccessibleName() + ": ";
+            } else {
+                return super.toString();
+            }
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return super.toString();
+        }
     }
 }
