@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopti.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:19 $
+ *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,7 @@ void ScGridOptions::SetDefaults()
     //  Raster-Defaults sind jetzt zwischen den Apps unterschiedlich
     //  darum hier selber eintragen (alles in 1/100mm)
 
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    if ( eSys == MEASURE_METRIC )
+    if ( ScOptionsUtil::IsMetricSystem() )
     {
         nFldDrawX = 1000;   // 1cm
         nFldDrawY = 1000;
@@ -450,28 +449,6 @@ SfxPoolItem* __EXPORT ScTpViewItem::Clone( SfxItemPool * ) const
     return new ScTpViewItem( *this );
 }
 
-//------------------------------------------------------------------------
-
-ScLinkConfigItem::ScLinkConfigItem( const rtl::OUString rSubTree ) :
-    ConfigItem( rSubTree )
-{
-}
-
-void ScLinkConfigItem::SetCommitLink( const Link& rLink )
-{
-    aCommitLink = rLink;
-}
-
-void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
-{
-    //! not implemented yet...
-}
-
-void ScLinkConfigItem::Commit()
-{
-    aCommitLink.Call( this );
-}
-
 //==================================================================
 //  Config Item containing view options
 //==================================================================
@@ -569,12 +546,12 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Resolution/XAxis",             // SCGRIDOPT_RESOLU_X
-        "Resolution/YAxis",             // SCGRIDOPT_RESOLU_Y
+        "Resolution/XAxis/NonMetric",   // SCGRIDOPT_RESOLU_X
+        "Resolution/YAxis/NonMetric",   // SCGRIDOPT_RESOLU_Y
         "Subdivision/XAxis",            // SCGRIDOPT_SUBDIV_X
         "Subdivision/YAxis",            // SCGRIDOPT_SUBDIV_Y
-        "Option/XAxis",                 // SCGRIDOPT_OPTION_X
-        "Option/YAxis",                 // SCGRIDOPT_OPTION_Y
+        "Option/XAxis/NonMetric",       // SCGRIDOPT_OPTION_X
+        "Option/YAxis/NonMetric",       // SCGRIDOPT_OPTION_Y
         "Option/SnapToGrid",            // SCGRIDOPT_SNAPTOGRID
         "Option/Synchronize",           // SCGRIDOPT_SYNCHRON
         "Option/VisibleGrid",           // SCGRIDOPT_VISIBLE
@@ -584,6 +561,15 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCGRIDOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    //  adjust for metric system
+    if (ScOptionsUtil::IsMetricSystem())
+    {
+        pNames[SCGRIDOPT_RESOLU_X] = OUString::createFromAscii( "Resolution/XAxis/Metric" );
+        pNames[SCGRIDOPT_RESOLU_Y] = OUString::createFromAscii( "Resolution/YAxis/Metric" );
+        pNames[SCGRIDOPT_OPTION_X] = OUString::createFromAscii( "Option/XAxis/Metric" );
+        pNames[SCGRIDOPT_OPTION_Y] = OUString::createFromAscii( "Option/YAxis/Metric" );
+    }
 
     return aNames;
 }

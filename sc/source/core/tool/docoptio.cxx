@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docoptio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
+ *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,7 @@ inline long TwipsToEvenHMM(long nTwips) { return ( (nTwips * 127 + 72) / 144 ) *
 
 USHORT lcl_GetDefaultTabDist()
 {
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    if ( eSys == MEASURE_METRIC )
+    if ( ScOptionsUtil::IsMetricSystem() )
         return 709;                 // 1,25 cm
     else
         return 720;                 // 1/2"
@@ -348,12 +347,16 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "TabStop"                   // SCDOCLAYOUTOPT_TABSTOP
+        "TabStop/NonMetric"         // SCDOCLAYOUTOPT_TABSTOP
     };
     Sequence<OUString> aNames(SCDOCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCDOCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    //  adjust for metric system
+    if (ScOptionsUtil::IsMetricSystem())
+        pNames[SCDOCLAYOUTOPT_TABSTOP] = OUString::createFromAscii( "TabStop/Metric" );
 
     return aNames;
 }

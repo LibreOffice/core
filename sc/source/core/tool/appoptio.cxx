@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 07:56:13 $
+ *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,10 @@ ScAppOptions::~ScAppOptions()
 
 void ScAppOptions::SetDefaults()
 {
-    MeasurementSystem eSys = Application::GetAppInternational().GetMeasurementSystem();
-    if ( eSys == MEASURE_METRIC )
-        eMetric     = FUNIT_CM;             // fuer die zivilisierte Welt
+    if ( ScOptionsUtil::IsMetricSystem() )
+        eMetric     = FUNIT_CM;             // default for countries with metric system
     else
-        eMetric     = FUNIT_INCH;           // fuer die komischen Amis
+        eMetric     = FUNIT_INCH;           // default for others
 
     nZoom           = 100;
     eZoomType       = SVX_ZOOM_PERCENT;
@@ -421,15 +420,19 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/MeasureUnit",        // SCLAYOUTOPT_MEASURE
-        "Other/StatusbarFunction",  // SCLAYOUTOPT_STATUSBAR
-        "Zoom/Value",               // SCLAYOUTOPT_ZOOMVAL
-        "Zoom/Type"                 // SCLAYOUTOPT_ZOOMTYPE
+        "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
+        "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
+        "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
+        "Zoom/Type"                     // SCLAYOUTOPT_ZOOMTYPE
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    //  adjust for metric system
+    if (ScOptionsUtil::IsMetricSystem())
+        pNames[SCLAYOUTOPT_MEASURE] = OUString::createFromAscii( "Other/MeasureUnit/Metric" );
 
     return aNames;
 }
