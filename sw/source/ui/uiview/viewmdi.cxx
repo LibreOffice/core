@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewmdi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:51:19 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 11:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@ USHORT  SwView::nMoveType = NID_PGE;
 BYTE    SwView::nActMark = 0;
 
 #define VIEW_IMAGECOLOR COL_LIGHTBLUE
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 void SwView::SetZoom( SvxZoomType eZoomType, short nFactor, BOOL bViewOnly )
 {
@@ -322,7 +325,8 @@ void SwView::CreatePageButtons(BOOL bShow)
     pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
     pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
     pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
-    pNaviBtn = new SwNaviImageButton(pMDI);
+    Reference< XFrame > xFrame = GetViewFrame()->GetFrame()->GetFrameInterface();
+    pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
     pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );
     pPageUpBtn->SetClickHdl( aLk );
