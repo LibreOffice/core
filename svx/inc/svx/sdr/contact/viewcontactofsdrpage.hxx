@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:27:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@ namespace sdr
             // PaintObject() is called.
             virtual sal_Bool ShouldPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
 
+            // #115593# Paint this object. This is before evtl. SubObjects get painted. It needs to return
+            // sal_True when something was pained and the paint output rectangle in rPaintRectangle.
+            virtual sal_Bool PaintObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
+
             // Pre- and Post-Paint this object. Is used e.g. for page background/foreground painting.
             virtual void PrePaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
             virtual void PostPaintObject(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
@@ -149,6 +153,9 @@ namespace sdr
 
             // Does this ViewContact support animation?
             virtual sal_Bool SupportsAnimation() const;
+
+            // overload for acessing the SdrPage
+            virtual SdrPage* TryToGetSdrPage() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
