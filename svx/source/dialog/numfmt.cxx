@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-23 11:50:01 $
+ *  last change: $Author: er $ $Date: 2001-03-23 11:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     {
         LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
             xLoc[i].Country );
-        // Don't list ambigous locales where we won't be able to convert
+        // Don't list ambiguous locales where we won't be able to convert
         // the LanguageType back to an identical Language_Country name and
         // therefore couldn't load the i18n LocaleData.
 #ifndef PRODUCT
@@ -440,7 +440,7 @@ void SvxNumberFormatTabPage::Init_Impl()
                     String( xLoc[i].Country ) != aCountry )
             {
 #ifndef PRODUCT
-                ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambigous locale\n" ) );
+                ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "ConvertIsoNamesToLanguage/ConvertLanguageToIsoNames: ambiguous locale\n" ) );
                 aMsg += ByteString( String( xLoc[i].Language ), RTL_TEXTENCODING_UTF8  );
                 if ( xLoc[i].Country.getLength() )
                 {
