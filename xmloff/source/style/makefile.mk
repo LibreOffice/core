@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: dvo $ $Date: 2001-05-14 13:04:53 $
+#   last change: $Author: cl $ $Date: 2001-05-18 07:02:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        XMLPercentOrMeasurePropertyHandler.cxx \
+        XMLIsPrecentagePropertyHandler.cxx \
         XMLRectangleMembersHandler.cxx \
         adjushdl.cxx	\
         backhdl.cxx		\
@@ -167,6 +169,8 @@ CXXFILES = \
 
 
 SLOFILES =	\
+        $(SLO)$/XMLPercentOrMeasurePropertyHandler.obj \
+        $(SLO)$/XMLIsPercentagePropertyHandler.obj \
         $(SLO)$/XMLRectangleMembersHandler.obj \
         $(SLO)$/adjushdl.obj	\
         $(SLO)$/backhdl.obj		\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-16 15:20:59 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 07:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1990,5 +1990,19 @@ XML_CONSTASCII_ACTION( sXML_button1, "button1" );
 XML_CONSTASCII_ACTION( sXML_button2, "button2" );
 XML_CONSTASCII_ACTION( sXML_button3, "button3" );
 XML_CONSTASCII_ACTION( sXML_button4, "button4" );
+
+XML_CONSTASCII_ACTION( sXML_caption_type, "caption-type" );
+XML_CONSTASCII_ACTION( sXML_caption_angle_type, "caption-angle-type" );
+XML_CONSTASCII_ACTION( sXML_caption_angle, "caption-angle" );
+XML_CONSTASCII_ACTION( sXML_caption_gap, "caption-gap" );
+XML_CONSTASCII_ACTION( sXML_caption_escape_direction, "caption-escape-direction" );
+XML_CONSTASCII_ACTION( sXML_caption_escape, "caption-escape" );
+XML_CONSTASCII_ACTION( sXML_caption_line_length, "caption-line-length" );
+XML_CONSTASCII_ACTION( sXML_caption_fit_line_length, "caption-fit-line-length" );
+XML_CONSTASCII_ACTION( sXML_free, "free" );
+
+XML_CONSTASCII_ACTION( sXML_straight_line, "straight-line" );
+XML_CONSTASCII_ACTION( sXML_angled_line, "angled-line" );
+XML_CONSTASCII_ACTION( sXML_angled_connector_line, "angled-connector-line" );
 
 #endif

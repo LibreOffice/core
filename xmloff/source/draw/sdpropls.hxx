@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:39:07 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 07:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,22 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_TEX_MODE                        (XML_SD_TYPES_START + 46 )
 
 //////////////////////////////////////////////////////////////////////////////
+// #FontWork# types
+#define XML_SD_TYPE_FONTWORK_STYLE                  (XML_SD_TYPES_START + 47 )
+#define XML_SD_TYPE_FONTWORK_ADJUST                 (XML_SD_TYPES_START + 48 )
+#define XML_SD_TYPE_FONTWORK_SHADOW                 (XML_SD_TYPES_START + 49 )
+#define XML_SD_TYPE_FONTWORK_FORM                   (XML_SD_TYPES_START + 50 )
+
+//////////////////////////////////////////////////////////////////////////////
+// Caption types
+#define XML_SD_TYPE_CAPTION_ANGLE_TYPE              (XML_SD_TYPES_START + 60 )
+#define XML_SD_TYPE_CAPTION_IS_ESC_REL              (XML_SD_TYPES_START + 61 )
+#define XML_SD_TYPE_CAPTION_ESC_REL                 (XML_SD_TYPES_START + 62 )
+#define XML_SD_TYPE_CAPTION_ESC_ABS                 (XML_SD_TYPES_START + 63 )
+#define XML_SD_TYPE_CAPTION_ESC_DIR                 (XML_SD_TYPES_START + 64 )
+#define XML_SD_TYPE_CAPTION_TYPE                    (XML_SD_TYPES_START + 65 )
+
+//////////////////////////////////////////////////////////////////////////////
 
 #define CTF_NUMBERINGRULES          1000
 #define CTF_NUMBERINGRULES_NAME     1001
@@ -206,11 +222,11 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_SD_SIZE_PROTECT             1046
 
 //////////////////////////////////////////////////////////////////////////////
-// #FontWork# types
-#define XML_SD_TYPE_FONTWORK_STYLE                  (XML_SD_TYPES_START + 47 )
-#define XML_SD_TYPE_FONTWORK_ADJUST                 (XML_SD_TYPES_START + 48 )
-#define XML_SD_TYPE_FONTWORK_SHADOW                 (XML_SD_TYPES_START + 49 )
-#define XML_SD_TYPE_FONTWORK_FORM                   (XML_SD_TYPES_START + 50 )
+// caption
+#define CTF_CAPTION_ISESCREL            1047
+#define CTF_CAPTION_ESCREL              1048
+#define CTF_CAPTION_ESCABS              1049
+
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
 

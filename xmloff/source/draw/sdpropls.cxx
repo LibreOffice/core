@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-16 13:36:17 $
+ *  last change: $Author: cl $ $Date: 2001-05-18 07:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,14 @@
 #include "XMLClipPropertyHandler.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLISPERCENTAGEPROPERTYHANDLER_HXX
+#include "XMLIsPercentagePropertyHandler.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLPERCENTORMEASUREPROPERTYHANDLER_HXX
+#include "XMLPercentOrMeasurePropertyHandler.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -376,6 +384,18 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_width,        XML_TYPE_RECTANGLE_WIDTH|MID_FLAG_MERGE_PROPERTY,   CTF_SD_OLE_VIS_AREA_WIDTH },
     { "VisibleArea",                XML_NAMESPACE_DRAW, sXML_visible_area_height,       XML_TYPE_RECTANGLE_HEIGHT|MID_FLAG_MERGE_PROPERTY,  CTF_SD_OLE_VIS_AREA_HEIGHT },
     { "IsInternal",                 XML_NAMESPACE_DRAW, NULL,                           XML_TYPE_BUILDIN_CMP_ONLY,                          CTF_SD_OLE_ISINTERNAL },
+
+    // caption properties
+    { "CaptionType",                XML_NAMESPACE_DRAW, sXML_caption_type,              XML_SD_TYPE_CAPTION_TYPE, 0 },
+    { "CaptionIsFixedAngle",        XML_NAMESPACE_DRAW, sXML_caption_angle_type,        XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 },
+    { "CaptionAngle",               XML_NAMESPACE_DRAW, sXML_caption_angle,             XML_TYPE_NUMBER, 0 },
+    { "CaptionGap",                 XML_NAMESPACE_DRAW, sXML_caption_gap,               XML_TYPE_MEASURE, 0 },
+    { "CaptionEscapeDirection",     XML_NAMESPACE_DRAW, sXML_caption_escape_direction,  XML_SD_TYPE_CAPTION_ESC_DIR, 0 },
+    { "CaptionIsEscapeRelative",    XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_IS_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ISESCREL },
+    { "CaptionEscapeRelative",      XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_ESC_REL|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCREL },
+    { "CaptionEscapeAbsolute",      XML_NAMESPACE_DRAW, sXML_caption_escape,            XML_SD_TYPE_CAPTION_ESC_ABS|MID_FLAG_MULTI_PROPERTY, CTF_CAPTION_ESCABS },
+    { "CaptionLineLength",          XML_NAMESPACE_DRAW, sXML_caption_line_length,       XML_TYPE_MEASURE, 0 },
+    { "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, sXML_caption_fit_line_length,   XML_TYPE_BOOL, 0 },
 
     // misc object properties
     { "MoveProtect",                XML_NAMESPACE_DRAW, sXML_move_protect,              XML_TYPE_BOOL, CTF_SD_MOVE_PROTECT },
@@ -738,6 +758,22 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Fontwork_Form_Enum[] =
     { 0,0 }
 };
 
+SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Esc_Dir_Enum[] =
+{
+    { sXML_horizontal,      0 }, //SDRCAPT_ESCHORIZONTAL,
+    { sXML_vertical,        1 }, //SDRCAPT_ESCVERTICAL,
+    { sXML_auto,            2 }, //SDRCAPT_ESCBESTFIT,
+    { 0,0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_Caption_Type_Enum[] =
+{
+    { sXML_straight_line,           0 }, //SDRCAPT_TYPE1,
+    { sXML_angled_line,             1 }, //SDRCAPT_TYPE2,
+    { sXML_angled_connector_line,   2 }, //SDRCAPT_TYPE3,
+    { 0,0 }
+};
+
 //////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel )
@@ -967,6 +1003,29 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_CONTROL_BORDER:
                 pHdl = new xmloff::OControlBorderHandler();
                 break;
+
+            case XML_SD_TYPE_CAPTION_ANGLE_TYPE:
+            {
+                const OUString aTrueStr( OUString::createFromAscii(sXML_fixed) );
+                const OUString aFalseStr( OUString::createFromAscii(sXML_free) );
+                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                break;
+            }
+            case XML_SD_TYPE_CAPTION_IS_ESC_REL:
+                pHdl = new XMLIsPercentagePropertyHandler();
+                break;
+            case XML_SD_TYPE_CAPTION_ESC_REL:
+                pHdl = new XMLPercentOrMeasurePropertyHandler( sal_True );
+                break;
+            case XML_SD_TYPE_CAPTION_ESC_ABS:
+                pHdl = new XMLPercentOrMeasurePropertyHandler( sal_False );
+                break;
+            case XML_SD_TYPE_CAPTION_ESC_DIR:
+                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Esc_Dir_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
+            case XML_SD_TYPE_CAPTION_TYPE:
+                pHdl = new XMLEnumPropertyHdl( pXML_Caption_Type_Enum , ::getCppuType((const sal_Int32*)0));
+                break;
         }
 
         if(pHdl)
@@ -1035,6 +1094,11 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pOLEVisAreaWidth = NULL;
     XMLPropertyState* pOLEVisAreaHeight = NULL;
     XMLPropertyState* pOLEIsInternal = NULL;
+
+    // caption
+    XMLPropertyState* pCaptionIsEscRel = NULL;
+    XMLPropertyState* pCaptionEscRel = NULL;
+    XMLPropertyState* pCaptionEscAbs = NULL;
 
     // filter properties
     for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
@@ -1150,6 +1214,9 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                         property->mnIndex = -1;
                 }
                 break;
+            case CTF_CAPTION_ISESCREL:              pCaptionIsEscRel = property;    break;
+            case CTF_CAPTION_ESCREL:                pCaptionEscRel = property;      break;
+            case CTF_CAPTION_ESCABS:                pCaptionEscAbs = property;      break;
         }
     }
 
@@ -1226,6 +1293,25 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                     pFontWorkShadowTransparence->mnIndex = -1;
             }
         }
+    }
+
+    if( pCaptionIsEscRel )
+    {
+        sal_Bool bIsRel;
+        pCaptionIsEscRel->maValue >>= bIsRel;
+
+        if( bIsRel )
+        {
+            if( pCaptionEscAbs )
+                pCaptionEscAbs->mnIndex = -1;
+        }
+        else
+        {
+            if( pCaptionEscRel )
+                pCaptionEscRel->mnIndex = -1;
+        }
+
+        pCaptionIsEscRel->mnIndex = -1;
     }
 
     SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
