@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2002-06-25 12:03:34 $
+ *  last change: $Author: pl $ $Date: 2002-07-09 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ static Font parseFont( const ByteString& rLine )
     Font aFont;
 
     xub_StrLen nPos1 = rLine.Search( '"' );
-    xub_StrLen nPos2 = rLine.Search( '"', nPos1 != STRING_NOTFOUND ? nPos1 : 0 );
+    xub_StrLen nPos2 = rLine.Search( '"', nPos1 != STRING_NOTFOUND ? nPos1+1 : 0 );
     if( nPos1 != STRING_NOTFOUND && nPos2 != STRING_NOTFOUND
         && (int)nPos2 - (int)nPos1 > 1 )
     {
@@ -549,21 +549,22 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
             }
             break;
             case UIFont:
-            {
-                Font aFont = parseFont( aLine );
-                aStyleSettings.SetAppFont( aFont );
-                aStyleSettings.SetHelpFont( aFont );
-                aStyleSettings.SetMenuFont( aFont );
-                aStyleSettings.SetToolFont( aFont );
-                aStyleSettings.SetLabelFont( aFont );
-                aStyleSettings.SetInfoFont( aFont );
-                aStyleSettings.SetRadioCheckFont( aFont );
-                aStyleSettings.SetPushButtonFont( aFont );
-                aStyleSettings.SetFieldFont( aFont );
-                aStyleSettings.SetIconFont( aFont );
-                aStyleSettings.SetGroupFont( aFont );
-            }
-            break;
+                if( aStyleSettings.GetUseSystemUIFonts() )
+                {
+                    Font aFont = parseFont( aLine );
+                    aStyleSettings.SetAppFont( aFont );
+                    aStyleSettings.SetHelpFont( aFont );
+                    aStyleSettings.SetMenuFont( aFont );
+                    aStyleSettings.SetToolFont( aFont );
+                    aStyleSettings.SetLabelFont( aFont );
+                    aStyleSettings.SetInfoFont( aFont );
+                    aStyleSettings.SetRadioCheckFont( aFont );
+                    aStyleSettings.SetPushButtonFont( aFont );
+                    aStyleSettings.SetFieldFont( aFont );
+                    aStyleSettings.SetIconFont( aFont );
+                    aStyleSettings.SetGroupFont( aFont );
+                }
+                break;
 #ifdef DEBUG
             default:
                 fprintf( stderr, "don't understand \"%d=%s\"\n", aToken, aLine.GetBuffer() );
