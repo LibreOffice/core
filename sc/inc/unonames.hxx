@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 19:53:54 $
+ *  last change: $Author: nn $ $Date: 2000-12-11 15:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #define SC_UNONAME_CWEIGHT          "CharWeight"
 #define SC_UNONAME_CPOST            "CharPosture"
 #define SC_UNONAME_CCROSS           "CharCrossedOut"
+#define SC_UNONAME_CSTRIKE          "CharStrikeout"
 #define SC_UNONAME_CLOCAL           "CharLocale"
 #define SC_UNONAME_CSHADD           "CharShadowed"
 #define SC_UNONAME_CFONT            "CharFont"

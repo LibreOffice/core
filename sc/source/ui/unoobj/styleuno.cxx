@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 19:55:31 $
+ *  last change: $Author: nn $ $Date: 2000-12-11 15:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,&::getCppuType((const awt::FontSlant*)0),     0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,&::getCppuType((const awt::FontSlant*)0),     0, MID_POSTURE },
         {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &::getBooleanCppuType(),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CSTRIKE),  ATTR_FONT_CROSSEDOUT,&getCppuType((sal_Int16*)0),           0, MID_CROSS_OUT },
         {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&::getCppuType((const sal_Int16*)0),            0, MID_UNDERLINE },
         {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &::getCppuType((const Float*)0),            0, MID_WEIGHT },
         {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,&::getCppuType((const Float*)0),           0, MID_WEIGHT },
