@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1944,7 +1944,7 @@ uno::Reference< form::XFormController > BibDataManager::GetFormController()
     {
         Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
         m_xFormCtrl = uno::Reference< form::XFormController > (
-            xMgr->createInstance(C2U("com.sun.star.form.controller.FormController")), UNO_QUERY);
+            xMgr->createInstance(C2U("com.sun.star.form.FormController")), UNO_QUERY);
         m_xFormCtrl->setModel(uno::Reference< awt::XTabControllerModel > (getForm(), UNO_QUERY));
         // #100312# -------------
         m_xFormDispatch = uno::Reference< frame::XDispatch > ( m_xFormCtrl, UNO_QUERY);
