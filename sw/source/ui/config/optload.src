@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-04 18:47:21 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 18:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Uppdatera l�nkar vid laddning";
         Text[ polish ] = "Aktualizuj ��cza podczas �adowania";
         Text[ portuguese_brazilian ] = "Update links when loading";
-        Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄ読み込み時にﾘﾝｸの更新";
+        Text[ japanese ] = "ドキュメント読み込み時にリンクの更新";
         Text[ korean ] = "로드시에 링크 업데이트";
         Text[ chinese_simplified ] = "在装入时更新链接";
         Text[ chinese_traditional ] = "載入時更新捷徑";
@@ -263,7 +263,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "F�lt~kommandon";
         Text[ polish ] = "Pola";
         Text[ portuguese_brazilian ] = "Update fields automatically";
-        Text[ japanese ] = "ﾌｨｰﾙﾄﾞ(~F)";
+        Text[ japanese ] = "フィールド(~F)";
         Text[ korean ] = "필드 명령어(~F)";
         Text[ chinese_simplified ] = "字段指令(~F)";
         Text[ chinese_traditional ] = "欄位指令(~F)";
@@ -291,7 +291,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Dia~gram";
         Text[ polish ] = "Wykresy";
         Text[ portuguese_brazilian ] = "Update charts automatically";
-        Text[ japanese ] = "ｸﾞﾗﾌ(~C)";
+        Text[ japanese ] = "グラフ(~C)";
         Text[ korean ] = "차트(~C)";
         Text[ chinese_simplified ] = "图表(~C)";
         Text[ chinese_traditional ] = "圖表(~C)";
@@ -376,7 +376,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ chinese_simplified ] = "选择对象：";
         Text[ russian ] = "����� �������:";
         Text[ polish ] = "Wyb�r obiektu:";
-        Text[ japanese ] = "ｵﾌﾞｼﾞｪｸﾄ選択:";
+        Text[ japanese ] = "オブジェクト選択:";
         Text[ chinese_traditional ] = "選擇物件：";
         Text[ arabic ] = "������ ��������:";
         Text[ greek ] = "����~��� ������������:";
@@ -473,7 +473,7 @@ TabPage TP_OPTLOAD_PAGE
     Text[ chinese_simplified ] = "制表符间隔";
     Text[ russian ] = "��� ���������";
         Text[ polish ] = "Tabulatory";
-        Text[ japanese ] = "ﾀﾌﾞ間隔";
+        Text[ japanese ] = "タブ間隔";
         Text [ norwegian ] = "Standard tabulatoravstand" ;
         Text [ finnish ] = "Sarkainkeskeytykset" ;
         Group = TRUE ;
@@ -546,7 +546,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Addera alla stycke- och tabellavst�nd i det aktuella ~dokumentet";
         Text[ polish ] = "Dodaj w bie��cym dokumencie wszystkie odst�py mi�dzy akapitami i tabelami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs and tables";
-        Text[ japanese ] = "現在のﾄﾞｷｭﾒﾝﾄの段落間隔と表間隔を加算する";
+        Text[ japanese ] = "現在のドキュメントの段落間隔と表間隔を加算する";
         Text[ chinese_simplified ] = "当前文档之中所有段落的及表格的间隔相加";
         Text[ chinese_traditional ] = "已開啓文件的所有段落間隔及表格間隔相加";
         Text[ arabic ] = "����� ����� ������� ��� �� ����� ������ ������� ������";
@@ -575,7 +575,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "L�gg till stycke- och ta~bellavst�nd i b�rjan av sidor";
         Text[ polish ] = "Dodaj odst�py od a~kapit�w i tabel na pocz�tku stron";
         Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
-        Text[ japanese ] = "ﾍﾟｰｼﾞの始めに段落間隔と表間隔を付ける";
+        Text[ japanese ] = "ページの始めに段落間隔と表間隔を付ける";
         Text[ korean ] = "페이지 시작부분의 단락 간격과 표 간격 합산";
         Text[ chinese_simplified ] = "在页首位置加入段落和表格的间隔";
         Text[ chinese_traditional ] = "在頁首位置加入段落與表格之間的間隔";
@@ -603,10 +603,10 @@ TabPage TP_OPTLOAD_PAGE
         Text[ swedish ] = "Justera ~tabulatorposition";
         Text[ polish ] = "Wyr�wnaj pozycj� tabulatora";
         Text[ portuguese_brazilian ] = "Align tab stop position";
-        Text[ japanese ] = "ﾀﾌﾞの位置を揃える";
+        Text[ japanese ] = "タブの位置を揃える";
         Text[ korean ] = "탭 정지 위치에 맞추기";
         Text[ chinese_simplified ] = "调整制表键位置";
-        Text[ chinese_traditional ] = "調整製表鍵位置";
+        Text[ chinese_traditional ] = "調整定位鍵位置";
         Text[ turkish ] = "Align tab stop position";
         Text[ arabic ] = "Align tab stop position";
         Text[ catalan ] = "Align tab stop position";
@@ -737,7 +737,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_simplified ] = "其它 OLE 对象";
         Text[ russian ] = "�������������� ������� OLE";
         Text[ polish ] = "Pozosta�e obiekty OLE";
-        Text[ japanese ] = "その他の OLE ｵﾌﾞｼﾞｪｸﾄ";
+        Text[ japanese ] = "その他の OLE オブジェクト";
         Text[ chinese_traditional ] = "其它 OLE 物件";
         Text[ arabic ] = "������ OLE ����";
         Text[ greek ] = "����������� ����������� OLE";
@@ -769,7 +769,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_simplified ] = "分类";
         Text[ russian ] = "���������";
         Text[ polish ] = "Kategoria";
-        Text[ japanese ] = "ｶﾃｺﾞﾘｰ";
+        Text[ japanese ] = "カテゴリー";
         Text[ chinese_traditional ] = "分類";
         Text[ arabic ] = "�����";
         Text[ greek ] = "~���������";
@@ -845,7 +845,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_simplified ] = "标签";
         Text[ russian ] = "�������";
         Text[ polish ] = "Etykieta";
-        Text[ japanese ] = "ﾃｷｽﾄ(~C)";
+        Text[ japanese ] = "テキスト";
         Text[ chinese_traditional ] = "標籤";
         Text[ arabic ] = "������� ���������";
         Text[ greek ] = "��������";
@@ -918,7 +918,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ chinese_simplified ] = "级";
         Text[ russian ] = "�������";
         Text[ polish ] = "Poziom";
-        Text[ japanese ] = "ﾚﾍﾞﾙ";
+        Text[ japanese ] = "レベル";
         Text[ chinese_traditional ] = "級";
         Text[ arabic ] = "�������";
         Text[ greek ] = "�������";
@@ -1417,15 +1417,15 @@ StringArray STR_ARR_METRIC
     };
     ItemList [ japanese ] =
     {
-            < "ﾐﾘﾒｰﾄﾙ" ; FUNIT_MM ; > ;
-        < "ｾﾝﾁﾒｰﾄﾙ" ; FUNIT_CM ; > ;
-        < "ﾒｰﾄﾙ" ; FUNIT_M ; > ;
-        < "ｷﾛﾒｰﾄﾙ" ; FUNIT_KM ; > ;
-        < "ｲﾝﾁ" ; FUNIT_INCH ; > ;
-        < "ﾌｨｰﾄ" ; FUNIT_FOOT ; > ;
-        < "ﾏｲﾙ" ; FUNIT_MILE ; > ;
-        < "ﾊﾟｲｶ" ; FUNIT_PICA ; > ;
-        < "ﾎﾟｲﾝﾄ" ; FUNIT_POINT ; > ;
+            < "ミリメートル" ; FUNIT_MM ; > ;
+        < "センチメートル" ; FUNIT_CM ; > ;
+        < "メートル" ; FUNIT_M ; > ;
+        < "キロメートル" ; FUNIT_KM ; > ;
+        < "インチ" ; FUNIT_INCH ; > ;
+        < "フィート" ; FUNIT_FOOT ; > ;
+        < "マイル" ; FUNIT_MILE ; > ;
+        < "パイカ" ; FUNIT_PICA ; > ;
+        < "ポイント" ; FUNIT_POINT ; > ;
     };
     ItemList [ chinese_traditional ] =
     {
@@ -1501,17 +1501,18 @@ StringArray STR_ARR_METRIC
     };
 ItemList [ catalan ] =
     {
-            < "Millimeter" ; FUNIT_MM ; > ;
-        < "Zentimeter" ; FUNIT_CM ; > ;
-        < "Meter" ; FUNIT_M ; > ;
-        < "Kilometer" ; FUNIT_KM ; > ;
-        < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fu�" ; FUNIT_FOOT ; > ;
-        < "Meilen" ; FUNIT_MILE ; > ;
+            < "Mil?l?metre" ; FUNIT_MM ; > ;
+        < "Cent�metre" ; FUNIT_CM ; > ;
+        < "Metre" ; FUNIT_M ; > ;
+        < "Quil�metre" ; FUNIT_KM ; > ;
+        < "Polzada" ; FUNIT_INCH ; > ;
+        < "Peu" ; FUNIT_FOOT ; > ;
+        < "Milles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
-        < "Point" ; FUNIT_POINT ; > ;
+        < "Punt" ; FUNIT_POINT ; > ;
     };
     };
+
 
 
 
