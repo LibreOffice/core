@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-18 11:16:51 $
+ *  last change: $Author: dv $ $Date: 2001-06-29 13:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,8 @@ Sequence < OUString > GetFolderContentProperties_Impl( const String& rFolder, co
         Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
 
-        Content aCnt( aFolderObj.GetMainURL(), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+        Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ),
+                      new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
         Reference< XResultSet > xResultSet;
         Sequence< OUString > aProps(6);
         OUString* pProps = aProps.getArray();
