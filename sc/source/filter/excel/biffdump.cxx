@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-03 15:04:11 $
+ *  last change: $Author: dr $ $Date: 2001-05-07 13:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,6 +976,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 
     if( nR || nL )      // skip dummy-zero DIMENSIONS at eof
     {
+        if( bBlankLine )
+            *pDumpStream << '\n';
+
         aT += pLevelPre;
         __AddHex( aT, nR );
 
@@ -5689,6 +5692,8 @@ _KEYWORD Biff8RecDumper::GetKeyType( const ByteString& r )
         e = NoWarnings;
     else if( t == "CONTLOAD" )
         e = Contload;
+    else if( t == "BLANKLINE" )
+        e = BlankLine;
     else if( t == "PARSEP" )
         e = Parsep;
     else if( t == "MAXBODYLINES" )
@@ -6161,6 +6166,7 @@ BOOL Biff8RecDumper::ExecCommand( const UINT32 nL, const ByteString& r, const By
         case ReadContRecs:  bReadContRecs = TRUE;   break;
         case NoWarnings:    bWarnings = FALSE;      break;
         case Contload:      bEndLoading = TRUE;     break;
+        case BlankLine:     bBlankLine = TRUE;      break;
         case Parsep:
             if( nValLen == 0 )
             {
@@ -6809,7 +6815,7 @@ Biff8RecDumper::Biff8RecDumper( RootData& rRootData ) :  ExcRoot( &rRootData )
     pLevelPre = pLevelPreStringNT;
 
     nMaxBodyLines = 1024;
-    bEndLoading = bSkip = bSkipOffset = bReadContRecs = FALSE;
+    bEndLoading = bSkip = bSkipOffset = bReadContRecs = bBlankLine = FALSE;
     bWarnings = TRUE;
 
     pDumpModes = NULL;
