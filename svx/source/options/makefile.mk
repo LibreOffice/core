@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:38:56 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:28:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,30 +94,39 @@ SRC1FILES=\
     optextbr.src		\
     optctl.src
 
+#EXCEPTIONSFILES=\
+#	$(SLO)$/optasian.obj		\
+#	$(SLO)$/optlingu.obj		\
+#	$(SLO)$/optaccessibility.obj	\
+#	$(SLO)$/optsave.obj		\
+#	$(SLO)$/optpath.obj
+
+#SLOFILES=\
+#	$(EXCEPTIONSFILES)	\
+#	$(SLO)$/asiancfg.obj	\
+#	$(SLO)$/htmlcfg.obj	\
+#	$(SLO)$/optcolor.obj    \
+#	$(SLO)$/optjsearch.obj  \
+#	$(SLO)$/optitems.obj	\
+#	$(SLO)$/optgenrl.obj	\
+#	$(SLO)$/adritem.obj	\
+#	$(SLO)$/optgrid.obj	\
+#	$(SLO)$/optinet2.obj	\
+#	$(SLO)$/optextbr.obj    \
+#	$(SLO)$/srchcfg.obj	\
+#	$(SLO)$/optctl.obj
+
 EXCEPTIONSFILES=\
-    $(SLO)$/multifil.obj		\
-    $(SLO)$/optasian.obj		\
-    $(SLO)$/optdict.obj		\
-    $(SLO)$/optlingu.obj		\
-    $(SLO)$/optaccessibility.obj	\
-    $(SLO)$/optsave.obj		\
-    $(SLO)$/optpath.obj
+    $(SLO)$/optlingu.obj
 
 SLOFILES=\
     $(EXCEPTIONSFILES)	\
     $(SLO)$/asiancfg.obj	\
-    $(SLO)$/optcolor.obj    \
-    $(SLO)$/optjsearch.obj  \
+    $(SLO)$/htmlcfg.obj	\
     $(SLO)$/optitems.obj	\
-    $(SLO)$/optgenrl.obj	\
     $(SLO)$/adritem.obj	\
     $(SLO)$/optgrid.obj	\
-    $(SLO)$/optinet2.obj	\
-    $(SLO)$/multipat.obj    \
-    $(SLO)$/optextbr.obj    \
-    $(SLO)$/srchcfg.obj	\
-    $(SLO)$/optctl.obj
-
+    $(SLO)$/srchcfg.obj
 
 SVXLIGHTOBJFILES=\
     $(OBJ)$/adritem.obj
