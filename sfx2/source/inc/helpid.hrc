@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:32:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,7 +382,14 @@
 #define HID_MACRO_HEADERTABLISTBOX                  (HID_SFX_START + 312)
 #define HID_MACROCHECKDIALOG                        (HID_SFX_START + 313)
 
-#define ACT_SFX_HID_END HID_MACRO_HEADERTABLISTBOX
+#define HID_XMLSEC_WARNING_BROKENSIGNATURE          (HID_SFX_START + 314)
+#define HID_XMLSEC_QUERY_LOSINGSIGNATURE            (HID_SFX_START + 315)
+#define HID_XMLSEC_QUERY_SAVEBEFORESIGN             (HID_SFX_START + 316)
+#define HID_XMLSECDLG_MACROWARN                     (HID_SFX_START + 317)
+#define HID_XMLSEC_INFO_WRONGDOCFORMAT              (HID_SFX_START + 318)
+#define HID_WARNING_MACROSDISABLED                  (HID_SFX_START + 319)
+
+#define ACT_SFX_HID_END HID_XMLSEC_INFO_WRONGDOCFORMAT
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
