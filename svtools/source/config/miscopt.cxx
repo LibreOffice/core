@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:07:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -490,7 +493,11 @@ SvtMiscOptions::SvtMiscOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
-        m_pDataContainer = new SvtMiscOptions_Impl;
+       RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtMiscOptions_Impl::ctor()");
+       m_pDataContainer = new SvtMiscOptions_Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_MISCOPTIONS);
     }
 }
 
