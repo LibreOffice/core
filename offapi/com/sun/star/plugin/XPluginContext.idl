@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginContext.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:31 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 16:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,6 @@
 // DocMerge from xml: interface com::sun::star::plugin::XPluginContext
 /** implements the calls a plugin library can make on its browser.
 
-
-
     <p>A default context can be created by a <type>XPluginManager</type>.
 
     </p>@see XPluginManager
@@ -163,7 +161,7 @@ interface XPluginContext: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::plugin::XPluginContext::newStream
-    /** requests a new stream that is created by the plugin and cosumed
+    /** requests a new stream that is created by the plugin and consumed
         by the browser.
      */
     void newStream( [in] com::sun::star::plugin::XPlugin plugin,
@@ -185,7 +183,7 @@ interface XPluginContext: com::sun::star::uno::XInterface
     // DOCUMENTATION CHANGED FOR XPluginContext::getUserAgent
 
     // DocMerge from xml: method com::sun::star::plugin::XPluginContext::getUserAgent
-    /** returns an application dependant identification string. This is
+    /** returns an application dependent identification string. This is
         the same string that is transmitted by a browser to an http server.
      */
     string getUserAgent( [in] com::sun::star::plugin::XPlugin plugin )
@@ -200,6 +198,9 @@ interface XPluginContext: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:31  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:27  mi
     moved from api
 

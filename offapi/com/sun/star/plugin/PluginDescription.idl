@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PluginDescription.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 16:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,6 @@
 // DocMerge from xml: struct com::sun::star::plugin::PluginDescription
 /** is a handle for one specific plugin shared object.
 
-
-
     <p>If there are multiple mimetypes and/or extensions, multiple
     <type>PluginDescription</type> objects will be created.</p>
  */
@@ -100,7 +98,7 @@ struct PluginDescription
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: field com::sun::star::plugin::PluginDescription::Description
-    /** contains a free text description of the plugin.
+    /** contains a text description of the plugin.
      */
     string Description;
 
@@ -113,6 +111,9 @@ struct PluginDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:27  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:28  hjs
     initial import
 
