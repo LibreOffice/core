@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-25 16:12:41 $
+ *  last change: $Author: hr $ $Date: 2001-09-28 14:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,8 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     }
     else
     {
-        if( !ImpPeekGraphicFormat( rStream, pConfig->GetImportFormatExtension( rFormat ), TRUE ) )
+        String aTmpStr( pConfig->GetImportFormatExtension( rFormat ) );
+        if( !ImpPeekGraphicFormat( rStream, aTmpStr, TRUE ) )
             return GRFILTER_FORMATERROR;
         if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
         {
