@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinstall.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:40:08 $
+ *  last change: $Author: hjs $ $Date: 2004-07-07 15:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,9 +163,14 @@ namespace desktop {
                     theMSF->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
             // localize the provider to user selection
+//            Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
+//            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
+//            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
+//            Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
+//            localizable->setLocale(aLocale);
+
             Reference< XLocalizable > localizable(theConfigProvider, UNO_QUERY_THROW);
-            LanguageType aUserLanguageType = LanguageSelection::getLanguageType();
-            OUString aUserLanguage = ConvertLanguageToIsoString(aUserLanguageType);
+            OUString aUserLanguage = LanguageSelection::getLanguageString();
             Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
             localizable->setLocale(aLocale);
 
@@ -220,24 +225,12 @@ namespace desktop {
                 // path exists, check if an installation lives there
                 if ( is_user_install() )
                 {
-                    // User installation already there, just check license.
-                    if (License::check())
-                        return E_None;
-                    else
-                        return E_License;
+                    return E_None;
                 }
                 // Note: fall-thru intended.
             }
             case Bootstrap::PATH_VALID:
-                {
-                    Reference< XMultiServiceFactory > xMultiServiceFactory( ::comphelper::getProcessServiceFactory() );
-                    rDesktop.RegisterServices( xMultiServiceFactory );
-                }
-
-                if (License::check())
-                    return  create_user_install(aUserInstallPath);
-                else
-                    return E_License;
+                return  create_user_install(aUserInstallPath);
 
             default:
                 return E_Unknown;
