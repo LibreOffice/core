@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:18:47 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 14:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ protected:
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState);
     virtual void FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual sal_Bool Close();
+
+    DECL_LINK( OnAsyncGetFocus, void* );
 
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
