@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:15:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,6 @@ namespace xmloff
     //=====================================================================
     class OFormsRootImport
                 :public SvXMLImportContext
-                ,public OAttributeMetaData
                 ,public OStackedLogging
     {
     public:
@@ -114,7 +113,7 @@ namespace xmloff
     //=====================================================================
     //= OFormsRootExport
     //=====================================================================
-    class OFormsRootExport : public OAttributeMetaData
+    class OFormsRootExport
     {
     private:
         SvXMLElementExport*     m_pImplElement;
