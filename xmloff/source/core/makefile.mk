@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-16 11:51:45 $
+#   last change: $Author: dvo $ $Date: 2001-05-17 08:47:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,7 @@ SLOFILES =	\
         $(SLO)$/xmlimp.obj		\
         $(SLO)$/xmlkywd.obj		\
         $(SLO)$/xmltkmap.obj	\
+        $(SLO)$/xmltoken.obj	\
         $(SLO)$/xmluconv.obj	\
         $(SLO)$/ProgressBarHelper.obj	\
         $(SLO)$/PropertySetMerger.obj	\
