@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:29:18 $
+ *  last change: $Author: dvo $ $Date: 2001-10-12 13:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,12 +118,13 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 
 void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
-    if ((nTempValue >= nValue) && (!bStrict || (bStrict && (nTempValue <= nReference))))
+    if (xStatusIndicator.is() && (nReference > 0))
     {
-        // #91317# no progress bar with values > 100%
-        nValue = (nTempValue > nReference) ? nReference : nTempValue;
-        if (xStatusIndicator.is() && (nReference > 0))
+        if ((nTempValue >= nValue) && (!bStrict || (bStrict && (nTempValue <= nReference))))
         {
+            // #91317# no progress bar with values > 100%
+            nValue = (nTempValue > nReference) ? nReference : nTempValue;
+
             double fValue(nValue);
             double fNewValue ((fValue * nRange) / nReference);
             double fPercent ((fNewValue * 100) / nRange);
@@ -133,8 +134,8 @@ void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
                 fOldPercent = fPercent;
             }
         }
+        else
+            DBG_ERROR("tried to set a wrong value on the progressbar");
     }
-    else
-        DBG_ERROR("tried to set a wrong value on the progressbar");
 }
 
