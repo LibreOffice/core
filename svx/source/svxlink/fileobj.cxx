@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2000-12-04 17:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ JP 28.02.96: noch eine Baustelle:
                         Application::Reschedule();
 
                     xMed = xTmpMed;
+                    bClearMedium = TRUE;
                 }
 
                 if( pDownLoadData ||
