@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:48:42 $
+ *  last change: $Author: kz $ $Date: 2001-06-09 00:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,12 +237,12 @@ ModalDialog RID_SVXDLG_ZOOM
         Size = MAP_APPFONT ( 92 , 8 ) ;
         Text = "Zoomfaktor" ;
         Text [ ENGLISH ] = "Zoom" ;
-        Text[ english_us ] = "Zoom";
+        Text[ english_us ] = "Zoom factor";
         Text[ portuguese ] = "Zoom";
-        Text[ russian ] = "Zoom";
+        Text[ russian ] = " Ó˝ÙÙËˆËÂÌÚ Ï‡Ò¯Ú‡·‡";
         Text[ greek ] = "Zoom";
         Text[ dutch ] = "Zoom";
-        Text[ french ] = "Zoom";
+        Text[ french ] = "Facteur";
         Text[ spanish ] = "Escala";
         Text[ finnish ] = "Zoom";
         Text[ italian ] = "Zoom";
@@ -250,7 +250,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text[ swedish ] = "Zoomfaktor";
         Text[ polish ] = "Faktor powiÍkszenia";
         Text[ portuguese_brazilian ] = "Zoom";
-        Text[ japanese ] = "Zoom";
+        Text[ japanese ] = "Ωﬁ∞—óvàˆ";
         Text[ korean ] = "Zoom";
         Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
         Text[ chinese_traditional ] = "≈„•‹§Ò®“";
@@ -297,3 +297,4 @@ ModalDialog RID_SVXDLG_ZOOM
     Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";
 };
  // ********************************************************************** EOF
+
