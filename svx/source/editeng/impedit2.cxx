@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-24 13:48:05 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <udlnitem.hxx>
 #include <adjitem.hxx>
 #include <scripttypeitem.hxx>
-#include <writingmodeitem.hxx>
+#include <frmdiritem.hxx>
 
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
@@ -1500,14 +1500,14 @@ BOOL ImpEditEngine::IsRightToLeft( USHORT nPara ) const
     {
         if ( !aStatus.IsOutliner() )
         {
-            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
-            bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+            const SvxFrameDirectionItem& rWritingDir = (const SvxFrameDirectionItem&)GetParaAttrib( nPara, EE_PARA_WRITINGDIR );
+            bR2L = rWritingDir.GetValue() == FRMDIR_HORI_RIGHT_TOP;
         }
         else
         {
             // Use pool default
-            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
-            bR2L = rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB;
+            const SvxFrameDirectionItem& rWritingDir = (const SvxFrameDirectionItem&)((ImpEditEngine*)this)->GetEmptyItemSet().Get( EE_PARA_WRITINGDIR );
+            bR2L = rWritingDir.GetValue() == FRMDIR_HORI_RIGHT_TOP;
         }
     }
 

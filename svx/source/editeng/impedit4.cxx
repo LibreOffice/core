@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-05 11:03:15 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #include "wghtitem.hxx"
 #include "langitem.hxx"
 #include <charreliefitem.hxx>
-#include <writingmodeitem.hxx>
+#include <frmdiritem.hxx>
 #include <emphitem.hxx>
 
 #include <rtl/tencinfo.h>
@@ -789,8 +789,8 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
     {
         case EE_PARA_WRITINGDIR:
         {
-            const SvxWritingModeItem& rWritingMode = (const SvxWritingModeItem&)rItem;
-            if ( rWritingMode.GetValue() == com::sun::star::text::WritingMode_RL_TB )
+            const SvxFrameDirectionItem& rWritingMode = (const SvxFrameDirectionItem&)rItem;
+            if ( rWritingMode.GetValue() == FRMDIR_HORI_RIGHT_TOP )
                 rOutput << "\\rtlpar";
             else
                 rOutput << "\\ltrpar";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdbg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 12:16:58 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@
 #include <numitem.hxx>
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
-#include <writingmodeitem.hxx>
+#include <frmdiritem.hxx>
 
 #include <impedit.hxx>
 #include <editeng.hxx>
@@ -106,7 +106,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
     {
         case EE_PARA_WRITINGDIR:
             aDebStr += "WritingDir=";
-            aDebStr += ByteString::CreateFromInt32( ((SvxWritingModeItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( ((SvxFrameDirectionItem&)rItem).GetValue() );
         break;
         case EE_PARA_OUTLLRSPACE:
         case EE_PARA_LRSPACE:

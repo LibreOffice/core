@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-06 13:09:37 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@
 #endif
 
 #ifdef DEBUG
-#include <writingmodeitem.hxx>
+#include <frmdiritem.hxx>
 #endif
 
 // Spaeter -> TOOLS\STRING.H (fuer Grep: WS_TARGET)
@@ -1015,10 +1015,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                     if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                     {
                         SfxItemSet aAttribs = pEditView->GetAttribs();
-                        const SvxWritingModeItem& rCurrentWritingMode = (const SvxWritingModeItem&)aAttribs.Get( EE_PARA_WRITINGDIR );
-                        SvxWritingModeItem aNewItem( ::com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR );
-                        if ( rCurrentWritingMode.GetValue() != ::com::sun::star::text::WritingMode_RL_TB )
-                            aNewItem.SetValue( ::com::sun::star::text::WritingMode_RL_TB );
+                        const SvxFrameDirectionItem& rCurrentWritingMode = (const SvxFrameDirectionItem&)aAttribs.Get( EE_PARA_WRITINGDIR );
+                        SvxFrameDirectionItem aNewItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
+                        if ( rCurrentWritingMode.GetValue() != FRMDIR_HORI_RIGHT_TOP )
+                            aNewItem.SetValue( FRMDIR_HORI_RIGHT_TOP );
                         aAttribs.Put( aNewItem );
                         pEditView->SetAttribs( aAttribs );
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-06 13:09:37 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2016,10 +2016,9 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     for ( USHORT nT = 0; nT < rTypes.Count(); nT++ )
         aPositions.Insert( rTypes[nT].nStartPos );
 
-//  MT: Need Multi-Portions first...
-//  const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
-//  for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
-//      aPositions.Insert( rWritingDirections[nD].nStartPos );
+    const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
+    for ( USHORT nD = 0; nD < rWritingDirections.Count(); nD++ )
+        aPositions.Insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {

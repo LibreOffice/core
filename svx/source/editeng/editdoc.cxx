@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 16:25:10 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,15 +206,15 @@ DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
 
 SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { 0 /*SID_TEXTDIRECTION_LEFT_TO_RIGHT */, SFX_ITEM_POOLABLE },  // EE_PARA_WRITINGDIR
-        { 0, SFX_ITEM_POOLABLE },                                       // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },           // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
+        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
         { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },   // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },     // EE_PARA_NUMBULL
-        { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_HYPHENATE
-        { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_BULLETSTATE
-        { 0, SFX_ITEM_POOLABLE },                           // EE_PARA_OUTLLRSPACE
+        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },       // EE_PARA_ASIANCJKSPACING
+        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },         // EE_PARA_NUMBULL
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_HYPHENATE
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_BULLETSTATE
+        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_OUTLLRSPACE
         { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },
         { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },
         { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },

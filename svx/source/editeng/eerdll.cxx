@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-18 12:16:59 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #include <langitem.hxx>
 #include <charscaleitem.hxx>
 #include <charreliefitem.hxx>
-#include <writingmodeitem.hxx>
+#include <frmdiritem.hxx>
 #include <xmlcnitm.hxx>
 
 #include <forbiddencharacterstable.hxx>
@@ -137,7 +137,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         // Absatzattribute:
         SvxNumRule aTmpNumRule( 0, 0, FALSE );
 
-        ppDefItems[0]  = new SvxWritingModeItem( com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR );
+        ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
 #ifndef SVX_LIGHT
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
 #else
