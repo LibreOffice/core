@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: od $ $Date: 2002-08-28 13:52:07 $
+ *  last change: $Author: od $ $Date: 2002-08-30 13:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,10 +1634,10 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush, OutputDevice *pOut,
         ///     in pixel coordinates to avoid overlapping of the different rectangles
         ///     in the region. An overlapping would cause paint errors, if the
         ///     different rectangle are drawn transparent.
-        SwRegionRects aRegion( (bDrawTransparent ? (pOut->LogicToPixel(rOut.SVRect())) : rOut ), 4 );
+        SwRegionRects aRegion( (bDrawTransparent ? SwRect(pOut->LogicToPixel(rOut.SVRect())) : rOut ), 4 );
         if ( aGrf.HasArea() )
         {
-            aRegion -= (bDrawTransparent ? ( pOut->LogicToPixel(aGrf.SVRect()) ) : aGrf);
+            aRegion -= ( bDrawTransparent ? ( SwRect(pOut->LogicToPixel(aGrf.SVRect())) ) : aGrf );
         }
 
         /// OD 06.08.2002 #99657# - if background region have to be drawn
