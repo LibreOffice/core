@@ -19,7 +19,6 @@ static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
     if ( fp )
     {
         int retval = _vftprintf( fp, format, ap );
-
         fclose( fp );
 
         return retval;
