@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convertgb18030.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ sal_Size ImplConvertGb18030ToUnicode(ImplTextConverterData const * pData,
         = ((ImplGb18030ConverterData const *) pData)->
               m_pGb18030ToUnicodeRanges;
     ImplGb18030ToUnicodeState eState = IMPL_GB_18030_TO_UNICODE_STATE_0;
-    sal_uInt32 nCode;
+    sal_uInt32 nCode = 0;
     sal_uInt32 nInfo = 0;
     sal_Size nConverted = 0;
     sal_Unicode * pDestBufPtr = pDestBuf;
