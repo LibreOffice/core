@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-08 14:57:03 $
+ *  last change: $Author: kr $ $Date: 2001-06-25 13:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2001-06-08 14:57:03 $
+ * @version     $Revision: 1.11 $ $ $Date: 2001-06-25 13:35:43 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -717,7 +717,8 @@ public class TypeDescription implements ITypeDescription {
             _offset = 3;
         }
         else {
-            superOffset = _superType._offset;
+            if(_superType != null) // do we have a supertype (we don't have one, if we are not derived of XInterface)
+                superOffset = _superType._offset;
 
             TypeInfo typeInfos[] = __getTypeInfos(_class);
             Method methods[] = _class.getMethods();
