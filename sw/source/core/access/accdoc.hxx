@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:10:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ public:
                 ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL clearAccessibleSelection(  )
         throw ( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL selectAllAccessible(  )
+    virtual void SAL_CALL selectAllAccessibleChildren(  )
         throw ( ::com::sun::star::uno::RuntimeException );
     virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  )
         throw ( ::com::sun::star::uno::RuntimeException );
