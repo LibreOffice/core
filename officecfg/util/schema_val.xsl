@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_val.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:33:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 	
+<!-- activate attribute templates -->
+	<xsl:template match="group|set|prop">
+		<xsl:apply-templates select="*|@*"/>
+	</xsl:template>
+
 <!-- make sure that missing features are not invoked -->
 	<xsl:template match = "item">
 		<xsl:message terminate="yes">ERROR: multiple template types for sets are NOT supported!</xsl:message>
@@ -92,6 +97,7 @@
 		<xsl:if test="count(child::prop) or count(child::set) or count(child::group) or count(child::node-ref)">
 			<xsl:message terminate="yes">ERROR: extensible groups with children are currently NOT supported!</xsl:message>
 		</xsl:if>
+		<xsl:apply-templates select="*|@*"/>
 	</xsl:template>
 
 <!-- Localized info elements (desc/label) are not supported currently -->
@@ -99,11 +105,20 @@
 		<xsl:message terminate="yes">ERROR: Info elements (desc/label) are currently not localized. Remove xml:lang attributes!</xsl:message>
 	</xsl:template>
 
+<!-- check for duplicate child names -->
+	<xsl:template match="@oor:name">
+        <xsl:variable name="item-name" select="."/>
+		<xsl:if test="../following-sibling::*[@oor:name = $item-name]">
+			<xsl:message terminate="yes">ERROR: Duplicate node name '<xsl:value-of select="$item-name"/>'!</xsl:message>
+		</xsl:if>			
+	</xsl:template>
+
 <!-- check if properties of type 'any' do not have a value -->
 	<xsl:template match="prop[@oor:type='oor:any']">
 		<xsl:if test="count(value)"> 
 			<xsl:message terminate="yes">ERROR: Properties of type 'oor:any' MUST NOT have a value!</xsl:message>
 		</xsl:if>
+		<xsl:apply-templates select="*|@*"/>
 	</xsl:template>
 
 <!-- inhibit (explicit) NIL values -->
