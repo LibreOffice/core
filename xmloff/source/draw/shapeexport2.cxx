@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 13:55:46 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,7 +1379,10 @@ void XMLShapeExport::ImpExportOLE2Shape(
         {
             // xlink:href
             OUString sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
-            sURL += xNamed->getName();
+            OUString sPersistName;
+
+            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ) ) >>= sPersistName;
+            sURL += sPersistName;
 
             sal_Bool bInternal;
             xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsInternal"))) >>= bInternal;
