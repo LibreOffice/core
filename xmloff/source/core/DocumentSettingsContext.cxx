@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:12 $
+ *  last change: $Author: mtg $ $Date: 2001-07-27 09:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,6 +587,12 @@ void XMLConfigItemContext::EndElement()
             if (IsXMLToken(sValue, XML_TRUE))
                 bValue = sal_True;
             rAny <<= bValue;
+        }
+        else if (IsXMLToken(sType, XML_BYTE))
+        {
+            sal_Int32 nValue(0);
+            SvXMLUnitConverter::convertNumber(nValue, sValue);
+            rAny <<= static_cast<sal_Int8>(nValue);
         }
         else if (IsXMLToken(sType, XML_SHORT))
         {
