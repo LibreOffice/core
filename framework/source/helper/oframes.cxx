@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 11:54:42 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,10 +67,6 @@
 #include <helper/oframes.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -129,7 +125,7 @@ OFrames::OFrames(   const   Reference< XMultiServiceFactory >&  xFactory        
         ,   m_aMutex                    ( aMutex            )
         ,   m_xOwner                    ( xOwner            )
         ,   m_pFrameContainer           ( pFrameContainer   )
-        ,   m_bRecursiveSearchProtection( PROTECTION_OFF    )
+        ,   m_bRecursiveSearchProtection( sal_False         )
 {
     // Safe impossible cases
     // Method is not defined for ALL incoming parameters!
@@ -229,7 +225,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
     if ( xOwner.is() == sal_True )
     {
         // Work only, if search was not started here ...!
-        if( m_bRecursiveSearchProtection == PROTECTION_OFF )
+        if( m_bRecursiveSearchProtection == sal_False )
         {
             // This class is a helper for services, which must implement XFrames.
             // His parent and childs are MY parent and childs to.
@@ -278,7 +274,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
             {
                 // Else; start a new search.
                 // Protect this instance against recursive calls from parents.
-                m_bRecursiveSearchProtection = PROTECTION_ON;
+                m_bRecursiveSearchProtection = sal_True;
                 // Ask parent of my owner for frames and append results to return list.
                 Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
                 // If a parent exist ...
@@ -289,7 +285,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
                 }
                 // We have all searched informations.
                 // Reset protection-mode.
-                m_bRecursiveSearchProtection = PROTECTION_OFF;
+                m_bRecursiveSearchProtection = sal_False;
             }
 
             //_____________________________________________________________________________________________________________
@@ -300,8 +296,6 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
                 // These things are supported by this instance himself.
                 sal_Int32 nChildSearchFlags = FrameSearchFlag::SELF | FrameSearchFlag::CHILDREN;
                 // Step over all items of container and ask childrens for frames.
-                // But first lock the container! see class FrameContainer for further informations.
-                m_pFrameContainer->lock();
                 sal_uInt32 nCount = m_pFrameContainer->getCount();
                 for ( sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex )
                 {
@@ -310,8 +304,6 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
                     Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
                     impl_appendSequence( seqFrames, xItem->getFrames()->queryFrames( nChildSearchFlags ) );
                 }
-                // Don't forget to unlock the container.
-                m_pFrameContainer->unlock();
             }
         }
     }
@@ -366,9 +358,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     {
         // Get element form container.
         // (If index not valid, FrameContainer return NULL!)
-        m_pFrameContainer->lock();
         aReturnValue <<= (*m_pFrameContainer)[nIndex];
-        m_pFrameContainer->unlock();
     }
 
     // Return result of this operation.
@@ -500,7 +490,7 @@ sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMult
             ( &xOwner           ==  NULL        )   ||
             ( xFactory.is()     ==  sal_False   )   ||
             ( xOwner.is()       ==  sal_False   )   ||
-            ( m_pFrameContainer ==  NULL        )
+            ( pFrameContainer   ==  NULL        )
         )
     {
         bOK = sal_False ;

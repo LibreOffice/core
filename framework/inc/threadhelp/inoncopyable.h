@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: registertemp.cxx,v $
+ *  $RCSfile: inoncopyable.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:14 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,65 +58,55 @@
  *
  *
  ************************************************************************/
+
+#ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
+#define __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
+
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
-#include <macros/registration.hxx>
-#endif
+//_________________________________________________________________________________________________________________
+//  interface includes
+//_________________________________________________________________________________________________________________
 
-/*=================================================================================================================
-    Add new include and new register info to for new services.
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
 
-    Example:
+//_________________________________________________________________________________________________________________
+//  namespace
+//_________________________________________________________________________________________________________________
 
-        #ifndef __YOUR_SERVICE_1_HXX_
-        #include <service1.hxx>
-        #endif
+namespace framework{
 
-        #ifndef __YOUR_SERVICE_2_HXX_
-        #include <service2.hxx>
-        #endif
+//_________________________________________________________________________________________________________________
+//  const
+//_________________________________________________________________________________________________________________
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
+//_________________________________________________________________________________________________________________
+//  declarations
+//_________________________________________________________________________________________________________________
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
+/*-************************************************************************************************************//**
+    @descr          Use this as one of your base classes to disable
+                    all possiblities to copy or assign one object to another one!
+                    We declare neccessary functions private to do so.
+*//*-*************************************************************************************************************/
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
-                                 else
-                                IFFACTORIE( Service2 )
-                             )
-=================================================================================================================*/
+class INonCopyAble
+{
+    public:
 
-#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <services/mediatypedetectionhelper.hxx>
-#endif
+        INonCopyAble() {}
 
-#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
-#include <services/frameloaderfactory.hxx>
-#endif
+    private:
 
-#ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-#include <services/filterfactory.hxx>
-#endif
+        INonCopyAble            ( const INonCopyAble& rCopy );
+        INonCopyAble& operator= ( const INonCopyAble& rCopy );
 
-#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-#include <services/typedetection.hxx>
-#endif
+};      //  class INonCopyAble
 
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
+}       //  namespace framework
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::TypeDetection               )
-                    )
-
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
-                    )
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediatypedetectionhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 08:39:19 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <macros/xserviceinfo.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -106,18 +110,7 @@
 //  namespaces
 //_________________________________________________________________________________________________________________
 
-namespace framework
-{
-
-#define OUSTRING                        ::rtl::OUString
-#define OWEAKOBJECT                     ::cppu::OWeakObject
-#define REFERENCE                       ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION                ::com::sun::star::uno::RuntimeException
-#define SEQUENCE                        ::com::sun::star::uno::Sequence
-#define XMULTISERVICEFACTORY            ::com::sun::star::lang::XMultiServiceFactory
-#define XSERVICEINFO                    ::com::sun::star::lang::XServiceInfo
-#define XSTRINGMAPPING                  ::com::sun::star::util::XStringMapping
-#define XTYPEPROVIDER                   ::com::sun::star::lang::XTypeProvider
+namespace framework{
 
 //_________________________________________________________________________________________________________________
 //  definitions
@@ -136,10 +129,10 @@ namespace framework
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class MediaTypeDetectionHelper  :   public XTYPEPROVIDER
-                                ,   public XSERVICEINFO
-                                ,   public XSTRINGMAPPING
-                                ,   public OWEAKOBJECT
+class MediaTypeDetectionHelper  :   public css::lang::XTypeProvider
+                                ,   public css::lang::XServiceInfo
+                                ,   public css::util::XStringMapping
+                                ,   public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -163,7 +156,7 @@ class MediaTypeDetectionHelper  :   public XTYPEPROVIDER
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         MediaTypeDetectionHelper( const REFERENCE< XMULTISERVICEFACTORY >& xFactory );
+         MediaTypeDetectionHelper( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
             @short      standard destructor
@@ -203,7 +196,7 @@ class MediaTypeDetectionHelper  :   public XTYPEPROVIDER
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL mapStrings( SEQUENCE< OUSTRING >& seqParameter ) throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL mapStrings( css::uno::Sequence< ::rtl::OUString >& seqParameter ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
@@ -212,7 +205,7 @@ class MediaTypeDetectionHelper  :   public XTYPEPROVIDER
 
     private:
 
-        REFERENCE< XMULTISERVICEFACTORY >       m_xFactory; /// reference to global servicemanager
+        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory; /// reference to global servicemanager
 
 };
 

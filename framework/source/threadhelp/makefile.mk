@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: as $ $Date: 2001-03-29 13:17:12 $
+#   last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,21 +62,26 @@
 PRJ=..$/..
 
 PRJNAME=			framework
-TARGET=				framework
-LIBTARGET=			NO
+TARGET=				fwk_threadhelp
+USE_DEFFILE=		TRUE
+NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
+BOOTSTRAP_SERVICE=	FALSE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	svpre.mk
-.INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
+.INCLUDE :  		svpre.mk
+.INCLUDE :  		settings.mk
+.INCLUDE :  		sv.mk
 
-# --- Files --------------------------------------------------------
+# --- Generate -----------------------------------------------------
 
-SLOFILES=	$(SLO)$/login.obj
+SLOFILES=			$(SLO)$/resetableguard.obj						\
+                    $(SLO)$/fairrwlock.obj							\
+                    $(SLO)$/gate.obj								\
+                    $(SLO)$/readguard.obj							\
+                    $(SLO)$/writeguard.obj
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
-
+.INCLUDE :			target.mk

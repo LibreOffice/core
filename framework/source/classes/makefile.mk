@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2000-11-23 14:52:07 $
+#   last change: $Author: as $ $Date: 2001-03-29 13:17:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,6 @@ BOOTSTRAP_SERVICE=	FALSE
 
 SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/filtercache.obj							\
-                    $(SLO)$/registrycache.obj						\
                     $(SLO)$/wildcard.obj							\
                     $(SLO)$/framecontainer.obj						\
                     $(SLO)$/taskcreator.obj							\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: task.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:24 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,18 +127,6 @@
 
 namespace framework{
 
-#define ILLEGALARGUMENTEXCEPTION            ::com::sun::star::lang::IllegalArgumentException
-#define IPROPERTYARRAYHELPER                ::cppu::IPropertyArrayHelper
-#define OBROADCASTHELPER                    ::cppu::OBroadcastHelper
-#define OPROPERTYSETHELPER                  ::cppu::OPropertySetHelper
-#define PROPERTY                            ::com::sun::star::beans::Property
-#define UNOPOINT                            ::com::sun::star::awt::Point
-#define UNOSIZE                             ::com::sun::star::awt::Size
-#define XPROPERTYSETINFO                    ::com::sun::star::beans::XPropertySetInfo
-#define XTASK                               ::com::sun::star::frame::XTask
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define EXCEPTION                           ::com::sun::star::uno::Exception
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -158,10 +146,10 @@ namespace framework{
                 OPropertySet
 *//*-*************************************************************************************************************/
 
-class Task  :   public XTASK                ,   // => XFrame => XComponent
-                public Frame                ,   // Order of baseclasses is neccessary for right initialization!
-                public OBROADCASTHELPER     ,
-                public OPROPERTYSETHELPER
+class Task  :   public css::frame::XTask            ,   // => XFrame => XComponent
+                public Frame                        ,   // Order of baseclasses is neccessary for right initialization!
+                public ::cppu::OBroadcastHelper     ,
+                public ::cppu::OPropertySetHelper
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -188,7 +176,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         Task( const REFERENCE< XMULTISERVICEFACTORY >& xFactory );
+         Task( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
             @short      standard destructor
@@ -232,7 +220,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL close() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL close() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -248,7 +236,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL tileWindows() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL tileWindows() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -264,7 +252,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL arrangeWindowsVertical() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL arrangeWindowsVertical() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -280,7 +268,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL arrangeWindowsHorizontal() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL arrangeWindowsHorizontal() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XComponent
@@ -301,19 +289,19 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL dispose() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException )
         {
             Frame::dispose();
         }
 
         /*-*******************************************************************************************************/
-        virtual void SAL_CALL addEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
         {
             Frame::addEventListener( xListener );
         }
 
         /*-*******************************************************************************************************/
-        virtual void SAL_CALL removeEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
         {
             Frame::removeEventListener( xListener );
         }
@@ -337,92 +325,89 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL initialize( const REFERENCE< XWINDOW >& xWindow ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException )
         {
             Frame::initialize( xWindow );
         }
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getContainerWindow() throw( RUNTIMEEXCEPTION )
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() throw( css::uno::RuntimeException )
         {
             return Frame::getContainerWindow();
         }
 
-        virtual void SAL_CALL setCreator( const REFERENCE< XFRAMESSUPPLIER >& xCreator ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException )
         {
             Frame::setCreator( xCreator );
         }
 
-        virtual REFERENCE< XFRAMESSUPPLIER > SAL_CALL getCreator() throw( RUNTIMEEXCEPTION )
+        virtual css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL getCreator() throw( css::uno::RuntimeException )
         {
             return Frame::getCreator();
         }
 
-        virtual OUSTRING SAL_CALL getName() throw( RUNTIMEEXCEPTION )
+        virtual ::rtl::OUString SAL_CALL getName() throw( css::uno::RuntimeException )
         {
             return Frame::getName();
         }
 
-        virtual void SAL_CALL setName( const OUSTRING& sName ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException )
         {
             Frame::setName( sName );
         }
 
-        virtual sal_Bool SAL_CALL isTop() throw( RUNTIMEEXCEPTION )
+        virtual sal_Bool SAL_CALL isTop() throw( css::uno::RuntimeException )
         {
             return Frame::isTop();
         }
 
-        virtual void SAL_CALL activate() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL activate() throw( css::uno::RuntimeException )
         {
             Frame::activate();
         }
 
-        virtual void SAL_CALL deactivate() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL deactivate() throw( css::uno::RuntimeException )
         {
             Frame::deactivate();
         }
 
-        virtual sal_Bool SAL_CALL isActive() throw( RUNTIMEEXCEPTION )
+        virtual sal_Bool SAL_CALL isActive() throw( css::uno::RuntimeException )
         {
             return Frame::isActive();
         }
 
-        virtual sal_Bool SAL_CALL setComponent( const   REFERENCE< XWINDOW >&       xComponentWindow    ,
-                                                const   REFERENCE< XCONTROLLER >&   xController         ) throw( RUNTIMEEXCEPTION )
+        virtual sal_Bool SAL_CALL setComponent( const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
+                                                const   css::uno::Reference< css::frame::XController >& xController         ) throw( css::uno::RuntimeException )
         {
             return Frame::setComponent( xComponentWindow, xController );
         }
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getComponentWindow() throw( RUNTIMEEXCEPTION )
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw( css::uno::RuntimeException )
         {
             return Frame::getComponentWindow();
         }
 
-        virtual REFERENCE< XCONTROLLER > SAL_CALL getController() throw( RUNTIMEEXCEPTION )
+        virtual css::uno::Reference< css::frame::XController > SAL_CALL getController() throw( css::uno::RuntimeException )
         {
             return Frame::getController();
         }
 
-        virtual void SAL_CALL contextChanged() throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL contextChanged() throw( css::uno::RuntimeException )
         {
             Frame::contextChanged();
         }
 
-        virtual void SAL_CALL addFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
         {
             Frame::addFrameActionListener( xListener );
         }
 
-        virtual void SAL_CALL removeFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION )
+        virtual void SAL_CALL removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException )
         {
             Frame::removeFrameActionListener( xListener );
         }
 
-        virtual REFERENCE< XFRAME > SAL_CALL findFrame( const   OUSTRING&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
-//      {
-//          return Frame::findFrame( sTargetFrameName, nSearchFlags );
-//      }
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL findFrame(   const   ::rtl::OUString&    sTargetFrameName    ,
+                                                                                           sal_Int32            nSearchFlags        ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XTopWindowListener
@@ -443,7 +428,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowClosing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -460,7 +445,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowActivated( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -477,7 +462,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowDeactivated( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XEventListener
@@ -498,7 +483,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -532,10 +517,10 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    IllegalArgumentException, if you call this with an invalid argument
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(         ANY&        aConvertedValue ,
-                                                                      ANY&      aOldValue       ,
-                                                                    sal_Int32   nHandle         ,
-                                                            const   ANY&        aValue          ) throw( ILLEGALARGUMENTEXCEPTION );
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
+                                                                      css::uno::Any&        aOldValue       ,
+                                                                    sal_Int32           nHandle         ,
+                                                            const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
 
         /*-****************************************************************************************************//**
             @short      set value of a transient property
@@ -554,8 +539,8 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    An exception is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
-                                                                  const ANY&        aValue  ) throw( EXCEPTION );
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32       nHandle ,
+                                                                  const css::uno::Any&  aValue  ) throw( css::uno::Exception );
 
         /*-****************************************************************************************************//**
             @short      get value of a transient property
@@ -572,8 +557,8 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL getFastPropertyValue( ANY&        aValue  ,
-                                                      sal_Int32 nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
+                                                      sal_Int32     nHandle ) const;
 
         /*-****************************************************************************************************//**
             @short      return structure and information about transient properties
@@ -589,7 +574,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual IPROPERTYARRAYHELPER& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
         /*-****************************************************************************************************//**
             @short      return propertysetinfo
@@ -607,7 +592,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XPROPERTYSETINFO > SAL_CALL getPropertySetInfo();
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -615,7 +600,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
 
     private:
 
-        DECL_LINK(      Close_Impl, void* );
+        DECL_LINK( Close_Impl, void* );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -630,22 +615,22 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_tryToChangeProperty(          sal_Bool    bProperty       ,
-                                            const   ANY&        aValue          ,
-                                                    ANY&        aOldValue       ,
-                                                    ANY&        aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
-        sal_Bool impl_tryToChangeProperty(  const   OUSTRING&   sProperty       ,
-                                            const   ANY&        aValue          ,
-                                                    ANY&        aOldValue       ,
-                                                    ANY&        aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
-        sal_Bool impl_tryToChangeProperty(  const   UNOPOINT&   aProperty       ,
-                                            const   ANY&        aValue          ,
-                                                    ANY&        aOldValue       ,
-                                                    ANY&        aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
-        sal_Bool impl_tryToChangeProperty(  const   UNOSIZE&    aProperty       ,
-                                            const   ANY&        aValue          ,
-                                                    ANY&        aOldValue       ,
-                                                    ANY&        aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
+        sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
+                                            const   css::uno::Any&      aValue          ,
+                                                    css::uno::Any&      aOldValue       ,
+                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   ::rtl::OUString&    sProperty       ,
+                                            const   css::uno::Any&      aValue          ,
+                                                    css::uno::Any&      aOldValue       ,
+                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   css::awt::Point&    aProperty       ,
+                                            const   css::uno::Any&      aValue          ,
+                                                    css::uno::Any&      aOldValue       ,
+                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
+        sal_Bool impl_tryToChangeProperty(  const   css::awt::Size&     aProperty       ,
+                                            const   css::uno::Any&      aValue          ,
+                                                    css::uno::Any&      aOldValue       ,
+                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -660,7 +645,7 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static const SEQUENCE< PROPERTY > impl_getStaticPropertyDescriptor();
+        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -697,17 +682,17 @@ class Task  :   public XTASK                ,   // => XFrame => XComponent
     protected:
 
         // But some values are neede by derived classes!
-        sal_Bool        m_bIsPlugIn         ;   /// In objects of these class this member is set to FALSE.
-                                                /// But in derived class PlugInFrame it's overwrited with TRUE!
+        sal_Bool            m_bIsPlugIn         ;   /// In objects of these class this member is set to FALSE.
+                                                    /// But in derived class PlugInFrame it's overwrited with TRUE!
 
     private:
 
         // Properties
         sal_Bool            m_bIsAlwaysVisible  ;
         sal_Bool            m_bIsFloating       ;
-        UNOPOINT            m_aPosition         ;
-        UNOSIZE             m_aSize             ;
-        OUSTRING            m_sTitle            ;
+        css::awt::Point     m_aPosition         ;
+        css::awt::Size      m_aSize             ;
+        ::rtl::OUString     m_sTitle            ;
         ::vcl::EventPoster  m_aPoster           ;
 
 };      //  class Tasks

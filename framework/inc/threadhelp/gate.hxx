@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: urltransformer.hxx,v $
+ *  $RCSfile: gate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,59 +59,31 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
-#define __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#ifndef __FRAMEWORK_THREADHELP_GATE_HXX_
+#define __FRAMEWORK_THREADHELP_GATE_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-#include <macros/debug.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
-#include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
-#include <macros/xserviceinfo.hxx>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
+#ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
+#include <threadhelp/inoncopyable.h>
 #endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
-#include <com/sun/star/util/URL.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -121,46 +93,38 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short
+    @short          implement a gate to block multiple threads at same time or unblock all
+    @descr          A gate can be used as a negative-condition! You can open a "door" - wait() will not block ...
+                    or you can close it - wait() blocks till open() is called again.
+                    As a special feature you can open the gate a little bit by sing openGap().
+                    Then all currently waiting threads are running immediately - but new ones are blocked!
 
-    @descr      -
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
-    @implements XInterface
-                XTypeProvider
-                XServiceInfo
-                XURLTransformer
+    @implements     -
+    @base           -
 
-    @base       OMutexMember
-                OWeakObject
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class URLTransformer    :   public css::lang::XTypeProvider     ,
-                            public css::lang::XServiceInfo      ,
-                            public css::util::XURLTransformer   ,
-                            public OMutexMember                 ,
-                            public ::cppu::OWeakObject
+class Gate : private INonCopyAble
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      ctor
+            @descr      These initialize the object right as an open gate.
 
             @seealso    -
 
@@ -170,11 +134,13 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         URLTransformer( const css::uno::Reference< css::lang::XMultiServiceFactory >& sFactory );
+        Gate();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      dtor
+            @descr      Is user forget it - we open the gate ...
+                        blocked threads can running ... but I don't know
+                        if it's right - we are destroyed yet!?
 
             @seealso    -
 
@@ -184,25 +150,13 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ~URLTransformer();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
-
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
-        DECLARE_XSERVICEINFO
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XURLTransformer
-        //---------------------------------------------------------------------------------------------------------
+        ~Gate();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      open the gate
+            @descr      A wait() call will not block then.
 
-            @seealso    -
+            @seealso    method close()
 
             @param      -
             @return     -
@@ -210,13 +164,13 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException );
+        void open();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      close the gate
+            @descr      A wait() call will block then.
 
-            @seealso    -
+            @seealso    method open()
 
             @param      -
             @return     -
@@ -224,14 +178,16 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseSmart(           css::util::URL&     aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
+        void close();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      open gate for current waiting threads
+            @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
+                        With this call you can open the passage for these waiting ones.
+                        The "gap" is closed by any new thread which call wait() automaticly!
 
-            @seealso    -
+            @seealso    method wait()
+            @seealso    method open()
 
             @param      -
             @return     -
@@ -239,79 +195,53 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException );
+        void openGap();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      must be called to pass the gate
+            @descr      If gate "open"   => wait() will not block.
+                        If gate "closed" => wait() will block till somewhere open it again.
+                        If gap  "open"   => currently waiting threads unblocked, new ones blocked
+
+            @seealso    method wait()
+            @seealso    method open()
+
+            @param      "pTimeOut", optional parameter to wait a certain time
+            @return     true, if wait was successful (gate was opened)
+                        false, if condition has an error or timeout was reached!
+
+            @onerror    We return false.
+        *//*-*****************************************************************************************************/
+
+        sal_Bool wait( const TimeValue* pTimeOut = NULL );
+
+        /*-****************************************************************************************************//**
+            @short      get information about current opening state
+            @descr      Use it if you not shure what going on ... but I think this never should realy neccessary!
 
             @seealso    -
 
             @param      -
-            @return     -
+            @return     true, if gate is open
+                        false, otherwise
 
-            @onerror    -
+            @onerror    No error could occure!
         *//*-*****************************************************************************************************/
 
-        virtual ::rtl::OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
-                                                                    sal_Bool            bWithPassword   ) throw( css::uno::RuntimeException );
+        sal_Bool isOpen() const;
 
     //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
+        ::osl::Mutex        m_aAccessLock   ;
+        ::osl::Condition    m_aPassage      ;
+        sal_Bool            m_bClosed       ;
+        sal_Bool            m_bGapOpen      ;
 
-        /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
-
-            @seealso    ASSERTs in implementation!
-
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_URLTransformer   (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        );
-        static sal_Bool impldbg_checkParameter_parseStrict      (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_parseSmart       (           css::util::URL&                                         aURL            ,
-                                                                    const   ::rtl::OUString&                                        sSmartProtocol  );
-        static sal_Bool impldbg_checkParameter_assemble         (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_getPresentation  (   const   css::util::URL&                                         aURL            ,
-                                                                            sal_Bool                                                bWithPassword   );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory          ;   /// reference to factory, which has created this instance
-
-};      //  class URLTransformer
+};      //  class Gate
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_GATE_HXX_

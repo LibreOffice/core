@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-16 11:54:31 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -116,18 +120,6 @@
 
 namespace framework{
 
-#define ANY                                 ::com::sun::star::uno::Any
-#define INDEXOUTOFBOUNDSEXCEPTION           ::com::sun::star::lang::IndexOutOfBoundsException
-#define MUTEX                               ::osl::Mutex
-#define OWEAKOBJECT                         ::cppu::OWeakObject
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define UNOTYPE                             ::com::sun::star::uno::Type
-#define WEAKREFERENCE                       ::com::sun::star::uno::WeakReference
-#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
-#define XFRAME                              ::com::sun::star::frame::XFrame
-#define XFRAMES                             ::com::sun::star::frame::XFrames
-#define XMULTISERVICEFACTORY                ::com::sun::star::lang::XMultiServiceFactory
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -156,8 +148,8 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess => XElementAccess
-                    public OWEAKOBJECT
+class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElementAccess
+                    public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -185,10 +177,10 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         OFrames(   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory        ,
-                            MUTEX&                              aMutex          ,
-                    const   REFERENCE< XFRAME >&                xOwner          ,
-                            FrameContainer*                     pFrameContainer );
+         OFrames(   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
+                            ::osl::Mutex&                                           aMutex          ,
+                    const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+                            FrameContainer*                                         pFrameContainer );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -213,7 +205,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL append( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      remove frame from container
@@ -228,7 +220,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    We do nothing in release or throw an assert in debug version.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL remove( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      return list of all applicable frames for given flags
@@ -242,7 +234,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    An empty list is returned.
         *//*-*****************************************************************************************************/
 
-        virtual SEQUENCE< REFERENCE< XFRAME > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XIndexAccess
@@ -262,7 +254,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    If a lock is set, we return 0 for prevent further access!
         *//*-*****************************************************************************************************/
 
-        virtual sal_Int32 SAL_CALL getCount() throw( RUNTIMEEXCEPTION );
+        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get specified container item by index
@@ -279,9 +271,9 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual ANY SAL_CALL getByIndex( sal_Int32 nIndex ) throw(  INDEXOUTOFBOUNDSEXCEPTION   ,
-                                                                    WRAPPEDTARGETEXCEPTION      ,
-                                                                    RUNTIMEEXCEPTION            );
+        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw(    css::lang::IndexOutOfBoundsException    ,
+                                                                                css::lang::WrappedTargetException       ,
+                                                                                css::uno::RuntimeException              );
 
         //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
@@ -300,7 +292,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual UNOTYPE SAL_CALL getElementType() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get fill state of current container
@@ -316,7 +308,7 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -378,8 +370,8 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_appendSequence(           SEQUENCE< REFERENCE< XFRAME > >&    seqDestination  ,
-                                     const  SEQUENCE< REFERENCE< XFRAME > >&    seqSource       );
+        void impl_appendSequence(           css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqDestination  ,
+                                     const  css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqSource       );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -404,13 +396,13 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
 
     private:
 
-        sal_Bool impldbg_checkParameter_OFramesCtor (   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory        ,
-                                                                MUTEX&                              aMutex          ,
-                                                        const   REFERENCE< XFRAME >&                xOwner          ,
-                                                                FrameContainer*                     pFrameContainer );
-        sal_Bool impldbg_checkParameter_append      (   const   REFERENCE< XFRAME >&                xFrame          );
-        sal_Bool impldbg_checkParameter_remove      (   const   REFERENCE< XFRAME >&                xFrame          );
-        sal_Bool impldbg_checkParameter_queryFrames (           sal_Int32                           nSearchFlags    );
+        static sal_Bool impldbg_checkParameter_OFramesCtor  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        ,
+                                                                        ::osl::Mutex&                                           aMutex          ,
+                                                                const   css::uno::Reference< css::frame::XFrame >&              xOwner          ,
+                                                                        FrameContainer*                                         pFrameContainer );
+        static sal_Bool impldbg_checkParameter_append       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
+        static sal_Bool impldbg_checkParameter_remove       (   const   css::uno::Reference< css::frame::XFrame >&              xFrame          );
+        static sal_Bool impldbg_checkParameter_queryFrames  (           sal_Int32                                               nSearchFlags    );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -421,11 +413,11 @@ class OFrames   :   public XFRAMES                      ,   //=> XIndexAccess =>
 
     private:
 
-        REFERENCE< XMULTISERVICEFACTORY >       m_xFactory                      ;   /// reference to global servicemanager
-        MUTEX&                                  m_aMutex                        ;   /// shared mutex with owner of an instance of this class
-        WEAKREFERENCE< XFRAME >                 m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
-        FrameContainer*                         m_pFrameContainer               ;   /// with owner shared list to hold all direct childs of an XFramesSupplier
-        sal_Bool                                m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
+        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory                      ;   /// reference to global servicemanager
+        ::osl::Mutex&                                               m_aMutex                        ;   /// shared mutex with owner of an instance of this class
+        css::uno::WeakReference< css::frame::XFrame >               m_xOwner                        ;   /// reference to owner of this instance (Hold no hard reference!)
+        FrameContainer*                                             m_pFrameContainer               ;   /// with owner shared list to hold all direct childs of an XFramesSupplier
+        sal_Bool                                                    m_bRecursiveSearchProtection    ;   /// flag to protect against recursive searches of frames at parents
 
 };      //  class OFrames
 

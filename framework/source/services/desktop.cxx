@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-03-15 08:57:28 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,16 @@
 #include <helper/odesktopdispatcher.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
-#endif
-
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -1614,24 +1618,20 @@ sal_Bool Desktop::impl_checkPlugInState()
     // set default return value if search failed or no plugin could be detected.
     sal_Bool bReturn = sal_False;
 
-    // We must search at ouer childs. We make a deep search.
-    // Lock the container. Nobody should append or remove elements during next time.
-    // But don't forget to unlock it again!
-    m_aChildTaskContainer.lock();
+    // We must search at ouer childs. We make a flat search at our direct children only.
     // Break loop, if something was found or all container items was compared.
-    sal_uInt32 nCount       = m_aChildTaskContainer.getCount();
-    sal_uInt32 nPosition    = 0;
+    Sequence< Reference< XFrame > > lTasks      = m_aChildTaskContainer.getAllElements();
+    sal_uInt32                      nCount      = lTasks.getLength();
+    sal_uInt32                      nPosition   = 0;
     while   (
                 ( bReturn   ==  sal_False   )   &&
                 ( nPosition <   nCount      )
             )
     {
-        Reference< XPluginInstance > xPlugInFrame( m_aChildTaskContainer[nPosition], UNO_QUERY );
+        Reference< XPluginInstance > xPlugInFrame( lTasks[nPosition], UNO_QUERY );
         bReturn = xPlugInFrame.is();
         ++nPosition;
     }
-    // Don't forget to unlock the container!
-    m_aChildTaskContainer.unlock();
 
     return bReturn;
 }

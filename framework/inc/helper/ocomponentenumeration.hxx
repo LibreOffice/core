@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentenumeration.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 13:01:14 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -120,21 +124,6 @@
 
 namespace framework{
 
-#define ANY                                 ::com::sun::star::uno::Any
-#define EVENTOBJECT                         ::com::sun::star::lang::EventObject
-#define NOSUCHELEMENTEXCEPTION              ::com::sun::star::container::NoSuchElementException
-#define OWEAKOBJECT                         ::cppu::OWeakObject
-#define REFERENCE                           ::com::sun::star::uno::Reference
-#define SEQUENCE                            ::com::sun::star::uno::Sequence
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define UNOTYPE                             ::com::sun::star::uno::Type
-#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
-#define XENUMERATION                        ::com::sun::star::container::XEnumeration
-#define XEVENTLISTENER                      ::com::sun::star::lang::XEventListener
-#define XCOMPONENT                          ::com::sun::star::lang::XComponent
-#define XTASK                               ::com::sun::star::frame::XTask
-#define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -158,13 +147,14 @@ namespace framework{
                     OWeakObject
 
     @devstatus      ready to use
+    @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class OComponentEnumeration :   public XTYPEPROVIDER        ,
-                                public XEVENTLISTENER       ,
-                                public XENUMERATION         ,
-                                public OMutexMember         ,
-                                public OWEAKOBJECT
+class OComponentEnumeration :   public css::lang::XTypeProvider     ,
+                                public css::lang::XEventListener    ,
+                                public css::container::XEnumeration ,
+                                public OMutexMember                 ,
+                                public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -189,7 +179,7 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OComponentEnumeration( const SEQUENCE< REFERENCE< XCOMPONENT > >& seqComponents );
+         OComponentEnumeration( const css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -215,7 +205,7 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XEnumeration
@@ -236,7 +226,7 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
                         (List is emtpy and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasMoreElements() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      give the next element, if some exist
@@ -250,9 +240,9 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual ANY SAL_CALL nextElement() throw(   NOSUCHELEMENTEXCEPTION  ,
-                                                    WRAPPEDTARGETEXCEPTION  ,
-                                                    RUNTIMEEXCEPTION        );
+        virtual css::uno::Any SAL_CALL nextElement() throw( css::container::NoSuchElementException  ,
+                                                             css::lang::WrappedTargetException      ,
+                                                            css::uno::RuntimeException              );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -325,8 +315,8 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
 
     private:
 
-        sal_Bool impldbg_checkParameter_OComponentEnumerationCtor   (   const   SEQUENCE< REFERENCE< XCOMPONENT > >&    seqComponents   );
-        sal_Bool impldbg_checkParameter_disposing                   (   const   EVENTOBJECT&                            aEvent          );
+        static sal_Bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
+        static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -337,8 +327,8 @@ class OComponentEnumeration :   public XTYPEPROVIDER        ,
 
     private:
 
-        sal_uInt32                              m_nPosition         ;   /// current position in enumeration
-        SEQUENCE< REFERENCE< XCOMPONENT > >     m_seqComponents     ;   /// list of current components
+        sal_uInt32                                                              m_nPosition         ;   /// current position in enumeration
+        css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >      m_seqComponents     ;   /// list of current components
 
 };      //  class OComponentEnumeration
 

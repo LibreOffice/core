@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-15 10:35:49 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -1386,7 +1390,7 @@ void Frame::impl_sendDisposeEvent()
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-sal_Bool Frame::impl_willFrameTop( const REFERENCE< XFRAMESSUPPLIER >& xParent )
+sal_Bool Frame::impl_willFrameTop( const Reference< XFramesSupplier >& xParent )
 {
     // Set default return value.
     sal_Bool bWillFrameTop = sal_False;

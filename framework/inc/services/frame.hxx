@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-23 14:52:05 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include <macros/xserviceinfo.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -200,46 +200,17 @@
 
 namespace framework{
 
-#define ANY                                         ::com::sun::star::uno::Any
-#define DISPATCHDESCRIPTOR                          ::com::sun::star::frame::DispatchDescriptor
-#define EVENTOBJECT                                 ::com::sun::star::lang::EventObject
-#define FOCUSEVENT                                  ::com::sun::star::awt::FocusEvent
-#define FRAMEACTION                                 ::com::sun::star::frame::FrameAction
-#define INDEXOUTOFBOUNDSEXCEPTION                   ::com::sun::star::lang::IndexOutOfBoundsException
-#define OINTERFACECONTAINERHELPER                   ::cppu::OInterfaceContainerHelper
-#define OMULTITYPEINTERFACECONTAINERHELPER          ::cppu::OMultiTypeInterfaceContainerHelper
-#define OSTRING                                     ::rtl::OString
-#define OUSTRING                                    ::rtl::OUString
-#define OWEAKOBJECT                                 ::cppu::OWeakObject
-#define PROPERTYVALUE                               ::com::sun::star::beans::PropertyValue
-#define RUNTIMEEXCEPTION                            ::com::sun::star::uno::RuntimeException
-#define UNOURL                                      ::com::sun::star::util::URL
-#define WINDOWEVENT                                 ::com::sun::star::awt::WindowEvent
-#define WRAPPEDTARGETEXCEPTION                      ::com::sun::star::lang::WrappedTargetException
-#define XBROWSEHISTORYREGISTRY                      ::com::sun::star::frame::XBrowseHistoryRegistry
-#define XCONTROLLER                                 ::com::sun::star::frame::XController
-#define XDISPATCH                                   ::com::sun::star::frame::XDispatch
-#define XDISPATCHPROVIDER                           ::com::sun::star::frame::XDispatchProvider
-#define XDISPATCHPROVIDERINTERCEPTION               ::com::sun::star::frame::XDispatchProviderInterception
-#define XDISPATCHPROVIDERINTERCEPTOR                ::com::sun::star::frame::XDispatchProviderInterceptor
-#define XEVENTLISTENER                              ::com::sun::star::lang::XEventListener
-#define XFOCUSLISTENER                              ::com::sun::star::awt::XFocusListener
-#define XFRAME                                      ::com::sun::star::frame::XFrame
-#define XFRAMEACTIONLISTENER                        ::com::sun::star::frame::XFrameActionListener
-#define XFRAMES                                     ::com::sun::star::frame::XFrames
-#define XFRAMESSUPPLIER                             ::com::sun::star::frame::XFramesSupplier
-#define XMULTISERVICEFACTORY                        ::com::sun::star::lang::XMultiServiceFactory
-#define XSERVICEINFO                                ::com::sun::star::lang::XServiceInfo
-#define XSTATUSINDICATOR                            ::com::sun::star::task::XStatusIndicator
-#define XSTATUSINDICATORFACTORY                     ::com::sun::star::task::XStatusIndicatorFactory
-#define XTOPWINDOWLISTENER                          ::com::sun::star::awt::XTopWindowListener
-#define XTYPEPROVIDER                               ::com::sun::star::lang::XTypeProvider
-#define XWINDOW                                     ::com::sun::star::awt::XWindow
-#define XWINDOWLISTENER                             ::com::sun::star::awt::XWindowListener
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
+
+// This enum can be used to set differnt active states of frames, tasks.
+enum eACTIVESTATE
+{
+    INACTIVE        ,   // I'am not a member of active path in tree and i don't have the focus.
+    ACTIVE          ,   // I'am in the middle of an active path in tree and i don't have the focus.
+    FOCUS               // I have the focus now. I must a member of an active path!
+};
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -266,25 +237,24 @@ namespace framework{
                 XWindowListener
                 XTopWindowListener
                 XFocusListener
-                [ XDebugging, if TEST_TREE is defined! ]
     @base       OMutexMember
                 OWeakObject
 
     @devstatus  deprecated
 *//*-*************************************************************************************************************/
 
-class Frame :   public XTYPEPROVIDER                    ,
-                public XSERVICEINFO                     ,
-                public XFRAMESSUPPLIER                  ,   // => XFrame      , XComponent
-                public XSTATUSINDICATORFACTORY          ,
-                public XDISPATCHPROVIDER                ,
-                public XDISPATCHPROVIDERINTERCEPTION    ,
-                public XBROWSEHISTORYREGISTRY           ,
-                public XWINDOWLISTENER                  ,   // => XEventListener
-                public XTOPWINDOWLISTENER               ,
-                public XFOCUSLISTENER                   ,
-                public OMutexMember                     ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
-                public OWEAKOBJECT
+class Frame :   public css::lang::XTypeProvider                 ,
+                public css::lang::XServiceInfo                  ,
+                public css::frame::XFramesSupplier              ,   // => XFrame      , XComponent
+                public css::task::XStatusIndicatorFactory       ,
+                public css::frame::XDispatchProvider            ,
+                public css::frame::XDispatchProviderInterception,
+                public css::frame::XBrowseHistoryRegistry       ,
+                public css::awt::XWindowListener                ,   // => XEventListener
+                public css::awt::XTopWindowListener             ,
+                public css::awt::XFocusListener                 ,
+                public OMutexMember                             ,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+                public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -310,7 +280,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    ASSERT in debug version or nothing in relaese version.
         *//*-*****************************************************************************************************/
 
-         Frame( const REFERENCE< XMULTISERVICEFACTORY >& xFactory );
+         Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
             @short      standard destructor
@@ -352,7 +322,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAMES > SAL_CALL getFrames() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrames > SAL_CALL getFrames() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get the current active child frame
@@ -370,7 +340,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAME > SAL_CALL getActiveFrame() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getActiveFrame() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      set the new active direct child frame
@@ -387,7 +357,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    An assertion is thrown, if given frame is'nt already a child of us.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setActiveFrame( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XStatusIndicatorFactory
@@ -405,7 +375,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XSTATUSINDICATOR > SAL_CALL createStatusIndicator() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XDispatchProvider
@@ -427,9 +397,9 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL&     aURL            ,
-                                                                const   OUSTRING&   sTargetFrameName,
-                                                                        sal_Int32   nSearchFlags    ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(    const   css::util::URL&     aURL            ,
+                                                                                        const   ::rtl::OUString&    sTargetFrameName,
+                                                                                                sal_Int32           nSearchFlags    ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -445,7 +415,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescriptor ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XDispatchProviderInterception
@@ -466,7 +436,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL registerDispatchProviderInterceptor( const REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -483,7 +453,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL releaseDispatchProviderInterceptor( const REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >& xInterceptor ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XBrowseHistoryRegistry
@@ -504,7 +474,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL updateViewData( const ANY& aValue ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL updateViewData( const css::uno::Any& aValue ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -521,9 +491,9 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL createNewEntry(   const   OUSTRING&                   sURL        ,
-                                                const   SEQUENCE< PROPERTYVALUE >&  seqArguments,
-                                                const   OUSTRING&                   sTitle      ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL createNewEntry(   const   ::rtl::OUString&                                    sURL        ,
+                                                const   css::uno::Sequence< css::beans::PropertyValue >&    seqArguments,
+                                                const   ::rtl::OUString&                                    sTitle      ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XWindowListener
@@ -544,7 +514,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowResized( const WINDOWEVENT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -561,7 +531,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowMoved( const WINDOWEVENT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -578,7 +548,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowShown( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -595,7 +565,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowHidden( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XTopWindowListener
@@ -616,7 +586,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowOpened( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowOpened( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -633,7 +603,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowClosing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -650,7 +620,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowClosed( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowClosed( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -667,7 +637,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowMinimized( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowMinimized( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -684,7 +654,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowNormalized( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowNormalized( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -701,7 +671,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowActivated( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -718,7 +688,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL windowDeactivated( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XFrame
@@ -739,7 +709,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL initialize( const REFERENCE< XWINDOW >& xWindow ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -758,7 +728,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getContainerWindow() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -775,7 +745,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setCreator( const REFERENCE< XFRAMESSUPPLIER >& xCreator ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -791,7 +761,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAMESSUPPLIER > SAL_CALL getCreator() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL getCreator() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -808,7 +778,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual OUSTRING SAL_CALL getName() throw( RUNTIMEEXCEPTION );
+        virtual ::rtl::OUString SAL_CALL getName() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -825,7 +795,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setName( const OUSTRING& sName ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -854,8 +824,8 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAME > SAL_CALL findFrame( const   OUSTRING&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL findFrame(   const   ::rtl::OUString&    sTargetFrameName    ,
+                                                                                        sal_Int32           nSearchFlags        ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -875,7 +845,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL isTop() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL isTop() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -892,7 +862,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL activate() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL activate() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -909,7 +879,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL deactivate() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL deactivate() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -926,7 +896,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL isActive() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL isActive() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -943,8 +913,8 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL setComponent( const   REFERENCE< XWINDOW >&       xComponentWindow    ,
-                                                const   REFERENCE< XCONTROLLER >&   xController         ) throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL setComponent( const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
+                                                const   css::uno::Reference< css::frame::XController >& xController         ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -968,7 +938,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getComponentWindow() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -985,7 +955,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XCONTROLLER > SAL_CALL getController() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XController > SAL_CALL getController() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1002,7 +972,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL contextChanged() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL contextChanged() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1019,7 +989,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1036,7 +1006,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XComponent
@@ -1060,7 +1030,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL dispose() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1077,7 +1047,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1094,7 +1064,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XEventListener
@@ -1115,7 +1085,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XFocusListener
@@ -1133,7 +1103,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL focusGained( const FOCUSEVENT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL focusGained( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1147,31 +1117,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL focusLost( const FOCUSEVENT& aEvent ) throw( RUNTIMEEXCEPTION );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  public but impl method for direct helper access of class "DispatchProvider".
-        //  Don't use this in another context!
-        //---------------------------------------------------------------------------------------------------------
-
-        /*-****************************************************************************************************//**
-            @short      search for last destination of load component by means of dispatch(...)
-            @descr      This is a HACK for XDispatch->dispatch(...) calls. You don't get any information about
-                        the destination frame, which has loaded a component in loadComponentFromURL()!
-                        But we will set a flag m_bILoadLastComponent in impl_loadComponent() if loading successfull.
-                        With these impl method you can find this frame and return his component ...
-                        If this method found any frame we must reset ouer special flag!
-
-            @seealso    method impl_loadComponent()
-            @seealso    method loadComponentFromURL()
-
-            @param      -
-            @return     A reference to frame, which has loaded the last component.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
-//OBSOLETE      REFERENCE< XFRAME > impl_searchLastLoadedComponent();
+        virtual void SAL_CALL focusLost( const css::awt::FocusEvent& aEvent ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -1199,7 +1145,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_setContainerWindow( const REFERENCE< XWINDOW >& xWindow );
+        void impl_setContainerWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1215,7 +1161,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_setComponentWindow( const REFERENCE< XWINDOW >& xWindow );
+        void impl_setComponentWindow( const css::uno::Reference< css::awt::XWindow >& xWindow );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1231,7 +1177,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_setController( const REFERENCE< XCONTROLLER >& xController );
+        void impl_setController( const css::uno::Reference< css::frame::XController >& xController );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1247,7 +1193,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_sendFrameActionEvent( const FRAMEACTION& aAction );
+        void impl_sendFrameActionEvent( const css::frame::FrameAction& aAction );
 
         /*-****************************************************************************************************//**
             @short      -
@@ -1277,7 +1223,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_willFrameTop( const REFERENCE< XFRAMESSUPPLIER >& xParent );
+        sal_Bool impl_willFrameTop( const css::uno::Reference< css::frame::XFramesSupplier >& xParent );
 
         /*-****************************************************************************************************//**
             @short      resize ouer componentwindow
@@ -1318,39 +1264,31 @@ class Frame :   public XTYPEPROVIDER                    ,
 
     private:
 
-        sal_Bool impldbg_checkParameter_append                              (   const   REFERENCE< XFRAME >&                        xFrame              );
-        sal_Bool impldbg_checkParameter_queryFrames                         (           sal_Int32                                   nSearchFlags        );
-        sal_Bool impldbg_checkParameter_remove                              (   const   REFERENCE< XFRAME >&                        xFrame              );
-        sal_Bool impldbg_checkParameter_setActiveFrame                      (   const   REFERENCE< XFRAME >&                        xFrame              );
-/*OBSOLETE
-         sal_Bool impldbg_checkParameter_queryDispatch                      (   const   UNOURL&                                     aURL                ,
-                                                                                  const OUSTRING&                                   sTargetFrameName    ,
-                                                                                          sal_Int32                                 nSearchFlags        );
-        sal_Bool impldbg_checkParameter_queryDispatches                     (   const   SEQUENCE< DISPATCHDESCRIPTOR >&             seqDescriptor       );
-        sal_Bool impldbg_checkParameter_registerDispatchProviderInterceptor (   const   REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >&  xInterceptor        );
-        sal_Bool impldbg_checkParameter_releaseDispatchProviderInterceptor  (   const   REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >&  xInterceptor        );
-*/
-        sal_Bool impldbg_checkParameter_updateViewData                      (   const   ANY&                                        aValue              );
-        sal_Bool impldbg_checkParameter_createNewEntry                      (   const   OUSTRING&                                   sURL                ,
-                                                                                  const SEQUENCE< PROPERTYVALUE >&                  seqArguments        ,
-                                                                                const   OUSTRING&                                   sTitle              );
-        sal_Bool impldbg_checkParameter_windowResized                       (   const   WINDOWEVENT&                                aEvent              );
-        sal_Bool impldbg_checkParameter_windowActivated                     (   const   EVENTOBJECT&                                aEvent              );
-        sal_Bool impldbg_checkParameter_windowDeactivated                   (   const   EVENTOBJECT&                                aEvent              );
-        sal_Bool impldbg_checkParameter_initialize                          (   const   REFERENCE< XWINDOW >&                       xWindow             );
-        sal_Bool impldbg_checkParameter_setCreator                          (   const   REFERENCE< XFRAMESSUPPLIER >&               xCreator            );
-        sal_Bool impldbg_checkParameter_setName                             (   const   OUSTRING&                                   sName               );
-        sal_Bool impldbg_checkParameter_findFrame                           (   const   OUSTRING&                                   sTargetFrameName    ,
-                                                                                         sal_Int32                                  nSearchFlags        );
-        sal_Bool impldbg_checkParameter_setComponent                        (   const   REFERENCE< XWINDOW >&                       xComponentWindow    ,
-                                                                                  const REFERENCE< XCONTROLLER >&                   xController         );
-        sal_Bool impldbg_checkParameter_addFrameActionListener              (   const   REFERENCE< XFRAMEACTIONLISTENER >&          xListener           );
-        sal_Bool impldbg_checkParameter_removeFrameActionListener           (   const   REFERENCE< XFRAMEACTIONLISTENER >&          xListener           );
-        sal_Bool impldbg_checkParameter_addEventListener                    (   const   REFERENCE< XEVENTLISTENER >&                xListener           );
-        sal_Bool impldbg_checkParameter_removeEventListener                 (   const   REFERENCE< XEVENTLISTENER >&                xListener           );
-        sal_Bool impldbg_checkParameter_disposing                           (   const   EVENTOBJECT&                                aEvent              );
-        sal_Bool impldbg_checkParameter_focusGained                         (   const   FOCUSEVENT&                                 aEvent              );
-        sal_Bool impldbg_checkParameter_focusLost                           (   const   FOCUSEVENT&                                 aEvent              );
+        static sal_Bool impldbg_checkParameter_append                               (   const   css::uno::Reference< css::frame::XFrame >&                  xFrame              );
+        static sal_Bool impldbg_checkParameter_queryFrames                          (           sal_Int32                                                   nSearchFlags        );
+        static sal_Bool impldbg_checkParameter_remove                               (   const   css::uno::Reference< css::frame::XFrame >&                  xFrame              );
+        static sal_Bool impldbg_checkParameter_setActiveFrame                       (   const   css::uno::Reference< css::frame::XFrame >&                  xFrame              );
+        static sal_Bool impldbg_checkParameter_updateViewData                       (   const   css::uno::Any&                                              aValue              );
+        static sal_Bool impldbg_checkParameter_createNewEntry                       (   const   ::rtl::OUString&                                            sURL                ,
+                                                                                          const css::uno::Sequence< css::beans::PropertyValue >&            seqArguments        ,
+                                                                                        const   ::rtl::OUString&                                            sTitle              );
+        static sal_Bool impldbg_checkParameter_windowResized                        (   const   css::awt::WindowEvent&                                      aEvent              );
+        static sal_Bool impldbg_checkParameter_windowActivated                      (   const   css::lang::EventObject&                                     aEvent              );
+        static sal_Bool impldbg_checkParameter_windowDeactivated                    (   const   css::lang::EventObject&                                     aEvent              );
+        static sal_Bool impldbg_checkParameter_initialize                           (   const   css::uno::Reference< css::awt::XWindow >&                   xWindow             );
+        static sal_Bool impldbg_checkParameter_setCreator                           (   const   css::uno::Reference< css::frame::XFramesSupplier >&         xCreator            );
+        static sal_Bool impldbg_checkParameter_setName                              (   const   ::rtl::OUString&                                            sName               );
+        static sal_Bool impldbg_checkParameter_findFrame                            (   const   ::rtl::OUString&                                            sTargetFrameName    ,
+                                                                                                 sal_Int32                                                  nSearchFlags        );
+        static sal_Bool impldbg_checkParameter_setComponent                         (   const   css::uno::Reference< css::awt::XWindow >&                   xComponentWindow    ,
+                                                                                          const css::uno::Reference< css::frame::XController >&             xController         );
+        static sal_Bool impldbg_checkParameter_addFrameActionListener               (   const   css::uno::Reference< css::frame::XFrameActionListener >&    xListener           );
+        static sal_Bool impldbg_checkParameter_removeFrameActionListener            (   const   css::uno::Reference< css::frame::XFrameActionListener >&    xListener           );
+        static sal_Bool impldbg_checkParameter_addEventListener                     (   const   css::uno::Reference< css::lang::XEventListener >&           xListener           );
+        static sal_Bool impldbg_checkParameter_removeEventListener                  (   const   css::uno::Reference< css::lang::XEventListener >&           xListener           );
+        static sal_Bool impldbg_checkParameter_disposing                            (   const   css::lang::EventObject&                                     aEvent              );
+        static sal_Bool impldbg_checkParameter_focusGained                          (   const   css::awt::FocusEvent&                                       aEvent              );
+        static sal_Bool impldbg_checkParameter_focusLost                            (   const   css::awt::FocusEvent&                                       aEvent              );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -1369,7 +1307,7 @@ class Frame :   public XTYPEPROVIDER                    ,
 
     #ifdef ENABLE_SERVICEDEBUG  // Only active in debug version.
 
-        OUSTRING impldbg_getTreeNames( sal_Int16 nLevel );
+        ::rtl::OUString impldbg_getTreeNames( sal_Int16 nLevel );
 
     #endif  // #ifdef ENABLE_SERVICEDEBUG
 
@@ -1382,26 +1320,25 @@ class Frame :   public XTYPEPROVIDER                    ,
 
         // But some variables are used in derived classes!
         // Make it protected for directly access.
-        OUSTRING                                        m_sName                             ;   /// name of this frame
-        REFERENCE< XFRAMESSUPPLIER >                    m_xParent                           ;   /// parent of this frame
-        REFERENCE< XDISPATCHPROVIDER >                  m_xDispatchHelper                   ;   /// helper for XDispatchProvider, XDispatch, XDispatchProviderInterception interfaces
-        REFERENCE< XMULTISERVICEFACTORY >               m_xFactory                          ;   /// reference to factory, which has create this instance
-        REFERENCE< XWINDOW >                            m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
-        sal_Bool                                        m_bRecursiveSearchProtection        ;   /// protect against recursion while searching in parent frames
-        FrameContainer                                  m_aChildFrameContainer              ;   /// array of child frames
+        ::rtl::OUString                                                     m_sName                             ;   /// name of this frame
+        css::uno::Reference< css::frame::XFramesSupplier >                  m_xParent                           ;   /// parent of this frame
+        css::uno::Reference< css::frame::XDispatchProvider >                m_xDispatchHelper                   ;   /// helper for XDispatchProvider, XDispatch, XDispatchProviderInterception interfaces
+        css::uno::Reference< css::lang::XMultiServiceFactory >              m_xFactory                          ;   /// reference to factory, which has create this instance
+        css::uno::Reference< css::awt::XWindow >                            m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
+        sal_Bool                                                            m_bRecursiveSearchProtection        ;   /// protect against recursion while searching in parent frames
+        FrameContainer                                                      m_aChildFrameContainer              ;   /// array of child frames
 
     private:
 
-        REFERENCE< XSTATUSINDICATORFACTORY >            m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
-        REFERENCE< XWINDOW >                            m_xComponentWindow                  ;   /// window of the actual component
-        REFERENCE< XCONTROLLER >                        m_xController                       ;   /// controller of the actual frame
-        eACTIVESTATE                                    m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
-        sal_Bool                                        m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
-        sal_Bool                                        m_bConnected                        ;   /// due to FrameActionEvent
-        sal_Bool                                        m_bAlreadyDisposed                  ;   /// protect egainst recursive dispose calls
-//OBSOLETE      sal_Bool                                        m_bILoadLastComponent               ;   /// help flag to find last destination of dispatch(...) in tree! see impl_searchLastLoadedComponent() for further informations
-        OMULTITYPEINTERFACECONTAINERHELPER              m_aListenerContainer                ;   /// container for ALL Listener
-        REFERENCE< XFRAMES >                            m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
+        css::uno::Reference< css::task::XStatusIndicatorFactory >           m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
+        css::uno::Reference< css::awt::XWindow >                            m_xComponentWindow                  ;   /// window of the actual component
+        css::uno::Reference< css::frame::XController >                      m_xController                       ;   /// controller of the actual frame
+        eACTIVESTATE                                                        m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...
+        sal_Bool                                                            m_bIsFrameTop                       ;   /// frame has no parent or the parent is a taskor the desktop
+        sal_Bool                                                            m_bConnected                        ;   /// due to FrameActionEvent
+        sal_Bool                                                            m_bAlreadyDisposed                  ;   /// protect egainst recursive dispose calls
+        ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListenerContainer                ;   /// container for ALL Listener
+        css::uno::Reference< css::frame::XFrames >                          m_xFramesHelper                     ;   /// helper for XFrames, XIndexAccess and XElementAccess interfaces
 
 };      // class Frame
 

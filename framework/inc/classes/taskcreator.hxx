@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -108,11 +112,6 @@
 
 namespace framework{
 
-#define OUSTRING                    ::rtl::OUString
-#define REFERENCE                   ::com::sun::star::uno::Reference
-#define XFRAME                      ::com::sun::star::frame::XFrame
-#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -129,7 +128,8 @@ namespace framework{
     @implements     -
     @base           -
 
-    @devstatus      deprecated
+    @devstatus      ready to use
+    @threadsafe     no
 *//*-*************************************************************************************************************/
 
 class TaskCreator
@@ -156,7 +156,7 @@ class TaskCreator
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         TaskCreator( const REFERENCE< XMULTISERVICEFACTORY >& xFactory );
+         TaskCreator( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
@@ -185,8 +185,8 @@ class TaskCreator
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XFRAME > createNewSystemTask ( const OUSTRING& sName );
-        REFERENCE< XFRAME > createNewBrowserTask( const OUSTRING& sName );
+        css::uno::Reference< css::frame::XFrame >   createNewSystemTask ( const ::rtl::OUString& sName );
+        css::uno::Reference< css::frame::XFrame >   createNewBrowserTask( const ::rtl::OUString& sName );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -200,7 +200,7 @@ class TaskCreator
 
     private:
 
-        OUSTRING impl_filterNames( const OUSTRING& sName );
+        ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -225,8 +225,8 @@ class TaskCreator
 
     private:
 
-        sal_Bool impldbg_checkParameter_createNewSystemTask (   const   OUSTRING&   sName   );
-        sal_Bool impldbg_checkParameter_createNewBrowserTask(   const   OUSTRING&   sName   );
+        static sal_Bool impldbg_checkParameter_createNewSystemTask  (   const   ::rtl::OUString&    sName   );
+        static sal_Bool impldbg_checkParameter_createNewBrowserTask (   const   ::rtl::OUString&    sName   );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
@@ -237,7 +237,7 @@ class TaskCreator
 
     private:
 
-        REFERENCE< XMULTISERVICEFACTORY >   m_xFactory  ;
+        css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory  ;
 
 };      //  class TaskCreator
 

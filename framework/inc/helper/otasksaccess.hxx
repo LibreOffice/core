@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otasksaccess.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 06:20:35 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,29 +128,6 @@
 
 namespace framework{
 
-#define ANY                                 ::com::sun::star::uno::Any
-#define EVENTOBJECT                         ::com::sun::star::lang::EventObject
-#define NOSUCHELEMENTEXCEPTION              ::com::sun::star::container::NoSuchElementException
-#define OWEAKOBJECT                         ::cppu::OWeakObject
-#define REFERENCE                           ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define UNOTYPE                             ::com::sun::star::uno::Type
-#define WEAKREFERENCE                       ::com::sun::star::uno::WeakReference
-#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
-#define XDESKTOP                            ::com::sun::star::frame::XDesktop
-#define XELEMENTACCESS                      ::com::sun::star::container::XElementAccess
-#define XENUMERATION                        ::com::sun::star::container::XEnumeration
-#define XENUMERATIONACCESS                  ::com::sun::star::container::XEnumerationAccess
-#define XTASK                               ::com::sun::star::frame::XTask
-#define MUTEX                               ::osl::Mutex
-#define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
-
-//_________________________________________________________________________________________________________________
-//  switches
-//  Use these to de/activate some features of this implementation.
-//  (for debugging or testing!)
-//_________________________________________________________________________________________________________________
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -169,15 +146,15 @@ namespace framework{
     @implements     XInterface
                     XEnumerationAccess
                     XElementAccess
-                    [ XDebugging if TEST_TREE is defined! ]
+
     @base           OWeakObject
 
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class OTasksAccess  :   public XTYPEPROVIDER                ,
-                        public XENUMERATIONACCESS           ,   // => XElementAccess
-                        public OWEAKOBJECT
+class OTasksAccess  :   public css::lang::XTypeProvider             ,
+                        public css::container::XEnumerationAccess   ,   // => XElementAccess
+                        public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -206,9 +183,9 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OTasksAccess(  const   REFERENCE< XDESKTOP >&      xOwner  ,
-                                FrameContainer*             pTasks  ,
-                                MUTEX&                      aMutex  );
+         OTasksAccess(  const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+                                FrameContainer*                                 pTasks  ,
+                                ::osl::Mutex&                                   aMutex  );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -236,7 +213,7 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XENUMERATION > SAL_CALL createEnumeration() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
@@ -255,7 +232,7 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual UNOTYPE SAL_CALL getElementType() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get state of tasklist of enumeration.
@@ -270,7 +247,7 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -324,9 +301,9 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
 
     private:
 
-        sal_Bool impldbg_checkParameter_OTasksAccessCtor(   const   REFERENCE< XDESKTOP >&      xOwner  ,
-                                                                    FrameContainer*             pTasks  ,
-                                                                    MUTEX&                      aMutex  ) const;
+        static sal_Bool impldbg_checkParameter_OTasksAccessCtor(    const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+                                                                               FrameContainer*                                  pTasks  ,
+                                                                            ::osl::Mutex&                                   aMutex  );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -337,10 +314,10 @@ class OTasksAccess  :   public XTYPEPROVIDER                ,
 
     private:
 
-        MUTEX&                              m_aMutex            ;   /// shared mutex with owner
-        WEAKREFERENCE< XDESKTOP >           m_xOwner            ;   /// weak reference to the desktop object!
-        FrameContainer*                     m_pTasks            ;   /// pointer to list of current tasks on desktop (is a member of class Desktop!)
-                                                                    /// This pointer is valid only, if weakreference can be locked.
+        ::osl::Mutex&                                       m_aMutex            ;   /// shared mutex with owner
+        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner            ;   /// weak reference to the desktop object!
+        FrameContainer*                                     m_pTasks            ;   /// pointer to list of current tasks on desktop (is a member of class Desktop!)
+                                                                                    /// This pointer is valid only, if weakreference can be locked.
 
 };      //  class OTasksAccess
 

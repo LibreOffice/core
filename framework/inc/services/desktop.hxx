@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-03-15 08:57:27 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,52 +220,6 @@
 
 namespace framework{
 
-#define ANY                                         ::com::sun::star::uno::Any
-#define EXCEPTION                                   ::com::sun::star::uno::Exception
-#define DISPATCHDESCRIPTOR                          ::com::sun::star::frame::DispatchDescriptor
-#define EVENTOBJECT                                 ::com::sun::star::lang::EventObject
-#define FEATURESTATEEVENT                           ::com::sun::star::frame::FeatureStateEvent
-#define FEATURESTATEEVENT                           ::com::sun::star::frame::FeatureStateEvent
-#define ILLEGALARGUMENTEXCEPTION                    ::com::sun::star::lang::IllegalArgumentException
-#define INDEXOUTOFBOUNDSEXCEPTION                   ::com::sun::star::lang::IndexOutOfBoundsException
-#define IOEXCEPTION                                 ::com::sun::star::io::IOException
-#define IPROPERTYARRAYHELPER                        ::cppu::IPropertyArrayHelper
-#define LOCALE                                      ::com::sun::star::lang::Locale
-#define OBROADCASTHELPER                            ::cppu::OBroadcastHelper
-#define OINTERFACECONTAINERHELPER                   ::cppu::OInterfaceContainerHelper
-#define OMULTITYPEINTERFACECONTAINERHELPER          ::cppu::OMultiTypeInterfaceContainerHelper
-#define OPROPERTYSETHELPER                          ::cppu::OPropertySetHelper
-#define OUSTRING                                    ::rtl::OUString
-#define OWEAKOBJECT                                 ::cppu::OWeakObject
-#define PROPERTY                                    ::com::sun::star::beans::Property
-#define PROPERTYVALUE                               ::com::sun::star::beans::PropertyValue
-#define TERMINATIONVETOEXCEPTION                    ::com::sun::star::frame::TerminationVetoException
-#define UNOURL                                      ::com::sun::star::util::URL
-#define WRAPPEDTARGETEXCEPTION                      ::com::sun::star::lang::WrappedTargetException
-#define XCOMPONENT                                  ::com::sun::star::lang::XComponent
-#define XCOMPONENTLOADER                            ::com::sun::star::frame::XComponentLoader
-#define XCONTROLLER                                 ::com::sun::star::frame::XController
-#define XDESKTOP                                    ::com::sun::star::frame::XDesktop
-#define XDISPATCH                                   ::com::sun::star::frame::XDispatch
-#define XDISPATCHDESCRIPTOR                         ::com::sun::star::frame::XDispatchDescriptor
-#define XDISPATCHPROVIDER                           ::com::sun::star::frame::XDispatchProvider
-#define XENUMERATIONACCESS                          ::com::sun::star::container::XEnumerationAccess
-#define XEVENTLISTENER                              ::com::sun::star::lang::XEventListener
-#define XFRAME                                      ::com::sun::star::frame::XFrame
-#define XFRAMEACTIONLISTENER                        ::com::sun::star::frame::XFrameActionListener
-#define XFRAMES                                     ::com::sun::star::frame::XFrames
-#define XFRAMESSUPPLIER                             ::com::sun::star::frame::XFramesSupplier
-#define XPROPERTYSETINFO                            ::com::sun::star::beans::XPropertySetInfo
-#define XSERVICEINFO                                ::com::sun::star::lang::XServiceInfo
-#define XSTATUSINDICATOR                            ::com::sun::star::task::XStatusIndicator
-#define XSTATUSINDICATORFACTORY                     ::com::sun::star::task::XStatusIndicatorFactory
-#define XSTATUSLISTENER                             ::com::sun::star::frame::XStatusListener
-#define XTASK                                       ::com::sun::star::frame::XTask
-#define XTASKSSUPPLIER                              ::com::sun::star::frame::XTasksSupplier
-#define XTERMINATELISTENER                          ::com::sun::star::frame::XTerminateListener
-#define XTYPEPROVIDER                               ::com::sun::star::lang::XTypeProvider
-#define XWINDOW                                     ::com::sun::star::awt::XWindow
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -302,7 +256,6 @@ enum eIMPL_loadState
                 XMultiPropertySet
                 XStatusListener
                 XEventListener
-                [ XDebugging, if TEST_TREE is defined! ]
     @base       OMutexMember
                 OBroadcastHelper
                 OPropertySetHelper
@@ -311,20 +264,19 @@ enum eIMPL_loadState
     @devstatus  deprecated
 *//*-*************************************************************************************************************/
 
-//class Desktop :   DERIVE_FROM_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
-class Desktop   :   public XTYPEPROVIDER            ,
-                    public XSERVICEINFO             ,
-                    public XDESKTOP                 ,
-                    public XCOMPONENTLOADER         ,
-                    public XTASKSSUPPLIER           ,
-                    public XDISPATCHPROVIDER        ,
-                    public XFRAMESSUPPLIER          ,   // => XFrame => XComponent
-                    public XSTATUSINDICATORFACTORY  ,
-                    public XSTATUSLISTENER          ,   // => XEventListener
-                    public OMutexMember             ,   // Struct for right initalization of mutex member! Must be the first one of baseclasses!
-                    public OBROADCASTHELPER         ,
-                    public OPROPERTYSETHELPER       ,
-                    public OWEAKOBJECT
+class Desktop   :   public css::lang::XTypeProvider             ,
+                    public css::lang::XServiceInfo              ,
+                    public css::frame::XDesktop                 ,
+                    public css::frame::XComponentLoader         ,
+                    public css::frame::XTasksSupplier           ,
+                    public css::frame::XDispatchProvider        ,
+                    public css::frame::XFramesSupplier          ,   // => XFrame => XComponent
+                    public css::task::XStatusIndicatorFactory   ,
+                    public css::frame::XStatusListener          ,   // => XEventListener
+                    public OMutexMember                         ,   // Struct for right initalization of mutex member! Must be the first one of baseclasses!
+                    public ::cppu::OBroadcastHelper             ,
+                    public ::cppu::OPropertySetHelper           ,
+                    public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -350,7 +302,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
         *//*-*****************************************************************************************************/
 
-         Desktop( const REFERENCE< XMULTISERVICEFACTORY >& xFactory );
+         Desktop( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
         /*-****************************************************************************************************//**
             @short      standard destructor
@@ -373,7 +325,6 @@ class Desktop   :   public XTYPEPROVIDER            ,
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-//      DECLARE_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
 
         //---------------------------------------------------------------------------------------------------------
         //  XDesktop
@@ -393,7 +344,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL terminate() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL terminate() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      add a listener for terminate events
@@ -407,7 +358,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    No listener is added.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addTerminateListener( const REFERENCE< XTERMINATELISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      remove a listener for terminate events
@@ -421,7 +372,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    No listener is removed.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeTerminateListener( const REFERENCE< XTERMINATELISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get access to create enumerations of all current components
@@ -437,7 +388,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XENUMERATIONACCESS > SAL_CALL getComponents() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL getComponents() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      return the current active component
@@ -452,7 +403,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XCOMPONENT > SAL_CALL getCurrentComponent() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL getCurrentComponent() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      return the current active frame in hierarchy
@@ -468,7 +419,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We return a null reference.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAME > SAL_CALL getCurrentFrame() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getCurrentFrame() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XComponentLoader
@@ -486,12 +437,12 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XCOMPONENT > SAL_CALL loadComponentFromURL(  const   OUSTRING&                   sURL                ,
-                                                                        const   OUSTRING&                   sTargetFrameName    ,
-                                                                                sal_Int32                   nSearchFlags        ,
-                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments        ) throw(    IOEXCEPTION             ,
-                                                                                                                                            ILLEGALARGUMENTEXCEPTION,
-                                                                                                                                            RUNTIMEEXCEPTION        );
+        virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const   ::rtl::OUString&                                    sURL                ,
+                                                                                                 const  ::rtl::OUString&                                    sTargetFrameName    ,
+                                                                                                      sal_Int32                                         nSearchFlags        ,
+                                                                                              const css::uno::Sequence< css::beans::PropertyValue >&    seqArguments        ) throw(    css::io::IOException                ,
+                                                                                                                                                                                    css::lang::IllegalArgumentException ,
+                                                                                                                                                                                    css::uno::RuntimeException          );
         //---------------------------------------------------------------------------------------------------------
         //  XTasksSupplier
         //---------------------------------------------------------------------------------------------------------
@@ -512,7 +463,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XENUMERATIONACCESS > SAL_CALL getTasks() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL getTasks() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      return current active task of ouer direct childs
@@ -530,7 +481,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XTASK > SAL_CALL getActiveTask() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XTask > SAL_CALL getActiveTask() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatchProvider
@@ -558,9 +509,9 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL&     aURL            ,
-                                                                const   OUSTRING&   sTargetFrameName,
-                                                                        sal_Int32   nSearchFlags    ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(    const   css::util::URL&     aURL            ,
+                                                                                        const   ::rtl::OUString&    sTargetFrameName,
+                                                                                                sal_Int32           nSearchFlags    ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not implemented yet
@@ -574,7 +525,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XFramesSupplier
@@ -594,7 +545,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAMES > SAL_CALL getFrames() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrames > SAL_CALL getFrames() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get the current active child frame
@@ -612,7 +563,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAME > SAL_CALL getActiveFrame() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getActiveFrame() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      set the new active direct child frame
@@ -629,7 +580,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    An assertion is thrown, if given frame is'nt already a child of us.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setActiveFrame( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XFrame
@@ -647,7 +598,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL initialize( const REFERENCE< XWINDOW >& xWindow ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL initialize( const css::uno::Reference< css::awt::XWindow >& xWindow ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -661,7 +612,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getContainerWindow() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getContainerWindow() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -675,7 +626,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setCreator( const REFERENCE< XFRAMESSUPPLIER >& xCreator ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& xCreator ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -689,7 +640,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAMESSUPPLIER > SAL_CALL getCreator() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL getCreator() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get the name of the desktop
@@ -704,7 +655,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual OUSTRING SAL_CALL getName() throw( RUNTIMEEXCEPTION );
+        virtual ::rtl::OUString SAL_CALL getName() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      set the new name of the desktop
@@ -719,7 +670,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setName( const OUSTRING& sName ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL setName( const ::rtl::OUString& sName ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      try to find a frame with special parameters
@@ -747,8 +698,8 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XFRAME > SAL_CALL findFrame( const   OUSTRING&   sTargetFrameName    ,
-                                                                sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XFrame > SAL_CALL findFrame(   const   ::rtl::OUString&    sTargetFrameName    ,
+                                                                                        sal_Int32           nSearchFlags        ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get state information about desktop
@@ -762,7 +713,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL isTop() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL isTop() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not implemented!
@@ -776,7 +727,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL activate() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL activate() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not implemented!
@@ -790,7 +741,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL deactivate() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL deactivate() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get state information about desktop
@@ -804,7 +755,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL isActive() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL isActive() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -818,8 +769,8 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL setComponent( const   REFERENCE< XWINDOW >&       xComponentWindow    ,
-                                                const   REFERENCE< XCONTROLLER >&   xController         ) throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL setComponent( const   css::uno::Reference< css::awt::XWindow >&       xComponentWindow    ,
+                                                const   css::uno::Reference< css::frame::XController >& xController         ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -833,7 +784,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XWINDOW > SAL_CALL getComponentWindow() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getComponentWindow() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not supported!
@@ -847,7 +798,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XCONTROLLER > SAL_CALL getController() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XController > SAL_CALL getController() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      not implemented yet!
@@ -861,7 +812,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL contextChanged() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL contextChanged() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      add listener for frame action events
@@ -875,7 +826,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We do nothing or throw an ASSERT in debug version!
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      remove listener for frame action events
@@ -890,7 +841,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We do nothing or throw an ASSERT in debug version!
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeFrameActionListener( const REFERENCE< XFRAMEACTIONLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& xListener ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XComponent
@@ -911,7 +862,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL dispose() throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      add listener for dispose events
@@ -926,7 +877,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We do nothing or throw an ASSERT in debug version!
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      remove listener for dispose events
@@ -942,7 +893,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    We do nothing or throw an ASSERT in debug version!
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeEventListener( const REFERENCE< XEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XStatusIndicatorFactory
@@ -960,7 +911,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XSTATUSINDICATOR > SAL_CALL createStatusIndicator() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XStatusListener
@@ -978,7 +929,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL statusChanged( const FEATURESTATEEVENT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //   XEventListener
@@ -996,7 +947,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const EVENTOBJECT& aSource ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -1045,10 +996,10 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    IllegalArgumentException, if you call this with an invalid argument
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL convertFastPropertyValue(         ANY&        aConvertedValue ,
-                                                                      ANY&      aOldValue       ,
-                                                                    sal_Int32   nHandle         ,
-                                                            const   ANY&        aValue          ) throw( ILLEGALARGUMENTEXCEPTION );
+        virtual sal_Bool SAL_CALL convertFastPropertyValue(         css::uno::Any&      aConvertedValue ,
+                                                                      css::uno::Any&        aOldValue       ,
+                                                                    sal_Int32           nHandle         ,
+                                                            const   css::uno::Any&      aValue          ) throw( css::lang::IllegalArgumentException );
 
         /*-****************************************************************************************************//**
             @short      set value of a transient property
@@ -1066,8 +1017,8 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    An exception is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
-                                                                  const ANY&        aValue  ) throw( EXCEPTION );
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32           nHandle ,
+                                                                  const css::uno::Any&      aValue  ) throw( css::uno::Exception );
 
         /*-****************************************************************************************************//**
             @short      get value of a transient property
@@ -1083,8 +1034,8 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL getFastPropertyValue( ANY&        aValue  ,
-                                                      sal_Int32 nHandle ) const;
+        virtual void SAL_CALL getFastPropertyValue( css::uno::Any&  aValue  ,
+                                                      sal_Int32     nHandle ) const;
 
         /*-****************************************************************************************************//**
             @short      return structure and information about transient properties
@@ -1099,7 +1050,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual IPROPERTYARRAYHELPER& SAL_CALL getInfoHelper();
+        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
         /*-****************************************************************************************************//**
             @short      return propertysetinfo
@@ -1116,7 +1067,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XPROPERTYSETINFO > SAL_CALL getPropertySetInfo();
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -1141,7 +1092,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XCOMPONENT > impl_getFrameComponent( const REFERENCE< XFRAME >& xFrame ) const;
+        css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
         /*-****************************************************************************************************//**
             @short      test, if a property will change his value
@@ -1161,10 +1112,10 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    IllegalArgumentException, if convert failed.
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_tryToChangeProperty(          sal_Bool    bProperty       ,
-                                            const   ANY&        aNewValue       ,
-                                                    ANY&        aOldValue       ,
-                                                    ANY&        aConvertedValue ) throw( ILLEGALARGUMENTEXCEPTION );
+        sal_Bool impl_tryToChangeProperty(          sal_Bool            bProperty       ,
+                                            const   css::uno::Any&      aNewValue       ,
+                                                    css::uno::Any&      aOldValue       ,
+                                                    css::uno::Any&      aConvertedValue ) throw( css::lang::IllegalArgumentException );
 
         /*-****************************************************************************************************//**
             @short      create table with information about properties
@@ -1180,23 +1131,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static const SEQUENCE< PROPERTY > impl_getStaticPropertyDescriptor();
-
-        /*-****************************************************************************************************//**
-            @short      create a new task
-            @descr      If findFrame() detect a "_blank" as targetname, he should create a new task.
-                        These helper-method do this.
-                        (Creation of a new task and initializing with an empty window and default values!)
-
-            @seealso    method findFrame()
-
-            @param      "sFrameName", new name for new taskframe.
-            @return     A reference to the new created task.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
-//OBSOLETE      REFERENCE< XFRAME > impl_createNewTask( const OUSTRING& sFrameName );
+        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
         /*-****************************************************************************************************//**
             @short      search for last destination of load component by means of dispatch(...)
@@ -1215,26 +1150,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-//OBSOLETE      REFERENCE< XFRAME > impl_searchLastLoadedComponent();
-
-        /*-****************************************************************************************************//**
-            @short      search for last destination of load component by means of dispatch(...)
-            @descr      This is a HACK for XDispatch->dispatch(...) calls. You don't get any information about
-                        the destination frame, which has loaded a component in loadComponentFromURL()!
-                        But we will set a flag m_bILoadLastComponent in impl_loadComponent() if loading successfull.
-                        With these impl method you can find this frame and return his component ...
-                        If this method found any frame we must reset ouer special flag!
-
-            @seealso    method impl_loadComponent()
-            @seealso    method loadComponentFromURL()
-
-            @param      -
-            @return     A reference to frame, which has loaded the last component.
-
-            @onerror    A null reference is returned.
-        *//*-*****************************************************************************************************/
-
-        void impl_sendQueryTerminationEvent() throw( TERMINATIONVETOEXCEPTION );
+        void impl_sendQueryTerminationEvent () throw( css::frame::TerminationVetoException );
         void impl_sendNotifyTerminationEvent();
 
         /*-****************************************************************************************************//**
@@ -1276,24 +1192,24 @@ class Desktop   :   public XTYPEPROVIDER            ,
 
         private:
 
-            sal_Bool impldbg_checkParameter_DesktopCtor                 (   const   REFERENCE< XMULTISERVICEFACTORY >&  xFactory        );
-            sal_Bool impldbg_checkParameter_addTerminateListener        (   const   REFERENCE< XTERMINATELISTENER >&    xListener       );
-            sal_Bool impldbg_checkParameter_removeTerminateListener     (   const   REFERENCE< XTERMINATELISTENER >&    xListener       );
-            sal_Bool impldbg_checkParameter_loadComponentFromURL        (   const   OUSTRING&                           sURL            ,
-                                                                               const    OUSTRING&                           sTargetFrameName,
-                                                                                       sal_Int32                            nSearchFlags    ,
-                                                                               const    SEQUENCE< PROPERTYVALUE >&          seqArguments    );
-            sal_Bool impldbg_checkParameter_queryDispatch               (   const   UNOURL&                             aURL            ,
-                                                                            const   OUSTRING&                           sTargetFrameName,
-                                                                                    sal_Int32                           nSearchFlags    );
-            sal_Bool impldbg_checkParameter_findFrame                   (   const   OUSTRING&                           sTargetFrameName,
-                                                                                    sal_Int32                           nSearchFlags    );
-            sal_Bool impldbg_checkParameter_addFrameActionListener      (   const   REFERENCE< XFRAMEACTIONLISTENER >&  xListener       );
-            sal_Bool impldbg_checkParameter_removeFrameActionListener   (   const   REFERENCE< XFRAMEACTIONLISTENER >&  xListener       );
-            sal_Bool impldbg_checkParameter_addEventListener            (   const   REFERENCE< XEVENTLISTENER >&        xListener       );
-            sal_Bool impldbg_checkParameter_removeEventListener         (   const   REFERENCE< XEVENTLISTENER >&        xListener       );
-            sal_Bool impldbg_checkParameter_statusChanged               (   const   FEATURESTATEEVENT&                  aEvent          );
-            sal_Bool impldbg_checkParameter_disposing                   (   const   EVENTOBJECT&                        aSource         );
+            static sal_Bool impldbg_checkParameter_DesktopCtor                  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory        );
+            static sal_Bool impldbg_checkParameter_addTerminateListener         (   const   css::uno::Reference< css::frame::XTerminateListener >&      xListener       );
+            static sal_Bool impldbg_checkParameter_removeTerminateListener      (   const   css::uno::Reference< css::frame::XTerminateListener >&      xListener       );
+            static sal_Bool impldbg_checkParameter_loadComponentFromURL         (   const   ::rtl::OUString&                                            sURL            ,
+                                                                                       const    ::rtl::OUString&                                            sTargetFrameName,
+                                                                                               sal_Int32                                                    nSearchFlags    ,
+                                                                                       const    css::uno::Sequence< css::beans::PropertyValue >&            seqArguments    );
+            static sal_Bool impldbg_checkParameter_queryDispatch                (   const   css::util::URL&                                             aURL            ,
+                                                                                    const   ::rtl::OUString&                                            sTargetFrameName,
+                                                                                            sal_Int32                                                   nSearchFlags    );
+            static sal_Bool impldbg_checkParameter_findFrame                    (   const   ::rtl::OUString&                                            sTargetFrameName,
+                                                                                            sal_Int32                                                   nSearchFlags    );
+            static sal_Bool impldbg_checkParameter_addFrameActionListener       (   const   css::uno::Reference< css::frame::XFrameActionListener >&    xListener       );
+            static sal_Bool impldbg_checkParameter_removeFrameActionListener    (   const   css::uno::Reference< css::frame::XFrameActionListener >&    xListener       );
+            static sal_Bool impldbg_checkParameter_addEventListener             (   const   css::uno::Reference< css::lang::XEventListener >&           xListener       );
+            static sal_Bool impldbg_checkParameter_removeEventListener          (   const   css::uno::Reference< css::lang::XEventListener >&           xListener       );
+            static sal_Bool impldbg_checkParameter_statusChanged                (   const   css::frame::FeatureStateEvent&                              aEvent          );
+            static sal_Bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                     aSource         );
 
             sal_Bool m_bIsTerminated ;  /// check flag to protect us against dispose before terminate!
                                         /// see dispose() for further informations!
@@ -1316,7 +1232,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
 
         #ifdef ENABLE_SERVICEDEBUG  // Only active in debug version!
 
-            OUSTRING impldbg_getTreeNames();
+            ::rtl::OUString impldbg_getTreeNames();
 
         #endif  // #ifdef ENABLE_SERVICEDEBUG
 
@@ -1327,34 +1243,32 @@ class Desktop   :   public XTYPEPROVIDER            ,
 
     private:
 
-        REFERENCE< XMULTISERVICEFACTORY >           m_xFactory                  ;   /// reference to factory, which has create this instance
-        OUSTRING                                    m_sName                     ;   /// desktop is a topframe and has a name
-        FrameContainer                              m_aChildTaskContainer       ;   /// array of child tasks (childs of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
-        OMULTITYPEINTERFACECONTAINERHELPER          m_aListenerContainer        ;   /// container for ALL Listener
-        REFERENCE< XFRAMES >                        m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
-        REFERENCE< XDISPATCH >                      m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
-        eIMPL_loadState                             m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
-        TaskCreator                                 m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
-        REFERENCE< XFRAME >                         m_xLastFrame                ;
-        sal_Bool                                    m_bAlreadyDisposed          ;   /// protection against multiple dispose calls
+        css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory                  ;   /// reference to factory, which has create this instance
+        ::rtl::OUString                                                 m_sName                     ;   /// desktop is a topframe and has a name
+        FrameContainer                                                  m_aChildTaskContainer       ;   /// array of child tasks (childs of desktop are tasks; and tasks are also frames - But pure frames are not accepted!)
+        ::cppu::OMultiTypeInterfaceContainerHelper                      m_aListenerContainer        ;   /// container for ALL Listener
+        css::uno::Reference< css::frame::XFrames >                      m_xFramesHelper             ;   /// helper for XFrames, XIndexAccess, XElementAccess and implementation of a childcontainer!
+        css::uno::Reference< css::frame::XDispatch >                    m_xDispatchHelper           ;   /// helper to dispatch something for new tasks, created by "_blank"!
+        eIMPL_loadState                                                 m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
+        TaskCreator                                                     m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
+        css::uno::Reference< css::frame::XFrame >                       m_xLastFrame                ;
+        sal_Bool                                                        m_bAlreadyDisposed          ;   /// protection against multiple dispose calls
 
         // Properties
-//OLD   REFERENCE< XCOMPONENT >                     m_xActiveComponent          ;   Durch setActive/getActive am Container zu ersetzen! (+cast nach XComponent!)
-//OLD   REFERENCE< XCOMPONENT >                     m_xActiveFrame              ;   Durch setActive/getActive am Container zu ersetzen!
-        sal_Bool                                    m_bHasBeamer                ;
-        sal_Bool                                    m_bHasCommonTaskBar         ;
-        sal_Bool                                    m_bHasDesigner              ;
-        sal_Bool                                    m_bHasExplorer              ;
-        sal_Bool                                    m_bHasFunctionBar           ;
-        sal_Bool                                    m_bHasMacroBar              ;
-        sal_Bool                                    m_bHasNavigator             ;
-        sal_Bool                                    m_bHasObjectBar             ;
-        sal_Bool                                    m_bHasOptionBar             ;
-        sal_Bool                                    m_bHasStatusBar             ;
-        sal_Bool                                    m_bHasToolbar               ;
+        sal_Bool                                                        m_bHasBeamer                ;
+        sal_Bool                                                        m_bHasCommonTaskBar         ;
+        sal_Bool                                                        m_bHasDesigner              ;
+        sal_Bool                                                        m_bHasExplorer              ;
+        sal_Bool                                                        m_bHasFunctionBar           ;
+        sal_Bool                                                        m_bHasMacroBar              ;
+        sal_Bool                                                        m_bHasNavigator             ;
+        sal_Bool                                                        m_bHasObjectBar             ;
+        sal_Bool                                                        m_bHasOptionBar             ;
+        sal_Bool                                                        m_bHasStatusBar             ;
+        sal_Bool                                                        m_bHasToolbar               ;
 
-};  //  class Desktop
+};      //  class Desktop
 
-}   //  namespace framework
+}       //  namespace framework
 
 #endif  //  #ifndef __FRAMEWORK_SERVICES_DESKTOP_HXX_

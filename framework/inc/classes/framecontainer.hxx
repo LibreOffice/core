@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
+#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
+#include <threadhelp/rwlockbase.hxx>
+#endif
+
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
 #endif
@@ -76,6 +80,10 @@
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
+#endif
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -116,12 +124,6 @@
 
 namespace framework{
 
-#define OREF                    ::vos::ORef
-#define REFERENCE               ::com::sun::star::uno::Reference
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define XFRAME                  ::com::sun::star::frame::XFrame
-#define OUSTRING                ::rtl::OUString
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -130,9 +132,9 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-typedef ::std::vector< REFERENCE< XFRAME > >    TFrameContainer     ;
-typedef TFrameContainer::iterator               TFrameIterator      ;
-typedef TFrameContainer::const_iterator         TConstFrameIterator ;
+typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer     ;
+typedef TFrameContainer::iterator                                   TFrameIterator      ;
+typedef TFrameContainer::const_iterator                             TConstFrameIterator ;
 
 /*-************************************************************************************************************//**
     @short          implement a container to hold childs of frame, task or desktop
@@ -140,19 +142,16 @@ typedef TFrameContainer::const_iterator         TConstFrameIterator ;
                     to do this. Some helper-classe like OFrames or OTasksAccess use it to. They hold a pointer to an instance
                     of this class, which is a member of a frame, task or desktop! You can append and remove frames.
                     It's possible to set one of these frames as active or deactive. You could have full index-access to
-                    container-items. To block append- or remove-calls, its possible to set a lock. Nobody can change the container
-                    the lock is set. But don't forget to unlock the container again!
-                    These class is NOT threadsafe!
+                    container-items.
 
     @implements     -
-    @base           -
+    @base           FairRWLockBase
 
-    @ATTENTION      This class is not threadsafe.
-
-    @devstatus      deprecated
+    @devstatus      ready to use
+    @threadsafe     yes
 *//*-*************************************************************************************************************/
 
-class FrameContainer
+class FrameContainer : private FairRWLockBase
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -206,7 +205,7 @@ class FrameContainer
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void append( const REFERENCE< XFRAME >& xFrame );
+        void append( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         /*-****************************************************************************************************//**
             @short      remove an existing frame from the container
@@ -222,7 +221,7 @@ class FrameContainer
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void remove( const REFERENCE< XFRAME >& xFrame );
+        void remove( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         /*-****************************************************************************************************//**
             @short      ask for an existing frame in container
@@ -238,7 +237,7 @@ class FrameContainer
             @onerror    We return sal_False.
         *//*-*****************************************************************************************************/
 
-        sal_Bool exist( const REFERENCE< XFRAME >& xFrame ) const;
+        sal_Bool exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
         /*-****************************************************************************************************//**
             @short      clear the container and free memory
@@ -255,38 +254,6 @@ class FrameContainer
         *//*-*****************************************************************************************************/
 
         void clear();
-
-        /*-****************************************************************************************************//**
-            @short      lock container
-            @descr      You can use some methods of this class to have full access to the container by index!
-                        But if someone add or remove frames to/from container we have a problem....
-                        With this method you can LOCK the container and all append()-, remove()- and clear()-calls are blocked.
-                        But ... don't forget to unlock ... !!!
-
-            @seealso    method unlock()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void lock();
-
-        /*-****************************************************************************************************//**
-            @short      unlock container
-            @descr      You can use some methods of this class to break full access to the container by index!
-                        From now, all access methods by index are blocked. Append(), remove() and clear() are non blocked.
-
-            @seealso    method lock()
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void unlock();
 
         /*-****************************************************************************************************//**
             @short      get count of items in container
@@ -316,7 +283,7 @@ class FrameContainer
             @onerror    We return NULL!
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XFRAME > operator[]( sal_uInt32 nIndex ) const;
+        css::uno::Reference< css::frame::XFrame > operator[]( sal_uInt32 nIndex ) const;
 
         /*-****************************************************************************************************//**
             @short      get all current items of container as snapshot
@@ -330,7 +297,7 @@ class FrameContainer
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        SEQUENCE< REFERENCE< XFRAME > > getAllElements();
+        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
 
         /*-****************************************************************************************************//**
             @short      ask it to get information about existing elements
@@ -363,7 +330,7 @@ class FrameContainer
             @onerror    If refrence not valid, we throw an assertion!
         *//*-*****************************************************************************************************/
 
-        void setActive( const REFERENCE< XFRAME >& xFrame );
+        void setActive( const css::uno::Reference< css::frame::XFrame >& xFrame );
 
         /*-****************************************************************************************************//**
             @short      get the current active frame in container.
@@ -379,7 +346,7 @@ class FrameContainer
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XFRAME > getActive() const;
+        css::uno::Reference< css::frame::XFrame > getActive() const;
 
         /*-****************************************************************************************************//**
             @short      Enable or disable automatic termination of desktop if last frame was removed from container
@@ -394,8 +361,8 @@ class FrameContainer
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void enableQuitTimer( const REFERENCE< XDESKTOP >& xDesktop );
-        void disableQuitTimer();
+        void enableQuitTimer    ( const css::uno::Reference< css::frame::XDesktop >& xDesktop   );
+        void disableQuitTimer   (                                                               );
 
         /*-****************************************************************************************************//**
             @short      implements default searches at children ...
@@ -413,9 +380,9 @@ class FrameContainer
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XFRAME > searchDeepDown          ( const OUSTRING& sName );
-        REFERENCE< XFRAME > searchFlatDown          ( const OUSTRING& sName );
-        REFERENCE< XFRAME > searchDirectChildren    ( const OUSTRING& sName );
+        css::uno::Reference< css::frame::XFrame > searchDeepDown        ( const ::rtl::OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchFlatDown        ( const ::rtl::OUString& sName ) const;
+        css::uno::Reference< css::frame::XFrame > searchDirectChildren  ( const ::rtl::OUString& sName ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -429,6 +396,9 @@ class FrameContainer
 
     private:
 
+        void impl_clear();
+        void impl_disableQuitTimer();
+
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
     //  (should be private everyway!)
@@ -438,6 +408,8 @@ class FrameContainer
             @short      debug-method to check incoming parameter of some other mehods of this class
             @descr      The following methods are used to check parameters for other methods
                         of this class. The return value is used directly for an ASSERT(...).
+
+            @attention  We don't need any mutex/lock here. We check incoming parameter only - no internal member!
 
             @seealso    ASSERTs in implementation!
 
@@ -454,7 +426,7 @@ class FrameContainer
 
         //*********************************************************************************************************
         // - check for NULL pointer or invalid references
-        inline sal_Bool implcp_append( const REFERENCE< XFRAME >& xFrame ) const
+        inline sal_Bool implcp_append( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
         {
             return  (
                         ( &xFrame       ==  NULL        )   ||
@@ -465,7 +437,7 @@ class FrameContainer
         //*********************************************************************************************************
         // - check for NULL pointer or invalid references only
         //   Don't look for Zombies here!
-        inline sal_Bool implcp_remove( const REFERENCE< XFRAME >& xFrame ) const
+        inline sal_Bool implcp_remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
         {
             return  (
                         ( &xFrame       ==  NULL        )   ||
@@ -475,7 +447,7 @@ class FrameContainer
 
         //*********************************************************************************************************
         // - check for NULL pointer or invalid references
-        inline sal_Bool implcp_exist( const REFERENCE< XFRAME >& xFrame ) const
+        inline sal_Bool implcp_exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
         {
             return  (
                         ( &xFrame       ==  NULL        )   ||
@@ -495,7 +467,7 @@ class FrameContainer
 
         //*********************************************************************************************************
         // - check for NULL pointer or invalid references
-        inline sal_Bool implcp_setActive( const REFERENCE< XFRAME >& xFrame ) const
+        inline sal_Bool implcp_setActive( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
         {
             return  (
                         ( &xFrame       ==  NULL        )   ||
@@ -507,7 +479,7 @@ class FrameContainer
         // - check for null pointer
         // - look for special target names ... some of them are not allowed as valid frame name
         // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchDeepDown( const OUSTRING& sName ) const
+        inline sal_Bool implcp_searchDeepDown( const ::rtl::OUString& sName ) const
         {
             return  (
                         ( &sName    ==  NULL                    )   ||
@@ -522,7 +494,7 @@ class FrameContainer
         // - check for null pointer
         // - look for special target names ... some of them are not allowed as valid frame name
         // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchFlatDown( const OUSTRING& sName ) const
+        inline sal_Bool implcp_searchFlatDown( const ::rtl::OUString& sName ) const
         {
             return  (
                         ( &sName    ==  NULL                    )   ||
@@ -537,7 +509,7 @@ class FrameContainer
         // - check for null pointer
         // - look for special target names ... some of them are not allowed as valid frame name
         // Attention: "_beamer" is a valid name.
-        inline sal_Bool implcp_searchDirectChildren( const OUSTRING& sName ) const
+        inline sal_Bool implcp_searchDirectChildren( const ::rtl::OUString& sName ) const
         {
             return  (
                         ( &sName    ==  NULL                    )   ||
@@ -547,6 +519,10 @@ class FrameContainer
                         ( sName     ==  SPECIALTARGET_PARENT    )
                     );
         }
+/*TODO
+
+    This method is not threadsafe ...
+    Correct it!
 
         //*********************************************************************************************************
         // Special debug mode.
@@ -566,7 +542,7 @@ class FrameContainer
             }
             return bZombieExist;
         }
-
+*/
     #endif  // #ifdef ENABLE_ASSERTIONS
 
     //-------------------------------------------------------------------------------------------------------------
@@ -576,10 +552,9 @@ class FrameContainer
 
     private:
 
-        sal_Bool                m_bLock             ;   /// lock to block append()-, remove()- or clear()-calls
-        TFrameContainer         m_aContainer        ;   /// list to hold all frames
-        REFERENCE< XFRAME >     m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
-        OREF< AsyncQuit >       m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
+        TFrameContainer                                 m_aContainer        ;   /// list to hold all frames
+        css::uno::Reference< css::frame::XFrame >       m_xActiveFrame      ;   /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
+        ::vos::ORef< AsyncQuit >                        m_rQuitTimer        ;   /// if an instance of these class used by desktop and last frame will be removed we must terminate the desktop
 
 };      //  class FrameContainer
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: avy $ $Date: 2001-03-22 08:46:24 $
+#   last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,35 +62,58 @@
 PRJ=..
 
 PRJNAME=			framework
-TARGET=				fwk
+TARGET=				framework
 USE_DEFFILE=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
-#COMP1TYPELIST=		fwk
-#COMP2TYPELIST=		fwl
-#COMP3TYPELIST=		lgd
+COMP1TYPELIST=		fwk
+COMP2TYPELIST=		fwl
+COMP3TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
-.INCLUDE :  version.mk
 
 .IF "$(COM)"=="ICC"
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- DLL Services ----------------------------------------------------
+# --- services library ----------------------------------------------------
 
-SHL1TARGET=		$(FRAMEWORK_TARGET)$(UPD)$(DLLPOSTFIX)
-SHL1IMPLIB=		i$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=		fwk$(UPD)$(DLLPOSTFIX)
 
-SHL1OBJS=		$(SLO)$/registerservices.obj    
+SHL1IMPLIB=		ifwk$(UPD)$(DLLPOSTFIX)
 
-SHL1LIBS=		$(SLB)$/fwk_services.lib			\
-                $(SLB)$/fwk_helper.lib				\
-                $(SLB)$/fwk_classes.lib
+SHL1OBJS=		$(SLO)$/registerservices.obj		\
+                $(SLO)$/frame.obj					\
+                $(SLO)$/task.obj					\
+                $(SLO)$/pluginframe.obj				\
+                $(SLO)$/desktop.obj					\
+                $(SLO)$/documentproperties.obj		\
+                $(SLO)$/urltransformer.obj			\
+                $(SLO)$/framecontainer.obj			\
+                $(SLO)$/taskcreator.obj		  		\
+                $(SLO)$/targetfinder.obj		  	\
+                $(SLO)$/argumentanalyzer.obj		\
+                $(SLO)$/wildcard.obj				\
+                $(SLO)$/asyncquit.obj				\
+                $(SLO)$/odesktopdispatcher.obj		\
+                $(SLO)$/ointerceptionhelper.obj		\
+                $(SLO)$/oframes.obj					\
+                $(SLO)$/opluginframedispatcher.obj	\
+                $(SLO)$/ostatusindicatorfactory.obj	\
+                $(SLO)$/ocomponentaccess.obj		\
+                $(SLO)$/otasksaccess.obj			\
+                $(SLO)$/ostatusindicator.obj		\
+                $(SLO)$/otasksenumeration.obj		\
+                $(SLO)$/ocomponentenumeration.obj	\
+                $(SLO)$/odispatchprovider.obj		\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/writeguard.obj				\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/resetableguard.obj
 
 SHL1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
@@ -110,9 +133,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 DEF1EXPORTFILE=	exports.dxp
 
-# --- DLL temp. light Services ----------------------------------------------------
+# --- light services library ----------------------------------------------------
 
 SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
+
 SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 
 SHL2OBJS=		$(SLO)$/registertemp.obj			\
@@ -121,7 +145,6 @@ SHL2OBJS=		$(SLO)$/registertemp.obj			\
                 $(SLO)$/filterfactory.obj			\
                 $(SLO)$/typedetection.obj			\
                 $(SLO)$/filtercache.obj				\
-                $(SLO)$/registrycache.obj			\
                 $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/wildcard.obj
 
@@ -139,36 +162,82 @@ DEF2NAME=		$(SHL2TARGET)
 
 DEF2EXPORTFILE=	exports.dxp
 
-# --- Applikation --------------------------------------------------------
+# --- login service library ----------------------------------------------------
 
-APP1TARGET= 	framework
+SHL3TARGET=		lgd$(UPD)$(DLLPOSTFIX)
 
-APP1OBJS=		$(SLO)$/framework.obj
+SHL3IMPLIB=		ilgd$(UPD)$(DLLPOSTFIX)
 
-APP1LIBS=		$(SLB)$/fwk_classes.lib				\
-                $(SLB)$/fwk_helper.lib				\
-                $(SLB)$/fwk_services.lib
+SHL3OBJS=		$(SLO)$/registerlogindialog.obj		\
+                 $(SLO)$/logindialog.obj
 
-APP1STDLIBS=	\
-                $(CPPULIB)							\
+SHL3STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(VOSLIB)							\
+                $(SALLIB)							\
+                $(SVLIB)							\
+                $(TOOLSLIB)
+
+SHL3DEF=		$(MISC)$/$(SHL3TARGET).def
+
+DEF3NAME=		$(SHL3TARGET)
+
+DEF3EXPORTFILE=	exports.dxp
+
+# --- login applikation --------------------------------------------------------
+
+APP1TARGET= 	login
+
+APP1OBJS=		$(SLO)$/login.obj					\
+                $(SLO)$/servicemanager.obj
+
+APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
                 $(TOOLSLIB) 						\
                 $(SVTOOLLIB)						\
-                $(SVLLIB)						\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
-                $(SOTLIB)							\
                 $(SVLIB)
 
-APP1DEPN=		$(SLB)$/fwk_helper.lib				\
-                $(SLB)$/fwk_classes.lib
+APP1DEPN=		$(SLO)$/servicemanager.obj
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/framework.def
+APP1DEF=		$(MISC)$/login.def
 .ENDIF
+
+# --- framework applikation --------------------------------------------------------
+# --- not build yet!        --------------------------------------------------------
+
+#APP2TARGET= 	framework
+#
+#APP2OBJS=		$(SLO)$/framework.obj
+#
+#APP2LIBS=		$(SLB)$/fwk_classes.lib				\
+#				$(SLB)$/fwk_helper.lib				\
+#				$(SLB)$/fwk_services.lib
+#
+#APP2STDLIBS=	$(CPPULIB)							\
+#				$(CPPUHELPERLIB)					\
+#				$(OSLLIB)							\
+#				$(SALLIB)							\
+#				$(VOSLIB)							\
+#				$(TOOLSLIB) 						\
+#				$(SVTOOLLIB)						\
+#				$(SVLLIB)							\
+#				$(TKLIB)							\
+#				$(COMPHELPERLIB)					\
+#				$(SOTLIB)							\
+#				$(SVLIB)
+#
+#APP2DEPN=		$(SLB)$/fwk_helper.lib				\
+#				$(SLB)$/fwk_classes.lib
+#
+#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+#APP2DEF=		$(MISC)$/framework.def
+#.ENDIF
 
 # --- Targets ------------------------------------------------------
 

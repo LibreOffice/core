@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 06:42:14 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 #include <services/urltransformer.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
-#endif
-
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -389,7 +389,7 @@ sal_Bool URLTransformer::impldbg_checkParameter_assemble( URL& aURL )
 }
 
 //*****************************************************************************************************************
-sal_Bool URLTransformer::impldbg_checkParameter_getPresentation (   const   UNOURL&     aURL            ,
+sal_Bool URLTransformer::impldbg_checkParameter_getPresentation (   const   URL&        aURL            ,
                                                                             sal_Bool    bWithPassword   )
 {
     // Set default return value.

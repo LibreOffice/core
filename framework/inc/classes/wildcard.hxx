@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wildcard.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:22 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,6 @@
 
 namespace framework{
 
-#define OUSTRING            ::rtl::OUString
-
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
@@ -169,8 +167,8 @@ class Wildcard
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static sal_Bool match(  const   OUSTRING&   sText       ,
-                                   const    OUSTRING&   sPattern    );
+        static sal_Bool match(  const   ::rtl::OUString&    sText       ,
+                                   const    ::rtl::OUString&    sPattern    );
 
         //---------------------------------------------------------------------------------------------------------
         //  debug and test methods
@@ -193,8 +191,8 @@ class Wildcard
 
         #ifdef ENABLE_ASSERTIONS
 
-        static sal_Bool impldbg_checkParameter_match(   const   OUSTRING&   sText       ,
-                                                           const    OUSTRING&   sPattern    );
+        static sal_Bool impldbg_checkParameter_match(   const   ::rtl::OUString&    sText       ,
+                                                           const    ::rtl::OUString&    sPattern    );
 
         #endif  // #ifdef ENABLE_ASSERTIONS
 

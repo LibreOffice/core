@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2000-12-20 14:01:47 $
+#   last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,15 @@ SLOFILES=			\
                     $(SLO)$/typedetection.obj						\
                     $(SLO)$/urltransformer.obj						\
                     $(SLO)$/mediatypedetectionhelper.obj			\
-                    $(SLO)$/documentproperties.obj
+                    $(SLO)$/documentproperties.obj					\
+                    $(SLO)$/logindialog.obj
+
+SRCFILES=			logindialog.src
+
+RESLIB1NAME=		lgd
+RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
+RESLIB1DEPN=		logindialog.src									\
+                    logindialog.hrc
 
 # --- Targets ------------------------------------------------------
 

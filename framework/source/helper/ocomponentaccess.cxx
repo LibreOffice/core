@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-06 11:34:43 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ Reference< XComponent > OComponentAccess::impl_getFrameComponent( const Referenc
 
 //*****************************************************************************************************************
 sal_Bool OComponentAccess::impldbg_checkParameter_OComponentAccessCtor( const   Reference< XDesktop >&      xOwner  ,
-                                                                                Mutex&                      aMutex  ) const
+                                                                                Mutex&                      aMutex  )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;

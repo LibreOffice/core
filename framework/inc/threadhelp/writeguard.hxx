@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: urltransformer.hxx,v $
+ *  $RCSfile: writeguard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,60 +59,28 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
-#define __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#define __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
+#ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
+#include <threadhelp/inoncopyable.h>
 #endif
 
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-#include <macros/debug.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
-#include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
-#include <macros/xserviceinfo.hxx>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
+#ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
+#include <threadhelp/irwlock.h>
 #endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
-#include <com/sun/star/util/URL.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -121,46 +89,64 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short
+    @short          implement a guard to set write locks
+    @descr          This guard should be used to set a lock for reading AND writing object internal member.
+                    We never need a own mutex to safe our internal member access - because
+                    a guard is used as function-local member only. There exist no multithreaded access to it realy ...
 
-    @descr      -
+    @attention      1) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+                    2) Every method support a return value "eReason". Use this value to react for refused lock-calls!
+                       this means: You can't work with this object! We are not ready for working yet ...
+                       React for that in a right way.
+                       (see irwlock.h for further informations)
 
-    @implements XInterface
-                XTypeProvider
-                XServiceInfo
-                XURLTransformer
+    @implements     -
+    @base           INonCopyAble
 
-    @base       OMutexMember
-                OWeakObject
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class URLTransformer    :   public css::lang::XTypeProvider     ,
-                            public css::lang::XServiceInfo      ,
-                            public css::util::XURLTransformer   ,
-                            public OMutexMember                 ,
-                            public ::cppu::OWeakObject
+class WriteGuard : private INonCopyAble
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        /*-****************************************************************************************************//**
+            @short      ctor
+            @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
+                        Null isn't allowed as value!
+
+            @attention  If eRefusalReason is different from E_WORK
+
+            @seealso    -
+
+            @param      "pLock",    reference to used lock member of object to protect
+            @param      "rLock",    reference to used lock member of object to protect
+            @param      "eReason",  return value for working mode
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        WriteGuard( IRWLock*        pLock   ,
+                    ERefusalReason& eReason );
+
+        WriteGuard( IRWLock&        rLock   ,
+                    ERefusalReason& eReason );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      dtor
+            @descr      We unlock the used lock member automaticly if user forget it.
 
             @seealso    -
 
@@ -170,11 +156,43 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         URLTransformer( const css::uno::Reference< css::lang::XMultiServiceFactory >& sFactory );
+        ~WriteGuard();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      set write lock
+            @descr      Call this method to set the write lock. The call will block till all current threads are synchronized!
+
+            @attention  You have to check "eReason". If is different from E_NONE your access to our member was refused!
+
+            @seealso    method unlock()
+
+            @param      "eReason", return the reason for refused calls
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void lock( ERefusalReason& eReason );
+
+        /*-****************************************************************************************************//**
+            @short      unset write lock
+            @descr      Call this method to unlock the rw-lock temp.!
+                        Normaly we do it at dtor automaticly for you ...
+
+            @seealso    method lock()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void unlock();
+
+        /*-****************************************************************************************************//**
+            @short      downgrade write access to read access without new blocking!
+            @descr      If this write lock is set you can change it to a "read lock".
+                        An "upgrade" is the same like new calling "lock()"!
 
             @seealso    -
 
@@ -184,134 +202,52 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ~URLTransformer();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
-
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
-        DECLARE_XSERVICEINFO
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XURLTransformer
-        //---------------------------------------------------------------------------------------------------------
+        void downgrade();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      return internal lock state
+            @descr      For user they dont know what they are doing there ...
 
             @seealso    -
 
             @param      -
-            @return     -
+            @return     Current set lock mode.
 
-            @onerror    -
+            @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual sal_Bool SAL_CALL parseSmart(           css::util::URL&     aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual ::rtl::OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
-                                                                    sal_Bool            bWithPassword   ) throw( css::uno::RuntimeException );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
+        ELockMode getMode() const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
+            @short      disable using of these functions!
+            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+                        Thats why we disable it by make it private.
 
-            @seealso    ASSERTs in implementation!
+            @seealso    other ctor
 
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
+            @param      -
+            @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_URLTransformer   (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        );
-        static sal_Bool impldbg_checkParameter_parseStrict      (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_parseSmart       (           css::util::URL&                                         aURL            ,
-                                                                    const   ::rtl::OUString&                                        sSmartProtocol  );
-        static sal_Bool impldbg_checkParameter_assemble         (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_getPresentation  (   const   css::util::URL&                                         aURL            ,
-                                                                            sal_Bool                                                bWithPassword   );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
+        WriteGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory          ;   /// reference to factory, which has created this instance
+        IRWLock*    m_pLock ;   /// refrence to lock-member of protected object
+        ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
 
-};      //  class URLTransformer
+};      //  class WriteGuard
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_

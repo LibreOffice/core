@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:26 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_HELPER_OINSTANCEPROVIDER_HXX_
-#include <helper/oinstanceprovider.hxx>
-#endif
-
 #ifndef __FRAMEWORK_CLASSES_SERVICEMANAGER_HXX_
 #include <classes/servicemanager.hxx>
 #endif
@@ -83,8 +79,8 @@
 #include <macros/debug.hxx>
 #endif
 
-#ifndef __FRAMEWORK_DEFINES_HXX_
-#include <defines.hxx>
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -163,10 +159,8 @@
 #include <com/sun/star/bridge/XInstanceProvider.hpp>
 #endif
 
-#ifdef TF_FILTER//MUSTFILTER
-    #ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
-    #include <com/sun/star/document/XTypeDetection.hpp>
-    #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
@@ -246,9 +240,7 @@ using namespace ::com::sun::star::util      ;
 using namespace ::com::sun::star::task      ;
 using namespace ::com::sun::star::mozilla   ;
 using namespace ::com::sun::star::bridge    ;
-#ifdef TF_FILTER//MUSTFILTER
 using namespace ::com::sun::star::document  ;
-#endif
 using namespace ::com::sun::star::container ;
 
 //_________________________________________________________________________________________________________________
@@ -285,7 +277,6 @@ class TestApplication : public Application
         void impl_testLoginDialog();
         #endif
 
-#ifdef TF_FILTER
         #ifdef TEST_FILTERCACHE
         void impl_testFilterCache();
         #endif
@@ -297,7 +288,6 @@ class TestApplication : public Application
         #ifdef TEST_FILTERREGISTRATION
         void impl_testFilterRegistration();
         #endif
-#endif
 
         #ifdef TEST_TREESEARCH
         sal_Bool impl_testTreeSearch();
@@ -355,11 +345,9 @@ void TestApplication::Main()
     #endif
 
     //-------------------------------------------------------------------------------------------------------------
-#ifdef TF_FILTER
     #ifdef TEST_TYPEDETECTION
     impl_testTypeDetection();
     #endif
-#endif
 
     //-------------------------------------------------------------------------------------------------------------
     #ifdef TEST_LOGINDIALOG
@@ -405,7 +393,6 @@ void TestApplication::Main()
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
-#ifdef TF_FILTER
 #ifdef TEST_TYPEDETECTION
 void TestApplication::impl_testTypeDetection()
 {
@@ -504,12 +491,10 @@ void TestApplication::impl_testTypeDetection()
     WRITE_LOGFILE( "testTypeDetection.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
 #endif
-#endif
 
 //_________________________________________________________________________________________________________________
 //  test method
 //_________________________________________________________________________________________________________________
-#ifdef TF_FILTER
 #ifdef TEST_FILTERCACHE
 void TestApplication::impl_testFilterCache()
 {
@@ -584,7 +569,6 @@ void TestApplication::impl_testFilterCache()
 
     WRITE_LOGFILE( "test_FilterCache.log", U2B(sBuffer.makeStringAndClear()).getStr() )
 }
-#endif
 #endif
 
 //_________________________________________________________________________________________________________________

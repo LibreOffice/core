@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 13:01:14 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -132,27 +136,6 @@
 
 namespace framework{
 
-#define ANY                                 ::com::sun::star::uno::Any
-#define EVENTOBJECT                         ::com::sun::star::lang::EventObject
-#define MUTEX                               ::osl::Mutex
-#define NOSUCHELEMENTEXCEPTION              ::com::sun::star::container::NoSuchElementException
-#define OWEAKOBJECT                         ::cppu::OWeakObject
-#define REFERENCE                           ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define SEQUENCE                            ::com::sun::star::uno::Sequence
-#define UNOTYPE                             ::com::sun::star::uno::Type
-#define WEAKREFERENCE                       ::com::sun::star::uno::WeakReference
-#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
-#define XDESKTOP                            ::com::sun::star::frame::XDesktop
-#define XELEMENTACCESS                      ::com::sun::star::container::XElementAccess
-#define XENUMERATION                        ::com::sun::star::container::XEnumeration
-#define XENUMERATIONACCESS                  ::com::sun::star::container::XEnumerationAccess
-#define XFRAMESSUPPLIER                     ::com::sun::star::frame::XFramesSupplier
-#define XFRAME                              ::com::sun::star::frame::XFrame
-#define XTASK                               ::com::sun::star::frame::XTask
-#define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
-#define XCOMPONENT                          ::com::sun::star::lang::XComponent
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -178,9 +161,9 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OComponentAccess  :   public XTYPEPROVIDER                ,
-                            public XENUMERATIONACCESS           ,   // => XElementAccess
-                            public OWEAKOBJECT
+class OComponentAccess  :   public css::lang::XTypeProvider             ,
+                            public css::container::XEnumerationAccess   ,   // => XElementAccess
+                            public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -208,8 +191,8 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OComponentAccess(  const   REFERENCE< XDESKTOP >&      xOwner  ,
-                                    MUTEX&                      aMutex  );
+         OComponentAccess(  const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+                                    ::osl::Mutex&                                   aMutex  );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -237,7 +220,7 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XENUMERATION > SAL_CALL createEnumeration() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XElementAccess
@@ -256,7 +239,7 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual UNOTYPE SAL_CALL getElementType() throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      get state of componentlist of enumeration.
@@ -271,7 +254,7 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -316,8 +299,8 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void impl_collectAllChildComponents(    const   REFERENCE< XFRAMESSUPPLIER >&           xNode           ,
-                                                          SEQUENCE< REFERENCE< XCOMPONENT > >&  seqComponents   );
+        void impl_collectAllChildComponents(    const   css::uno::Reference< css::frame::XFramesSupplier >&                 xNode           ,
+                                                          css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >&   seqComponents   );
 
         /*-****************************************************************************************************//**
             @short      get the component of a frame
@@ -331,7 +314,7 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XCOMPONENT > impl_getFrameComponent( const REFERENCE< XFRAME >& xFrame ) const;
+        css::uno::Reference< css::lang::XComponent > impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -356,8 +339,8 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
 
     private:
 
-        sal_Bool impldbg_checkParameter_OComponentAccessCtor(   const   REFERENCE< XDESKTOP >&      xOwner  ,
-                                                                        MUTEX&                      aMutex  ) const;
+        static sal_Bool impldbg_checkParameter_OComponentAccessCtor(    const   css::uno::Reference< css::frame::XDesktop >&    xOwner  ,
+                                                                                   ::osl::Mutex&                                    aMutex  );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -368,8 +351,8 @@ class OComponentAccess  :   public XTYPEPROVIDER                ,
 
     private:
 
-        MUTEX&                              m_aMutex            ;   /// shared mutex with owner
-        WEAKREFERENCE< XDESKTOP >           m_xOwner            ;   /// weak reference to the desktop object!
+        ::osl::Mutex&                                       m_aMutex            ;   /// shared mutex with owner
+        css::uno::WeakReference< css::frame::XDesktop >     m_xOwner            ;   /// weak reference to the desktop object!
 
 };      //  class OComponentAccess
 

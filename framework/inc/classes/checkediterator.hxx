@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-12 13:11:47 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ namespace framework{
     @base           -
 
     @devstatus      ready to use
+    @threadsafe     no
 *//*-*************************************************************************************************************/
 
 template< class TContainer >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:23 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <macros/generic.hxx>
 #endif
 
+#ifndef __FRAMEWORK_TARGETS_H_
+#include <targets.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -100,10 +104,6 @@
 
 namespace framework{
 
-#define OUSTRING            ::rtl::OUString
-#define REFERENCE           ::com::sun::star::uno::Reference
-#define XFRAME              ::com::sun::star::frame::XFrame
-
 //_________________________________________________________________________________________________________________
 //  declarations
 //_________________________________________________________________________________________________________________
@@ -120,21 +120,6 @@ enum EFrameType
     E_TASK          ,
     E_FRAME
 };
-
-/*-************************************************************************************************************//**
-    @short          These values specify special target names which must handled.
-*//*-*************************************************************************************************************/
-
-#define SPECIALTARGET_BLANK                                     DECLARE_ASCII("_blank"      )
-#define SPECIALTARGET_SELF                                      DECLARE_ASCII("_self"       )
-#define SPECIALTARGET_PARENT                                    DECLARE_ASCII("_parent"     )
-#define SPECIALTARGET_TOP                                       DECLARE_ASCII("_top"        )
-#define SPECIALTARGET_BEAMER                                    DECLARE_ASCII("_beamer"     )
-/* not supported yet!
-#define SPECIALTARGET_DOCUMENT                                  DECLARE_ASCII("_document"   )
-#define SPECIALTARGET_EXPLORER                                  DECLARE_ASCII("_explorer"   )
-#define SPECIALTARGET_PARTWINDOW                                DECLARE_ASCII("_partwindow" )
-*/
 
 /*-************************************************************************************************************//**
     @short          valid result values to classify targeting
@@ -165,9 +150,8 @@ enum ETargetClass
     @implements     -
     @base           -
 
-    @ATTENTION      This class is'nt threadsafe!
-
     @devstatus      ready to use
+    @threadsafe     not neccessary
 *//*-*************************************************************************************************************/
 
 class TargetFinder
@@ -223,14 +207,14 @@ class TargetFinder
             @onerror    E_UNKNOWN is returned.
         *//*-*****************************************************************************************************/
 
-        static ETargetClass classify(           EFrameType      eFrameType                          ,
-                                        const   OUSTRING&       sTargetName                         ,
-                                                   sal_Int32        nSearchFlags                        ,
-                                                sal_Bool&       bCreationAllowed                    ,
-                                                sal_Bool        bChildrenExist                      ,
-                                        const   OUSTRING&       sFrameName          =   OUSTRING()  ,
-                                                sal_Bool        bParentExist        =   sal_False   ,
-                                        const   OUSTRING&       sParentName         =   OUSTRING()  );
+        static ETargetClass classify(           EFrameType          eFrameType                                  ,
+                                        const   ::rtl::OUString&    sTargetName                                 ,
+                                                   sal_Int32            nSearchFlags                                ,
+                                                sal_Bool&           bCreationAllowed                            ,
+                                                sal_Bool            bChildrenExist                              ,
+                                        const   ::rtl::OUString&    sFrameName          =   ::rtl::OUString()   ,
+                                                sal_Bool            bParentExist        =   sal_False           ,
+                                        const   ::rtl::OUString&    sParentName         =   ::rtl::OUString()   );
 
         //---------------------------------------------------------------------------------------------------------
         //  private methods
@@ -256,28 +240,28 @@ class TargetFinder
             @onerror    A null reference is returned.
         *//*-*****************************************************************************************************/
 
-        static ETargetClass impl_classifyForDesktop     (           sal_Bool    bChildrenExist      ,
-                                                            const   OUSTRING&   sTargetName         ,
-                                                                       sal_Int32    nSearchFlags        );
+        static ETargetClass impl_classifyForDesktop     (           sal_Bool            bChildrenExist      ,
+                                                            const   ::rtl::OUString&    sTargetName         ,
+                                                                       sal_Int32            nSearchFlags        );
 
-        static ETargetClass impl_classifyForPlugInFrame (           sal_Bool    bParentExist        ,
-                                                                    sal_Bool    bChildrenExist      ,
-                                                            const   OUSTRING&   sFrameName          ,
-                                                            const   OUSTRING&   sTargetName         ,
-                                                                       sal_Int32    nSearchFlags        );
+        static ETargetClass impl_classifyForPlugInFrame (           sal_Bool            bParentExist        ,
+                                                                    sal_Bool            bChildrenExist      ,
+                                                            const   ::rtl::OUString&    sFrameName          ,
+                                                            const   ::rtl::OUString&    sTargetName         ,
+                                                                       sal_Int32            nSearchFlags        );
 
-        static ETargetClass impl_classifyForTask        (           sal_Bool    bParentExist        ,
-                                                                    sal_Bool    bChildrenExist      ,
-                                                            const   OUSTRING&   sFrameName          ,
-                                                            const   OUSTRING&   sTargetName         ,
-                                                                       sal_Int32    nSearchFlags        );
+        static ETargetClass impl_classifyForTask        (           sal_Bool            bParentExist        ,
+                                                                    sal_Bool            bChildrenExist      ,
+                                                            const   ::rtl::OUString&    sFrameName          ,
+                                                            const   ::rtl::OUString&    sTargetName         ,
+                                                                       sal_Int32            nSearchFlags        );
 
-        static ETargetClass impl_classifyForFrame       (           sal_Bool    bParentExist        ,
-                                                                    sal_Bool    bChildrenExist      ,
-                                                            const   OUSTRING&   sFrameName          ,
-                                                            const   OUSTRING&   sParentName         ,
-                                                            const   OUSTRING&   sTargetName         ,
-                                                                       sal_Int32    nSearchFlags        );
+        static ETargetClass impl_classifyForFrame       (           sal_Bool            bParentExist        ,
+                                                                    sal_Bool            bChildrenExist      ,
+                                                            const   ::rtl::OUString&    sFrameName          ,
+                                                            const   ::rtl::OUString&    sParentName         ,
+                                                            const   ::rtl::OUString&    sTargetName         ,
+                                                                       sal_Int32            nSearchFlags        );
 
         //---------------------------------------------------------------------------------------------------------
         //  debug and test methods
@@ -306,14 +290,14 @@ class TargetFinder
         // - check invalid references, misused booleans, wrong flags or for an unknown frame type
         // - value of bCreationAllowed will set by classify() - existing value isn't important
         // - empty strings are allowed
-        static inline sal_Bool implcp_classify(         EFrameType  eFrameType          ,
-                                                const   OUSTRING&   sTargetName         ,
-                                                        sal_Int32   nSearchFlags        ,
-                                                        sal_Bool&   bCreationAllowed    ,
-                                                        sal_Bool    bChildrenExist      ,
-                                                const   OUSTRING&   sFrameName          ,
-                                                        sal_Bool    bParentExist        ,
-                                                const   OUSTRING&   sParentName         )
+        static inline sal_Bool implcp_classify(         EFrameType          eFrameType          ,
+                                                const   ::rtl::OUString&    sTargetName         ,
+                                                        sal_Int32           nSearchFlags        ,
+                                                        sal_Bool&           bCreationAllowed    ,
+                                                        sal_Bool            bChildrenExist      ,
+                                                const   ::rtl::OUString&    sFrameName          ,
+                                                        sal_Bool            bParentExist        ,
+                                                const   ::rtl::OUString&    sParentName         )
         {
             return  (
                         ( &sTargetName      ==  NULL            )   ||

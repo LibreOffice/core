@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: as $ $Date: 2001-02-26 08:45:23 $
+#   last change: $Author: as $ $Date: 2001-03-29 13:17:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,17 +78,16 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- Test Applikation --------------------------------------------------
+# --- applikation: "test" --------------------------------------------------
 
-APP1TARGET= 	$(TARGET)
+APP1TARGET= 	test
 
 APP1OBJS=		$(SLO)$/test.obj
 
 APP1LIBS=		$(SLB)$/fwk_classes.lib				\
                 $(SLB)$/fwk_helper.lib
 
-APP1STDLIBS=	\
-                $(CPPULIB)							\
+APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
@@ -106,16 +105,44 @@ APP1DEPN=		$(SLB)$/fwk_helper.lib				\
 APP1DEF=		$(MISC)$/test.def
 .ENDIF
 
-# --- TypeCFG Applikation --------------------------------------------------
+# --- application: "threadtest" --------------------------------------------------
 
-APP2TARGET= 	typecfg
+APP2TARGET= 	threadtest
 
-APP2OBJS=		$(SLO)$/typecfg.obj					\
+APP2OBJS=		$(SLO)$/threadtest.obj				\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/resetableguard.obj			\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/writeguard.obj
+
+APP2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(SVLIB)
+
+APP2DEPN=		$(SLO)$/fairrwlock.obj				\
+                $(SLO)$/resetableguard.obj			\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/writeguard.obj
+
+.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+APP2DEF=		$(MISC)$/threadtest.def
+.ENDIF
+
+# --- applikation: "typecfg" --------------------------------------------------
+
+APP3TARGET= 	typecfg
+
+APP3OBJS=		$(SLO)$/typecfg.obj					\
                 $(SLO)$/servicemanager.obj			\
                 $(SLO)$/filtercache.obj				\
                 $(SLO)$/wildcard.obj
 
-APP2STDLIBS=	$(CPPULIB)							\
+APP3STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(OSLLIB)							\
                 $(SALLIB)							\
@@ -126,11 +153,11 @@ APP2STDLIBS=	$(CPPULIB)							\
                 $(COMPHELPERLIB)					\
                 $(SVLIB)
 
-APP2DEPN=		$(SLO)$/servicemanager.obj			\
+APP3DEPN=		$(SLO)$/servicemanager.obj			\
                 $(SLO)$/filtercache.obj
 
 .IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP2DEF=		$(MISC)$/typecfg.def
+APP3DEF=		$(MISC)$/typecfg.def
 .ENDIF
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterflags.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-20 14:44:45 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 
 namespace framework{
 
+/*-************************************************************************************************************//**
+    @short          These values describe our supported filter flags.
+    @attention      Don't change flag values without reason - we must support old functionality and position
+                    in flag combined values!
+*//*-*************************************************************************************************************/
+
 #define FILTERFLAGNAME_IMPORT                               DECLARE_ASCII("Import"          )
 #define FILTERFLAGNAME_EXPORT                               DECLARE_ASCII("Export"          )
 #define FILTERFLAGNAME_INTERNAL                             DECLARE_ASCII("Internal"        )
@@ -105,6 +111,27 @@ namespace framework{
 #define FILTERFLAG_SILENTEXPORT                             0x00200000L     // 2097152
 #define FILTERFLAG_BROWSERPREFERED                          0x00400000L     // 4194304
 #define FILTERFLAG_PREFERED                                 0x10000000L     // 268435456
+
+#define DISABLE_FILTERFLAG_IMPORT                           0xFFFFFFFEL
+#define DISABLE_FILTERFLAG_EXPORT                           0xFFFFFFFDL
+#define DISABLE_FILTERFLAG_TEMPLATE                         0xFFFFFFFBL
+#define DISABLE_FILTERFLAG_INTERNAL                         0xFFFFFFF7L
+#define DISABLE_FILTERFLAG_TEMPLATEPATH                     0xFFFFFFEFL
+#define DISABLE_FILTERFLAG_OWN                              0xFFFFFFDFL
+#define DISABLE_FILTERFLAG_ALIEN                            0xFFFFFFBFL
+#define DISABLE_FILTERFLAG_USESOPTIONS                      0xFFFFFF7FL
+#define DISABLE_FILTERFLAG_DEFAULT                          0xFFFFFEFFL
+#define DISABLE_FILTERFLAG_NOTINFILEDIALOG                  0xFFFFEFFFL
+#define DISABLE_FILTERFLAG_NOTINCHOOSER                     0xFFFFDFFFL
+#define DISABLE_FILTERFLAG_ASYNCHRON                        0xFFFFBFFFL
+#define DISABLE_FILTERFLAG_READONLY                         0xFFFEFFFFL
+#define DISABLE_FILTERFLAG_NOTINSTALLED                     0xFFFDFFFFL
+#define DISABLE_FILTERFLAG_CONSULTSERVICE                   0xFFFBFFFFL
+#define DISABLE_FILTERFLAG_3RDPARTYFILTER                   0xFFF7FFFFL
+#define DISABLE_FILTERFLAG_PACKED                           0xFFEFFFFFL
+#define DISABLE_FILTERFLAG_SILENTEXPORT                     0xFFDFFFFFL
+#define DISABLE_FILTERFLAG_BROWSERPREFERED                  0xFFBFFFFFL
+#define DISABLE_FILTERFLAG_PREFERED                         0xEFFFFFFFL
 
 }       //  namespace framework
 

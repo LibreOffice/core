@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetfinder.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-03-09 14:42:25 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ ETargetClass TargetFinder::classify(            EFrameType      eFrameType      
 //  private method
 //*****************************************************************************************************************
 ETargetClass TargetFinder::impl_classifyForDesktop(         sal_Bool    bChildrenExist  ,
-                                                    const   OUSTRING&   sTargetName     ,
+                                                    const   OUString&   sTargetName     ,
                                                             sal_Int32   nSearchFlags    )
 {
     ETargetClass eResult = E_UNKNOWN;

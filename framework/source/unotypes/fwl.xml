@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module-description PUBLIC "-//W3C//DTD HTML 3.2//EN" "module-description.dtd">
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
     <module-name> fwl </module-name>
+
     <component-description>
         <author> Andreas Schluens </author>
         <name> com.sun.star.comp.framework.TypeDetection </name>
@@ -12,7 +15,9 @@
         <language> c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.document.TypeDetection </supported-service>
+        <type> com.</type>
     </component-description>
+
     <component-description>
         <author> Andreas Schluens </author>
         <name> com.sun.star.comp.framework.FilterFactory </name>
@@ -24,6 +29,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.document.FilterFactory </supported-service>
     </component-description>
+
     <component-description>
         <author> Andreas Schluens </author>
         <name> com.sun.star.comp.frame.FrameLoaderFactory </name>
@@ -36,6 +42,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.FrameLoaderFactory </supported-service>
     </component-description>
+
     <component-description>
         <author> Ingrid Halama </author>
         <name> com.sun.star.comp.framework.MediaTypeDetectionHelper </name>
@@ -48,6 +55,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.frame.MediaTypeDetectionHelper </supported-service>
     </component-description>
+
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  comphelper  </project-build-dependency>
@@ -55,6 +63,7 @@
     <project-build-dependency>  vos         </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
     <project-build-dependency>  svl         </project-build-dependency>
+
     <runtime-module-dependency> cppu2       </runtime-module-dependency>
     <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
     <runtime-module-dependency> comphelp2   </runtime-module-dependency>
@@ -62,4 +71,5 @@
     <runtime-module-dependency> vos2$(COM)  </runtime-module-dependency>
     <runtime-module-dependency> sal2        </runtime-module-dependency>
     <runtime-module-dependency> svl         </runtime-module-dependency>
+
 </module-description>

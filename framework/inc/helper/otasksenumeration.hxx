@@ -2,9 +2,9 @@
  *
  *  $RCSfile: otasksenumeration.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 06:20:35 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -120,21 +124,6 @@
 
 namespace framework{
 
-#define ANY                                 ::com::sun::star::uno::Any
-#define EVENTOBJECT                         ::com::sun::star::lang::EventObject
-#define NOSUCHELEMENTEXCEPTION              ::com::sun::star::container::NoSuchElementException
-#define OWEAKOBJECT                         ::cppu::OWeakObject
-#define REFERENCE                           ::com::sun::star::uno::Reference
-#define SEQUENCE                            ::com::sun::star::uno::Sequence
-#define RUNTIMEEXCEPTION                    ::com::sun::star::uno::RuntimeException
-#define UNOTYPE                             ::com::sun::star::uno::Type
-#define WRAPPEDTARGETEXCEPTION              ::com::sun::star::lang::WrappedTargetException
-#define XENUMERATION                        ::com::sun::star::container::XEnumeration
-#define XEVENTLISTENER                      ::com::sun::star::lang::XEventListener
-#define XFRAME                              ::com::sun::star::frame::XFrame
-#define XTASK                               ::com::sun::star::frame::XTask
-#define XTYPEPROVIDER                       ::com::sun::star::lang::XTypeProvider
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -160,11 +149,11 @@ namespace framework{
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OTasksEnumeration :   public XTYPEPROVIDER        ,
-                            public XEVENTLISTENER       ,
-                            public XENUMERATION         ,
-                            public OMutexMember         ,
-                            public OWEAKOBJECT
+class OTasksEnumeration :   public css::lang::XTypeProvider     ,
+                            public css::lang::XEventListener    ,
+                            public css::container::XEnumeration ,
+                            public OMutexMember                 ,
+                            public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -189,7 +178,7 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
             @onerror    Do nothing and reset this object to default with an empty list.
         *//*-*****************************************************************************************************/
 
-         OTasksEnumeration( const SEQUENCE< REFERENCE< XFRAME > >& seqTasks );
+         OTasksEnumeration( const css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >& seqTasks );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -215,7 +204,7 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XEnumeration
@@ -236,7 +225,7 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
                         (List is emtpy and there no accessible elements ...)
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasMoreElements() throw( RUNTIMEEXCEPTION );
+        virtual sal_Bool SAL_CALL hasMoreElements() throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      give the next element, if some exist
@@ -250,9 +239,9 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
             @onerror    If end of enumeration is arrived or there are no elements in list => a NoSuchElementException is thrown.
         *//*-*****************************************************************************************************/
 
-        virtual ANY SAL_CALL nextElement() throw(   NOSUCHELEMENTEXCEPTION  ,
-                                                    WRAPPEDTARGETEXCEPTION  ,
-                                                    RUNTIMEEXCEPTION        );
+        virtual css::uno::Any SAL_CALL nextElement() throw( css::container::NoSuchElementException  ,
+                                                             css::lang::WrappedTargetException      ,
+                                                            css::uno::RuntimeException              );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -325,8 +314,8 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
 
     private:
 
-        sal_Bool impldbg_checkParameter_OTasksEnumerationCtor   (   const   SEQUENCE< REFERENCE< XFRAME > >&    seqTasks    );
-        sal_Bool impldbg_checkParameter_disposing               (   const   EVENTOBJECT&                        aEvent      );
+        static sal_Bool impldbg_checkParameter_OTasksEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::frame::XFrame > >&    seqTasks    );
+        static sal_Bool impldbg_checkParameter_disposing                (   const   css::lang::EventObject&                                             aEvent      );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -337,8 +326,8 @@ class OTasksEnumeration :   public XTYPEPROVIDER        ,
 
     private:
 
-        sal_uInt32                              m_nPosition         ;   /// current position in enumeration
-        SEQUENCE< REFERENCE< XTASK > >          m_seqTasks          ;   /// list of current tasks
+        sal_uInt32                                                          m_nPosition         ;   /// current position in enumeration
+        css::uno::Sequence< css::uno::Reference< css::frame::XTask > >      m_seqTasks          ;   /// list of current tasks
 
 };      //  class OTasksEnumeration
 

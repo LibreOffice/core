@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: urltransformer.hxx,v $
+ *  $RCSfile: resetableguard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,59 +59,27 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
-#define __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#define __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
-#include <macros/generic.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-#include <macros/debug.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
-#include <macros/xinterface.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
-#include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_XSERVICEINFO_HXX_
-#include <macros/xserviceinfo.hxx>
-#endif
-
-#ifndef __FRAMEWORK_GENERAL_H_
-#include <general.h>
+#ifndef __FRAMEWORK_THREADHELP_INONCOPYABLE_H_
+#include <threadhelp/inoncopyable.h>
 #endif
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
-#include <com/sun/star/util/URL.hpp>
-#endif
-
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -121,46 +89,55 @@
 namespace framework{
 
 //_________________________________________________________________________________________________________________
-//  exported const
+//  const
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
-//  exported definitions
+//  declarations
 //_________________________________________________________________________________________________________________
 
 /*-************************************************************************************************************//**
-    @short
+    @short          implement a guard for implementing save thread access
+    @descr          These guard has an additional feature to well known one ::osl::Guard.
+                    You can lock() and unlock() it very often!
+                    A set bool flag inside protect this implementation against multiple lock() calls
+                    without any unlock()! So the increasing of guarded mutex couldn't be greater then 1 ...
 
-    @descr      -
+    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
-    @implements XInterface
-                XTypeProvider
-                XServiceInfo
-                XURLTransformer
+    @implements     -
+    @base           INonCopyAble
 
-    @base       OMutexMember
-                OWeakObject
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class URLTransformer    :   public css::lang::XTypeProvider     ,
-                            public css::lang::XServiceInfo      ,
-                            public css::util::XURLTransformer   ,
-                            public OMutexMember                 ,
-                            public ::cppu::OWeakObject
+class ResetableGuard : private INonCopyAble
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
-
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  constructor / destructor
-        //---------------------------------------------------------------------------------------------------------
+        /*-****************************************************************************************************//**
+            @short      ctors
+            @descr      Use these ctor methods to initialize the guard right.
+                        Given mutex reference must be valid - otherwise crashes could occure!
+
+            @seealso    -
+
+            @param      "pMutex"    pointer to mutex for using as lock
+            @param      "rMutex"    reference to mutex for using as lock
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        ResetableGuard( ::osl::Mutex* pMutex );
+        ResetableGuard( ::osl::Mutex& rMutex );
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      dtor
+            @descr      We must release set mutex if programmer forget it ...
 
             @seealso    -
 
@@ -170,11 +147,18 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         URLTransformer( const css::uno::Reference< css::lang::XMultiServiceFactory >& sFactory );
+        ~ResetableGuard();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      enable/disable the lock
+            @descr      Use this methods to lock or unlock the mutex.
+                        You can do it so often you wish to do that ...
+
+            @attention  We use another member to prevent us against multiple acquire calls of the same guard
+                        without suitable release calls!
+                        You don't must protect access at these bool member by using an own mutex ....
+                        because nobody use the same guard instance from different threads!
+                        It will be a function-local object every time.
 
             @seealso    -
 
@@ -184,134 +168,69 @@ class URLTransformer    :   public css::lang::XTypeProvider     ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual ~URLTransformer();
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider, XServiceInfo
-        //---------------------------------------------------------------------------------------------------------
-
-        DECLARE_XINTERFACE
-        DECLARE_XTYPEPROVIDER
-        DECLARE_XSERVICEINFO
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XURLTransformer
-        //---------------------------------------------------------------------------------------------------------
+        void lock();
+        void unlock();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      try to lock the mutex
+            @descr      Try to acquire the mutex without blocking.
 
             @seealso    -
 
             @param      -
-            @return     -
+            @return     true, if lock already set or could new acquired
+                        false, otherwise
 
-            @onerror    -
+            @onerror    No error could occure.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException );
+        sal_Bool tryToLock();
 
         /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
+            @short      get information about current lock state
+            @descr      Use it if you not shure what going on ... but I think this never should realy neccessary!
 
             @seealso    -
 
             @param      -
-            @return     -
+            @return     true, if lock is set
+                        false, otherwise
 
-            @onerror    -
+            @onerror    No error could occure!
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL parseSmart(           css::util::URL&     aURL            ,
-                                                const   ::rtl::OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        virtual ::rtl::OUString SAL_CALL getPresentation(   const   css::util::URL&     aURL            ,
-                                                                    sal_Bool            bWithPassword   ) throw( css::uno::RuntimeException );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
+        sal_Bool isLocked() const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
     //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-
         /*-****************************************************************************************************//**
-            @short      debug-method to check incoming parameter of some other mehods of this class
-            @descr      The following methods are used to check parameters for other methods
-                        of this class. The return value is used directly for an ASSERT(...).
+            @short      disable using of these functions!
+            @descr      It's not allowed to use this methods. Different problem can occure otherwise.
+                        Thats why we disable it by make it private.
 
-            @seealso    ASSERTs in implementation!
+            @seealso    other ctor
 
-            @param      references to checking variables
-            @return     sal_False on invalid parameter<BR>
-                        sal_True  otherway
+            @param      -
+            @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-
-        static sal_Bool impldbg_checkParameter_URLTransformer   (   const   css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory        );
-        static sal_Bool impldbg_checkParameter_parseStrict      (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_parseSmart       (           css::util::URL&                                         aURL            ,
-                                                                    const   ::rtl::OUString&                                        sSmartProtocol  );
-        static sal_Bool impldbg_checkParameter_assemble         (           css::util::URL&                                         aURL            );
-        static sal_Bool impldbg_checkParameter_getPresentation  (   const   css::util::URL&                                         aURL            ,
-                                                                            sal_Bool                                                bWithPassword   );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
+        ResetableGuard();
 
     //-------------------------------------------------------------------------------------------------------------
-    //  variables
-    //  (should be private everyway!)
+    //  private member
     //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-        css::uno::Reference< css::lang::XMultiServiceFactory >      m_xFactory          ;   /// reference to factory, which has created this instance
+        ::osl::Mutex*   m_pMutex    ;   /// pointer to safed mutex
+        sal_Bool        m_bLocked   ;   /// protection against multiple lock() calls without unlock()
 
-};      //  class URLTransformer
+};      //  class ResetableGuard
 
 }       //  namespace framework
 
-#endif  //  #ifndef __FRAMEWORK_SERVICES_URLTRANSFORMER_HXX_
+#endif  //  #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_

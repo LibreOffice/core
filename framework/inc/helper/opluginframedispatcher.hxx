@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opluginframedispatcher.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-02-15 14:14:16 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <macros/debug.hxx>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -148,27 +152,6 @@
 
 namespace framework{
 
-#define DISPATCHDESCRIPTOR                      ::com::sun::star::frame::DispatchDescriptor
-#define MUTEX                                   ::osl::Mutex
-#define OMULTITYPEINTERFACECONTAINERHELPERVAR   ::cppu::OMultiTypeInterfaceContainerHelperVar
-#define OUSTRING                                ::rtl::OUString
-#define OWEAKOBJECT                             ::cppu::OWeakObject
-#define PROPERTYVALUE                           ::com::sun::star::beans::PropertyValue
-#define REFERENCE                               ::com::sun::star::uno::Reference
-#define RUNTIMEEXCEPTION                        ::com::sun::star::uno::RuntimeException
-#define SEQUENCE                                ::com::sun::star::uno::Sequence
-#define UNOURL                                  ::com::sun::star::util::URL
-#define WEAKREFERENCE                           ::com::sun::star::uno::WeakReference
-#define XDISPATCH                               ::com::sun::star::frame::XDispatch
-#define XDISPATCHPROVIDER                       ::com::sun::star::frame::XDispatchProvider
-#define XFRAME                                  ::com::sun::star::frame::XFrame
-#define XINPUTSTREAM                            ::com::sun::star::io::XInputStream
-#define XMULTISERVICEFACTORY                    ::com::sun::star::lang::XMultiServiceFactory
-#define XPLUGININSTANCE                         ::com::sun::star::mozilla::XPluginInstance
-#define XPLUGININSTANCENOTIFYSINK               ::com::sun::star::mozilla::XPluginInstanceNotifySink
-#define XPLUGININSTANCEPEER                     ::com::sun::star::mozilla::XPluginInstancePeer
-#define XSTATUSLISTENER                         ::com::sun::star::frame::XStatusListener
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -177,40 +160,6 @@ namespace framework{
 //  exported definitions
 //_________________________________________________________________________________________________________________
 
-struct tIMPLExtractedArguments
-{
-    OUSTRING                        sReferrer       ;   // Value of extracted referrer argument
-    REFERENCE< XINPUTSTREAM >       xPostDataStream ;   // Value of extracted data stream for posting
-
-    sal_Int32                       nValidMask      ;   // state of extracted arguments
-
-    /*ATTENTION
-
-        Bug: #83884#
-                If no copy-ctor exist - we crash under linux !??
-                Why?? ... I HAVE ABSOLUT NO IDEA!
-                May be its a compiler bug ... or a problem of stack- or memory- handling ...
-     */
-
-    tIMPLExtractedArguments()
-    {
-        sReferrer       =   OUSTRING()                  ;
-        xPostDataStream =   REFERENCE< XINPUTSTREAM >() ;
-        nValidMask      =   0                           ;
-    }
-
-    tIMPLExtractedArguments( const tIMPLExtractedArguments& rCopy )
-        :   sReferrer       (   rCopy.sReferrer         )
-        ,   xPostDataStream (   rCopy.xPostDataStream   )
-        ,   nValidMask      (   rCopy.nValidMask        )
-    {
-    }
-
-    ~tIMPLExtractedArguments()
-    {
-    }
-};
-
 /*-************************************************************************************************************//**
     Use OMultiTypeInterfaceContainerHelperVar-template to create new class to get a container
     to combine string values with listeners.
@@ -218,15 +167,15 @@ struct tIMPLExtractedArguments
 
 struct IMPL_hashCode
 {
-    size_t operator()(const OUSTRING& sString) const
+    size_t operator()(const ::rtl::OUString& sString) const
     {
         return sString.hashCode();
     }
 };
 
-typedef OMULTITYPEINTERFACECONTAINERHELPERVAR<  OUSTRING                  ,
-                                                IMPL_hashCode             ,
-                                                std::equal_to< OUSTRING > > IMPL_ListenerContainerHelper ;
+typedef ::cppu::OMultiTypeInterfaceContainerHelperVar<  ::rtl::OUString                     ,
+                                                        IMPL_hashCode                       ,
+                                                        ::std::equal_to< ::rtl::OUString > > IMPL_ListenerContainerHelper ;
 
 /*-************************************************************************************************************//**
     @short          -
@@ -238,13 +187,13 @@ typedef OMULTITYPEINTERFACECONTAINERHELPERVAR<  OUSTRING                  ,
                     XPluginInstanceNotifySink
     @base           OWeakObject
 
-    @devstatus      deprecated
+    @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
-                                      public XDISPATCH                  ,
-                                    public XPLUGININSTANCENOTIFYSINK    ,
-                                    public OWEAKOBJECT
+class OPlugInFrameDispatcher    :   public css::frame::XDispatchProvider            ,
+                                      public css::frame::XDispatch                  ,
+                                    public css::mozilla::XPluginInstanceNotifySink  ,
+                                    public ::cppu::OWeakObject
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -252,9 +201,10 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
 
     public:
 
-        static void AddArguments( const SEQUENCE < PROPERTYVALUE > & rArgs, const ::rtl::OUString& rURL );
-        static const SEQUENCE < PROPERTYVALUE >* GetArguments( const ::rtl::OUString& rURL );
-        static void RemoveArguments( const ::rtl::OUString& rURL );
+        static void                                                     AddArguments    (   const   css::uno::Sequence< css::beans::PropertyValue > &   rArgs   ,
+                                                                                            const   ::rtl::OUString&                                    rURL    );
+        static const css::uno::Sequence < css::beans::PropertyValue >*  GetArguments    (   const   ::rtl::OUString&                                    rURL    );
+        static void                                                     RemoveArguments (   const   ::rtl::OUString&                                    rURL    );
 
         //---------------------------------------------------------------------------------------------------------
         //  constructor / destructor
@@ -272,10 +222,10 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-         OPlugInFrameDispatcher(    const   REFERENCE< XMULTISERVICEFACTORY >&      xFactory    ,
-                                        MUTEX&                                  aMutex      ,
-                                const   REFERENCE< XPLUGININSTANCE >&           xOwner      ,
-                                const   REFERENCE< XPLUGININSTANCEPEER >&       xPlugInDLL  );
+         OPlugInFrameDispatcher(    const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory    ,
+                                        ::osl::Mutex&                                               aMutex      ,
+                                const   css::uno::Reference< css::mozilla::XPluginInstance >&       xOwner      ,
+                                const   css::uno::Reference< css::mozilla::XPluginInstancePeer >&   xPlugInDLL  );
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -302,9 +252,9 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    We return a NULL-reference.
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XDISPATCH > SAL_CALL queryDispatch(  const   UNOURL&     aURL                ,
-                                                                const   OUSTRING&   sTargetFrameName    ,
-                                                                        sal_Int32   nSearchFlags        ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(    const   css::util::URL&     aURL                ,
+                                                                                        const   ::rtl::OUString&    sTargetFrameName    ,
+                                                                                                sal_Int32           nSearchFlags        ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      search dispatcher for more the one URL
@@ -319,7 +269,7 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    An empty list is returned.
         *//*-*****************************************************************************************************/
 
-        virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( RUNTIMEEXCEPTION );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& seqDescripts ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XDispatch
@@ -339,8 +289,8 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL dispatch( const   UNOURL&                     aURL        ,
-                                        const   SEQUENCE< PROPERTYVALUE >&  seqArguments) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL dispatch( const   css::util::URL&                                     aURL        ,
+                                        const   css::uno::Sequence< css::beans::PropertyValue >&    seqArguments) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      add listener for state events
@@ -355,8 +305,8 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL addStatusListener(    const   REFERENCE< XSTATUSLISTENER >&   xControl,
-                                                    const   UNOURL&                         aURL    ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL addStatusListener(    const   css::uno::Reference< css::frame::XStatusListener >& xControl,
+                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException );
 
         /*-****************************************************************************************************//**
             @short      remove listener
@@ -371,8 +321,8 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL removeStatusListener( const   REFERENCE< XSTATUSLISTENER >&   xControl,
-                                                    const   UNOURL&                         aURL    ) throw( RUNTIMEEXCEPTION );
+        virtual void SAL_CALL removeStatusListener( const   css::uno::Reference< css::frame::XStatusListener >& xControl,
+                                                    const   css::util::URL&                                     aURL    ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XPluginInstanceNotifySink
@@ -391,7 +341,7 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void SAL_CALL notifyURL( const OUSTRING& sURL ) throw( RUNTIMEEXCEPTION );
+        void SAL_CALL notifyURL( const ::rtl::OUString& sURL ) throw( css::uno::RuntimeException );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -433,22 +383,8 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        tIMPLExtractedArguments impl_extractArguments( const SEQUENCE< PROPERTYVALUE >& seqArguments );
-
-        /*-****************************************************************************************************//**
-            @short      -
-            @descr      -
-
-            @seealso    -
-
-            @param      -
-            @return     -
-
-            @onerror    -
-        *//*-*****************************************************************************************************/
-
-        void impl_sendStatusEvent(  const   OUSTRING&   sURL                ,
-                                            sal_Bool    bLoadingSuccessful  );
+        void impl_sendStatusEvent(  const   ::rtl::OUString&    sURL                ,
+                                            sal_Bool            bLoadingSuccessful  );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -473,21 +409,21 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
 
     private:
 
-         sal_Bool impldbg_checkParameter_OPlugInFrameDispatcherCtor (   const   REFERENCE< XMULTISERVICEFACTORY >&      xFactory            ,
-                                                                                MUTEX&                                  aMutex              ,
-                                                                        const   REFERENCE< XPLUGININSTANCE >&           xOwner              ,
-                                                                        const   REFERENCE< XPLUGININSTANCEPEER >&       xPlugInDLL          );
-        sal_Bool impldbg_checkParameter_queryDispatch               (   const   UNOURL&                                 aURL                ,
-                                                                        const   OUSTRING&                               sTargetFrameName    ,
-                                                                                sal_Int32                               nSearchFlags        );
-        sal_Bool impldbg_checkParameter_queryDispatches             (   const   SEQUENCE< DISPATCHDESCRIPTOR >&         seqDescriptor       );
-        sal_Bool impldbg_checkParameter_dispatch                    (   const   UNOURL&                                 aURL                ,
-                                                                        const   SEQUENCE< PROPERTYVALUE >&              seqArguments        );
-        sal_Bool impldbg_checkParameter_addStatusListener           (   const   REFERENCE< XSTATUSLISTENER >&           xControl            ,
-                                                                        const   UNOURL&                                 aURL                );
-        sal_Bool impldbg_checkParameter_removeStatusListener        (   const   REFERENCE< XSTATUSLISTENER >&           xControl            ,
-                                                                        const   UNOURL&                                 aURL                );
-        sal_Bool impldbg_checkParameter_notifyURL                   (   const   OUSTRING&                               sURL                );
+         static sal_Bool impldbg_checkParameter_OPlugInFrameDispatcherCtor  (   const   css::uno::Reference< css::lang::XMultiServiceFactory >&     xFactory            ,
+                                                                                        ::osl::Mutex&                                               aMutex              ,
+                                                                                const   css::uno::Reference< css::mozilla::XPluginInstance >&       xOwner              ,
+                                                                                const   css::uno::Reference< css::mozilla::XPluginInstancePeer >&   xPlugInDLL          );
+        static sal_Bool impldbg_checkParameter_queryDispatch                (   const   css::util::URL&                                             aURL                ,
+                                                                                const   ::rtl::OUString&                                            sTargetFrameName    ,
+                                                                                        sal_Int32                                                   nSearchFlags        );
+        static sal_Bool impldbg_checkParameter_queryDispatches              (   const   css::uno::Sequence< css::frame::DispatchDescriptor >&       seqDescriptor       );
+        static sal_Bool impldbg_checkParameter_dispatch                     (   const   css::util::URL&                                             aURL                ,
+                                                                                const   css::uno::Sequence< css::beans::PropertyValue >&            seqArguments        );
+        static sal_Bool impldbg_checkParameter_addStatusListener            (   const   css::uno::Reference< css::frame::XStatusListener >&         xControl            ,
+                                                                                const   css::util::URL&                                             aURL                );
+        static sal_Bool impldbg_checkParameter_removeStatusListener         (   const   css::uno::Reference< css::frame::XStatusListener >&         xControl            ,
+                                                                                const   css::util::URL&                                             aURL                );
+        static sal_Bool impldbg_checkParameter_notifyURL                    (   const   ::rtl::OUString&                                            sURL                );
 
     #endif  // #ifdef ENABLE_ASSERTIONS
 
@@ -498,12 +434,12 @@ class OPlugInFrameDispatcher    :   public XDISPATCHPROVIDER            ,
 
     private:
 
-        REFERENCE< XMULTISERVICEFACTORY >       m_xFactory              ;   /// servicemanager to create uno services
-        MUTEX&                                  m_aMutex                ;   /// shared mutex with owner instance
-        WEAKREFERENCE< XPLUGININSTANCE >        m_xOwnerWeak            ;   /// weakreference to owner (Don't use a hard reference. Owner can't delete us then!)
-        REFERENCE< XPLUGININSTANCEPEER >        m_xPlugInDLL            ;   /// Interface for communication with browser.
-        OUSTRING                                m_sTargetFrameName      ;   /// We need it as target for get/postURL.
-        IMPL_ListenerContainerHelper            m_aListenerContainer    ;   /// Container to combine listeners and URLs.
+        css::uno::Reference< css::lang::XMultiServiceFactory >          m_xFactory              ;   /// servicemanager to create uno services
+        ::osl::Mutex&                                                   m_aMutex                ;   /// shared mutex with owner instance
+        css::uno::WeakReference< css::mozilla::XPluginInstance >        m_xOwnerWeak            ;   /// weakreference to owner (Don't use a hard reference. Owner can't delete us then!)
+        css::uno::Reference< css::mozilla::XPluginInstancePeer >        m_xPlugInDLL            ;   /// Interface for communication with browser.
+        ::rtl::OUString                                                 m_sTargetFrameName      ;   /// We need it as target for get/postURL.
+        IMPL_ListenerContainerHelper                                    m_aListenerContainer    ;   /// Container to combine listeners and URLs.
 
 };      //  class OPlugInFrameDispatcher
 

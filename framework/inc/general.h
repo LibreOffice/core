@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: registertemp.cxx,v $
+ *  $RCSfile: general.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:14 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,65 +58,36 @@
  *
  *
  ************************************************************************/
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#define __FRAMEWORK_GENERAL_H_
+
 //_________________________________________________________________________________________________________________
-//  includes of my own project
+//  includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
-#include <macros/registration.hxx>
+#ifndef __FRAMEWORK_MACROS_GENERIC_HXX_
+#include <macros/generic.hxx>
 #endif
 
-/*=================================================================================================================
-    Add new include and new register info to for new services.
+//_________________________________________________________________________________________________________________
+//  namespace
+//_________________________________________________________________________________________________________________
 
-    Example:
+namespace framework{
 
-        #ifndef __YOUR_SERVICE_1_HXX_
-        #include <service1.hxx>
-        #endif
+//_________________________________________________________________________________________________________________
+//  some general defines for whole project
+//_________________________________________________________________________________________________________________
 
-        #ifndef __YOUR_SERVICE_2_HXX_
-        #include <service2.hxx>
-        #endif
+#define FEATUREDESCRIPTOR_LOADSTATE                         DECLARE_ASCII("loadFinishedOrCancelled")    /// status event mapped from load event of frame loader
 
-        COMPONENTGETIMPLEMENTATIONENVIRONMENT
+//_________________________________________________________________________________________________________________
+//  some general types for whole project
+//_________________________________________________________________________________________________________________
 
-        COMPONENTWRITEINFO  (   COMPONENTINFO( Service1 )
-                                 COMPONENTINFO( Service2 )
-                            )
+#define css                                                 ::com::sun::star                            /// used for short namespaces!
 
-        COMPONENTGETFACTORY (   IFFACTORIE( Service1 )
-                                 else
-                                IFFACTORIE( Service2 )
-                             )
-=================================================================================================================*/
+}       //  namespace framework
 
-#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <services/mediatypedetectionhelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
-#include <services/frameloaderfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-#include <services/filterfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-#include <services/typedetection.hxx>
-#endif
-
-COMPONENTGETIMPLEMENTATIONENVIRONMENT
-
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::TypeDetection               )
-                    )
-
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
-                    )
+#endif  //  #ifndef __FRAMEWORK_GENERAL_H_

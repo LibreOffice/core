@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: mediatypedetectionhelper.cxx,v $
+ *  $RCSfile: resetableguard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,8 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <services/mediatypedetectionhelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_H_
-#include <services.h>
-#endif
-
-#ifndef _INETTYPE_HXX
-#include <svtools/inettype.hxx>
-#endif
-
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
+#include <threadhelp/resetableguard.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -84,106 +72,101 @@
 //_________________________________________________________________________________________________________________
 
 //_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  const
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
 
-namespace framework
-{
+namespace framework{
 
-using namespace ::com::sun::star        ;
-using namespace ::rtl                   ;
+using namespace ::osl   ;
 
 //_________________________________________________________________________________________________________________
-//  declarations
+//  non exported const
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  non exported declarations
+//_________________________________________________________________________________________________________________
+
+//_________________________________________________________________________________________________________________
+//  definitions
 //_________________________________________________________________________________________________________________
 
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-MediaTypeDetectionHelper::MediaTypeDetectionHelper( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-    : m_xFactory( xFactory )
+ResetableGuard::ResetableGuard( Mutex* pMutex )
+    :   m_pMutex    ( pMutex    )
+    ,   m_bLocked   ( sal_False )
 {
+    lock();
+}
+
+//*****************************************************************************************************************
+//  constructor
+//*****************************************************************************************************************
+ResetableGuard::ResetableGuard( Mutex& rMutex )
+    :   m_pMutex    ( &rMutex   )
+    ,   m_bLocked   ( sal_False )
+{
+    lock();
 }
 
 //*****************************************************************************************************************
 //  destructor
 //*****************************************************************************************************************
-MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
+ResetableGuard::~ResetableGuard()
 {
+    unlock();
 }
 
 //*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
+//  public method
 //*****************************************************************************************************************
-
-DEFINE_XINTERFACE_3                 (   MediaTypeDetectionHelper
-                                        , OWeakObject
-                                        , DIRECT_INTERFACE( lang::XTypeProvider )
-                                        , DIRECT_INTERFACE( lang::XServiceInfo  )
-                                        , DIRECT_INTERFACE( util::XStringMapping )
-                                    )
-
-DEFINE_XTYPEPROVIDER_3              (   MediaTypeDetectionHelper
-                                        , lang::XTypeProvider
-                                        , lang::XServiceInfo
-                                        , util::XStringMapping
-                                    )
-
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
-                                        , SERVICENAME_MEDIATYPEDETECTIONHELPER
-                                        , IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER
-                                    )
-
-//*****************************************************************************************************************
-//   XStringMapping
-//*****************************************************************************************************************
-
-//virtual
-sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
-        uno::Sequence< OUString >& rSeq )
-        throw(uno::RuntimeException)
+void ResetableGuard::lock()
 {
-    sal_Bool bModified = sal_False;
-    for( sal_Int32 i = rSeq.getLength(); i--; )
+    if( m_bLocked == sal_False )
     {
-
-        OUString& rUrl = rSeq[i];
-        INetContentType eType = INetContentTypes::GetContentTypeFromURL( rUrl );
-
-        UniString aType( INetContentTypes::GetContentType( eType ) );
-        if( aType.Len() )
-        {
-            rUrl = aType;
-            bModified = sal_True;
-        }
+        m_bLocked = m_pMutex->acquire();
     }
-    return bModified;
 }
 
-}   // namespace framework
-/*-------------------------------------------------------------------------
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+void ResetableGuard::unlock()
+{
+    if( m_bLocked == sal_True )
+    {
+        m_bLocked = !(m_pMutex->release());
+    }
+}
 
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/01/26 06:42:14  as
-    change baeh_services/BAEHSERVICES to services/SERVICES
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool ResetableGuard::tryToLock()
+{
+    if( m_bLocked == sal_False )
+    {
+        m_bLocked = m_pMutex->tryToAcquire();
+    }
+    return m_bLocked;
+}
 
-    Revision 1.2  2000/11/28 14:45:30  as
-    #79040# new version of new type detection
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool ResetableGuard::isLocked() const
+{
+    return m_bLocked;
+}
 
-    Revision 1.1  2000/11/23 14:52:10  as
-    #79040# implement new filter detection - use TF_FILTER to enable
-
-    Revision 1.1.1.1  2000/09/18 16:29:23  hr
-    initial import
-
-    Revision 1.4  2000/09/15 15:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/09/01 13:05:41  as
-    new targeting, new macros, new dispatching ...
-
-    Revision 1.2  2000/07/31 10:13:38  iha
-    typemapping
-
-
--------------------------------------------------------------------------*/
+}   //  namespace framework

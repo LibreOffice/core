@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: registertemp.cxx,v $
+ *  $RCSfile: registerlogindialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2001-03-29 13:17:14 $
  *
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 //_________________________________________________________________________________________________________________
 //  includes of my own project
 //_________________________________________________________________________________________________________________
@@ -91,32 +92,14 @@
                              )
 =================================================================================================================*/
 
-#ifndef __FRAMEWORK_SERVICES_MEDIATYPEDETECTIONHELPER_HXX_
-#include <services/mediatypedetectionhelper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
-#include <services/frameloaderfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_FILTERFACTORY_HXX_
-#include <services/filterfactory.hxx>
-#endif
-
-#ifndef __FRAMEWORK_SERVICES_TYPEDETECTION_HXX_
-#include <services/typedetection.hxx>
+#ifndef __FRAMEWORK_SERVICES_LOGINDIALOG_HXX_
+#include <services/logindialog.hxx>
 #endif
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
-COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
-                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
-                        COMPONENTINFO( ::framework::FilterFactory               )
-                        COMPONENTINFO( ::framework::TypeDetection               )
+COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::LoginDialog )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
-                        IFFACTORY( ::framework::FrameLoaderFactory              )   else
-                        IFFACTORY( ::framework::FilterFactory                   )   else
-                        IFFACTORY( ::framework::TypeDetection                   )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::LoginDialog     )
                     )

@@ -1,10 +1,10 @@
 fr	framework	:	svtools NULL
 fr	framework								usr1	-	all	fr_mkout NULL
 fr	framework\source\unotypes				nmake	-	all	fr_unotypes NULL
-fr	framework\source\classes				nmake	-	all	fr_classes fr_unotypes NULL
-fr	framework\source\helper					nmake	-	all	fr_helper fr_unotypes NULL
-fr	framework\source\services				nmake	-	all	fr_services fr_unotypes NULL
-fr	framework\source\logindialog			nmake	-	all	fr_logindialog fr_unotypes NULL
-fr	framework\source\application			nmake	-	all	fr_application fr_unotypes NULL
-fr	framework\source\register				nmake	-	all	fr_register fr_unotypes NULL
-fr	framework\util							nmake	-	all	fr_util fr_application fr_classes fr_helper fr_register fr_services NULL
+fr	framework\source\threadhelp				nmake	-	all	fr_threadhelp NULL
+fr	framework\source\classes				nmake	-	all	fr_classes fr_unotypes fr_threadhelp NULL
+fr	framework\source\helper					nmake	-	all	fr_helper fr_unotypes fr_threadhelp NULL
+fr	framework\source\services				nmake	-	all	fr_services fr_unotypes fr_threadhelp NULL
+fr	framework\source\application			nmake	-	all	fr_application fr_unotypes fr_threadhelp NULL
+fr	framework\source\register				nmake	-	all	fr_register fr_unotypes fr_threadhelp NULL
+fr	framework\util							nmake	-	all	fr_util fr_threadhelp fr_application fr_classes fr_helper fr_register fr_services NULL

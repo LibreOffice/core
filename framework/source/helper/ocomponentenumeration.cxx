@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentenumeration.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
+ *  last change: $Author: as $ $Date: 2001-03-29 13:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ sal_Bool SAL_CALL OComponentEnumeration::hasMoreElements() throw( RuntimeExcepti
     // => The last one is getLength() - 1!
     // m_nPosition's current value is the position for the next element, which will be return, if user call "nextElement()"
     // => We have more elements if current position less then the length of the list!
-    return ( m_nPosition < m_seqComponents.getLength() );
+    return ( m_nPosition < (sal_uInt32)(m_seqComponents.getLength()) );
 }
 
 //*****************************************************************************************************************
