@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-06 07:57:13 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 17:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
     Text[ greek ] = "¡ÔËﬁÍÂıÛÁ";   \
     Text[ korean ] = "Ï†ÄÏû•";  \
     Text[ turkish ] = "Kaydet"; \
-    Text[ catalan ] = "Guardar";
+    Text[ catalan ] = "Desa";
 
 TabPage RID_SFXPAGE_SAVE
 {
@@ -113,7 +113,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Cargar";
         Text[ finnish ] = "Load";
         Text[ italian ] = "Carica";
-        Text[ danish ] = "Load";
+        Text[ danish ] = "IndlÊs";
         Text[ swedish ] = "Ladda";
         Text[ polish ] = "£aduj";
         Text[ portuguese_brazilian ] = "Load";
@@ -123,7 +123,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "ËºâÂÖ•";
         Text[ turkish ] = "Load";
         Text[ arabic ] = "Load";
-        Text[ catalan ] = "Load";
+        Text[ catalan ] = "Carrega";
     };
     CheckBox CB_LOAD_SETTINGS
     {
@@ -140,7 +140,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Cargar la configuraciÛn de usuario al cargar el documento";
         Text[ finnish ] = "Load user-defined settings with the document";
         Text[ italian ] = "Carica le impostazioni personalizzate insieme al documento";
-        Text[ danish ] = "Load user-defined settings with the document";
+        Text[ danish ] = "IndlÊs ~brugerspecifikke indstillinger sammen med dokumentet";
         Text[ swedish ] = "Ladda ~anv‰ndarspecifika inst‰llningar med dokumentet";
         Text[ polish ] = "£aduj dokument ≥πcznie z ustawieniami indywidualnymi";
         Text[ portuguese_brazilian ] = "Load user-defined settings with the document";
@@ -178,7 +178,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "¡ÔËﬁÍÂıÛÁ";
         Text[ korean ] = "Ï†ÄÏû•";
         Text[ turkish ] = "Kaydet";
-        Text[ catalan ] = "Guardar";
+        Text[ catalan ] = "Desa";
     };
     CheckBox BTN_DOCINFO
     {
@@ -354,7 +354,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Optimar el tamaÒo del formato XML (sin pretty printing)";
         Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
         Text[ italian ] = "Ottimizza dimensioni del formato XML (senza stampa elegante)";
-        Text[ danish ] = "Size optimization for XML files (no pretty printing)";
+        Text[ danish ] = "Optimer st¯rrelse for XML-format (uden Pretty Printing)";
         Text[ swedish ] = "Storleksoptimering fˆr XML-format (utan pretty printing)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
         Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
@@ -379,7 +379,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ french ] = "Enregistrement relatif des URL" ;
         Text [ dutch ] = "URLs relatief opslaan" ;
         Text [ swedish ] = "Spara URL:er relativt" ;
-        Text [ danish ] = "Gem URLs relativt" ;
+        Text [ danish ] = "Gem URL'er relativt" ;
         Text [ portuguese_brazilian ] = "URLs relativ speichern" ;
         Text [ portuguese ] = "Guardar URLs relativamente" ;
         Text[ chinese_simplified ] = "Â≠òÁõòÁõ∏ÂØπÁöÑURLÂú∞ÂùÄ";
@@ -464,7 +464,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ french ] = "Format de fichier standard";
         Text[ spanish ] = "Formato de archivo predeterminado";
         Text[ italian ] = "Formato file standard";
-        Text[ danish ] = "Standard file format";
+        Text[ danish ] = "Standardfilformat";
         Text[ swedish ] = "Standardfilformat";
         Text[ polish ] = "Domyúlny format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
@@ -492,7 +492,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Tipo de documento";
         Text[ finnish ] = "~Asiakirjan tyyppi";
         Text[ italian ] = "Tipo documento";
-        Text[ danish ] = "Document";
+        Text[ danish ] = "~Dokumenttype";
         Text[ swedish ] = "~Dokumenttyp";
         Text[ polish ] = "Typ dokumentu";
         Text[ portuguese_brazilian ] = "Document";
@@ -519,7 +519,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ spanish ] = "Guardar siempre como";
         Text[ finnish ] = "~Vakiotallennusmuoto";
         Text[ italian ] = "Salva sempre come";
-        Text[ danish ] = "File formats";
+        Text[ danish ] = "Gem altid ~som";
         Text[ swedish ] = "Spara alltid s~om";
         Text[ polish ] = "Zapisuj zawsze jako";
         Text[ portuguese_brazilian ] = "File formats";
@@ -787,7 +787,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text[ spanish ] = "El uso de \"%1\" como formato de archivo predeterminado puede causar una pÈrdida de informaciÛn.\n";
         Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ italian ] = "L'uso di \"%1\" quale formato standard puÚ causare la perdita di dati.\n";
-        Text[ danish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ danish ] = "\"Brug af \"\"%1\"\" som standard-filformat kan medf¯re datatab.\n\"";
         Text[ swedish ] = "Att anv‰nda \"%1\" som standardfilformat kan leda till att information gÂr fˆrlorad.\n";
         Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
         Text[ portuguese_brazilian ] = "Saving with \"%1\" may cause information loss.\n";
