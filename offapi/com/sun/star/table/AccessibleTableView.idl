@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 10:00:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ module com {  module sun {  module star {  module table {
     tables in the edit view of a spreadsheet.
     @since #107627#
 */
-service AccessibleTableView
+published service AccessibleTableView
 {
     /** This interface gives access to any table cell that is contained in
           a table fragment that is at least partially visible. A table fragment
