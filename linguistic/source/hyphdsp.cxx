@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-29 14:15:07 $
+ *  last change: $Author: tl $ $Date: 2001-05-16 10:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,11 @@ Reference< XHyphenatedWord > SAL_CALL
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
+
+                    // if language is not supported by the services
+                    // remove it from the list.
+                    if (rHyph.is()  &&  !rHyph->hasLocale( rLocale ))
+                        aSvcList.Remove( nLanguage );
                 }
             }
         }   // if (xEntry.is())
@@ -489,6 +494,11 @@ Reference< XHyphenatedWord > SAL_CALL
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
+
+                    // if language is not supported by the services
+                    // remove it from the list.
+                    if (rHyph.is()  &&  !rHyph->hasLocale( rLocale ))
+                        aSvcList.Remove( nLanguage );
                 }
             }
         }   // if (xEntry.is())
@@ -592,6 +602,11 @@ Reference< XPossibleHyphens > SAL_CALL
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
+
+                    // if language is not supported by the services
+                    // remove it from the list.
+                    if (rHyph.is()  &&  !rHyph->hasLocale( rLocale ))
+                        aSvcList.Remove( nLanguage );
                 }
             }
         }   // if (xEntry.is())

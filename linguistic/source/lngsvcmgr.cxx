@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 14:29:18 $
+ *  last change: $Author: tl $ $Date: 2001-05-16 10:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ static Sequence< Locale > GetAvailLocales(
                 DBG_ERROR( "interface not supported by service" );
         }
 
-        // build returnes sequence
+        // build return sequence
         INT16 nLanguages = aLanguages.Count();
         aRes.realloc( nLanguages );
         Locale *pRes = aRes.getArray();
@@ -270,8 +270,7 @@ static void SetAvailableServiceLists( LinguDispatcher &rDispatcher,
 void SetAvailableCfgServiceLists( LinguDispatcher &rDispatcher,
         const SvcInfoArray &rAvailSvcs )
 {
-    String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    SvtLinguConfigItem aCfg( aRoot );
+    SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
 
     // get list of nodenames to look at for their service list
     const char *pEntryName = 0;
@@ -885,25 +884,88 @@ void LngSvcMgr::GetAvailableThesSvcs_Impl()
 
 void LngSvcMgr::SetCfgServiceLists( SpellCheckerDispatcher &rSpellDsp )
 {
-    if (!pAvailSpellSvcs)
-        GetAvailableSpellSvcs_Impl();
-    SetAvailableCfgServiceLists( rSpellDsp, *pAvailSpellSvcs );
+    SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager/SpellCheckerList" ) );
+
+    Sequence< OUString > aNames( aCfg.GetNodeNames( OUString() ) );
+    const OUString *pNames = aNames.getConstArray();
+    INT32 nLen = aNames.getLength();
+
+    Sequence< Any > aValues( aCfg.GetProperties( aNames ) );
+    if (nLen  &&  nLen == aValues.getLength())
+    {
+        const Any *pValues = aValues.getConstArray();
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            Sequence< OUString > aSvcImplNames;
+            if (pValues[i] >>= aSvcImplNames)
+            {
+#ifdef DEBUG
+                INT32 nSvcs = aSvcImplNames.getLength();
+                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+#endif
+                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(pNames[i]) ) );
+                rSpellDsp.SetServiceList( aLocale, aSvcImplNames );
+            }
+        }
+    }
 }
 
 
 void LngSvcMgr::SetCfgServiceLists( HyphenatorDispatcher &rHyphDsp )
 {
-    if (!pAvailHyphSvcs)
-        GetAvailableHyphSvcs_Impl();
-    SetAvailableCfgServiceLists( rHyphDsp, *pAvailHyphSvcs );
+    SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager/HyphenatorList" ) );
+
+    Sequence< OUString > aNames( aCfg.GetNodeNames( OUString() ) );
+    const OUString *pNames = aNames.getConstArray();
+    INT32 nLen = aNames.getLength();
+
+    Sequence< Any > aValues( aCfg.GetProperties( aNames ) );
+    if (nLen  &&  nLen == aValues.getLength())
+    {
+        Sequence< OUString > aSvcImplNames( 1 );
+        OUString *pSvcImplNames = aSvcImplNames.getArray();
+
+        const Any *pValues = aValues.getConstArray();
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            OUString aSvcImplName;
+            if (pValues[i] >>= aSvcImplName)
+            {
+                pSvcImplNames[0] = aSvcImplName;
+                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(pNames[i]) ) );
+                rHyphDsp.SetServiceList( aLocale, aSvcImplNames );
+            }
+        }
+    }
 }
 
 
 void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 {
-    if (!pAvailThesSvcs)
-        GetAvailableThesSvcs_Impl();
-    SetAvailableCfgServiceLists( rThesDsp, *pAvailThesSvcs );
+    SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager/ThesaurusList" ) );
+
+    Sequence< OUString > aNames( aCfg.GetNodeNames( OUString() ) );
+    const OUString *pNames = aNames.getConstArray();
+    INT32 nLen = aNames.getLength();
+
+    Sequence< Any > aValues( aCfg.GetProperties( aNames ) );
+    if (nLen  &&  nLen == aValues.getLength())
+    {
+        const Any *pValues = aValues.getConstArray();
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            Sequence< OUString > aSvcImplNames;
+            if (pValues[i] >>= aSvcImplNames)
+            {
+#ifdef DEBUG
+                INT32 nSvcs = aSvcImplNames.getLength();
+                const OUString *pSvcImplNames = aSvcImplNames.getConstArray();
+#endif
+                Locale aLocale( CreateLocale( ConvertIsoStringToLanguage(pNames[i]) ) );
+                rThesDsp.SetServiceList( aLocale, aSvcImplNames );
+            }
+        }
+    }
 }
 
 
@@ -1176,8 +1238,7 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
 
     if (pDsp  &&  aLocales.getLength())
     {
-        String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-        SvtLinguConfigItem aCfg( aRoot );
+        SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
 
         INT32 nLen = aLocales.getLength();
         const Locale *pLocale = aLocales.getConstArray();
@@ -1314,8 +1375,7 @@ Sequence< OUString > SAL_CALL
     INT16 nLanguage = LocaleToLanguage( rLocale );
     String aCfgLocale( ConvertLanguageToIsoString( nLanguage ) );
 
-    String aRoot( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
-    SvtLinguConfigItem aCfg( aRoot );
+    SvtLinguConfigItem aCfg( A2OU( "Office.Linguistic/ServiceManager" ) );
 
     Sequence< Any > aValues;
     Sequence< OUString > aName( 1 );

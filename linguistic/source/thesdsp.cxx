@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdsp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 16:11:15 $
+ *  last change: $Author: tl $ $Date: 2001-05-16 10:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,25 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+///////////////////////////////////////////////////////////////////////////
+
+static BOOL SvcListHasLanguage(
+        const Sequence< Reference< XThesaurus > > &rRefs,
+        const Locale &rLocale )
+{
+    BOOL bHasLanguage = FALSE;
+
+    const Reference< XThesaurus > *pRef = rRefs.getConstArray();
+    INT32 nLen = rRefs.getLength();
+    for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
+    {
+        if (pRef[k].is())
+            bHasLanguage = pRef[k]->hasLocale( rLocale );
+    }
+
+    return bHasLanguage;
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -242,6 +261,14 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
+                }
+
+                // if language is not supported by any of the services
+                // remove it from the list.
+                if (i == nLen  &&  aMeanings.getLength() == 0)
+                {
+                    if (!SvcListHasLanguage( pEntry->aSvcRefs, rLocale ))
+                        aSvcList.Remove( nLanguage );
                 }
             }
         }

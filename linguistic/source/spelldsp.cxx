@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelldsp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-27 16:10:29 $
+ *  last change: $Author: tl $ $Date: 2001-05-16 10:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,25 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
+
+///////////////////////////////////////////////////////////////////////////
+
+static BOOL SvcListHasLanguage(
+        const Sequence< Reference< XSpellChecker1 > > &rRefs,
+        INT16 nLanguage )
+{
+    BOOL bHasLanguage = FALSE;
+
+    const Reference< XSpellChecker1 > *pRef = rRefs.getConstArray();
+    INT32 nLen = rRefs.getLength();
+    for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
+    {
+        if (pRef[k].is())
+            bHasLanguage = pRef[k]->hasLanguage( nLanguage );
+    }
+
+    return bHasLanguage;
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -400,6 +419,14 @@ BOOL SpellCheckerDispatcher::isValid_Impl(
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
                 }
+
+                // if language is not supported by any of the services
+                // remove it from the list.
+                if (i == nLen)
+                {
+                    if (!SvcListHasLanguage( pEntry->aSvc1Refs, nLanguage ))
+                        aSvcList.Remove( nLanguage );
+                }
             }
         }
 
@@ -637,6 +664,14 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
 
                     pEntry->aFlags.nLastTriedSvcIndex = i;
                     ++i;
+                }
+
+                // if language is not supported by any of the services
+                // remove it from the list.
+                if (i == nLen)
+                {
+                    if (!SvcListHasLanguage( pEntry->aSvc1Refs, nLanguage ))
+                        aSvcList.Remove( nLanguage );
                 }
             }
         }
