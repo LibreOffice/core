@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:19:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
 #endif
+#ifndef _SVX_BOLNITEM_HXX
+#include <svx/bolnitem.hxx>
+#endif
 #ifndef _SVX_ROTMODIT_HXX
 #include <svx/rotmodit.hxx>
 #endif
@@ -137,7 +140,9 @@
 
 // PALETTE record - color information =========================================
 
-sal_Int32 lcl_xestyle_GetColorDistance( const Color& rColor1, const Color& rColor2 )
+namespace {
+
+sal_Int32 lclGetColorDistance( const Color& rColor1, const Color& rColor2 )
 {
     sal_Int32 nDist = rColor1.GetRed() - rColor2.GetRed();
     nDist *= nDist * 77;
@@ -148,7 +153,7 @@ sal_Int32 lcl_xestyle_GetColorDistance( const Color& rColor1, const Color& rColo
     return nDist;
 }
 
-void lcl_xestyle_SetMixedColor( Color& rDest, const Color& rSrc1, const Color& rSrc2 )
+void lclSetMixedColor( Color& rDest, const Color& rSrc1, const Color& rSrc2 )
 {
     rDest.SetRed( static_cast< sal_uInt8 >( (static_cast< sal_uInt16 >( rSrc1.GetRed() ) + rSrc2.GetRed()) / 2 ) );
     rDest.SetGreen( static_cast< sal_uInt8 >( (static_cast< sal_uInt16 >( rSrc1.GetGreen() ) + rSrc2.GetGreen()) / 2 ) );
@@ -160,8 +165,12 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
     return rStrm << rColor.GetRed() << rColor.GetGreen() << rColor.GetBlue() << sal_uInt8( 0 );
 }
 
+} // namespace
+
 
 // additional classes for color reduction -------------------------------------
+
+namespace {
 
 /** Maps a color list index to a palette index.
     @descr  Used to remap the color ID data vector from list indexes to palette indexes. */
@@ -186,6 +195,8 @@ struct XclNearest
 
 typedef ::std::vector< XclRemap >   XclRemapVec;
 typedef ::std::vector< XclNearest > XclNearestVec;
+
+} // namespace
 
 
 // ----------------------------------------------------------------------------
@@ -375,15 +386,15 @@ void XclExpPalette::GetMixedColors(
     Color aColorArr[ 5 ];
     aColorArr[ 0 ] = maPalette[ nIndex1 ].maColor;
     aColorArr[ 4 ] = maPalette[ nIndex2 ].maColor;
-    lcl_xestyle_SetMixedColor( aColorArr[ 2 ], aColorArr[ 0 ], aColorArr[ 4 ] );
-    lcl_xestyle_SetMixedColor( aColorArr[ 1 ], aColorArr[ 0 ], aColorArr[ 2 ] );
-    lcl_xestyle_SetMixedColor( aColorArr[ 3 ], aColorArr[ 2 ], aColorArr[ 4 ] );
+    lclSetMixedColor( aColorArr[ 2 ], aColorArr[ 0 ], aColorArr[ 4 ] );
+    lclSetMixedColor( aColorArr[ 1 ], aColorArr[ 0 ], aColorArr[ 2 ] );
+    lclSetMixedColor( aColorArr[ 3 ], aColorArr[ 2 ], aColorArr[ 4 ] );
 
     sal_Int32 nMinDist = nFirstDist;
     sal_uInt32 nMinIndex = 0;
     for( sal_uInt32 nCnt = 1; nCnt < 4; ++nCnt )
     {
-        sal_Int32 nDist = lcl_xestyle_GetColorDistance( aForeColor, aColorArr[ nCnt ] );
+        sal_Int32 nDist = lclGetColorDistance( aForeColor, aColorArr[ nCnt ] );
         if( nDist < nMinDist )
         {
             nMinDist = nDist;
@@ -525,7 +536,7 @@ sal_uInt32 XclExpPalette::GetNearestListColor( const Color& rColor, sal_uInt32 n
             XclListColor* pCheck = maColorList.GetObject( nIx );
             if( pCheck )
             {
-                sal_Int32 nDist = lcl_xestyle_GetColorDistance( rColor, pCheck->GetColor() );
+                sal_Int32 nDist = lclGetColorDistance( rColor, pCheck->GetColor() );
                 if( nDist < nMinD )
                 {
                     nFound = nIx;
@@ -554,7 +565,7 @@ sal_Int32 XclExpPalette::GetNearestPaletteColor(
     {
         if( !bDefaultOnly || aIter->mbDefault )
         {
-            sal_Int32 nCurrDist = lcl_xestyle_GetColorDistance( rColor, aIter->maColor );
+            sal_Int32 nCurrDist = lclGetColorDistance( rColor, aIter->maColor );
             if( nCurrDist < nDist )
             {
                 rnIndex = aIter - maPalette.begin();
@@ -575,7 +586,7 @@ sal_Int32 XclExpPalette::GetNearPaletteColors(
     for( XclPaletteColorVec::const_iterator aIter = maPalette.begin(), aEnd = maPalette.end();
             aIter != aEnd; ++aIter )
     {
-        sal_Int32 nCurrDist = lcl_xestyle_GetColorDistance( rColor, aIter->maColor );
+        sal_Int32 nCurrDist = lclGetColorDistance( rColor, aIter->maColor );
         if( nCurrDist < nDist1 )
         {
             rnSecond = rnFirst;
@@ -1042,10 +1053,9 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
             mnIndent = static_cast< sal_uInt8 >( ::std::max( ::std::min( nTmpIndent, 0x0FL ), 0L ) );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
-            // rotation
-            sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
-            mnRotation = XclTools::GetXclRotation( nScRot );
-            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
+            // shrink to fit
+            mbShrink = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT, BOOL );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_SHRINKTOFIT, bStyle );
 
             // CTL text direction
             switch( GETITEMVALUE( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR, SvxFrameDirection ) )
@@ -1073,16 +1083,33 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
             }
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
-            // orientation
-            switch( GETITEMVALUE( rItemSet, SvxOrientationItem, ATTR_ORIENTATION, SvxCellOrientation ) )
+            // stacked/rotation
+            BOOL bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, BOOL );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_STACKED, bStyle );
+            if( bStacked )
             {
-                case SVX_ORIENTATION_STANDARD:  meOrient = xlTextOrientNoRot;       break;
-                case SVX_ORIENTATION_TOPBOTTOM: meOrient = xlTextOrient90cw;        break;
-                case SVX_ORIENTATION_BOTTOMTOP: meOrient = xlTextOrient90ccw;       break;
-                case SVX_ORIENTATION_STACKED:   meOrient = xlTextOrientTopBottom;   break;
-                default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown text orientation" );
+                if( eBiff < xlBiff8 )
+                    meOrient = xlTextOrientTopBottom;
+                else
+                    mnRotation = EXC_ROT_STACKED;
             }
-            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ORIENTATION, bStyle );
+            else
+            {
+                // rotation
+                sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
+                if( eBiff < xlBiff8 )
+                {
+                    if( (4500 < nScRot) && (nScRot < 13500) )
+                        meOrient = xlTextOrient90ccw;
+                    else if( (22500 < nScRot) && (nScRot < 31500) )
+                        meOrient = xlTextOrient90cw;
+                    else
+                        meOrient = xlTextOrientNoRot;
+                }
+                else
+                    mnRotation = XclTools::GetXclRotation( nScRot );
+                bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
+            }
         }
 
         case xlBiff3:   // attributes new in BIFF3
@@ -1110,22 +1137,6 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
 
         break;
         default:    DBG_ERROR_BIFF();
-    }
-
-    // combine orientation/rotation
-    switch( meOrient )
-    {
-        case xlTextOrientTopBottom: mnRotation = EXC_XF8_STACKED;   break;
-        // #i4378# old calc doc's without real rotation do not have an ATTR_ROTATE_VALUE set
-        case xlTextOrient90ccw:     mnRotation = 90;                break;
-        case xlTextOrient90cw:      mnRotation = 180;               break;
-    }
-    if( meOrient == xlTextOrientNoRot )
-    {
-        if( (45 < mnRotation) && (mnRotation <= 90) )
-            meOrient = xlTextOrient90ccw;
-        else if( (135 < mnRotation) && (mnRotation <= 180) )
-            meOrient = xlTextOrient90cw;
     }
 
     return bUsed;
@@ -1166,6 +1177,7 @@ void XclExpCellAlign::FillToXF8( sal_uInt16& rnAlign, sal_uInt16& rnMiscAttrib )
     ::insert_value( rnAlign, meVerAlign, 4, 3 );
     ::insert_value( rnAlign, mnRotation, 8, 8 );
     ::insert_value( rnMiscAttrib, mnIndent, 0, 4 );
+    ::set_flag( rnMiscAttrib, EXC_XF8_SHRINK, mbShrink );
     ::insert_value( rnMiscAttrib, meTextDir, 6, 2 );
 }
 
@@ -1176,12 +1188,14 @@ XclExpCellBorder::XclExpCellBorder() :
     mnLeftColorId(   XclExpPalette::GetColorIdFromIndex( mnLeftColor ) ),
     mnRightColorId(  XclExpPalette::GetColorIdFromIndex( mnRightColor ) ),
     mnTopColorId(    XclExpPalette::GetColorIdFromIndex( mnTopColor ) ),
-    mnBottomColorId( XclExpPalette::GetColorIdFromIndex( mnBottomColor ) )
+    mnBottomColorId( XclExpPalette::GetColorIdFromIndex( mnBottomColor ) ),
+    mnDiagColorId(   XclExpPalette::GetColorIdFromIndex( mnDiagColor ) )
 {
 }
 
+namespace {
 
-void lcl_xestyle_GetBorderLine(
+void lclGetBorderLine(
         sal_uInt8& rnXclLine, sal_uInt32& rnColorId,
         const SvxBorderLine* pLine, XclExpPalette& rPalette, XclBiff eBiff )
 {
@@ -1211,15 +1225,64 @@ void lcl_xestyle_GetBorderLine(
         XclExpPalette::GetColorIdFromIndex( 0 );
 }
 
+} // namespace
 
 bool XclExpCellBorder::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff, bool bStyle )
 {
-    const SvxBoxItem& rBoxItem = GETITEM( rItemSet, SvxBoxItem, ATTR_BORDER );
-    lcl_xestyle_GetBorderLine( mnLeftLine,   mnLeftColorId,   rBoxItem.GetLeft(),   rPalette, eBiff );
-    lcl_xestyle_GetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
-    lcl_xestyle_GetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
-    lcl_xestyle_GetBorderLine( mnBottomLine, mnBottomColorId, rBoxItem.GetBottom(), rPalette, eBiff );
-    return ScfTools::CheckItem( rItemSet, ATTR_BORDER, bStyle );
+    bool bUsed = false;
+
+    switch( eBiff )
+    {
+        // ALL 'case's - run through!
+
+        case xlBiff8:   // attributes new in BIFF8
+        {
+            const SvxLineItem& rTLBRItem = GETITEM( rItemSet, SvxLineItem, ATTR_BORDER_TLBR );
+            sal_uInt8 nTLBRLine;
+            sal_uInt32 nTLBRColorId;
+            lclGetBorderLine( nTLBRLine, nTLBRColorId, rTLBRItem.GetLine(), rPalette, eBiff );
+            mbDiagTLtoBR = (nTLBRLine != EXC_LINE_NONE);
+
+            const SvxLineItem& rBLTRItem = GETITEM( rItemSet, SvxLineItem, ATTR_BORDER_BLTR );
+            sal_uInt8 nBLTRLine;
+            sal_uInt32 nBLTRColorId;
+            lclGetBorderLine( nBLTRLine, nBLTRColorId, rBLTRItem.GetLine(), rPalette, eBiff );
+            mbDiagBLtoTR = (nBLTRLine != EXC_LINE_NONE);
+
+            if( ::HasPriority( rTLBRItem.GetLine(), rBLTRItem.GetLine() ) )
+            {
+                mnDiagLine = nTLBRLine;
+                mnDiagColorId = nTLBRColorId;
+            }
+            else
+            {
+                mnDiagLine = nBLTRLine;
+                mnDiagColorId = nBLTRColorId;
+            }
+
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER_TLBR, bStyle ) ||
+                     ScfTools::CheckItem( rItemSet, ATTR_BORDER_BLTR, bStyle );
+        }
+
+        case xlBiff7:
+        case xlBiff5:
+        case xlBiff4:
+        case xlBiff3:
+        case xlBiff2:
+        {
+            const SvxBoxItem& rBoxItem = GETITEM( rItemSet, SvxBoxItem, ATTR_BORDER );
+            lclGetBorderLine( mnLeftLine,   mnLeftColorId,   rBoxItem.GetLeft(),   rPalette, eBiff );
+            lclGetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
+            lclGetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
+            lclGetBorderLine( mnBottomLine, mnBottomColorId, rBoxItem.GetBottom(), rPalette, eBiff );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_BORDER, bStyle );
+        }
+
+        break;
+        default:    DBG_ERROR_BIFF();
+    }
+
+    return bUsed;
 }
 
 void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
@@ -1228,6 +1291,7 @@ void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
     mnRightColor  = rPalette.GetColorIndex( mnRightColorId );
     mnTopColor    = rPalette.GetColorIndex( mnTopColorId );
     mnBottomColor = rPalette.GetColorIndex( mnBottomColorId );
+    mnDiagColor   = rPalette.GetColorIndex( mnDiagColorId );
 }
 
 #if 0
@@ -1274,6 +1338,10 @@ void XclExpCellBorder::FillToXF8( sal_uInt32& rnBorder1, sal_uInt32& rnBorder2 )
     ::insert_value( rnBorder1, mnRightColor,  23, 7 );
     ::insert_value( rnBorder2, mnTopColor,     0, 7 );
     ::insert_value( rnBorder2, mnBottomColor,  7, 7 );
+    ::insert_value( rnBorder2, mnDiagColor,   14, 7 );
+    ::insert_value( rnBorder2, mnDiagLine,    21, 4 );
+    ::set_flag( rnBorder1, EXC_XF_DIAGONAL_TL_TO_BR, mbDiagTLtoBR );
+    ::set_flag( rnBorder1, EXC_XF_DIAGONAL_BL_TO_TR, mbDiagBLtoTR );
 }
 
 void XclExpCellBorder::FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) const
@@ -1653,13 +1721,16 @@ const sal_uInt32 EXC_XFLIST_NOTFOUND    = LIST_ENTRY_NOTFOUND;
 const sal_uInt32 EXC_XFLIST_HARDLIMIT   = 256 * 1024;
 
 
-bool lcl_xestyle_IsBuiltInStyle( const String& rStyleName )
+namespace {
+
+bool lclIsBuiltInStyle( const String& rStyleName )
 {
     return
         XclTools::IsBuiltInStyleName( rStyleName ) ||
         XclTools::IsCondFormatStyleName( rStyleName );
 }
 
+} // namespace
 
 XclExpXFBuffer::XclExpXFBuffer( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -1886,7 +1957,7 @@ void XclExpXFBuffer::InsertUserStyles()
 {
     SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
-        if( pStyleSheet->IsUserDefined() && !lcl_xestyle_IsBuiltInStyle( pStyleSheet->GetName() ) )
+        if( pStyleSheet->IsUserDefined() && !lclIsBuiltInStyle( pStyleSheet->GetName() ) )
             InsertStyleXF( *pStyleSheet );
 }
 
