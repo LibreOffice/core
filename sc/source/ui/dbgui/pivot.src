@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "Çë½èÖúÊó±ê½«ÓÒÒ³ÖĞµÄ×Ö¶ÎÍÏÀ­µ½Ï£ÍûµÄÇøÓò¡£";
         Text[ russian ] = "Ñ ïîìîùüş ìûøè ïåğåòÿíèòå ïîëå ñ ïğàâîé ñòîğîíû â æåëàåìóş îáëàñòü.";
         Text[ polish ] = "Przesuñ pola z prawej strony za pomoc¹ myszy do ¿¹danego obszaru.";
-        Text[ japanese ] = "‰E‘¤‚É‚ ‚éÌ¨°ÙÄŞÎŞÀİ‚ğŠó–]‚Ì—Ìˆæ‚ÉÄŞ×¯¸Ş‚µ‚Ä‰º‚³‚¢B";
+        Text[ japanese ] = "‰E‘¤‚É‚ ‚éÌ¨°ÙÄŞÎŞÀİ‚ğŠó–]‚Ì—Ìˆæ‚ÉÄŞ×¯¸Ş‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = "½Ğ±z¨Ï¥Î·Æ¹«Áä±NÄæ¦ì©ì©Ô¨ì¥k­¶ªº¥ô·N¤@­Ó°Ï°ì¡C";
         Text[ arabic ] = "ÇÓÍÈ ÇáÍŞæá ãä ÇáÕİÍÉ Çáíãäì ÈæÇÓØÉ ÇáãÇæÓ Åáì ÇáãäÇØŞ ÇáÊí ÊÑÛÈ İíåÇ.";
         Text[ greek ] = "Óıñåôå ìå ôï ğïíôßêé ôá ğåäßá ôçò äåîéÜò óåëßäáò óôéò ğåñéï÷İò ğïõ åğéèõìåßôå.";
@@ -545,7 +545,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "ÖĞ¼äÖµ - ";
         Text[ russian ] = "Ñğåäíåå çíà÷åíèå -  ";
         Text[ polish ] = "Œrednia wartoœæ -  ";
-        Text[ japanese ] = "•½‹Ï’l- ";
+        Text[ japanese ] = "•½‹Ï’l - ";
         Text[ chinese_traditional ] = "¤¤¶¡­È - ";
         Text[ arabic ] = "Ü Average";
         Text[ greek ] = "Ìİóç ôéìŞ - ";
@@ -571,7 +571,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "×î´ó  - ";
         Text[ russian ] = "Ìàêñèìóì -  ";
         Text[ polish ] = "Max -   ";
-        Text[ japanese ] = "Å‘å’l- ";
+        Text[ japanese ] = "Å‘å’l - ";
         Text[ chinese_traditional ] = "³Ì¤j  - ";
         Text[ arabic ] = "- Max";
         Text[ greek ] = "Max - ";
@@ -597,7 +597,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "×îĞ¡ - ";
         Text[ russian ] = "Ìèíèìóì -  ";
         Text[ polish ] = "Min -   ";
-        Text[ japanese ] = "Å¬’l- ";
+        Text[ japanese ] = "Å¬’l - ";
         Text[ chinese_traditional ] = "³Ì¤p - ";
         Text[ arabic ] = "- Min";
         Text[ greek ] = "Min - ";
@@ -623,7 +623,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "³Ë»ı- ";
         Text[ russian ] = "Ïğîèçâåäåíèå -  ";
         Text[ polish ] = "Produkt -  ";
-        Text[ japanese ] = "Ï- ";
+        Text[ japanese ] = "Ï - ";
         Text[ chinese_traditional ] = "­¼¿n- ";
         Text[ arabic ] = "- Product";
         Text[ greek ] = "Product - ";
@@ -770,7 +770,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ chinese_simplified ] = "Êı¾İÖúÀí";
     Text[ russian ] = "Ñâîäíàÿ òàáëèöà";
     Text[ polish ] = "Pilot danych";
-    Text[ japanese ] = "ÃŞ°À Êß²Û¯Ä";
+    Text[ japanese ] = "ÃŞ°ÀÊß²Û¯Ä";
     Text[ chinese_traditional ] = "¸ê®Æ§U²z";
     Text[ arabic ] = "ãÑÔÏ ÇáÈíÇäÇÊ";
     Text [ spanish ] = "Piloto de datos" ;
