@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:30:31 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_simplified ] = "³£Ήζ±ν΄ο(~E)";
         Text[ russian ] = "Πεγσλÿπνξε βϋπΰζενθε";
         Text[ polish ] = "Wyra~Ώenie regularne";
-        Text[ japanese ] = "ά²ΩΔή¶°Δή•¶(~E)";
+        Text[ japanese ] = "³‹K•\\»(~E)";
         Text[ chinese_traditional ] = "±`³WªνΉF(~E)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
@@ -1512,7 +1512,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ russian ] = "Πεησλόςΰς τθλόςπΰ β";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
         Text[ japanese ] = "Μ¨Ωΐ‹‰Κ‚Μ“\\‚θ•t‚―ζ(~R)";
-        Text[ chinese_traditional ] = "±NΏzΏοµ²ªG½Ζ»s¨μ(~R)...";
+        Text[ chinese_traditional ] = "½Ζ»sΏzΏοµ²ªG¨μ(~R)...";
         Text[ arabic ] = "δΣΞ δΚνΜΙ ΗαΚΥένΙ Εαμ";
         Text[ greek ] = "Αντιγραφή αποτελεσμάτων στο";
         Text[ korean ] = "ΗΚΕΝ°α°ϊ΅΅Γβ·Β";
@@ -1866,7 +1866,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_simplified ] = "³£Ήζ±ν΄ο(~E)";
         Text[ russian ] = "Πεγσλÿπνξε βϋπΰζενθε";
         Text[ polish ] = "Wyra~Ώenie regularne";
-        Text[ japanese ] = "ά²ΩΔή¶°Δή•¶(~E)";
+        Text[ japanese ] = "³‹K•\\»(~E)";
         Text[ chinese_traditional ] = "±`³WªνΉF(~E)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
@@ -3321,7 +3321,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_simplified ] = "³£Ήζ±ν΄ο(~R)";
         Text[ russian ] = "Πεγσλÿπνξε βϋπΰζενθε";
         Text[ polish ] = "WyraΏenie regularne";
-        Text[ japanese ] = "ά²ΩΔή¶°Δή•¶(~R)";
+        Text[ japanese ] = "³‹K•\\»(~R)";
         Text[ chinese_traditional ] = "±`³WªνΉF(~R)";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική πα~ράσταση";
