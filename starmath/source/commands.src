@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:24:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,7 +1116,7 @@ Menu RID_COMMANDMENU
             Text [ danish ] = "Mængdeoperationer" ;
             Text [ italian ] = "Operazioni degli insiemi" ;
             Text [ spanish ] = "~Operaciones de conjuntos" ;
-            Text [ french ] = "O~pérations quantitatives" ;
+            Text [ french ] = "O~pérateurs d'ensemble" ;
             Text [ dutch ] = "~Definities" ;
             Text [ portuguese ] = "~Operações de conjuntos" ;
             SubMenu = Menu
@@ -2362,6 +2362,7 @@ Menu RID_COMMANDMENU
         };
     };
 };
+
 
 
 
