@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 11:39:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,6 +378,7 @@ void OTableController::Execute(sal_uInt16 _nId)
             doSaveDoc(sal_True);
             break;
         case ID_BROWSER_SAVEDOC:
+            static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->SaveCurRow();
             doSaveDoc(sal_False);
             break;
         case ID_BROWSER_CUT:
@@ -1596,8 +1597,16 @@ void OTableController::alterColumns()
             OFieldDescription* pField = (*aIter)->GetActFieldDescr();
             if(!pField)
                 continue;
+
             if(pField->IsPrimaryKey() && !xKeyColumns->hasByName(pField->GetName()))
-            {
+            {// new primary key column inserted which isn't already in the columns selection
+                dropKey();
+                Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
+                appendKey(xKeySup);
+                break;
+            }
+            else if(xKeyColumns->hasByName(pField->GetName()))
+            {// found a column which is in the primary key but is marked not to be
                 dropKey();
                 Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
                 appendKey(xKeySup);
@@ -1606,7 +1615,7 @@ void OTableController::alterColumns()
         }
     }
     else
-    {
+    {// no primary key available so we check if we should create one
         Reference<XKeysSupplier> xKeySup(m_xTable,UNO_QUERY);
         appendKey(xKeySup);
     }
