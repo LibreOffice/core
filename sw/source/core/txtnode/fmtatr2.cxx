@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:35:07 $
+ *  last change: $Author: os $ $Date: 2002-10-16 09:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,10 +576,13 @@ BOOL SwFmtRuby::PutValue( const com::sun::star::uno::Any& rVal,
         }
         break;
         case MID_RUBY_CHARSTYLE:
-            DBG_ERROR("char style name must be handled outside")
-//          bRet = rVal >>= sTmp;
-//          sCharFmtName <<= SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT );
-        //no break;
+        {
+            OUString sTmp;
+            bRet = rVal >>= sTmp;
+            if(bRet)
+                sCharFmtName = SwStyleNameMapper::GetUIName(sTmp, GET_POOLID_CHRFMT );
+        }
+        break;
         default:
             bRet = FALSE;
     }
