@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_draw.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:18:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "%PRODUCTNAME Draw"
 en-US = "%PRODUCTNAME Draw"
 
 [STR_DESC_MODULE_PRG_DRAW]
-de = "Das vektororientierte %PRODUCTNAME Draw hilft Ihnen beim Erzeugen von Illustrationen, Logos und Plakaten ."
-en-US = "Use the vector-oriented %PRODUCTNAME Draw to create illustrations, logos and posters."
+de = "Zeichnungen erstellen und bearbeiten, Flussdiagramme entwerfen und Logos kreieren mit %PRODUCTNAME Draw."
+en-US = "Create and edit drawings, flow charts, and logos by using %PRODUCTNAME Draw."
 
 [STR_NAME_MODULE_PRG_DRAW_BIN]
 de = "Programmodul"
@@ -73,7 +73,7 @@ en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_DRAW_BIN]
 de = "Die Anwendung %PRODUCTNAME Draw"
-en-US = "The %PRODUCTNAME Draw Application"
+en-US = "The application %PRODUCTNAME Draw"
 
 [STR_NAME_MODULE_PRG_DRAW_HELP]
 de = "%PRODUCTNAME Draw Hilfe"
