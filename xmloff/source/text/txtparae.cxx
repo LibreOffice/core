@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-31 10:18:35 $
+ *  last change: $Author: mh $ $Date: 2001-02-01 19:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #endif
 
 #ifndef __SGI_STL_VECTOR
-#include <stl/vector>
+#include <vector>
 #endif
 
 
