@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-20 14:50:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,8 +246,8 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
         aOStm.Close();
     }
 
-    if ( EXIT_NOERROR != cExitCode )
-        raise( SIGABRT );
+//  if ( EXIT_NOERROR != cExitCode )
+//      raise( SIGABRT );
 
     return cExitCode;
 }
