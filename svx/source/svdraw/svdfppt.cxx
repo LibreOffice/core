@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-19 14:14:26 $
+ *  last change: $Author: sj $ $Date: 2002-12-10 17:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
+#endif
+#ifndef _STG_HXX
+#include <sot/stg.hxx>
 #endif
 
 #include "svdfppt.hxx"
@@ -1956,7 +1959,7 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
         DffRecordHeader aHd;
         rStCtrl >> aHd;
 
-        UINT32 nLen = aHd.nRecLen - 4;
+        sal_uInt32 nLen = aHd.nRecLen - 4;
         if ( (INT32)nLen > 0 )
         {
             char* pBuf = new char[ nLen ];
@@ -1989,7 +1992,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                     pDest->Seek( STREAM_SEEK_TO_END );
                     pDbgOut->Write( pDest->GetData(), pDest->Tell() );
                     pDest->Seek( STREAM_SEEK_TO_BEGIN );
-
                     delete pDbgOut;
                 }
             }
@@ -1998,62 +2000,72 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId, const Graphic& rGraf, co
                 delete pDest;
             else
             {
-                SvStorageRef xObjStor( new SvStorage( pDest, TRUE ) );
-                if ( xObjStor.Is() )
+                Storage* pObjStor = new Storage( *pDest, TRUE );
+                if ( pObjStor )
                 {
-                    SvStorageStreamRef xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ) );
-                    if ( xSrcTst.Is() )
+                    SvStorageRef xObjStor( new SvStorage( pObjStor ) );
+                    if ( xObjStor.Is() )
                     {
-                        BYTE aTestA[ 10 ];
-                        BOOL bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
-                        if ( !bGetItAsOle )
-                        {   // maybe there is a contentsstream in here
-                            xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Contents" ) ), STREAM_READWRITE | STREAM_NOCREATE );
-                            bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
-                        }
-                        if ( bGetItAsOle )
+                        if ( xObjStor->GetClassName() == SvGlobalName() )
                         {
-                            if ( nSvxMSDffOLEConvFlags )
+                            ClsId aId( pObjStor-> GetClassId() );
+                            xObjStor->SetClass( SvGlobalName( aId.n1, aId.n2, aId.n3, aId.n4, aId.n5, aId.n6, aId.n7, aId.n8, aId.n9, aId.n10, aId.n11 ),
+                                pObjStor->GetFormat(), pObjStor->GetUserName() );
+                        }
+                        SvStorageStreamRef xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "\1Ole" ) ) );
+                        if ( xSrcTst.Is() )
+                        {
+                            BYTE aTestA[ 10 ];
+                            BOOL bGetItAsOle = ( sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
+                            if ( !bGetItAsOle )
+                            {   // maybe there is a contentsstream in here
+                                xSrcTst = xObjStor->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Contents" ) ), STREAM_READWRITE | STREAM_NOCREATE );
+                                bGetItAsOle = ( xSrcTst.Is() && sizeof( aTestA ) == xSrcTst->Read( aTestA, sizeof( aTestA ) ) );
+                            }
+                            if ( bGetItAsOle )
                             {
-                                SvStorageRef xDestStorage( pOe->pShell->GetStorage() );
-                                SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
-                                            nSvxMSDffOLEConvFlags, *xObjStor,
-                                            *xDestStorage, rGraf ));
-                                if( xIPObj.Is() )
+                                if ( nSvxMSDffOLEConvFlags )
                                 {
-                                    String aNm( pOe->pShell->InsertObject( xIPObj, String() )->GetObjName() );
-                                    pRet = new SdrOle2Obj( xIPObj, aNm, rBoundRect, FALSE );
+                                    SvStorageRef xDestStorage( pOe->pShell->GetStorage() );
+                                    SvInPlaceObjectRef xIPObj( CheckForConvertToSOObj(
+                                                nSvxMSDffOLEConvFlags, *xObjStor,
+                                                *xDestStorage, rGraf ));
+                                    if( xIPObj.Is() )
+                                    {
+                                        String aNm( pOe->pShell->InsertObject( xIPObj, String() )->GetObjName() );
+                                        pRet = new SdrOle2Obj( xIPObj, aNm, rBoundRect, FALSE );
+                                    }
                                 }
-                            }
-                            if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
-                            {
-                                PPTConvertOCXControls aPPTConvertOCXControls( pOe->pShell, eAktPageKind );
-                                ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
-                                if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, FALSE ) )
-                                    pRet = GetSdrObjectFromXShape( xShape );
-                            }
-                            if ( !pRet )
-                            {
-                                GDIMetaFile aMtf;
-                                SvEmbeddedObject::MakeContentStream( xObjStor,
-                                            *lcl_GetMetaFileFromGrf_Impl( aGraphic, aMtf ) );
-
-                                SvInPlaceObjectRef xInplaceObj( ((SvFactory*)SvInPlaceObject::
-                                                        ClassFactory())->CreateAndLoad( xObjStor ) );
-                                if( xInplaceObj.Is() )
+                                if ( !pRet && ( pOe->nType == PPT_PST_ExControl ) )
                                 {
+                                    PPTConvertOCXControls aPPTConvertOCXControls( pOe->pShell, eAktPageKind );
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape;
+                                    if ( aPPTConvertOCXControls.ReadOCXStream( xObjStor, &xShape, FALSE ) )
+                                        pRet = GetSdrObjectFromXShape( xShape );
+                                }
+                                if ( !pRet )
+                                {
+                                    GDIMetaFile aMtf;
+                                    SvEmbeddedObject::MakeContentStream( xObjStor,
+                                                *lcl_GetMetaFileFromGrf_Impl( aGraphic, aMtf ) );
 
-                                    // VisArea am OutplaceObject setzen!!
-                                    Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
-                                        aGraphic.GetPrefMapMode(), MapMode( xInplaceObj->GetMapUnit() ) ) );
-                                    // modifiziert wollen wir nicht werden
+                                    SvInPlaceObjectRef xInplaceObj( ((SvFactory*)SvInPlaceObject::
+                                                            ClassFactory())->CreateAndLoad( xObjStor ) );
+                                    if( xInplaceObj.Is() )
+                                    {
 
-                                    xInplaceObj->EnableSetModified( FALSE );
-                                    xInplaceObj->SetVisArea( Rectangle( Point(), aSize ) );
-                                    xInplaceObj->EnableSetModified( TRUE );
+                                        // VisArea am OutplaceObject setzen!!
+                                        Size aSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
+                                            aGraphic.GetPrefMapMode(), MapMode( xInplaceObj->GetMapUnit() ) ) );
+                                        // modifiziert wollen wir nicht werden
 
-                                    String aNm( pOe->pShell->InsertObject( xInplaceObj, String() )->GetObjName() );
-                                    pRet = new SdrOle2Obj( xInplaceObj, aNm, rBoundRect, FALSE );
+                                        xInplaceObj->EnableSetModified( FALSE );
+                                        xInplaceObj->SetVisArea( Rectangle( Point(), aSize ) );
+                                        xInplaceObj->EnableSetModified( TRUE );
+
+                                        String aNm( pOe->pShell->InsertObject( xInplaceObj, String() )->GetObjName() );
+                                        pRet = new SdrOle2Obj( xInplaceObj, aNm, rBoundRect, FALSE );
+                                    }
                                 }
                             }
                         }
