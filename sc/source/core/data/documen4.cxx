@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-07 09:29:23 $
+ *  last change: $Author: dr $ $Date: 2001-02-13 17:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,9 +266,8 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
             if (rParam.aRefFormulaCell.GetCol()+k <= rParam.aRefFormulaEnd.GetCol())
             {
                 ScRefTripel aTrip;
-                aTrip.SetCol(rParam.aRefFormulaCell.GetCol()+k);
-                aTrip.SetRow(rParam.aRefFormulaCell.GetRow());
-                aTrip.SetTab(rParam.aRefFormulaCell.GetTab());
+                aTrip.Put( rParam.aRefFormulaCell.GetCol()+k, rParam.aRefFormulaCell.GetRow(),
+                    rParam.aRefFormulaCell.GetTab(), TRUE, FALSE, FALSE );
                 String aFString = aForString;
                 aFString += aTrip.GetRefString(this, nTab1);
                 aFString += ';';
@@ -276,12 +275,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 aFString += ';';
                 for (j = nRow1; j <= nRow2; j++)
                 {
-                    aTrip.SetCol(nCol1);
-                    aTrip.SetRow(j);
-                    aTrip.SetTab(nTab1);
-                    aTrip.SetRelCol(TRUE);
-                    aTrip.SetRelRow(TRUE);
-                    aTrip.SetRelTab(TRUE);
+                    aTrip.Put( nCol1, j, nTab1, FALSE, TRUE, TRUE );
                     String aFormula = aFString;
                     aFormula += aTrip.GetRefString(this, nTab1);
                     aFormula += ')';
@@ -309,9 +303,8 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
             if (rParam.aRefFormulaCell.GetRow()+k <= rParam.aRefFormulaEnd.GetRow())
             {
                 ScRefTripel aTrip;
-                aTrip.SetCol(rParam.aRefFormulaCell.GetCol());
-                aTrip.SetRow(rParam.aRefFormulaCell.GetRow()+k);
-                aTrip.SetTab(rParam.aRefFormulaCell.GetTab());
+                aTrip.Put( rParam.aRefFormulaCell.GetCol(), rParam.aRefFormulaCell.GetRow()+k,
+                    rParam.aRefFormulaCell.GetTab(), FALSE, TRUE, FALSE );
                 String aFString = aForString;
                 aFString += aTrip.GetRefString(this, nTab1);
                 aFString += ';';
@@ -319,12 +312,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
                 aFString += ';';
                 for (i = nCol1; i <= nCol2; i++)
                 {
-                    aTrip.SetCol(i);
-                    aTrip.SetRow(nRow1);
-                    aTrip.SetTab(nTab1);
-                    aTrip.SetRelCol(TRUE);
-                    aTrip.SetRelRow(TRUE);
-                    aTrip.SetRelTab(TRUE);
+                    aTrip.Put( i, nRow1, nTab1, TRUE, FALSE, TRUE );
                     String aFormula = aFString;
                     aFormula += aTrip.GetRefString(this, nTab1);
                     aFormula += ')';
@@ -356,23 +344,13 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
             aFString += ';';
             for (j = nRow1+1; j <= nRow2; j++)
             {
-                aTrip.SetCol(nCol1);
-                aTrip.SetRow(j);
-                aTrip.SetTab(nTab1);
-                aTrip.SetRelCol(FALSE);
-                aTrip.SetRelRow(TRUE);
-                aTrip.SetRelTab(TRUE);
+                aTrip.Put( nCol1, j, nTab1, FALSE, TRUE, TRUE );
                 String aFormula = aFString;
                 aFormula += aTrip.GetRefString(this, nTab1);
                 aFormula += ';';
                 aFormula += rParam.aRefRowCell.GetRefString(this, nTab1);
                 aFormula += ';';
-                aTrip.SetCol(i);
-                aTrip.SetRow(nRow1);
-                aTrip.SetTab(nTab1);
-                aTrip.SetRelCol(TRUE);
-                aTrip.SetRelRow(FALSE);
-                aTrip.SetRelTab(TRUE);
+                aTrip.Put( i, nRow1, nTab1, TRUE, FALSE, TRUE );
                 aFormula += aTrip.GetRefString(this, nTab1);
                 aFormula += ')';
                 ScFormulaCell* pCell = new ScFormulaCell(this, ScAddress( i, j, nTab1 ),
