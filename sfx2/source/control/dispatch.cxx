@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 11:17:04 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 09:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
+#include <com/sun/star/frame/XTask.hpp>
+#endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
@@ -1922,6 +1926,14 @@ sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp,
         for ( nNo = 0; pIFace && nNo<pIFace->GetObjectBarCount(); ++nNo )
         {
             sal_uInt16 nPos = pIFace->GetObjectBarPos(nNo);
+            if ( ( nPos & SFX_POSITION_MASK ) == 0 )
+            {
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XTask >
+                    xTask( pImp->pFrame->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                if ( !xTask.is() )
+                    continue;
+            }
+
             if ( bReadOnlyShell && !( nPos & SFX_VISIBILITY_READONLYDOC ) )
                 continue;
 
