@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 13:28:13 $
+ *  last change: $Author: dbo $ $Date: 2001-03-13 10:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,11 +190,24 @@ void assign( test::TestData & rData,
 }
 
 //==================================================================================================
+class TestDummy : public OWeakObject
+{
+public:
+    sal_Int32 getRefCount() const
+        { return m_refCount; }
+
+    virtual ~TestDummy()
+        { OSL_TRACE( "> scalar TestDummy dtor <\n" ); }
+};
+//==================================================================================================
 class Test_Impl : public cppu::WeakImplHelper1< XLanguageBindingTest >
 {
     test::TestData _aData, _aStructData;
 
 public:
+    sal_Int32 getRefCount() const
+        { return m_refCount; }
+
     virtual ~Test_Impl()
         { OSL_TRACE( "> scalar Test_Impl dtor <\n" ); }
 
@@ -383,39 +396,41 @@ test::TestData Test_Impl::getValues( sal_Bool& bBool, sal_Unicode& cChar, sal_In
 }
 
 //==================================================================================================
-sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
+static sal_Bool performTest(
+    const Reference< XLanguageBindingTest > & xLBT,
+    const Reference< XInterface > & xDummyInterface )
 {
-    OSL_ENSURE( xLBT.is(), "### no test interface!" );
-    if (xLBT.is())
+    OSL_ENSURE( xLBT.is() && xDummyInterface.is(), "### no test interfaces!" );
+    if (xLBT.is() && xDummyInterface.is())
     {
         // this data is never ever granted access to by calls other than equals(), assign()!
         test::TestData aData; // test against this data
-
-        Reference<XInterface > xI( *new OWeakObject() );
 
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 0x123456789abcdef0, 0xfedcba9876543210,
                 (float)17.0815, 3.1415926359, TestEnum_LOLA,
-                OUString::createFromAscii("dumdidum"), xI,
-                Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
-
-        OSL_ENSURE( aData.Any == xI, "### unexpected any!" );
-        OSL_ENSURE( !(aData.Any != xI), "### unexpected any!" );
-
+                OUString::createFromAscii("dumdidum"), xDummyInterface,
+                makeAny( xDummyInterface ) );
         aData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aData, 1 );
-        // aData complete
+        OSL_ENSURE( aData.Any == xDummyInterface, "### unexpected any!" );
+        OSL_ENSURE( !(aData.Any != xDummyInterface), "### unexpected any!" );
+
+        // aData complete ==> never touched again
         //================================================================================
 
         // this is a manually copy of aData for first setting...
+        test::TestData aSetData0( aData ); // copy ctor
+        // assignment
+        test::TestData aSetData1 = aSetData0;
+
         test::TestData aSetData;
-
         assign( (test::TestElement &)aSetData,
-                aData.Bool, aData.Char, aData.Byte, aData.Short, aData.UShort,
-                aData.Long, aData.ULong, aData.Hyper, aData.UHyper, aData.Float, aData.Double,
-                aData.Enum, aData.String, xI,
-                Any( &xI, ::getCppuType( (const Reference<XInterface > *)0 ) ) );
-
+                aSetData1.Bool, aSetData1.Char, aSetData1.Byte, aSetData1.Short, aSetData1.UShort,
+                aSetData1.Long, aSetData1.ULong, aSetData1.Hyper, aSetData1.UHyper,
+                aSetData1.Float, aSetData1.Double,
+                aSetData1.Enum, aSetData1.String, aSetData1.Interface, aSetData1.Any );
+        // switch over to new sequence allocation
         aSetData.Sequence = Sequence<test::TestElement >( (const test::TestElement *)&aSetData, 1 );
 
         xLBT->setValues(
@@ -577,42 +592,48 @@ sal_Bool raiseException( const Reference< XLanguageBindingTest > & xLBT )
 //==================================================================================================
 void test_di(void)
 {
-    Test_Impl * p = new Test_Impl();
-    Reference< XInterface > x( *p );
+    TestDummy * p = new TestDummy();
+    Reference< XInterface > xDummy( *p );
     {
-    Reference<XLanguageBindingTest > xOriginal( x, UNO_QUERY );
-    Reference<XLanguageBindingTest > xLBT;
-
-    uno_Environment * pCppEnv1 = 0;
-    uno_Environment * pCppEnv2 = 0;
-
-    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
-    uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
-
-    Mapping aMapping( pCppEnv1, pCppEnv2, OUString::createFromAscii("prot") );
-    aMapping.mapInterface( (void **)&xLBT, xOriginal.get(), ::getCppuType( &xOriginal ) );
-    OSL_ENSURE( aMapping.is(), "### cannot get mapping!" );
-
-    (*pCppEnv2->release)( pCppEnv2 );
-    (*pCppEnv1->release)( pCppEnv1 );
-
-    OSL_ASSERT( xLBT.is() );
-
-    if (xLBT.is() && performTest( xLBT ))
-    {
-        if (raiseException( xLBT ))
+        Test_Impl * p = new Test_Impl();
+        Reference< XInterface > x( *p );
         {
-            printf( "> dynamic invocation test succeeded!\n" );
+            Reference<XLanguageBindingTest > xOriginal( x, UNO_QUERY );
+            Reference<XLanguageBindingTest > xLBT;
+
+            uno_Environment * pCppEnv1 = 0;
+            uno_Environment * pCppEnv2 = 0;
+
+            OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+            uno_getEnvironment( &pCppEnv1, aCppEnvTypeName.pData, 0 );
+            uno_createEnvironment( &pCppEnv2, aCppEnvTypeName.pData, 0 ); // anonymous
+
+            Mapping aMapping( pCppEnv1, pCppEnv2, OUString( RTL_CONSTASCII_USTRINGPARAM("prot") ) );
+            aMapping.mapInterface( (void **)&xLBT, xOriginal.get(), ::getCppuType( &xOriginal ) );
+            OSL_ENSHURE( aMapping.is(), "### cannot get mapping!" );
+
+            (*pCppEnv2->release)( pCppEnv2 );
+            (*pCppEnv1->release)( pCppEnv1 );
+
+            OSL_ASSERT( xLBT.is() );
+
+            if (xLBT.is() && performTest( xLBT, xDummy ))
+            {
+                if (raiseException( xLBT ))
+                {
+                    printf( "> dynamic invocation test succeeded!\n" );
+                }
+                else
+                {
+                    printf( "> exception test failed!\n" );
+                }
+            }
+            else
+            {
+                printf( "> dynamic invocation test failed!\n" );
+            }
         }
-        else
-        {
-            printf( "> exception test failed!\n" );
-        }
+        OSL_ENSURE( p->getRefCount() == 1, "### test object ref count > 1 !" );
     }
-    else
-    {
-        printf( "> dynamic invocation test failed!\n" );
-    }
-    }
+    OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
 }
