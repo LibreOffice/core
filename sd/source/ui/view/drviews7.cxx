@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-13 15:18:58 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1481,128 +1481,10 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-
-    // #UndoRedo#
-    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
-    {
-        // #87227#
-        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-        sal_Bool bActivate(FALSE);
-
-        if(pUndoManager)
-        {
-            if(pUndoManager->GetUndoActionCount() != 0)
-            {
-                bActivate = TRUE;
-            }
-        }
-
-        if(bActivate)
-        {
-            // #87229# Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp(ResId(STR_UNDO, SFX_APP()->GetSfxResManager()));
-            aTmp += pUndoManager->GetUndoActionComment(0);
-            rSet.Put(SfxStringItem(SID_UNDO, aTmp));
-        }
-        else
-        {
-            rSet.DisableItem(SID_UNDO);
-        }
-    }
-    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
-    {
-        // #87227#
-        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-
-        if(pUndoManager)
-        {
-            sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
-            if(nCount)
-            {
-                // prepare list
-                List aStringList;
-
-                for(sal_uInt16 a(0); a < nCount; a++)
-                {
-                    // generate one String in list per undo step
-                    String* pInsertString = new String(pUndoManager->GetUndoActionComment(a));
-                    aStringList.Insert(pInsertString, LIST_APPEND);
-                }
-
-                // set item
-                rSet.Put(SfxStringListItem(SID_GETUNDOSTRINGS, &aStringList));
-
-                // delete Strings again
-                for(a = 0; a < nCount; a++)
-                    delete (String*)aStringList.GetObject(a);
-            }
-            else
-            {
-                rSet.DisableItem(SID_GETUNDOSTRINGS);
-            }
-        }
-    }
-    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
-    {
-        // #87227#
-        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-        sal_Bool bActivate(FALSE);
-
-        if(pUndoManager)
-        {
-            if(pUndoManager->GetRedoActionCount() != 0)
-            {
-                bActivate = TRUE;
-            }
-        }
-
-        if(bActivate)
-        {
-            // #87229# Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(ResId(STR_REDO, SFX_APP()->GetSfxResManager()));
-            aTmp += pUndoManager->GetRedoActionComment(0);
-            rSet.Put(SfxStringItem(SID_REDO, aTmp));
-        }
-        else
-        {
-            rSet.DisableItem(SID_REDO);
-        }
-    }
-    if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
-    {
-        // #87227#
-        SfxUndoManager* pUndoManager = ImpGetUndoManagerFromViewShell(*this);
-
-        if(pUndoManager)
-        {
-            sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
-            if(nCount)
-            {
-                // prepare list
-                List aStringList;
-
-                for(sal_uInt16 a(0); a < nCount; a++)
-                {
-                    // generate one String in list per undo step
-                    String* pInsertString = new String(pUndoManager->GetRedoActionComment(a));
-                    aStringList.Insert(pInsertString, LIST_APPEND);
-                }
-
-                // set item
-                rSet.Put(SfxStringListItem(SID_GETREDOSTRINGS, &aStringList));
-
-                // delete Strings again
-                for(a = 0; a < nCount; a++)
-                    delete (String*)aStringList.GetObject(a);
-            }
-            else
-            {
-                rSet.DisableItem(SID_GETREDOSTRINGS);
-            }
-        }
-    }
+    // #96090# moved SID_UNDO to SdViewShell::GetMenuState()
+    // #96090# moved SID_REDO to SdViewShell::GetMenuState()
+    // #96090# moved SID_GETUNDOSTRINGS to SdViewShell::GetMenuState()
+    // #96090# moved SID_GETREDOSTRINGS to SdViewShell::GetMenuState()
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Edit->Hyperlink
