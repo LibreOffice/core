@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialogUtil.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-02-26 09:53:00 $
+ *  last change:$Date: 2003-02-26 09:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ private boolean checkBox;
  * @param xMSF A MultiServiceFactory.
  * @param log The log writer.
  */
-public SecurityDialogUtils(XMultiServiceFactory xMSF, String btnName, boolean checkBox )
+public SecurityDialogUtil(XMultiServiceFactory xMSF, String btnName, boolean checkBox )
 {
     this.xMSF = xMSF;
     this.btnName = btnName;
