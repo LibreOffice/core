@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:49:41 $
+ *  last change: $Author: ama $ $Date: 2001-03-19 15:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,9 @@ public:
            void SetDiffFnt( const SfxItemSet* pSet );
     inline void SetFnt( const SvxFont &rFont, const BYTE nWhich )
         { bFntChg = bOrgChg = TRUE; aSub[nWhich].SetFnt( rFont ); }
-           void SetFnt( const SwAttrSet* pSet );
+
+    void SetFnt( const SwAttrHandler& rAH );
+
     inline void SetSwFnt( const SwFont &rFont )
             { *this = rFont; }
     inline const SvxFont &GetFnt( const BYTE nWhich ) const
