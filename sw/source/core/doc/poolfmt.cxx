@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:04:25 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,33 +234,12 @@ long lcl_GetRightMargin( SwDoc& rDoc )
 {
     // sorge dafuer, dass die Druckereinstellungen in die Standard-
     // Seitenvorlage uebernommen wurden.
-    long nLeft, nRight, nWidth;
-    const SfxPrinter* pPrt = rDoc.GetPrt( !rDoc.IsInReading() );
-    if( !pPrt )
-    {
-        SvxPaper ePaper;
-        if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
-        {
-            ePaper = SVX_PAPER_A4;
-            nLeft = nRight = 1134;  //2 Zentimeter
-        }
-        else
-        {
-            ePaper = SVX_PAPER_LEGAL;
-            nLeft = nRight = 1800;  // 1,25 Inch
-        }
-
-        nWidth = SvxPaperInfo::GetPaperSize( ePaper ).Width();
-    }
-    else
-    {
-        const SwFrmFmt& rPgDscFmt =
+    const SwFrmFmt& rPgDscFmt =
             const_cast<const SwDoc *>(&rDoc)->GetPageDesc( 0 ).GetMaster();
-        const SvxLRSpaceItem& rLR = rPgDscFmt.GetLRSpace();
-        nLeft = rLR.GetLeft();
-        nRight = rLR.GetRight();
-        nWidth = rPgDscFmt.GetFrmSize().GetWidth();
-    }
+    const SvxLRSpaceItem& rLR = rPgDscFmt.GetLRSpace();
+    const long nLeft = rLR.GetLeft();
+    const long nRight = rLR.GetRight();
+    const long nWidth = rPgDscFmt.GetFrmSize().GetWidth();
     return nWidth - nLeft - nRight;
 }
 
