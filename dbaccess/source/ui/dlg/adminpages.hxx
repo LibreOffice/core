@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-28 11:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@
 #ifndef _DBAUI_TABLETREE_HXX_
 #include "tabletree.hxx"
 #endif
-
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
 //.........................................................................
 namespace dbaui
 {
@@ -210,6 +212,7 @@ protected:
     void initializeHistory();
 
     sal_Bool isBrowseable(DATASOURCE_TYPE _eType) const;
+    StringBag getInstalledAdabasDBs(const String &_rPath);
 
     DECL_LINK(OnDatasourceTypeSelected, ListBox*);
     DECL_LINK(OnBrowseConnections, PushButton*);
@@ -270,7 +273,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
+    static sal_uInt16* getDetailIds();
 
 private:
     GroupBox            m_aFrame;
@@ -300,7 +303,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
+    static sal_uInt16* getDetailIds();
 
 private:
     FixedText           m_aDriverLabel;
@@ -324,7 +327,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
+    static sal_uInt16* getDetailIds();
 
 private:
     FixedLine           m_aSeparator1;
@@ -341,7 +344,7 @@ public:
     static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
+    static sal_uInt16* getDetailIds();
 
 private:
     FixedLine           m_aSeparator1;
@@ -359,7 +362,7 @@ public:
     virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
     /// get the SfxPoolItem ids used by this tab page
-    static sal_Int32* getDetailIds();
+    static sal_uInt16* getDetailIds();
 
 private:
     CheckBox    m_aHeader;
@@ -457,6 +460,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2000/11/22 15:44:05  oj
+ *  #80269# remove property long names
+ *
  *  Revision 1.10  2000/11/10 17:35:28  fs
  *  no parameter in checkItems anymore - did not make sense in the context it is called / some small bug fixes
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 02:04:35 $
+ *  last change: $Author: oj $ $Date: 2000-11-28 11:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,25 +379,25 @@ protected:
 
 protected:
     /// set the state of a data source specified by position
-    void                setEntryState(sal_Int32 _nPos, DatasourceState _eState);
+    void                setEntryState(sal_uInt16 _nPos, DatasourceState _eState);
     /// get the state of a data source specified by position
-    DatasourceState     getEntryState(sal_Int32 _nPos) const;
+    DatasourceState     getEntryState(sal_uInt16 _nPos) const;
     /// get the resource id for imgages to be used for the given data source state
-    sal_Int32           getImageId(DatasourceState _eState);
+    sal_uInt16          getImageId(DatasourceState _eState);
     /** get the position of an entry given by name, excluding the entries marked as deleted
         (with respect to these deleted entries the names are unique)
     */
-    sal_Int32           getValidEntryPos(const String& _rName);
+    sal_uInt16          getValidEntryPos(const String& _rName);
     /// get the position of an (deleted) entry for a given access key
-    sal_Int32           getDeletedEntryPos(sal_Int32 _nAccessKey);
+    sal_uInt16          getDeletedEntryPos(sal_Int32 _nAccessKey);
 
     /// get the access key for a entry given by position
-    sal_Int32           getAccessKey(sal_Int32 _nPos) const;
+    sal_Int32           getAccessKey(sal_uInt16 _nPos) const;
     /// set the access key for a entry given by position, to be used for entry which are in state DELETED only
-    void                setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey);
+    void                setAccessKey(sal_uInt16 _nPos, sal_Int32 _nAccessKey);
 
     /// remove an entry (given by pos) from the list, auto-select the next one
-    void                implDeleted(sal_Int32 _nPos);
+    void                implDeleted(sal_uInt16 _nPos);
 
 public:
     ODatasourceSelector(Window* _pParent, const ResId& _rResId);
@@ -436,7 +436,7 @@ public:
     void        deleted(sal_Int32 _nAccessKey);
 
     /// insert the name of an existent data source
-    sal_Int32   insert(const String& _rName);
+    sal_uInt16  insert(const String& _rName);
 
     /// insert the name of a daza source which is newly created
     void        insertNew(const String& _rName);
@@ -503,7 +503,7 @@ private:
     typedef StringSet::const_iterator       ConstStringSetIterator;
     StringSet               m_aValidDatasources;        /// names of all data sources except the currently selected one
 
-    DECLARE_STL_MAP(sal_Int32, ::rtl::OUString, ::std::less< sal_Int32 >, MapInt2String);
+    DECLARE_STL_MAP(sal_uInt16, ::rtl::OUString, ::std::less< sal_uInt16 >, MapInt2String);
     MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
     MapInt2String           m_aIndirectPropTranslator;  /// translating property id's into names (indirect properties of a data source)
 
@@ -580,7 +580,7 @@ protected:
     ::rtl::OUString getUniqueName() const;
 
     /// translate the given value into an SfxPoolItem, put this into the given set under the given id
-    void        implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const ::com::sun::star::uno::Any& _rValue);
+    void        implTranslateProperty(SfxItemSet& _rSet, sal_uInt16  _nId, const ::com::sun::star::uno::Any& _rValue);
     /// translate the given SfxPoolItem into an <type scope="com.sun.star.Any">uno</type>
     ::com::sun::star::uno::Any
                 implTranslateProperty(const SfxPoolItem* _pItem);
@@ -606,7 +606,7 @@ protected:
         The type is calculated from the DSN item in the given set.<br/>
         The usual items such as DSN, NAME etc. are not returned, only the special ones not common to all types.
     */
-    const sal_Int32*    getRelevantItems(const SfxItemSet& _rSet) const;
+    const sal_uInt16*   getRelevantItems(const SfxItemSet& _rSet) const;
 
     /** check if the data source described by the given set needs authentication<p/>
         The return value depends on the data source type only.
@@ -633,6 +633,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/11/23 02:04:35  svesik
+ *  Remove stl/ from #include statement
+ *
  *  Revision 1.5  2000/11/10 17:36:50  fs
  *  small bug fixes
  *

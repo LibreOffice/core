@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-22 15:44:05 $
+ *  last change: $Author: oj $ $Date: 2000-11-28 11:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,60 +489,37 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
         break;
         case DST_ADABAS:
         {
-            // collect the names of the installed databases
-            StringBag aInstalledDBs;
-
             String sAdabasConfigDir;
             const char* pAdabas = getenv("DBCONFIG");
             if (pAdabas)
                 sAdabasConfigDir.AssignAscii(pAdabas);
+            else // we have a normal adabas installation
+            {    // so we check the local database names in $DBROOT/config
+                const char* pAdabasRoot = getenv("DBROOT");
+                if (pAdabasRoot)
+                    sAdabasConfigDir.AssignAscii(pAdabasRoot);
+            }
+
             if(sAdabasConfigDir.Len())
             {
-                INetURLObject aNormalizer;
-                aNormalizer.SetSmartProtocol(INET_PROT_FILE);
-                aNormalizer.SetSmartURL(sAdabasConfigDir);
-                sAdabasConfigDir = aNormalizer.GetMainURL();
-
-                if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
-                    sAdabasConfigDir.AppendAscii("config");
-                else
-                    sAdabasConfigDir.AppendAscii("/config");
-
-                ::ucb::Content aAdabasConfigDir;
-                try
+                // collect the names of the installed databases
+                StringBag aInstalledDBs;
+                aInstalledDBs = getInstalledAdabasDBs(sAdabasConfigDir);
+                if(!aInstalledDBs.size())
                 {
-                    aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
-                }
-                catch(::ucb::ContentCreationException &e)
-                {
-                    e;  // make compiler happy
-                    DBG_ERROR("OGeneralPage::OnBrowseConnections: could not create the UCB content for the adabas config directory!");
+                    const char* pAdabasRoot = getenv("DBROOT");
+                    if (pAdabasRoot)
+                    {
+                        sAdabasConfigDir.AssignAscii(pAdabasRoot);
+                        aInstalledDBs = getInstalledAdabasDBs(sAdabasConfigDir);
+                    }
                 }
 
-                if (aAdabasConfigDir.get().is())
-                {   // we have a content for the directory, loop through all entries
-                    Sequence< ::rtl::OUString > aProperties(1);
-                    aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
-
-                    try
-                    {
-                        Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, ::ucb::INCLUDE_DOCUMENTS_ONLY);
-                        Reference< XRow > xRow(xFiles, UNO_QUERY);
-                        xFiles->beforeFirst();
-                        while (xFiles->next())
-                            aInstalledDBs.insert(xRow->getString(1));
-                    }
-                    catch(Exception&)
-                    {
-                        DBG_ERROR("OGeneralPage::OnBrowseConnections: could not enumerate the adabas config files!");
-                    }
-
-                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, GetSelectedType());
-                    if (RET_OK == aSelector.Execute())
-                    {
-                        m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
-                        callModifiedHdl();
-                    }
+                ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, GetSelectedType());
+                if (RET_OK == aSelector.Execute())
+                {
+                    m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
+                    callModifiedHdl();
                 }
             }
             else
@@ -585,7 +562,60 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
     }
     return 0L;
 }
+// -----------------------------------------------------------------------------
+StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rPath)
+{
+    INetURLObject aNormalizer;
+    aNormalizer.SetSmartProtocol(INET_PROT_FILE);
+    aNormalizer.SetSmartURL(_rPath);
+    String sAdabasConfigDir = aNormalizer.GetMainURL();
 
+    if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
+        sAdabasConfigDir.AppendAscii("config");
+    else
+        sAdabasConfigDir.AppendAscii("/config");
+
+    ::ucb::Content aAdabasConfigDir;
+    try
+    {
+        aAdabasConfigDir = ::ucb::Content(sAdabasConfigDir, Reference< ::com::sun::star::ucb::XCommandEnvironment >());
+    }
+    catch(::ucb::ContentCreationException&)
+    {
+        DBG_ERROR("OGeneralPage::OnBrowseConnections: could not create the UCB content for the adabas config directory!");
+    }
+
+    StringBag aInstalledDBs;
+    sal_Bool bIsFolder = sal_False;
+    try
+    {
+        bIsFolder = aAdabasConfigDir.isFolder();
+    }
+    catch(Exception&) // the exception is thrown when the path doesn't exists
+    {
+    }
+    if (bIsFolder && aAdabasConfigDir.get().is())
+    {   // we have a content for the directory, loop through all entries
+        Sequence< ::rtl::OUString > aProperties(1);
+        aProperties[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+
+        try
+        {
+            Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, ::ucb::INCLUDE_DOCUMENTS_ONLY);
+            Reference< XRow > xRow(xFiles, UNO_QUERY);
+            xFiles->beforeFirst();
+            while (xFiles->next())
+                aInstalledDBs.insert(xRow->getString(1));
+        }
+        catch(Exception&)
+        {
+            DBG_ERROR("OGeneralPage::OnBrowseConnections: could not enumerate the adabas config files!");
+        }
+    }
+
+
+    return aInstalledDBs;
+}
 //-------------------------------------------------------------------------
 IMPL_LINK(OGeneralPage, OnDatasourceTypeSelected, ListBox*, _pBox)
 {
@@ -797,12 +827,12 @@ ODbaseDetailsPage::~ODbaseDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_Int32* ODbaseDetailsPage::getDetailIds()
+sal_uInt16* ODbaseDetailsPage::getDetailIds()
 {
-    static sal_Int32* pRelevantIds = NULL;
+    static sal_uInt16* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_Int32 nRelevantIds[] =
+        static sal_uInt16 nRelevantIds[] =
         {
             DSID_SHOWDELETEDROWS,
             DSID_CHARSET,
@@ -908,12 +938,12 @@ OJdbcDetailsPage::~OJdbcDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_Int32* OJdbcDetailsPage::getDetailIds()
+sal_uInt16* OJdbcDetailsPage::getDetailIds()
 {
-    static sal_Int32* pRelevantIds = NULL;
+    static sal_uInt16* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_Int32 nRelevantIds[] =
+        static sal_uInt16 nRelevantIds[] =
         {
             DSID_JDBCDRIVERCLASS,
             DSID_CHARSET,
@@ -997,12 +1027,12 @@ SfxTabPage* OOdbcDetailsPage::Create( Window* pParent, const SfxItemSet& _rAttrS
 }
 
 // -----------------------------------------------------------------------
-sal_Int32* OOdbcDetailsPage::getDetailIds()
+sal_uInt16* OOdbcDetailsPage::getDetailIds()
 {
-    static sal_Int32* pRelevantIds = NULL;
+    static sal_uInt16* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_Int32 nRelevantIds[] =
+        static sal_uInt16 nRelevantIds[] =
         {
             DSID_ADDITIONALOPTIONS,
             DSID_CHARSET,
@@ -1045,12 +1075,12 @@ SfxTabPage* OAdabasDetailsPage::Create( Window* pParent, const SfxItemSet& _rAtt
 }
 
 // -----------------------------------------------------------------------
-sal_Int32* OAdabasDetailsPage::getDetailIds()
+sal_uInt16* OAdabasDetailsPage::getDetailIds()
 {
-    static sal_Int32* pRelevantIds = NULL;
+    static sal_uInt16* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_Int32 nRelevantIds[] =
+        static sal_uInt16 nRelevantIds[] =
         {
             DSID_CHARSET,
             0
@@ -1117,12 +1147,12 @@ OTextDetailsPage::~OTextDetailsPage()
 }
 
 // -----------------------------------------------------------------------
-sal_Int32* OTextDetailsPage::getDetailIds()
+sal_uInt16* OTextDetailsPage::getDetailIds()
 {
-    static sal_Int32* pRelevantIds = NULL;
+    static sal_uInt16* pRelevantIds = NULL;
     if (!pRelevantIds)
     {
-        static sal_Int32 nRelevantIds[] =
+        static sal_uInt16 nRelevantIds[] =
         {
             DSID_FIELDDELIMITER,
             DSID_TEXTDELIMITER,
@@ -1325,9 +1355,9 @@ sal_Bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
 //------------------------------------------------------------------------
 String OTextDetailsPage::GetSeparator( const ComboBox& rBox, const String& rList )
 {
-    char    nTok = '\t';
+    sal_Unicode nTok = '\t';
     sal_uInt16  nRet(0);
-    sal_uInt16  nPos(rBox.GetEntryPos( rBox.GetText() ));
+    xub_StrLen  nPos(rBox.GetEntryPos( rBox.GetText() ));
 
     if( nPos == COMBOBOX_ENTRY_NOTFOUND )
         return rBox.GetText().Copy(0);
@@ -1734,6 +1764,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2000/11/22 15:44:05  oj
+ *  #80269# remove property long names
+ *
  *  Revision 1.13  2000/11/10 17:35:29  fs
  *  no parameter in checkItems anymore - did not make sense in the context it is called / some small bug fixes
  *
