@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:46:07 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ Menu RID_MAIN_MENU
                 Text[ french ] = "Envo~yer";
                         Text[ italian ] = "~Invia";
                         Text[ swedish ] = "Ski~cka";
-                        Text[ japanese ] = "送る";
+                        Text[ japanese ] = "送る(~D)";
                         Text[ korean ] = "보내기(~D)";
                         Text[ chinese_simplified ] = "发送(~D)";
                         Text[ chinese_traditional ] = "傳送(~D)";
@@ -185,7 +185,7 @@ Menu RID_MAIN_MENU
                         Text[ finnish ] = "L�he~t�";
                         Text[ danish ] = "S~end";
                         Text[ polish ] = "Wy�lij";
-                        Text[ portuguese_brazilian ] = "Enviar";
+                        Text[ portuguese_brazilian ] = "En~viar";
                         Text[ turkish ] = "G�n~der";
                         Text[ arabic ] = "�����";
                         Text[ catalan ] = "Env~ia";
@@ -315,10 +315,10 @@ Menu RID_MAIN_MENU
                 Text = "~Datenquelle ausw�hlen..." ;
                 Text[ english_us ] = "~Choose Data Source...";
                    Text[ swedish ] = "V�lj ut ~datak�lla...";
-                        Text[ japanese ] = "データソースの選択...";
-                        Text[ korean ] = "데이터 원본 선택(~D)...";
-                        Text[ chinese_simplified ] = "选择数据源...";
-                        Text[ chinese_traditional ] = "選擇資料源...";
+                        Text[ japanese ] = "データソースの選択(~C)...";
+                        Text[ korean ] = "데이터 원본 선택(~C)...";
+                        Text[ chinese_simplified ] = "选择数据源(~C)...";
+                        Text[ chinese_traditional ] = "選擇資料源(~C)...";
                         Text[ portuguese ] = "~Fonte de dados...";
                         Text[ russian ] = "~�������� ������...";
                         Text[ greek ] = "��������� ~���������...";
@@ -358,10 +358,10 @@ Menu RID_MAIN_MENU
                         Text[ danish ] = "Delete ~Record";
                         Text[ swedish ] = "Radera data~post";
                         Text[ polish ] = "Delete ~Record";
-                        Text[ portuguese_brazilian ] = "Delete ~Record";
-                        Text[ japanese ] = "レコードの削除";
-                        Text[ korean ] = "레코드 삭제";
-                        Text[ chinese_simplified ] = "删除数据条目";
+                        Text[ portuguese_brazilian ] = "Excluir ~registro";
+                        Text[ japanese ] = "レコードの削除(~R)";
+                        Text[ korean ] = "레코드 삭제(~R)";
+                        Text[ chinese_simplified ] = "删除数据条目(~R)";
                         Text[ chinese_traditional ] = "刪除資料條目(~R)";
                         Text[ turkish ] = "~Tutana�� Sil";
                         Text[ arabic ] = "Delete ~Record";
@@ -421,8 +421,8 @@ Menu RID_MAIN_MENU
                         Text[ danish ] = "~Record";
                         Text[ swedish ] = "D~atapost";
                         Text[ polish ] = "~Record";
-                        Text[ portuguese_brazilian ] = "~Record";
-                        Text[ japanese ] = "レコード";
+                        Text[ portuguese_brazilian ] = "~Registro";
+                        Text[ japanese ] = "レコード(~R)";
                         Text[ korean ] = "~레코드";
                         Text[ chinese_simplified ] = "数据条目(~R)";
                         Text[ chinese_traditional ] = "資料條目(~R)";
@@ -438,7 +438,7 @@ Menu RID_MAIN_MENU
 
                 };
             };
-            Text[ language_user1 ] = "May ; May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
+            Text[ language_user1 ] = "; May ; May 2002 EM: \"has nothing to do with the clipboard\" (OS)";
             Text[ english_us ] = "~Insert";
             Text[ portuguese ] = "~Inserir";
             Text[ russian ] = "���~����";
@@ -503,7 +503,7 @@ Menu RID_MAIN_MENU
                         Text[ danish ] = "~Filtrer...";
                         Text[ swedish ] = "~Filtrera...";
                         Text[ polish ] = "Filtruj...";
-                        Text[ portuguese_brazilian ] = "Filter...";
+                        Text[ portuguese_brazilian ] = "Filtrar...";
                         Text[ japanese ] = "フィルタ(~F)...";
                         Text[ korean ] = "필터(~F)...";
                         Text[ chinese_simplified ] = "筛选(~F)...";
@@ -556,6 +556,7 @@ Menu RID_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
