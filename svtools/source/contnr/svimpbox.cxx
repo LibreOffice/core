@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cd $ $Date: 2002-12-02 10:32:23 $
+ *  last change: $Author: gt $ $Date: 2002-12-05 11:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2176,8 +2176,9 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 {
     aEditTimer.Stop();
+    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
 
-    if( rKEvt.GetKeyCode().IsMod2() )
+    if( rKeyCode.IsMod2() )
         return FALSE; // Alt-Taste nicht auswerten
 
     nFlags &= (~F_FILLING);
@@ -2190,10 +2191,10 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
     BOOL bKeyUsed = TRUE;
 
     USHORT  nDelta = (USHORT)aVerSBar.GetPageSize();
-    USHORT  aCode = rKEvt.GetKeyCode().GetCode();
+    USHORT  aCode = rKeyCode.GetCode();
 
-    BOOL    bShift = rKEvt.GetKeyCode().IsShift();
-    BOOL    bMod1 = rKEvt.GetKeyCode().IsMod1();
+    BOOL    bShift = rKeyCode.IsShift();
+    BOOL    bMod1 = rKeyCode.IsMod1();
 
     SvLBoxEntry* pNewCursor;
 
@@ -2442,8 +2443,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
-            else
-                bKeyUsed = FALSE;
+//          else
+//              bKeyUsed = FALSE;   #105907# assume user wants to use quicksearch with key "a", so key is handled!
             break;
 
         case KEY_SUBTRACT:
@@ -2532,8 +2533,16 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 bKeyUsed = FALSE;
             break;
 
-        default:
+        case KEY_ESCAPE:
+            // #105907# must not be handled because this quits dialogs etc...
             bKeyUsed = FALSE;
+            break;
+
+        default:
+            if( bMod1 )
+                // #105907# CTRL is pressed, assume user don't want to use quicksearch...
+                // ... except the earlier handled ESC key!
+                bKeyUsed = FALSE;
     }
     return bKeyUsed;
 }
