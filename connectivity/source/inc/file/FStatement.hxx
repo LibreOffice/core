@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 12:00:01 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,14 @@
 #ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
@@ -127,7 +127,7 @@ namespace connectivity
         class OStatement_Base       :   public  OBaseMutex,
                                         public  OStatement_BASE,
                                         public  ::comphelper::OPropertyContainer,
-                                        public  ::utl::OPropertyArrayUsageHelper<OStatement_Base>
+                                        public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>
 
         {
             ::com::sun::star::sdbc::SQLWarning                                           m_aLastWarning;

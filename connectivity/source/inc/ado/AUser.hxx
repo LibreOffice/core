@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ namespace connectivity
         };
 
         class OUserExtend;
-        typedef ::utl::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OUserExtend> OUserExtend_PROP;
 
         class OUserExtend : public OAdoUser,
                             public OUserExtend_PROP

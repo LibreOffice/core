@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EResultSet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:47:01 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace connectivity
         // these typedef's are only necessary for the compiler
         typedef ::cppu::ImplHelper1<  ::com::sun::star::sdbcx::XRowLocate> OFlatResultSet_BASE;
         typedef file::OResultSet                                            OFlatResultSet_BASE2;
-        typedef ::utl::OPropertyArrayUsageHelper<OFlatResultSet>            OFlatResultSet_BASE3;
+        typedef ::comphelper::OPropertyArrayUsageHelper<OFlatResultSet>     OFlatResultSet_BASE3;
 
 
         class OFlatResultSet :  public OFlatResultSet_BASE2,

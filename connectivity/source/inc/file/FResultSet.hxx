@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-05 14:35:15 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #ifndef _CPPUHELPER_COMPBASE11_HXX_
 #include <cppuhelper/compbase11.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_FILE_OSTATEMENT_HXX_
 #include "file/FStatement.hxx"
@@ -242,7 +242,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
         class OResultSet :  public  OBaseMutex,
                             public  OResultSet_BASE,
                             public  ::comphelper::OPropertyContainer,
-                            public  ::utl::OPropertyArrayUsageHelper<OResultSet>
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
         protected:

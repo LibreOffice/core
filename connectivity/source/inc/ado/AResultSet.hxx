@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:25 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@
 #ifndef _CPPUHELPER_COMPBASE12_HXX_
 #include <cppuhelper/compbase12.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_ADO_ASTATEMENT_HXX_
 #include "ado/AStatement.hxx"
@@ -135,7 +135,7 @@ namespace connectivity
         class OResultSet :  public OBaseMutex,
                             public  OResultSet_BASE,
                             public  ::cppu::OPropertySetHelper,
-                            public  ::utl::OPropertyArrayUsageHelper<OResultSet>
+                            public  ::comphelper::OPropertyArrayUsageHelper<OResultSet>
         {
 
             ADORecordset*                   m_pRecordSet;
