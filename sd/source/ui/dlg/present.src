@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:43:19 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #include <svx/svxids.hrc>
 #include "present.hrc"
-
 #define DISTANCE    23
 #define DISTANCE2   ((DISTANCE) + 81)
 
@@ -573,7 +572,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ spanish ] = "Avan~ce manual de diapositivas" ;
         Text [ english_us ] = "Change slides ~manually" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ‰‹å·¥æ›´æ¢å¹»ç¯ç‰‡(~M)";
+        Text[ chinese_simplified ] = "æ‰‹åŠ¨æ›´æ¢å¹»ç¯ç‰‡";
         Text[ russian ] = "Ñìåíà ñëàéäà âğó÷íóş";
         Text[ polish ] = "Zmieniaj slajd~y rêcznie";
         Text[ japanese ] = "æ‰‹å‹•ã§ç”»é¢åˆ‡ã‚Šæ›¿ãˆ(~M)";
