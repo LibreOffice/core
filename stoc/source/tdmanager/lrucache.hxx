@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lrucache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-30 14:44:10 $
+ *  last change: $Author: dbo $ $Date: 2001-05-10 14:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,19 +116,19 @@ public:
         @param rKey a key
         @return value
     */
-    inline t_Val getValue( const t_Key & rKey ) const;
+    inline t_Val getValue( t_Key const & rKey ) const;
     /** Sets a value to be cached for given key.
         <br>
         @param rKey a key
         @param rValue a value
     */
-    inline void setValue( const t_Key & rKey, const t_Val & rValue );
+    inline void setValue( t_Key const & rKey, t_Val const & rValue );
     /** Tests whether a value is cached for given key.
         <br>
         @param rKey a key
         @return true, if value is cached
     */
-    inline sal_Bool hasValue( const t_Key & rKey ) const;
+    inline sal_Bool hasValue( t_Key const & rKey ) const;
     /** Clears the cache, thus releasing all cached elements and keys.
         <br>
     */
@@ -164,7 +164,8 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::~LRU_Cache()
 }
 //__________________________________________________________________________________________________
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntry * pEntry ) const
+inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront(
+    CacheEntry * pEntry ) const
 {
     if (pEntry != _pHead)
     {
@@ -186,15 +187,17 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntr
 }
 //__________________________________________________________________________________________________
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( const t_Key & rKey ) const
+inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue(
+    t_Key const & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
-    const t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
+    t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
     return (iFind != _aKey2Element.end());
 }
 //__________________________________________________________________________________________________
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t_Key & rKey ) const
+inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue(
+    t_Key const & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
     const t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
@@ -214,12 +217,12 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t
 //__________________________________________________________________________________________________
 template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
 inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
-    const t_Key & rKey, const t_Val & rValue )
+    t_Key const & rKey, t_Val const & rValue )
 {
     if (_nCachedElements > 0)
     {
         ::osl::MutexGuard aGuard( _aCacheMutex );
-        const t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
+        t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
 
         CacheEntry * pEntry;
         if (iFind == _aKey2Element.end())
@@ -266,10 +269,10 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
 }
 
 //==================================================================================================
-struct FctHashOUString : public ::std::unary_function< const ::rtl::OUString &, size_t >
+struct FctHashOUString : public ::std::unary_function< ::rtl::OUString const &, size_t >
 {
-    size_t operator()( const ::rtl::OUString & rKey ) const
-        { return rKey.hashCode(); }
+    size_t operator()( ::rtl::OUString const & rKey ) const
+        { return (size_t)rKey.hashCode(); }
 };
 
 /** Template instance for OUString keys, Any values.<br>

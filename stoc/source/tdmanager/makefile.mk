@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:19:14 $
+#   last change: $Author: dbo $ $Date: 2001-05-10 14:35:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,8 +78,7 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
-        $(SLO)$/tdmgr.obj	\
-        $(SLO)$/transfer.obj
+        $(SLO)$/tdmgr.obj
 
 SHL1TARGET=	$(TARGET)
 
