@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:47:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,6 +1270,9 @@ void SearchTabPage_Impl::Resize()
     aSearchFT.SetSizePixel( aNewSize );
     aNewSize.Height() = aResultsLB.GetSizePixel().Height();
     aResultsLB.SetSizePixel( aNewSize );
+    aNewSize.Height() = aFullWordsCB.GetSizePixel().Height();
+    aFullWordsCB.SetSizePixel( aNewSize );
+    aScopeCB.SetSizePixel( aNewSize );
     aNewSize = aSearchED.GetSizePixel();
     aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 ) -
                        ( aSearchBtn.GetSizePixel().Width() + ( aPnt.X() / 2 ) );
