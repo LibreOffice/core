@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 11:08:59 $
+ *  last change: $Author: mba $ $Date: 2001-12-20 17:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1999,7 +1999,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             }
 
             // INI schreiben
-            if ( pCW )
+            if ( pCW && pCW->pWin )
             {
                 BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
                 pCW->aInfo = pCW->pWin->GetInfo();
