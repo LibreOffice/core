@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:00:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-12 12:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
     OUString sPlugin = BootParams::getPlugin();
     if (sPlugin.getLength() > 0)
     {
-        PluginLibrary lib(OUString(), sPlugin);
+        PluginLibrary lib = PluginLibrary(OUString(), sPlugin);
         vecPlugins.push_back(lib);
         return vecPlugins;
     }
