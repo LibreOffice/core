@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-06 11:13:23 $
+ *  last change: $Author: kz $ $Date: 2001-11-08 21:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,7 +1155,7 @@ String RID_DB_GROUP_WIZARD_START + 23
 String RID_DB_FORM_WIZARD_START + 0
 {
     Text = "AutoPilot Formular";
-    Text [ english_us ] = "AutoPilot Forms";
+    Text [ english_us ] = "Form AutoPilot";
     Text[ portuguese ] = "AutoPiloto - Formulбrios";
     Text[ russian ] = "Автопилот формуляров";
     Text[ dutch ] = "AutoPiloot Formulieren";
@@ -2345,7 +2345,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text = "Binдrfeld-Darstellung";
     Text [ english ] = "Presentation of Binary Fields";
     Text [ english_us ] = "Display of binary fields";
-    Text[ language_user1 ] = "Groupbox";
+    Text[ language_user1 ] = "Ьberschrift einiger Dialog Controls";
     Text[ portuguese ] = "Representaзгo de campos binбrios";
     Text[ russian ] = "Представление бинарного поля";
     Text[ greek ] = "Presentation of Binary Fields";
@@ -6102,6 +6102,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ catalan ] = "No, I only wish to use the value for display purposes";
     Text[ finnish ] = "~Nein, ich mцchte den Wert nur zum Anzeigen verwenden.";
 };
+
 
 
 
