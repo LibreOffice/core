@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 11:57:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-03 15:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2102,6 +2102,39 @@ Point SwAccessibleMap::PixelToCore( const Point& rPoint ) const
     return aPoint;
 }
 
+static inline long lcl_CorrectCoarseValue(long aCoarseValue, long aFineValue,
+                                          long aRefValue, bool bToLower)
+{
+    long aResult = aCoarseValue;
+
+    if (bToLower)
+    {
+        if (aFineValue < aRefValue)
+            aResult -= 1;
+    }
+    else
+    {
+        if (aFineValue > aRefValue)
+            aResult += 1;
+    }
+
+    return aResult;
+}
+
+static inline Rectangle & lcl_CorrectRectangle(Rectangle & rRect,
+                                        const Rectangle & rSource,
+                                        const Rectangle & rInGrid)
+{
+    rRect.nLeft = lcl_CorrectCoarseValue(rRect.nLeft, rSource.nLeft,
+                                         rInGrid.nLeft, false);
+    rRect.nTop = lcl_CorrectCoarseValue(rRect.nTop, rSource.nTop,
+                                        rInGrid.nTop, false);
+    rRect.nRight = lcl_CorrectCoarseValue(rRect.nRight, rSource.nRight,
+                                          rInGrid.nRight, true);
+    rRect.nBottom = lcl_CorrectCoarseValue(rRect.nBottom, rSource.nBottom,
+                                           rInGrid.nBottom, true);
+}
+
 Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
 {
     Rectangle aRect;
@@ -2109,6 +2142,9 @@ Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const
     {
         PreviewAdjust( rRect.TopLeft(), sal_False );
         aRect = GetShell()->GetWin()->LogicToPixel( rRect );
+
+        Rectangle aTmpRect = GetShell()->GetWin()->PixelToLogic( aRect );
+        lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
 
     return aRect;
@@ -2121,6 +2157,9 @@ Rectangle SwAccessibleMap::PixelToCore( const Rectangle& rRect ) const
     {
         PreviewAdjust( rRect.TopLeft(), sal_True );
         aRect = GetShell()->GetWin()->PixelToLogic( rRect );
+
+        Rectangle aTmpRect = GetShell()->GetWin()->LogicToPixel( aRect );
+        lcl_CorrectRectangle(aRect, rRect, aTmpRect);
     }
     return aRect;
 }
