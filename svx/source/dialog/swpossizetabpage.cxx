@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swpossizetabpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 13:06:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 12:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1938,7 +1938,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
     m_aWorkArea = m_pSdrView->GetWorkArea();
 
     // Beruecksichtigung Ankerposition (bei Writer)
-    const SdrMarkList& rMarkList = m_pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = m_pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
