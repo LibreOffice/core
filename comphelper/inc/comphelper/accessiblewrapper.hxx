@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblewrapper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:56:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.............................................................................
 namespace comphelper
@@ -123,13 +126,14 @@ namespace comphelper
     class OAccessibleContextWrapper;
     class OWrappedAccessibleChildrenManager;
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::accessibility::XAccessible
-                                >   OAccessibleWrapper_Base;
+    struct OAccessibleWrapper_Base :
+        public ::cppu::ImplHelper1 < ::com::sun::star::accessibility::XAccessible >
+    {};
 
     /** a class which aggregates a proxy for an XAccessible, and wrapping the context returned by this
         XAccessible.
     */
-    class OAccessibleWrapper:public OAccessibleWrapper_Base
+    class COMPHELPER_DLLPUBLIC OAccessibleWrapper:public OAccessibleWrapper_Base
                             ,public OComponentProxyAggregation
 
     {
@@ -182,9 +186,9 @@ namespace comphelper
         ~OAccessibleWrapper( );
 
     private:
-        OAccessibleWrapper( );                                      // never implemented
-        OAccessibleWrapper( const OAccessibleWrapper& );            // never implemented
-        OAccessibleWrapper& operator=( const OAccessibleWrapper& ); // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper( );                                        // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper( const OAccessibleWrapper& );          // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleWrapper& operator=( const OAccessibleWrapper& );   // never implemented
     };
 
     //=========================================================================
@@ -209,7 +213,7 @@ namespace comphelper
 
         @seealso OAccessibleContextWrapper
     */
-    class OAccessibleContextWrapperHelper
+    class COMPHELPER_DLLPUBLIC OAccessibleContextWrapperHelper
                 :private OComponentProxyAggregationHelper
                 ,public OAccessibleContextWrapperHelper_Base
     {
@@ -308,7 +312,7 @@ namespace comphelper
                                             ,   ::com::sun::star::accessibility::XAccessibleContext
                                             >   OAccessibleContextWrapper_CBase;
 
-    class OAccessibleContextWrapper
+    class COMPHELPER_DLLPUBLIC OAccessibleContextWrapper
                     :public OBaseMutex
                     ,public OAccessibleContextWrapper_CBase
                     ,public OAccessibleContextWrapperHelper
@@ -375,9 +379,9 @@ namespace comphelper
         virtual ~OAccessibleContextWrapper();
 
     private:
-        OAccessibleContextWrapper();                                                // never implemented
-        OAccessibleContextWrapper( const OAccessibleContextWrapper& );              // never implemented
-        OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& );   // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper();                                              // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper( const OAccessibleContextWrapper& );                // never implemented
+        COMPHELPER_DLLPRIVATE OAccessibleContextWrapper& operator=( const OAccessibleContextWrapper& ); // never implemented
     };
 
     //=========================================================================
@@ -394,7 +398,7 @@ namespace comphelper
                                     >   OWrappedAccessibleChildrenManager_Base;
     /** manages wrapping XAccessible's to XAccessible's
     */
-    class OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
+    class COMPHELPER_DLLPUBLIC OWrappedAccessibleChildrenManager : public OWrappedAccessibleChildrenManager_Base
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
@@ -463,9 +467,9 @@ namespace comphelper
         ~OWrappedAccessibleChildrenManager( );
 
     private:
-        OWrappedAccessibleChildrenManager( );                                                       // never implemented
-        OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& );              // never implemented
-        OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& );   // never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( );                                                     // never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager( const OWrappedAccessibleChildrenManager& );                // never implemented
+        COMPHELPER_DLLPRIVATE OWrappedAccessibleChildrenManager& operator=( const OWrappedAccessibleChildrenManager& ); // never implemented
     };
 
 //.............................................................................
