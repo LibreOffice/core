@@ -50,7 +50,8 @@ in this Software without prior written authorization from the X Consortium.
 #include <sys/stat.h>
 
 #define MAXDEFINES  512
-#define MAXFILES    1024  /* Increased from 512. -mcafee */
+#define MAXFILES    2048  /* Increased from 512. -mcafee */
+                          /* Increased from 1024. -mh */
 #define MAXDIRS     64
 #define SYMTABINC   10  /* must be > 1 for define() to work right */
 #define TRUE        1
