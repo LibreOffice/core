@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-16 10:40:32 $
+ *  last change: $Author: os $ $Date: 2002-08-06 08:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,10 +787,10 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
     if( pNode != pActNode || !nActPos )
         nActPos = STRING_LEN;
 
-    SwAutoCompleteWord& rACW = pNode->GetDoc()->GetAutoCompleteWords();
+    SwDoc* pDoc = pNode->GetDoc();
+    SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     // modify string according to redline information
-    const SwDoc* pDoc = pNode->GetDoc();
     USHORT nAct = pDoc->GetRedlinePos( *pNode );
     const XubString rOldTxt( pNode->aText );
 
@@ -923,10 +923,10 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     {
                         XubString rNewWord( rWord );
                         rNewWord.EraseAllChars( CH_TXTATR_INWORD );
-                        rACW.InsertWord( rNewWord );
+                        rACW.InsertWord( rNewWord, *pDoc );
                     }
                     else
-                        rACW.InsertWord( rWord );
+                        rACW.InsertWord( rWord, *pDoc );
                 }
             }
 
@@ -1128,7 +1128,8 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos,
         nActPos = STRING_LEN;
 
     const XubString& rTxt = pNode->aText;
-    SwAutoCompleteWord& rACW = pNode->GetDoc()->GetAutoCompleteWords();
+    SwDoc* pDoc = pNode->GetDoc();
+    SwAutoCompleteWord& rACW = SwDoc::GetAutoCompleteWords();
 
     xub_StrLen nBegin = 0;
     xub_StrLen nEnd = pNode->aText.Len();
@@ -1152,7 +1153,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos,
                 {
 // !!! ---> ggfs. das Flag bIsVisarea auswerten
                     if( rACW.GetMinWordLen() <= rWord.Len() )
-                        rACW.InsertWord( rWord );
+                        rACW.InsertWord( rWord, *pDoc );
 // !!! ---> ggfs. das Flag bIsVisarea auswerten
                     bAnyWrd = TRUE;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acmplwrd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: os $ $Date: 2002-08-06 08:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,27 @@
 #define _SVSTDARR_STRINGSISORTDTOR
 #include <svtools/svstdarr.hxx>
 
+class SwDoc;
+class SwAutoCompleteWord_Impl;
+class SwAutoCompleteClient;
 
 class SwAutoCompleteWord
 {
-    SvStringsISortDtor aWordLst;
+    friend class SwAutoCompleteClient;
+
+    SvStringsISortDtor aWordLst; // contains extended strings carrying source information
     SvPtrarr aLRULst;
+
+    SwAutoCompleteWord_Impl* pImpl;
     USHORT nMaxCount, nMinWrdLen;
     BOOL bLockWordLst;
+
+    void DocumentDying(const SwDoc& rDoc);
 public:
     SwAutoCompleteWord( USHORT nWords = 500, USHORT nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
-    BOOL InsertWord( const String& rWord );
+    BOOL InsertWord( const String& rWord, SwDoc& rDoc );
     BOOL RemoveWord( const String& rWord );
     BOOL SearchWord( const String& rWord, USHORT* pFndPos = 0 ) const;
 
