@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:24:50 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 07:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,13 +151,15 @@ namespace dbaui
     class OTableEditorInsUndoAct : public OTableEditorUndoAct
     {
     protected:
-        ::std::vector<OTableRow*>   m_aInsertedRows;
+        ::std::vector<OTableRow*>   m_vInsertedRows;
         long                        m_nInsPos;
 
         virtual void    Undo();
         virtual void    Redo();
     public:
-        OTableEditorInsUndoAct( OTableEditorCtrl* pOwner, long nInsertPosition );
+        OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
+                                long nInsertPosition,
+                                const ::std::vector< OTableRow*>& _vInsertedRows);
         virtual ~OTableEditorInsUndoAct();
     };
 
