@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml2xcd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-06-15 12:37:19 $
+ *  last change: $Author: as $ $Date: 2001-06-15 13:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@ using namespace ::framework ;
                         - use own formated string for all non localized values
                         - seperate "Installed" flag for filters
                     4)  set right values for "Order" property of filters
+
+                draft)  i ) - support "HANDLER"             => #ifdef DRAFT_I
+                        ii) - recover old filter names      => #ifdef DRAFT_II
  */
 
 #define ARGUMENT_FILENAME_STANDARD      DECLARE_ASCII("-fis=")          // argument for file name of standard filters       <filename in system notation>
@@ -231,6 +234,10 @@ class XCDGenerator : public Application
         void                    impl_generateDetectorSet        (                                                                                       );
         void                    impl_generateLoaderSet          (                                                                                       );
         void                    impl_generateDefaults           (                                                                                       ); // generate defaults
+        #ifdef DRAFT_I
+        void                    impl_generateHandlerTemplate    (                                                                                       );
+        void                    impl_generateHandlerSet         (                                                                                       );
+        #endif
 
         void                    impl_generateFilterFlagTemplate (   const   ::rtl::OUString&                        sName                               ,  // helper to write atomic elements
                                                                             sal_Int32                               nValue                              ,
@@ -506,6 +513,9 @@ void XCDGenerator::impl_generateXCD()
     impl_generateTypeTemplate    ();
     impl_generateFilterTemplate  ();
     impl_generateDetectorTemplate();
+    #ifdef DRAFT_I
+    impl_generateHandlerTemplate ();
+    #endif
     impl_generateLoaderTemplate  ();
 
     m_aData.sBufferStandard.appendAscii     ( "\t</schema:templates>\n"                     );
@@ -518,6 +528,9 @@ void XCDGenerator::impl_generateXCD()
     impl_generateTypeSet         ();
     impl_generateFilterSet       ();
     impl_generateDetectorSet     ();
+    #ifdef DRAFT_I
+    impl_generateHandlerSet      ();
+    #endif
     impl_generateLoaderSet       ();
     impl_generateDefaults        ();
 
@@ -1279,6 +1292,28 @@ void XCDGenerator::impl_generateDefaults()
     // close group
     m_aData.sBufferStandard.appendAscii( "\t</schema:group>\n" );
 }
+
+#ifdef DRAFT_I
+//*****************************************************************************************************************
+void XCDGenerator::impl_generateHandlerTemplate()
+{
+    m_aData.sBufferStandard.appendAscii( "\t\t<schema:group cfg:name=\"Handler\">\n"                                                                   );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t<schema:value cfg:name=\"Types\" cfg:type=\"string\" cfg:derivedBy=\"list\" cfg:writable=\""           );
+    m_aData.sBufferStandard.appendAscii( m_aData.bWriteable==sal_True ? "true\">\n" : "false\">\n"                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t<schema:documentation>\n"                                                                            );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t\t<schema:description>List of types which could be handled by this service.</schema:description>\n"  );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t\t</schema:documentation>\n"                                                                           );
+    m_aData.sBufferStandard.appendAscii( "\t\t\t</schema:value>\n"                                                                                     );
+    m_aData.sBufferStandard.appendAscii( "\t\t</schema:group>\n"                                                                                       );
+}
+
+//*****************************************************************************************************************
+void XCDGenerator::impl_generateHandlerSet()
+{
+    // write empty handler set!
+    m_aData.sBufferStandard.appendAscii( "\t<schema:set cfg:name=\"Handlers\" cfg:element-type=\"Handler\"/>\n" );
+}
+#endif
 
 //*****************************************************************************************************************
 void XCDGenerator::impl_generateIntProperty(        ::rtl::OUStringBuffer& sXCD        ,
