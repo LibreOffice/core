@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-11 13:24:00 $
+ *  last change: $Author: mt $ $Date: 2002-01-16 10:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 #ifndef SVX_LIGHT
 
 #if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
-    SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtfout.rtf" ) ), STREAM_WRITE );
+    SvFileStream aRTFOut( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_in.rtf" ) ), STREAM_WRITE );
     aRTFOut << rInput;
     aRTFOut.Close();
     rInput.Seek( 0 );
@@ -308,18 +308,6 @@ void ImpEditEngine::Write( SvStream& rOutput, EETextFormat eFormat, EditSelectio
             WriteBin( rOutput, aSel );
         else
             DBG_ERROR( "Write: Unbekanntes Format" );
-
-#if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
-        if ( eFormat == EE_FORMAT_RTF )
-        {
-            SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.log" ) ), STREAM_WRITE|STREAM_TRUNC );
-            ULONG nP = rOutput.Tell();
-            rOutput.Seek( 0 );
-            aStream << rOutput;
-            rOutput.Seek( nP );
-        }
-#endif
-
     }
 }
 #endif
@@ -732,17 +720,17 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             {
                 aAttribItems.Clear();
                 USHORT nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
-                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptType );
                 if ( !n || IsScriptChange( EditPaM( pNode, nIndex ) ) )
                 {
-                    SfxItemSet aAttribs( GetEmptyItemSet() );
-                    GetAttribs( nNode, nIndex+1, nIndex+1 );
+                    SfxItemSet aAttribs = GetAttribs( nNode, nIndex+1, nIndex+1 );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) ), LIST_APPEND );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_FONTHEIGHT, nScriptType ) ), LIST_APPEND );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_WEIGHT, nScriptType ) ), LIST_APPEND );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_ITALIC, nScriptType ) ), LIST_APPEND );
                     aAttribItems.Insert( &aAttribs.Get( GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType ) ), LIST_APPEND );
                 }
+                // #96298# Insert hard attribs AFTER CJK attribs...
+                lcl_FindValidAttribs( aAttribItems, pNode, nIndex, nScriptType );
 
                 rOutput << '{';
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
@@ -775,6 +763,15 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput << "}}";    // 1xKlammerung Absaetze, 1x Klammerung RTF-Dokument
     rOutput.Flush();
 
+#if defined (EDITDEBUG) && !defined(MAC) && !defined( UNX )
+    {
+        SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.rtf" ) ), STREAM_WRITE|STREAM_TRUNC );
+        ULONG nP = rOutput.Tell();
+        rOutput.Seek( 0 );
+        aStream << rOutput;
+        rOutput.Seek( nP );
+    }
+#endif
 
     return rOutput.GetError();
 #else
@@ -829,6 +826,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         {
             rOutput << sRTF_SL;
             long nVal = ((const SvxLineSpacingItem&)rItem).GetLineHeight();
+            char cMult = '0';
             if ( ((const SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 // Woher kriege ich jetzt den Wert?
@@ -836,8 +834,10 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 nVal = ((const SvxLineSpacingItem&)rItem).GetPropLineSpace();
                 nVal *= 240;
                 nVal /= 100;
+                cMult = '1';
             }
             rOutput.WriteNumber( nVal );
+            rOutput << sRTF_SLMULT << cMult;
         }
         break;
         case EE_PARA_JUST:
@@ -2244,4 +2244,12 @@ BOOL ImpEditEngine::ImplHasText() const
 {
     return ( ( GetEditDoc().Count() > 1 ) || GetEditDoc().GetObject(0)->Len() );
 }
+
+long ImpEditEngine::LogicToTwips( long n )
+{
+    Size aSz( n, 0 );
+    aSz = pRefDev->LogicToLogic( aSz, NULL, &MapMode( MAP_TWIP ) );
+    return aSz.Width();
+}
+
 
