@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:58:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     USHORT          nConnect1 = aLbConnect1.GetSelectEntryPos();
     USHORT          nConnect2 = aLbConnect2.GetSelectEntryPos();
     BOOL            bCopyPosOk;
+    USHORT i;
 
     if ( aBtnCopyResult.IsChecked() )
     {
@@ -573,7 +574,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
         bCopyPosOk = ( SCA_VALID == (nResult & SCA_VALID) );
     }
 
-    for ( USHORT i=0; i<3; i++ )
+    for ( i = 0; i < 3; i++ )
     {
         USHORT      nField  = aFieldLbArr[i]->GetSelectEntryPos();
         ScQueryOp   eOp     = (ScQueryOp)aCondLbArr[i]->GetSelectEntryPos();
