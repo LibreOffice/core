@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:05:03 $
+ *  last change: $Author: nn $ $Date: 2001-03-06 14:48:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,7 +630,13 @@ void __EXPORT ScDrawView::UpdateUserViewOptions()
         SetGridVisible( rGrid.GetGridVisible() );
         SetSnapEnabled( rGrid.GetUseGridSnap() );
         SetGridSnap( rGrid.GetUseGridSnap() );
-        SetSnapGrid( Size( rGrid.GetFldSnapX(), rGrid.GetFldSnapY() ) );
+
+        //  Snap from grid options is no longer used
+//      SetSnapGrid( Size( rGrid.GetFldSnapX(), rGrid.GetFldSnapY() ) );
+
+        Fraction aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
+        Fraction aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );
+        SetSnapGridWidth( aFractX, aFractY );
 
         SetGridCoarse( Size( rGrid.GetFldDrawX(), rGrid.GetFldDrawY() ) );
         SetGridFine( Size( rGrid.GetFldDrawX() / (rGrid.GetFldDivisionX() + 1),
