@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2004-08-23 09:04:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,8 @@ WNDCLASS* Window::mpWndClass = NULL;
 
 // ------------------------------------------------------------------------------
 
-Window::Window( Player& rPlayer ) :
+Window::Window( const uno::Reference< lang::XMultiServiceFactory >& rxMgr, Player& rPlayer ) :
+    mxMgr( rxMgr ),
     mrPlayer( rPlayer ),
     meZoomLevel( media::ZoomLevel_NOT_AVAILABLE ),
     mnParentWnd( 0 ),
