@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 15:02:56 $
+#   last change: $Author: obo $ $Date: 2004-11-18 08:21:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,11 +68,12 @@ TARGET=getuid
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+# no 'lib' prefix
+DLLPRE=
 
 .IF "$(OS)" == "SOLARIS"
 

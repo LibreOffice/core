@@ -18,7 +18,7 @@ cd `dirname $0`
 DIRECTORY=`pwd`
 
 ADMINFILE=$DIRECTORY/admin
-GETUID_SO=/tmp/libgetuid.so.$$
+GETUID_SO=/tmp/getuid.so.$$
 linenum=???
 tail +$linenum $0 > $GETUID_SO
 
