@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 13:30:21 $
+ *  last change: $Author: rt $ $Date: 2004-02-11 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,6 +1340,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
             case SC_SERVICE_TRGRADTAB:  xRet = xDrawTrGradTab;  break;
             case SC_SERVICE_MARKERTAB:  xRet = xDrawMarkerTab;  break;
             case SC_SERVICE_DASHTAB:    xRet = xDrawDashTab;    break;
+            case SC_SERVICE_CHDATAPROV: xRet = xChartDataProv;  break;
         }
 
         if ( !xRet.is() )
@@ -1355,6 +1356,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
                 case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab = xRet;  break;
                 case SC_SERVICE_MARKERTAB:  xDrawMarkerTab = xRet;  break;
                 case SC_SERVICE_DASHTAB:    xDrawDashTab = xRet;    break;
+                case SC_SERVICE_CHDATAPROV: xChartDataProv = xRet;  break;
             }
         }
     }
