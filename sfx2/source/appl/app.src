@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-24 11:27:48 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message[ russian ] = "Äîêóìåíò óæå çàïóùåí è àêòèâèğîâàí.";
     Message[ polish ] = "Dokument zosta³ ju¿ za³adowany i uaktywniony.";
     Message[ japanese ] = "ÄŞ·­ÒİÄ‚Í‚·‚Å‚É“Ç‚İ‚Ü‚ê±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B";
-    Message[ chinese_traditional ] = "¤w¸g¸Ë¸ü³o­ÓÀÉ®×¨Ã³B©ó¿E¬¡ª¬ºA¡C";
+    Message[ chinese_traditional ] = "¤w¸g¸Ë¤J³o­ÓÀÉ®×¨Ã³B©ó¨Ï¥Îª¬ºA¡C";
     Message[ arabic ] = "Çáãáİ ßÇä ãÍãáÇğ ÈÇáİÚá æÊã ÊäÔíØå.";
     Message[ dutch ] = "Document is reeds geladen en geactiveerd.";
     Message[ chinese_simplified ] = "ÒÑ¾­×°ÔØÕâ¸öÎÄ¼ş²¢´¦ÓÚ¼¤»î×´Ì¬¡£";
@@ -1417,7 +1417,7 @@ InfoBox MSG_CANT_QUIT
     Message[ russian ] = "Âûõîä èç ïğèëîæåíèÿ ñåé÷àñ íåâîçìîæåí.\nÏîäîæäèòå, ïîæàëóéñòà, îêîí÷àíèÿ âñåõ çàäàíèé ïå÷àòè è/èëè\n äåéñòâèÿ OLE è çàêğîéòå âñå äèàëîãè.";
     Message[ polish ] = "Aplikacji nie mo¿na zakoñczyæ.\nProszê zaczekaæ na koniec zadañ wydruku i/lub\nakcji OLE i zamkn¹æ wszystkie aplikacje.";
     Message[ japanese ] = "ÌßÛ¸Ş×Ñ‚ğ‚½‚¾‚¢‚ÜI—¹‚Å‚«‚Ü‚¹‚ñB\n‚·‚×‚Ä‚Ìˆóü¼Ş®ÌŞ ‚»‚µ‚Ä/‚Ü‚½‚Í \nOLE ±¸¼®İ ‚ÌI—¹‚Ü‚Å‘Ò‚Á‚Ä ‚·‚×‚Ä‚ÌÀŞ²±Û¸Ş‚ğ•Â‚¶‚Ä‰º‚³‚¢B";
-    Message[ chinese_traditional ] = "²{¦bµLªkµ²§ô³o­ÓÀ³¥Îµ{¦¡¡C\n½Ğµ¥­Ô©Ò¦³¦C¦L¥ô°È©ÎOLE¿E¬¡ª¬ºA¤w¸gµ²§ô¡M\nµM«á¦AÃö³¬©Ò¦³ªº¹ï¸Ü¤è¶ô¡C";
+    Message[ chinese_traditional ] = "²{¦bµLªkµ²§ô³o­ÓÀ³¥Îµ{¦¡¡C\n½Ğµ¥­Ô©Ò¦³¦C¦L¥ô°È©ÎOLE¨Ï¥Îª¬ºA¤w¸gµ²§ô¡M\nµM«á¦AÃö³¬©Ò¦³ªº¹ï¸Ü¤è¶ô¡C";
     Message[ arabic ] = "áÇ íãßä ÅäåÇÁ ÇáÊØÈíŞ ÍÇáíÇğ.\nÇáÑÌÇÁ ÇáÇäÊÙÇÑ ÍÊì ÇäÊåÇÁ ßá ãåÇã ÇáØÈÇÚÉ¡ æ/Ãæ\nÊäÔíØÇÊ OLE¡ Ëã Şã ÈÅÛáÇŞ ßá ãÑÈÚÇÊ ÇáÍæÇÑ.";
     Message[ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen.";
     Message[ chinese_simplified ] = "ÏÖÔÚÎŞ·¨½áÊøÕâ¸öÓ¦ÓÃ³ÌĞò¡£\nÇëÄúÉÔµÈÖ±µ½³ÌĞòÍê³ÉËùÓĞ´òÓ¡ÈÎÎñ»òOLE¼¤»î×´Ì¬½áÊø£¬\nÈ»ºóÔÙ¹Ø±ÕËùÓĞ¶Ô»°¿ò¡£";
@@ -1448,7 +1448,7 @@ QueryBox MSG_IS_SERVER
     Message[ russian ] = "Ïğèëîæåíèå åùå îòêğûòî êàê ñåğâåğ îáúåêòà èëè ïå÷àòè.\nÇàêğûòü åãî íåñìîòğÿ íà ıòî?";
     Message[ polish ] = "Aplikacja jest jeszcze aktywna jako obiekt lub serwer wydruku.\nCzy j¹ mimo to zamkn¹æ?";
     Message[ japanese ] = "±ÌßØ¹°¼®İ‚Í ‚Ü‚¾µÌŞ¼Şª¸Ä‚Ü‚½‚ÍÌßØİÄ »°ÊŞ°‚Æ‚µ‚Ä±¸Ã¨ÌŞ‚Å‚·B\n•Â‚¶‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
-    Message[ chinese_traditional ] = "³o­ÓÀ³¥Îµ{¦¡§@¬°ª«¥ó©Î¦C¦L¦øªA¾¹ÁÙ³B©ó¿E¬¡ª¬ºA¡C\n±zÁÙ¬O­nÃö³¬¥¦¡H";
+    Message[ chinese_traditional ] = "³o­ÓÀ³¥Îµ{¦¡§@¬°ª«¥ó©Î¦C¦L¦øªA¾¹ÁÙ³B©ó¨Ï¥Îª¬ºA¡C\n±zÁÙ¬O­nÃö³¬¥¦¡H";
     Message[ arabic ] = "ãÇ ÒÇá åĞÇ ÇáÊØÈíŞ äÔØÇğ ßãÒæøÏ ßÇÆä Ãæ ãÒæÏ ØÈÇÚÉ.\nåá ÊÑíÏ ÛáŞå Úáì ÇáÑÛã ãä Ğáß¿";
     Message[ dutch ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten ?";
     Message[ chinese_simplified ] = "Õâ¸öÓ¦ÓÃ³ÌĞò×÷Îª¶ÔÏó»ò´òÓ¡·şÎñÆ÷»¹´¦ÓÚ¼¤»î×´Ì¬¡£\nÄú»¹ÊÇÒª¹Ø±ÕËü?";
@@ -1529,7 +1529,7 @@ String STR_NOMODUL
     Text[ russian ] = "Çàïóñê ìîäóëåé ïğèëîæåíèÿ â êà÷åñòâå ïğèëîæåíèé íåâîçìîæåí,\nåñëè àêòèâèğîâàí StarDesktoğ.";
     Text[ polish ] = "Modu³y aplikacji nie mog¹ zostaæ uruchomione jako aplikacje\n, jeœli jest w³¹czony pulpit %PRODUCTNAME Desktop.";
     Text[ japanese ] = "%PRODUCTNAME Desktop ‚ª±¸Ã¨ÌŞ‚Ì‚Æ‚«‚ÍA±ÌßØ¹°¼®İ‚Æ‚µ‚Ä±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ğ\nŠJn‚Å‚«‚Ü‚¹‚ñB";
-    Text[ chinese_traditional ] = "¦b%PRODUCTNAME Desktop³B¤_¿E¬¡ª¬ºA®É\n¡MÀ³¥Îµ{§Çªº¼Ò¶ô¤£¯à°÷·í§@À³¥Îµ{¦¡±Ò°Ê¹B¦æ¡C";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Desktop ¨Ï¥Î¤¤®É\n¡MÀ³¥Îµ{§Çªº¼Ò¶ô¤£¯à°÷·í§@À³¥Îµ{¦¡±Ò°Ê¹B¦æ¡C";
     Text[ arabic ] = "áÇ íãßä ÈÏÁ æÍÏÇÊ ÇáÊØÈíŞÇÊ ÇáäãØíÉ ßÊØÈíŞÇÊ¡\nÅĞÇ ßÇä %PRODUCTNAME Desktop äÔØÇğ.";
     Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
     Text[ chinese_simplified ] = "Èç¹û%PRODUCTNAME Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
@@ -1698,7 +1698,7 @@ String STR_DOUBLEEXCEPTION
     TEXT[ russian ] = "Âî âğåìÿ ñîõğàíåíèÿ àâàğèéíîãî âîññòàíîâëåíèÿ ïğîèçîøëà äîïîëíèòåëüíàÿ îøèáêà â ñèñòåìå.\nÂîçìîæíî ÷òî äàííûå ñîõğàíåíû íåïîëíîñòüş.";
     TEXT[ polish ] = "Podczas alarmowego zabezpieczenia danych wyst¹pi³ dalszy b³¹d w systemie.\nDane s¹ event. niekompletnie zabezpieczone.";
     TEXT[ japanese ] = "ŒxÌ§²Ù•ÛŒì‚ÌÛ‚É‘¼‚Ì¼½ÃÑ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nÃŞ°À‚Í‚¨‚»‚ç‚­Š®‘S‚É•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    TEXT[ chinese_traditional ] = "¦b­×´_Àx¦s®Éµo¥Í¤F¤@­Ó¿ù»~¡C\n¸ê®ÆÀx¦s«Ü¦³¥i¯à¤£§¹¾ã¡C";
+    TEXT[ chinese_traditional ] = "ÁÙ­ì¸ê®Æ³Æ¥÷®Éµo¥Í¤F¤@­Ó¿ù»~¡C\n¸ê®ÆÀx¦s«Ü¦³¥i¯à¤£§¹¾ã¡C";
     TEXT[ arabic ] = "ÍÏË ÎØÃ ÂÎÑ ÃËäÇÁ ÚãáíÉ ÍİÙ ÇáÇÓÊÑÏÇÏ.\nãä ÇáãÍÊãá Ãä ÇáÈíÇäÇÊ áã ÊõÍİÙ ÈÔßá ßÇãá.";
     TEXT[ dutch ] = "Tijdens het opslaan van alarmgegevens is nog een systeemfout opgetreden.\nDe gegevens werden evtl. niet compleet opgeslagen.";
     TEXT[ chinese_simplified ] = "ÔÚĞŞ¸´´æÅÌÊ±·¢ÉúÁËÒ»¸ö´íÎó¡£\nÊı¾İ´æÅÌºÜÓĞ¿ÉÄÜ²»ÍêÕû¡£";
@@ -2265,7 +2265,7 @@ String STR_EVENT_CREATEDOC
     Text[ russian ] = "Ñîçäàòü äîêóìåíò";
     Text[ polish ] = "Utwórz dokument";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìì¬";
-    Text[ chinese_traditional ] = "«Ø¥ß¤å¥ó";
+    Text[ chinese_traditional ] = "»s§@¤å¥ó";
     Text[ arabic ] = "ÅäÔÇÁ ãÓÊäÏ";
     Text[ dutch ] = "Document maken";
     Text[ chinese_simplified ] = "½¨Á¢ÎÄµµ";
@@ -2487,7 +2487,7 @@ String STR_EVENT_ACTIVATEDOC
     Text[ russian ] = "Àêòèâèğîâàòü äîêóìåíò";
     Text[ polish ] = "Uaktywnij dokument";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ±¸Ã¨ÌŞ‚É‚µ‚½";
-    Text[ chinese_traditional ] = "¿E¬¡¤å¥ó";
+    Text[ chinese_traditional ] = "±Ò°Ê¤å¥ó";
     Text[ arabic ] = "ÊäÔíØ ÇáãÓÊäÏ";
     Text[ dutch ] = "Document activeren";
     Text[ chinese_simplified ] = "¼¤»îÎÄµµ";
@@ -2516,7 +2516,7 @@ String STR_EVENT_DEACTIVATEDOC
     Text[ russian ] = "Äåàêòèâèğîâàòü äîêóìåíò";
     Text[ polish ] = "Dezaktywuj dokument";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ”ñ±¸Ã¨ÌŞ‚É‚µ‚½";
-    Text[ chinese_traditional ] = "¥¢¬¡¤å¥ó";
+    Text[ chinese_traditional ] = "¤£¨Ï¥Î¤å¥ó";
     Text[ arabic ] = "ÅáÛÇÁ ÊäÔíØ ÇáãÓÊäÏ";
     Text[ dutch ] = "Document deactiveren";
     Text[ chinese_simplified ] = "Ê§»îÎÄµµ";
@@ -3293,7 +3293,7 @@ String RID_PLUGIN
     Text[ russian ] = "Àêòèâèğîâàòü Plug-In";
     Text[ polish ] = "W³¹cz wtyczkê Plug-In";
     Text[ japanese ] = "Ìß×¸Ş²İ‚ğ±¸Ã¨ÌŞ‚É‚·‚é";
-    Text[ chinese_traditional ] = "¿E¬¡ Plug-In";
+    Text[ chinese_traditional ] = "±Ò°Ê Plug-In";
     Text[ arabic ] = "ÊäÔíØ Plug-In";
     Text[ dutch ] = "PlugIn-activering";
     Text[ chinese_simplified ] = "¼¤»î Plug-In";
@@ -3600,7 +3600,7 @@ String STR_KEY_BACKUP_PATH
     Text[ russian ] = "Ğåçåğâíûå êîïèè";
     Text[ polish ] = "Kopie zapasowe";
     Text[ japanese ] = "ÊŞ¯¸±¯ÌßºËß°";
-    Text[ chinese_traditional ] = "¦w¥ş³Æ¥ó";
+    Text[ chinese_traditional ] = "¦w¥ş³Æ¥÷";
     Text[ arabic ] = "äÓÎ ÇÍÊíÇØíÉ";
     Text[ dutch ] = "Reservekopieën";
     Text[ chinese_simplified ] = "°²È«±¸¼ş";
