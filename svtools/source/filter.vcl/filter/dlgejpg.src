@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ ModalDialog DLG_EXPORT_JPG
         Text[ chinese_simplified ] = "·ÂÕæÉ«";
         Text[ russian ] = "Íàòóğàëüíûå öâåòà";
         Text[ polish ] = "Trwa³e kolory";
-        Text[ japanese ] = "‘NÊF";
+        Text[ japanese ] = "True Color";
         Text[ chinese_traditional ] = "¥ş±m";
         Text[ arabic ] = "ÃáæÇä ÍŞíŞíÉ";
         Text[ dutch ] = "Echte kleuren";
