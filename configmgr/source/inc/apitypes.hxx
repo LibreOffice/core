@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:40:31 $
+ *  last change: $Author: mh $ $Date: 2001-02-02 17:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <stl/vector>
+#include <vector>
 
 namespace configmgr
 {
