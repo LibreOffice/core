@@ -3,9 +3,9 @@
  *
  *  $RCSfile: DataAccess.xcs,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:33:29 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 12:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
   <import oor:component="org.openoffice.Office.Common"/>
   <uses oor:component="org.openoffice.Office.Common"/>
   <templates>
+    <!-- Responsible: OJ -->
     <group oor:name="DataSettings">
       <prop oor:name="Filter" oor:type="xs:string">
         <info>
@@ -367,6 +368,7 @@
     </group>
   </templates>
   <component>
+    <!-- Responsible: OJ -->
     <info>
       <desc xml:lang="en-US">describes how to access databases of different vendors and how to filter and layout result data of specific database tables.</desc>
     </info>
