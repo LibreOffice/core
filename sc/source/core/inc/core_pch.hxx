@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_pch.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:36:09 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
 #include <tools/errcode.hxx>
 #include <vcl/sv.h>
 #include <global.hxx>
-#include <vcl/color.hxx>
+#include <tools/color.hxx>
 #include <tools/lang.hxx>
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
@@ -116,10 +116,8 @@
 #include <tools/resid.hxx>
 #include <tools/table.hxx>
 #include <stdarg.h>
-#include <vcl/rc.hxx>
 #include <tools/rc.hxx>
 #include <tools/resmgr.hxx>
-#include <vcl/resid.hxx>
 #include <tools/unqidx.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svtools/sbxdef.hxx>
@@ -147,7 +145,7 @@
 #include <rechead.hxx>
 #include <tools/unqid.hxx>
 #include <vcl/apptypes.hxx>
-#include <vcl/fonttype.hxx>
+#include <vcl/vclenum.hxx>
 #include <globstr.hrc>
 #include <compiler.hrc>
 #include <tools/shl.hxx>
@@ -157,7 +155,6 @@
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/accel.hxx>
-#include <vcl/gdiobj.hxx>
 #include <patattr.hxx>
 #include <svtools/zforlist.hxx>
 #include <tools/pstm.hxx>
@@ -198,7 +195,6 @@
 #include <vcl/print.hxx>
 #include <docoptio.hxx>
 #include <markdata.hxx>
-#include <vcl/system.hxx>
 #include <vcl/wrkwin.hxx>
 #include <stlpool.hxx>
 #include <sfx2/app.hxx>
