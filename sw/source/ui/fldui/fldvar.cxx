@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-13 20:30:37 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 18:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, pBox )
             aValueED.SetText(aEmptyStr);
         }
 
-        aValueED.EnableDrop(FALSE);
+        aValueED.SetDropEnable(FALSE);
         UpdateSubType();    // Auswahl-Listboxen initialisieren
     }
 
@@ -377,7 +377,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
             }
             bValue = bName = bNumFmt = bInvisible = TRUE;
 
-            aValueED.EnableDrop(TRUE);
+            aValueED.SetDropEnable(TRUE);
             break;
         }
 
@@ -423,7 +423,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // (statt test2 = test + 1)
                 aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
-            aValueED.EnableDrop(TRUE);
+            aValueED.SetDropEnable(TRUE);
             break;
 
         case TYP_FORMELFLD:
@@ -431,7 +431,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 bValue = TRUE;
                 bNumFmt = TRUE;
                 aValueFT.SetText(SW_RESSTR(STR_FORMULA));
-                aValueED.EnableDrop(TRUE);
+                aValueED.SetDropEnable(TRUE);
             }
             break;
 
@@ -527,8 +527,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet
                         String sCmd( pType->GetCmd() );
-                        USHORT nTmpPos = sCmd.SearchAndReplace( cTokenSeperator, ' ' );
-                        sCmd.SearchAndReplace( cTokenSeperator, ' ', nTmpPos );
+                        USHORT nTmpPos = sCmd.SearchAndReplace( so3::cTokenSeperator, ' ' );
+                        sCmd.SearchAndReplace( so3::cTokenSeperator, ' ', nTmpPos );
 
                         aValueED.SetText( sCmd );
                         aFormatLB.SelectEntryPos(pType->GetType());
@@ -1106,8 +1106,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', cTokenSeperator, nTmpPos );
+                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', so3::cTokenSeperator );
+                        sValue.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
                         ((SwDDEFieldType*)pType)->SetCmd(sValue);
                         ((SwDDEFieldType*)pType)->SetType((USHORT)nFormat);
                     }
@@ -1137,8 +1137,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', cTokenSeperator, nTmpPos );
+                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', so3::cTokenSeperator );
+                        sValue.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
 
                         SwDDEFieldType aType(sName, sValue, (USHORT)nFormat);
                         aSelectionLB.InsertEntry(sName);
@@ -1397,6 +1397,9 @@ void SwFldVarPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/13 20:30:37  jp
+    Bug #83829#: validate fieldname
+
     Revision 1.2  2001/02/09 07:44:09  os
     TabPage size changed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:01:38 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 18:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             aValueFT.Show();
             aValueED.Show();
         }
-        aNameED.EnableDrop(FALSE);
+        aNameED.SetDropEnable(FALSE);
 
         if (IsFldEdit())
         {
@@ -396,13 +396,13 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
 
             case TYP_HIDDENPARAFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.EnableDrop(TRUE);
+                aNameED.SetDropEnable(TRUE);
                 bName = TRUE;
                 break;
 
             case TYP_HIDDENTXTFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.EnableDrop(TRUE);
+                aNameED.SetDropEnable(TRUE);
                 aValueFT.SetText(SW_RESSTR(STR_INSTEXT));
                 if (!IsFldEdit())
                     aValueED.SetText(::GetActiveView()->GetWrtShell().GetSelTxt());
@@ -411,7 +411,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
 
             case TYP_CONDTXTFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
-                aNameED.EnableDrop(TRUE);
+                aNameED.SetDropEnable(TRUE);
                 if (IsFldEdit())
                 {
                     aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
@@ -443,7 +443,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, pBox )
             case TYP_COMBINED_CHARS:
                 {
                     aNameFT.SetText(SW_RESSTR(STR_COMBCHRS_FT));
-                    aNameED.EnableDrop(TRUE);
+                    aNameED.SetDropEnable(TRUE);
                     bName = TRUE;
 
                     const USHORT nLen = aNameED.GetText().Len();
@@ -721,6 +721,9 @@ IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/01/18 14:01:38  jp
+    new Field/-Type: combined character
+
     Revision 1.1.1.1  2000/09/18 17:14:36  hr
     initial import
 
