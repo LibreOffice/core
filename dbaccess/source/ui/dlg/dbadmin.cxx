@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 16:28:02 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,7 +925,10 @@ IMPL_LINK(ODbAdminDialog, OnDatasourceSelected, ListBox*, _pBox)
     // first ask the current page if it is allowed to leave
     if (!PrepareLeaveCurrentPage())
     {   // the page did not allow us to leave -> restore the old selection
-        m_aSelector.select(m_sCurrentDatasource);
+        if (m_sCurrentDatasource.getLength())
+            m_aSelector.select(m_sCurrentDatasource);
+        else
+            m_aSelector.select(m_nCurrentDeletedDataSource);
         return 1L;
     }
 
@@ -1083,6 +1086,7 @@ void ODbAdminDialog::implSelectDeleted(sal_Int32 _nKey)
     if (m_sCurrentDatasource.getLength())   // previous selection was not on a deleted data source
         m_aValidDatasources.insert(m_sCurrentDatasource);
     m_sCurrentDatasource = ::rtl::OUString();
+    m_nCurrentDeletedDataSource = _nKey;
 
     // reset the tag pages
     resetPages(Reference< XPropertySet >(), sal_True);
@@ -1100,6 +1104,7 @@ void ODbAdminDialog::implSelectDatasource(const ::rtl::OUString& _rRegisteredNam
     if (m_sCurrentDatasource.getLength())   // previous selection was not on a deleted data source
         m_aValidDatasources.insert(m_sCurrentDatasource);
     m_sCurrentDatasource = _rRegisteredName;
+    m_nCurrentDeletedDataSource = -1;
     // remove the now selected data source from our set
     m_aValidDatasources.erase(m_sCurrentDatasource);
 
@@ -1902,7 +1907,7 @@ sal_Int32 ODatasourceSelector::getAccessKey(sal_Int32 _nPos) const
 {
     EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData(_nPos));
     if (!pData)
-        return NULL;    // entry is in default state
+        return 0;   // entry is in default state
     return pData->nAccessKey;
 }
 
@@ -2141,7 +2146,9 @@ long ODatasourceSelector::Notify(NotifyEvent& _rNEvt)
                 switch (rKeyCode.GetCode())
                 {
                     case KEY_DELETE:
-                        m_aDeleteHandler.Call(this);
+                        if (getAccessKey(m_aDatasourceList.GetSelectEntryPos()) <= 0)
+                            // for a non-deleted data source, call the delete handler
+                            m_aDeleteHandler.Call(this);
                         bHandled = sal_True;
                         break;
                     case KEY_INSERT:
@@ -2184,6 +2191,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2000/11/10 16:28:02  fs
+ *  #80185# implApplyChanges: reset some meta-data-items
+ *
  *  Revision 1.16  2000/11/03 09:15:07  fs
  *  #79998# SetSavePasswordText
  *

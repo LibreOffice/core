@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 08:03:33 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 17:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,6 +509,7 @@ private:
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
 
+    sal_Int32               m_nCurrentDeletedDataSource;
 private:
     ODatasourceSelector m_aSelector;
 
@@ -632,6 +633,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/10/31 08:03:33  fs
+ *  +selectDataSource - supporting an initial selecting when creating as service
+ *
  *  Revision 1.3  2000/10/30 08:00:23  fs
  *  +getDatasourceType / +getRelevantItems / +hasAuthentication
  *
