@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:11:02 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,6 @@ String &TruncateBookmark(String &rRet)
 
 void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
 {
-    using namespace ww;
     bool bBookMarkOnly = false;
     INetURLObject aURL(rUrl);
     String sURL;
@@ -947,10 +946,10 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
         bBookMarkOnly = true;
 
     if (bBookMarkOnly)
-        sURL = FieldString(eHYPERLINK);
+        sURL = FieldString(ww::eHYPERLINK);
     else
     {
-        String sFld(FieldString(eHYPERLINK));
+        String sFld(FieldString(ww::eHYPERLINK));
         sFld.APPEND_CONST_ASC("\"");
         sURL.Insert(sFld, 0);
         sURL += '\"';
@@ -962,7 +961,7 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
     if (rTarget.Len())
         (sURL.APPEND_CONST_ASC(" \\n ")) += rTarget;
 
-    rWrt.OutField(0, eHYPERLINK, sURL, WRITEFIELD_START | WRITEFIELD_CMD_START);
+    rWrt.OutField(0, ww::eHYPERLINK, sURL, WRITEFIELD_START | WRITEFIELD_CMD_START);
 
     // write the refence to the "picture" structure
     ULONG nDataStt = rWrt.pDataStrm->Tell();
@@ -983,7 +982,7 @@ void WW8_AttrIter::StartURL(const String &rUrl, const String &rTarget)
 
     rWrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(), sizeof( aArr1 ), aArr1 );
 
-    rWrt.OutField(0, eHYPERLINK, sURL, WRITEFIELD_CMD_END);
+    rWrt.OutField(0, ww::eHYPERLINK, sURL, WRITEFIELD_CMD_END);
 
     // now write the picture structur
     sURL = aURL.GetURLNoMark();
