@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:29:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
 #endif
-#pragma hdrstop
+
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
