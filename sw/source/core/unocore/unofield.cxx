@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 09:14:30 $
+ *  last change: $Author: dvo $ $Date: 2001-04-10 14:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,8 +2001,8 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_JUMPEDITFLD);
                 pFld = new SwJumpEditField((SwJumpEditFieldType*)pFldType,
                                 m_pProps->nUSHORT1,
-                                m_pProps->sPar1,
-                                m_pProps->sPar2);
+                                                                m_pProps->sPar2,
+                                                                m_pProps->sPar1);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DOCINFO_CHANGE_AUTHOR     :
