@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2000-11-20 16:19:10 $
+ *  last change: $Author: mba $ $Date: 2000-12-01 15:03:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ SvtViewDialogOptions_Impl::SvtViewDialogOptions_Impl()
         :   ConfigItem  ( ROOTNODE_DIALOGS )
 {
     // Read complete list from configuration.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -268,12 +268,13 @@ void SvtViewDialogOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::Commit()
 {
+/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
@@ -297,6 +298,7 @@ void SvtViewDialogOptions_Impl::Commit()
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
     }
+*/
 }
 
 //*****************************************************************************************************************
@@ -449,7 +451,7 @@ SvtViewTabDialogOptions_Impl::SvtViewTabDialogOptions_Impl()
         :   ConfigItem  ( ROOTNODE_TABDIALOGS )
 {
     // Read complete list from configuration.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -476,12 +478,13 @@ void SvtViewTabDialogOptions_Impl::Notify( const Sequence< OUString >& seqProper
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::Commit()
 {
+/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
@@ -503,6 +506,7 @@ void SvtViewTabDialogOptions_Impl::Commit()
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
     }
+*/
 }
 
 //*****************************************************************************************************************
@@ -647,7 +651,7 @@ SvtViewTabPageOptions_Impl::SvtViewTabPageOptions_Impl()
         :   ConfigItem  ( ROOTNODE_TABPAGES )
 {
     // Read complete list from configuration.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -674,12 +678,13 @@ void SvtViewTabPageOptions_Impl::Notify( const Sequence< OUString >& seqProperty
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewTabPageOptions_Impl::Commit()
 {
+/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
@@ -695,6 +700,7 @@ void SvtViewTabPageOptions_Impl::Commit()
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
     }
+*/
 }
 
 //*****************************************************************************************************************
@@ -803,7 +809,7 @@ SvtViewWindowOptions_Impl::SvtViewWindowOptions_Impl()
         :   ConfigItem  ( ROOTNODE_WINDOWS )
 {
     // Read complete list from configuration.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -830,12 +836,13 @@ void SvtViewWindowOptions_Impl::Notify( const Sequence< OUString >& seqPropertyN
     // We ignore given name sequence.
     // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
     // I think to read the whole list is the best way.
-    impl_ReadWholeList();
+//    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::Commit()
 {
+/*
     // Calculate size of dynamic set, copy names and values to it and set it in configuration.
     // For structure informations see class description of "SvtViewOptions" in header!
 
@@ -861,6 +868,7 @@ void SvtViewWindowOptions_Impl::Commit()
         OUString sName = pIterator->first;
         SetSetProperties( sName, seqProperties ); // The keyname of our hash is the kename of our set!
     }
+*/
 }
 
 //*****************************************************************************************************************
