@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:46:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,93 +103,6 @@
 #define PresentationViewShell
 using namespace sd;
 #include "sdslots.hxx"
-
-namespace {
-
-/** Objects of this class wait for the execution of an asynchronous view
-    shell change and finish the initialization of a new
-    PresentationViewShell object.
-
-    After it has done its job the object removes itself as listener from the
-    view shell base and destroyes itself.
-*/
-class ViewShellChangeListener
-{
-public:
-    ViewShellChangeListener (
-        ViewShellBase& rBase,
-        FrameView* pFrameView,
-        USHORT nPageNumber,
-        const SfxRequest& rRequest)
-        : mrBase (rBase),
-          mpFrameView(pFrameView),
-          mnPageNumber(nPageNumber),
-          maRequest(rRequest)
-    {
-        if (mpFrameView != NULL)
-            mpFrameView->Connect();
-        rBase.GetPaneManager().AddEventListener (
-            LINK(this, ViewShellChangeListener, HandleViewShellChange));
-    }
-private:
-    ViewShellBase& mrBase;
-    FrameView* const mpFrameView;
-    const USHORT mnPageNumber;
-    SfxRequest maRequest;
-
-    DECL_LINK(HandleViewShellChange, PaneManagerEvent*);
-};
-
-IMPL_LINK(ViewShellChangeListener, HandleViewShellChange,
-    PaneManagerEvent*, pEvent)
-{
-    if (pEvent->meEventId == PaneManagerEvent::EID_VIEW_SHELL_ADDED
-        && pEvent->mePane == PaneManager::PT_CENTER)
-    {
-        if (pEvent->mpShell->ISA(PresentationViewShell))
-        {
-            PresentationViewShell* pShell
-                = PTR_CAST(PresentationViewShell, pEvent->mpShell);
-            pShell->FinishInitialization (
-                mpFrameView,
-                maRequest,
-                mnPageNumber);
-            if (mpFrameView != NULL)
-                mpFrameView->Disconnect();
-            /*
-            mpFrameView->Connect();
-            pShell->GetFrameView()->Disconnect();
-            pShell->SetFrameView (mpFrameView);
-            pShell->SwitchPage (mnPageNumber);
-            pShell->WriteFrameViewData();
-
-            SfxBoolItem aShowItem (SID_SHOWPOPUPS, FALSE);
-            SfxUInt16Item aId (SID_CONFIGITEMID, SID_NAVIGATOR);
-            pShell->GetViewFrame()->GetDispatcher()->Execute(
-                SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
-            pShell->GetViewFrame()->Show();
-            pShell->SetSlideShowFunction (new FuSlideShow(
-                pShell,
-                pShell->GetActiveWindow(),
-                pShell->GetView(),
-                pShell->GetDoc(),
-                maRequest));
-            pShell->GetActiveWindow()->GrabFocus();
-            pShell->GetSlideShow()->Activate();
-            pShell->GetSlideShow()->StartShow();
-            */
-        }
-
-        // Remove this listener from the view shell base and destroy it.
-        mrBase.GetPaneManager().RemoveEventListener (
-            LINK(this,ViewShellChangeListener,HandleViewShellChange));
-        delete this;
-    }
-
-    return 0;
-}
-
-} // end of anonymouse namespace
 
 namespace sd {
 
@@ -350,7 +263,8 @@ void PresentationViewShell::Activate( BOOL bIsMDIActivate )
     }
 }
 
-// -----------------------------------------------------------------------------
+
+
 
 void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
 {
@@ -359,7 +273,8 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* pWin )
         DrawViewShell::Paint( rRect, pWin );
 }
 
-// -----------------------------------------------------------------------------
+
+
 
 void PresentationViewShell::CreateFullScreenShow (
     ViewShell* pOriginShell,
@@ -406,20 +321,18 @@ void PresentationViewShell::CreateFullScreenShow (
             if (pCurrentPage != NULL)
                 nStartPage = (pCurrentPage->GetPageNum() - 1) / 2;
 
-            // The rest of the initialization is done by an object that
-            // waits until the PresentationViewShell object has been
-            // created.  This is necessary because the creation is done
-            // asynchronously.
-            new ViewShellChangeListener(
-                *pBase,
-                pOriginShell->GetFrameView(),
-                nStartPage,
-                rRequest);
             pBase->GetViewFrame()->Show();
             // The following GrabFocus() is responsible for activating the
             // new view shell.  Without it the screen remains blank (under
             // Windows and some Linux variants.)
             pBase->GetWindow()->GrabFocus();
+
+            PresentationViewShell* pShell = PTR_CAST(PresentationViewShell, pBase->GetMainViewShell());
+            if (pShell != NULL)
+                pShell->FinishInitialization (
+                    pOriginShell->GetFrameView(),
+                    rRequest,
+                    nStartPage);
         }
     }
 }
