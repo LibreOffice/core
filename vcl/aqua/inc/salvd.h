@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:23 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 struct SalVirDevData
 {
     SalGraphics*            mpGraphics;             // current VirDev graphics
+    USHORT                  mnBitCount;             // GWorld pixel depth
     long                    mnWidth;                // GWorld width
     long                    mnHeight;               // GWorld height
     BOOL                    mbGraphics;             // is Graphics used?

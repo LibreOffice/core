@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:25 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,10 +153,8 @@ SalGraphics* SalFrame::GetGraphics()
 
         if ( hView )
         {
-            SalData* pSalData = GetSalData();
             maFrameData.mpGraphics = new SalGraphics;
             maFrameData.mpGraphics->maGraphicsData.mhDC      = hView;
-            maFrameData.mpGraphics->maGraphicsData.mhWnd     = pFrame->maFrameData.mhWnd;
             maFrameData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbVirDev  = FALSE;
             maFrameData.mpGraphics->maGraphicsData.mbWindow  = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:25 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 SalVirtualDevice::SalVirtualDevice()
 {
     maVirDevData.mpGraphics = NULL;
+    maVirDevData.mnBitCount = 0;
     maVirDevData.mnWidth = 0;
     maVirDevData.mnHeight = 0;
     maVirDevData.mbGraphics = FALSE;
@@ -79,6 +80,8 @@ SalVirtualDevice::SalVirtualDevice()
 
 SalVirtualDevice::~SalVirtualDevice()
 {
+    if ( maVirDevData.mpGraphics )
+        delete maVirDevData.mpGraphics;
 }
 
 // -----------------------------------------------------------------------
@@ -89,12 +92,32 @@ SalGraphics* SalVirtualDevice::GetGraphics()
         return NULL;
 
     if ( !maVirDevData.mpGraphics )
-        maVirDevData.mpGraphics = NULL;
+    {
+        maVirDevData.mpGraphics = new SalGraphics;
+        GWorldPtr pGWorld = NULL;
+        Rect aRect;
+        OSStatus aQDStatus = noErr;
 
-    maVirDevData.mbGraphics = FALSE;
+        // Set the dimensions of the GWorldPtr
+        MacSetRect( &aRect, 0, 0, maVirDevData.mnWidth, maVirDevData.mnHeight );
+
+        // Create the offscreen graphics context
+        aQDStatus = NewGWorld( &pGWorld, maVirDevData.mnBitCount, &aRect, NULL,
+            NULL, 0);
+
+        if ( aQDStatus == noErr );
+        {
+            maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = (CGrafPtr)pGWorld;
+            maVirDevData.mpGraphics->maGraphicsData.mbPrinter = FALSE;
+            maVirDevData.mpGraphics->maGraphicsData.mbVirDev  = TRUE;
+            maVirDevData.mpGraphics->maGraphicsData.mbWindow  = FALSE;
+            maVirDevData.mpGraphics->maGraphicsData.mbScreen  = TRUE;
+        }
+    }
+
+    maVirDevData.mbGraphics = TRUE;
 
     return maVirDevData.mpGraphics;
-
 }
 
 // -----------------------------------------------------------------------
@@ -108,5 +131,30 @@ void SalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
 
 BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 {
-    return FALSE;
+    GWorldPtr pGWorld = NULL;
+    Rect aRect;
+    OSStatus aQDStatus = noErr;
+
+    maVirDevData.mnWidth = nDX;
+    maVirDevData.mnHeight = nDY;
+
+    // Set the dimensions of the GWorldPtr
+    MacSetRect( &aRect, 0, 0, maVirDevData.mnWidth, maVirDevData.mnHeight );
+
+    // If we have already created a graphics context, dispose of it
+    if ( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort )
+    {
+        DisposeGWorld( maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort );
+        maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = NULL;
+    }
+
+    // Create the offscreen graphics context
+    aQDStatus = NewGWorld( &pGWorld, maVirDevData.mnBitCount, &aRect, NULL,
+        NULL, 0);
+    if ( aQDStatus == noErr )
+        maVirDevData.mpGraphics->maGraphicsData.mpCGrafPort = (CGrafPtr)pGWorld;
+    else
+        return FALSE;
+
+    return TRUE;
 }

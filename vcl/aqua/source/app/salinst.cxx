@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-24 01:01:24 $
+ *  last change: $Author: pluby $ $Date: 2000-12-24 19:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ SalFrame* SalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 
 void SalInstance::DestroyFrame( SalFrame* pFrame )
 {
-    delete ( pFrame );
+    delete pFrame;
 }
 
 // -----------------------------------------------------------------------
@@ -325,6 +325,11 @@ SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, USHORT nBitCount )
 {
     SalVirtualDevice *pVirDev = new SalVirtualDevice;
+
+    // Cache values for when SalVirtualDevice::GetGraphics() is invoked
+    pVirDev->maVirDevData.mnBitCount = nBitCount;
+    pVirDev->maVirDevData.mnWidth = nDX;
+    pVirDev->maVirDevData.mnHeight = nDY;
 
     return pVirDev;
 }
