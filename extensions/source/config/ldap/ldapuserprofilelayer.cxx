@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprofilelayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:06:15 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,11 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_CONNECTIONLOSTEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/ConnectionLostException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+// on windows this is defined indirectly by <ldap.h>
+#undef OPTIONAL
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
@@ -99,6 +104,11 @@ void LdapUserProfileSource::getUserProfile(const rtl::OUString & aUser, LdapUser
     mConnection.getUserProfile(aUser,
                                mProfileMap,
                                aProfile);
+}
+
+rtl::OUString LdapUserProfileSource::getComponentName() const
+{
+    return mProfileMap.getComponentName();
 }
 
 rtl::OUString LdapUserProfileSource::getConfigurationBasePath() const
@@ -145,6 +155,52 @@ LdapUserProfileLayer::~LdapUserProfileLayer()
     delete mProfile;
 }
 //------------------------------------------------------------------------------
+
+#define PROPNAME( name ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) )
+#define PROPTYPE( type ) getCppuType( static_cast< type const *>( 0 ) )
+
+const sal_Int32 LAYER_PROPERTY_URL = 1;
+
+cppu::IPropertyArrayHelper * SAL_CALL LdapUserProfileLayer::newInfoHelper()
+{
+    using com::sun::star::beans::Property;
+    using namespace com::sun::star::beans::PropertyAttribute;
+
+    Property properties[] =
+    {
+        Property(PROPNAME("URL"), LAYER_PROPERTY_URL, PROPTYPE(rtl::OUString), READONLY)
+    };
+
+    return new cppu::OPropertyArrayHelper(properties, sizeof(properties)/sizeof(properties[0]));
+}
+//------------------------------------------------------------------------------
+
+void SAL_CALL LdapUserProfileLayer::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const
+{
+    switch (nHandle)
+    {
+    case LAYER_PROPERTY_URL:
+        {
+            rtl::OUStringBuffer aURL;
+            aURL.appendAscii("ldap-user-profile:");
+            aURL.append(mUser);
+            aURL.append(sal_Unicode('@'));
+            if (mSource.is())
+                aURL.append(mSource->getComponentName());
+            else
+                aURL.appendAscii("<NULL>");
+
+            rValue <<= aURL.makeStringAndClear();
+        }
+        break;
+
+    default:
+        OSL_ENSURE(false, "Error: trying to get an UNKNOWN property");
+        break;
+    }
+}
+//------------------------------------------------------------------------------
+
 bool LdapUserProfileLayer::readProfile()
 {
     if (mSource.is())
