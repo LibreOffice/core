@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFolderPicker.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com { module sun { module star { module ui { module dialogs {
 /** Specifies a FolderPicker interface.
 */
 
-interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialog
+published interface XFolderPicker: com::sun::star::ui::dialogs::XExecutableDialog
 {
     //-------------------------------------------------------------------------
     /** Sets the root directory that the FolderPicker should display.
