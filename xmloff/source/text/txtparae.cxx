@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 11:10:23 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark")),
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
     sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
-    sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName"))
+    sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
+    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap"))
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -1793,6 +1794,17 @@ void XMLTextParagraphExport::addHyperlinkAttributes(
             GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK,
                                       sXML_show, pStr );
         }
+    }
+
+    if( rPropSetInfo->hasPropertyByName( sServerMap ) &&
+        ( !rPropState.is() || PropertyState_DIRECT_VALUE ==
+                    rPropState->getPropertyState( sServerMap ) ) )
+    {
+        aAny = rPropSet->getPropertyValue( sServerMap );
+        if( *(sal_Bool *)aAny.getValue() )
+            GetExport().AddAttributeASCII( XML_NAMESPACE_OFFICE,
+                                           sXML_server_map,
+                                             sXML_true );
     }
 
     if( rPropSetInfo->hasPropertyByName( sUnvisitedCharStyleName ) &&

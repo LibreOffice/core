@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-16 13:50:03 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -706,6 +706,10 @@ void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
         xPropSet->setPropertyValue( xTxtImp->sHyperLinkTarget, aAny );
     }
 
-    // TODO: Map
+    if( xPropSetInfo->hasPropertyByName( xTxtImp->sServerMap ) )
+    {
+        aAny.setValue( &bMap, ::getBooleanCppuType() );
+        xPropSet->setPropertyValue( xTxtImp->sServerMap, aAny );
+    }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-17 07:37:42 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,8 @@ XMLTextImportHelper::XMLTextImportHelper(
     sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sTextFrame(RTL_CONSTASCII_USTRINGPARAM("TextFrame")),
-    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName"))
+    sPageDescName(RTL_CONSTASCII_USTRINGPARAM("PageDescName")),
+    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap"))
 {
     Reference< XChapterNumberingSupplier > xCNSupplier( rModel, UNO_QUERY );
 
