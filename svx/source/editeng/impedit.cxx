@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-24 08:20:57 $
+ *  last change: $Author: mt $ $Date: 2001-10-25 10:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,6 +1284,7 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             SetEditSelection( aSel );
             pEditEngine->pImpEditEngine->UpdateSelections();
             pEditEngine->pImpEditEngine->FormatAndUpdate( GetEditViewPtr() );
+            ShowCursor( DoAutoScroll(), TRUE );
         }
     }
 }
