@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-19 09:03:39 $
+#   last change: $Author: tv $ $Date: 2000-11-07 11:22:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ URL_NEWMENU_DRAW_TARGET         = urlnewdraw
 URL_NEWMENU_CHART_TARGET        = urlnewchart
 URL_NEWMENU_IMAGE_TARGET        = urlnewimage
 URL_NEWMENU_MATH_TARGET         = urlnewmath
+URL_NEWMENU_WEBTOP_TARGET       = urlnewwebtop
 URL_SAMPLES_TEXTS_TARGET        = urlsamplestexts
 URL_SAMPLES_SPREADSHEETS_TARGET = urlsamplesspreadsheets
 URL_SAMPLES_PRESENTATIONS_TARGET = urlsamplespresentations
