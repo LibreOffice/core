@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:50:13 $
+#   last change: $Author: kz $ $Date: 2004-01-28 14:41:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,38 +75,28 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=			\
-                                        $(SLO)$/documentlist.obj                                                             \
+                    $(SLO)$/documentlist.obj                        \
                     $(SLO)$/desktop.obj								\
-                    $(SLO)$/pluginframe.obj							\
                     $(SLO)$/frame.obj								\
-                    $(SLO)$/frameloaderfactory.obj					\
-                    $(SLO)$/filterfactory.obj						\
-                    $(SLO)$/typedetection.obj						\
                     $(SLO)$/urltransformer.obj						\
                     $(SLO)$/mediatypedetectionhelper.obj			\
                     $(SLO)$/documentproperties.obj					\
-                    $(SLO)$/logindialog.obj							\
                     $(SLO)$/menudocumenthandler.obj					\
                     $(SLO)$/attributelist.obj						\
                     $(SLO)$/saxnamespacefilter.obj					\
-                    $(SLO)$/contenthandlerfactory.obj				\
                     $(SLO)$/substitutepathvars.obj					\
                     $(SLO)$/pathsettings.obj                        \
                     $(SLO)$/backingcomp.obj							\
-                    $(SLO)$/dispatchhelper.obj                      \
-                    $(SLO)$/detectorfactory.obj
-
+                    $(SLO)$/dispatchhelper.obj
 
 SRS1NAME=$(TARGET)
-SRC1FILES=			logindialog.src \
+SRC1FILES=          \
                     documentlist.src
 
 RESLIB1NAME=		lgd
 RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
-RESLIB1DEPN=		logindialog.src									\
-            logindialog.hrc \
-            documentlist.src \
-            documentlist.hrc
+RESLIB1DEPN=        documentlist.src \
+                    documentlist.hrc
 
 
 # --- Targets ------------------------------------------------------
