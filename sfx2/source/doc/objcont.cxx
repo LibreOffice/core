@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:55:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1558,22 +1558,6 @@ SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
 
 SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pViewFrame )
 {
-/*
-    SfxBindings& rBindings = pViewFrame->GetBindings();
-    sal_Bool bCheckPlugin = SfxApplication::IsPlugin();
-    const ResId* pId = bCheckPlugin ? GetFactory().GetPluginMenuBarId() : GetFactory().GetMenuBarId();
-    DBG_ASSERT( pId && pId->GetId(), "Component must have own window!" );
-    if ( !pId )
-        return NULL;
-
-    SfxConfigManager *pCfgMgr = SFX_APP()->GetConfigManager_Impl();
-    if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pId->GetId() ) )
-        pCfgMgr = pImp->pCfgMgr;
-
-    SfxMenuBarManager* pMgr = new SfxMenuBarManager( *pId, rBindings, pCfgMgr, pViewFrame->ISA( SfxInPlaceFrame ) );
-    return pMgr;
-*/
-
     const ResId* pId = GetFactory().GetMenuBarId();
     if ( pId )
     {
@@ -1589,24 +1573,12 @@ SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pVie
         if ( xLayoutManager.is() )
         {
             rtl::OUString aMenuBarURL( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ));
-//            aMenuBarURL += rtl::OUString::valueOf( sal_Int32( pId->GetId() ));
-
             xLayoutManager->createElement( aMenuBarURL );
         }
     }
 
     return NULL;
 
-}
-
-SfxImageManager* SfxObjectShell::GetImageManager_Impl()
-{
-    if ( pImp->pImageManager )
-        return pImp->pImageManager;
-
-    // every document has its own ImageManager, but they may use the global configuration!
-    pImp->pImageManager = new SfxImageManager( this );
-    return pImp->pImageManager;
 }
 
 SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BOOL bForWriting )
