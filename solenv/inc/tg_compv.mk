@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-26 11:57:55 $
+#   last change: $Author: hjs $ $Date: 2001-10-26 13:17:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,8 @@
 #
 #*************************************************************************
 
+COMNAME:=
+
 .IF "$(COM)"=="GCC"
 CFLAGSVERSION=-dumpversion
 CFLAGSNUMVERSION=-dumpversion |& awk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
@@ -91,7 +93,7 @@ COMNAME=msci
 .ENDIF
 
 .IF "$(COM)"=="GCC"
-.IF "$(CCNUMVER)">="000200950000"
+.IF "$(CCNUMVER)">="000200910000"
 COMID=GCC
 COMNAME=gcc2
 .ENDIF
@@ -107,6 +109,20 @@ COMID=C52
 COMNAME=sunpro5
 .ENDIF
 .ENDIF
+
+.IF "$(COMNAME)"==""
+
+# "EXCEPTIONSFILES" get compiled before this, but shouldn't
+# appear in the first n modules.
+
+compiler_version_error:
+    @+echo ++++++++++++++++++++++++++++++++++++
+    @+echo  Could not detect compiler version!
+    @+echo  Please extend tg_compv.mk in 
+    @+echo  "solenv/inc".
+    @+echo ++++++++++++++++++++++++++++++++++++
+
+.ENDIF          # "$(COMNAME)"==""
 
 CDEFS+=-DCPPU_ENV=$(COMNAME)
 
