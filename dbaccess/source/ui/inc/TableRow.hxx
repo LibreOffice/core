@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 09:58:54 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,23 +99,24 @@ namespace dbaui
         OTableRow( const OTableRow& rRow, long nPosition = -1 );
         virtual ~OTableRow();
 
-        OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
+        inline OFieldDescription* GetActFieldDescr() const { return m_pActFieldDescr; }
+        inline bool isValid() const { return GetActFieldDescr() != NULL; }
 
         void SetFieldType( const OTypeInfo* _pType, sal_Bool _bForce = sal_False );
 
         void SetPrimaryKey( BOOL bSet );
         BOOL IsPrimaryKey() const;
 
-        long GetPos() const { return m_nPos; }
+        inline long GetPos() const { return m_nPos; }
 
-        void SetReadOnly( BOOL bRead=TRUE ){ m_bReadOnly = bRead; }
-        BOOL IsReadOnly() const { return m_bReadOnly; }
+        inline void SetReadOnly( BOOL bRead=TRUE ){ m_bReadOnly = bRead; }
+        inline BOOL IsReadOnly() const { return m_bReadOnly; }
 
-        void SetFirstNameModify( BOOL bMod ){ m_bFirstNameModify = bMod; }
-        void SetFirstDescrModify( BOOL bMod ){ m_bFirstDescrModify = bMod; }
+        inline void SetFirstNameModify( BOOL bMod ){ m_bFirstNameModify = bMod; }
+        inline void SetFirstDescrModify( BOOL bMod ){ m_bFirstDescrModify = bMod; }
 
-        BOOL IsFirstNameModify() const { return m_bFirstNameModify; }
-        BOOL IsFirstDescrModify() const { return m_bFirstDescrModify; }
+        inline BOOL IsFirstNameModify() const { return m_bFirstNameModify; }
+        inline BOOL IsFirstDescrModify() const { return m_bFirstDescrModify; }
 
         friend SvStream& operator<<( SvStream& rStr,const OTableRow& _rRow );
         friend SvStream& operator>>( SvStream& rStr, OTableRow& _rRow );
