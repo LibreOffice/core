@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:34:49 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ arabic ] = "0 corresponds to 01/01/1904";
         QuickHelpText[ spanish ] = "El valor 0 corresponde al 01.01.1904";
         Text[ greek ] = "~01/01/1904";
-        Text[ korean ] = "~01/01/1904";
+        Text[ korean ] = "01/01/1904";
         QuickHelpText[ greek ] = "ÔéìŞ 0 áíôéóôïé÷åß óôéò 01/01/1904";
         QuickHelpText[ korean ] = "0 corresponds to 01/01/1904";
         Text[ turkish ] = "~01.01.1904";
@@ -823,7 +823,7 @@ TabPage RID_SCPAGE_CALC
         Text[ chinese_traditional ] = "°Ï¤À¤j¤p¼g(~C)";
         Text[ arabic ] = "ãÑÇÚÇÉ ÇáÃÍÑİ ÇáßÈíÑÉ/ÇáÕÛíÑÉ";
         Text[ greek ] = "Óõìöùíßá ğåæşí-êåöáëáßùí";
-        Text[ korean ] = "´ë/¼Ò ¹®ÀÚ ±¸ºĞ(~N)";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~N)";
         Text[ turkish ] = "~Büyük/küçük harf duyarlı";
         Text[ language_user1 ] = " ";
     };
@@ -2682,7 +2682,7 @@ TabPage RID_SCPAGE_INPUT
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "Se~lektion in Spalten-/Zeilenköpfen hervorheben" ;
         Text [ ENGLISH ] = "~Highlight selection in Column-/Row Headings" ;
-        Text [ english_us ] = "~Highlight selection in column/row headings" ;
+        Text [ english_us ] = "Highlight sele~ction in column/row headings" ;
         Text [ portuguese_brazilian ] = "Se~lektion in Spalten-/Zeilenköpfen hervorheben" ;
         Text [ swedish ] = "Framhäv markering i ko~lumn-/radhuvuden" ;
         Text [ danish ] = "Fremhæv markeringer i kolonne-/rækkeoverskrifter" ;
