@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,20 @@
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
+#endif
 
-#ifndef INCLUDED_FUNCTIONAL
-#define INCLUDED_FUNCTIONAL
 #include <functional>
-#endif // INCLUDED_FUNCTIONAL
 
 #ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
+#include "querycomposer.hxx"
 #endif
 
 using namespace dbaccess;
@@ -215,32 +221,41 @@ void OQuery::implCollectColumns( )
         clearColumns( );
 
         // fill the columns with columns from the statement
-        Reference< XStatement > xStmt = m_xConnection->createStatement();
-        OSL_ENSURE(xStmt.is(),"No Statement created!");
-        if(xStmt.is())
+        Reference< XSQLQueryComposerFactory >  xFactory(m_xConnection, UNO_QUERY);
+        Reference< XSQLQueryComposer > xComposer;
+        if (xFactory.is())
         {
-            Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
-            OSL_ENSURE(xRs.is(),"No Resultset created!");
-            if(xRs.is())
+            try
             {
-                Reference< XNameAccess > xColumns = xRs->getColumns();
-                if(xColumns.is())
-                {
-                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                    const ::rtl::OUString* pBegin = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-                    for ( ;pBegin != pEnd; ++pBegin)
-                    {
-                        Reference<XPropertySet> xSource;
-                        xColumns->getByName( *pBegin ) >>= xSource;
-                        OTableColumn* pColumn = new OTableColumn( xSource );
-
-                        implAppendColumn( *pBegin, pColumn );
-                    }
-                }
-                ::comphelper::disposeComponent(xRs);
+                xComposer = xFactory->createQueryComposer();
             }
-            ::comphelper::disposeComponent(xStmt);
+            catch (Exception&)
+            {
+                xComposer = NULL;
+            }
+        }
+        if(xComposer.is())
+        {
+            xComposer->setQuery(m_sCommand);
+
+            xComposer->setFilter(::rtl::OUString::createFromAscii("0=1"));
+            //  aFilterStatement = m_xComposer->getComposedQuery();
+            Reference<XColumnsSupplier> xCols(xComposer,UNO_QUERY);
+            Reference< XNameAccess > xColumns = xCols->getColumns();
+            if(xColumns.is())
+            {
+                Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                const ::rtl::OUString* pBegin = aNames.getConstArray();
+                const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                for ( ;pBegin != pEnd; ++pBegin)
+                {
+                    Reference<XPropertySet> xSource;
+                    xColumns->getByName( *pBegin ) >>= xSource;
+                    OTableColumn* pColumn = new OTableColumn( xSource );
+
+                    implAppendColumn( *pBegin, pColumn );
+                }
+            }
         }
     }
     catch( const SQLContext& e )

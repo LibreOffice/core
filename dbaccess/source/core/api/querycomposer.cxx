@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,20 +449,41 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
 
         sal_Int32 nCount = xMeta.is() ? xMeta->getColumnCount() : sal_Int32(0);
         ::comphelper::UStringMixEqual bCase(m_xMetaData->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::TStringMixEqualFunctor bCase2(m_xMetaData->storesMixedCaseQuotedIdentifiers());
+        ::std::map<OSQLColumns::const_iterator,int> aColumnMap;
         for(sal_Int32 i=1;i<=nCount;++i)
         {
             ::rtl::OUString sName = xMeta->getColumnName(i);
             OSQLColumns::const_iterator aFind = ::connectivity::find(aCols->begin(),aCols->end(),sName,bCase);
             if(aFind != aCols->end())
-                aNames.push_back(sName);
+                //aNames.end() == ::std::find_if(aNames.begin(),aNames.end(),::std::bind2nd(bCase2,sName)))
+            {
+                if(aColumnMap.find(aFind) != aColumnMap.end())
+                {   // we found a column name which exists twice
+                    // so we start after the first found
+                    do
+                    {
+                        aFind = ::connectivity::findRealName(++aFind,aCols->end(),sName,bCase);
+                    }
+                    while(aColumnMap.find(aFind) != aColumnMap.end() && aFind != aCols->end());
+
+                    OSL_ENSURE(aFind != aCols->end(),"Invalid column!");
+                }
+                if(aFind != aCols->end())
+                {
+                    (*aFind)->getPropertyValue(PROPERTY_NAME) >>= sName;
+                    aColumnMap.insert(::std::map<OSQLColumns::const_iterator,int>::value_type(aFind,0));
+                    aNames.push_back(sName);
+                }
+            }
             else
             { // we can now only look if we found it under the realname propertery
-                aFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
+                OSQLColumns::const_iterator aRealFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
 
                 if(i <= aCols->size())
                 {
-                    if(aFind == aCols->end())
-                    { // here we have to make the assumption that the postion is correct
+                    if(aRealFind == aCols->end())
+                    { // here we have to make the assumption that the position is correct
                         OSQLColumns::iterator aFind2 = aCols->begin() + i-1;
                         Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
                         if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))

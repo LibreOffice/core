@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
+ *  last change: $Author: oj $ $Date: 2001-11-23 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1519,11 +1519,23 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             sal_Int32 nCount = xMetaData->getColumnCount();
                             m_aDataColumns.reserve(nCount+1);
                             aColumns->reserve(nCount+1);
+                            DECLARE_STL_USTRINGACCESS_MAP(int,StringMap);
+                            StringMap aColumnMap;
                             for (sal_Int32 i = 0 ; i < nCount; ++i)
                             {
                                 // retrieve the name of the column
-                                ::rtl::OUString aName = xMetaData->getColumnName(i + 1);
-
+                                ::rtl::OUString sName = xMetaData->getColumnName(i + 1);
+                                // check for duplicate entries
+                                if(aColumnMap.find(sName) != aColumnMap.end())
+                                {
+                                    ::rtl::OUString sAlias(sName);
+                                    sal_Int32 i=1;
+                                    while(aColumnMap.find(sAlias) != aColumnMap.end())
+                                    {
+                                        (sAlias = sName) += ::rtl::OUString::valueOf(i++);
+                                    }
+                                    sName = sAlias;
+                                }
                                 ORowSetDataColumn* pColumn = new ORowSetDataColumn( getMetaData(),
                                                                                     this,
                                                                                     this,
@@ -1531,9 +1543,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                                     aDescription,
                                                                                     m_aCurrentRow,
                                                                                     m_pCache->getEnd());
+                                aColumnMap.insert(StringMap::value_type(sName,0));
                                 aColumns->push_back(pColumn);
-                                pColumn->setName(aName);
-                                aNames.push_back(aName);
+                                pColumn->setName(sName);
+                                aNames.push_back(sName);
                                 m_aDataColumns.push_back(pColumn);
 
                                 try
@@ -1565,15 +1578,23 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         sal_Int32 nCount = xMeta->getColumnCount();
                         m_aDataColumns.reserve(nCount+1);
                         aColumns->reserve(nCount+1);
+                        ::std::map<Reference<XPropertySet>,int> aColumnMap; // need to find duplicates
 
-                        for(sal_Int32 i=1; i<=nCount ;++i)
+                        for(sal_Int32 i=1; i <= nCount ;++i)
                         {
+                            sal_Bool bReFetchName = sal_False;
                             ::rtl::OUString sName = xMeta->getColumnName(i);
                             Reference<XPropertySet> xColumn;
                             if (m_xColumns->hasByName(sName))
                                 m_xColumns->getByName(sName) >>= xColumn;
                             if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
                                 m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+                            // check if column already in the list we need another
+                            if(aColumnMap.find(xColumn) != aColumnMap.end())
+                            {
+                                xColumn = NULL;
+                                bReFetchName = sal_True;
+                            }
                             if(!xColumn.is())
                             {
                                 // no column found so we could look at the position i
@@ -1590,6 +1611,9 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                 }
                             }
                             DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
+                            if(bReFetchName && xColumn.is())
+                                xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+                            aColumnMap.insert(::std::map< Reference<XPropertySet>,int>::value_type(xColumn,0));
 
                             Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
                             if(xInfo.is() && xInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
