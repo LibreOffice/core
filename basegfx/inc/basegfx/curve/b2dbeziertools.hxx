@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:33:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,17 @@ namespace basegfx
         Bound on the maximal distance of the approximation to the
         true curve.
 
+        @param bAddEndPoint
+        Defines if the end point of the segment shall be added. This
+        is handy for subdividing a number of segments int one destination
+        polygon without the need to remove double points afterwards.
+
         @return the number of line segments created
     */
     sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&              rPoly,
                                            const B2DCubicBezier&    rCurve,
-                                           double                   distanceBound );
+                                           double                   distanceBound,
+                                           bool                     bAddEndPoint );
 
     /** Subdivide given cubic bezier segment.
 
@@ -145,11 +151,17 @@ namespace basegfx
         polygon lines, in degrees. Values greater than |90| are
         truncated to 90 degrees. You won't use them, anyway.
 
+        @param bAddEndPoint
+        Defines if the end point of the segment shall be added. This
+        is handy for subdividing a number of segments int one destination
+        polygon without the need to remove double points afterwards.
+
         @return the number of line segments created
     */
     sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&             rPoly,
                                         const B2DCubicBezier&   rCurve,
-                                        double                  angleBound );
+                                        double                  angleBound,
+                                        bool                    bAddEndPoint);
 
     /** Subdivide given cubic bezier segment.
 
@@ -199,11 +211,17 @@ namespace basegfx
         Bound on the maximal distance of the approximation to the
         true curve
 
+        @param bAddEndPoint
+        Defines if the end point of the segment shall be added. This
+        is handy for subdividing a number of segments int one destination
+        polygon without the need to remove double points afterwards.
+
         @return the number of line segments created
     */
     sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  rPoly,
                                            const B2DQuadraticBezier&    rCurve,
-                                           double                       distanceBound );
+                                           double                       distanceBound,
+                                           bool                         bAddEndPoint );
 
     /** Subdivide given quadratic bezier segment.
 
@@ -224,11 +242,17 @@ namespace basegfx
         polygon lines, in degrees. Values greater than |90| are
         truncated to 90 degrees. You won't use them, anyway.
 
+        @param bAddEndPoint
+        Defines if the end point of the segment shall be added. This
+        is handy for subdividing a number of segments int one destination
+        polygon without the need to remove double points afterwards.
+
         @return the number of line segments created
     */
     sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&                 rPoly,
                                         const B2DQuadraticBezier&   rCurve,
-                                        double                      angleBound );
+                                        double                      angleBound,
+                                        bool                        bAddEndPoint );
 
 }
 #endif /* _BGFX_CURVE_B2DBEZIERTOOLS_HXX */
