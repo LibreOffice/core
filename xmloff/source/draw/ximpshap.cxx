@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 15:44:42 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 11:18:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2522,16 +2522,16 @@ SvXMLImportContext * SdXMLAppletShapeContext::CreateChildContext( USHORT nPrefix
                     aParamValue = aValue;
                 }
             }
+        }
 
-            if( aParamName.getLength() )
-            {
-                sal_Int32 nIndex = maParams.getLength();
-                maParams.realloc( nIndex + 1 );
-                maParams[nIndex].Name = aParamName;
-                maParams[nIndex].Handle = -1;
-                maParams[nIndex].Value <<= aParamValue;
-                maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
-            }
+        if( aParamName.getLength() )
+        {
+            sal_Int32 nIndex = maParams.getLength();
+            maParams.realloc( nIndex + 1 );
+            maParams[nIndex].Name = aParamName;
+            maParams[nIndex].Handle = -1;
+            maParams[nIndex].Value <<= aParamValue;
+            maParams[nIndex].State = beans::PropertyState_DIRECT_VALUE;
         }
 
         return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
