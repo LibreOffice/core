@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-03-05 07:11:43 $
+ *  last change: $Author: mba $ $Date: 2001-03-14 12:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,6 @@ using namespace ::rtl;
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
-void TestFunc( ::com::sun::star::util::URL aUrl );
-
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
     if ( !pSlot )
@@ -247,6 +245,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sPreview        = String::CreateFromAscii( "Preview"        );
             static const String sSilent         = String::CreateFromAscii( "Silent"         );
             static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
+            static const String sURL            = String::CreateFromAscii( "URL"            );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUsrAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -285,6 +284,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else if ( aName == sPostString && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_POSTSTRING, *((::rtl::OUString*)rProp.Value.getValue()) ) );
 
+            else if ( aName == sURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                rSet.Put( SfxStringItem( SID_OPENURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+
             else if ( aName == sFrameName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_TARGETNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
 
@@ -315,14 +317,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 String aPar = *((::rtl::OUString*)rProp.Value.getValue());
                 Size aSize;
                 Point aPos;
-#if SUPD<613//MUSTINI
-                if ( SfxIniManager::GetPosSize( aPar, aPos, aSize ) )
-                    rSet.Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPos, aSize ) ) );
-#else
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
                 DBG_ASSERT( sal_False, "TransformParameters()\nProperty \"PosSize\" isn't supported yet!\n" );
-#endif
-#endif
             }
 
             // CharacterSet-Property?
@@ -349,8 +344,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
     }
 
-    if ( nSlotId == SID_OPENDOC || nSlotId == SID_OPENURL )
+    if ( nSlotId == SID_OPENDOC )
     {
+        if ( rSet.GetItemState( SID_OPENURL ) == SFX_ITEM_SET )
+            nItems++;
         if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_TEMPLATE ) == SFX_ITEM_SET )
@@ -402,7 +399,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         }
     }
 
-    if ( nSlotId == SID_OPENDOC || nSlotId == SID_OPENURL )
+    if ( nSlotId == SID_OPENDOC )
     {
         static const String sTemplateRegionName   = String::CreateFromAscii( "TemplateRegionName"   );
         static const String sTemplateName   = String::CreateFromAscii( "TemplateName"   );
@@ -422,6 +419,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sPreview        = String::CreateFromAscii( "Preview"        );
         static const String sSilent         = String::CreateFromAscii( "Silent"         );
         static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
+        static const String sURL            = String::CreateFromAscii( "URL"            );
 
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -499,19 +497,18 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             pValue[nItems].Name = sJumpMark;
             pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
+        if ( rSet.GetItemState( SID_OPENURL, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sURL;
+            pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue())  );
+        }
 
         SFX_ITEMSET_ARG( &rSet, pRectItem, SfxRectangleItem, SID_VIEW_POS_SIZE, sal_False );
         if ( pRectItem )
         {
             pValue[nItems].Name = sPosSize;
             Rectangle aRect = pRectItem->GetValue();
-#if SUPD<613//MUSTINI
-            pValue[nItems++].Value <<= (  ::rtl::OUString(SfxIniManager::GetString( aRect.TopLeft(), aRect.GetSize() ) ) );
-#else
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
             DBG_ASSERT(sal_False, "TransformItems()\nSfxIniManager::GetString used to set property \"PosSize\" ...!\n");
-#endif
-#endif
         }
 
         SFX_ITEMSET_ARG( &rSet, pRefItem, SfxRefItem, SID_POSTLOCKBYTES, sal_False );
@@ -540,267 +537,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
 SV_IMPL_PTRARR( SfxComponentKeyArr_Impl, SfxComponentKeyPtr_Impl );
 
-#if 0
-
-// Implementation of XInterface, XTypeProvider, XServiceInfo, helper- and static-methods
-SFX_IMPL_XINTERFACE_1( SfxComponentFactory, OWeakObject, ::com::sun::star::lang::XMultiServiceFactory )
-SFX_IMPL_XTYPEPROVIDER_1( SfxComponentFactory, ::com::sun::star::lang::XMultiServiceFactory )
-SFX_IMPL_XSERVICEINFO( SfxComponentFactory, "com.sun.star.frame.FrameLoaderFactory", "com.sun.star.comp.sfx2.FrameLoaderFactory" )
-SFX_IMPL_ONEINSTANCEFACTORY( SfxComponentFactory )
-
-SfxComponentFactory::SfxComponentFactory( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > const &)
-{
-}
-
-SfxComponentFactory::~SfxComponentFactory()
-{
-}
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SfxComponentFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
-{
-    return ::com::sun::star::uno::Sequence < ::rtl::OUString >();
-}
-
-void SfxComponentFactory::Init_Impl()
-{
-//  TRY
-    {
-        Reference< XPropertySet > xMan( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
-        Any aAny = xMan->getPropertyValue( DEFINE_CONST_UNICODE("Registry") );
-        aAny >>= xRegistry;
-        if ( xRegistry.is() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xRootKey = xRegistry->getRootKey();
-            ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >  xKey = xRootKey->openKey( DEFINE_CONST_UNICODE("/Loader") );
-            if ( xKey.is() && xKey->getValueType() == ::com::sun::star::registry::RegistryValueType_ASCIILIST )
-            {
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = xKey->getAsciiListValue();
-                const ::rtl::OUString* pStr = aNames.getConstArray();
-                for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
-                {
-                    ::rtl::OUString aKeyStr = DEFINE_CONST_UNICODE("/IMPLEMENTATIONS/");
-                    aKeyStr += pStr[n];
-
-                    SfxComponentKey_Impl *pEntry = new SfxComponentKey_Impl;
-                    pEntry->aImplName = pStr[n];
-                    ::rtl::OUString aTempStr = aKeyStr;
-                    aTempStr += DEFINE_CONST_UNICODE("/Loader/Pattern");
-                    xKey = xRootKey->openKey(aTempStr);
-                    if ( xKey.is() )
-                    {
-                        ::com::sun::star::registry::RegistryValueType aType = xKey->getValueType();
-                        switch ( aType )
-                        {
-                            case ::com::sun::star::registry::RegistryValueType_ASCII :
-                            {
-                                pEntry->aPatterns.Insert( new String( xKey->getAsciiValue() ), pEntry->aPatterns.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRING :
-                            {
-                                pEntry->aPatterns.Insert( new String( xKey->getStringValue() ), pEntry->aPatterns.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_ASCIILIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getAsciiListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aPatterns.Insert( new String( pUStrings[n] ), pEntry->aPatterns.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRINGLIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getStringListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aPatterns.Insert( new String( pUStrings[n] ), pEntry->aPatterns.Count() ) ;
-                                break;
-                            }
-                        }
-                    }
-
-                    aTempStr = aKeyStr;
-                    aTempStr += DEFINE_CONST_UNICODE("/Loader/Extension");
-                    xKey = xRootKey->openKey(aTempStr);
-                    if ( xKey.is() )
-                    {
-                        ::com::sun::star::registry::RegistryValueType aType = xKey->getValueType();
-                        switch ( aType )
-                        {
-                            case ::com::sun::star::registry::RegistryValueType_ASCII :
-                            {
-                                pEntry->aExtensions.Insert( new String( xKey->getAsciiValue() ), pEntry->aExtensions.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRING :
-                            {
-                                pEntry->aExtensions.Insert( new String( xKey->getStringValue() ), pEntry->aExtensions.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_ASCIILIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getAsciiListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aExtensions.Insert( new String( pUStrings[n] ), pEntry->aExtensions.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRINGLIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getStringListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aExtensions.Insert( new String( pUStrings[n] ), pEntry->aExtensions.Count() ) ;
-                                break;
-                            }
-                        }
-                    }
-
-                    aTempStr = aKeyStr;
-                    aTempStr += DEFINE_CONST_UNICODE("/Loader/MimeType");
-                    xKey = xRootKey->openKey(aTempStr);
-                    if ( xKey.is() )
-                    {
-                        ::com::sun::star::registry::RegistryValueType aType = xKey->getValueType();
-                        switch ( aType )
-                        {
-                            case ::com::sun::star::registry::RegistryValueType_ASCII :
-                            {
-                                pEntry->aMimeTypes.Insert( new String( xKey->getAsciiValue() ), pEntry->aMimeTypes.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRING :
-                            {
-                                pEntry->aMimeTypes.Insert( new String( xKey->getStringValue() ), pEntry->aMimeTypes.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_ASCIILIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getAsciiListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aMimeTypes.Insert( new String( pUStrings[n] ), pEntry->aMimeTypes.Count() ) ;
-                                break;
-                            }
-                            case ::com::sun::star::registry::RegistryValueType_STRINGLIST :
-                            {
-                                ::com::sun::star::uno::Sequence < ::rtl::OUString > aKey = xKey->getStringListValue();
-                                long nLen = aKey.getLength();
-                                const ::rtl::OUString* pUStrings = aKey.getConstArray();
-                                for ( long n=0; n<nLen; n++ )
-                                    pEntry->aMimeTypes.Insert( new String( pUStrings[n] ), pEntry->aMimeTypes.Count() ) ;
-                                break;
-                            }
-                        }
-                    }
-
-                    aKeyArr.Insert( pEntry, n );
-                }
-            }
-        }
-    }
-/*
-    CATCH ( OUnoException, e )
-    {
-    }
-    END_CATCH;
-*/
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxComponentFactory::createInstance( const ::rtl::OUString& aURL ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    return CreateInstance_Impl( aURL, NULL );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxComponentFactory::createInstanceWithArguments( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aSequ;
-    if ( Arguments.getLength() )
-    {
-        const ::com::sun::star::uno::Any aAny = Arguments.getConstArray()[0];
-        if ( aAny.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >*)0) )
-            aAny >>= aSequ ;
-    }
-
-    return CreateInstance_Impl( aURL, &aSequ );
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxComponentFactory::CreateInstance_Impl( const ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >* pArguments )
-{
-    if ( !xRegistry.is() )
-    {
-        Init_Impl();
-    }
-
-    String aName( aURL );
-    Any aAny( UCB_Helper::GetProperty( aName, WID_FLAG_IS_FOLDER ) );
-    BOOL bIsFolder = FALSE;
-    if ( ( aAny >>= bIsFolder ) && bIsFolder )
-    {
-        Reference< XFrameLoader >  xLoader;
-#ifdef WNT
-#if SUPD<613//MUSTINI module iexplorer no longer supported!
-        SfxIniManager* pIni = SfxIniManager::Get();
-        if( !Application::IsRemoteServer() && pIni->IsInternetExplorerAvailable() )
-            xLoader = Reference< XFrameLoader >( createInstance( DEFINE_CONST_UNICODE("private:iexplorer") ), ::com::sun::star::uno::UNO_QUERY );
-        if ( !xLoader.is() )
-#endif
-#endif
-            xLoader = Reference< XFrameLoader >( createInstance( DEFINE_CONST_UNICODE(".component:Text") ), ::com::sun::star::uno::UNO_QUERY );
-        return xLoader;
-    }
-
-    if ( xRegistry.is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-        sal_uInt16 nCount = aKeyArr.Count();
-        sal_uInt16 n;
-        for ( n=0; n<nCount; n++ )
-        {
-            SfxComponentKey_Impl* pEntry = aKeyArr[n];
-            sal_uInt16 nLen = pEntry->aPatterns.Count();
-            for ( sal_uInt16 n=0; n<nLen; n++ )
-            {
-                if ( WildCard( *pEntry->aPatterns[n] ).Matches( aName ) )
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( xMan->createInstance( pEntry->aImplName ), ::com::sun::star::uno::UNO_QUERY );
-                    if ( xLoader.is() )
-                        return xLoader;
-                }
-            }
-        }
-
-        INetURLObject aObject( aName );
-        String aExt( aObject.GetExtension() );
-        if ( aExt.Len() )
-        {
-            for ( n=0; n<nCount; n++ )
-            {
-                SfxComponentKey_Impl* pEntry = aKeyArr[n];
-                sal_uInt16 nLen = pEntry->aExtensions.Count();
-                for ( long n=0; n<nLen; n++ )
-                {
-                    if ( *pEntry->aExtensions[n] == aExt )
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrameLoader >  xLoader( xMan->createInstance( pEntry->aImplName ), ::com::sun::star::uno::UNO_QUERY );
-                        if ( xLoader.is() )
-                            return xLoader;
-                    }
-                }
-            }
-        }
-    }
-
-    return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
-}
-
-#endif
 
 #if 0 // (mba)
 #ifdef SOLAR_JAVA
@@ -898,9 +634,7 @@ void SfxJavaLoader::status( const ::com::sun::star::uno::Reference< ::com::sun::
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xCtrl( xComp, ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xPeer( xFrame->getContainerWindow(), ::com::sun::star::uno::UNO_QUERY );
-#if SUPD > 582
         xCtrl->createPeer( Application::GetVCLToolkit(), xPeer );
-#endif
         xComp->setPosSize( 0, 0, 100, 100, PosSize_POSSIZE );
         xFrame->setComponent( xComp, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > () );
     }
@@ -927,40 +661,7 @@ void SfxJavaLoader::LoadFinished( sal_Bool bOK )
 
 #endif
 #endif // (mba)
-/*
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxLoaderFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-}
 
-SFX_IMPL_UNO_OBJECT_1( SfxLoaderFactory, "LoaderFactory", ::com::sun::star::lang::XMultiServiceFactory );
-
-SfxLoaderFactory::SfxLoaderFactory()
-{
-}
-
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxLoaderFactory::createInstanceWithArguments(const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
-{
-    return xRet;
-}
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SfxLoaderFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
-{
-
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(9);
-    ::rtl::OUString *pArr = aRet.getArray();
-    pArr[0] = "ftp:";
-    pArr[1] = "http:";
-    pArr[2] = "https:";
-    pArr[3] = "file:";
-    pArr[4] = "news:";
-    pArr[5] = "staroffice.private:";
-    pArr[6] = "imap:";
-    pArr[7] = "pop3:";
-    pArr[8] = "vim:";
-
-    return aRet;
-}
-*/
 SFX_IMPL_XINTERFACE_1( DownloaderLoader, OWeakObject, ::com::sun::star::frame::XFrameLoader )
 SFX_IMPL_XTYPEPROVIDER_1( DownloaderLoader, ::com::sun::star::frame::XFrameLoader )
 SFX_IMPL_XSERVICEINFO( DownloaderLoader, FRAMELOADER_SERVICENAME, "com.sun.star.comp.sfx2.DownloaderLoader" )
@@ -1170,8 +871,12 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
     return nErr;
 }
 
-
 // -----------------------------------------------------------------------
+
+#define IMPLEMENTATION_NAME "com.sun.comp.jsimport.IchitaroImportFilter"
+#define SERVICE_NAME        "com.sun.star.document.ImportFilter"
+
+
 
 extern "C" {
 
@@ -1263,7 +968,26 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
     xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.ui.FileSave") );
+#if 0
+    if (pRegistryKey)
+    {
+            try
+            {
+                Reference< XRegistryKey > xKey(
+                    reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
+                Reference< XRegistryKey > xNewKey = xKey->createKey(
+                    ::rtl::OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
+                xNewKey->createKey( ::rtl::OUString::createFromAscii( SERVICE_NAME ) );
+
+                return sal_True;
+            }
+            catch (InvalidRegistryException &)
+            {
+                OSL_ENSHURE( sal_False, "### InvalidRegistryException!" );
+            }
+    }
+#endif
     return True;
 }
 
@@ -1308,8 +1032,24 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
             xFactory->acquire();
             pReturn = xFactory.get();
         }
+#if 0
+        if (!xFactory.is() && pServiceManager )
+        {
+                ::rtl::OUString aImplementationName = ::rtl::OUString::createFromAscii( pImplementationName );
+                if (aImplementationName == ::rtl::OUString::createFromAscii( IMPLEMENTATION_NAME ) )
+                {
+                    xFactory = ::cppu::createSingleFactory( xServiceManager, aImplementationName,
+                                                IchitaroImportFilter_CreateInstance,
+                                                IchitaroImportFilter::getSupportedServiceNames_Static() );
+                }
+                if (xFactory.is())
+                {
+                    xFactory->acquire();
+                    pReturn = xFactory.get();
+                }
+        }
+#endif
     }
-
     // Return with result of this operation.
     return pReturn ;
 }
