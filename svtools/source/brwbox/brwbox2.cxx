@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:20:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #include <vcl/salgtype.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
@@ -353,7 +355,9 @@ void BrowseBox::EndScroll()
 
 //-------------------------------------------------------------------
 
+#ifndef GCC
 #pragma optimize( "", off )
+#endif
 
 void BrowseBox::ToggleSelection( BOOL bForce )
 {
@@ -431,7 +435,9 @@ void BrowseBox::ToggleSelection( BOOL bForce )
     bNotToggleSel = FALSE;
 }
 
+#ifndef GCC
 #pragma optimize( "", on )
+#endif
 
 //-------------------------------------------------------------------
 
@@ -1334,7 +1340,6 @@ void BrowseBox::UpdateScrollbars()
     if ( nRowCount <
          long( aDataWinSize.Height() / GetDataRowHeight() ) )
         ScrollRows( -nTopRow );
-    long nDelta = nCornerSize;
     if ( bNeedsVScroll && !pVScroll->IsVisible() )
         pVScroll->Show();
 
@@ -1527,7 +1532,9 @@ IMPL_LINK( BrowseBox, StartDragHdl, HeaderBar*, pBar )
 
 //-------------------------------------------------------------------
 // MI: es wurde immer nur die 1. Spalte resized
+#ifndef GCC
 #pragma optimize("elg",off)
+#endif
 
 void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -1583,7 +1590,9 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
         SetNoSelection();
 }
 
+#ifndef GCC
 #pragma optimize("",on)
+#endif
 
 //-------------------------------------------------------------------
 
@@ -2008,7 +2017,8 @@ void BrowseBox::Dispatch( USHORT nId )
                 BOOL bLocalSelect = ( !IsRowSelected( nCurRow ) ||
                                  GetSelectRowCount() == 1 || IsRowSelected( nCurRow - 1 ) );
                 SelectRow( nCurRow, bLocalSelect, TRUE );
-                if ( bDone = GoToRow( GetCurRow() + 1 , FALSE ) )
+                bDone = GoToRow( GetCurRow() + 1 , FALSE );
+                if ( bDone )
                     SelectRow( GetCurRow(), TRUE, TRUE );
             }
             else
