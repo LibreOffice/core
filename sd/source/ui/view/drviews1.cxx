@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-27 15:08:05 $
+ *  last change: $Author: ka $ $Date: 2002-03-20 14:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,7 +1534,7 @@ sal_Int8 SdDrawViewShell::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHel
     {
     }
 
-    return( pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
+    return( pFuSlideShow ? DND_ACTION_NONE : pDrView->AcceptDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
 }
 
 /*************************************************************************
@@ -1553,9 +1553,10 @@ sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetH
     {
     }
 
-    return( pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
+    return( pFuSlideShow ? DND_ACTION_NONE : pDrView->ExecuteDrop( rEvt, rTargetHelper, pTargetWindow, nPage, nLayer ) );
 }
 
 #ifdef WNT
 #pragma optimize ( "", on )
 #endif
+    
