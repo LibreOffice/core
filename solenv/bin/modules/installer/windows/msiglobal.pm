@@ -65,6 +65,7 @@ use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
+use installer::pathanalyzer;
 use installer::remover;
 use installer::scriptitems;
 use installer::systemactions;
@@ -178,6 +179,9 @@ sub generate_cab_file_list
             my $oneline = "makecab.exe /V3 /F " . $ddffilename . " 2\>\&1 |" . "\n";
 
             push(@cabfilelist, $oneline);
+
+            # collecting all ddf files
+            push(@installer::globals::allddffiles, $ddffilename);
         }
     }
     elsif ( $installer::globals::one_cab_file )
@@ -221,6 +225,9 @@ sub generate_cab_file_list
         my $oneline = "makecab.exe /F " . $ddffilename . "\n";
 
         push(@cabfilelist, $oneline);
+
+        # collecting all ddf files
+        push(@installer::globals::allddffiles, $ddffilename);
     }
     else
     {
@@ -229,6 +236,88 @@ sub generate_cab_file_list
 
 
     return \@cabfilelist;   # contains all system calls for packaging process
+}
+
+########################################################################
+# Returning the file sequence of a specified file.
+########################################################################
+
+sub get_file_sequence
+{
+    my ($filesref, $uniquefilename) = @_;
+
+    my $sequence = "";
+    my $found_sequence = 0;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $onefile = ${$filesref}[$i];
+        my $uniquename = $onefile->{'uniquename'};
+
+        if ( $uniquename eq $uniquefilename )
+        {
+            $sequence = $onefile->{'sequencenumber'};
+            $found_sequence = 1;
+        }
+    }
+
+    if ( ! $found_sequence ) { installer::exiter::exit_program("ERROR: No sequence found for $uniquefilename !", "get_file_sequence"); }
+
+    return $sequence;
+}
+
+########################################################################
+# For update and patch reasons the pack order needs to be saved.
+# The pack order is saved in the ddf files; the names and locations
+# of the ddf files are saved in @installer::globals::allddffiles.
+# The outputfile "packorder.txt" can be saved in
+# $installer::globals::infodirectory .
+########################################################################
+
+sub save_packorder
+{
+    my ( $filesref ) = @_;
+
+    my $packorderfilename = "packorder.txt";
+    $packorderfilename = $installer::globals::infodirectory . $installer::globals::separator . $packorderfilename;
+
+    my @packorder = ();
+
+    my $headerline = "\# Syntax\: Filetable_Sequence Cabinetfilename Physical_FileName Unique_FileName\n\n";
+    push(@packorder, $headerline);
+
+    for ( my $i = 0; $i <= $#installer::globals::allddffiles; $i++ )
+    {
+        my $ddffilename = $installer::globals::allddffiles[$i];
+        my $ddffile = installer::files::read_file($ddffilename);
+        my $cabinetfile = "";
+
+        for ( my $j = 0; $j <= $#{$ddffile}; $j++ )
+        {
+            my $oneline = ${$ddffile}[$j];
+
+            # Getting the Cabinet file name
+            # .Set CabinetName1=adabasd1.cab
+
+            if ( $oneline =~ /^\s*\.Set\s+CabinetName.*\=(.*?)\s*$/ ) { $cabinetfile = $1; }
+            if ( $oneline =~ /^\s*\.Set\s+/ ) { next; }
+
+            if ( $oneline =~ /^\s*\"(.*?)\"\s+(.*?)\s*$/ )
+            {
+                my $sourcefile = $1;
+                my $uniquefilename = $2;
+
+                installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$sourcefile);
+
+                my $filesequence = get_file_sequence($filesref, $uniquefilename);
+
+                my $line = $filesequence . "\t" . $cabinetfile . "\t" . $sourcefile . "\t" . $uniquefilename . "\n";
+                push(@packorder, $line);
+            }
+        }
+    }
+
+    installer::files::save_file($packorderfilename ,\@packorder);
 }
 
 #################################################################
@@ -944,6 +1033,55 @@ sub get_guid_list
 }
 
 #################################################################
+# Filling the component hash with the values of the
+# component file.
+#################################################################
+
+sub fill_component_hash
+{
+    my ($componentfile) = @_;
+
+    my %components = ();
+
+    for ( my $i = 0; $i <= $#{$componentfile}; $i++ )
+    {
+        my $line = ${$componentfile}[$i];
+
+        if ( $line =~ /^\s*(.*?)\t(.*?)\s*$/ )
+        {
+            my $key = $1;
+            my $value = $2;
+
+            $components{$key} = $value;
+        }
+    }
+
+    return \%components;
+}
+
+#################################################################
+# Creating a new component file, if new guids were generated.
+#################################################################
+
+sub create_new_component_file
+{
+    my ($componenthash) = @_;
+
+    my @componentfile = ();
+
+    my $key;
+
+    foreach $key (keys %{$componenthash})
+    {
+        my $value = $componenthash->{$key};
+        my $input = "$key\t$value\n";
+        push(@componentfile ,$input);
+    }
+
+    return \@componentfile;
+}
+
+#################################################################
 # Filling real component GUID into the component table.
 # This works only on Windows
 #################################################################
@@ -952,22 +1090,93 @@ sub set_uuid_into_component_table
 {
     my ($idtdirbase) = @_;
 
-    my $componentfilename  = $idtdirbase . $installer::globals::separator . "Componen.idt";
+    my $componenttablename  = $idtdirbase . $installer::globals::separator . "Componen.idt";
 
-    my $componentfile = installer::files::read_file($componentfilename);
+    my $componenttable = installer::files::read_file($componenttablename);
 
-    my $number = $#{$componentfile} + 1;
+#   my $number = $#{$componenttable} + 1;
+#
+#   my $guidref = get_guid_list($number);
+#
+#   for ( my $i = 0; $i <= $#{$componenttable}; $i++ )
+#   {
+#       my $uuid = ${$guidref}[$i];
+#       installer::remover::remove_leading_and_ending_whitespaces(\$uuid);
+#       ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
+#   }
 
-    my $guidref = get_guid_list($number);
+    # For update and patch reasons (small update) the GUID of an existing component must not change!
+    # The collection of component GUIDs is saved in the directory $installer::globals::idttemplatepath in the file "components.txt"
 
-    for ( my $i = 0; $i <= $#{$componentfile}; $i++ )
+    my $infoline = "";
+    my $counter = 0;
+    my $componentfile = installer::files::read_file($installer::globals::componentfilename);
+    my $componenthash = fill_component_hash($componentfile);
+
+    for ( my $i = 3; $i <= $#{$componenttable}; $i++ )  # ignoring the first three lines
     {
-        my $uuid = ${$guidref}[$i];
-        installer::remover::remove_leading_and_ending_whitespaces(\$uuid);
-        ${$componentfile}[$i] =~ s/COMPONENTGUID/$uuid/;
+        my $oneline = ${$componenttable}[$i];
+        my $componentname = "";
+        if ( $oneline =~ /^\s*(\S+?)\t/ ) { $componentname = $1; }
+
+        my $uuid = "";
+
+        if ( $componenthash->{$componentname} )
+        {
+            $uuid = $componenthash->{$componentname};
+        }
+        else
+        {
+            # This is an error or a warning?
+            # Creating a new guid for the component and saving this in the "components.txt"
+            # Setting global variable: created_new_component_guid
+
+            # Creating new guid
+
+            my $guidref = get_guid_list(1); # only one GUID shall be generated
+            my $newuuid = ${$guidref}[0];
+            $newuuid =~ s/\s*$//;           # removing ending spaces
+            $infoline = "WARNING: Creating new GUID for component: $componentname, value: $newuuid \n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $counter++;
+
+            # Setting new uuid
+            $componenthash->{$componentname} = $newuuid;
+
+            # Setting flag
+            $installer::globals::created_new_component_guid = 1;    # this is very important!
+
+            $uuid = $newuuid;
+        }
+
+        ${$componenttable}[$i] =~ s/COMPONENTGUID/$uuid/;
     }
 
-    installer::files::save_file($componentfilename, $componentfile)
+    installer::files::save_file($componenttablename, $componenttable);
+
+    if ( $installer::globals::created_new_component_guid )
+    {
+        # create new component file!
+        $componentfile = create_new_component_file($componenthash);
+        installer::worker::sort_array($componentfile);
+
+        # To avoid conflict the components file cannot be saved at the same place
+        # All important data have to be saved in the directory: $installer::globals::infodirectory
+        my $localcomponentfilename = $installer::globals::componentfilename;
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$localcomponentfilename);
+        $localcomponentfilename = $installer::globals::infodirectory . $installer::globals::separator . $localcomponentfilename;
+        installer::files::save_file($localcomponentfilename, $componentfile);
+
+        # installer::files::save_file($installer::globals::componentfilename, $componentfile);  # version using new file in solver
+
+        $infoline = "WARNING COMPONENTCODES: Created $counter new GUIDs for components ! \n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "SUCCESS COMPONENTCODES: All component codes exist! \n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 }
 
 #################################################################
@@ -1106,19 +1315,18 @@ sub execute_packaging
 
 sub set_global_code_variables
 {
-    my ( $languagesref ) = @_;
+    my ( $languagesref, $languagestringref, $allvariableshashref ) = @_;
 
     my $codefile = installer::files::read_file($installer::globals::codefilename);
+
+    my $isopensource = 0;
+    if ( $allvariableshashref->{'OPENSOURCE'} ) { $isopensource = $allvariableshashref->{'OPENSOURCE'}; }
 
     my $onelanguage = "";
 
     if ( $#{$languagesref} > 0 )    # more than one language
     {
-        if (( ${$languagesref}[1] =~ /81/ ) ||
-            ( ${$languagesref}[1] =~ /82/ ) ||
-            ( ${$languagesref}[1] =~ /86/ ) ||
-            ( ${$languagesref}[1] =~ /88/ ) ||
-            ( ${$languagesref}[1] =~ /jp/ ) ||
+        if (( ${$languagesref}[1] =~ /jp/ ) ||
             ( ${$languagesref}[1] =~ /ko/ ) ||
             ( ${$languagesref}[1] =~ /zh/ ))
         {
@@ -1146,15 +1354,13 @@ sub set_global_code_variables
     $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
     $installer::globals::upgradecode = installer::windows::idtglobal::get_language_string_from_language_block($codeblock, $onelanguage, "");
 
-    # if ( $installer::globals::productcode eq "" ) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
+    # if (( $installer::globals::productcode eq "" ) && ( ! $isopensource )) { installer::exiter::exit_program("ERROR: ProductCode for language $onelanguage not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
     if ( $installer::globals::upgradecode eq "" ) { installer::exiter::exit_program("ERROR: UpgradeCode not defined in $installer::globals::codefilename !", "set_global_code_variables"); }
 
     # $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
     # push( @installer::globals::logfileinfo, $infoline);
     $infoline = "Setting UpgradeCode to: $installer::globals::upgradecode \n";
     push( @installer::globals::logfileinfo, $infoline);
-
-    # New: Always generating a new product code for each package
 
     my $guidref = get_guid_list(1); # only one GUID shall be generated
 
@@ -1164,6 +1370,33 @@ sub set_global_code_variables
     $infoline = "Setting ProductCode to: $installer::globals::productcode \n";
     push( @installer::globals::logfileinfo, $infoline);
 
+}
+
+###############################################################
+# Setting the product version used in property table and
+# upgrade table. Saving in global variable $msiproductversion
+###############################################################
+
+sub set_msiproductversion
+{
+    my ( $allvariables ) = @_;
+
+    my $productversion = $allvariables->{'PRODUCTVERSION'};
+
+    if ( $productversion =~ /^\s*(\d+)\.(\d+)\.(\d+)\s*$/ )
+    {
+        $productversion = $1 . "\." . $2 . $3 . "\." . $installer::globals::buildid;
+    }
+    elsif  ( $productversion =~ /^\s*(\d+)\.(\d+)\s*$/ )
+    {
+        $productversion = $1 . "\." . $2 . "\." . $installer::globals::buildid;
+    }
+    else
+    {
+        $productversion = $productversion . "\." . "00" . "\." . $installer::globals::buildid;
+    }
+
+    $installer::globals::msiproductversion = $productversion;
 }
 
 1;
