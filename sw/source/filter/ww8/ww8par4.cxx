@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
     //      0x2c, 0x30 Skalierung x,y in Promille
     //      0x34, 0x38, 0x3c, 0x40 Crop Left, Top, Right, Bot in tw
 
-    SvStorageStreamRef xSrc3 = rSrc1->OpenStream( WW8_ASCII2STR( "\3PIC" ));
+    SvStorageStreamRef xSrc3 = rSrc1->OpenStream( WW8_ASCII2STR( "\3PIC" ),
+        STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pS = xSrc3;
     pS->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     pS->Seek( STREAM_SEEK_TO_END );
@@ -197,10 +198,8 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
         >> nCropRight
         >> nCropBottom;
 
-    if (!rX)
-        rX = nOrgWidth  - nCropLeft - nCropRight;
-    if (!rY)
-        rY = nOrgHeight - nCropTop  - nCropBottom;
+    rX = nOrgWidth  - nCropLeft - nCropRight;
+    rY = nOrgHeight - nCropTop  - nCropBottom;
     if(       10 > nScaleX
         || 65536 < nScaleX
         ||    10 > nScaleY
@@ -220,7 +219,8 @@ static BOOL SwWw8ReadScaling( INT16& rX, INT16& rY, SvStorageRef& rSrc1 )
 static BOOL SwWw6ReadMetaStream(GDIMetaFile& rWMF, OLE_MFP* pMfp,
     SvStorageRef& rSrc1)
 {
-    SvStorageStreamRef xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR( "\3META" ));
+    SvStorageStreamRef xSrc2 = rSrc1->OpenStream( WW8_ASCII2STR("\3META"),
+        STREAM_STD_READ | STREAM_NOCREATE);
     SvStorageStream* pSt = xSrc2;
     pSt->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     ULONG nRead = pSt->Read( pMfp, sizeof(*pMfp ) );

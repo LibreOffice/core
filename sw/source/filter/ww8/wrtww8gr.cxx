@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: cmc $ $Date: 2001-10-31 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
     INT16 nX=0,nY=0;
     if (!bGraphicNeeded && SwWW8ImplReader::ImportOleWMF(xOleStg,aWMF,nX,nY))
     {
+        bGraphicNeeded=FALSE;
         Point aTmpPoint;
         Rectangle aRect( aTmpPoint, Size( nX, nY ) );
         Graphic aGraph(aWMF);
@@ -241,14 +242,16 @@ BOOL SwWW8Writer::TestOleNeedsGraphic(const SwAttrSet& rSet,
             rO2->GetGDIMetaFile( aNewMtf );
 #if 0
             //The compare in gdimtf.cxx isn't good #94067#
-            if (aMtf != aNewMtf)
+            if (aMtf == aNewMtf)
 #else
-            if (aMtf.GetChecksum() != aNewMtf.GetChecksum())
+            if (aMtf.GetChecksum() == aNewMtf.GetChecksum())
 #endif
-                bGraphicNeeded=TRUE;
+                bGraphicNeeded=FALSE;
             delete pRet;
         }
     }
+    else
+        bGraphicNeeded=TRUE;
     return bGraphicNeeded;
 #endif
 }
