@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redcom.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:01:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,21 +80,22 @@
 //------------------------------------------------------------------------
 
 ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                    ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext):
-        SvxPostItDialog(pParent,rCoreSet,bPrevNext,TRUE )
+                    ScDocShell *pShell,ScChangeAction *pAction,BOOL bPrevNext)
 {
+    pDlg = new SvxPostItDialog(pParent,rCoreSet,bPrevNext,TRUE);
     pDocShell=pShell;
-    DontChangeAuthor();
-    HideAuthor();
+    pDlg->DontChangeAuthor();
+    pDlg->HideAuthor();
 
-    SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
-    SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
+    pDlg->SetPrevHdl(LINK( this, ScRedComDialog, PrevHdl));
+    pDlg->SetNextHdl(LINK( this, ScRedComDialog, NextHdl));
 
     ReInit(pAction);
 }
 
 ScRedComDialog::~ScRedComDialog()
 {
+    delete pDlg;
 }
 
 ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
@@ -146,12 +147,12 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
     {
         String aTitle;
         pChangeAction->GetDescription( aTitle, pDocShell->GetDocument());
-        SetText(aTitle);
+        pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
         BOOL bNext=FindNext(pChangeAction)!=NULL;
         BOOL bPrev=FindPrev(pChangeAction)!=NULL;
-        EnableTravel(bNext,bPrev);
+        pDlg->EnableTravel(bNext,bPrev);
 
         String aAuthor = pChangeAction->GetUser();
 
@@ -160,19 +161,19 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
         aDate += ' ';
         aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
 
-        ShowLastAuthor(aAuthor, aDate);
-        SetNote(aComment);
+        pDlg->ShowLastAuthor(aAuthor, aDate);
+        pDlg->SetNote(aComment);
     }
 }
 
 short ScRedComDialog::Execute()
 {
-    short nRet=SvxPostItDialog::Execute();
+    short nRet=pDlg->Execute();
 
     if(nRet== RET_OK )
     {
-        if ( pDocShell!=NULL && GetNote() != aComment )
-            pDocShell->SetChangeComment( pChangeAction, GetNote());
+        if ( pDocShell!=NULL && pDlg->GetNote() != aComment )
+            pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
     }
 
     return nRet;
@@ -197,8 +198,8 @@ void ScRedComDialog::SelectCell()
 
 IMPL_LINK(ScRedComDialog, PrevHdl, SvxPostItDialog*, pDlg )
 {
-    if (pDocShell!=NULL && GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, GetNote());
+    if (pDocShell!=NULL && pDlg->GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
 
     ReInit(FindPrev(pChangeAction));
     SelectCell();
@@ -208,8 +209,8 @@ IMPL_LINK(ScRedComDialog, PrevHdl, SvxPostItDialog*, pDlg )
 
 IMPL_LINK(ScRedComDialog, NextHdl, SvxPostItDialog*, pDlg )
 {
-    if ( pDocShell!=NULL && GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, GetNote());
+    if ( pDocShell!=NULL && pDlg->GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
 
     ReInit(FindNext(pChangeAction));
     SelectCell();
