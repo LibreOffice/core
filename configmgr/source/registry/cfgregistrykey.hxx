@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-16 08:12:14 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/Mutex.hxx>
@@ -100,26 +103,20 @@ class OConfigurationRegistryKey
     sal_Bool        m_bReadOnly;        /// is the key readonly ?
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    m_xNodeAccess;      /// the config node object, if it describes a container
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
-                    m_xNodeDeepAccess;  /// for accessing elements which are grandchildren
+                    m_xNode;        /// the config node object, if it is a container
 
-    ::com::sun::star::uno::Any
-                    m_aLeafElement;     /// if the key represents a leaf, this is the value
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-                    m_xLeafParent;      /// if the key represents a leaf, this is it's parent. used for write access
+                    m_xParentNode;      /// if the key is not the root, this is it's parent.
 
-    ::rtl::OUString m_sLocalName;       /** the name of the element relative to the parent, which would be
-                                            m_xLeafParent in case the key represents a value node
+    const ::rtl::OUString   m_sLocalName; /** the name of the element relative to the parent, which is
+                                            m_xParentNode if that is present
                                         */
 
-    // TODO : the current concept does not recognize any changes in the config tree, i.e. the values stored
-    // in a configuration key wrapper are not changed if the value in the corresponding config node changes.
+    // TODO : the current concept does not recognize when config keys are disposed (e.g. when the registry is closed)
+    //
     // Possible solutions:
-    // 1. on each value (or even on each sub key) access, the node is read from the configuration hierarchy, again.
-    //      sounds very expensive.
-    // 2. each registry key is a listener on the node it represents.
-    //      sounds expensive, too.
+    // 1. each registry key is a listener on the component containing its node
+    //      may be is expensive ?.
     //
     // At the moment we ignore this restriction, but perhaps we can't do that forever ....
 
@@ -127,23 +124,31 @@ public:
     /// when used as ctor parameter, this indicates that the key wraps a config tree subtree root
     struct SubtreeRoot { };
 
-    /** builds an registry key which wraps the root of a configuration node
+    /** builds an registry key which wraps the root of a configuration registry
     */
     OConfigurationRegistryKey(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainerNode
+             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxRootNode
             ,sal_Bool _bWriteable
             ,SubtreeRoot
         );
 
-    /** builds an registry key for a configuration container node
-        @param      _rxContainerNode    the container the key should represent
-        @param      _rLocalName         the name of the node local to it's parent. Must be empty only if
-                                        the key represents the root node of a navigatable sub tree.
+    /** builds an registry key for a configuration node
+        @param      _rxContainerNode    the node the key should represent
         @param      _bWriteable         should the key be writeable ?
     */
     OConfigurationRegistryKey(
-             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainerNode
-            ,const ::rtl::OUString& _rLocalName
+             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxNode
+            ,sal_Bool _bWriteable
+        );
+
+    /** builds an registry key for a configuration child node.
+        @param      _rxParentNode   the parent of the node. Used for update access and for obtaining the initial value.
+        @param      _rRelativeName  te relative name within the parent
+        @param      _bWriteable     should the key be writeable ?
+    */
+    OConfigurationRegistryKey(
+             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentNode
+            ,const ::rtl::OUString& _rRelativeName
             ,sal_Bool _bWriteable
         );
 
@@ -202,11 +207,30 @@ protected:
         KAT_CHILD           /// access to one of the (grand-)children of the node
     };
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+        implGetParentPropertyInfo()
+            throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Bool implIsReadOnly()
+            throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Bool implEnsureNode()
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Type implGetUnoType()
+            throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Bool implEnsureValue()
+            throw(::com::sun::star::uno::RuntimeException);
+
+    sal_Bool implIsValid() throw ();
+
     /** check if the registry key is valid
         @param      _eIntentedAccess    type of access which the caller wants to perform on the object
         @throws             <type scope="com.sun.star.registry">InvalidRegistryException</type> if the key is invalid
     */
-    void checkValid(KEY_ACCESS_TYPE _eIntentedAccess) throw (::com::sun::star::registry::InvalidRegistryException);
+    void checkValid(KEY_ACCESS_TYPE _eIntentedAccess)
+        throw (::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
     /** return an child element.
         @param      _rDescendantName    the name of the descendant to open. May have a depth of more than 1, if
@@ -218,14 +242,20 @@ protected:
                             the element refered by _rName does not exist, the configuration node threw an exception, or
                             the name has a depth of more than one and the config node does not support this.
     */
-    ::com::sun::star::uno::Any getDescendant(const ::rtl::OUString& _rDescendantName) throw(::com::sun::star::registry::InvalidRegistryException);
+    ::com::sun::star::uno::Any
+        implGetDescendant(const ::rtl::OUString& _rDescendantName)
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
     /** write the given value into the configuration node the object represents.
         @throws             <type scope="com.sun.star.registry">InvalidRegistryException</type> if the key is invalid,
                             not opened for write access or the configurations parent is not able to provide a value access
         @throws             <type scope="com.sun.star.uno">RuntimeException</type> if a fatal runtime error occurs
     */
-    void writeValueNode(const ::com::sun::star::uno::Any& _rValue) throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+    void implSetValue(const ::com::sun::star::uno::Any& _rValue)
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::uno::Any implGetValue()
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
     /** open the sub key (depth 1 or more) determined by the given name
         @param      _rKeyName       the name of the descendant node
@@ -234,7 +264,9 @@ protected:
                             the element refered by _rName does not exist, the configuration node threw an exception, or
                             the name has a depth of more than one and the config node does not support this.
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OUString& _rKeyName ) throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey >
+        implGetKey( const ::rtl::OUString& _rKeyName )
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
     /** check the given (relative) key name syntactically.
 
@@ -247,21 +279,25 @@ protected:
         @throws InvalidRegistryException
             if the name is empty or consists of slashes only
     */
-    void checkRelativeKeyName(::rtl::OUString& _rKeyName) throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+    void checkRelativeKeyName(::rtl::OUString& _rKeyName)
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
-    /** get a default value for a leaf which is originally NULL
+    /** get a default value for a value of a given type
 
-        <p>The configuration leaf nodes are allowed to be NULL, but we no no chance to wrap this here (the registry
+        <p>Some configuration value nodes are allowed to be NULL, but we no no chance to wrap this here (the registry
         interface does not allow NULL values). So in case we encounter such a NULL leaf, we create a default value for
         it, dependent on the type of the leaf (which can be retrieved from it's parent).</p>
 
+        @param  _rType          the type of the element to create
         @return
             an <type scope="com::sun::star::uno">Any</type> representing a default for the node value type. If the
-            return value is still VOID, the node has an unsupported type (e.g. double)
+            return value is still VOID, the node has a nullable type (e.g. any)
         @throws com::sun::star::registry::InvalidRegistryException
-            if the parent node specified by <arg>_rParentName</arg> did not provide type information for the node
+            if the type given could not be supported
     */
-    ::com::sun::star::uno::Any  getEmptyLeafDefault(const ::rtl::OUString& _rParentName, const ::rtl::OUString& _rElementLocalName);
+    ::com::sun::star::uno::Any
+        implCreateDefaultElement(::com::sun::star::uno::Type const& _rType)
+            throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 };
 
 

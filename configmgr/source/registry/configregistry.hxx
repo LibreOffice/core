@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:22 $
+ *  last change: $Author: jb $ $Date: 2001-02-23 10:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@ protected:
                         m_xUpdateRoot;  /// the update access to the root of the sub tree, valid if opened for writing
     ::rtl::OUString     m_sLocation;    /// URL of the configuration node we're representing, if any
 
-    ::cppu::OInterfaceContainerHelper
-                        m_aFlushListeners;
-
 
 public:
     OConfigurationRegistry(
@@ -156,15 +153,13 @@ public:
     virtual void SAL_CALL removeFlushListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushListener >& l ) throw(::com::sun::star::uno::RuntimeException);
 
 protected:
-    virtual void SAL_CALL disposing() {
-        ServiceComponentImpl::disposing();
-    }
+    virtual void SAL_CALL disposing();
     /// translates the given URL into a nodepath which may be used with the configuration provider
     ::rtl::OUString getNodePathFromURL(const ::rtl::OUString& _rURL);
 
-    void checkOpen() throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
+    void implCheckOpen() throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
-    sal_Bool isOpen() { return isValid(); }
+    sal_Bool implIsOpen();
 };
 
 
