@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:29:42 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 13:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #include <vcl/mapunit.hxx>
 #include <vcl/mapmod.hxx>
+
+#ifndef COMPHELPER_ACCESSIBLE_TEXT_HELPER_HXX
+#include <comphelper/accessibletexthelper.hxx>
+#endif
 
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
@@ -375,11 +379,12 @@ void SmDocShell::SetText(const String& rBuffer)
         SmGraphicAccessible *pAcc = pViewSh ? pViewSh->GetGraphicWindow().GetAccessible() : 0;
         if (pAcc)
         {
-            uno::Any aOldValue, aNewValue;
-            aOldValue <<= rtl::OUString( aText );
-            aNewValue <<= rtl::OUString( rBuffer );
-            pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
-                    aOldValue, aNewValue );
+            Any aOldValue, aNewValue;
+            if ( comphelper::OCommonAccessibleText::implInitTextChangedEvent( aText, rBuffer, aOldValue, aNewValue ) )
+            {
+                pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
+                        aOldValue, aNewValue );
+            }
         }
     }
 }
