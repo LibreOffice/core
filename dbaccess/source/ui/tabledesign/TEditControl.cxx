@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 13:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void OTableEditorCtrl::InitCellController()
     //////////////////////////////////////////////////////////////////////
     // Zelle Feldname
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     xub_StrLen nMaxTextLen((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
@@ -603,7 +603,7 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const String& rFieldName )
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
 
@@ -885,7 +885,7 @@ String OTableEditorCtrl::GenerateName( const String& rName )
     // Basisnamen zum Anhaengen einer Numerierung erstellen
     String aBaseName;
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     xub_StrLen nMaxTextLen((xub_StrLen)( xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0));
 
@@ -1323,7 +1323,7 @@ sal_Bool OTableEditorCtrl::IsDeleteAllowed( long nRow )
 
     // Wenn nur Felder hinzugefuegt werden duerfen, Delete nur auf neuen Feldern
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     return  !(xTable.is() && xTable->getPropertySetInfo()->getPropertyByName(PROPERTY_NAME).Attributes & PropertyAttribute::READONLY) ||
             ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn() && xMetaData->supportsAlterTableWithDropColumn());
@@ -1341,7 +1341,7 @@ sal_Bool OTableEditorCtrl::IsInsertNewAllowed( long nRow )
         return sal_True;
 
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
     if(!xMetaData.is())
         return sal_False;
     //////////////////////////////////////////////////////////////
@@ -1372,7 +1372,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
     //////////////////////////////////////////////////////////////
     // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
     Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
     if(!xMetaData.is() || !xMetaData->supportsCoreSQLGrammar())
         return sal_False;
 

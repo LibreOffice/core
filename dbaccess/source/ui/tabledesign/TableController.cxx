@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:04:03 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 13:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,7 +1078,7 @@ void OTableController::loadData()
     m_vRowList.clear();
 
     OTableRow* pTabEdRow = NULL;
-    Reference< XDatabaseMetaData> xMetaData = getConnection().is() ? getConnection()->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = getConnection().is() ? getConnection()->getMetaData() : Reference< XDatabaseMetaData>();
     //////////////////////////////////////////////////////////////////////
     // Datenstruktur mit Daten aus DatenDefinitionsObjekt fuellen
     if(m_xTable.is() && xMetaData.is())
@@ -1243,7 +1243,7 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
 // -----------------------------------------------------------------------------
 void OTableController::checkColumns() throw(::com::sun::star::sdbc::SQLException)
 {
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
 
     ::comphelper::UStringMixEqual bCase(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::const_iterator aIter = m_vRowList.begin();
