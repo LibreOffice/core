@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:53:25 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,13 +190,6 @@ BOOL SfxApplication::QueryExit_Impl()
     // alles canceln was zu canceln ist
     GetCancelManager()->Cancel(TRUE);
 
-    // direkte Benutzung is beendet
-    if ( pAppData_Impl->bDirectAliveCount )
-    {
-        SvFactory::DecAliveCount();
-        pAppData_Impl->bDirectAliveCount = FALSE;
-    }
-
 /*
     SfxObjectShell *pLastDocSh = SfxObjectShell::GetFirst();
     if ( bQuit )
@@ -232,18 +225,6 @@ void SfxApplication::Deinitialize()
     if ( pAppData_Impl->pCancelMgr )
         pAppData_Impl->EndListening( *pAppData_Impl->pCancelMgr );
 
-/*
-    // Falls noch mal zwischendurch eine Task ( BasicIDE! ) angelegt wurde ...
-    do
-    {
-        SfxObjectShell* pFirst = SfxObjectShell::GetFirst();
-        if ( pFirst )
-            pFirst->DoClose();
-        else
-            break;
-    }
-    while ( sal_True );
-*/
     //!Wait();
     StarBASIC::Stop();
 
@@ -258,7 +239,6 @@ void SfxApplication::Deinitialize()
 
     DELETEZ( pAppData_Impl->pTemplates );
 
-    SvFactory::ClearDemandObjects();
     DELETEZ(pImp->pTemplateDlg);
     SetViewFrame(0);
     bDowning = FALSE;
@@ -288,7 +268,6 @@ void SfxApplication::Deinitialize()
     if( pImp->pDialogLibContainer )
         pImp->pDialogLibContainer->release();
 
-    SvFactory::ClearDemandObjects();
     bInExit = FALSE;
 
     DBG_ASSERT( pViewFrame == 0, "active foreign ViewFrame" );
@@ -300,6 +279,7 @@ void SfxApplication::Deinitialize()
     DELETEZ(pImp->pAutoSaveTimer);
     DELETEZ(pAppDispat);
     DELETEZ(pImp->pSfxResManager);
+    DELETEZ(pImp->pOfaResMgr);
 
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEX(pAppData_Impl->pMatcher);
