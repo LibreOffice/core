@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:23:21 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 14:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef __SGI_STL_MAP
-#include <stl/map>
+#include <map>
 #endif
 
 //=========================================================================
