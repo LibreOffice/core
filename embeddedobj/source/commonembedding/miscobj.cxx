@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:51:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,7 @@ uno::Any SAL_CALL OCommonEmbeddedObject::queryInterface( const uno::Type& rType 
 
     aReturn <<= ::cppu::queryInterface( rType,
                                         static_cast< embed::XEmbeddedObject* >( this ),
+                                        static_cast< embed::XStateChangeBroadcaster* >( this ),
                                         static_cast< embed::XVisualObject* >( this ),
                                         static_cast< embed::XEmbedPersist* >( this ),
                                         static_cast< embed::XLinkageSupport* >( this ),
