@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-07-10 17:30:42 $
+ *  last change: $Author: er $ $Date: 2001-08-06 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,4 +285,27 @@ sal_Int32 TransliterationWrapper::compareString( const String& rStr1, const Stri
 #endif
     }
     return 0;
+}
+
+
+// --- helpers --------------------------------------------------------
+
+sal_Bool TransliterationWrapper::isEqual( const String& rStr1, const String& rStr2 ) const
+{
+    sal_Int32 nMatch1, nMatch2;
+    sal_Bool bMatch = equals(
+        rStr1, 0, rStr1.Len(), nMatch1,
+        rStr2, 0, rStr2.Len(), nMatch2 );
+    return bMatch && nMatch1 == nMatch2 && nMatch1 == rStr1.Len() &&
+        nMatch2 == rStr2.Len();
+}
+
+
+sal_Bool TransliterationWrapper::isMatch( const String& rStr1, const String& rStr2 ) const
+{
+    sal_Int32 nMatch1, nMatch2;
+    sal_Bool bMatch = equals(
+        rStr1, 0, rStr1.Len(), nMatch1,
+        rStr2, 0, rStr2.Len(), nMatch2 );
+    return bMatch && nMatch1 <= nMatch2 && nMatch1 == rStr1.Len();
 }
