@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeTypeHandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:39:24 $
+ *  last change: $Author: af $ $Date: 2002-05-06 09:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,12 @@
  *
  ************************************************************************/
 
-
 #include "ShapeTypeHandler.hxx"
 #include "SvxShapeTypes.hxx"
 
+#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_INFO_HXX
+#include "AccessibleShapeInfo.hxx"
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPEDESCRIPTOR_HPP_
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
 #endif
@@ -87,8 +89,8 @@ ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
 
 // Create an empty reference to an accessible object.
 AccessibleShape*
-    CreateEmptyShapeReference (const uno::Reference<XAccessible>& rxParent,
-        const uno::Reference<drawing::XShape>& rxShape,
+    CreateEmptyShapeReference (
+        const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo,
         ShapeTypeId nId)
 {
@@ -164,19 +166,17 @@ const OUString& ShapeTypeHandler::GetServiceName (ShapeTypeId aTypeId) const
 
 /** This factory method determines the type descriptor for the type of the
     given shape, then calls the descriptor's create function, and finally
-    initialized the new object.
+    initializes the new object.
 */
 AccessibleShape*
     ShapeTypeHandler::CreateAccessibleObject (
-        const uno::Reference<drawing::XShape>& rxShape,
-        const uno::Reference<XAccessible>& rxParent,
+        const AccessibleShapeInfo& rShapeInfo,
         const AccessibleShapeTreeInfo& rShapeTreeInfo) const
 {
-    ShapeTypeId nSlotId (GetSlotId (rxShape));
+    ShapeTypeId nSlotId (GetSlotId (rShapeInfo.mxShape));
     AccessibleShape* pShape =
         maShapeTypeDescriptorList[nSlotId].maCreateFunction (
-            rxParent,
-            rxShape,
+            rShapeInfo,
             rShapeTreeInfo,
             maShapeTypeDescriptorList[nSlotId].mnShapeTypeId);
     if (pShape != NULL)
