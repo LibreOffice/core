@@ -16882,3 +16882,14 @@ _real@8@3ffd820c49ba5e354000
 ?s_pType_com_sun_star_text_XDefaultNumberingProvider@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXDefaultNumberingProvider@text@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_text_XNumberingFormatter@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXNumberingFormatter@text@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ??0SvxUnoNameItemTable@@QAE@PAVSdrModel@@GE@Z
+??0?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@QAE@PAVXInterface@1234@W4__UnoReference_NoAcquire@1234@@Z
+?TRGetBaseGeometry@SdrObject@@UBEEAAVMatrix3D@@AAVXPolyPolygon@@@Z
+?TRGetBaseGeometry@SdrPathObj@@UBEEAAVMatrix3D@@AAVXPolyPolygon@@@Z
+?TRGetBaseGeometry@SdrTextObj@@UBEEAAVMatrix3D@@AAVXPolyPolygon@@@Z
+??1?$Reference@VXDragSource@dnd@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?deallocate@?$allocator@V?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@_STL@@QBEXPAV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@I@Z
+??4OUString@rtl@@QAEAAV01@ABV01@@Z
+??_3uno@star@sun@com@@YAXAAVAny@0123@ABV?$Reference@VXResultSet@sdbc@star@sun@com@@@0123@@Z
+?DbgIsAssert@@YAKXZ
+?getTypeLibType@Type@uno@star@sun@com@@QBAPAU_typelib_TypeDescriptionReference@@XZ
+??1SystemWindow@@UAE@XZ
