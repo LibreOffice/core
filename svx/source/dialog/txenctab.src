@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-21 21:19:05 $
+ *  last change: $Author: sb $ $Date: 2002-02-26 12:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Chinesisch vereinfacht (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Chinesisch traditionell (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinesisch vereinfacht (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chinesisch traditionell (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinesisch traditionell (Big5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinesisch traditionell (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japanisch (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chinesisch vereinfacht (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Chinesisch traditionell (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
@@ -226,7 +227,8 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Chinese Simplified (GB-18030)"                   ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Chinese Traditional (GBT-12345)"                 ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinese Simplified (GBK/GB-2312-80)"             ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chinese Traditional (BIG5)"                      ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinese Traditional (Big5)"                      ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinese Traditional (Big5-HKSCS)"                ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japanese (EUC-JP)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chinese Simplified (EUC-CN)"                     ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Chinese Traditional (EUC-TW)"                    ; RTL_TEXTENCODING_EUC_TW           ; > ;
@@ -298,7 +300,8 @@ ItemList [ language_user1 ] =
         < "Chinesisch vereinfacht (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Chinesisch traditionell (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinesisch vereinfacht (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chinesisch traditionell (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinesisch traditionell (Big5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinesisch traditionell (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japanisch (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chinesisch vereinfacht (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Chinesisch traditionell (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
@@ -367,7 +370,8 @@ ItemList [ language_user1 ] =
         < "Chinese simplified (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
         < "Chinese traditional (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
         < "Chinese simplified (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chinese traditional (BIG5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinese traditional (Big5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
+        < "Chinese traditional (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
         < "Japanese (EUC-JP)"                               ; RTL_TEXTENCODING_EUC_JP           ; > ;
         < "Chinese simplified (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
         < "Chinese traditional (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
