@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:45:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:40:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1882,6 +1882,15 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
 // --> FME 2004-07-30 #i32329# Enhanced table selection
 bool SwFEShell::SelTblRowCol( const Point& rPt )
 {
+    // --> FME 2004-10-20 #i35543# SelTblRowCol should remove any existing
+    // table cursor:
+    if ( IsTableMode() )
+    {
+        KillPams();
+        ClearMark();
+    }
+    // <--
+
     bool bRet = false;
     bool bRow = 0;
     bool bCol = 0;
