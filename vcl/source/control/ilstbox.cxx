@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:36:14 $
+ *  last change: $Author: mt $ $Date: 2001-08-15 11:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mbUserDrawEnabled   = FALSE;
     mbInUserDraw        = FALSE;
     mbReadOnly          = FALSE;
+    mbHasFocusRect      = FALSE;
     mbSimpleMode        = ( nWinStyle & WB_SIMPLEMODE ) ? TRUE : FALSE;
     mbSort              = ( nWinStyle & WB_SORT ) ? TRUE : FALSE;
 
@@ -738,6 +739,28 @@ void ImplListBoxWindow::RemoveEntry( USHORT nPos )
 
 // -----------------------------------------------------------------------
 
+void ImplListBoxWindow::ImplShowFocusRect()
+{
+    if ( mbHasFocusRect )
+        HideFocus();
+    ShowFocus( maFocusRect );
+    mbHasFocusRect = TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void ImplListBoxWindow::ImplHideFocusRect()
+{
+    if ( mbHasFocusRect )
+    {
+        HideFocus();
+        mbHasFocusRect = FALSE;
+    }
+}
+
+
+// -----------------------------------------------------------------------
+
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     mbMouseMoveSelect = FALSE;  // Nur bis zum ersten MouseButtonDown
@@ -856,7 +879,7 @@ void ImplListBoxWindow::SelectEntry( USHORT nPos, BOOL bSelect )
 {
     if ( mpEntryList->IsEntryPosSelected( nPos ) != bSelect )
     {
-        HideFocus();
+        ImplHideFocusRect();
         if( bSelect )
         {
             if( !mbMulti )
@@ -1013,7 +1036,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
             }
             else if( eLET != LET_TRACKING )
             {
-                HideFocus();
+                ImplHideFocusRect();
                 ImplPaint( nSelect, TRUE );
                 bFocusChanged = TRUE;
             }
@@ -1030,7 +1053,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
         {
             maFocusRect.SetPos( Point( 0, ( nSelect - mnTop ) * mnMaxHeight ) );
             if( HasFocus() )
-                ShowFocus( maFocusRect );
+                ImplShowFocusRect();
         }
     }
     return bSelectionChanged;
@@ -1062,7 +1085,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 if ( mnTrackingSaveSelection != LISTBOX_ENTRY_NOTFOUND )
                 {
                     maFocusRect.SetPos( Point( 0, ( mnCurrentPos - mnTop ) * mnMaxHeight ) );
-                    ShowFocus( maFocusRect );
+                    ImplShowFocusRect();
                 }
             }
         }
@@ -1097,15 +1120,21 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
             USHORT nSelect = LISTBOX_ENTRY_NOTFOUND;
             if( aPt.Y() < 0 )
             {
-                nSelect = mnCurrentPos ? ( mnCurrentPos - 1 ) : 0;
-                if( nSelect < mnTop )
-                    SetTopEntry( mnTop-1 );
+                if ( mnCurrentPos != LISTBOX_ENTRY_NOTFOUND )
+                {
+                    nSelect = mnCurrentPos ? ( mnCurrentPos - 1 ) : 0;
+                    if( nSelect < mnTop )
+                        SetTopEntry( mnTop-1 );
+                }
             }
             else if( aPt.Y() > GetOutputSizePixel().Height() )
             {
-                nSelect = Min(  (USHORT)(mnCurrentPos+1), (USHORT)(mpEntryList->GetEntryCount()-1) );
-                if( nSelect >= mnTop + mnMaxVisibleEntries )
-                    SetTopEntry( mnTop+1 );
+                if ( mnCurrentPos != LISTBOX_ENTRY_NOTFOUND )
+                {
+                    nSelect = Min(  (USHORT)(mnCurrentPos+1), (USHORT)(mpEntryList->GetEntryCount()-1) );
+                    if( nSelect >= mnTop + mnMaxVisibleEntries )
+                        SetTopEntry( mnTop+1 );
+                }
             }
             else
             {
@@ -1140,13 +1169,53 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                     SelectEntry( GetEntryList()->GetSelectEntryPos( 0 ), FALSE );
                     mbTrackingSelect = FALSE;
                 }
-                else if ( mbStackMode && ( rTEvt.GetMouseEvent().GetPosPixel().Y() < 0 )
-                        && ( rTEvt.GetMouseEvent().GetPosPixel().X() > 0 )  && ( rTEvt.GetMouseEvent().GetPosPixel().X() < aRect.Right() ) )
+                else if ( mbStackMode )
                 {
-                    DeselectAll();
+                    if ( ( rTEvt.GetMouseEvent().GetPosPixel().X() > 0 )  && ( rTEvt.GetMouseEvent().GetPosPixel().X() < aRect.Right() ) )
+                    {
+                        if ( ( rTEvt.GetMouseEvent().GetPosPixel().Y() < 0 ) || ( rTEvt.GetMouseEvent().GetPosPixel().Y() > GetOutputSizePixel().Height() ) )
+                        {
+                            BOOL bSelectionChanged = FALSE;
+                            if ( ( rTEvt.GetMouseEvent().GetPosPixel().Y() < 0 )
+                                   && !mnCurrentPos )
+                            {
+                                if ( mpEntryList->IsEntryPosSelected( 0 ) )
+                                {
+                                    SelectEntry( 0, FALSE );
+                                    bSelectionChanged = TRUE;
+                                    nSelect = LISTBOX_ENTRY_NOTFOUND;
+
+                                }
+                            }
+                            else
+                            {
+                                mbTrackingSelect = TRUE;
+                                bSelectionChanged = SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl );
+                                mbTrackingSelect = FALSE;
+                            }
+
+                            if ( bSelectionChanged )
+                            {
+                                mbSelectionChanged = TRUE;
+                                mbTravelSelect = TRUE;
+                                mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();
+                                ImplCallSelect();
+                                mbTravelSelect = FALSE;
+                            }
+                        }
+                    }
                 }
             }
             mnCurrentPos = nSelect;
+            if ( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND )
+            {
+                ImplHideFocusRect();
+            }
+            else
+            {
+                maFocusRect.SetPos( Point( 0, ( mnCurrentPos - mnTop ) * mnMaxHeight ) );
+                ImplShowFocusRect();
+            }
         }
     }
 }
@@ -1540,8 +1609,9 @@ void ImplListBoxWindow::Paint( const Rectangle& rRect )
 {
     USHORT nCount = mpEntryList->GetEntryCount();
 
-    if( HasFocus() )
-        HideFocus();
+    BOOL bShowFocusRect = mbHasFocusRect;
+    if ( mbHasFocusRect )
+        ImplHideFocusRect();
 
     long nY = 0; // + mnBorder;
     long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
@@ -1557,8 +1627,8 @@ void ImplListBoxWindow::Paint( const Rectangle& rRect )
     }
 
     maFocusRect.SetPos( Point( 0, ( mnCurrentPos - mnTop ) * mnMaxHeight ) );
-    if( HasFocus() )
-        ShowFocus( maFocusRect );
+    if( HasFocus() && bShowFocusRect )
+        ImplShowFocusRect();
 }
 
 // -----------------------------------------------------------------------
@@ -1578,7 +1648,7 @@ void ImplListBoxWindow::GetFocus()
     if ( nPos == LISTBOX_ENTRY_NOTFOUND )
         nPos = 0;
     maFocusRect.SetPos( Point( 0, ( nPos - mnTop ) * mnMaxHeight ) );
-    ShowFocus( maFocusRect );
+    ImplShowFocusRect();
     Control::GetFocus();
 }
 
@@ -1586,7 +1656,7 @@ void ImplListBoxWindow::GetFocus()
 
 void ImplListBoxWindow::LoseFocus()
 {
-    HideFocus();
+    ImplHideFocusRect();
     Control::LoseFocus();
 }
 
@@ -1612,14 +1682,16 @@ void ImplListBoxWindow::SetTopEntry( USHORT nTop )
     nTop = Min( nTop, nMaxTop );
     if ( nTop != mnTop )
     {
-        HideFocus();
         long nDiff = ( mnTop - nTop ) * mnMaxHeight;
         mnTop = nTop;
+        Update();
+        ImplHideFocusRect();
         Scroll( 0, nDiff );
+        Update();
         maFocusRect.Top() += nDiff;
         maFocusRect.Bottom() += nDiff;
         if( HasFocus() )
-            ShowFocus( maFocusRect );
+            ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
 }
@@ -1653,11 +1725,13 @@ void ImplListBoxWindow::ScrollHorz( short n )
 
     if ( nDiff )
     {
-        HideFocus();
         mnLeft += nDiff;
+        Update();
+        ImplHideFocusRect();
         Scroll( -nDiff, 0 );
+        Update();
         if( HasFocus() )
-            ShowFocus( maFocusRect );
+            ImplShowFocusRect();
         maScrollHdl.Call( this );
     }
 }
