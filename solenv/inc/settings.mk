@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-06 13:35:10 $
+#   last change: $Author: hjs $ $Date: 2000-12-14 15:38:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1047,13 +1047,9 @@ MKDEPSOLENV=-I:$(SOLARENV)$/inc -I:$(SOLARENV)$/$(GUI)$(CVER)$(COMEX)$/inc
 MKDEPSOLVER=-I:$(SOLARVERSION)$/$(INPATH)$/inc.$(UPDMINOR) -I:$(SOLARVERSION)$/$(INPATH)$/inc
 MKDEPLOCAL=-I:$(INCCOM)
 
-MKSLEX=$(ROOTDIR)$/lex
-MKSYACC=$(ROOTDIR)$/yacc
-
 BISON=bison
 YACCFLAGS*=-d -o 
 
-ROOTDIR=$(DEVROOT)$/bin$/lexyacc
 .IF "$(GUI)"=="UNX"
 SVIDL=svidl
 .ELSE
