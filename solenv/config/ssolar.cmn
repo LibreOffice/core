@@ -19,6 +19,7 @@ common
         *copyprj
 		__mgrdir
         rsc_once
+		use_shell
         *zipdep
 		BIG_GOODIES
 		BIG_SVX
@@ -47,6 +48,7 @@ common
 		DISABLE_SAL_DBGBOX
 		DELIVER
 		DMAKE_INC
+		DMAKE
 		DYNAMIC_CRT
 		ENABLEUNICODE
 		GCRINC
@@ -96,6 +98,7 @@ common
 		PROEXT
 		PROFILE
 		profile
+		REMOTE_BUILD_FLAG
 		RES_ARAB
 		RES_CHINSIM
 		RES_CHINTRAD
