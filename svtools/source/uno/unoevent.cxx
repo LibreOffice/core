@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 19:59:42 $
+ *  last change: $Author: dvo $ $Date: 2001-04-17 09:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,10 +464,13 @@ void SvEventDescriptor::getByName(
             RuntimeException)
 {
     const SvxMacroItem& rItem = getMacroItem();
-    if( !rItem.HasMacro( nEvent ) )
-        throw NoSuchElementException();
-
-    rMacro = rItem.GetMacro(nEvent);
+    if( rItem.HasMacro( nEvent ) )
+        rMacro = rItem.GetMacro(nEvent);
+    else
+    {
+        SvxMacro aEmptyMacro(sEmpty, sEmpty);
+        rMacro = aEmptyMacro;
+    }
 }
 
 
