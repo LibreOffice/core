@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: os $ $Date: 2000-11-15 13:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,14 @@ void SwJavaEditDialog::CheckTravel()
 
         if (pFld->IsCodeURL())
         {
-            aUrlED.SetText(pFld->GetPar2());
+            String sURL(pFld->GetPar2());
+            if(sURL.Len())
+            {
+                INetURLObject aINetURL(sURL);
+                if(INET_PROT_FILE == aINetURL.GetProtocol())
+                    sURL = aINetURL.PathToFileName();
+            }
+            aUrlED.SetText(sURL);
             aEditED.SetText(aEmptyStr);
             aUrlRB.Check();
         }
@@ -359,59 +366,17 @@ IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
 {
     String sFileName;
     if( GetFileFilterNameDlg( *pBtn, sFileName ))
+    {
+        if(sFileName.Len())
+        {
+            INetURLObject aINetURL(sFileName);
+            if(INET_PROT_FILE == aINetURL.GetProtocol())
+                sFileName = aINetURL.PathToFileName();
+        }
         aUrlED.SetText( sFileName );
+    }
     return 0;
 }
-
-/*************************************************************************
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.13  2000/09/18 16:05:31  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.12  2000/06/26 13:20:15  os
-      INetURLObject::SmartRelToAbs removed
-
-      Revision 1.11  2000/04/18 15:17:32  os
-      UNICODE
-
-      Revision 1.10  2000/02/11 14:46:57  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.9  1999/01/20 15:56:58  JP
-      Task #58677#: Crsr in Readonly Bereichen zulassen
-
-
-      Rev 1.8   20 Jan 1999 16:56:58   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.7   19 Aug 1998 17:22:14   JP
-   Bug #55247#: fuers MoveNext-/-PrevFldType einen eigenen Pam verwenden
-
-      Rev 1.6   13 Feb 1998 14:16:02   JP
-   statt selbst den InserDocDialog zu rufen, die neue Funktion GetFileFilterNameDlg rufen
-
-      Rev 1.5   24 Nov 1997 18:23:28   MA
-   includes
-
-      Rev 1.4   03 Nov 1997 13:18:10   MA
-   precomp entfernt
-
-      Rev 1.3   23 Jul 1997 20:25:54   HJS
-   includes
-
-      Rev 1.2   29 May 1997 16:16:02   OM
-   URL in ScriptDialog eingeben
-
-      Rev 1.1   13 Feb 1997 17:36:02   OM
-   Segmentierung
-
-      Rev 1.0   13 Feb 1997 17:35:22   OM
-   Initial revision.
-
-*************************************************************************/
 
 
 
