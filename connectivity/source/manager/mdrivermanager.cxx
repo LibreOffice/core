@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mdrivermanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:09:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 11:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
 #endif
@@ -117,14 +114,15 @@ class ODriverEnumeration : public ::cppu::WeakImplHelper1< XEnumeration >
 {
     friend class OSDBCDriverManager;
 
-    DECLARE_STL_VECTOR(OSDBCDriverManager::SdbcDriver, Drivers);
-    Drivers             m_aDrivers;
-    sal_Int32           m_nPos;
+    DECLARE_STL_VECTOR( SdbcDriver, DriverArray );
+    DriverArray                 m_aDrivers;
+    ConstDriverArrayIterator    m_aPos;
+    // order matters!
 
 protected:
     virtual ~ODriverEnumeration();
 public:
-    ODriverEnumeration(const Drivers& _rDriverSequence);
+    ODriverEnumeration(const DriverArray& _rDriverSequence);
 
 // XEnumeration
     virtual sal_Bool SAL_CALL hasMoreElements( ) throw(RuntimeException);
@@ -132,9 +130,9 @@ public:
 };
 
 //--------------------------------------------------------------------------
-ODriverEnumeration::ODriverEnumeration(const Drivers& _rDriverSequence)
-    :m_aDrivers(_rDriverSequence)
-    ,m_nPos(0)
+ODriverEnumeration::ODriverEnumeration(const DriverArray& _rDriverSequence)
+    :m_aDrivers( _rDriverSequence )
+    ,m_aPos( m_aDrivers.begin() )
 {
 }
 
@@ -142,19 +140,186 @@ ODriverEnumeration::ODriverEnumeration(const Drivers& _rDriverSequence)
 ODriverEnumeration::~ODriverEnumeration()
 {
 }
+
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL ODriverEnumeration::hasMoreElements(  ) throw(RuntimeException)
 {
-    return m_nPos < m_aDrivers.size();
+    return m_aPos != m_aDrivers.end();
 }
 
 //--------------------------------------------------------------------------
 Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    if (!hasMoreElements())
+    if ( !hasMoreElements() )
         throwNoSuchElementException();
-    return makeAny(m_aDrivers[m_nPos++]);
+
+    return makeAny( *m_aPos++ );
 }
+
+    //=====================================================================
+    //= helper
+    //=====================================================================
+    //---------------------------------------------------------------------
+    //--- 24.08.01 11:27:59 -----------------------------------------------
+
+    /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
+    struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
+    {
+        const DriverAccess& operator()( const DriverAccess& _rDescriptor ) const
+        {
+            if ( !_rDescriptor.xDriver.is() )
+                // we did not load this driver, yet
+                if ( _rDescriptor.xComponentFactory.is() )
+                    // we have a factory for it
+                    const_cast< DriverAccess& >( _rDescriptor ).xDriver = _rDescriptor.xDriver.query( _rDescriptor.xComponentFactory->createInstance() );
+            return _rDescriptor;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 11:28:04 -----------------------------------------------
+
+    /// an STL functor which extracts a SdbcDriver from a DriverAccess
+    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, SdbcDriver >
+    {
+        SdbcDriver operator()( const DriverAccess& _rAccess ) const
+        {
+            return _rAccess.xDriver;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 12:37:50 -----------------------------------------------
+
+    typedef ::std::unary_compose< ExtractDriverFromAccess, EnsureDriver > ExtractAfterLoad_BASE;
+    /// an STL functor which loads a driver described by a DriverAccess, and extracts the SdbcDriver
+    struct ExtractAfterLoad : public ExtractAfterLoad_BASE
+    {
+        ExtractAfterLoad() : ExtractAfterLoad_BASE( ExtractDriverFromAccess(), EnsureDriver() ) { }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 11:42:36 -----------------------------------------------
+
+    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, SdbcDriver >
+    {
+        SdbcDriver operator()( const DriverCollection::value_type& _rElement ) const
+        {
+            return _rElement.second;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 11:51:03 -----------------------------------------------
+
+    // predicate for checking whether or not a driver accepts a given URL
+    class AcceptsURL : public ::std::unary_function< SdbcDriver, bool >
+    {
+    protected:
+        const ::rtl::OUString& m_rURL;
+
+    public:
+        // ctor
+        AcceptsURL( const ::rtl::OUString& _rURL ) : m_rURL( _rURL ) { }
+
+        //.................................................................
+        bool operator()( SdbcDriver& _rDriver ) const
+        {
+            // ask the driver
+            if ( _rDriver.is() && _rDriver->acceptsURL( m_rURL ) )
+                return true;
+
+            // does not accept ...
+            return false;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 12:51:54 -----------------------------------------------
+
+    static sal_Int32 lcl_getDriverPrecedence( const Reference< XMultiServiceFactory >&  _rxFactory, Sequence< ::rtl::OUString >& _rPrecedence )
+    {
+        _rPrecedence.realloc( 0 );
+        try
+        {
+            // some strings we need
+            const ::rtl::OUString sConfigurationProviderServiceName =
+                ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
+            const ::rtl::OUString sDriverManagerConfigLocation =
+                ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/DriverManager");
+            const ::rtl::OUString sDriverPreferenceLocation =
+                ::rtl::OUString::createFromAscii("DriverPrecedence");
+            const ::rtl::OUString sNodePathArgumentName =
+                ::rtl::OUString::createFromAscii("nodepath");
+            const ::rtl::OUString sNodeAccessServiceName =
+                ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+
+            // create a configuration provider
+            Reference< XMultiServiceFactory > xConfigurationProvider(
+                _rxFactory->createInstance(sConfigurationProviderServiceName),
+                UNO_QUERY);
+            OSL_ENSURE(xConfigurationProvider.is(), "lcl_getDriverPrecedence: could not instantiate the configuration provider!");
+            if (xConfigurationProvider.is())
+            {
+                // one argument for creating the node access: the path to the configuration node
+                Sequence< Any > aCreationArgs(1);
+                aCreationArgs[0] <<= PropertyValue(sNodePathArgumentName, 0, makeAny(sDriverManagerConfigLocation), PropertyState_DIRECT_VALUE);
+
+                // create the node access
+                Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
+
+                OSL_ENSURE(xDriverManagerNode.is(), "lcl_getDriverPrecedence: could not open my configuration node!");
+                if (xDriverManagerNode.is())
+                {
+                    // obtain the preference list
+                    Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
+    #ifdef _DEBUG
+                    sal_Bool bSuccess =
+    #endif
+                    aPreferences >>= _rPrecedence;
+                    OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "lcl_getDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
+                }
+            }
+        }
+        catch( const Exception& e)
+        {
+            e;  // make compiler happy
+            OSL_ENSURE( sal_False, "lcl_getDriverPrecedence: caught an exception!" );
+        }
+
+        return _rPrecedence.getLength();
+    }
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 13:01:56 -----------------------------------------------
+
+    /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
+    struct CompareDriverAccessByName : public ::std::binary_function< DriverAccess, DriverAccess, bool >
+    {
+        //.................................................................
+        bool operator()( const DriverAccess& lhs, const DriverAccess& rhs )
+        {
+            return lhs.sImplementationName < rhs.sImplementationName ? true : false;
+        }
+    };
+
+    //---------------------------------------------------------------------
+    //--- 24.08.01 13:08:17 -----------------------------------------------
+
+    /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
+    struct CompareDriverAccessToName : public ::std::binary_function< DriverAccess, ::rtl::OUString, bool >
+    {
+        //.................................................................
+        bool operator()( const DriverAccess& lhs, const ::rtl::OUString& rhs )
+        {
+            return lhs.sImplementationName < rhs ? true : false;
+        }
+        //.................................................................
+        bool operator()( const ::rtl::OUString& lhs, const DriverAccess& rhs )
+        {
+            return lhs < rhs.sImplementationName ? true : false;
+        }
+    };
 
 //==========================================================================
 //= OSDBCDriverManager
@@ -165,26 +330,73 @@ OSDBCDriverManager::OSDBCDriverManager(const Reference< XMultiServiceFactory >& 
     ,m_nLoginTimeout(NULL)
 {
     // bootstrap all objects supporting the .sdb.Driver service
+    bootstrapDrivers();
 
-    Reference< XContentEnumerationAccess > xEnumAccess(_rxFactory, UNO_QUERY);
+    // initialize the drivers order
+    initializeDriverPrecedence();
+}
+
+//---------------------------------------------------------------------
+//--- 24.08.01 11:15:32 -----------------------------------------------
+
+void OSDBCDriverManager::bootstrapDrivers()
+{
+    Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
     Reference< XEnumeration > xEnumDrivers;
     if (xEnumAccess.is())
         xEnumDrivers = xEnumAccess->createContentEnumeration(SERVICE_SDBC_DRIVER);
 
+    OSL_ENSURE( xEnumDrivers.is(), "OSDBCDriverManager::bootstrapDrivers: no enumeration for the drivers available!" );
     if (xEnumDrivers.is())
     {
         Reference< XSingleServiceFactory > xFactory;
+        Reference< XServiceInfo > xSI;
         while (xEnumDrivers->hasMoreElements())
         {
-            if (::cppu::extractInterface(xFactory, xEnumDrivers->nextElement()))
+            ::cppu::extractInterface( xFactory, xEnumDrivers->nextElement() );
+            OSL_ENSURE( xFactory.is(), "OSDBCDriverManager::bootstrapDrivers: no factory extracted" );
+
+            if ( xFactory.is() )
             {
-                Reference< XDriver > xDriver(xFactory->createInstance(), UNO_QUERY);
-                if (xDriver.is())
-                    m_aDriversBS.push_back(xDriver);
+                // we got a factory for the driver
+                DriverAccess aDriverDescriptor;
+                sal_Bool bValidDescriptor = sal_False;
+
+                // can it tell us something about the implementation name?
+                xSI = xSI.query( xFactory );
+                if ( xSI.is() )
+                {   // yes -> no need to load the driver immediately (load it later when needed)
+                    aDriverDescriptor.sImplementationName = xSI->getImplementationName();
+                    aDriverDescriptor.xComponentFactory = xFactory;
+                    bValidDescriptor = sal_True;
+                }
+                else
+                {
+                    // no -> create the driver
+                    Reference< XDriver > xDriver( xFactory->createInstance(), UNO_QUERY );
+                    OSL_ENSURE( xDriver.is(), "OSDBCDriverManager::bootstrapDrivers: a driver which is no driver?!" );
+
+                    if ( xDriver.is() )
+                    {
+                        aDriverDescriptor.xDriver = xDriver;
+                        // and obtain it's implementation name
+                        xSI = xSI.query( xDriver );
+                        OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
+                        if ( xSI.is() )
+                        {
+                            aDriverDescriptor.sImplementationName = xSI->getImplementationName();
+                            bValidDescriptor = sal_True;
+                        }
+                    }
+                }
+
+                if ( bValidDescriptor )
+                {
+                    m_aDriversBS.push_back( aDriverDescriptor );
+                }
             }
         }
     }
-    initializeDriverPrecedence();
 }
 
 //--------------------------------------------------------------------------
@@ -196,108 +408,47 @@ void OSDBCDriverManager::initializeDriverPrecedence()
 
     try
     {
-        // some strings we need
-        const ::rtl::OUString sConfigurationProviderServiceName =
-            ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-        const ::rtl::OUString sDriverManagerConfigLocation =
-            ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/DriverManager");
-        const ::rtl::OUString sDriverPreferenceLocation =
-            ::rtl::OUString::createFromAscii("DriverPrecedence");
-        const ::rtl::OUString sNodePathArgumentName =
-            ::rtl::OUString::createFromAscii("nodepath");
-        const ::rtl::OUString sNodeAccessServiceName =
-            ::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+        // get the precedence of the drivers from the configuration
+        Sequence< ::rtl::OUString > aDriverOrder;
+        if ( 0 == lcl_getDriverPrecedence( m_xServiceFactory, aDriverOrder ) )
+            // nothing to do
+            return;
 
-        // create a configuration provider
-        Reference< XMultiServiceFactory > xConfigurationProvider(
-            m_xServiceFactory->createInstance(sConfigurationProviderServiceName),
-            UNO_QUERY);
-        OSL_ENSURE(xConfigurationProvider.is(), "OSDBCDriverManager::initializeDriverPrecedence: could not instantiate the configuration provider!");
-        if (xConfigurationProvider.is())
+        // aDriverOrder now is the list of driver implementation names in the order they should be used
+
+        // sort our bootstrapped drivers
+        ::std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
+
+        // loop through the names in the precedence order
+        const ::rtl::OUString* pDriverOrder     =                   aDriverOrder.getConstArray();
+        const ::rtl::OUString* pDriverOrderEnd  =   pDriverOrder +  aDriverOrder.getLength();
+
+        // the first driver for which there is no preference
+        DriverAccessArrayIterator aNoPrefDriversStart = m_aDriversBS.begin();
+            // at the moment this is the first of all drivers we know
+
+        for ( ; ( pDriverOrder < pDriverOrderEnd ) && ( aNoPrefDriversStart != m_aDriversBS.end() ); ++pDriverOrder )
         {
-            // one argument for creating the node access: the path to the configuration node
-            Sequence< Any > aCreationArgs(1);
-            aCreationArgs[0] <<= PropertyValue(sNodePathArgumentName, 0, makeAny(sDriverManagerConfigLocation), PropertyState_DIRECT_VALUE);
+            // look for the impl name in the DriverAccess array
+            ::std::pair< DriverAccessArrayIterator, DriverAccessArrayIterator > aPos =
+                ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), *pDriverOrder, CompareDriverAccessToName() );
 
-            // create the node access
-            Reference< XNameAccess > xDriverManagerNode(xConfigurationProvider->createInstanceWithArguments(sNodeAccessServiceName, aCreationArgs), UNO_QUERY);
+            if ( aPos.first != aPos.second )
+            {   // we have a DriverAccess with this impl name
 
-            OSL_ENSURE(xDriverManagerNode.is(), "OSDBCDriverManager::initializeDriverPrecedence: could not open my configuration node!");
-            if (xDriverManagerNode.is())
-            {
-                // obtain the preference list
-                Any aPreferences = xDriverManagerNode->getByName(sDriverPreferenceLocation);
-                Sequence< ::rtl::OUString > aDriverOrder;
-#ifdef _DEBUG
-                sal_Bool bSuccess =
-#endif
-                aPreferences >>= aDriverOrder;
-                OSL_ENSURE(bSuccess || !aPreferences.hasValue(), "OSDBCDriverManager::initializeDriverPrecedence: invalid value for the preferences node (no string sequence but not NULL)!");
+                OSL_ENSURE( ::std::distance( aPos.first, aPos.second ) == 1,
+                    "OSDBCDriverManager::initializeDriverPrecedence: move than one driver with this impl name? How this?" );
+                // move the DriverAccess pointed to by aPos.first to the position pointed to by aNoPrefDriversStart
 
-                if (!aDriverOrder.getLength())
-                    // nothing to do
-                    return;
+                if ( aPos.first != aNoPrefDriversStart )
+                {   // if this does not hold, the DriverAccess alread has the correct position
 
-                // we have a list of driver implementation names which specify the order to use
-
-                // first collect the implementation names of our bootstrapped drivers
-                DECLARE_STL_USTRINGACCESS_MAP( sal_Int32, MapString2Int);
-                MapString2Int aDriverImplNames;
-                for (   ConstBootstrappedDriversIterator aDriverLoop = m_aDriversBS.begin();
-                        aDriverLoop != m_aDriversBS.end();
-                        ++aDriverLoop
-                    )
-                {
-                    Reference< XServiceInfo > xDriverSI(*aDriverLoop, UNO_QUERY);
-                    OSL_ENSURE(xDriverSI.is(), "OSDBCDriverManager::initializeDriverPrecedence: encountered a driver without service info!");
-                    if (xDriverSI.is())
-                        aDriverImplNames.insert(MapString2Int::value_type(xDriverSI->getImplementationName(),sal_Int32(aDriverLoop - m_aDriversBS.begin())));
+                    // rotate the range [aNoPrefDriversStart, aPos.second) right 1 element
+                    ::std::rotate( aNoPrefDriversStart, aPos.second - 1, aPos.second );
                 }
 
-                BootstrappedDrivers aSortedDrivers;
-                aSortedDrivers.reserve(3);
-                    // this will be the sorted drivers
-                ::std::set< sal_Int32 > aPreferedDriversOriginalPos;
-                    // the drivers in m_aDriversBS which have been inserted in aSortedDrivers
-
-                // loop through the sequence telling us the preferred driver order
-                const ::rtl::OUString* pDriverOrder = aDriverOrder.getConstArray();
-                const ::rtl::OUString* pDriverOrderEnd = pDriverOrder + aDriverOrder.getLength();
-                sal_Int32 nPreferredDriverInsertPosition = 0;
-                    // the position in m_aDriversBS where the current preferred driver is to be inserted
-                for (;pDriverOrder < pDriverOrderEnd; ++pDriverOrder)
-                {
-                    MapString2IntIterator aThisDriverPos = aDriverImplNames.find(*pDriverOrder);
-                    if (aDriverImplNames.end() != aThisDriverPos)
-                    {   // we know this driver
-                        sal_Int32 nThisDriverPos = aThisDriverPos->second;
-
-                        aSortedDrivers.push_back(m_aDriversBS[nThisDriverPos]);
-                        aPreferedDriversOriginalPos.insert(nThisDriverPos);
-                    }
-                }
-
-                if (aPreferedDriversOriginalPos.size() != m_aDriversBS.size())
-                {
-                    // we still have drivers in m_aDriversBS which have not been inserted into aSortedDrivers
-                    // -> copy the remaining drivers
-                    sal_Int32 i = 0;
-                    for (   ConstBootstrappedDriversIterator aDriverLoop = m_aDriversBS.begin();
-                            aDriverLoop != m_aDriversBS.end();
-                            ++aDriverLoop, ++i
-                        )
-                    {
-                        if (aPreferedDriversOriginalPos.end() == aPreferedDriversOriginalPos.find(i))
-                        {   // the driver has not been inserted into aSortedDrivers, yet
-                            aSortedDrivers.push_back(*aDriverLoop);
-                        }
-                    }
-                }
-
-                OSL_ENSURE(m_aDriversBS.size() == aSortedDrivers.size(), "OSDBCDriverManager::initializeDriverPrecedence: inconsistence!");
-
-                // now we have it ...
-                m_aDriversBS = aSortedDrivers;
+                // next round we start searching and pos right
+                ++aNoPrefDriversStart;
             }
         }
     }
@@ -306,6 +457,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         OSL_ENSURE(sal_False, "OSDBCDriverManager::initializeDriverPrecedence: caught an exception while sorting the drivers!");
     }
 }
+
 //--------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OSDBCDriverManager::getConnection( const ::rtl::OUString& _rURL ) throw(SQLException, RuntimeException)
 {
@@ -355,11 +507,28 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  ) thr
 {
     MutexGuard aGuard(m_aMutex);
 
-    ODriverEnumeration::Drivers aDrivers(m_aDriversBS);
-    for (ConstRuntimeDriversIterator aLoop = m_aDriversRT.begin(); aLoop != m_aDriversRT.end(); ++aLoop)
-        aDrivers.push_back(aLoop->second);
+    ODriverEnumeration::DriverArray aDrivers;
 
-    return new ODriverEnumeration(aDrivers);
+    // ensure that all our bootstrapped drivers are insatntiated
+    ::std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver() );
+
+    // copy the bootstrapped drivers
+    ::std::transform(
+        m_aDriversBS.begin(),               // "copy from" start
+        m_aDriversBS.end(),                 // "copy from" end
+        ::std::back_inserter( aDrivers ),   // insert into
+        ExtractDriverFromAccess()           // transformation to apply (extract a driver from a driver access)
+    );
+
+    // append the runtime drivers
+    ::std::transform(
+        m_aDriversRT.begin(),                   // "copy from" start
+        m_aDriversRT.end(),                     // "copy from" end
+        ::std::back_inserter( aDrivers ),       // insert into
+        ExtractDriverFromCollectionElement()    // transformation to apply (extract a driver from a driver access)
+    );
+
+    return new ODriverEnumeration( aDrivers );
 }
 
 //--------------------------------------------------------------------------
@@ -423,7 +592,7 @@ Sequence< ::rtl::OUString > SAL_CALL OSDBCDriverManager::getSupportedServiceName
 Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const ::rtl::OUString& _rName ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
+    ConstDriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
@@ -434,12 +603,12 @@ Reference< XInterface > SAL_CALL OSDBCDriverManager::getRegisteredObject( const 
 void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName, const Reference< XInterface >& _rxObject ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    ConstRuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
+    ConstDriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
     {
         Reference< XDriver > xNewDriver(_rxObject, UNO_QUERY);
         if (xNewDriver.is())
-            m_aDriversRT.insert(RuntimeDrivers::value_type(_rName, xNewDriver));
+            m_aDriversRT.insert(DriverCollection::value_type(_rName, xNewDriver));
         else
             throw IllegalArgumentException();
     }
@@ -451,7 +620,7 @@ void SAL_CALL OSDBCDriverManager::registerObject( const ::rtl::OUString& _rName,
 void SAL_CALL OSDBCDriverManager::revokeObject( const ::rtl::OUString& _rName ) throw(Exception, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    RuntimeDriversIterator aSearch = m_aDriversRT.find(_rName);
+    DriverCollectionIterator aSearch = m_aDriversRT.find(_rName);
     if (aSearch == m_aDriversRT.end())
         throwNoSuchElementException();
 
@@ -467,40 +636,37 @@ Reference< XDriver > SAL_CALL OSDBCDriverManager::getDriverByURL( const ::rtl::O
 //--------------------------------------------------------------------------
 Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const ::rtl::OUString& _rURL)
 {
-    // search all bootstrapped drivers
-    for (   ConstBootstrappedDriversIterator aSearchBS = m_aDriversBS.begin();
-            aSearchBS != m_aDriversBS.end();
-            ++aSearchBS
-        )
+    Reference< XDriver > xReturn;
+
     {
-        try
-        {
-            if ((*aSearchBS)->acceptsURL(_rURL))
-                return *aSearchBS;
-        }
-        catch(SQLException&)
-        {
-        }
+        // search all bootstrapped drivers
+        DriverAccessArrayIterator aPos = ::std::find_if(
+            m_aDriversBS.begin(),       // begin of search range
+            m_aDriversBS.end(),         // end of search range
+            unary_compose< AcceptsURL, ExtractAfterLoad >( AcceptsURL( _rURL ), ExtractAfterLoad() )
+                                        // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
+        );
+
+        // found something?
+        if ( m_aDriversBS.end() != aPos )
+            xReturn = aPos->xDriver;
     }
 
-    // search all drivers registered at runtime
-    for (   ConstRuntimeDriversIterator aSearchRT = m_aDriversRT.begin();
-            aSearchRT != m_aDriversRT.end();
-            ++aSearchRT
-        )
+    if ( !xReturn.is() )
     {
-        try
-        {
-            if (aSearchRT->second->acceptsURL(_rURL))
-                return aSearchRT->second;
-        }
-        catch(SQLException&)
-        {
-        }
+        // no -> search the runtime drivers
+        DriverCollectionIterator aPos = ::std::find_if(
+            m_aDriversRT.begin(),       // begin of search range
+            m_aDriversRT.end(),         // end of search range
+            unary_compose< AcceptsURL, ExtractDriverFromCollectionElement >( AcceptsURL( _rURL ), ExtractDriverFromCollectionElement() )
+                                        // compose two functors: extract the driver from the access, then ask the resulting driver for acceptance
+        );
+
+        if ( m_aDriversRT.end() != aPos )
+            xReturn = aPos->second;
     }
 
-
-    return Reference< XDriver >();
+    return xReturn;
 }
 
 }   // namespace connectivity
