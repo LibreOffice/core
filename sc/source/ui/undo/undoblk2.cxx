@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-16 13:15:06 $
+ *  last change: $Author: nn $ $Date: 2001-07-06 12:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
+    USHORT nPaintStart = nStart ? nStart-1 : 0;
+
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if (pViewShell)
@@ -163,14 +165,14 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
             pViewShell->DoneBlockMode();
             pViewShell->InitOwnBlockMode();
             pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
+
+            nPaintStart = 0;        // paint all, because of changed selection
         }
     }
 
     //! outlines from all tables?
     if (pUndoTab)                                           // Outlines mit gespeichert?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
-
-    USHORT nPaintStart = nStart ? nStart-1 : 0;
 
     USHORT nTabCount = pDoc->GetTableCount();
     USHORT nTab;
@@ -213,6 +215,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
+    BOOL bPaintAll = FALSE;
     if (eMode==SC_SIZE_OPTIMAL)
     {
         if (pViewShell)
@@ -220,6 +223,8 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
             pViewShell->DoneBlockMode();
             pViewShell->InitOwnBlockMode();
             pViewShell->GetViewData()->GetMarkData() = aMarkData;   // CopyMarksTo
+
+            bPaintAll = TRUE;       // paint all, because of changed selection
         }
     }
 
@@ -232,6 +237,10 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 
     // SetWidthOrHeight aendert aktuelle Tabelle !
     pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
+
+    // paint grid if selection was changed directly at the MarkData
+    if (bPaintAll)
+        pDocShell->PostPaint( 0, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PAINT_GRID );
 
     EndRedo();
 }
@@ -250,6 +259,9 @@ BOOL __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/16 13:15:06  nn
+    #75222# UndoWidthOrHeight: allow several sheets
+
     Revision 1.1.1.1  2000/09/18 16:45:07  hr
     initial import
 
