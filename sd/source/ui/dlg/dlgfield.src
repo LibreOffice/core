@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text = "Feldtyp" ;
         Text [ ENGLISH ] = "field type" ;
         Text [ english_us ] = "Field type" ;
-        Text [ portuguese_brazilian ] = "Feldtyp" ;
+        Text [ portuguese_brazilian ] = "Tipo de campo" ;
         Text [ swedish ] = "F‰lttyp" ;
         Text [ danish ] = "Felttype" ;
         Text [ italian ] = "Tipo di campo" ;
@@ -92,11 +92,14 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ arabic ] = "‰Ê⁄ «·Õﬁ·";
         Text[ greek ] = "‘˝ÔÚ Â‰ﬂÔı";
         Text[ korean ] = "ÌïÑÎìú Ïú†Ìòï";
-        Text[ turkish ] = "Alan tipi";
+        Text[ turkish ] = "Alan t¸r¸";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus de camp";
         Text[ finnish ] = "Kentt‰tyyppi";
         Text[ thai ] = "‡∏ä‡∏ô‡∏¥‡∏î‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+        Text[ czech ] = "Typ pole";
+        Text[ hebrew ] = "Feldtyp";
+        Text[ hindi ] = "Field type";
     };
     RadioButton RBT_FIX
     {
@@ -107,7 +110,7 @@ ModalDialog DLG_FIELD_MODIFY
         TabStop = TRUE ;
         Text [ portuguese ] = "~fixo" ;
         Text [ english_us ] = "~Fixed" ;
-        Text [ portuguese_brazilian ] = "~fix" ;
+        Text [ portuguese_brazilian ] = "~Fixo" ;
         Text [ swedish ] = "~fast" ;
         Text [ danish ] = "fast" ;
         Text [ italian ] = "~Fisso" ;
@@ -116,7 +119,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ dutch ] = "~vast" ;
         Text[ chinese_simplified ] = "Âõ∫ÂÆö(~F)";
         Text[ russian ] = "~‘ËÍÒËÓ‚‡ÌÌÓÂ";
-        Text[ polish ] = "Sta≥y";
+        Text[ polish ] = "~Sta≥y";
         Text[ japanese ] = "Âõ∫ÂÆö(~F)";
         Text[ chinese_traditional ] = "Âõ∫ÂÆö(~F)";
         Text[ arabic ] = "À«» ";
@@ -127,6 +130,9 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ catalan ] = "~Fix";
         Text[ finnish ] = "~Kiinte‰";
         Text[ thai ] = "~‡∏Ñ‡∏á‡∏ó‡∏µ‡πà";
+        Text[ czech ] = "Nemƒõnn√Ω";
+        Text[ hebrew ] = "~fix";
+        Text[ hindi ] = "~‡§∏‡•ç‡§•‡§ø‡§∞";
     };
     RadioButton RBT_VAR
     {
@@ -137,7 +143,7 @@ ModalDialog DLG_FIELD_MODIFY
         TabStop = TRUE ;
         Text [ portuguese ] = "~vari·vel" ;
         Text [ english_us ] = "~Variable" ;
-        Text [ portuguese_brazilian ] = "~variabel" ;
+        Text [ portuguese_brazilian ] = "~Vari·vel" ;
         Text [ swedish ] = "~variabel" ;
         Text [ danish ] = "variabel" ;
         Text [ italian ] = "~Variabile" ;
@@ -146,7 +152,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ dutch ] = "~variabel" ;
         Text[ chinese_simplified ] = "ÂèØÂèò(~V)";
         Text[ russian ] = "~»ÁÏÂÌˇÂÏÓÂ";
-        Text[ polish ] = "Zmienny";
+        Text[ polish ] = "~Zmienny";
         Text[ japanese ] = "Ëá™ÂãïÊõ¥Êñ∞(~V)";
         Text[ chinese_traditional ] = "ÂèØËÆä(~V)";
         Text[ arabic ] = "„ €Ì—";
@@ -157,6 +163,9 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ catalan ] = "~Variable";
         Text[ finnish ] = "~Muuttuja";
         Text[ thai ] = "~‡∏ï‡∏±‡∏ß‡πÅ‡∏õ‡∏£";
+        Text[ czech ] = "Promƒõnn√Ω";
+        Text[ hebrew ] = "~variabel";
+        Text[ hindi ] = "~‡§™‡§∞‡§ø‡§µ‡§∞‡•ç‡§§‡•Ä";
     };
     FixedText FT_LANGUAGE
     {
@@ -165,26 +174,29 @@ ModalDialog DLG_FIELD_MODIFY
         Text = "~Sprache" ;
         Text [ ENGLISH ] = "~Language" ;
         Text [ english_us ] = "~Language" ;
-        Text[ portuguese ] = "~Language";
-        Text[ russian ] = "~Language";
-        Text[ greek ] = "~Language";
-        Text[ dutch ] = "~Language";
+        Text[ portuguese ] = "~LÌngua";
+        Text[ russian ] = "ﬂÁ˚Í";
+        Text[ greek ] = "√Î˛ÛÛ·";
+        Text[ dutch ] = "~Taal";
         Text[ french ] = "Langue";
         Text[ spanish ] = "~Idioma";
-        Text[ finnish ] = "~Language";
+        Text[ finnish ] = "K~ieli";
         Text[ italian ] = "Lin~gua";
-        Text[ danish ] = "~Language";
+        Text[ danish ] = "Sprog";
         Text[ swedish ] = "~SprÂk";
-        Text[ polish ] = "~Language";
-        Text[ portuguese_brazilian ] = "~Language";
+        Text[ polish ] = "JÍzyk";
+        Text[ portuguese_brazilian ] = "~Idioma";
         Text[ japanese ] = "Ë®ÄË™û(~L)";
         Text[ korean ] = "Ïñ∏Ïñ¥(~L)";
         Text[ chinese_simplified ] = "ËØ≠Ë®Ä(~L)";
         Text[ chinese_traditional ] = "Ë™ûË®Ä(~L)";
-        Text[ turkish ] = "~Language";
-        Text[ arabic ] = "~Language";
-        Text[ catalan ] = "~Language";
-        Text[ thai ] = "~Language";
+        Text[ turkish ] = "~Dil";
+        Text[ arabic ] = "«··€…";
+        Text[ catalan ] = "~Idioma";
+        Text[ thai ] = "‡∏†‡∏≤~‡∏©‡∏≤";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‚ÄÆ◊©◊§◊î‚Ä¨";
+        Text[ hindi ] = "~‡§≠‡§æ‡§∑‡§æ";
     };
 
     ListBox LB_LANGUAGE
@@ -210,7 +222,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text = "F~ormat" ;
         Text [ ENGLISH ] = "F~ormat" ;
         Text [ english_us ] = "F~ormat" ;
-        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "Forma~to" ;
         Text [ swedish ] = "F~ormat" ;
         Text [ danish ] = "Format" ;
         Text [ italian ] = "F~ormato" ;
@@ -220,7 +232,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text [ portuguese ] = "Forma~to" ;
         Text[ chinese_simplified ] = "Ê†ºÂºè(~O)";
         Text[ russian ] = "‘ÓÏ‡Ú";
-        Text[ polish ] = "Format";
+        Text[ polish ] = "~Format";
         Text[ japanese ] = "Êõ∏Âºè(~O)";
         Text[ chinese_traditional ] = "Ê†ºÂºè(~O)";
         Text[ arabic ] = " ‰”Ìﬁ";
@@ -231,6 +243,9 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ catalan ] = "F~ormat";
         Text[ finnish ] = "Muotoil~e";
         Text[ thai ] = "‡∏£‡∏π~‡∏õ‡πÅ‡∏ö‡∏ö";
+        Text[ czech ] = "Form√°t";
+        Text[ hebrew ] = "F~ormat";
+        Text[ hindi ] = "~‡§∞‡§ö‡§®‡§æ";
     };
     OKButton BTN_OK
     {
@@ -252,7 +267,7 @@ ModalDialog DLG_FIELD_MODIFY
         TabStop = TRUE ;
     };
     Text [ english_us ] = "Edit Field" ;
-    Text [ portuguese_brazilian ] = "Feldbefehl bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Editar Campo" ;
     Text [ swedish ] = "Redigera f‰ltkommando" ;
     Text [ danish ] = "Rediger felt" ;
     Text [ italian ] = "Modifica comando di campo" ;
@@ -273,7 +288,23 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ catalan ] = "Edita el camp";
     Text[ finnish ] = "Muokkaa kentt‰‰";
     Text[ thai ] = "‡πÅ‡∏Å‡πâ‡πÑ‡∏Ç‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+    Text[ czech ] = "Upravit pole";
+    Text[ hebrew ] = "Feldbefehl bearbeiten";
+    Text[ hindi ] = "‡§ï‡•ç‡§∑‡•á‡§§‡•ç‡§∞ ‡§ï‡§æ ‡§∏‡§Ç‡§™‡§æ‡§¶‡§®";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
