@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:20:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("DecimalDelimiter"), 0, makeAny(::rtl::OUString(&m_cDecimalDelimiter,1)), PropertyState_DIRECT_VALUE));
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("ThousandDelimiter"), 0, makeAny(::rtl::OUString(&m_cThousandDelimiter,1)), PropertyState_DIRECT_VALUE));
 
-    // build a new parameter sequence from the original parameters, appended bý the new parameters from above
+    // build a new parameter sequence from the original parameters, appended by the new parameters from above
         PropertyValue *pParams = aParam.empty() ? 0 : &aParam[0];
         aDriverParam = ::comphelper::concatSequences(
         info,
