@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:23:04 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,6 @@ class  RscPtrPtr;
 #endif
 
 /******************* T y p e s *******************************************/
-#define HASH_NONAME         0xFFFF  //not an entry in hashtabel
-typedef USHORT              HASHID; // Definition von HASHID
 // Zeichensatz
 enum COMPARE { LESS = -1, EQUAL = 0, GREATER = 1 };
 
@@ -95,12 +93,13 @@ BOOL Append( FILE * fDest, ByteString aSourceFile );
 ByteString InputFile ( char * pInput, char * pExt );
 ByteString OutputFile( ByteString aInput, char * ext );
 char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv,
-                     USHORT nArgc );
-void RscExit( USHORT nExit );
+                     sal_uInt32 nArgc );
+void RscExit( sal_uInt32 nExit );
 
 /********* A n s i - F u n c t i o n   F o r w a r d s *******************/
 int rsc_strnicmp( const char *string1, const char *string2, size_t count );
 int rsc_stricmp( const char *string1, const char *string2 );
+char* rsc_strdup( const char* );
 
 /****************** C L A S S E S ****************************************/
 DECLARE_LIST( RscStrList, ByteString * )
@@ -112,110 +111,130 @@ public:
     static char * MakeUTF8FromL( char * pStr );
 };
 
-/*********** R s c M e m *************************************************/
-class RscMem
-{
-public:
-    static void *   Malloc( unsigned int nSize );
-    static void *   Realloc( void * pMem, unsigned int nSize );
-    static char *   Realloc( char * pMem, unsigned int nSize ){
-                        return (char *)Realloc( (void *)pMem, nSize );
-                    }
-    static void     Free( void * pMem );
-    static void     Free( char * pMem ){
-                        Free( (void *)pMem );
-                    }
-    static char *   Assignsw( const char *psw, short nExtraSpace );
-};
-
 /****************** R s c P t r P t r ************************************/
 class RscPtrPtr
 {
-    USHORT  nCount;
+    sal_uInt32  nCount;
     void **         pMem;
 public:
                     RscPtrPtr();
                     ~RscPtrPtr();
     void            Reset();
-    USHORT  Append( void * );
-    USHORT  Append( char * pStr ){  printf( "\n" );
-
+    sal_uInt32  Append( void * );
+    sal_uInt32  Append( char * pStr ){
                         return( Append( (void *)pStr ) );
                     };
-    USHORT  GetCount(){ return( nCount ); };
-    void *          GetEntry( USHORT nEle );
+    sal_uInt32  GetCount(){ return( nCount ); };
+    void *          GetEntry( sal_uInt32 nEle );
     void **         GetBlock(){ return( pMem ); };
 };
 
 /****************** R s c W r i t e R c **********************************/
 class RscWriteRc
 {
-    unsigned int        nLen;
+    sal_uInt32              nLen;
     BOOL                bSwap;
     RSCBYTEORDER_TYPE   nByteOrder;
     char *              pMem;
-    char *              GetPointer( unsigned int nSize );
+    char *              GetPointer( sal_uInt32 nSize );
 public:
                 RscWriteRc( RSCBYTEORDER_TYPE nOrder = RSC_SYSTEMENDIAN );
                 ~RscWriteRc();
-    unsigned int        IncSize( unsigned int nSize );// gibt die vorherige Groesse
+    sal_uInt32      IncSize( sal_uInt32 nSize );// gibt die vorherige Groesse
     void *      GetBuffer()
                 {
                     return GetPointer( 0 );
                 }
-    USHORT      GetShort( USHORT nPos )
+    sal_uInt16  GetShort( sal_uInt32 nPos )
                 {
-                    return bSwap ? SWAPSHORT( *(USHORT*)(GetPointer(nPos)) ) : *(USHORT*)(GetPointer(nPos));
+                    sal_uInt16 nVal = 0;
+                    char* pFrom = GetPointer(nPos);
+                    char* pTo = (char*)&nVal;
+                    *pTo++ = *pFrom++;
+                    *pTo++ = *pFrom++;
+                    return bSwap ? SWAPSHORT( nVal ) : nVal;
                 }
-    char *      GetUTF8( USHORT nPos )
+    sal_uInt32  GetLong( sal_uInt32 nPos )
+                {
+                    sal_uInt32 nVal = 0;
+                    char* pFrom = GetPointer(nPos);
+                    char* pTo = (char*)&nVal;
+                    *pTo++ = *pFrom++;
+                    *pTo++ = *pFrom++;
+                    *pTo++ = *pFrom++;
+                    *pTo++ = *pFrom++;
+                    return bSwap ? SWAPLONG( nVal ) : nVal;
+                }
+    char *      GetUTF8( sal_uInt32 nPos )
                 {
                     return GetPointer( nPos );
                 }
 
 
     RSCBYTEORDER_TYPE GetByteOrder() const { return nByteOrder; }
-    unsigned int    Size(){ return( nLen ); };
-    //void        Put( void * pData, USHORT nSize );
-    void        Put( INT32 lVal )
+    sal_uInt32      Size(){ return( nLen ); };
+    void        Put( sal_uInt64 lVal )
                 {
                     if( bSwap )
                     {
-                        Put( *(((USHORT*)&lVal) +1) );
-                        Put( *(USHORT*)&lVal );
+                        Put( *(((sal_uInt32*)&lVal)+1) );
+                        Put( *(sal_uInt32*)&lVal );
                     }
                     else
                     {
-                        Put( *(USHORT*)&lVal );
-                        Put( *(((USHORT*)&lVal) +1) );
+                        Put( *(sal_uInt32*)&lVal );
+                        Put( *(((sal_uInt32*)&lVal)+1) );
                     }
                 }
-    void        Put( UINT32 nValue )
-                { Put( (INT32)nValue ); }
-    void        Put( USHORT nValue );
-    void        Put( short nValue )
-                { Put( (USHORT)nValue ); }
+    void        Put( sal_Int32 lVal )
+                {
+                    if( bSwap )
+                    {
+                        Put( *(((sal_uInt16*)&lVal) +1) );
+                        Put( *(sal_uInt16*)&lVal );
+                    }
+                    else
+                    {
+                        Put( *(sal_uInt16*)&lVal );
+                        Put( *(((sal_uInt16*)&lVal) +1) );
+                    }
+                }
+    void        Put( sal_uInt32 nValue )
+                { Put( (sal_Int32)nValue ); }
+    void        Put( sal_uInt16 nValue );
+    void        Put( sal_Int16 nValue )
+                { Put( (sal_uInt16)nValue ); }
     void        PutUTF8( char * pData );
 
-    void        PutAt( USHORT nPos, INT32 lVal )
+    void        PutAt( sal_uInt32 nPos, INT32 lVal )
                 {
                     if( bSwap )
                     {
-                        PutAt( nPos, *(((USHORT*)&lVal) +1) );
-                        PutAt( nPos + 2, *(USHORT*)&lVal );
+                        PutAt( nPos, *(((sal_uInt16*)&lVal) +1) );
+                        PutAt( nPos + 2, *(sal_uInt16*)&lVal );
                     }
                     else
                     {
-                        PutAt( nPos, *(USHORT*)&lVal );
-                        PutAt( nPos + 2, *(((USHORT*)&lVal) +1) );
+                        PutAt( nPos, *(sal_uInt16*)&lVal );
+                        PutAt( nPos + 2, *(((sal_uInt16*)&lVal) +1) );
                     }
                 }
-    void        PutAt( USHORT nPos, short nVal )
+    void        PutAt( sal_uInt32 nPos, sal_uInt32 lVal )
                 {
-                    PutAt( nPos, (USHORT)nVal );
+                    PutAt( nPos, (INT32)lVal);
                 }
-    void        PutAt( USHORT nPos, USHORT nVal )
+    void        PutAt( sal_uInt32 nPos, short nVal )
                 {
-                    *(USHORT *)(GetPointer( nPos )) = bSwap ? SWAPSHORT( nVal ) : nVal;
+                    PutAt( nPos, (sal_uInt16)nVal );
+                }
+    void        PutAt( sal_uInt32 nPos, sal_uInt16 nVal )
+                {
+                    if( bSwap )
+                        nVal = SWAPSHORT( nVal );
+                    char* pTo = GetPointer( nPos );
+                    char* pFrom = (char*)&nVal;
+                    *pTo++ = *pFrom++;
+                    *pTo++ = *pFrom++;
                 }
 };
 
