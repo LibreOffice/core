@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:22:31 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,7 @@ String STR_PRESOBJ_MPTITLE
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬±à¼­±êÌâÎÄµÄ¸ñÊ½¡£";
     Text[ russian ] = "Äëÿ ïğàâêè ôîğìàòà òåêñòà çàãîëîâêà ùåëêíèòå îäèí ğàç ìûøüş";
     Text[ polish ] = "Kliknij, aby edytowaæ format tekstu tytu³owego.";
-    Text[ japanese ] = "À²ÄÙÃ·½Ä‚Ì‘®‚ğ•ÒW‚·‚é‚½‚ß‚É¸Ø¯¸‚µ‚Ä‚­‚¾‚³‚¢";
+    Text[ japanese ] = "À²ÄÙÃ·½Ä‚Ì‘®‚ğ•ÒW‚·‚é‚É‚Í¸Ø¯¸‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ«ö¤@¤U¹«¼Ğ¡A½s¿è¼ĞÃD¤åªº®æ¦¡¡C";
     Text[ arabic ] = "ÇäŞÑ áÊÍÑíÑ ÊäÓíŞ äÕ ÇáÚäæÇä";
     Text[ dutch ] = "Klik om de opmaak van de titeltekst te bewerken";
@@ -356,7 +356,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬±à¼­´ó¸ÙÕıÎÄ¸ñÊ½¡£";
     Text[ russian ] = "Äëÿ ïğàâêè ôîğìàòà òåêñòà ñòğóêòóğû ùåëêíèòå îäèí ğàç ìûøüş";
     Text[ polish ] = "Kliknij, aby edytowaæ formaty tekstu konspektu.";
-    Text[ japanese ] = "±³Ä×²İ‚Ì‘®‚ğ•ÒW‚·‚é‚½‚ß‚É¸Ø¯¸‚µ‚Ä‚­‚¾‚³‚¢";
+    Text[ japanese ] = "±³Ä×²İÃ·½Ä‚Ì‘®‚ğ•ÒW‚·‚é‚É‚Í¸Ø¯¸‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ±z«öÀ»¹«¼Ğ¡A½s¿è¤jºõ¤å¦r®æ¦¡¡C";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊŞæã ÈÊÍÑíÑ ÊäÓíŞ äÕ ÇáÊŞÓíã";
     Text[ dutch ] = "Klik om het formaat van de overzichtstekst te bewerken";
@@ -607,7 +607,7 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬ÒÆ¶¯Ò³Ãæ¡£";
     Text[ russian ] = "Äëÿ ïåğåìåùåíèÿ ñòğàíèöû ùåëêíèòå îäèí ğàç ìûøüş";
     Text[ polish ] = "Kliknij, aby przesun¹æ slajd.";
-    Text[ japanese ] = "Íß°¼Ş‚ğˆÚ“®‚·‚é‚½‚ß‚É¸Ø¯¸‚µ‚Ä‚­‚¾‚³‚¢";
+    Text[ japanese ] = "Íß°¼Ş‚ğˆÚ“®‚·‚é‚É‚Í¸Ø¯¸‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "½Ğ«öÀ»¹«¼Ğ¡A²¾°Ê­¶­±¡C";
     Text[ arabic ] = "ÇäŞÑ áÅÒÇÍÉ ÇáÕİÍÉ";
     Text[ dutch ] = "Klik om de pagina te verplaatsen";
@@ -660,7 +660,7 @@ String STR_PRESOBJ_TITLE
     Text[ chinese_simplified ] = "µ¥»÷²åÈë±êÌâ";
     Text[ russian ] = "Äîáàâèòü çàãîëîâîê ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj tytu³ przez klikniêcie";
-    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÀ²ÄÙ‚ğ‘}“ü";
+    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÀ²ÄÙ‚Ì‘}“ü";
     Text[ chinese_traditional ] = "«ö¤@¤U·Æ¹«¥ªÁä·s¼W¼ĞÃD";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ ÚäæÇä";
     Text[ dutch ] = "Klik om titel toe te voegen";
@@ -687,7 +687,7 @@ String STR_PRESOBJ_OUTLINE
     Text[ chinese_simplified ] = "µ¥»÷Êó±ê¼üĞÂÔö´ó¸Ù";
     Text[ russian ] = "Äîáàâèòü ñòğóêòóğó ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj konspekt przez klikniêcie";
-    Text[ japanese ] = "¸Ø¯¸‚µ‚Ä±³Ä×²İ‚ğ‘}“ü";
+    Text[ japanese ] = "¸Ø¯¸‚µ‚Ä±³Ä×²İ‚Ì‘}“ü";
     Text[ chinese_traditional ] = "«öÀ»·Æ¹«¥ªÁä·s¼W¤jºõ";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÅÏÑÇÌ ÊŞÓíã";
     Text[ dutch ] = "Klik om overzicht toe te voegen";
@@ -714,7 +714,7 @@ String STR_PRESOBJ_TEXT
     Text[ chinese_simplified ] = "µ¥»÷Êó±ê¼üÌí¼ÓÎÄ×Ö";
     Text[ russian ] = "Äîáàâèòü òåêñò ùåë÷êîì";
     Text[ polish ] = "Dodaj tekst przez klikniêcie";
-    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÃ·½Ä‚ğ‘}“ü";
+    Text[ japanese ] = "¸Ø¯¸‚µ‚ÄÃ·½Ä‚Ì‘}“ü";
     Text[ chinese_traditional ] = "«öÀ»·Æ¹«¥ªÁä·s¼W¤å¦r";
     Text[ arabic ] = "ÇäŞÑ áÅÏÑÇÌ äÕ";
     Text[ dutch ] = "Klik om tekst toe te voegen";
@@ -768,7 +768,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼ĞÎ";
     Text[ russian ] = "Äîáàâèòü ğèñóíîê äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj grafikê przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚Å}‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚Å}‚Ì‘}“ü";
     Text[ chinese_traditional ] = "ÂùÀ»·Æ¹«¥ª«ö¶s´¡¤J¹Ï§Î";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÕæÑÉ";
     Text[ dutch ] = "Afbeelding door dubbelklikken toevoegen";
@@ -795,7 +795,7 @@ String STR_PRESOBJ_OBJECT
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê¼ÓÈë¶ÔÏó";
     Text[ russian ] = "Äîáàâèòü îáúåêò äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj obiekt przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚ÄµÌŞ¼Şª¸Ä‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚ÄµÌŞ¼Şª¸Ä‚Ì‘}“ü";
     Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ¥[¤Jª«¥ó";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ßÇÆä";
     Text[ dutch ] = "Dubbelklik om object toe te voegen";
@@ -822,7 +822,7 @@ String STR_PRESOBJ_CHART
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼±í";
     Text[ russian ] = "Äîáàâèòü äèàãğàììó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj wykres przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä¸Ş×Ì‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä¸Ş×Ì‚Ì‘}“ü";
     Text[ chinese_traditional ] = "«ö¤@¤U¹«¼Ğ´¡¤J¹Ïªí";
     Text[ arabic ] = "áÅÖÇİÉ ÑÓãÇ ÈíÇäíÇ¡ ÇäŞÑ äŞÑÇ ãÒÏæÌÇ";
     Text[ dutch ] = "Dubbelklik om diagram toe te voegen";
@@ -849,7 +849,7 @@ String STR_PRESOBJ_ORGCHART
     Text[ chinese_simplified ] = "Ë«»÷Êó±êĞÂÔö×éÖ¯Í¼±í";
     Text[ russian ] = "Äîáàâèòü îğãàíèçàöèîííóş äèàãğàììó äâîéíûì ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj wykres organizacyjny przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä‘gD}‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä‘gD}‚Ì‘}“ü";
     Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ·s¼W²ÕÂ´¹Ïªí";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÑÓã ÈíÇäí åíßáí";
     Text[ dutch ] = "Dubbelklik om organisatiediagram toe te voegen";
@@ -876,7 +876,7 @@ String STR_PRESOBJ_TABLE
     Text[ chinese_simplified ] = "ÇëÄúË«»÷Êó±êĞÂÔö¹¤×÷±í";
     Text[ russian ] = "Äîáàâèòü òàáëèöó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj arkusz kalkulacyjny przez podwójne klikniêcie";
-    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä•\\‚ğ‘}“ü";
+    Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä•\\‚Ì‘}“ü";
     Text[ chinese_traditional ] = "½Ğ±zÂùÀ»·Æ¹««ö¶s·s¼W¤u§@ªí";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÌÏæá";
     Text[ dutch ] = "Dubbelklik om werkblad toe te voegen";
@@ -932,7 +932,7 @@ String STR_OUTLINEVIEWSHELL
     Text[ chinese_simplified ] = "´ó¸ÙÄ£Ê½";
     Text[ russian ] = "Ğåæèì ñòğóêòóğû";
     Text[ polish ] = "Tryb konspektu";
-    Text[ japanese ] = "±³Ä×²İ Ó°ÄŞ";
+    Text[ japanese ] = "±³Ä×²İÓ°ÄŞ";
     Text[ chinese_traditional ] = "¤jºõ¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáÊŞÓíã";
     Text[ dutch ] = "Overzichtmodus";
@@ -1064,7 +1064,7 @@ String STR_APPLICATIONOBJECTBAR
     Text [ ENGLISH ] = "StarImpress 4.0" ;
     Text [ norwegian ] = "StarImpress 4.0" ;
     Text [ italian ] = "StarImpress 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Draw 4.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 4.0" ;
     Text [ portuguese ] = "StarImpress 4.0" ;
     Text [ finnish ] = "StarImpress 4.0" ;
     Text [ danish ] = "StarImpress 4.0" ;
@@ -1082,7 +1082,7 @@ String STR_APPLICATIONOBJECTBAR
     Text[ dutch ] = "StarImpress 4.0";
     Text[ chinese_simplified ] = "StarImpress 4.0";
     Text[ greek ] = "StarImpress 4.0";
-    Text[ korean ] = "StarOffice Impress 4.0";
+    Text[ korean ] = "%PRODUCTNAME Impress 4.0";
     Text[ turkish ] = "StarImpress 4.0";
     Text[ language_user1 ] = " ";
 };
@@ -1238,7 +1238,7 @@ String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
     Text[ chinese_simplified ] = "¿ÚÁî´íÎó»òÕßÎÄ¼şÒÑ¾­Ëğ»µ¡£";
     Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü èëè ïîâğåæäåííûé ôàéë.";
     Text[ polish ] = "Has³o jest nieprawid³owe lub plik jest uszkodzony.";
-    Text[ japanese ] = "Êß½Ü°ÄŞ‚ª³‚µ‚­‚È‚¢‚©A‚Ü‚½‚ÍÌ§²Ù‚ª”j‘¹‚µ‚Ä‚¢‚Ü‚·B";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚ªŠÔˆá‚Á‚Ä‚¢‚é‚©A‚Ü‚½‚ÍÌ§²Ù‚É–â‘è‚ª‚ ‚è‚Ü‚·B";
     Text[ chinese_traditional ] = "±K½XµL®Ä©ÎªÌÀÉ®×¤w¸g·lÃa¡C";
     Text[ arabic ] = "ßáãÉ ÇáÓÑ ÛíÑ ÕÍíÍÉ Ãæ Çáãáİ ãÚØæÈ.";
     Text[ dutch ] = "Het wachtwoord is niet correct of het bestand is beschadigd";
@@ -1292,7 +1292,7 @@ String STR_NOT_ENOUGH_MEMORY
     Text[ chinese_simplified ] = "ÄÚ´æ²»×ã£¡\nÖĞ¶ÏÖ´ĞĞÃüÁî¡£";
     Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè!\nÎïåğàöèÿ áóäåò ïğåğâàíà.";
     Text[ polish ] = "Za ma³o pamiêci!\nAkcja zostanie anulowana.";
-    Text[ japanese ] = "\\•ª‚È‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñ!\n±¸¼®İ‚Í’†~‚³‚ê‚Ü‚·B";
+    Text[ japanese ] = "\\•ª‚ÈÒÓØ‹ó‚«—e—Ê‚ª‚ ‚è‚Ü‚¹‚ñB\n±¸¼®İ‚ğ’†~‚µ‚Ü‚·B";
     Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡I\n¤¤Â_°õ¦æ©R¥O¡C";
     Text[ arabic ] = "áÇ ÊæÌÏ ĞÇßÑÉ ßÇİíÉ!\nÓæİ íÊã ŞØÚ ÇáÅÌÑÇÁ.";
     Text[ dutch ] = "Niet genoeg geheugen!\nDe activiteit wordt gestopt.";
@@ -1355,7 +1355,7 @@ String STR_POOLSHEET_OBJWITHARROW
     Text[ chinese_simplified ] = "´ø¼ıÍ·µÄ¶ÔÏó";
     Text[ russian ] = "Îáúåêò ñî ñòğåëêîé";
     Text[ polish ] = "Obiekt z grotem strza³ki";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä–îˆóæ’[•t‚«";
+    Text[ japanese ] = "–îˆóæ’[•t‚«µÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "±a½bÀYªºª«¥ó";
     Text[ arabic ] = "ßÇÆä ÈÓåã";
     Text[ dutch ] = "Object met pijl";
@@ -1381,7 +1381,7 @@ String STR_POOLSHEET_OBJWITHSHADOW
     Text[ chinese_simplified ] = "´øÒõÓ°µÄ¶ÔÏó";
     Text[ russian ] = "Îáúåêò ñ çàòåíåíèåì";
     Text[ polish ] = "Obiekt z cieniem";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä‰e•t‚«";
+    Text[ japanese ] = "‰e•t‚«µÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "±a³±¼vªºª«¥ó";
     Text[ arabic ] = "ßÇÆä ÈÙá";
     Text[ dutch ] = "Object met schaduw";
@@ -1412,7 +1412,7 @@ String STR_POOLSHEET_OBJWITHOUTFILL
     Text[ chinese_simplified ] = "²»ÌîÉ«µÄ¶ÔÏó";
     Text[ russian ] = "Îáúåêò áåç çàëèâêè";
     Text[ polish ] = "Obiekt bez wype³nienia";
-    Text[ japanese ] = "µÌŞ¼Şª¸Ä “h‚è‚Â‚Ô‚µ‚È‚µ";
+    Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "¤£¶ñ¦âªºª«¥ó";
     Text[ arabic ] = "ßÇÆä ÈÏæä ÊÚÈÆÉ";
     Text[ dutch ] = "Object zonder vulling";
@@ -1583,7 +1583,7 @@ String STR_POOLSHEET_TITLE1
     Text[ chinese_simplified ] = "±êÌâ 1";
     Text[ russian ] = "Çàãîëîâîê1";
     Text[ polish ] = "Tytu³1";
-    Text[ japanese ] = "À²ÄÙ1";
+    Text[ japanese ] = "À²ÄÙ 1";
     Text[ chinese_traditional ] = "¼ĞÃD 1";
     Text[ arabic ] = "ÇáÚäæÇä1";
     Text[ dutch ] = "Titel1";
@@ -1609,7 +1609,7 @@ String STR_POOLSHEET_TITLE2
     Text[ chinese_simplified ] = "±êÌâ 2";
     Text[ russian ] = "Çàãîëîâîê2";
     Text[ polish ] = "Tytu³2";
-    Text[ japanese ] = "À²ÄÙ2";
+    Text[ japanese ] = "À²ÄÙ 2";
     Text[ chinese_traditional ] = "¼ĞÃD 2";
     Text[ arabic ] = "ÇáÚäæÇä2";
     Text[ dutch ] = "Titel2";
@@ -1671,7 +1671,7 @@ String STR_POOLSHEET_HEADLINE1
     Text[ chinese_simplified ] = "±êÌâ 1";
     Text[ russian ] = "Çàãîëîâîê1";
     Text[ polish ] = "Tytu³1";
-    Text[ japanese ] = "Œ©o‚µ1";
+    Text[ japanese ] = "Œ©o‚µ 1";
     Text[ chinese_traditional ] = "¼ĞÃD 1";
     Text[ arabic ] = "ÇáÚäæÇä1";
     Text[ dutch ] = "Kop1";
@@ -1702,7 +1702,7 @@ String STR_POOLSHEET_HEADLINE2
     Text[ chinese_simplified ] = "±êÌâ 2";
     Text[ russian ] = "Çàãîëîâîê2";
     Text[ polish ] = "Tytu³2";
-    Text[ japanese ] = "Œ©o‚µ2";
+    Text[ japanese ] = "Œ©o‚µ 2";
     Text[ chinese_traditional ] = "¼ĞÃD 2";
     Text[ arabic ] = "ÇáÚäæÇä2";
     Text[ dutch ] = "Kop2";
@@ -1966,7 +1966,7 @@ String STR_PRESOBJ_IMAGE
     Text[ dutch ] = "Dubbelklik om afbeelding toe te voegen";
     Text[ chinese_simplified ] = "Í¨¹ıË«»÷²åÈëÍ¼Ïñ";
     Text[ greek ] = "ÊÜíôå äéğëü êëéê ãéá ôç ğñïóèŞêç ôçò åéêüíáò";
-    Text[ korean ] = "´õºíÅ¬¸¯À¸·Î ÀÌ¹ÌÁö Ãß°¡";
+    Text[ korean ] = "´õºíÅ¬¸¯ÇÏ¿© ÀÌ¹ÌÁö Ãß°¡";
     Text[ turkish ] = "Resim eklemek için çift tıklayın";
     Text[ language_user1 ] = " ";
 };
@@ -1974,49 +1974,49 @@ String STR_PRESOBJ_IMAGE
 
 String STR_STAROFFICE_XML_DRAW
 {
-    Text = "StarOffice XML (Draw)" ;
+    Text = "%PRODUCTNAME XML (Draw)" ;
     Text [ ENGLISH ] = "StarOffice XML (Draw)" ;
-    Text[ english_us ] = "StarOffice XML (Draw)";
-    Text[ portuguese ] = "StarOffice XML (Draw)";
-    Text[ russian ] = "StarOffice XML (Draw)";
-    Text[ greek ] = "StarOffice XML (Draw)";
-    Text[ dutch ] = "StarOffice XML (Draw)";
-    Text[ french ] = "StarOffice XML (Draw)";
-    Text[ spanish ] = "StarOffice XML (Draw)";
-    Text[ italian ] = "StarOffice XML (Draw)";
-    Text[ danish ] = "StarOffice XML (Draw)";
-    Text[ swedish ] = "StarOffice XML (Draw)";
-    Text[ polish ] = "StarOffice XML (Draw)";
-    Text[ portuguese_brazilian ] = "StarOffice XML (Draw)";
-    Text[ japanese ] = "StarOffice XML (Draw)";
-    Text[ korean ] = "StarOffice XML (Draw)";
-    Text[ chinese_simplified ] = "StarOffice XML (Draw)";
-    Text[ chinese_traditional ] = "StarOffice XML (Draw)";
-    Text[ turkish ] = "StarOffice XML (Draw)";
-    Text[ arabic ] = "StarOffice XML (Draw)";
+    Text[ english_us ] = "%PRODUCTNAME XML (Draw)";
+    Text[ portuguese ] = "%PRODUCTNAME XML (Draw)";
+    Text[ russian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ greek ] = "%PRODUCTNAME XML (Draw)";
+    Text[ dutch ] = "%PRODUCTNAME XML (Draw)";
+    Text[ french ] = "%PRODUCTNAME XML (Draw)";
+    Text[ spanish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ italian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ danish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ swedish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ polish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Draw)";
+    Text[ japanese ] = "%PRODUCTNAME XML (Draw)";
+    Text[ korean ] = "%PRODUCTNAME XML (Draw)";
+    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Draw)";
+    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Draw)";
+    Text[ turkish ] = "%PRODUCTNAME XML (Draw)";
+    Text[ arabic ] = "%PRODUCTNAME XML (Draw)";
 };
 
 String STR_STAROFFICE_XML_IMPRESS
 {
-    Text = "StarOffice XML (Impress)" ;
+    Text = "%PRODUCTNAME XML (Impress)" ;
     Text [ ENGLISH ] = "StarOffice XML (Impress)" ;
-    Text[ english_us ] = "StarOffice XML (Impress)";
-    Text[ portuguese ] = "StarOffice XML (Impress)";
-    Text[ russian ] = "StarOffice XML (Impress)";
-    Text[ greek ] = "StarOffice XML (Impress)";
-    Text[ dutch ] = "StarOffice XML (Impress)";
-    Text[ french ] = "StarOffice XML (Impress)";
-    Text[ spanish ] = "StarOffice XML (Impress)";
-    Text[ italian ] = "StarOffice XML (Impress)";
-    Text[ danish ] = "StarOffice XML (Impress)";
-    Text[ swedish ] = "StarOffice XML (Impress)";
-    Text[ polish ] = "StarOffice XML (Impress)";
-    Text[ portuguese_brazilian ] = "StarOffice XML (Impress)";
-    Text[ japanese ] = "StarOffice XML (Impress)";
-    Text[ korean ] = "StarOffice XML (Impress)";
-    Text[ chinese_simplified ] = "StarOffice XML (Impress)";
-    Text[ chinese_traditional ] = "StarOffice XML (Impress)";
-    Text[ turkish ] = "StarOffice XML (Impress)";
-    Text[ arabic ] = "StarOffice XML (Impress)";
+    Text[ english_us ] = "%PRODUCTNAME XML (Impress)";
+    Text[ portuguese ] = "%PRODUCTNAME XML (Impress)";
+    Text[ russian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ greek ] = "%PRODUCTNAME XML (Impress)";
+    Text[ dutch ] = "%PRODUCTNAME XML (Impress)";
+    Text[ french ] = "%PRODUCTNAME XML (Impress)";
+    Text[ spanish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ italian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ danish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ swedish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ polish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME XML (Impress)";
+    Text[ japanese ] = "%PRODUCTNAME XML (Impress)";
+    Text[ korean ] = "%PRODUCTNAME XML (Impress)";
+    Text[ chinese_simplified ] = "%PRODUCTNAME XML (Impress)";
+    Text[ chinese_traditional ] = "%PRODUCTNAME XML (Impress)";
+    Text[ turkish ] = "%PRODUCTNAME XML (Impress)";
+    Text[ arabic ] = "%PRODUCTNAME XML (Impress)";
 };
 
