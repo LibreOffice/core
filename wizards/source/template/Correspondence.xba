@@ -39,7 +39,7 @@ End Function
 
 Function GetFieldName(oFieldKnot as Object, GeneralFieldName as String)
 	If oFieldKnot.HasByName(GeneralFieldName) Then
-    GetFieldName = oFieldKnot.GetByName(GeneralFieldName).DatabaseFieldName
+    GetFieldName = oFieldKnot.GetByName(GeneralFieldName).AssignedFieldName
 	Else
 		GetFieldName = &quot;&quot;
 	End If
@@ -228,7 +228,7 @@ Dim oFieldMaster as Object
 				oFieldMaster.PlaceHolder = getResText(1350+31)
 			Case Else
 				oFieldMaster.PlaceHolder = sColName
-		End Select	
+		End Select
 		oFieldMaster.Hint = getResText(1350)
 		oBookText.InsertTextContent(oBookMarkCursor, oFieldMaster, True)
 	End If
