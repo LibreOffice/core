@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainerhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:06:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,26 +250,22 @@ sal_Bool OPropertyContainerHelper::convertFastPropertyValue(
             Any aNewRequestedValue( _rValue );
 
             // normalization
-            // (102329 - 14.08.2002 - fs@openoffice.org)
+            // (#102329# - 2002-08-14 - fs@openoffice.org)
+            // (#i29490# - 2004-06-16 - fs@openoffice.org)
             if ( !aNewRequestedValue.getValueType().equals( aPos->aType ) )
             {   // the actually given value is not of the same type as the one required
-                if  (   ( TypeClass_INTERFACE == aNewRequestedValue.getValueType().getTypeClass() )
-                    &&  ( TypeClass_INTERFACE == aPos->aType.getTypeClass() )
-                    )
-                {   // but both are XInterface-derivees
-                    Any aProperlyTyped( NULL, aPos->aType.getTypeLibType() );
+                Any aProperlyTyped( NULL, aPos->aType.getTypeLibType() );
 
-                    if (    uno_type_assignData(
-                                const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
-                                const_cast< void* >( aNewRequestedValue.getValue() ), aNewRequestedValue.getValueType().getTypeLibType(),
-                                cpp_queryInterface, cpp_acquire, cpp_release
-                            )
+                if (    uno_type_assignData(
+                            const_cast< void* >( aProperlyTyped.getValue() ), aProperlyTyped.getValueType().getTypeLibType(),
+                            const_cast< void* >( aNewRequestedValue.getValue() ), aNewRequestedValue.getValueType().getTypeLibType(),
+                            cpp_queryInterface, cpp_acquire, cpp_release
                         )
-                    {
-                        // we were able to query the given XInterface-derivee for the interface
-                        // which is required for this property
-                        aNewRequestedValue = aProperlyTyped;
-                    }
+                    )
+                {
+                    // we were able to query the given XInterface-derivee for the interface
+                    // which is required for this property
+                    aNewRequestedValue = aProperlyTyped;
                 }
             }
 
