@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 09:07:34 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,22 +497,55 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 rSh.EnterStdMode();
                 if (bInserted)
                     rView.AutoCaption(TABLE_CAP);
+                rReq.Done();
             }
             else
             {
                 USHORT nCols = 0;
                 USHORT nRows = 0;
                 USHORT nInsTblFlags = ALL_TBL_INS_ATTR;
-                String aTableName;
+                String aTableName, aAutoName;
                 SwTableAutoFmt* pTAFmt = 0;
 
                 if( pArgs && pArgs->Count() >= 2 )
                 {
-                    nCols = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_TABLE_COLUMN)).GetValue();
-                    nRows = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_TABLE_ROW)).GetValue();
+                    SFX_REQUEST_ARG( rReq, pName, SfxStringItem, FN_INSERT_TABLE, sal_False );
+                    SFX_REQUEST_ARG( rReq, pCols, SfxUInt16Item, SID_ATTR_TABLE_COLUMN, sal_False );
+                    SFX_REQUEST_ARG( rReq, pRows, SfxUInt16Item, SID_ATTR_TABLE_ROW, sal_False );
+                    SFX_REQUEST_ARG( rReq, pFlags, SfxInt32Item, FN_PARAM_1, sal_False );
+                    SFX_REQUEST_ARG( rReq, pAuto, SfxStringItem, FN_PARAM_2, sal_False );
 
-                    const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-                    nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+                    if ( pName )
+                        aTableName = pName->GetValue();
+                    if ( pCols )
+                        nCols = pCols->GetValue();
+                    if ( pRows )
+                        nRows = pRows->GetValue();
+                    if ( pAuto )
+                    {
+                        aAutoName = pAuto->GetValue();
+                        if ( aAutoName.Len() )
+                        {
+                            SwTableAutoFmtTbl aTableTbl;
+                            aTableTbl.Load();
+                            for ( USHORT n=0; n<aTableTbl.Count(); n++ )
+                            {
+                                if ( aTableTbl[n]->GetName() == aAutoName )
+                                {
+                                    pTAFmt = new SwTableAutoFmt( *aTableTbl[n] );
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if ( pFlags )
+                        nInsTblFlags = (USHORT) pFlags->GetValue();
+                    else
+                    {
+                        const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+                        nInsTblFlags = pModOpt->GetInsTblFlags(bHTMLMode);
+                    }
                 }
 
                 if( !nCols || !nRows )
@@ -520,13 +553,24 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
                     if( RET_OK == pDlg->Execute() )
                     {
-                        pDlg->GetValues( aTableName, nRows, nCols, nInsTblFlags, pTAFmt );
+                        pDlg->GetValues( aTableName, nRows, nCols, nInsTblFlags, aAutoName, pTAFmt );
                     }
+                    else
+                        rReq.Ignore();
                     delete pDlg;
                 }
 
                 if( nCols && nRows )
                 {
+                    // record before shell change
+                    rReq.AppendItem( SfxStringItem( FN_INSERT_TABLE, aTableName ) );
+                    if ( aAutoName.Len() )
+                        rReq.AppendItem( SfxStringItem( FN_PARAM_2, aAutoName ) );
+                    rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_COLUMN, nCols ) );
+                    rReq.AppendItem( SfxUInt16Item( SID_ATTR_TABLE_ROW, nRows ) );
+                    rReq.AppendItem( SfxInt32Item( FN_PARAM_1, (sal_Int32) nInsTblFlags ) );
+                    rReq.Done();
+
                     rSh.StartUndo(UNDO_INSTABLE);
                     bCallEndUndo = TRUE;
 
@@ -1106,6 +1150,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2002/07/01 09:07:34  mba
+    #100784#: recording paramaters
+
     Revision 1.15  2002/06/14 07:56:50  mba
     #100266#: recording
 

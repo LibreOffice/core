@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #define ROW_COL_PROD 16384
 
 void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
-                                USHORT& rInsTblFlags,
+                                USHORT& rInsTblFlags, String& rAutoName,
                                 SwTableAutoFmt *& prTAFmt )
 {
     rName = aNameEdit.GetText();
@@ -107,7 +107,10 @@ void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
     if (!aDontSplitCB.IsChecked())
         rInsTblFlags |= SPLIT_LAYOUT;
     if( pTAutoFmt )
+    {
         prTAFmt = new SwTableAutoFmt( *pTAutoFmt );
+        rAutoName = prTAFmt->GetName();
+    }
 }
 
 // CTOR / DTOR -----------------------------------------------------------
@@ -225,6 +228,9 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/06/01 11:14:09  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.2  2001/02/28 09:09:32  os
     #83804# no split in HTML
 
