@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:24:01 $
+ *  last change: $Author: mt $ $Date: 2001-02-27 12:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ static uno::Reference< datatransfer::clipboard::XClipboard > ImplGetClipboard()
     static uno::Reference< datatransfer::clipboard::XClipboard > xClipboard;
     if ( !xClipboard.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = vcl::unohelper::GetMultiServiceFactory();
         xClipboard = uno::Reference< datatransfer::clipboard::XClipboard >( xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), uno::UNO_QUERY );
     }
     return xClipboard;
