@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2004-01-08 15:17:29 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:33:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,6 +664,15 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
+        // For Japanese calendar, first year calls GAN, see bug 111668 for detail.
+        if (eraArray == gengou_eraArray && value == 1
+            && (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+                nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR)
+            && (nNativeNumberMode == NativeNumberMode::NATNUM1 ||
+                nNativeNumberMode == NativeNumberMode::NATNUM2)) {
+            static sal_Unicode gan = 0x5143;
+            return OUString(&gan, 1);
+        }
         sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
         if (nNatNum > 0)
             return aNatNum.getNativeNumberString(aOUStr, aLocale, nNatNum);
