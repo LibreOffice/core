@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seqstream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:06:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 namespace comphelper
 {
 
@@ -99,7 +103,7 @@ namespace comphelper
 //==================================================================
 
 
-class SequenceInputStream
+class COMPHELPER_DLLPUBLIC SequenceInputStream
 : public ::cppu::WeakImplHelper2< ::com::sun::star::io::XInputStream, ::com::sun::star::io::XSeekable >
 {
     ::osl::Mutex    m_aMutex;
