@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pw $ $Date: 2000-10-10 12:35:44 $
+#   last change: $Author: ka $ $Date: 2000-11-16 16:36:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -196,6 +196,7 @@ CXXFILES = \
         tpshadow.cxx   \
         transfrm.cxx \
         zoom.cxx \
+        grfflt.cxx \
         $(PROJECTPCHSOURCE).cxx
 
 SRS1NAME=dialogs
@@ -242,7 +243,8 @@ SRC1FILES =  \
         thesdlg.src \
         tp3dattr.src \
         zoom.src	\
-        dlgctrl.src
+        dlgctrl.src \
+        grfflt.src 
 
 SRS2NAME=drawdlgs
 SRC2FILES =  \
@@ -344,7 +346,8 @@ SLOFILES=\
         $(SLO)$/tpshadow.obj   \
         $(SLO)$/transfrm.obj \
         $(SLO)$/worient.obj    \
-        $(SLO)$/zoom.obj
+        $(SLO)$/zoom.obj	 \
+        $(SLO)$/grfflt.obj	
 
 EXCEPTIONSFILES=\
         $(SLO)$/_bmpmask.obj	\
