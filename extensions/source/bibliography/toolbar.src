@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-12 13:20:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:12:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "ÃœÊ·";
             Text[ turkish ] = "Tablo";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Tabla";
         };
         ToolBoxItem
         {
@@ -136,6 +137,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ chinese_traditional ] = "∑j¥M∂µ•ÿ";
             Text[ arabic ] = "„’ÿ·Õ «·»ÕÀ";
             Text[ turkish ] = "Arama ˆlÁ¸t¸";
+            Text[ catalan ] = "ExpresiÛn de b˙squeda";
         };
         ToolBoxItem
         {
@@ -176,6 +178,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "›· — ¬·Ì";
             Text[ turkish ] = "Otomatik filtre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "AutoFiltro";
         };
 
         ToolBoxItem
@@ -205,6 +208,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "›· — ﬁÌ«”Ì";
             Text[ turkish ] = "Standart filtre";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Filtro est·ndar";
         };
 
         ToolBoxItem
@@ -234,6 +238,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "≈“«·… ›· —";
             Text[ turkish ] = "Filtreyi kald˝r";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar filtro";
         };
         ToolBoxItem
         {
@@ -262,6 +267,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = " ⁄ÌÌ‰ «·√⁄„œ…";
             Text[ turkish ] = "S¸tun d¸zeni";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "AsignaciÛn de columnas";
         };
         ToolBoxItem
         {
@@ -291,6 +297,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ arabic ] = "„’œ— «·»Ì«‰« ";
             Text[ turkish ] = "Veri kayna˝";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Fuente de datos";
         };
 /*
         ToolBoxItem
