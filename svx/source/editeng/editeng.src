@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:02:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,323 +64,57 @@
 
 String RID_EDITUNDO_DEL
 {
-    TEXT = "Löschen" ;
-    TEXT [ English ] = "Delete" ;
-    TEXT [ norwegian ] = "Slett" ;
-    TEXT [ italian ] = "Elimina" ;
-    TEXT [ portuguese_brazilian ] = "Excluir" ;
-    TEXT [ portuguese ] = "Eliminar" ;
-    TEXT [ finnish ] = "Poista" ;
-    TEXT [ danish ] = "Slet" ;
-    TEXT [ french ] = "Supprimer" ;
-    TEXT [ swedish ] = "Radera" ;
-    TEXT [ dutch ] = "Wissen" ;
-    TEXT [ spanish ] = "Borrar" ;
-    TEXT [ english_us ] = "Delete" ;
-    TEXT[ chinese_simplified ] = "åˆ é™¤";
-    TEXT[ russian ] = "Óäàëèòü";
-    TEXT[ polish ] = "Usuñ";
-    TEXT[ japanese ] = "å‰Šé™¤";
-    TEXT[ chinese_traditional ] = "åˆªé™¤";
-    TEXT[ arabic ] = "ÍĞİ";
-    TEXT[ dutch ] = "Wissen";
-    TEXT[ chinese_simplified ] = "åˆ é™¤";
-    TEXT[ greek ] = "ÄéáãñáöŞ";
-    TEXT[ korean ] = "ì‚­ì œ";
-    TEXT[ turkish ] = "Sil";
-    TEXT[ catalan ] = "Suprimeix";
-    TEXT[ thai ] = "à¸¥à¸š";
-    TEXT[ czech ] = "Smazat";
-    TEXT[ hebrew ] = "â€®××—×™×§×”â€¬";
-    TEXT[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤“";
-    TEXT[ slovak ] = "ZmazaÅ¥";
-    TEXT[ hungarian ] = "TÃ¶rlÃ©s";
-    TEXT[ slovenian ] = "IzbriÅ¡i";
+    Text [ de ] = "Löschen" ;
+    Text [ en-US ] = "Delete" ;
 };
 
 String RID_EDITUNDO_MOVE
 {
-    TEXT = "Verschieben" ;
-    TEXT [ English ] = "Move" ;
-    TEXT [ norwegian ] = "Flytt" ;
-    TEXT [ italian ] = "Sposta" ;
-    TEXT [ portuguese_brazilian ] = "Mover" ;
-    TEXT [ portuguese ] = "Mover" ;
-    TEXT [ finnish ] = "Siirrä" ;
-    TEXT [ danish ] = "Flyt" ;
-    TEXT [ french ] = "Déplacer" ;
-    TEXT [ swedish ] = "Flytta" ;
-    TEXT [ dutch ] = "Verplaatsen" ;
-    TEXT [ spanish ] = "Desplazar" ;
-    TEXT [ english_us ] = "Move" ;
-    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
-    TEXT[ russian ] = "Ïåğåìåñòèòü";
-    TEXT[ polish ] = "Przesuñ";
-    TEXT[ japanese ] = "ç§»å‹•";
-    TEXT[ chinese_traditional ] = "ç§»å‹•";
-    TEXT[ arabic ] = "ÅÒÇÍÉ";
-    TEXT[ dutch ] = "Verplaatsen";
-    TEXT[ chinese_simplified ] = "ç§»åŠ¨";
-    TEXT[ greek ] = "Ìåôáêßíçóç";
-    TEXT[ korean ] = "ì´ë™";
-    TEXT[ turkish ] = "Taşı";
-    TEXT[ catalan ] = "Mou";
-    TEXT[ thai ] = "à¸¢à¹‰à¸²à¸¢";
-    TEXT[ czech ] = "PÅ™esunout";
-    TEXT[ hebrew ] = "â€®×”×–×–×”â€¬";
-    TEXT[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¾à¤¨à¥à¤¤à¤°";
-    TEXT[ slovak ] = "PresunÃºÅ¥";
-    TEXT[ hungarian ] = "ÃthelyezÃ©s";
-    TEXT[ slovenian ] = "Premakni";
+    Text [ de ] = "Verschieben" ;
+    Text [ en-US ] = "Move" ;
 };
 
 String RID_EDITUNDO_INSERT
 {
-    TEXT = "Einfügen" ;
-    TEXT [ English ] = "Insert" ;
-    TEXT [ norwegian ] = "Sett inn" ;
-    TEXT [ italian ] = "Inserisci" ;
-    TEXT [ portuguese_brazilian ] = "Inserir" ;
-    TEXT [ portuguese ] = "Inserir" ;
-    TEXT [ finnish ] = "Lisää" ;
-    TEXT [ danish ] = "Indsæt" ;
-    TEXT [ french ] = "Insérer" ;
-    TEXT [ swedish ] = "Infoga" ;
-    TEXT [ dutch ] = "Invoegen" ;
-    TEXT [ spanish ] = "Insertar" ;
-    TEXT [ english_us ] = "Insert" ;
-    TEXT[ chinese_simplified ] = "æ’å…¥";
-    TEXT[ russian ] = "Âñòàâèòü";
-    TEXT[ polish ] = "Wstaw";
-    TEXT[ japanese ] = "æŒ¿å…¥";
-    TEXT[ chinese_traditional ] = "æ’å…¥";
-    TEXT[ arabic ] = "ÅÏÑÇÌ";
-    TEXT[ dutch ] = "Invoegen";
-    TEXT[ chinese_simplified ] = "æ’å…¥";
-    TEXT[ greek ] = "ÅéóáãùãŞ";
-    TEXT[ korean ] = "ì‚½ì…";
-    TEXT[ turkish ] = "Ekle";
-    TEXT[ catalan ] = "Insereix";
-    TEXT[ thai ] = "à¹à¸—à¸£à¸";
-    TEXT[ czech ] = "VloÅ¾it";
-    TEXT[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    TEXT[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";
-    TEXT[ slovak ] = "VloÅ¾iÅ¥";
-    TEXT[ hungarian ] = "BeszÃºrÃ¡s";
-    TEXT[ slovenian ] = "Vstavi";
+    Text [ de ] = "Einfügen" ;
+    Text [ en-US ] = "Insert" ;
 };
 
 String RID_EDITUNDO_REPLACE
 {
-    TEXT = "Ersetzen" ;
-    TEXT [ English ] = "Replace" ;
-    TEXT [ norwegian ] = "Replace" ;
-    TEXT [ italian ] = "Sostituisci" ;
-    TEXT [ portuguese_brazilian ] = "Substituir" ;
-    TEXT [ portuguese ] = "Substituir" ;
-    TEXT [ finnish ] = "Korvaa" ;
-    TEXT [ danish ] = "Erstat" ;
-    TEXT [ french ] = "Remplacer" ;
-    TEXT [ swedish ] = "Ersätt" ;
-    TEXT [ dutch ] = "Vervangen" ;
-    TEXT [ spanish ] = "Reemplazar" ;
-    TEXT [ english_us ] = "Replace" ;
-    TEXT[ chinese_simplified ] = "æ›¿æ¢";
-    TEXT[ russian ] = "Çàìåíèòü";
-    TEXT[ polish ] = "Zamieñ";
-    TEXT[ japanese ] = "ç½®æ›";
-    TEXT[ chinese_traditional ] = "ä»£æ›¿";
-    TEXT[ arabic ] = "ÇÓÊÈÏÇá";
-    TEXT[ dutch ] = "Vervangen";
-    TEXT[ chinese_simplified ] = "æ›¿æ¢";
-    TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
-    TEXT[ korean ] = "ë°”ê¾¸ê¸°";
-    TEXT[ turkish ] = "Değiştir";
-    TEXT[ catalan ] = "Reemplaça";
-    TEXT[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆ";
-    TEXT[ czech ] = "Nahradit";
-    TEXT[ hebrew ] = "â€®×”×—×œ×¤×”â€¬";
-    TEXT[ hindi ] = "à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨";
-    TEXT[ slovak ] = "NahradiÅ¥";
-    TEXT[ hungarian ] = "Csere";
-    TEXT[ slovenian ] = "Zamenjaj";
+    Text [ de ] = "Ersetzen" ;
+    Text [ en-US ] = "Replace" ;
 };
 
 String RID_EDITUNDO_SETATTRIBS
 {
-    TEXT = "Attribute anwenden" ;
-    TEXT [ English ] = "Apply attributes" ;
-    TEXT [ norwegian ] = "Bruk attributter" ;
-    TEXT [ italian ] = "Applica attributi" ;
-    TEXT [ portuguese_brazilian ] = "Aplicar atributos" ;
-    TEXT [ portuguese ] = "Aplicar atributos" ;
-    TEXT [ finnish ] = "Käytä määritteitä" ;
-    TEXT [ danish ] = "Anvend attributter" ;
-    TEXT [ french ] = "Appliquer les attributs" ;
-    TEXT [ swedish ] = "Använd attribut" ;
-    TEXT [ dutch ] = "Attributen toepassen" ;
-    TEXT [ spanish ] = "Aplicar atributos" ;
-    TEXT [ english_us ] = "Apply attributes" ;
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
-    TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
-    TEXT[ polish ] = "Zastosuj atrybuty";
-    TEXT[ japanese ] = "å±æ€§ã‚’é©ç”¨";
-    TEXT[ chinese_traditional ] = "ä½¿ç”¨å±¬æ€§";
-    TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
-    TEXT[ dutch ] = "Attributen toepassen";
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨å±æ€§";
-    TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
-    TEXT[ korean ] = "ì†ì„± ì ìš©";
-    TEXT[ turkish ] = "Öznitelikleri kullan";
-    TEXT[ catalan ] = "Aplica els atributs";
-    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°";
-    TEXT[ czech ] = "PouÅ¾Ã­t atributy";
-    TEXT[ hebrew ] = "â€®×™×©×•× ×ª×›×•× ×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "PouÅ¾iÅ¥ atribÃºty";
-    TEXT[ hungarian ] = "JellemzÅ‘k alkalmazÃ¡sa";
-    TEXT[ slovenian ] = "Uporabi atribute";
+    Text [ de ] = "Attribute anwenden" ;
+    Text [ en-US ] = "Apply attributes" ;
 };
 
 String RID_EDITUNDO_RESETATTRIBS
 {
-    TEXT = "Attribute zurücksetzen" ;
-    TEXT [ English ] = "Reset attributes" ;
-    TEXT [ norwegian ] = "Sett attributter på nytt" ;
-    TEXT [ italian ] = "Reimposta attributi" ;
-    TEXT [ portuguese_brazilian ] = "Redefinir atributos" ;
-    TEXT [ portuguese ] = "Repor atributos" ;
-    TEXT [ finnish ] = "Palauta määritteet" ;
-    TEXT [ danish ] = "Nulstil attributter" ;
-    TEXT [ french ] = "Restaurer les attributs" ;
-    TEXT [ swedish ] = "Återställ attribut" ;
-    TEXT [ dutch ] = "Attributen herstellen" ;
-    TEXT [ spanish ] = "Restablecer atributos" ;
-    TEXT [ english_us ] = "Reset attributes" ;
-    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
-    TEXT[ russian ] = "Âîññòàíîâèòü àòğèáóòû";
-    TEXT[ polish ] = "Resetuj atrybuty";
-    TEXT[ japanese ] = "å±æ€§ã‚’å…ƒã«æˆ»ã™";
-    TEXT[ chinese_traditional ] = "é‡è¨­å±¬æ€§";
-    TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
-    TEXT[ dutch ] = "Attributen herstellen";
-    TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
-    TEXT[ greek ] = "ÅğáíáöïñÜ éäéïôŞôùí";
-    TEXT[ korean ] = "ì†ì„± ì›ë˜ëŒ€ë¡œ";
-    TEXT[ turkish ] = "Öznitelikleri başa al";
-    TEXT[ catalan ] = "Reinicia els atributs";
-    TEXT[ thai ] = "à¸à¸³à¸«à¸™à¸”à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¹ƒà¸«à¸¡à¹ˆ";
-    TEXT[ czech ] = "Obnovit atributy";
-    TEXT[ hebrew ] = "â€®××™×¤×•×¡ ×ª×›×•× ×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤à¤Ÿà¥à¤°à¤¿à¤¬à¥à¤¯à¥‚à¤Ÿà¥à¤¸ à¤°à¤¿à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "ObnoviÅ¥ atribÃºty";
-    TEXT[ hungarian ] = "JellemzÅ‘k visszaÃ¡llÃ­tÃ¡sa";
-    TEXT[ slovenian ] = "Ponastavi atribute";
+    Text [ de ] = "Attribute zurücksetzen" ;
+    Text [ en-US ] = "Reset attributes" ;
 };
 
 String RID_EDITUNDO_INDENT
 {
-    TEXT = "Einrücken" ;
-    TEXT [ English ] = "Einrücken" ;
-    Text [ portuguese ] = "Avançar" ;
-    Text [ english_us ] = "Indent" ;
-    Text [ portuguese_brazilian ] = "Recuo" ;
-    Text [ swedish ] = "Dra in" ;
-    Text [ danish ] = "Indryk" ;
-    Text [ italian ] = "Rientro" ;
-    Text [ spanish ] = "Sangría" ;
-    Text [ french ] = "Mettre en retrait" ;
-    Text [ dutch ] = "Inspringing" ;
-    Text[ chinese_simplified ] = "ç¼©è¿›";
-    Text[ russian ] = "Îòñòóï";
-    Text[ polish ] = "Wciêcie";
-    Text[ japanese ] = "æŒ¿å…¥";
-    Text[ chinese_traditional ] = "ç¸®æ’";
-    Text[ arabic ] = "ÅÒÇÍÉ";
-    Text[ dutch ] = "Inspringing";
-    Text[ chinese_simplified ] = "ç¼©è¿›";
-    Text[ greek ] = "Åóï÷Ş";
-    Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
-    Text[ turkish ] = "Girinti";
-    Text[ catalan ] = "Sagnat";
-    Text[ finnish ] = "Sisennä";
-    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡";
-    Text[ czech ] = "OdsazenÃ­";
-    Text[ hebrew ] = "â€®×›× ×™×¡×”â€¬";
-    Text[ hindi ] = "à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
-    Text[ slovak ] = "Odsadenie";
-    Text[ hungarian ] = "BehÃºzÃ¡s";
-    Text[ slovenian ] = "Zamik";
+    Text [ de ] = "Einrücken" ;
+    Text [ en-US ] = "Indent" ;
 };
 
 String RID_EDITUNDO_SETSTYLE
 {
-    TEXT = "Vorlagen anwenden" ;
-    TEXT [ English ] = "Apply styles" ;
-    TEXT [ norwegian ] = "Bruk maler" ;
-    TEXT [ italian ] = "Applica modelli" ;
-    TEXT [ portuguese_brazilian ] = "Aplicar Estilos" ;
-    TEXT [ portuguese ] = "Aplicar estilos" ;
-    TEXT [ finnish ] = "Käytä tyylejä" ;
-    TEXT [ danish ] = "Anvend typografier" ;
-    TEXT [ french ] = "Appliquer les styles" ;
-    TEXT [ swedish ] = "Använd mallar" ;
-    TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
-    TEXT [ spanish ] = "Aplicar estilos" ;
-    TEXT [ english_us ] = "Apply Styles" ;
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
-    TEXT[ russian ] = "Ïğèìåíèòü ñòèëè";
-    TEXT[ polish ] = "Zastosuj style";
-    TEXT[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ«ã‚’é©ç”¨";
-    TEXT[ chinese_traditional ] = "ä½¿ç”¨æ¨£å¼";
-    TEXT[ arabic ] = "ÇÓÊÎÏÇã äãÇĞÌ";
-    TEXT[ dutch ] = "Opmaakprofielen toepassen";
-    TEXT[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
-    TEXT[ greek ] = "ÅöáñìïãŞ ğñïôığùí";
-    TEXT[ korean ] = "ìŠ¤íƒ€ì¼ ì ìš©";
-    TEXT[ turkish ] = "Şablonları kullan";
-    TEXT[ catalan ] = "Aplica els estils";
-    TEXT[ thai ] = "à¹ƒà¸Šà¹‰à¸¥à¸±à¸à¸©à¸“à¸°";
-    TEXT[ czech ] = "PouÅ¾Ã­t styly";
-    TEXT[ hebrew ] = "â€®×™×©×•× ×¡×’× ×•× ×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤¶à¥ˆà¤²à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-    TEXT[ slovak ] = "PouÅ¾iÅ¥ Å¡tÃ½ly";
-    TEXT[ hungarian ] = "StÃ­lusok alkalmazÃ¡sa";
-    TEXT[ slovenian ] = "Uporabi sloge";
+    Text [ de ] = "Vorlagen anwenden" ;
+    Text [ en-US ] = "Apply Styles" ;
 };
 
 String RID_EDITUNDO_TRANSLITERATE
 {
-    TEXT = "Groß-/Kleinschreibung";
-    TEXT[English] = "Change case";
-    TEXT[ english_us ] = "Case/Characters";
-    TEXT[ portuguese ] = "Caixa/Caracteres";
-    TEXT[ russian ] = "Ğåãèñòğ";
-    TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
-    TEXT[ dutch ] = "Hoofdletters/kleine letters";
-    TEXT[ french ] = "Casse/Caractères";
-    TEXT[ spanish ] = "Mayúsculas/minúsculas";
-    TEXT[ italian ] = "Maiuscole/minuscole";
-    TEXT[ danish ] = "STORE/små og tegn";
-    TEXT[ swedish ] = "Bokstäver/tecken";
-    TEXT[ polish ] = "Wielkie i ma³e litery";
-    TEXT[ portuguese_brazilian ] = "Caixa/Caracteres";
-    TEXT[ japanese ] = "æ–‡å­—ç¨®ã®å¤‰æ›";
-    TEXT[ korean ] = "ë¬¸ì ë°”ê¾¸ê¸°";
-    TEXT[ chinese_simplified ] = "å˜åŒ–å­—æ¯å’Œå­—ä½“æ ¼å¼";
-    TEXT[ chinese_traditional ] = "è®ŠåŒ–å­—æ¯å’Œå­—å‹æ ¼å¼";
-    TEXT[ turkish ] = "Koşul/Karakterler";
-    TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
-    TEXT[ language_user1 ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
-    TEXT[ catalan ] = "Majúscules/minúscules";
-    TEXT[ finnish ] = "Muuta kirjainkoko";
-    TEXT[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œ/à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-    TEXT[ czech ] = "Velikost/znaky";
-    TEXT[ hebrew ] = "â€®×¡×™×•×•×’ ××•×ª×™×•×ªâ€¬";
-    TEXT[ hindi ] = "à¤•à¥‡à¤¸/à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
-    TEXT[ slovak ] = "VeÄ¾kosÅ¥/znaky";
-    TEXT[ hungarian ] = "Kis- Ã©s nagybetÅ±k";
-    TEXT[ slovenian ] = "ÄŒrke/znaki";
+    Text [ de ] = "Groß-/Kleinschreibung";
+    Text [ en-US ] = "Case/Characters";
+    Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
 };
 
 
@@ -392,36 +126,9 @@ Menu RID_MENU_SPELL
         {
             Identifier = MN_SPELLING ;
             HelpId = HID_EDITENG_SPELLER_START;
-            Text = "~Rechtschreibprüfung..." ;
-            Text [ English ] = "~Spelling..." ;
-            Text [ english_us ] = "~Spellcheck..." ;
-            Text[ language_user1 ] = "; triple dots (...) are required now at the end of the text";
-            Text[ portuguese ] = "Or~tografia";
-            Text[ russian ] = "~Ïğîâåğêà îğôîãğàôèè";
-            Text[ greek ] = "Ïñèïãñáöéêüò İëåã÷ïò";
-            Text[ dutch ] = "~Spellingcontrole";
-            Text[ french ] = "~Vérification orthographique...";
-            Text[ spanish ] = "~Revisión ortográfica...";
-            Text[ finnish ] = "~Oikeinkirjoituksen tarkistus";
-            Text[ italian ] = "Controllo ~ortografico...";
-            Text[ danish ] = "~Stavekontrol...";
-            Text[ swedish ] = "~Rättstavning...";
-            Text[ polish ] = "~Pisownia";
-            Text[ portuguese_brazilian ] = "Verificação ~Ortográfica";
-            Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
-            Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬(~S)...";
-            Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥";
-            Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
-            Text[ turkish ] = "~Yazım Kontrolü...";
-            Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
-            Text[ catalan ] = "~Ortografia";
-            Text[ thai ] = "~à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”";
-            Text[ czech ] = "Kontrola pravopisu";
-            Text[ hebrew ] = "â€®×‘×“×™×§×ª ××™×•×ªâ€¬";
-            Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤° à¤•à¥€ à¤œà¤¾à¤à¤š";
-            Text[ slovak ] = "~Kontrola pravopisu";
-            Text[ hungarian ] = "~HelyesÃ­rÃ¡s-ellenÅ‘rzÃ©s...";
-            Text[ slovenian ] = "~Preverjanje Ärkovanja...";
+            Text [ de ] = "~Rechtschreibprüfung..." ;
+            Text [ en-US ] = "~Spellcheck..." ;
+            Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
         };
         MenuItem
         {
@@ -430,74 +137,15 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text = "~Aufnehmen" ;
-            Text [ English ] = "~Insert" ;
-            Text [ english_us ] = "~Add" ;
-            Text [ italian ] = "A~ggiungi" ;
-            Text [ spanish ] = "~Incluir" ;
-            Text [ french ] = "~Ajouter" ;
-            Text [ dutch ] = "~Toevoegen" ;
-            Text [ swedish ] = "~Lägg till" ;
-            Text [ danish ] = "~Tilføj" ;
-            Text [ portuguese ] = "~Adicionar" ;
-            Text [ portuguese_brazilian ] = "~Adicionar" ;
-            Text [ chinese_simplified ] = "åŠ å…¥(~A)";
-            Text[ russian ] = "Äîáàâèòü";
-            Text[ polish ] = "~Dodaj";
-            Text[ japanese ] = "è¿½åŠ (~A)";
-            Text[ chinese_traditional ] = "åŠ å…¥(~A)";
-            Text[ arabic ] = "ÅÖÇİÉ";
-            Text[ dutch ] = "~Toevoegen";
-            Text[ chinese_simplified ] = "åŠ å…¥(~A)";
-            Text[ greek ] = "Ğñ~ïóèŞêç";
-            Text[ korean ] = "ì¶”ê°€(~A)";
-            Text[ turkish ] = "Ekle";
-            Text[ catalan ] = "~Afegeix";
-            Text[ finnish ] = "Lis~ää";
-            Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
-            Text[ czech ] = "PÅ™idat";
-            Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-            Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
-            Text[ slovak ] = "Prid~aÅ¥";
-            Text[ hungarian ] = "~HozzÃ¡adÃ¡s";
-            Text[ slovenian ] = "~Dodaj";
+            Text [ de ] = "~Aufnehmen" ;
+            Text [ en-US ] = "~Add" ;
         };
         MenuItem
         {
             Identifier = MN_IGNORE ;
             HelpId = HID_EDITENG_SPELLER_IGNORE;
-            Text = "Alle i~gnorieren" ;
-            Text [ ENGLISH ] = "I~gnore all" ;
-            Text [ norwegian ] = "I~gnorer alle" ;
-            Text [ italian ] = "~Ignora tutto" ;
-            Text [ portuguese_brazilian ] = "Ignorar Tudo" ;
-            Text [ portuguese ] = "I~gnorar tudo" ;
-            Text [ finnish ] = "Ohita kaikki" ;
-            Text [ danish ] = "Ignorer alle" ;
-            Text [ french ] = "Tout ~ignorer" ;
-            Text [ swedish ] = "~Ignorera alla" ;
-            Text [ dutch ] = "Alle ~negeren" ;
-            Text [ spanish ] = "I~gnorar todo" ;
-            Text [ english_us ] = "Ignore All" ;
-            Text [ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥";
-            Text[ russian ] = "Ïğîïóñòèòü âñå";
-            Text[ polish ] = "Ignoruj wszystko";
-            Text[ japanese ] = "ã™ã¹ã¦ç„¡è¦–ã™ã‚‹";
-            Text[ chinese_traditional ] = "å…¨éƒ¨å¿½ç•¥";
-            Text[ arabic ] = "ÊÌÇåá Çáßá";
-            Text[ dutch ] = "Alle ~negeren";
-            Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥";
-            Text[ greek ] = "ĞáñÜ~âëåøç üëùí";
-            Text[ korean ] = "ëª¨ë‘ ë¬´ì‹œ";
-            Text[ turkish ] = "Tümünü yok say";
-            Text[ catalan ] = "Ignora'ls tots";
-            Text[ thai ] = "à¹€à¸à¸´à¸à¹€à¸‰à¸¢à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-            Text[ czech ] = "Ignorovat vÅ¡e";
-            Text[ hebrew ] = "â€®×”×ª×¢×œ××•×ª ××”×›×œâ€¬";
-            Text[ hindi ] = "à¤¸à¤¬ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
-            Text[ slovak ] = "IgnorovaÅ¥ vÅ¡etko";
-            Text[ hungarian ] = "Mindent mellÅ‘z";
-            Text[ slovenian ] = "Prezri vse";
+            Text [ de ] = "Alle i~gnorieren" ;
+            Text [ en-US ] = "Ignore All" ;
         };
         MenuItem
         {
@@ -506,37 +154,8 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text = "Auto~Korrektur" ;
-            Text [ English ] = "~AutoCorrect" ;
-            Text [ english_us ] = "AutoCorrect" ;
-            Text [ portuguese_brazilian ] = "AutoCorreção" ;
-            Text [ swedish ] = "Auto~Korrigering" ;
-            Text [ danish ] = "AutoKorrektur" ;
-            Text [ italian ] = "~Correzione automatica" ;
-            Text [ spanish ] = "~Corrección automática" ;
-            Text [ french ] = "AutoCo~rrection" ;
-            Text [ dutch ] = "~AutoCorrectie" ;
-            Text [ portuguese ] = "Auto~Correcção" ;
-            Text [ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
-            Text[ russian ] = "Àâòîçàìåíà";
-            Text[ polish ] = "Autokorekta";
-            Text[ japanese ] = "ã‚ªãƒ¼ãƒˆã‚³ãƒ¬ã‚¯ãƒˆ";
-            Text[ chinese_traditional ] = "è‡ªå‹•æ ¡æ­£";
-            Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
-            Text[ dutch ] = "~AutoCorrectie";
-            Text[ chinese_simplified ] = "è‡ªåŠ¨æ›´æ­£";
-            Text[ greek ] = "Áõôüìáôç ~Äéüñèùóç";
-            Text[ korean ] = "ìë™ ìˆ˜ì •";
-            Text[ turkish ] = "Otomatik düzeltme";
-            Text[ catalan ] = "Auto~correcció";
-            Text[ finnish ] = "Automaattinen korjaus";
-            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-            Text[ czech ] = "AutomatickÃ© opravy";
-            Text[ hebrew ] = "â€®×ª×™×§×•×Ÿ ××•×˜×•××˜×™â€¬";
-            Text[ hindi ] = "à¤¸à¥à¤µà¤¯à¤‚ à¤ à¥€à¤• à¤•à¤°à¥‹";
-            Text[ slovak ] = "AutomatickÃ© opravy";
-            Text[ hungarian ] = "Automatikus javÃ­tÃ¡s";
-            Text[ slovenian ] = "Samopopravki";
+            Text [ de ] = "Auto~Korrektur" ;
+            Text [ en-US ] = "AutoCorrect" ;
         };
     };
 };
@@ -544,95 +163,13 @@ Menu RID_MENU_SPELL
 
 String RID_STR_WORD
 {
-    Text = "Wort ist %x";
-    Text [ ENGLISH ] = "Word is %x";
-    Text[ english_us ] = "Word is %x";
-    Text[ portuguese ] = "Word is %x";
-    Text[ russian ] = "Word is %x";
-    Text[ greek ] = "Word is %x";
-    Text[ dutch ] = "Word is %x";
-    Text[ french ] = "Mot %x";
-    Text[ spanish ] = "La palabra es %x";
-    Text[ finnish ] = "Word is %x";
-    Text[ italian ] = "Il termine è %x";
-    Text[ danish ] = "Ord er %x";
-    Text[ swedish ] = "Ordet är %x";
-    Text[ polish ] = "Word is %x";
-    Text[ portuguese_brazilian ] = "Palavra %x";
-    Text[ japanese ] = "å˜èªã¯ %x";
-    Text[ korean ] = "ë‹¨ì–´ëŠ” %x";
-    Text[ chinese_simplified ] = "å•è¯æ˜¯ %x";
-    Text[ chinese_traditional ] = "å­—æ˜¯ %x";
-    Text[ turkish ] = "Kelime: %x";
-    Text[ arabic ] = "Word is %x";
-    Text[ catalan ] = "Word is %x";
-    Text[ thai ] = "Word is %x";
-    Text[ czech ] = "Slovo je %x";
-    Text[ hebrew ] = "â€®××™×œ×” ×”×™× %xâ€¬";
-    Text[ hindi ] = "Word is %x";
-    Text[ slovak ] = "Slovo je %x";
-    Text[ hungarian ] = "A szÃ³ %x";
-    Text[ slovenian ] = "Jezik besede je %x";
+    Text [ de ] = "Wort ist %x";
+    Text [ en-US ] = "Word is %x";
 };
 
 String RID_STR_PARAGRAPH
 {
-    Text = "Absatz ist %x";
-    Text [ ENGLISH ] = "Paragraph is %x";
-    Text[ english_us ] = "Paragraph is %x";
-    Text[ portuguese ] = "Paragraph is %x";
-    Text[ russian ] = "Paragraph is %x";
-    Text[ greek ] = "Paragraph is %x";
-    Text[ dutch ] = "Paragraph is %x";
-    Text[ french ] = "Paragraphe %x";
-    Text[ spanish ] = "El párrafo es %x";
-    Text[ finnish ] = "Paragraph is %x";
-    Text[ italian ] = "Il paragrafo è %x";
-    Text[ danish ] = "Afsnit er %x";
-    Text[ swedish ] = "Stycket är %x";
-    Text[ polish ] = "Paragraph is %x";
-    Text[ portuguese_brazilian ] = "Parágrafo %x";
-    Text[ japanese ] = "æ®µè½ã¯ %x";
-    Text[ korean ] = "ë‹¨ë½ì€ %x";
-    Text[ chinese_simplified ] = "æ®µè½æ˜¯ %x";
-    Text[ chinese_traditional ] = "æ®µè½æ˜¯ %x";
-    Text[ turkish ] = "%x paragrafdır";
-    Text[ arabic ] = "Paragraph is %x";
-    Text[ catalan ] = "Paragraph is %x";
-    Text[ thai ] = "Paragraph is %x";
-    Text[ czech ] = "Odstavec je %x";
-    Text[ hebrew ] = "â€®×¤×¡×§×” ×”×™× %xâ€¬";
-    Text[ hindi ] = "Paragraph is %x";
-    Text[ slovak ] = "Odstavec je %x";
-    Text[ hungarian ] = "A bekezdÃ©s %x";
-    Text[ slovenian ] = "Jezik odstavka je %x";
+    Text [ de ] = "Absatz ist %x";
+    Text [ en-US ] = "Paragraph is %x";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
