@@ -12711,3 +12711,17 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?lcl_autoUpdateFileExtension@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1457922879@@YAXPAVSvtFileDialog@@@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1457922879@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRX642\src\svtools\source\filepicker\iodlgimp.cxx2872324351@@YA?AVString@@ABV2@@Z
+?ProcessWindowEvent@AccessibleListBox@svt@@AAEXABVVclWindowEvent@@@Z
+?WindowEventListener@AccessibleListBox@svt@@AAEJPAVVclSimpleEvent@@@Z
+?checkActionIndex_Impl@?%O:\SRX643\src\svtools\source\Accessibility\accessiblelistboxentry.cxx23334234@@YAXJ@Z
+?isHiContrast@?%O:\SRX643\src\svtools\source\brwbox\editbrowsebox.cxx631132480@svt@@YAEPAVWindow@@@Z
+?ClosePath@WinMtfPathObj@@QAEXXZ
+?IsStarSymbol@@YA_NABVString@@@Z
+?AddEventListener@SvTreeListBox@@QAEXABVLink@@@Z
+?RemoveEventListener@SvTreeListBox@@QAEXABVLink@@@Z
+?GetFsysExtension_Impl@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YAXPAVControl@@JJAAJ@Z
+?lcl_autoUpdateFileExtension@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YAXPAVSvtFileDialog@@@Z
+?lcl_getHomeDirectory@?%O:\SRX643\src\svtools\source\filepicker\iodlg.cxx657814052@@YAEABVString@@AAV2@@Z
