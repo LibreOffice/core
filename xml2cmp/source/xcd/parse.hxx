@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $Date:  $
+ *  last change: $Author: np $Date: 2001/03/23 13:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,10 +145,13 @@ class X2CParser
                             Simstr &            o_rText,
                             char                i_cEnd,
                             bool                i_bReverseName = false );
-    void                CheckAndPassBeginTag(
+    /// @return false in case of empty tag with no attributes.
+    bool                CheckAndPassBeginTag(
                             const char *        i_sElementName );
     void                CheckAndPassEndTag(
                             const char *        i_sElementName );
+    /// @precond IsBeginTag() == true.
+    bool                IsAbsoluteEmpty() const;
 
 
     void                SyntaxError(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: np $Date: 2001/03/23 13:39:37 $
+ *  last change: $Author: np $Date: 2002/08/08 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,9 @@ X2CParser::Parse_Text( Simstr &         o_sText,
                        const Simstr &   i_sElementName,
                        bool             i_bReverseName )
 {
-    CheckAndPassBeginTag(i_sElementName.str());
+
+    if ( ! CheckAndPassBeginTag(i_sElementName.str()) )
+        return;
 
     // Add new Element
     GetTextTill( o_sText, '<', i_bReverseName );
@@ -224,8 +226,10 @@ X2CParser::Parse_MultipleText( List<Simstr> &   o_rTexts,
 {
     for ( Goto('<'); IsBeginTag(i_sElementName.str()); Goto('<') )
     {
-        o_rTexts.push_back(Simstr());
-        Parse_Text(o_rTexts.back(), i_sElementName, i_bReverseName);
+        Simstr sNew;
+        Parse_Text(sNew, i_sElementName, i_bReverseName);
+        if (sNew.l() > 0)
+            o_rTexts.push_back(sNew);
     }
 }
 
@@ -400,15 +404,19 @@ X2CParser::GetTextTill( Simstr & o_rText,
     o_rText = &sWord[0];
 }
 
-void
+bool
 X2CParser::CheckAndPassBeginTag( const char * i_sElementName )
 {
+    bool ret = true;
     Goto('<');
     if ( ! IsBeginTag(i_sElementName) )
         SyntaxError( "unexpected element");
+    if (IsAbsoluteEmpty())
+        ret = false;
     Goto_And_Pass('>');
-    Pass_White();
-
+    if (ret)
+        Pass_White();
+    return ret;
 }
 
 void
@@ -418,6 +426,24 @@ X2CParser::CheckAndPassEndTag( const char * i_sElementName )
     if ( !IsEndTag(i_sElementName) )
         SyntaxError("missing or not matching end tag");
     Goto_And_Pass('>');
+}
+
+bool
+X2CParser::IsAbsoluteEmpty() const
+{
+    const char * pEnd = strchr(text+1, '>');
+    if (pEnd != 0)
+    {
+        if ( *(pEnd-1) == '/' )
+        {
+            const char * pAttr = strchr(text+1, '"');
+             if (pAttr == 0)
+                return true;
+            else if ( (pAttr-text) > (pEnd-text) )
+                return true;
+        }
+    }
+    return false;
 }
 
 void
