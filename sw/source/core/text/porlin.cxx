@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 13:09:33 $
+ *  last change: $Author: fme $ $Date: 2002-05-28 11:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 
 #pragma hdrstop
 
+#ifdef BIDI
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
+#endif
+#endif
 #ifndef _SW_PORTIONHANDLER_HXX
 #include <SwPortionHandler.hxx>
 #endif
@@ -158,17 +163,27 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
     USHORT nLastWidth = pLast->Width();
 
     if ( pLast->InSpaceGrp() && rInf.GetSpaceAdd() )
-        nLastWidth += pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
+        nLastWidth += (USHORT)pLast->CalcSpacing( rInf.GetSpaceAdd(), rInf );
 
     KSHORT nPos;
     SwTxtPaintInfo aInf( rInf );
 
-#ifdef VERTICAL_LAYOUT
-    switch ( UnMapDirection( rInf.GetFont()->GetOrientation(),
-                                  rInf.GetTxtFrm()->IsVertical() ) )
+#ifdef BIDI
+    const BOOL bBidiPor = rInf.GetTxtFrm()->IsRightToLeft() ==
+                          ( TEXT_LAYOUT_COMPLEX_DISABLED ==
+                            rInf.GetOut()->GetLayoutMode() );
+
+    USHORT nDir = bBidiPor ?
+                  1800 :
+                  UnMapDirection( rInf.GetFont()->GetOrientation(),
+                                  rInf.GetTxtFrm()->IsVertical() );
+
 #else
-    switch ( rInf.GetFont()->GetOrientation() )
+    USHORT nDir = UnMapDirection( rInf.GetFont()->GetOrientation(),
+                                  rInf.GetTxtFrm()->IsVertical() );
 #endif
+
+    switch ( nDir )
     {
     case 0 :
         nPos = KSHORT( rInf.X() );
@@ -182,6 +197,14 @@ void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
             nPos -= nLastWidth + nHalfView;
         aInf.Y( nPos );
         break;
+#ifdef BIDI
+    case 1800 :
+        nPos = KSHORT( rInf.X() );
+        if( nLastWidth > nHalfView )
+            nPos -= nLastWidth + nHalfView;
+        aInf.X( nPos );
+        break;
+#endif
     case 2700 :
         nPos = KSHORT( rInf.Y() );
         if( nLastWidth > nHalfView )
