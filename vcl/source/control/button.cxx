@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:17:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,12 +138,14 @@ class ImplCommonButtonData
 public:
     Rectangle       maFocusRect;
     USHORT          mnButtonState;
+    BOOL            mbSmallSymbol;
 
     Image           maImage;
     Image           maImageHC;
     BitmapEx*       mpBitmapEx;
     BitmapEx*       mpBitmapExHC;
     ImageAlign      meImageAlign;
+    SymbolAlign     meSymbolAlign;
 
 public:
                     ImplCommonButtonData();
@@ -154,10 +156,12 @@ public:
 ImplCommonButtonData::ImplCommonButtonData()
 {
     mnButtonState   = 0;
+    mbSmallSymbol = FALSE;
 
     mpBitmapEx = NULL;
     mpBitmapExHC = NULL;
     meImageAlign = IMAGEALIGN_TOP;
+    meSymbolAlign = SYMBOLALIGN_LEFT;
 }
 
 // -----------------------------------------------------------------------
@@ -228,7 +232,8 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         SV_BUTTONTEXT_CLOSE,
         SV_BUTTONTEXT_MORE,
         SV_BUTTONTEXT_IGNORE,
-        SV_BUTTONTEXT_ABORT
+        SV_BUTTONTEXT_ABORT,
+        SV_BUTTONTEXT_LESS
     };
 
     ResId aResId( aResIdAry[(USHORT)eButton], ImplGetResMgr() );
@@ -493,10 +498,13 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
             if ( bDrawText )
             {
                 nSymbolHeight = pDev->GetTextHeight();
+                if ( mpButtonData->mbSmallSymbol )
+                    nSymbolHeight = nSymbolHeight * 3 / 4;
+
                 aSymbol = Rectangle( Point(), Size( nSymbolHeight, nSymbolHeight ) );
                 ImplCalcSymbolRect( aSymbol );
-                aRect.Left() += 2 * nSymbolHeight;
-                aTSSize.Width() = 2 * nSymbolHeight;
+                aRect.Left() += 3 * nSymbolHeight / 2;
+                aTSSize.Width() = 3 * nSymbolHeight / 2;
             }
             else
             {
@@ -642,8 +650,21 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
     if ( bHasSymbol )
     {
-        *pSymbolRect = Rectangle( aTextPos, aSymbolSize );
-        aTextPos.X() += ( 2 * nSymbolHeight );
+        if ( mpButtonData->meSymbolAlign == SYMBOLALIGN_RIGHT )
+        {
+            Point aRightPos = Point( aTextPos.X() + aTextSize.Width() + aSymbolSize.Width()/2, aTextPos.Y() );
+            *pSymbolRect = Rectangle( aRightPos, aSymbolSize );
+        }
+        else
+        {
+            *pSymbolRect = Rectangle( aTextPos, aSymbolSize );
+            aTextPos.X() += ( 3 * nSymbolHeight / 2 );
+        }
+        if ( mpButtonData->mbSmallSymbol )
+        {
+            nYOffset = (aUnion.GetHeight() - aSymbolSize.Height())/2;
+            pSymbolRect->setY( aTextPos.Y() + nYOffset );
+        }
     }
 
     USHORT nStyle = 0;
@@ -715,6 +736,27 @@ USHORT& Button::ImplGetButtonState()
 USHORT Button::ImplGetButtonState() const
 {
     return mpButtonData->mnButtonState;
+}
+
+// -----------------------------------------------------------------------
+void Button::ImplSetSymbolAlign( SymbolAlign eAlign )
+{
+    if ( mpButtonData->meSymbolAlign != eAlign )
+    {
+        mpButtonData->meSymbolAlign = eAlign;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+}
+
+// -----------------------------------------------------------------------
+SymbolAlign Button::ImplGetSymbolAlign() const
+{
+    return mpButtonData->meSymbolAlign;
+}
+// -----------------------------------------------------------------------
+void Button::ImplSetSmallSymbol( BOOL bSmall )
+{
+    mpButtonData->mbSmallSymbol = bSmall;
 }
 
 // -----------------------------------------------------------------------
@@ -1850,6 +1892,18 @@ void PushButton::SetSymbol( SymbolType eSymbol )
         meSymbol = eSymbol;
         StateChanged( STATE_CHANGE_DATA );
     }
+}
+
+// -----------------------------------------------------------------------
+void PushButton::SetSymbolAlign( SymbolAlign eAlign )
+{
+    ImplSetSymbolAlign( eAlign );
+}
+
+// -----------------------------------------------------------------------
+SymbolAlign PushButton::GetSymbolAlign() const
+{
+    return ImplGetSymbolAlign();
 }
 
 // -----------------------------------------------------------------------
