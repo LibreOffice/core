@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcdriverenum.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:49:30 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #include <sal/types.h>
 #endif
 
+#include <vector>
+
 namespace rtl
 {
     class OUString;
@@ -94,12 +96,11 @@ namespace offapp
     public:
         ODriverEnumeration() throw();
         ~ODriverEnumeration() throw();
-
-        typedef const   ::rtl::OUString*    const_iterator;
+        typedef ::std::vector< ::rtl::OUString >::const_iterator const_iterator;
 
         const_iterator  begin() const throw();
         const_iterator  end() const throw();
-        sal_Int32       size() const throw();
+        sal_Int32 size() const throw();
     };
 
 //........................................................................
