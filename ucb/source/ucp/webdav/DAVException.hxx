@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVException.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,17 +77,13 @@ class DAVException
             DAV_HTTP_LOOKUP,    // Name lookup failed, mData = server[:port]
             DAV_HTTP_AUTH,      // User authentication failed on server
             DAV_HTTP_AUTHPROXY, // User authentication failed on proxy
-            DAV_HTTP_SERVERAUTH,// Server authentication failed
-            DAV_HTTP_PROXYAUTH, // Proxy authentication failed
             DAV_HTTP_CONNECT,   // Could not connect to server, mData = server[:port]
             DAV_HTTP_TIMEOUT,   // Connection timed out
             DAV_HTTP_FAILED,    // The precondition failed
-            DAV_HTTP_RETRY,     // Retry request (http_end_request ONLY)
+            DAV_HTTP_RETRY,     // Retry request
             DAV_HTTP_REDIRECT,  // See http_redirect.h, mData = new URL
             DAV_SESSION_CREATE, // session creation error, mData = server[:port]
-            DAV_INVALID_ARG,
-            DAV_FILE_OPEN,      // mData = file URL
-            DAV_FILE_WRITE };   // mData = file URL
+            DAV_INVALID_ARG };  // mData = file URL
 
     private:
         ExceptionCode   mExceptionCode;

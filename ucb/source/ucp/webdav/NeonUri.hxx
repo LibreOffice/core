@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonUri.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:29 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include <rtl/ustring.hxx>
 #endif
 
+#ifndef _DAVEXCEPTION_HXX_
+#include <DAVException.hxx>
+#endif
+
 namespace webdav_ucp
 {
 
@@ -93,11 +97,17 @@ class NeonUri
         static ne_uri   sUriDefaultsHTTPS;
         static ne_uri   sUriDefaultsFTP;
 
+        void init( const rtl::OString & rUri, const ne_uri * pUri );
         void calculateURI ();
 
     public:
-        NeonUri( const ::rtl::OUString & inUri );
+        NeonUri( const ::rtl::OUString & inUri ) throw ( DAVException );
+        NeonUri( const ne_uri * inUri ) throw ( DAVException );
         ~NeonUri( );
+
+        bool operator== ( const NeonUri & rOther ) const;
+        bool operator!= ( const NeonUri & rOther ) const
+        { return !operator==( rOther ); }
 
         const ::rtl::OUString & GetURI( void ) const
                                             { return mURI; };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:24 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _DAVRESOURCEACCESS_HXX_
 #include "DAVResourceAccess.hxx"
-#endif
-#ifndef _NEONURI_HXX_
-#include "NeonUri.hxx"
 #endif
 
 //=========================================================================
@@ -609,8 +606,33 @@ void DAVResourceAccess::initialize()
                     throw;
                 }
             }
+
+            // Own URI is needed for redirect cycle detection.
+            m_aRedirectURIs.push_back( aURI );
         }
     }
+}
+
+//=========================================================================
+sal_Bool DAVResourceAccess::detectRedirectCycle(
+                                const rtl::OUString& rRedirectURL )
+{
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+    NeonUri aUri( rRedirectURL );
+
+    std::vector< NeonUri >::const_iterator it  = m_aRedirectURIs.begin();
+    std::vector< NeonUri >::const_iterator end = m_aRedirectURIs.end();
+
+    while ( it != end )
+    {
+        if ( aUri == (*it) )
+            return sal_True;
+
+        it++;
+    }
+
+    return sal_False;
 }
 
 //=========================================================================
@@ -621,10 +643,13 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e )
         case DAVException::DAV_HTTP_REDIRECT:
             try
             {
-                // set new URL and path.
-                setURL( e.getData() );
-                initialize();
-                return sal_True;
+                if ( !detectRedirectCycle( e.getData() ) )
+                {
+                    // set new URL and path.
+                    setURL( e.getData() );
+                    initialize();
+                    return sal_True;
+                }
             }
             catch( DAVException const & )
             {

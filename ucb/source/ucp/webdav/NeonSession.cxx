@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:28 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,24 +813,34 @@ void NeonSession::HandleError( int nError )
                                 NeonUri::makeConnectionEndPointString(
                                                     m_aHostName, m_nPort ) );
 
-#if 0
         case NE_TIMEOUT:      // Connection timed out
+            throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
+                                NeonUri::makeConnectionEndPointString(
+                                                    m_aHostName, m_nPort ) );
+
         case NE_FAILED:       // The precondition failed
+            throw DAVException( DAVException::DAV_HTTP_FAILED,
+                                NeonUri::makeConnectionEndPointString(
+                                                    m_aHostName, m_nPort ) );
+
         case NE_RETRY:        // Retry request (ne_end_request ONLY)
-#endif
+            throw DAVException( DAVException::DAV_HTTP_RETRY,
+                                NeonUri::makeConnectionEndPointString(
+                                                    m_aHostName, m_nPort ) );
 
         case NE_REDIRECT:
         {
-            char * uri
-                = ne_uri_unparse( ne_redirect_location( m_pHttpSession ) );
-            rtl::OUString aUri( rtl::OUString::createFromAscii( uri ) );
-            free( uri );
-            throw DAVException( DAVException::DAV_HTTP_REDIRECT, aUri );
+            NeonUri aUri( ne_redirect_location( m_pHttpSession ) );
+            throw DAVException(
+                    DAVException::DAV_HTTP_REDIRECT, aUri.GetURI() );
         }
         default:
+        {
+            OSL_TRACE( "NeonSession::HandleError : Unknown Neon error code!" );
             throw DAVException( DAVException::DAV_HTTP_ERROR,
                                 rtl::OUString::createFromAscii(
                                     ne_get_error( m_pHttpSession ) ) );
+        }
     }
 }
 

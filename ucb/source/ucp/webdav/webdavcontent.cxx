@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2697,16 +2697,12 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                             e.getData() );
             break;
 
+// @@@ No matching InteractiveNetwork*Exception
 //        case DAVException::DAV_HTTP_AUTH:
 //            break;
-//
+
+// @@@ No matching InteractiveNetwork*Exception
 //        case DAVException::DAV_HTTP_AUTHPROXY:
-//            break;
-//
-//        case DAVException::DAV_HTTP_SERVERAUTH:
-//            break;
-//
-//        case DAVException::DAV_HTTP_PROXYAUTH:
 //            break;
 
         case DAVException::DAV_HTTP_CONNECT:
@@ -2718,14 +2714,15 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                             e.getData() );
             break;
 
-/*
-        case DAVException::DAV_HTTP_TIMEOUT:
-            break;
-*/
+// @@@ No matching InteractiveNetwork*Exception
+//        case DAVException::DAV_HTTP_TIMEOUT:
+//            break;
 
+// @@@ No matching InteractiveNetwork*Exception
 //        case DAVException::DAV_HTTP_REDIRECT:
 //            break;
 
+// @@@ No matching InteractiveNetwork*Exception
 //        case DAVException::DAV_SESSION_CREATE:
 //            break;
 
@@ -2736,36 +2733,6 @@ uno::Any Content::MapDAVException( const DAVException & e, sal_Bool bWrite )
                             static_cast< cppu::OWeakObject * >( this ),
                             -1 );
             break;
-
-        case DAVException::DAV_FILE_OPEN:
-        {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= e.getData();
-
-            aException <<=
-                star::ucb::InteractiveAugmentedIOException(
-                         rtl::OUString::createFromAscii( "Cannot open file!" ),
-                         static_cast< cppu::OWeakObject * >( this ),
-                         task::InteractionClassification_ERROR,
-                         star::ucb::IOErrorCode_CANT_READ,
-                         aArgs );
-            break;
-        }
-
-        case DAVException::DAV_FILE_WRITE:
-        {
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[ 0 ] <<= e.getData();
-            aException <<=
-                star::ucb::InteractiveAugmentedIOException(
-                         rtl::OUString::createFromAscii(
-                                            "Cannot write to file!" ),
-                         static_cast< cppu::OWeakObject * >( this ),
-                         task::InteractionClassification_ERROR,
-                         star::ucb::IOErrorCode_CANT_WRITE,
-                         aArgs );
-            break;
-        }
 
         default:
             aException <<=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-15 10:05:24 $
+ *  last change: $Author: kso $ $Date: 2002-08-21 07:34:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _DAVTYPES_HXX_
 #include "DAVTypes.hxx"
 #endif
+#ifndef _NEONURI_HXX_
+#include "NeonUri.hxx"
+#endif
 
 namespace webdav_ucp
 {
@@ -118,6 +121,7 @@ class DAVResourceAccess
     rtl::Reference< DAVSessionFactory > m_xSessionFactory;
     com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > m_xSMgr;
+    std::vector< NeonUri > m_aRedirectURIs;
 
 public:
     DAVResourceAccess() : m_xSessionFactory( 0 ) {}
@@ -246,6 +250,7 @@ public:
         throw( DAVException );
 
 private:
+    sal_Bool detectRedirectCycle( const rtl::OUString& rRedirectURL );
     sal_Bool handleException( DAVException & e );
     void initialize()
         throw ( DAVException );
