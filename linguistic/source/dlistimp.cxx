@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-01 18:58:41 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 15:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,12 +343,6 @@ INT16 DicEvtListenerHelper::FlushEvents()
             xRef->processDictionaryListEvent( aEvent );
     }
 
-    if ( (nCondensedEvt & DictionaryListEventFlags::ACTIVATE_POS_DIC)   ||
-         (nCondensedEvt & DictionaryListEventFlags::DEACTIVATE_POS_DIC) ||
-         (nCondensedEvt & DictionaryListEventFlags::ACTIVATE_NEG_DIC)   ||
-         (nCondensedEvt & DictionaryListEventFlags::DEACTIVATE_NEG_DIC) )
-        LinguOptions().SetCfgActiveDictionaries( xMyDicList );
-
     // clear "list" of events
     nCondensedEvt = 0;
     aCollectDicEvt.realloc( 0 );
@@ -421,7 +415,7 @@ DicList::DicList() :
     //! activation of the dictionaries
     pDicEvtLstnrHelper->BeginCollectEvents();
     //
-    const Sequence< OUString > aActiveDics( aOpt.GetCfgActiveDictionaries() );
+    const Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
     const OUString *pActiveDic = aActiveDics.getConstArray();
     INT32 nLen = aActiveDics.getLength();
     for (INT32 i = 0;  i < nLen;  ++i)
