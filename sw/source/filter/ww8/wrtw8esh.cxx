@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@
 #endif
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx>
 #endif
 #ifndef _WW8PAR_HXX
 #include <ww8par.hxx>
@@ -512,6 +515,39 @@ PlcDrawObj::~PlcDrawObj()
 {
 }
 
+bool RTLGraphicsHack(long &rLeft, long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
+    SwTwips nPageRight, SwTwips nPageSize, bool bRTL)
+{
+    bool bRet = false;
+    if (bRTL && eHoriOri == HORI_NONE)
+    {
+        if (eHoriRel == REL_PG_FRAME)
+        {
+            rLeft = nPageSize - rLeft;
+            bRet = true;
+        }
+        else if ((eHoriRel == REL_PG_PRTAREA) || (eHoriRel == FRAME))
+        {
+            rLeft = nPageSize - nPageLeft - nPageRight - rLeft;
+            bRet = true;
+        }
+    }
+    if (bRet)
+        rLeft -= nWidth;
+    return bRet;
+}
+
+bool SwWW8Writer::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
+    SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, bool bBiDi)
+{
+    SwTwips nPageLeft, nPageRight, nPageSize;
+    nPageSize = CurrentPageWidth(nPageLeft, nPageRight);
+
+    return RTLGraphicsHack(rLeft, nWidth,
+    eHoriOri, eHoriRel, nPageLeft, nPageRight, nPageSize, bBiDi);
+}
+
 void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
 {
     if (8 > rWrt.pFib->nVersion)    // Cannot export drawobject in vers 7-
@@ -577,15 +613,42 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
             // spid
             SwWW8Writer::WriteLong(*rWrt.pTableStrm, aIter->mnShapeId);
 
+            //Nasty bidi swap
+            bool bBiDi = false;
+            if (const SwPosition *pPos = rFmt.GetAnchor().GetCntntAnchor())
+            {
+                bBiDi =
+                  (FRMDIR_HORI_RIGHT_TOP == rWrt.pDoc->GetTextDirection(*pPos));
+            }
+            else
+            {
+                const SwFrmFmt &rPageFmt =
+                  rWrt.pDoc->GetPageDesc(
+                  rFmt.GetAnchor().GetPageNum()).GetMaster();
+                bBiDi =
+                  (FRMDIR_HORI_RIGHT_TOP == rPageFmt.GetFrmDir().GetValue());
+            }
+
+            sal_Int32 nLeft = aRect.Left() + aIter->mnThick;
+            sal_Int32 nRight = aRect.Right() - aIter->mnThick;
+
+            if (RES_FLYFRMFMT == rFmt.Which())
+            {
+                long nWidth = nRight - nLeft;
+                if (rWrt.MiserableRTLGraphicsHack(nLeft, nWidth,
+                    rHOr.GetHoriOrient(), rHOr.GetRelationOrient(), bBiDi))
+                {
+                    nRight = nLeft + nWidth;
+                }
+            }
+
             //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
             //(most of) the border is outside the graphic is word, so
             //change dimensions to fit
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Left() +
-                aIter->mnThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
             SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Top() +
                 aIter->mnThick);
-            SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Right() -
-                aIter->mnThick);
+            SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
             SwWW8Writer::WriteLong(*rWrt.pTableStrm,aRect.Bottom() -
                 aIter->mnThick);
 
