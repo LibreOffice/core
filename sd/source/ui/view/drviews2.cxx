@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:10:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,8 +1031,9 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 List* pAttrList = new List();
                 List* pPresObjList = ( (SdPage*) pDrView->GetPageViewPvNum(0)->GetPage() )
                                                                     ->GetPresObjList();
+                ULONG i;
 
-                for ( ULONG i = 0; i < nCount; i++ )
+                for ( i = 0; i < nCount; i++ )
                 {
                     SdrObject* pObj = rMarkList.GetMark(i)->GetObj();
 
