@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jl $ $Date: 2001-04-18 15:26:23 $
+#   last change: $Author: jl $ $Date: 2001-04-19 15:36:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,6 @@ SHL1VERSIONMAP= lngi.map
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    +echo	_TI2	   >$@
-    +echo	_TI1	  >>$@
+#$(MISC)$/$(SHL1TARGET).flt : makefile.mk
+#	+echo	_TI2	   >$@
+#	+echo	_TI1	  >>$@
