@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 09:00:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "model/SlsPageEnumeration.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "view/SlideSorterView.hxx"
+#include "view/SlsLayouter.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsClipboard.hxx"
@@ -158,7 +159,8 @@ SlideSorterViewShell::SlideSorterViewShell (
     pWindow->SetViewOrigin (Point(0,0));
     // We do our own scrolling while dragging a page selection.
     pWindow->SetUseDropScroll (false);
-    pWindow->SetStyle (pWindow->GetStyle() | WB_TABSTOP);
+    // Change the winbits so that the active window accepts the focus.
+    pWindow->SetStyle ((pWindow->GetStyle() && ~WB_DIALOGCONTROL) || WB_TABSTOP);
     pWindow->Show();
 
 
@@ -311,6 +313,7 @@ void SlideSorterViewShell::SetupControls (::Window* pParentWindow)
 
 
 
+
 void SlideSorterViewShell::SetupListeners (void)
 {
     if (mpTabBar.get() != NULL)
@@ -321,6 +324,11 @@ void SlideSorterViewShell::SetupListeners (void)
                 TabBarHandler));
 
     GetParentWindow()->AddEventListener(
+        LINK(
+            mpSlideSorterController.get(),
+            controller::SlideSorterController,
+            WindowEventHandler));
+    GetActiveWindow()->AddEventListener(
         LINK(
             mpSlideSorterController.get(),
             controller::SlideSorterController,
@@ -342,6 +350,11 @@ void SlideSorterViewShell::ReleaseListeners (void)
     {
         GetVerticalScrollBar()->SetScrollHdl (Link());
     }
+
+    GetActiveWindow()->RemoveEventListener(
+        LINK(mpSlideSorterController.get(),
+            controller::SlideSorterController,
+            WindowEventHandler));
     GetParentWindow()->RemoveEventListener(
         LINK(mpSlideSorterController.get(),
             controller::SlideSorterController,
@@ -581,7 +594,14 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
         rView.SetFillDraft (pFrameView->IsFillDraft());
         rView.SetTextDraft (pFrameView->IsTextDraft());
         rView.SetGrafDraft (pFrameView->IsGrafDraft());
-    //AF    rView.ChangePagesPerRow (pFrameView->GetSlidesPerRow());
+
+        USHORT nSlidesPerRow (pFrameView->GetSlidesPerRow());
+        if (nSlidesPerRow > 0)
+            rView.GetLayouter().SetColumnCount(nSlidesPerRow,nSlidesPerRow);
+        else
+            // A value of 0 is interpreted as 'auto'.  The number of columns
+            // is adapted to the available size.
+            rView.GetLayouter().SetColumnCount(1,5);
 
     // DrawMode for 'main' window
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
@@ -601,7 +621,11 @@ void SlideSorterViewShell::WriteFrameViewData()
         pFrameView->SetFillDraft( rView.IsFillDraft() );
         pFrameView->SetTextDraft( rView.IsTextDraft() );
         pFrameView->SetGrafDraft( rView.IsGrafDraft() );
-        //AF    pFrameView->SetSlidesPerRow(rView.GetPagesPerRow());
+
+        if (rView.GetLayouter().IsColumnCountFixed())
+            pFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
+        else
+            pFrameView->SetSlidesPerRow(0);
 
         // DrawMode for 'main' window
         if( pFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
