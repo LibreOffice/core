@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldump.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-09 11:23:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 int bFilter = 0;
 int bLdump3 = 0;
+int bUseDirectives = 0;
 
 DECLARE_HASHTABLE( ExportSet, char *, LibExport*)
 
@@ -114,33 +115,67 @@ bool LibDump::Dump()
     if (!pList)
         DumpError(10);
 
-    // berechnug des offsets fuer anfang der gemangelten namen
-    unsigned char TmpBuffer[4];
-    fread( TmpBuffer, 1, 4, pList);
-    // anzahl bigendian mal laenge + ueberspringen der naechsten laengenangabe
-    unsigned long nOffSet = ( TmpBuffer[2] * 256 + TmpBuffer[3] ) * 4 + 4;
-    fseek( pList, nOffSet, 0);
+    // forget about offset when working on linker directives
+    if ( !bUseDirectives )
+    {
+        // calculating offset for name section
+        unsigned char TmpBuffer[4];
+        fread( TmpBuffer, 1, 4, pList);
+        // anzahl bigendian mal laenge + ueberspringen der naechsten laengenangabe
+        unsigned long nOffSet = ( TmpBuffer[2] * 256 + TmpBuffer[3] ) * 4 + 4;
+        fseek( pList, nOffSet, 0);
+    }
 
     char c;
     char aTmpBuf[4096];
-    // Einlesen der .exp-Datei
+    // reading file containing symbols
     while( !feof( pList ) )
     {
-        int i = 0;
-        // symbol komplett einlesen
-        while ( (c = fgetc( pList )) != '\0' )
+           int i = 0;
+        if ( !bUseDirectives )
         {
-            if ( ((c >= 33) && (c <= 126)) && ( c!=40 && c!=41) )
-                aBuf[i] = c;
-            else
+            // symbol komplett einlesen
+            while ( (c = fgetc( pList )) != '\0' )
             {
-                aBuf[0] = '\0';
-                break;
+                if ( ((c >= 33) && (c <= 126)) && ( c!=40 && c!=41) )
+                    aBuf[i] = c;
+                else
+                {
+                    aBuf[0] = '\0';
+                    break;
+                }
+                i++;
             }
-            i++;
+            // Namen found
+            aBuf[i] = '\0';
         }
-        // Namen gefunden
-        aBuf[i] = '\0';
+        else
+        {
+            fgets( aTmpBuf, 4096, pList );
+            char * pEnd = 0;
+            char *pFound = 0;
+            aBuf[0] = '\0';
+            pFound = strchr( aTmpBuf, 'E' );
+            while ( pFound )
+            {
+                if ( strncmp( "EXPORT:", pFound, 7) == 0 )
+                {
+                    pFound += 7;
+                    pEnd = strchr( pFound, ',');
+                    if ( pEnd )
+                        *pEnd = '\0';
+                    strncpy( aBuf, pFound, strlen( pFound));
+                    aBuf[ strlen( pFound) ] = '\0';
+//                    fprintf( stderr, "\n--- %s\n", aBuf);
+                    break;
+                }
+                else
+                {
+                    pFound++;
+                    pFound = strchr( pFound, 'E' );
+                }
+            }
+        }
 
         int n_is_ct;
         if ((aBuf[0] =='?') || ( n_is_ct = !strncmp(aBuf, "__CT",4)))
@@ -603,11 +638,12 @@ bool LibDump::DumpError( unsigned long n )
         case 11: p = "No valid library file"; break;
 #endif
         case 98: p = "Out of memory"; break;
-        case 99: p = "LDUMP [-LD3] [-A] [-E nn] [-F name] Filename[.LIB]\n"
+        case 99: p = "LDUMP [-LD3] [-D] [-A] [-E nn] [-F name] Filename[.LIB]\n"
                      "-LD3   : Supports feature set of ldump3 (default: ldump/ldump2)\n"
                      "-A     : all symbols (default: only C++)\n"
                      "-E nn  : gerenration of export table beginning with number nn\n"
-                     "-F name: Filter file\n"; break;
+                     "-F name: Filter file\n"
+                     "-D     : file contains \"dumpbin\" directives\n"; break;
         case 500: p = "Unable to open filter file\n"; break;
         case 510: p = "Overflow of filter table\n"; break;
         case 600: p = "Unable to open base database file\n"; break;
@@ -692,6 +728,13 @@ main( int argc, char **argv )
             nState = STATE_CEXPORT;
             pCExport = new char[ 1 ];
             pCExport[ 0 ] = 0;
+        }
+        else if (( !strcmp( argv[ i ], "-D" )) || ( !strcmp( argv[ i ], "-d" ))) {
+            if ( nState != STATE_NON ) {
+                usage();
+                return 0;
+            }
+            bUseDirectives = 1;
         }
         else {
             switch ( nState ) {
