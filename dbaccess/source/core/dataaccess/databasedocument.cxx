@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-18 10:58:28 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@
 #ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationStorage.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONSTORAGE_HPP_
+#include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #endif
 #ifndef DBA_COREDATAACCESS_COMMITLISTENER_HXX
 #include "commitlistener.hxx"
@@ -976,19 +976,19 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& Event ) th
     setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
-Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager > SAL_CALL ODatabaseSource::getUIConfigurationManager(  ) throw (RuntimeException)
+Reference< ::com::sun::star::ui::XUIConfigurationManager > SAL_CALL ODatabaseSource::getUIConfigurationManager(  ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if (OComponentHelper::rBHelper.bDisposed)
         throw DisposedException();
     if ( !m_xUIConfigurationManager.is() )
     {
-        m_xUIConfigurationManager = Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager >(
+        m_xUIConfigurationManager = Reference< ::com::sun::star::ui::XUIConfigurationManager >(
             m_xServiceFactory->createInstance(
-                ::rtl::OUString::createFromAscii( "drafts.com.sun.star.ui.UIConfigurationManager" )),
+                ::rtl::OUString::createFromAscii( "com.sun.star.ui.UIConfigurationManager" )),
                 UNO_QUERY );
 
-        Reference< ::drafts::com::sun::star::ui::XUIConfigurationStorage > xUIConfigStorage( m_xUIConfigurationManager, UNO_QUERY );
+        Reference< ::com::sun::star::ui::XUIConfigurationStorage > xUIConfigStorage( m_xUIConfigurationManager, UNO_QUERY );
         if ( xUIConfigStorage.is() )
         {
             rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
