@@ -2,9 +2,9 @@
  *
  *  $RCSfile: markdata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-01-18 18:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,17 +250,24 @@ void ScMarkData::MarkToMulti()
     {
         SetMultiMarkArea( aMarkRange, !bMarkIsNeg );
         bMarked = FALSE;
+
+        //  check if all multi mark ranges have been removed
+        if ( bMarkIsNeg && !HasAnyMultiMarks() )
+            ResetMark();
     }
 }
 
 void ScMarkData::MarkToSimple()
 {
-    if ( bMultiMarked && !bMarking )
+    if ( bMarking )
+        return;
+
+    if ( bMultiMarked && bMarked )
+        MarkToMulti();                  // may result in bMarked and bMultiMarked reset
+
+    if ( bMultiMarked )
     {
         DBG_ASSERT(pMultiSel, "bMultiMarked, aber pMultiSel == 0");
-
-        if (bMarked)
-            MarkToMulti();
 
         ScRange aNew = aMultiRange;
 
