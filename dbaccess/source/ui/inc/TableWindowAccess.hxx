@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:21:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,25 +64,28 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef DBACCESS_ACCESSIBLEBASE_HXX
-#include "AccessibleBase.hxx"
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
+#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #endif
 
 namespace dbaui
 {
-    typedef ::cppu::ImplHelper1< ::com::sun::star::accessibility::XAccessibleRelationSet
+    typedef ::cppu::ImplHelper2< ::com::sun::star::accessibility::XAccessibleRelationSet,
+                                  ::com::sun::star::accessibility::XAccessible
                                             > OTableWindowAccess_BASE;
     class OTableWindow;
     /** the class OTableWindowAccess represents the accessible object for table windows
         like they are used in the QueryDesign and the RelationDesign
     */
-    class OTableWindowAccess    :   public OAccessibleBase
+    class OTableWindowAccess    :   public VCLXAccessibleComponent
                                 ,   public OTableWindowAccess_BASE
     {
         OTableWindow*   m_pTable; // the window which I should give accessibility to
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getParentChild(sal_Int32 _nIndex);
     protected:
         /** this function is called upon disposing the component
         */
@@ -93,18 +96,17 @@ namespace dbaui
         */
         virtual sal_Bool isEditable() const;
     public:
-        OTableWindowAccess( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& _xParent,
-                            OTableWindow* _pTable);
+        OTableWindowAccess( OTableWindow* _pTable);
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire(  ) throw ()
         { // here inline is allowed because we do not use this class outside this dll
-            OAccessibleBase::acquire(  );
+            VCLXAccessibleComponent::acquire(  );
         }
         virtual void SAL_CALL release(  ) throw ()
         { // here inline is allowed because we do not use this class outside this dll
-            OAccessibleBase::release(  );
+            VCLXAccessibleComponent::release(  );
         }
 
         // XTypeProvider
@@ -117,6 +119,9 @@ namespace dbaui
         // XServiceInfo - static methods
         static com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( com::sun::star::uno::RuntimeException );
         static ::rtl::OUString getImplementationName_Static(void) throw( com::sun::star::uno::RuntimeException );
+
+        // XAccessible
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // XAccessibleContext
         virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -137,6 +142,15 @@ namespace dbaui
         virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL getRelation( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL containsRelation( sal_Int16 aRelationType ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::accessibility::AccessibleRelation SAL_CALL getRelationByType( sal_Int16 aRelationType ) throw (::com::sun::star::uno::RuntimeException);
+
+        void notifyAccessibleEvent(
+                    const sal_Int16 _nEventId,
+                    const ::com::sun::star::uno::Any& _rOldValue,
+                    const ::com::sun::star::uno::Any& _rNewValue
+                )
+        {
+            NotifyAccessibleEvent(_nEventId,_rOldValue,_rNewValue);
+        }
     };
 }
 #endif // DBACCESS_TABLEWINDOWACCESS_HXX
