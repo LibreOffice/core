@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:38:04 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,21 @@ inline void _release( void * p, uno_ReleaseFunc release ) SAL_THROW( () )
     }
 }
 
+//------------------------------------------------------------------------------
+inline sal_uInt32 calcSeqMemSize(
+    sal_Int32 nElementSize, sal_Int32 nElements )
+{
+    sal_uInt64 nSize =
+        (sal_uInt64) SAL_SEQUENCE_HEADER_SIZE +
+        ((sal_uInt64) nElementSize * (sal_uInt64) nElements);
+    if (nSize > 0xffffffffU)
+        return 0;
+    else
+        return (sal_uInt32) nSize;
+}
+
 //--------------------------------------------------------------------------------------------------
-inline uno_Sequence * _getEmptySequence() SAL_THROW( () )
+inline uno_Sequence * createEmptySequence() SAL_THROW( () )
 {
     ::osl_incrementInterlockedCount( &g_emptySeq.nRefCount );
     return &g_emptySeq;
