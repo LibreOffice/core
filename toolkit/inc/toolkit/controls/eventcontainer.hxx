@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-09 09:18:17 $
+ *  last change: $Author: dbo $ $Date: 2001-04-10 07:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 
+#include <osl/diagnose.h>
 #ifndef _COM_SUN_STAR_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -74,8 +75,8 @@ typedef ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameContainer,
                                  ::com::sun::star::container::XContainer > NameContainerHelper;
 
 
-//namespace toolkit
-//{
+namespace toolkit
+{
 
 // Hashtable to optimize
 struct hashName_Impl
@@ -115,11 +116,12 @@ class NameContainer_Impl : public NameContainerHelper
     ContainerListenerMultiplexer maContainerListeners;
 
 public:
-    NameContainer_Impl( ::com::sun::star::uno::Type aType )
+    NameContainer_Impl( ::com::sun::star::uno::Type const & aType )
         : mType( aType )
         , mnElementCount( 0 )
         , maContainerListeners( *this )
-    {}
+    {
+    }
 
     // Methods XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
@@ -169,5 +171,5 @@ public:
 };
 
 
-//} // namespace toolkit_namecontainer
+}   // namespace toolkit_namecontainer
 

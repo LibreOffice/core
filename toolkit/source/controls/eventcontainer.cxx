@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventcontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-09 09:18:45 $
+ *  last change: $Author: dbo $ $Date: 2001-04-10 07:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@ using namespace osl;
 using namespace rtl;
 using namespace std;
 
+
+namespace toolkit
+{
 
 // Methods XElementAccess
 Type NameContainer_Impl::getElementType()
@@ -235,12 +238,14 @@ void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::R
 }
 
 
+
 // Ctor
 ScriptEventContainer::ScriptEventContainer( void )
     : NameContainer_Impl( getCppuType( (ScriptEventDescriptor*) NULL ) )
 {
 }
 
+}
 
 
 

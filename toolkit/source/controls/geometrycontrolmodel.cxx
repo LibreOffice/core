@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-23 14:47:53 $
+ *  last change: $Author: dbo $ $Date: 2001-04-10 07:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,7 +400,7 @@
     Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents() throw(RuntimeException)
     {
         if( !mxEventContainer.is() )
-            mxEventContainer = (XNameContainer*)new ScriptEventContainer();
+            mxEventContainer = (XNameContainer*)new toolkit::ScriptEventContainer();
         return mxEventContainer;
     }
 
@@ -411,6 +411,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/03/23 14:47:53  tbe
+ *  removed HelpText property from geometry model
+ *
  *  Revision 1.8  2001/03/22 15:34:23  tbe
  *  added HelpText property
  *
