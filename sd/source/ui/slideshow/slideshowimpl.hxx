@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:50:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ namespace sd
 {
 class SlideShowView;
 class AnimationPageList;
-
+class PaneHider;
 
 struct WrappedShapeEventImpl
 {
@@ -416,6 +416,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
+
+    ::std::auto_ptr<PaneHider> mpPaneHider;
 };
 
 class SlideShowImplGuard
