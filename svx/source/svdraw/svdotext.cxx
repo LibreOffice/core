@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:02:24 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,35 @@
 #include "xflgrit.hxx"
 #endif
 
+#ifndef _SVDPOOL_HXX
+#include <svdpool.hxx>
+#endif
+
+#ifndef _SVX_XFLCLIT_HXX
+#include <xflclit.hxx>
+#endif
+
+#ifndef _SFXSTYLE_HXX
+#include <svtools/style.hxx>
+#endif
+
+#ifndef _MyEDITENG_HXX
+#include <editeng.hxx>
+#endif
+
+#ifndef _SFXITEMITER_HXX
+#include <svtools/itemiter.hxx>
+#endif
+
+#ifndef _SDR_PROPERTIES_TEXTPROPERTIES_HXX
+#include <svx/sdr/properties/textproperties.hxx>
+#endif
+
+// #111111#
+#ifndef _SDR_CONTACT_VIEWCONTACTOFTEXTOBJ_HXX
+#include <svx/sdr/contact/viewcontactoftextobj.hxx>
+#endif
+
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
@@ -140,6 +169,24 @@ inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 //    @@   @@@@@ @@   @@   @@    @@@@  @@@@@   @@@@
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// BaseProperties section
+
+sdr::properties::BaseProperties* SdrTextObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::TextProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// DrawContact section
+
+sdr::contact::ViewContact* SdrTextObj::CreateObjectSpecificViewContact()
+{
+    return new sdr::contact::ViewContactOfTextObj(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrTextObj,SdrAttrObj);
 
@@ -159,6 +206,12 @@ SdrTextObj::SdrTextObj():
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #111096#
+    mbTextHidden = sal_False;
+
+    // #111096#
+    mbTextAnimationAllowed = sal_True;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -183,6 +236,12 @@ SdrTextObj::SdrTextObj(const Rectangle& rNewRect):
     // #101684#
     mbInEditMode = FALSE;
 
+    // #111096#
+    mbTextHidden = sal_False;
+
+    // #111096#
+    mbTextAnimationAllowed = sal_True;
+
     // #108784#
     maTextEditOffset = Point(0, 0);
 }
@@ -203,6 +262,12 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind):
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #111096#
+    mbTextHidden = sal_False;
+
+    // #111096#
+    mbTextAnimationAllowed = sal_True;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -226,6 +291,12 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect):
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #111096#
+    mbTextHidden = sal_False;
+
+    // #111096#
+    mbTextAnimationAllowed = sal_True;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -251,6 +322,12 @@ SdrTextObj::SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStr
 
     // #101684#
     mbInEditMode = FALSE;
+
+    // #111096#
+    mbTextHidden = sal_False;
+
+    // #111096#
+    mbTextAnimationAllowed = sal_True;
 
     // #108784#
     maTextEditOffset = Point(0, 0);
@@ -316,14 +393,15 @@ void SdrTextObj::NbcSetText(const XubString& rStr)
 
 void SdrTextObj::SetText(const XubString& rStr)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     NbcSetText(rStr);
     SetChanged();
-    SendRepaintBroadcast();
-    if (GetBoundRect()!=aBoundRect0) {
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    }
+    BroadcastObjectChange();
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    //if (GetBoundRect()!=aBoundRect0) {
+    //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    //}
 }
 
 void SdrTextObj::NbcSetText(SvStream& rInput, USHORT eFormat)
@@ -342,14 +420,15 @@ void SdrTextObj::NbcSetText(SvStream& rInput, USHORT eFormat)
 
 void SdrTextObj::SetText(SvStream& rInput, USHORT eFormat)
 {
-    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-    SendRepaintBroadcast();
+    Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+    // #110094#-14 SendRepaintBroadcast();
     NbcSetText(rInput,eFormat);
     SetChanged();
-    SendRepaintBroadcast();
-    if (GetBoundRect()!=aBoundRect0) {
-        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-    }
+    BroadcastObjectChange();
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    //if (GetBoundRect()!=aBoundRect0) {
+    //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+    //}
 }
 
 const Size& SdrTextObj::GetTextSize() const
@@ -375,7 +454,7 @@ FASTBOOL SdrTextObj::IsAutoGrowHeight() const
     if(!bTextFrame)
         return FALSE; // AutoGrow nur bei TextFrames
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT))).GetValue();
 
     if(bRet)
@@ -400,7 +479,7 @@ FASTBOOL SdrTextObj::IsAutoGrowWidth() const
     if(!bTextFrame)
         return FALSE; // AutoGrow nur bei TextFrames
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     BOOL bRet = ((SdrTextAutoGrowHeightItem&)(rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH))).GetValue();
 
     // #101684#
@@ -428,7 +507,7 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
     if(IsContourTextFrame())
         return SDRTEXTHORZADJUST_BLOCK;
 
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextHorzAdjust eRet = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
 
     // #101684#
@@ -458,7 +537,7 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
         return SDRTEXTVERTADJUST_TOP;
 
     // #103516# Take care for vertical text animation here
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
     BOOL bInEditMode = IsInEditMode();
 
@@ -513,7 +592,7 @@ void SdrTextObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = TRUE;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
     rInfo.bShearAllowed     =bNoTextFrame;
     rInfo.bEdgeRadiusAllowed=TRUE;
@@ -568,7 +647,7 @@ void SdrTextObj::SetPage(SdrPage* pNewPage)
 
 void SdrTextObj::SetModel(SdrModel* pNewModel)
 {
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
     SdrModel* pOldModel=pModel;
     BOOL bLinked=IsLinkedText();
     BOOL bChg=pNewModel!=pModel;
@@ -596,7 +675,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             // zunaechst das HeightItem festklopfen, damit
             // 1. Es eben bestehen bleibt und
             // 2. DoStretchChars vom richtigen Wert ausgeht
-            SetItem(SvxFontHeightItem(nOldFontHgt));
+            SetObjectItem(SvxFontHeightItem(nOldFontHgt));
         }
         // erst jetzt den Outliner holen, etc. damit obiges SetAttr auch wirkt
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
@@ -615,7 +694,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
             if (bSetHgtItem) {
                 // Und nun noch das Rahmenattribut korregieren
                 nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
-                SetItem(SvxFontHeightItem(nOldFontHgt));
+                SetObjectItem(SvxFontHeightItem(nOldFontHgt));
             }
         }
         SetOutlinerParaObject(rOutliner.CreateParaObject()); // #34494#
@@ -632,7 +711,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
 
 FASTBOOL SdrTextObj::NbcSetEckenradius(long nRad)
 {
-    SetItem(SdrEckenradiusItem(nRad));
+    SetObjectItem(SdrEckenradiusItem(nRad));
     return TRUE;
 }
 
@@ -640,7 +719,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowHeight(FASTBOOL bAuto)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextAutoGrowHeightItem(bAuto));
+        SetObjectItem(SdrTextAutoGrowHeightItem(bAuto));
         return TRUE;
     }
     return FALSE;
@@ -650,14 +729,14 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextMinFrameHeightItem(nHgt));
+        SetObjectItem(SdrTextMinFrameHeightItem(nHgt));
 
         // #84974# use bDisableAutoWidthOnDragging as
         // bDisableAutoHeightOnDragging if vertical.
         if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
             bDisableAutoWidthOnDragging = FALSE;
-            SetItem(SdrTextAutoGrowHeightItem(FALSE));
+            SetObjectItem(SdrTextAutoGrowHeightItem(FALSE));
         }
 
         return TRUE;
@@ -669,7 +748,7 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameHeight(long nHgt)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextMaxFrameHeightItem(nHgt));
+        SetObjectItem(SdrTextMaxFrameHeightItem(nHgt));
         return TRUE;
     }
     return FALSE;
@@ -679,7 +758,7 @@ FASTBOOL SdrTextObj::NbcSetAutoGrowWidth(FASTBOOL bAuto)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextAutoGrowWidthItem(bAuto));
+        SetObjectItem(SdrTextAutoGrowWidthItem(bAuto));
         return TRUE;
     }
     return FALSE;
@@ -689,14 +768,14 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextMinFrameWidthItem(nWdt));
+        SetObjectItem(SdrTextMinFrameWidthItem(nWdt));
 
         // #84974# use bDisableAutoWidthOnDragging only
         // when not vertical.
         if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
             bDisableAutoWidthOnDragging = FALSE;
-            SetItem(SdrTextAutoGrowWidthItem(FALSE));
+            SetObjectItem(SdrTextAutoGrowWidthItem(FALSE));
         }
 
         return TRUE;
@@ -708,7 +787,7 @@ FASTBOOL SdrTextObj::NbcSetMaxTextFrameWidth(long nWdt)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextMaxFrameWidthItem(nWdt));
+        SetObjectItem(SdrTextMaxFrameWidthItem(nWdt));
         return TRUE;
     }
     return FALSE;
@@ -718,7 +797,7 @@ FASTBOOL SdrTextObj::NbcSetFitToSize(SdrFitToSizeType eFit)
 {
     if(bTextFrame)
     {
-        SetItem(SdrTextFitToSizeTypeItem(eFit));
+        SetObjectItem(SdrTextFitToSizeTypeItem(eFit));
         return TRUE;
     }
     return FALSE;
@@ -744,14 +823,14 @@ void SdrTextObj::ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAncho
         pContourXPP = new XPolyPolygon();
 
         // #86258# test if shadow needs to be avoided for TakeContour()
-        const SfxItemSet& rSet = GetItemSet();
+        const SfxItemSet& rSet = GetObjectItemSet();
         sal_Bool bShadowOn = ((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
         if(bShadowOn)
         {
             // #86258# force shadow off
             SdrObject* pCopy = Clone();
-            pCopy->SetItem(SdrShadowItem(FALSE));
+            pCopy->SetMergedItem(SdrShadowItem(FALSE));
             pCopy->TakeContour(*pContourXPP);
             delete pCopy;
         }
@@ -1130,15 +1209,37 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Rectangle& r
     }
 }
 
-FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrTextObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
     FASTBOOL bPrinter=rXOut.GetOutDev()->GetOutDevType()==OUTDEV_PRINTER;
     FASTBOOL bPrintPreView=rXOut.GetOutDev()->GetOutDevViewType()==OUTDEV_VIEWTYPE_PRINTPREVIEW;
+
+    // #111096#
+    // allow to hide text
+    if(GetTextHidden())
+    {
+        return bOk;
+    }
+
+    // #111096#
+    if(rInfoRec.mbUseBitmapEx)
+    {
+        OutputDevice* pOutDev = rXOut.GetOutDev();
+        Point aDestPos = pOutDev->LogicToPixel(rInfoRec.maPosition);
+        sal_Bool bMapModeWasEnabledDest(pOutDev->IsMapModeEnabled());
+
+        pOutDev->EnableMapMode(sal_False);
+        pOutDev->DrawBitmapEx(aDestPos, rInfoRec.maBitmapEx);
+        pOutDev->EnableMapMode(bMapModeWasEnabledDest);
+
+        return bOk;
+    }
 
     if (bPrinter && bEmptyPresObj)
         return bOk; // Leere Praesentationsobjekte nicht drucken!
@@ -1172,7 +1273,7 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
                     // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
                     // SetLineAttr(...) needs to be called if the outline item is set
-                    const SfxItemSet& rSet = GetItemSet();
+                    const SfxItemSet& rSet = GetObjectItemSet();
                     BOOL bFormTextOutline = ((XFormTextOutlineItem&)(rSet.Get(XATTR_FORMTXTOUTLINE))).GetValue();
 
                     if(bFormTextOutline)
@@ -1188,7 +1289,6 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
             {
                 // sonst kein Fontwork
                 // hier findet das richtige Painten des Textes statt
-
                 Rectangle aTextRect;
                 Rectangle aAnchorRect;
                 Rectangle aPaintRect;
@@ -1196,137 +1296,94 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 
                 // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
                 ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
-
-                FASTBOOL bAnimated=GetTextAniKind()!=SDRTEXTANI_NONE;
                 OutputDevice* pOutDev=rXOut.GetOutDev();
 
-                // #98825# Text animation is initialized and strted from this Paint()
-                // no one seems to use StartTextAnimation(...) or StopTextAnimation(...)
-                // at all. Thus, I need to stop text animation here when necessary.
-                sal_Bool bDoNotPaintAnimatedText =
-                    bPrinter || (rInfoRec.nPaintMode & SDRPAINTMODE_ANILIKEPRN) !=0 || !bAnimated;
-
-                if(!bDoNotPaintAnimatedText)
+                if (aGeo.nDrehWink!=0)
                 {
-                    // if animated text is disabled, do not start it here...
-                    if(0L != rInfoRec.pPV)
+                    // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
+                    FASTBOOL bNeedClip=(bTextFrame && !IsAutoGrowHeight()) || bContourFrame;
+                    // ClipRegion setzen. Das macht Malte bei gedrehter Ausgabe naemlich nicht!
+                    FASTBOOL bMtf=pOutDev->GetConnectMetaFile()!=NULL;
+                    // Clipping merken
+                    FASTBOOL bClip0=pOutDev->IsClipRegion();
+                    Region   aClip0(pOutDev->GetClipRegion());
+                    if (bNeedClip)
                     {
-                        const SdrView& rTargetView = rInfoRec.pPV->GetView();
-                        const SvtAccessibilityOptions& rOpt = ((SdrView&)rTargetView).getAccessibilityOptions();
-                        sal_Bool bIsAllowedAnimatedText = rOpt.GetIsAllowAnimatedText();
-
-                        if(!bIsAllowedAnimatedText)
+                        if (bMtf) pOutDev->Push();
+                        // Neues Clipping setzen
+                        Rectangle aClipRect(aPaintRect);
+                        if (bPrinter)
+                        { // #42520#: Bei HP-Druckern fehlt sonst oefter der letzte Buchstabe einer Zeile
+                            Size a1Pix(pOutDev->PixelToLogic(Size(1,1)));
+                            aClipRect.Top()-=a1Pix.Width();
+                            aClipRect.Left()-=a1Pix.Height();
+                            aClipRect.Right()+=a1Pix.Width();
+                            aClipRect.Bottom()+=a1Pix.Height();
+                        }
+                        Polygon aClipPoly(aClipRect);
+                        RotatePoly(aClipPoly,aPaintRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+                        // Intersect geht leider nicht, weil Poly statt Rect
+                        pOutDev->SetClipRegion(aClipPoly);
+                        if (bClip0)
                         {
-                            bDoNotPaintAnimatedText = sal_True;
-
-                            if(pPlusData && pPlusData->pAnimator)
-                            {
-                                pPlusData->pAnimator->Stop();
-                                delete pPlusData->pAnimator;
-                                pPlusData->pAnimator = 0L;
-                            }
+                            // Aber wenn's vorher nur ein Rechteck war, dann
+                            // intersecte ich mein Poly nun mit diesem
+                            pOutDev->IntersectClipRegion(aClip0.GetBoundRect());
                         }
                     }
-                }
-
-                if(bDoNotPaintAnimatedText)
-                {
-                    if (!bAnimated && pPlusData!=NULL && pPlusData->pAnimator!=NULL)
+                    // Textausgabe
+                    rOutliner.Draw(pOutDev,aPaintRect.TopLeft(),(short)(aGeo.nDrehWink/10));
+                    if (bNeedClip)
                     {
-                        delete pPlusData->pAnimator;
-                        pPlusData->pAnimator=NULL;
-                    }
-                    if (aGeo.nDrehWink!=0)
-                    {
-                        // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
-                        FASTBOOL bNeedClip=(bTextFrame && !IsAutoGrowHeight()) || bContourFrame;
-                        // ClipRegion setzen. Das macht Malte bei gedrehter Ausgabe naemlich nicht!
-                        FASTBOOL bMtf=pOutDev->GetConnectMetaFile()!=NULL;
-                        // Clipping merken
-                        FASTBOOL bClip0=pOutDev->IsClipRegion();
-                        Region   aClip0(pOutDev->GetClipRegion());
-                        if (bNeedClip)
-                        {
-                            if (bMtf) pOutDev->Push();
-                            // Neues Clipping setzen
-                            Rectangle aClipRect(aPaintRect);
-                            if (bPrinter)
-                            { // #42520#: Bei HP-Druckern fehlt sonst oefter der letzte Buchstabe einer Zeile
-                                Size a1Pix(pOutDev->PixelToLogic(Size(1,1)));
-                                aClipRect.Top()-=a1Pix.Width();
-                                aClipRect.Left()-=a1Pix.Height();
-                                aClipRect.Right()+=a1Pix.Width();
-                                aClipRect.Bottom()+=a1Pix.Height();
-                            }
-                            Polygon aClipPoly(aClipRect);
-                            RotatePoly(aClipPoly,aPaintRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-                            // Intersect geht leider nicht, weil Poly statt Rect
-                            pOutDev->SetClipRegion(aClipPoly);
-                            if (bClip0)
-                            {
-                                // Aber wenn's vorher nur ein Rechteck war, dann
-                                // intersecte ich mein Poly nun mit diesem
-                                pOutDev->IntersectClipRegion(aClip0.GetBoundRect());
-                            }
-                        }
-                        // Textausgabe
-                        rOutliner.Draw(pOutDev,aPaintRect.TopLeft(),(short)(aGeo.nDrehWink/10));
-                        if (bNeedClip)
-                        {
-                            // Clipping restaurieren
-                            if (bMtf)
-                                pOutDev->Pop();
-                            else
-                            {
-                                if (bClip0)
-                                    pOutDev->SetClipRegion(aClip0);
-                                else
-                                    pOutDev->SetClipRegion();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if(IsVerticalWriting())
-                        {
-                            // new try for #82826#
-                            if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
-                            {
-                                aPaintRect = Rectangle(
-                                    aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
-                                    aPaintRect.Right(), aPaintRect.Bottom());
-                            }
-
-                            // #91744# for vertical writing the original fix #82826#
-                            // needs to be taken out.
-                            rOutliner.Draw(pOutDev, aPaintRect);
-                        }
+                        // Clipping restaurieren
+                        if (bMtf)
+                            pOutDev->Pop();
                         else
                         {
-                            // new try for #82826#
-                            if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
-                            {
-                                aPaintRect = Rectangle(
-                                    aPaintRect.Left(), aPaintRect.Top(),
-                                    aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
-                            }
-
-                            // #91809# for horizontal writing the original fix #82826#
-                            // needs to be taken out, too.
-                            rOutliner.Draw(pOutDev, aPaintRect);
-
-                            // #82826# for correct preview of outliner views
-                            //// rOutliner.Draw(pOutDev,aPaintRect);
-                            //if(aPaintRect.Top() > aAnchorRect.Top())
-                            //  rOutliner.Draw(pOutDev, aPaintRect);
-                            //else
-                            //  rOutliner.Draw(pOutDev, aAnchorRect);
+                            if (bClip0)
+                                pOutDev->SetClipRegion(aClip0);
+                            else
+                                pOutDev->SetClipRegion();
                         }
                     }
                 }
                 else
                 {
-                    ImpPaintAnimatedText(*rXOut.GetOutDev(),rXOut.GetOffset(),rOutliner,aAnchorRect,aPaintRect,rInfoRec);
+                    if(IsVerticalWriting())
+                    {
+                        // new try for #82826#
+                        if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
+                        {
+                            aPaintRect = Rectangle(
+                                aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
+                                aPaintRect.Right(), aPaintRect.Bottom());
+                        }
+
+                        // #91744# for vertical writing the original fix #82826#
+                        // needs to be taken out.
+                        rOutliner.Draw(pOutDev, aPaintRect);
+                    }
+                    else
+                    {
+                        // new try for #82826#
+                        if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
+                        {
+                            aPaintRect = Rectangle(
+                                aPaintRect.Left(), aPaintRect.Top(),
+                                aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
+                        }
+
+                        // #91809# for horizontal writing the original fix #82826#
+                        // needs to be taken out, too.
+                        rOutliner.Draw(pOutDev, aPaintRect);
+
+                        // #82826# for correct preview of outliner views
+                        //// rOutliner.Draw(pOutDev,aPaintRect);
+                        //if(aPaintRect.Top() > aAnchorRect.Top())
+                        //  rOutliner.Draw(pOutDev, aPaintRect);
+                        //else
+                        //  rOutliner.Draw(pOutDev, aAnchorRect);
+                    }
                 }
 
                 rOutliner.Clear();
@@ -1399,167 +1456,16 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 // Denn dann ist der MtfAnimator initiallisiert
 void SdrTextObj::StartTextAnimation(OutputDevice* pOutDev, const Point& rOffset, long nExtraData)
 {
-    if (GetTextAniKind()!=SDRTEXTANI_NONE && ImpGetMtfAnimator()!=NULL) {
-        ImpSdrMtfAnimator* pAnimator=ImpForceMtfAnimator();
-        pAnimator->Start(*pOutDev,rOffset,nExtraData);
-    }
+    // #111096#
+    // use new text animation
+    SetTextAnimationAllowed(sal_True);
 }
 
 void SdrTextObj::StopTextAnimation(OutputDevice* pOutDev, long nExtraData)
 {
-    if (pPlusData!=NULL && pPlusData->pAnimator!=NULL) {
-        ImpSdrMtfAnimator* pAnimator=pPlusData->pAnimator;
-        for (ULONG nInfoNum=pAnimator->GetInfoCount(); nInfoNum>0;) {
-            nInfoNum--;
-            ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
-            if (pInfo->nExtraData==nExtraData &&
-                (pOutDev==NULL || pInfo->pOutDev==pOutDev)) pAnimator->RemoveInfo(nInfoNum);
-        }
-    }
-}
-
-FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffset,
-    SdrOutliner& rOutliner, const Rectangle& rAnchorRect, const Rectangle& rPaintRect,
-    const SdrPaintInfoRec& rInfoRec) const
-{
-    SdrTextAniKind eAniKind = GetTextAniKind();
-    FASTBOOL bBlink = eAniKind == SDRTEXTANI_BLINK;
-    const SfxItemSet& rSet = GetItemSet();
-    SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
-    ImpSdrMtfAnimator* pAnimator = ((SdrTextObj*)this)->ImpForceMtfAnimator();
-    pAnimator->SetAnimationNotifyHdl(LINK(this,SdrTextObj,ImpAnimationHdl));
-
-    // erstmal checken, ob nicht schon laeuft
-    ImpMtfAnimationInfo* pRunningInfo = NULL;
-
-    for(ULONG nInfoNum = pAnimator->GetInfoCount(); nInfoNum>0 && pRunningInfo==NULL;) {
-        nInfoNum--;
-        ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
-        if (pInfo->pPageView==rInfoRec.pPV && pInfo->pOutDev==&rOut) {
-            if (!pInfo->bBackSaved) pRunningInfo=pInfo;
-            else {
-                MapMode aMap1(pInfo->aBackground.GetMapMode());
-                MapMode aMap2(rOut.GetMapMode());
-                if (aMap1.GetMapUnit()==aMap2.GetMapUnit() &&
-                    aMap1.GetScaleX()==aMap2.GetScaleX() &&
-                    aMap1.GetScaleY()==aMap2.GetScaleY()) pRunningInfo=pInfo;
-            }
-        }
-    }
-    if (pRunningInfo!=NULL) {
-        if (pRunningInfo->bBackSaved) {
-            // Teilinvalidierung des Hintergrunds
-            Rectangle aClipRect(rInfoRec.aDirtyRect);
-            if (rOut.GetMapMode().GetMapUnit()==MAP_TWIP) {
-                HACK(Bei Teilinvalidierung von Laufschrift im Writer 1 Pixel korregieren);
-                Size a1Pix(rOut.PixelToLogic(Size(1,1)));
-                aClipRect.Top()+=a1Pix.Width();
-                aClipRect.Left()+=a1Pix.Height();
-                aClipRect.Right()-=a1Pix.Width();
-                aClipRect.Bottom()-=a1Pix.Height();
-            }
-            Region aRegion(aClipRect);
-            pRunningInfo->SaveBackground(*pAnimator,&aRegion);
-            pRunningInfo->Paint(*pAnimator,rOut);
-        }
-        return TRUE;
-    }
-    pAnimator->SetAttributes(rSet);
-
-    Point aRotateRef(rAnchorRect.TopLeft());
-    // Die Drehreferenz ist bei allen Rechtecken jeweils das eigene TopLeft()
-    // (rPaintRect,rAnchorRect). Ich verschiebe nun aPaintRect so, dass fuer
-    // beide die Drehreferenz rAnchorRect.TopLeft() gilt.
-    Rectangle aPaintRect(rPaintRect);
-
-    // #103516# Do this calculatin for vertical text, too.
-    if((SDRTEXTHORZADJUST_BLOCK == GetTextHorizontalAdjust() || SDRTEXTVERTADJUST_BLOCK == GetTextVerticalAdjust())
-        && SDRTEXTFIT_NONE != GetFitToSize())
-    {
-        // Bei den Default-Textrahmen muss ich erstmal die laengste Zeile berechnen
-        // Das gibt allerdings Probleme bei Absatzformatierungen Center, Rechts
-        // und evtl. auch bei Blocksatz.
-        Size aSiz(rOutliner.CalcTextSize());
-        aPaintRect.Right()=aPaintRect.Left()+aSiz.Width();
-        aPaintRect.Bottom()=aPaintRect.Top()+aSiz.Height();
-    }
-
-    // PaintRect auf's AnchorRect ausrichten (den selben Drehpunkt fuer alle)
-    if (aGeo.nDrehWink!=0) {
-        if (aPaintRect.TopLeft()!=aRotateRef) {
-            Point aTmpPt(aPaintRect.TopLeft());
-            RotatePoint(aTmpPt,aRotateRef,-aGeo.nSin,aGeo.nCos); // -sin=zurueckdrehen
-            aTmpPt-=aPaintRect.TopLeft();
-            aPaintRect.Move(aTmpPt.X(),aTmpPt.Y());
-        }
-    }
-    Rectangle aScrollFrameRect(aPaintRect);
-    if (!bBlink) {
-        if (eDirection==SDRTEXTANI_LEFT || eDirection==SDRTEXTANI_RIGHT) {
-            aScrollFrameRect.Left()=rAnchorRect.Left();
-            aScrollFrameRect.Right()=rAnchorRect.Right();
-        }
-        if (eDirection==SDRTEXTANI_UP || eDirection==SDRTEXTANI_DOWN) {
-            aScrollFrameRect.Top()=rAnchorRect.Top();
-            aScrollFrameRect.Bottom()=rAnchorRect.Bottom();
-        }
-    }
-    Rectangle aAnimationBoundRect(aScrollFrameRect);
-    if (aGeo.nDrehWink!=0) {
-        // Das aAnimationBoundRect ist das BoundRect des gedrehten aScrollFrameRect.
-        // Fuer diesen Bereich muss spaeter der Hintergrund gesichert werden, ...
-        Polygon aPoly(aAnimationBoundRect);
-        RotatePoly(aPoly,aRotateRef,aGeo.nSin,aGeo.nCos);
-        aAnimationBoundRect=aPoly.GetBoundRect();
-    }
-    // ClipRegion am pAnimator setzen, falls erforderlich
-    if (bBlink) pAnimator->SetClipRegion(); // kein Clipping erforderlich
-    else {
-        if (aGeo.nDrehWink==0) pAnimator->SetClipRegion(aScrollFrameRect); // RectClipping
-        else {
-            Polygon aPoly(aScrollFrameRect);
-            RotatePoly(aPoly,aRotateRef,aGeo.nSin,aGeo.nCos);
-            pAnimator->SetClipRegion(aPoly); // PolyClipping
-        }
-    }
-    Rectangle aAnimationBoundRectPlus(aAnimationBoundRect); // Das ist das AnimationBoundRect +PvOfs
-    aAnimationBoundRectPlus.Move(rOffset.X(),rOffset.Y());
-
-    { // Nun das Metafile erzeugen
-        GDIMetaFile* pMtf=new GDIMetaFile;
-        VirtualDevice aBlackHole;
-        aBlackHole.EnableOutput(FALSE);
-        pMtf->Record(&aBlackHole);
-
-        //AW vertical writing
-        // For the outliner::Draw method which takes a start position
-        // the upper right position must be offered for vertical writing.
-        // Update: MT changed the method to take the same position as normal,
-        // so I changed this back.
-        Point aPaintPos = rPaintRect.TopLeft();
-
-        //aPaintPos-=aAnimationBoundRect.TopLeft();
-        // Die RedLines der Online-Rechtschreibpruefung werden via DrawPixel
-        // gemalt. Das ist bei Laufschrift, besonders unter OS/2, viel zu langsam.
-        // Deshalb schalte ich diese hier bei der Metafileaufzeichnung temporaer ab.
-        ULONG nStat0=rOutliner.GetControlWord();
-        rOutliner.SetControlWord(nStat0|EE_CNTRL_NOREDLINES);
-        rOutliner.Draw(&aBlackHole,aPaintPos,(short)(aGeo.nDrehWink/10));
-        rOutliner.SetControlWord(nStat0);
-        pMtf->Stop();
-        pMtf->WindStart();
-        pAnimator->SetGDIMetaFile(pMtf);
-    }
-    pAnimator->SetOutputRect(aAnimationBoundRect);
-    pAnimator->SetScrollFrameRect(aScrollFrameRect);
-    pAnimator->SetMtfFrameRect(aPaintRect);
-    pAnimator->SetRotateRef(aRotateRef);
-    pAnimator->SetRotateAngle(aGeo.nDrehWink);
-
-    ImpMtfAnimationInfo* pInfo=pAnimator->Start(rOut,rOffset);
-    // Nun noch die PageView setzen (fuer Xor)
-    pInfo->pPageView=rInfoRec.pPV;
-    return TRUE;
+    // #111096#
+    // use new text animation
+    SetTextAnimationAllowed(sal_False);
 }
 
 void SdrTextObj::RecalcBoundRect()
@@ -1579,7 +1485,7 @@ void SdrTextObj::ImpAddTextToBoundRect()
                 rOutl.SetUpdateMode(TRUE);
                 ImpTextPortionHandler aTPHandler(rOutl,*this);
 
-                aXOut.SetTextAttr(GetItemSet());
+                aXOut.SetTextAttr(GetObjectItemSet());
 
                 aTPHandler.DrawTextToPath(aXOut,FALSE);
                 if (pFormTextBoundRect==NULL) pFormTextBoundRect=new Rectangle;
@@ -1636,7 +1542,7 @@ SdrObject* SdrTextObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
 
     if (bFontwork) {
         if (pFormTextBoundRect!=NULL) aR=*pFormTextBoundRect;
-        else aR=GetBoundRect();
+        else aR=GetCurrentBoundRect();
     }
     else
     {
@@ -1791,7 +1697,9 @@ void SdrTextObj::TakeObjNamePlural(XubString& rName) const
 
 void SdrTextObj::operator=(const SdrObject& rObj)
 {
-    SdrAttrObj::operator=(rObj);
+    // call parent
+    SdrObject::operator=(rObj);
+
     const SdrTextObj* pText=PTR_CAST(SdrTextObj,&rObj);
     if (pText!=NULL) {
         aRect     =pText->aRect;
@@ -1854,9 +1762,10 @@ void SdrTextObj::TakeContour(XPolyPolygon& rPoly) const
     }
 }
 
-void SdrTextObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrTextObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 void SdrTextObj::RecalcSnapRect()
 {
@@ -1949,7 +1858,7 @@ void SdrTextObj::ImpSetupDrawOutlinerForPaint( FASTBOOL         bContourFrame,
             rOutliner.SetControlWord(nStat);
         }
     }
-    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
+    rOutliner.SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     TakeTextRect(rOutliner, rTextRect, FALSE, &rAnchorRect);
     rPaintRect = rTextRect;
 
@@ -1991,20 +1900,6 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// pre- and postprocessing for objects for saving
-
-void SdrTextObj::PreSave()
-{
-    // call parent
-    SdrAttrObj::PreSave();
-
-    // Prepare OutlinerParaObjects for storing
-    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
-    if(pParaObj && GetModel())
-        pParaObj->PrepareStore((SfxStyleSheetPool*)GetModel()->GetStyleSheetPool());
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
 {
@@ -2029,8 +1924,10 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 
     if( pOutlinerParaObject )
     {
-        ImpForceItemSet();
-        mpObjectItemSet->Put( SvxWritingModeItem( pOutlinerParaObject->IsVertical() ? com::sun::star::text::WritingMode_TB_RL : com::sun::star::text::WritingMode_LR_TB ) );
+        SvxWritingModeItem aWritingMode(pOutlinerParaObject->IsVertical()
+            ? com::sun::star::text::WritingMode_TB_RL
+            : com::sun::star::text::WritingMode_LR_TB);
+        GetProperties().SetObjectItemDirect(aWritingMode);
     }
 
     SetTextSizeDirty();
@@ -2041,7 +1938,7 @@ void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
     if (!IsTextFrame()) {
         // Das SnapRect behaelt seine Groesse bei
         bBoundRectDirty=TRUE;
-        SetRectsDirty(TRUE);
+        SetRectsDirty(sal_True);
     }
     ImpSetTextStyleSheetListeners();
     ImpCheckMasterCachable();
@@ -2057,7 +1954,7 @@ void SdrTextObj::NbcReformatText()
         } else {
             // Das SnapRect behaelt seine Groesse bei
             bBoundRectDirty=TRUE;
-            SetRectsDirty(TRUE);
+            SetRectsDirty(sal_True);
         }
         SetTextSizeDirty();
     }
@@ -2066,35 +1963,15 @@ void SdrTextObj::NbcReformatText()
 void SdrTextObj::ReformatText()
 {
     if (pOutlinerParaObject!=NULL) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         NbcReformatText();
         SetChanged();
-        SendRepaintBroadcast();
-        if (GetBoundRect()!=aBoundRect0) {
-            SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
-        }
-    }
-}
-
-void SdrTextObj::RestartAnimation(SdrPageView* pPageView) const
-{
-    FASTBOOL bAnimated=GetTextAniKind()!=SDRTEXTANI_NONE;
-    if (bAnimated) {
-        ImpSdrMtfAnimator* pAnimator=((SdrTextObj*)this)->ImpGetMtfAnimator();
-        if (pAnimator!=NULL) {
-            if (pPageView==NULL) {
-                pAnimator->Stop();
-            } else {
-                for (ULONG nInfoNum=pAnimator->GetInfoCount(); nInfoNum>0;) {
-                    nInfoNum--;
-                    ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
-                    if (pInfo->pPageView==pPageView) {
-                        pAnimator->RemoveInfo(nInfoNum);
-                    }
-                }
-            }
-        }
+        BroadcastObjectChange();
+        SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        //if (GetBoundRect()!=aBoundRect0) {
+        //  SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
+        //}
     }
 }
 
@@ -2228,8 +2105,7 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
         if( pOutlinerParaObject->IsVertical() )
         {
-            ImpForceItemSet();
-            mpObjectItemSet->Put( SvxWritingModeItem( com::sun::star::text::WritingMode_TB_RL ) );
+            GetProperties().SetObjectItemDirect(SvxWritingModeItem(com::sun::star::text::WritingMode_TB_RL));
         }
     }
 
@@ -2245,9 +2121,9 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
 
     if(rHead.GetVersion() < 12 && !bTextFrame)
     {
-        mpObjectItemSet->Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
-        mpObjectItemSet->Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
-        mpObjectItemSet->Put(SvxAdjustItem(SVX_ADJUST_CENTER));
+        GetProperties().SetObjectItemDirect(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER));
+        GetProperties().SetObjectItemDirect(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER));
+        GetProperties().SetObjectItemDirect(SvxAdjustItem(SVX_ADJUST_CENTER));
     }
 
     if (bTextFrame && pOutlinerParaObject!=NULL)
@@ -2257,16 +2133,16 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
          pOutlinerParaObject->GetTextObject().GetVersion() < 500 &&
          !pOutlinerParaObject->IsEditDoc() )
     {
-        pOutlinerParaObject->MergeParaAttribs( GetItemSet() );
+        pOutlinerParaObject->MergeParaAttribs( GetObjectItemSet() );
     }
 
     // #84529# correct gradient rotation for 5.2 and earlier
     if(aGeo.nDrehWink != 0 && rHead.GetVersion() <= 16)
     {
-        XFillStyle eStyle = ((const XFillStyleItem&)GetItem(XATTR_FILLSTYLE)).GetValue();
+        XFillStyle eStyle = ((const XFillStyleItem&)GetObjectItem(XATTR_FILLSTYLE)).GetValue();
         if(XFILL_GRADIENT == eStyle)
         {
-            XFillGradientItem aItem = (XFillGradientItem&)GetItem(XATTR_FILLGRADIENT);
+            XFillGradientItem aItem = (XFillGradientItem&)GetObjectItem(XATTR_FILLGRADIENT);
             XGradient aGradient = aItem.GetValue();
 
             // calc new angle. aGeo.nDrehWink is 1/100th degree, aGradient.GetAngle()
@@ -2282,7 +2158,7 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             // create new item and set
             aGradient.SetAngle(nNewAngle);
             aItem.SetValue(aGradient);
-            SetItem(aItem);
+            SetObjectItem(aItem);
         }
     }
 
@@ -2291,134 +2167,34 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     ImpCheckMasterCachable();
 }
 
-IMPL_LINK(SdrTextObj,ImpAnimationHdl,ImpSdrMtfAnimator*,pAnimator)
-{
-    // Aehnliche Implementation am Grafikobjekt: svdograf.cxx, SdrGrafObj
-
-    // Wenn wir nicht mehr da sind, stoppen wir natuerlich alles
-    // und kehren gleich zurueck
-    if (!bInserted || pPage==NULL || pModel==NULL) {
-        pAnimator->Stop();
-        return 0;
-    }
-
-    // Alle Extra-Data auf 0 setzen, wenn keine andere ExtraData
-    // ausser der eigenen (1) gesetzt;
-    // groesser als 1 bedeutet zum. beim GrafObj, dass die Animation
-    // von aussen gestartet wurde, z.B. von der DiaShow.
-    ULONG nInfoNum;
-    for (nInfoNum=pAnimator->GetInfoCount(); nInfoNum>0;) {
-        nInfoNum--;
-        ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
-        if (pInfo->nExtraData==1L) pInfo->nExtraData=0L;
-    }
-
-    USHORT   nPageNum=pPage->GetPageNum();
-    FASTBOOL bMaster=pPage->IsMasterPage() && !bNotVisibleAsMaster;
-    USHORT   nLsAnz=pModel->GetListenerCount();
-
-    for (USHORT nLsNum=0; nLsNum<nLsAnz; nLsNum++) {
-        SfxListener* pLs=pModel->GetListener(nLsNum);
-        SdrObjEditView* pView=PTR_CAST(SdrObjEditView,pLs);
-        if (pView!=NULL) {
-            FASTBOOL bDis=!pView->IsAnimationEnabled();
-            FASTBOOL bMrk=pView->IsObjMarked(this);
-            FASTBOOL bEdt=pView->GetTextEditObject()==this;
-            USHORT nPvAnz=pView->GetPageViewCount();
-            for (USHORT nPvNum=0; nPvNum<nPvAnz; nPvNum++) {
-                SdrPageView* pPV=pView->GetPageViewPvNum(nPvNum);
-                SdrPage* pPg=pPV->GetPage();
-                if (pPV->GetVisibleLayers().IsSet(nLayerID)) {
-                    FASTBOOL bJa=pPg==pPage;
-                    if (!bJa && bMaster && !pPg->IsMasterPage()) {
-                        USHORT nMasterAnz=pPg->GetMasterPageCount();
-                        for  (USHORT nMasterNum=0; nMasterNum<nMasterAnz && !bJa; nMasterNum++) {
-                            const SdrMasterPageDescriptor& rMPD=pPg->GetMasterPageDescriptor(nMasterNum);
-                            bJa=nPageNum==rMPD.GetPageNum() && rMPD.GetVisibleLayers().IsSet(nLayerID);
-                        }
-                    }
-                    if (bJa) {
-                        USHORT nOutAnz=pView->GetWinCount();
-                        for (USHORT nOutNum=0; nOutNum<nOutAnz; nOutNum++) {
-                            OutputDevice* pOut=pView->GetWin(nOutNum);
-                            if (pOut->GetOutDevType()==OUTDEV_WINDOW)
-                            {
-                                Point                   aPvOfs( pPV->GetOffset() );
-                                ULONG                   nPos = pAnimator->FindInfo(*pOut,aPvOfs,0);
-                                ImpMtfAnimationInfo*    pInfo = NULL;
-                                const BOOL              bPause = ( bMrk || bEdt || bDis );
-
-                                if( nPos != CONTAINER_ENTRY_NOTFOUND )
-                                {
-                                    pInfo = pAnimator->GetInfo(nPos);
-
-                                    if( ( pInfo->pPageView && pInfo->pPageView != pPV ) && pInfo->nExtraData == 0L )
-                                        pInfo = NULL;
-                                }
-                                else if( !bPause )
-                                {
-                                    // Falls kein Record gefunden, wird ein neuer erzeugt
-                                    // Das passiert z.B., wenn das Obj auf einer MasterPage liegt
-                                    // und diese mittels MasterPagePaintCache angezeigt wurde.
-                                    pInfo=pAnimator->Start(*pOut,aPvOfs);
-                                }
-
-                                if( pInfo )
-                                {
-                                    // Flag am gefundenen bzw. neuen Objekt setzen
-                                    // ( Info soll _nicht_ geloescht werden )
-                                    if( pInfo->nExtraData == 0L )
-                                        pInfo->nExtraData = 1L;
-
-                                    pInfo->bPause = bPause;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    // Alle Objekte mit nicht gesetztem Flag loeschen
-    for (nInfoNum=pAnimator->GetInfoCount(); nInfoNum>0;) {
-        nInfoNum--;
-        ImpMtfAnimationInfo* pInfo=pAnimator->GetInfo(nInfoNum);
-        if (pInfo->nExtraData==0L) {
-            pAnimator->RemoveInfo(nInfoNum);
-        }
-        if (pInfo->nExtraData==1L) pInfo->nExtraData=0L;
-    }
-    return 0;
-}
-
-void SdrTextObj::SetTextAnimationSupervisor( OutputDevice* pDisplayDev, BOOL bObjSupervises )
-{
-    ImpSdrMtfAnimator* pAnimator = ImpGetMtfAnimator();
-
-    if( GetTextAniKind() != SDRTEXTANI_NONE && pAnimator )
-    {
-        for( ULONG nInfoNum = pAnimator->GetInfoCount(); nInfoNum > 0; )
-        {
-            ImpMtfAnimationInfo* pInfo = pAnimator->GetInfo( --nInfoNum );
-
-            if( pInfo->pOutDev == pDisplayDev )
-            {
-                pInfo->nExtraData = ( bObjSupervises ? 1L : (long) this );
-
-                if( !bObjSupervises )
-                    pInfo->bPause = FALSE;
-            }
-        }
-    }
-}
+// #111096#
+//void SdrTextObj::SetTextAnimationSupervisor( OutputDevice* pDisplayDev, BOOL bObjSupervises )
+//{
+//  ImpSdrMtfAnimator* pAnimator = ImpGetMtfAnimator();
+//
+//  if( GetTextAniKind() != SDRTEXTANI_NONE && pAnimator )
+//  {
+//      for( ULONG nInfoNum = pAnimator->GetInfoCount(); nInfoNum > 0; )
+//      {
+//          ImpMtfAnimationInfo* pInfo = pAnimator->GetInfo( --nInfoNum );
+//
+//          if( pInfo->pOutDev == pDisplayDev )
+//          {
+//              pInfo->nExtraData = ( bObjSupervises ? 1L : (long) this );
+//
+//              if( !bObjSupervises )
+//                  pInfo->bPause = FALSE;
+//          }
+//      }
+//  }
+//}
 
 SdrFitToSizeType SdrTextObj::GetFitToSize() const
 {
     SdrFitToSizeType eType = SDRTEXTFIT_NONE;
 
     if(!IsAutoGrowWidth())
-        eType = ((SdrTextFitToSizeTypeItem&)(GetItem(SDRATTR_TEXT_FITTOSIZE))).GetValue();
+        eType = ((SdrTextFitToSizeTypeItem&)(GetObjectItem(SDRATTR_TEXT_FITTOSIZE))).GetValue();
 
     return eType;
 }
@@ -2446,17 +2222,23 @@ void SdrTextObj::ForceOutlinerParaObject()
     }
 }
 
-BOOL SdrTextObj::IsVerticalWriting() const
+sal_Bool SdrTextObj::IsVerticalWriting() const
 {
     // #89459#
-    if(pOutlinerParaObject)
-        return pOutlinerParaObject->IsVertical();
     if(pEdtOutl)
+    {
         return pEdtOutl->IsVertical();
-    return FALSE;
+    }
+
+    if(pOutlinerParaObject)
+    {
+        return pOutlinerParaObject->IsVertical();
+    }
+
+    return sal_False;
 }
 
-void SdrTextObj::SetVerticalWriting( BOOL bVertical )
+void SdrTextObj::SetVerticalWriting(sal_Bool bVertical)
 {
     ForceOutlinerParaObject();
 
@@ -2466,7 +2248,7 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
         if(pOutlinerParaObject->IsVertical() != bVertical)
         {
             // get item settings
-            const SfxItemSet& rSet = GetItemSet();
+            const SfxItemSet& rSet = GetObjectItemSet();
             sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
             sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
@@ -2505,7 +2287,7 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
                 case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
             }
 
-            SetItemSet(aNewSet);
+            SetObjectItemSet(aNewSet);
 
             // set ParaObject orientation accordingly
             pOutlinerParaObject->SetVertical(bVertical);
@@ -2673,6 +2455,173 @@ void SdrTextObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPo
 bool SdrTextObj::IsRealyEdited() const
 {
     return pEdtOutl && pEdtOutl->IsModified();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// moved inlines here form hxx
+
+long SdrTextObj::GetEckenradius() const
+{
+    return ((SdrEckenradiusItem&)(GetObjectItemSet().Get(SDRATTR_ECKENRADIUS))).GetValue();
+}
+
+long SdrTextObj::GetMinTextFrameHeight() const
+{
+    return ((SdrTextMinFrameHeightItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEHEIGHT))).GetValue();
+}
+
+long SdrTextObj::GetMaxTextFrameHeight() const
+{
+    return ((SdrTextMaxFrameHeightItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEHEIGHT))).GetValue();
+}
+
+long SdrTextObj::GetMinTextFrameWidth() const
+{
+    return ((SdrTextMinFrameWidthItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MINFRAMEWIDTH))).GetValue();
+}
+
+long SdrTextObj::GetMaxTextFrameWidth() const
+{
+    return ((SdrTextMaxFrameWidthItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_MAXFRAMEWIDTH))).GetValue();
+}
+
+
+FASTBOOL SdrTextObj::IsFontwork() const
+{
+    return (bTextFrame) ? FALSE // Default ist FALSE
+        : ((XFormTextStyleItem&)(GetObjectItemSet().Get(XATTR_FORMTXTSTYLE))).GetValue()!=XFT_NONE;
+}
+
+FASTBOOL SdrTextObj::IsHideContour() const
+{
+    return (bTextFrame) ? FALSE // Default ist: Nein, kein HideContour; HideContour nicht bei TextFrames
+        : ((XFormTextHideFormItem&)(GetObjectItemSet().Get(XATTR_FORMTXTHIDEFORM))).GetValue();
+}
+
+FASTBOOL SdrTextObj::IsContourTextFrame() const
+{
+    return (bTextFrame) ? FALSE // ContourFrame nicht bei normalen TextFrames
+        : ((SdrTextContourFrameItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME))).GetValue();
+}
+
+long SdrTextObj::GetTextLeftDistance() const
+{
+    return ((SdrTextLeftDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LEFTDIST))).GetValue();
+}
+
+long SdrTextObj::GetTextRightDistance() const
+{
+    return ((SdrTextRightDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_RIGHTDIST))).GetValue();
+}
+
+long SdrTextObj::GetTextUpperDistance() const
+{
+    return ((SdrTextUpperDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_UPPERDIST))).GetValue();
+}
+
+long SdrTextObj::GetTextLowerDistance() const
+{
+    return ((SdrTextLowerDistItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_LOWERDIST))).GetValue();
+}
+
+SdrTextAniKind SdrTextObj::GetTextAniKind() const
+{
+    return ((SdrTextAniKindItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_ANIKIND))).GetValue();
+}
+
+SdrTextAniDirection SdrTextObj::GetTextAniDirection() const
+{
+    return ((SdrTextAniDirectionItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+}
+
+// #111096#
+// Access to thext hidden flag
+sal_Bool SdrTextObj::GetTextHidden() const
+{
+    return mbTextHidden;
+}
+
+void SdrTextObj::NbcSetTextHidden(sal_Bool bNew)
+{
+    if(bNew != mbTextHidden)
+    {
+        mbTextHidden = bNew;
+    }
+}
+
+// #111096#
+// Get necessary data for text scroll animation. ATM base it on a Text-Metafile and a
+// painting rectangle. Rotation is excluded from the returned values.
+GDIMetaFile* SdrTextObj::GetTextScrollMetaFileAndRectangle(
+    Rectangle& rScrollRectangle, Rectangle& rPaintRectangle)
+{
+    GDIMetaFile* pRetval = 0L;
+    SdrOutliner& rOutliner = ImpGetDrawOutliner();
+    Rectangle aTextRect;
+    Rectangle aAnchorRect;
+    Rectangle aPaintRect;
+    Fraction aFitXKorreg(1,1);
+    sal_Bool bContourFrame(IsContourTextFrame());
+
+    // get outliner set up. To avoid getting a somehow rotated MetaFile,
+    // temporarily disable object rotation.
+    sal_Int32 nAngle(aGeo.nDrehWink);
+    aGeo.nDrehWink = 0L;
+    ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
+    aGeo.nDrehWink = nAngle;
+
+    Rectangle aScrollFrameRect(aPaintRect);
+    const SfxItemSet& rSet = GetObjectItemSet();
+    SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+
+    if(SDRTEXTANI_LEFT == eDirection || SDRTEXTANI_RIGHT == eDirection)
+    {
+        aScrollFrameRect.Left() = aAnchorRect.Left();
+        aScrollFrameRect.Right() = aAnchorRect.Right();
+    }
+
+    if(SDRTEXTANI_UP == eDirection || SDRTEXTANI_DOWN == eDirection)
+    {
+        aScrollFrameRect.Top() = aAnchorRect.Top();
+        aScrollFrameRect.Bottom() = aAnchorRect.Bottom();
+    }
+
+    // create the MetaFile
+    pRetval = new GDIMetaFile;
+    VirtualDevice aBlackHole;
+    aBlackHole.EnableOutput(sal_False);
+    pRetval->Record(&aBlackHole);
+    Point aPaintPos = aPaintRect.TopLeft();
+
+    sal_uInt32 nStat0(rOutliner.GetControlWord());
+    rOutliner.SetControlWord(nStat0|EE_CNTRL_NOREDLINES);
+    rOutliner.Draw(&aBlackHole, aPaintPos);
+    rOutliner.SetControlWord(nStat0);
+
+    pRetval->Stop();
+    pRetval->WindStart();
+
+    // return PaintRectanglePixel and pRetval;
+    rScrollRectangle = aScrollFrameRect;
+    rPaintRectangle = aPaintRect;
+
+    return pRetval;
+}
+
+// #111096#
+// Access to TextAnimationAllowed flag
+sal_Bool SdrTextObj::IsTextAnimationAllowed() const
+{
+    return mbTextAnimationAllowed;
+}
+
+void SdrTextObj::SetTextAnimationAllowed(sal_Bool bNew)
+{
+    if(mbTextAnimationAllowed != bNew)
+    {
+        mbTextAnimationAllowed = bNew;
+        ActionChanged();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
