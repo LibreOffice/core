@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:05:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName
         //  add the (user) suffix if the display name matches any style's programmatic name
         //  or if it already contains the suffix
 
-        String aRet = rDispName;
+        String aRet(rDispName);
         aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( SC_SUFFIX_USER ) );
         return aRet;
     }
@@ -649,13 +649,12 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< container::XNameContainer >  xFamily = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference< container::XNameContainer >  xFamily(GetObjectByIndex_Impl(nIndex));
     if (xFamily.is())
-        aAny <<= xFamily;
+        return uno::makeAny(xFamily);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType() throw(uno::RuntimeException)
@@ -677,13 +676,12 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const rtl::OUString& aName )
                         lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< container::XNameContainer >  xFamily = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference< container::XNameContainer >  xFamily(GetObjectByName_Impl(aName));
     if (xFamily.is())
-        aAny <<= xFamily;
+        return uno::makeAny(xFamily);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
@@ -732,7 +730,7 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
         for (long i = 0; i < nPropCount; i++)
         {
             const beans::PropertyValue& rProp = pPropArray[i];
-            String aPropName = rProp.Name;
+            String aPropName(rProp.Name);
 
             if (aPropName.EqualsAscii( SC_UNONAME_OVERWSTL ))
                 bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
@@ -808,8 +806,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(UINT32 nIndex)
             SfxStyleSheetBase* pStyle = aIter[(USHORT)nIndex];
             if ( pStyle )
             {
-                String aName = pStyle->GetName();
-                return new ScStyleObj( pDocShell, eFamily, aName );
+                return new ScStyleObj( pDocShell, eFamily, String (pStyle->GetName()) );
             }
         }
     }
@@ -820,7 +817,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const rtl::OUString& aName)
 {
     if ( pDocShell )
     {
-        String aString = aName;
+        String aString(aName);
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -837,14 +834,14 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const 
     ScUnoGuard aGuard;
     sal_Bool bDone = sal_False;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
-    uno::Reference< uno::XInterface > xInterface;
-    if ( aElement >>= xInterface )
+    uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
+    if ( xInterface.is() )
     {
         ScStyleObj* pStyleObj = ScStyleObj::getImplementation( xInterface );
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
                 !pStyleObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            String aNameStr = ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily );
+            String aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ));
 
             ScDocument* pDoc = pDocShell->GetDocument();
             ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -891,7 +888,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
     BOOL bFound = FALSE;
     if ( pDocShell )
     {
-        String aString = ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily );
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -959,13 +956,12 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< style::XStyle >  xObj = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference< style::XStyle >  xObj(GetObjectByIndex_Impl(nIndex));
     if (xObj.is())
-        aAny <<= xObj;
+        return uno::makeAny(xObj);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType() throw(uno::RuntimeException)
@@ -987,14 +983,13 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< style::XStyle > xObj =
-        GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ) );
-    uno::Any aAny;
+    uno::Reference< style::XStyle > xObj(
+        GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ) ));
     if (xObj.is())
-        aAny <<= xObj;
+        return uno::makeAny(xObj);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
@@ -1033,7 +1028,7 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     if ( pDocShell )
     {
-        String aString = ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily );
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, eFamily ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -1189,7 +1184,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        String aString = ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, eFamily );
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, eFamily ));
         sal_Bool bOk = pStyle->SetParent( aString );
         if (bOk)
         {
@@ -1245,7 +1240,7 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        String aString = aNewName;
+        String aString(aNewName);
         sal_Bool bOk = pStyle->SetName( aString );
         if (bOk)
         {
@@ -1314,7 +1309,7 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
 {
     ScUnoGuard aGuard;
     beans::PropertyState eRet = beans::PropertyState_DIRECT_VALUE;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     const SfxItemPropertyMap* pResultEntry = NULL;
     const SfxItemSet* pItemSet = GetStyleItemSet_Impl( aString, pResultEntry );
@@ -1375,7 +1370,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
                                     uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aAny;
 
     const SfxItemPropertyMap* pResultEntry = NULL;
@@ -1571,7 +1566,7 @@ void SAL_CALL ScStyleObj::setPropertiesToDefault( const uno::Sequence<rtl::OUStr
         const SfxItemPropertyMap* pMap = pPropertyMap;
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            String aNameString = pNames[i];
+            String aNameString(pNames[i]);
             pMap = SfxItemPropertyMap::GetByName( pMap, aNameString );
             SetOnePropertyValue( pMap, NULL );
             if (!pMap)
@@ -1637,7 +1632,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
         if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
-        String aString = String::CreateFromAscii( pMap->pName );
+        String aString(String::CreateFromAscii( pMap->pName ));
 
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
         sal_Bool bDone = sal_False;
@@ -1874,7 +1869,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aAny;
 
     const SfxItemPropertyMap* pResultEntry = NULL;
