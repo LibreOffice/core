@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:22:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ typedef void FcPattern;
 typedef void FcFontSet;
 typedef int FcResult;
 typedef int FcBool;
+typedef int FcMatchKind;
 typedef char FcChar8;
 #endif
 
@@ -547,6 +548,7 @@ void PrintFontManager::deinitFontconfig()
 
 bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo )
 {
+#ifdef ENABLE_FONTCONFIG
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
     if( ! rWrapper.isValid() )
         return false;
@@ -655,4 +657,7 @@ bool PrintFontManager::matchFont( FastPrintFontInfo& rInfo )
     rWrapper.FcPatternDestroy( pPattern );
 
     return bSuccess;
+#else
+    return false;
+#endif
 }
