@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:45:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 13:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,6 @@ using namespace svx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
@@ -177,7 +176,7 @@ const static char __FAR_DATA sFontSize[]        = "font-size: ";
 DBG_NAME(ODatabaseImportExport);
 //======================================================================
 ODatabaseImportExport::ODatabaseImportExport(const Reference< XMultiServiceFactory >& _rM,
-                                             const Reference< XNumberFormatter >& _rxNumberF,
+                                             const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                              const String& rExchange)
     :m_pReader(NULL)
     ,m_pRowMarker(NULL)
@@ -669,7 +668,7 @@ const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t
 
 //-------------------------------------------------------------------
 OHTMLImportExport::OHTMLImportExport(const Reference< XMultiServiceFactory >& _rM,
-                                     const Reference< XNumberFormatter >& _rxNumberF,
+                                     const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                                      const String& rExchange)
         : ODatabaseImportExport(_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
@@ -950,7 +949,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 
     double fVal = 0.0;
 
-    Reference< XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
 
     Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
     SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());

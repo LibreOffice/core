@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:53:55 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 12:59:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,6 @@ using namespace dbtools;
 //  using namespace comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 //  using namespace ::com::sun::star::sdb;
@@ -205,12 +204,12 @@ using namespace ::com::sun::star::sdbc;
 namespace
 {
     // -----------------------------------------------------------------------------
-    double checkDoubleForDateFormat(double _nValue,sal_Int32 _nFormatKey,const Reference<XNumberFormatter>& _xNumberFormatter)
+    double checkDoubleForDateFormat(double _nValue,sal_Int32 _nFormatKey,const Reference< ::com::sun::star::util::XNumberFormatter>& _xNumberFormatter)
     {
         double nValue = _nValue;
         sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(_xNumberFormatter,_nFormatKey);
-        if(     (nNumberFormat & NumberFormat::DATE)    == NumberFormat::DATE
-            || (nNumberFormat & NumberFormat::DATETIME) == NumberFormat::DATETIME )
+        if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
+            || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
         {
             nValue = DBTypeConversion::toStandardDbDate(DBTypeConversion::getNULLDate(_xNumberFormatter->getNumberFormatsSupplier()),nValue);
         }
@@ -417,7 +416,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
 //------------------------------------------------------------------------------
 void OFieldDescControl::Init()
 {
-    Reference< XNumberFormatter > xFormatter = GetFormatter();
+    Reference< ::com::sun::star::util::XNumberFormatter > xFormatter = GetFormatter();
     ::dbaui::setEvalDateFormatForFormatter(xFormatter);
 }
 
@@ -770,7 +769,7 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
 
     sal_Int32 nOldFormatKey(pActFieldDescr->GetFormatKey());
     SvxCellHorJustify rOldJustify = pActFieldDescr->GetHorJustify();
-    Reference< XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = GetFormatter()->getNumberFormatsSupplier();
 
     Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
     SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());
@@ -2073,7 +2072,7 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
     {
         if (!_nFormatKey)
         {
-            Reference< XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
+            Reference< ::com::sun::star::util::XNumberFormatTypes> xNumberTypes(GetFormatter()->getNumberFormatsSupplier()->getNumberFormats(),UNO_QUERY);
             OSL_ENSURE(xNumberTypes.is(),"XNumberFormatTypes is null!");
 
             _nFormatKey = ::dbtools::getDefaultNumberFormat( _pFieldDescr->GetType(),
@@ -2083,7 +2082,7 @@ sal_Bool OFieldDescControl::isTextFormat(const OFieldDescription* _pFieldDescr,s
                 GetLocale());
         }
         sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(GetFormatter(),_nFormatKey);
-        bTextFormat = (nNumberFormat == NumberFormat::TEXT);
+        bTextFormat = (nNumberFormat == ::com::sun::star::util::NumberFormat::TEXT);
     }
     catch(const Exception&)
     {
@@ -2127,7 +2126,7 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                 _pFieldDescr->GetControlDefault() >>= nValue;
 
 
-            Reference<XNumberFormatter> xNumberFormatter = GetFormatter();
+            Reference< ::com::sun::star::util::XNumberFormatter> xNumberFormatter = GetFormatter();
             Reference<XPropertySet> xFormSet = xNumberFormatter->getNumberFormatsSupplier()->getNumberFormats()->getByKey(nFormatKey);
             OSL_ENSURE(xFormSet.is(),"XPropertySet is null!");
             ::rtl::OUString sFormat;
@@ -2139,15 +2138,15 @@ String OFieldDescControl::getControlDefault( const OFieldDescription* _pFieldDes
                 ::comphelper::getNumberFormatProperty(xNumberFormatter,nFormatKey,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Locale"))) >>= aLocale;
 
                 sal_Int32 nNumberFormat = ::comphelper::getNumberFormatType(xNumberFormatter,nFormatKey);
-                if(     (nNumberFormat & NumberFormat::DATE)    == NumberFormat::DATE
-                    || (nNumberFormat & NumberFormat::DATETIME) == NumberFormat::DATETIME )
+                if(     (nNumberFormat & ::com::sun::star::util::NumberFormat::DATE)    == ::com::sun::star::util::NumberFormat::DATE
+                    || (nNumberFormat & ::com::sun::star::util::NumberFormat::DATETIME) == ::com::sun::star::util::NumberFormat::DATETIME )
                 {
                     nValue = DBTypeConversion::toNullDate(DBTypeConversion::getNULLDate(xNumberFormatter->getNumberFormatsSupplier()),nValue);
                 }
 
 
 
-                Reference<XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
+                Reference< ::com::sun::star::util::XNumberFormatPreviewer> xPreViewer(xNumberFormatter,UNO_QUERY);
                 OSL_ENSURE(xPreViewer.is(),"XNumberFormatPreviewer is null!");
                 sDefault = xPreViewer->convertNumberToPreviewString(sFormat,nValue,aLocale,sal_True);
             }

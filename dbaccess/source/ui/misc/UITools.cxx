@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:33:25 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 13:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,6 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
 
 
@@ -807,7 +806,7 @@ SvxCellHorJustify mapTextJustify(const sal_Int32& _nAlignment)
 // -----------------------------------------------------------------------------
 void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
-    if ( _pFieldDesc->GetFormatKey() != NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
+    if ( _pFieldDesc->GetFormatKey() != ::com::sun::star::util::NumberFormat::UNDEFINED && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY) )
         _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_pFieldDesc->GetFormatKey()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN) )
         _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
@@ -1097,7 +1096,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
                     aFilter.realloc(aFilter.getLength()+1);
                     aFilter.getArray()[aFilter.getLength()-1] = _sName;
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
-                    Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                    Reference< ::com::sun::star::util::XFlushable> xFlush(xProp,UNO_QUERY);
                     if(xFlush.is())
                         xFlush->flush();
                 }
@@ -1323,9 +1322,9 @@ namespace
     }
 }
 // -----------------------------------------------------------------------------
-URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
+::com::sun::star::util::URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHelpId)
 {
-    URL aURL;
+    ::com::sun::star::util::URL aURL;
     aURL.Complete = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
     aURL.Complete += _sModuleName;
     aURL.Complete += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
@@ -1344,9 +1343,9 @@ URL createHelpAgentURL(const ::rtl::OUString& _sModuleName,const sal_Int32 _nHel
     return aURL;
 }
 // -----------------------------------------------------------------------------
-void setEvalDateFormatForFormatter(Reference< XNumberFormatter >& _rxFormatter)
+void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter)
 {
-    Reference< XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = _rxFormatter->getNumberFormatsSupplier();
 
     Reference< XUnoTunnel > xTunnel(xSupplier,UNO_QUERY);
     SvNumberFormatsSupplierObj* pSupplierImpl = (SvNumberFormatsSupplierObj*)xTunnel->getSomething(SvNumberFormatsSupplierObj::getUnoTunnelId());

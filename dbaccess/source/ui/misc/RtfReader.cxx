@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 13:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,6 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
@@ -162,7 +161,7 @@ DBG_NAME(ORTFReader);
 // ==========================================================================
 ORTFReader::ORTFReader( SvStream& rIn,
                         const Reference< XConnection >& _rxConnection,
-                        const Reference< XNumberFormatter >& _rxNumberF,
+                        const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
@@ -175,7 +174,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
 ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
                        const TPositions &_rColumnPositions,
-                       const Reference< XNumberFormatter >& _rxNumberF,
+                       const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                        const TColumnVector* pList,
                        const OTypeInfoMap* _pInfoMap)
