@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:10:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -98,8 +97,8 @@
 //___________________________________________________________________
 // class XclImpChangeTrack
 
-XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData, const XclImpStream& rBookStrm ) :
-    ExcRoot( pRootData ),
+XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm ) :
+    XclImpRoot( rRoot ),
     aRecHeader(),
     sOldUsername(),
     pChangeTrack( NULL ),
@@ -108,16 +107,14 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData, const XclImpStream& r
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
 {
-    const XclImpRoot& rRoot = *pExcRoot->pIR;
-
     // Verify that the User Names stream exists before going any further. Excel adds both
     // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
     // remains if Change Tracking is turned off.
-    SotStorageStreamRef xUserStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
+    SotStorageStreamRef xUserStrm = OpenStream( EXC_STREAM_USERNAMES );
     if( !xUserStrm.Is() )
         return;
 
-    xInStrm = rRoot.OpenStream( EXC_STREAM_REVLOG );
+    xInStrm = OpenStream( EXC_STREAM_REVLOG );
     if( xInStrm.Is() )
     {
         xInStrm->Seek( STREAM_SEEK_TO_END );
@@ -125,9 +122,9 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData, const XclImpStream& r
         if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
         {
             xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm = new XclImpStream( *xInStrm, rRoot );
+            pStrm = new XclImpStream( *xInStrm, GetRoot() );
             pStrm->CopyDecrypterFrom( rBookStrm );
-            pChangeTrack = new ScChangeTrack( rRoot.GetDocPtr() );
+            pChangeTrack = new ScChangeTrack( GetDocPtr() );
 
             sOldUsername = pChangeTrack->GetUser();
             pChangeTrack->SetUseFixDateTime( TRUE );
@@ -179,7 +176,7 @@ void XclImpChangeTrack::DoDeleteRange( const ScRange& rRange )
 
 SCTAB XclImpChangeTrack::ReadTabNum()
 {
-    return static_cast<SCTAB>(pExcRoot->pIR->GetTabInfo().GetCurrentIndex(
+    return static_cast<SCTAB>(GetTabInfo().GetCurrentIndex(
                 pStrm->ReaduInt16(), nTabIdCount ));
 }
 
@@ -215,10 +212,10 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab 
     {
         // internal ref - read tab num and return sc tab num (position in TABID list)
         pStrm->Ignore( 3 );
-        rFirstTab = static_cast< SCTAB >( pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) );
+        rFirstTab = static_cast< SCTAB >( GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) );
         sal_uInt8 nFillByte = pStrm->ReaduInt8();
         rLastTab = (nFillByte == 0x00) ?
-            static_cast< SCTAB >( pExcRoot->pIR->GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) ) : rFirstTab;
+            static_cast< SCTAB >( GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) ) : rFirstTab;
     }
     else
     {
@@ -227,13 +224,13 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab 
         String aEncUrl( pStrm->ReadUniString() );
         String aUrl;
         bool bSelf;
-        XclImpUrlHelper::DecodeUrl( aUrl, bSelf, *pExcRoot->pIR, aEncUrl );
+        XclImpUrlHelper::DecodeUrl( aUrl, bSelf, GetRoot(), aEncUrl );
         pStrm->Ignore( 1 );
         // - sheet name, always separated from URL
         String aTabName( pStrm->ReadUniString() );
         ScfTools::ConvertToScSheetName( aTabName );
         pStrm->Ignore( 1 );
-        rFirstTab = rLastTab = static_cast<SCTAB>(pExcRoot->pIR->GetLinkManager().GetScTab( aUrl, aTabName ));
+        rFirstTab = rLastTab = static_cast<SCTAB>(GetLinkManager().GetScTab( aUrl, aTabName ));
     }
     return sal_True;
 }
@@ -252,7 +249,7 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     SvMemoryStream aMemStrm;
     aMemStrm << (sal_uInt16) 0x0001 << nFmlSize;
     pStrm->CopyToStream( aMemStrm, nFmlSize );
-    XclImpStream aFmlaStrm( aMemStrm, *pExcRoot->pIR );
+    XclImpStream aFmlaStrm( aMemStrm, GetRoot() );
     aFmlaStrm.StartNextRecord();
     XclImpChTrFmlConverter aFmlConv( aFmlaStrm, *this );
 
@@ -304,7 +301,7 @@ void XclImpChangeTrack::ReadCell(
             if( pStrm->IsValid() )
             {
                 rpCell = new ScValueCell( fValue );
-                rFormat = pExcRoot->pIR->GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
+                rFormat = GetFormatter().GetStandardFormat( NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
             }
         }
         break;
@@ -313,7 +310,7 @@ void XclImpChangeTrack::ReadCell(
             ScTokenArray* pTokenArray = NULL;
             ReadFormula( pTokenArray, rPosition );
             if( pStrm->IsValid() && pTokenArray )
-                rpCell = new ScFormulaCell( pExcRoot->pDoc, rPosition, pTokenArray );
+                rpCell = new ScFormulaCell( GetDocPtr(), rPosition, pTokenArray );
         }
         break;
         default:
@@ -523,17 +520,17 @@ void XclImpChangeTrack::ReadRecords()
 
 void XclImpChangeTrack::Apply()
 {
-    if( pChangeTrack && pExcRoot )
+    if( pChangeTrack )
     {
         pChangeTrack->SetUser( sOldUsername );
         pChangeTrack->SetUseFixDateTime( FALSE );
 
-        pExcRoot->pDoc->SetChangeTrack( pChangeTrack );
+        GetDoc().SetChangeTrack( pChangeTrack );
         pChangeTrack = NULL;
 
         ScChangeViewSettings aSettings;
         aSettings.SetShowChanges( TRUE );
-        pExcRoot->pDoc->SetChangeViewSettings( aSettings );
+        GetDoc().SetChangeViewSettings( aSettings );
     }
 }
 
