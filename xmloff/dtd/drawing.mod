@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.78 2002-09-30 09:33:39 mib Exp $
+	$Id: drawing.mod,v 1.79 2002-10-09 16:08:24 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -398,6 +398,7 @@
 <!ATTLIST style:properties draw:show-unit %boolean; #IMPLIED>
 <!ATTLIST style:properties draw:placing (below|above) #IMPLIED>
 <!ATTLIST style:properties draw:parallel %boolean; #IMPLIED>
+<!ATTLIST style:properties draw:decimal-plaaces %nonNegativeLength; #IMPLIED>
 
 <!-- frame attributes -->
 <!ATTLIST style:properties draw:frame-display-scrollbar %boolean; #IMPLIED>

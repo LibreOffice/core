@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-11 12:18:09 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 16:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,6 +333,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "MeasureShowUnit",                 XML_NAMESPACE_DRAW, XML_SHOW_UNIT,              XML_TYPE_BOOL, 0 ),
     MAP( "MeasureBelowReferenceEdge",       XML_NAMESPACE_DRAW, XML_PLACING,                XML_SD_TYPE_MEASURE_PLACING, 0 ),
     MAP( "MeasureTextRotate90",             XML_NAMESPACE_DRAW, XML_PARALLEL,               XML_TYPE_BOOL, 0 ),
+    MAP( "MeasureDecimalPlaces",            XML_NAMESPACE_DRAW, XML_DECIMAL_PLACES,         XML_TYPE_NUMBER16, 0 ),
 
     // 3D geometry attributes
     MAP( "D3DHorizontalSegments",           XML_NAMESPACE_DR3D, XML_HORIZONTAL_SEGMENTS,    XML_TYPE_NUMBER, 0 ),

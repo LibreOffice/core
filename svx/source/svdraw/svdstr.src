@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-15 11:47:03 $
+ *  last change: $Author: cl $ $Date: 2002-10-09 16:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -15305,32 +15305,11 @@ String SIP_SA_MEASURETEXTFIXEDANGLE
     Text[ finnish ] = "Mitta-arvon kulma";
 };
 
-String SIP_SA_MEASURERESERVE04
+String SIP_SA_MEASUREDECIMALPLACES
 {
-    Text = "Bemassung Reserve 4";
-    Text [ ENGLISH ] = "Dimensioning reserved 4" ;
-    Text[ english_us ] = "Dimensioning reserved 4";
-    Text[ portuguese ] = "Dimensionamento de reserva 4";
-    Text[ russian ] = "Ηΰπεηεπβθπξβΰννϋι πΰημεπ 4";
-    Text[ dutch ] = "Afmetingsreserve 4";
-    Text[ french ] = "Rιservι pour cotation 4";
-    Text[ spanish ] = "Dimensiones reserva 4";
-    Text[ italian ] = "Quotatura riservato 4";
-    Text[ danish ] = "Dimensionering reserve 4";
-    Text[ swedish ] = "Dimensionering reserverad fφr 4";
-    Text[ polish ] = "Zarezerwowane wymiarowanie 4";
-    Text[ portuguese_brazilian ] = "Dimensioning reserved 4";
-    Text[ japanese ] = "ε―Έζ³•θ¨ε…¥ δΊε‚™4";
-    Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 4";
-    Text[ chinese_traditional ] = "ε®ε°Ίε―Έι η•™ 4";
-    Text[ arabic ] = "ΗαήνΗΣ γΝΜζÒ αά 4";
-    Text[ dutch ] = "Afmetingsreserve 4";
-    Text[ chinese_simplified ] = "ε®ε°Ίε―ΈιΆ„η•™ 4";
-    Text[ greek ] = "Διαστασιολόγηση εναλλακτ. 4";
-    Text[ korean ] = "μΉμ μλΉ„ 4";
-    Text[ turkish ] = "Boyutlar - Yedek 4";
-    Text[ catalan ] = "Dimensiones reserva 4";
-    Text[ finnish ] = "Mitoitus varattu 4:lle";
+    Text = "Nachkommastellen";
+    Text [ ENGLISH ] = "Decimal places" ;
+    Text[ english_us ] = "Decimal places";
 };
 
 String SIP_SA_MEASURERESERVE05
