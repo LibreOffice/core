@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-30 08:54:59 $
+ *  last change: $Author: mba $ $Date: 2001-01-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbhelper.hxx>
+
 #pragma hdrstop
 
 /************** class SotStorageStream ***********************************/
@@ -494,11 +496,7 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
     {
         // named storage
         if( ( ( nMode & ERASEMASK ) == ERASEMASK ) )
-        {
-            DBG_ERROR( "Only possible for file URLs, remove file by yourself" );
-            // ???
-            osl::File::remove( aName );
-        }
+            ::utl::UCBContentHelper::Kill( aName );
 
         String aURL;
         INetURLObject aObj( aName );
