@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-21 11:32:32 $
+ *  last change: $Author: aidan $ $Date: 2002-11-29 12:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ void SwWW8Writer::OutListTab()
 
     BYTE aPapSprms [] = {
         0x0f, 0x84, 0, 0,               // sprmPDxaLeft
-        0x11, 0x84, 0, 0                // sprmPDxaLeft1
+        0x11, 0x84, 0, 0,               // sprmPDxaLeft1
+        0x15, 0xc6, 0x05, 0x00, 0x01, 0, 0, 0x06
     };
 
     StarSymbolToMSMultiFont *pConvert = 0;
@@ -299,7 +300,7 @@ void SwWW8Writer::OutListTab()
             // write the rgbxchNums[9]
             pTableStrm->Write(aNumLvlPos, WW8ListManager::nMaxLevel);
 
-            nFlags = 2;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
+            nFlags = 0;     // ixchFollow: 0 - tab, 1 - blank, 2 - nothing
             *pTableStrm << nFlags;
             // dxaSoace/dxaIndent (Word 6 compatibility)
             SwWW8Writer::WriteLong( *pTableStrm, 0 );
@@ -369,8 +370,9 @@ void SwWW8Writer::OutListTab()
             Set_UInt16( pData, rFmt.GetAbsLSpace() );
             pData += 2;
             Set_UInt16( pData, rFmt.GetFirstLineOffset() );
+            pData += 5;
+            Set_UInt16( pData, rFmt.GetAbsLSpace() );
             pTableStrm->Write( aPapSprms, sizeof( aPapSprms ));
-
             // write Chpx
             if( aCharAtrs.Count() )
                 pTableStrm->Write( aCharAtrs.GetData(), aCharAtrs.Count() );
