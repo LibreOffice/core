@@ -80,7 +80,7 @@ sub convertfile {
 
     $destfile=$dest . "/" . File::Basename::basename($file);
 
-    File::Path::mkpath($dest,0,0755);
+    File::Path::mkpath($dest,0,0775);
 
     open(IN,"<$file") || die "can not open $file";
     open(OUT,">$destfile") || die "can not open $destfile";
