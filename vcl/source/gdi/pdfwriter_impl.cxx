@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-27 10:00:33 $
+ *  last change: $Author: pl $ $Date: 2002-10-02 17:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3455,14 +3455,17 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
 {
     MARK( "drawPolyLine" );
 
+    int nPoints = rPoly.GetSize();
+    if( nPoints < 2 )
+        return;
+
     updateGraphicsState();
 
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
         return;
 
-    int nPoints = rPoly.GetSize();
     OStringBuffer aLine( 20 * nPoints );
-    m_aPages.back().appendPolygon( rPoly, aLine, false );
+    m_aPages.back().appendPolygon( rPoly, aLine, rPoly[0] == rPoly[nPoints-1] );
     aLine.append( "S\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
