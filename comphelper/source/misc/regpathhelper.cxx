@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regpathhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-11 11:47:32 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 16:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,17 +139,18 @@ static OUString getDefaultLocalRegistry()
 #ifdef TF_FILEURL
         if (bFindProfile)
         {
-            sal_Int32 tokenCount = uBuffer.getTokenCount('/');
-            OUString sSeperator(RTL_CONSTASCII_USTRINGPARAM("/"));
+            static OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
             OUString sPath(RTL_CONSTASCII_USTRINGPARAM("file://"));
             FileBase::RC retRC = FileBase::E_None;
 
-            sPath += uBuffer.getToken(2, '/');
-            for (sal_Int32 i = 3; i < tokenCount - 1; i++)
+            sal_Int32 nIndex = 0;
+            sPath += uBuffer.getToken(2, '/', nIndex);
+            while( nIndex != -1 )
             {
-                sPath += sSeperator;
-                sPath += uBuffer.getToken(i, '/');
-
+                sPath += sSeparator;
+                sPath += uBuffer.getToken(0, '/', nIndex);
+                if( nIndex == -1 )
+                    break;
                 retRC = Directory::create(sPath);
                 if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
                 {
@@ -160,17 +161,18 @@ static OUString getDefaultLocalRegistry()
 #else
         if (bFindProfile)
         {
-            sal_Int32 tokenCount = uBuffer.getTokenCount('/');
-            OUString sSeperator(RTL_CONSTASCII_USTRINGPARAM("/"));
+            static OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
             OUString sPath(RTL_CONSTASCII_USTRINGPARAM("//"));
             FileBase::RC retRC = FileBase::E_None;
 
-            sPath += uBuffer.getToken(2, '/');
-            for (sal_Int32 i = 3; i < tokenCount - 1; i++)
+            sal_Int32 nIndex = 0;
+            sPath += uBuffer.getToken(2, '/', nIndex);
+            while( nIndex != -1 )
             {
-                sPath += sSeperator;
-                sPath += uBuffer.getToken(i, '/');
-
+                sPath += sSeparator;
+                sPath += uBuffer.getToken(0, '/', nIndex);
+                if( nIndex == -1 )
+                    break;
                 retRC = Directory::create(sPath);
                 if ( retRC != FileBase::E_None && retRC != FileBase::E_EXIST)
                 {
