@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ab $ $Date: 2002-08-08 12:43:56 $
+ *  last change: $Author: ab $ $Date: 2002-10-14 08:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3250,39 +3250,43 @@ RTLFUNC(TypeName)
 {
     static const char* pTypeNames[] =
     {
-        "Empty",
-        "Null",
-        "Integer",
-        "Long",
-        "Single",
-        "Double",
-        "Currency",
-        "Date",
-        "String",
-        "Object",
-        "Error",
-        "Boolean",
-        "Variant",
-        "DataObject",
-        "Unknown Type",
-        "Unknown Type",
-        "Char",
-        "Byte",
-        "UShort",
-        "ULong",
-        "Long64",
-        "ULong64",
-        "Int",
-        "UInt",
-        "Void",
-        "HResult",
-        "Pointer",
-        "DimArray",
-        "CArray",
-        "Userdef",
-        "Lpstr",
-        "Lpwstr",
-        "Unknown Type",
+        "Empty",            // SbxEMPTY
+        "Null",             // SbxNULL
+        "Integer",          // SbxINTEGER
+        "Long",             // SbxLONG
+        "Single",           // SbxSINGLE
+        "Double",           // SbxDOUBLE
+        "Currency",         // SbxCURRENCY
+        "Date",             // SbxDATE
+        "String",           // SbxSTRING
+        "Object",           // SbxOBJECT
+        "Error",            // SbxERROR
+        "Boolean",          // SbxBOOL
+        "Variant",          // SbxVARIANT
+        "DataObject",       // SbxDATAOBJECT
+        "Unknown Type",     //
+        "Unknown Type",     //
+        "Char",             // SbxCHAR
+        "Byte",             // SbxBYTE
+        "UShort",           // SbxUSHORT
+        "ULong",            // SbxULONG
+        "Long64",           // SbxLONG64
+        "ULong64",          // SbxULONG64
+        "Int",              // SbxINT
+        "UInt",             // SbxUINT
+        "Void",             // SbxVOID
+        "HResult",          // SbxHRESULT
+        "Pointer",          // SbxPOINTER
+        "DimArray",         // SbxDIMARRAY
+        "CArray",           // SbxCARRAY
+        "Userdef",          // SbxUSERDEF
+        "Lpstr",            // SbxLPSTR
+        "Lpwstr",           // SbxLPWSTR
+        "Unknown Type",     // SbxCoreSTRING
+        "WString",          // SbxWSTRING
+        "WChar",            // SbxWCHAR
+        "Int64",            // SbxSALINT64
+        "UInt64",           // SbxSALUINT64
     };
 
     if ( rPar.Count() != 2 )
