@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfile.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ namespace csv
      class File;
 }
 
+/** Represents an HTML output file.
+*/
 class DocuFile_Html
 {
   public:
@@ -85,11 +87,10 @@ class DocuFile_Html
                                                 i_rFilePath );
     void                SetTitle(
                             const char *        i_sTitle );
-    void                SetStyle(
+    void                SetInlineStyle(
                             const char *        i_sStyle );
-    void                SetBodyAttr(
-                            const char *        i_sAttrName,
-                            const char *        i_sAttrValue );
+    void                SetRelativeCssPath(
+                            const char *        i_sCssFile_relativePath );
     void                SetCopyright(
                             const char *        i_sCopyright );
     void                EmptyBody();
@@ -103,11 +104,12 @@ class DocuFile_Html
     void                WriteBody(
                             csv::File &         io_aFile );
     // DATA
-    udmstri             sFilePath;
-    udmstri             sTitle;
-    udmstri             sLocation;
-    udmstri             sStyle;
-    udmstri             sCopyright;
+    String              sFilePath;
+    String              sTitle;
+    String              sLocation;
+    String              sStyle;
+    String              sCssFile;
+    String              sCopyright;
 
     Html::Body          aBodyData;
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_display.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:13 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ class HtmlDisplay_Idl : public autodoc::HtmlDisplay_Idl_Ifc
     void                Create_FilesInProjectTree();
     void                Create_PackageList();
     void                Create_HelpFile();
+    void                Create_CssFile();
 
     /** @descr
         - makes sure, the module's directory exists
