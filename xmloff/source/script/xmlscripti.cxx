@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 11:26:01 $
+ *  last change: $Author: ab $ $Date: 2000-12-07 14:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,9 +162,9 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
 
     sal_Bool bEmbedded = sal_False;
     sal_Bool bLinked = sal_False;
-    if( msLName.equalsAsciiL( sXML_embedded_library, sizeof(sXML_embedded_library)-1 ) )
+    if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
         bEmbedded = sal_True;
-    else if( msLName.equalsAsciiL( sXML_linked_library, sizeof(sXML_linked_library)-1 ) )
+    else if( msLName.equalsAsciiL( sXML_library_linked, sizeof(sXML_library_linked)-1 ) )
         bLinked = sal_True;
 
     if( bEmbedded || bLinked )
@@ -184,7 +184,7 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
             {
                 sPassword = xAttrList->getValueByIndex( i );
             }
-            else if( bLinked && sAttrName.equalsAsciiL( sXML_link_target_url, sizeof(sXML_link_target_url)-1 ) )
+            else if( bLinked && sAttrName.equalsAsciiL( sXML_href, sizeof(sXML_href)-1 ) )
             {
                 sLinkTargetURL = xAttrList->getValueByIndex( i );
             }
@@ -211,7 +211,7 @@ SvXMLImportContext* XMLScriptElementContext::CreateChildContext( sal_uInt16 nPre
 {
     SvXMLImportContext* pContext = NULL;
 
-    if( msLName.equalsAsciiL( sXML_embedded_library, sizeof(sXML_embedded_library)-1 ) )
+    if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
     {
         if( rLName.equalsAsciiL( sXML_module, sizeof(sXML_module)-1 ) )
         {
