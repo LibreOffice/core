@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:08:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:38:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,10 +372,10 @@ BYTE SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRect )
                     const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
                     if ( pFly->IsAnLower( &rThis ) )//This Lower vom Fly?
                         continue;
-                    pAnchor = pFly->GetAnchor();
+                    pAnchor = pFly->GetAnchorFrm();
                 }
                 else
-                    pAnchor = ((SwDrawContact*)pUserCall)->GetAnchor();
+                    pAnchor = ((SwDrawContact*)pUserCall)->GetAnchorFrm( pObj );
 
                 if ( pAnchor == &rThis )
                 {
