@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:34:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1284,7 +1284,15 @@ RTTypeClass typereg_reader_getTypeClass(void * hEntry) SAL_THROW_EXTERN_C()
 
     if (pEntry == NULL) return RT_TYPE_INVALID;
 
-    return (RTTypeClass) pEntry->readUINT16(OFFSET_TYPE_CLASS);
+    return (RTTypeClass)
+        (pEntry->readUINT16(OFFSET_TYPE_CLASS) & ~RT_TYPE_PUBLISHED);
+}
+
+sal_Bool typereg_reader_isPublished(void * hEntry) SAL_THROW_EXTERN_C()
+{
+    TypeRegistryEntry * entry = static_cast< TypeRegistryEntry * >(hEntry);
+    return entry != 0
+        && (entry->readUINT16(OFFSET_TYPE_CLASS) & RT_TYPE_PUBLISHED) != 0;
 }
 
 void typereg_reader_getTypeName(void * hEntry, rtl_uString** pTypeName)
