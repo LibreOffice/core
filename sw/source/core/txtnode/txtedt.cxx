@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:13:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,9 +552,9 @@ void SwTxtNode::SetWrong( SwWrongList *pNew )
 
 SwScanner::SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng,
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde,
-                      BOOL bRev, BOOL bOS )
+                      BOOL bRev, BOOL bOS, BOOL bClp )
     : rNode( rNd ), pWrong( pWrng ), nWordType( nType ), nLen( 0 ),
-      bReverse( bRev ), bStart( TRUE ), bIsOnlineSpell( bOS )
+      bReverse( bRev ), bStart( TRUE ), bIsOnlineSpell( bOS ), bClip( bClp)
 {
     ASSERT( rNd.GetTxt().Len(), "SwScanner: EmptyString" );
     if( bReverse )
@@ -567,6 +567,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const SwWrongList* pWrng,
         nBegin = nStart;
         nEndPos = nEnde;
     }
+    nStartPos = nStart;
 
     aCurrLang = rNd.GetLang( nBegin );
 }
@@ -596,11 +597,7 @@ BOOL SwScanner::NextWord()
     // get next language in order to find next or previous word
     const USHORT nNextScript =
             pBreakIt->xBreak->getScriptType( rText, nBegin );
-    if ( nNextScript != GetI18NScriptTypeOfLanguage( aCurrLang ) )
-    {
-        LanguageType aNextLang = rNode.GetLang( nBegin, nNextScript );
-        aCurrLang = aNextLang;
-    }
+    aCurrLang = rNode.GetLang( nBegin, nNextScript );
 
     // get the word boundaries
     aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
@@ -656,6 +653,15 @@ BOOL SwScanner::NextWord()
         const long nEnd = Min( aBound.endPos, nScriptEnd );
         nBegin = (xub_StrLen)aBound.startPos;
         nLen = (xub_StrLen)(nEnd - nBegin);
+    }
+
+    // optionally clip the result of getWordBoundaries:
+    if ( bClip )
+    {
+        aBound.startPos = Max( (xub_StrLen)aBound.startPos, nStartPos );
+        aBound.endPos = Min( (xub_StrLen)aBound.endPos, nEndPos );
+        nBegin = (xub_StrLen)aBound.startPos;
+        nLen = (xub_StrLen)(aBound.endPos - nBegin);
     }
 
     if( ! nLen )
@@ -942,7 +948,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         // the words in the wrong list have to be checked
         SwScanner aScanner( *this, NULL,
                             WordType::DICTIONARY_WORD,
-                            nBegin, nEnd, FALSE, TRUE );
+                            nBegin, nEnd, FALSE, TRUE, TRUE /*clip result*/ );
         while( !rArgs.bConvTextFound && aScanner.NextWord() )
         {
             const XubString& rWord = aScanner.GetWord();
@@ -951,7 +957,7 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
             // within the word
             eActLang = GetLang( aScanner.GetBegin(), rWord.Len() );
 
-            if( rWord.Len() > 0 && LANGUAGE_KOREAN == eActLang )
+            if( rWord.Len() > 0 && rArgs.nConvLang == eActLang )
             {
                 // clip result to provided begin and end (that may be
                 // obtained from a selection) in order to restrict the
