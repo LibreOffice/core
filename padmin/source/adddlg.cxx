@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:21:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:43:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,13 @@ APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
     m_aOldBtn.Check( FALSE );
     if( ! AddPrinterDialog::getOldPrinterLocation().Len() )
         m_aOldBtn.Enable( FALSE );
+    if( PrinterInfoManager::get().getType() != PrinterInfoManager::Default )
+    {
+        m_aPrinterBtn.Check( FALSE );
+        m_aFaxBtn.Check( TRUE );
+        m_aPrinterBtn.Enable( FALSE );
+        m_aOldBtn.Enable( FALSE );
+    }
 }
 
 APChooseDevicePage::~APChooseDevicePage()
@@ -615,21 +622,21 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
                 aInfo.m_aContext.setValue( pKey, pValue );
             aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
             if( aValue.Len() )
-                aInfo.m_nLeftMarginAdjust = aValue.ToInt32() - ((double)nLeft * 35.27777778 );
+                aInfo.m_nLeftMarginAdjust = aValue.ToInt32() - (int)((double)nLeft * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginRight", aDefMarginRight );
             if( aValue.Len() )
-                aInfo.m_nRightMarginAdjust = aValue.ToInt32() - ((double)nRight * 35.27777778 );
+                aInfo.m_nRightMarginAdjust = aValue.ToInt32() - (int)((double)nRight * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginTop", aDefMarginTop );
             if( aValue.Len() )
-                aInfo.m_nTopMarginAdjust = aValue.ToInt32() - ((double)nTop * 35.27777778 );
+                aInfo.m_nTopMarginAdjust = aValue.ToInt32() - (int)((double)nTop * 35.27777778 );
             aValue = aConfig.ReadKey( "MarginBottom", aDefMarginBottom );
             if( aValue.Len() )
-                aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - ((double)nBottom * 35.27777778 );
+                aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - (int)((double)nBottom * 35.27777778 );
         }
 
         aValue = aConfig.ReadKey( "Scale", aDefScale );
         if( aValue.Len() )
-            aInfo.m_nScale = 100.0 * StringToDouble( aValue );
+            aInfo.m_nScale = (int)(100.0 * StringToDouble( aValue ));
 
         aValue = aConfig.ReadKey( "Copies", aDefScale );
         if( aValue.Len() )
@@ -785,17 +792,17 @@ void APPdfDriverPage::fill( PrinterInfo& rInfo )
 
 AddPrinterDialog::AddPrinterDialog( Window* pParent )
         : ModalDialog( pParent, PaResId( RID_ADD_PRINTER_DIALOG ) ),
-          m_aNextPB( this, PaResId( RID_ADDP_BTN_NEXT ) ),
-          m_aPrevPB( this, PaResId( RID_ADDP_BTN_PREV ) ),
-          m_aFinishPB( this, PaResId( RID_ADDP_BTN_FINISH ) ),
           m_aCancelPB( this, PaResId( RID_ADDP_BTN_CANCEL ) ),
+          m_aPrevPB( this, PaResId( RID_ADDP_BTN_PREV ) ),
+          m_aNextPB( this, PaResId( RID_ADDP_BTN_NEXT ) ),
+          m_aFinishPB( this, PaResId( RID_ADDP_BTN_FINISH ) ),
           m_aLine( this, PaResId( RID_ADDP_LINE ) ),
           m_aTitleImage( this, PaResId( RID_ADDP_CTRL_TITLE ) ),
           m_pCurrentPage( NULL ),
           m_pChooseDevicePage( NULL ),
+          m_pCommandPage( NULL ),
           m_pChooseDriverPage( NULL ),
           m_pNamePage( NULL ),
-          m_pCommandPage( NULL ),
           m_pOldPrinterPage( NULL ),
           m_pFaxDriverPage( NULL ),
           m_pFaxSelectDriverPage( NULL ),
@@ -1103,7 +1110,6 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
 
     int nVersion = 1;
-    bool bDoublet;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
     hash_set< OUString, OUStringHash > aPrinters;
@@ -1126,7 +1132,6 @@ String AddPrinterDialog::getOldPrinterLocation()
     ByteString aFileName;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
     if( pHome )
     {
         aFileName = pHome;
