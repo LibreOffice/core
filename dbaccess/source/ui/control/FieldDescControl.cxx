@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:15:39 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 13:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -835,6 +835,10 @@ IMPL_LINK( OFieldDescControl, FormatClickHdl, Button *, pButton )
             //  SFX_BINDINGS().Invalidate(SID_SAVEDOC);
         }
     }
+    delete pFormatDescriptor;
+    delete pPool;
+    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
+        delete pDefaults[i];
 
     return 0;
 }
