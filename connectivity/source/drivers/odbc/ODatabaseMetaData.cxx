@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:11:59 $
+ *  last change: $Author: oj $ $Date: 2000-11-22 14:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "odbc/OTools.hxx"
 #endif
 #ifndef _CONNECTIVITY_ODBC_ORESULTSET_HXX_
-#include "odbc/OResultSet.hxx"
+#include "odbc/ODatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -104,7 +104,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openTypeInfo();
     return xRef;
@@ -115,7 +115,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openCatalogs();
     return xRef;
@@ -134,7 +134,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLExce
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openSchemas();
     return xRef;
@@ -147,7 +147,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openColumnPrivileges(catalog,schema,table,columnNamePattern);
     return xRef;
@@ -160,7 +160,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openColumns(catalog,schemaPattern,tableNamePattern,columnNamePattern);
     return xRef;
@@ -173,7 +173,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openTables(catalog,schemaPattern,tableNamePattern,types);
     return xRef;
@@ -186,7 +186,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openProcedureColumns(catalog,schemaPattern,procedureNamePattern,columnNamePattern);
     return xRef;
@@ -199,7 +199,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openProcedures(catalog,schemaPattern,procedureNamePattern);
     return xRef;
@@ -211,7 +211,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openVersionColumns(catalog,schema,table);
     return xRef;
@@ -307,7 +307,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openExportedKeys(catalog,schema,table);
     return xRef;
@@ -319,7 +319,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openImportedKeys(catalog,schema,table);
     return xRef;
@@ -331,7 +331,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openPrimaryKeys(catalog,schema,table);
     return xRef;
@@ -344,7 +344,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openIndexInfo(catalog,schema,table,unique,approximate);
     return xRef;
@@ -357,7 +357,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openBestRowIdentifier(catalog,schema,table,scope,nullable);
     return xRef;
@@ -369,7 +369,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openTablePrivileges(catalog,schemaPattern,tableNamePattern);
     return xRef;
@@ -383,7 +383,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openForeignKeys(primaryCatalog,primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
         foreignCatalog, foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
@@ -654,7 +654,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     SQLHANDLE hStmt;
     N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
 
-    OResultSet* pResult = new OResultSet(hStmt);
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt);
     Reference< XResultSet > xRef = pResult;
     pResult->openTablesTypes();
     return xRef;
