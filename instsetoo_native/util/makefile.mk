@@ -117,7 +117,7 @@ LOCALPYFILES= \
 # native - "Native" software distribution for the platform
 # portable - Portable software distribution
 
-.IF "$(FORMAT)"!="" && "$(EPM)"==""
+.IF "$(FORMAT)"!="" && "$(EPM)"=="" && "$(USE_PACKAGER)"==""
 ALLTAR : $(LOCALPYFILES)
     @echo "No EPM: do no packaging at this stage"
 .ELIF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
