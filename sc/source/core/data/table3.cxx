@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2002-01-22 17:47:17 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@
 #include "userlist.hxx"
 #include "progress.hxx"
 #include "cellform.hxx"
+
+#include <vector>
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -659,6 +661,17 @@ void lcl_RemoveNumberFormat( ScTable* pTab, USHORT nCol, USHORT nRow )
     }
 }
 
+
+// at least MSC needs this at linkage level to be able to use it in a template
+typedef struct lcl_ScTable_DoSubTotals_RowEntry
+{
+    USHORT  nGroupNo;
+    USHORT  nSubStartRow;
+    USHORT  nDestRow;
+    USHORT  nFuncStart;
+    USHORT  nFuncEnd;
+} RowEntry;
+
 //      neue Zwischenergebnisse
 //      rParam.nRow2 wird veraendert !
 
@@ -689,23 +702,12 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     USHORT*         nGroupCol = rParam.nField;  // Spalten nach denen
                                                 // gruppiert wird
-    USHORT          nResCount;                  // pro Ebene eingestellt
-    USHORT*         nResCols;                   // Ergebnis-Spalten
-    ScSubTotalFunc* eResFunc;                   // Ergebnis-Funktionen
 
     //  #44444# Durch (leer) als eigene Kategorie muss immer auf
     //  Teilergebniszeilen aus den anderen Spalten getestet werden
     //  (frueher nur, wenn eine Spalte mehrfach vorkam)
     BOOL bTestPrevSub = ( nLevelCount > 1 );
 
-    USHORT  nLevel;
-    BOOL    bChanged;
-    USHORT  nRow;
-    USHORT  nSubStartRow;
-    USHORT  nDestRow;
-    USHORT  nFuncStart;
-    USHORT  nFuncEnd;
-    String  aString;
     String  aSubString;
     String  aOutString;
 
@@ -722,29 +724,38 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     BOOL bSpaceLeft = TRUE;                                         // Erfolg beim Einfuegen?
 
-    for (nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)     // incl. Gesamtergebnis
+    // #90279# For performance reasons collect formula entries so their
+    // references don't have to be tested for updates each time a new row is
+    // inserted
+    RowEntry aRowEntry;
+    ::std::vector< RowEntry > aRowVector;
+
+    for (USHORT nLevel=0; nLevel<=nLevelCount && bSpaceLeft; nLevel++)      // incl. Gesamtergebnis
     {
         BOOL bTotal = ( nLevel == nLevelCount );
-        USHORT nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
+        aRowEntry.nGroupNo = bTotal ? 0 : (nLevelCount-nLevel-1);
 
-        nResCount   = rParam.nSubTotals[nGroupNo];
-        nResCols    = rParam.pSubTotals[nGroupNo];
-        eResFunc    = rParam.pFunctions[nGroupNo];
+        // how many results per level
+        USHORT nResCount         = rParam.nSubTotals[aRowEntry.nGroupNo];
+        // result functions
+        ScSubTotalFunc* eResFunc = rParam.pFunctions[aRowEntry.nGroupNo];
 
         if (nResCount)                                      // sonst nur sortieren
         {
-            for (i=0; i<=nGroupNo; i++)
+            for (i=0; i<=aRowEntry.nGroupNo; i++)
             {
                 GetString( nGroupCol[i], nStartRow, aSubString );
-                *pCompString[i] = aSubString;
-                if (bIgnoreCase)
-                    ScGlobal::pCharClass->toUpper( *pCompString[i] );
+                if ( bIgnoreCase )
+                    *pCompString[i] = ScGlobal::pCharClass->upper( aSubString );
+                else
+                    *pCompString[i] = aSubString;
             }                                                   // aSubString bleibt auf dem letzten stehen
 
             BOOL bBlockVis = FALSE;             // Gruppe eingeblendet?
-            nSubStartRow = nStartRow;
-            for (nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
+            aRowEntry.nSubStartRow = nStartRow;
+            for (USHORT nRow=nStartRow; nRow<=nEndRow+1 && bSpaceLeft; nRow++)
             {
+                BOOL bChanged;
                 if (nRow>nEndRow)
                     bChanged = TRUE;
                 else
@@ -752,7 +763,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bChanged = FALSE;
                     if (!bTotal)
                     {
-                        for (i=0; i<=nGroupNo && !bChanged; i++)
+                        String aString;
+                        for (i=0; i<=aRowEntry.nGroupNo && !bChanged; i++)
                         {
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
@@ -780,22 +792,38 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                 }
                 if ( bChanged )
                 {
-                    nDestRow   = nRow;
-                    nFuncStart = nSubStartRow;
-                    nFuncEnd   = nRow-1;
-                    ComplRefData aRef;
-                    aRef.InitFlags();
-                    aRef.Ref1.nTab = nTab;
-                    aRef.Ref2.nTab = nTab;
+                    aRowEntry.nDestRow   = nRow;
+                    aRowEntry.nFuncStart = aRowEntry.nSubStartRow;
+                    aRowEntry.nFuncEnd   = nRow-1;
 
-                    bSpaceLeft = pDocument->InsertRow( 0,nTab, MAXCOL,nTab, nDestRow, 1 );
-                    DBShowRow( nDestRow, bBlockVis );
+                    bSpaceLeft = pDocument->InsertRow( 0, nTab, MAXCOL, nTab,
+                            aRowEntry.nDestRow, 1 );
+                    DBShowRow( aRowEntry.nDestRow, bBlockVis );
                     bBlockVis = FALSE;
-                    if (rParam.bPagebreak && nRow < MAXROW && nSubStartRow != nStartRow
-                                          && nLevel == 0)
-                        SetRowFlags(nSubStartRow,GetRowFlags(nSubStartRow)|CR_MANUALBREAK);
+                    if ( rParam.bPagebreak && nRow < MAXROW &&
+                            aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
+                        SetRowFlags( aRowEntry.nSubStartRow,
+                                GetRowFlags(aRowEntry.nSubStartRow) |
+                                CR_MANUALBREAK);
+
                     if (bSpaceLeft)
                     {
+                        for ( ::std::vector< RowEntry >::iterator iMove(
+                                    aRowVector.begin() );
+                                iMove != aRowVector.end(); ++iMove)
+                        {
+                            if ( aRowEntry.nDestRow <= iMove->nSubStartRow )
+                                ++iMove->nSubStartRow;
+                            if ( aRowEntry.nDestRow <= iMove->nDestRow )
+                                ++iMove->nDestRow;
+                            if ( aRowEntry.nDestRow <= iMove->nFuncStart )
+                                ++iMove->nFuncStart;
+                            if ( aRowEntry.nDestRow <= iMove->nFuncEnd )
+                                ++iMove->nFuncEnd;
+                        }
+                        // collect formula positions
+                        aRowVector.push_back( aRowEntry );
+
                         if (bTotal)     // "Gesamtergebnis"
                             aOutString = ScGlobal::GetRscString( STR_TABLE_GESAMTERGEBNIS );
                         else
@@ -822,36 +850,8 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                 }
                             aOutString += ScGlobal::GetRscString( nStrId );
                         }
-                        SetString( nGroupCol[nGroupNo], nDestRow, nTab, aOutString );
-                        ApplyStyle( nGroupCol[nGroupNo], nDestRow, *pStyle );
-
-                        for (USHORT i=0; i<nResCount; i++)
-                        {
-                            aRef.Ref1.nCol = nResCols[i];
-                            aRef.Ref1.nRow = nFuncStart;
-                            aRef.Ref2.nCol = nResCols[i];
-                            aRef.Ref2.nRow = nFuncEnd;
-
-                            ScTokenArray aArr;
-                            aArr.AddOpCode(ocSubTotal);
-                            aArr.AddOpCode(ocOpen);
-                            aArr.AddDouble((double) eResFunc[i]);
-                            aArr.AddOpCode(ocSep);
-                            aArr.AddDoubleReference(aRef);
-                            aArr.AddOpCode(ocClose);
-                            aArr.AddOpCode(ocStop);
-                            ScBaseCell* pCell = new ScFormulaCell
-                            ( pDocument, ScAddress( nResCols[i], nDestRow, nTab ), &aArr );
-                            PutCell( nResCols[i], nDestRow, pCell );
-
-                            if ( nResCols[i] != nGroupCol[nGroupNo] )
-                            {
-                                ApplyStyle( nResCols[i], nDestRow, *pStyle );
-
-                                //  Zahlformat loeschen
-                                lcl_RemoveNumberFormat( this, nResCols[i], nDestRow );
-                            }
-                        }
+                        SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
+                        ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, *pStyle );
 
 /*                      if (rParam.bPagebreak && nRow < MAXROW)
                         {
@@ -862,13 +862,14 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 */
                         ++nRow;
                         ++nEndRow;
-                        nSubStartRow = nRow;
-                        for (i=0; i<=nGroupNo; i++)
+                        aRowEntry.nSubStartRow = nRow;
+                        for (i=0; i<=aRowEntry.nGroupNo; i++)
                         {
                             GetString( nGroupCol[i], nRow, aSubString );
-                            *pCompString[i] = aSubString;
-                            if (bIgnoreCase)
-                                ScGlobal::pCharClass->toUpper( *pCompString[i] );
+                            if ( bIgnoreCase )
+                                *pCompString[i] = ScGlobal::pCharClass->upper( aSubString );
+                            else
+                                *pCompString[i] = aSubString;
                         }
                     }
                 }
@@ -883,6 +884,47 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
         {
 //          DBG_ERROR( "nSubTotals==0 bei DoSubTotals" );
         }
+    }
+
+    // now insert the formulas
+    ComplRefData aRef;
+    aRef.InitFlags();
+    aRef.Ref1.nTab = nTab;
+    aRef.Ref2.nTab = nTab;
+    for ( ::std::vector< RowEntry >::const_iterator iEntry( aRowVector.begin());
+            iEntry != aRowVector.end(); ++iEntry)
+    {
+        USHORT nResCount         = rParam.nSubTotals[iEntry->nGroupNo];
+        USHORT* nResCols         = rParam.pSubTotals[iEntry->nGroupNo];
+        ScSubTotalFunc* eResFunc = rParam.pFunctions[iEntry->nGroupNo];
+        for ( USHORT i=0; i < nResCount; ++i )
+        {
+            aRef.Ref1.nCol = nResCols[i];
+            aRef.Ref1.nRow = iEntry->nFuncStart;
+            aRef.Ref2.nCol = nResCols[i];
+            aRef.Ref2.nRow = iEntry->nFuncEnd;
+
+            ScTokenArray aArr;
+            aArr.AddOpCode( ocSubTotal );
+            aArr.AddOpCode( ocOpen );
+            aArr.AddDouble( (double) eResFunc[i] );
+            aArr.AddOpCode( ocSep );
+            aArr.AddDoubleReference( aRef );
+            aArr.AddOpCode( ocClose );
+            aArr.AddOpCode( ocStop );
+            ScBaseCell* pCell = new ScFormulaCell( pDocument, ScAddress(
+                        nResCols[i], iEntry->nDestRow, nTab), &aArr );
+            PutCell( nResCols[i], iEntry->nDestRow, pCell );
+
+            if ( nResCols[i] != nGroupCol[iEntry->nGroupNo] )
+            {
+                ApplyStyle( nResCols[i], iEntry->nDestRow, *pStyle );
+
+                //  Zahlformat loeschen
+                lcl_RemoveNumberFormat( this, nResCols[i], iEntry->nDestRow );
+            }
+        }
+
     }
 
     //!     je nach Einstellung Zwischensummen-Zeilen nach oben verschieben ?
