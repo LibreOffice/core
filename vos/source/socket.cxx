@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 10:42:00 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 10:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1440,7 +1440,7 @@ OStreamSocket& OStreamSocket::operator= (const OStreamSocket& sock)
 /*****************************************************************************/
 sal_Int32 OStreamSocket::read(void* pBuffer, sal_uInt32 n) const
 {
-    sal_uInt8 SAL_HUGE *Ptr = (sal_uInt8 SAL_HUGE *)pBuffer;
+    sal_uInt8 *Ptr = (sal_uInt8  *)pBuffer;
 
     if (m_pRecvTimeout && ! isRecvReady(m_pRecvTimeout))
         return 0;
@@ -1487,7 +1487,7 @@ sal_Int32 OStreamSocket::read(void* pBuffer, sal_uInt32 n) const
 /*****************************************************************************/
 sal_Int32 OStreamSocket::write(const void* pBuffer, sal_uInt32 n)
 {
-    sal_uInt8 SAL_HUGE *Ptr = (sal_uInt8 SAL_HUGE *)pBuffer;
+    sal_uInt8 *Ptr = (sal_uInt8 *)pBuffer;
 
     if (m_pSendTimeout && ! isSendReady(m_pSendTimeout))
         return 0;
