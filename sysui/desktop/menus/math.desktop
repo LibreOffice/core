@@ -7,6 +7,6 @@ Type=Application
 Categories=Application;Office;
 Exec=openoffice -math %U
 TryExec=openoffice-math
-MimeType=application/x-vnd.oasis.openoffice.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math
+MimeType=application/vnd.oasis.opendocument.formula;application/vnd.sun.xml.math;application/vnd.stardivision.math
 Name=%PRODUCTNAME Math
 Comment=Create and edit scientific formulas and equations by using Math.

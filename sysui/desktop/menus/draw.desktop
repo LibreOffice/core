@@ -7,6 +7,6 @@ Type=Application
 Categories=Application;Office;
 Exec=openoffice -draw %U
 TryExec=openoffice-draw
-MimeType=application/x-vnd.oasis.openoffice.drawing;application/x-vnd.oasis.openoffice.drawing-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw
+MimeType=application/vnd.oasis.opendocument.drawing;application/vnd.oasis.opendocument.drawing-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw
 Name=%PRODUCTNAME Draw
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
