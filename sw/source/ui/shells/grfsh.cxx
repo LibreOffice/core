@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 11:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,29 +433,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         }
         break;
 
-        case SID_SIM_START:
-            if ( SFX_APP()->HasFeature( SFX_FEATURE_SIMAGE ))
-            {
-                String sGrfNm;
-                rSh.GetGrfNms( &sGrfNm, 0  );
-
-                if( sGrfNm.Len() )
-                {
-                    InfoBox aAsk( GetView().GetWindow(),
-                                    SW_RES(MSG_REMOVE_LINK));
-                    if( RET_NO == aAsk.Execute())
-                        break;
-                }
-
-                GetView().GetEditWin().GrfToOle();
-                if( rSh.IsOLEObj() )
-                {
-                    rSh.LaunchOLEObj();
-                }
-                else
-                    rSh.GetView().GetViewFrame()->GetDispatcher()->Execute( FN_FORMAT_GRAFIC_DLG );
-            }
-            break;
         case FN_GRAPHIC_MIRROR_ON_EVEN_PAGES:
         {
             SfxItemSet aSet(rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_MIRRORGRF);
@@ -466,12 +443,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
         }
         break;
 
-
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
     }
-
 }
 
 
@@ -584,25 +559,6 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
     }
     GetView().GetViewFrame()->GetBindings().Invalidate(rReq.GetSlot());
 }
-
-
-void SwGrfShell::GetState(SfxItemSet &rSet)
-{
-    //  case SID_SIM_START:
-    if ( GetShell().IsSelObjProtected(FLYPROTECT_CONTENT) ||
-         !SFX_APP()->HasFeature( SFX_FEATURE_SIMAGE ) )
-    {
-        rSet.DisableItem(SID_SIM_START);
-    }
-    else
-    {
-        SwDocShell &rSh = *GetView().GetDocShell();
-        if ( rSh.GetProtocol().IsInPlaceActive() ||
-             rSh.GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-            rSet.DisableItem(SID_SIM_START);
-    }
-}
-
 
 void SwGrfShell::GetAttrState(SfxItemSet &rSet)
 {
@@ -963,6 +919,9 @@ IMPL_LINK( SwTextShell, InitGraphicFrame, Button *, pButton )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:46  hr
+    initial import
+
     Revision 1.134  2000/09/18 16:06:04  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: jp $ $Date: 2000-10-05 11:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@ public:
     SFX_DECL_INTERFACE(SW_GRFSHELL);
 
     void    Execute(SfxRequest &);
-    void    GetState(SfxItemSet &);
     void    ExecAttr(SfxRequest &);
     void    GetAttrState(SfxItemSet &);
 
