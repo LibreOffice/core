@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2003-07-10 14:41:29 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 14:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
     // The name of the named pipe is created with the hashcode of the user installation directory (without /user). We have to retrieve
     // this information from a unotools implementation.
     ::utl::Bootstrap::PathStatus aLocateResult = ::utl::Bootstrap::locateUserInstallation( aUserInstallPath );
-    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS )
+    if ( aLocateResult == ::utl::Bootstrap::PATH_EXISTS || aLocateResult == ::utl::Bootstrap::PATH_VALID)
         aDummy = aUserInstallPath;
     else
     {
