@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,11 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                     SfxEventConfigItem_Impl* pConfig =
                         mpObjShell ? mpObjShell->GetEventConfig_Impl(TRUE) : SFX_APP()->GetEventConfig()->GetAppEventConfig_Impl();
 
-                    ANY aValue = BlowUpMacro( rElement );
+                    ANY aValue;
+                    BlowUpMacro( rElement, aValue, mpObjShell );
 
                     // pConfig becomes the owner of the new SvxMacro
-                    SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell );
+                    SvxMacro *pMacro = ConvertToMacro( aValue, mpObjShell, FALSE );
                      pConfig->ConfigureEvent( nID, pMacro );
                     maEventData[i] = aValue;
 
@@ -292,49 +293,22 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
         while ( nIndex < nCount )
         {
             if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aType;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aScript;
-            }
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
-            {
-                aProperties[ nIndex ].Value >>= aScript;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aLibrary;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aMacroName;
-            }
+            else
+                DBG_ERROR("Unknown property value!");
             nIndex += 1;
         }
 
-        if ( aType.compareToAscii( STAR_BASIC ) == 0 )
+        if ( aType.compareToAscii( STAR_BASIC ) == 0 && aScript.getLength() )
         {
-            if ( !aScript.getLength() && aMacroName.getLength() )
-            {
-                aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-                if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
-                     && aLibrary.compareToAscii("StarDesktop") != 0 )
-                {
-                    aScript += OUSTRING('.');
-                }
-
-                aScript += OUSTRING('/');
-                aScript += aMacroName;
-                aScript += OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
-            }
-
-            if ( aScript.getLength() )
-            {
-                aGuard.clear();
-                SfxMacroLoader::loadMacro( aScript, mpObjShell );
-            }
+            aGuard.clear();
+            SfxMacroLoader::loadMacro( aScript, mpObjShell );
         }
         else if ( aType.compareToAscii( "Service" ) == 0  || ( aType.compareToAscii( "Script" ) == 0 ) )
         {
@@ -411,13 +385,17 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, BOOL bBlowUp )
 {
     SvxMacro* pMacro = NULL;
-
     SEQUENCE < PROPERTYVALUE > aProperties;
+    ANY aAny;
+    if ( bBlowUp )
+        BlowUpMacro( rElement, aAny, pObjShell );
+    else
+        aAny = rElement;
 
-    if ( rElement >>= aProperties )
+    if ( aAny >>= aProperties )
     {
         OUSTRING        aType;
         OUSTRING        aScriptURL;
@@ -433,31 +411,20 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
         while ( nIndex < nCount )
         {
             if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aType;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aScriptURL;
-            }
-            else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
-            {
-                aProperties[ nIndex ].Value >>= aScriptURL;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aLibrary;
-            }
             else if ( aProperties[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
-            {
                 aProperties[ nIndex ].Value >>= aMacroName;
-            }
+            else
+                DBG_ERROR("Unknown propery value!");
             nIndex += 1;
         }
 
         // Get the type
         ScriptType  eType( STARBASIC );
-
         if ( aType.compareToAscii( STAR_BASIC ) == COMPARE_EQUAL )
             eType = STARBASIC;
         else if ( aType.compareToAscii( "Script" ) == COMPARE_EQUAL && aScriptURL.getLength() )
@@ -466,31 +433,6 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             eType = JAVASCRIPT;
         else
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
-
-        if ( ( eType == STARBASIC ) && ! aMacroName.getLength() && aScriptURL.getLength() )
-        {
-            sal_Int32 nHashPos = aScriptURL.indexOf( '/', 8 );
-            sal_Int32 nArgsPos = aScriptURL.indexOf( '(' );
-
-            if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
-            {
-                OUSTRING aBasMgrName( INetURLObject::decode( aScriptURL.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-
-                if ( aBasMgrName.compareToAscii(".") == 0 && pObjShell )
-                    aLibrary = pObjShell->GetTitle( SFX_TITLE_APINAME );
-                else if ( aBasMgrName.getLength() )
-                    aLibrary = aBasMgrName;
-                else
-                    aLibrary = SFX_APP()->GetName();
-
-                // Get the macro name
-                aMacroName = aScriptURL.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
-            }
-            else
-            {
-                DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
-            }
-        }
 
         if ( aMacroName.getLength() )
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
@@ -501,19 +443,18 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
     return pMacro;
 }
 
-//--------------------------------------------------------------------------------------------------------
-ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
+void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
 {
     SEQUENCE < PROPERTYVALUE > aInProps;
-    SEQUENCE < PROPERTYVALUE > aOutProps;
+    SEQUENCE < PROPERTYVALUE > aOutProps(2);
 
-    if ( ! ( rEvent >>= aInProps ) )
-        return rEvent;
+    if ( !( rEvent >>= aInProps ) )
+        return;
 
     sal_Int32 nCount = aInProps.getLength();
 
     if ( !nCount )
-        return rEvent;
+        return;
 
     OUSTRING aType;
     OUSTRING aScript;
@@ -525,76 +466,80 @@ ANY SfxEvents_Impl::BlowUpMacro( const ANY& rEvent ) const
     while ( nIndex < nCount )
     {
         if ( aInProps[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-            aInProps[ nIndex ].Value >>= aType;
+        {
+            aInProps[nIndex].Value >>= aType;
+            aOutProps[0] = aInProps[nIndex];
+        }
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
-            aInProps[ nIndex ].Value >>= aScript;
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT_URL ) == 0 )
-            aInProps[ nIndex ].Value >>= aScript;
+        {
+            aInProps[nIndex].Value >>= aScript;
+            aOutProps[1] = aInProps[nIndex];
+        }
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
+        {
             aInProps[ nIndex ].Value >>= aLibrary;
+        }
         else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
+        {
             aInProps[ nIndex ].Value >>= aMacroName;
+        }
         nIndex += 1;
     }
 
-    if ( aScript.getLength() && ( ! aMacroName.getLength() || ! aLibrary.getLength() ) &&
-                                ( aType.compareToAscii( STAR_BASIC ) == 0 ) )
+    if ( aType.compareToAscii( STAR_BASIC ) == 0 )
     {
-        if ( ! aMacroName.getLength() )
-            nIndex += 1;
-        if ( ! aLibrary.getLength() )
-            nIndex += 1;
-
-        sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
-        sal_Int32 nArgsPos = aScript.indexOf( '(' );
-
-        if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+        aOutProps.realloc(4);
+        if ( aScript.getLength() && ( ! aMacroName.getLength() || ! aLibrary.getLength() ) )
         {
-            OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-            SfxObjectShell* pDoc = mpObjShell ? mpObjShell : SfxObjectShell::Current();
+            sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
+            sal_Int32 nArgsPos = aScript.indexOf( '(' );
 
-            if ( aBasMgrName.compareToAscii(".") == 0 )
-                aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
-            else if ( aBasMgrName.getLength() )
-                aLibrary = aBasMgrName;
+            if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+            {
+                OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+                if ( !pDoc )
+                    pDoc = SfxObjectShell::Current();
+
+                if ( aBasMgrName.compareToAscii(".") == 0 )
+                    aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
+                else if ( aBasMgrName.getLength() )
+                    aLibrary = aBasMgrName;
+                else
+                    aLibrary = SFX_APP()->GetName();
+
+                // Get the macro name
+                aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
+            }
             else
-                aLibrary = SFX_APP()->GetName();
+            {
+                DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
+            }
+        }
+        else if ( !aScript.getLength() && aMacroName.getLength() && aLibrary.getLength() )
+        {
+            aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
+            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
+                    && aLibrary.compareToAscii("StarDesktop") != 0 )
+            {
+                aScript += OUSTRING('.');
+            }
 
-            // Get the macro name
-            aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
+            aScript += OUSTRING('/');
+            aScript += aMacroName;
+            aScript += OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
         }
         else
-        {
-            DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
-        }
+            // wrong properties
+            return;
 
-        aOutProps = SEQUENCE < PROPERTYVALUE > ( nIndex );
-        nIndex = 0;
-        sal_Int32 i = 0;
-
-        while ( nIndex < nCount )
-        {
-            if ( ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) != 0 ) &&
-                 ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) != 0 ) )
-            {
-                aOutProps[ i++ ] = aInProps[ nIndex ];
-            }
-            nIndex += 1;
-        }
-
-        aOutProps[i].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
-        aOutProps[i].Value <<= aLibrary;
-        i+= 1;
-        aOutProps[i].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-        aOutProps[i].Value <<= aMacroName;
-
-        ANY aRet;
-        aRet <<= aOutProps;
-
-        return aRet;
+        aOutProps[1].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
+        aOutProps[1].Value <<= aScript;
+        aOutProps[2].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
+        aOutProps[2].Value <<= aLibrary;
+        aOutProps[3].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+        aOutProps[3].Value <<= aMacroName;
+        rRet <<= aOutProps;
     }
-
-    return rEvent;
 }
 
 SFX_IMPL_XSERVICEINFO( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
