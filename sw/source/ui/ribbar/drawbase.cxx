@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-16 09:34:40 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 17:32:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,15 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     if (!rMEvt.IsShift())
                     {
                         if (!pSdrView->HasMarkablePoints())
+                        {
+                            //JP 10.10.2001: Bug 89619 - don't scroll the
+                            //              cursor into the visible area
+                            BOOL bUnlockView = !pSh->IsViewLocked();
+                            pSh->LockView( TRUE );  //lock visible section
                             pSh->SelectObj(Point(LONG_MAX, LONG_MAX));  // Alles deselektieren
+                            if( bUnlockView )
+                                pSh->LockView( FALSE );
+                        }
                         else
                             pSdrView->UnmarkAllPoints();
                     }
@@ -303,8 +311,8 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                 if (!pSh->IsSelFrmMode())
                     pSh->EnterSelFrmMode(NULL);
 
-                if ((bReturn = pSh->BeginMark(aStartPos)) == TRUE)
-                        pWin->SetDrawAction(TRUE);
+                if( 0 != (bReturn = pSh->BeginMark(aStartPos)) )
+                    pWin->SetDrawAction(TRUE);
 
                 SetDrawPointer();
             }
@@ -725,6 +733,9 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/08/16 09:34:40  fme
+      Fix #90760#: Removed VCL defines
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 
