@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap_gfx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:12:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:51:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 
 namespace psp {
 
-const sal_Int32 nLineLength = 80;
-const sal_Int32 nBufferSize = 16384;
+const sal_uInt32 nLineLength = 80;
+const sal_uInt32 nBufferSize = 16384;
 
 /*
  *
@@ -197,9 +197,9 @@ public:
 
 Ascii85Encoder::Ascii85Encoder (osl::File* pFile) :
         mpFile (pFile),
-        mnOffset (0),
+        mnByte (0),
         mnColumn (0),
-        mnByte (0)
+        mnOffset (0)
 {}
 
 inline void
@@ -598,6 +598,7 @@ PrinterGfx::writePS2ImageHeader (const Rectangle& rArea, psp::ImageType nType)
         case psp::PaletteImage:    nDictType = 1; break;
         case psp::GrayScaleImage:  nDictType = 2; break;
         case psp::MonochromeImage: nDictType = 3; break;
+        default: break;
     }
     sal_Int32 nCompressType = mbCompressBmp ? 1 : 0;
 
@@ -630,14 +631,15 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 
         case psp::MonochromeImage:
         case psp::PaletteImage:
+        {
 
             sal_Int32 nChar = 0;
             sal_Char  pImage [4096];
 
-            sal_Int32 nSize = rBitmap.GetPaletteEntryCount() - 1;
+            const sal_uInt32 nSize = rBitmap.GetPaletteEntryCount();
 
             nChar += psp::appendStr ("[/Indexed /DeviceRGB ", pImage + nChar);
-            nChar += psp::getValueOf (rBitmap.GetPaletteEntryCount() - 1, pImage + nChar);
+            nChar += psp::getValueOf (nSize - 1, pImage + nChar);
             if (mbCompressBmp)
                 nChar += psp::appendStr ("\npsp_lzwstring\n", pImage + nChar);
             else
@@ -646,7 +648,7 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
 
             ByteEncoder* pEncoder = mbCompressBmp ? new LZWEncoder(mpPageBody)
                                                   : new Ascii85Encoder(mpPageBody);
-            for (sal_Int32 i = 0; i < rBitmap.GetPaletteEntryCount(); i++)
+            for (sal_uInt32 i = 0; i < nSize; i++)
             {
                 PrinterColor aColor = rBitmap.GetPaletteColor(i);
 
@@ -657,8 +659,9 @@ PrinterGfx::writePS2Colorspace(const PrinterBmp& rBitmap, psp::ImageType nType)
             delete pEncoder;
 
             WritePS (mpPageBody, "pop ] setcolorspace\n");
-
-            break;
+        }
+        break;
+        default: break;
     }
 }
 
