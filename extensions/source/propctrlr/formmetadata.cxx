@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:47:47 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,9 +293,9 @@ namespace pcr
         DEF_INFO_2( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
-        DEF_INFO_2( LINEEND_FORMAT,    LINEEND_FORMAT,     LINEEND_FORMAT,    FORM_VISIBLE, ENUM_ONE ),
         DEF_INFO_2( WORDBREAK,         WORDBREAK,          WORDBREAK,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_4( TEXTTYPE,          TEXTTYPE,           TEXTTYPE,          FORM_VISIBLE, VIRTUAL_PROP, ENUM, ACTUATING ),
+        DEF_INFO_2( LINEEND_FORMAT,    LINEEND_FORMAT,     LINEEND_FORMAT,    FORM_VISIBLE, ENUM_ONE ),
         DEF_INFO_2( MULTISELECTION,    MULTISELECTION,     MULTISELECTION,    FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_4( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, VIRTUAL_PROP, ENUM ),
         DEF_INFO_2( HSCROLL,           HSCROLL,            HSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
