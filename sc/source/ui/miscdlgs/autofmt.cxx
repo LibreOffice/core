@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:03:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,16 +1325,16 @@ void AutoFmtPreview::CalcCellArray( BOOL bFitWidth )
     // Initialisieren des Zellfeldes (5x5 Zellen).
     // Rectangles enthalten Position und Groesse einer Zelle.
     // abhaengig, ob Zellbreite an Format angepasst werden soll (bFitWidth)
-    USHORT  nRow;
+    SCROW   nRow;
     USHORT  nDataColWidth = (bFitWidth) ? nDataColWidth2 : nDataColWidth1;
 
     for ( nRow=0; nRow<=4; nRow++ )
     {
         Point   topLeftPos ( 2, (nRowHeight * nRow) + 2 );
         Size    rectSize   ( 0, nRowHeight );
-        USHORT  nCell;
-        USHORT  nFirst = nRow*5;
-        USHORT  nLast  = nFirst+4;
+        SCROW   nCell;
+        SCROW   nFirst = nRow*5;
+        SCROW   nLast  = nFirst+4;
 
         for ( nCell=nFirst; nCell<=nLast; nCell++ )
         {
@@ -1385,14 +1385,14 @@ void AutoFmtPreview::CalcLineMap()
     if ( pCurData )
     {
         SvxBoxItem  aFrameItem;
-        USHORT      nRow;
+        SCROW       nRow;
 
         for ( nRow=0; nRow<=4; nRow++ )
         {
-            USHORT  nLine;
-            USHORT  nCell;
-            USHORT  nFirst = (nRow*5);
-            USHORT  nLast  = nFirst+4;
+            SCROW   nLine;
+            SCROW   nCell;
+            SCROW   nFirst = (nRow*5);
+            SCROW   nLast  = nFirst+4;
 
             for ( nCell=nFirst; nCell<=nLast; nCell++ )
             {
