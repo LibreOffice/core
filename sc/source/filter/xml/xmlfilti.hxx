@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 08:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ public:
     virtual void EndElement();
 
     void SetIsCaseSensitive(const sal_Bool bTemp) { bIsCaseSensitive = bTemp; }
-    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = sal_True;}
+    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
     void OpenConnection(const sal_Bool bTemp) { sal_Bool* pTemp = new sal_Bool; *pTemp = bConnectionOr;
                             bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
                             aConnectionOrStack.Push(pTemp);}
@@ -228,6 +228,7 @@ class ScXMLDPFilterContext : public SvXMLImportContext
     ScQueryParam    aFilterFields;
     ScAddress       aOutputPosition;
     ScRange         aConditionSourceRangeAddress;
+    sal_uInt8   nFilterFieldCount;
     sal_Int16   nUserListIndex;
     sal_Bool    bSkipDuplicates : 1;
     sal_Bool    bCopyOutputData : 1;
@@ -260,15 +261,13 @@ public:
     virtual void EndElement();
 
     void SetIsCaseSensitive(const sal_Bool bTemp) { bIsCaseSensitive = bTemp; }
-    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = sal_True;}
+    void SetUseRegularExpressions(const sal_Bool bTemp) { if (!bUseRegularExpressions) bUseRegularExpressions = bTemp;}
     void OpenConnection(const sal_Bool bTemp) { sal_Bool* pTemp = new sal_Bool; *pTemp = bConnectionOr;
                             bConnectionOr = bNextConnectionOr; bNextConnectionOr = bTemp;
                             aConnectionOrStack.Push(pTemp);}
     void CloseConnection() { sal_Bool* pTemp = static_cast <sal_Bool*> (aConnectionOrStack.Pop()); bConnectionOr = *pTemp; bNextConnectionOr = *pTemp; delete pTemp;}
     sal_Bool GetConnection() { sal_Bool bTemp = bConnectionOr; bConnectionOr = bNextConnectionOr; return bTemp; }
-    void AddFilterField (const ScQueryEntry& aFilterField) { aFilterFields.Resize(aFilterFields.GetEntryCount() + 1);
-                                                            ScQueryEntry aEntry = aFilterFields.GetEntry(aFilterFields.GetEntryCount() - 1);
-                                                            aEntry = aFilterField; }
+    void AddFilterField (const ScQueryEntry& aFilterField);
 };
 
 class ScXMLDPAndContext : public SvXMLImportContext

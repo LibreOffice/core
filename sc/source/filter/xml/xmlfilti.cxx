@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2002-01-18 08:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,8 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     bCopyOutputData(sal_False),
     bConditionSourceRange(sal_False),
     aFilterFields(),
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    nFilterFieldCount(0)
 {
     ScDocument* pDoc = GetScImport().GetDocument();
     pDataPilotTable = pTempDataPilotTableContext;
@@ -549,7 +550,10 @@ SvXMLImportContext *ScXMLDPFilterContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLDPFilterContext::EndElement()
 {
-    pDataPilotTable->SetFilterUseRegularExpressions(bUseRegularExpressions);
+    aFilterFields.bRegExp = bUseRegularExpressions;
+    aFilterFields.bCaseSens = bIsCaseSensitive;
+    aFilterFields.bDuplicate = !bSkipDuplicates;
+//  pDataPilotTable->SetFilterUseRegularExpressions(bUseRegularExpressions);
     if (bCopyOutputData)
     {
         pDataPilotTable->SetFilterOutputPosition(aOutputPosition);
@@ -557,11 +561,20 @@ void ScXMLDPFilterContext::EndElement()
     }
     else
         pDataPilotTable->SetFilterCopyOutputData(sal_False);
-    pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
-    pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
+//  pDataPilotTable->SetFilterIsCaseSensitive(bIsCaseSensitive);
+//  pDataPilotTable->SetFilterSkipDuplicates(bSkipDuplicates);
     pDataPilotTable->SetSourceQueryParam(aFilterFields);
     if (bConditionSourceRange)
         pDataPilotTable->SetFilterSourceRange(aConditionSourceRangeAddress);
+}
+
+void ScXMLDPFilterContext::AddFilterField (const ScQueryEntry& aFilterField)
+{
+    aFilterFields.Resize(nFilterFieldCount + 1);
+    ScQueryEntry& rEntry = aFilterFields.GetEntry(nFilterFieldCount);
+    rEntry = aFilterField;
+    rEntry.bDoQuery = sal_True;
+    nFilterFieldCount++;
 }
 
 ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
