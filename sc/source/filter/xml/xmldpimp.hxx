@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:57:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,9 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     ScDPSaveDimension*          pDim;
 
     ::std::vector<ScXMLDataPilotGroup> aGroups;
+    rtl::OUString               sGroupSource;
     rtl::OUString               sSelectedPage;
     rtl::OUString               sName;
-    rtl::OUString               sGroupSource;
     double                      fStart;
     double                      fEnd;
     double                      fStep;
@@ -346,8 +346,8 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     sal_Int16                   nOrientation;
     sal_Bool                    bShowEmpty;
     sal_Bool                    bSelectedPage;
+    sal_Bool                    bIsGroupField;
     sal_Bool                    bDateValue;
-    sal_Bool                    bGroupField;
     sal_Bool                    bAutoStart;
     sal_Bool                    bAutoEnd;
 
@@ -378,6 +378,19 @@ public:
     void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
     void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
     void SetLayoutInfo(const com::sun::star::sheet::DataPilotFieldLayoutInfo& aInfo) { if (pDim) pDim->SetLayoutInfo(&aInfo); }
+    void SetGrouping(const rtl::OUString& rGroupSource, const double& rStart, const double& rEnd, const double& rStep,
+        sal_Int32 nPart, sal_Bool bDate, sal_Bool bAutoSt, sal_Bool bAutoE)
+    {
+        bIsGroupField = sal_True;
+        sGroupSource = rGroupSource;
+        fStart = rStart;
+        fEnd = rEnd;
+        fStep = rStep;
+        nGroupPart = nPart;
+        bDateValue = bDate;
+        bAutoStart = bAutoSt;
+        bAutoEnd = bAutoE;
+    }
     void AddGroup(const ::std::vector<rtl::OUString>& rMembers, const rtl::OUString& rName);
 };
 
