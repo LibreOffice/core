@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-22 14:04:41 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,6 +722,15 @@ void ElementDescriptor::readDefaults()
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HelpURL") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":help-url") ) );
 }
+
+struct StringTriple
+{
+    char const * first;
+    char const * second;
+    char const * third;
+};
+extern StringTriple const * const g_pEventTranslations;
+
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEvents()
     SAL_THROW( (Exception) )
@@ -739,37 +748,88 @@ void ElementDescriptor::readEvents()
                 script::ScriptEventDescriptor descr;
                 if (xEvents->getByName( pNames[ nPos ] ) >>= descr)
                 {
-                    ElementDescriptor * pElem = new ElementDescriptor(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":event") ) );
-                    Reference< xml::sax::XAttributeList > xElem( pElem );
-
                     OSL_ENSURE( descr.ListenerType.getLength() > 0 &&
-                                descr.EventMethod.getLength() > 0,
-                                "### invalid listener/ event method descr!" );
-                    pElem->addAttribute(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":listener-type") ),
-                        descr.ListenerType );
-                    pElem->addAttribute(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":event-method") ),
-                        descr.EventMethod );
-                    if (descr.ScriptType.getLength())
+                                descr.EventMethod.getLength() > 0 &&
+                                descr.ScriptCode.getLength() > 0 &&
+                                descr.ScriptType.getLength() > 0,
+                                "### invalid event descr!" );
+
+                    OUString aEventName;
+
+                    if (! descr.AddListenerParam.getLength())
                     {
-                        pElem->addAttribute(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":script-type") ),
-                            descr.ScriptType );
+                        // detection of event-name
+                        OString listenerType( OUStringToOString( descr.ListenerType, RTL_TEXTENCODING_ASCII_US ) );
+                        OString eventMethod( OUStringToOString( descr.EventMethod, RTL_TEXTENCODING_ASCII_US ) );
+                        StringTriple const * p = g_pEventTranslations;
+                        while (p->first)
+                        {
+                            if (0 == ::rtl_str_compare( p->second, eventMethod.getStr() ) &&
+                                0 == ::rtl_str_compare( p->first, listenerType.getStr() ))
+                            {
+                                aEventName = OUString( p->third, ::rtl_str_getLength( p->third ), RTL_TEXTENCODING_ASCII_US );
+                                break;
+                            }
+                            ++p;
+                        }
                     }
-                    if (descr.ScriptCode.getLength())
+
+                    ElementDescriptor * pElem;
+                    Reference< xml::sax::XAttributeList > xElem;
+
+                    if (aEventName.getLength()) // script:event
+                    {
+                        pElem = new ElementDescriptor(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":event") ) );
+                        xElem = pElem;
+
+                        pElem->addAttribute(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":event-name") ),
+                            aEventName );
+                    }
+                    else // script:listener-event
+                    {
+                        pElem = new ElementDescriptor(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-event") ) );
+                        xElem = pElem;
+
+                        pElem->addAttribute(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-type") ),
+                            descr.ListenerType );
+                        pElem->addAttribute(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-method") ),
+                            descr.EventMethod );
+
+                        if (descr.AddListenerParam.getLength())
+                        {
+                            pElem->addAttribute(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":listener-param") ),
+                                descr.AddListenerParam );
+                        }
+                    }
+
+                    // separate optional location
+                    sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );
+                    if (nIndex >= 0)
                     {
                         pElem->addAttribute(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":script-code") ),
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":location") ),
+                            descr.ScriptCode.copy( 0, nIndex ) );
+                        pElem->addAttribute(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":macro-name") ),
+                            descr.ScriptCode.copy( nIndex +1 ) );
+                    }
+                    else
+                    {
+                        pElem->addAttribute(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":macro-name") ),
                             descr.ScriptCode );
                     }
-                    if (descr.AddListenerParam.getLength())
-                    {
-                        pElem->addAttribute(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":param") ),
-                            descr.AddListenerParam );
-                    }
+
+                    // language
+                    pElem->addAttribute(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_PREFIX ":language") ),
+                        descr.ScriptType );
 
                     addSubElement( xElem );
                 }

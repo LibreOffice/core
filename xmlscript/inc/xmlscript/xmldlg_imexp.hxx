@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_imexp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-28 10:50:35 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,13 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
 
+#ifndef _XMLSCRIPT_XMLNS_H_
+#include <xmlscript/xmlns.h>
+#endif
+
 
 namespace xmlscript
 {
-
-#define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
-#define XMLNS_DIALOGS_UID 1
-#define XMLNS_DIALOGS_PREFIX "dlg"
-
 
 //==================================================================================================
 void SAL_CALL exportDialogModel(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-11 13:53:34 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 
@@ -108,7 +105,7 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
 
     try
     {
-        ::rtl::OUString localRegistry = ::comphelper::getPathToUserRegistry();
+        ::rtl::OUString localRegistry = OUString::createFromAscii( "xmlscript.rdb" ); //"::comphelper::getPathToUserRegistry();
         ::rtl::OUString systemRegistry = ::comphelper::getPathToSystemRegistry();
 
         Reference< registry::XSimpleRegistry > xLocalRegistry( ::cppu::createSimpleRegistry() );
@@ -149,55 +146,59 @@ Reference< lang::XMultiServiceFactory > createApplicationServiceManager()
                 Reference< XInterface >() );
         }
 
-        Reference < registry::XImplementationRegistration > xReg(
-            xContext->getServiceManager()->createInstanceWithContext(
-                OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ), xContext ), UNO_QUERY );
+        Reference< XInterface > x( xContext->getServiceManager()->createInstanceWithContext(
+            OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ), xContext ) );
+        if (! x.is()) // register only once
+        {
+            Reference < registry::XImplementationRegistration > xReg(
+                xContext->getServiceManager()->createInstanceWithContext(
+                    OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ), xContext ), UNO_QUERY );
 
 #ifdef SAL_W32
-        OUString aDllName = OUString::createFromAscii( "sax.dll" );
+            OUString aDllName = OUString::createFromAscii( "sax.dll" );
 #else
-        OUString aDllName = OUString::createFromAscii( "libsax.so" );
+            OUString aDllName = OUString::createFromAscii( "libsax.so" );
 #endif
-        xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-            aDllName, Reference< registry::XSimpleRegistry > () );
+            xReg->registerImplementation(
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                aDllName, Reference< registry::XSimpleRegistry > () );
 #ifdef SAL_W32
-        aDllName = OUString::createFromAscii( "tk" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( "mi.dll" );
+            aDllName = OUString::createFromAscii( "tk" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( "mi.dll" );
 #else
-        aDllName = OUString::createFromAscii( "libtk" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( ".so" );
+            aDllName = OUString::createFromAscii( "libtk" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( ".so" );
 #endif
-        xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-            aDllName, Reference< registry::XSimpleRegistry > () );
+            xReg->registerImplementation(
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                aDllName, Reference< registry::XSimpleRegistry > () );
 #ifdef SAL_W32
-        aDllName = OUString::createFromAscii( "svt" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( "mi.dll" );
+            aDllName = OUString::createFromAscii( "svt" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( "mi.dll" );
 #else
-        aDllName = OUString::createFromAscii( "libsvt" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( ".so" );
+            aDllName = OUString::createFromAscii( "libsvt" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( ".so" );
 #endif
-        xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-            aDllName, Reference< registry::XSimpleRegistry > () );
+            xReg->registerImplementation(
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                aDllName, Reference< registry::XSimpleRegistry > () );
 #ifdef SAL_W32
-        aDllName = OUString::createFromAscii( "i18n" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( "mi.dll" );
+            aDllName = OUString::createFromAscii( "i18n" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( "mi.dll" );
 #else
-        aDllName = OUString::createFromAscii( "libi18n" );
-        aDllName += OUString::valueOf( (sal_Int32)SUPD );
-        aDllName += OUString::createFromAscii( ".so" );
+            aDllName = OUString::createFromAscii( "libi18n" );
+            aDllName += OUString::valueOf( (sal_Int32)SUPD );
+            aDllName += OUString::createFromAscii( ".so" );
 #endif
-        xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
-            aDllName, Reference< registry::XSimpleRegistry > () );
-
+            xReg->registerImplementation(
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                aDllName, Reference< registry::XSimpleRegistry > () );
+        }
     }
 
     catch( Exception& rExc )

@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc\xmlscript
 ..\inc\xmlscript\xmldlg_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmldlg_imexp.hxx
 ..\inc\xmlscript\xmllib_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmllib_imexp.hxx
 ..\inc\xmlscript\xmlmod_imexp.hxx %_DEST%\inc%_EXT%\xmlscript\xmlmod_imexp.hxx
+..\inc\xmlscript\xmlns.h %_DEST%\inc%_EXT%\xmlscript\xmlns.h
 
 ..\dtd\*.dtd %_DEST%\bin%_EXT%\*.dtd
 

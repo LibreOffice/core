@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: xmllib_imexp.hxx,v $
+ *  $RCSfile: xmlns.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
@@ -58,63 +58,23 @@
  *
  *
  ************************************************************************/
-#ifndef _XMLSCRIPT_XMLLIB_IMEXP_HXX_
-#define _XMLSCRIPT_XMLLIB_IMEXP_HXX_
-
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-
 #ifndef _XMLSCRIPT_XMLNS_H_
-#include <xmlscript/xmlns.h>
-#endif
+#define _XMLSCRIPT_XMLNS_H_
 
+#define XMLNS_DIALOGS_URI "http://openoffice.org/2000/dialog"
+#define XMLNS_DIALOGS_UID 1
+#define XMLNS_DIALOGS_PREFIX "dlg"
 
-namespace xmlscript
-{
+#define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
+#define XMLNS_SCRIPT_UID 2
+#define XMLNS_SCRIPT_PREFIX "script"
 
-//==================================================================================================
-// Library container export
+#define XMLNS_LIBRARY_URI "http://openoffice.org/2000/library"
+#define XMLNS_LIBRARY_UID 3
+#define XMLNS_LIBRARY_PREFIX "library"
 
-// HACK C++ struct to transport info. Later the container
-// itself should do the export/import and use exportet XML
-// functionality from xmlscript
-struct LibDescriptor
-{
-    ::rtl::OUString aName;
-    ::rtl::OUString aStorageURL;
-    sal_Bool bLink;
-    sal_Bool bReadOnly;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > aElementNames;
-};
-
-struct LibDescriptorArray
-{
-    LibDescriptor* mpLibs;
-    sal_Int32 mnLibCount;
-
-    LibDescriptorArray( void ) { mpLibs = NULL; }
-    LibDescriptorArray( sal_Int32 nLibCount );
-
-    ~LibDescriptorArray();
-
-};
-
-SAL_DLLEXPORT void
-SAL_CALL exportLibraryContainer(
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
-    const LibDescriptorArray* pLibArray )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
-
-SAL_DLLEXPORT ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
-
-//==================================================================================================
-
-}
+#define XMLNS_XLINK_URI "http://www.w3.org/1999/xlink"
+#define XMLNS_XLINK_UID 4
+#define XMLNS_XLINK_PREFIX "xlink"
 
 #endif

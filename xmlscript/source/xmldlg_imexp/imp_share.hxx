@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,10 @@ inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
 }
 inline bool getBoolAttr(
     sal_Bool * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    sal_Int32 nUid = XMLNS_DIALOGS_UID )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
     if (aValue.getLength())
     {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
@@ -127,16 +128,18 @@ inline bool getBoolAttr(
 }
 inline bool getStringAttr(
     OUString * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    sal_Int32 nUid = XMLNS_DIALOGS_UID )
 {
-    *pRet = xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName );
+    *pRet = xAttributes->getValueByUidName( nUid, rAttrName );
     return (pRet->getLength() > 0);
 }
 inline bool getLongAttr(
     sal_Int32 * pRet, OUString const & rAttrName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    sal_Int32 nUid = XMLNS_DIALOGS_UID )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    OUString aValue( xAttributes->getValueByUidName( nUid, rAttrName ) );
     if (aValue.getLength())
     {
         *pRet = toInt32( aValue );
@@ -201,12 +204,13 @@ protected:
     DialogImport * _pImport;
     ElementBase * _pParent;
 
+    sal_Int32 _nUid;
     OUString _aLocalName;
     Reference< xml::sax2::XExtendedAttributes > _xAttributes;
 
 public:
     ElementBase(
-        OUString const & rLocalName,
+        sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () );
@@ -250,7 +254,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
-        : ElementBase( rLocalName, xAttributes, pParent, pImport )
+        : ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
         {}
 };
 //==================================================================================================
@@ -289,7 +293,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
-        : ElementBase( rLocalName, xAttributes, pParent, pImport )
+        : ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
         , _inited( 0 )
         , _hasValue( 0 )
         {}
@@ -314,7 +318,7 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
-        : ElementBase( rLocalName, xAttributes, pParent, pImport )
+        : ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
         {}
 };
 
@@ -327,14 +331,14 @@ class ControlElement
 protected:
     sal_Int32 _nBasePosX, _nBasePosY;
 
-    vector< Reference< xml::sax2::XExtendedAttributes > > _events;
+    vector< Reference< xml::XImportContext > > _events;
 
     OUString getControlId(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     Reference< xml::XImportContext > getStyle(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 public:
-    vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() SAL_THROW( () )
+    vector< Reference< xml::XImportContext > > const * getEvents() SAL_THROW( () )
         { return &_events; }
 
     ControlElement(
@@ -358,7 +362,7 @@ public:
         { return _xControlModel; }
 
     void importEvents(
-        vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents );
+        vector< Reference< xml::XImportContext > > const & rEvents );
     bool importStringProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
@@ -441,11 +445,11 @@ public:
         throw (xml::sax::SAXException, RuntimeException);
 
     inline EventElement(
-        OUString const & rLocalName,
+        sal_Int32 nUid, OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
         SAL_THROW( () )
-        : ElementBase( rLocalName, xAttributes, pParent, pImport )
+        : ElementBase( nUid, rLocalName, xAttributes, pParent, pImport )
         {}
 };
 //==================================================================================================

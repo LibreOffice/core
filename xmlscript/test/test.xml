@@ -3,6 +3,7 @@
 
 <window xmlns="http://openoffice.org/2000/dialog"
     xmlns:dlg="http://openoffice.org/2000/dialog"
+    xmlns:script="http://openoffice.org/2000/script"
     style-id="dialog"
     id="window1" title="Test-Dialog" left="50" top="50" height="690" width="400">
 
@@ -16,7 +17,10 @@
     <dlg:bulletinboard xmlns:ns="http://www.fake" xmlns:dlg="http://openoffice.org/2000/dialog">
 
         <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50" width="50" height="50" style-id="bla3" xmlns:ns="http://openoffice.org/2000/dialog">
-            <event listener-type="type" event-method="clicked" script-type="basic" script-code="code" param="testi"/>
+            <dlg:event listener-type="com.sun.star.awt.XKeyListener" event-method="keyReleased" script-type="StarBasic" script-code="application:ExecutingMacro"/>
+            <script:event script:event-name="on-rowchange" script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic"/>
+            <script:listener-event script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic" script:listener-type="com.sun.star.awt.XMouseListener" script:listener-method="mouseEntered"/>
+            <script:listener-event script:macro-name="ExecutingMacro" script:location="application" script:language="StarBasic" script:listener-type="com.sun.star.awt.XMouseListener" script:listener-method="mousePressed" script:listener-param="parameter0, so this will never ever be a script:event, but always a script:listener-event element!"/>
         </button>
 
         <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50" width="50" height="50" style-id="bla" xmlns:ns="http://openoffice.org/2000/dialog"/>

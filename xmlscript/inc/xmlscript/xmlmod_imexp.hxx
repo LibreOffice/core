@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_imexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,13 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
+#ifndef _XMLSCRIPT_XMLNS_H_
+#include <xmlscript/xmlns.h>
+#endif
+
 
 namespace xmlscript
 {
-
-#define XMLNS_SCRIPT_URI "http://openoffice.org/2000/script"
-#define XMLNS_SCRIPT_UID 1
-#define XMLNS_SCRIPT_PREFIX "script"
 
 //==================================================================================================
 // Script module import/export

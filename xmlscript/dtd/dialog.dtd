@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-        $Id: dialog.dtd,v 1.15 2001-07-30 17:18:41 dbo Exp $
+        $Id: dialog.dtd,v 1.16 2001-08-07 10:55:46 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -72,6 +72,11 @@
                                dlg:help-url CDATA #IMPLIED
                                ">
 
+<!ENTITY % event "(script:event|
+		   script:listener-event|
+		   dlg:event
+		  )">
+
 <!ENTITY % control "(dlg:bulletinboard|
                      dlg:button|
                      dlg:checkbox|
@@ -93,7 +98,7 @@
                      dlg:scrollbar
                     )">
 
-<!ELEMENT dlg:window (dlg:styles*, dlg:event*, dlg:bulletinboard*)>
+<!ELEMENT dlg:window (dlg:styles*, (%event;)*, dlg:bulletinboard*)>
 <!ATTLIST dlg:window dlg:id CDATA #REQUIRED
                      dlg:left %numeric; #IMPLIED
                      dlg:top %numeric; #IMPLIED
@@ -106,6 +111,7 @@
                      dlg:help-text CDATA #IMPLIED
                      dlg:help-url CDATA #IMPLIED
                      xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dialog"
+                     xmlns:script CDATA #FIXED "http://openoffice.org/2000/script"
                      >
 
 <!ELEMENT dlg:styles (dlg:style+)>
@@ -134,6 +140,21 @@
                     dlg:font-type (raster|device|scalable) #IMPLIED
                     >
 
+<!ELEMENT script:event EMPTY>
+<!ATTLIST script:event script:location CDATA #IMPLIED
+		       script:language CDATA #REQUIRED
+		       script:macro-name CDATA #REQUIRED
+                       script:event-name CDATA #REQUIRED
+		       >
+<!ELEMENT script:listener-event EMPTY>
+<!ATTLIST script:listener-event script:location CDATA #IMPLIED
+				script:language CDATA #REQUIRED
+				script:macro-name CDATA #REQUIRED
+				script:listener-type CDATA #REQUIRED
+				script:listener-method CDATA #REQUIRED
+				script:listener-param CDATA #IMPLIED
+				>
+<!-- deprecated -->
 <!ELEMENT dlg:event EMPTY>
 <!ATTLIST dlg:event dlg:listener-type CDATA #REQUIRED
                     dlg:event-method CDATA #REQUIRED
@@ -141,20 +162,21 @@
                     dlg:script-code CDATA #IMPLIED
                     dlg:param CDATA #IMPLIED
                     >
+<!-- /deprecated -->
                         
 <!ELEMENT dlg:bulletinboard ((%control;)*)>
 <!ATTLIST dlg:bulletinboard dlg:left %numeric; #IMPLIED
                             dlg:top %numeric; #IMPLIED
                             >
 
-<!ELEMENT dlg:button (dlg:event*)>
+<!ELEMENT dlg:button ((%event;)*)>
 <!ATTLIST dlg:button %default-attributes;
                      dlg:value CDATA #IMPLIED
                      dlg:default %boolean; #IMPLIED
                      dlg:tabstop %boolean; #IMPLIED
                      >
 
-<!ELEMENT dlg:checkbox (dlg:event*)>
+<!ELEMENT dlg:checkbox ((%event;)*)>
 <!ATTLIST dlg:checkbox %default-attributes;
                        dlg:value CDATA #IMPLIED
                        dlg:checked %boolean; #IMPLIED
@@ -162,7 +184,7 @@
                        dlg:tabstop %boolean; #IMPLIED
                        >
 
-<!ELEMENT dlg:combobox (dlg:menupopup?, dlg:event*)>
+<!ELEMENT dlg:combobox (dlg:menupopup?, (%event;)*)>
 <!ATTLIST dlg:combobox %default-attributes;
                        dlg:tabstop %boolean; #IMPLIED
                        dlg:readonly %boolean; #IMPLIED
@@ -173,7 +195,7 @@
                        dlg:value CDATA #IMPLIED
                        >
 
-<!ELEMENT dlg:menulist (dlg:menupopup?, dlg:event*)>
+<!ELEMENT dlg:menulist (dlg:menupopup?, (%event;)*)>
 <!ATTLIST dlg:menulist %default-attributes;
                        dlg:tabstop %boolean; #IMPLIED
                        dlg:spin %boolean; #IMPLIED
@@ -188,7 +210,7 @@
                        >
 
 <!ELEMENT dlg:radiogroup (dlg:radio+)>
-<!ELEMENT dlg:radio (dlg:event*)>
+<!ELEMENT dlg:radio ((%event;)*)>
 <!ATTLIST dlg:radio %default-attributes;
                     dlg:value CDATA #IMPLIED
                     dlg:checked %boolean; #IMPLIED
@@ -210,7 +232,7 @@
                    dlg:value CDATA #IMPLIED
                    >
 
-<!ELEMENT dlg:textfield (dlg:event*)>
+<!ELEMENT dlg:textfield ((%event;)*)>
 <!ATTLIST dlg:textfield %default-attributes;
                         dlg:tabstop %boolean; #IMPLIED
                         dlg:align (left|center|right|none) #IMPLIED
@@ -224,18 +246,18 @@
                         dlg:value CDATA #IMPLIED
                         >
 
-<!ELEMENT dlg:img (dlg:event*)>
+<!ELEMENT dlg:img ((%event;)*)>
 <!ATTLIST dlg:img %default-attributes;
                   dlg:src CDATA #IMPLIED
                   >
 
-<!ELEMENT dlg:filecontrol (dlg:event*)>
+<!ELEMENT dlg:filecontrol ((%event;)*)>
 <!ATTLIST dlg:filecontrol %default-attributes;
                           dlg:tabstop %boolean; #IMPLIED
                           dlg:value CDATA #IMPLIED
                           >
 
-<!ELEMENT dlg:currencyfield (dlg:event*)>
+<!ELEMENT dlg:currencyfield ((%event;)*)>
 <!ATTLIST dlg:currencyfield %default-attributes;
                             dlg:tabstop %boolean; #IMPLIED
                             dlg:readonly %boolean; #IMPLIED
@@ -250,7 +272,7 @@
                             dlg:spin %boolean; #IMPLIED
                             >
 
-<!ELEMENT dlg:datefield (dlg:event*)>
+<!ELEMENT dlg:datefield ((%event;)*)>
 <!ATTLIST dlg:datefield %default-attributes;
                         dlg:tabstop %boolean; #IMPLIED
                         dlg:readonly %boolean; #IMPLIED
@@ -262,7 +284,7 @@
                         dlg:spin %boolean; #IMPLIED
                         >
 
-<!ELEMENT dlg:numericfield (dlg:event*)>
+<!ELEMENT dlg:numericfield ((%event;)*)>
 <!ATTLIST dlg:numericfield %default-attributes;
                            dlg:tabstop %boolean; #IMPLIED
                            dlg:readonly %boolean; #IMPLIED
@@ -276,7 +298,7 @@
                            dlg:spin %boolean; #IMPLIED
                            >
 
-<!ELEMENT dlg:timefield (dlg:event*)>
+<!ELEMENT dlg:timefield ((%event;)*)>
 <!ATTLIST dlg:timefield %default-attributes;
                         dlg:tabstop %boolean; #IMPLIED
                         dlg:readonly %boolean; #IMPLIED
@@ -288,7 +310,7 @@
                         dlg:spin %boolean; #IMPLIED
                         >
 
-<!ELEMENT dlg:patternfield (dlg:event*)>
+<!ELEMENT dlg:patternfield ((%event;)*)>
 <!ATTLIST dlg:patternfield %default-attributes;
                            dlg:tabstop %boolean; #IMPLIED
                            dlg:readonly %boolean; #IMPLIED
@@ -298,13 +320,13 @@
                            dlg:literal-mask CDATA #IMPLIED
                            >
 
-<!ELEMENT dlg:fixedline (dlg:event*)>
+<!ELEMENT dlg:fixedline ((%event;)*)>
 <!ATTLIST dlg:fixedline %default-attributes;
                         dlg:align (horizontal|vertical) #IMPLIED
                         dlg:value CDATA #IMPLIED
                         >
 
-<!ELEMENT dlg:scrollbar (dlg:event*)>
+<!ELEMENT dlg:scrollbar ((%event;)*)>
 <!ATTLIST dlg:scrollbar %default-attributes;
                         dlg:align (horizontal|vertical) #IMPLIED
                         dlg:curpos %numeric; #IMPLIED
@@ -314,7 +336,7 @@
                         dlg:visible-size %numeric; #IMPLIED
                         >
 
-<!ELEMENT dlg:progressmeter (dlg:event*)>
+<!ELEMENT dlg:progressmeter ((%event;)*)>
 <!ATTLIST dlg:progressmeter %default-attributes;
                             dlg:value %numeric; #IMPLIED
                             dlg:value-min %numeric; #IMPLIED

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 13:17:40 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace xmlscript
 void EventElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
-    static_cast< ControlElement * >( _pParent )->_events.push_back( _xAttributes );
+    static_cast< ControlElement * >( _pParent )->_events.push_back( this );
 }
 //__________________________________________________________________________________________________
 ControlElement::ControlElement(
@@ -97,7 +97,7 @@ ControlElement::ControlElement(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
     SAL_THROW( () )
-    : ElementBase( rLocalName, xAttributes, pParent, pImport )
+    : ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
 {
     if (_pParent)
     {
@@ -866,9 +866,57 @@ bool ImportContext::importOrientationProperty(
     }
     return false;
 }
+
+//==================================================================================================
+struct StringTriple
+{
+    char const * first;
+    char const * second;
+    char const * third;
+};
+static StringTriple const s_aEventTranslations[] =
+{
+    // from xmloff/source/forms/formevents.cxx
+    { "com.sun.star.form.XApproveActionListener", "approveAction", "on-approveaction" },
+    { "com.sun.star.awt.XActionListener", "actionPerformed", "on-performaction" },
+    { "com.sun.star.form.XChangeListener", "changed", "on-change" },
+    { "com.sun.star.awt.XTextListener", "textChanged", "on-textchange" },
+    { "com.sun.star.awt.XItemListener", "itemStateChanged", "on-itemstatechange" },
+    { "com.sun.star.awt.XFocusListener", "focusGained", "on-focus" },
+    { "com.sun.star.awt.XFocusListener", "focusLost", "on-blur" },
+    { "com.sun.star.awt.XKeyListener", "keyPressed", "on-keydown" },
+    { "com.sun.star.awt.XKeyListener", "keyReleased", "on-keyup" },
+    { "com.sun.star.awt.XMouseListener", "mouseEntered", "on-mouseover" },
+    { "com.sun.star.awt.XMouseMotionListener", "mouseDragged", "on-mousedrag" },
+    { "com.sun.star.awt.XMouseMotionListener", "mouseMoved", "on-mousemove" },
+    { "com.sun.star.awt.XMouseListener", "mousePressed", "on-mousedown" },
+    { "com.sun.star.awt.XMouseListener", "mouseReleased", "on-mouseup" },
+    { "com.sun.star.awt.XMouseListener", "mouseExited", "on-mouseout" },
+    { "com.sun.star.form.XResetListener", "approveReset", "on-approvereset" },
+    { "com.sun.star.form.XResetListener", "resetted", "on-reset" },
+    { "com.sun.star.form.XSubmitListener", "approveSubmit", "on-submit" },
+    { "com.sun.star.form.XUpdateListener", "approveUpdate", "on-approveupdate" },
+    { "com.sun.star.form.XUpdateListener", "updated", "on-update" },
+    { "com.sun.star.form.XLoadListener", "loaded", "on-load" },
+    { "com.sun.star.form.XLoadListener", "reloading", "on-startreload" },
+    { "com.sun.star.form.XLoadListener", "reloaded", "on-reload" },
+    { "com.sun.star.form.XLoadListener", "unloading", "on-startunload" },
+    { "com.sun.star.form.XLoadListener", "unloaded", "on-unload" },
+    { "com.sun.star.form.XConfirmDeleteListener", "confirmDelete", "on-confirmdelete" },
+    { "com.sun.star.sdb.XRowSetApproveListener", "approveRowChange", "on-approverowchange" },
+    { "com.sun.star.sdbc.XRowSetListener", "rowChanged", "on-rowchange" },
+    { "com.sun.star.sdb.XRowSetApproveListener", "approveCursorMove", "on-approvecursormove" },
+    { "com.sun.star.sdbc.XRowSetListener", "cursorMoved", "on-cursormove" },
+    { "com.sun.star.form.XDatabaseParameterListener", "approveParameter", "on-supplyparameter" },
+    { "com.sun.star.sdb.XSQLErrorListener", "errorOccured", "on-error" },
+    { 0, 0, 0 }
+};
+extern StringTriple const * const g_pEventTranslations;
+StringTriple const * const g_pEventTranslations = s_aEventTranslations;
+
 //__________________________________________________________________________________________________
 void ImportContext::importEvents(
-    vector< Reference< xml::sax2::XExtendedAttributes > > const & rEvents )
+    vector< Reference< xml::XImportContext > > const & rEvents )
 {
     Reference< script::XScriptEventsSupplier > xSupplier( _xControlModel, UNO_QUERY );
     if (xSupplier.is())
@@ -879,35 +927,129 @@ void ImportContext::importEvents(
             for ( size_t nPos = 0; nPos < rEvents.size(); ++nPos )
             {
                 script::ScriptEventDescriptor descr;
-                Reference< xml::sax2::XExtendedAttributes > xEvent( rEvents[ nPos ] );
 
-                if (!getStringAttr( &descr.ListenerType,
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
-                                    xEvent ) ||
-                    !getStringAttr( &descr.EventMethod,
-                                    OUString( RTL_CONSTASCII_USTRINGPARAM("event-method") ),
-                                    xEvent ))
+                EventElement * pEventElement = static_cast< EventElement * >( rEvents[ nPos ].get() );
+                sal_Int32 nUid = pEventElement->getUid();
+                OUString aLocalName( pEventElement->getLocalName() );
+                Reference< xml::sax2::XExtendedAttributes > xAttributes( pEventElement->getAttributes() );
+
+                // nowadays script events
+                if (XMLNS_SCRIPT_UID == nUid)
                 {
-                    throw xml::sax::SAXException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type | event attribute(s)!") ),
-                        Reference< XInterface >(), Any() );
+                    if (!getStringAttr( &descr.ScriptType,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM("language") ),
+                                        xAttributes, XMLNS_SCRIPT_UID ) ||
+                        !getStringAttr( &descr.ScriptCode,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM("macro-name") ),
+                                        xAttributes, XMLNS_SCRIPT_UID ))
+                    {
+                        throw xml::sax::SAXException(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("missing language or macro-name attribute(s) of event!") ),
+                            Reference< XInterface >(), Any() );
+                    }
+
+                    OUString aLocation;
+                    if (getStringAttr( &aLocation, OUString( RTL_CONSTASCII_USTRINGPARAM("location") ),
+                                       xAttributes, XMLNS_SCRIPT_UID ))
+                    {
+                        // prepend location
+                        OUStringBuffer buf( 48 );
+                        buf.append( aLocation );
+                        buf.append( (sal_Unicode)':' );
+                        buf.append( descr.ScriptCode );
+                        descr.ScriptCode = buf.makeStringAndClear();
+                    }
+
+                    // script:event element
+                    if (aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+                    {
+                        OUString aEventName;
+                        if (! getStringAttr( &aEventName,
+                                             OUString( RTL_CONSTASCII_USTRINGPARAM("event-name") ),
+                                             xAttributes, XMLNS_SCRIPT_UID ))
+                        {
+                            throw xml::sax::SAXException(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM("missing event-name attribute!") ),
+                                Reference< XInterface >(), Any() );
+                        }
+
+                        // lookup in table
+                        OString str( OUStringToOString( aEventName, RTL_TEXTENCODING_ASCII_US ) );
+                        StringTriple const * p = g_pEventTranslations;
+                        while (p->first)
+                        {
+                            if (0 == ::rtl_str_compare( p->third, str.getStr() ))
+                            {
+                                descr.ListenerType = OUString( p->first, ::rtl_str_getLength( p->first ), RTL_TEXTENCODING_ASCII_US );
+                                descr.EventMethod = OUString( p->second, ::rtl_str_getLength( p->second ), RTL_TEXTENCODING_ASCII_US );
+                                break;
+                            }
+                            ++p;
+                        }
+
+                        if (! p->first)
+                        {
+                            throw xml::sax::SAXException(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM("no matching event-name found!") ),
+                                Reference< XInterface >(), Any() );
+                        }
+                    }
+                    else // script:listener-event element
+                    {
+                        OSL_ASSERT( aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("listener-event") ) );
+
+                        if (!getStringAttr( &descr.ListenerType,
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
+                                            xAttributes, XMLNS_SCRIPT_UID ) ||
+                            !getStringAttr( &descr.EventMethod,
+                                            OUString( RTL_CONSTASCII_USTRINGPARAM("listener-method") ),
+                                            xAttributes, XMLNS_SCRIPT_UID ))
+                        {
+                            throw xml::sax::SAXException(
+                                OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type or listener-method attribute(s)!") ),
+                                Reference< XInterface >(), Any() );
+                        }
+                        // optional listener param
+                        getStringAttr(
+                            &descr.AddListenerParam,
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("listener-param") ),
+                            xAttributes, XMLNS_SCRIPT_UID );
+                    }
+                }
+                else // deprecated dlg:event element
+                {
+                    OSL_ASSERT( XMLNS_DIALOGS_UID == nUid && aLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ) );
+
+                    if (!getStringAttr( &descr.ListenerType,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM("listener-type") ),
+                                        xAttributes, XMLNS_DIALOGS_UID ) ||
+                        !getStringAttr( &descr.EventMethod,
+                                        OUString( RTL_CONSTASCII_USTRINGPARAM("event-method") ),
+                                        xAttributes, XMLNS_DIALOGS_UID ))
+                    {
+                        throw xml::sax::SAXException(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("missing listener-type or event-method attribute(s)!") ),
+                            Reference< XInterface >(), Any() );
+                    }
+
+                    getStringAttr(
+                        &descr.ScriptType,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
+                        xAttributes, XMLNS_DIALOGS_UID );
+                    getStringAttr(
+                        &descr.ScriptCode,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
+                        xAttributes, XMLNS_DIALOGS_UID );
+                    getStringAttr(
+                        &descr.AddListenerParam,
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
+                        xAttributes, XMLNS_DIALOGS_UID );
                 }
 
-                getStringAttr( &descr.ScriptType,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-type") ),
-                               xEvent );
-                getStringAttr( &descr.ScriptCode,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("script-code") ),
-                               xEvent );
-                getStringAttr( &descr.AddListenerParam,
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("param") ),
-                               xEvent );
-
-                OUStringBuffer buf( 32 );
+                OUStringBuffer buf( 48 );
                 buf.append( descr.ListenerType );
                 buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("::") );
                 buf.append( descr.EventMethod );
-
                 xEvents->insertByName( buf.makeStringAndClear(), makeAny( descr ) );
             }
         }
@@ -996,7 +1138,7 @@ OUString ElementBase::getLocalName()
 sal_Int32 ElementBase::getUid()
     throw (RuntimeException)
 {
-    return XMLNS_DIALOGS_UID;
+    return _nUid;
 }
 //__________________________________________________________________________________________________
 Reference< xml::sax2::XExtendedAttributes > ElementBase::getAttributes()
@@ -1035,12 +1177,13 @@ Reference< xml::XImportContext > ElementBase::createChildContext(
 
 //__________________________________________________________________________________________________
 ElementBase::ElementBase(
-    OUString const & rLocalName,
+    sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
     SAL_THROW( () )
     : _pImport( pImport )
     , _pParent( pParent )
+    , _nUid( nUid )
     , _aLocalName( rLocalName )
     , _xAttributes( xAttributes )
 {
@@ -1162,7 +1305,12 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     SAL_THROW( (Exception) )
 {
     NameSpaceUid arNamespaceUids[] = {
-        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ), XMLNS_DIALOGS_UID )
+        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ), XMLNS_DIALOGS_UID ),
+        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_URI) ), XMLNS_SCRIPT_UID )
+/*        ,
+        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_URI) ), XMLNS_LIBRARY_UID ),
+        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_XLINK_URI) ), XMLNS_XLINK_UID )
+*/
     };
 
     return ::xmlscript::createDocumentHandler(

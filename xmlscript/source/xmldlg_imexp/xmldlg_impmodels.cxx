@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-08 11:48:31 $
+ *  last change: $Author: dbo $ $Date: 2001-08-07 10:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,16 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
+//--------------------------------------------------------------------------------------------------
+static inline bool isEventElement( sal_Int32 nUid, OUString const & rLocalName ) throw ()
+{
+    return ((XMLNS_SCRIPT_UID == nUid &&
+             (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ) ||
+              rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("listener-event") ))) ||
+            (XMLNS_DIALOGS_UID == nUid &&
+             rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") )));
+}
+
 // progessmeter
 //__________________________________________________________________________________________________
 Reference< xml::XImportContext > ProgressBarElement::createChildContext(
@@ -77,16 +87,10 @@ Reference< xml::XImportContext > ProgressBarElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -135,16 +139,10 @@ Reference< xml::XImportContext > ScrollBarElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -200,16 +198,10 @@ Reference< xml::XImportContext > FixedLineElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -254,16 +246,10 @@ Reference< xml::XImportContext > PatternFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -322,16 +308,10 @@ Reference< xml::XImportContext > TimeFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -396,16 +376,10 @@ Reference< xml::XImportContext > NumericFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -476,16 +450,10 @@ Reference< xml::XImportContext > DateFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -550,16 +518,10 @@ Reference< xml::XImportContext > CurrencyFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -633,16 +595,10 @@ Reference< xml::XImportContext > FileControlElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -689,16 +645,10 @@ Reference< xml::XImportContext > ImageControlElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -740,16 +690,10 @@ Reference< xml::XImportContext > TextElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -799,16 +743,10 @@ Reference< xml::XImportContext > TextFieldElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -886,7 +824,12 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    // event
+    if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else if (XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -897,7 +840,7 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
     {
         getStringAttr( &_label, OUString( RTL_CONSTASCII_USTRINGPARAM("value") ), xAttributes );
 
-        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+        return new ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
     // radio
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
@@ -908,11 +851,6 @@ Reference< xml::XImportContext > TitledBoxElement::createChildContext(
             new RadioElement( rLocalName, xAttributes, this, _pImport ) );
         _radios.push_back( xRet );
         return xRet;
-    }
-    // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-    {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -996,16 +934,10 @@ Reference< xml::XImportContext > RadioElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -1123,7 +1055,7 @@ Reference< xml::XImportContext > MenuPopupElement::createChildContext(
                 _itemSelected.push_back( _itemValues.size() -1 );
             }
         }
-        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+        return new ElementBase( XMLNS_DIALOGS_UID, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -1164,7 +1096,12 @@ Reference< xml::XImportContext > MenuListElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    // event
+    if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else if (XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1176,15 +1113,10 @@ Reference< xml::XImportContext > MenuListElement::createChildContext(
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
     }
-    // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-    {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
-    }
     else
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event or menupopup element!") ),
             Reference< XInterface >(), Any() );
     }
 }
@@ -1241,7 +1173,12 @@ Reference< xml::XImportContext > ComboBoxElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
+    // event
+    if (isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else if (XMLNS_DIALOGS_UID != nUid)
     {
         throw xml::sax::SAXException(
             OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
@@ -1253,15 +1190,10 @@ Reference< xml::XImportContext > ComboBoxElement::createChildContext(
         _popup = new MenuPopupElement( rLocalName, xAttributes, this, _pImport );
         return _popup;
     }
-    // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
-    {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
-    }
     else
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event or menupopup element!") ),
             Reference< XInterface >(), Any() );
     }
 }
@@ -1326,16 +1258,10 @@ Reference< xml::XImportContext > CheckBoxElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
@@ -1402,16 +1328,10 @@ Reference< xml::XImportContext > ButtonElement::createChildContext(
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (XMLNS_DIALOGS_UID != nUid)
-    {
-        throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
-            Reference< XInterface >(), Any() );
-    }
     // event
-    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+    if (isEventElement( nUid, rLocalName ))
     {
-        return new EventElement( rLocalName, xAttributes, this, _pImport );
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
     }
     else
     {
