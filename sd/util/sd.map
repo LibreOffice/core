@@ -6,6 +6,9 @@ SD_1_0 {
         CreateObjSdGraphicDocShellDll;
         InitSdDll;
         DeInitSdDll;
+        component_getImplementationEnvironment;
+        component_writeInfo;
+        component_getFactory;
     local:
         *;
 };
