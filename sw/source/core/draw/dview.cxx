@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:21:41 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 10:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,141 +349,350 @@ inline SdrObject *lcl_FindParent( SdrObject *pObj )
     return 0;
 }
 
+/** determine maximal order number for a 'child' object of given 'parent' object
 
+    OD 2004-08-20 #110810#
 
+    @author OD
+*/
+sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
+                                           const SdrObject* _pExclChildObj ) const
+{
+    sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
+
+    const SdrPage* pDrawPage = _rParentObj.GetDrawObj()->GetPage();
+    ASSERT( pDrawPage,
+            "<SwDrawView::_GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
+
+    sal_uInt32 nObjCount = pDrawPage->GetObjCount();
+    for ( sal_uInt32 i = nObjCount-1; i > _rParentObj.GetDrawObj()->GetOrdNum() ; --i )
+    {
+        const SdrObject* pObj = pDrawPage->GetObj( i );
+
+        // Don't consider 'child' object <_pExclChildObj>
+        if ( pObj == _pExclChildObj )
+        {
+            continue;
+        }
+
+        if ( pObj->GetOrdNum() > nMaxChildOrdNum &&
+             _rParentObj.IsAnLower( lcl_FindAnchor( pObj, TRUE ) ) )
+        {
+            nMaxChildOrdNum = pObj->GetOrdNum();
+            break;
+        }
+    }
+
+    return nMaxChildOrdNum;
+}
+
+/** method to move 'repeated' objects of the given moved object to the
+    according level
+
+    OD 2004-08-23 #110810#
+
+    @author OD
+*/
+void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
+                                    const std::vector<SdrObject*>& _rMovedChildObjs ) const
+{
+    // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
+    std::vector<SwAnchoredObject*> aAnchoredObjs;
+    {
+        const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
+        ASSERT( pContact,
+                "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
+        pContact->GetAnchoredObjs( aAnchoredObjs );
+    }
+
+    // check, if 'repeated' objects exists.
+    if ( aAnchoredObjs.size() > 1 )
+    {
+        SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+
+        // move 'repeated' ones to the same order number as the already moved one.
+        sal_uInt32 nNewPos = _rMovedAnchoredObj.GetDrawObj()->GetOrdNum();
+        while ( !aAnchoredObjs.empty() )
+        {
+            SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
+            if ( pAnchoredObj != &_rMovedAnchoredObj )
+            {
+                pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
+                                            nNewPos );
+                pDrawPage->RecalcObjOrdNums();
+                // adjustments for accessibility API
+                if ( pAnchoredObj->ISA(SwFlyFrm) )
+                {
+                    const SwFlyFrm *pTmpFlyFrm = static_cast<SwFlyFrm*>(pAnchoredObj);
+                    rImp.DisposeAccessibleFrm( pTmpFlyFrm );
+                    rImp.AddAccessibleFrm( pTmpFlyFrm );
+                }
+                else
+                {
+                    rImp.DisposeAccessibleObj( pAnchoredObj->GetDrawObj() );
+                    rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
+                }
+            }
+            aAnchoredObjs.pop_back();
+        }
+
+        // move 'repeated' ones of 'child' objects
+        for ( std::vector<SdrObject*>::const_iterator aObjIter = _rMovedChildObjs.begin();
+              aObjIter != _rMovedChildObjs.end(); ++aObjIter )
+        {
+            SdrObject* pChildObj = (*aObjIter);
+            {
+                const SwContact* pContact = ::GetUserCall( pChildObj );
+                ASSERT( pContact,
+                        "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
+                pContact->GetAnchoredObjs( aAnchoredObjs );
+            }
+            // move 'repeated' ones to the same order number as the already moved one.
+            sal_uInt32 nNewPos = pChildObj->GetOrdNum();
+            while ( !aAnchoredObjs.empty() )
+            {
+                SwAnchoredObject* pAnchoredObj = aAnchoredObjs.back();
+                if ( pAnchoredObj->GetDrawObj() != pChildObj )
+                {
+                    pDrawPage->SetObjectOrdNum( pAnchoredObj->GetDrawObj()->GetOrdNum(),
+                                                nNewPos );
+                    pDrawPage->RecalcObjOrdNums();
+                    // adjustments for accessibility API
+                    if ( pAnchoredObj->ISA(SwFlyFrm) )
+                    {
+                        const SwFlyFrm *pTmpFlyFrm = static_cast<SwFlyFrm*>(pAnchoredObj);
+                        rImp.DisposeAccessibleFrm( pTmpFlyFrm );
+                        rImp.AddAccessibleFrm( pTmpFlyFrm );
+                    }
+                    else
+                    {
+                        rImp.DisposeAccessibleObj( pAnchoredObj->GetDrawObj() );
+                        rImp.AddAccessibleObj( pAnchoredObj->GetDrawObj() );
+                    }
+                }
+                aAnchoredObjs.pop_back();
+            }
+        }
+    }
+}
+
+// --> OD 2004-08-20 #110810# - adjustment and re-factoring of method
 void SwDrawView::ObjOrderChanged( SdrObject* pObj, ULONG nOldPos,
                                           ULONG nNewPos )
 {
-    SdrPage *pPg = GetModel()->GetPage( 0 );
-    if ( pPg->IsObjOrdNumsDirty() )
-        pPg->RecalcObjOrdNums();
-    const BOOL bBtm = nOldPos > nNewPos;
-    ULONG nMoveTo = ULONG_MAX;
-
-    //Wenn ein Object nach oben geschoben werden soll, so muss es wenigstens
-    //seine Kinder plus einem ueberspringen.
-    if ( !bBtm && nNewPos < pPg->GetObjCount() - 1 )
+    // --> OD 2004-08-17 #110810# - nothing to do for group members
+    if ( pObj->GetUpGroup() )
     {
-        ULONG nPos = nOldPos;
-        SdrObject *pTmp = pPg->GetObj( nPos );
-        while ( pTmp == pObj || lcl_IsChild( pObj, pTmp ) )
-        {
-            ++nPos;
-            pTmp = pPg->GetObj( nPos );
-        }
-        if ( nPos > nNewPos )
-            nMoveTo = nPos;
+        return;
     }
-    if ( nMoveTo != ULONG_MAX )
-    {
-        if ( nMoveTo <= nNewPos )
-            ++nMoveTo;
-        pPg->SetObjectOrdNum( nNewPos, nMoveTo );
-        if ( pPg->IsObjOrdNumsDirty() )
-            pPg->RecalcObjOrdNums();
-        nNewPos = nMoveTo;
-        nMoveTo = ULONG_MAX;
-    }
+    // <--
 
-    //Kein Objekt darf in eine Schachtelung von Rahmen/Objekten eindringen,
-    //die Kette muss ggf. uebersprungen werden.
-    if ( bBtm )
+    // determine drawing page and assure that the order numbers are correct.
+    SdrPage* pDrawPage = GetModel()->GetPage( 0 );
+    if ( pDrawPage->IsObjOrdNumsDirty() )
+        pDrawPage->RecalcObjOrdNums();
+    const sal_uInt32 nObjCount = pDrawPage->GetObjCount();
+
+    SwAnchoredObject* pMovedAnchoredObj =
+                                ::GetUserCall( pObj )->GetAnchoredObj( pObj );
+    const SwFlyFrm* pParentAnchoredObj =
+                                pMovedAnchoredObj->GetAnchorFrm()->FindFlyFrm();
+
+    const bool bMovedForward = nOldPos < nNewPos;
+
+    // assure for a 'child' object, that it doesn't exceed the limits of its 'parent'
+    if ( pParentAnchoredObj )
     {
-        if ( nNewPos > 0 )
+        if ( bMovedForward )
         {
-            SdrObject *pMax = GetMaxToBtmObj( pObj ),
-                      *pO = pPg->GetObj( nNewPos + 1 ),
-                      *pPre = pO;
-            while ( pO && 0 != (pO = GetMaxToBtmObj( pO )))
+            sal_uInt32 nMaxChildOrdNumWithoutMoved =
+                    _GetMaxChildOrdNum( *pParentAnchoredObj, pMovedAnchoredObj->GetDrawObj() );
+            if ( nNewPos > nMaxChildOrdNumWithoutMoved+1 )
             {
-                if ( pO != pMax )
-                    nMoveTo = pO->GetOrdNumDirect();
-                if ( pO == pPre )
-                    break;
+                // set position to the top of the 'child' object group
+                pDrawPage->SetObjectOrdNum( nNewPos, nMaxChildOrdNumWithoutMoved+1 );
+                nNewPos = nMaxChildOrdNumWithoutMoved+1;
             }
         }
-    }
-    else
-    {
-        if ( nNewPos < pPg->GetObjCount() - 1 )
+        else
         {
-            ULONG nPos = nNewPos;
-            SdrObject *pMyParent = lcl_FindParent( pObj ),
-                      *pNxt      = pPg->GetObj( nPos + 1 ),
-                      *pNxtParent= lcl_FindParent( pNxt );
-            while ( pNxtParent && pNxtParent != pMyParent )
+            const sal_uInt32 nParentOrdNum = pParentAnchoredObj->GetDrawObj()->GetOrdNum();
+            if ( nNewPos < nParentOrdNum )
             {
-                nMoveTo = ++nPos;
-                if ( nPos < pPg->GetObjCount() - 1 )
-                {
-                    pNxt       = pPg->GetObj( nPos + 1 );
-                    pNxtParent = lcl_FindParent( pNxt );
-                }
-                else
-                    break;
+                // set position to the bottom of the 'child' object group
+                pDrawPage->SetObjectOrdNum( nNewPos, nParentOrdNum );
+                nNewPos = nParentOrdNum;
             }
         }
-    }
-    if ( nMoveTo != ULONG_MAX )
-    {
-        pPg->SetObjectOrdNum( nNewPos, nMoveTo );
-        if ( pPg->IsObjOrdNumsDirty() )
-            pPg->RecalcObjOrdNums();
-        nNewPos = nMoveTo;
+        if ( pDrawPage->IsObjOrdNumsDirty() )
+            pDrawPage->RecalcObjOrdNums();
     }
 
-    if ( pObj->ISA(SwVirtFlyDrawObj) )
+    // Assure, that object isn't positioned between 'repeated' ones
+    if ( ( bMovedForward && nNewPos < nObjCount - 1 ) ||
+         ( !bMovedForward && nNewPos > 0 ) )
     {
-        //Ein Rahmen wurde in seiner Order veraendert. Hier muss nachtraeglich
-        //dafuer gesorgt werden, dass seine 'Kinder' nachgezogen werden.
-        const SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-        if ( pPg->IsObjOrdNumsDirty() )
-            pPg->RecalcObjOrdNums();
-
-        rImp.DisposeAccessibleFrm( pFly );
-        rImp.AddAccessibleFrm( pFly );
-
-        if ( bBtm )
-            ++nNewPos;
-        BOOL bFound = FALSE;
-        for ( ULONG i = nOldPos; i < pPg->GetObjCount(); ++i )
+        const SdrObject* pTmpObj =
+                pDrawPage->GetObj( bMovedForward ? nNewPos - 1 : nNewPos + 1 );
+        if ( pTmpObj )
         {
-            SdrObject *pO = pPg->GetObj( i );
-            if ( pO == pObj )
-                break;
-            const SwFrm *pAnch;
-            const BOOL bFly = pO->ISA(SwVirtFlyDrawObj);
-            if ( bFly )
+            sal_uInt32 nTmpNewPos( nNewPos );
+            if ( bMovedForward )
             {
-                pAnch = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->GetAnchorFrm();
+                // move before the top 'repeated' object
+                const sal_uInt32 nTmpMaxOrdNum =
+                                    ::GetUserCall( pTmpObj )->GetMaxOrdNum();
+                if ( nTmpMaxOrdNum > nNewPos )
+                    nTmpNewPos = nTmpMaxOrdNum;
             }
             else
             {
-                pAnch = ((SwDrawContact*)GetUserCall(pO))->GetAnchorFrm( pO );
+                // move behind the bottom 'repeated' object
+                const sal_uInt32 nTmpMinOrdNum =
+                                    ::GetUserCall( pTmpObj )->GetMinOrdNum();
+                if ( nTmpMinOrdNum < nNewPos )
+                    nTmpNewPos = nTmpMinOrdNum;
             }
-            const SwFlyFrm *pF = pAnch ? pAnch->FindFlyFrm() : NULL;
-            if ( pF && (pF == pFly || pFly->IsUpperOf( *pF ) ) )
+            if ( nTmpNewPos != nNewPos )
             {
-                //Kind gefunden, verschieben.
-                pPg->SetObjectOrdNum( i, nNewPos );
-                pPg->RecalcObjOrdNums();
-                --i;    //keinen auslassen
-                if ( bFly )
-                {
-                    const SwFlyFrm *pFF =
-                        static_cast< const SwVirtFlyDrawObj *>(pO)->GetFlyFrm();
-                    rImp.DisposeAccessibleFrm( pFF );
-                    rImp.AddAccessibleFrm( pFF );
-                }
+                pDrawPage->SetObjectOrdNum( nNewPos, nTmpNewPos );
+                nNewPos = nTmpNewPos;
+                pDrawPage->RecalcObjOrdNums();
             }
         }
     }
+
+    // On move forward, assure that object is moved before its own childs.
+    // Only Writer fly frames can have childs.
+    if ( pMovedAnchoredObj->ISA(SwFlyFrm) &&
+         bMovedForward && nNewPos < nObjCount - 1 )
+    {
+        sal_uInt32 nMaxChildOrdNum =
+                    _GetMaxChildOrdNum( *(static_cast<const SwFlyFrm*>(pMovedAnchoredObj)) );
+        if ( nNewPos < nMaxChildOrdNum )
+        {
+            // determine position before the object before its top 'child' object
+            const SdrObject* pTmpObj = pDrawPage->GetObj( nMaxChildOrdNum );
+            sal_uInt32 nTmpNewPos = ::GetUserCall( pTmpObj )->GetMaxOrdNum() + 1;
+            if ( nTmpNewPos >= nObjCount )
+            {
+                --nTmpNewPos;
+            }
+            // assure, that determined position isn't between 'repeated' objects
+            pTmpObj = pDrawPage->GetObj( nTmpNewPos );
+            nTmpNewPos = ::GetUserCall( pTmpObj )->GetMaxOrdNum();
+            // apply new position
+            pDrawPage->SetObjectOrdNum( nNewPos, nTmpNewPos );
+            nNewPos = nTmpNewPos;
+            pDrawPage->RecalcObjOrdNums();
+        }
+    }
+
+    // Assure, that object isn't positioned between nested objects
+    if ( ( bMovedForward && nNewPos < nObjCount - 1 ) ||
+         ( !bMovedForward && nNewPos > 0 ) )
+    {
+        sal_uInt32 nTmpNewPos( nNewPos );
+        const SwFrmFmt* pParentFrmFmt =
+                pParentAnchoredObj ? &(pParentAnchoredObj->GetFrmFmt()) : 0L;
+        const SdrObject* pTmpObj = pDrawPage->GetObj( nNewPos + 1 );
+        while ( pTmpObj )
+        {
+            const SwFlyFrm* pTmpParentObj =
+                                lcl_FindAnchor( pTmpObj, TRUE )->FindFlyFrm();
+            if ( pTmpParentObj &&
+                 &(pTmpParentObj->GetFrmFmt()) != pParentFrmFmt )
+            {
+                if ( bMovedForward )
+                {
+                    nTmpNewPos = ::GetUserCall( pTmpObj )->GetMaxOrdNum();
+                    pTmpObj = pDrawPage->GetObj( nTmpNewPos + 1 );
+                }
+                else
+                {
+                    nTmpNewPos = ::GetUserCall( pTmpParentObj->GetDrawObj() )
+                                                            ->GetMinOrdNum();
+                    pTmpObj = pTmpParentObj->GetDrawObj();
+                }
+            }
+            else
+                break;
+        }
+        if ( nTmpNewPos != nNewPos )
+        {
+            pDrawPage->SetObjectOrdNum( nNewPos, nTmpNewPos );
+            nNewPos = nTmpNewPos;
+            pDrawPage->RecalcObjOrdNums();
+        }
+    }
+
+    // setup collection of moved 'child' objects to move its 'repeated' objects.
+    std::vector< SdrObject* > aMovedChildObjs;
+
+    // move 'childs' accordingly
+    if ( pMovedAnchoredObj->ISA(SwFlyFrm) )
+    {
+        const SwFlyFrm* pFlyFrm = static_cast<SwFlyFrm*>(pMovedAnchoredObj);
+
+        // adjustments for accessibility API
+        rImp.DisposeAccessibleFrm( pFlyFrm );
+        rImp.AddAccessibleFrm( pFlyFrm );
+
+        const sal_uInt32 nChildNewPos = bMovedForward ? nNewPos : nNewPos+1;
+        sal_uInt32 i = bMovedForward ? nOldPos : nObjCount-1;
+        do
+        {
+            SdrObject* pTmpObj = pDrawPage->GetObj( i );
+            if ( pTmpObj == pObj )
+                break;
+
+            const SwFlyFrm* pTmpParentObj =
+                                lcl_FindAnchor( pTmpObj, TRUE )->FindFlyFrm();
+            if ( pTmpParentObj &&
+                 ( ( pTmpParentObj == pFlyFrm ) ||
+                   ( pFlyFrm->IsUpperOf( *pTmpParentObj ) ) ) )
+            {
+                // move child object.,
+                pDrawPage->SetObjectOrdNum( i, nChildNewPos );
+                pDrawPage->RecalcObjOrdNums();
+                // collect 'child' object
+                aMovedChildObjs.push_back( pTmpObj );
+                // adjustments for accessibility API
+                if ( pTmpObj->ISA(SwVirtFlyDrawObj) )
+                {
+                    const SwFlyFrm *pTmpFlyFrm =
+                        static_cast<SwVirtFlyDrawObj*>(pTmpObj)->GetFlyFrm();
+                    rImp.DisposeAccessibleFrm( pTmpFlyFrm );
+                    rImp.AddAccessibleFrm( pTmpFlyFrm );
+                }
+                else
+                {
+                    rImp.DisposeAccessibleObj( pTmpObj );
+                    rImp.AddAccessibleObj( pTmpObj );
+                }
+            }
+            else
+            {
+                // adjust loop counter
+                if ( bMovedForward )
+                    ++i;
+                else if ( !bMovedForward && i > 0 )
+                    --i;
+            }
+
+        } while ( ( bMovedForward && i < ( nObjCount - aMovedChildObjs.size() ) ) ||
+                  ( !bMovedForward && i > ( nNewPos + aMovedChildObjs.size() ) ) );
+    }
     else
     {
+        // adjustments for accessibility API
         rImp.DisposeAccessibleObj( pObj );
         rImp.AddAccessibleObj( pObj );
     }
+
+    _MoveRepeatedObjs( *pMovedAnchoredObj, aMovedChildObjs );
 }
+// <--
 
 /*************************************************************************
 |*
@@ -719,8 +928,12 @@ void SwDrawView::CheckPossibilities()
                         SvInPlaceObjectRef aRef = pNd->GetOLEObj().GetOleRef();
                         if ( aRef.Is() )
                         {
-                            bSzProtect = SVOBJ_MISCSTATUS_NOTRESIZEABLE & aRef->GetMiscStatus()
+                            // --> OD 2004-08-16 #110810# - improvement for
+                            // the future, when more than one Writer fly frame
+                            // can be selected.
+                            bSzProtect |= SVOBJ_MISCSTATUS_NOTRESIZEABLE & aRef->GetMiscStatus()
                                             ? TRUE : FALSE;
+                            // <--
                         }
                     }
                 }
