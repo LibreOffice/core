@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dcommn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:40:14 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,8 +1164,30 @@ void Base3DCommon::CalcNewPoint(UINT32 nNew, UINT32 nHigh, UINT32 nLow,
 
     if(aLow.Point()[nDim] != aHigh.Point()[nDim])
     {
-        fFactor = (fBound - aHigh.Point()[nDim])
-            / (aLow.Point()[nDim] - aHigh.Point()[nDim]);
+        // #i27159#
+        // Still numerical problems here around 0.0 and 1.0. I decided to
+        // go the numerically more cautios way and avoid values which get
+        // a little bit below 0.0 or above 1.0 here. The original line was:
+        // fFactor = (fBound - aHigh.Point()[nDim]) / (aLow.Point()[nDim] - aHigh.Point()[nDim]);
+        const double fFactorA(fBound - aHigh.Point()[nDim]);
+
+        if(fabs(fFactorA) < SMALL_DVALUE)
+        {
+            fFactor = 0.0;
+        }
+        else
+        {
+            const double fFactorB(aLow.Point()[nDim] - aHigh.Point()[nDim]);
+
+            if(fabs(fFactorA - fFactorB) < SMALL_DVALUE)
+            {
+                fFactor = 1.0;
+            }
+            else
+            {
+                fFactor = fFactorA / fFactorB;
+            }
+        }
     }
 
 #ifdef DBG_UTIL
