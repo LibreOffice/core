@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-26 08:08:49 $
+ *  last change: $Author: fme $ $Date: 2002-04-25 12:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,15 @@ sal_Bool SwFlyCntPortion::Format( SwTxtFormatInfo &rInf )
         // 3924: wenn die Zeile voll ist und der zeichengebundene Frame am
         // Anfang der Zeile steht.
         // 5157: nicht wenn einem Fly ausgewichen werden kann!
-        if( !rInf.X() && !rInf.GetFly() )
+        // "Begin of line" criteria ( ! rInf.X() ) has to be extended.
+        // KerningPortions at beginning of line, e.g., for grid layout
+        // must be considered.
+        const SwLinePortion* pLastPor = rInf.GetLast();
+        const USHORT nLeft = ( pLastPor && pLastPor->IsKernPortion() ) ?
+                               pLastPor->Width() :
+                               0;
+
+        if( nLeft == rInf.X() && ! rInf.GetFly() )
         {
             Width( rInf.Width() );
             bFull = sal_False; // Damit Notizen noch in dieser Zeile landen
