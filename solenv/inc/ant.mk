@@ -17,7 +17,8 @@ ANT_OPTIONAL=$(SOLARBINDIR)$/jakarta-ant-1.4-optional.jar
 .ENDIF
 
 .IF "$(ANT_CLASSPATH)"==""
-ANT_CLASSPATH:=$(SOLARBINDIR)$/xerces.jar$(PATH_SEPERATOR)$(CLASSDIR)$/xerces.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/jaxp.jar$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$/$(SOLARBINDIR)$/junit.jar$(PATH_SEPERATOR)$(CLASSDIR)$/ant.jar
+ANT_CLASSPATH:=$(CLASSDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(CLASSDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(CLASSDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(CLASSDIR)$/junit.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/xercesImpl.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/xml-apis.jar$(PATH_SEPERATOR)$(SOLARBINDIR)$/ant.jar$(PATH_SEPERATOR)$(ANT_OPTIONAL)$(PATH_SEPERATOR)$(SOLARBINDIR)$/junit.jar
+
 .IF "$(ANTPRJ_BOOTSTRAP)"==""
 ANT_CLASSPATH!:=$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/antprj.jar
 .ENDIF
@@ -81,6 +82,7 @@ $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.p
     @+cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
+    @echo $(CLASSPATH)
     $(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
@@ -99,7 +101,7 @@ jar .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(ANT) $(ANT_FLAGS) $@
+    $(ANT) $(ANTFLAGS) $@
 
 javadoc .PHONY:
     $(ANT) $(ANT_FLAGS) $@
