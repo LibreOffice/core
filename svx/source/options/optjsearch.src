@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:34:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ japanese ] = "娍帤昞\婰偺備傟(堎懱帤)";
         Text[ korean ] = "Match variant-form kanji (itaiji)";
         Text[ chinese_simplified ] = "日文汉字(异体字)";
-        Text[ chinese_traditional ] = "Match variant-form kanji (itaiji)";
+        Text[ chinese_traditional ] = "らゅ簙(钵砰)";
         Text[ turkish ] = "Match variant-form kanji (itaiji)";
         Text[ arabic ] = "Match variant-form kanji (itaiji)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -325,8 +325,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match di/zi, du/zu";
         Text[ japanese ] = "僡/僕丄僤/僘";
         Text[ korean ] = "Match di/zi, du/zu";
-        Text[ chinese_simplified ] = "di/zi, du/zu (日文)";
-        Text[ chinese_traditional ] = "di/zi, du/zu らゅ";
+        Text[ chinese_simplified ] = "di/zi, du/zu";
+        Text[ chinese_traditional ] = "di/zi, du/zu";
         Text[ turkish ] = "Match di/zi, du/zu";
         Text[ arabic ] = "Match di/zi, du/zu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -351,8 +351,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match ba/va, ha/fa";
         Text[ japanese ] = "僶/償傽丄僴/僼傽";
         Text[ korean ] = "Match ba/va, ha/fa";
-        Text[ chinese_simplified ] = "ba/va, ha/fa (日文)";
-        Text[ chinese_traditional ] = "ba/va, ha/fa らゅ";
+        Text[ chinese_simplified ] = "ba/va, ha/fa";
+        Text[ chinese_traditional ] = "ba/va, ha/fa";
         Text[ turkish ] = "Match ba/va, ha/fa";
         Text[ arabic ] = "Match ba/va, ha/fa";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -377,8 +377,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match tsi/thi/chi, dhi/zi";
         Text[ japanese ] = "僣傿/僥傿/僠丄僨傿/僕";
         Text[ korean ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ chinese_simplified ] = "tsi/thi/chi, dhi/zi (日文)";
-        Text[ chinese_traditional ] = "tsi/thi/chi, dhi/zi らゅ";
+        Text[ chinese_simplified ] = "tsi/thi/chi, dhi/zi";
+        Text[ chinese_traditional ] = "tsi/thi/chi, dhi/zi";
         Text[ turkish ] = "Match tsi/thi/chi, dhi/zi";
         Text[ arabic ] = "Match tsi/thi/chi, dhi/zi";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -403,8 +403,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match hyu/fyu, byu/vyu";
         Text[ japanese ] = "僸儏/僼儏丄價儏/償儏";
         Text[ korean ] = "Match hyu/fyu, byu/vyu";
-        Text[ chinese_simplified ] = "hyu/fyu, byu/vyu (日文)";
-        Text[ chinese_traditional ] = "hyu/fyu, byu/vyu らゅ";
+        Text[ chinese_simplified ] = "hyu/fyu, byu/vyu";
+        Text[ chinese_traditional ] = "hyu/fyu, byu/vyu";
         Text[ turkish ] = "Match hyu/fyu, byu/vyu";
         Text[ arabic ] = "Match hyu/fyu, byu/vyu";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -429,8 +429,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match se/she, ze/je";
         Text[ japanese ] = "僙/僔僃丄僛/僕僃";
         Text[ korean ] = "Match se/she, ze/je";
-        Text[ chinese_simplified ] = "se/she, ze/je (日文)";
-        Text[ chinese_traditional ] = "se/she, ze/je らゅ";
+        Text[ chinese_simplified ] = "se/she, ze/je";
+        Text[ chinese_traditional ] = "se/she, ze/je";
         Text[ turkish ] = "Match se/she, ze/je";
         Text[ arabic ] = "Match se/she, ze/je";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -455,8 +455,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match ia/iya (piano/piyano)";
         Text[ japanese ] = "僀抜丄僄抜偵懕偔傾/儎(僺傾僲/僺儎僲)";
         Text[ korean ] = "Match ia/iya (piano/piyano)";
-        Text[ chinese_simplified ] = "ia/iya (piano/piyano)(日文)";
-        Text[ chinese_traditional ] = "ia/iya (piano/piyano)らゅ";
+        Text[ chinese_simplified ] = "ia/iya (piano/piyano)";
+        Text[ chinese_traditional ] = "ia/iya (piano/piyano)";
         Text[ turkish ] = "Match ia/iya (piano/piyano)";
         Text[ arabic ] = "Match ia/iya (piano/piyano)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
@@ -481,8 +481,8 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ portuguese_brazilian ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ japanese ] = "僒峴偺慜偺僉/僋 (僥僉僗僩/僥僋僗僩)";
         Text[ korean ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ chinese_simplified ] = "ki/ku (tekisuto/tekusuto)(日文)";
-        Text[ chinese_traditional ] = "ki/ku (tekisuto/tekusuto) らゅ";
+        Text[ chinese_simplified ] = "ki/ku (tekisuto/tekusuto)";
+        Text[ chinese_traditional ] = "ki/ku (tekisuto/tekusuto)";
         Text[ turkish ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ arabic ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ language_user1 ] = "EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
