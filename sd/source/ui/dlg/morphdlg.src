@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:44:35 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,8 @@ ModalDialog DLG_MORPH
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "Settings";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     FixedText FT_STEPS
     {
@@ -161,6 +163,8 @@ ModalDialog DLG_MORPH
         Text[ hebrew ] = "Schritte";
         Text[ hindi ] = "बढती";
         Text[ slovak ] = "Prírastky";
+        Text[ hungarian ] = "Alakzatok száma";
+        Text[ slovenian ] = "Koraki";
     };
     MetricField MTF_STEPS
     {
@@ -209,6 +213,8 @@ ModalDialog DLG_MORPH
         Text[ hebrew ] = "Attributierung überblenden";
         Text[ hindi ] = "क्रॉस-फ़ेड ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty zatmavenia";
+        Text[ hungarian ] = "Jellemzők átúsztatása";
+        Text[ slovenian ] = "Atributi pojemanja";
     };
     CheckBox CBX_ORIENTATION
     {
@@ -243,6 +249,8 @@ ModalDialog DLG_MORPH
         Text[ hebrew ] = "Gleiche Orientierung";
         Text[ hindi ] = "समान अनुस्थापन";
         Text[ slovak ] = "Rovnaká orientácia";
+        Text[ hungarian ] = "Azonos irány";
+        Text[ slovenian ] = "Enaka usmerjenost";
     };
     Text [ english_us ] = "Cross-fading" ;
     Text [ italian ] = "Morphing" ;
@@ -270,7 +278,10 @@ ModalDialog DLG_MORPH
     Text[ hebrew ] = "Überblenden";
     Text[ hindi ] = "क्रॉस-फ़ेड करना";
     Text[ slovak ] = "Zatmavenie";
+    Text[ hungarian ] = "Átúsztatás";
+    Text[ slovenian ] = "Pojemanje";
 };
+
 
 
 
