@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:38:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
-//CHINA001 #ifndef _SVX_TABORDER_HXX
-//CHINA001 #include "taborder.hxx"
-//CHINA001 #endif
 #ifndef _SVX_FMUNDO_HXX
 #include "fmundo.hxx"
 #endif
@@ -637,18 +634,12 @@ namespace svxform
                             Reference< XForm >  xForm(  pFormData->GetFormIface());
 
                             Reference< XTabControllerModel >  xTabController(xForm, UNO_QUERY);
-                            if( !xTabController.is() ) break;
-                            //CHINA001 FmTabOrderDlg aTabDlg(m_xORB, GetpApp()->GetAppWindow(), GetNavModel()->GetFormShell() );
-                            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            if(pFact)
-                            {
-                                VclAbstractDialog* aTabDlg = pFact->CreateFmTabOrderDlg( m_xORB, Application::GetDefDialogParent(), GetNavModel()->GetFormShell(), ResId(RID_SVXDLG_TAB_ORDER) );
-                                DBG_ASSERT(aTabDlg, "Dialogdiet fail!");//CHINA001
-                                aTabDlg->Execute(); //CHINA001 aTabDlg.Execute();
-                                delete aTabDlg; //add by CHINA001
-                            }
+                            if( !xTabController.is() )
+                                break;
+                            GetNavModel()->GetFormShell()->GetImpl()->ExecuteTabOrderDialog( xTabController );
                         }
                         break;
+
                         case SID_FM_SHOW_PROPERTY_BROWSER:
                         {
                             ShowSelectionProperties(sal_True);
