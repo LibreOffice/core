@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,11 @@ namespace connectivity
         inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW( () )
             { return ::rtl_allocateMemory( nSize ); }
         inline static void * SAL_CALL operator new( size_t nSize,const void* _pHint ) SAL_THROW( () )
-            { return ::rtl_allocateMemory( nSize ); }
+            { return _pHint; }
         inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW( () )
             { ::rtl_freeMemory( pMem ); }
         inline static void SAL_CALL operator delete( void * pMem,const void* _pHint ) SAL_THROW( () )
-            { ::rtl_freeMemory( pMem ); }
+            {  }
 
         void acquire()
         {
