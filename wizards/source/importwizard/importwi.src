@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:54:54 $
+ *  last change: $Author: bc $ $Date: 2001-09-12 16:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,7 +1025,7 @@ String sConvertError1
 
 String sConvertError2
 {
-    Text = "Autopiloten abbrechen";
+    Text = "Autopilot abbrechen";
     Text[English] = "Cancel Autopilot";
     Text[ English_us ] = "Cancel AutoPilot";
     Text[ french ] = "Quitter l'AutoPilote";

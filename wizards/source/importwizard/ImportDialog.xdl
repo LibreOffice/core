@@ -42,13 +42,13 @@
   <dlg:button dlg:id="Button1" dlg:tab-index="23" dlg:left="248" dlg:top="75" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateImportPath" dlg:help-url="HID:34585" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="Button2" dlg:tab-index="24" dlg:left="248" dlg:top="91" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateExportPath" dlg:help-url="HID:34585" dlg:value="...">
+  <dlg:button dlg:id="Button2" dlg:tab-index="24" dlg:left="248" dlg:top="91" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="TemplateExportPath" dlg:help-url="HID:34600" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="Button3" dlg:tab-index="25" dlg:left="248" dlg:top="148" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentImportPath" dlg:help-url="HID:34590" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="Button4" dlg:tab-index="26" dlg:left="248" dlg:top="164" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentExportPath" dlg:help-url="HID:34590" dlg:value="...">
+  <dlg:button dlg:id="Button4" dlg:tab-index="26" dlg:left="248" dlg:top="164" dlg:width="14" dlg:height="14" dlg:page="2" dlg:tag="DocumentExportPath" dlg:help-url="HID:34601" dlg:value="...">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="ImportWizard.DialogModul.TakoverFolderName" script:language="StarBasic"/>
   </dlg:button>
   <dlg:radiogroup>
