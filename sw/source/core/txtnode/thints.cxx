@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 17:43:57 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,11 +1349,169 @@ void SwpHints::ClearDummies( SwTxtNode &rNode )
  * gleichartiges Attribut endet oder beginnt, welches einen von der beiden
  * Kandidaten umfasst, auch Zeichenvorlage duerfen nicht ueberlappt werden.
  */
+/*-----------------5.9.2001 09:26-------------------
+ * And here a smarter version of good old Merge(..)
+ * If a SwTxtAttr is given, only the merging between this attribute and the
+ * neighbours are checked. This saves time, if no attribute is given (in more
+ * complex situations), the whole attribute array is checked as before.
+ * --------------------------------------------------*/
 
-BOOL SwpHints::Merge( SwTxtNode &rNode )
+BOOL SwpHints::Merge( SwTxtNode &rNode, SwTxtAttr* pAttr )
 {
-    USHORT i = 0;
+    USHORT i;
     BOOL bMerged = FALSE;
+    if( pAttr && USHRT_MAX != ( i = GetPos( pAttr ) ) )
+    {
+        const xub_StrLen *pEnd = pAttr->GetEnd();
+        if ( pEnd && !pAttr->IsDontMergeAttr() )
+        {
+            USHORT j = i;
+            const USHORT nWhich = pAttr->Which();
+            const USHORT nStart = *pAttr->GetStart();
+            const USHORT nEnd = *pEnd;
+            SwTxtAttr *pPrev;
+            SwTxtAttr *pNext;
+            USHORT nEndIdx = aHtEnd.GetPos( pAttr );
+            ASSERT( USHRT_MAX != nEndIdx, "Missing end index" );
+            if( nEndIdx )
+            {
+                // If there's a attribute with same start and which-id,
+                // it's not possible to merge with a previous attribute.
+                pPrev = pAttr;
+                while( j )
+                {
+                    SwTxtAttr *pOther = GetHt(--j);
+                    if ( *pOther->GetStart() < nStart )
+                        break;
+                    if( pOther->Which() == nWhich || pOther->IsCharFmtAttr()
+                        || pAttr->IsCharFmtAttr() )
+                    {
+                        pPrev = NULL;
+                        break;
+                    }
+                }
+            }
+            else
+                pPrev = NULL;
+            if( i + 1 < Count() )
+            {
+                // If there's a attribute with same end and which-id,
+                // it's not possible to merge with a following attribute.
+                j = nEndIdx + 1;
+                pNext = pAttr;
+                while( j < Count() )
+                {
+                    SwTxtAttr *pOther = GetEnd( j++ );
+                    if( !pOther->GetEnd() )
+                        continue;
+                    if( *pOther->GetEnd() > nEnd )
+                        break;
+                    if( pOther->Which() == nWhich || pOther->IsCharFmtAttr()
+                        || pAttr->IsCharFmtAttr() )
+                    {
+                        pNext = NULL;
+                        break;
+                    }
+                }
+            }
+            else
+                pNext = NULL;
+            if( pPrev )
+            {
+                pPrev = NULL;
+                j = nEndIdx;
+                do
+                {
+                    // Looking for a previous attribute with the same which-id
+                    // which ends exact at the start of the given attribute
+                    SwTxtAttr *pOther = GetEnd( --j );
+                    pEnd = pOther->GetEnd();
+                    if( !pEnd || *pEnd > nStart )
+                        continue;
+                    if( *pEnd < nStart )
+                        break;
+                    if( pOther->Which() == nWhich )
+                    {
+                        if( pOther->GetAttr() == pAttr->GetAttr() )
+                        {
+                            bMerged = TRUE;
+                            pPrev = pOther;
+                        }
+                        else
+                            pPrev = NULL;
+                        break;
+                    }
+                    if( pOther->IsCharFmtAttr() || pAttr->IsCharFmtAttr() )
+                    {
+                        pPrev = NULL;
+                        break;
+                    }
+                } while ( j );
+            }
+            if( pNext )
+            {
+                j = i + 1;
+                pNext = NULL;
+                while( j < Count() )
+                {
+                    // Looking for a following attribute with the same which-id
+                    // which starts at the end of the given attribute
+                    SwTxtAttr *pOther = GetStart( j++ );
+                    pEnd = pOther->GetEnd();
+                    if( !pEnd || *pOther->GetStart() < nEnd )
+                        continue;
+                    if( *pOther->GetStart() > nEnd )
+                        break;
+                    if( pOther->Which() == nWhich )
+                    {
+                        if( pOther->GetAttr() == pAttr->GetAttr() )
+                        {
+                            bMerged = TRUE;
+                            pNext = pOther;
+                        }
+                        else
+                            pNext = NULL;
+                        break;
+                    }
+                    if( pOther->IsCharFmtAttr() || pAttr->IsCharFmtAttr() )
+                    {
+                        pNext = NULL;
+                        break;
+                    }
+                }
+            }
+            if( bMerged )
+            {
+                if( pNext )
+                {
+                    if( pHistory )
+                    {
+                        pHistory->Add( pAttr );
+                        pHistory->Add( pNext );
+                    }
+                    *pAttr->GetEnd() = *pNext->GetEnd();
+                    pAttr->SetDontExpand( FALSE );
+                    if( pHistory ) pHistory->Add( pAttr, TRUE );
+                    rNode.DestroyAttr( Cut( j - 1 ) );
+                }
+                if( pPrev )
+                {
+                    if( pHistory )
+                    {
+                        pHistory->Add( pPrev );
+                        pHistory->Add( pAttr );
+                    }
+                    *pPrev->GetEnd() = *pAttr->GetEnd();
+                    pPrev->SetDontExpand( FALSE );
+                    if( pHistory ) pHistory->Add( pPrev, TRUE );
+                    rNode.DestroyAttr( Cut( i ) );
+                }
+                return TRUE;
+            }
+            return FALSE;
+        }
+    }
+    i = 0;
     while ( i < Count() )
     {
         SwTxtAttr *pHt = GetHt( i++ );
@@ -1646,8 +1804,10 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
     {
         SwpHintsArr::Insert( pHint );
         CalcFlags();
-        CHECK;
-
+#ifndef PRODUCT
+        if( !rNode.GetDoc()->IsInReading() )
+            CHECK;
+#endif
         // ... und die Abhaengigen benachrichtigen
         if ( rNode.GetDepends() )
         {
@@ -1659,6 +1819,8 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
 
     // ----------------------------------------------------------------
     // Ab hier gibt es nur noch pHint mit einem EndIdx !!!
+
+    SwTxtAttr *pMerge = pHint; // For a smarter Merge-function
 
     if( *pHtEnd < nHtStart )
     {
@@ -1700,6 +1862,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                 // Hint erzeugen.
                 if ( nHtEnd != nMaxEnd )
                 {
+                    pMerge = NULL; // No way to use the smarter Merge()
                     pHint = rNode.MakeTxtAttr( bParaAttr ? *pParaItem :
                                                             pHint->GetAttr(),
                                                 nHtStart, nMaxEnd );
@@ -1927,7 +2090,10 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
             // Nur wenn wir nicht sowieso schon durch die Absatzattribute
             // gueltig sind, werden wir eingefuegt ...
             if( bForgetAttr )
+            {
                 rNode.DestroyAttr( pHint );
+                pMerge = NULL; // No smart Merge()
+            }
             else
             {
                 SwpHintsArr::Insert( pHint );
@@ -1948,6 +2114,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
                 continue;
             if( !pTmpHints )
                 break;
+            pMerge = NULL; // No smart Merge()
             pHint = pTmpHints->GetObject(0);
             nWhich = pHint->Which();
             nHtStart = *pHint->GetStart();
@@ -1964,7 +2131,7 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
 
         // Jetzt wollen wir mal gucken, ob wir das SwpHintsArray nicht
         // etwas vereinfachen koennen ...
-        Merge( rNode );
+        Merge( rNode, pMerge );
     }
     else
     {
@@ -1981,6 +2148,10 @@ void SwpHints::Insert( SwTxtAttr *pHint, SwTxtNode &rNode, USHORT nMode )
             rNode.Modify( 0, &aHint );
         }
     }
+#ifndef PRODUCT
+    if( !rNode.GetDoc()->IsInReading() )
+        CHECK;
+#endif
 }
 
 /*************************************************************************

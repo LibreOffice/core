@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,6 @@
 
 #include "txatbase.hxx"
 #include "ndhints.hxx"
-
-#ifndef PRODUCT
-#define CHECK   Check();
-#else
-#define CHECK
-#endif
 
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
@@ -271,7 +265,6 @@ void SwpHintsArr::Insert( const SwTxtAttr *pHt )
     DumpHints( *this, aHtEnd );
 #endif
 #endif
-    CHECK;
 }
 
 void SwpHintsArr::DeleteAtPos( const USHORT nPos )
@@ -291,7 +284,6 @@ void SwpHintsArr::DeleteAtPos( const USHORT nPos )
     DumpHints( *this, aHtEnd );
 #endif
 #endif
-    CHECK;
 }
 
 #ifndef PRODUCT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 18:52:24 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ private:
     // keine Ueberlappungen mit gleichartigen Attr. entstehen,
     // Ist der Rueckgabewert TRUE, so wurde verschmolzen und dabei u.a. auch
     // ein Resort ausgeloest.
-    BOOL Merge( SwTxtNode &rNode );
+    BOOL Merge( SwTxtNode &rNode, SwTxtAttr* pAttr = 0 );
     // Haelt ein neues Attribut in pHistory fest.
     void NoteInHistory( SwTxtAttr *pAttr, const BOOL bNew = FALSE );
 

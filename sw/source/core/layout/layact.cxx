@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-06-15 11:38:55 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ void SwLayAction::CheckWaitCrsr()
 inline void SwLayAction::CheckIdleEnd()
 {
     if ( !IsInput() )
-        bInput = GetInputType() && GetpApp()->AnyInput( GetInputType() );
+        bInput = GetInputType() && Application::AnyInput( GetInputType() );
 }
 
 /*************************************************************************
@@ -2337,7 +2337,7 @@ BOOL SwLayIdle::_FormatSpelling( const SwCntntFrm *pCnt )
             bAllValid = FALSE;
         if ( aRepaint.HasArea() )
             pImp->GetShell()->InvalidateWindows( aRepaint );
-        if ( GetpApp()->AnyInput( INPUT_ANY ) )
+        if ( Application::AnyInput( INPUT_ANY ) )
             return TRUE;
     }
     //Die im Absatz verankerten Flys wollen auch mitspielen.
@@ -2449,7 +2449,7 @@ BOOL SwLayIdle::_CollectAutoCmplWords( const SwCntntFrm *pCnt,
         if( !bPageValid )
             bAllValid = FALSE;
 */
-        if ( GetpApp()->AnyInput( INPUT_ANY ) )
+        if ( Application::AnyInput( INPUT_ANY ) )
             return TRUE;
     }
 

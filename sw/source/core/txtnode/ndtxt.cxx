@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-27 15:51:01 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,8 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
 #ifndef PRODUCT
-#define CHECK_SWPHINTS(pNd)  { if(pNd->GetpSwpHints()) \
+#define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
+                                   !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
 #else
 #define CHECK_SWPHINTS(pNd)

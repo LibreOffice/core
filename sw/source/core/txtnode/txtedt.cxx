@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-14 14:43:53 $
+ *  last change: $Author: ama $ $Date: 2001-09-05 09:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _SV_SVAPP_HXX //autogen wg. Application
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
 #endif
@@ -979,6 +982,7 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos,
 
     if( nBegin < nEnd )
     {
+        USHORT nCnt = 200;
         SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE );
         while( aScanner.NextWord( pNode->GetLang( nBegin ) ) )
         {
@@ -998,6 +1002,12 @@ void SwTxtFrm::CollectAutoCmplWrds( SwCntntNode* pActNode, xub_StrLen nActPos,
                 }
                 else
                     bACWDirty = TRUE;
+            }
+            if( !--nCnt )
+            {
+                if ( Application::AnyInput( INPUT_ANY ) )
+                    return;
+                nCnt = 100;
             }
         }
     }
