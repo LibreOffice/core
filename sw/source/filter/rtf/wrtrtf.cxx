@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:09:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -710,7 +710,7 @@ void SwRTFWriter::OutUnicodeSafeRecord(const sal_Char *pToken,
             Strm() << '{' << pToken << ' ';
             RTFOutFuncs::Out_String(Strm(), rContent, DEF_ENCODING,
                 bWriteHelpFmt);
-            Strm() << '}}}';
+            Strm() << "}}}";
         }
 
     }
