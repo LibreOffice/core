@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:12:22 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -656,7 +659,7 @@ SvStream& operator>>( SvStream& rIn, PptFontEntityAtom& rAtom )
         nTemp = cData[ i ];
         if ( !nTemp )
             break;
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         cData[ i ] = ( nTemp >> 8 ) | ( nTemp << 8 );
 #endif
     }
@@ -4947,7 +4950,7 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
         nMaxLen >>= 1;
         pBuf[ nMaxLen ] = 0;
         sal_Unicode* pPtr = pBuf;
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         sal_Unicode nTemp;
         for ( i = 0; i < nMaxLen; i++ )
         {
