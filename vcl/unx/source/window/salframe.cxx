@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2001-04-27 15:28:18 $
+ *  last change: $Author: pl $ $Date: 2001-05-02 17:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2800,28 +2800,6 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case VisibilityNotify:
-                // HACK: this is a workaround for CJK input method
-                // (see #79518#) the input method switches the focus forth and
-                // back while a second document is being mapped
-                // this really should be fixed in the input method
-                // as there are other problems with it too: on some window
-                // managers the focus will end in the status window of
-                // the IME and not in any document.
-                if( pEvent->xvisibility.state != VisibilityUnobscured
-                    && nVisibility_ == VisibilityFullyObscured
-                    && ! mpParent && maChildren.Count() == 0
-                    )
-                {
-                    XLIB_Window focusWindow = None;
-                    int revert = RevertToNone;
-                    XGetInputFocus( pDisplay_->GetDisplay(), &focusWindow, &revert );
-                    if( focusWindow == GetShellWindow()
-                        || ( focusWindow == GetStackingWindow() && GetStackingWindow() )
-                        || focusWindow == GetWindow() )
-                    {
-                        XRaiseWindow( pDisplay_->GetDisplay(), GetStackingWindow() != None ? GetStackingWindow() : GetShellWindow() );
-                    }
-                }
                 nVisibility_ = pEvent->xvisibility.state;
                 nRet = TRUE;
                 break;
