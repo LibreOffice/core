@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:54:46 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,26 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Einfügen" ;
         Text [ English ] = "Insert" ;
+        Text[ english_us ] = "Insert";
+        Text[ portuguese ] = "Insert";
+        Text[ russian ] = "Insert";
+        Text[ greek ] = "Insert";
+        Text[ dutch ] = "Insert";
+        Text[ french ] = "Insert";
+        Text[ spanish ] = "Insert";
+        Text[ finnish ] = "Insert";
+        Text[ italian ] = "Insert";
+        Text[ danish ] = "Insert";
+        Text[ swedish ] = "Infoga";
+        Text[ polish ] = "Insert";
+        Text[ portuguese_brazilian ] = "Insert";
+        Text[ japanese ] = "Insert";
+        Text[ korean ] = "Insert";
+        Text[ chinese_simplified ] = "Insert";
+        Text[ chinese_traditional ] = "Insert";
+        Text[ turkish ] = "Insert";
+        Text[ arabic ] = "Insert";
+        Text[ catalan ] = "Insert";
     };
     FixedText FT_INS_ATTR
     {
@@ -305,7 +325,7 @@ TabPage TP_REDLINE_OPT
     {
             < "[Ingen]" ; > ;
         < "Fed" ; > ;
-        < "Kursiv" ; > ;
+        < ", Kursiv" ; > ;
         < "Understreget" ; > ;
         < "Dobbelt understreget" ; > ;
         < "Store bogstaver" ; > ;
@@ -352,7 +372,7 @@ TabPage TP_REDLINE_OPT
         < "Doppelt unterstrichen" ; > ;
         < "Versalien" ; > ;
         < "Gemeine" ; > ;
-        < "Kapitälchen" ; > ;
+        < "Kapit?lchen" ; > ;
         < "Titelschrift" ; > ;
         < "Hintergrundfarbe" ; > ;
         < "Hintergrundfarbe" ; > ;
@@ -539,6 +559,26 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Löschen" ;
         Text [ English ] = "Delete" ;
+        Text[ english_us ] = "Delete";
+        Text[ portuguese ] = "Delete";
+        Text[ russian ] = "Delete";
+        Text[ greek ] = "Delete";
+        Text[ dutch ] = "Delete";
+        Text[ french ] = "Delete";
+        Text[ spanish ] = "Delete";
+        Text[ finnish ] = "Delete";
+        Text[ italian ] = "Delete";
+        Text[ danish ] = "Delete";
+        Text[ swedish ] = "Radera";
+        Text[ polish ] = "Delete";
+        Text[ portuguese_brazilian ] = "Delete";
+        Text[ japanese ] = "Delete";
+        Text[ korean ] = "Delete";
+        Text[ chinese_simplified ] = "Delete";
+        Text[ chinese_traditional ] = "Delete";
+        Text[ turkish ] = "Delete";
+        Text[ arabic ] = "Delete";
+        Text[ catalan ] = "Delete";
     };
     FixedText FT_DEL_ATTR
     {
@@ -642,6 +682,26 @@ TabPage TP_REDLINE_OPT
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Attributänderung" ;
         Text [ English ] = "Attributes changed" ;
+        Text[ english_us ] = "Attributes changed";
+        Text[ portuguese ] = "Attributes changed";
+        Text[ russian ] = "Attributes changed";
+        Text[ greek ] = "Attributes changed";
+        Text[ dutch ] = "Attributes changed";
+        Text[ french ] = "Attributes changed";
+        Text[ spanish ] = "Attributes changed";
+        Text[ finnish ] = "Attributes changed";
+        Text[ italian ] = "Attributes changed";
+        Text[ danish ] = "Attributes changed";
+        Text[ swedish ] = "Attributändring";
+        Text[ polish ] = "Attributes changed";
+        Text[ portuguese_brazilian ] = "Attributes changed";
+        Text[ japanese ] = "Attributes changed";
+        Text[ korean ] = "Attributes changed";
+        Text[ chinese_simplified ] = "Attributes changed";
+        Text[ chinese_traditional ] = "Attributes changed";
+        Text[ turkish ] = "Attributes changed";
+        Text[ arabic ] = "Attributes changed";
+        Text[ catalan ] = "Attributes changed";
     };
     FixedText FT_CHG_ATTR
     {
@@ -747,7 +807,7 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Changed lines" ;
         Text [ portuguese ] = "Linhas modificadas" ;
         Text [ english_us ] = "Lines changed" ;
-        Text [ portuguese_brazilian ] = "Geänderte Zeilen" ;
+        Text [ portuguese_brazilian ] = "Ge?nderte Zeilen" ;
         Text [ swedish ] = "Ändrade rader" ;
         Text [ danish ] = "Ændrede rækker" ;
         Text [ italian ] = "Righe modificate" ;
@@ -789,7 +849,7 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_traditional ] = "¼Ð°O(~K)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "ÓÞìáíóç";
-        Text[ korean ] = "¸¶Å·(~K)";
+        Text[ korean ] = "¼±ÅÃ Ç¥½Ã";
         Text[ turkish ] = "Ýþaret";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Marca";
@@ -838,7 +898,7 @@ TabPage TP_REDLINE_OPT
             < "[Keine]" ; > ;
             < "Linker Rand" ; > ;
             < "Rechter Rand" ; > ;
-            < "Außenrand" ; > ;
+            < "Au?enrand" ; > ;
             < "Innenrand" ; > ;
         };
         stringlist [ swedish ] =
