@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:54:05 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 00:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,9 @@
 #endif
 #include "strmname.h"
 #include "unomodel.hxx"
+
+#include <tools/stream.hxx>
+#include <vcl/cvtgrf.hxx>
 
 // --------------
 // - Namespaces -
@@ -1032,6 +1035,33 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
         {
+
+
+SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
+Graphic         aMtfGraphic( aMtf );
+Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
+
+if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
+{
+    const double fWH = static_cast< double >( aPreviewSizePixel.Width() ) / static_cast< double >( aPreviewSizePixel.Height() );
+
+    if( fWH <= 1.0 )
+        aPreviewSizePixel.Width() = static_cast< long >( 128.0 * fWH ), aPreviewSizePixel.Height() = 128;
+    else
+        aPreviewSizePixel.Width() = 128, aPreviewSizePixel.Height() = static_cast< long >( 128.0 / fWH );
+
+    if( GraphicConverter::Export( aSvOutputStream, aMtfGraphic.GetBitmapEx( &aPreviewSizePixel ), CVT_PNG ) )
+    {
+        // handle errror case here
+    }
+    else
+    {
+        // Success
+    }
+}
+
+
+
             Point aInsertPos( rPos );
 
             if( pOwnData && pOwnData->GetWorkDocument() )
