@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-23 16:03:29 $
+ *  last change: $Author: nn $ $Date: 2002-10-07 18:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,9 @@ void lcl_ReverseTwipsToMM( Rectangle& rRect )
 ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     FmFormModel( SvtPathOptions().GetPalettePath(),
                  NULL,                          // SfxItemPool* Pool
-                 pGlobalDrawPersist ? pGlobalDrawPersist : pDocument->GetDocumentShell(),
+                 pGlobalDrawPersist ?
+                     pGlobalDrawPersist :
+                     ( pDocument ? pDocument->GetDocumentShell() : NULL ),
                  TRUE ),        // bUseExtColorTable (is set below)
     aName( rName ),
     pDoc( pDocument ),
@@ -271,7 +273,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
 {
     pGlobalDrawPersist = NULL;          // nur einmal benutzen
 
-    SfxObjectShell* pObjSh = pDocument->GetDocumentShell();
+    SfxObjectShell* pObjSh = pDocument ? pDocument->GetDocumentShell() : NULL;
     if ( pObjSh )
     {
         SetObjectShell( pObjSh );
@@ -380,11 +382,18 @@ void ScDrawLayer::UpdateBasic()
 
 SdrModel* __EXPORT ScDrawLayer::AllocModel() const
 {
-    return new ScDrawLayer( pDoc, aName );
+    //  #103849# Allocated model (for clipboard etc) must not have a pointer
+    //  to the original model's document, pass NULL as document:
+
+    return new ScDrawLayer( NULL, aName );
 }
 
 Window* __EXPORT ScDrawLayer::GetCurDocViewWin()
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::GetCurDocViewWin without document" );
+    if ( !pDoc )
+        return NULL;
+
     SfxViewShell* pViewSh = SfxViewShell::Current();
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
 
@@ -543,6 +552,10 @@ void ScDrawLayer::SetPageSize( USHORT nPageNo, const Size& rSize )
 
 void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData* pData )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::RecalcPos without document" );
+    if ( !pDoc )
+        return;
+
     BOOL bArrow = ( pObj->IsPolyObj() && pObj->GetPointCount()==2 );    // Pfeil ?
     BOOL bCircle = ( pObj->ISA(SdrCircObj) );                           // Kreis (Gueltigkeit)
     BOOL bCaption = ( pObj->ISA(SdrCaptionObj) );                       // Notiz
@@ -785,6 +798,10 @@ void ScDrawLayer::Store( SvStream& rStream ) const
 
 BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) const
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::GetPrintArea without document" );
+    if ( !pDoc )
+        return FALSE;
+
     USHORT nTab = rRange.aStart.Tab();
     DBG_ASSERT( rRange.aEnd.Tab() == nTab, "GetPrintArea: Tab unterschiedlich" );
 
@@ -1080,6 +1097,10 @@ void ScDrawLayer::MoveAreaTwips( USHORT nTab, const Rectangle& rArea,
 void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2,USHORT nRow2,
                             short nDx,short nDy, BOOL bInsDel )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::MoveArea without document" );
+    if ( !pDoc )
+        return;
+
     if (!bAdjustEnabled)
         return;
 
@@ -1126,6 +1147,10 @@ void ScDrawLayer::MoveArea( USHORT nTab, USHORT nCol1,USHORT nRow1, USHORT nCol2
 
 void ScDrawLayer::WidthChanged( USHORT nTab, USHORT nCol, long nDifTwips )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::WidthChanged without document" );
+    if ( !pDoc )
+        return;
+
     if (!bAdjustEnabled)
         return;
 
@@ -1149,6 +1174,10 @@ void ScDrawLayer::WidthChanged( USHORT nTab, USHORT nCol, long nDifTwips )
 
 void ScDrawLayer::HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::HeightChanged without document" );
+    if ( !pDoc )
+        return;
+
     if (!bAdjustEnabled)
         return;
 
@@ -1172,6 +1201,10 @@ void ScDrawLayer::HeightChanged( USHORT nTab, USHORT nRow, long nDifTwips )
 
 BOOL ScDrawLayer::HasObjectsInRows( USHORT nTab, USHORT nStartRow, USHORT nEndRow )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::HasObjectsInRows without document" );
+    if ( !pDoc )
+        return FALSE;
+
     Rectangle aTestRect;
 
     USHORT i;
@@ -1256,6 +1289,10 @@ void ScDrawLayer::DeleteObjects( USHORT nTab )
 void ScDrawLayer::DeleteObjectsInArea( USHORT nTab, USHORT nCol1,USHORT nRow1,
                                             USHORT nCol2,USHORT nRow2 )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::DeleteObjectsInArea without document" );
+    if ( !pDoc )
+        return;
+
     SdrPage* pPage = GetPage(nTab);
     DBG_ASSERT(pPage,"Page ?");
     if (!pPage)
@@ -1296,6 +1333,10 @@ void ScDrawLayer::DeleteObjectsInArea( USHORT nTab, USHORT nCol1,USHORT nRow1,
 
 void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::DeleteObjectsInSelection without document" );
+    if ( !pDoc )
+        return;
+
     if ( !rMark.IsMultiMarked() )
         return;
 
@@ -1443,6 +1484,10 @@ BOOL lcl_MoveRanges( ScRangeList& rRanges, const ScRange& rSourceRange, const Sc
 void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, USHORT nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange )
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::CopyFromClip without document" );
+    if ( !pDoc )
+        return;
+
     if (!pClipModel)
         return;
 
@@ -1860,13 +1905,17 @@ void ScDrawLayer::SetGlobalDrawPersist(SvPersist* pPersist)         // static
 
 void __EXPORT ScDrawLayer::SetChanged( FASTBOOL bFlg /* =TRUE */ )
 {
-    if ( bFlg )
+    if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( TRUE );
     FmFormModel::SetChanged( bFlg );
 }
 
 SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
+    DBG_ASSERT( pDoc, "ScDrawLayer::GetDocumentStream without document" );
+    if ( !pDoc )
+        return NULL;
+
     SvStorage*  pStor = pDoc->GetDocumentShell() ? pDoc->GetDocumentShell()->GetMedium()->GetStorage() : NULL;
     SvStream*   pRet = NULL;
 
