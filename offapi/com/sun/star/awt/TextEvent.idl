@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::TextEvent
 /** specifies a text event.
  */
 struct TextEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::TextEvent::dummy1
-    /** This is dummy field only. Ignore.
+    /** This is a dummy field only. Please ignore.
      */
     short dummy1;
 
