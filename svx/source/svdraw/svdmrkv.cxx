@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmrkv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:48:30 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ BOOL SdrMarkView::ImpIsFrameHandles() const
         const SdrObject* pObj=aMark.GetMark(0)->GetObj();
         if (pObj->GetObjInventor()==SdrInventor) {
             UINT16 nIdent=pObj->GetObjIdentifier();
-            if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE) {
+            if (nIdent==OBJ_LINE || nIdent==OBJ_EDGE || nIdent==OBJ_CAPTION || nIdent==OBJ_MEASURE || nIdent==OBJ_CUSTOMSHAPE ) {
                 bFrmHdl=FALSE;
             }
         }
