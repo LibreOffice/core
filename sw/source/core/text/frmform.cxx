@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:09:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2093,10 +2093,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     if ( pMaster && !pMaster->IsFlyLock() &&
          pMaster->GetDrawObjs() )
     {
-        // OD 2004-05-17 #i28701# - lock frame in order to avoid the
-        // clear of its paragraph portions due to the invalidation of
-        // its floating screen objects.
-        SwTxtFrmLocker aLock(this);
         SwSortedObjs* pObjs = pMaster->GetDrawObjs();
         for( MSHORT i = 0; i < pObjs->Count(); ++i )
         {
@@ -2107,7 +2103,10 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
                     == FLY_AUTO_CNTNT )
             {
-                pAnchoredObj->CheckCharRectAndTopOfLine();
+                // --> OD 2005-01-04 #118895# - no check for paragraph portion
+                // information for empty paragraphs, because they have none.
+                pAnchoredObj->CheckCharRectAndTopOfLine( !IsEmpty() );
+                // <--
             }
             // <--
         }
