@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:46:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
@@ -492,7 +491,6 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
         case DST_ODBC:
         case DST_ADO:
         case DST_LDAP:
-        case DST_CALC:
             return sal_True;
             break;
         case DST_MSACCESS:
@@ -503,6 +501,7 @@ sal_Bool ODsnTypeCollection::hasAuthentication(DATASOURCE_TYPE _eType) const
         case DST_OUTLOOKEXP: //????
         case DST_DBASE:
         case DST_FLAT:
+        case DST_CALC:
         case DST_EMBEDDED:
         default:
             return sal_False;
