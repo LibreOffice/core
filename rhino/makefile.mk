@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-01 13:11:19 $
+#   last change: $Author: hr $ $Date: 2005-04-06 10:53:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,11 +66,6 @@ PRJNAME=ooo_rhino
 TARGET=ooo_rhino
 
 .IF "$(SOLAR_JAVA)"!=""
-.IF "$(JDK)" == "gcj"
-all:
-        @echo This dir cannot be build with gcj because of javax.swing.JTextArea.replaceRange
-.ELSE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
@@ -89,7 +84,6 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
-.ENDIF
 .ELSE
 all:
         @echo java disabled
