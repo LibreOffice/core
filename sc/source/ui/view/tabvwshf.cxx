@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:09:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             break;
 
         case FID_INS_TABLE:
+        case FID_INS_TABLE_EXT:
             {
                 ScMarkData& rMark    = pViewData->GetMarkData();
                 SCTAB   nTabSelCount = rMark.GetSelectCount();
@@ -273,7 +274,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
                     AbstractScInsertTableDlg* pDlg = pFact->CreateScInsertTableDlg( GetDialogParent(), *pViewData,
-                                                                                    nTabSelCount,
+                                                                                    nTabSelCount, nSlot == FID_INS_TABLE_EXT,
                                                                                     ResId(RID_SCDLG_INSERT_TABLE));
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                     if ( RET_OK == pDlg->Execute() )
@@ -790,6 +791,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                 break;
 
             case FID_INS_TABLE:
+            case FID_INS_TABLE_EXT:
             case FID_TAB_APPEND:
                 if (   !pDoc->IsDocEditable()
                     || nTabCount > MAXTAB)
