@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:32:13 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 10:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         UINT32 nInv = pObj->GetObjInventor();
         UINT16 nIdent = pObj->GetObjIdentifier();
 
-        aOleData = TransferableDataHelper();
+        aOLEDataHelper = TransferableDataHelper();
         delete pGraphic, pGraphic = NULL;
         delete pBookmark, pBookmark = NULL;
         delete pImageMap, pImageMap = NULL;
@@ -234,10 +234,8 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         {
             const SvInPlaceObjectRef& rOldObjRef = ((SdrOle2Obj*)pObj)->GetObjRef();
 
-            /* !!!Clipboard
             if( rOldObjRef.Is() )
-                aOleData = TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
-            */
+                aOLEDataHelper = TransferableDataHelper( rOldObjRef->CreateTransferableSnapshot() );
         }
         else if( pObj->ISA( SdrGrafObj ) && !pSourceDoc->GetAnimationInfo( pObj ) )
         {
@@ -390,10 +388,18 @@ void SdTransferable::AddSupportedFormats()
     if( !pSdViewIntern )
         CreateData();
 
-    SdDrawDocument*     pDoc = NULL;
-    const SdrMarkList&  rMarkList = pSdViewIntern->GetMarkList();
+    if( aOLEDataHelper.GetTransferable().is() )
+    {
+        AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
+        AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
-    if( pGraphic )
+        DataFlavorExVector              aVector( aOLEDataHelper.GetDataFlavorExVector() );
+        DataFlavorExVector::iterator    aIter( aVector.begin() ), aEnd( aVector.end() );
+
+        while( aIter != aEnd )
+            AddFormat( *aIter++ );
+    }
+    else if( pGraphic )
     {
         AddFormat( SOT_FORMATSTR_ID_SVXB );
 
@@ -421,15 +427,9 @@ void SdTransferable::AddSupportedFormats()
     {
         AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-
-        if( !aOleData.GetTransferable().is() )
-        {
-            AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
-            AddFormat( SOT_FORMAT_BITMAP );
-        }
-        else
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
+        AddFormat( SOT_FORMATSTR_ID_DRAWING );
+        AddFormat( SOT_FORMAT_GDIMETAFILE );
+        AddFormat( SOT_FORMAT_BITMAP );
     }
 
     if( pImageMap )
@@ -443,10 +443,25 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     sal_Bool    bOK = sal_False;
 
-    if( HasFormat( nFormat ) )
-    {
-        CreateData();
+    CreateData();
 
+    if( aOLEDataHelper.GetTransferable().is() && aOLEDataHelper.HasFormat( rFlavor ) )
+    {
+        ULONG nOldSwapMode;
+
+        if( pSdDrawDocumentIntern )
+        {
+            nOldSwapMode = pSdDrawDocumentIntern->GetSwapGraphicsMode();
+            pSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
+        }
+
+        bOK = SetAny( aOLEDataHelper.GetAny( rFlavor ), rFlavor );
+
+        if( pSdDrawDocumentIntern )
+            pSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
+    }
+    else if( HasFormat( nFormat ) )
+    {
         if( ( nFormat == SOT_FORMATSTR_ID_LINKSRCDESCRIPTOR || nFormat == SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) && pObjDesc )
         {
             bOK = SetTransferableObjectDescriptor( *pObjDesc, rFlavor );
@@ -480,21 +495,6 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
         else if( pBookmark )
         {
             bOK = SetINetBookmark( *pBookmark, rFlavor );
-        }
-        else if( aOleData.GetTransferable().is() )
-        {
-            ULONG nOldSwapMode;
-
-            if( pSdDrawDocumentIntern )
-            {
-                nOldSwapMode = pSdDrawDocumentIntern->GetSwapGraphicsMode();
-                pSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
-            }
-
-            bOK = SetAny( aOleData.GetAny( rFlavor ), rFlavor );
-
-            if( pSdDrawDocumentIntern )
-                pSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );
         }
         else if( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
@@ -556,11 +556,11 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
         case( SDTRANSFER_OBJECTTYPE_DRAWOLE ):
         {
             SvEmbeddedObject*   pEmbObj = (SvEmbeddedObject*) pObject;
-            SvStorageRef        xWorkStore( new SvStorage( FALSE, String() ) );
+            SvStorageRef        xWorkStore( new SvStorage( TRUE, String() ) );
             const String        aStoreName( xWorkStore->GetName() );
 
             // write document storage
-            xWorkStore->SetVersion( SOFFICE_FILEFORMAT_50 );
+            xWorkStore->SetVersion( SOFFICE_FILEFORMAT_60 );
             pEmbObj->SetupStorage( xWorkStore );
             bRet = pEmbObj->DoSaveAs( xWorkStore );
             pEmbObj->DoSaveCompleted();

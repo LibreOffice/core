@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:12:28 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 10:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ class SdTransferable : public TransferableHelper
 private:
 
     SvEmbeddedObjectRef             aDocShellRef;
-    TransferableDataHelper          aOleData;
+    TransferableDataHelper          aOLEDataHelper;
     TransferableObjectDescriptor*   pObjDesc;
     SvObjectDescriptor*             pObjectDescriptor;
     const SdView*                   pSdView;
