@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoedsrc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-07 15:45:46 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 14:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _SFXBRDCST_HXX
 #include <svtools/brdcst.hxx>
