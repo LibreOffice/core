@@ -1,6 +1,4 @@
 ..\%__SRC%\bin\xsec_fw.dll %_DEST%\bin%_EXT%\xsec_fw.dll
 ..\%__SRC%\bin\xsec_xmlsec.dll %_DEST%\bin%_EXT%\xsec_xmlsec.dll
 ..\%__SRC%\bin\xmlsecurity.dll %_DEST%\bin%_EXT%\xmlsecurity.dll
-
-..\%__SRC%\lib\* %_DEST%\bin%_EXT%
-
+..\%__SRC%\bin\xmlsec*.res %_DEST%\bin%_EXT%\xmlsec*.res
