@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: as $ $Date: 2002-06-13 08:04:03 $
+ *  last change: $Author: rt $ $Date: 2002-06-13 08:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#include <stdio.h>
 
 #ifndef __FRAMEWORK_DISPATCH_DISPATCHPROVIDER_HXX_
 #include <dispatch/dispatchprovider.hxx>
