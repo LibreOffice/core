@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:18:56 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
         }
 
         if( !pSfxFlt )
-            pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr );
+            pSfxFlt = SwIoSystem::GetFileFilter( pMed->GetPhysicalName(), aEmptyStr, pMed );
 
         if( pSfxFlt )
         {
