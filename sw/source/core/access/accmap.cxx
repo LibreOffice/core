@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-09 09:16:20 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,12 @@ void SwAccessibleMap::InvalidateCursorPosition(
     else
     {
         FireEvents();
-        pAccImpl->InvalidateCursorPos();
+        // While firing events the current frame might have
+        // been disposed because it moved out of the vis area.
+        // Setting the cursor for such frames is useless and even
+        // causes asserts.
+        if( pAccImpl->GetFrm() )
+            pAccImpl->InvalidateCursorPos();
     }
 }
 
