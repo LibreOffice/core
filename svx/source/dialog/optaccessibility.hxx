@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:38:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@ class SvxAccessibilityOptionsTabPage : public SfxTabPage
     FixedLine       m_aMiscellaneousLabel;      // FL_MISCELLANEOUS
     CheckBox        m_aAccessibilityTool;       // CB_ACCESSIBILITY_TOOL
     CheckBox        m_aTextSelectionInReadonly; // CB_TEXTSELECTION
-    CheckBox        m_aSystemFont;              // CB_SYSTEM_FONT
     CheckBox        m_aAnimatedGraphics;        // CB_ANIMATED_GRAPHICS
     CheckBox        m_aAnimatedTexts;           // CB_ANIMATED_TEXTS
     CheckBox        m_aTipHelpCB;               // CB_TIPHELP
