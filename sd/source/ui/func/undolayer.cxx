@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undolayer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-12 18:39:57 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,11 @@
 
 #include "undolayer.hxx"
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "strings.hrc"
 #include "sdresid.hxx"
 
@@ -90,10 +92,11 @@ SdLayerModifyUndoAction::SdLayerModifyUndoAction(
 
 void SdLayerModifyUndoAction::Undo()
 {
-    SdDrawDocShell* pDocSh = pDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
     if( pDocSh )
     {
-        SdDrawViewShell* pDrViewSh = PTR_CAST( SdDrawViewShell, pDocSh->GetViewShell() );
+        ::sd::DrawViewShell* pDrViewSh =
+              PTR_CAST(::sd::DrawViewShell, pDocSh->GetViewShell() );
         if( pDrViewSh )
         {
             pDrViewSh->ModifyLayer( mpLayer, maOldLayerName, mbOldIsVisible, mbOldIsLocked, mbOldIsPrintable );
@@ -103,15 +106,14 @@ void SdLayerModifyUndoAction::Undo()
 
 void SdLayerModifyUndoAction::Redo()
 {
-    SdDrawDocShell* pDocSh = pDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocSh = pDoc->GetDocSh();
     if( pDocSh )
     {
-        SdDrawViewShell* pDrViewSh = PTR_CAST( SdDrawViewShell, pDocSh->GetViewShell() );
+        ::sd::DrawViewShell* pDrViewSh =
+              PTR_CAST(::sd::DrawViewShell, pDocSh->GetViewShell() );
         if( pDrViewSh )
         {
             pDrViewSh->ModifyLayer( mpLayer, maNewLayerName, mbNewIsVisible, mbNewIsLocked, mbNewIsPrintable );
         }
     }
 }
-
-
