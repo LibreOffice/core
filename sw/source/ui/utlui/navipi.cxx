@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:56:34 $
+ *  last change: $Author: os $ $Date: 2001-08-30 08:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -925,11 +925,13 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     nWishWidth = aContentToolBox.CalcWindowSizePixel().Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
-//  Navi um Border vergroessern
-//  FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
-//  if(pFloat)
-    ((SfxDockingWindow*)pParent)->SetMinOutputSizePixel(Size(nWishWidth, nZoomOutInit));
+    Size aMinSize(nWishWidth, nZoomOutInit);
+    ((SfxDockingWindow*)pParent)->SetMinOutputSizePixel(aMinSize);
     SetOutputSizePixel( Size( nWishWidth, nZoomOutInit));
+    Size aTmpParentSize(((SfxDockingWindow*)pParent)->GetSizePixel());
+    if(aTmpParentSize.Width() < aMinSize.Width() ||
+        aTmpParentSize.Height() < aMinSize.Height())
+        ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
     aContentTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
