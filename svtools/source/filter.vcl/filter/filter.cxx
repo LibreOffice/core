@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-09 19:47:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1509,6 +1509,28 @@ USHORT GraphicFilter::GetImportFormatNumber( const String& rFormatName )
 
 // ------------------------------------------------------------------------
 
+USHORT GraphicFilter::GetImportFormatNumberForShortName( const String& rShortName )
+{
+    DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatNumber() : no Config" );
+
+    pConfig->SetGroup( IMP_FILTERSECTION );
+
+    USHORT i = 0, nKeys = pConfig->GetKeyCount();
+
+    while( i < nKeys )
+    {
+        UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
+        if( ImpGetFormatExtension( aTemp ).EqualsIgnoreCaseAscii( rShortName ) )
+            break;
+
+        i++;
+    }
+
+    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+}
+
+// ------------------------------------------------------------------------
+
 String GraphicFilter::GetImportFormatName( USHORT nFormat )
 {
     DBG_ASSERT( pConfig,"GraphicFilter::GetImportFormatName() : no Config" );
@@ -1620,6 +1642,27 @@ USHORT GraphicFilter::GetExportFormatNumber( const String& rFormatName )
     {
         UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
         if( ImpGetFormatName( aTemp ).EqualsIgnoreCaseAscii( aUpperFormat ) )
+            break;
+        i++;
+    }
+
+    return( ( i == nKeys ) ? GRFILTER_FORMAT_NOTFOUND : i );
+}
+
+// ------------------------------------------------------------------------
+
+USHORT GraphicFilter::GetExportFormatNumberForShortName( const String& rShortName )
+{
+    DBG_ASSERT( pConfig,"GraphicFilter:: : no Config" );
+
+    pConfig->SetGroup( EXP_FILTERSECTION );
+
+    USHORT i = 0, nKeys = pConfig->GetKeyCount();
+
+    while( i < nKeys )
+    {
+        UniString aTemp( pConfig->ReadKey( i ), RTL_TEXTENCODING_UTF8 );
+        if( ImpGetFormatExtension( aTemp ).EqualsIgnoreCaseAscii( rShortName ) )
             break;
         i++;
     }
@@ -2728,39 +2771,20 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             break;
         }
 
-        if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
+        if( aShortName.Len() )
         {
-            if( aShortName.Len() )
+            if( GRAPHIC_NONE == pData->maGraphic.GetType() || pData->maGraphic.GetContext() ) // Import
             {
-                for( USHORT i = 0, nCount = GetImportFormatCount(); i < nCount; i++ )
-                {
-                    ByteString aImpShortName( GetImportFormatShortName( i ), RTL_TEXTENCODING_UTF8 );
-                    aImpShortName.ToUpperAscii();
-                    if( aImpShortName.CompareTo( aShortName ) == COMPARE_EQUAL )
-                    {
-                        nFormat = i;
-                        break;
-                    }
-                }
+                // Import
+                nFormat = GetImportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
+                nRet = ( ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == GRFILTER_OK );
             }
-
-            nRet = ( ImportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == GRFILTER_OK );
-        }
-        else if( aShortName.Len() ) // Export
-        {
-            for( USHORT i = 0, nCount = GetExportFormatCount(); i < nCount; i++ )
+            else
             {
-                ByteString aExpShortName( GetExportFormatShortName( i ), RTL_TEXTENCODING_UTF8 );
-                aExpShortName.ToUpperAscii();
-                if( aExpShortName.CompareTo( aShortName ) == COMPARE_EQUAL )
-                {
-                    nFormat = i;
-                    break;
-                }
-            }
-
-            if( nFormat )
+                // Export
+                nFormat = GetExportFormatNumberForShortName( String( aShortName.GetBuffer(), RTL_TEXTENCODING_UTF8 ) );
                 nRet = ( ExportGraphic( pData->maGraphic, String(), pData->mrStm, nFormat ) == GRFILTER_OK );
+            }
         }
 
         EnableOptions( bOptions );
