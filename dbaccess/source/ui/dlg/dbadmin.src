@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:13:24 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 13:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,6 @@
 #endif
 
 #define IL_TABLESUBCRIPTION \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_NEW_TABLE_DESIGN;\
@@ -98,10 +93,20 @@ ImageList IMG_TABLESUBCRIPTION_SC
     {
         File = "sc_tblscr.bmp";
     };
+    MaskColor   = Color {
+    Red   = 0xC000;
+    Green = 0xC000;
+    Blue  = 0xC000;
+    };
     IL_TABLESUBCRIPTION ;
 };
 ImageList IMG_TABLESUBCRIPTION_SCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "sch_tblscr.bmp";
@@ -114,10 +119,20 @@ ImageList IMG_TABLESUBCRIPTION_LC
     {
         File = "lc_tblscr.bmp";
     };
+    MaskColor   = Color {
+    Red   = 0xC000;
+    Green = 0xC000;
+    Blue  = 0xC000;
+    };
     IL_TABLESUBCRIPTION ;
 };
 ImageList IMG_TABLESUBCRIPTION_LCH
 {
+    MaskColor   = Color {
+                Red   = 0xffff;
+                Green = 0x0000;
+                Blue  = 0xffff;
+        };
     ImageBitmap = Bitmap
     {
         File = "lch_tblscr.bmp";
@@ -128,11 +143,6 @@ ImageList IMG_TABLESUBCRIPTION_LCH
 
 //-------------------------------------------------------------------------
 #define IL_QUERYADMINISTRATION \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_NEW_QUERY_DESIGN;\
@@ -148,6 +158,11 @@ ImageList IMG_TABLESUBCRIPTION_LCH
 
 ImageList IMG_QUERYADMINISTRATION_SC
 {
+    MaskColor   = Color {
+    Red   = 0xC000;
+    Green = 0xC000;
+    Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "sc_qryadmin.bmp";
@@ -156,6 +171,11 @@ ImageList IMG_QUERYADMINISTRATION_SC
 };
 ImageList IMG_QUERYADMINISTRATION_SCH
 {
+    MaskColor   = Color {
+                Red   = 0xffff;
+                Green = 0x0000;
+                Blue  = 0xffff;
+        };
     ImageBitmap = Bitmap
     {
         File = "sch_qryadmin.bmp";
@@ -164,6 +184,11 @@ ImageList IMG_QUERYADMINISTRATION_SCH
 };
 ImageList IMG_QUERYADMINISTRATION_LC
 {
+    MaskColor   = Color {
+    Red   = 0xC000;
+    Green = 0xC000;
+    Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "lc_qryadmin.bmp";
@@ -172,6 +197,11 @@ ImageList IMG_QUERYADMINISTRATION_LC
 };
 ImageList IMG_QUERYADMINISTRATION_LCH
 {
+    MaskColor   = Color {
+                Red   = 0xffff;
+                Green = 0x0000;
+                Blue  = 0xffff;
+        };
     ImageBitmap = Bitmap
     {
         File = "lch_qryadmin.bmp";
@@ -180,11 +210,6 @@ ImageList IMG_QUERYADMINISTRATION_LCH
 };
 //-------------------------------------------------------------------------
 #define IL_DOCUMENTLINKS \
-    MaskColor   = Color {\
-    Red   = 0xC000;\
-    Green = 0xC000;\
-    Blue  = 0xC000;\
-    };\
 \
     IdList = {\
         ID_NEW_LINK;\
@@ -200,6 +225,11 @@ ImageList IMG_QUERYADMINISTRATION_LCH
 
 ImageList IMG_DOCUMENTLINKS_SC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "sc_doclinks.bmp";
@@ -208,6 +238,11 @@ ImageList IMG_DOCUMENTLINKS_SC
 };
 ImageList IMG_DOCUMENTLINKS_SCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "sch_doclinks.bmp";
@@ -216,6 +251,11 @@ ImageList IMG_DOCUMENTLINKS_SCH
 };
 ImageList IMG_DOCUMENTLINKS_LC
 {
+    MaskColor   = Color {
+        Red   = 0xC000;
+        Green = 0xC000;
+        Blue  = 0xC000;
+    };
     ImageBitmap = Bitmap
     {
         File = "lc_doclinks.bmp";
@@ -224,6 +264,11 @@ ImageList IMG_DOCUMENTLINKS_LC
 };
 ImageList IMG_DOCUMENTLINKS_LCH
 {
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
     ImageBitmap = Bitmap
     {
         File = "lch_doclinks.bmp";
@@ -3576,6 +3621,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.98  2002/05/21 09:13:24  kz
+ *  Merge SRX642: 21.05.02 - 11:12:54
+ *
  *  Revision 1.97  2002/05/07 20:06:47  kz
  *  Merge SRX642: 07.05.02 - 22:06:14
  *
