@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-10 15:29:44 $
+ *  last change: $Author: bc $ $Date: 2002-07-18 14:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,6 @@ public class Dataimport extends ReportWizard{
         }
         catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(System.out);
-            System.exit( 0 );
         }
         catch(java.lang.Exception javaexception ){
         javaexception.printStackTrace(System.out);
@@ -260,10 +259,12 @@ public class Dataimport extends ReportWizard{
         if (bgoOn[0] == false)
         return false;
         if (bgetConnection){
-        CurDBMetaData.Statement = CurDBMetaData.DBConnection.createStatement();
-        CurDBMetaData.ResultSet = CurDBMetaData.Statement.executeQuery(CurDBMetaData.Command);
-        XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, CurDBMetaData.ResultSet);
-        CurDBMetaData.xColumns = xDBCols.getColumns();
+        boolean bexecute = DBMetaData.executeCommand(xMSF, CurDBMetaData,CurReportDocument.Frame, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
+        if (bexecute){;
+            XColumnsSupplier xDBCols = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, CurDBMetaData.ResultSet);
+            CurDBMetaData.xColumns = xDBCols.getColumns();
+        }
+        return bexecute;
         }
         else
         return false;
@@ -273,11 +274,6 @@ public class Dataimport extends ReportWizard{
         UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
         return false;
     }
-    return bgetConnection;
-    }
-    catch(com.sun.star.sdbc.SQLException exception){
-    UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot);
-    return false;
     }
 
 //    catch(com.sun.star.uno.Exception exception ){
@@ -481,19 +477,25 @@ public class Dataimport extends ReportWizard{
     UNODialogs.UNODialog CurUNOProgressDialog = UNODialogs.initializeDialog(xMSF, new String[] {"Height", "PositionX", "PositionY", "Step", "Title", "Width"},
                             new Object[] {new Integer(84), new Integer(250), new Integer(150), new Integer(0), sProgressTitle, new Integer(180)}
                             , iWidth);
-
-    if (bgetConnection){
         com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
         oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
+
+    if (bgetConnection){
 
         UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNOProgressDialog, "lblProgressDBConnection",
                             new String[] {"FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"},
                             new Object[] {oFontDesc, new Integer(10), sProgressDBConnection, new Integer(6), new Integer(6), new Integer(0), new Integer(150)});
-    }
 
-    UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNOProgressDialog, "lblProgressDataImport",
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNOProgressDialog, "lblProgressDataImport",
                             new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},
                             new Object[] {new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)});
+
+    }
+    else{
+        UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNOProgressDialog, "lblProgressDataImport",
+                        new String[] {"FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "Width"},
+                        new Object[] {oFontDesc, new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)});
+    }
 
     UNODialogs.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", CurUNOProgressDialog, "lblCurProgress",
                             new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "Width"},

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bc $ $Date: 2002-06-27 12:08:40 $
+ *  last change: $Author: bc $ $Date: 2002-07-18 14:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ public class CallReportWizard {
      */
     public static XSingleServiceFactory __getServiceFactory(String stringImplementationName, XMultiServiceFactory xMSF, XRegistryKey xregistrykey)
     {
-                XSingleServiceFactory xsingleservicefactory = null;
+    XSingleServiceFactory xsingleservicefactory = null;
         if ( stringImplementationName.equals(
             ReportWizardImplementation.class.getName() ) )
             xsingleservicefactory = FactoryHelper.getServiceFactory(
@@ -184,33 +184,20 @@ public class CallReportWizard {
             xmultiservicefactory = xmultiservicefactoryInitialization;
         }
 
+        public void trigger(String sEvent){
+    try{
+        XComponentLoader xcomponentloader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
+        if (sEvent.compareTo("start") == 0) {
+        ReportWizard.startReportWizard(xmultiservicefactory, null);
+        }
+        else if (sEvent.compareTo("fill") == 0){
+            Dataimport.createReport(xmultiservicefactory);
+        }
+    }
+    catch( Exception exception ){
+        System.err.println( exception );
+        }}
 
-
-            public void trigger(String sEvent)
-                {
-                        if ( sEvent.compareTo("start") == 0) {
-                              try
-                            {
-                               XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
-                                  ReportWizard.startReportWizard(xmultiservicefactory);
-                            }
-                         catch( Exception exception )
-                            {
-                                System.err.println( exception );
-                            }
-                        }
-                        else if ( sEvent.compareTo("fill") == 0) {
-                                try
-                            {
-                               XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
-                                 Dataimport.createReport(xmultiservicefactory);
-                            }
-                            catch( Exception exception )
-                            {
-                                System.err.println( exception );
-                            }
-                        }
-                }
 
         /** The service name, that must be used to get an instance of this service.
          */
@@ -229,7 +216,11 @@ public class CallReportWizard {
          */
         public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            xmultiservicefactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[ 0 ] );
+        com.sun.star.beans.PropertyValue[] CurPropertyValue;
+        CurPropertyValue = (com.sun.star.beans.PropertyValue[]) object;
+        ReportWizard.startReportWizard(xmultiservicefactory,CurPropertyValue);
+
+    //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }
 
         /** This method returns an array of all supported service names.
