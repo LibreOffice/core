@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 06:40:46 $
+ *  last change: $Author: khong $ $Date: 2002-05-31 07:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,9 @@ TRANSLITERATION_NUMTOTEXT( Lower_zh_CN, Lower_zh, Lower_zh, CJK, 0 )
 TRANSLITERATION_NUMTOTEXT( Upper_zh_CN, Upper_zh, Upper_zh, CJK, 0 )
 TRANSLITERATION_NUMTOTEXT( Lower_zh_TW, Lower_zh, Lower_zh, CJK, 0 )
 TRANSLITERATION_NUMTOTEXT( Upper_zh_TW, Upper_zh_TW, Upper_zh_TW, CJK, 0 )
-TRANSLITERATION_NUMTOTEXT( Fullwidth_zh, FullWidth, Lower_zh, CJK, 0 )
-TRANSLITERATION_NUMTOTEXT( Fullwidth_ja, FullWidth, Modern_ja, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_zh_CN, FullWidth, Lower_zh, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_zh_TW, FullWidth, Lower_zh_TW, CJK, 0 )
+TRANSLITERATION_NUMTOTEXT( Fullwidth_ja_JP, FullWidth, Modern_ja, CJK, 0 )
 TRANSLITERATION_NUMTOTEXT( Fullwidth_ko, FullWidth, Hangul_ko, CJK, 0 )
 #define Multiplier_Lower_ko Multiplier_Upper_zh_TW
 #define Multiplier_Upper_ko Multiplier_Upper_zh_TW
