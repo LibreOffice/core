@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-08 12:12:54 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,12 +339,12 @@ void XPlugin_Impl::modelChanged()
 
     ::rtl::OUString aURL = getCreationURL();
     int nPos = aURL.lastIndexOf( (sal_Unicode)'.' );
-    ::rtl::OUString aExt = aURL.copy( nPos ).toLowerCase();
+    ::rtl::OUString aExt = aURL.copy( nPos ).toAsciiLowerCase();
     if( nPos != -1 )
     {
         for( int i = 0; i < aDescrs.getLength(); i++ )
         {
-            ::rtl::OUString aThisExt = pDescrs[ i ].Extension.toLowerCase();
+            ::rtl::OUString aThisExt = pDescrs[ i ].Extension.toAsciiLowerCase();
             if( aThisExt.indexOf( aExt ) != -1 )
             {
                 nDescr = i;
@@ -541,7 +541,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
         loadPlugin();
 
     ::rtl::OString aMIME;
-    if( mimetype.len() )
+    if( mimetype.getLength() )
         aMIME = ::rtl::OUStringToOString( mimetype, m_aEncoding );
     else
         // Notnagel
@@ -884,8 +884,8 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer )
     }
 
     m_pPlugin->getPluginComm()->
-          NPP_SetWindow( m_pPlugin->getNPPInstance(),
-                         m_pPlugin->getNPWindow());
+        NPP_SetWindow( m_pPlugin->getNPPInstance(),
+                       m_pPlugin->getNPWindow());
 }
 
 void PluginInputStream::closeOutput()

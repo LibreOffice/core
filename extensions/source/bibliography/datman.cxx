@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 13:57:24 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:25:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,7 +1195,7 @@ void BibDataManager::startQueryWith(const OUString& rQuery)
     pConfig->setQueryText( rQuery );
 
     rtl::OUString aQueryString;
-    if(rQuery.len()>0)
+    if(rQuery.getLength()>0)
     {
         aQueryString=aQuoteChar;
         aQueryString+=getQueryField();
@@ -1636,7 +1636,7 @@ try
         }
     }
 
-    if(theFieldName.len()>0)
+    if(theFieldName.getLength()>0)
     {
         Reference< XPropertySet >  xPropSet;
         Any aElement;
@@ -1685,7 +1685,7 @@ try
         }
     }
 
-    if(theFieldName.len()>0)
+    if(theFieldName.getLength()>0)
     {
         Reference< XPropertySet >  xPropSet;
         Any aElement;

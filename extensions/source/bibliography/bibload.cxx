@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 15:46:20 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:24:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -641,7 +641,7 @@ rtl::OUString lcl_AddProperty(Reference< container::XNameAccess >  xColumns,
         {
             if(pMapping->aColumnPairs[nEntry].sLogicalColumnName == OUString(rColumnName))
             {
-                   sColumnName = pMapping->aColumnPairs[nEntry].sRealColumnName;
+                sColumnName = pMapping->aColumnPairs[nEntry].sRealColumnName;
                 break;
             }
         }
@@ -728,7 +728,7 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
             do
             {
                 rtl::OUString sTemp = xIdColumn->getString();
-                if (sTemp.len() && !xIdColumn->wasNull())
+                if (sTemp.getLength() && !xIdColumn->wasNull())
                 {
                     int nLen = aRet.getLength();
                     if (nLen = nRealNameCount)
@@ -819,7 +819,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
 void BibliographyLoader::setPropertyValue(const rtl::OUString& PropertyName,
                                         const Any& aValue)
     throw( UnknownPropertyException, PropertyVetoException,
-         IllegalArgumentException, WrappedTargetException, RuntimeException)
+        IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     throw UnknownPropertyException();
     //no changeable properties

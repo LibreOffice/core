@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 15:49:29 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void BibFrameController_Impl::dispose()
     pImp->aLC.disposeAndClear(aObject);
     xDatman = 0;
     pDatMan = 0;
-     aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
+    aStatusListeners.DeleteAndDestroy( 0, aStatusListeners.Count() );
  }
 
 void BibFrameController_Impl::addEventListener( const uno::Reference< lang::XEventListener > & aListener )
@@ -467,7 +467,7 @@ void BibFrameController_Impl::addStatusListener(
         rtl::OUString aFilterStr=pDatMan->getFilter();
         FeatureStateEvent  aEvent;
         aEvent.FeatureURL = aURL;
-        aEvent.IsEnabled  = (aFilterStr.len() > 0);
+        aEvent.IsEnabled  = (aFilterStr.getLength() > 0);
         aEvent.Requery    = sal_False;
         aEvent.Source     = (XDispatch *) this;
         aListener->statusChanged( aEvent );
@@ -498,7 +498,7 @@ void BibFrameController_Impl::removeStatusListener(
             BibStatusDispatch *pObj = aStatusListeners[n];
             sal_Bool bFlag=pObj->xListener.is();
             if (!bFlag || (pObj->xListener == aObject &&
-                ( !aURL.Complete.len() || pObj->aURL.Path == aURL.Path  )))
+                ( !aURL.Complete.getLength() || pObj->aURL.Path == aURL.Path  )))
             {
                 aStatusListeners.DeleteAndDestroy( n );
                 break;

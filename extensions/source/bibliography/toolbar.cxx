@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-20 12:23:38 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ void BibToolBar::SendDispatch(sal_uInt16 nId, const Sequence< PropertyValue >& r
 
     uno::Reference< frame::XDispatchProvider >  xDSP( xController, UNO_QUERY );
 
-    if( xDSP.is() && aCommand.len())
+    if( xDSP.is() && aCommand.getLength())
     {
         uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
