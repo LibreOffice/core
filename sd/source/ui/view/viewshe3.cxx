@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 12:03:10 $
+ *  last change: $Author: ka $ $Date: 2001-03-09 11:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ void SdViewShell::PrintStdOrNotes(SfxPrinter& rPrinter,
                 sal_uInt32 nFirstIndex = 0, nLastIndex = aPageVector.size() - 1;
 
                 if( aPageVector.size() & 1 )
-                    aPairVector.push_back( ::std::make_pair( 65535, aPageVector[ nFirstIndex++ ] ) );
+                    aPairVector.push_back( ::std::make_pair( (USHORT) 65535, aPageVector[ nFirstIndex++ ] ) );
                 else
                     aPairVector.push_back( ::std::make_pair( aPageVector[ nLastIndex-- ], aPageVector[ nFirstIndex++ ] ) );
 
