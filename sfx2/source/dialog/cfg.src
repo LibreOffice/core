@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:44:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ TabPage TP_CONFIG_MENU
         Text[ polish ] = "Wpisy menu";
         Text[ portuguese_brazilian ] = "Menu entries";
         Text[ japanese ] = "ÒΖ­°€–Ϊ";
-        Text[ korean ] = "Menu entries";
+        Text[ korean ] = "Έή΄Ί ΗΧΈρ";
         Text[ chinese_simplified ] = "²Λµ¥ΜυΔΏ";
         Text[ chinese_traditional ] = "¥\\―ΰªν¶µ¥Ψ";
         Text[ turkish ] = "Menu entries";
@@ -552,7 +552,7 @@ TabPage TP_CONFIG_ACCEL
         Text[ polish ] = "Skrσty klawiaturowe";
         Text[ portuguese_brazilian ] = "Keyboard shortcuts";
         Text[ japanese ] = "Ό®°Δ¶―Δ·°";
-        Text[ korean ] = "Keyboard shortcuts";
+        Text[ korean ] = "Ε°ΊΈµε ΄άΓΰ Ε°";
         Text[ chinese_simplified ] = "ΧιΊΟΌό";
         Text[ chinese_traditional ] = "²Υ¦XΑδ";
         Text[ turkish ] = "Keyboard shortcuts";
@@ -1372,8 +1372,8 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "‚ά‚ΎΞί―Μί±―Μί‚Μ‚έ‚Ι„‚θ“–‚Δ‚η‚κ‚ι‹@”\\‚Μ€–Ϊ‚ª‚ ‚θ‚ά‚·B\n\n‚±‚Μέ’θ‚π“K—p‚µ‚Δ‚ΰ‚Ά‚Ά‚Ε‚·‚©?";
     Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§ΦΕγ¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
-    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια ";
-    Message[ korean ] = "ΖΛΎχΈΈ ΗÒ΄ηµΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω.\n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δι";
+    Message[ korean ] = "ΖΛΎχΏ΅ΈΈ ΗΨ΄ηµΙ Όφ ΐΦ΄Β ±β΄Ιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω.\n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Yalnύzca aηύlan mφnόlere atanabilen iώlevleri olan giriώler mevcut.\n\nBu konfigόrasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todavνa hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\nΏDesea continuar de todos modos?";
@@ -1587,6 +1587,7 @@ String STR_MENU
     Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
 
 
 
