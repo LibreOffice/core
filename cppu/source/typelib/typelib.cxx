@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:30:26 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,6 +1197,11 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
+    if (*ppRet != 0) {
+        typelib_typedescription_release(&(*ppRet)->aBase);
+        *ppRet = 0;
+    }
+
     typelib_InterfaceTypeDescription * pITD = 0;
     typelib_typedescription_newEmpty(
         (typelib_TypeDescription **)&pITD, typelib_TypeClass_INTERFACE, pTypeName );
@@ -1209,6 +1214,15 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
             reinterpret_cast< typelib_TypeDescription ** >(
                 &pITD->ppBaseTypes[i]),
             ppBaseInterfaces[i]);
+        if (pITD->ppBaseTypes[i] == 0
+            || !complete(
+                reinterpret_cast< typelib_TypeDescription ** >(
+                    &pITD->ppBaseTypes[i]),
+                false))
+        {
+            OSL_ASSERT(false);
+            return;
+        }
         OSL_ASSERT(pITD->ppBaseTypes[i] != 0);
     }
     if (nBaseInterfaces > 0) {
@@ -1278,8 +1292,6 @@ extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
     pTmp->nAlignment = adjustAlignment( pTmp->nAlignment );
     pTmp->bComplete = sal_False;
 
-    if (*ppRet)
-        ::typelib_typedescription_release( (typelib_TypeDescription *)*ppRet );
     *ppRet = pITD;
 }
 
