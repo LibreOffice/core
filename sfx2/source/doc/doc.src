@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:18:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,7 +953,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message[ chinese_simplified ] = "ƒъ“™÷Ў…и±к„Љ—щ љќƒЉю¬р£њ";
     Message[ russian ] = "¬ы хотите восстановить стандартный шаблон?";
     Message[ polish ] = "Czy chcesz zresetowaж szablon domyЬlny?";
-    Message[ japanese ] = "ХWПАљј≤ўВрЎЊѓƒВµВ№ВЈВ©?";
+    Message[ japanese ] = "ХWПАљј≤ўВрЎЊѓƒВµВ№ВЈВ©БB";
     Message[ chinese_traditional ] = "±z≠n≠Ђ≥]Љ–Ј«ЉЋ¶°ј…Ѓ„°H";
     Message[ arabic ] = "еб  —нѕ ≈Џ«ѕ…  Џннд «бё«б» «б«Ё —«÷нњ";
     Message[ dutch ] = "Wilt u de veranderingen in de standaardsjabloon ongedaan maken?";
@@ -1069,7 +1069,7 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ russian ] = "¬озможно, что в этом документе содержатс€\n форматировани€ и информаци€, которые невозможно сохранить\nв формате $(FORMAT). —охранить изменени€ в\nформате $(OWNFORMAT)?";
     Text[ polish ] = "Dokument ten moњe zawieraж formatowania\ni informacje, ktуrych nie bкdzie moњna zapisaж\nw formacie $(FORMAT). Czy chcesz zapisaж\nzmiany w formacie $(OWNFORMAT)?";
     Text[ japanese ] = "В±ВћƒёЈ≠“ЁƒВЌ $(FORMAT) ПСОЃВ≈ХџСґВ≈ВЂВ»ВҐПСОЃРЁТиВ∆ПоХсВр\nК№ВсВ≈ВҐВ№ВЈБBХѕНXВр\n$(OWNFORMAT) ПСОЃВ…ХџСґВµВ№ВЈВ©БB";
-    Text[ chinese_traditional ] = "≥o≠”§е•у•iѓаІt¶≥§@®«µL™k•ќ $(FORMAT) Ѓж¶°јx¶s™ЇЃж¶°°C\n±z≠n®ѕ•ќ $(OWNFORMAT) Ѓж¶°јx¶s§е•у™Ї≈№Іу°H";
+    Text[ chinese_traditional ] = "≥o≠”§е•у•iѓаІt¶≥§@®«µL™k•ќ $(FORMAT) Ѓж¶°јx¶s™ЇЃж¶°°C\n≠n®ѕ•ќ $(OWNFORMAT) Ѓж¶°јx¶s§е•у™Ї≈№Іу°H";
     Text[ arabic ] = "гд «бггяд √д «б д”нё«  ж«бгЏбжг« ° «б н нЌ жн Џбне« е–« «бг” дѕ°\nџн— ё«»б… ббЌЁў »«б д”нё $(FORMAT). еб  —нѕ ЌЁў «б џнн—« \n»«б д”нё $(OWNFORMAT)њ";
     Text[ dutch ] = "Dit document kan opmaakattributen en gegevens \nbevatten die niet in $(FORMAT) formaat opgeslagen\nkunnen worden. Wilt u deze wijzigingen in\n$(OWNFORMAT) formaat opslaan?";
     Text[ chinese_simplified ] = "’вЄцќƒµµњ…ƒ№Їђ”–“ї–©ќёЈ®”√ $(FORMAT) Єс љіж≈ћµƒЄс љЇЌ–≈ѕҐ°£\nƒъ“™ є”√ $(OWNFORMAT) Єс љіж≈ћќƒµµµƒЄьЄƒ¬р£њ";
@@ -1374,14 +1374,14 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text [ danish ] = "Skal typografien \"$(ARG1)\" erstattes?" ;
     Text [ portuguese_brazilian ] = "Soll der Style $(ARG1) ersetzt werden?" ;
     Text [ portuguese ] = "Deseja substituir o estilo \"$(ARG1)\"?" ;
-    Text[ chinese_simplified ] = "“™Єьћж—щ љ°∞$(ARG1)°±£њ";
+    Text[ chinese_simplified ] = "“™ћжїї—щ љ $(ARG1)£њ";
     Text[ russian ] = "«аменить стиль \"$(ARG1)\"?";
     Text[ polish ] = "Zastєpiж styl \"$(ARG1)\"?";
     Text[ japanese ] = "љј≤ў \"$(ARG1)\" ВрТuКЈВµВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "≠nіј•NЉЋ¶°°u$(ARG1)°v°H";
     Text[ arabic ] = "еб  —нѕ «” »ѕ«б «бдгЎ \"$(ARG1)\"њ";
     Text[ dutch ] = "Wilt u opmaakprofiel \"$(ARG1)\" vervangen?";
-    Text[ chinese_simplified ] = "“™Єьћж—щ љ°∞$(ARG1)°±£њ";
+    Text[ chinese_simplified ] = "“™ћжїї—щ љ $(ARG1)£њ";
     Text[ greek ] = "Ќб бнфйкбфбуфбиея фп уфхл $(ARG1);";
     Text[ korean ] = "јѓ«ь $(ARG1)јї(Є¶)  іл√Љ«ѕљ√∞Џљјіѕ±о?";
     Text[ turkish ] = "\"$(ARG1)\" biзimi baюkasэ ile deрiюtirilsin mi?";
@@ -1701,14 +1701,14 @@ String STR_FSET_FILTERNAME1
     Text [ french ] = "Document %PRODUCTNAME Frame" ;
     Text [ dutch ] = "%PRODUCTNAME Frame-document" ;
     Text [ portuguese ] = "Documento %PRODUCTNAME Frame" ;
-    Text[ chinese_simplified ] = "%PRODUCTNAME Frame ќƒµµ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME њтґ‘ѕуќƒµµ";
     Text[ russian ] = "%PRODUCTNAME Frame - ƒокумент";
     Text[ polish ] = "%PRODUCTNAME Frame - Dokument";
     Text[ japanese ] = "%PRODUCTNAME Frame ƒёЈ≠“Ёƒ";
     Text[ chinese_traditional ] = "%PRODUCTNAME ∞TЃЎ§е•у";
     Text[ arabic ] = "г” дѕ %PRODUCTNAME Frame";
     Text[ dutch ] = "%PRODUCTNAME Frame-document";
-    Text[ chinese_simplified ] = "%PRODUCTNAME Frame ќƒµµ";
+    Text[ chinese_simplified ] = "%PRODUCTNAME њтґ‘ѕуќƒµµ";
     Text[ greek ] = "Єггсбцп фпх %PRODUCTNAMEFrame";
     Text[ korean ] = "%PRODUCTNAME Frame єЃЉ≠";
     Text[ turkish ] = "%PRODUCTNAME frame belgesi";
@@ -1732,7 +1732,7 @@ String STR_TEMPL_MOVED
     Text[ chinese_simplified ] = "√ї”–‘Џ‘≠јіќї÷√’“µљ—щ љ°∞$(TEMPLATE)°±°£”–“їЄцЌђ√ыµƒ—щ љ‘Џ°∞$(FOUND)°±і¶°£љсЇуƒъ“™ є”√’вЄц—щ љљш––µч’ы¬р£њ";
     Text[ russian ] = "Ўаблон \"$(TEMPLATE)\" не найден в исходном месте. Ўаблон с таким же именем находитс€ в \"$(FOUND)\". »спользовать этот шаблон в будущем дл€ синхронизации?";
     Text[ polish ] = "Szablonu \"$(TEMPLATE)\" nie znaleziono na jego pierwotnym miejscu. Szablon o tej samej nazwie istnieje w \"$(FOUND)\". Czy uњyж w przysz≥oЬci tego szablonu do aktualizacji?";
-    Text[ japanese ] = "√ЁћяЏ∞ƒ\"$(TEMPLATE)\"ВЌ М≥ВћПкПКВ…М©В¬В©ВиВ№ВєВсВ≈ВµВљБBУѓВґЦЉСOВћ√ЁћяЏ∞ƒВ™ \"$(FOUND)\"В…В†ВиВ№ВЈБBВ±Вћ√ЁћяЏ∞ƒВрН°Мг ЉЁЄџВ…ОgВҐВ№ВЈВ©?";
+    Text[ japanese ] = "√ЁћяЏ∞ƒ \"$(TEMPLATE)\" ВЌМ≥ВћПкПКВ…М©В¬В©ВиВ№ВєВсВ≈ВµВљБBУѓВґЦЉСOВћ√ЁћяЏ∞ƒВ™ \"$(FOUND)\" В…В†ВиВ№ВЈБBН°МгВ±Вћ√ЁћяЏ∞ƒВрУѓКъЙїВ…ОgВҐВ№ВЈВ©БB";
     Text[ chinese_traditional ] = "®S¶≥¶b≠м®”™Ї¶мЄmІд®м≥o≠”ЉЋ¶°$(TEMPLATE)°C¶≥§@≠”¶P¶W™ЇЉЋ¶°¶b $(FOUND) °C§µЂб±z≠n§сЄы≥o≠”ЉЋ¶°°H";
     Text[ arabic ] = " Џ–— «бЏЋж— Џбм «бё«б» \"$(TEMPLATE)\" Ён гж÷Џе «б√’бн. нжћѕ ё«б» »дЁ” «б«”г Ён «бгж÷Џ \"$(FOUND)\". еб  —нѕ «” ќѕ«г е–« «бё«б» бб ЌѕнЋ Ён «бг” ё»бњ";
     Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" werd niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?";
@@ -2065,6 +2065,7 @@ String STR_PACKNGO_NEWMEDIUM
 };
 
 // ******************************************************************* EOF
+
 
 
 
