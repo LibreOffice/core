@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-16 19:16:43 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 12:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
 
 void SwHistory::Add( const SwTxtAttr* pHint, ULONG nNodeIdx, BOOL bNewAttr )
 {
+
     ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
 
     SwHstryHint * pHt;
@@ -1064,8 +1065,14 @@ void SwHistory::Add( const SwTxtAttr* pHint, ULONG nNodeIdx, BOOL bNewAttr )
             pHt = new SwHstryTxtFlyCnt( (SwTxtFlyCnt*)pHint );
             break;
         case RES_TXTATR_FIELD:
+        {
             pHt = new SwSetTxtFldHint( (SwTxtFld*)pHint, nNodeIdx );
-            break;
+            const SwDoc* pDoc = ((SwTxtFtn*)pHint)->GetTxtNode().GetDoc();
+            SwModify* pCallBack = pDoc->GetUnoCallBack();
+            SwPtrMsgPoolItem aMsgHint( RES_FIELD_DELETED, (void*)pHint );
+            pCallBack->Modify(&aMsgHint, &aMsgHint );
+        }
+        break;
         case RES_TXTATR_TOXMARK:
         {
             pHt = new SwSetTOXMarkHint( (SwTxtTOXMark*)pHint, nNodeIdx );
