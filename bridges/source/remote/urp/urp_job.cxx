@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: jbu $ $Date: 2001-12-10 18:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,29 @@ namespace bridges_urp
         sal_Bool bSuccess = sal_True;
         MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
 
-        if( m_pBridgeImpl->m_bDisposed )
+        if( m_pMethodType &&
+            REMOTE_RELEASE_METHOD_INDEX == m_pMethodType->aBase.nPosition &&
+            ! m_pBridgeImpl->m_bDisposed &&
+            m_pBridgeImpl->m_pWriter->getIdentifier() != ::osl::Thread::getCurrentIdentifier() )
+        {
+            // all release calls are delegated to the writer thread to avoid
+            // multiple synchron calls with the same thread id and reentrant
+            // marshaling (in case during destruction of parameters a release is
+            // invoked ).
+            m_pBridgeImpl->m_pWriter->insertReleaseRemoteCall(
+                m_pOid, m_pInterfaceType->aBase.pWeakRef );
+
+            // No waiting, please
+            return sal_False;
+        }
+        else if ( m_pMethodType &&
+                  REMOTE_RELEASE_METHOD_INDEX == m_pMethodType->aBase.nPosition &&
+                  m_pBridgeImpl->m_bDisposed )
+        {
+            // no exception for release calls !
+            return sal_False;
+        }
+        else if( m_pBridgeImpl->m_bDisposed )
         {
             OUStringBuffer buf( 128 );
             buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "URP-Bridge: disposed" ) );

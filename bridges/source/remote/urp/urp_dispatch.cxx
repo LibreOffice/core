@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_dispatch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 08:47:31 $
+ *  last change: $Author: jbu $ $Date: 2001-12-10 18:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,21 +129,9 @@ void SAL_CALL urp_sendRequest(
 
     ClientJob job(pEnvRemote, pImpl, pOid, pMemberType, pInterfaceType, pReturn, ppArgs, ppException);
 
-    if( pImpl->m_properties.bForceSynchronous &&
-        REMOTE_RELEASE_METHOD_INDEX ==
-        ((typelib_InterfaceMemberTypeDescription*)pMemberType)->nPosition &&
-        pImpl->m_pWriter->getIdentifier() != ::osl::Thread::getCurrentIdentifier() )
+    if( job.pack() && ! job.isOneway() )
     {
-        // all release calls in the FORCE SYNCHRONOUS case are delegated to the writer thread to avoid
-        // multiple synchron calls with the same thread id.
-        pImpl->m_pWriter->insertReleaseRemoteCall( pOid, pInterfaceType->aBase.pWeakRef );
-    }
-    else
-    {
-        if( job.pack() && ! job.isOneway() )
-        {
-            job.wait();
-        }
+        job.wait();
     }
 }
 
