@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
+ *  last change: $Author: nn $ $Date: 2000-11-15 19:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,16 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 break;
 
             case SID_DELETE_PRINTAREA:
-                if ( !pDoc->GetPrintRangeCount( nTab ) )
+                if ( nTabSelCount > 1 )
+                {
+                    BOOL bHas = FALSE;
+                    for (USHORT i=0; i<nTabCount; i++)
+                        if (rMark.GetTableSelect(i) && pDoc->GetPrintRangeCount(i) )
+                            bHas = TRUE;
+                    if (!bHas)
+                        rSet.DisableItem( nWhich );
+                }
+                else if ( !pDoc->GetPrintRangeCount( nTab ) )
                     rSet.DisableItem( nWhich );
                 break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-05 10:53:00 $
+ *  last change: $Author: nn $ $Date: 2000-11-15 19:46:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,90 +629,104 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
                                 const String* pRepCol, const String* pRepRow,
                                 BOOL bAddPrint )
 {
+    //  on all selected tables
+
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
-    USHORT      nCurTab = GetViewData()->GetTabNo();
-    ScRange     aRange( 0,0,nCurTab );  // falls Tab im String nicht angegeben
+    USHORT nTabCount    = pDoc->GetTableCount();
+    ScMarkData& rMark   = GetViewData()->GetMarkData();
+    USHORT nTab;
 
     ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
-    USHORT nAdd = 0;
-    if ( bAddPrint )
-        nAdd = pDoc->GetPrintRangeCount( nCurTab );
 
-    //  Druckbereiche
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (rMark.GetTableSelect(nTab))
+        {
+            ScRange aRange( 0,0,nTab );
 
-    if ( pPrint )
-    {
-        if ( !pPrint->Len() )
-            pDoc->SetPrintRangeCount( nCurTab, nAdd );      // loeschen bzw. unveraendert
-        else
-        {
-            USHORT nTCount = pPrint->GetTokenCount();
-            pDoc->SetPrintRangeCount( nCurTab, nTCount + nAdd );
-            for (USHORT i=0; i<nTCount; i++)
+            USHORT nAdd = 0;
+            if ( bAddPrint )
+                nAdd = pDoc->GetPrintRangeCount( nTab );
+
+            //  print ranges
+
+            if ( pPrint )
             {
-                String aToken = pPrint->GetToken(i);
-                if ( aRange.ParseAny( aToken, pDoc ) & SCA_VALID )
-                    pDoc->SetPrintRange( nCurTab, i + nAdd, aRange );
-            }
-        }
-    }
-    else        //  sonst Selektion (Druckbereich wird immer gesetzt)
-    {
-        ScMarkData& rMark = GetViewData()->GetMarkData();
-        if ( GetViewData()->GetSimpleArea( aRange, TRUE ) )
-        {
-            pDoc->SetPrintRangeCount( nCurTab, nAdd + 1 );
-            pDoc->SetPrintRange( nCurTab, nAdd, aRange );
-        }
-        else if ( rMark.IsMultiMarked() )
-        {
-            ScRangeListRef aList( new ScRangeList );
-            rMark.FillRangeListWithMarks( aList, FALSE );
-            USHORT nCnt = (USHORT) aList->Count();
-            if ( nCnt )
-            {
-                pDoc->SetPrintRangeCount( nCurTab, nCnt + nAdd );
-                ScRangePtr pR;
-                USHORT i;
-                for ( pR = aList->First(), i=0; i < nCnt;
-                      pR = aList->Next(), i++ )
+                if ( !pPrint->Len() )
+                    pDoc->SetPrintRangeCount( nTab, nAdd );     // remove / leave unchanged
+                else
                 {
-                    pDoc->SetPrintRange( nCurTab, i + nAdd, *pR );
+                    USHORT nTCount = pPrint->GetTokenCount();
+                    pDoc->SetPrintRangeCount( nTab, nTCount + nAdd );
+                    for (USHORT i=0; i<nTCount; i++)
+                    {
+                        String aToken = pPrint->GetToken(i);
+                        if ( aRange.ParseAny( aToken, pDoc ) & SCA_VALID )
+                            pDoc->SetPrintRange( nTab, i + nAdd, aRange );
+                    }
                 }
             }
+            else        //  use selection (print range is always set)
+            {
+                if ( GetViewData()->GetSimpleArea( aRange, TRUE ) )
+                {
+                    pDoc->SetPrintRangeCount( nTab, nAdd + 1 );
+                    pDoc->SetPrintRange( nTab, nAdd, aRange );
+                }
+                else if ( rMark.IsMultiMarked() )
+                {
+                    ScRangeListRef aList( new ScRangeList );
+                    rMark.FillRangeListWithMarks( aList, FALSE );
+                    USHORT nCnt = (USHORT) aList->Count();
+                    if ( nCnt )
+                    {
+                        pDoc->SetPrintRangeCount( nTab, nCnt + nAdd );
+                        ScRangePtr pR;
+                        USHORT i;
+                        for ( pR = aList->First(), i=0; i < nCnt;
+                              pR = aList->Next(), i++ )
+                        {
+                            pDoc->SetPrintRange( nTab, i + nAdd, *pR );
+                        }
+                    }
+                }
+            }
+
+            //  repeat columns
+
+            if ( pRepCol )
+            {
+                if ( !pRepCol->Len() )
+                    pDoc->SetRepeatColRange( nTab, NULL );
+                else
+                    if ( aRange.ParseAny( *pRepCol, pDoc ) & SCA_VALID )
+                        pDoc->SetRepeatColRange( nTab, &aRange );
+            }
+
+            //  repeat rows
+
+            if ( pRepRow )
+            {
+                if ( !pRepRow->Len() )
+                    pDoc->SetRepeatRowRange( nTab, NULL );
+                else
+                    if ( aRange.ParseAny( *pRepRow, pDoc ) & SCA_VALID )
+                        pDoc->SetRepeatRowRange( nTab, &aRange );
+            }
         }
-    }
 
-    //  Wiederholungsspalten
+    //  undo (for all tables)
 
-    if ( pRepCol )
-    {
-        if ( !pRepCol->Len() )
-            pDoc->SetRepeatColRange( nCurTab, NULL );
-        else
-            if ( aRange.ParseAny( *pRepCol, pDoc ) & SCA_VALID )
-                pDoc->SetRepeatColRange( nCurTab, &aRange );
-    }
-
-    //  Wiederholungszeilen
-
-    if ( pRepRow )
-    {
-        if ( !pRepRow->Len() )
-            pDoc->SetRepeatRowRange( nCurTab, NULL );
-        else
-            if ( aRange.ParseAny( *pRepRow, pDoc ) & SCA_VALID )
-                pDoc->SetRepeatRowRange( nCurTab, &aRange );
-    }
-
-    //  Umbrueche und Undo
-
+    USHORT nCurTab = GetViewData()->GetTabNo();
     ScPrintRangeSaver* pNewRanges = pDoc->CreatePrintRangeSaver();
     pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoPrintRange( pDocSh, nCurTab, pOldRanges, pNewRanges ) );
 
-    ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nCurTab ).UpdatePages();
+    //  update page breaks
+
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (rMark.GetTableSelect(nTab))
+            ScPrintFunc( pDocSh, pDocSh->GetPrinter(), nTab ).UpdatePages();
 
     SfxBindings& rBindings = GetViewData()->GetBindings();
     rBindings.Invalidate( SID_DELETE_PRINTAREA );
