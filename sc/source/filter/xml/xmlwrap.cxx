@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-03 08:53:31 $
+ *  last change: $Author: ka $ $Date: 2000-12-03 16:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlkywd.hxx>
+#include <svx/xmlgrhlp.hxx>
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
@@ -194,10 +195,18 @@ sal_Bool ScXMLImportWrapper::Import()
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh )
     {
+        SvXMLGraphicHelper* pGraphicHelper;
+        uno::Reference< container::XIndexContainer > xGrfContainer;
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
+        if( !xSource.is() )
+        {
+            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+            xGrfContainer = pGraphicHelper;
+        }
+
         uno::Reference<xml::sax::XDocumentHandler> xFilter = new ScXMLImport(
-            xModel, bLoadDoc, nStyleFamilyMask);
+            xModel, xGrfContainer, bLoadDoc, nStyleFamilyMask);
 
         // connect parser and filter
         uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
@@ -210,6 +219,7 @@ sal_Bool ScXMLImportWrapper::Import()
             if( xSourceControl.is() )
                 xSourceControl->start();
         }
+
         sal_Bool bRetval(sal_True);
 
         try
@@ -228,6 +238,9 @@ sal_Bool ScXMLImportWrapper::Import()
         {
             bRetval = sal_False;
         }
+
+        if( !xSource.is() )
+            SvXMLGraphicHelper::Destroy( pGraphicHelper );
 
         return bRetval;
     }
@@ -277,10 +290,21 @@ sal_Bool ScXMLImportWrapper::Export()
         pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
+        uno::Reference< container::XIndexContainer > xGrfContainer;
+        SvXMLGraphicHelper* pGraphicHelper;
 
-        ScXMLExport *pExp = new ScXMLExport( xModel, sFileName, xHandler, sal_False );
+        if( pStorage )
+        {
+            pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+            xGrfContainer = pGraphicHelper;
+        }
+
+        ScXMLExport *pExp = new ScXMLExport( xModel, sFileName, xHandler, xGrfContainer, sal_False );
 
         sal_Bool bRet = (0 == pExp->exportDoc( sXML_spreadsheet ));
+
+        if( pStorage )
+            SvXMLGraphicHelper::Destroy( pGraphicHelper );
 
         delete pExp;
 
