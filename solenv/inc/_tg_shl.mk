@@ -137,7 +137,7 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL1VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL1VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL1VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -554,7 +554,7 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL2VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL2VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL2VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -971,7 +971,7 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL3VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL3VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL3VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -1388,7 +1388,7 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL4VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL4VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL4VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -1805,7 +1805,7 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL5VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL5VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL5VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -2222,7 +2222,7 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL6VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL6VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL6VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -2639,7 +2639,7 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL7VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL7VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL7VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -3056,7 +3056,7 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL8VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL8VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL8VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -3473,7 +3473,7 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL9VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL9VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL9VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
@@ -3890,7 +3890,7 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL10VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL10VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL10VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-31 13:10:14 $
+#   last change: $Author: hjs $ $Date: 2001-11-01 10:50:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -237,7 +237,7 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 .IF "$(COMID)"=="gcc3"
     +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | $(AWK) -f $(SOLARENV)$/bin$/addsym.awk > $@
 .ELSE           # "$(COMID)"=="gcc3"
-    +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) | > $@
+    +tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @+chmod a+w $@
     
