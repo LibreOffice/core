@@ -1,5 +1,4 @@
 i pkginfo=pkginfo
-d none share 0755 root other
 d none share/gnome 0755 root other
 d none share/gnome/application-registry 0755 root other
 f none share/gnome/application-registry/%PREFIX.applications=%SOURCE/usr/share/gnome/application-registry/%PREFIX.applications 0644 root other
@@ -33,3 +32,15 @@ f none share/pixmaps/%PREFIX-presentation-template.png=../icons/hicolor/48x48/mi
 f none share/pixmaps/%PREFIX-master-document.png=../icons/hicolor/48x48/mimetypes/master-document.png 0644 root other
 f none share/pixmaps/%PREFIX-formula.png=../icons/hicolor/48x48/mimetypes/formula.png 0644 root other
 f none share/pixmaps/%PREFIX-database.png=../icons/hicolor/48x48/mimetypes/database.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-text.png=../icons/hicolor/48x48/mimetypes/oasis-text.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-text-template.png=../icons/hicolor/48x48/mimetypes/oasis-text-template.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-spreadsheet.png=../icons/hicolor/48x48/mimetypes/oasis-spreadsheet.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-spreadsheet-template.png=../icons/hicolor/48x48/mimetypes/oasis-spreadsheet-template.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-drawing.png=../icons/hicolor/48x48/mimetypes/oasis-drawing.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-drawing-template.png=../icons/hicolor/48x48/mimetypes/oasis-drawing-template.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-presentation.png=../icons/hicolor/48x48/mimetypes/oasis-presentation.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-presentation-template.png=../icons/hicolor/48x48/mimetypes/oasis-presentation-template.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-master-document.png=../icons/hicolor/48x48/mimetypes/oasis-master-document.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-formula.png=../icons/hicolor/48x48/mimetypes/oasis-formula.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-database.png=../icons/hicolor/48x48/mimetypes/oasis-database.png 0644 root other
+f none share/pixmaps/%PREFIX-oasis-web-template.png=../icons/hicolor/48x48/mimetypes/oasis-web-template.png 0644 root other
