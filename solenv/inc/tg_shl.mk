@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-19 14:41:53 $
+#   last change: $Author: svesik $ $Date: 2001-07-13 18:30:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -164,7 +164,9 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
 .IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="IRIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
+.ENDIF
 .ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): \
@@ -197,7 +199,9 @@ $(USE_SHL$(TNR)VERSIONMAP) .PHONY:
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:f)
 .IF "$(OS)"!="MACOSX"
+.IF "$(OS)"!="IRIX"
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
+.ENDIF
 .ENDIF
 
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
