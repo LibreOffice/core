@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-27 10:04:52 $
+ *  last change: $Author: sj $ $Date: 2002-09-27 15:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SVX_ESCHEREX_HXX
 #include "escherex.hxx"
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <unoapi.hxx>
 #endif
 #ifndef _SV_GRADIENT_HXX
 #include <vcl/gradient.hxx>
@@ -543,8 +546,47 @@ static sal_Bool GetLineArrow( const sal_Bool bLineStart,
             if ( EscherPropertyValueHelper::GetPropertyValue(
                 aAny, rXPropSet, sLineName, sal_False ) )
             {
-                String aArrowStartName = *(::rtl::OUString*)aAny.getValue();
-                if ( aArrowStartName.GetTokenCount( ' ' ) == 2 )
+                String          aArrowStartName = *(::rtl::OUString*)aAny.getValue();
+                rtl::OUString   aApiName;
+                sal_Int16       nWhich = bLineStart ? XATTR_LINESTART : XATTR_LINEEND;
+
+                SvxUnogetApiNameForItem( nWhich, aArrowStartName, aApiName );
+                if ( aApiName.getLength() )
+                {
+
+                    /* todo:
+                    calculate the best option for ArrowLenght and ArrowWidth
+                    */
+                    if ( aApiName.equalsAscii( "Arrow concave" ) )
+                        reLineEnd = ESCHER_LineArrowStealthEnd;
+                    else if ( aApiName.equalsAscii( "Square 45" ) )
+                        reLineEnd = ESCHER_LineArrowDiamondEnd;
+                    else if ( aApiName.equalsAscii( "Small Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if ( aApiName.equalsAscii( "Dimension Lines" ) )
+                    {
+                        rnArrowLength = 0;
+                        rnArrowWidth  = 2;
+                        reLineEnd = ESCHER_LineArrowOvalEnd;
+                    }
+                    else if ( aApiName.equalsAscii( "Double Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if ( aApiName.equalsAscii( "Rounded short Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if ( aApiName.equalsAscii( "Symmetric Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if ( aApiName.equalsAscii( "Line Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowOpenEnd;
+                    else if ( aApiName.equalsAscii( "Rounded large Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                    else if ( aApiName.equalsAscii( "Circle" ) )
+                        reLineEnd = ESCHER_LineArrowOvalEnd;
+                    else if ( aApiName.equalsAscii( "Square" ) )
+                        reLineEnd = ESCHER_LineArrowDiamondEnd;
+                    else if ( aApiName.equalsAscii( "Arrow" ) )
+                        reLineEnd = ESCHER_LineArrowEnd;
+                }
+                else if ( aArrowStartName.GetTokenCount( ' ' ) == 2 )
                 {
                     sal_Bool b = sal_True;
                     String aArrowName( aArrowStartName.GetToken( 0, ' ' ) );
