@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PersAttrListTContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:55:31 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,39 @@ using namespace ::com::sun::star::xml::sax;
 
 TYPEINIT1( XMLPersAttrListTContext, XMLTransformerContext );
 
+void XMLPersAttrListTContext::AddAttribute(
+        sal_uInt16 nAPrefix,
+           ::xmloff::token::XMLTokenEnum eAToken,
+           ::xmloff::token::XMLTokenEnum eVToken )
+{
+    OUString aAttrValue( ::xmloff::token::GetXMLToken( eVToken ) );
+    AddAttribute( nAPrefix, eAToken, aAttrValue );
+}
+
+void XMLPersAttrListTContext::AddAttribute(
+    sal_uInt16 nAPrefix,
+    ::xmloff::token::XMLTokenEnum eAToken,
+    const ::rtl::OUString & rValue )
+{
+    OUString aAttrQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
+                nAPrefix, ::xmloff::token::GetXMLToken( eAToken ) ) );
+    OUString aAttrValue( rValue );
+
+    XMLMutableAttributeList *pMutableAttrList;
+    if( m_xAttrList.is() )
+    {
+        pMutableAttrList =
+            static_cast< XMLMutableAttributeList * >( m_xAttrList.get() );
+    }
+    else
+    {
+        pMutableAttrList = new XMLMutableAttributeList ;
+        m_xAttrList = pMutableAttrList;
+    }
+
+    pMutableAttrList->AddAttribute( aAttrQName, aAttrValue );
+}
+
 XMLPersAttrListTContext::XMLPersAttrListTContext(
         XMLTransformerBase& rImp,
         const OUString& rQName ) :
@@ -148,20 +181,27 @@ XMLTransformerContext *XMLPersAttrListTContext::CreateChildContext(
 void XMLPersAttrListTContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    OSL_ENSURE( !m_xAttrList.is(), "attr list is already existing" );
+    XMLMutableAttributeList *pMutableAttrList = 0;
+
+    Reference< XAttributeList > xAttrList( rAttrList );
     if( m_nActionMap != INVALID_ACTIONS )
     {
-        Reference< XAttributeList > xAttrList( rAttrList );
-        XMLMutableAttributeList *pMutableAttrList =
+        pMutableAttrList =
             GetTransformer().ProcessAttrList( xAttrList, m_nActionMap,
                                                  sal_True );
-        if( pMutableAttrList  )
-            m_xAttrList = pMutableAttrList;
     }
 
-    if( !m_xAttrList.is() )
+    if( m_xAttrList.is() )
     {
-        // clone the attribute list
+        static_cast< XMLMutableAttributeList * >( m_xAttrList.get() )
+                ->AppendAttributeList( xAttrList );
+    }
+    else if( pMutableAttrList )
+    {
+        m_xAttrList = xAttrList;
+    }
+    else
+    {
         m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
     }
 }
