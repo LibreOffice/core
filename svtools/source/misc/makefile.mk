@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tl $ $Date: 2000-12-22 12:41:23 $
+#   last change: $Author: hjs $ $Date: 2001-01-11 12:25:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ LIB2OBJFILES=\
     $(SLO)$/inettype.obj \
     $(SLO)$/iniadrtk.obj \
     $(SLO)$/loginerr.obj \
+    $(SLO)$/staticmbmisc.obj \
     $(SLO)$/strcrypt.obj \
     $(SLO)$/strmadpt.obj
 
@@ -131,7 +132,6 @@ LIB3OBJFILES=\
     $(SLO)$/imap3.obj \
     $(SLO)$/iniman.obj \
     $(SLO)$/iniprop.obj \
-    $(SLO)$/lngmisc.obj \
     $(SLO)$/ownlist.obj \
     $(SLO)$/pver.obj \
     $(SLO)$/urihelper.obj \
@@ -140,6 +140,13 @@ LIB3OBJFILES=\
 EXCEPTIONSFILES=\
     $(SLO)$/strmadpt.obj	\
     $(SLO)$/iniman.obj
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
+# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+LIB1OBJFILES+=$(SLO)$/staticmbmisc.obj
+.ENDIF
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
