@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:49:46 $
+ *  last change: $Author: rt $ $Date: 2004-08-25 09:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,16 @@ class SwWriteTableRow
 
     long nPos;                  // End-Position (twips) der Zeile
     BOOL mbUseLayoutHeights;
+
+    // Forbidden and not implemented.
+    SwWriteTableRow();
+
+    SwWriteTableRow & operator= (const SwWriteTableRow &);
+
+protected:
+    // GCC >= 3.4 needs accessible T (const T&) to pass T as const T& argument.
+    SwWriteTableRow( const SwWriteTableRow & );
+
 public:
 
     USHORT nTopBorder;              // Dicke der oberen/unteren Umrandugen
