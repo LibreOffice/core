@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:44 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             eEditMode == EM_MASTERPAGE      ||
             ePageKind == PK_NOTES           ||
             ePageKind == PK_HANDOUT         ||
-            IsLayerModeActive())
+            (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
         {
             if (rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE)
                 rSet.DisableItem(SID_DELETE_PAGE);
