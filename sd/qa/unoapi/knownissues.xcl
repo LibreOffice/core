@@ -1,11 +1,6 @@
 ### 110439 ###
 sd.SdUnoOutlineView::com::sun::star::frame::XController
 
-### 114134 ###
-sd.SdDrawPage::com::sun::star::drawing::XShapeGrouper
-sd.SdGenericDrawPage::com::sun::star::drawing::XShapeGrouper
-sd.SdMasterPage::com::sun::star::drawing::XShapeGrouper
-
 ### i22883 ###
 sd.SdUnoPresView::com::sun::star::ui::XContextMenuInterception
 sd.SdUnoDrawView::com::sun::star::ui::XContextMenuInterception
@@ -30,11 +25,16 @@ sd.SdXImpressDocument::com::sun::star::document::XViewDataSupplier
 ### i22896 ###
 sd.SdXImpressDocument::com::sun::star::document::XEventBroadcaster
 
-### i26124 ###
-sd.AccessibleDrawDocumentView::com::sun::star::accessibility::XAccessibleEventBroadcaster
-
 ### i26264 ###
 sd.SdXImpressDocument::com::sun::star::view::XPrintable
 
-### i27847 ###
-sd.SdXImpressDocument::com::sun::star::lang::XComponent
+### i36322 ###
+sd.SdUnoPresView::com::sun::star::lang::XComponent
+sd.SdUnoDrawView::com::sun::star::lang::XComponent
+
+### i36330 ###
+sd.SdUnoPresView::com::sun::star::lang::XServiceInfo
+sd.SdUnoDrawView::com::sun::star::lang::XServiceInfo
+
+### i34994 ###
+sd.SdXPresentation::com::sun::star::presentation::Presentation
