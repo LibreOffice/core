@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-16 08:15:59 $
+ *  last change: $Author: dl $ $Date: 2001-06-25 11:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,10 +323,18 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SdrShadowYDistItem(300));
 
                     // Zeichenattribute (Edit Engine)
-    SvxFontItem aSvxFontItem;
-    SvxFontItem aSvxFontItemCJK( EE_CHAR_FONTINFO_CJK );
-    SvxFontItem aSvxFontItemCTL( EE_CHAR_FONTINFO_CTL );
-    GetDefaultFonts( aSvxFontItem, aSvxFontItemCJK, aSvxFontItemCTL );
+    Font aLatinFont( OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE ), 0 ) );
+    SvxFontItem aSvxFontItem( aLatinFont.GetFamily(), aLatinFont.GetName(), aLatinFont.GetStyleName(), aLatinFont.GetPitch(),
+                              aLatinFont.GetCharSet(), EE_CHAR_FONTINFO );
+
+    Font aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CJK ), 0 ) );
+    SvxFontItem aSvxFontItemCJK( aCJKFont.GetFamily(), aCJKFont.GetName(), aCJKFont.GetStyleName(), aCJKFont.GetPitch(),
+                                 aCJKFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+
+    Font aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, GetLanguage( EE_CHAR_LANGUAGE_CTL ), 0 ) );
+    SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
+                                 aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+
     rISet.Put( aSvxFontItem );
     rISet.Put( aSvxFontItemCJK );
     rISet.Put( aSvxFontItemCTL );
