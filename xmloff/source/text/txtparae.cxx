@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:06 $
+ *  last change: $Author: hr $ $Date: 2004-03-11 16:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ SV_DECL_PTRARR_SORT_DEL( OUStringsSort_Impl, OUStringPtr, 20, 10 )
 SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 
 #ifndef PRODUCT
-static txtparae_bContainsIllegalCharacters = sal_False;
+static int txtparae_bContainsIllegalCharacters = sal_False;
 #endif
 
 // The following map shows which property values are required:
