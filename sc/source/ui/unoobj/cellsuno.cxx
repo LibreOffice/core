@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 08:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4977,8 +4977,8 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
                                 sal_Bool bEmpty ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScFilterDescriptor* pNew = new ScFilterDescriptor;
     ScDocShell* pDocSh = GetDocShell();
+    ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);
     if ( !bEmpty && pDocSh )
     {
         // DB-Bereich anlegen erst beim Ausfuehren, per API immer genau den Bereich
@@ -5014,7 +5014,8 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     //  die Daten in ein ScFilterDescriptor Objekt zu kopieren:
     //! wenn es schon ein ScFilterDescriptor ist, direkt per getImplementation?
 
-    ScFilterDescriptor aImpl;
+    ScDocShell* pDocSh = GetDocShell();
+    ScFilterDescriptor aImpl(pDocSh);
     aImpl.setFilterFields( xDescriptor->getFilterFields() );
     //  Rest sind jetzt Properties...
 
@@ -5026,7 +5027,6 @@ void SAL_CALL ScCellRangeObj::filter( const uno::Reference<sheet::XSheetFilterDe
     //  ausfuehren...
     //
 
-    ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {
         ScQueryParam aParam = aImpl.GetParam();
@@ -5082,7 +5082,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
     {
         //! Test, ob xObject im selben Dokument ist
 
-        ScFilterDescriptor* pNew = new ScFilterDescriptor;  //! stattdessen vom Objekt?
+        ScFilterDescriptor* pNew = new ScFilterDescriptor(pDocSh);  //! stattdessen vom Objekt?
         //XSheetFilterDescriptorRef xNew = xObject->createFilterDescriptor(TRUE);
 
         ScQueryParam aParam = pNew->GetParam();

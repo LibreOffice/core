@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-07 17:58:52 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 08:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,7 +779,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScDataPilotDescriptorBase
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScDataPilotFilterDescriptor( this );
+    return new ScDataPilotFilterDescriptor( pDocShell, this );
 }
 
 uno::Reference<container::XIndexAccess> SAL_CALL ScDataPilotDescriptorBase::getDataPilotFields()
