@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 12:03:13 $
+ *  last change: $Author: ka $ $Date: 2001-02-26 12:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
@@ -112,9 +115,11 @@
 // --------------
 
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
+using namespace ::com::sun::star::datatransfer::dnd;
 
 // --------------------------------
 // - TransferableObjectDescriptor -
@@ -166,8 +171,7 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 // - TransferableHelper -
 // ----------------------
 
-TransferableHelper::TransferableHelper() :
-    mpxClipboard( NULL )
+TransferableHelper::TransferableHelper()
 {
 }
 
@@ -175,15 +179,13 @@ TransferableHelper::TransferableHelper() :
 
 TransferableHelper::~TransferableHelper()
 {
-    delete mpxClipboard;
 }
 
 // -----------------------------------------------------------------------------
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
-    if( !maAny.hasValue() || !maFormats.size() ||
-        maLastFormat != rFlavor.MimeType )
+    if( !maAny.hasValue() || !maFormats.size() || ( maLastFormat != rFlavor.MimeType ) )
     {
         maLastFormat = rFlavor.MimeType;
         maAny = Any();
@@ -241,7 +243,7 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
     while( aIter != aEnd )
     {
-        if( rFlavor.MimeType == (*aIter++).MimeType )
+        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
         {
             bRet = sal_True;
             aIter = aEnd;
@@ -258,6 +260,44 @@ void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& 
     Application::GetSolarMutex().acquire();
     ObjectReleased();
     Application::GetSolarMutex().release();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::disposing( const EventObject& rSource ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE ) throw( RuntimeException )
+{
+    DragFinished( rDSDE.DropSuccess ? rDSDE.DropAction : DNDConstants::ACTION_NONE );
+    ObjectReleased();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::dragEnter( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::dragExit( const DragSourceEvent& rDSE ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::dragOver( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::dropActionChanged( const DragSourceDragEvent& rDSDE ) throw( RuntimeException )
+{
 }
 
 // -----------------------------------------------------------------------------
@@ -316,7 +356,7 @@ void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 
     while( aIter != aEnd )
     {
-        if( rFlavor.MimeType == (*aIter++).MimeType )
+        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
             aIter = maFormats.erase( aIter );
         else
             aIter++;
@@ -601,6 +641,12 @@ sal_Bool TransferableHelper::WriteObject( SotStorageStreamRef& rxOStm, void* pUs
 
 // -----------------------------------------------------------------------------
 
+void TransferableHelper::DragFinished( sal_Int8 nDropAction )
+{
+}
+
+// -----------------------------------------------------------------------------
+
 void TransferableHelper::ObjectReleased()
 {
 }
@@ -609,14 +655,51 @@ void TransferableHelper::ObjectReleased()
 
 void TransferableHelper::CopyToClipboard() const
 {
-    if( !mpxClipboard )
-        ( (TransferableHelper*) this )->mpxClipboard = new Reference< XClipboard >( GetSystemClipboard() );
+    if( !mxClipboard.is() )
+        ( (TransferableHelper*) this )->mxClipboard = GetSystemClipboard();
 
-    if( mpxClipboard->is() )
+    if( mxClipboard.is() )
     {
-        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-        (*mpxClipboard)->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
-        Application::AcquireSolarMutex( nRef );
+        try
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
+            Application::AcquireSolarMutex( nRef );
+        }
+        catch( ... )
+        {
+            DBG_ERROR( "Could not copy to clipboard" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::StartDrag( Window& rWindow, sal_Int8 nDnDSourceActions,
+                                    sal_Int32 nDnDPointer, sal_Int32 nDnDImage )
+{
+    Reference< XDragSource > xDragSource( rWindow.GetDragSource() );
+
+    if( xDragSource.is() )
+    {
+        DragGestureEvent    aEvt;
+        const Point         aPt( rWindow.GetPointerPosPixel() );
+
+        aEvt.DragAction = DNDConstants::ACTION_COPY;
+        aEvt.DragOrigin.X = aPt.X();
+        aEvt.DragOrigin.Y = aPt.Y();
+        aEvt.DragSource = xDragSource;
+
+        try
+        {
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, nDnDImage, this, this );
+            Application::AcquireSolarMutex( nRef );
+        }
+        catch( ... )
+        {
+            DBG_ERROR( "Could not start drag" );
+        }
     }
 }
 
@@ -820,15 +903,14 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
     {
         DataFlavor aFlavor;
         if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavor ) &&
-            aFlavor.MimeType == rFlavor.MimeType )
+            TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
         {
             Bitmap aBmp;
             *xStm >> aBmp;
             rGraphic = aBmp;
         }
-        else if( SotExchange::GetFormatDataFlavor(
-                            SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
-                aFlavor.MimeType == rFlavor.MimeType )
+        else if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavor ) &&
+                 TransferableDataHelper::IsEqual( aFlavor, rFlavor ) )
         {
             GDIMetaFile aMtf;
             *xStm >> aMtf;
@@ -836,6 +918,7 @@ sal_Bool TransferableDataHelper::GetGraphic( const ::com::sun::star::datatransfe
         }
         else
             *xStm >> rGraphic;
+
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
@@ -1144,11 +1227,8 @@ sal_Bool TransferableDataHelper::GetInterface( const DataFlavor& rFlavor, Refere
 
 TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
 {
-    static Reference< XClipboard >  xClipboard;
-    TransferableDataHelper          aRet;
-
-    if( !xClipboard.is() )
-        xClipboard = TransferableHelper::GetSystemClipboard();
+    Reference< XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
+    TransferableDataHelper  aRet;
 
     if( xClipboard.is() )
     {
@@ -1157,13 +1237,28 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
 
             if( xTransferable.is() )
+            {
                 aRet = TransferableDataHelper( xTransferable );
+                aRet.mxClipboard = xClipboard;
+            }
         }
         catch( ... )
         {
-            DBG_ERROR( "Could not get cliopboard content" );
+            DBG_ERROR( "Could not get clipboard content" );
         }
     }
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rFlavor1,
+                                          const ::com::sun::star::datatransfer::DataFlavor& rFlavor2,
+                                          sal_Bool bCompareParameters )
+{
+    if( bCompareParameters )
+        return( rFlavor1.MimeType == rFlavor2.MimeType );
+    else
+        return( String( rFlavor1.MimeType ).GetToken( 0, ';' ) == String( rFlavor2.MimeType ).GetToken( 0, ';' ) );
 }

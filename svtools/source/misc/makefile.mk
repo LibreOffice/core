@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: sab $ $Date: 2001-02-22 17:36:14 $
+#   last change: $Author: ka $ $Date: 2001-02-26 12:58:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -138,12 +138,14 @@ LIB3OBJFILES=\
     $(SLO)$/pver.obj		\
     $(SLO)$/urihelper.obj	\
     $(SLO)$/vcldata.obj		\
-    $(SLO)$/transfer.obj
+    $(SLO)$/transfer.obj	\
+    $(SLO)$/transfer2.obj	
 
 EXCEPTIONSFILES=\
     $(SLO)$/strmadpt.obj	\
     $(SLO)$/iniman.obj		\
-    $(SLO)$/transfer.obj
+    $(SLO)$/transfer.obj	\
+    $(SLO)$/transfer2.obj	
 
 UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
