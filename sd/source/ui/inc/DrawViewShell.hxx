@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:54:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,11 @@ public:
 
     USHORT          GetCurPageId() { return( aTabControl.GetCurPageId() ); }
 
-    void            ShowUIControls( sal_Bool bVisible = sal_True );
+    /** Show controls of the UI or hide them, depending on the given flag.
+        Do not call this method directly.  Call the method at ViewShellBase
+        instead.
+    */
+    virtual void ShowUIControls (bool bVisible = true);
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
