@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
 
     // Relationen zwischen den einzelnen Tabellen anzeigen
     OTableWindowMap* pTabWins = GetTabWinMap();
-    if(bNewTable && pTabWins->size() && strTableName.getLength())
+    if(bNewTable && !pTabWins->empty() && strTableName.getLength())
     {
         Reference<XConnection> xCon = m_pView->getController()->getConnection();
         OSL_ENSURE(xCon.is(),"OQueryTableView::AddTabWin connection is null!");

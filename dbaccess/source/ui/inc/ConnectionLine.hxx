@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:26 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #ifndef DBAUI_CONNECTIONLINEDATA_HXX
 #include "ConnectionLineData.hxx"
 #endif
+#ifndef INCLUDED_FUNCTIONAL
+#define INCLUDED_FUNCTIONAL
+#include <functional>
+#endif
 
 class SvLBoxEntry;
 class OutputDevice;
@@ -113,7 +117,7 @@ namespace dbaui
         Rectangle           GetBoundingRect();
         BOOL                RecalcLine();
         void                Draw( OutputDevice* pOutDev );
-        BOOL                CheckHit( const Point& rMousePos );
+        bool                CheckHit( const Point& rMousePos ) const;
         String              GetSourceFieldName() const { return m_pData->GetSourceFieldName(); }
         String              GetDestFieldName() const { return m_pData->GetDestFieldName(); }
 
@@ -127,5 +131,29 @@ namespace dbaui
 
         OConnectionLineData*    GetData() const { return m_pData; }
     };
+    /// unary_function Functor object for class OConnectionLine returntype is void
+    /// draws a connectionline object on outputdevice
+    struct TConnectionLineDrawFunctor : ::std::unary_function<OConnectionLine*,void>
+    {
+        OutputDevice* pDevice;
+        TConnectionLineDrawFunctor(OutputDevice* _pDevice)
+        {
+            pDevice = _pDevice;
+        }
+        inline void operator()(OConnectionLine* _pLine)
+        {
+            _pLine->Draw(pDevice);
+        }
+    };
+    /// binary_function Functor object for class OConnectionLine returntype is bool
+    /// checks if the point is on connectionline
+    struct TConnectionLineCheckHitFunctor : ::std::binary_function<OConnectionLine*,Point,bool>
+    {
+        inline bool operator()(const OConnectionLine* lhs,const Point& rhs) const
+        {
+            return lhs->CheckHit(rhs);
+        }
+    };
+
 }
 #endif // DBAUI_CONNECTIONLINE_HXX

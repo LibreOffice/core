@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,7 @@ double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Point& q)
     return l;
 }
 //------------------------------------------------------------------------
-BOOL OConnectionLine::CheckHit( const Point& rMousePos )
+bool OConnectionLine::CheckHit( const Point& rMousePos ) const
 {
     //////////////////////////////////////////////////////////////////////
     /*
@@ -477,10 +477,11 @@ BOOL OConnectionLine::CheckHit( const Point& rMousePos )
     {
         if(::std::min(m_aSourceConnPos.X(),m_aDestConnPos.X()) <= q.X() && ::std::min(m_aSourceConnPos.Y(),m_aDestConnPos.Y()) <= q.Y()
             && q.X() <= ::std::max(m_aDestConnPos.X(),m_aSourceConnPos.X())   && q.Y() <= ::std::max(m_aDestConnPos.Y(),m_aSourceConnPos.Y()))
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
+// -----------------------------------------------------------------------------
 
 

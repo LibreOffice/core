@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-25 06:20:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1967,6 +1967,9 @@ void OQueryDesignView::InitFromParseNode()
                     ::rtl::OUString aComposedName;
                     ::rtl::OUString aQualifierName;
                     ::rtl::OUString sAlias;
+
+
+
                     OSQLTables::const_iterator aIter = aMap.begin();
                     for(;aIter != aMap.end();++aIter)
                     {
@@ -1991,17 +1994,11 @@ void OQueryDesignView::InitFromParseNode()
 
                     // now delete the data for which we haven't any tablewindow
                     OJoinTableView::OTableWindowMap* pTableMap = m_pTableView->GetTabWinMap();
-                    ::std::vector< OTableWindowData*>::iterator aDataIter = static_cast<OQueryController*>(getController())->getTableWindowData()->begin();
-                    for(;aDataIter != static_cast<OQueryController*>(getController())->getTableWindowData()->end();)
+                    OJoinTableView::OTableWindowMap::iterator aIterTableMap = pTableMap->begin();
+                    for(;aIterTableMap != pTableMap->end();++aIterTableMap)
                     {
-                        OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(*aDataIter);
-                        if(pTableMap->find(pData->GetAliasName()) == pTableMap->end())
-                        {
-                            delete *aDataIter;
-                            aDataIter = static_cast<OQueryController*>(getController())->getTableWindowData()->erase(aDataIter);
-                        }
-                        else
-                            ++aDataIter;
+                        if(aMap.find(aIterTableMap->first) == aMap.end())
+                            m_pTableView->RemoveTabWin(aIterTableMap->second);
                     }
 
                     FillOuterJoins(pParseTree->getChild(3)->getChild(0)->getChild(1));

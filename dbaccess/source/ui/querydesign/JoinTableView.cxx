@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,11 @@
 #ifndef DBAUI_TABLEWINDOWDATA_HXX
 #include "TableWindowData.hxx"
 #endif
+#ifndef INCLUDED_FUNCTIONAL
+#define INCLUDED_FUNCTIONAL
+#include <functional>
+#endif
+
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -987,10 +992,8 @@ void OJoinTableView::InvalidateConnections()
     DBG_CHKTHIS(OJoinTableView,NULL);
     //////////////////////////////////////////////////////////////////////
     // Die Joins zeichnen
-
-    ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    for(;aIter != m_vTableConnection.end();++aIter)
-        (*aIter)->Invalidate();
+    ::std::for_each(m_vTableConnection.begin(),m_vTableConnection.end(),
+        ::std::mem_fun(& OTableConnection::Invalidate));
 }
 
 //------------------------------------------------------------------------------
@@ -1316,7 +1319,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                         if (aIter != m_aTableMap.end())
                         {   // there is a currently active tab win
                             // check if there is an "overflow" and we should select a conn instead of a win
-                            if (m_vTableConnection.size())
+                            if (!m_vTableConnection.empty())
                             {
                                 if ((aIter->second == m_aTableMap.rbegin()->second) && bForward)
                                     // the last win is active and we're travelling forward -> select the first conn
@@ -1343,7 +1346,7 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                             if (i == sal_Int32(m_vTableConnection.size() - 1) && bForward)
                                 // the last conn is active and we're travelling forward -> select the first win
                                 pNextWin = m_aTableMap.begin()->second;
-                            if ((i == 0) && !bForward && m_aTableMap.size())
+                            if ((i == 0) && !bForward && !m_aTableMap.empty())
                                 // the first conn is active and we're travelling backward -> select the last win
                                 pNextWin = m_aTableMap.rbegin()->second;
 
@@ -1356,9 +1359,9 @@ long OJoinTableView::PreNotify(NotifyEvent& rNEvt)
                                     pNextConn = m_vTableConnection[(i + (bForward ? 1 : m_vTableConnection.size() - 1)) % m_vTableConnection.size()];
                                 else
                                 {   // no tab win selected, no conn selected
-                                    if (m_vTableConnection.size())
+                                    if (!m_vTableConnection.empty())
                                         pNextConn = m_vTableConnection[bForward ? 0 : m_vTableConnection.size() - 1];
-                                    else if (m_aTableMap.size())
+                                    else if (!m_aTableMap.empty())
                                     {
                                         if(bForward)
                                             pNextWin = m_aTableMap.begin()->second;
@@ -1441,7 +1444,7 @@ void OJoinTableView::GrabTabWinFocus()
         else
             m_pLastFocusTabWin->GrabFocus();
     }
-    else if (m_aTableMap.size() && m_aTableMap.begin()->second && m_aTableMap.begin()->second->IsVisible())
+    else if (!m_aTableMap.empty() && m_aTableMap.begin()->second && m_aTableMap.begin()->second->IsVisible())
     {
         OTableWindow* pFirstWin = m_aTableMap.begin()->second;
         if (pFirstWin->GetListBox())

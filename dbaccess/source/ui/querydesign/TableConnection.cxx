@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,16 +142,7 @@ void OTableConnection::UpdateLineList()
         delete *aLineIter;
     m_vConnLine.clear();
 
-    //////////////////////////////////////////////////////////////////////
-    // Linienliste aus der Datenliste neu erstellen
-    ::std::vector<OConnectionLineData*>* pLineData = GetData()->GetConnLineDataList();
-    ::std::vector<OConnectionLineData*>::const_iterator aIter = pLineData->begin();
-    for(;aIter != pLineData->end();++aIter)
-    {
-        OConnectionLine* pConnLine = new OConnectionLine( this, *aIter );
-        m_vConnLine.push_back(pConnLine);
-    }
-
+    Init();
 }
 
 //------------------------------------------------------------------------
@@ -166,7 +157,7 @@ OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
     m_vConnLine.clear();
 
     // Linienliste kopieren
-    if( rConn.GetConnLineList()->size() )
+    if(! rConn.GetConnLineList()->empty() )
     {
         const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
         ::std::vector<OConnectionLine*>::const_iterator aIter = pLine->begin();
@@ -191,8 +182,7 @@ OTableConnection& OTableConnection::operator=( const OTableConnection& rConn )
 //------------------------------------------------------------------------
 void OTableConnection::RecalcLines()
 {
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
-        (*aIter)->RecalcLine();
+    ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),::std::mem_fun(&OConnectionLine::RecalcLine));
 }
 //------------------------------------------------------------------------
 OTableWindow* OTableConnection::GetSourceWin() const
@@ -228,16 +218,16 @@ BOOL OTableConnection::CheckHit( const Point& rMousePos )
 {
     //////////////////////////////////////////////////////////////////////
     // Pruefen, ob auf eine der Linien geclickt worden ist
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
-    {
-        if( (*aIter)->IsValid() && (*aIter)->CheckHit(rMousePos) )
-            return TRUE;
-    }
-    return FALSE;
+    ::std::vector<OConnectionLine*>::iterator aIter = ::std::find_if(m_vConnLine.begin(),
+                                                                     m_vConnLine.end(),
+                                                                     ::std::compose2(::std::logical_and<bool>(),
+                                                                                ::std::mem_fun(&OConnectionLine::IsValid),
+                                                                                ::std::bind2nd(TConnectionLineCheckHitFunctor(),rMousePos)));
+    return aIter != m_vConnLine.end();
 }
 
 //------------------------------------------------------------------------
-void OTableConnection::Invalidate()
+bool OTableConnection::Invalidate()
 {
     Rectangle rcBounding = GetBoundingRect();
     rcBounding.Bottom() += 1;
@@ -247,6 +237,8 @@ void OTableConnection::Invalidate()
         // Invalidate erfasst dabei offensichtlich eine Pixelzeile weniger als Draw.
         // Oder alles haengt ganz anders zusammen ... jedenfalls klappt es so ...
     m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
+
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -265,9 +257,9 @@ Rectangle OTableConnection::GetBoundingRect()
         if( (aTempRect.GetWidth()!=1) && (aTempRect.GetHeight()!=1) )
         {
             if( (aBoundingRect.GetWidth()==1) && (aBoundingRect.GetHeight()==1) )
-                aBoundingRect = (*aIter)->GetBoundingRect();
+                aBoundingRect = aTempRect;
             else
-                aBoundingRect.Union( (*aIter)->GetBoundingRect() );
+                aBoundingRect.Union( aTempRect );
         }
     }
 
@@ -278,18 +270,11 @@ Rectangle OTableConnection::GetBoundingRect()
 void OTableConnection::Draw( const Rectangle& rRect )
 {
     //////////////////////////////////////////////////////////////////////
-    // Nur neu zeichnen, wenn Connection innerhalb des ungueltigen Bereichs liegt
-/*  Rectangle aIntersectRect = GetBoundingRect().GetIntersection( rRect );
-    Rectangle aBoundingRect = GetBoundingRect();
-    if( !aIntersectRect.GetWidth() && !aIntersectRect.GetHeight() )
-        return;
-*/
-
-    //////////////////////////////////////////////////////////////////////
     // Linien zeichnen
-    for(::std::vector<OConnectionLine*>::iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
-        (*aIter)->Draw( m_pParent );
+    ::std::for_each(m_vConnLine.begin(),m_vConnLine.end(),TConnectionLineDrawFunctor(m_pParent));
 }
+// -----------------------------------------------------------------------------
+
 
 
 

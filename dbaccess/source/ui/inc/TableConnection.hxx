@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:05:50 $
+ *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,12 @@ namespace dbaui
 
         OTableConnection& operator=( const OTableConnection& rConn );
 
+
         void        Select();
         void        Deselect();
         BOOL        IsSelected() const { return m_bSelected; }
         BOOL        CheckHit( const Point& rMousePos );
-        void        Invalidate();
+        bool        Invalidate();
         void        UpdateLineList();
 
         OTableWindow* GetSourceWin() const;
