@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-04 13:35:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,16 +87,16 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
-#include <drafts/com/sun/star/awt/XExtendedToolkit.hpp>
+#ifndef _COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
+#include <com/sun/star/awt/XExtendedToolkit.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 
@@ -268,20 +268,20 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     return aLibName;
 }
 
-void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEventObject )
+void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject )
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
     if ( xExtToolkit.is() )
     {
         // Only for focus events
         sal_Int16 nType;
         rEventObject.NewValue >>= nType;
-        if ( nType == ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+        if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
             xExtToolkit->fireFocusGained( rEventObject.Source );
         else
         {
             rEventObject.OldValue >>= nType;
-            if ( nType == ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
+            if ( nType == ::com::sun::star::accessibility::AccessibleStateType::FOCUSED )
                 xExtToolkit->fireFocusLost( rEventObject.Source );
         }
 
