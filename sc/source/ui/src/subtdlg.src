@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:13:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Skupiny";
         Text[ hebrew ] = "Gruppen";
         Text[ hindi ] = "समूह";
+        Text[ slovak ] = "Zoskupenie";
     };
     CheckBox BTN_PAGEBREAK
     {
@@ -131,6 +132,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Zlom stránky mezi skupinami";
         Text[ hebrew ] = "Neue Seite bei Gru~ppenwechsel";
         Text[ hindi ] = "समूह के बीच में ~पृष्ठ खण्डन";
+        Text[ slovak ] = "Zalomenie stránky medzi sku~pinami";
     };
     CheckBox BTN_CASE
     {
@@ -166,6 +168,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Rozlišovat velká/malá písmena";
         Text[ hebrew ] = "~Groß-/Kleinschreibung beachten";
         Text[ hindi ] = "~केस सचेतन";
+        Text[ slovak ] = "Rozlišovať veľké/~malé písmená";
     };
     CheckBox BTN_SORT
     {
@@ -200,6 +203,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Předřadit oblast podle skupin";
         Text[ hebrew ] = "Bereich vorher nach Gruppen ~sortieren";
         Text[ hindi ] = "समूह के आधार पर विस्तीर्ण को पहिले से ही ~सोर्ट करो";
+        Text[ slovak ] = "Preu~sporiadať oblasť podľa skupín";
     };
     CheckBox BTN_FORMATS
     {
@@ -235,6 +239,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Zahrnout formáty";
         Text[ hebrew ] = "~Formate einschließen";
         Text[ hindi ] = "रचनों को स~म्मिलित करो";
+        Text[ slovak ] = "Zahr~núť formáty";
     };
     CheckBox BTN_USERDEF
     {
@@ -269,6 +274,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Uživatelské pořadí řazení";
         Text[ hebrew ] = "~Benutzerdefinierte Sortierreihenfolge";
         Text[ hindi ] = "सोर्ट क्रम को व्य~वस्था करो";
+        Text[ slovak ] = "~Užívateľské poradie triedenia";
     };
     ListBox LB_USERDEF
     {
@@ -311,6 +317,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Vzestupně";
         Text[ hebrew ] = "A~ufsteigend";
         Text[ hindi ] = "~आरोहण क्रम";
+        Text[ slovak ] = "~Vzostupne";
     };
     RadioButton BTN_DESCENDING
     {
@@ -345,6 +352,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Sestupně";
         Text[ hebrew ] = "Abs~teigend";
         Text[ hindi ] = "अ~वरोहण क्रम";
+        Text[ slovak ] = "Zostupn~e";
     };
     FixedLine FL_SORT
     {
@@ -378,6 +386,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ czech ] = "Řadit";
         Text[ hebrew ] = "‮מיון‬";
         Text[ hindi ] = "सोर्ट";
+        Text[ slovak ] = "Zoradiť";
     };
 };
 
@@ -422,6 +431,7 @@ TabPage RID_SUBTBASE
         Text[ czech ] = "Seskupit podle";
         Text[ hebrew ] = "~Gruppieren nach";
         Text[ hindi ] = "से ~समूह";
+        Text[ slovak ] = "Zos~kupiť";
     };
     ListBox LB_GROUP
     {
@@ -465,6 +475,7 @@ TabPage RID_SUBTBASE
         Text[ czech ] = "Spočítat mezisoučty pro";
         Text[ hebrew ] = "~Teilergebnisse berechnen für";
         Text[ hindi ] = "केलिए आधाकुलजोड़ को ~गणना करो";
+        Text[ slovak ] = "Spočít~ať medzisúčet pre";
     };
     Control WND_COLUMNS
     {
@@ -506,6 +517,7 @@ TabPage RID_SUBTBASE
         Text[ czech ] = "Použít funkci";
         Text[ hebrew ] = "~Berechnungsvorschrift";
         Text[ hindi ] = "~फ़ंक्शन् का उपयोग करो";
+        Text[ slovak ] = "Použiť ~funkciu";
     };
     ListBox LB_FUNCTIONS
     {
@@ -907,6 +919,20 @@ TabPage RID_SUBTBASE
         < "Var (नमूना)" ; Default ; > ;
         < "VarP (जनसंख्या)" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Celkom" ; Default ; > ;
+        < "Počet" ; Default ; > ;
+        < "Priemer" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Počet (iba čísla)" ; Default ; > ;
+        < "ŠtandOdch (vzorka)" ; Default ; > ;
+        < "ŠtandOdchP (Populácia)" ; Default ; > ;
+        < "Var (vzor)" ; Default ; > ;
+        < "VarP (populácia)" ; Default ; > ;
+    };
     };
 };
 
@@ -984,6 +1010,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ czech ] = "1. skupina";
                 Text[ hebrew ] = "1. Gruppe";
                 Text[ hindi ] = "1st समूह";
+                Text[ slovak ] = "1. skupina";
             };
             PageItem
             {
@@ -1016,6 +1043,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ czech ] = "2. skupina";
                 Text[ hebrew ] = "2. Gruppe";
                 Text[ hindi ] = "2nd समूह";
+                Text[ slovak ] = "2. skupina";
             };
             PageItem
             {
@@ -1048,6 +1076,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ czech ] = "3. skupina";
                 Text[ hebrew ] = "3. Gruppe";
                 Text[ hindi ] = "3rd समूह";
+                Text[ slovak ] = "3. skupina";
             };
             PageItem
             {
@@ -1080,6 +1109,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text[ czech ] = "Volby";
                 Text[ hebrew ] = "‮אפשרויות‬";
                 Text[ hindi ] = "विकल्प";
+                Text[ slovak ] = "Nastavenia";
             };
         };
     };
@@ -1117,6 +1147,7 @@ TabDialog RID_SCDLG_SUBTOTALS
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     Text[ chinese_simplified ] = "分类汇总";
     Text[ russian ] = "������������� �����";
@@ -1133,7 +1164,10 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ czech ] = "Mezisoučty";
     Text[ hebrew ] = "Teilergebnisse";
     Text[ hindi ] = "आधा कुलजोड़";
+    Text[ slovak ] = "Medzisúčty";
 };
+
+
 
 
 
