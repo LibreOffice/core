@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 12:29:39 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,13 +108,9 @@ Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw 
 {
     Any aRet = SbaXDataBrowserController::queryInterface(_rType);
     if(!aRet.hasValue())
-    {
         aRet = ::cppu::queryInterface(_rType,
                                 (::com::sun::star::util::XModifyBroadcaster*)this,
                                 (::com::sun::star::form::XLoadListener*)this);
-        if(!aRet.hasValue())
-            aRet = m_xFormControllerImpl->queryAggregation(_rType);
-    }
 
     return aRet;
 }
@@ -125,26 +121,13 @@ SbaExternalSourceBrowser::SbaExternalSourceBrowser(const Reference< ::com::sun::
     ,m_aModifyListeners(m_aPropertyMutex)
     ,m_bInQueryDispatch(NULL)
 {
-    // create the aggregated object
-    ::comphelper::increment(m_refCount);
-    {
-        m_pFormControllerImpl = new FormControllerImpl(this);
-        m_xFormControllerImpl = m_pFormControllerImpl;
-        m_xFormControllerImpl->setDelegator(*this);
-    }
-    ::comphelper::decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------------
 SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 {
-    // Freigeben der Aggregation
-    if (m_xFormControllerImpl.is())
-    {
-        Reference< XInterface >  xEmpty;
-        m_xFormControllerImpl->setDelegator(xEmpty);
-    }
 }
+
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException)
 {
@@ -210,24 +193,6 @@ void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObjec
     ::cppu::OInterfaceIteratorHelper aIt(m_aModifyListeners);
     while (aIt.hasMoreElements())
         ((::com::sun::star::util::XModifyListener*)aIt.next())->modified(aEvt);
-}
-
-// -----------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( RuntimeException )
-{
-    Reference< ::com::sun::star::frame::XFrameActionListener >  xAggListener;
-    if (m_xFormControllerImpl.is())
-        m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::frame::XFrameActionListener>*)0)) >>= xAggListener;
-
-    // log off my aggregated object
-    if (m_xCurrentFrame.is() && xAggListener.is())
-        m_xCurrentFrame->removeFrameActionListener(xAggListener);
-
-    SbaXDataBrowserController::attachFrame(xFrame);
-
-    // and log on to the new frame
-    if (m_xCurrentFrame.is() && xAggListener.is())
-        m_xCurrentFrame->addFrameActionListener(xAggListener);
 }
 
 //------------------------------------------------------------------
@@ -414,22 +379,6 @@ void SAL_CALL SbaExternalSourceBrowser::disposing()
 
     stopListening();
 
-    if (m_xFormControllerImpl.is())
-    {
-        Reference< ::com::sun::star::lang::XComponent >  xAggComp;
-        m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::lang::XComponent>*)0)) >>= xAggComp;
-        if (xAggComp.is())
-            xAggComp->dispose();
-    }
-
-    // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
-    Reference< ::com::sun::star::frame::XFrameActionListener >  xAggListener;
-    if (m_xFormControllerImpl.is())
-    {
-        m_xFormControllerImpl->queryAggregation( ::getCppuType((const Reference< ::com::sun::star::frame::XFrameActionListener >*)0)) >>= xAggListener;
-        m_xCurrentFrame->removeFrameActionListener(xAggListener);
-    }
-
     SbaXDataBrowserController::disposing();
 }
 
@@ -540,45 +489,7 @@ void SAL_CALL SbaExternalSourceBrowser::disposing(const ::com::sun::star::lang::
         ClearView();
     }
 
-    if (m_xFormControllerImpl != Source.Source)
-    {   // forward the event to my aggregate (if it isn't the source itself)
-        Reference< ::com::sun::star::lang::XEventListener >  xAggListener;
-        m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::lang::XEventListener >*)0)) >>= xAggListener;
-        if (xAggListener.is())
-            xAggListener->disposing(Source);
-    }
-
-    // the frame
-    if (Source.Source == m_xCurrentFrame)
-    {
-        // our aggregated object doesn't handle its frame action listening itself, so we have to log it off
-        Reference< ::com::sun::star::frame::XFrameActionListener >  xAggListener;
-        if (m_xFormControllerImpl.is())
-        {
-            m_xFormControllerImpl->queryAggregation(::getCppuType((const Reference< ::com::sun::star::frame::XFrameActionListener >*)0)) >>= xAggListener;
-            m_xCurrentFrame->removeFrameActionListener(xAggListener);
-        }
-    }
     SbaXDataBrowserController::disposing(Source);
-}
-//------------------------------------------------------------------
-void SbaExternalSourceBrowser::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
-{
-    SbaXDataBrowserController::addControlListeners(_xGridControl);
-
-    Reference< ::com::sun::star::awt::XWindow >  xWindow(_xGridControl, UNO_QUERY);
-    if (xWindow.is())
-        xWindow->addFocusListener(this);
-}
-
-//------------------------------------------------------------------
-void SbaExternalSourceBrowser::removeControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
-{
-    SbaXDataBrowserController::removeControlListeners(_xGridControl);
-
-    Reference< ::com::sun::star::awt::XWindow >  xWindow(_xGridControl, UNO_QUERY);
-    if (xWindow.is())
-        xWindow->removeFocusListener(this);
 }
 
 //------------------------------------------------------------------
@@ -602,46 +513,6 @@ void SbaExternalSourceBrowser::stopListening()
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( RuntimeException )
-{
-    ::com::sun::star::lang::EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
-    while (aIter.hasMoreElements())
-        ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formActivated(aEvt);
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( RuntimeException )
-{
-    if (!getBrowserView() || !getBrowserView()->getGridControl().is())
-        return;
-    Reference< ::com::sun::star::awt::XVclWindowPeer >  xMyGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
-    if (!xMyGridPeer.is())
-        return;
-    Reference< ::com::sun::star::awt::XWindowPeer >  xNextControlPeer(e.NextFocus, UNO_QUERY);
-    if (!xNextControlPeer.is())
-        return;
-
-    if (xMyGridPeer->isChild(xNextControlPeer))
-        return;
-
-    if (xMyGridPeer == xNextControlPeer)
-        return;
-
-    ::com::sun::star::lang::EventObject aEvt(*this);
-    ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
-    while (aIter.hasMoreElements())
-        ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
-
-    // commit the changes of the grid control (as we're deactivated)
-    Reference< ::com::sun::star::form::XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
-    if (xCommitable.is())
-        xCommitable->commit();
-    else
-        OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::focusLost : why is my control not commitable ?");
-}
-
-//------------------------------------------------------------------
 sal_uInt16 SbaExternalSourceBrowser::SaveData(sal_Bool bUI, sal_Bool bForBrowsing)
 {
     if (m_bSuspending)
@@ -655,138 +526,3 @@ sal_uInt16 SbaExternalSourceBrowser::SaveData(sal_Bool bUI, sal_Bool bForBrowsin
 
 //==================================================================
 //==================================================================
-
-//------------------------------------------------------------------
-SbaExternalSourceBrowser::FormControllerImpl::FormControllerImpl(SbaExternalSourceBrowser* m_pOwner)
-    :m_pOwner(m_pOwner)
-    ,m_bActive(sal_False)
-    ,m_aActivateListeners(m_pOwner->m_aPropertyMutex)
-{
-    OSL_ENSURE(m_pOwner, "SbaExternalSourceBrowser::FormControllerImpl::FormControllerImpl : invalid Owner !");
-}
-
-//------------------------------------------------------------------
-SbaExternalSourceBrowser::FormControllerImpl::~FormControllerImpl()
-{
-}
-
-//------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XControl >  SbaExternalSourceBrowser::FormControllerImpl::getCurrentControl(void) throw( RuntimeException )
-{
-    return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< ::com::sun::star::awt::XControl > ();
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::addActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
-{
-    m_aActivateListeners.addInterface(l);
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::removeActivateListener(const Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( RuntimeException )
-{
-    m_aActivateListeners.removeInterface(l);
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setModel(const Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( RuntimeException )
-{
-    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::setModel : invalid call, can't change my model !");
-}
-
-//------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getModel(void) throw( RuntimeException )
-{
-    if (m_pOwner->m_pDataSourceImpl)
-        return Reference< ::com::sun::star::awt::XTabControllerModel > ((Reference< XInterface > )*m_pOwner->m_pDataSourceImpl, UNO_QUERY);
-
-    return Reference< ::com::sun::star::awt::XTabControllerModel > ();
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::setContainer(const Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( RuntimeException )
-{
-    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::setContainer : invalid call, can't change my container !");
-}
-
-//------------------------------------------------------------------
-Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getContainer(void) throw( RuntimeException )
-{
-    if (m_pOwner->getBrowserView())
-        return m_pOwner->getBrowserView()->getContainer();
-    return Reference< ::com::sun::star::awt::XControlContainer > ();
-}
-
-//------------------------------------------------------------------
-Sequence< Reference< ::com::sun::star::awt::XControl > > SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::getControls(void) throw( RuntimeException )
-{
-    if (m_pOwner->getBrowserView())
-    {
-        Reference< ::com::sun::star::awt::XControl >  xGrid = m_pOwner->getBrowserView()->getGridControl();
-        return Sequence< Reference< ::com::sun::star::awt::XControl > >(&xGrid, 1);
-    }
-    return Sequence< Reference< ::com::sun::star::awt::XControl > >();
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::autoTabOrder(void) throw( RuntimeException )
-{
-    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder(void) throw( RuntimeException )
-{
-    OSL_ENSURE(sal_False, "SbaExternalSourceBrowser::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateFirst(void) throw( RuntimeException )
-{
-    if (m_pOwner->getBrowserView())
-        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::activateLast(void) throw( RuntimeException )
-{
-    if (m_pOwner->getBrowserView())
-        m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
-{
-    OSL_ENSURE(aEvent.Source == m_pOwner->m_xCurrentFrame, "SbaExternalSourceBrowser::FormControllerImpl::frameAction : where did this come frome ?");
-
-    ::com::sun::star::lang::EventObject aEvt(*m_pOwner);
-    ::cppu::OInterfaceIteratorHelper aIter(m_aActivateListeners);
-    switch (aEvent.Action)
-    {
-        case ::com::sun::star::frame::FrameAction_FRAME_ACTIVATED:
-            // as the frame sends more ACTIVATED than DEACTIVATING events we check this with our own flag, so the listeners
-            // will be notified only when the first activation occurs
-//          if (!m_bActive)
-                // TODO : when de DEACTIVATED-event is implemented (MBA) reinsert this line
-//          {
-//              while (aIter.hasMoreElements())
-//                  ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formActivated(aEvt);
-//          }
-//          m_bActive = sal_True;
-            break;
-
-        case ::com::sun::star::frame::FrameAction_FRAME_DEACTIVATING:
-//          while (aIter.hasMoreElements())
-//              ((::com::sun::star::form::XFormControllerListener*)aIter.next())->formDeactivated(aEvt);
-//          m_bActive = sal_False;
-            break;
-    }
-}
-
-//------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& Source) throw( RuntimeException )
-{
-    // nothing to do
-    // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
-}
-

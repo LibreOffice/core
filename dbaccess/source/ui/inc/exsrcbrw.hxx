@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SBA_BWRCTRLR_HXX
 #include "brwctrlr.hxx"
 #endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
 #include <com/sun/star/form/XFormController.hpp>
 #endif
@@ -87,7 +84,6 @@ namespace dbaui
     class SbaExternalSourceBrowser
                 :public SbaXDataBrowserController
                 ,public ::com::sun::star::util::XModifyBroadcaster
-                ,public ::com::sun::star::awt::XFocusListener
     {
         ::cppu::OInterfaceContainerHelper   m_aModifyListeners;
             // for multiplexing the modify events
@@ -95,53 +91,6 @@ namespace dbaui
         sal_Bool                            m_bInQueryDispatch;
             // our queryDispatch will ask our frame, which first will ask our queryDispatch, so we need to protect against
             // recursion
-
-        //==============================================================================
-        // a helper class implementing a ::com::sun::star::form::XFormController, will be aggregated by SbaExternalSourceBrowser
-        // (we can't derive from ::com::sun::star::form::XFormController as it's base class is ::com::sun::star::awt::XTabController and the ::com::sun::star::awt::XTabController::getModel collides
-        // with the ::com::sun::star::frame::XController::getModel implemented in our base class SbaXDataBrowserController)
-        class FormControllerImpl
-            : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::XFormController,
-                                                 ::com::sun::star::frame::XFrameActionListener>
-        {
-            friend class SbaExternalSourceBrowser;
-            ::cppu::OInterfaceContainerHelper   m_aActivateListeners;
-            SbaExternalSourceBrowser*           m_pOwner;
-            sal_Bool                            m_bActive;
-
-        public:
-            FormControllerImpl(SbaExternalSourceBrowser* pOwner);
-
-            // ::com::sun::star::form::XFormController
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL removeActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
-
-            // ::com::sun::star::awt::XTabController
-            virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException );
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >  SAL_CALL getContainer(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  > SAL_CALL getControls(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL autoTabOrder(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL activateTabOrder(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL activateFirst(void) throw( ::com::sun::star::uno::RuntimeException );
-            virtual void SAL_CALL activateLast(void) throw( ::com::sun::star::uno::RuntimeException );
-
-            // ::com::sun::star::frame::XFrameActionListener
-            virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
-
-            // ::com::sun::star::lang::XEventListener
-            virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-
-        protected:
-            ~FormControllerImpl();
-        };
-        friend class SbaExternalSourceBrowser::FormControllerImpl;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xFormControllerImpl;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >         m_xTabControllerModelFake;
-        FormControllerImpl* m_pFormControllerImpl;
 
     public:
         SbaExternalSourceBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -171,9 +120,6 @@ namespace dbaui
         virtual void SAL_CALL addModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
         virtual void SAL_CALL removeModifyListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
 
-        // ::com::sun::star::frame::XController
-        virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
-
         // ::com::sun::star::lang::XComponent
         virtual void SAL_CALL disposing();
 
@@ -182,14 +128,6 @@ namespace dbaui
 
         // ::com::sun::star::lang::XEventListener
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
-
-        // ::com::sun::star::awt::XFocusListener
-        virtual void SAL_CALL focusGained(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
-        virtual void SAL_CALL focusLost(const ::com::sun::star::awt::FocusEvent& e) throw( ::com::sun::star::uno::RuntimeException );
-
-        // we want to be a focus listener for the control
-        virtual void addControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
-        virtual void removeControlListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > & _xGridControl);
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
