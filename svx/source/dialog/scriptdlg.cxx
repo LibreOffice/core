@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:46:59 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,8 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasRe
 {
     SetSelectionMode( SINGLE_SELECTION );
     OSL_TRACE("setting default node images");
-    /*
-    SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
-                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION );
+    /* SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
+                   WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HIDESELECTION ); */
     // ISSUE these node bitmaps don't appear?
     SetNodeBitmaps( Image( ResId( IMG_PLUS ) ),
                     Image( ResId( IMG_MINUS ) ),
@@ -115,8 +114,7 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasRe
     SetNodeBitmaps( Image( ResId( IMG_PLUS_HC ) ),
                     Image( ResId( IMG_MINUS_HC ) ),
                     BMP_COLOR_HIGHCONTRAST );
-    */
-    SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL );
+    //SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL );
     FreeResource();
     nMode = 0xFF;   // Alles
 }
@@ -405,7 +403,7 @@ void __EXPORT SFTreeListBox::ExpandedHdl()
 // InputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 InputDialog::InputDialog(Window * pParent, USHORT nMode )
-    : ModalDialog( pParent, SVX_RES( DLG_NEWLIB ) ),
+    : ModalDialog( pParent, SVX_RES( RID_DLG_NEWLIB ) ),
         aText( this, ResId( FT_NEWLIB ) ),
         aEdit( this, ResId( ED_LIBNAME ) ),
         aOKButton( this, ResId( PB_OK ) ),
@@ -447,15 +445,15 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::r
         aDelButton( this, ResId( SF_PB_DEL ) ),
         aHelpButton( this, ResId( SF_PB_HELP ) ),
         m_sLanguage( language ),
-        m_delErrStr( ResId( STR_DELFAILED ) ),
-        m_delErrTitleStr( ResId( STR_DELFAILED_TITLE ) ),
-        m_delQueryStr( ResId( STR_DELQUERY ) ),
-        m_delQueryTitleStr( ResId( STR_DELQUERY_TITLE ) ) ,
-        m_createErrStr( ResId ( STR_CREATEFAILED ) ),
-        m_createDupStr( ResId ( STR_CREATEFAILEDDUP ) ),
-        m_createErrTitleStr( ResId( STR_CREATEFAILED_TITLE ) ),
-        m_renameErrStr( ResId ( STR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( ResId( STR_RENAMEFAILED_TITLE ) )
+        m_delErrStr( ResId( RID_SVXSTR_DELFAILED ) ),
+        m_delErrTitleStr( ResId( RID_SVXSTR_DELFAILED_TITLE ) ),
+        m_delQueryStr( ResId( RID_SVXSTR_DELQUERY ) ),
+        m_delQueryTitleStr( ResId( RID_SVXSTR_DELQUERY_TITLE ) ) ,
+        m_createErrStr( ResId ( RID_SVXSTR_CREATEFAILED ) ),
+        m_createDupStr( ResId ( RID_SVXSTR_CREATEFAILEDDUP ) ),
+        m_createErrTitleStr( ResId( RID_SVXSTR_CREATEFAILED_TITLE ) ),
+        m_renameErrStr( ResId ( RID_SVXSTR_RENAMEFAILED ) ),
+        m_renameErrTitleStr( ResId( RID_SVXSTR_RENAMEFAILED_TITLE ) )
 {
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
