@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 06:53:13 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 07:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog RID_FONTDIALOG
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Schriftart" ;
-        Text [ english_us ] = "~Font" ;
+        Text [ ENGLISH ] = "~Font" ;
     };
     ComboBox 1
     {
@@ -257,7 +257,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Size = MAP_APPFONT ( 40 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Basisgröße: : ~Basisgröße: */
         Text = "~Basisgröße" ;
-        Text [ english_us ] = "Base ~size" ;
+        Text [ ENGLISH ] = "~Basis size" ;
     };
     MetricField 1
     {
@@ -278,7 +278,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Text" ;
         Left = TRUE ;
-        Text [ english_us ] = "~Text" ;
+        Text [ English ] = "~Text" ;
     };
     MetricField 4
     {
@@ -299,7 +299,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Indizes" ;
-        Text [ english_us ] = "~Indexes" ;
+        Text [ ENGLISH ] = "~Indices" ;
         Left = TRUE ;
     };
     MetricField 5
@@ -321,7 +321,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Funktionen" ;
-        Text [ english_us ] = "~Functions" ;
+        Text [ ENGLISH ] = "~Functions" ;
         Left = TRUE ;
     };
     MetricField 6
@@ -343,7 +343,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Operatoren" ;
-        Text [ english_us ] = "~Operators" ;
+        Text [ ENGLISH ] = "~Operators" ;
         Left = TRUE ;
     };
     MetricField 7
@@ -365,7 +365,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Grenzen" ;
-        Text [ english_us ] = "~Limits" ;
+        Text [ ENGLISH ] = "~Borders" ;
         Left = TRUE ;
     };
     MetricField 8
@@ -557,7 +557,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 18 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Variablen" ;
-        Text [ english_us ] = "~Variables" ;
+        Text [ ENGLISH ] = "~Variables" ;
     };
     ListBox 1
     {
@@ -573,7 +573,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Funktionen" ;
-        Text [ english_us ] = "~Functions" ;
+        Text [ ENGLISH ] = "~Functions" ;
     };
     ListBox 2
     {
@@ -589,7 +589,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 51 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Zahlen" ;
-        Text [ english_us ] = "~Numbers" ;
+        Text [ ENGLISH ] = "~Numbers" ;
     };
     ListBox 3
     {
@@ -605,7 +605,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Text" ;
-        Text [ english_us ] = "~Text" ;
+        Text [ English ] = "~Text" ;
     };
     ListBox 4
     {
@@ -1072,7 +1072,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             Text = "~Abstand" ;
-            Text [ english_us ] = "~Spacing" ;
+            Text [ ENGLISH ] = "~Distance" ;
         };
         Bitmap 2
         {
@@ -1081,7 +1081,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Zeilenabstand" ;
-            Text [ english_us ] = "~Line spacing" ;
+            Text [ ENGLISH ] = "~Linespacing" ;
         };
         Bitmap 3
         {
@@ -1090,7 +1090,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 4
         {
             Text = "~Wurzelabstand" ;
-            Text [ english_us ] = "~Root spacing" ;
+            Text [ ENGLISH ] = "~Rootspacing" ;
         };
         Bitmap 4
         {
@@ -1102,12 +1102,12 @@ ModalDialog RID_DISTANCEDIALOG
         String 1
         {
             Text = "Indizes" ;
-            Text [ english_us ] = "Indexes" ;
+            Text [ ENGLISH ] = "Indices" ;
         };
         String 2
         {
             Text = "~Hochstellung" ;
-            Text [ english_us ] = "~Superscript" ;
+            Text [ ENGLISH ] = "~Superscript" ;
         };
         Bitmap 2
         {
@@ -1116,7 +1116,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Tiefstellung" ;
-            Text [ english_us ] = "S~ubscript" ;
+            Text [ ENGLISH ] = "S~upscript" ;
         };
         Bitmap 3
         {
@@ -1157,7 +1157,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Zählerhöhe: : ~Zählerhöhe: */
             Text = "~Zählerhöhe" ;
-            Text [ english_us ] = "~Numerator" ;
+            Text [ ENGLISH ] = "~Numerator high" ;
         };
         Bitmap 2
         {
@@ -1166,7 +1166,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Nennertiefe" ;
-            Text [ english_us ] = "~Denominator" ;
+            Text [ ENGLISH ] = "~Denominator deep" ;
         };
         Bitmap 3
         {
@@ -1206,7 +1206,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Überlänge: : ~šberlänge: */
             Text = "~Überlänge" ;
-            Text [ english_us ] = "~Excess length" ;
+            Text [ ENGLISH ] = "~Excessive lenght" ;
         };
         Bitmap 2
         {
@@ -1216,7 +1216,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Strichstärke: : ~Strichstärke: */
             Text = "~Strichstärke" ;
-            Text [ english_us ] = "~Weight" ;
+            Text [ ENGLISH ] = "~Line width" ;
         };
         Bitmap 3
         {
@@ -1256,7 +1256,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? Grenz~höhe: : Grenz~höhe: */
             Text = "Grenz~höhe" ;
-            Text [ english_us ] = "~Upper limit" ;
+            Text [ ENGLISH ] = "Maximum ~hight" ;
         };
         Bitmap 2
         {
@@ -1265,7 +1265,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "Grenz~tiefe" ;
-            Text [ english_us ] = "~Lower limit" ;
+            Text [ ENGLISH ] = "Minimum hight:" ;
         };
         Bitmap 3
         {
@@ -1304,7 +1304,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             Text = "~left/right Übergröße" ;
-            Text[ english_us ] = "~Excess size (left/right)";
+            Text [ ENGLISH ] = "~left/right excess height" ;
         };
         Bitmap 2
         {
@@ -1313,7 +1313,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Abstand" ;
-            Text [ english_us ] = "~Spacing" ;
+            Text [ ENGLISH ] = "~Distance:" ;
         };
         Bitmap 3
         {
@@ -1322,7 +1322,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 5
         {
             Text = "~Übergröße" ;
-            Text[ english_us ] = "~Excess size";
+            Text [ ENGLISH ] = "~Excess size" ;
         };
         Bitmap 5
         {
@@ -1361,7 +1361,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             Text = "~Zeilenabstand" ;
-            Text [ english_us ] = "~Line spacing" ;
+            Text [ ENGLISH ] = "~Line spacing" ;
         };
         Bitmap 2
         {
@@ -1370,7 +1370,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Spaltenabstand" ;
-            Text [ english_us ] = "~Column spacing" ;
+            Text [ ENGLISH ] = "~Column spacing" ;
         };
         Bitmap 3
         {
@@ -1410,7 +1410,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Primärhöhe: : ~Primärhöhe: */
             Text = "~Primärhöhe" ;
-            Text [ english_us ] = "~Primary height" ;
+            Text [ ENGLISH ] = "~Primary hight" ;
         };
         Bitmap 2
         {
@@ -1419,7 +1419,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Mindestabstand" ;
-            Text [ english_us ] = "~Minimum spacing" ;
+            Text [ ENGLISH ] = "~Minimum distance" ;
         };
         Bitmap 3
         {
@@ -1459,7 +1459,7 @@ ModalDialog RID_DISTANCEDIALOG
         {
             /* ### ACHTUNG: Neuer Text in Resource? ~Übergröße: : ~šbergröße: */
             Text = "~Übergröße" ;
-            Text [ english_us ] = "~Excess size" ;
+            Text [ ENGLISH ] = "~Oversize" ;
         };
         Bitmap 2
         {
@@ -1468,7 +1468,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Abstand" ;
-            Text [ english_us ] = "~Spacing" ;
+            Text [ ENGLISH ] = "~Distance" ;
         };
         Bitmap 3
         {
@@ -1506,7 +1506,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 2
         {
             Text = "~Links" ;
-            TEXT[ english_us ] = "~Left";
+            Text [ ENGLISH ] = "~Left" ;
         };
         Bitmap 2
         {
@@ -1515,7 +1515,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 3
         {
             Text = "~Rechts" ;
-            TEXT[ english_us ] = "~Right";
+            Text [ ENGLISH ] = "~Right" ;
         };
         Bitmap 3
         {
@@ -1524,7 +1524,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 4
         {
             Text = "~Oben" ;
-            TEXT[ english_us ] = "~Top";
+            Text [ ENGLISH ] = "~Top" ;
         };
         Bitmap 4
         {
@@ -1533,7 +1533,7 @@ ModalDialog RID_DISTANCEDIALOG
         String 5
         {
             Text = "~Unten" ;
-            TEXT[ english_us ] = "~Bottom";
+            Text [ ENGLISH ] = "~Bottom" ;
         };
         Bitmap 5
         {
