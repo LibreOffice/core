@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:54:46 $
+ *  last change: $Author: rt $ $Date: 2002-02-21 21:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,7 @@ TabPage RID_SFXPAGE_SAVE
             < "글 문서" ;     APP_WRITER    ; > ;
         < "HTML형 문서" ;    APP_WRITER_WEB;  > ;
         < "스프레드시트 문서" ; APP_CALC      ; > ;
-        < "프리젠테이션" ;     APP_IMPRESS   ; > ;
+        < "프레젠테이션" ;     APP_IMPRESS   ; > ;
         < "그리기" ;        APP_DRAW      ; > ;
         < "수식" ;           APP_MATH      ; > ;
         };
