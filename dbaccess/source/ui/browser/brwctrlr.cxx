@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 18:34:39 $
+ *  last change: $Author: fs $ $Date: 2000-11-09 07:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #ifndef _COM_SUN_STAR_UNO_TYPECLASS_HPP_
 #include <com/sun/star/uno/TypeClass.hpp>
 #endif
-#ifndef _SVX_DBERRBOX_HXX
-#include <svx/dbmsgbox.hxx>
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -200,6 +200,9 @@
 #endif
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -410,6 +413,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
     catch(Exception&)
     {
     }
+    DBG_ASSERT(m_xUrlTransformer.is(), "SbaXDataBrowserController::SbaXDataBrowserController: no URLTransformer!");
     static ::rtl::OUString s_sHelpFileName(::rtl::OUString::createFromAscii("database.hlp"));
     sal_Int32 nAttrib = PropertyAttribute::READONLY | PropertyAttribute::TRANSIENT;
     registerProperty(PROPERTY_HELPFILENAME, PROPERTY_ID_HELPFILENAME,nAttrib,&s_sHelpFileName,  ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
@@ -1364,10 +1368,11 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if (::comphelper::isAssignableFrom(aEvent.Reason.getValueType(),::getCppuType((const SQLException*)0)))
+    SQLExceptionInfo aInfo(aEvent.Reason);
+    if (aInfo.isValid())
     {
         ::vos::OGuard aGuard(Application::GetSolarMutex());
-        SvxDBMsgBox aDlg(NULL, *(SQLException*)aEvent.Reason.getValue());
+        OSQLMessageBox aDlg(getContent(), aInfo);
         aDlg.Execute();
     }
     if (m_nFormActionNestingLevel)
@@ -2570,7 +2575,9 @@ URL SbaXDataBrowserController::getURLForId(sal_Int32 _nId) const
             break;
         }
 
-    // TODO: maybe let an URLTransformer analyze the URL
+    if (m_xUrlTransformer.is())
+        m_xUrlTransformer->parseStrict(aReturn);
+
     return aReturn;
 }
 
