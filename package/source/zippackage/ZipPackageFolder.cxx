@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:32:39 $
+ *  last change: $Author: mtg $ $Date: 2001-08-30 13:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,35 +327,14 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
         }
         if (bIsFolder)
         {
-            // In case the entry we are reading is also the entry we are writing, we will
-            // store the ZipEntry data in pTempEntry
-            ZipPackageFolder::copyZipEntry ( *pTempEntry, pFolder->aEntry );
-            pTempEntry->nTime = ZipOutputStream::getCurrentDosTime();
-            pTempEntry->nCrc = pTempEntry->nSize = pTempEntry->nCompressedSize = 0;
-            pTempEntry->nMethod = STORED;
-            pTempEntry->sName = rPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
-            try
-            {
-                vos::ORef < EncryptionData > xEmpty;
-                rZipOut.putNextEntry( *pTempEntry, xEmpty );
-                rZipOut.closeEntry();
-            }
-            catch (IOException & )
-            {
-                VOS_ENSURE( 0, "Error writing ZipOutputStream" );
-            }
+            OUString sTempName = rPath + rShortName + OUString( RTL_CONSTASCII_USTRINGPARAM ( "/" ) );
 
             pValue[0].Name = sMediaTypeProperty;
             pValue[0].Value <<= pFolder->GetMediaType();
             pValue[1].Name = sFullPathProperty;
-            pValue[1].Value <<= pTempEntry->sName;
+            pValue[1].Value <<= sTempName;
 
-            // Copy back the zip entry and make the offset negative so that we
-            // know it's point at the beginning of the LOC
-            ZipPackageFolder::copyZipEntry ( pFolder->aEntry, *pTempEntry );
-            pFolder->aEntry.nOffset *= -1;
-            pFolder->saveContents(pTempEntry->sName, rManList, rZipOut, rEncryptionKey, rRandomPool);
-            pFolder->aEntry.sName = rShortName;
+            pFolder->saveContents( sTempName, rManList, rZipOut, rEncryptionKey, rRandomPool);
         }
         else
         {
