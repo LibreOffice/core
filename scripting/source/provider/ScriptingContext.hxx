@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:10 $
+ *  last change: $Author: dfoster $ $Date: 2003-11-04 17:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,82 +62,63 @@
 #ifndef _FRAMEWORK_SCRIPT_PROTOCOLHANDLER_SCRIPTING_CONTEXT_HXX_
 #define _FRAMEWORK_SCRIPT_PROTOCOLHANDLER_SCRIPTING_CONTEXT_HXX_
 
-#include <hash_map>
 
 #include <osl/mutex.hxx>
 #include <rtl/ustring>
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/uno3.hxx>
+#include <comphelper/propertycontainer.hxx>
+#include <comphelper/proparrhlp.hxx>
+
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/weak.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <comphelper/broadcasthelper.hxx>
 namespace func_provider
 {
 // for simplification
 #define css ::com::sun::star
-#define dcsssf ::drafts::com::sun::star::script::framework
 
 //Typedefs
 //=============================================================================
-typedef ::std::hash_map < ::rtl::OUString, css::uno::Any, ::rtl::OUStringHash,
-    ::std::equal_to< ::rtl::OUString > > ScriptingConext_hash;
-typedef ::std::vector< ::rtl::OUString > OUString_vec;
+//typedef ::cppu::WeakImplHelper1< css::beans::XPropertySet > ScriptingContextImpl_BASE;
 
-class ScriptingContext : public ::cppu::WeakImplHelper1< css::beans::XPropertySet >
+class ScriptingContext : public ::comphelper::OMutexAndBroadcastHelper, public ::comphelper::OPropertyContainer,
+                         public ::comphelper::OPropertyArrayUsageHelper< ScriptingContext >,  public css::lang::XTypeProvider, public ::cppu::OWeakObject
 {
 
 public:
     ScriptingContext( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~ScriptingContext();
+    // XInterface
 
-    // XPropertySet implementation
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo( )
-        throw ( css::uno::RuntimeException );
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName,
-        const css::uno::Any& aValue )
-        throw ( css::beans::UnknownPropertyException,
-            css::beans::PropertyVetoException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
-    virtual css::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw ( css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
-        throw ( css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
-    virtual void SAL_CALL removePropertyChangeListener(
-        const ::rtl::OUString& aPropertyName,
-        const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
-        throw ( css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
-    virtual void SAL_CALL addVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-        throw ( css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
-    virtual void SAL_CALL removeVetoableChangeListener(
-        const ::rtl::OUString& PropertyName,
-        const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-        throw ( css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException );
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
+        throw( css::uno::RuntimeException )
+    {
+        css::uno::Any aRet( OPropertySetHelper::queryInterface( rType ) );
+        return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
+    }
+    void SAL_CALL acquire() throw() { ::cppu::OWeakObject::acquire(); }
+    void SAL_CALL release() throw() { ::cppu::OWeakObject::release(); }
+    // XPropertySet
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
+            throw ( css::uno::RuntimeException );
+    //XTypeProvider
+    DECLARE_XTYPEPROVIDER( )
 
+protected:
+
+    // OPropertySetHelper
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(  );
+
+    // OPropertyArrayUsageHelper
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper(  ) const;
 private:
-    // to obtain other services if needed
-    ScriptingConext_hash m_propertyMap;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    osl::Mutex m_mutex;
-
-    // Private helper methods
-    bool validateKey( const ::rtl::OUString& key );
 
 };
 } // func_provider

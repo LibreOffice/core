@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptingContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:13:25 $
+ *  last change: $Author: dfoster $ $Date: 2003-11-04 17:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
@@ -69,7 +71,12 @@
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
-
+#define DOC_REF_PROPID  1
+#define DOC_STORAGE_ID_PROPID 2
+#define DOC_URI_PROPID   3
+#define RESOLVED_STORAGE_ID_PROPID  4
+#define SCRIPT_INFO_PROPID  5
+#define SCRIPTINGCONTEXT_DEFAULT_ATTRIBS()   beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::MAYBEVOID
 namespace func_provider
 {
 
@@ -77,7 +84,8 @@ namespace func_provider
 // XScriptingContext implementation
 //
 //*************************************************************************
-ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) :
+ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) : //ScriptingContextImpl_BASE( GetMutex()),
+    OPropertyContainer( GetBroadcastHelper() ),
         m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptingContext ctor called >\n" );
@@ -85,121 +93,55 @@ ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xCont
     validateXRef( m_xContext,
                   "ScriptingContext::ScriptingContext: No context available\n" );
 
-    //Setup internal hash map
     Any nullAny;
 
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
-    m_propertyMap[ scriptingConstantsPool.DOC_REF ] = nullAny;
-    m_propertyMap[ scriptingConstantsPool.DOC_STORAGE_ID ] = nullAny;
-    m_propertyMap[ scriptingConstantsPool.DOC_URI ] = nullAny;
-    m_propertyMap[ scriptingConstantsPool.RESOLVED_STORAGE_ID ] = nullAny;
-    m_propertyMap[ scriptingConstantsPool.SCRIPT_INFO ] = nullAny;
+    registerPropertyNoMember( scriptingConstantsPool.DOC_REF, DOC_REF_PROPID, SCRIPTINGCONTEXT_DEFAULT_ATTRIBS(),::getCppuType(  (const Reference< css::frame::XModel >* ) NULL ), NULL ) ;
+    registerPropertyNoMember( scriptingConstantsPool.DOC_STORAGE_ID, DOC_STORAGE_ID_PROPID, SCRIPTINGCONTEXT_DEFAULT_ATTRIBS(), ::getCppuType(  (const sal_Int32* ) NULL ), NULL ) ;
+    registerPropertyNoMember( scriptingConstantsPool.DOC_URI, DOC_URI_PROPID, SCRIPTINGCONTEXT_DEFAULT_ATTRIBS(), ::getCppuType(  (const ::rtl::OUString* ) NULL ), NULL ) ;
+    registerPropertyNoMember( scriptingConstantsPool.RESOLVED_STORAGE_ID, RESOLVED_STORAGE_ID_PROPID, SCRIPTINGCONTEXT_DEFAULT_ATTRIBS(), ::getCppuType(  (const sal_Int32* ) NULL ), NULL );
+    registerPropertyNoMember( scriptingConstantsPool.SCRIPT_INFO, SCRIPT_INFO_PROPID, SCRIPTINGCONTEXT_DEFAULT_ATTRIBS(), ::getCppuType(  (const sal_Int32* ) NULL ), NULL );
 }
 
-//*************************************************************************
-bool ScriptingContext::validateKey( const ::rtl::OUString& key )
-{
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-    return ( m_propertyMap.find( key ) != m_propertyMap.end() );
-}
-
-//*************************************************************************
 ScriptingContext::~ScriptingContext()
 {
     OSL_TRACE( "< ScriptingContext dtor called >\n" );
 }
+// -----------------------------------------------------------------------------
+// OPropertySetHelper
+// -----------------------------------------------------------------------------
 
-//*************************************************************************
-// XPropertySet implementation
-//*************************************************************************
-Reference< beans::XPropertySetInfo > SAL_CALL ScriptingContext::getPropertySetInfo( )
-    throw ( RuntimeException )
+::cppu::IPropertyArrayHelper& ScriptingContext::getInfoHelper(  )
 {
-    return Reference< beans::XPropertySetInfo > (); // Not supported
+    return *getArrayHelper();
 }
 
-//*************************************************************************
-void SAL_CALL ScriptingContext::setPropertyValue( const ::rtl::OUString& aPropertyName,
-    const Any& aValue )
-    throw ( beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException,
-            RuntimeException )
+// -----------------------------------------------------------------------------
+// OPropertyArrayUsageHelper
+// -----------------------------------------------------------------------------
+
+::cppu::IPropertyArrayHelper* ScriptingContext::createArrayHelper(  ) const
 {
-    if ( !validateKey( aPropertyName ) )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptingContext::setPropertyValue: invalid key" ),
-            Reference< XInterface >() );
-    }
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-    m_propertyMap[ aPropertyName ] = aValue;
+    Sequence< beans::Property > aProps;
+    describeProperties( aProps );
+    return new ::cppu::OPropertyArrayHelper( aProps );
 }
+// -----------------------------------------------------------------------------
+// XPropertySet
+// -----------------------------------------------------------------------------
 
-//*************************************************************************
-Any SAL_CALL ScriptingContext::getPropertyValue( const ::rtl::OUString& PropertyName )
-    throw ( beans::UnknownPropertyException,
-            lang::WrappedTargetException, RuntimeException )
+Reference< beans::XPropertySetInfo > ScriptingContext::getPropertySetInfo(  ) throw (RuntimeException)
 {
-    if ( !validateKey( PropertyName ) )
-    {
-        throw RuntimeException(
-            OUSTR( "ScriptingContext::getPropertyValue: invalid key" ),
-            Reference< XInterface >() );
-    }
-
-    ::osl::Guard< osl::Mutex > aGuard( m_mutex );
-    Any returnValue = m_propertyMap[ PropertyName ];
-
-    return returnValue;
+    Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
 }
+// -----------------------------------------------------------------------------// XTypeProvider
+// -----------------------------------------------------------------------------
+IMPLEMENT_GET_IMPLEMENTATION_ID( ScriptingContext )
 
-//*************************************************************************
-void SAL_CALL ScriptingContext::addPropertyChangeListener(
-    const ::rtl::OUString& aPropertyName,
-    const Reference< beans::XPropertyChangeListener >& xListener )
-    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
-            RuntimeException )
+css::uno::Sequence< css::uno::Type > SAL_CALL ScriptingContext::getTypes(  ) throw (css::uno::RuntimeException)
 {
-    throw RuntimeException(
-        OUSTR( "ScriptingContext::addPropertyChangeListener: method not supported" ),
-        Reference< XInterface >() );
+    return OPropertyContainer::getTypes();
 }
-
-//*************************************************************************
-void SAL_CALL ScriptingContext::removePropertyChangeListener(
-    const ::rtl::OUString& aPropertyName,
-    const Reference< beans::XPropertyChangeListener >& aListener )
-    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
-            RuntimeException )
-{
-    throw RuntimeException(
-        OUSTR( "ScriptingContext::removePropertyChangeListener: method not supported" ),
-        Reference< XInterface >() );
-}
-
-//*************************************************************************
-void SAL_CALL ScriptingContext::addVetoableChangeListener(
-    const ::rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
-    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
-            RuntimeException )
-{
-    throw RuntimeException(
-        OUSTR( "ScriptingContext::addVetoableChangeListener: method not supported" ),
-        Reference< XInterface >() );
-}
-
-//*************************************************************************
-void SAL_CALL ScriptingContext::removeVetoableChangeListener(
-    const ::rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
-    throw ( beans::UnknownPropertyException, lang::WrappedTargetException,
-            RuntimeException )
-{
-    throw RuntimeException(
-        OUSTR( "ScriptingContext::removeVetoableChangeListener: method not supported" ),
-        Reference< XInterface >() );
-}
-
 } // namespace func_provider

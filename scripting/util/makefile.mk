@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: npower $ $Date: 2003-08-19 09:51:21 $
+#   last change: $Author: dfoster $ $Date: 2003-11-04 17:45:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SHL1IMPLIB= $(TARGET)
 SHL1STDLIBS+=\
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
+    $(COMPHELPERLIB) \
     $(SALLIB)
 
 
