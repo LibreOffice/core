@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:49:33 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,11 @@
 #include <comphelper/extract.hxx>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORYHXX_
-#include <comphelper/processfactory.hxx>
-#endif
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORYHXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSUPPORTEDLOCALES_HPP_
 #include <com/sun/star/linguistic2/XSupportedLocales.hpp>
 #endif
@@ -358,7 +360,9 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const uno::Sequence < formula::SymbolDescriptor > &rProps,
                     const rtl::OUString rName) const
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    // #110680#
+    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( rExport.getServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
     if( xServiceFactory.is() )
@@ -502,7 +506,9 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
     if( !xForbChars.is() || !xLocales.is() )
         return;
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    // #110680#
+    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
+    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( rExport.getServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 
     if( xServiceFactory.is() )
