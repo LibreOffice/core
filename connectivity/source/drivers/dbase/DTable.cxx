@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 07:59:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,8 +1385,10 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 if (pIndex->Find(0,rRow[nPos]))
                 {
                     // es existiert kein eindeutiger Wert
-                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Dupilcate value found!");
-                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("Duplicate value found in column \"");
+                    sMessage += aColName;
+                    sMessage += ::rtl::OUString::createFromAscii( "\"!");
+                    throw SQLException(sMessage,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
                 }
             }
         }
