@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFormsCollection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:08 $
+ *  last change:$Date: 2003-05-27 12:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.container.XNameContainer;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XDrawPage;
 import com.sun.star.form.XForm;
 import com.sun.star.lang.XComponent;
@@ -119,7 +120,7 @@ public class OFormsCollection extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a draw document" );
-        xDrawDoc = DrawTools.createDrawDoc( tParam.getMSF() );
+        xDrawDoc = DrawTools.createDrawDoc( (XMultiServiceFactory)tParam.getMSF() );
     }
 
     /**

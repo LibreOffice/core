@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OGridControlModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:07 $
+ *  last change:$Date: 2003-05-27 12:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.form.XGridColumnFactory;
@@ -168,7 +169,7 @@ public class OGridControlModel extends TestCase {
     * Creates Drawing document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         log.println( "creating a draw document" );
         try {
@@ -223,7 +224,7 @@ public class OGridControlModel extends TestCase {
 
 
         //get GridControlModel
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
         String objName = "Grid";
         XControlShape shape = FormTools.insertControlShape
             (xDrawDoc, 5000, 7000, 2000, 2000, "GridControl") ;
