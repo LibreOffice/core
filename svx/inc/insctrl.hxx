@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:37:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,13 @@
 #include <sfx2/stbitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxInsertToolBoxControl -----------------------------------------
 
-class SvxInsertStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxInsertStatusBarControl : public SfxStatusBarControl
 {
 public:
     virtual void    StateChanged( USHORT nSID, SfxItemState eState,
@@ -88,7 +92,7 @@ private:
     BOOL    bInsert;
 
 #ifdef _SVX_INSCTRL_CXX
-    void    DrawItemText_Impl();
+    SVX_DLLPRIVATE void DrawItemText_Impl();
 #endif
 };
 
