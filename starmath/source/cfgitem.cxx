@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-16 09:20:25 $
+ *  last change: $Author: tl $ $Date: 2002-12-10 11:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ static const char * aMathPropNames[] =
     "Print/Frame",
     "Print/Size",
     "Print/ZoomFactor",
-    "Misc/NoSymbolsWarning",
+    //"Misc/NoSymbolsWarning",
     "Misc/IgnoreSpacesRight",
     "View/ToolboxVisible",
     "View/AutoRedraw",
@@ -247,7 +247,7 @@ struct SmCfgOther
     BOOL            bToolboxVisible;
     BOOL            bAutoRedraw;
     BOOL            bFormulaCursor;
-    BOOL            bNoSymbolsWarning;
+    //BOOL            bNoSymbolsWarning;
 
     SmCfgOther();
 };
@@ -260,7 +260,7 @@ SmCfgOther::SmCfgOther()
     bPrintTitle         = bPrintFormulaText   =
     bPrintFrame         = bIgnoreSpacesRight  =
     bToolboxVisible     = bAutoRedraw         =
-    bFormulaCursor      = bNoSymbolsWarning   = TRUE;
+    bFormulaCursor      = /*bNoSymbolsWarning   =*/ TRUE;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -960,10 +960,11 @@ void SmMathConfig::LoadOther()
         // Print/ZoomFactor
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->nPrintZoomFactor = nTmp16;
-        ++pVal;
+/*        ++pVal;
         // Misc/NoSymbolsWarning
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
             pOther->bNoSymbolsWarning = bTmp;
+*/
         ++pVal;
         // Misc/IgnoreSpacesRight
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
@@ -1012,8 +1013,9 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (INT16) pOther->ePrintSize;
     // Print/ZoomFactor
     *pValue++ <<= (INT16) pOther->nPrintZoomFactor;
-    // Misc/NoSymbolsWarning
+/*    // Misc/NoSymbolsWarning
     *pValue++ <<= (BOOL) pOther->bNoSymbolsWarning;
+*/
     // Misc/IgnoreSpacesRight
     *pValue++ <<= (BOOL) pOther->bIgnoreSpacesRight;
     // View/ToolboxVisible
@@ -1345,22 +1347,6 @@ void SmMathConfig::SetShowFormulaCursor( BOOL bVal )
     if (!pOther)
         LoadOther();
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
-}
-
-
-BOOL SmMathConfig::IsNoSymbolsWarning() const
-{
-    if (!pOther)
-        ((SmMathConfig *) this)->LoadOther();
-    return pOther->bNoSymbolsWarning;
-}
-
-
-void SmMathConfig::SetNoSymbolsWarning( BOOL bVal )
-{
-    if (!pOther)
-        LoadOther();
-    SetOtherIfNotEqual( pOther->bNoSymbolsWarning, bVal );
 }
 
 
