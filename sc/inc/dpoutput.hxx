@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:08:09 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@
 class Rectangle;
 class SvStream;
 class ScDocument;
+class StrCollection;
 
 struct ScDPOutLevelData;
 
@@ -172,6 +173,8 @@ public:
                                     long nDragDim,
                                     Rectangle& rPosRect, USHORT& rOrient, long& rDimPos );
     BOOL            IsFilterButton( const ScAddress& rPos );
+
+    void            GetMemberResultNames( StrCollection& rNames, long nDimension );
 };
 
 
