@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-12 15:38:28 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,9 +497,47 @@ void __EXPORT ScTabViewShell::WriteUserData(String& rData, BOOL bBrowse)
     GetViewData()->WriteUserData(rData);
 }
 
+void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
+{
+    GetViewData()->WriteUserDataSequence (rSettings);
+}
+
 void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL bBrowse)
 {
     DoReadUserData( rData );
+}
+
+void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
+{
+    Window* pOldWin = GetActiveWin();
+    BOOL bFocus = pOldWin && pOldWin->HasFocus();
+
+    GetViewData()->ReadUserDataSequence(rSettings);
+    SetTabNo( GetViewData()->GetTabNo(), TRUE );
+
+    if ( GetViewData()->IsPagebreakMode() )
+        SetCurSubShell( GetCurObjectSelectionType(), TRUE );
+
+    Window* pNewWin = GetActiveWin();
+    if (pNewWin && pNewWin != pOldWin)
+    {
+        SetWindow( pNewWin );       //! ist diese ViewShell immer aktiv???
+        if (bFocus)
+            pNewWin->GrabFocus();
+        WindowChanged();            // Drawing-Layer (z.B. #56771#)
+    }
+
+    if (GetViewData()->GetHSplitMode() == SC_SPLIT_FIX ||
+        GetViewData()->GetVSplitMode() == SC_SPLIT_FIX)
+    {
+        InvalidateSplit();
+    }
+
+    ZoomChanged();
+
+    TestHintWindow();
+
+    //! if ViewData has more tables than document, remove tables in ViewData
 }
 
 // DoReadUserData is also called from ctor when switching from print preview

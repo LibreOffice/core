@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 09:47:01 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@ private:
                     ScViewDataTable( const ScViewDataTable& rDataTable );
                     ~ScViewDataTable();
 
-    void            WriteUserDataInAny(com::sun::star::uno::Any& aAny);
-    void            ReadUserDataFromAny(const com::sun::star::uno::Any& aAny);
+    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
+    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
 };
 
 // ---------------------------------------------------------------------------
@@ -253,8 +253,8 @@ public:
     void            WriteUserData(String& rData);
     void            ReadUserData(const String& rData);
     void            ReadExtOptions(const ScExtDocOptions& rOpt);
-    void            WriteUserDataInAny(com::sun::star::uno::Any& aAny);
-    void            ReadUserDataFromAny(const com::sun::star::uno::Any& aAny);
+    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
+    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
 
     ScDocument*     GetDocument() const;
 
