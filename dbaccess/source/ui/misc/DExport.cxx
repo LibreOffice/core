@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:06 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,7 +698,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const
                         if(_aTextColor.hasValue())
                             m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                     }
-                    m_bIsAutoIncrement  = aWizard.SetAutoincrement();
+                    m_bIsAutoIncrement  = aWizard.isAutoincrementEnabled();
                     m_vColumns          = aWizard.GetColumnPositions();
                     m_vColumnTypes      = aWizard.GetColumnTypes();
                 }

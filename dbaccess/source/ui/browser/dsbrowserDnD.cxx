@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 08:33:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,7 @@ namespace dbaui
         ::std::vector<sal_Int32> aColumnTypes;
         aColumnTypes.reserve(nCount+1);
         aColumnTypes.push_back(-1); // just to avoid a everytime i-1 call
+
         for(sal_Int32 k=1;k <= nCount;++k)
             aColumnTypes.push_back(xMeta->getColumnType(k));
 
@@ -320,17 +321,21 @@ namespace dbaui
             if ( bNext )
             {
                 ++nRowCount;
+                sal_Bool bInsertAutoIncrement = sal_True;
                 ODatabaseExport::TPositions::const_iterator aPosIter = _rvColumns.begin();
-                for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter,++i)
+                for(sal_Int32 i = 1;aPosIter != _rvColumns.end();++aPosIter)
                 {
                     sal_Int32 nPos = aPosIter->second;
                     if(nPos == CONTAINER_ENTRY_NOTFOUND)
                         continue;
-                    if(i == 1 && bIsAutoIncrement)
+                    if ( bIsAutoIncrement && bInsertAutoIncrement )
                     {
                         xParameter->setInt(1,nRowCount);
+                        bInsertAutoIncrement = sal_False;
                         continue;
                     }
+                    // we have to check here against 1 because the parameters are 1 based
+                    OSL_ENSURE( i >= 1 && i < aColumnTypes.size(),"Index out of range for column types!");
                     switch(aColumnTypes[i])
                     {
                         case DataType::CHAR:
@@ -379,6 +384,7 @@ namespace dbaui
                         default:
                             OSL_ENSURE(0,"Unknown type");
                     }
+                    ++i;
                 }
                 xPrep->executeUpdate();
             }
@@ -740,6 +746,7 @@ namespace dbaui
 
                     if (aWizard.Execute() == RET_OK)
                     {
+                        WaitObject aWO(getBrowserView());
                         Reference<XPropertySet> xTable;
                         switch(aWizard.getCreateStyle())
                         {
@@ -754,7 +761,7 @@ namespace dbaui
                                 }
                             case OCopyTableWizard::WIZARD_APPEND_DATA:
                                 {
-                                    WaitObject aWO(getBrowserView());
+
                                     if(!xTable.is())
                                         xTable = aWizard.createTable();
                                     if(!xTable.is())
@@ -809,7 +816,7 @@ namespace dbaui
                                                 aColumnMapping,
                                                 xTable,
                                                 xDestConnection->getMetaData(),
-                                                aWizard.SetAutoincrement(),
+                                                aWizard.isAutoincrementEnabled(),
                                                 aSelection);
                                 }
                                 break;
@@ -1411,6 +1418,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.57  2002/11/05 08:33:33  oj
+ *  #104698# use new ctor and check if entry is container
+ *
  *  Revision 1.56  2002/10/31 12:48:33  oj
  *  #104392# insert waitobject before inserting data
  *

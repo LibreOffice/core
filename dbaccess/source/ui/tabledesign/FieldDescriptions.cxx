@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:48:19 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+
+#define DEFAULT_VARCHAR_PRECSION    50
+#define DEFAULT_OTHER_PRECSION      16
+#define DEFAULT_NUMERIC_PRECSION    5
+#define DEFAULT_NUMERIC_SCALE       0
+
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
@@ -216,6 +222,60 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
             SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
         if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
             SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
+    }
+}
+// -----------------------------------------------------------------------------
+void OFieldDescription::FillFromTypeInfo(const OTypeInfo* _pType,sal_Bool _bForce,sal_Bool _bReset)
+{
+    const OTypeInfo* pOldType = getTypeInfo();
+    if ( _pType != pOldType )
+    {
+        // reset type depending information
+        if ( _bReset )
+        {
+            SetFormatKey(0);
+            SetControlDefault(Any());
+        }
+
+        sal_Bool bForce = _bForce || pOldType == NULL || pOldType->nType != _pType->nType;
+        switch ( _pType->nType )
+        {
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+                if ( bForce )
+                {
+                    sal_Int32 nPrec = DEFAULT_VARCHAR_PRECSION;
+                    if ( GetPrecision() )
+                        nPrec = GetPrecision();
+                    SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
+                }
+                break;
+            default:
+                if ( bForce )
+                {
+                    sal_Int32 nPrec = DEFAULT_OTHER_PRECSION;
+                    if ( GetPrecision() )
+                        nPrec = GetPrecision();
+                    if ( _pType->nPrecision && _pType->nMaximumScale )
+                    {
+                        SetPrecision(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION);
+                        SetScale(::std::min<sal_Int32>(GetScale() ? GetScale() : DEFAULT_NUMERIC_SCALE,_pType->nMaximumScale));
+                    }
+                    else if ( _pType->nPrecision )
+                        SetPrecision(::std::min<sal_Int32>(nPrec,_pType->nPrecision));
+                }
+        }
+        if ( !_pType->aCreateParams.getLength() )
+        {
+            SetPrecision(_pType->nPrecision);
+            SetScale(_pType->nMinimumScale);
+        }
+        if ( !_pType->bNullable && IsNullable() )
+            SetIsNullable(ColumnValue::NO_NULLS);
+        if ( !_pType->bAutoIncrement && IsAutoIncrement() )
+            SetAutoIncrement(sal_False);
+        SetCurrency( _pType->bCurrency );
+        SetType(_pType);
     }
 }
 // -----------------------------------------------------------------------------

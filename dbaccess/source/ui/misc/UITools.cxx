@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 09:43:30 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,6 +1288,47 @@ void setEvalDateFormatForFormatter(Reference< XNumberFormatter >& _rxFormatter)
         SvNumberFormatter* pFormatter = pSupplierImpl->GetNumberFormatter();
         pFormatter->SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT);
     }
+}
+// -----------------------------------------------------------------------------
+const OTypeInfo* queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
+{
+    const OTypeInfo* pTypeInfo = NULL;
+    // first we search for a type which supports autoIncrement
+    OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
+    OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
+    for(;aIter != aEnd;++aIter)
+    {
+        // OJ: we don't want to set an autoincrement column to be key
+        // because we don't have the possiblity to know how to create
+        // such auto increment column later on
+        // so until we know how to do it, we create a column without autoincrement
+        //  if ( !aIter->second->bAutoIncrement )
+        {   // therefor we have searched
+            if ( aIter->second->nType == DataType::INTEGER )
+            {
+                pTypeInfo = aIter->second; // alternative
+                break;
+            }
+            else if ( !pTypeInfo && aIter->second->nType == DataType::DOUBLE )
+                pTypeInfo = aIter->second; // alternative
+            else if ( !pTypeInfo && aIter->second->nType == DataType::REAL )
+                pTypeInfo = aIter->second; // alternative
+        }
+    }
+    if ( !pTypeInfo ) // just a fallback
+        pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);
+
+    OSL_ENSURE(pTypeInfo,"checkColumns: cann't find a type which is useable as a key!");
+    return pTypeInfo;
+}
+// -----------------------------------------------------------------------------
+const OTypeInfo* queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rTypeInfo)
+{
+    OTypeInfoMap::const_iterator aIter = _rTypeInfo.find(_nDataType);
+    if(aIter != _rTypeInfo.end())
+        return aIter->second;
+    OSL_ENSURE(0,"Wrong DataType supplied!");
+    return NULL;
 }
 // .........................................................................
 }

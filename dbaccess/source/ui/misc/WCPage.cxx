@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,17 +144,17 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
         {
             try
             {
-                static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
+                const static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
                 Reference<XResultSet> xRs = xMetaData->getTableTypes();
-                if(xRs.is())
+                if ( xRs.is() )
                 {
                     Reference<XRow> xRow(xRs,UNO_QUERY);
-                    while(xRs->next())
+                    while ( xRs->next() )
                     {
                         ::rtl::OUString sValue = xRow->getString(1);
-                        if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
+                        if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW) )
                         {
-                            m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
+                            m_bIsViewAllowed = sal_True;
                             break;
                         }
                     }
@@ -171,7 +171,14 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
 
         //////////////////////////////////////////////////////////////////////
         // do we support pkeys
-        m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+        try
+        {
+            m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+        }
+        catch(const SQLException&)
+        {
+            m_bPKeyAllowed = sal_False;
+        }
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
@@ -207,7 +214,11 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
 
         m_aFT_KeyName.Enable(sal_False);
         m_edKeyName.Enable(sal_False);
-        m_edKeyName.SetText(String::CreateFromAscii("ID"));
+
+        ::rtl::OUString sKeyName(::rtl::OUString::createFromAscii("ID"));
+        sKeyName = ::dbtools::createUniqueName(m_pParent->m_xSourceColumns,sKeyName,sal_False);
+        m_edKeyName.SetText(sKeyName);
+
         sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
         m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
     }
@@ -270,16 +281,16 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, pButton )
 sal_Bool OCopyTable::LeavePage()
 {
     m_pParent->m_bCreatePrimaryColumn   = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName               = m_edKeyName.GetText();
+    m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryColumn ? m_edKeyName.GetText() : String();
 
     // first check if the table already exists in the database
     if( m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA )
     {
         Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
         Reference<XNameAccess> xTables;
-        if(xSup.is())
+        if ( xSup.is() )
             xTables = xSup->getTables();
-        if(xTables.is() && xTables->hasByName(m_edTableName.GetText()))
+        if ( xTables.is() && xTables->hasByName(m_edTableName.GetText()) )
         {
             String aInfoString( ModuleRes(STR_ERR_DUPL_TABLENAME) );
             aInfoString.SearchAndReplaceAscii("$name$",m_edTableName.GetText());
@@ -306,11 +317,23 @@ sal_Bool OCopyTable::LeavePage()
                 return sal_False;
             }
         }
+
+        // now we have to check if the name of the primary key already exists
+        if (    m_pParent->m_bCreatePrimaryColumn
+            &&  m_pParent->m_aKeyName != ::dbtools::createUniqueName(m_pParent->m_xSourceColumns,m_pParent->m_aKeyName,sal_False) )
+        {
+            String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
+            aInfoString += String(' ');
+            aInfoString += String(m_pParent->m_aKeyName);
+            InfoBox aNameInfoBox( this, aInfoString );
+            aNameInfoBox.Execute();
+            return sal_False;
+        }
     }
 
-    if(!m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()))
+    if ( !m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()) )
     { // table exists and name has changed
-        if(m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA)
+        if ( m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA )
         {
             if(!checkAppendData())
                 return sal_False;

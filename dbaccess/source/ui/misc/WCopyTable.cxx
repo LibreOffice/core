@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,13 +347,32 @@ void OCopyTableWizard::CheckColumns()
     OSL_ENSURE(m_xConnection.is(),"OCopyTableWizard::CheckColumns: No connection!");
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    if(m_xConnection.is())
+    if ( m_xConnection.is() )
     {
         Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
         sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
 
-        if(!m_vDestColumns.empty())
-        {   // we have dest columns so look for the column matching
+        sal_Bool bContainsColumns = !m_vDestColumns.empty();
+
+        if ( bPKeyAllowed && isAutoincrementEnabled() )
+        {
+            // add extra column for the primary key
+            const OTypeInfo* pTypeInfo = queryPrimaryKeyType(m_aDestTypeInfo);
+            if ( pTypeInfo )
+            {
+                OFieldDescription* pField = new OFieldDescription();
+                pField->SetName(m_aKeyName);
+                pField->FillFromTypeInfo(pTypeInfo,sal_True,sal_True);
+                pField->SetPrimaryKey(sal_True);
+                pField->SetIsNullable(ColumnValue::NO_NULLS);
+                insertColumn(0,pField);
+                m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(1,1));
+                m_vColumnTypes.push_back(pField->GetType());
+            }
+        }
+
+        if ( bContainsColumns )
+        {   // we have dest columns so look for the matching column
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
             {
@@ -384,7 +403,7 @@ void OCopyTableWizard::CheckColumns()
                 OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
                 pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
                 pField->SetType(convertType((*aSrcIter)->second->getTypeInfo()));
-                if(!bPKeyAllowed)
+                if ( !bPKeyAllowed )
                     pField->SetPrimaryKey(sal_False);
 
                 // now create a column
@@ -433,7 +452,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
     return bFinish;
 }
 //------------------------------------------------------------------------
-sal_Bool OCopyTableWizard::SetAutoincrement() const
+sal_Bool OCopyTableWizard::isAutoincrementEnabled() const
 {
     return m_bCreatePrimaryColumn;
 }
@@ -582,35 +601,10 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
                 // search for type
                 sal_Bool bForce;
                 const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
-                if(!pTypeInfo)
+                if ( !pTypeInfo )
                     pTypeInfo = m_pTypeInfo;
 
-                pActFieldDescr->SetType(pTypeInfo);
-                switch(pTypeInfo->nType)
-                {
-                    case DataType::CHAR:
-                    case DataType::VARCHAR:
-                        {
-                            sal_Int32 nPrec = 50;
-                            if(pActFieldDescr->GetPrecision())
-                                nPrec = pActFieldDescr->GetPrecision();
-                            pActFieldDescr->SetPrecision(::std::min<sal_Int32>(nPrec,pTypeInfo->nPrecision));
-                        }
-                        break;
-                    default:
-                        {
-                            sal_Int32 nPrec = 16;
-                            if(pActFieldDescr->GetPrecision())
-                                nPrec = pActFieldDescr->GetPrecision();
-                            if(pTypeInfo->nPrecision && pTypeInfo->nMaximumScale)
-                            {
-                                pActFieldDescr->SetPrecision(nPrec ? nPrec : 5);
-                                pActFieldDescr->SetScale(::std::min<sal_Int32>(pActFieldDescr->GetScale(),pTypeInfo->nMaximumScale));
-                            }
-                            else if(pTypeInfo->nPrecision)
-                                pActFieldDescr->SetPrecision(::std::min<sal_Int32>(nPrec,pTypeInfo->nPrecision));
-                        }
-                }
+                pActFieldDescr->FillFromTypeInfo(pTypeInfo,sal_True,sal_False);
                 _rColVector.push_back(_rColumns.insert(ODatabaseExport::TColumns::value_type(pActFieldDescr->GetName(),pActFieldDescr)).first);
             }
             // fill the primary  key information

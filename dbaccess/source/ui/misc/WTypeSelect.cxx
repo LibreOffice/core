@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:06 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -161,10 +164,26 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     {
         case FIELD_PRPOERTY_COLUMNNAME:
             {
-                OCopyTableWizard::TNameMapping::iterator aIter = ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.begin();
-                for(;aIter != ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.end();++aIter)
+                // first we have to check if this name already exists
+                if ( aListBox.GetEntryPos(String(pActFieldDescr->GetName())) != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    if(aIter->second == sName)
+                    String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
+                    strMessage.SearchAndReplaceAscii("$column$", pActFieldDescr->GetName());
+                    String sTitle(ModuleRes(STR_STAT_WARNING));
+                    OSQLMessageBox aMsg(this,sTitle,strMessage,WB_OK | WB_DEF_OK,OSQLMessageBox::Error);
+                    aMsg.Execute();
+                    pActFieldDescr->SetName(sName);
+                    DisplayData(pActFieldDescr);
+                    break;
+                }
+
+                // now we change the name
+                OCopyTableWizard::TNameMapping::iterator aIter = ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.begin();
+                OCopyTableWizard::TNameMapping::iterator aEnd  = ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.end();
+
+                for(;aIter != aEnd;++aIter)
+                {
+                    if ( aIter->second == sName )
                     {
                         aIter->second = pActFieldDescr->GetName();
                         break;

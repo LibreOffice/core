@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:03:46 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,8 +278,11 @@ namespace dbaui
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDestObject() const { return m_xDestObject; }
-        // return sal_True if I need to set the autoincrement value by myself otherwise sal_False
-        sal_Bool SetAutoincrement() const;
+        /**
+            @return
+                <TRUE/> if I need to set the autoincrement value by myself otherwise <FALSE/>
+        */
+        sal_Bool isAutoincrementEnabled() const;
 
         const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-12 13:20:11 $
+ *  last change: $Author: oj $ $Date: 2002-11-14 07:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,11 +890,7 @@ void OTableController::reconnect(sal_Bool _bUI)
 // -----------------------------------------------------------------------------
 const OTypeInfo* OTableController::getTypeInfoByType(sal_Int32 _nDataType) const
 {
-    OTypeInfoMap::const_iterator aIter = m_aTypeInfo.find(_nDataType);
-    if(aIter != m_aTypeInfo.end())
-        return aIter->second;
-    OSL_ENSURE(0,"Wrong DataType supplied!");
-    return NULL;
+    return queryTypeInfoByType(_nDataType,m_aTypeInfo);
 }
 // -----------------------------------------------------------------------------
 void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bNew,sal_Bool _bKeyColumns)
@@ -1203,33 +1199,9 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             if (nReturn == RET_YES)
             {
                 OTableRow* pNewRow = new OTableRow();
-                const OTypeInfo* pTypeInfo = NULL;
-                // first we search for a type which supports autoIncrement
-                OTypeInfoMap::const_iterator aIter = m_aTypeInfo.begin();
-                for(;aIter != m_aTypeInfo.end();++aIter)
-                {
-                    // OJ: we don't want to set an autoincrement column to be key
-                    // because we don't have the possiblity to know how to create
-                    // such auto increment column later on
-                    // so until we know how to do it, we create a column without autoincrement
-                    //  if ( !aIter->second->bAutoIncrement )
-                    {   // therefor we have searched
-                        if(aIter->second->nType == DataType::INTEGER)
-                        {
-                            pTypeInfo = aIter->second; // alternative
-                            break;
-                        }
-                        else if(!pTypeInfo && aIter->second->nType == DataType::DOUBLE)
-                            pTypeInfo = aIter->second; // alternative
-                        else if(!pTypeInfo && aIter->second->nType == DataType::REAL)
-                            pTypeInfo = aIter->second; // alternative
-                    }
-                }
-                if(!pTypeInfo) // just a fallback
-                    pTypeInfo = getTypeInfoByType(DataType::VARCHAR);
+                const OTypeInfo* pTypeInfo = ::dbaui::queryPrimaryKeyType(m_aTypeInfo);
 
-                OSL_ENSURE(pTypeInfo,"checkColumns: cann't find a type which is useable as a key!");
-                if(pTypeInfo)
+                if ( pTypeInfo )
                 {
                     pNewRow->SetFieldType( pTypeInfo );
                     OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
