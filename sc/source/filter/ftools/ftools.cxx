@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:26:20 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,31 +213,6 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt1
 }
 
 
-// *** token handling *** -----------------------------------------------------
-
-void ScfTools::AddToken( String& rTokenList, const String& rToken, sal_Unicode cSep )
-{
-    if( rToken.Len() )
-    {
-        if( rTokenList.Len() )
-            rTokenList += cSep;
-        rTokenList += rToken;
-    }
-}
-
-void ScfTools::AddQuotes( String& rString, sal_Unicode cQuote )
-{
-    rString.Insert( cQuote, 0 ).Append( cQuote );
-}
-
-void ScfTools::EraseQuotes( String& rString, sal_Unicode cQuote )
-{
-    xub_StrLen nLastIx = rString.Len() - 1;
-    if( (nLastIx > 0) && (rString.GetChar( 0 ) == cQuote) && (rString.GetChar( nLastIx ) == cQuote) )
-        rString.Erase( nLastIx ).Erase( 0, 1 );
-}
-
-
 // *** conversion of names *** ------------------------------------------------
 
 void ScfTools::ConvertToScSheetName( String& rName )
@@ -418,7 +393,7 @@ bool ScfTools::GetHTMLNameFromName( const String& rSource, String& rName )
     if( rSource.EqualsIgnoreCaseAscii( GetHTMLNamePrefix(), 0, GetHTMLNamePrefix().Len() ) )
     {
         rName = rSource.Copy( GetHTMLNamePrefix().Len() );
-        AddQuotes( rName );
+        ScGlobal::AddQuotes( rName );
     }
     else if( rSource.EqualsIgnoreCaseAscii( GetHTMLIndexPrefix(), 0, GetHTMLIndexPrefix().Len() ) )
     {
