@@ -1,0 +1,75 @@
+#ifndef __com_sun_star_ui_XUIElementSettings_idl__
+#define __com_sun_star_ui_XUIElementSettings_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_container_XIndexAccess_idl__
+#include <com/sun/star/container/XIndexAccess.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
+/** provides functions to retrieve and change user interface element structure
+    data and to update its visible representation.
+
+    @since OOo 2.0.0
+*/
+
+interface XUIElementSettings : com::sun::star::uno::XInterface
+{
+    /** forces the user interface element to retrieve new settings from its
+        configuration source.
+
+        <p>
+        This is not done automatically as configurable user interface elements
+        are controlled by layout managers. It is more efficient to let the
+        responsible layout manager to control the update process in a single
+        task.
+        </p>
+    */
+    void updateSettings();
+
+    /** provides a <type>UIElementSettings</type> instance that provides access
+        to the structure of user interface element if the user interface element
+        type supports it.
+
+        @param bWriteable
+            must be <TRUE/> if the retrieved settings should be a writeable.
+            Otherwise <FALSE/> should be provided to get a shareable reference
+            to the settings data.
+
+        @return
+            the current settings of the user interface element.
+    */
+    com::sun::star::container::XIndexAccess getSettings( [in] boolean bWriteable );
+
+    /** set changes to the structure of the user interface element.
+
+        @param UISettings
+            new data settings for the configurable user interface element.
+
+
+        <p>
+        User interface elements cannot be changed directly. The changed structure
+        data has to be set again. This speeds up the configuration process if many
+        changes have to be made on the structure. The persistence of changes are
+        controlled by the boolean property <member>Persistent</member>.
+
+        </p>
+
+        @see com::sun::star::ui::UIElementSettings
+    */
+    void setSettings( [in] com::sun::star::container::XIndexAccess UISettings );
+};
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
