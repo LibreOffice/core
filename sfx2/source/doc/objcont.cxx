@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-02 15:54:45 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 12:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,7 +1689,7 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
         {
             pImp->pEventConfig =
                 new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
-                    pApp->GetEventConfig() );
+                    pApp->GetEventConfig(), this );
             pImp->pEventConfig->Init( pImp->pCfgMgr );
         }
     }
