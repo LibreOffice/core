@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:53:00 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >    m_xComposer;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xColumns; // the columns from a table or query
 
-        connectivity::OWeakRefArray                             m_aClones;
-        connectivity::ORowVector< connectivity::ORowSetValue >  m_aParameterRow; // hold all parameters
+        connectivity::OWeakRefArray                 m_aClones;
+        ORowSetValueVector                          m_aParameterRow; // hold all parameters
 
         ::cppu::OInterfaceContainerHelper           m_aRowsetListeners;
         ::cppu::OInterfaceContainerHelper           m_aApproveListeners;
@@ -474,6 +474,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.32  2002/12/05 09:53:00  fs
+    #105390# #i8481# defined order of notifications for operations on a RowSet
+
     Revision 1.31  2002/08/13 11:13:00  oj
     #98095# clear mutex before calling our listeners
 

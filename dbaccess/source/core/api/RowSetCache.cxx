@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:54:54 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,39 +447,39 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
 }
 // -------------------------------------------------------------------------
 // OComponentHelper
-void SAL_CALL ORowSetCache::disposing(void)
+void ORowSetCache::disposing(void)
 {
 }
 // -------------------------------------------------------------------------
 
 // ::com::sun::star::lang::XEventListener
-void SAL_CALL ORowSetCache::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
+void ORowSetCache::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
 }
 // -------------------------------------------------------------------------
 
 // XCloseable
-void SAL_CALL ORowSetCache::close(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::close(  )
 {
 }
 // -------------------------------------------------------------------------
 
 // XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > SAL_CALL ORowSetCache::getMetaData(  ) throw(SQLException, RuntimeException)
+Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
 {
     return m_xMetaData;
 }
 // -------------------------------------------------------------------------
 
 // ::com::sun::star::sdbcx::XColumnsSupplier
-Reference< ::com::sun::star::container::XNameAccess > SAL_CALL ORowSetCache::getColumns(  ) throw(RuntimeException)
+Reference< ::com::sun::star::container::XNameAccess > ORowSetCache::getColumns(  ) throw(RuntimeException)
 {
     return Reference< ::com::sun::star::container::XNameAccess >();
 }
 // -------------------------------------------------------------------------
 
 // XRow
-sal_Bool SAL_CALL ORowSetCache::wasNull(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::wasNull(  )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -500,67 +500,67 @@ ORowSetValue ORowSetCache::getValue(sal_Int32 columnIndex)
     return (*(*m_aMatrixIter))[m_nLastColumnIndex];
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ORowSetCache::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::rtl::OUString ORowSetCache::getString( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::getBoolean( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-sal_Int8 SAL_CALL ORowSetCache::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int8 ORowSetCache::getByte( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-sal_Int16 SAL_CALL ORowSetCache::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int16 ORowSetCache::getShort( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ORowSetCache::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int32 ORowSetCache::getInt( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-sal_Int64 SAL_CALL ORowSetCache::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+sal_Int64 ORowSetCache::getLong( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-float SAL_CALL ORowSetCache::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+float ORowSetCache::getFloat( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-double SAL_CALL ORowSetCache::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+double ORowSetCache::getDouble( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL ORowSetCache::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > ORowSetCache::getBytes( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-::com::sun::star::util::Date SAL_CALL ORowSetCache::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Date ORowSetCache::getDate( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-::com::sun::star::util::Time SAL_CALL ORowSetCache::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::Time ORowSetCache::getTime( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-::com::sun::star::util::DateTime SAL_CALL ORowSetCache::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+::com::sun::star::util::DateTime ORowSetCache::getTimestamp( sal_Int32 columnIndex )
 {
     return getValue(columnIndex);
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > ORowSetCache::getBinaryStream( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -571,7 +571,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getBinary
     return new ::comphelper::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
 }
 // -------------------------------------------------------------------------
-Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< ::com::sun::star::io::XInputStream > ORowSetCache::getCharacterStream( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -582,7 +582,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSetCache::getCharac
     return new ::comphelper::SequenceInputStream((*(*m_aMatrixIter))[m_nLastColumnIndex].getSequence());
 }
 // -------------------------------------------------------------------------
-Any SAL_CALL ORowSetCache::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
+Any ORowSetCache::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -590,7 +590,7 @@ Any SAL_CALL ORowSetCache::getObject( sal_Int32 columnIndex, const Reference< ::
     return Any();
 }
 // -------------------------------------------------------------------------
-Reference< XRef > SAL_CALL ORowSetCache::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XRef > ORowSetCache::getRef( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -598,7 +598,7 @@ Reference< XRef > SAL_CALL ORowSetCache::getRef( sal_Int32 columnIndex ) throw(S
     return Reference< XRef >();
 }
 // -------------------------------------------------------------------------
-Reference< XBlob > SAL_CALL ORowSetCache::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XBlob > ORowSetCache::getBlob( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -606,7 +606,7 @@ Reference< XBlob > SAL_CALL ORowSetCache::getBlob( sal_Int32 columnIndex ) throw
     return Reference< XBlob >();
 }
 // -------------------------------------------------------------------------
-Reference< XClob > SAL_CALL ORowSetCache::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XClob > ORowSetCache::getClob( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -614,7 +614,7 @@ Reference< XClob > SAL_CALL ORowSetCache::getClob( sal_Int32 columnIndex ) throw
     return Reference< XClob >();
 }
 // -------------------------------------------------------------------------
-Reference< XArray > SAL_CALL ORowSetCache::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+Reference< XArray > ORowSetCache::getArray( sal_Int32 columnIndex )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -624,7 +624,7 @@ Reference< XArray > SAL_CALL ORowSetCache::getArray( sal_Int32 columnIndex ) thr
 // -------------------------------------------------------------------------
 
 // ::com::sun::star::sdbcx::XRowLocate
-Any SAL_CALL ORowSetCache::getBookmark(  ) throw(SQLException, RuntimeException)
+Any ORowSetCache::getBookmark(  )
 {
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -648,7 +648,7 @@ Any SAL_CALL ORowSetCache::getBookmark(  ) throw(SQLException, RuntimeException)
     }
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 {
 //  if(m_bInserted)
 //      m_bInserted = sal_False;
@@ -678,7 +678,7 @@ sal_Bool SAL_CALL ORowSetCache::moveToBookmark( const Any& bookmark ) throw(SQLE
     return m_aMatrixIter != m_pMatrix->end() && (*m_aMatrixIter).isValid();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
     sal_Bool bRet;
     if(bRet = moveToBookmark(bookmark))
@@ -693,23 +693,23 @@ sal_Bool SAL_CALL ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ORowSetCache::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 ORowSetCache::compareBookmarks( const Any& first, const Any& second )
 {
     return (!first.hasValue() || !second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(first,second);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::hasOrderedBookmarks(  )
 {
     return m_pCacheSet->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ORowSetCache::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 {
     return m_pCacheSet->hashBookmark(bookmark);
 }
 // -------------------------------------------------------------------------
 // XRowUpdate
-void SAL_CALL ORowSetCache::updateNull( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateNull( sal_Int32 columnIndex )
 {
     updateValue(columnIndex,ORowSetValue());
 }
@@ -725,7 +725,7 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     m_bModified = sal_True;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
 {
     checkUpdateConditions(columnIndex);
 
@@ -736,7 +736,7 @@ void SAL_CALL ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Ref
     updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
 {
     checkUpdateConditions(columnIndex);
 
@@ -748,7 +748,7 @@ void SAL_CALL ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const 
     updateValue(columnIndex,aSeq);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x )
 {
     checkUpdateConditions(columnIndex);
 
@@ -759,7 +759,7 @@ void SAL_CALL ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x ) 
     m_bModified = sal_True;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale )
 {
     checkUpdateConditions(columnIndex);
 
@@ -772,7 +772,7 @@ void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const An
 }
 // -------------------------------------------------------------------------
 // XResultSet
-sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::next(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -795,14 +795,14 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
     return !m_bAfterLast;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::isBeforeFirst(  )
 {
     //  return !m_nPosition;
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_bBeforeFirst;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::isAfterLast(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::isAfterLast(  )
 {
     //  return m_pCacheSet->isAfterLast();
     //  return m_bRowCountFinal ? m_bAfterLast : m_pCacheSet->isAfterLast();
@@ -810,20 +810,20 @@ sal_Bool SAL_CALL ORowSetCache::isAfterLast(  ) throw(SQLException, RuntimeExcep
     return m_bAfterLast;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::isFirst(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::isFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_nPosition == 1; // ask resultset for
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::isLast(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::isLast(  )
 {
     //  return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
     return m_nPosition == m_nRowCount;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::beforeFirst(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -838,7 +838,7 @@ void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::afterLast(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::afterLast(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1169,7 +1169,7 @@ sal_Bool ORowSetCache::moveWindow()
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::first(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1193,7 +1193,7 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::last(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1232,14 +1232,14 @@ sal_Bool SAL_CALL ORowSetCache::last(  ) throw(SQLException, RuntimeException)
     return bRet;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ORowSetCache::getRow(  ) throw(SQLException, RuntimeException)
+sal_Int32 ORowSetCache::getRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
     return (isBeforeFirst() || isAfterLast()) ? 0 : m_nPosition;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::absolute( sal_Int32 row )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1294,7 +1294,7 @@ sal_Bool SAL_CALL ORowSetCache::absolute( sal_Int32 row ) throw(SQLException, Ru
     return !(m_bAfterLast || m_bBeforeFirst);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::relative( sal_Int32 rows ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::relative( sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1316,7 +1316,7 @@ sal_Bool SAL_CALL ORowSetCache::relative( sal_Int32 rows ) throw(SQLException, R
     return bErg;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::previous(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1349,7 +1349,7 @@ sal_Bool SAL_CALL ORowSetCache::previous(  ) throw(SQLException, RuntimeExceptio
     return bRet;
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::refreshRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::refreshRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1364,30 +1364,30 @@ void SAL_CALL ORowSetCache::refreshRow(  ) throw(SQLException, RuntimeException)
     }
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::rowUpdated(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::rowUpdated(  )
 {
     return m_pCacheSet->rowUpdated();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::rowInserted(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::rowInserted(  )
 {
     return m_pCacheSet->rowInserted();
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ORowSetCache::rowDeleted(  ) throw(SQLException, RuntimeException)
+sal_Bool ORowSetCache::rowDeleted(  )
 {
     //  return m_pCacheSet->rowDeleted();
     return m_bDeleted;
 }
 // -------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ORowSetCache::getStatement(  ) throw(SQLException, RuntimeException)
+Reference< XInterface > ORowSetCache::getStatement(  )
 {
     return m_pCacheSet->getStatement();
 }
 // -------------------------------------------------------------------------
 
 // XResultSetUpdate
-void SAL_CALL ORowSetCache::insertRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::insertRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1435,7 +1435,7 @@ void ORowSetCache::cancelRowModification()
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1451,7 +1451,7 @@ void SAL_CALL ORowSetCache::updateRow(  ) throw(SQLException, RuntimeException)
     refreshRow(  );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) throw(SQLException, RuntimeException)
+void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1476,7 +1476,7 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
     //  refreshRow(  );
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::deleteRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::deleteRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1505,7 +1505,7 @@ void SAL_CALL ORowSetCache::deleteRow(  ) throw(SQLException, RuntimeException)
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::cancelRowUpdates(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1525,7 +1525,7 @@ void SAL_CALL ORowSetCache::cancelRowUpdates(  ) throw(SQLException, RuntimeExce
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::moveToInsertRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1547,7 +1547,7 @@ void SAL_CALL ORowSetCache::moveToInsertRow(  ) throw(SQLException, RuntimeExcep
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::moveToCurrentRow(  )
 {
     ::osl::MutexGuard aGuard( m_aRowCountMutex );
 
@@ -1560,17 +1560,17 @@ void SAL_CALL ORowSetCache::moveToCurrentRow(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 
 // XRowSet
-void SAL_CALL ORowSetCache::execute(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::execute(  )
 {
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::util::XCancellable
-void SAL_CALL ORowSetCache::cancel(  ) throw(RuntimeException)
+void ORowSetCache::cancel(  ) throw(RuntimeException)
 {
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
-Sequence< sal_Int32 > SAL_CALL ORowSetCache::deleteRows( const Sequence< Any >& rows ) throw(SQLException, RuntimeException)
+Sequence< sal_Int32 > ORowSetCache::deleteRows( const Sequence< Any >& rows )
 {
     // TODO impl. a better version which is faster than tis one
 
@@ -1633,12 +1633,12 @@ void ORowSetCache::rotateCacheIterator(sal_Int16 _nDist)
 }
 // -----------------------------------------------------------------------------
 // XWarningsSupplier
-Any SAL_CALL ORowSetCache::getWarnings(  ) throw(SQLException, RuntimeException)
+Any ORowSetCache::getWarnings(  )
 {
     return Any ();
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeException)
+void ORowSetCache::clearWarnings(  )
 {
 }
 // -------------------------------------------------------------------------

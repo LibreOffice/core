@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:52:59 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:10:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,7 +990,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         // remember old value for fire
         sal_Bool bOld = m_bNew;
 
-        ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
+        ORowSetRow aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
         if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
         {
@@ -1038,7 +1038,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 
     if(m_bModified)
     {
-        ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
+        ORowSetRow aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
 
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
         if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
@@ -1082,7 +1082,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 
     positionCache();
 
-    ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+    ORowSetRow aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,1);
     if(notifyAllListenersRowBeforeChange(aGuard,aEvt))
@@ -1128,7 +1128,7 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     positionCache();
 
     m_pCache->cancelRowUpdates();
-    ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
+    ORowSetRow aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
 
     m_aBookmark     = m_pCache->getBookmark();
     m_aCurrentRow   = m_pCache->m_aMatrixIter;
@@ -1232,7 +1232,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
         if(m_aBookmark.hasValue())
             positionCache();
 
-        ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
+        ORowSetRow aOldValues = new ORowSetValueVector( m_pCache->m_aMatrixIter->getBody() );
 
         const sal_Bool bNewState = m_bNew;
         const sal_Bool bModState = m_bModified;

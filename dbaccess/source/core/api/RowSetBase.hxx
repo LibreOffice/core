@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:53:00 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
 #ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
 #endif
+#include <functional>
 
 
 
@@ -189,7 +190,7 @@ namespace dbaccess
         ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper,::osl::Mutex* _pMutex);
 
         // fire a notification for all that are listening on column::VALUE property
-        void firePropertyChange(const ORowSetMatrix::iterator& _rOldRow);
+        void firePropertyChange(const ORowSetRow& _rOldRow);
         virtual void fireRowcount() { }                             // fire if rowcount changed
         virtual sal_Bool notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rGuard,const ::com::sun::star::sdb::RowChangeEvent &rEvt)
             {return sal_True; }                                                     // fire if rowcount changed
@@ -219,7 +220,7 @@ namespace dbaccess
         // returns a value of a column of the current row
         const connectivity::ORowSetValue& getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
-        void setCurrentRow(sal_Bool _bMoved,const ORowSetMatrix::iterator& _rOldValues,::osl::ResettableMutexGuard& _rGuard);
+        void setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,::osl::ResettableMutexGuard& _rGuard);
         void checkPositioningAllowed() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();
@@ -227,6 +228,28 @@ namespace dbaccess
         // m_aCurrentRow to end of matrix
         // m_aOldRow to NULL
         void movementFailed();
+
+        /** move the cache the postion defined by the member functor
+            @param  _aCheckFunctor
+                Return <TRUE/> when we already stand on the row we want to.
+            @param  _aMovementFunctor
+                The mehtod used to move.
+            @return
+                <TRUE/> if movement was successful.
+        */
+        sal_Bool SAL_CALL move( ::std::mem_fun_t<sal_Bool,ORowSetBase>& _aCheckFunctor,
+                                ::std::mem_fun_t<sal_Bool,ORowSetCache>& _aMovementFunctor);
+
+        /** same meaning as isFirst. Only need by mem_fun
+            @return
+                <TRUE/> if so.
+        */
+        sal_Bool isOnFirst();
+        /** same meaning as isLast. Only need by mem_fun
+            @return
+                <TRUE/> if so.
+        */
+        sal_Bool isOnLast();
 
     public:
         virtual ~ORowSetBase();

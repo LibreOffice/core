@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetRow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2002-12-05 14:10:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,9 @@
 
 namespace dbaccess
 {
-    typedef ::vos::ORef< connectivity::ORowVector< connectivity::ORowSetValue > >       ORowSetRow;
-    typedef ::std::vector< ORowSetRow >                                 ORowSetMatrix;
+    typedef connectivity::ORowVector< connectivity::ORowSetValue >  ORowSetValueVector;
+    typedef ::vos::ORef< ORowSetValueVector >                       ORowSetRow;
+    typedef ::std::vector< ORowSetRow >                             ORowSetMatrix;
 
     class ORowSetValueCompare
     {
@@ -108,6 +109,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/07/24 13:25:25  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.3  2001/05/18 11:48:25  oj
     #86528# size changes
 
