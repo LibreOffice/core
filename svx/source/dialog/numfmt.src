@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:51:55 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,18 +861,18 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ ENGLISH ] = "So~urce format" ;
         Text [ english_us ] = "So~urce format" ;
         Text[ portuguese ] = "So~urce format";
-        Text[ russian ] = "So~urce format";
+        Text[ russian ] = "»ÒıÓ‰Ì˚È ÙÓÏ‡Ú";
         Text[ greek ] = "So~urce format";
         Text[ dutch ] = "So~urce format";
-        Text[ french ] = "So~urce format";
-        Text[ spanish ] = "So~urce format";
+        Text[ french ] = "Format de la so~urce";
+        Text[ spanish ] = "Formato de fuente";
         Text[ finnish ] = "So~urce format";
         Text[ italian ] = "So~urce format";
         Text[ danish ] = "So~urce format";
         Text[ swedish ] = "K‰~llformat";
-        Text[ polish ] = "So~urce format";
+        Text[ polish ] = "Format ürÛd≥owy";
         Text[ portuguese_brazilian ] = "So~urce format";
-        Text[ japanese ] = "So~urce format";
+        Text[ japanese ] = "ø∞ΩèëéÆ";
         Text[ korean ] = "So~urce format";
         Text[ chinese_simplified ] = "‘≠ º∏Ò Ω";
         Text[ chinese_traditional ] = "So~urce format";
@@ -1041,6 +1041,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     Text[ catalan ] = "Formato numÈrico";
 };
  // ********************************************************************** EOF
+
 
 
 
