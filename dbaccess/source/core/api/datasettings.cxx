@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 #ifndef _DBA_CORE_PROPERTYHELPER_HXX_
 #include "propertyhelper.hxx"
 #endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -110,7 +106,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -197,50 +192,64 @@ float ConvertFontWidth( ::FontWidth eWidth )
 //= ODataSettings
 //==========================================================================
 //--------------------------------------------------------------------------
-void ODataSettings::registerProperties()
+void ODataSettings::registerProperties(ODataSettings_Base* _pItem)
 {
     registerProperty(PROPERTY_FILTER, PROPERTY_ID_FILTER, PropertyAttribute::BOUND,
-                    &m_sFilter, ::getCppuType(&m_sFilter));
+                    &_pItem->m_sFilter, ::getCppuType(&_pItem->m_sFilter));
 
     registerProperty(PROPERTY_ORDER, PROPERTY_ID_ORDER, PropertyAttribute::BOUND,
-                    &m_sOrder, ::getCppuType(&m_sOrder));
+                    &_pItem->m_sOrder, ::getCppuType(&_pItem->m_sOrder));
 
     registerProperty(PROPERTY_APPLYFILTER, PROPERTY_ID_APPLYFILTER, PropertyAttribute::BOUND,
-                    &m_bApplyFilter, ::getBooleanCppuType());
+                    &_pItem->m_bApplyFilter, ::getBooleanCppuType());
 
     registerProperty(PROPERTY_FONT, PROPERTY_ID_FONT, PropertyAttribute::BOUND,
-                    &m_aFont, ::getCppuType(&m_aFont));
+                    &_pItem->m_aFont, ::getCppuType(&_pItem->m_aFont));
 
     registerMayBeVoidProperty(PROPERTY_ROW_HEIGHT, PROPERTY_ID_ROW_HEIGHT, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aRowHeight, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aRowHeight, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 
     registerMayBeVoidProperty(PROPERTY_TEXTCOLOR, PROPERTY_ID_TEXTCOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aTextColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 
     registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
-                    &m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+                    &_pItem->m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
 
     registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
-        &m_nFontEmphasis, ::getCppuType(&m_nFontEmphasis));
+        &_pItem->m_nFontEmphasis, ::getCppuType(&_pItem->m_nFontEmphasis));
 
-    registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
-        &m_nFontRelief, ::getCppuType(&m_nFontRelief));
+    registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,&_pItem->m_nFontRelief, ::getCppuType(&_pItem->m_nFontRelief));
+
+    registerProperty(PROPERTY_FONTNAME,         PROPERTY_ID_FONTNAME,        PropertyAttribute::BOUND,&_pItem->m_aFont.Name,            ::getCppuType(&_pItem->m_aFont.Name));
+    registerProperty(PROPERTY_FONTHEIGHT,       PROPERTY_ID_FONTHEIGHT,      PropertyAttribute::BOUND,&_pItem->m_aFont.Height,          ::getCppuType(&_pItem->m_aFont.Height));
+    registerProperty(PROPERTY_FONTWIDTH,        PROPERTY_ID_FONTWIDTH,       PropertyAttribute::BOUND,&_pItem->m_aFont.Width,           ::getCppuType(&_pItem->m_aFont.Width));
+    registerProperty(PROPERTY_FONTSTYLENAME,    PROPERTY_ID_FONTSTYLENAME,   PropertyAttribute::BOUND,&_pItem->m_aFont.StyleName,       ::getCppuType(&_pItem->m_aFont.StyleName));
+    registerProperty(PROPERTY_FONTFAMILY,       PROPERTY_ID_FONTFAMILY,      PropertyAttribute::BOUND,&_pItem->m_aFont.Family,          ::getCppuType(&_pItem->m_aFont.Family));
+    registerProperty(PROPERTY_FONTCHARSET,      PROPERTY_ID_FONTCHARSET,     PropertyAttribute::BOUND,&_pItem->m_aFont.CharSet,         ::getCppuType(&_pItem->m_aFont.CharSet));
+    registerProperty(PROPERTY_FONTPITCH,        PROPERTY_ID_FONTPITCH,       PropertyAttribute::BOUND,&_pItem->m_aFont.Pitch,           ::getCppuType(&_pItem->m_aFont.Pitch));
+    registerProperty(PROPERTY_FONTCHARWIDTH,    PROPERTY_ID_FONTCHARWIDTH,   PropertyAttribute::BOUND,&_pItem->m_aFont.CharacterWidth,  ::getCppuType(&_pItem->m_aFont.CharacterWidth));
+    registerProperty(PROPERTY_FONTWEIGHT,       PROPERTY_ID_FONTWEIGHT,      PropertyAttribute::BOUND,&_pItem->m_aFont.Weight,          ::getCppuType(&_pItem->m_aFont.Weight));
+    registerProperty(PROPERTY_FONTSLANT,        PROPERTY_ID_FONTSLANT,       PropertyAttribute::BOUND,&_pItem->m_aFont.Slant,           ::getCppuType(&_pItem->m_aFont.Slant));
+    registerProperty(PROPERTY_FONTUNDERLINE,    PROPERTY_ID_FONTUNDERLINE,   PropertyAttribute::BOUND,&_pItem->m_aFont.Underline,       ::getCppuType(&_pItem->m_aFont.Underline));
+    registerProperty(PROPERTY_FONTSTRIKEOUT,    PROPERTY_ID_FONTSTRIKEOUT,   PropertyAttribute::BOUND,&_pItem->m_aFont.Strikeout,       ::getCppuType(&_pItem->m_aFont.Strikeout));
+    registerProperty(PROPERTY_FONTORIENTATION,  PROPERTY_ID_FONTORIENTATION, PropertyAttribute::BOUND,&_pItem->m_aFont.Orientation,     ::getCppuType(&_pItem->m_aFont.Orientation));
+    registerProperty(PROPERTY_FONTKERNING,      PROPERTY_ID_FONTKERNING,     PropertyAttribute::BOUND,&_pItem->m_aFont.Kerning,         ::getCppuType(&_pItem->m_aFont.Kerning));
+    registerProperty(PROPERTY_FONTWORDLINEMODE, PROPERTY_ID_FONTWORDLINEMODE,PropertyAttribute::BOUND,&_pItem->m_aFont.WordLineMode,    ::getCppuType(&_pItem->m_aFont.WordLineMode));
+    registerProperty(PROPERTY_FONTTYPE,         PROPERTY_ID_FONTTYPE,        PropertyAttribute::BOUND,&_pItem->m_aFont.Type,            ::getCppuType(&_pItem->m_aFont.Type));
 }
 
 //--------------------------------------------------------------------------
 ODataSettings::ODataSettings(OBroadcastHelper& _rBHelper)
-    :OPropertyContainer(_rBHelper)
+    :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base()
 {
-    registerProperties();
 }
 
 //--------------------------------------------------------------------------
 ODataSettings::ODataSettings(const ODataSettings& _rSource, ::cppu::OBroadcastHelper& _rBHelper)
-    :OPropertyContainer(_rBHelper)
+    :OPropertyStateContainer(_rBHelper)
     ,ODataSettings_Base(_rSource)
 {
-    registerProperties();
 }
 
 //--------------------------------------------------------------------------
@@ -265,95 +274,60 @@ ODataSettings_Base::ODataSettings_Base(const ODataSettings_Base& _rSource)
     m_nFontEmphasis = _rSource.m_nFontEmphasis;
     m_nFontRelief   = _rSource.m_nFontRelief;
 }
-
-//--------------------------------------------------------------------------
-void ODataSettings_Base::storeTo(const OConfigurationNode& _rConfigLocation) const
+// -----------------------------------------------------------------------------
+Any ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
 {
-    if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
+    Any aRet;
+    static ::com::sun::star::awt::FontDescriptor aFD = ::comphelper::getDefaultFont();
+    switch( _nHandle )
     {
-        OSL_ENSURE(sal_False, "ODataSettings_Base::storeTo : invalid config key (NULL or readonly) !");
-        return;
+        case PROPERTY_ID_FILTER:
+        case PROPERTY_ID_ORDER:
+            aRet <<= ::rtl::OUString();         break;
+        case PROPERTY_ID_FONT:
+            aRet <<= aFD;           break;
+        case PROPERTY_ID_APPLYFILTER:
+            aRet <<= sal_False;         break;
+        case PROPERTY_ID_TEXTRELIEF:
+            aRet <<= ::com::sun::star::awt::FontRelief::NONE;           break;
+        case PROPERTY_ID_TEXTEMPHASIS:
+            aRet <<= ::com::sun::star::awt::FontEmphasisMark::NONE;         break;
+        case PROPERTY_ID_FONTNAME:
+            aRet <<= aFD.Name;          break;
+        case PROPERTY_ID_FONTHEIGHT:
+            aRet <<= aFD.Height;break;
+        case PROPERTY_ID_FONTWIDTH:
+            aRet <<= aFD.Width;break;
+        case PROPERTY_ID_FONTSTYLENAME:
+            aRet <<= aFD.StyleName;break;
+        case PROPERTY_ID_FONTFAMILY:
+            aRet <<= aFD.Family;break;
+        case PROPERTY_ID_FONTCHARSET:
+            aRet <<= aFD.CharSet;break;
+        case PROPERTY_ID_FONTPITCH:
+            aRet <<= aFD.Pitch;break;
+        case PROPERTY_ID_FONTCHARWIDTH:
+            aRet <<= aFD.CharacterWidth;break;
+        case PROPERTY_ID_FONTWEIGHT:
+            aRet <<= aFD.Weight;break;
+        case PROPERTY_ID_FONTSLANT:
+            aRet <<= aFD.Slant; break;
+        case PROPERTY_ID_FONTUNDERLINE:
+            aRet <<= aFD.Underline;break;
+        case PROPERTY_ID_FONTSTRIKEOUT:
+            aRet <<= aFD.Strikeout;break;
+        case PROPERTY_ID_FONTORIENTATION:
+            aRet <<= aFD.Orientation;break;
+        case PROPERTY_ID_FONTKERNING:
+            aRet <<= aFD.Kerning;break;
+        case PROPERTY_ID_FONTWORDLINEMODE:
+            aRet <<= aFD.WordLineMode;break;
+        case PROPERTY_ID_FONTTYPE:
+            aRet <<= aFD.Type;break;
     }
 
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FILTER, makeAny(m_sFilter));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ORDER, makeAny(m_sOrder));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_APPLYFILTER, ::cppu::bool2any(m_bApplyFilter));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT, m_aRowHeight);
-
-    Any aNullAny;
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_NAME, makeAny( m_aFont.Name ) );
-    sal_Bool bValidFont = 0 != m_aFont.Name.getLength();
-
-    Any aEmpty;
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_HEIGHT,        bValidFont ? makeAny( m_aFont.Height )          : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WIDTH,         bValidFont ? makeAny( m_aFont.Width )           : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_STYLENAME,     bValidFont ? makeAny( m_aFont.StyleName )       : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_FAMILY,        bValidFont ? makeAny( m_aFont.Family )          : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_CHARSET,       bValidFont ? makeAny( m_aFont.CharSet )         : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_PITCH,         bValidFont ? makeAny( m_aFont.Pitch )           : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH,bValidFont ? makeAny( m_aFont.CharacterWidth )  : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WEIGHT,        bValidFont ? makeAny( m_aFont.Weight )          : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_SLANT,         bValidFont ? makeAny( (sal_Int16)m_aFont.Slant ): aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_UNDERLINE,     bValidFont ? makeAny( m_aFont.Underline )       : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_STRIKEOUT,     bValidFont ? makeAny( m_aFont.Strikeout )       : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_ORIENTATION,   bValidFont ? makeAny( m_aFont.Orientation )     : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_KERNING,       bValidFont ? makeAny( m_aFont.Kerning )         : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_WORDLINEMODE,  bValidFont ? makeAny( m_aFont.WordLineMode )    : aEmpty );
-    _rConfigLocation.setNodeValue( CONFIGKEY_DEFSET_FONT_TYPE,          bValidFont ? makeAny( m_aFont.Type )            : aEmpty );
-
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR, m_aTextColor);
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR, m_aTextLineColor);
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS, makeAny(m_nFontEmphasis));
-    _rConfigLocation.setNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF, makeAny(m_nFontRelief));
+    return aRet;
 }
-
-//--------------------------------------------------------------------------
-void ODataSettings_Base::loadFrom(const OConfigurationNode& _rConfigLocation)
-{
-    if (!_rConfigLocation.isValid())
-    {
-        OSL_ENSURE(sal_False, "ODataSettings_Base::loadFrom: invalid config key (NULL) !");
-        return;
-    }
-
-    OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FILTER)       >>= m_sFilter);
-    OSL_VERIFY(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ORDER)        >>= m_sOrder);
-    m_bApplyFilter = ::cppu::any2bool(_rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_APPLYFILTER));
-
-    // default the font
-    m_aFont = ::comphelper::getDefaultFont();
-
-    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_NAME) >>= m_aFont.Name;
-    if ( m_aFont.Name.getLength() )
-    {   // all other settings are only used if the name is valid
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_HEIGHT )       >>= m_aFont.Height;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WIDTH )        >>= m_aFont.Width;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_STYLENAME )    >>= m_aFont.StyleName;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_FAMILY )       >>= m_aFont.Family;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_CHARSET )      >>= m_aFont.CharSet;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_PITCH )        >>= m_aFont.Pitch;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_CHARACTERWIDTH )>>= m_aFont.CharacterWidth;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WEIGHT )       >>= m_aFont.Weight;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_UNDERLINE )    >>= m_aFont.Underline;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_STRIKEOUT )    >>= m_aFont.Strikeout;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_ORIENTATION )  >>= m_aFont.Orientation;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_KERNING )      >>= m_aFont.Kerning;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_WORDLINEMODE ) >>= m_aFont.WordLineMode;
-        _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_TYPE )         >>= m_aFont.Type;
-
-        sal_Int16 nTemp = 0;
-        if ( _rConfigLocation.getNodeValue( CONFIGKEY_DEFSET_FONT_SLANT ) >>= nTemp )
-            m_aFont.Slant = (FontSlant)nTemp;
-    }
-
-    m_aRowHeight = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_ROW_HEIGHT);
-    m_aTextColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_TEXTCOLOR);
-
-    m_aTextLineColor = _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_UNDERLINECOLOR);
-    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTEREMPHASIS) >>= m_nFontEmphasis;
-    _rConfigLocation.getNodeValue(CONFIGKEY_DEFSET_FONT_CHARACTERRELIEF) >>= m_nFontRelief;
-}
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
