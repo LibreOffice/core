@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:15:14 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2304,9 +2304,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             aDescriptor[daCursor] <<= xResSet;
 
         OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
-        MergeNew(pImpl->pMergeDialog->GetMergeType() ,
-                            rSh,
-                            aDescriptor);
+        MergeNew(pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor);
+        OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
+
         // reset the cursor inside
         xResSet = NULL;
         aDescriptor[daCursor] <<= xResSet;
