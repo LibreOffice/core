@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:11:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,8 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ hindi ] = "चुना हुआ फ़िल्टर $(FILTER) को आपके प्रकाशन में सम्मिलित नहीं किया है ।\nहम्हारे मुख्य पृष्ठ में आप ऑर्डर के बार में विषय अन्वेषण कर सकते है ।";
     Text[ slovak ] = "Vybraný filter $(FILTER) nebol zahrnutý vo vašej verzii programu.\nInformácie o objednávkach môžete nájsť na našich domovských stránkach.";
 };
+
+
 
 
 
