@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:18:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,78 +112,23 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 150 ) ;
-    Text = "%PRODUCTNAME Base" ;
-    Text [ english ] = "%PRODUCTNAME Base" ;
-    Text [ english_us ] = "%PRODUCTNAME Base" ;
+    Text [ de ] = "%PRODUCTNAME Base" ;
+    Text [ en-US ] = "%PRODUCTNAME Base" ;
 
     FixedLine FL_DETAILS
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 268, 8 ) ;
-        Text = "Details";
-        Text [ english ] = "details";
-        Text [ english_us ] = "Details";
-        Text[ portuguese ] = "Detalhes";
-        Text[ russian ] = "ƒÂÚ‡ÎË";
-        Text[ greek ] = "ÀÂÙÔÏ›ÒÂÈÂÚ";
-        Text[ dutch ] = "Details";
-        Text[ french ] = "DÈtails";
-        Text[ spanish ] = "Detalles";
-        Text[ italian ] = "Dettagli";
-        Text[ danish ] = "Detaljer";
-        Text[ swedish ] = "Detaljer";
-        Text[ polish ] = "SzczegÛ≥y";
-        Text[ portuguese_brazilian ] = "Detalhes";
-        Text[ japanese ] = "Ë©≥Á¥∞";
-        Text[ korean ] = "ÏûêÏÑ∏Ìûà";
-        Text[ chinese_simplified ] = "ÁªÜËäÇ";
-        Text[ chinese_traditional ] = "Á¥∞ÁØÄ";
-        Text[ arabic ] = "«· ›«’Ì·";
-        Text[ turkish ] = "Detaylar";
-        Text[ catalan ] = "Detalls";
-        Text[ finnish ] = "Lis‰tiedot";
-        Text[ thai ] = "‡∏£‡∏≤‡∏¢‡∏•‡∏∞‡πÄ‡∏≠‡∏µ‡∏¢‡∏î";
-        Text[ czech ] = "Podrobnosti";
-        Text[ hebrew ] = "Details";
-        Text[ hindi ] = "‡§µ‡§ø‡§∏‡•ç‡§§‡§æ‡§∞‡§™‡•Ç‡§∞‡•ç‡§µ‡§ï ‡§µ‡§∞‡•ç‡§£‡§®";
-        Text[ slovak ] = "Podrobnosti";
-        Text[ hungarian ] = "R√©szletek";
-        Text[ slovenian ] = "Podrobnosti";
+        Text [ de ] = "Details";
+        Text [ en-US ] = "Details";
     };
     FixedText FT_ERRORLIST
     {
         Pos = MAP_APPFONT ( 12, 12 ) ;
         Size = MAP_APPFONT ( 125, 10 ) ;
-        Text = "~Fehlerliste:";
-        Text [ english ] = "error ~list:";
-        Text [ english_us ] = "Error ~list:";
+        Text [ de ] = "~Fehlerliste:";
+        Text [ en-US ] = "Error ~list:";
         Group = TRUE;
-        Text[ portuguese ] = "~Lista de erros:";
-        Text[ russian ] = "—ÔËÒÓÍ Ó¯Ë·ÓÍ:";
-        Text[ greek ] = "ÀﬂÛÙ· Û~ˆ·ÎÏ‹Ù˘Ì:";
-        Text[ dutch ] = "Lijst met ~fouten: ";
-        Text[ french ] = "~Liste des erreurs :";
-        Text[ spanish ] = "Lista de ~errores:";
-        Text[ italian ] = "Lista errori:";
-        Text[ danish ] = "~Fejlliste:";
-        Text[ swedish ] = "~Fellista:";
-        Text[ polish ] = "~Lista b≥ÍdÛw:";
-        Text[ portuguese_brazilian ] = "~Lista de erros:";
-        Text[ japanese ] = "„Ç®„É©„Éº„É™„Çπ„Éà(~L):";
-        Text[ korean ] = "Ïò§Î•ò Î™©Î°ù(~L):";
-        Text[ chinese_simplified ] = "ÈîôËØØÂàóÂçï(~L)Ôºö";
-        Text[ chinese_traditional ] = "ÈåØË™§Ê∏ÖÂñÆ(~L)Ôºö";
-        Text[ arabic ] = "ﬁ«∆„… «·√Œÿ«¡:";
-        Text[ turkish ] = "Hata ~listesi:";
-        Text[ catalan ] = "~Llista d'errors:";
-        Text[ finnish ] = "Virhe~luettelo:";
-        Text[ thai ] = " ~‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏ú‡∏¥‡∏î‡∏û‡∏•‡∏≤‡∏î:";
-        Text[ czech ] = "Seznam chyb:";
-        Text[ hebrew ] = "~Fehlerliste:";
-        Text[ hindi ] = "~‡§ó‡§≤‡§§‡•Ä ‡§∏‡•Ç‡§ö‡•Ä:";
-        Text[ slovak ] = "Zoznam chybov√Ωch h~l√°sen√≠:";
-        Text[ hungarian ] = "Hiba~lista:";
-        Text[ slovenian ] = "~Seznam napak:";
     };
     Control CTL_ERRORLIST
     {
@@ -197,36 +142,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     {
         Pos = MAP_APPFONT ( 143, 12 ) ;
         Size = MAP_APPFONT ( 125, 10 ) ;
-        Text = "~Beschreibung:";
-        Text [ english ] = "~description:";
-        Text [ english_us ] = "~Description:";
+        Text [ de ] = "~Beschreibung:";
+        Text [ en-US ] = "~Description:";
         Group = TRUE;
-        Text[ portuguese ] = "~DescriÁ„o:";
-        Text[ russian ] = "ŒÔËÒ‡ÌËÂ:";
-        Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ:";
-        Text[ dutch ] = "~Beschrijving: ";
-        Text[ french ] = "~Description :";
-        Text[ spanish ] = "~DescripciÛn:";
-        Text[ italian ] = "Descrizione:";
-        Text[ danish ] = "~Beskrivelse:";
-        Text[ swedish ] = "~Beskrivning:";
-        Text[ polish ] = "~Opis:";
-        Text[ portuguese_brazilian ] = "~DescriÁ„o:";
-        Text[ japanese ] = "Ë™¨Êòé(~D):";
-        Text[ korean ] = "ÏÑ§Î™Ö(~D):";
-        Text[ chinese_simplified ] = "ËØ¥Êòé(~D)Ôºö";
-        Text[ chinese_traditional ] = "ÊèèËø∞(~D)Ôºö";
-        Text[ arabic ] = "«·Ê’›:";
-        Text[ turkish ] = "~Tan˝m:";
-        Text[ catalan ] = "~DescripciÛ";
-        Text[ finnish ] = "~Kuvaus:";
-        Text[ thai ] = "~‡∏Ñ‡∏≥‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢:";
-        Text[ czech ] = "Popis:";
-        Text[ hebrew ] = "‚ÄÆ◊™◊ê◊ï◊®:‚Ä¨";
-        Text[ hindi ] = "~‡§µ‡§ø‡§µ‡§∞‡§£:";
-        Text[ slovak ] = "~Popis:";
-        Text[ hungarian ] = "~Le√≠r√°s:";
-        Text[ slovenian ] = "~Opis:";
     };
     MultiLineEdit ME_DESCRIPTION
     {
@@ -247,220 +165,32 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 
     String STR_EXCEPTION_ERROR
     {
-        Text = "Fehler";
-        Text [ english ] = "Error";
-        Text [ english_us ] = "Error";
-        Text[ portuguese ] = "Erro";
-        Text[ russian ] = "Œ¯Ë·Í‡";
-        Text[ greek ] = "”ˆ‹ÎÏ·";
-        Text[ dutch ] = "Fout";
-        Text[ french ] = "Erreur";
-        Text[ spanish ] = "Error";
-        Text[ italian ] = "Errore";
-        Text[ danish ] = "Fejl";
-        Text[ swedish ] = "Fel";
-        Text[ polish ] = "B≥πd";
-        Text[ portuguese_brazilian ] = "Erro";
-        Text[ japanese ] = "„Ç®„É©„Éº";
-        Text[ korean ] = "Ïò§Î•ò";
-        Text[ chinese_simplified ] = "ÈîôËØØ";
-        Text[ chinese_traditional ] = "ÈåØË™§";
-        Text[ turkish ] = "Hata";
-        Text[ arabic ] = "Œÿ√";
-        Text[ catalan ] = "S'ha produÔt un error";
-        Text[ finnish ] = "Virhe";
-        Text[ thai ] = "‡∏ú‡∏¥‡∏î‡∏û‡∏•‡∏≤‡∏î";
-        Text[ czech ] = "Chyba";
-        Text[ hebrew ] = "Fehler";
-        Text[ hindi ] = "‡§ó‡§≤‡§§‡•Ä";
-        Text[ slovak ] = "Chyba";
-        Text[ hungarian ] = "Hiba";
-        Text[ slovenian ] = "Napaka";
+        Text [ de ] = "Fehler";
+        Text [ en-US ] = "Error";
     };
     String STR_EXCEPTION_WARNING
     {
-        Text = "Warnung";
-        Text [ english ] = "Warning";
-        Text [ english_us ] = "Warning";
-        Text[ portuguese ] = "AdvertÍncia";
-        Text[ russian ] = "œÂ‰ÛÔÂÊ‰ÂÌËÂ";
-        Text[ greek ] = "–ÒÔÂÈ‰ÔÔﬂÁÛÁ";
-        Text[ dutch ] = "Waarschuwing";
-        Text[ french ] = "Avertissement";
-        Text[ spanish ] = "Advertencia";
-        Text[ italian ] = "Avvertenza";
-        Text[ danish ] = "Advarsel";
-        Text[ swedish ] = "Varning";
-        Text[ polish ] = "Ostrzeøenie";
-        Text[ portuguese_brazilian ] = "Aviso";
-        Text[ japanese ] = "Ë≠¶Âëä";
-        Text[ korean ] = "Í≤ΩÍ≥†";
-        Text[ chinese_simplified ] = "Ë≠¶Âëä";
-        Text[ chinese_traditional ] = "Ë≠¶Âëä";
-        Text[ turkish ] = "Uyar˝";
-        Text[ arabic ] = " Õ–Ì—";
-        Text[ catalan ] = "Advertiment";
-        Text[ finnish ] = "Varoitus";
-        Text[ thai ] = "‡∏Ñ‡∏≥‡πÄ‡∏ï‡∏∑‡∏≠‡∏ô";
-        Text[ czech ] = "Upozornƒõn√≠";
-        Text[ hebrew ] = "Warnung";
-        Text[ hindi ] = "‡§ö‡•á‡§§‡§æ‡§µ‡§®‡•Ä";
-        Text[ slovak ] = "Upozornenie";
-        Text[ hungarian ] = "Figyelmeztet√©s";
-        Text[ slovenian ] = "Opozorilo";
+        Text [ de ] = "Warnung";
+        Text [ en-US ] = "Warning";
     };
     String STR_EXCEPTION_INFO
     {
-        Text = "Information";
-        Text [ english ] = "Information";
-        Text [ english_us ] = "Information";
-        Text[ portuguese ] = "InformaÁ„o";
-        Text[ russian ] = "»ÌÙÓÏ‡ˆËˇ";
-        Text[ greek ] = "–ÎÁÒÔˆÔÒﬂÂÚ";
-        Text[ dutch ] = "Informatie";
-        Text[ french ] = "Information";
-        Text[ spanish ] = "InformaciÛn";
-        Text[ italian ] = "Informazione";
-        Text[ danish ] = "Information";
-        Text[ swedish ] = "Information";
-        Text[ polish ] = "Informacja";
-        Text[ portuguese_brazilian ] = "InformaÁ„o";
-        Text[ japanese ] = "ÊÉÖÂ†±";
-        Text[ korean ] = "Ï†ïÎ≥¥";
-        Text[ chinese_simplified ] = "‰ø°ÊÅØ";
-        Text[ chinese_traditional ] = "Ë≥áË®ä";
-        Text[ turkish ] = "Bilgi";
-        Text[ arabic ] = "„⁄·Ê„« ";
-        Text[ catalan ] = "InformaciÛ";
-        Text[ finnish ] = "Tiedot";
-        Text[ thai ] = "‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
-        Text[ czech ] = "Informace";
-        Text[ hebrew ] = "Information";
-        Text[ hindi ] = "‡§∏‡•Ç‡§ö‡§®‡§æ";
-        Text[ slovak ] = "Inform√°cia";
-        Text[ hungarian ] = "Inform√°ci√≥";
-        Text[ slovenian ] = "Informacije";
+        Text [ de ] = "Information";
+        Text [ en-US ] = "Information";
     };
     String STR_EXCEPTION_DETAILS
     {
-        Text = "Details";
-        Text [ english ] = "Details";
-        Text [ english_us ] = "Details";
-        Text[ portuguese ] = "Detalhes";
-        Text[ russian ] = "ƒÂÚ‡ÎË";
-        Text[ greek ] = "ÀÂÙÔÏ›ÒÂÈÂÚ";
-        Text[ dutch ] = "Details";
-        Text[ french ] = "DÈtails";
-        Text[ spanish ] = "Detalles";
-        Text[ italian ] = "Dettagli";
-        Text[ danish ] = "Detaljer";
-        Text[ swedish ] = "Detaljer";
-        Text[ polish ] = "SzczegÛ≥y";
-        Text[ portuguese_brazilian ] = "Detalhes";
-        Text[ japanese ] = "Ë©≥Á¥∞";
-        Text[ korean ] = "ÏûêÏÑ∏Ìûà";
-        Text[ chinese_simplified ] = "ÁªÜËäÇ";
-        Text[ chinese_traditional ] = "Á¥∞ÁØÄ";
-        Text[ turkish ] = "Detaylar";
-        Text[ arabic ] = " ›«’Ì·";
-        Text[ catalan ] = "Detalls";
-        Text[ finnish ] = "Lis‰tiedot";
-        Text[ thai ] = "‡∏£‡∏≤‡∏¢‡∏•‡∏∞‡πÄ‡∏≠‡∏µ‡∏¢‡∏î";
-        Text[ czech ] = "Podrobnosti";
-        Text[ hebrew ] = "Details";
-        Text[ hindi ] = "‡§µ‡§ø‡§∏‡•ç‡§§‡§æ‡§∞‡§™‡•Ç‡§∞‡•ç‡§µ‡§ï ‡§µ‡§∞‡•ç‡§£‡§®";
-        Text[ slovak ] = "Podrobnosti";
-        Text[ hungarian ] = "R√©szletek";
-        Text[ slovenian ] = "Podrobnosti";
+        Text [ de ] = "Details";
+        Text [ en-US ] = "Details";
     };
     String STR_EXCEPTION_STATUS
     {
-        Text = "SQL-Status";
-        Text [ english ] = "SQL State";
-        Text [ english_us ] = "SQL Status";
-        Text[ portuguese ] = "Estado SQL";
-        Text[ russian ] = "—ÓÒÚÓˇÌËÂ SQL";
-        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ SQL";
-        Text[ dutch ] = "SQL-status";
-        Text[ french ] = "Statut SQL";
-        Text[ spanish ] = "Estado SQL";
-        Text[ italian ] = "Stato SQL";
-        Text[ danish ] = "SQL-status";
-        Text[ swedish ] = "SQL-status";
-        Text[ polish ] = "Stan SQL";
-        Text[ portuguese_brazilian ] = "Estado SQL";
-        Text[ japanese ] = "SQL „Çπ„ÉÜ„Éº„Çø„Çπ";
-        Text[ korean ] = "SQL ÏÉÅÌÉú";
-        Text[ chinese_simplified ] = "SQL Áä∂ÊÄÅ";
-        Text[ chinese_traditional ] = "SQL ÁãÄÊÖã";
-        Text[ turkish ] = "SQL durumu";
-        Text[ arabic ] = "Õ«·…SQL";
-        Text[ catalan ] = "Estat de l'SQL";
-        Text[ finnish ] = "SQL-tila";
-        Text[ thai ] = "‡∏™‡∏ñ‡∏≤‡∏ô‡∏∞ SQL ";
-        Text[ czech ] = "Stav SQL";
-        Text[ hebrew ] = "SQL-Status";
-        Text[ hindi ] = "SQL ‡§µ‡§∏‡•ç‡§§‡•Å‡§∏‡•ç‡§•‡§ø‡§§‡§ø";
-        Text[ slovak ] = "SQL status";
-        Text[ hungarian ] = "SQL √°llapota";
-        Text[ slovenian ] = "Stanje SQL";
+        Text [ de ] = "SQL-Status";
+        Text [ en-US ] = "SQL Status";
     };
     String STR_EXCEPTION_ERRORCODE
     {
-        Text = "Fehler-Code";
-        Text [ english ] = "Error code";
-        Text [ english_us ] = "Error code";
-        Text[ portuguese ] = "CÛdigo de erro";
-        Text[ russian ] = " Ó‰ Ó¯Ë·ÍË";
-        Text[ greek ] = " ˘‰ÈÍ¸Ú Ûˆ‹ÎÏ·ÙÔÚ";
-        Text[ dutch ] = "Foutcode";
-        Text[ french ] = "Code d'erreur";
-        Text[ spanish ] = "CÛdigo de error";
-        Text[ italian ] = "Codice di errore";
-        Text[ danish ] = "Fejlkode";
-        Text[ swedish ] = "Felkod";
-        Text[ polish ] = "Kod b≥Ídu";
-        Text[ portuguese_brazilian ] = "CÛdigo de erro";
-        Text[ japanese ] = "„Ç®„É©„Éº„Ç≥„Éº„Éâ";
-        Text[ korean ] = "Ïò§Î•ò ÏΩîÎìú";
-        Text[ chinese_simplified ] = "ÈîôËØØÁ†Å";
-        Text[ chinese_traditional ] = "ÈåØË™§Á¢º";
-        Text[ turkish ] = "Hata Kodu";
-        Text[ arabic ] = "—„“ «·Œÿ√";
-        Text[ catalan ] = "Codi d'error";
-        Text[ finnish ] = "Virhekoodi";
-        Text[ thai ] = "‡∏£‡∏´‡∏±‡∏™‡∏ú‡∏¥‡∏î‡∏û‡∏•‡∏≤‡∏î";
-        Text[ czech ] = "K√≥d chyby";
-        Text[ hebrew ] = "Fehler-Code";
-        Text[ hindi ] = "‡§ó‡§≤‡§§‡•Ä ‡§ï‡•ã‡§°";
-        Text[ slovak ] = "K√≥d chyby";
-        Text[ hungarian ] = "Hibak√≥d";
-        Text[ slovenian ] = "≈†ifra napake";
+        Text [ de ] = "Fehler-Code";
+        Text [ en-US ] = "Error code";
     };
-    Text[ portuguese ] = "%PRODUCTNAME Base";
-    Text[ russian ] = "%PRODUCTNAME Base";
-    Text[ greek ] = "%PRODUCTNAME - ¬‹ÛÁ";
-    Text[ dutch ] = "%PRODUCTNAME Base";
-    Text[ french ] = "%PRODUCTNAME Base";
-    Text[ spanish ] = "%PRODUCTNAME Base";
-    Text[ finnish ] = "%PRODUCTNAME Base";
-    Text[ italian ] = "%PRODUCTNAME Base";
-    Text[ danish ] = "%PRODUCTNAME Base";
-    Text[ swedish ] = "%PRODUCTNAME Base";
-    Text[ polish ] = "%PRODUCTNAME Base";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME Base";
-    Text[ japanese ] = "%PRODUCTNAME Base";
-    Text[ korean ] = "%PRODUCTNAME Base";
-    Text[ chinese_simplified ] = "%PRODUCTNAME Base";
-    Text[ chinese_traditional ] = "%PRODUCTNAME Base";
-    Text[ turkish ] = "%PRODUCTNAME Base";
-    Text[ arabic ] = "%PRODUCTNAME Base";
-    Text[ catalan ] = "%PRODUCTNAME Base";
-    Text[ thai ] = "‡∏ê‡∏≤‡∏ô %PRODUCTNAME ";
-    Text[ czech ] = "%PRODUCTNAME Base";
-    Text[ hebrew ] = "%PRODUCTNAME Base";
-    Text[ hindi ] = "%PRODUCTNAME ‡§Ü‡§ß‡§æ‡§∞";
-    Text[ slovak ] = "%PRODUCTNAME Base";
-    Text[ hungarian ] = "%PRODUCTNAME Base";
-    Text[ slovenian ] = "%PRODUCTNAME Base";
 };
