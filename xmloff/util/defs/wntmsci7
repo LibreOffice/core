@@ -10935,3 +10935,11 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?__default_constructed@_STL@@YA?AUAttributeAssignment@OAttribute2Property@xmloff@@PAU234@@Z
 ?__default_constructed_aux@_STL@@YA?AUAttributeAssignment@OAttribute2Property@xmloff@@PAU234@ABU__false_type@1@@Z
 ?lcl_AddState@@YAXAAV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@JABVOUString@rtl@@AAV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
+??0?$Reference@VX3DDisplay@chart@star@sun@com@@@uno@star@sun@com@@QAE@ABVBaseReference@1234@W4__UnoReference_Query@1234@@Z
+??1UnknownPropertyException@beans@star@sun@com@@QAE@XZ
+??C?$Reference@VX3DDisplay@chart@star@sun@com@@@uno@star@sun@com@@QBAPAVX3DDisplay@chart@234@XZ
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@V?$Sequence@J@uno@star@sun@com@@@2345@@Z
+??0DataRowPointStyle@chartxml@@QAE@W4StyleType@01@JJJVOUString@rtl@@J@Z
+??0SchXMLStatisticsObjectContext@@QAE@AAVSchXMLImportHelper@@AAVSvXMLImport@@GABVOUString@rtl@@AAV?$list@UDataRowPointStyle@chartxml@@V?$allocator@UDataRowPointStyle@chartxml@@@_STL@@@_STL@@JW4ContextType@0@@Z
+??1SchXMLStatisticsObjectContext@@UAE@XZ
+?StartElement@SchXMLStatisticsObjectContext@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
