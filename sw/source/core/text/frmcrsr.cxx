@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-02 14:23:39 $
+ *  last change: $Author: ama $ $Date: 2001-05-07 09:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     SwTwips nUpperMaxY = pTmpFrm->Frm().Top() + pTmpFrm->Prt().Bottom();
     SwTwips nMaxY = Min( pFrm->Frm().Top() + pFrm->Prt().Bottom(), nUpperMaxY );
 
+    sal_Bool bRet = sal_False;
+
     if ( pFrm->IsEmpty() || !pFrm->Prt().Height() )
     {
         Point aPnt1 = pFrm->Frm().Pos() + pFrm->Prt().Pos();
@@ -272,14 +274,13 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             pCMS->aRealHeight.X() = 0;
             pCMS->aRealHeight.Y() = rOrig.Height();
         }
-        return sal_True;
+        bRet = sal_True;
     }
     else
     {
         if( !pFrm->HasPara() )
             return sal_False;
         sal_Bool bGoOn = sal_True;
-        sal_Bool bRet;
         sal_Bool bPrvLine;
         xub_StrLen nOffset = rPos.nContent.GetIndex();
         xub_StrLen nNextOfst;
@@ -302,8 +303,27 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             else
                 bGoOn = sal_False;
         } while ( bGoOn );
-        return bRet;
     }
+    if( bRet )
+    {
+        SwPageFrm *pPage = pFrm->FindPageFrm();
+        ASSERT( pPage, "Text esaped from page?" );
+        if( rOrig.Top() < pPage->Frm().Top() ||
+            rOrig.Top() > pPage->Frm().Bottom() )
+        {
+            // Following situation: if the frame is in an invalid sectionframe,
+            // it's possible that the frame is outside the page. If we restrict
+            // the cursor position to the page area, we enforce the formatting
+            // of the page, of the section frame and the frame himself.
+            if( rOrig.Top() < pPage->Frm().Top() )
+                rOrig.Pos().Y() = pPage->Frm().Top();
+            SwTwips nBott = pPage->Frm().Bottom();
+            if( rOrig.Top() > nBott )
+                rOrig.Pos().Y() = nBott;
+        }
+    }
+
+    return bRet;
 }
 
 /*************************************************************************
