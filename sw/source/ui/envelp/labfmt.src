@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¤ô¥­¶¡¹j(~Z)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÃİŞíÉ";
         Text[ greek ] = "Ïñéæüíôéá áğüóôáóç";
-        Text[ korean ] = "°¡·Î °£°İ(~Z)";
+        Text[ korean ] = "°¡·Î °£°İ";
         Text[ turkish ] = "~Yatay boşluk";
         Text[ language_user1 ] = " ";
     };
@@ -153,7 +153,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "««ª½¶¡¹j(~V)";
         Text[ arabic ] = "ÇáÎØæÉ ÇáÑÃÓíÉ";
         Text[ greek ] = "Êáôáêüñõöç áğüóôáóç";
-        Text[ korean ] = "¼¼·Î °£°İ(~V)";
+        Text[ korean ] = "¼¼·Î °£°İ";
         Text[ turkish ] = "Dikey boşluk";
         Text[ language_user1 ] = " ";
     };
@@ -195,7 +195,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¼e(~W)";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ greek ] = "ĞëÜôïò";
-        Text[ korean ] = "³Êºñ(~W)";
+        Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Ge~nişlik";
         Text[ language_user1 ] = " ";
     };
@@ -237,7 +237,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "°ª(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ greek ] = "¾øïò";
-        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "~Yükseklik";
         Text[ language_user1 ] = " ";
     };
@@ -279,7 +279,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¥ª¦VÃä®Ø(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
     };
@@ -323,7 +323,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¤WÃä®Ø(~T)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí";
         Text[ greek ] = "¢íù ğåñéèşñéï";
-        Text[ korean ] = "À§ ¿©¹é(~T)";
+        Text[ korean ] = "À§ ¿©¹é";
         Text[ turkish ] = "Üst kenar";
         Text[ language_user1 ] = " ";
     };
@@ -367,7 +367,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "Äæ(~C)";
         Text[ arabic ] = "ÇáÃÚãÏÉ";
         Text[ greek ] = "ÓôŞëåò";
-        Text[ korean ] = "¿­(~C)";
+        Text[ korean ] = "¿­";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
     };
@@ -408,7 +408,7 @@ TabPage TP_LAB_FMT
         Text[ chinese_traditional ] = "¦æ(~O)";
         Text[ arabic ] = "ÇáÕİæİ";
         Text[ greek ] = "Ãñáììİò";
-        Text[ korean ] = "Çà(~O)";
+        Text[ korean ] = "Çà";
         Text[ turkish ] = "~Satır";
         Text[ language_user1 ] = " ";
     };
@@ -430,6 +430,24 @@ TabPage TP_LAB_FMT
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Speichern..." ;
         Text [ English ] = "Save..." ;
+        Text[ english_us ] = "Save...";
+        Text[ portuguese ] = "Save...";
+        Text[ russian ] = "Ñîõğàíèòü...";
+        Text[ greek ] = "ÁğïèŞêåõ~óç...";
+        Text[ dutch ] = "Save...";
+        Text[ french ] = "Save...";
+        Text[ spanish ] = "Save...";
+        Text[ italian ] = "Save...";
+        Text[ danish ] = "Save...";
+        Text[ swedish ] = "~Spara...";
+        Text[ polish ] = "Zapisz...";
+        Text[ portuguese_brazilian ] = "Save...";
+        Text[ japanese ] = "Save...";
+        Text[ korean ] = "Save...";
+        Text[ chinese_simplified ] = "Save...";
+        Text[ chinese_traditional ] = "Àx¦s...";
+        Text[ turkish ] = "Save...";
+        Text[ arabic ] = "ÍİÙ...";
     };
 };
  // String *******************************************************************
@@ -559,7 +577,7 @@ String STR_LEFT
     Text[ chinese_traditional ] = "¥ª¦VÃä®Ø";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
     Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
-    Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é";
+    Text[ korean ] = "¿ŞÂÊ ¿©¹é";
     Text[ turkish ] = "Sol kenar";
     Text[ language_user1 ] = " ";
 };
@@ -706,7 +724,7 @@ ModalDialog DLG_SAVE_LABEL
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Typ";
         Text[ japanese ] = "í—Ş(~T)";
-        Text[ chinese_traditional ] = "Ãş«¬(~T)";
+        Text[ chinese_traditional ] = "Ãş«¬";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
         Text[ korean ] = "À¯Çü(~T)";
@@ -725,6 +743,24 @@ ModalDialog DLG_SAVE_LABEL
         Size = MAP_APPFONT ( 165 , 54 ) ;
         Text = "Optionen";
         Text [ ENGLISH ] = "Options" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Options";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ greek ] = "Options";
+        Text[ dutch ] = "Options";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Options";
+        Text[ italian ] = "Options";
+        Text[ danish ] = "Options";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "Options";
+        Text[ korean ] = "Options";
+        Text[ chinese_simplified ] = "Options";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ turkish ] = "Options";
+        Text[ arabic ] = "ÇáÎíÇÑÇÊ";
     };
     OKButton PB_OK
     {
@@ -754,5 +790,41 @@ ModalDialog DLG_SAVE_LABEL
         DefButton = WB_DEF_CANCEL ;
         Message = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?" ;
         Message [ English ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?" ;
+        Message[ english_us ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ portuguese ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ russian ] = "Íàêëåéêà \"%1 / %2\" óæå ñóùåñòâóåò.\nÇàìåíèòü ıòè äàííûå?";
+        Message[ greek ] = "Ç åôéêİôá \"%1 / %2\" õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
+        Message[ dutch ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ french ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ spanish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ italian ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ danish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ swedish ] = "Etiketten \"%1 / %2\" finns redan.\nVill du skriva över den?";
+        Message[ polish ] = "Etykieta \"%1 / %2\" ju¿ istnieje.\nSkasowaæ dane przez zapisanie?";
+        Message[ portuguese_brazilian ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ japanese ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ korean ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ chinese_simplified ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ chinese_traditional ] = "³o­Ó¶K¼Ğ¡u%1 / %2¡v¤w¸g¦s¦b¡C\n­nÂĞ¼g¡H";
+        Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ arabic ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
     };
+    Text[ english_us ] = "Save label format";
+    Text[ portuguese ] = "Save label format";
+    Text[ russian ] = "Ñîõğàíèòü ôîğìàò íàêëåéêè";
+    Text[ greek ] = "ÁğïèŞêåõóç ôïõ ìåãİèïõò ôçò åôéêİôáò";
+    Text[ dutch ] = "Save label format";
+    Text[ french ] = "Save label format";
+    Text[ spanish ] = "Save label format";
+    Text[ italian ] = "Save label format";
+    Text[ danish ] = "Save label format";
+    Text[ swedish ] = "Spara etikettformat";
+    Text[ polish ] = "Zapisz format etykiety";
+    Text[ portuguese_brazilian ] = "Save label format";
+    Text[ japanese ] = "Save label format";
+    Text[ korean ] = "Save label format";
+    Text[ chinese_simplified ] = "Save label format";
+    Text[ chinese_traditional ] = "Àx¦s¶K¼Ğ®æ¦¡";
+    Text[ turkish ] = "Save label format";
+    Text[ arabic ] = "ÍİÙ ÊäÓíŞ ÈØÇŞÇÊ ÇáÚäæäÉ";
 };
