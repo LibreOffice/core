@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 17:03:03 $
+#   last change: $Author: rt $ $Date: 2003-06-12 07:47:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,7 @@ SLOFILES=   \
             $(SLO)$/vclxaccessiblestatusbaritem.obj		\
             $(SLO)$/vclxaccessibletabcontrol.obj		\
             $(SLO)$/vclxaccessibletabpage.obj			\
+            $(SLO)$/vclxaccessibletabpagewindow.obj		\
             $(SLO)$/vclxaccessibletextcomponent.obj		\
             $(SLO)$/vclxaccessibletextfield.obj			\
             $(SLO)$/vclxaccessibletoolbox.obj			\
