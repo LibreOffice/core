@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:49:45 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 15:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ protected:
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
-    virtual ULONG           exportDoc( const char *pClass = 0 ) { return 0; }
+    virtual ULONG           exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) { return 0; }
 
 public:
 
