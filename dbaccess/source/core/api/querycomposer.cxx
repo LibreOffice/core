@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 13:51:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-05 07:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,9 +121,6 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef COMPHELPER_INDEXACCESSWRAPPER_HXX
-#include <comphelper/IndexAccessWrapper.hxx>
 #endif
 
 
