@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-03-19 14:29:03 $
+ *  last change:$Date: 2004-05-03 08:47:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ public class ClParser {
         for (int i = 0; i < args.length;) {
             String pName = getParameterFor(mapping, args[i]).trim();
             String pValue = "";
-
             if (pName.equals("TestJob")) {
                 if (args.length > (i + 1)) {
                     pValue = args[i].trim() + " " + args[i + 1].trim();
@@ -142,6 +141,7 @@ public class ClParser {
         map.setProperty("-cmd", "AppExecutionCommand");
         map.setProperty("-o", "TestJob");
         map.setProperty("-sce", "TestJob");
+        map.setProperty("-p", "TestJob");
         map.setProperty("-aca", "AdditionalConnectionArguments");
         map.setProperty("-xcl", "ExclusionList");
 
