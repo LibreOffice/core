@@ -1,16 +1,16 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AxTestComponents", "AxTestComponents.vcproj", "{CF6DC513-B04E-420A-A0F9-6D1F4046D098}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Release MinDependency
-		ConfigName.2 = Release MinSize
-		ConfigName.3 = Unicode Debug
-		ConfigName.4 = Unicode Release MinDependency
-		ConfigName.5 = Unicode Release MinSize
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
+		Debug = Debug
+		Release MinDependency = Release MinDependency
+		Release MinSize = Release MinSize
+		Unicode Debug = Unicode Debug
+		Unicode Release MinDependency = Unicode Release MinDependency
+		Unicode Release MinSize = Unicode Release MinSize
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{CF6DC513-B04E-420A-A0F9-6D1F4046D098}.Debug.ActiveCfg = Debug|Win32
