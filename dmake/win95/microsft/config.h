@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:02:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,8 @@
 
 #define HAVE_ERRNO_H 1
 #define HAVE_STRERROR 1
+#define HAVE_TEMPNAM 1
+#define HAVE_FCNTL_H 1
 
 /* These defines are needed for itypes.h! (this is tested only with MSVC++ 6.0) */
 #define SIZEOF_INT 4
