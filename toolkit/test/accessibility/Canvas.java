@@ -1,4 +1,4 @@
-import java.util.Vector;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -31,8 +31,9 @@ class Canvas
     public Canvas (MessageInterface aMessageDisplay)
     {
         super (true);
-        maObjects = new Vector ();
+        maObjects = new java.util.HashMap ();
         maNodes = new Vector ();
+        maObjectList = new Vector ();
         maContexts = new Vector ();
         addMouseListener (this);
         addMouseMotionListener (this);
@@ -55,22 +56,29 @@ class Canvas
             maTree.addTreeSelectionListener (this);
     }
 
-    public void addAccessible (AccessibleObject aObject)
+    protected void addAccessible (AccTreeNode aNode)
     {
-        // Update bounding box that includes all objects.
-        if (maObjects.size() == 0)
-            maBoundingBox = aObject.getBBox();
-        else
-            maBoundingBox = maBoundingBox.union (aObject.getBBox());
+        AccessibleObject aObject = (AccessibleObject) maObjects.get (aNode);
+        if (aObject == null)
+        {
+            aObject = new AccessibleObject (aNode);
+            // Update bounding box that includes all objects.
+            if (maObjects.size() == 0)
+                maBoundingBox = aObject.getBBox();
+            else
+                maBoundingBox = maBoundingBox.union (aObject.getBBox());
 
-        if ( maObjects.indexOf( aObject ) == -1 )
-            maObjects.add (aObject);
-        repaint ();
+            maObjects.put (aNode, aObject);
+            maObjectList.add (aObject);
+
+            repaint ();
+        }
     }
 
-    public void removeAccessible (AccessibleObject aObject)
+    protected void removeAccessible (AccTreeNode aNode)
     {
-        maObjects.remove (aObject);
+        maObjectList.remove (maObjects.get(aNode));
+        maObjects.remove (aNode);
         repaint ();
     }
 
@@ -80,7 +88,7 @@ class Canvas
         if (maNodes.indexOf (aNode) == -1)
         {
             maNodes.add (aNode);
-            addAccessible (new AccessibleObject (aNode));
+            addAccessible (aNode);
         }
     }
 
@@ -89,7 +97,7 @@ class Canvas
         int i = maNodes.indexOf (aNode);
         if( i != -1 )
         {
-            removeAccessible( (AccessibleObject)maObjects.elementAt( i ) );
+            removeAccessible (aNode);
             maNodes.remove (aNode);
         }
     }
@@ -98,7 +106,7 @@ class Canvas
     {
         int i = maNodes.indexOf (aNode);
         if (i != -1)
-            ((AccessibleObject)maObjects.elementAt(i)).update();
+            ((AccessibleObject)maObjects.get(aNode)).update();
     }
 
     public void clear ()
@@ -114,7 +122,6 @@ class Canvas
 
     public void setShowDescriptions (boolean bNewValue)
     {
-        System.out.println ("setting show descriptions to " + bNewValue);
         mbShowDescriptions = bNewValue;
         repaint ();
     }
@@ -126,7 +133,6 @@ class Canvas
 
     public void setShowNames (boolean bNewValue)
     {
-        System.out.println ("setting show names to " + bNewValue);
         mbShowNames = bNewValue;
         repaint ();
     }
@@ -153,10 +159,10 @@ class Canvas
         else
             mnScaleFactor = nYScale;
 
-        int n = maObjects.size();
-        for (int i=0; i<n; i++)
+        int nCount = maObjectList.size();
+        for (int i=0; i<nCount; i++)
         {
-            AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.elementAt(i);
+            AccessibleObject aAccessibleObject = (AccessibleObject)maObjectList.elementAt(i);
             aAccessibleObject.paint (
                 g,
                 mnXOffset, mnYOffset, mnScaleFactor,
@@ -237,13 +243,15 @@ class Canvas
         if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0)
             FindAccessibleObjectUnderMouse (e);
     }
+
     protected void FindAccessibleObjectUnderMouse (MouseEvent e)
     {
         int nObjects = maObjects.size();
         AccessibleObject aNewActiveObject = null;
-        for (int i=nObjects-1; i>=0; i--)
+        int nCount = maObjectList.size();
+        for (int i=nCount-1; i>=0; --i)
         {
-            AccessibleObject aObject = (AccessibleObject)(maObjects.elementAt(i));
+            AccessibleObject aObject = (AccessibleObject)maObjectList.elementAt(i);
             if (aObject != null)
                 if (aObject.contains (e.getX(),e.getY()))
                 {
@@ -291,13 +299,9 @@ class Canvas
         Object aObject = aPath.getLastPathComponent();
         if (aObject instanceof AccTreeNode)
         {
-            int i = maNodes.indexOf ((AccTreeNode)aObject);
-            if (i != -1)
-            {
-                AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.elementAt(i);
-                if (selectObject (aAccessibleObject))
-                    repaint();
-            }
+            AccessibleObject aAccessibleObject = (AccessibleObject)maObjects.get ((AccTreeNode)aObject);
+            if (selectObject (aAccessibleObject))
+                repaint();
         }
     }
 
@@ -311,8 +315,10 @@ class Canvas
         mnScaleFactor;
     protected AccessibleObject
         maActiveObject;
+    protected java.util.HashMap
+        maObjects;
     protected Vector
-        maObjects,
+        maObjectList,
         maContexts,
         maNodes;
     protected Rectangle
