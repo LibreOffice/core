@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:17:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-06 09:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,8 @@ extern "C" void SAL_CALL createRegistryInfo_OCfgImport( )
     static ::dbacfg::OMultiInstanceAutoRegistration< ::dbacfg::OCfgImport > aAutoRegistration;
 }
 //--------------------------------------------------------------------------
-namespace dbacfg
-{
+using namespace dbacfg;
+// {
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbcx;
@@ -921,5 +921,5 @@ sal_Bool isDocumentReport(const Reference< XMultiServiceFactory >& _xORB,const :
     return bReport;
 }
 // -----------------------------------------------------------------------------
-}// dbacfg
+// }// dbacfg
 // -----------------------------------------------------------------------------
