@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@
 #include "editable.hxx"
 
 #include "globstr.hrc"
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
@@ -1777,7 +1778,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             else
             {
-                SvxCharacterMap* pDlg = new SvxCharacterMap(    pTabViewShell->GetDialogParent(), FALSE );
+                //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(     pTabViewShell->GetDialogParent(), FALSE );
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( pTabViewShell->GetDialogParent(), ResId(RID_SVXDLG_CHARMAP), FALSE);
+                DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 Font             aCurFont;
 
                 // font color doesn't matter here
