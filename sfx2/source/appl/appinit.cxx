@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:37:37 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 #ifndef _SFXINTITEM_HXX //autogen
 #include <svtools/intitem.hxx>
@@ -98,7 +101,6 @@
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
-#include <svtools/inethist.hxx>
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
 #endif
@@ -265,7 +267,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     //pAppData_Impl->pSfxFrameObjectFactoryPtr = new SfxFrameObjectFactoryPtr;
     //pAppData_Impl->pSfxFrameObjectFactoryPtr->pSfxFrameObjectFactory = SfxFrameObject::ClassFactory();
     //SvBindStatusCallback::SetProgressCallback( STATIC_LINK( 0, SfxProgress, DefaultBindingProgress ) );
-    //INetURLHistory::GetOrCreate()->SetLocation( SvtPathOptions().GetUserConfigPath() );
 
     pImp->pEventHdl = new UniqueIndex( 1, 4, 4 );
     //InitializeDisplayName_Impl();
