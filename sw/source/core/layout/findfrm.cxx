@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:46:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,9 +1263,6 @@ void SwFrm::SetInfFlags()
         return;                       //lieferbar
 
     bInfInvalid = bInfBody = bInfTab = bInfFly = bInfFtn = bInfSct = FALSE;
-#ifndef PRODUCT
-    BOOL bIsInTab = FALSE;
-#endif
 
     SwFrm *pFrm = this;
     if( IsFtnContFrm() )
@@ -1277,13 +1274,6 @@ void SwFrm::SetInfFlags()
             bInfBody = TRUE;
         else if ( pFrm->IsTabFrm() || pFrm->IsCellFrm() )
         {
-#ifndef PRODUCT
-            if( pFrm->IsTabFrm() )
-            {
-                ASSERT( !bIsInTab, "Table in table: Not implemented." );
-                bIsInTab = TRUE;
-            }
-#endif
             bInfTab = TRUE;
         }
         else if ( pFrm->IsFlyFrm() )
