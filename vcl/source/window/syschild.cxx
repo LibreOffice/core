@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #define _SV_SYSCHILD_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -74,7 +73,6 @@
 #include <window.hxx>
 #ifndef _SV_SALOBJ_HXX
 #include <salobj.hxx>
-#endif
 #endif
 
 #ifndef _SV_RC_H
@@ -93,11 +91,9 @@
 #include <syschild.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
-
-#ifndef REMOTE_APPSERVER
 
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        USHORT nEvent, const void* /* pEvent */ )
@@ -146,19 +142,14 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     return nRet;
 }
 
-#endif
-
 // =======================================================================
 
 void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle )
 {
-#ifndef REMOTE_APPSERVER
     mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame() );
-#endif
 
     Window::ImplInit( pParent, nStyle, NULL );
 
-#ifndef REMOTE_APPSERVER
     // Wenn es ein richtiges SysChild ist, dann painten wir auch nicht
     if ( GetSystemData() )
     {
@@ -166,7 +157,6 @@ void SystemChildWindow::ImplInit( Window* pParent, WinBits nStyle )
         SetParentClipMode( PARENTCLIPMODE_CLIP );
         SetBackground();
     }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -195,27 +185,21 @@ SystemChildWindow::SystemChildWindow( Window* pParent, const ResId& rResId ) :
 
 SystemChildWindow::~SystemChildWindow()
 {
-#ifndef REMOTE_APPSERVER
     Hide();
     if ( mpSysObj )
     {
         ImplGetSVData()->mpDefInst->DestroyObject( mpSysObj );
         mpSysObj = NULL;
     }
-#endif
 }
 
 // -----------------------------------------------------------------------
 
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
-#ifndef REMOTE_APPSERVER
     if ( mpSysObj )
         return mpSysObj->GetSystemData();
     else
         return NULL;
-#else
-    return NULL;
-#endif
 }
 
