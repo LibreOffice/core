@@ -280,7 +280,7 @@ void PieChart::createShapes()
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = 0.0;//as defined
+    double fLogicZ        = -0.5;//as defined
 
     //(@todo maybe different iteration for breaks in axis ?)
     sal_Int32 nStartCategoryIndex = m_pPosHelper->getStartCategoryIndex(); // inclusive

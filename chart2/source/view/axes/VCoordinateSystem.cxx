@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-15 08:51:25 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 19:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@ uno::Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDim  )
 
 void setExplicitScaleToDefault( ExplicitScaleData& rExplicitScale )
 {
-    rExplicitScale.Minimum = 0.0;
-    rExplicitScale.Maximum = 1.0;
+    rExplicitScale.Minimum = -0.5;
+    rExplicitScale.Maximum = 0.5;
     rExplicitScale.Orientation = AxisOrientation_MATHEMATICAL;
     //rExplicitScale.Scaling = ;
     //rExplicitScale.Breaks = ;
