@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:10:41 $
+#   last change: $Author: obo $ $Date: 2004-06-01 09:04:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ CDEFS += -D__SGI_STL_BOOL_H
 SLOFILES= \
         $(SLO)$/javavm.obj		\
         $(SLO)$/jvmargs.obj	\
-        $(SLO)$/interact.obj
+        $(SLO)$/interact.obj 
 
 .IF "$(COM)"=="C52"
 # Code generation bug in conjunction with exception handling
@@ -105,7 +105,8 @@ SHL1STDLIBS= \
         $(UNOLIB)	    	\
         $(SALLIB) \
         $(JVMACCESSLIB) \
-        $(SALHELPERLIB)
+        $(SALHELPERLIB) \
+    $(JVMFWKLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS += advapi32.lib
