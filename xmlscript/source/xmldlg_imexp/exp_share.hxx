@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:48 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,9 @@ public:
         throw ()
         : _name( name )
         {}
-
+    //
+    inline OUString getName()
+        { return _name; }
     //
     void addSubElem( Reference< xml::sax::XAttributeList > const & xElem );
     inline Reference< xml::sax::XAttributeList > getSubElemAt( sal_Int32 nIndex )
@@ -151,6 +153,7 @@ public:
     void readHexLongAttr( OUString const & rPropName, OUString const & rAttrName );
     void readShortAttr( OUString const & rPropName, OUString const & rAttrName );
     void readBoolAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readAlignAttr( OUString const & rPropName, OUString const & rAttrName );
     //
     inline void addAttr( OUString const & rAttrName, OUString const & rValue );
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue );

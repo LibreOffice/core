@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:48 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,10 @@ ControlElement::ControlElement(
     }
 }
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ControlElement::getStyle()
+Reference< xml::XImportContext > ControlElement::getStyle(
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    OUString aStyleId( _xAttributes->getValueByUidName(
+    OUString aStyleId( xAttributes->getValueByUidName(
         XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("style-id") ) ) );
     if (aStyleId.getLength())
     {
@@ -115,14 +116,15 @@ Reference< xml::XImportContext > ControlElement::getStyle()
     return Reference< xml::XImportContext >();
 }
 //__________________________________________________________________________________________________
-OUString ControlElement::getControlId()
+OUString ControlElement::getControlId(
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    OUString aId( _xAttributes->getValueByUidName(
+    OUString aId( xAttributes->getValueByUidName(
         XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("id") ) ) );
     if (! aId.getLength())
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("missing id element for button!") ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("missing id attribute!") ),
             Reference< XInterface >(), Any() );
     }
     return aId;
@@ -611,6 +613,20 @@ bool ControlImportContext::importLongProperty(
     return false;
 }
 //__________________________________________________________________________________________________
+bool ControlImportContext::importLongProperty(
+    sal_Int32 nOffset,
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aValue.getLength())
+    {
+        _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) + nOffset ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
 bool ControlImportContext::importShortProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
@@ -624,13 +640,54 @@ bool ControlImportContext::importShortProperty(
     return false;
 }
 //__________________________________________________________________________________________________
-void ControlImportContext::importDefaults(
+bool ControlImportContext::importAlignProperty(
+    OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    if (!importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+    OUString aAlign( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aAlign.getLength())
+    {
+        sal_Int16 nAlign;
+        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left") ))
+        {
+            nAlign = 0;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        {
+            nAlign = 1;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right") ))
+        {
+            nAlign = 2;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("none") ))
+        {
+            nAlign = 0; // default
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid align value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ), makeAny( nAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+void ControlImportContext::importDefaults(
+    sal_Int32 nBaseX, sal_Int32 nBaseY,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    if (!importLongProperty( nBaseX,
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("left") ),
                              xAttributes ) ||
-        !importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+        !importLongProperty( nBaseY,
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("top") ),
                              xAttributes ) ||
         !importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:48 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,288 @@ using namespace ::com::sun::star::uno;
 
 namespace xmlscript
 {
+
+//##################################################################################################
+
+// edit
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > TextFieldElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+//      // event
+//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+//      {
+//          return new EventElement( rLocalName, xAttributes, this, _pImport );
+//      }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void TextFieldElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlEditModel") ) );
+    Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+
+    ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                             _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HardLineBreaks") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("hard-linebreaks") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("HScroll") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("hscroll") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VScroll") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("vscroll") ),
+                               _xAttributes );
+    ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
+                             _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
+                               _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                                  _xAttributes );
+    OUString aValue;
+    if (getStringAttr( &aValue, OUString( RTL_CONSTASCII_USTRINGPARAM("echochar") ), _xAttributes ) &&
+        aValue.getLength() > 0)
+    {
+        OSL_ENSURE( aValue.getLength() == 1, "### more than one character given for echochar!" );
+        sal_Int16 nChar = (sal_Int16)aValue[ 0 ];
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("EchoChar") ),
+                                         makeAny( nChar ) );
+    }
+}
+
+//##################################################################################################
+
+// titledbox
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > TitledBoxElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // title
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("title") ))
+    {
+        getStringAttr( &_label, OUString( RTL_CONSTASCII_USTRINGPARAM("value") ), xAttributes );
+
+        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+    }
+    // radio
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
+    {
+        // dont create radios here, => titledbox must be inserted first due to radio grouping,
+        // possible predecessors!
+        _radios.push_back( xAttributes );
+        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+    }
+//      // event
+//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+//      {
+//          return new EventElement( rLocalName, xAttributes, this, _pImport );
+//      }
+    else
+    {
+        return BulletinBoardElement::createChildContext( nUid, rLocalName, xAttributes );
+    }
+}
+//__________________________________________________________________________________________________
+void TitledBoxElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    {
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) );
+    Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+                                     makeAny( _nBasePosX ) );
+    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+                                     makeAny( _nBasePosY ) );
+    if (!ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM("width") ),
+                                 _xAttributes ) ||
+        !ctx.importLongProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM("height") ),
+                                 _xAttributes ))
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("missing titlebox size attribute(s)!") ),
+            Reference< XInterface >(), Any() );
+    }
+
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("default") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("printable") ),
+                               _xAttributes );
+
+    if (_label.getLength())
+    {
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                                         makeAny( _label ) );
+    }
+    }
+
+    // create radios AFTER group box!
+    for ( size_t nPos = 0; nPos < _radios.size(); ++nPos )
+    {
+        Reference< xml::sax2::XExtendedAttributes > xAttributes( _radios[ nPos ] );
+        ControlImportContext ctx(
+            _pImport, getControlId( xAttributes ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
+        if (xStyle.is())
+        {
+            StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+            pStyle->importTextColorStyle( xControlModel );
+            pStyle->importFontStyle( xControlModel );
+        }
+
+        ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
+
+        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                                  xAttributes );
+
+        sal_Int16 nVal;
+        sal_Bool bTriState = sal_False;
+        sal_Bool bChecked = sal_False;
+        getBoolAttr( &bTriState, OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ), xAttributes );
+        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ))
+        {
+            // has "checked" attribute
+            nVal = (bChecked ? 1 : 0);
+        }
+        else
+        {
+            nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
+        }
+
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
+                                         makeAny( nVal ) );
+    }
+}
+
+//##################################################################################################
+
+// radiogroup
+//__________________________________________________________________________________________________
+Reference< xml::XImportContext > RadioGroupElement::createChildContext(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    if (XMLNS_DIALOGS_UID != nUid)
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal namespace!") ),
+            Reference< XInterface >(), Any() );
+    }
+    // radio
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radio") ))
+    {
+        ControlImportContext ctx(
+            _pImport, getControlId( xAttributes ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
+        if (xStyle.is())
+        {
+            StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+            pStyle->importTextColorStyle( xControlModel );
+            pStyle->importFontStyle( xControlModel );
+        }
+
+        ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
+
+        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                                  xAttributes );
+
+        sal_Int16 nVal;
+        sal_Bool bTriState = sal_False;
+        sal_Bool bChecked = sal_False;
+        getBoolAttr( &bTriState, OUString( RTL_CONSTASCII_USTRINGPARAM("tristate") ), xAttributes );
+        if (getBoolAttr( &bChecked, OUString( RTL_CONSTASCII_USTRINGPARAM("checked") ), xAttributes ))
+        {
+            // has "checked" attribute
+            nVal = (bChecked ? 1 : 0);
+        }
+        else
+        {
+            nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
+        }
+
+        xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
+                                         makeAny( nVal ) );
+
+        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+    }
+//      // event
+//      else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("event") ))
+//      {
+//          return new EventElement( rLocalName, xAttributes, this, _pImport );
+//      }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
 
 //##################################################################################################
 
@@ -172,11 +454,11 @@ void MenuListElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     ControlImportContext ctx(
-        _pImport, getControlId(),
+        _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle() );
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -186,7 +468,7 @@ void MenuListElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( _xAttributes );
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
 
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiSelection") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiselection") ),
@@ -199,12 +481,12 @@ void MenuListElement::endElement()
                              _xAttributes );
 
     MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-    Reference< beans::XPropertySet > xProps( xControlModel );
-    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
-                              makeAny( p->getItemValues() ) );
-    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
-                              makeAny( p->getSelectedItems() ) );
+    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
+                                     makeAny( p->getItemValues() ) );
+    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectedItems") ),
+                                     makeAny( p->getSelectedItems() ) );
 }
+
 //##################################################################################################
 
 // combobox
@@ -243,11 +525,11 @@ void ComboBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     ControlImportContext ctx(
-        _pImport, getControlId(),
+        _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle() );
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -257,7 +539,7 @@ void ComboBoxElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( _xAttributes );
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
 
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("readonly") ),
@@ -269,16 +551,15 @@ void ComboBoxElement::endElement()
                                OUString( RTL_CONSTASCII_USTRINGPARAM("spin-button") ),
                                _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
-                             OUString( RTL_CONSTASCII_USTRINGPARAM("max-textlen") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("maxlength") ),
                              _xAttributes );
     ctx.importShortProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                              OUString( RTL_CONSTASCII_USTRINGPARAM("linecount") ),
                              _xAttributes );
 
     MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-    Reference< beans::XPropertySet > xProps( xControlModel );
-    xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
-                              makeAny( p->getItemValues() ) );
+    xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("StringItemList") ),
+                                     makeAny( p->getItemValues() ) );
 
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
@@ -317,11 +598,11 @@ void CheckBoxElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     ControlImportContext ctx(
-        _pImport, getControlId(),
+        _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) );
     Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
 
-    Reference< xml::XImportContext > xStyle( getStyle() );
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -329,7 +610,7 @@ void CheckBoxElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( _xAttributes );
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
 
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
@@ -351,7 +632,7 @@ void CheckBoxElement::endElement()
     }
     else
     {
-        sal_Int16 nVal = (bTriState ? 2 : 0);
+        sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => dont know!
         xControlModel->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ),
                                          makeAny( nVal ) );
     }
@@ -389,10 +670,10 @@ void ButtonElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     ControlImportContext ctx(
-        _pImport, getControlId(),
+        _pImport, getControlId( _xAttributes ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) );
 
-    Reference< xml::XImportContext > xStyle( getStyle() );
+    Reference< xml::XImportContext > xStyle( getStyle( _xAttributes ) );
     if (xStyle.is())
     {
         StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
@@ -402,7 +683,7 @@ void ButtonElement::endElement()
         pStyle->importFontStyle( xControlModel );
     }
 
-    ctx.importDefaults( _xAttributes );
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
 
     ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                               OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
@@ -447,6 +728,54 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     {
         return new MenuListElement( rLocalName, xAttributes, this, _pImport );
     }
+    // radiogroup
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("radiogroup") ))
+    {
+        return new RadioGroupElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // titledbox
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("titledbox") ))
+    {
+        return new TitledBoxElement( rLocalName, xAttributes, this, _pImport );
+    }
+    // text
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("text") ))
+    {
+        ControlImportContext ctx(
+            _pImport, getControlId( xAttributes ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+
+        Reference< xml::XImportContext > xStyle( getStyle( xAttributes ) );
+        if (xStyle.is())
+        {
+            StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+            pStyle->importBackgroundColorStyle( xControlModel );
+            pStyle->importTextColorStyle( xControlModel );
+            pStyle->importBorderStyle( xControlModel );
+            pStyle->importFontStyle( xControlModel );
+        }
+
+        ctx.importDefaults( _nBasePosX, _nBasePosY, xAttributes );
+
+        ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                                  xAttributes );
+        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                                   OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
+                                   xAttributes );
+        ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                                 OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                                 xAttributes );
+        // dummy
+        return new ElementBase( rLocalName, xAttributes, this, _pImport );
+    }
+    // textfield
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("textfield") ))
+    {
+        return new TextFieldElement( rLocalName, xAttributes, this, _pImport );
+    }
+
 
     // bulletinboard
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bulletinboard") ))
@@ -461,8 +790,12 @@ Reference< xml::XImportContext > BulletinBoardElement::createChildContext(
     }
 }
 //__________________________________________________________________________________________________
-void BulletinBoardElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
+BulletinBoardElement::BulletinBoardElement(
+    OUString const & rLocalName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    ElementBase * pParent, DialogImport * pImport )
+    throw ()
+    : ControlElement( rLocalName, xAttributes, pParent, pImport )
 {
     OUString aValue( _xAttributes->getValueByUidName(
         XMLNS_DIALOGS_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("left") ) ) );

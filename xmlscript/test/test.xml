@@ -1,7 +1,7 @@
 <window xmlns="http://openoffice.org/2000/dialog"
     xmlns:dlg="http://openoffice.org/2000/dialog"
 
-    label="Test-Dialog" height="400" width="400">
+    label="Test-Dialog" height="600" width="600">
 
 <dlg:styles>
   <dlg:style style-id="bla" background-color="0xffffff" dlg:text-color="255"/>
@@ -10,26 +10,100 @@
 </dlg:styles>
 
     <dlg:bulletinboard xmlns:ns="http://www.fake">
+
         <button dlg:id="button1" ns:value="hallo" dlg:left="50" ns:top="50"  width="50" height="50"
                 style-id="bla3"
                 xmlns:ns="http://openoffice.org/2000/dialog"/>
+
         <button dlg:id="button3" ns:value="hallo2" dlg:left="250" ns:top="50"  width="50" height="50"
                 style-id="bla"
                 xmlns:ns="http://openoffice.org/2000/dialog"/>
-        <checkbox id="check1" value="check one" checked="true" left="50" top="150" width="50" height="50"/>
-        <menulist id="list1" multiselection="true" left="150" top="150" width="50" height="50">
-        <menupopup>
+
+        <checkbox id="check1" value="checked" left="50" top="150" width="100" height="20"
+              checked="true"
+              />
+        <checkbox id="check2" value="dontknow" left="50" top="170" width="100" height="20"
+              tristate="true"
+              />
+        <checkbox id="check3" value="tristate_checked" left="50" top="190" width="100" height="20"
+              checked="true"
+              tristate="true"
+              />
+
+        <menulist id="list1" multiselection="true" left="50" top="400" width="100" height="100">
+            <menupopup>
                 <menuitem value="item1"/>
                 <menuitem value="item2" selected="true"/>
                 <menuitem value="item3" selected="true"/>
-        </menupopup>
+            </menupopup>
         </menulist>
-        <combobox id="combo1" value="combotext" left="50" top="250" width="50" height="50" spin-button="true">
-        <menupopup>
+
+        <menulist id="list2" left="250" top="400" width="100" height="100">
+            <menupopup>
+                <menuitem value="item4"/>
+                <menuitem value="item5" selected="true"/>
+                <menuitem value="item6"/>
+            </menupopup>
+        </menulist>
+
+        <combobox id="combo1" value="combotext1" left="250" top="150" width="50" height="50"
+              >
+            <menupopup>
                 <menuitem value="Citem1"/>
-                <menuitem value="Citem2" selected="true"/>
-        </menupopup>
+                <menuitem value="Citem2"/>
+            </menupopup>
         </combobox>
+        <combobox id="combo2" value="combotext2" left="310" top="150" width="50" height="50"
+              spin-button="true"
+              >
+            <menupopup>
+                <menuitem value="Citem3"/>
+                <menuitem value="Citem4"/>
+            </menupopup>
+        </combobox>
+
+        <radiogroup>
+            <radio id="radio1" value="radio1" left="50" top="250" width="100" height="20"
+                   />
+            <radio id="radio2" value="checked" left="50" top="270" width="100" height="20"
+                   checked="true"
+                   />
+            <radio id="radio3" value="unchecked" left="50" top="290" width="100" height="20"
+                   checked="false"
+                   />
+        </radiogroup>
+
+        <titledbox id="groupbox1" left="250" top="250" width="120" height="100">
+            <title value="grouped"/>
+            <radio id="radio4" value="default radio" left="5" top="15" width="100" height="20"
+                   />
+            <radio id="radio5" value="dontknow" left="5" top="35" width="100" height="20"
+                   tristate="true"
+                   />
+            <radio id="radio6" value="tristate_checked" left="5" top="55" width="100" height="20"
+                   tristate="true"
+                   checked="true"
+                   />
+            <radio id="radio7" value="checked" left="5" top="75" width="100" height="20"
+                   checked="true"
+                   />
+        </titledbox>
+
+        <text id="fixed1" left="50" top="520" width="180" height="20"
+              value="fixed text is here..."
+              multiline="true"
+              align="center"/>
+
+        <textfield id="field1" left="250" top="520" width="50" height="40"
+               value="edit text here..." readonly="true" vscroll="true"
+               multiline="true"
+               align="right"/>
+
+        <textfield id="field2" left="320" top="520" width="50" height="40"
+               value="edit text2 here..." hscroll="true"
+               multiline="true" echochar="*"
+               align="left"/>
+
     </dlg:bulletinboard>
 
 </window>

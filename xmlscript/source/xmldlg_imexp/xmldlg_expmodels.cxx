@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:48 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 14:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,9 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
             addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
                      OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
             break;
-        default:
+        case 2: // tristate=true exported, checked omitted => dont know!
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
+            break;
         }
     }
 }
@@ -168,7 +169,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Dropdown") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":spin-button") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
-                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":max-textlen") ) );
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
     readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("LineCount") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linecount") ) );
 
@@ -268,11 +269,177 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
 void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
     throw (Exception)
 {
+    // collect styles
+    Style aStyle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor )
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr )
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                 all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+
+    sal_Int16 nState;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
+    {
+        switch (nState)
+        {
+        case 0:
+            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+            break;
+        case 1:
+            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":checked") ),
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            break;
+        case 2: // tristate=true exported, checked omitted => dont know!
+            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tristate") ),
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+            break;
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
+    throw (Exception)
+{
+    // collect styles
+    Style aStyle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor )
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr )
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                 all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    // defaults \ tabstop
+    sal_Bool bEnabled;
+    if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Enabled") ) ) >>= bEnabled)
+    {
+        if (! bEnabled)
+        {
+            addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":disabled") ),
+                     OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
+        }
+    }
+    else
+    {
+        OSL_ENSURE( 0, "unexpected property type for \"Enabled\": not bool!" );
+    }
+
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":printable") ) );
+//      readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+//                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionX") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":left") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PositionY") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":top") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Width") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":width") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Height") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":height") ) );
+
+    OUString aTitle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ) ) >>= aTitle)
+    {
+        ElementDescriptor * title = new ElementDescriptor(
+            _xProps, _xPropState,
+            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":title") ) );
+        title->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ),
+                        aTitle );
+        addSubElem( title );
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
+    throw (Exception)
+{
+    // collect styles
+    Style aStyle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor )
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor )
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border )
+        aStyle._set |= 0x4;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr )
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                 all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEditModel( StyleBag * all_styles )
     throw (Exception)
 {
+    // collect styles
+    Style aStyle;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor )
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor )
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("Border") ) ) >>= aStyle._border )
+        aStyle._set |= 0x4;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("FontDescriptor") ) ) >>= aStyle._descr )
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                 all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+
+    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HardLineBreaks") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":hard-linebreaks") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("HScroll") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":hscroll") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VScroll") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":vscroll") ) );
+    readLongAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MaxTextLen") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":maxlength") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":readonly") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Text") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    sal_Int16 nEcho;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("EchoChar") ) ) >>= nEcho)
+    {
+        sal_Unicode cEcho = (sal_Unicode)nEcho;
+        addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":echochar") ),
+                 OUString( &cEcho, 1 ) );
+    }
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
@@ -286,16 +453,6 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
-    throw (Exception)
-{
-}
-//__________________________________________________________________________________________________
-void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
-    throw (Exception)
-{
-}
-//__________________________________________________________________________________________________
-void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     throw (Exception)
 {
 }
