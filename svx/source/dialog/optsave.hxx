@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:40:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ private:
     CheckBox            aAutoSaveBtn;
     NumericField        aAutoSaveEdit;
     FixedText           aMinuteText;
-    CheckBox            aAutoSavePromptBtn;
+//  CheckBox            aAutoSavePromptBtn;
 
     FixedLine           aRelBox;
     CheckBox            aRelFsysBtn;
