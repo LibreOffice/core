@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:12:53 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
+#include <vcl/mnemonic.hxx>
 #include "bibbeam.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
@@ -480,7 +480,7 @@ void BibToolBar::SelectFilterItem(sal_uInt16    nId)
 {
     aPopupMenu.CheckItem(nId);
     nSelMenuItem=nId;
-    aQueryField = aPopupMenu.GetItemText(nId).EraseAllChars( '~' );
+    aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
 }
 
 void BibToolBar::EnableSourceList(sal_Bool bFlag)
@@ -561,7 +561,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,pT)
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
     pPropertyVal[0].Name = C2U("DataSourceName");
-    String aEntry( aLBSource.GetSelectEntry().EraseAllChars( '~' ) );
+    String aEntry( MnemonicGenerator::EraseAllMnemonicChars( aLBSource.GetSelectEntry() ) );
     rtl::OUString aSelection = aEntry;
     pPropertyVal[0].Value <<= aSelection;
     SendDispatch(TBC_LB_SOURCE,aPropVal);
@@ -584,7 +584,7 @@ IMPL_LINK( BibToolBar, MenuHdl, Timer*,pT)
             aPopupMenu.CheckItem(nSelMenuItem,sal_False);
             aPopupMenu.CheckItem(nId);
             nSelMenuItem=nId;
-            aQueryField = aPopupMenu.GetItemText(nId).EraseAllChars( '~' );
+            aQueryField = MnemonicGenerator::EraseAllMnemonicChars( aPopupMenu.GetItemText(nId) );
             Sequence<PropertyValue> aPropVal(2);
             PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
             pPropertyVal[0].Name = C2U("QueryText");
