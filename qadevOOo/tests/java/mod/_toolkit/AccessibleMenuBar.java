@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuBar.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-11-18 16:31:29 $
+ *  last change: $Date: 2004-01-05 20:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -81,6 +70,18 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Test for object which is represented accessible component of
@@ -107,7 +108,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleMenuBar extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -115,22 +115,21 @@ public class AccessibleMenuBar extends TestCase {
      * Finds accessible component with role <code>MENUBAR</code>
      * walking through the accessible component tree of a document.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
@@ -138,38 +137,38 @@ public class AccessibleMenuBar extends TestCase {
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,atw);
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-//        at.printAccessibleTree(log, xRoot);
 
+        //        at.printAccessibleTree(log, xRoot);
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.MENU_BAR);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-                    UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
+        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                   XAccessibleComponent.class,
+                                                   oObj);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    System.out.println("Grabbing focus ... ");
-                    acomp.grabFocus();
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                System.out.println("Grabbing focus ... ");
+                acomp.grabFocus();
+            }
+        });
 
         tEnv.addObjRelation("XAccessibleSelection.OneAlwaysSelected",
-                                                            new Boolean(false));
+                            new Boolean(false));
 
         tEnv.addObjRelation("XAccessibleSelection.multiSelection",
-                                                            new Boolean(false));
+                            new Boolean(false));
 
         return tEnv;
-
     }
 
     /**
@@ -177,7 +176,8 @@ public class AccessibleMenuBar extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
@@ -187,8 +187,9 @@ public class AccessibleMenuBar extends TestCase {
     /**
      * Disposes document.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
@@ -197,9 +198,9 @@ public class AccessibleMenuBar extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
