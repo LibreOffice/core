@@ -493,6 +493,14 @@ UDK_3_0_0 {
 UDK_3.1 {
     global:
         osl_getTempDirURL;
+
+        rtl_math_doubleToString;
+        rtl_math_doubleToUString;
+        rtl_math_pow10Exp;
+        rtl_math_round;
+        rtl_math_stringToDouble;
+        rtl_math_uStringToDouble;
+
     local:
         *;
 };
