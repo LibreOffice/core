@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 05:48:21 $
+ *  last change: $Author: pb $ $Date: 2001-07-12 10:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,18 +71,19 @@ Window WIN_HELP_INDEX
         HelpId = HID_HELP_LISTBOX;
         Border = TRUE ;
         DropDown = TRUE;
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 108 , 40 ) ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 114 , 40 ) ;
     };
     FixedLine FL_ACTIVE
     {
+        Hide = True;
         Pos = MAP_APPFONT ( 2, 19 ) ;
         Size = MAP_APPFONT ( 118 , 1 ) ;
     };
     TabControl TC_INDEX
     {
         HelpId = HID_HELP_TABCONTROL;
-        Pos = MAP_APPFONT ( 0, 23 ) ;
+        Pos = MAP_APPFONT ( 3, 19 ) ;
         PageList =
         {
 /*          PageItem
@@ -407,14 +408,19 @@ TabPage TP_HELP_BOOKMARKS
     };
 };
 
-Image IMG_HELP_TOOLBOX_INDEX
+Image IMG_HELP_TOOLBOX_INDEX_ON
 {
-    ImageBitmap = Bitmap { File = "sc05401.bmp" ; };
+    ImageBitmap = Bitmap { File = "indexon_small.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_INDEX_OFF
+{
+    ImageBitmap = Bitmap { File = "indexoff_small.bmp" ; };
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
 };
 Image IMG_HELP_TOOLBOX_START
 {
-    ImageBitmap = Bitmap { File = "sc05411.bmp" ; };
+    ImageBitmap = Bitmap { File = "sc06303.bmp" ; };
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
 };
 Image IMG_HELP_TOOLBOX_PREV
@@ -425,11 +431,6 @@ Image IMG_HELP_TOOLBOX_PREV
 Image IMG_HELP_TOOLBOX_NEXT
 {
     ImageBitmap = Bitmap { File = "sc06300.bmp" ; };
-    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
-};
-Image IMG_HELP_TOOLBOX_CONTEXT
-{
-    ImageBitmap = Bitmap { File = "sc05414.bmp" ; };
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
 };
 Image IMG_HELP_TOOLBOX_PRINT
@@ -467,10 +468,10 @@ String STR_HELP_WINDOW_TITLE
     Text[ catalan ] = "%PRODUCTNAME Ayuda";
     Text[ finnish ] = " Ohjelman %PRODUCTNAME ohje";
 };
-String STR_HELP_BUTTON_INDEX
+String STR_HELP_BUTTON_INDEX_ON
 {
-    Text = "Index";
-    Text [ english_us ] = "Index";
+    Text = "Navigationsbereich anzeigen";
+    Text [ english_us ] = "Show navigation area";
     Text[ portuguese ] = "Õndice";
     Text[ russian ] = "»Ì‰ÂÍÒ";
     Text[ greek ] = "≈ıÒÂÙﬁÒÈÔ";
@@ -490,6 +491,11 @@ String STR_HELP_BUTTON_INDEX
     Text[ arabic ] = "›Â—”";
     Text[ catalan ] = "Õndice";
     Text[ finnish ] = "Hakemisto";
+};
+String STR_HELP_BUTTON_INDEX_OFF
+{
+    Text = "Navigationsbereich ausschalten";
+    Text [ english_us ] = "Hide navigation area";
 };
 String STR_HELP_BUTTON_START
 {
