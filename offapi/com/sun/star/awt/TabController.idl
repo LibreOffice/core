@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TabController.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-02 16:09:48 $
+ *  last change: $Author: obo $ $Date: 2002-12-09 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,5 @@ service TabController
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-
-=============================================================================*/
 #endif
 
