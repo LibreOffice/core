@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleacceleratorconfiguration.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2004-10-14 09:26:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,3 +220,4 @@ void ModuleAcceleratorConfiguration::impl_ts_fillCache()
 }
 
 } // namespace framework
+
