@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:08:23 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ TabPage RID_PAGE_GW_FIELDSELECTION
         Text[ swedish ] = "Tabellelement";
         Text[ polish ] = "Element tabeli";
         Text[ portuguese_brazilian ] = "Table Element";
-        Text[ japanese ] = "√∞ÃﬁŸÇÃóvëf";
+        Text[ japanese ] = "√∞ÃﬁŸç\\ê¨óvëf";
         Text[ korean ] = "≈◊¿Ã∫Ì ø‰º“";
         Text[ chinese_simplified ] = "±Ìµ•‘™º˛";
         Text[ chinese_traditional ] = "™Ì≥Ê§∏•Û";
@@ -284,6 +284,9 @@ String RID_STR_TIMEPOSTFIX
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/07/13 21:08:23  kz
+ *  Merge SRC638: 13.07.01 - 23:07:15
+ *
  *  Revision 1.12  2001/07/03 22:32:05  kz
  *  Merge SRC633: 04.07.01 - 00:31:06
  *
@@ -323,6 +326,7 @@ String RID_STR_TIMEPOSTFIX
  *
  *  Revision 1.0 05.03.01 09:50:25  fs
  ************************************************************************/
+
 
 
 
