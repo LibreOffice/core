@@ -562,31 +562,6 @@ SfxObjectItem AddDirect SID_NEWDOCDIRECT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem AddLibrary SID_ADD_LIBRARY
-(SfxStringItem LibraryFileName SID_FILE_NAME,SfxUInt16Item Mode SID_ADD_LIBRARY,SfxBoolItem Replace SID_REMOVE_LIBRARY,SfxStringItem LibraryName SID_LOAD_LIBRARY,SfxStringItem LibraryExternalName SID_DOCTITLE)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOKSOURCE
 ()
 [
@@ -4152,31 +4127,6 @@ SfxVoidItem LoadEvents SID_CONFIGEVENT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem LoadLibrary SID_LOAD_LIBRARY
-(SfxStringItem LibraryName SID_LOAD_LIBRARY)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem LoadMenu SID_CONFIGMENU
 (SfxStringItem FileName SID_CFGFILE)
 [
@@ -5800,31 +5750,6 @@ SfxBoolItem Reload SID_RELOAD
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem RemoveLibrary SID_REMOVE_LIBRARY
-(SfxStringItem LibraryName SID_REMOVE_LIBRARY)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem RemoveWatch SID_BASICIDE_REMOVEWATCH
 ()
 [
@@ -6059,7 +5984,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxStringItem SaveTo SID_SAVETO)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6108,34 +6033,6 @@ SfxBoolItem SaveAsTemplate SID_DOCTEMPLATE
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_TEMPLATE;
-]
-
-//--------------------------------------------------------------------------
-SfxBoolItem SaveAsUrl SID_SAVEASURL
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_DOC_READONLY,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* status: */
-    SlotType = SfxStringItem
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_DOCUMENT;
 ]
 
 //--------------------------------------------------------------------------
@@ -7416,31 +7313,6 @@ SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem UnloadLibrary SID_UNLOAD_LIBRARY
-(SfxStringItem LibraryName SID_UNLOAD_LIBRARY)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem UpdateAllModuleSources SID_BASICIDE_UPDATEALLMODULESOURCES
 ()
 [
@@ -8675,6 +8547,29 @@ SfxVoidItem OptionsTreeDialog SID_OPTIONS_TREEDIALOG
     GroupId = GID_OPTIONS;
 ]
 
+SfxBoolItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = TRUE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+]
+
 //--------------------------------------------------------------------------
 SfxVoidItem RecentFileList SID_RECENTFILELIST
 [
@@ -8772,3 +8667,4 @@ SfxStringItem InsertAVMedia SID_INSERT_AVMEDIA
     ToolBoxConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+
