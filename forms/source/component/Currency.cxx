@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:07:57 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,6 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 //==================================================================
 // OCurrencyModel
 //==================================================================
-sal_Int32   OCurrencyModel::nValueHandle = -1;
-
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
@@ -189,15 +187,13 @@ void OCurrencyModel::implConstruct()
 DBG_NAME( OCurrencyModel )
 //------------------------------------------------------------------
 OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD)
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD, sal_False )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( OCurrencyModel, NULL );
 
     m_nClassId = FormComponentType::CURRENCYFIELD;
-    m_sDataFieldConnectivityProperty = PROPERTY_VALUE;
-    if (OCurrencyModel::nValueHandle == -1)
-        OCurrencyModel::nValueHandle = getOriginalHandle(PROPERTY_ID_VALUE);
+    initValueProperty( PROPERTY_VALUE, PROPERTY_ID_VALUE );
 
     implConstruct();
 }
@@ -273,61 +269,48 @@ void OCurrencyModel::fillProperties(
     return FRM_COMPONENT_CURRENCYFIELD; // old (non-sun) name for compatibility !
 }
 
-// XBoundComponent
 //------------------------------------------------------------------------------
-sal_Bool OCurrencyModel::_commit()
+sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OCurrencyModel::nValueHandle );
-    if (!compare(aNewValue, m_aSaveValue))
+    Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
+    if ( !compare( aControlValue, m_aSaveValue ) )
     {
-        if (aNewValue.getValueType().getTypeClass() == TypeClass_VOID)
+        if ( aControlValue.getValueType().getTypeClass() == TypeClass_VOID )
             m_xColumnUpdate->updateNull();
         else
         {
             try
             {
-                m_xColumnUpdate->updateDouble(getDouble(aNewValue));
+                m_xColumnUpdate->updateDouble( getDouble( aControlValue ) );
             }
             catch(Exception&)
             {
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = aControlValue;
     }
     return sal_True;
 }
 
 //------------------------------------------------------------------------------
-void OCurrencyModel::_onValueChanged()
+Any OCurrencyModel::translateDbColumnToControlValue()
 {
     m_aSaveValue <<= m_xColumn->getDouble();
-    if (m_xColumn->wasNull())
+    if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OCurrencyModel::nValueHandle, m_aSaveValue);
-    }
+    return m_aSaveValue;
 }
 
 // XReset
 //------------------------------------------------------------------------------
-void OCurrencyModel::_reset( void )
+Any OCurrencyModel::getDefaultForReset() const
 {
     Any aValue;
-    if (m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE)
+    if ( m_aDefault.getValueType().getTypeClass() == TypeClass_DOUBLE )
         aValue = m_aDefault;
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OCurrencyModel::nValueHandle, aValue);
-    }
+    return aValue;
 }
 
 //.........................................................................
