@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:34:17 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 16:36:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ String S_READING_FILE
     Text[ swedish ] = "Reading the files";
     Text[ polish ] = "Czytanie plik�w";
     Text[ portuguese_brazilian ] = "Einlesen der Dateien";
-    Text[ japanese ] = "ﾌｧｲﾙの読み取り";
+    Text[ japanese ] = "ファイルの読み取り";
     Text[ korean ] = "파일 읽기";
     Text[ chinese_simplified ] = "读取文件";
     Text[ chinese_traditional ] = "讀取檔案";
@@ -160,7 +160,7 @@ String S_CANNOT_OPEN_FILE
     Text[ swedish ] = "File cannot be opened: ($Arg1)";
     Text[ polish ] = "Nie mo�e otworzy� pliku: ($Arg1)";
     Text[ portuguese_brazilian ] = "Kann Datei nicht ?ffnen: ($Arg1)";
-    Text[ japanese ] = "ﾌｧｲﾙが開けられません: ($Arg1)";
+    Text[ japanese ] = "ファイルが開けられません: ($Arg1)";
     Text[ korean ] = "파일이 열리지 않음: ($Arg1)";
     Text[ chinese_simplified ] = "无法打开文件：($Arg1)";
     Text[ chinese_traditional ] = "無法開啟檔案： ($Arg1)";
@@ -280,7 +280,7 @@ String S_TIMOUT_WAITING
     Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ polish ] = "Server Timeout podczas czekania na odpowied�. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "応答待ちの際のｻｰﾊﾞｰのﾀｲﾑｱｳﾄ。ｼｰｹﾝｽNo.: ($Arg1)";
+    Text[ japanese ] = "応答待ちの際のサーバーのタイムアウト。シーケンスNo.: ($Arg1)";
     Text[ korean ] = "응답을 기다릴 때 서버 타임아웃. 일련 번호: ($Arg1)";
     Text[ chinese_simplified ] = "在等候答复时服务器超时。序列号：($Arg1)";
     Text[ chinese_traditional ] = "伺服器等候答复超時。序列號碼： ($Arg1)";
@@ -304,7 +304,7 @@ String S_APPLICATION_RESTARTED
     Text[ swedish ] = "Application has been restarted.";
     Text[ polish ] = "Aplikacja zosta�a ponownie uruchomiona.";
     Text[ portuguese_brazilian ] = "Applikation wurde neu gestartet.";
-    Text[ japanese ] = "ｱﾌﾟﾘｹｰｼｮﾝは再ｽﾀｰﾄされました。";
+    Text[ japanese ] = "アプリケーションは再スタートされました。";
     Text[ korean ] = "응용 프로그램이 다시 시작 되었습니다.";
     Text[ chinese_simplified ] = "应用程序已经重新启动。";
     Text[ chinese_traditional ] = "重新啟動了應用程式。";
@@ -328,7 +328,7 @@ String S_APPLICATION_START_FAILED
     Text[ swedish ] = "Application \"($Arg1)\" cannot be started.  ";
     Text[ polish ] = "Nie mo�na uruchomi� aplikacji \"($Arg1)\". ";
     Text[ portuguese_brazilian ] = "Applikation \"($Arg1)\" kann nicht gestartet werden. ";
-    Text[ japanese ] = "ｱﾌﾟﾘｹｰｼｮﾝ \"($Arg1)\" はｽﾀｰﾄできません。 ";
+    Text[ japanese ] = "アプリケーション \"($Arg1)\" はスタートできません。 ";
     Text[ korean ] = "응용 프로그램 \"($Arg1)\"은(는) 시작될 수 없습니다. ";
     Text[ chinese_simplified ] = "无法启动应用程序($Arg1)。 ";
     Text[ chinese_traditional ] = "無法啟動應用程式($Arg1)。";
@@ -352,7 +352,7 @@ String S_TIMOUT_SENDING
     Text[ swedish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ polish ] = "Server Timeout podczas wysy�ania. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Senden. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "送信の際のｻｰﾊﾞｰのﾀｲﾑｱｳﾄ。ｼｰｹﾝｽNo.: ($Arg1)";
+    Text[ japanese ] = "送信の際のサーバーのタイムアウト。シーケンスNo.: ($Arg1)";
     Text[ korean ] = "송신시 서버 시간 초과. 일련 번호: ($Arg1)";
     Text[ chinese_simplified ] = "在寄发时服务器超时。序列号：($Arg1)";
     Text[ chinese_traditional ] = "伺服器發送時超時。序列號碼： ($Arg1)";
@@ -376,7 +376,7 @@ String S_NO_CONNECTION
     Text[ swedish ] = "No connection. Sequence No: ($Arg1)";
     Text[ polish ] = "Brak po��czenia. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Keine Verbindung. Sequenz Nr: ($Arg1)";
-    Text[ japanese ] = "接続なし。ｼｰｹﾝｽNo.: ($Arg1)";
+    Text[ japanese ] = "接続なし。シーケンスNo.: ($Arg1)";
     Text[ korean ] = "연결 안됨. 일련번호: ($Arg1)";
     Text[ chinese_simplified ] = "没有连接。序列号：($Arg1)";
     Text[ chinese_traditional ] = "無法連線。序列號碼：($Arg1)";
@@ -400,7 +400,7 @@ String S_NO_FILES_FOUND // Not used anymore. needed only for old *.res files
     Text[ swedish ] = "No ($Arg1) files found";
     Text[ polish ] = "Nie znaleziono plik�w ($Arg1)";
     Text[ portuguese_brazilian ] = "Keine ($Arg1) Dateien gefunden";
-    Text[ japanese ] = "($Arg1)ﾌｧｲﾙは見つかりません。";
+    Text[ japanese ] = "($Arg1)ファイルは見つかりません。";
     Text[ korean ] = "($Arg1) 파일을 찾지 못했습니다.";
     Text[ chinese_simplified ] = "没有找到 ($Arg1) 文件";
     Text[ chinese_traditional ] = "沒有找到 ($Arg1) 檔案";
@@ -424,7 +424,7 @@ String S_ERRORS_DETECTED
     Text[ swedish ] = "** ($Arg1) errors occurred";
     Text[ polish ] = "** Wyst�pi�o ($Arg1) b��d�w";
     Text[ portuguese_brazilian ] = "** ($Arg1) Fehler aufgetreten";
-    Text[ japanese ] = "** ($Arg1) のｴﾗｰ発生";
+    Text[ japanese ] = "** ($Arg1) のエラー発生";
     Text[ korean ] = "** ($Arg1) 오류 발생";
     Text[ chinese_simplified ] = "发生了** ($Arg1) 错误";
     Text[ chinese_traditional ] = "** ($Arg1) 錯誤";
@@ -448,7 +448,7 @@ String S_NO_ERRORS_DETECTED
     Text[ swedish ] = "** No errors have occurred";
     Text[ polish ] = "** Nie wyst�pi�y �adne b��dy";
     Text[ portuguese_brazilian ] = "** Keine Fehler aufgetreten";
-    Text[ japanese ] = "** ｴﾗｰなし";
+    Text[ japanese ] = "** エラーなし";
     Text[ korean ] = "** 발생된 오류 없음.";
     Text[ chinese_simplified ] = "** 没有出现错误";
     Text[ chinese_traditional ] = "** 沒有出現錯誤";
@@ -568,7 +568,7 @@ String S_UNKNOWN_SLOT_CONTROL
     Text[ swedish ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ polish ] = "Nieznany Slot/Control :\"($Arg1)\"";
     Text[ portuguese_brazilian ] = "Slot/Control unbekannt :\"($Arg1)\"";
-    Text[ japanese ] = "ｽﾛｯﾄ/ｺﾝﾄﾛｰﾙがわかりません:\"($Arg1)\"";
+    Text[ japanese ] = "スロット/コントロールがわかりません:\"($Arg1)\"";
     Text[ korean ] = "알수 없는 슬롯/컨트롤 :\"($Arg1)\"";
     Text[ chinese_simplified ] = "不明的 Slot/Control：\"($Arg1)\"";
     Text[ chinese_traditional ] = "Slot/Control 不明：($Arg1)";
@@ -592,7 +592,7 @@ String S_RETURN_SEQUENCE_MISSMATCH
     Text[ swedish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ polish ] = "Return Stream o nieprawid�owej sekwencji: ($Arg1) zamiast ($Arg2)";
     Text[ portuguese_brazilian ] = "Return Stream mit falscher Sequenz: ($Arg1) statt ($Arg2)";
-    Text[ japanese ] = "ﾘﾀｰﾝｽﾄﾘｰﾑのｼｰｹﾝｽが間違っています: ($Arg2) でなく ($Arg1)";
+    Text[ japanese ] = "リターンストリームのシーケンスが間違っています: ($Arg2) でなく ($Arg1)";
     Text[ korean ] = "일련 번호가 틀린 리턴 스트림: ($Arg2) 대신 ($Arg1)";
     Text[ chinese_simplified ] = "含有错误序列的返回信息流：($Arg1) 代替($Arg2)";
     Text[ chinese_traditional ] = "返回數據流的序列錯誤：($Arg1)， 應該是 ($Arg2)";
@@ -616,7 +616,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ swedish ] = "Return value received but different Id expected";
     Text[ polish ] = "Odebrano warto�� return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
-    Text[ japanese ] = "ﾘﾀｰﾝ値を受け取りましたが、別のIdが必要です。";
+    Text[ japanese ] = "リターン値を受け取りましたが、別のIdが必要です。";
     Text[ korean ] = "반환값 수신함,  하지만 다른 Id를 기대함";
     Text[ chinese_simplified ] = "返回值接收期待的是其它的 Id(标识符)";
     Text[ chinese_traditional ] = "接收到返回值，但是期待是其它 Id";
@@ -640,7 +640,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ swedish ] = "Return value received but receiver not defined";
     Text[ polish ] = "Odebrano warto�� return, ale brak zdefiniowanego odbiorcy";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf?nger definiert";
-    Text[ japanese ] = "ﾘﾀｰﾝ値を受け取りましたが、受信者が決定できません。";
+    Text[ japanese ] = "リターン値を受け取りましたが、受信者が決定できません。";
     Text[ korean ] = "반환값 수신함, 하지만 수신자가  정의되지 않았음";
     Text[ chinese_simplified ] = "返回值接收没有指定接收者";
     Text[ chinese_traditional ] = "接收到返回值，但是沒有指定接收目標。";
@@ -703,6 +703,7 @@ String
     Text = ;
 };
 */
+
 
 
 
