@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 11:30:16 $
+ *  last change: $Author: pb $ $Date: 2001-11-01 13:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,11 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH__MODULE         14
 #define DEFAULTPATH__PALETTE        15
 #define DEFAULTPATH__PLUGIN         16
-#define DEFAULTPATH__TEMPLATE       17
-#define DEFAULTPATH__USERCONFIG     18
-#define DEFAULTPATH__USERDICTIONARY 19
-#define DEFAULTPATH__WORK           20
+#define DEFAULTPATH__TEMP           17
+#define DEFAULTPATH__TEMPLATE       18
+#define DEFAULTPATH__USERCONFIG     19
+#define DEFAULTPATH__USERDICTIONARY 20
+#define DEFAULTPATH__WORK           21
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -148,6 +149,7 @@ public:
     String          m_aModulePath;
     String          m_aPalettePath;
     String          m_aPluginPath;
+    String          m_aTempPath;
     String          m_aTemplatePath;
     String          m_aUserConfigPath;
     String          m_aUserDictionaryPath;
@@ -191,7 +193,7 @@ static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
     SvtPathOptions::PATH_MODULE,        &SvtDefaultOptions_Impl::m_aModulePath,
     SvtPathOptions::PATH_PALETTE,       &SvtDefaultOptions_Impl::m_aPalettePath,
     SvtPathOptions::PATH_PLUGIN,        &SvtDefaultOptions_Impl::m_aPluginPath,
-    SvtPathOptions::PATH_TEMP,          NULL,
+    SvtPathOptions::PATH_TEMP,          &SvtDefaultOptions_Impl::m_aTempPath,
     SvtPathOptions::PATH_TEMPLATE,      &SvtDefaultOptions_Impl::m_aTemplatePath,
     SvtPathOptions::PATH_USERCONFIG,    &SvtDefaultOptions_Impl::m_aUserConfigPath,
     SvtPathOptions::PATH_USERDICTIONARY,&SvtDefaultOptions_Impl::m_aUserDictionaryPath,
@@ -221,6 +223,7 @@ Sequence< OUString > GetDefaultPropertyNames()
         "Module",           // PATH_MODULE
         "Palette",          // PATH_PALETTE
         "Plugin",           // PATH_PLUGIN
+        "Temp",             // PATH_TEMP
         "Template",         // PATH_TEMPLATE
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
@@ -348,6 +351,7 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                     case DEFAULTPATH__MODULE:           m_aModulePath = String( aFullPath );        break;
                     case DEFAULTPATH__PALETTE:          m_aPalettePath = String( aFullPath );       break;
                     case DEFAULTPATH__PLUGIN:           m_aPluginPath = String( aFullPath );        break;
+                    case DEFAULTPATH__TEMP:             m_aTempPath = String( aFullPath );          break;
                     case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
                     case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
                     case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
