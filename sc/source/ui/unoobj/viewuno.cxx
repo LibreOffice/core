@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-11 09:43:59 $
+ *  last change: $Author: sab $ $Date: 2002-08-12 08:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,8 +616,10 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
         {
             pDrawView->ScEndTextEdit();
             pDrawView->UnmarkAll();
-            bRet = TRUE;
         }
+        else //#102232#; if there is  no DrawView remove range selection
+            pViewSh->Unmark();
+        bRet = TRUE;
     }
 
     if (bDrawSelModeSet) // remove DrawSelMode if set by API; if necessary it will be set again later
