@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:11:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,12 +124,11 @@ void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
                     pCollection = pDoc->GetChartListenerCollection();//new ScChartListenerCollection(pDoc);
                 if (pCollection)
                 {
-                    ScRangeListRef aRangeListRef = new ScRangeList();
+                    ScRangeListRef aRangeListRef(new ScRangeList());
                     ScXMLConverter::GetRangeListFromString(*aRangeListRef, *pRangeList, pDoc);
                     if (aRangeListRef->Count())
                     {
-                        ScChartListener* pCL = new ScChartListener(
-                                            rName, pDoc, aRangeListRef );
+                        ScChartListener* pCL(new ScChartListener(rName, pDoc, aRangeListRef ));
                         pCollection->Insert( pCL );
                         pCL->StartListeningTo();
                     }
@@ -149,7 +148,7 @@ void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
     sal_Int32 nEndX, sal_Int32 nEndY)
 {
     ScMyToResizeShape aShape;
-    aShape.xShape = rShape;
+    aShape.xShape.set(rShape);
     aShape.pRangeList = pRangeList;
     aShape.aEndCell = rEndAddress;
     aShape.aStartCell = rStartAddress;
@@ -170,14 +169,14 @@ void ScMyShapeResizer::GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rSt
     else
         aRefPoint.X = rStartRect.Left();
     aRefPoint.Y = rStartRect.Top();
-    Rectangle* pRect = new Rectangle(pDoc->GetMMRect(
+    Rectangle aRect(pDoc->GetMMRect(
         static_cast<SCCOL>(rEndCell.Column), static_cast<SCROW>(rEndCell.Row),
         static_cast<SCCOL>(rEndCell.Column), static_cast<SCROW>(rEndCell.Row), rEndCell.Sheet ));
     if (bNegativePage)
-        rEndX = -rEndX + pRect->Right();
+        rEndX = -rEndX + aRect.Right();
     else
-        rEndX += pRect->Left();
-    rEndY += pRect->Top();
+        rEndX += aRect.Left();
+    rEndY += aRect.Top();
     rPoint.X += aRefPoint.X;
     if (bNegativePage)
     {
@@ -199,7 +198,6 @@ void ScMyShapeResizer::GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rSt
     else
         rSize.Width = rEndX - rPoint.X;
     rSize.Height = rEndY - rPoint.Y;
-    delete pRect;
 }
 
 void ScMyShapeResizer::ResizeShapes()
@@ -220,23 +218,23 @@ void ScMyShapeResizer::ResizeShapes()
         uno::Reference<table::XTableRows> xTableRows;
         sal_Int32 nOldRow(-1);
         sal_Int32 nOldSheet(-1);
-        ScMyToResizeShapes::iterator aItr = aShapes.begin();
+        ScMyToResizeShapes::iterator aItr(aShapes.begin());
+        ScMyToResizeShapes::iterator aEndItr(aShapes.end());
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {
-            uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
-            uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
-            ScDocument* pDoc = rImport.GetDocument();
+            uno::Reference<container::XIndexAccess> xIndex( xSpreadDoc->getSheets(), uno::UNO_QUERY );
+            ScDocument* pDoc(rImport.GetDocument());
             if ( pDoc && xIndex.is() )
             {
                 rImport.LockSolarMutex();
-                while (aItr != aShapes.end())
+                while (aItr != aEndItr)
                 {
                     if ((nOldSheet != aItr->aEndCell.Sheet) || !xSheet.is())
                     {
                         nOldSheet = aItr->aEndCell.Sheet;
-                        uno::Any aTable = xIndex->getByIndex(nOldSheet);
-                        if (aTable>>=xSheet)
+                        xSheet.set(xIndex->getByIndex(nOldSheet), uno::UNO_QUERY);
+                        if (xSheet.is())
                         {
                             uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet, uno::UNO_QUERY);
                             if (xColumnRowRange.is())
@@ -248,17 +246,15 @@ void ScMyShapeResizer::ResizeShapes()
                         if (nOldRow != aItr->aEndCell.Row || !xTableRow.is())
                         {
                             nOldRow = aItr->aEndCell.Row;
-                            uno::Any aRow = xTableRows->getByIndex(nOldRow);
-                            aRow >>= xTableRow;
+                            xTableRows->getByIndex(nOldRow) >>= xTableRow;
                         }
                         if (xTableRow.is())
                         {
                             uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
                             if (xRowProperties.is())
                             {
-                                uno::Any aAny = xRowProperties->getPropertyValue(sRowHeight);
                                 sal_Int32 nHeight;
-                                if (aAny >>= nHeight)
+                                if (xRowProperties->getPropertyValue(sRowHeight) >>= nHeight)
                                 {
                                     Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row),
                                         static_cast<SCCOL>(aItr->aStartCell.Column), static_cast<SCROW>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
@@ -274,12 +270,8 @@ void ScMyShapeResizer::ResizeShapes()
                                             uno::Reference<beans::XPropertySet> xShapeProps (aItr->xShape, uno::UNO_QUERY);
                                             if(xShapeProps.is())
                                             {
-                                                uno::Any aAny = xShapeProps->getPropertyValue(  sStartShape );
-                                                uno::Reference<drawing::XShape> xStartShape;
-                                                aAny >>= xStartShape;
-                                                aAny = xShapeProps->getPropertyValue( sEndShape );
-                                                uno::Reference<drawing::XShape> xEndShape;
-                                                aAny >>= xEndShape;
+                                                uno::Reference<drawing::XShape> xStartShape(xShapeProps->getPropertyValue(  sStartShape ), uno::UNO_QUERY);
+                                                uno::Reference<drawing::XShape> xEndShape(xShapeProps->getPropertyValue( sEndShape ), uno::UNO_QUERY);
                                                 if (!xStartShape.is() && !xEndShape.is())
                                                 {
                                                     awt::Size aOldSize(aSize);
@@ -301,8 +293,7 @@ void ScMyShapeResizer::ResizeShapes()
                                                     if (xStartShape.is())
                                                     {
                                                         awt::Point aEndPoint;
-                                                        uno::Any aAny = xShapeProps->getPropertyValue(sEndPosition);
-                                                        aAny >>= aEndPoint;
+                                                        xShapeProps->getPropertyValue(sEndPosition) >>= aEndPoint;
                                                         aPoint.X = aRec.Left() + aEndPoint.X;
                                                         aPoint.Y = aRec.Top() + aEndPoint.Y;
                                                         sProperty = sEndPosition;
@@ -310,15 +301,12 @@ void ScMyShapeResizer::ResizeShapes()
                                                     else
                                                     {
                                                         awt::Point aStartPoint;
-                                                        uno::Any aAny = xShapeProps->getPropertyValue(sStartPosition);
-                                                        aAny >>= aStartPoint;
+                                                        xShapeProps->getPropertyValue(sStartPosition) >>= aStartPoint;
                                                         aPoint.X = aRec.Left() + aStartPoint.X;
                                                         aPoint.Y = aRec.Top() + aStartPoint.Y;
                                                         sProperty = sStartPosition;
                                                     }
-                                                    uno::Any aAny;
-                                                    aAny <<= aPoint;
-                                                    xShapeProps->setPropertyValue(sProperty, aAny);
+                                                    xShapeProps->setPropertyValue(sProperty, uno::makeAny(aPoint));
                                                 }
                                             }
                                         }
@@ -398,17 +386,11 @@ void ScMyShapeResizer::ResizeShapes()
                     if (IsOLE(aItr->xShape))
                     {
                         uno::Reference < beans::XPropertySet > xShapeProps ( aItr->xShape, uno::UNO_QUERY );
-                        uno::Reference < beans::XPropertySetInfo > xShapeInfo = xShapeProps->getPropertySetInfo();
-                        if (xShapeProps.is() && xShapeInfo.is())
-                        {
-                            if (xShapeInfo->hasPropertyByName(sPersistName))
-                            {
-                                uno::Any aAny = xShapeProps->getPropertyValue(sPersistName);
-                                rtl::OUString sName;
-                                if (aAny >>= sName)
-                                    CreateChartListener(pDoc, sName, aItr->pRangeList);
-                            }
-                        }
+                        uno::Reference < beans::XPropertySetInfo > xShapeInfo(xShapeProps->getPropertySetInfo());
+                        rtl::OUString sName;
+                        if (xShapeProps.is() && xShapeInfo.is() && xShapeInfo->hasPropertyByName(sPersistName) &&
+                            (xShapeProps->getPropertyValue(sPersistName) >>= sName))
+                            CreateChartListener(pDoc, sName, aItr->pRangeList);
                     }
                     if (aItr->pRangeList)
                         delete aItr->pRangeList;
