@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:14:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-31 20:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,7 @@ ModalDialog DLG_LOGIN
     Text[ catalan ] = "Se requieren el nombre de usuario y la contraseña";
     Text[ finnish ] = "Käyttäjätunnus ja salasana pakolliset";
 };
+
 
 
 
