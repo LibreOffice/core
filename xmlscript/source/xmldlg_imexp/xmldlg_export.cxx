@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:49:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,7 +1176,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
         for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
         {
             Reference< xml::sax::XAttributeList > xAttr( _styles[ nPos ]->createElement() );
-            static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut );
+            static_cast< ElementDescriptor * >( xAttr.get() )->dump( xOut.get() );
         }
         xOut->ignorableWhitespace( OUString() );
         xOut->endElement( aStylesName );
@@ -1423,7 +1423,7 @@ void SAL_CALL exportDialogModel(
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aWindowName, xWindow );
      // dump out events
-    pWindow->dumpSubElements( xOut );
+    pWindow->dumpSubElements( xOut.get() );
     // dump out stylebag
     all_styles.dump( xOut );
 
@@ -1438,7 +1438,7 @@ void SAL_CALL exportDialogModel(
         for ( size_t nPos = 0; nPos < all_elements.size(); ++nPos )
         {
             ElementDescriptor * pElem = static_cast< ElementDescriptor * >( all_elements[ nPos ].get() );
-            pElem->dump( xOut );
+            pElem->dump( xOut.get() );
         }
 
         // end bulletinboard
