@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:22:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,8 @@ public:
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
     // die harte Tour ueber die Nodes nach vorne suchen!!
-    const SwPageDesc* FindPageDesc( BOOL bCalcLay ) const;
+    // OD 18.03.2003 #106326#
+    const SwPageDesc* FindPageDesc( BOOL bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
 
     // falls der Node in einem Fly steht, dann wird das entsprechende Format
     // returnt
