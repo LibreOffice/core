@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-06-13 13:59:43 $
+ *  last change: $Author: vg $ $Date: 2002-01-25 14:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,45 +63,17 @@
 *   rscdep.cxx
 *
 *   (c) Martin Hollmichel 1998
+*   added intern simple_getopt Vladimir Glazounov 2002
 *
 ***************************************************************/
 
 #ifdef WNT
 #define __STDC__ 1
-#ifdef BOOTSTRAPPER
-#include <glibc/posix/getopt.h>
-#else
-#include <glibc/getopt.h>
-#endif
-#endif
-#ifdef UNX
-#ifdef BOOTSTRAPPER
-#ifndef SOLARIS
-#include <glibc/posix/getopt.h>
-#endif
-#ifdef MACOSX
-#include <glibc/posix/getopt.h>
-#endif
-#else
-#include <glibc/config.h>
-#ifndef SOLARIS
-#include <glibc/getopt.h>
-#endif
-#endif
 #endif
 
-#if defined(SOLARIS)
-extern "C" {
-struct option
-{
-    char* name;
-    int has_arg;
-    int* flagl;
-    int val;
-};
-extern int getopt_long( int, char* const*, const char *, const struct option*, int *);
-}
-#endif
+/* Heiner Rechtien: poor man's getopt() */
+int     simple_getopt(int argc, char *argv[], const char *optstring);
+                        //, const struct option *longopts, int longind);
 
 #ifdef UNX
 #include <unistd.h>
@@ -239,29 +211,14 @@ main( int argc, char **argv )
     while( 1 )
     {
         int this_option_optind = optind ? optind : 1;
-        int option_index = 0;
-
-                static struct option long_options[] =
-                {
-                        {"add",1,0,0},
-                        {0,0,0,0}
-                };
-
-        c = getopt_long( argc, argv,
-        "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"",
-                long_options, &option_index );
+        c = simple_getopt( argc, argv,
+        "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"");
         if ( c == -1 )
             break;
 
         switch( c )
         {
             case 0:
-#ifdef DEBUG_VERBOSE
-                printf("option %s", long_options[option_index].name);
-                if ( optarg)
-                    printf(" with arg %s", optarg );
-                printf("\n");
-#endif
                 break;
             case 'a' :
 #ifdef DEBUG_VERBOSE
@@ -374,6 +331,41 @@ main( int argc, char **argv )
     return 0;
 }
 
+/* Heiner Rechtien: my very simple minded implementation of getopt()
+ * it's too sad that getopt() is not available everywhere
+ * note: this is not a full POSIX conforming getopt()
+ */
+simple_getopt(int argc, char *argv[], const char *optstring)
+{
+    char *arg = argv[optind];
 
+    /* skip all response file arguments */
+    if ( arg ) {
+        while ( *arg == '@' )
+            arg = argv[++optind];
 
+        if ( arg[0] == '-' && arg[1] != '\0' ) {
+            char *popt;
+            int c = arg[1];
+            if ( (popt = strchr(optstring, c)) == NULL ) {
+                optopt = c;
+                if ( opterr )
+                    fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
+                return '?';
+            }
+            if ( *(++popt) == ':') {
+                 if ( arg[2] != '\0' ) {
+                     optarg = ++arg;
+                 } else {
+                     optarg = argv[++optind];
+                 }
+             } else {
+                 optarg = NULL;
+             }
+             ++optind;
+             return c;
+        }
+    }
+    return -1;
+}
 
