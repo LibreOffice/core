@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 15:00:14 $
+#   last change: $Author: vg $ $Date: 2005-03-23 14:26:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ SLOFILES =	\
         $(SLO)$/viewsh.obj \
         $(SLO)$/frmload.obj \
         $(SLO)$/frame.obj \
-        $(SLO)$/urlframe.obj \
         $(SLO)$/printer.obj \
         $(SLO)$/prnmon.obj \
         $(SLO)$/viewprn.obj \
