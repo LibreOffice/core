@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicDocShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:34:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef _SFX_OBJFAC_HXX //autogen
 #include <sfx2/docfac.hxx>
 #endif
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
-#endif
 #ifndef _SFX_OBJSH_HXX //autogen
 #include <sfx2/objsh.hxx>
 #endif
@@ -100,7 +97,7 @@ public:
     TYPEINFO();
 
     SFX_DECL_INTERFACE(SD_IF_SDGRAPHICDOCSHELL);
-    SFX_DECL_OBJECTFACTORY(GraphicDocShell);
+    SFX_DECL_OBJECTFACTORY();
 
     GraphicDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
