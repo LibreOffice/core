@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-11 15:08:02 $
+ *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,6 +902,15 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 GrafikCtor();
             if (!pMSDffManager)
                 pMSDffManager = new SwMSDffManager(*this);
+            /*
+            ##835##
+            Disable use of main stream as fallback stream for inline direct
+            blips as it is known that they are directly after the record
+            header, testing for existance in main stream may lead to an
+            incorrect fallback graphic being found if other escher graphics
+            have been inserted in the document
+            */
+            SvStream *pFallback = pMSDffManager->DisableFallbackStream();
             if( !pMSDffManager->GetModel() )
                 pMSDffManager->SetModel(pDrawModel, 1440);
 
@@ -1090,74 +1099,12 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 else
                     pMSDffManager->RemoveFromShapeOrder( pObject );
 
-                // auch das ggfs. uebergebene alte Sdr-Text-Objekt aus der
+                // auch das ggfs.
                 // Page loeschen, falls nicht gruppiert,
                 if( pTextObj && !bTextObjWasGrouped )
                     pDrawPg->RemoveObject( pTextObj->GetOrdNum() );
             }
-#if 0
-            }
-            else                        // eingebettete Grafik im Escher-Objekt
-            {                           // ===================    =============
-                Graphic aGraph;
-                ULONG nCode;
-                *pDataStream >> nCode;
-                if(0xF004000F == nCode)
-                {
-                    int nOK;
-                    if(!(nOK = WW8QuickHackForMSDFF_DirectBLIPImport(
-                        *pDataStream, &aPD, aGraph, aGrName) ))
-                    {
-                        ASSERT( !this, "Wo ist die Grafik ?" );
-                    }
-                    else
-                    {
-                        //Set position, scaling and cropping of the pictures
-                        SfxItemSet aGrfSet(rDoc.GetAttrPool(),
-                                RES_GRFATR_BEGIN, RES_GRFATR_END-1);
-                        if ((nOK == 1) &&
-                            (aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB))
-                        {
-                            SwCropGrf aCrop(aPD.nCL,aPD.nCR,aPD.nCT,aPD.nCB );
-                            aGrfSet.Put( aCrop );
-                        }
-
-                        if( pOldFlyFmt )
-                        {
-                            pRet = MakeGrafByFlyFmt(pTextObj, *pOldFlyFmt, aPD,
-                                &aGraph, aEmptyStr, aGrName, aGrfSet,
-                                bSetToBackground);
-                        }
-                        else
-                        {
-                            if( pWFlyPara && pWFlyPara->bGrafApo )
-                                pRet = MakeGrafNotInCntnt( aPD, &aGraph,
-                                    aEmptyStr, aGrName, aGrfSet );
-                            else
-                                pRet = MakeGrafInCntnt( aPic, aPD, &aGraph,
-                                    aEmptyStr, aGrName, aGrfSet );
-                        }
-
-                        if ((nOK == 2) &&
-                            (aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB))
-                        {
-                            WW8_FSPA aDummy = {0};
-                            SvxMSDffImportRec aPseudoRecord;
-                            aPseudoRecord.nCropFromLeft = aPD.nCL;
-                            aPseudoRecord.nCropFromBottom = aPD.nCB;
-                            aPseudoRecord.nCropFromRight = aPD.nCR;
-                            aPseudoRecord.nCropFromTop = aPD.nCT;
-                            SetAttributesAtGrfNode(&aPseudoRecord,pRet,&aDummy);
-                        }
-                    }
-                }
-                else
-                {
-                    // leider verloren...
-                    ASSERT( !this, "Wo ist das Shape fuer die Grafik ?" );
-                }
-            }
-#endif
+        pMSDffManager->EnableFallbackStream(pFallback);
         }
         else if ( (aPic.lcb >= 58) && aPic.MFP.xExt && aPic.MFP.yExt )
             pRet = ImportGraf1( aPic, pDataStream, nPicLocFc );
@@ -1242,11 +1189,14 @@ void WW8FSPAShadowToReal( WW8_FSPA_SHADOW * pFSPAS, WW8_FSPA * pFSPA )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.7 2001-04-11 15:08:02 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf2.cxx,v 1.8 2001-05-08 14:02:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.7  2001/04/11 15:08:02  jp
+      Bug #85614#: SdrOleObject - set InPlaceObject pointer to zero if the object is insert as SW-OleObject
+
       Revision 1.6  2001/03/27 12:01:49  cmc
       brightness, contrast, drawmode {im|ex}port, merge 0x01 and 0x08 graphics systems for escher to replace hack
 

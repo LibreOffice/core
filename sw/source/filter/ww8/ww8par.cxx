@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 09:58:00 $
+ *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,20 @@ SdrObject* SwMSDffManager::ImportOLE( long nOLEId, const Graphic& rGrf,
     }
     return pRet;
 }
+
+SvStream *SwMSDffManager::DisableFallbackStream()
+{
+    SvStream *pOld = pStData2;
+    pStData2 = 0;
+    return pOld;
+}
+
+void SwMSDffManager::EnableFallbackStream(SvStream *pNew)
+{
+    pStData2 = pNew;
+}
+
+
 
 
 /***************************************************************************
@@ -3118,11 +3132,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.21 2001-05-03 09:58:00 fme Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.22 2001-05-08 14:02:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/05/03 09:58:00  fme
+      New: Compatible tabstop behaviour
+
       Revision 1.20  2001/04/26 12:00:32  cmc
       ##777## bInTableApo not saved/restored
 

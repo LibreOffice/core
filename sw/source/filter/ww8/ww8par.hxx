@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-27 11:17:03 $
+ *  last change: $Author: cmc $ $Date: 2001-05-08 14:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,6 +493,9 @@ public:
     SwMSDffManager( SwWW8ImplReader& rRdr );
     const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >
         GetLastOCXShape() const {return xShape;}
+    SvStream *DisableFallbackStream();
+    void EnableFallbackStream(SvStream *pNew);
+
 private:
 // If we convert an OCX through this manager we will store the uno XShape
 // reference created through the conversion
@@ -577,7 +580,7 @@ friend class WW8FormulaControl;
 
     SwFieldType* pNumFldType;   // fuer Nummernkreis
 
-    SvxMSDffManager* pMSDffManager;
+    SwMSDffManager* pMSDffManager;
 
     SvStringsDtor* pAtnNames;
 
@@ -1160,11 +1163,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.25 2001-04-27 11:17:03 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.26 2001-05-08 14:02:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.25  2001/04/27 11:17:03  cmc
+      ##826## Allow borders set in styles to be removed by sprms with empty line descriptions
+
       Revision 1.24  2001/04/25 18:27:07  jp
       Bug #83181#: don't insert in GroupObjects SW-OLE-Objects
 
