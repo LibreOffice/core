@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mhu $ $Date: 2002-07-28 15:55:58 $
+ *  last change: $Author: mhu $ $Date: 2002-08-03 13:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 /*      OSL_TRACE("sending fd %i\n",SocketFD); */
 
     iov[0].iov_base = buf;
-    iov[0].iov_len  = sizeof(buffer);
+    iov[0].iov_len  = sizeof(buf);
     msg.msg_iov     = iov;
     msg.msg_iovlen  = 1;
     msg.msg_name    = NULL;
@@ -627,7 +627,7 @@ static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 /*      OSL_TRACE("sending fd %i\n",SocketFD); */
 
     iov[0].iov_base = buf;
-    iov[0].iov_len = sizeof(buffer);
+    iov[0].iov_len = sizeof(buf);
     msg.msg_iov = iov;
     msg.msg_iovlen = 1;
     msg.msg_name = NULL;
