@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-11 12:47:17 $
+ *  last change: $Author: mh $ $Date: 2001-11-27 14:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,7 +834,7 @@ static void ChildStatusProc(void *pData)
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)\n", errno, strerror(errno));
-#ifdef LINUX
+#if defined(LINUX) || defined (FREEBSD)
             unsetenv("HOME");
 #else
             putenv("HOME=");
