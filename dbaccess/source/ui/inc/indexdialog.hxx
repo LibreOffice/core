@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 11:45:08 $
+ *  last change: $Author: fs $ $Date: 2001-05-11 16:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ namespace dbaui
 
         OIndexCollection*       m_pIndexes;
         SvLBoxEntry*            m_pPreviousSelection;
+        sal_Bool                m_bEditAgain;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                 m_xORB;
@@ -183,7 +184,7 @@ namespace dbaui
 
     private:
         void OnNewIndex();
-        void OnDropIndex();
+        void OnDropIndex(sal_Bool _bConfirm = sal_True);
         void OnRenameIndex();
         void OnSaveIndex();
         void OnResetIndex();
@@ -206,6 +207,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/02 11:45:08  fs
+ *  #86434# OnEditIndexAgain
+ *
  *  Revision 1.4  2001/04/02 12:04:40  fs
  *  #85275# added a help button
  *
