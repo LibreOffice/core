@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: jb $ $Date: 2002-03-28 14:12:13 $
+#   last change: $Author: jb $ $Date: 2002-06-12 16:40:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ SLOFILES=	\
         $(SLO)$/cachewritescheduler.obj	\
         $(SLO)$/invalidatetree.obj		\
         $(SLO)$/cachefactory.obj		\
-        $(SLO)$/backendwrap.obj			\
         $(SLO)$/cacheaccess.obj			\
         $(SLO)$/cachedata.obj			\
         $(SLO)$/cacheline.obj			\
