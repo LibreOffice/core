@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:16:12 $
+ *  last change: $Author: mav $ $Date: 2004-12-02 10:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,7 @@ public:
     sal_Bool bIsDiskSpannedJAR: 1;
     sal_Bool bIsCharsetInitialized: 1;
     sal_Bool bDisposeStorage: 1;
+    sal_Bool bStorageBasedOnInStream: 1;
     uno::Reference < embed::XStorage > xStorage;
 
     SfxPoolCancelManager_ImplRef xCancelManager;
@@ -458,7 +459,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     bIsCharsetInitialized( sal_False ),
     bUseInteractionHandler( sal_True ),
     bAllowDefaultIntHdl( sal_False ),
-    m_bRemoveBackup( sal_False )
+    m_bRemoveBackup( sal_False ),
+    bStorageBasedOnInStream( sal_False )
 {
     aDoneLink.CreateMutex();
 }
@@ -645,13 +647,8 @@ void SfxMedium::CloseInStream_Impl()
     // would use an invalid ( deleted ) stream.
     if ( pInStream && pImp->xStorage.is() )
     {
-        //TODO/MBA: how to deal with this?!
-        //maybe we need a new flag when the storage was created from the instream
-        //const SvStream *pStorage = aStorage->GetSvStream();
-        //if ( pStorage == pInStream )
-        {
+        if ( pImp->bStorageBasedOnInStream )
             CloseStorage();
-        }
     }
 
     if ( pInStream && !GetContent().is() )
@@ -1030,6 +1027,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
         CloseOutStream();
         pImp->xStorage = comphelper::OStorageHelper::GetStorageFromURL( pImp->pTempFile->GetURL(), nStorOpenMode&STREAM_WRITE ?
                 embed::ElementModes::READWRITE : embed::ElementModes::READ );
+
+        pImp->bStorageBasedOnInStream = sal_False;
     }
     else
     {
@@ -1051,6 +1050,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                     CreateTempFile();
                     aArgs[0] <<= ::rtl::OUString( aName );
                     aArgs[1] <<= embed::ElementModes::READ;
+
+                    pImp->bStorageBasedOnInStream = sal_False;
                 }
                 else
                 {
@@ -1062,6 +1063,8 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                         aArgs[0] <<= pImp->xStream;
                         aArgs[1] <<= ( ( nStorOpenMode & STREAM_WRITE ) ?
                                         embed::ElementModes::READWRITE : embed::ElementModes::READ );
+
+                        pImp->bStorageBasedOnInStream = sal_True;
                     }
                     else
                     {
@@ -1080,17 +1083,17 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
                             }
                         }
 
+                        // if the document is opened as readonly the copy should be done according to selected approach
+                        // if the document is opened for editing the copy should be done to use it as a temporary location for changes before the final transfer
+                           CreateTempFile();
+
+                        aArgs[0] <<= ::rtl::OUString( aName );
                         if ( bReadOnly )
-                        {
-                            aArgs[0] <<= pImp->xInputStream;
                             aArgs[1] <<= embed::ElementModes::READ;
-                        }
                         else
-                        {
-                            CreateTempFile();
-                            aArgs[0] <<= ::rtl::OUString( aName );
                             aArgs[1] <<= embed::ElementModes::READWRITE;
-                        }
+
+                           pImp->bStorageBasedOnInStream = sal_False;
                     }
                 }
 
@@ -1126,6 +1129,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
             catch ( uno::Exception& )
             {
                 //TODO/MBA: error handling; Error and LastStorageError
+                pImp->bStorageBasedOnInStream = sal_False;
             }
         }
     }
@@ -1249,6 +1253,7 @@ void SfxMedium::CloseStorage()
         }
 
         pImp->xStorage = 0;
+        pImp->bStorageBasedOnInStream = sal_False;
     }
 
     bTriedStorage = sal_False;
