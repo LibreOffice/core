@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-11 13:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,6 +975,9 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleRowDescription(
 {
     // TODO: Is there any reasonable we can do here?
     OUString sDesc;
+
+    GetTableData().CheckRowAndCol(nRow, 0, this);
+
     return sDesc;
 }
 
@@ -984,6 +987,9 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleColumnDescription(
 {
     // TODO: Is there any reasonable we can do here?
     OUString sDesc;
+
+    GetTableData().CheckRowAndCol(0, nColumn, this);
+
     return sDesc;
 }
 
@@ -1267,6 +1273,13 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRow( sal_Int32 nChildIndex )
         nRet = static_cast< sal_Int32 >( ::std::distance(
                     GetTableData().GetRows().begin(), aRow ) );
     }
+    else
+    {
+        ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
+                "aCell not expected to be valid.");
+
+        throw IndexOutOfBoundsException();
+    }
 
     return nRet;
 }
@@ -1290,6 +1303,13 @@ sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleColumn(
                 GetTableData().GetColumns().lower_bound( nLeft ) );
         nRet = static_cast< sal_Int32 >( ::std::distance(
                     GetTableData().GetColumns().begin(), aCol ) );
+    }
+    else
+    {
+        ASSERT( !aCell.IsValid(), "SwAccessibleTable::getAccessibleColumn:"
+                "aCell not expected to be valid.");
+
+        throw IndexOutOfBoundsException();
     }
 
     return nRet;
