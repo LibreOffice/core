@@ -1,8 +1,22 @@
 /*************************************************************************
  *
+ *  $RCSfile: texttonum.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:44:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2002 by Sun Microsystems, Inc.
+ *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -36,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2002 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -44,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _L10N_TRANSLITERATION_TEXTTONUM_HXX_
 #define _L10N_TRANSLITERATION_TEXTTONUM_HXX_
 
@@ -52,26 +65,11 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class TextToNum : public transliteration_Numeric {
-public:
-    TextToNum();
-
-    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset ) throw(com::sun::star::uno::RuntimeException);
-
-protected:
-    sal_Int16 number;
-    sal_Int16 multiplier;
-private:
-    void SAL_CALL numberMaker(sal_Int16 max, sal_Int16 cur, const sal_Unicode *str, sal_Int32& i,
-        sal_Int32 len, sal_Unicode *dst, sal_Int32& count, com::sun::star::uno::Sequence< sal_Int32 >& offset,
-        rtl::OUString& numberChar, rtl::OUString& multiplierChar);
-};
-
 #define TRANSLITERATION_TEXTTONUM( name ) \
-class TextToNum##name : public TextToNum \
+class TextToNum##name : public transliteration_Numeric \
 { \
 public: \
-    TextToNum##name (); \
+        TextToNum##name (); \
 };
 
 #ifdef TRANSLITERATION_ALL
