@@ -14,5 +14,7 @@
         <status value="final"/>
         <supported-service>drafts::com::sun::star::accessibility::Accessible</supported-service>
         <supported-service>drafts::com::sun::star::accessibility::AccessibleContext</supported-service>
+        <supported-service>drafts::com::sun::star::accessibility::AccessibleComponent</supported-service>
+        <supported-service>com::sun::star::drawing::AccessibleGraphControl</supported-service>
     </component-description>
 </module-description>
