@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:42:40 $
+#   last change: $Author: os $ $Date: 2000-11-17 11:51:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,8 @@ IDLFILES=\
     XDocumentInfoSupplier.idl\
     XDocumentInsertable.idl\
     XEmbeddedObjectSupplier.idl\
+    XExporter.idl\
+    XImporter.idl\
     XLinkTargetSupplier.idl\
     XStandaloneDocumentInfo.idl\
     XEventSupplier.idl\
