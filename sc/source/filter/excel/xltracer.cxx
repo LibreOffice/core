@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:37:17 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,24 +75,46 @@ using ::com::sun::star::beans::PropertyValue;
 
 // ============================================================================
 
+// Trace Table details are grouped by functionality using the context entry.
+// Each separate context starts at the next 1000 interval. New entries should
+// be added to their appropriate context. New contexts should be added onto
+// the end. Any gaps in the 1000 sequence or within the 1000 are the result
+// of trace events no longer present.
 static const XclTracerDetails pTracerDetails[] =
 {
-    { eUnKnown,          "UNKNOWN",         "UNKNOWN",         "Unknown trace property."            },
-    { eRowLimitExceeded, "Row Limits",      "Sheet",           "Row limit exceeded."                },
-    { eTabLimitExceeded, "Sheet Limits",    "Sheet",           "Sheet limit exceeded."              },
-    { ePassword,         "Protection",      "Password",        "Document is password protected."    },
-    { ePrintRange,       "Print",           "Print Range",     "Print Range present."               },
-    { eHorizontalPrint,  "Print",           "Pages Wide",      "Horizontal pages not supported."    },
-    { eShortDate,        "Cell Formatting", "Short Dates",     "Possible Date format issue."        },
-    { eShrinkToFit,      "Cell Formatting", "Shrink To Fit",   "Shrink to fit not supported"        },
-    { eAlignmentFill,    "Cell Formatting", "Alignment Fill",  "Alignment Fill not supported"       },
-    { eDiagonalBorder,   "Cell Formatting", "Border",          "Diagonal border present."           },
-    { eBorderLineStyle,  "Cell Formatting", "Border",          "Line style not supported.",         },
-    { eFillPattern,      "Cell Formatting", "Pattern",         "Fill Pattern not supported.",       },
-    { eInvisibleGrid,    "Properties",      "Grid Invisible",  "Grid invisible on first sheet"      },
-    { eFormattedNote,    "Notes",           "Formatting",      "Text may be formatted."             },
-    { eFormulaExtName,   "Formula",         "External Name",   "External names not supported."      },
-    { ePivotDataSource,  "Chart",           "Pivot",           "External data source not supported."}
+    { eUnKnown,             0,     "UNKNOWN",        "UNKNOWN",         "Unknown trace property."            },
+    { eRowLimitExceeded,    1000,  "Limits",         "Sheet",           "Row limit exceeded."                },
+    { eTabLimitExceeded,    1001,  "Limits",         "Sheet",           "Sheet limit exceeded."              },
+    { ePassword,            2000,  "Protection",     "Password",        "Document is password protected."    },
+    { ePrintRange,          3000,  "Print",          "Print Range",     "Print Range present."               },
+    { eHorizontalPrint,     3001,  "Print",          "Pages Wide",      "Horizontal pages not supported."    },
+    { eShortDate,           4000,  "CellFormatting", "Short Dates",     "Possible Date format issue."        },
+    { eShrinkToFit,         4001,  "CellFormatting", "Shrink To Fit",   "Shrink to fit not supported."        },
+    { eAlignmentFill,       4002,  "CellFormatting", "Alignment Fill",  "Alignment Fill not supported."       },
+    { eDiagonalBorder,      4003,  "CellFormatting", "Border",          "Diagonal border present."           },
+    { eBorderLineStyle,     4004,  "CellFormatting", "Border",          "Line style not supported.",         },
+    { eFillPattern,         4005,  "CellFormatting", "Pattern",         "Fill Pattern not supported.",       },
+    { eInvisibleGrid,       5000,  "Properties",     "Grid Invisible",  "Grid invisible on first sheet."      },
+    { eFormattedNote,       6000,  "Notes",          "Formatting",      "Text may be formatted."             },
+    { eFormulaExtName,      7000,  "Formula",        "External Name",   "External names not supported."      },
+    { eFormulaMissingArg,   7001,  "Formula",        "Missing Argument","Parameter missing."      },
+    { ePivotDataSource,     8000,  "Chart",          "Pivot",           "External data source not supported."},
+    { ePivotChartExists,    8001,  "Chart",          "Pivot",           "Pivot Chart not supported."},
+    { eChartUnKnownType,    8002,  "Chart",          "Type",            "Chart Type not supported."},
+    { eChartTrendLines,     8003,  "Chart",          "Type",            "Chart trendlines not supported."},
+    { eChartOnlySheet,      8004,  "Chart",          "Type",            "Chart only sheet not supported."},
+    { eChartRange,          8005,  "Chart",          "Source Data",     "Category and Value range not symmetrical."},
+    { eChartDSName,         8006,  "Chart",          "Source Data",     "Name not linked to cell."},
+    { eChartDataTable,      8007,  "Chart",          "Legend",          "Data table not supported."},
+    { eChartLegendPosition, 8008,  "Chart",          "Legend",          "Position not guaranteed."},
+    { eChartTextFormatting, 8009,  "Chart",          "Formatting",      "Text formatting present."},
+    { eChartEmbeddedObj,    8010,  "Chart",          "Area",            "Object inside chart."},
+    { eChartBorderAuto,     8011,  "Chart",          "Area",            "Automatic border in chart area."},
+    { eChartAxisAuto,       8012,  "Chart",          "Axis",            "Axis interval is automatic."},
+    { eChartInvalidXY,      8013,  "Chart",          "Scatter",         "Unsupported data range."},
+    { eUnsupportedObject,   9000,  "Object",         "Type",            "Limited Object support."},
+    { eObjectNotPrintable,  9001,  "Object",         "Print",           "Object not printable."},
+    { eDVType,              10000, "DataValidation", "Type",            "Custom type present."}
 };
 
 XclTracer::XclTracer( const String& rDocUrl, const OUString& rConfigPath ) :
@@ -147,7 +169,7 @@ void XclTracer::TraceLog( XclTracerId eProblem, sal_Int32 nValue )
     if( mbEnabled )
     {
         OUString sID(CREATE_STRING("SC"));
-        sID += rtl::OUString::valueOf(static_cast<sal_Int32>(eProblem));
+        sID += rtl::OUString::valueOf(static_cast<sal_Int32>(pTracerDetails[eProblem].mnID));
         OUString sProblem  = rtl::OUString ::createFromAscii(pTracerDetails[eProblem].mpProblem);
 
         switch (eProblem)
@@ -185,7 +207,7 @@ void XclTracer::Context( XclTracerId eProblem, sal_uInt16 nTab )
 
 void XclTracer::ProcessTraceOnce(XclTracerId eProblem, sal_uInt16 nTab)
 {
-    if( maFirstTimes[eProblem] )
+    if( mbEnabled && maFirstTimes[eProblem])
     {
         TraceLog(pTracerDetails[eProblem].meProblemId, nTab);
         maFirstTimes[eProblem] = false;
@@ -218,7 +240,7 @@ void XclTracer::TracePrintRange()
 void XclTracer::TracePrintFitToPages( sal_uInt16 nFitWidth)
 {
     if(nFitWidth > 1)
-        TraceLog( eHorizontalPrint);  // will only be called once.
+        ProcessTraceOnce( eHorizontalPrint);
 }
 
 void XclTracer::TraceDates( sal_uInt16 nNumFmt)
@@ -282,10 +304,117 @@ void XclTracer::TraceFormulaExtName( )
     ProcessTraceOnce(eFormulaExtName);
 }
 
+void XclTracer::TraceFormulaMissingArg()
+{
+    // missing parameter in Formula record
+    ProcessTraceOnce(eFormulaMissingArg);
+}
+
 void XclTracer::TracePivotDataSource( bool bExternal)
 {
     if(bExternal)
         ProcessTraceOnce(ePivotDataSource);
+}
+
+void XclTracer::TracePivotChartExists()
+{
+    // Pivot Charts not currently displayed.
+    ProcessTraceOnce(ePivotChartExists);
+}
+
+void XclTracer::TraceChartUnKnownType()
+{
+    ProcessTraceOnce(eChartUnKnownType);
+}
+
+void XclTracer::TraceChartTrendLines()
+{
+    ProcessTraceOnce(eChartTrendLines);
+}
+
+void XclTracer::TraceChartOnlySheet()
+{
+    ProcessTraceOnce(eChartOnlySheet);
+}
+
+void XclTracer::TraceChartRange()
+{
+    // Chart range symmetry is essential to display a chart. If the count
+    // of category values is not equal to the count of values or the start row/column
+    // depending on type, is not the same, then the chart range is said to be not
+    // symmetrical and will not display correctly.
+    ProcessTraceOnce(eChartRange);
+}
+
+void XclTracer::TraceChartDSName()
+{
+    // Data series names must be linked to a cell to appear. Hard
+    // coded strings contained in the ChartSeriestext() do not appear.
+    ProcessTraceOnce(eChartDSName);
+}
+
+void XclTracer::TraceChartDataTable()
+{
+    // Data table is not supported.
+    ProcessTraceOnce(eChartDataTable);
+}
+
+void XclTracer::TraceChartLegendPosition()
+{
+    // If position is set to "not docked or inside the plot area" then
+    // we cannot guarantee the legend position.
+    ProcessTraceOnce(eChartLegendPosition);
+}
+
+void XclTracer::TraceChartTextFormatting()
+{
+    // text formatting in titles or data labels not supported.
+    ProcessTraceOnce(eChartTextFormatting);
+}
+
+void XclTracer::TraceChartEmbeddedObj()
+{
+    // drawing objects e.g. text boxes etc not supported inside charts
+    ProcessTraceOnce(eChartEmbeddedObj);
+}
+
+void XclTracer::TraceChartBorderAuto()
+{
+    // Excel Automatic Chart Area borders use a different
+    // default style to Calc.
+    ProcessTraceOnce(eChartBorderAuto);
+}
+
+void XclTracer::TraceChartAxisAuto()
+{
+    // Axis intervals generated automatically may not
+    // be the same.
+    ProcessTraceOnce(eChartAxisAuto);
+}
+
+void XclTracer::TraceChartInvalidXY()
+{
+    // Scatter charts will ony appear if the category(X) data range is
+    // located in the left most column in relation to the value range.
+    ProcessTraceOnce(eChartInvalidXY);
+}
+
+void XclTracer::TraceUnsupportedObjects()
+{
+    // Called from Excel 5.0 - limited Graphical object support.
+    ProcessTraceOnce(eUnsupportedObject);
+}
+
+void XclTracer::TraceObjectNotPrintable()
+{
+    ProcessTraceOnce(eObjectNotPrintable);
+}
+
+void XclTracer::TraceDVType(  bool bType)
+{
+    // Custom types work if 'Data->validity dialog' is not OKed.
+    if(bType)
+        ProcessTraceOnce(eDVType);
 }
 
 // ============================================================================
