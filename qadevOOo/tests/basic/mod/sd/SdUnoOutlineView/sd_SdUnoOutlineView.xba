@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdUnoOutlineView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:43 $ 
+'*  last change:$Date: 2003-03-06 09:44:09 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -107,19 +107,17 @@ On Error Goto ErrHndl
     Dim aSlotID As String
     aSlotID = "slot:27010"
 
-    Dim urls As Variant
     Dim url as new com.sun.star.util.URL
     url.Complete = aSlotID
-    urls = Array(url)
 
     Dim UrlTransformer As Object
     UrlTransformer = createUnoService("com.sun.star.util.URLTransformer")
-    UrlTransformer.parseStrict(urls())
+    UrlTransformer.parseStrict(url)
 
     Dim xDispatcher As Object
-    xDispatcher = oObj.queryDispatch( urls(0),"",0)
+    xDispatcher = oObj.queryDispatch( url,"",0)
     if Not IsNULL(xDispatcher) then
-        xDispatcher.dispatch( urls(0), null )
+        xDispatcher.dispatch( url, DimArray() )
     else
         Out.log("queryDispatch FAILED... Object SdUnoOutlineView can't be created")
         oObj =  NULL_OBJECT
