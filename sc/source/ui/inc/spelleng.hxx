@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:10:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ public:
                                 ScDocument* pUndoDoc,
                                 ScDocument* pRedoDoc,
                                 ESelection* pEdSelection,
-                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bCellSelection );
 
     virtual                 ~ScConversionEngineBase();
@@ -111,7 +111,7 @@ protected:
 
 private:
     /** Fills the edit engine from a document cell. */
-    void                    FillFromCell( USHORT nCol, USHORT nRow, USHORT nTab );
+    void                    FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
 protected:  // for usage in derived classes
     ScViewData&             mrViewData;
@@ -123,11 +123,11 @@ private:
     ScDocument*             mpRedoDoc;          /// Document stores all new cells for REDO action.
     ESelection*             mpEditSel;          /// Cell selection from edit mode or NULL.
     LanguageType            meCurrLang;         /// Current cell language.
-    USHORT                  mnStartCol;         /// Initial column index.
-    USHORT                  mnStartRow;         /// Initial row index.
-    USHORT                  mnStartTab;         /// Initial sheet index.
-    USHORT                  mnCurrCol;          /// Current column index.
-    USHORT                  mnCurrRow;          /// Current row index.
+    SCCOL                   mnStartCol;         /// Initial column index.
+    SCROW                   mnStartRow;         /// Initial row index.
+    SCTAB                   mnStartTab;         /// Initial sheet index.
+    SCCOL                   mnCurrCol;          /// Current column index.
+    SCROW                   mnCurrRow;          /// Current row index.
     bool                    mbCellSelect;       /// true = Cell selection; false = Entire sheet.
     bool                    mbIsAnyModified;    /// true = At least one cell has been changed.
     bool                    mbInitialState;     /// true = Not searched for a cell yet.
@@ -148,7 +148,7 @@ public:
                                 ScDocument* pUndoDoc,
                                 ScDocument* pRedoDoc,
                                 ESelection* pEdSelection,
-                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bCellSelection,
                                 XSpellCheckerRef xSpeller );
 
@@ -181,7 +181,7 @@ public:
                                 ScDocument* pUndoDoc,
                                 ScDocument* pRedoDoc,
                                 ESelection* pEdSelection,
-                                USHORT nCol, USHORT nRow, USHORT nTab,
+                                SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 bool bCellSelection,
                                 LanguageType eConvLanguage );
 
