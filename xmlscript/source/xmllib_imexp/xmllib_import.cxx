@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:20:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:42:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
     else if (mpLibDesc && rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
     {
         LibDescriptor& aDesc = *mpLibDesc;
-        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = sal_False;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
 
         aDesc.aName = xAttributes->getValueByUidName(
             XMLNS_LIBRARY_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
@@ -234,6 +234,10 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
         getBoolAttr(
             &aDesc.bPasswordProtected,
             OUString( RTL_CONSTASCII_USTRINGPARAM("passwordprotected") ),
+            xAttributes, XMLNS_LIBRARY_UID );
+        getBoolAttr(
+            &aDesc.bPreload,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("preload") ),
             xAttributes, XMLNS_LIBRARY_UID );
 
         return new LibraryElement( rLocalName, xAttributes, 0, this );
@@ -274,7 +278,7 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
     {
         LibDescriptor aDesc;
-        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = sal_False;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = aDesc.bPreload = sal_False;
 
         aDesc.aName = xAttributes->getValueByUidName(
             _pImport->XMLNS_LIBRARY_UID,
