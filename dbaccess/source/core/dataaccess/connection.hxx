@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ protected:
                             m_xMasterConnection;
     OWeakRefArray           m_aStatements;
 
+
 protected:
     virtual ~OConnectionRerouter();
 
@@ -191,6 +192,7 @@ class ODatabaseSource;
 class OConnection           :public OSubComponent
                             ,public OConnectionRerouter
                             ,public OConnection_Base
+                            ,public IWarningsContainer
 {
 protected:
     OQueryContainer         m_aQueries;
@@ -202,7 +204,8 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                             m_xORB;
 
-    OTableContainer*        m_pTables;
+    OTableContainer*            m_pTables;
+    ::com::sun::star::uno::Any  m_aAdditionalWarnings;  // own warnings (appended to the ones got by the master connection)
 
 protected:
     virtual ~OConnection();
@@ -239,6 +242,18 @@ public:
 
 // ::com::sun::star::sdb::XCommandPreparation
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCommand( const ::rtl::OUString& command, sal_Int32 commandType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::sdbc::XWarningsSupplier
+    virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+protected:
+    // IWarningsContainer
+    virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning);
+    virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext);
+
+protected:
+    static void implConcatWarnings(::com::sun::star::uno::Any& _rChainLeft, const ::com::sun::star::uno::Any& _rChainRight);
 };
 
 //........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 15:04:16 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,14 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
+#ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
+#endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -120,6 +125,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
+using namespace ::dbtools;
 
 //........................................................................
 namespace dbaccess
@@ -401,7 +407,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
 {
     DBG_CTOR(OConnection,NULL);
 
-    m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex,this);
+    m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }
@@ -413,6 +419,64 @@ OConnection::~OConnection()
     DBG_DTOR(OConnection,NULL);
 }
 
+
+// IWarningsContainer
+//------------------------------------------------------------------------------
+void OConnection::appendWarning(const SQLContext& _rContext)
+{
+    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rContext));
+}
+
+//------------------------------------------------------------------------------
+void OConnection::appendWarning(const SQLWarning& _rWarning)
+{
+    implConcatWarnings(m_aAdditionalWarnings, makeAny(_rWarning));
+}
+
+// XWarningsSupplier
+//--------------------------------------------------------------------------
+Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
+{
+    Any aReturn = OConnectionRerouter::getWarnings();
+    if (!m_aAdditionalWarnings.hasValue())
+        return aReturn;
+    else
+    {
+        // copy m_aAdditionalWarnings, and append the original warnings
+        Any aOverallWarnings(m_aAdditionalWarnings);
+        implConcatWarnings(aOverallWarnings, aReturn);
+        return aOverallWarnings;
+    }
+}
+
+//--------------------------------------------------------------------------
+void OConnection::implConcatWarnings(Any& _rChainLeft, const Any& _rChainRight)
+{
+    if (!_rChainLeft.hasValue())
+        _rChainLeft = _rChainRight;
+    else
+    {
+        // to travel the chain by reference (and not by value), we need the getValue ...
+        // looks like a hack, but the meaning of getValue is documented, and it's the only chance for reference-traveling ....
+
+        DBG_ASSERT(SQLExceptionInfo(_rChainLeft).isValid(), "OConnection::appendWarning: invalid warnings chain (this will crash)!");
+
+        const SQLException* pChainTravel = static_cast<const SQLException*>(_rChainLeft.getValue());
+        SQLExceptionIteratorHelper aReferenceIterHelper(pChainTravel);
+        while (aReferenceIterHelper.hasMoreElements())
+            pChainTravel = aReferenceIterHelper.next();
+
+        // reached the end of the chain, and pChainTravel points to the last element
+        const_cast<SQLException*>(pChainTravel)->NextException = _rChainRight;
+    }
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
+{
+    OConnectionRerouter::clearWarnings();
+    m_aAdditionalWarnings.clear();
+}
 
 // com::sun::star::lang::XTypeProvider
 //--------------------------------------------------------------------------
