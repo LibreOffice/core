@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:58:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <sallayout.hxx>
 #endif
 
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 #ifndef _USE_PRINT_EXTENSION_
 namespace psp { struct JobData; class PrinterGfx; }
 #endif
@@ -80,7 +84,7 @@ namespace psp { struct JobData; class PrinterGfx; }
 class ServerFont;
 class ImplDevFontAttributes;
 
-class PspGraphics : public SalGraphics
+class VCL_DLLPUBLIC PspGraphics : public SalGraphics
 {
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;
