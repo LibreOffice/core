@@ -2,9 +2,9 @@
  *
  *  $RCSfile: html_kit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,7 @@ PageTitle_Std::operator()( XmlElement &        o_rOwner,
 {
     o_rOwner
         >> *new AnElement("div")
-            << new AlignAttr("center")
-            << new StyleAttr("background-color:#ccccff; line-height:26pt;")
+            << new ClassAttr("title")
             >> *new Headline(2)
                 << i_sTypeTitle
                 << " "
@@ -120,8 +119,7 @@ PageTitle_Std::operator()( XmlElement & o_rOwner )
     XmlElement & ret =
         o_rOwner
             >> *new AnElement("div")
-                << new AlignAttr("center")
-                << new StyleAttr("background-color:#ccccff; line-height:26pt;")
+                << new ClassAttr("title")
                 >> *new Headline(2);
     return ret;
 }
@@ -291,9 +289,8 @@ FlagTable::FlagTable( XmlElement &        o_rOwner,
         sprintf( sWidth, "%d%%", nWidth );      // SAFE SPRINTF (#100211# - checked)
 
         rCell1
-            << new AnAttribute( "bgcolor", "#eeeeff" )
             << new WidthAttr( sWidth )
-            << new StyleAttr( "font-family:Arial; font-size:8pt; font-weight:bold;" );
+            << new ClassAttr( "flagname" );
         TableCell & rCell2 = rRow2.AddCell();
         aCells.push_back( CellPair(&rCell1, &rCell2) );
     }   // end for
@@ -315,13 +312,13 @@ FlagTable::SetColumn( uintt               i_nColumnPosition,
     if (i_bValue)
     {
         rCell2
-            << new StyleAttr( "font-family:Arial; font-size:8pt; font-weight:bold;" )
+            << new ClassAttr("flagyes")
             << "YES";
     }
     else //
     {
         rCell2
-            << new StyleAttr( "font-family:Arial; font-size:8pt;" )
+            << new ClassAttr("flagno")
             << "NO";
     }  // endif
 }
@@ -340,7 +337,7 @@ FlagTable::SetColumn( uintt               i_nColumnPosition,
     rCell1
         << i_sColumnName;
     rCell2
-        << new StyleAttr( "font-family:Arial; font-size:8pt; font-weight:bold;" )
+        << new ClassAttr( "flagtext" )
         << i_sValue;
 }
 
