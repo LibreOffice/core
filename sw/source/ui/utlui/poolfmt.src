@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:04:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:17:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ String STR_POOLCHR_LABEL
     Text[ japanese ] = "å›³è¡¨ç•ªå·æ–‡å­—";
     Text[ chinese_traditional ] = "æ¨™ç±¤æ–‡";
     Text[ arabic ] = "ÃÍÑİ ÇáÊÓãíÉ ÇáÊæÖíÍíÉ";
-    Text[ greek ] = "×áñáêôŞñåò åğéãñáöŞò";
+    Text[ greek ] = "×áñáêôŞñåò ëåæÜíôáò";
     Text[ korean ] = "ìº¡ì…˜ ë¬¸ì";
     Text[ turkish ] = "Resim yazısı karakterleri";
     Text[ language_user1 ] = " ";
@@ -334,7 +334,7 @@ String STR_POOLCHR_JUMPEDIT
     Text[ japanese ] = "ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€";
     Text[ chinese_traditional ] = "è¬ç”¨å­—å…ƒ";
     Text[ arabic ] = "ÚäÕÑ äÇÆÈ";
-    Text[ greek ] = "Óıìâïëï êñÜôçóçò èİóçò";
+    Text[ greek ] = "Ğëáßóéï äåßêôçò ôïğïèİôçóçò";
     Text[ korean ] = "í”Œë ˆì´ìŠ¤í™€ë”";
     Text[ turkish ] = "Genel arama karakteri";
     Text[ language_user1 ] = " ";
@@ -358,7 +358,7 @@ String STR_POOLCHR_TOXJUMP
     Text [ spanish ] = "Salto de índice" ;
     Text [ french ] = "Saut d'index" ;
     Text [ portuguese ] = "Salto ao índice" ;
-    Text [ portuguese_brazilian ] = "Vínculo de Índice" ;
+    Text [ portuguese_brazilian ] = "Vínculo de índice" ;
     Text[ chinese_simplified ] = "ç›®å½•é“¾æ¥";
     Text[ russian ] = "Ññûëêà óêàçàòåëÿ";
     Text[ polish ] = "£¹cze indeksu";
@@ -833,7 +833,7 @@ String STR_POOLFRM_FRAME
     Text[ language_user1 ] = " ";
     Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
     Text[ arabic ] = "ßÇÏÑ";
-    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ greek ] = "Ğëáßóéï";
     Text[ korean ] = "í”„ë ˆì„";
     Text[ turkish ] = "Çerçeve";
     Text[ catalan ] = "Marc";
@@ -3358,7 +3358,7 @@ String STR_POOLCOLL_LABEL
     Text[ japanese ] = "å›³è¡¨ç•ªå·";
     Text[ chinese_traditional ] = "æ¨™ç±¤";
     Text[ arabic ] = "ÊÓãíÉ ÊæÖíÍíÉ";
-    Text[ greek ] = "ÅğéãñáöŞ";
+    Text[ greek ] = "ËåæÜíôá";
     Text[ korean ] = "ìº¡ì…˜";
     Text[ turkish ] = "Resim Yazısı";
     Text[ language_user1 ] = " ";
@@ -3570,7 +3570,7 @@ String STR_POOLCOLL_TOX_IDXH
     Text [ swedish ] = "Sakregisteröverskrift" ;
     Text [ danish ] = "Stikordsregisteroverskrift" ;
     Text [ portuguese ] = "Título do índice remissivo" ;
-    Text [ portuguese_brazilian ] = "Título do Índice" ;
+    Text [ portuguese_brazilian ] = "Título do índice" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëÿ";
     Text[ polish ] = "Nag³ówek indeksu";
@@ -3694,7 +3694,7 @@ String STR_POOLCOLL_TOX_IDXBREAK
     Text [ swedish ] = "Sakregisteravskiljare" ;
     Text [ danish ] = "Stikordsregister separator" ;
     Text [ portuguese ] = "Separador de índice remissivo" ;
-    Text [ portuguese_brazilian ] = "Separador de Índice" ;
+    Text [ portuguese_brazilian ] = "Separador de índice" ;
     Text[ chinese_simplified ] = "ç´¢å¼•ç›®å½• åˆ†éš”ç¬¦";
     Text[ russian ] = "Ğàçäåëèòåëü ïğåäìåòíîãî óêàçàòåëÿ";
     Text[ polish ] = "Separator indeksu";
@@ -3726,7 +3726,7 @@ String STR_POOLCOLL_TOX_CNTNTH
     Text [ swedish ] = "Innehållsförteckning överskrift" ;
     Text [ danish ] = "Indholdsfortegnelse overskrift" ;
     Text [ portuguese ] = "Título do índice" ;
-    Text [ portuguese_brazilian ] = "Título do Índice" ;
+    Text [ portuguese_brazilian ] = "Título do índice" ;
     Text[ chinese_simplified ] = "å†…å®¹ç›®å½•æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê îãëàâëåíèÿ";
     Text[ polish ] = "Nag³ówek spisu treœci";
@@ -4068,7 +4068,7 @@ String STR_POOLCOLL_TOX_USERH
     Text [ swedish ] = "Användarförteckning överskrift" ;
     Text [ danish ] = "Brugerindeks overskrift" ;
     Text [ portuguese ] = "Título do índice do utilizador" ;
-    Text [ portuguese_brazilian ] = "Título do Índice do Usuário" ;
+    Text [ portuguese_brazilian ] = "Título do índice do usuário" ;
     Text[ chinese_simplified ] = "ä½¿ç”¨è€…ç›®å½• æ ‡é¢˜";
     Text[ russian ] = "Çàãîëîâîê óêàçàòåëåé ïîëüçîâàòåëÿ";
     Text[ polish ] = "Nag³ówek indeksu u¿ytkownika";
@@ -4412,7 +4412,7 @@ String STR_POOLCOLL_TOX_ILLUSH
     Text[ danish ] = "Figuroversigt overskrift";
     Text[ swedish ] = "Illustrationsförteckning överskrift";
     Text[ polish ] = "Nag³ówek indeksu ilustracji";
-    Text[ portuguese_brazilian ] = "Título do Índice de Ilustrações";
+    Text[ portuguese_brazilian ] = "Título do índice de ilustrações";
     Text[ japanese ] = "å›³ã®ç´¢å¼• è¦‹å‡ºã—";
     Text[ korean ] = "ì‚½í™” ìƒ‰ì¸ ì œëª©";
     Text[ chinese_simplified ] = "æ’å›¾ç›®å½•æ ‡é¢˜";
@@ -4536,7 +4536,7 @@ String STR_POOLCOLL_TOX_TABLESH
     Text[ danish ] = "Tabeloversigt overskrift";
     Text[ swedish ] = "Tabellförteckning överskrift";
     Text[ polish ] = "Nag³ówek indeksu tabeli";
-    Text[ portuguese_brazilian ] = "Título do Índice de tabelas";
+    Text[ portuguese_brazilian ] = "Título do índice de tabelas";
     Text[ japanese ] = "è¡¨ç´¢å¼•è¦‹å‡ºã—";
     Text[ korean ] = "í‘œ ìƒ‰ì¸ ì œëª©";
     Text[ chinese_simplified ] = "è¡¨æ ¼ç›®å½•æ ‡é¢˜";
@@ -5469,7 +5469,7 @@ String STR_POOLCHR_RUBYTEXT
     Text[ english_us ] = "Rubies";
     Text[ portuguese ] = "Rubys";
     Text[ russian ] = "Òğàíñëèòåğàöèÿ";
-    Text[ greek ] = "ÖùíçôéêÜ óıìâïëá";
+    Text[ greek ] = "×áñáêôŞñåò öùíçôéêŞò ãñáöŞò";
     Text[ dutch ] = "Fonetische tekens";
     Text[ french ] = "Rubys";
     Text[ spanish ] = "Rubys";
@@ -5478,7 +5478,7 @@ String STR_POOLCHR_RUBYTEXT
     Text[ danish ] = "Fonetisk tekst";
     Text[ swedish ] = "Rubytext";
     Text[ polish ] = "Dopiski fonetyczne";
-    Text[ portuguese_brazilian ] = "Rubis";
+    Text[ portuguese_brazilian ] = "Rubys";
     Text[ japanese ] = "ãµã‚ŠãŒãª";
     Text[ korean ] = "ë§ë§";
     Text[ chinese_simplified ] = "æ‹¼éŸ³å’Œæ³¨éŸ³ç¬¦å·";
@@ -5518,11 +5518,12 @@ String STR_POOLCHR_VERT_NUM
     Text[ czech ] = "Symboly pro svislÃ© ÄÃ­slovÃ¡nÃ­";
     Text[ hebrew ] = "Vertikale Nummerierungszeichen";
     Text[ catalan ] = "Vertical Numbering Symbols";
-    Text[ portuguese_brazilian ] = "Vertical Numbering Symbols";
+    Text[ portuguese_brazilian ] = "Símbolos de numeração vertical";
     Text[ thai ] = "Vertical Numbering Symbols";
     Text[ hindi ] = "Vertical Numbering Symbols";
     Text[ slovak ] = "ZvislÃ© ÄÃ­slovacie symboly";
 };
+
 
 
 
