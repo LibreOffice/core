@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-27 15:54:38 $
+ *  last change: $Author: cl $ $Date: 2002-04-02 14:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,6 +1493,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
     mnLastFocusItemId          = 0;
+    mnKeyModifier     = 0;
 
 
     maTimer.SetTimeout( 50 );
@@ -4696,6 +4697,7 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
+    mnKeyModifier = aKeyCode.GetModifier();
     USHORT nCode = aKeyCode.GetCode();
     BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
     BOOL bForwardKey = FALSE;
@@ -4825,6 +4827,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
 
     if( bForwardKey )
         DockingWindow::KeyInput( rKEvt );
+
+    mnKeyModifier = 0;
 }
 
 // -----------------------------------------------------------------------
