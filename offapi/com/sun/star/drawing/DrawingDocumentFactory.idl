@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentFactory.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:44 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 12:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,97 +72,12 @@
 
 //=============================================================================
 
-/** this service describes a factory for documents that
-    can contain drawing objects
-
-    @see DrawingDocument
+/** @deprecated Pleas use the factory interface of the service GenericDrawingDocument.
  */
 service DrawingDocumentFactory
 {
-    /** this factory lets you create various services that are
-        used inside a drawing document
-
-        <p>The following services are <type>Shape</type>s.
-        They are created by the documents factory and must
-        be inserted into a <type>DrawPage</type> or <type>MasterPage</type>
-        of this document.
-
-        <ul>
-            <li><type>RectangleShape</type></li>
-            <li><type>EllipseShape</type></li>
-            <li><type>ControlShape</type></li>
-            <li><type>ConnectorShape</type></li>
-            <li><type>MeasureShape</type></li>
-            <li><type>LineShape</type></li>
-            <li><type>PolyPolygonShape</type></li>
-            <li><type>PolyLineShape</type></li>
-            <li><type>OpenBezierShape</type></li>
-            <li><type>ClosedBezierShape</type></li>
-            <li><type>GraphicObjectShape</type></li>
-            <li><type>GroupShape</type></li>
-            <li><type>TextShape</type></li>
-            <li><type>OLE2Shape</type></li>
-            <li><type>PageShape</type></li>
-            <li><type>CaptionShape</type></li>
-            <li><type>PluginShape</type></li>
-            <li><type>AppletShape</type></li>
-        </ul>
-
-        <p>The following services are all <type scope="com::sun::star::text">TextField</type>
-        and can be inserted into text as <type scope="com::sun::star::text">TextContent</type>.
-
-        <ul>
-            <li><member scope="com::sun::star::text">TextField::DateTime</member></li>
-            <li><member scope="com::sun::star::text">TextField::URL</member></li>
-            <li><member scope="com::sun::star::text">TextField::PageNumber</member></li>
-            <li><member scope="com::sun::star::text">TextField::PageCount</member></li>
-            <li><member scope="com::sun::star::text">TextField::SheetName</member></li>
-            <li><member scope="com::sun::star::text">TextField::FileName</member></li>
-            <li><member scope="com::sun::star::text">TextField::DocInfo.Title</member></li>
-            <li><member scope="com::sun::star::text">TextField::Author</member></li>
-            <li><member scope="com::sun::star::text">TextField::Measure</member></li>
-        </ul>
-
-        <p>The following services gives access to resources used inside the document
-        and let you add new resources.
-
-        <ul>
-            <li><type scope="com::sun::star::drawing">DashTable</type></li>
-            <li><type scope="com::sun::star::drawing">GradientTable</type></li>
-            <li><type scope="com::sun::star::drawing">HatchTable</type></li>
-            <li><type scope="com::sun::star::drawing">BitmapTable</type></li>
-            <li><type scope="com::sun::star::drawing">TransparencyGradientTable</type></li>
-            <li><type scope="com::sun::star::drawing">MarkerTable</type></li>
-        </ul>
-
-        <p>The following service can be set at the <code>Numbering</code> property
-        inside a <type scope="com::sun::star::style">ParagraphProperties</type>
-
-        <ul>
-            <li><type scope="com::sun::star::text">NumberingRules</type></li>
-        </ul>
-
-        <p>The following services can be used for a <type scope="com::sun::star::image">ImageMap</type>
-        inside the document.
-
-        <br>A <type scope="com::sun::star::image">ImageMap</type> can be obtained from a
-        <type>GraphicObjectShape</type>
-
-        <ul>
-            <li><type scope="com::sun::star::image">ImageMapRectangleObject</type></li>
-            <li><type scope="com::sun::star::image">ImageMapCircleObject</type></li>
-            <li><type scope="com::sun::star::image">ImageMapPolygonObject</type></li>
-        </ul>
-
-        <p>The following services lets you access the drawing property defaults
-        of a document.
-
-        <ul>
-            <li><type scope="com::sun::star::drawing">Defaults</type></li>
-        </ul>
-    */
+    /** @deprecated */
     interface com::sun::star::lang::XMultiServiceFactory;
-
 };
 
 //=============================================================================
