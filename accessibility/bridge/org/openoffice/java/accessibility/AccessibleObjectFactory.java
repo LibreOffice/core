@@ -64,7 +64,7 @@ import javax.accessibility.Accessible;
 import javax.accessibility.AccessibleStateSet;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 /**
 */
@@ -297,10 +297,10 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.CANVAS,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.CHECKBOX:
+            case AccessibleRole.CHECK_BOX:
                 c = new CheckBox(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.COMBOBOX:
+            case AccessibleRole.COMBO_BOX:
                 c = new ComboBox(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.DOCUMENT:
@@ -311,7 +311,7 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.ENDNOTE:
+            case AccessibleRole.END_NOTE:
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
                     xAccessible, xAccessibleContext);
                 break;
@@ -341,7 +341,7 @@ public class AccessibleObjectFactory {
             case AccessibleRole.LABEL:
                 c = new Label(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.LAYEREDPANE:
+            case AccessibleRole.LAYERED_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.LAYERED_PANE,
                     xAccessible, xAccessibleContext);
                 break;
@@ -356,10 +356,10 @@ public class AccessibleObjectFactory {
 //                  c.setVisible(false);
 //              }
                 break;
-            case AccessibleRole.MENUBAR:
+            case AccessibleRole.MENU_BAR:
                 c = new Container(javax.accessibility.AccessibleRole.MENU_BAR, xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.MENUITEM:
+            case AccessibleRole.MENU_ITEM:
                 c = new MenuItem(xAccessible, xAccessibleContext);
                 c.setFocusable(false);
                 // Menu items are always visible, but change SHOWING state
@@ -367,17 +367,17 @@ public class AccessibleObjectFactory {
 //                  c.setVisible(false);
 //              }
                 break;
-            case AccessibleRole.POPUPMENU:
+            case AccessibleRole.POPUP_MENU:
                 c = new Container(javax.accessibility.AccessibleRole.POPUP_MENU, xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.OPTIONPANE:
+            case AccessibleRole.OPTION_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.OPTION_PANE,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.PAGETAB:
+            case AccessibleRole.PAGE_TAB:
                 c = new Container(javax.accessibility.AccessibleRole.PAGE_TAB, xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.PAGETABLIST:
+            case AccessibleRole.PAGE_TAB_LIST:
                 c = new Container(javax.accessibility.AccessibleRole.PAGE_TAB_LIST, xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.PARAGRAPH:
@@ -388,17 +388,17 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.PUSHBUTTON:
+            case AccessibleRole.PUSH_BUTTON:
                 c = new Button(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.RADIOBUTTON:
+            case AccessibleRole.RADIO_BUTTON:
                 c = new RadioButton(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.ROOTPANE:
+            case AccessibleRole.ROOT_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.ROOT_PANE,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.SCROLLBAR:
+            case AccessibleRole.SCROLL_BAR:
                 if (xAccessibleStateSet.contains(AccessibleStateType.VERTICAL)) {
                     c = new ScrollBar(xAccessible, xAccessibleContext,
                         javax.swing.SwingConstants.VERTICAL);
@@ -406,7 +406,7 @@ public class AccessibleObjectFactory {
                     c = new ScrollBar(xAccessible, xAccessibleContext);
                 }
                 break;
-            case AccessibleRole.SCROLLPANE:
+            case AccessibleRole.SCROLL_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.SCROLL_PANE,
                     xAccessible, xAccessibleContext);
                 break;
@@ -422,19 +422,19 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.CANVAS,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.SPLITPANE:
+            case AccessibleRole.SPLIT_PANE:
                 c = new Container(javax.accessibility.AccessibleRole.SPLIT_PANE,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.STATUSBAR:
+            case AccessibleRole.STATUS_BAR:
                 c = new Container(javax.accessibility.AccessibleRole.STATUS_BAR,
                     xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.COLUMN_HEADER:
             case AccessibleRole.TABLE:
-                if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANT)) {
+                if (xAccessibleStateSet.contains(AccessibleStateType.MANAGES_DESCENDANTS)) {
                     c = new Table(xAccessible, xAccessibleContext,
-                        xAccessibleStateSet.contains(AccessibleStateType.MULTISELECTABLE));
+                        xAccessibleStateSet.contains(AccessibleStateType.MULTI_SELECTABLE));
                 } else {
                     c = new Container(javax.accessibility.AccessibleRole.TABLE,
                         xAccessible, xAccessibleContext);
@@ -451,20 +451,20 @@ public class AccessibleObjectFactory {
                 c = new Container(javax.accessibility.AccessibleRole.PANEL,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.TOGGLEBUTTON:
+            case AccessibleRole.TOGGLE_BUTTON:
                 c = new ToggleButton(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.TOOLBAR:
+            case AccessibleRole.TOOL_BAR:
                 c = new Container(javax.accessibility.AccessibleRole.TOOL_BAR,
                     xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.TOOLTIP:
+            case AccessibleRole.TOOL_TIP:
                 c = new ToolTip(xAccessible, xAccessibleContext);
                 break;
             case AccessibleRole.TREE:
                 c = new Tree(xAccessible, xAccessibleContext);
                 break;
-            case AccessibleRole.VIEWPORT:
+            case AccessibleRole.VIEW_PORT:
                 c = new Container(javax.accessibility.AccessibleRole.VIEWPORT,
                     xAccessible, xAccessibleContext);
                 break;
