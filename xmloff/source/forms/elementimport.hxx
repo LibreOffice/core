@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:16:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:09:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,15 @@ namespace xmloff
         */
         ::rtl::OUString                 m_sBoundCellAddress;
 
+        /** name of a value binding (xforms:bind attribute) */
+        ::rtl::OUString                 m_sBindingID;
+
+        /** name of a list binding (form:xforms-list-source attribute) */
+        ::rtl::OUString                 m_sListBindingID;
+
+        /** name of a submission (xforms:submission attribute) */
+        ::rtl::OUString                 m_sSubmissionID;
+
     protected:
         // for use by derived classes only
         OControlImport(
@@ -295,6 +304,15 @@ namespace xmloff
                 we have a valid element (m_xElement)
         */
         virtual void doRegisterCellValueBinding( const ::rtl::OUString& _rBoundCellAddress );
+
+        /** register the given XForms binding */
+        virtual void doRegisterXFormsValueBinding( const ::rtl::OUString& );
+
+        /** register the given XForms list binding */
+        virtual void doRegisterXFormsListBinding( const ::rtl::OUString& );
+
+        /** register the given XForms submission */
+        virtual void doRegisterXFormsSubmission( const ::rtl::OUString& );
 
     protected:
         //added by BerryJia for fixing bug102407 2002-11-5
