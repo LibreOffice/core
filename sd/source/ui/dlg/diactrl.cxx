@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diactrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: ka $ $Date: 2001-11-13 16:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ DiaEffectControl::DiaEffectControl( Window* pParent, SfxBindings& rBdx, WinBits 
     aLbEffect.SetSizePixel( Size( aXSize.Width() * 21, aXSize.Height() * 10 ) ); // 155/180
     aLbEffect.Fill();
     aLbEffect.SelectEffect( presentation::FadeEffect_NONE );
+    aLbEffect.SetHelpId( SID_DIA_EFFECT );
     aLbEffect.Show();
 
     Size aDescSize = aFtDescr.GetSizePixel();
@@ -187,6 +188,7 @@ DiaSpeedControl::DiaSpeedControl( Window* pParent, SfxBindings& rBdx, WinBits nS
     aLbSpeed.InsertEntry( aStrMed );
     aLbSpeed.InsertEntry( aStrFast );
     aLbSpeed.SelectEntryPos( 0 );
+    aLbSpeed.SetHelpId( SID_DIA_SPEED );
     aLbSpeed.Show();
 
     //SetSizePixel( Size( 95, 20 ) );
@@ -259,6 +261,7 @@ DiaAutoControl::DiaAutoControl( Window* pParent, SfxBindings& rBdx, WinBits nSty
     aLbAuto.InsertEntry( aStrSemi );
     aLbAuto.InsertEntry( aStrAuto );
     aLbAuto.SelectEntryPos( 0 );
+    aLbAuto.SetHelpId( SID_DIA_AUTO );
     aLbAuto.Show();
 
     //SetSizePixel( Size( 175, 20 ) );
