@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXImpressDocument.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 12:27:34 $
+ *  last change:$Date: 2003-12-11 12:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,15 @@
  *
  *
  ************************************************************************/
-
 package mod._sd;
+
+import com.sun.star.drawing.XShape;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.XSelectionSupplier;
 
 import java.io.PrintWriter;
 
@@ -67,10 +74,10 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
+import util.DrawTools;
 import util.SOfficeFactory;
 
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 
 /**
 * Test for object which is represented by service
@@ -115,6 +122,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 */
 public class SdXImpressDocument extends TestCase {
     XComponent xImpressDoc;
+    XComponent xImpressDoc2;
 
     /**
     * Called while disposing a <code>TestEnvironment</code>.
@@ -123,9 +131,10 @@ public class SdXImpressDocument extends TestCase {
     * @param tEnv the environment to cleanup
     * @param log writer to log information while testing
     */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xImpressDoc");
         xImpressDoc.dispose();
+        xImpressDoc2.dispose();
     }
 
     /**
@@ -134,28 +143,54 @@ public class SdXImpressDocument extends TestCase {
     * <code>com.sun.star.presentation.PresentationDocument</code>.
     * @see com.sun.star.presentation.PresentationDocument
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                              PrintWriter log)
+        throws StatusException {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
         // get a soffice factory object
         SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                    (XMultiServiceFactory)Param.getMSF());
+                                     (XMultiServiceFactory) Param.getMSF());
 
         try {
-            log.println( "creating a impress document" );
+            log.println("creating a impress document");
             xImpressDoc = SOF.createImpressDoc(null);
+            xImpressDoc2 = SOF.createImpressDoc(null);
         } catch (com.sun.star.uno.Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( xImpressDoc );
+        XModel xModel1 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xImpressDoc);
+        XModel xModel2 = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                            xImpressDoc2);
+
+        XController cont1 = xModel1.getCurrentController();
+        XController cont2 = xModel2.getCurrentController();
+
+        cont1.getFrame().setName("cont1");
+        cont2.getFrame().setName("cont2");
+
+        XSelectionSupplier sel = (XSelectionSupplier) UnoRuntime.queryInterface(
+                                         XSelectionSupplier.class, cont1);
+
+        XShape aShape = SOF.createShape(xImpressDoc, 5000, 3500, 7500, 5000,
+                                        "Rectangle");
+
+        DrawTools.getDrawPage(xImpressDoc, 0).add(aShape);
+
+        log.println("creating a new environment for drawpage object");
+
+        TestEnvironment tEnv = new TestEnvironment(xImpressDoc);
+
+        log.println("adding Controller as ObjRelation for XModel");
+        tEnv.addObjRelation("CONT2", cont2);
+
+        log.println("Adding SelectionSupplier and Shape to select for XModel");
+        tEnv.addObjRelation("SELSUPP", sel);
+        tEnv.addObjRelation("TOSELECT", aShape);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-
-}    // finish class SdDrawPage
-
+} // finish class SdDrawPage
