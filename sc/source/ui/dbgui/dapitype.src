@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-19 21:09:12 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 18:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ french ] = "Sélection";
         Text[ spanish ] = "Selección";
         Text[ italian ] = "Selezione";
-        Text[ danish ] = "Udvalg";
+        Text[ danish ] = "Vælg";
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
@@ -454,7 +454,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ french ] = "Sélection";
         Text[ spanish ] = "Selección";
         Text[ italian ] = "Selezione";
-        Text[ danish ] = "Udvalg";
+        Text[ danish ] = "Vælg";
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
@@ -811,7 +811,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ french ] = "Sélection";
         Text[ spanish ] = "Selección";
         Text[ italian ] = "Selezione";
-        Text[ danish ] = "Udvalg";
+        Text[ danish ] = "Vælg";
         Text[ swedish ] = "Urval";
         Text[ polish ] = "Wybór";
         Text[ portuguese_brazilian ] = "Select";
