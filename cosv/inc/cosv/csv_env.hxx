@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csv_env.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-06-25 15:15:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,10 +170,29 @@ void                PerformAssertion(
 #define csv_noimpl(x)       ::csv::PerformAssertion( "Functon " #x " is not yet implemented.", __FILE__, __LINE__)
 #define csv_exception       ::csv::PerformAssertion( "Exception to be raised.", __FILE__, __LINE__)
 #else
+
+// Save NDEBUG state
+#ifdef NDEBUG
+#define CSV_CSV_ENV_HXX_HAD_NDEBUG
+#undef NDEBUG
+#endif
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
+
 #define csv_assert(x)       assert(x);
 #define csv_noimpl(x)       assert(x);
 #define csv_exception       assert(x);
+
+// Restore NDEBUG state
+#ifdef CSV_CSV_ENV_HXX_HAD_NDEBUG
+#define NDEBUG
+#else
+#undef NDEBUG
+#endif
+
 #endif
 
 #else // #ifndef CSV_NO_ASSERTIONS else
