@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-13 22:11:38 $
+ *  last change: $Author: cp $ $Date: 2000-12-15 14:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,7 +974,7 @@ XlfdStorage::InterfaceFont (AttributeProvider* pFactory)
 
         if (    (eType   == TYPE_SCALABLE)
             && ((eWeight == WEIGHT_NORMAL) || (eWeight == WEIGHT_MEDIUM))
-            && ((eItalic == ITALIC_NORMAL) || (eItalic == ITALIC_NONE))
+            && ((eItalic == ITALIC_NONE))
            )
         {
             Attribute *pFamily   = pFactory->RetrieveFamily(mpList[i]->mnFamily);
