@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:15:50 $
+#   last change: $Author: rt $ $Date: 2004-11-26 16:34:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,64 +67,6 @@ TARGET=ldapschema
 .INCLUDE :  settings.mk
 
 # --- Targets ------------------------------------------------------
-
-XCSFILES= \
-    org$/openoffice$/Inet.xcs \
-    org$/openoffice$/Office$/Addons.xcs \
-    org$/openoffice$/Office$/Calc.xcs \
-    org$/openoffice$/Office$/Chart.xcs \
-    org$/openoffice$/Office$/Commands.xcs \
-    org$/openoffice$/Office$/Common.xcs \
-    org$/openoffice$/Office$/Compatibility.xcs \
-    org$/openoffice$/Office$/DataAccess.xcs \
-    org$/openoffice$/Office$/Draw.xcs \
-    org$/openoffice$/Office$/Impress.xcs \
-    org$/openoffice$/Office$/Java.xcs \
-    org$/openoffice$/Office$/Jobs.xcs \
-    org$/openoffice$/Office$/Labels.xcs \
-    org$/openoffice$/Office$/Linguistic.xcs \
-    org$/openoffice$/Office$/Math.xcs \
-    org$/openoffice$/Office$/ProtocolHandler.xcs \
-    org$/openoffice$/Office$/SFX.xcs \
-    org$/openoffice$/Office$/Substitution.xcs \
-    org$/openoffice$/Office$/UI.xcs \
-    org$/openoffice$/Office$/Views.xcs \
-    org$/openoffice$/Office$/Writer.xcs \
-    org$/openoffice$/Office$/WriterWeb.xcs \
-    org$/openoffice$/Office$/Scripting.xcs \
-    org$/openoffice$/Office$/Security.xcs \
-    org$/openoffice$/Office$/Recovery.xcs \
-    org$/openoffice$/Office$/UI$/Controller.xcs \
-    org$/openoffice$/Office$/UI$/Factories.xcs \
-    org$/openoffice$/Office$/UI$/Commands.xcs \
-    org$/openoffice$/Office$/UI$/BasicIDECommands.xcs \
-    org$/openoffice$/Office$/UI$/BibliographyCommands.xcs \
-    org$/openoffice$/Office$/UI$/CalcCommands.xcs \
-    org$/openoffice$/Office$/UI$/ChartCommands.xcs \
-    org$/openoffice$/Office$/UI$/DbuCommands.xcs \
-    org$/openoffice$/Office$/UI$/DrawImpressCommands.xcs \
-    org$/openoffice$/Office$/UI$/GenericCommands.xcs \
-    org$/openoffice$/Office$/UI$/MathCommands.xcs \
-    org$/openoffice$/Office$/UI$/StartModuleCommands.xcs \
-    org$/openoffice$/Office$/UI$/WriterCommands.xcs \
-    org$/openoffice$/Office$/TypeDetection.xcs \
-    org$/openoffice$/Setup.xcs \
-    org$/openoffice$/UserProfile.xcs \
-    org$/openoffice$/VCL.xcs \
-    org$/openoffice$/ucb$/Configuration.xcs \
-    org$/openoffice$/ucb$/Hierarchy.xcs \
-    org$/openoffice$/ucb$/Store.xcs \
-    org$/openoffice$/TypeDetection$/Types.xcs \
-    org$/openoffice$/TypeDetection$/Filter.xcs \
-    org$/openoffice$/TypeDetection$/GraphicFilter.xcs \
-    org$/openoffice$/TypeDetection$/Misc.xcs
-
-# transform xcs format to properties format
-RESOURCES1=$(foreach,j,$(foreach,i,$(XCSFILES) $(MISC)$/registry$/res$/$i) $(foreach,k,$(alllangext) $(subst,$/res,$/res$/{$(iso_$(k))} $j)))
-RESOURCES=$(foreach,i,$(RESOURCES1) $(subst,.xcs,.properties $i))
-
-# remove unnecessary info from the component schemas
-TRIMXSL=$(foreach,i,$(XCSFILES) $(MISC)$/registry$/schema$/{$(subst,.xcs,.xcs $i)})
 
 UNIXTEXT= \
     $(MISC)$/oo-org-map.properties \
