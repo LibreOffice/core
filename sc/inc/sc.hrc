@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:05:13 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 10:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,8 @@
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
 #define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
+
+#define SID_ENABLE_HYPHENATION          (SC_VIEW_START + 87)
 
 // Nachrichten -------------------------------------------------------------
 
