@@ -77,33 +77,33 @@ public class PropTest extends PropertySet implements XServiceInfo
     public long longA;
     public float floatA;
     public double doubleA;
-    public String stringA;
-    public Object objectA;
-    public Any anyA;
-    public Type typeA;
-    public XInterface xinterfaceA;
-    public XTypeProvider xtypeproviderA;
-    public boolean[] arBoolA;
-    public char[] arCharA;
-    public byte[] arByteA;
-    public short[] arShortA;
-    public int[] arIntA;
-    public long[] arLongA;
-    public float[] arFloatA;
-    public double[] arDoubleA;
-    public String[] arStringA;
-    public Object[] arObjectA;
-    public Any[] arAnyA;
-    public XInterface[] arXinterfaceA;
-    public boolean[][] ar2BoolA;
-    public Boolean boolClassA;
-    public Character charClassA;
-    public Byte byteClassA;
-    public Short shortClassA;
-    public Integer intClassA;
-    public Long longClassA;
-    public Float floatClassA;
-    public Double doubleClassA;
+    public String stringA; // MAYBEVOID
+    public Object objectA; // MAYBEVOID
+    public Any anyA; // MAYBEVOID
+    public Type typeA;// MAYBEVOID
+    public XInterface xinterfaceA;// MAYBEVOID
+    public XTypeProvider xtypeproviderA;// MAYBEVOID
+    public boolean[] arBoolA; // MAYBEVOID
+    public char[] arCharA; // MAYBEVOID
+    public byte[] arByteA; // MAYBEVOID
+    public short[] arShortA; // MAYBEVOID
+    public int[] arIntA; // MAYBEVOID
+    public long[] arLongA; // MAYBEVOID
+    public float[] arFloatA; // MAYBEVOID
+    public double[] arDoubleA; // MAYBEVOID
+    public String[] arStringA; // MAYBEVOID
+    public Object[] arObjectA; // MAYBEVOID
+    public Any[] arAnyA; // MAYBEVOID
+    public XInterface[] arXinterfaceA; // MAYBEVOID
+    public boolean[][] ar2BoolA; // MAYBEVOID
+    public Boolean boolClassA; // MAYBEVOID
+    public Character charClassA; // MAYBEVOID
+    public Byte byteClassA; // MAYBEVOID
+    public Short shortClassA; // MAYBEVOID
+    public Integer intClassA; // MAYBEVOID
+    public Long longClassA; // MAYBEVOID
+    public Float floatClassA; // MAYBEVOID
+    public Double doubleClassA; // MAYBEVOID
 
     // readonly
     public int roIntA= 100;
@@ -113,9 +113,9 @@ public class PropTest extends PropertySet implements XServiceInfo
 
     // BOUND & CONSTRAINED
     public boolean bcBoolA;
-    public Boolean bcBoolClassA;
-    public Object bcObjectA;
-    public Any bcAnyA;
+    public Boolean bcBoolClassA; // MAYBEVOID
+    public Object bcObjectA; // MAYBEVOID
+    public Any bcAnyA;       // MAYBEVOID
 
     // MAYBEVOID
     public Integer mvIntA;
@@ -134,41 +134,41 @@ public class PropTest extends PropertySet implements XServiceInfo
         registerProperty("longA", (short) 0);
         registerProperty("floatA", (short) 0);
         registerProperty("doubleA", (short) 0);
-        registerProperty("stringA", (short) 0);
-        registerProperty("objectA", (short) 0);
-        registerProperty("anyA", (short) 0);
-        registerProperty("typeA", (short) 0);
-        registerProperty("xinterfaceA", (short) 0);
-        registerProperty("xtypeproviderA", (short) 0);
-        registerProperty("arBoolA", (short) 0);
-        registerProperty("arCharA", (short) 0);
-        registerProperty("arByteA", (short) 0);
-        registerProperty("arShortA", (short) 0);
-        registerProperty("arIntA", (short) 0);
-        registerProperty("arLongA", (short) 0);
-        registerProperty("arFloatA", (short) 0);
-        registerProperty("arDoubleA", (short) 0);
-        registerProperty("arStringA", (short) 0);
-        registerProperty("arObjectA", (short) 0);
-        registerProperty("arAnyA", (short) 0);
-        registerProperty("arXinterfaceA", (short) 0);
-        registerProperty("ar2BoolA", (short) 0);
-        registerProperty("boolClassA", (short) 0);
-        registerProperty("charClassA", (short) 0);
-        registerProperty("byteClassA", (short) 0);
-        registerProperty("shortClassA", (short) 0);
-        registerProperty("intClassA", (short) 0);
-        registerProperty("longClassA", (short) 0);
-        registerProperty("floatClassA", (short) 0);
-        registerProperty("doubleClassA", (short) 0);
+        registerProperty("stringA", PropertyAttribute.MAYBEVOID);
+        registerProperty("objectA", PropertyAttribute.MAYBEVOID);
+        registerProperty("anyA", PropertyAttribute.MAYBEVOID);
+        registerProperty("typeA", PropertyAttribute.MAYBEVOID);
+        registerProperty("xinterfaceA", PropertyAttribute.MAYBEVOID);
+        registerProperty("xtypeproviderA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arBoolA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arCharA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arByteA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arShortA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arIntA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arLongA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arFloatA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arDoubleA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arStringA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arObjectA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arAnyA", PropertyAttribute.MAYBEVOID);
+        registerProperty("arXinterfaceA", PropertyAttribute.MAYBEVOID);
+        registerProperty("ar2BoolA", PropertyAttribute.MAYBEVOID);
+        registerProperty("boolClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("charClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("byteClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("shortClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("intClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("longClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("floatClassA", PropertyAttribute.MAYBEVOID);
+        registerProperty("doubleClassA", PropertyAttribute.MAYBEVOID);
         registerProperty("roIntA", PropertyAttribute.READONLY);
         registerProperty("roIntClassA", PropertyAttribute.READONLY);
         registerProperty("roObjectA", PropertyAttribute.READONLY);
         registerProperty("roAnyA", PropertyAttribute.READONLY);
         registerProperty("bcBoolA",(short) ( PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED));
-        registerProperty("bcBoolClassA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED));
-        registerProperty("bcObjectA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED));
-        registerProperty("bcAnyA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED));
+        registerProperty("bcBoolClassA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED | PropertyAttribute.MAYBEVOID));
+        registerProperty("bcObjectA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED | PropertyAttribute.MAYBEVOID));
+        registerProperty("bcAnyA", (short) (PropertyAttribute.BOUND | PropertyAttribute.CONSTRAINED |PropertyAttribute.MAYBEVOID));
         registerProperty("mvIntA", PropertyAttribute.MAYBEVOID);
         registerProperty("mvObjectA", PropertyAttribute.MAYBEVOID);
         registerProperty("mvAnyA", PropertyAttribute.MAYBEVOID);
