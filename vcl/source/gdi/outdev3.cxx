@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:01:44 $
+ *  last change: $Author: th $ $Date: 2001-07-09 22:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,8 +1041,8 @@ static char const aImplSubsSans[] = "albany;arial;helvetica;lucidasans;lucida;ge
 static char const aImplSubsSerif[] = "thorndale;timesnewroman;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;garamond;garamondmt;palatino";
 static char const aImplSubsFixed[] = "cumberland;couriernew;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol";
 static char const aImplSubsStarSymbol[] = "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl";
-static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts;opensymbol";
-static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl;opensymbol";
+static char const aImplSubsDingBats[] = "starsymbol;zapfdingbats;monotypesorts;dingbats;opensymbol";
+static char const aImplSubsSymbol[] = "starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol";
 
 static char const aImplSubsAndaleSans[] = "andalesans;verdana;trebuchetms";
 static char const aImplSubsSansNarrow[] = "arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed";
@@ -1333,13 +1333,13 @@ static ImplFontNameAttr const aImplFontNameList[] =
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_CHANCERY | IMPL_FONT_ATTR_ITALIC },
 {   "lucidaconsole",        aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, aImplHTMLSubsMonospace,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_FIXED },
-{   "lucidadingbats",       aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+{   "lucidadingbats",       aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "lucidahandwriting",    aImplSubsComic, aImplSubsZapfChancery, aImplSubsPalaceScript, NULL, NULL, NULL, aImplHTMLSubsCursive,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SCRIPT | IMPL_FONT_ATTR_HANDWRITING | IMPL_FONT_ATTR_ITALIC },
 {   "lucidasans",           aImplSubsSans, aImplSubsSansUnicode, NULL, NULL, NULL, aImplPSSubsHelvetica, aImplHTMLSubsSansSerif,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_SANSSERIF },
-{   "lucidasansdingbats",   aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL, NULL,
+{   "lucidasansdingbats",   aImplSubsDingBats, aImplSubsStarSymbol, aImplSubsSansUnicode, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_SPECIAL | IMPL_FONT_ATTR_SYMBOL },
 {   "lucidasanstyp",        aImplSubsFixed, NULL, NULL, NULL, NULL, NULL, NULL,
                             WEIGHT_NORMAL, WIDTH_NORMAL, IMPL_FONT_ATTR_NORMAL | IMPL_FONT_ATTR_TYPEWRITER | IMPL_FONT_ATTR_FIXED },
@@ -8406,5 +8406,3 @@ BOOL OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     rFontCharMap.ImplSetRanges( nPairs, pCodes );
     return TRUE;
 }
-
-// -----------------------------------------------------------------------
