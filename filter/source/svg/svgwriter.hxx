@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,9 @@
 // -----------------------------------------------------------------------------
 
 #define _SVG_USE_NATIVE_TEXTDECORATION
-#undef  _SVG_USE_TSPANS
+#define _SVG_USE_TSPANS 1
 #undef  _SVG_WRITE_EXTENTS
-#define _SVG_EMBED_FONTS
+#define _SVG_EMBED_FONTS 1
 
 // -----------------------------------------------------------------------------
 
