@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-13 16:42:16 $
+ *  last change: $Author: kso $ $Date: 2001-06-14 06:52:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
     Compressed                    x
     Encrypted                     x
     HasEncryptedEntries   x (root folder only)
+    SegmentSize           x (root folder only)
 
     getCommandInfo        x       x
     getPropertySetInfo    x       x
@@ -115,6 +116,7 @@
 #include "pkgcontent.hxx"
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
@@ -198,9 +200,16 @@ Sequence< Property > Content::getProperties(
                     -1,
                     getCppuBooleanType(),
                     PropertyAttribute::BOUND | PropertyAttribute::READONLY
+                ),
+                beans::Property(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM( "SegmentSize" ) ),
+                    -1,
+                    getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                    beans::PropertyAttribute::BOUND
                 )
             };
-            return Sequence< Property >( aRootFolderPropertyInfoTable, 6 );
+            return Sequence< Property >( aRootFolderPropertyInfoTable, 7 );
         }
         else
         {
