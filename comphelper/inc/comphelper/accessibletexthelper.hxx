@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-26 17:00:07 $
+ *  last change: $Author: tbe $ $Date: 2002-07-01 13:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ namespace comphelper
 //      implGetLocale
 //      implGetSelection
 //      getCaretPosition
+//      setCaretPosition
 //      getCharacterAttributes
 //      getCharacterBounds
 //      getIndexAtPoint
