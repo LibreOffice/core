@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: th $ $Date: 2001-02-23 16:13:58 $
+ *  last change: $Author: th $ $Date: 2001-02-23 18:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2344,14 +2344,14 @@ static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
     {
         LanguageType eLang = rFont.GetLanguage();
         // In Chinese Simplified the EmphasisMarks are below/left
-        if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) &&
+        if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
              (eLang == LANGUAGE_CHINESE_SINGAPORE) )
             nEmphasisMark |= EMPHASISMARK_POS_BELOW;
         else
         {
             eLang = rFont.GetCJKContextLanguage();
             // In Chinese Simplified the EmphasisMarks are below/left
-            if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) &&
+            if ( (eLang == LANGUAGE_CHINESE_SIMPLIFIED) ||
                  (eLang == LANGUAGE_CHINESE_SINGAPORE) )
                 nEmphasisMark |= EMPHASISMARK_POS_BELOW;
             else
@@ -2360,6 +2360,38 @@ static FontEmphasisMark ImplGetEmphasisMarkStyle( const Font& rFont )
     }
 
     return nEmphasisMark;
+}
+
+// -----------------------------------------------------------------------
+
+static BOOL ImplIsUnderlineAbove( const Font& rFont )
+{
+    if ( !rFont.IsVertical() )
+        return FALSE;
+
+    LanguageType eLang = rFont.GetLanguage();
+    // In all Chinese Languages the underline is left
+    if ( (eLang == LANGUAGE_CHINESE)                ||
+         (eLang == LANGUAGE_CHINESE_TRADITIONAL)    ||
+         (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
+         (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
+         (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
+         (eLang == LANGUAGE_CHINESE_MACAU) )
+        return FALSE;
+    else
+    {
+        eLang = rFont.GetCJKContextLanguage();
+        // In all Chinese Languages the underline is left
+        if ( (eLang == LANGUAGE_CHINESE)                ||
+             (eLang == LANGUAGE_CHINESE_TRADITIONAL)    ||
+             (eLang == LANGUAGE_CHINESE_SIMPLIFIED)     ||
+             (eLang == LANGUAGE_CHINESE_HONGKONG)       ||
+             (eLang == LANGUAGE_CHINESE_SINGAPORE)      ||
+             (eLang == LANGUAGE_CHINESE_MACAU) )
+            return FALSE;
+    }
+
+    return TRUE;
 }
 
 // =======================================================================
@@ -2473,26 +2505,31 @@ int OutputDevice::ImplNewFont()
                 pFontEntry->maMetric.maStyleName= pFontEntry->maFontSelData.maStyleName;
                 pFontEntry->maMetric.mbDevice   = FALSE;
             }
-            pFontEntry->maMetric.mnSuperscriptSize      = 0;
-            pFontEntry->maMetric.mnSuperscriptOffset    = 0;
-            pFontEntry->maMetric.mnSubscriptSize        = 0;
-            pFontEntry->maMetric.mnSubscriptOffset      = 0;
-            pFontEntry->maMetric.mnUnderlineSize        = 0;
-            pFontEntry->maMetric.mnUnderlineOffset      = 0;
-            pFontEntry->maMetric.mnBUnderlineSize       = 0;
-            pFontEntry->maMetric.mnBUnderlineOffset     = 0;
-            pFontEntry->maMetric.mnDUnderlineSize       = 0;
-            pFontEntry->maMetric.mnDUnderlineOffset1    = 0;
-            pFontEntry->maMetric.mnDUnderlineOffset2    = 0;
-            pFontEntry->maMetric.mnWUnderlineSize       = 0;
-            pFontEntry->maMetric.mnWUnderlineOffset     = 0;
-            pFontEntry->maMetric.mnStrikeoutSize        = 0;
-            pFontEntry->maMetric.mnStrikeoutOffset      = 0;
-            pFontEntry->maMetric.mnBStrikeoutSize       = 0;
-            pFontEntry->maMetric.mnBStrikeoutOffset     = 0;
-            pFontEntry->maMetric.mnDStrikeoutSize       = 0;
-            pFontEntry->maMetric.mnDStrikeoutOffset1    = 0;
-            pFontEntry->maMetric.mnDStrikeoutOffset2    = 0;
+            pFontEntry->maMetric.mnUnderlineSize            = 0;
+            pFontEntry->maMetric.mnUnderlineOffset          = 0;
+            pFontEntry->maMetric.mnBUnderlineSize           = 0;
+            pFontEntry->maMetric.mnBUnderlineOffset         = 0;
+            pFontEntry->maMetric.mnDUnderlineSize           = 0;
+            pFontEntry->maMetric.mnDUnderlineOffset1        = 0;
+            pFontEntry->maMetric.mnDUnderlineOffset2        = 0;
+            pFontEntry->maMetric.mnWUnderlineSize           = 0;
+            pFontEntry->maMetric.mnWUnderlineOffset         = 0;
+            pFontEntry->maMetric.mnAboveUnderlineSize       = 0;
+            pFontEntry->maMetric.mnAboveUnderlineOffset     = 0;
+            pFontEntry->maMetric.mnAboveBUnderlineSize      = 0;
+            pFontEntry->maMetric.mnAboveBUnderlineOffset    = 0;
+            pFontEntry->maMetric.mnAboveDUnderlineSize      = 0;
+            pFontEntry->maMetric.mnAboveDUnderlineOffset1   = 0;
+            pFontEntry->maMetric.mnAboveDUnderlineOffset2   = 0;
+            pFontEntry->maMetric.mnAboveWUnderlineSize      = 0;
+            pFontEntry->maMetric.mnAboveWUnderlineOffset    = 0;
+            pFontEntry->maMetric.mnStrikeoutSize            = 0;
+            pFontEntry->maMetric.mnStrikeoutOffset          = 0;
+            pFontEntry->maMetric.mnBStrikeoutSize           = 0;
+            pFontEntry->maMetric.mnBStrikeoutOffset         = 0;
+            pFontEntry->maMetric.mnDStrikeoutSize           = 0;
+            pFontEntry->maMetric.mnDStrikeoutOffset1        = 0;
+            pFontEntry->maMetric.mnDStrikeoutOffset2        = 0;
 #ifndef REMOTE_APPSERVER
             pGraphics->GetFontMetric( &(pFontEntry->maMetric) );
             pFontEntry->mnWidthFactor = pGraphics->GetCharWidth( 0, CHARCACHE_STD-1, pFontEntry->maWidthAry );
@@ -3027,21 +3064,21 @@ void OutputDevice::ImplInitTextLineSize()
     long            nUnderlineOffset;
     long            nStrikeoutOffset;
 
-    nLineHeight = ((mpFontEntry->maMetric.mnDescent*25)+50) / 100;
+    nLineHeight = ((pFontEntry->maMetric.mnDescent*25)+50) / 100;
     if ( !nLineHeight )
         nLineHeight = 1;
     nLineHeight2 = nLineHeight / 2;
     if ( !nLineHeight2 )
         nLineHeight2 = 1;
 
-    nBLineHeight = ((mpFontEntry->maMetric.mnDescent*50)+50) / 100;
+    nBLineHeight = ((pFontEntry->maMetric.mnDescent*50)+50) / 100;
     if ( nBLineHeight == nLineHeight )
         nBLineHeight++;
     nBLineHeight2 = nBLineHeight/2;
     if ( !nBLineHeight2 )
         nBLineHeight2 = 1;
 
-    n2LineHeight = ((mpFontEntry->maMetric.mnDescent*16)+50) / 100;
+    n2LineHeight = ((pFontEntry->maMetric.mnDescent*16)+50) / 100;
     if ( !n2LineHeight )
         n2LineHeight = 1;
     n2LineDY = n2LineHeight;
@@ -3051,53 +3088,28 @@ void OutputDevice::ImplInitTextLineSize()
     if ( !n2LineDY2 )
         n2LineDY2 = 1;
 
-    BOOL bVertical = maFont.IsVertical();
-    long nLeading = mpFontEntry->maMetric.mnLeading;
-    if ( bVertical )
-    {
-        if ( !nLeading )
-        {
-            if ( mpFontEntry->maMetric.mnDescent )
-                nLeading = mpFontEntry->maMetric.mnDescent;
-            else
-            {
-                nLeading = mpFontEntry->maMetric.mnAscent*4/5;
-                if ( !nLeading )
-                    nLeading = 1;
-            }
-        }
-        nUnderlineOffset = -(mpFontEntry->maMetric.mnAscent-nLeading/2);
-    }
-    else
-        nUnderlineOffset = mpFontEntry->maMetric.mnDescent/2 + 1;
-    nStrikeoutOffset = -((mpFontEntry->maMetric.mnAscent-mpFontEntry->maMetric.mnLeading)/3);
+    nUnderlineOffset = pFontEntry->maMetric.mnDescent/2 + 1;
+    nStrikeoutOffset = -((pFontEntry->maMetric.mnAscent-pFontEntry->maMetric.mnLeading)/3);
 
     if ( !pFontEntry->maMetric.mnUnderlineSize )
     {
-        pFontEntry->maMetric.mnUnderlineSize    = nLineHeight;
-        pFontEntry->maMetric.mnUnderlineOffset  = nUnderlineOffset - nLineHeight2;
-        if ( bVertical && (nLeading < mpFontEntry->maMetric.mnDescent) )
-        {
-            if ( nLineHeight > 1 )
-                pFontEntry->maMetric.mnUnderlineSize--;
-        }
+        pFontEntry->maMetric.mnUnderlineSize        = nLineHeight;
+        pFontEntry->maMetric.mnUnderlineOffset      = nUnderlineOffset - nLineHeight2;
     }
     if ( !pFontEntry->maMetric.mnBUnderlineSize )
     {
-        pFontEntry->maMetric.mnBUnderlineSize   = nBLineHeight;
-        pFontEntry->maMetric.mnBUnderlineOffset = nUnderlineOffset - nBLineHeight2;
+        pFontEntry->maMetric.mnBUnderlineSize       = nBLineHeight;
+        pFontEntry->maMetric.mnBUnderlineOffset     = nUnderlineOffset - nBLineHeight2;
     }
     if ( !pFontEntry->maMetric.mnDUnderlineSize )
     {
-        pFontEntry->maMetric.mnDUnderlineSize    = n2LineHeight;
-        pFontEntry->maMetric.mnDUnderlineOffset1 = nUnderlineOffset - n2LineDY2 - n2LineHeight;
-        pFontEntry->maMetric.mnDUnderlineOffset2 = pFontEntry->maMetric.mnDUnderlineOffset1 + n2LineDY + n2LineHeight;
+        pFontEntry->maMetric.mnDUnderlineSize       = n2LineHeight;
+        pFontEntry->maMetric.mnDUnderlineOffset1    = nUnderlineOffset - n2LineDY2 - n2LineHeight;
+        pFontEntry->maMetric.mnDUnderlineOffset2    = pFontEntry->maMetric.mnDUnderlineOffset1 + n2LineDY + n2LineHeight;
     }
     if ( !pFontEntry->maMetric.mnWUnderlineSize )
     {
-        long nWCalcSize = mpFontEntry->maMetric.mnDescent;
-        if ( bVertical )
-            nWCalcSize = nLeading;
+        long nWCalcSize = pFontEntry->maMetric.mnDescent;
         if ( nWCalcSize < 6 )
         {
             if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
@@ -3107,23 +3119,105 @@ void OutputDevice::ImplInitTextLineSize()
         }
         else
             pFontEntry->maMetric.mnWUnderlineSize = ((nWCalcSize*50)+50) / 100;
-        pFontEntry->maMetric.mnWUnderlineOffset = nUnderlineOffset;
+        pFontEntry->maMetric.mnWUnderlineOffset     = nUnderlineOffset;
     }
+
     if ( !pFontEntry->maMetric.mnStrikeoutSize )
     {
-        pFontEntry->maMetric.mnStrikeoutSize    = nLineHeight;
-        pFontEntry->maMetric.mnStrikeoutOffset  = nStrikeoutOffset - nLineHeight2;
+        pFontEntry->maMetric.mnStrikeoutSize        = nLineHeight;
+        pFontEntry->maMetric.mnStrikeoutOffset      = nStrikeoutOffset - nLineHeight2;
     }
     if ( !pFontEntry->maMetric.mnBStrikeoutSize )
     {
-        pFontEntry->maMetric.mnBStrikeoutSize   = nBLineHeight;
-        pFontEntry->maMetric.mnBStrikeoutOffset = nStrikeoutOffset - nBLineHeight2;
+        pFontEntry->maMetric.mnBStrikeoutSize       = nBLineHeight;
+        pFontEntry->maMetric.mnBStrikeoutOffset     = nStrikeoutOffset - nBLineHeight2;
     }
     if ( !pFontEntry->maMetric.mnDStrikeoutSize )
     {
-        pFontEntry->maMetric.mnDStrikeoutSize    = n2LineHeight;
-        pFontEntry->maMetric.mnDStrikeoutOffset1 = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
-        pFontEntry->maMetric.mnDStrikeoutOffset2 = pFontEntry->maMetric.mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
+        pFontEntry->maMetric.mnDStrikeoutSize       = n2LineHeight;
+        pFontEntry->maMetric.mnDStrikeoutOffset1    = nStrikeoutOffset - n2LineDY2 - n2LineHeight;
+        pFontEntry->maMetric.mnDStrikeoutOffset2    = pFontEntry->maMetric.mnDStrikeoutOffset1 + n2LineDY + n2LineHeight;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void OutputDevice::ImplInitAboveTextLineSize()
+{
+    ImplFontEntry*  pFontEntry = mpFontEntry;
+    long            nLineHeight;
+    long            nLineHeight2;
+    long            nBLineHeight;
+    long            nBLineHeight2;
+    long            n2LineHeight;
+    long            n2LineDY;
+    long            n2LineDY2;
+    long            nUnderlineOffset;
+    long            nLeading;
+
+    nLeading = pFontEntry->maMetric.mnLeading;
+    if ( !nLeading )
+    {
+        nLeading = pFontEntry->maMetric.mnAscent*4/5;
+        if ( !nLeading )
+            nLeading = 1;
+    }
+
+    nLineHeight = ((nLeading*25)+50) / 100;
+    if ( !nLineHeight )
+        nLineHeight = 1;
+    nLineHeight2 = nLineHeight / 2;
+    if ( !nLineHeight2 )
+        nLineHeight2 = 1;
+
+    nBLineHeight = ((nLeading*50)+50) / 100;
+    if ( nBLineHeight == nLineHeight )
+        nBLineHeight++;
+    nBLineHeight2 = nBLineHeight/2;
+    if ( !nBLineHeight2 )
+        nBLineHeight2 = 1;
+
+    n2LineHeight = ((nLeading*16)+50) / 100;
+    if ( !n2LineHeight )
+        n2LineHeight = 1;
+    n2LineDY = n2LineHeight;
+    if ( n2LineDY <= 0 )
+        n2LineDY = 1;
+    n2LineDY2 = n2LineDY/2;
+    if ( !n2LineDY2 )
+        n2LineDY2 = 1;
+
+    nUnderlineOffset = -(pFontEntry->maMetric.mnAscent-(nLeading/2));
+
+    if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
+    {
+        pFontEntry->maMetric.mnAboveUnderlineSize       = nLineHeight;
+        pFontEntry->maMetric.mnAboveUnderlineOffset     = nUnderlineOffset - nLineHeight2;
+    }
+    if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
+    {
+        pFontEntry->maMetric.mnAboveBUnderlineSize      = nBLineHeight;
+        pFontEntry->maMetric.mnAboveBUnderlineOffset    = nUnderlineOffset - nBLineHeight2;
+    }
+    if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
+    {
+        pFontEntry->maMetric.mnAboveDUnderlineSize      = n2LineHeight;
+        pFontEntry->maMetric.mnAboveDUnderlineOffset1   = nUnderlineOffset - n2LineDY2 - n2LineHeight;
+        pFontEntry->maMetric.mnAboveDUnderlineOffset2   = pFontEntry->maMetric.mnAboveDUnderlineOffset1 + n2LineDY + n2LineHeight;
+    }
+    if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
+    {
+        long nWCalcSize = nLeading;
+        if ( nWCalcSize < 6 )
+        {
+            if ( (nWCalcSize == 1) || (nWCalcSize == 2) )
+                pFontEntry->maMetric.mnAboveWUnderlineSize = nWCalcSize;
+            else
+                pFontEntry->maMetric.mnAboveWUnderlineSize = 3;
+        }
+        else
+            pFontEntry->maMetric.mnAboveWUnderlineSize = ((nWCalcSize*50)+50) / 100;
+        pFontEntry->maMetric.mnAboveWUnderlineOffset    = nUnderlineOffset;
     }
 }
 
@@ -3329,7 +3423,8 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
 void OutputDevice::ImplDrawTextLine( long nBaseX,
                                      long nX, long nY, long nWidth,
                                      FontStrikeout eStrikeout,
-                                     FontUnderline eUnderline )
+                                     FontUnderline eUnderline,
+                                     BOOL bUnderlineAbove )
 {
     if ( !nWidth )
         return;
@@ -3351,9 +3446,20 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
          (eUnderline == UNDERLINE_DOUBLEWAVE) ||
          (eUnderline == UNDERLINE_BOLDWAVE) )
     {
-        if ( !pFontEntry->maMetric.mnWUnderlineSize )
-            ImplInitTextLineSize();
-        nLineHeight = pFontEntry->maMetric.mnWUnderlineSize;
+        if ( bUnderlineAbove )
+        {
+            if ( !pFontEntry->maMetric.mnAboveWUnderlineSize )
+                ImplInitAboveTextLineSize();
+            nLinePos = pFontEntry->maMetric.mnAboveWUnderlineOffset;
+            nLineHeight = pFontEntry->maMetric.mnAboveWUnderlineSize;
+        }
+        else
+        {
+            if ( !pFontEntry->maMetric.mnWUnderlineSize )
+                ImplInitTextLineSize();
+            nLinePos = pFontEntry->maMetric.mnWUnderlineOffset;
+            nLineHeight = pFontEntry->maMetric.mnWUnderlineSize;
+        }
         if ( (eUnderline == UNDERLINE_SMALLWAVE) &&
              (nLineHeight > 3) )
             nLineHeight = 3;
@@ -3362,7 +3468,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
             nLineWidth = 1;
         if ( eUnderline == UNDERLINE_BOLDWAVE )
             nLineWidth *= 2;
-        nLinePos = nY + pFontEntry->maMetric.mnWUnderlineOffset - (nLineHeight / 2);
+        nLinePos += nY + (nLineHeight / 2);
         long nLineWidthHeight = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
         if ( eUnderline == UNDERLINE_DOUBLEWAVE )
         {
@@ -3479,10 +3585,20 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
              (eUnderline == UNDERLINE_DASHDOT) ||
              (eUnderline == UNDERLINE_DASHDOTDOT) )
         {
-            if ( !pFontEntry->maMetric.mnUnderlineSize )
-                ImplInitTextLineSize();
-            nLineHeight = pFontEntry->maMetric.mnUnderlineSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnUnderlineOffset;
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveUnderlineSize )
+                    ImplInitAboveTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnAboveUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnAboveUnderlineOffset;
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnUnderlineSize )
+                    ImplInitTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnUnderlineOffset;
+            }
         }
         else if ( (eUnderline == UNDERLINE_BOLD) ||
                   (eUnderline == UNDERLINE_BOLDDOTTED) ||
@@ -3491,18 +3607,39 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
                   (eUnderline == UNDERLINE_BOLDDASHDOT) ||
                   (eUnderline == UNDERLINE_BOLDDASHDOTDOT) )
         {
-            if ( !pFontEntry->maMetric.mnBUnderlineSize )
-                ImplInitTextLineSize();
-            nLineHeight = pFontEntry->maMetric.mnBUnderlineSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnBUnderlineOffset;
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveBUnderlineSize )
+                    ImplInitAboveTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnAboveBUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnAboveBUnderlineOffset;
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnBUnderlineSize )
+                    ImplInitTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnBUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnBUnderlineOffset;
+            }
         }
         else if ( eUnderline == UNDERLINE_DOUBLE )
         {
-            if ( !pFontEntry->maMetric.mnDUnderlineSize )
-                ImplInitTextLineSize();
-            nLineHeight = pFontEntry->maMetric.mnDUnderlineSize;
-            nLinePos    = nY + pFontEntry->maMetric.mnDUnderlineOffset1;
-            nLinePos2   = nY + pFontEntry->maMetric.mnDUnderlineOffset2;
+            if ( bUnderlineAbove )
+            {
+                if ( !pFontEntry->maMetric.mnAboveDUnderlineSize )
+                    ImplInitAboveTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnAboveDUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset1;
+                nLinePos2   = nY + pFontEntry->maMetric.mnAboveDUnderlineOffset2;
+            }
+            else
+            {
+                if ( !pFontEntry->maMetric.mnDUnderlineSize )
+                    ImplInitTextLineSize();
+                nLineHeight = pFontEntry->maMetric.mnDUnderlineSize;
+                nLinePos    = nY + pFontEntry->maMetric.mnDUnderlineOffset1;
+                nLinePos2   = nY + pFontEntry->maMetric.mnDUnderlineOffset2;
+            }
         }
         else
             nLineHeight = 0;
@@ -3717,7 +3854,7 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
                                       const long* pDXAry,
                                       FontStrikeout eStrikeout,
                                       FontUnderline eUnderline,
-                                      BOOL bWordLine )
+                                      BOOL bWordLine, BOOL bUnderlineAbove )
 {
     if ( bWordLine )
     {
@@ -3734,7 +3871,7 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
                 // Query Size to text start and draw the Line to text end
                 long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
                 long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
-                ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline );
+                ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline, bUnderlineAbove );
             }
             if ( bLine != bCurLine )
             {
@@ -3749,18 +3886,18 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
             // Query Size to text start and draw the Line to text end
             long nStartX = ImplGetTextWidth( pStr, nLineStart, pDXAry );
             long nEndX = ImplGetTextWidth( pStr, nLineEnd, pDXAry );
-            ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline );
+            ImplDrawTextLine( nX, nX+nStartX, nY, nEndX-nStartX, eStrikeout, eUnderline, bUnderlineAbove );
         }
     }
     else
-        ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( pStr, nLen, pDXAry ), eStrikeout, eUnderline );
+        ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( pStr, nLen, pDXAry ), eStrikeout, eUnderline, bUnderlineAbove );
 }
 
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, xub_Unicode c )
 {
-    ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( &c, 1, NULL ), STRIKEOUT_NONE, UNDERLINE_SINGLE );
+    ImplDrawTextLine( nX, nX, nY, ImplGetTextWidth( &c, 1, NULL ), STRIKEOUT_NONE, UNDERLINE_SINGLE, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -4195,7 +4332,8 @@ void OutputDevice::ImplDrawTextDirect( long nX, long nY,
             ImplDrawTextLines( nX, nY, pStr, nLen, pDXAry,
                                maFont.GetStrikeout(),
                                maFont.GetUnderline(),
-                               maFont.IsWordLineMode() );
+                               maFont.IsWordLineMode(),
+                               ImplIsUnderlineAbove( maFont ) );
         }
 
         // EmphasisMark
@@ -4706,7 +4844,8 @@ void OutputDevice::SetTextAlign( TextAlign eAlign )
 
 void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
                                  FontStrikeout eStrikeout,
-                                 FontUnderline eUnderline )
+                                 FontUnderline eUnderline,
+                                 BOOL bUnderlineAbove )
 {
     DBG_TRACE( "OutputDevice::DrawTextLine()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
@@ -4748,7 +4887,14 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
     aPos.X() += mnTextOffX;
     aPos.Y() += mnTextOffY;
-    ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nWidth, eStrikeout, eUnderline );
+    ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nWidth, eStrikeout, eUnderline, bUnderlineAbove );
+}
+
+// ------------------------------------------------------------------------
+
+BOOL OutputDevice::IsTextUnderlineAbove( const Font& rFont )
+{
+    return ImplIsUnderlineAbove( rFont );
 }
 
 // ------------------------------------------------------------------------
