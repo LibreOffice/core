@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 12:04:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,14 +148,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    XMLPropStyleContext* OFormLayerXMLImport::createControlStyleContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
-        const Reference< sax::XAttributeList >& _rxAttrList, SvXMLStylesContext& _rParentStyles,
-        sal_uInt16 _nFamily, sal_Bool _bDefaultStyle )
-    {
-        return m_pImpl->createControlStyleContext( _nPrefix, _rLocalName, _rxAttrList, _rParentStyles, _nFamily, _bDefaultStyle );
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
     {
         m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
@@ -174,6 +166,14 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11.66.1  2004/06/08 14:49:18  mib
+ *  - #i20153#: form controls
+ *
+ *  Revision 1.11  2003/12/01 12:04:36  rt
+ *  INTEGRATION: CWS geordi2q09 (1.10.24); FILE MERGED
+ *  2003/11/24 15:17:09 obo 1.10.24.2: undo last change
+ *  2003/11/21 17:02:46 obo 1.10.24.1: #111934# join CWS comboboxlink
+ *
  *  Revision 1.10.24.2  2003/11/24 15:17:09  obo
  *  undo last change
  *
