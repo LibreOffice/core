@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-09 15:06:20 $
+ *  last change: $Author: dv $ $Date: 2001-03-09 15:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef __com_sun_star_frame_TemplateAccess_idl__
 #define __com_sun_star_frame_TemplateAccess_idl__
 
-#ifndef __com_sun_star_frame_XLocalizedContentAccess_idl__
-#include <com/sun/star/frame/XLocalizedContentAccess.idl>
+#ifndef __com_sun_star_lang_XLocalizable_idl__
+#include <com/sun/star/lang/XLocalizable.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XDocumentTemplates_idl__
+#include <com/sun/star/frame/XDocumentTemplates.idl>
 #endif
 
 
@@ -84,7 +88,7 @@ module com {  module sun {  module star {  module frame {
 service TemplateAccess
 {
     // DocMerge: empty anyway
-    interface com::sun::star::frame::XLocalizable;
+    interface com::sun::star::lang::XLocalizable;
     // DocMerge: empty anyway
     interface com::sun::star::frame::XDocumentTemplates;
 
@@ -94,9 +98,5 @@ service TemplateAccess
 
 }; }; }; };
 
-/*=============================================================================
 
-    $Log: not supported by cvs2svn $
-
-=============================================================================*/
 #endif
