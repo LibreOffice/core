@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:41:10 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,10 @@
 #include <ary_i/codeinf2.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_enumvalue.hxx>
 #include <ary/idl/ip_ce.hxx>
+#include <parser/parserinfo.hxx>
+#include <adc_msg.hxx>
 #include <s2_luidl/uidl_tok.hxx>
 #include <x_parse2.hxx>
 
@@ -179,12 +182,16 @@ UnoIDL_PE::PassDocuAt( ary::idl::CodeEntity & io_rCe )
     {
         io_rCe.Set_Docu(pDocu.Release());
     }
-    else if (io_rCe.ClassId() != ary::idl::Module::class_id)
+    else if // KORR_FUTURE
+            // Re-enable doc-warning for Enum Values, as soon as there is a
+            //   @option -no-doc-for-enumvalues.
+            (     io_rCe.ClassId() != ary::idl::Module::class_id
+              AND io_rCe.ClassId() != ary::idl::EnumValue::class_id  )
     {
-         Cout() << "Warning: "
-               << io_rCe.LocalName()
-               << " has no documentation."
-               << Endl();
+        TheMessages().Out_MissingDoc(
+                        io_rCe.LocalName(),
+                        ParseInfo().CurFile(),
+                        ParseInfo().CurLine() );
     }
 }
 
@@ -212,6 +219,17 @@ UnoIDL_PE::CurNamespace() const
     }
 }
 
+const ParserInfo &
+UnoIDL_PE::ParseInfo() const
+{
+    if ( Parent() != 0 )
+        return Parent()->ParseInfo();
+    else
+    {
+        csv_assert(false);
+        return *(const ParserInfo*)0;
+    }
+}
 
 }   // namespace uidl
 }   // namespace csi
