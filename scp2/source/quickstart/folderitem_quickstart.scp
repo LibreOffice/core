@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_quickstart.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:10:22 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:55:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,5 +65,5 @@ FolderItem gid_Folderitem_Exe_Quickstart
     ModuleID = gid_Module_Optional_Quickstart;
     Name = "%PRODUCTNAME %PRODUCTVERSION";
     FolderID = PREDEFINED_AUTOSTART;
-    FileID = gid_File_Exe_Quickstart;
+    FileID = gid_File_Exe_Install_Quickstart;
 End
