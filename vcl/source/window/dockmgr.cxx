@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:10:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,11 +1222,21 @@ BOOL ImplDockingWindowWrapper::Close()
 
 void ImplDockingWindowWrapper::ToggleFloatingMode()
 {
+    // notify listeners
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
 
     // notify dockingwindow/toolbox
+    // note: this should (was: must) be done before notifying the
+    //       listeners to have the toolbox in the proper state
+
+    // !!! putting this before the notification somehow leads to formatting errors
+    //  when undocking horizontal toolbars by double click, so better keep it here until
+    // fully understood
+    // as a result undocking vertical toolbars via double click changes the layout of
+    // the toolbar buttons, which is a minor problem...
     if( GetWindow()->ImplIsDockingWindow() )
         ((DockingWindow*) GetWindow())->ToggleFloatingMode();
+
 
     // must be enabled in Window::Notify to prevent permanent docking during mouse move
     mbStartDockingEnabled = FALSE;
@@ -1273,9 +1283,12 @@ void ImplDockingWindowWrapper::PopupModeEnd()
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::Resizing( Size& )
+void ImplDockingWindowWrapper::Resizing( Size& rSize )
 {
-    // TODO: send event
+    // TODO: add virtual Resizing() to class Window, so we can get rid of class DockingWindow
+    DockingWindow *pDockingWindow = dynamic_cast< DockingWindow* >( GetWindow() );
+    if( pDockingWindow )
+        pDockingWindow->Resizing( rSize );
 }
 
 // -----------------------------------------------------------------------
