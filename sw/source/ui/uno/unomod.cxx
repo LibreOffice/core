@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-24 21:45:52 $
+ *  last change: $Author: rt $ $Date: 2001-07-26 16:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ void SwXPrintSettings::_preGetValues ()
     pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
 }
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw(UnknownPropertyException, WrappedTargetException )
 {
     sal_Bool bBool = TRUE;
     sal_Bool bBoolVal;
@@ -696,7 +696,7 @@ void SwXViewSettings::_preGetValues ()
         mpConstViewOption = SW_MOD()->GetViewOption(bWeb);
 }
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw(UnknownPropertyException, WrappedTargetException )
 {
     sal_Bool bBool = TRUE;
     sal_Bool bBoolVal;
