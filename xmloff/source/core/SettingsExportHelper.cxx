@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:03:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:05:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
 #endif
 #ifndef _XMLENUMS_HXX_
 #include <xmlenums.hxx>
@@ -565,7 +568,9 @@ void XMLSettingsExportHelper::exportSettings(
 {
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aProps.getLength(), "no properties to export");
-    exportSequencePropertyValue(aProps, rName);
+    ::rtl::OUString aQName =
+        rExport.GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOO, rName );
+    exportSequencePropertyValue(aProps, aQName);
 }
 
 
