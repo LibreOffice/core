@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
+ *  last change: $Author: mba $ $Date: 2000-11-09 17:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ sal_Bool SfxContentHelper::IsDocument( const String& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
+        DBG_WARNING( "CommandAbortedException" );
     }
     catch( ::com::sun::star::ucb::IllegalIdentifierException& )
     {
@@ -230,7 +230,7 @@ sal_Bool SfxContentHelper::IsFolder( const String& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        //DBG_ERRORFILE( "CommandAbortedException" );
+        DBG_WARNING( "CommandAbortedException" );
     }
     catch( ::com::sun::star::ucb::IllegalIdentifierException& )
     {
@@ -286,7 +286,7 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
     {
-        DBG_ERRORFILE( "CommandAbortedException" );
+        DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
     catch( ... )
