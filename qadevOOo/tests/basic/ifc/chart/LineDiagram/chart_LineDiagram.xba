@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: chart_LineDiagram.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:45:35 $ 
+'*  last change:$Date: 2003-10-06 12:49:58 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -126,8 +126,13 @@ On Error Goto ErrHndl
     nSpline(1) = 2
     PropertyTester.TestProperty("SplineType", nSpline())
 
+    PropertyTester.TestProperty("SplineOrder")
+
+    PropertyTester.TestProperty("SplineResolution")
+
     ' Change an object back!
     oObj = oObject
+
 Exit Sub
 ErrHndl:
     Test.Exception()
