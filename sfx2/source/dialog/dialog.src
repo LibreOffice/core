@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:33:17 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ CheckBox CB_READ_ONLY
     Text [ finnish ] = "~Vain luku" ;
     Text [ danish ] = "Skrivebeskyttet" ;
     Text [ french ] = "En ~lecture seule" ;
-    Text [ swedish ] = "Sk~rivskyddad" ;
+    Text [ swedish ] = "Ba~ra läsning" ;
     Text [ dutch ] = "~Alleen lezen" ;
     Text [ spanish ] = "~Solo lectura" ;
     Text [ english_us ] = "~Read-only" ;
@@ -1095,6 +1095,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 };
 
 // ******************************************************************* EOF
+
 
 
 
