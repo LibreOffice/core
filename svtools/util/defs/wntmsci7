@@ -9913,3 +9913,6 @@ _real@8@3ffeccccccccccccd000
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3152811313@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3152811313@@YAXPAVControl@@JJAAJ@Z
 ?lcl_DecoratedFilter@?%O:\SRC641\src\svtools\source\filepicker\iodlgimp.cxx2292813393@@YA?AVString@@ABV2@@Z
+??_B?1???s_aMutex@?$OPropertyArrayUsageHelper@VSvtFilePicker@@@$D@@9@51
+?s_aMutex@?$OPropertyArrayUsageHelper@VSvtFilePicker@@@$E
+?s_aMutex@?$OPropertyArrayUsageHelper@VSvtFilePicker@@@comphelper@@1VMutex@osl@@A
