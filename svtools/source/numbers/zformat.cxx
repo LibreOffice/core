@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-13 19:32:45 $
+ *  last change: $Author: er $ $Date: 2001-07-12 14:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,8 @@ static long GetPrecExp( double fAbsVal )
 }
 
 const USHORT nNewCurrencyVersionId = 0x434E;    // "NC"
-const sal_Unicode cNewCurrencyMagic = 0x01;         // Magic fuer Format im Kommentar
+const sal_Unicode cNewCurrencyMagic = 0x01;     // Magic for format code in comment
+const USHORT nNewStandardFlagVersionId = 0x4653;    // "SF"
 
 /***********************Funktion SvNumberformatInfo******************************/
 
@@ -1237,24 +1238,39 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         (nNewCurrencyEnd = aComment.Search( cNewCurrencyMagic, 1 )) != STRING_NOTFOUND );
     BOOL bNewCurrencyLoaded = FALSE;
     BOOL bNewCurrency = FALSE;
-    if ( rHdr.BytesLeft() )
-    {   // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR
+
+    BOOL bGoOn = TRUE;
+    while ( rHdr.BytesLeft() && bGoOn )
+    {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
         USHORT nId;
         rStream >> nId;
-        DBG_ASSERT( nId == nNewCurrencyVersionId, "SvNumberformat::Load: unknown nId" );
-        if ( nId == nNewCurrencyVersionId )
+        switch ( nId )
         {
-            bNewCurrencyLoaded = TRUE;
-            rStream >> bNewCurrency;
-            if ( bNewCurrency )
+            case nNewCurrencyVersionId :
             {
-                for ( USHORT j=0; j<4; j++ )
+                bNewCurrencyLoaded = TRUE;
+                rStream >> bNewCurrency;
+                if ( bNewCurrency )
                 {
-                    NumFor[j].LoadNewCurrencyMap( rStream );
+                    for ( USHORT j=0; j<4; j++ )
+                    {
+                        NumFor[j].LoadNewCurrencyMap( rStream );
+                    }
                 }
             }
+            break;
+            case nNewStandardFlagVersionId :
+                rStream >> bStandard;   // the real standard flag
+            break;
+            default:
+                DBG_ERRORFILE( "SvNumberformat::Load: unknown header bytes left nId" );
+                bGoOn = FALSE;  // stop reading unknown stream left over of newer versions
+                // Would be nice to have multiple read/write headers instead
+                // but old versions wouldn't know it, TLOT.
         }
     }
+    rHdr.EndEntry();
+
     if ( bNewCurrencyLoaded )
     {
         if ( bNewCurrency && bNewCurrencyComment )
@@ -1285,8 +1301,6 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             SetNewStandardDefined( nNewStandard );
     }
     SetComment( aComment );
-
-    rHdr.EndEntry();
 
     if ( eHackConversion != NF_CONVERT_NONE )
     {   //! und weiter mit dem HACK!
@@ -1390,10 +1404,30 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
         Build50Formatstring( aFormatstring );       // alten Formatstring generieren
     }
 
+    // old SO5 versions do behave strange (no output) if standard flag is set
+    // on formats not prepared for it (not having the following exact types)
+    BOOL bOldStandard = bStandard;
+    if ( bOldStandard )
+    {
+        switch ( eType )
+        {
+            case NUMBERFORMAT_NUMBER :
+            case NUMBERFORMAT_DATE :
+            case NUMBERFORMAT_TIME :
+            case NUMBERFORMAT_DATETIME :
+            case NUMBERFORMAT_PERCENT :
+            case NUMBERFORMAT_SCIENTIFIC :
+                // ok to save
+            break;
+            default:
+                bOldStandard = FALSE;
+        }
+    }
+
     rHdr.StartEntry();
     rStream.WriteByteString( aFormatstring, rStream.GetStreamCharSet() );
     rStream << eType << fLimit1 << fLimit2 << (USHORT) eOp1 << (USHORT) eOp2
-            << bStandard << bIsUsed;
+            << bOldStandard << bIsUsed;
     for (USHORT i = 0; i < 4; i++)
         NumFor[i].Save(rStream);
     // ab SV_NUMBERFORMATTER_VERSION_NEWSTANDARD
@@ -1409,6 +1443,14 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
             NumFor[j].SaveNewCurrencyMap( rStream );
         }
     }
+
+    // the real standard flag to load with versions >638 if different
+    if ( bStandard != bOldStandard )
+    {
+        rStream << nNewStandardFlagVersionId;
+        rStream << bStandard;
+    }
+
     rHdr.EndEntry();
 }
 
