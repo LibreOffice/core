@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-25 17:33:23 $
+ *  last change: $Author: ssa $ $Date: 2001-07-27 13:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,7 +1958,9 @@ void ImplUpdateCursorRect( Window *pWindow )
             return;     // we'll update later
         Rectangle rRect;
         long rWidth;
+        pFrame->IsInEvtHandler( true ); // avoid recursion
         ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
+        pFrame->IsInEvtHandler( false );
         pFrame->SetCursorRect( &rRect, rWidth );
     }
 }
