@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:15:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,14 @@ class SwRowFrm: public SwLayoutFrm
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     const SwTableLine *pTabLine;
+    SwRowFrm* pFollowRow;
+    bool bIsFollowFlowRow;
 
 protected:
     virtual void MakeAll();
 
 public:
-    SwRowFrm( const SwTableLine & );
+    SwRowFrm( const SwTableLine &, bool bInsertContent = true );
     ~SwRowFrm();
 
     virtual void Cut();
@@ -102,6 +104,17 @@ public:
     //Passt die Zellen auf die aktuelle Hoehe an, invalidiert die Zellen
     //wenn die Direction nicht der Hoehe entspricht.
     void AdjustCells( const SwTwips nHeight, const BOOL bHeight );
+
+    //
+    //
+    SwRowFrm* GetFollowRow() const { return pFollowRow; }
+    void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
+
+    bool IsFollowFlowRow() const { return bIsFollowFlowRow; }
+    void SetFollowFlowRow( bool bNew ) { bIsFollowFlowRow = bNew; }
+
+    bool IsRowSplitAllowed() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwRowFrm)
 };
 
