@@ -206,8 +206,6 @@ sub copy_one_file
 
     my ($returnvalue, $infoline);
 
-    my $mode = -x $source ? 0775 : 0664;
-
     my $copyreturn = copy($source, $dest);
 
     if ($copyreturn)
@@ -221,22 +219,30 @@ sub copy_one_file
         $returnvalue = 0;
     }
 
-    # taking care of file attributes
-    my $chmodreturn = chmod($mode, $dest);
-    if ($chmodreturn)
-    {
-        $infoline = "chmod $mode, $dest\n";
-        $returnvalue = 1;
-    }
-    else
-    {
-        # HACK: this isn't exactly the Right Thing(tm),
-        # we should reconsider the use of chmod()
-        $infoline = "WARNING: Could not chmod $dest: $!\n";
-        $returnvalue = 1;
+    push(@installer::globals::logfileinfo, $infoline);
+
+    if ( !$returnvalue ) {
+        return $returnvalue;
     }
 
-    push(@installer::globals::logfileinfo, $infoline);
+    # taking care of file attributes
+    if ($installer::globals::iswin && -f $dest) {
+        my $mode = -x $source ? 0775 : 0664;
+        my $mode_str = sprintf("%o", $mode);
+        my $chmodreturn = chmod($mode, $dest);
+        if ($chmodreturn)
+        {
+            $infoline = "chmod $mode_str, $dest\n";
+            $returnvalue = 1;
+        }
+        else
+        {
+            $infoline = "WARNING: Could not chmod $dest: $!\n";
+            $returnvalue = 0;
+        }
+
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 
     return $returnvalue;
 }
