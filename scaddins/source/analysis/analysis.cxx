@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:23:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -782,32 +782,31 @@ sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) THROWDEF_RTE_IAE
     return ( nVal & 0x00000001 )? 1 : 0;
 }
 
-
-double SAL_CALL AnalysisAddIn::getMultinomial( const SEQSEQ( sal_Int32 )& aV ) THROWDEF_RTE_IAE
+double SAL_CALL
+AnalysisAddIn::getMultinomial( constREFXPS& xOpt, const SEQSEQ( sal_Int32 )& aVLst,
+                               const SEQ( uno::Any )& aOptVLst ) THROWDEF_RTE_IAE
 {
-    sal_Int32       n1, n2;
-    sal_Int32       nE1 = aV.getLength();
-    sal_Int32       nE2;
-    sal_Int32       nZ = 0;
-    double          fN = 1.0;
+    ScaDoubleListGE0 aValList;
 
-    for( n1 = 0 ; n1 < nE1 ; n1++ )
+    aValList.Append( aVLst );
+    aValList.Append( aAnyConv, xOpt, aOptVLst );
+
+    if( aValList.Count() == 0 )
+        return 0.0;
+
+    sal_Int32 nZ = 0;
+    double    fN = 1.0;
+
+    for( const double *p = aValList.First(); p; p = aValList.Next() )
     {
-        const SEQ( sal_Int32 )& rList = aV[ n1 ];
-        nE2 = rList.getLength();
-        const sal_Int32*    pList = rList.getConstArray();
-
-        for( n2 = 0 ; n2 < nE2 ; n2++ )
+        double fInt = (*p >= 0.0) ? rtl::math::approxFloor( *p ) : rtl::math::approxCeil( *p );
+        if ( fInt < 0.0 || fInt > 170.0 )
+            THROW_IAE;
+        sal_Int32 n = static_cast< sal_Int32 >( fInt );
+        if( n > 0 )
         {
-            sal_Int32       n = pList[ n2 ];
-
-            if( n < 0 || n > 170 )
-                THROW_IAE;
-            else if( n > 0 )
-            {
-                nZ += n;
-                fN *= Fak( n );
-            }
+            nZ += n;
+            fN *= Fak( n );
         }
     }
 
