@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_UnoControlButtonModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:38 $ 
+'*  last change:$Date: 2003-10-06 12:44:30 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -65,10 +65,6 @@
 '*************************************************************************
 '*************************************************************************
 
-
-
-
-
 Sub RunTest()
 
 '*************************************************************************
@@ -82,8 +78,6 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("BackgroundColor")
 
     PropertyTester.TestProperty("DefaultButton")
-
-    PropertyTester.TestProperty("DefaultControl")
 
     PropertyTester.TestProperty("Enabled")
 
@@ -103,6 +97,18 @@ On Error Goto ErrHndl
 
     PropertyTester.TestProperty("PushButtonType", Array(0,1,2,3))
     
+    PropertyTester.TestProperty("FontEmphasisMark")
+
+    PropertyTester.TestProperty("FontRelief")
+
+    PropertyTester.TestProperty("ImageAlign")
+
+    PropertyTester.TestProperty("ImageURL")
+
+    PropertyTester.TestProperty("State")
+
+    PropertyTester.TestProperty("TextLineColor")
+
 Exit Sub
 ErrHndl:
     Test.Exception()
