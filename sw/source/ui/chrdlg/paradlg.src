@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:35:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-31 20:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,4 +510,5 @@ TabDialog DLG_DRAWPARA
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Párrafo";
 };
+
 
