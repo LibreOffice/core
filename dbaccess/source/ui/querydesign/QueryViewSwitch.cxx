@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,8 @@ sal_Bool OQueryViewSwitch::switchView()
         m_pDesignView->Show ( bGraphicalDesign );
         if ( bGraphicalDesign && m_bAddTableDialogWasVisible )
             getAddTableDialog()->Show();
+
+        GrabFocus();
     }
 
     if ( pContainer )
