@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2001-06-18 15:01:39 $
+ *  last change: $Author: af $ $Date: 2001-06-25 12:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void SchXMLChartContext::EndElement()
                 {
                     DBG_ERROR( "Property String for Title not available" );
                 }
-                uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+/*              uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
                 if( xShape.is())
                 {
                     // perform build chart with new title string
@@ -329,7 +329,7 @@ void SchXMLChartContext::EndElement()
                     }
                     xShape->setPosition( maMainTitlePos );
                 }
-            }
+*/          }
         }
         if( maSubTitle.getLength())
         {
@@ -346,7 +346,7 @@ void SchXMLChartContext::EndElement()
                 {
                     DBG_ERROR( "Property String for Title not available" );
                 }
-                uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+/*              uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
                 if( xShape.is())
                 {
                     // perform build chart with new title string
@@ -358,9 +358,10 @@ void SchXMLChartContext::EndElement()
                     }
                     xShape->setPosition( maSubTitlePos );
                 }
-            }
+*/          }
         }
     }
+
 
     if( mbHasOwnTable )
     {
@@ -472,9 +473,23 @@ void SchXMLChartContext::EndElement()
     }
 
     // allow BuildChart again
-    uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
+/*  uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( xModel.is())
         xModel->unlockControllers();
+*/
+    //  Set the main title's and subtitle's positions.
+    if( maMainTitle.getLength() > 0)
+    {
+        uno::Reference<drawing::XShape> xMainTitleShape(xDoc->getTitle(), uno::UNO_QUERY);
+        if( xMainTitleShape.is())
+            xMainTitleShape->setPosition( maMainTitlePos );
+    }
+    if( maSubTitle.getLength() > 0)
+    {
+        uno::Reference<drawing::XShape> xSubTitleShape(xDoc->getSubTitle(), uno::UNO_QUERY);
+        if( xSubTitleShape.is())
+            xSubTitleShape->setPosition( maSubTitlePos );
+    }
 
     // set absolute legend position after (BuildChart!)
     if( mbHasLegend )
@@ -631,7 +646,7 @@ void    SchXMLChartContext::InitChart   (awt::Size aChartSize,
     }
 
     //  We have to unlock the controllers and execute an implicit BuildChart because
-    //  the following call to setData needs data structures created in a BuildChartrelies.
+    //  the following call to setData needs data structures created in a BuildChart.
     if( xModel.is())
         xModel->unlockControllers();
 
