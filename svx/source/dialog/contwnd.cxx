@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,10 +138,8 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
             aSet.Put( XFillColorItem( String(), TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
 
-//-/            pPathObj->SetAttributes( aSet, FALSE );
-//-/            SdrBroadcastItemChange aItemChange(*pPathObj);
-            pPathObj->SetItemSetAndBroadcast(aSet);
-//-/            pPathObj->BroadcastItemChange(aItemChange);
+            //pPathObj->SetItemSetAndBroadcast(aSet);
+            pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
             pPage->InsertObject( pPathObj );
         }
@@ -153,7 +151,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
         pView->CombineMarkedObjects( FALSE );
     }
 
-    pModel->SetChanged( TRUE );
+    pModel->SetChanged( sal_False );
 }
 
 
@@ -180,7 +178,7 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
                 aPolyPoly.Insert( XOutCreatePolygon( rXPolyPoly.GetObject( i ), NULL ) );
         }
 
-        pModel->SetChanged( FALSE );
+        pModel->SetChanged( sal_False );
     }
 
     return aPolyPoly;
