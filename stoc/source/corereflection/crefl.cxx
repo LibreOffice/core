@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:53:51 $
+ *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,66 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
         OUString( RTL_CONSTASCII_USTRINGPARAM("IdlReflectionServiceImpl::forType() failed!") ),
         (XWeak *)(OWeakObject *)this );
     return Reference< XIdlClass >(); // dummy
+}
+
+//__________________________________________________________________________________________________
+const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    if (! _aCpp2Uno.is())
+    {
+        MutexGuard aGuard( getMutexAccess() );
+        if (! _aCpp2Uno.is())
+        {
+            _aCpp2Uno = Mapping(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
+            OSL_ENSURE( _aCpp2Uno.is(), "### cannot get c++ to uno mapping!" );
+            if (! _aCpp2Uno.is())
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get c++ to uno mapping!") ),
+                    (XWeak *)(OWeakObject *)this );
+            }
+        }
+    }
+    return _aCpp2Uno;
+}
+//__________________________________________________________________________________________________
+const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    if (! _aUno2Cpp.is())
+    {
+        MutexGuard aGuard( getMutexAccess() );
+        if (! _aUno2Cpp.is())
+        {
+            _aUno2Cpp = Mapping(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
+            OSL_ENSURE( _aUno2Cpp.is(), "### cannot get uno to c++ mapping!" );
+            if (! _aUno2Cpp.is())
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot get uno to c++ mapping!") ),
+                    (XWeak *)(OWeakObject *)this );
+            }
+        }
+    }
+    return _aUno2Cpp;
+}
+//__________________________________________________________________________________________________
+uno_Interface * IdlReflectionServiceImpl::mapToUno(
+    const Any & rObj, typelib_InterfaceTypeDescription * pTo )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    Reference< XInterface > xObj;
+    if (extract( rObj, pTo, xObj, this ))
+        return (uno_Interface *)getCpp2Uno().mapInterface( xObj.get(), pTo );
+
+    throw RuntimeException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        (XWeak *)(OWeakObject *)this );
 }
 
 //==================================================================================================

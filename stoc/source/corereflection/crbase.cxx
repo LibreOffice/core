@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
+ *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,11 @@ IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUSt
 {
     _pReflection->acquire();
     typelib_typedescription_acquire( _pTypeDescr );
+    if (! _pTypeDescr->bComplete)
+        typelib_typedescription_complete( &_pTypeDescr );
     typelib_typedescription_acquire( _pDeclTypeDescr );
+    if (! _pDeclTypeDescr->bComplete)
+        typelib_typedescription_complete( &_pDeclTypeDescr );
 }
 //__________________________________________________________________________________________________
 IdlMemberImpl::~IdlMemberImpl()
@@ -303,7 +307,12 @@ Reference< XIdlClass > IdlMemberImpl::getDeclaringClass()
     throw(::com::sun::star::uno::RuntimeException)
 {
     if (! _xDeclClass.is())
-        _xDeclClass = getReflection()->forType( getDeclTypeDescr() );
+    {
+        Reference< XIdlClass > xDeclClass( getReflection()->forType( getDeclTypeDescr() ) );
+        MutexGuard aGuard( getMutexAccess() );
+        if (! _xDeclClass.is())
+            _xDeclClass = xDeclClass;
+    }
     return _xDeclClass;
 }
 //__________________________________________________________________________________________________

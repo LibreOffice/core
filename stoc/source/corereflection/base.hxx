@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-26 13:01:03 $
+ *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,7 @@ extern ClassNameList g_aClassNames;
 Mutex & getMutexAccess();
 
 //--------------------------------------------------------------------------------------------------
-inline td_equals( typelib_TypeDescription * pTD,
-                  typelib_TypeDescriptionReference * pType )
+inline bool td_equals( typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
 {
     return (pTD->pWeakRef == pType ||
             (pTD->pTypeName->length == pType->pTypeName->length &&
@@ -166,12 +165,19 @@ class IdlReflectionServiceImpl
     // caching
     LRU_CacheAnyByOUString                  _aElements;
 
+    Mapping                     _aCpp2Uno;
+    Mapping                     _aUno2Cpp;
+
     inline Reference< XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
 public:
     Reference< XHierarchicalNameAccess > getTDMgr() const
         { return _xTDMgr; }
     Reference< XMultiServiceFactory > getSMgr() const
         { return _xMgr; }
+
+    const Mapping & getCpp2Uno() throw(::com::sun::star::uno::RuntimeException);
+    const Mapping & getUno2Cpp() throw(::com::sun::star::uno::RuntimeException);
+    uno_Interface * mapToUno( const Any & rObj, typelib_InterfaceTypeDescription * pTo ) throw(::com::sun::star::uno::RuntimeException);
 
     // ctor/ dtor
     IdlReflectionServiceImpl( const Reference< XComponentContext > & xContext );
@@ -397,9 +403,6 @@ public:
 class IdlMemberImpl
     : public WeakImplHelper1< XIdlMember >
 {
-    Mapping                     _aCpp2Uno;
-    Mapping                     _aUno2Cpp;
-
     IdlReflectionServiceImpl *  _pReflection;
     OUString                    _aName;
 
@@ -419,10 +422,6 @@ public:
     typelib_TypeDescription *   getDeclTypeDescr() const
         { return _pDeclTypeDescr; }
 
-    inline const Mapping & getCpp2Uno() throw(::com::sun::star::uno::RuntimeException);
-    inline const Mapping & getUno2Cpp() throw(::com::sun::star::uno::RuntimeException);
-    inline uno_Interface * mapToUno( const Any & rObj, typelib_InterfaceTypeDescription * pTo ) throw(::com::sun::star::uno::RuntimeException);
-
     // ctor/ dtor
     IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                    typelib_TypeDescription * pTypeDescr, typelib_TypeDescription * pDeclTypeDescr );
@@ -432,50 +431,6 @@ public:
     virtual Reference< XIdlClass > SAL_CALL getDeclaringClass() throw(::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
 };
-//__________________________________________________________________________________________________
-inline const Mapping & IdlMemberImpl::getCpp2Uno()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (! _aCpp2Uno.is())
-    {
-        MutexGuard aGuard( getMutexAccess() );
-        if (! _aCpp2Uno.is())
-        {
-            _aCpp2Uno = Mapping( OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ) );
-            OSL_ENSURE( _aCpp2Uno.is(), "### cannot c++ to uno mapping!" );
-            if (! _aCpp2Uno.is())
-            {
-                throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot c++ to uno mapping!") ),
-                    (XWeak *)(OWeakObject *)this );
-            }
-        }
-    }
-    return _aCpp2Uno;
-}
-//__________________________________________________________________________________________________
-inline const Mapping & IdlMemberImpl::getUno2Cpp()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if (! _aUno2Cpp.is())
-    {
-        MutexGuard aGuard( getMutexAccess() );
-        if (! _aUno2Cpp.is())
-        {
-            _aUno2Cpp = Mapping( OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
-                                 OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
-            OSL_ENSURE( _aUno2Cpp.is(), "### cannot uno to c++ mapping!" );
-            if (! _aUno2Cpp.is())
-            {
-                throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("cannot uno TO c++ mapping!") ),
-                    (XWeak *)(OWeakObject *)this );
-            }
-        }
-    }
-    return _aUno2Cpp;
-}
 
 //--------------------------------------------------------------------------------------------------
 // coerces to type descr pTo else queries for it: the interface pointer is returned via rDest
@@ -535,21 +490,6 @@ inline sal_Bool coerce_assign(
             (void *)rSource.getValue(), rSource.getValueTypeRef(),
             cpp_queryInterface, cpp_acquire, cpp_release );
     }
-}
-
-//__________________________________________________________________________________________________
-inline uno_Interface * IdlMemberImpl::mapToUno( const Any & rObj,
-                                                typelib_InterfaceTypeDescription * pTo )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    Reference< XInterface > xObj;
-    if (extract( rObj, pTo, xObj, getReflection() ))
-        return (uno_Interface *)getCpp2Uno().mapInterface( xObj.get(), pTo );
-
-    throw RuntimeException(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
-        (XWeak *)(OWeakObject *)this );
-    return 0; // dummy
 }
 
 }

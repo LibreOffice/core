@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
+ *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,8 @@ FieldAccessMode IdlAttributeFieldImpl::getAccessMode()
 Any IdlAttributeFieldImpl::get( const Any & rObj )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+    uno_Interface * pUnoI = getReflection()->mapToUno(
+        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -259,7 +260,7 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
         else
         {
             uno_any_destruct( &aRet, cpp_release );
-            uno_any_constructAndConvert( &aRet, pReturn, pTD, getUno2Cpp().get() );
+            uno_any_constructAndConvert( &aRet, pReturn, pTD, getReflection()->getUno2Cpp().get() );
             uno_destructData( pReturn, pTD, 0 );
         }
         return aRet;
@@ -280,7 +281,8 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
             (XWeak *)(OWeakObject *)this );
     }
 
-    uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+    uno_Interface * pUnoI = getReflection()->mapToUno(
+        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -295,13 +297,13 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
         if (pTD->eTypeClass == typelib_TypeClass_ANY)
         {
             uno_copyAndConvertData( pArg, SAL_CONST_CAST( Any *, &rValue ),
-                                    pTD, getCpp2Uno().get() );
+                                    pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }
         else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
         {
             uno_copyAndConvertData( pArg, SAL_CONST_CAST( void *, rValue.getValue() ),
-                                    pTD, getCpp2Uno().get() );
+                                    pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }
         else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
@@ -310,7 +312,7 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
             if (bAssign = extract( rValue, (typelib_InterfaceTypeDescription *)pTD,
                                    xObj, getReflection() ))
             {
-                *(void **)pArg = getCpp2Uno().mapInterface(
+                *(void **)pArg = getReflection()->getCpp2Uno().mapInterface(
                     xObj.get(), (typelib_InterfaceTypeDescription *)pTD );
             }
         }
@@ -321,7 +323,7 @@ void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
             // construct temp uno val to do proper assignment: todo opt
             void * pTemp = alloca( pValueTD->nSize );
             uno_copyAndConvertData(
-                pTemp, (void *)rValue.getValue(), pValueTD, getCpp2Uno().get() );
+                pTemp, (void *)rValue.getValue(), pValueTD, getReflection()->getCpp2Uno().get() );
             uno_constructData(
                 pArg, pTD );
             // assignment does simple conversion
@@ -371,7 +373,8 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             (XWeak *)(OWeakObject *)this );
     }
 
-    uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+    uno_Interface * pUnoI = getReflection()->mapToUno(
+        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -386,13 +389,13 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
         if (pTD->eTypeClass == typelib_TypeClass_ANY)
         {
             uno_copyAndConvertData( pArg, SAL_CONST_CAST( Any *, &rValue ),
-                                    pTD, getCpp2Uno().get() );
+                                    pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }
         else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
         {
             uno_copyAndConvertData( pArg, SAL_CONST_CAST( void *, rValue.getValue() ),
-                                    pTD, getCpp2Uno().get() );
+                                    pTD, getReflection()->getCpp2Uno().get() );
             bAssign = sal_True;
         }
         else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
@@ -401,7 +404,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             if (bAssign = extract( rValue, (typelib_InterfaceTypeDescription *)pTD,
                                    xObj, getReflection() ))
             {
-                *(void **)pArg = getCpp2Uno().mapInterface(
+                *(void **)pArg = getReflection()->getCpp2Uno().mapInterface(
                     xObj.get(), (typelib_InterfaceTypeDescription *)pTD );
             }
         }
@@ -412,7 +415,7 @@ void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
             // construct temp uno val to do proper assignment: todo opt
             void * pTemp = alloca( pValueTD->nSize );
             uno_copyAndConvertData(
-                pTemp, (void *)rValue.getValue(), pValueTD, getCpp2Uno().get() );
+                pTemp, (void *)rValue.getValue(), pValueTD, getReflection()->getCpp2Uno().get() );
             uno_constructData(
                 pArg, pTD );
             // assignment does simple conversion
@@ -744,7 +747,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         }
     }
 
-    uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+    uno_Interface * pUnoI = getReflection()->mapToUno(
+        rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
     OSL_ENSURE( pUnoI, "### illegal destination object given!" );
     if (pUnoI)
     {
@@ -781,14 +785,14 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     uno_type_copyAndConvertData(
                         ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
-                        pCppArgs[nPos].getValueTypeRef(), getCpp2Uno().get() );
+                        pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = sal_True;
                 }
                 else if (pTD->eTypeClass == typelib_TypeClass_ANY)
                 {
                     uno_type_any_constructAndConvert(
                         (uno_Any *)ppUnoArgs[nPos], (void *)pCppArgs[nPos].getValue(),
-                        pCppArgs[nPos].getValueTypeRef(), getCpp2Uno().get() );
+                        pCppArgs[nPos].getValueTypeRef(), getReflection()->getCpp2Uno().get() );
                     bAssign = sal_True;
                 }
                 else if (pCppArgs[nPos].getValueTypeClass() == TypeClass_INTERFACE &&
@@ -798,7 +802,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                     if (bAssign = extract( pCppArgs[nPos], (typelib_InterfaceTypeDescription *)pTD,
                                            xDest, getReflection() ))
                     {
-                        *(void **)ppUnoArgs[nPos] = getCpp2Uno().mapInterface(
+                        *(void **)ppUnoArgs[nPos] = getReflection()->getCpp2Uno().mapInterface(
                             xDest.get(), (typelib_InterfaceTypeDescription *)pTD );
                     }
                 }
@@ -809,7 +813,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                     // construct temp uno val to do proper assignment: todo opt
                     void * pTemp = alloca( pValueTD->nSize );
                     uno_copyAndConvertData(
-                        pTemp, (void *)pCppArgs[nPos].getValue(), pValueTD, getCpp2Uno().get() );
+                        pTemp, (void *)pCppArgs[nPos].getValue(), pValueTD,
+                        getReflection()->getCpp2Uno().get() );
                     uno_constructData(
                         ppUnoArgs[nPos], pTD );
                     // assignment does simple conversion
@@ -824,7 +829,7 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     IllegalArgumentException aExc(
                         OUString( RTL_CONSTASCII_USTRINGPARAM("cannot coerce argument type during corereflection call!") ),
-                        *(const Reference< XInterface > *)rObj.getValue(), nPos );
+                        *(const Reference< XInterface > *)rObj.getValue(), (sal_Int16)nPos );
 
                     // cleanup
                     while (nPos--)
@@ -865,7 +870,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
             aExc.Message = OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during invocation!") );
             uno_any_destruct( &aExc.TargetException, cpp_release );
             uno_type_copyAndConvertData(
-                &aExc.TargetException, pUnoExc, ::getCppuType( (const Any *)0 ).getTypeLibType(), getUno2Cpp().get() );
+                &aExc.TargetException, pUnoExc, ::getCppuType( (const Any *)0 ).getTypeLibType(),
+                getReflection()->getUno2Cpp().get() );
             uno_any_destruct( pUnoExc, 0 );
             throw aExc;
         }
@@ -878,13 +884,16 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 {
                     uno_any_destruct( &pCppArgs[nParams], cpp_release );
                     uno_any_constructAndConvert(
-                        &pCppArgs[nParams], ppUnoArgs[nParams], ppParamTypes[nParams], getUno2Cpp().get() );
+                        &pCppArgs[nParams], ppUnoArgs[nParams], ppParamTypes[nParams],
+                        getReflection()->getUno2Cpp().get() );
                 }
                 uno_destructData( ppUnoArgs[nParams], ppParamTypes[nParams], 0 );
                 TYPELIB_DANGER_RELEASE( ppParamTypes[nParams] );
             }
             uno_any_destruct( &aRet, cpp_release );
-            uno_any_constructAndConvert( &aRet, pUnoReturn, pReturnType, getUno2Cpp().get() );
+            uno_any_constructAndConvert(
+                &aRet, pUnoReturn, pReturnType,
+                getReflection()->getUno2Cpp().get() );
             uno_destructData( pUnoReturn, pReturnType, 0 );
             TYPELIB_DANGER_RELEASE( pReturnType );
         }

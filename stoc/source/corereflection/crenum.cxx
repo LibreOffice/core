@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crenum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
+ *  last change: $Author: dbo $ $Date: 2002-10-17 07:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,8 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
 void EnumIdlClassImpl::createObject( Any & rObj )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    int eVal = ((typelib_EnumTypeDescription *)IdlClassImpl::getTypeDescr())->nDefaultEnumValue;
+    sal_Int32 eVal =
+        ((typelib_EnumTypeDescription *)IdlClassImpl::getTypeDescr())->nDefaultEnumValue;
     rObj.setValue( &eVal, IdlClassImpl::getTypeDescr() );
 }
 
