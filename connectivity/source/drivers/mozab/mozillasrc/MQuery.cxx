@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-10-10 13:17:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
 }
 
 // -------------------------------------------------------------------------
-sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
+sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
     OSL_TRACE("IN MQuery::executeQuery()\n");
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -399,9 +399,17 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     if ( nmap->getDir( m_aAddressbook, getter_AddRefs( directory ) ) == sal_False )
         return( -1 );
 
-    m_aQueryDirectory->directory = do_QueryInterface(directory, &rv);
+    SDBCAddress::sdbc_address_type eSDBCAddressType = _pCon->getSDBCAddressType();
 
-    if ( NS_FAILED(rv) || _bIsOutlookExpress)
+    // Since Outlook Express and Outlook in OCL mode support a very limited query capability,
+    // we use the following bool to judge whether we need bypass any use of a DirectoryQuery
+    // interface and instead force the use of the QueryProxy.
+    sal_Bool forceQueryProxyUse = (eSDBCAddressType == SDBCAddress::Outlook) || (eSDBCAddressType == SDBCAddress::OutlookExp);
+
+    // Initialize directory in cases of LDAP and Mozilla
+    if (!forceQueryProxyUse) m_aQueryDirectory->directory = do_QueryInterface(directory, &rv);
+
+    if ( NS_FAILED(rv) || forceQueryProxyUse)
     {
         // Create a nsIAbDirectoryQuery object which eventually will execute
         // the query by calling DoQuery().
