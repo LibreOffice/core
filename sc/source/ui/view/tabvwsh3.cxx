@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 13:52:08 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 14:01:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,6 +553,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 GetViewData()->SetSyntaxMode( bSet );
                 PaintGrid();
                 rBindings.Invalidate( FID_TOGGLESYNTAX );
+                rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
                 rReq.Done();
             }
             break;
@@ -565,6 +566,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 GetViewData()->SetHeaderMode( bSet );
                 RepeatResize();
                 rBindings.Invalidate( FID_TOGGLEHEADERS );
+                rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
                 rReq.Done();
             }
             break;
@@ -578,8 +580,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
 
                 pThisFrame->SetChildWindow( nId, bSet );
-
                 rBindings.Invalidate( FID_TOGGLEINPUTLINE );
+                rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
+                rReq.Done();
             }
             break;
 
@@ -680,6 +683,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     PaintTop();
                     PaintLeft();
                     rBindings.Invalidate( SID_ATTR_ZOOM );
+                    rReq.AppendItem( SvxZoomItem( GetZoomType(), nZoom, nSlot ) );
                     rReq.Done();
                 }
             }
