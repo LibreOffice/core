@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:50:04 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
     int scflag = 1;                                         /*- start contour flag */
     int ecflag = 0;                                         /*- end contour flag */
     int cp = 0;                                             /*- current point */
-    int StartContour = 0, EndContour = 0;
+    int StartContour = 0, EndContour = 1;
 
     listSetElementDtor(pList, free);
     *path = 0;
