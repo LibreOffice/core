@@ -1,6 +1,3 @@
-### 100040 ###
-forms.ODatabaseForm::com::sun::star::awt::XTabControllerModel
-
 ### 112634 ###
 forms.OButtonControl::com::sun::star::awt::XWindow
 forms.OCheckBoxControl::com::sun::star::awt::XWindow
@@ -16,25 +13,54 @@ forms.OListBoxControl::com::sun::star::awt::XWindow
 forms.ONumericControl::com::sun::star::awt::XWindow
 forms.OPatternControl::com::sun::star::awt::XWindow
 forms.ORadioButtonControl::com::sun::star::awt::XWindow
-forms.OTimeControl::com::sun::star::awt::XWindow
+forms.ONavigationBarControl::com::sun::star::awt::XWindow
 
 ### 114044 ###
 forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
 
-### 114045 ###
-forms.OButtonModel::com::sun::star::io::XPersistObject
-forms.OImageButtonModel::com::sun::star::io::XPersistObject
-
 ### i21167 ###
 forms.ODatabaseForm::com::sun::star::form::XLoadable
 
-### i23451 ###
-forms.OFileControlModel::com::sun::star::beans::XMultiPropertySet
-forms.OGroupBoxModel::com::sun::star::beans::XMultiPropertySet
-forms.OImageButtonModel::com::sun::star::beans::XMultiPropertySet
-forms.OFileControlModel::com::sun::star::beans::XFastPropertySet
-forms.OGroupBoxModel::com::sun::star::beans::XFastPropertySet
-forms.OImageButtonModel::com::sun::star::beans::XFastPropertySet
+### i30258 ###
+forms.ODateModel::com::sun::star::form::XUpdateBroadcaster
+forms.OEditModel::com::sun::star::form::XUpdateBroadcaster
+forms.ONumericModel::com::sun::star::form::XUpdateBroadcaster
+forms.OTimeModel::com::sun::star::form::XUpdateBroadcaster
+forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
+forms.OListBoxModel::com::sun::star::form::XUpdateBroadcaster
+forms.OCurrencyModel::com::sun::star::form::XUpdateBroadcaster
+forms.OPatternModel::com::sun::star::form::XUpdateBroadcaster
+forms.OFormattedFieldWrapper::com::sun::star::form::XUpdateBroadcaster
+forms.OListBoxModel::com::sun::star::form::DataAwareControlModel
+forms.ONumericModel::com::sun::star::form::DataAwareControlModel
+forms.OPatternModel::com::sun::star::form::DataAwareControlModel
 
-### i26347 ###
-forms.ODatabaseForm::com::sun::star::sdbc::XResultSetUpdate
+### i32886 ###
+forms.ORadioButtonModel::com::sun::star::form::binding::BindableDatabaseRadioButton
+
+### sometimes the property BoundField throws a UndeclaredThrowableException ###
+#forms.OImageControlModel::com::sun::star::form::DataAwareControlModel
+
+### tends to freeze at arbitrary times ###
+forms.ONavigationBarModel::com::sun::star::io::XPersistObject
+forms.OButtonModel::com::sun::star::io::XPersistObject
+forms.OButtonModel::com::sun::star::io::XPersistObject~
+forms.OCheckBoxModel::com::sun::star::io::XPersistObject
+forms.OComboBoxModel::com::sun::star::io::XPersistObject
+forms.OCurrencyModel::com::sun::star::io::XPersistObject
+forms.ODateModel::com::sun::star::io::XPersistObject
+forms.OEditModel::com::sun::star::io::XPersistObject
+forms.OFileControlModel::com::sun::star::io::XPersistObject
+forms.OFixedTextModel::com::sun::star::io::XPersistObject
+forms.OGridControlModel::com::sun::star::io::XPersistObject
+forms.OGroupBoxModel::com::sun::star::io::XPersistObject
+forms.OHiddenModel::com::sun::star::io::XPersistObject
+forms.OImageButtonModel::com::sun::star::io::XPersistObject
+forms.OImageControlModel::com::sun::star::io::XPersistObject
+forms.OListBoxModel::com::sun::star::io::XPersistObject
+forms.ONumericModel::com::sun::star::io::XPersistObject
+forms.OPatternModel::com::sun::star::io::XPersistObject
+forms.ORadioButtonModel::com::sun::star::io::XPersistObject
+forms.OScrollBarModel::com::sun::star::io::XPersistObject
+forms.OSpinButtonModel::com::sun::star::io::XPersistObject
+forms.OTimeModel::com::sun::star::io::XPersistObject
