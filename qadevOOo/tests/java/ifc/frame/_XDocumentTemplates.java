@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDocumentTemplates.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 09:51:52 $
+ *  last change:$Date: 2003-09-08 10:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+import util.utils;
+
 import com.sun.star.beans.Property;
 import com.sun.star.frame.XDocumentTemplates;
 import com.sun.star.frame.XStorable;
@@ -72,12 +75,9 @@ import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.ucb.XContent;
 import com.sun.star.ucb.XContentAccess;
 import com.sun.star.ucb.XDynamicResultSet;
-import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import util.utils;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
 /**
 * Testing <code>com.sun.star.frame.XDesktop</code>
 * interface methods:
