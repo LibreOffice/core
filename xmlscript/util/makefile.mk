@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ab $ $Date: 2001-02-26 09:56:45 $
+#   last change: $Author: kz $ $Date: 2001-03-06 09:58:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..
 
 PRJNAME=xmlscript
-TARGET=xmlscript
+TARGET=xcr
 NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
@@ -74,13 +74,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 #-------------------------------------------------------------------
 
-LIB1TARGET=	$(SLB)$/$(TARGET)all.lib
+LIB1TARGET=	$(SLB)$/$(TARGET).lib
 
 LIB1FILES= \
         $(SLB)$/xml_helper.lib		\
         $(SLB)$/xmldlg_imexp.lib
 
-SHL1TARGET=xcr$(UPD)$(DLLPOSTFIX)
+SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1LIBS= \
         $(LIB1TARGET)
@@ -92,11 +92,11 @@ SHL1STDLIBS= \
         $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
+SHL1IMPLIB=	i$(TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=	$(TARGET)all
+DEFLIB1NAME=	$(TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
 
 # --- Targets -------------------------------------------------------
