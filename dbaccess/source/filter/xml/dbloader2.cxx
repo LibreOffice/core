@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:30:04 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 14:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
 #include <com/sun/star/frame/XFrameLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
 #include <com/sun/star/frame/XLoadEventListener.hpp>
@@ -460,6 +463,21 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         if ( xController.is() && rFrame.is() )
             xController->attachFrame(rFrame);
+
+        try
+        {
+            Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
+                UNO_QUERY);
+            if ( xDocEventBroadcaster.is() )
+            {
+                ::com::sun::star::document::EventObject aEvent(xModel, bCreateNew ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnLoad")));
+                xDocEventBroadcaster->notifyEvent(aEvent);
+            }
+        }
+        catch(Exception)
+        {
+            OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+        }
         rListener->loadFinished(this);
     }
     else if (!bSuccess && rListener.is())
