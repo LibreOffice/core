@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Desktop.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:36:03 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:01:21 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -78,6 +78,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XNamingService;
 import com.sun.star.util.MalformedNumberFormatException;
+import com.sun.star.util.XNumberFormatTypes;
 import com.sun.star.util.XNumberFormats;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.util.XNumberFormatter;
@@ -269,6 +270,26 @@ public class Desktop {
         return xNumberFormatter;
     }
 
+
+    /**
+     * gives a key to pass to a NumberFormat object. <br/>
+     * example: <br/>
+     * <pre>
+     * XNumberFormatsSupplier nsf = (XNumberFormatsSupplier)UnoRuntime.queryInterface(...,document);
+     * int key = Desktop.getNumberFormatterKey( nsf, ...star.i18n.NumberFormatIndex.DATE...);
+     * XNumberFormatter nf = Desktop.createNumberFormatter(xmsf, nsf);
+     * nf.convertNumberToString( key, 1972 );
+     * </pre>
+     * @param numberFormatsSupplier
+     * @param type - a constant out of i18n.NumberFormatIndex enumeration.
+     * @return a key to use with a util.NumberFormat instance.
+     *
+     */
+    public static int getNumberFormatterKey( Object numberFormatsSupplier, short type) {
+        Object numberFormatTypes = ((XNumberFormatsSupplier)UnoRuntime.queryInterface(XNumberFormatsSupplier.class,numberFormatsSupplier)).getNumberFormats();
+        Locale l = new Locale();
+        return ((XNumberFormatTypes)UnoRuntime.queryInterface(XNumberFormatTypes.class,numberFormatTypes)).getFormatIndex(type, l);
+    }
 
     public static String convertNumberToString(XNumberFormatter _xNumberFormatter, int _nkey, double _dblValue){
         return _xNumberFormatter.convertNumberToString(_nkey, _dblValue);
