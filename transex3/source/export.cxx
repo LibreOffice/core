@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:15:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,6 +1232,8 @@ USHORT Export::GetLangIndex( const ByteString &rLang )
         return SLOVAK_INDEX;
     else if ( sLang == "ESTONIAN" )
         return ESTONIAN_INDEX;
+    else if ( sLang == "SLOVENIAN" )
+        return SLOVENIAN_INDEX;
     else if ( sLang == "ENGLISH" )
         return ENGLISH_INDEX;
     else if ( sLang == "DANISH" )
