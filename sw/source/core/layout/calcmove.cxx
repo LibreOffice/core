@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:33:12 $
+ *  last change: $Author: ama $ $Date: 2001-07-03 10:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,9 +514,12 @@ void SwFrm::MakePos()
         }
         else if ( GetUpper() )
         {
-            // In einem spaltigen Rahmen rufen wir lieber kein Calc "von unten"
             if( !GetUpper()->IsSctFrm() )
-                GetUpper()->Calc(); // Jetzt koennte ein Prev dazugekommen sein...
+            {
+                SwFlyFrm* pTmpFly = FindFlyFrm();
+                if( !pTmpFly || !pTmpFly->IsFlyInCntFrm() )
+                    GetUpper()->Calc();
+            }
             pPrv = lcl_Prev( this, FALSE );
             if ( !bUseUpper && pPrv )
             {   aFrm.Pos( pPrv->Frm().Pos() );

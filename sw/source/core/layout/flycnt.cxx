@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 13:59:58 $
+ *  last change: $Author: ama $ $Date: 2001-07-03 10:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,7 +1166,8 @@ inline void ValidateSz( SwFrm *pFrm )
 
 void DeepCalc( const SwFrm *pFrm )
 {
-    if( pFrm->IsSctFrm() )
+    if( pFrm->IsSctFrm() ||
+        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
         return;
     USHORT nCnt = 0;
 
