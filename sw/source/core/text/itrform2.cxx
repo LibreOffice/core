@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,6 +1472,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "SwTxtFormatter::FormatLine( nStart ) with unswapped frame" );
 
+    // For the formatting routines, we set pOut to the reference device.
     SwHookOut aHook( GetInfo() );
     if( GetInfo().GetLen() < GetInfo().GetTxt().Len() )
         GetInfo().SetLen( GetInfo().GetTxt().Len() );
