@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-20 12:39:40 $
+ *  last change: $Author: cp $ $Date: 2001-02-05 09:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,12 @@ void ImplEntryList::SelectEntry( USHORT nPos, BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
-uno::Reference< i18n::XCollator > ImplGetCollator()
+uno::Reference< i18n::XCollator > ImplGetCollator (lang::Locale &rLocale)
 {
     static uno::Reference< i18n::XCollator > xCollator;
     if ( !xCollator.is() )
         xCollator = vcl::unohelper::CreateCollator();
+    xCollator->loadDefaultCollator (rLocale, 0);
 
     return xCollator;
 }
@@ -211,11 +212,8 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
     }
     else
     {
-        // XXX the transliteration !IsValid(). This exploits that neither
-        // the i18n nor the i18n_simple implementation uses it yet
-        uno::Reference< i18n::XCollator > xCollator = ImplGetCollator();
-        uno::Reference< i18n::XTransliteration > xTransliteration;
         lang::Locale aLocale = Application::GetSettings().GetLocale();
+        uno::Reference< i18n::XCollator > xCollator = ImplGetCollator(aLocale);
 
         const XubString& rStr = pNewEntry->maStr;
         ULONG nLow, nHigh, nMid;
@@ -228,9 +226,8 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
         {
             // XXX even though XCollator::compareString returns a sal_Int32 the only
             // defined values are {-1, 0, 1} which is compatible with StringCompare
-            StringCompare eComp = (StringCompare)xCollator->compareString (
-                                                            rStr, pTemp->maStr,
-                                                            aLocale, xTransliteration);
+            StringCompare eComp =
+                    (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
 
             // Schnelles Einfuegen bei sortierten Daten
             if ( eComp != COMPARE_LESS )
@@ -242,8 +239,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
                 nLow  = mnMRUCount;
                 pTemp = (ImplEntryType*)GetEntry( (USHORT)nLow );
 
-                eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr,
-                                                            aLocale, xTransliteration);
+                eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
                 if ( eComp != COMPARE_GREATER )
                 {
                     Insert( pNewEntry, (ULONG)0 );
@@ -257,9 +253,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
                         nMid = (nLow + nHigh) / 2;
                         pTemp = (ImplEntryType*)GetObject( nMid );
 
-                        eComp = (StringCompare)xCollator->compareString (
-                                                            rStr, pTemp->maStr,
-                                                            aLocale, xTransliteration);
+                        eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
 
                         if ( eComp == COMPARE_LESS )
                             nHigh = nMid-1;
