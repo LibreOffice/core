@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchrecordersupplier.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 13:49:47 $
+ *  last change: $Author: as $ $Date: 2002-09-23 05:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,15 @@ void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&
     aReadLock.unlock();
     // => SAFE
 
+    // clear unspecific situations
+    if (!xDispatcher.is())
+        throw css::uno::RuntimeException(DECLARE_ASCII("specification violation: dispatcher is NULL"), static_cast< ::cppu::OWeakObject* >(this));
+
+    if (!xRecorder.is())
+        throw css::uno::RuntimeException(DECLARE_ASCII("specification violation: no valid dispatch recorder available"), static_cast< ::cppu::OWeakObject* >(this));
+
+    // check, if given dispatch supports record functionality by itself ...
+    // or must be wrapped.
     css::uno::Reference< css::frame::XRecordableDispatch > xRecordable(
         xDispatcher,
         css::uno::UNO_QUERY);
