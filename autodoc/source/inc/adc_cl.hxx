@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 11:20:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,19 @@ class CommandLine : public csv::CommandLine_Ifc
     const String &      DisplayOf_SinceTagValue(
                             const String &      i_sVersionNumber ) const;
 
+        // extern IDL links
+    const String &      ExternRoot() const      { return sExternRoot; }
+    const String &      ExternNamespace() const { return sExternNamespace; }
 
     // ACCESS
     static const CommandLine &
                         Get_();
+    void                Set_ExternRoot(
+                            const String &      i_s )
+                                                { sExternRoot = i_s; }
+    void                Set_ExternNamespace(
+                            const String &      i_s )
+                                                { sExternNamespace = i_s; }
   private:
     // Interface cosv::CommandLine_Ifc:
     virtual void        do_Init(
@@ -164,6 +173,9 @@ class CommandLine : public csv::CommandLine_Ifc
                         pTheInstance_;
     command::CreateHtml *
                         pCommand_CreateHtml;
+
+    String              sExternRoot;
+    String              sExternNamespace;
 };
 
 
