@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-29 09:45:59 $
+ *  last change: $Author: cl $ $Date: 2002-12-03 15:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ sal_Bool FlashExporter::exportAll( Reference< XComponent > xDoc, Reference< XOut
         exportBackgrounds( xDrawPage, nPage, true );
 
         maPagesMap[nPage].mnForegroundID = mpWriter->startSprite();
-        exportDrawPageContents( xDrawPage, false );
+        exportDrawPageContents( xDrawPage, false, false );
         mpWriter->endSprite();
 
         // AS: If the background is different than the previous slide,
@@ -338,7 +338,7 @@ sal_Bool FlashExporter::exportSlides( Reference< XDrawPage > xDrawPage, Referenc
         OSL_ASSERT( false );
     }
 
-    exportDrawPageContents(xDrawPage, true);
+    exportDrawPageContents(xDrawPage, true, false);
 
     mpWriter->storeTo( xOutputStream );
 
@@ -550,7 +550,7 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
     gObjectCache[shapesum] = nPage;
 
     sal_uInt16 rObjectsID = mpWriter->startSprite();
-    exportDrawPageContents( xMasterPage, sal_False );
+    exportDrawPageContents( xMasterPage, false, true );
     mpWriter->endSprite();
 
     maPagesMap[nPage].mnObjectsID = rObjectsID;
@@ -562,17 +562,17 @@ sal_uInt16 FlashExporter::exportMasterPageObjects(sal_uInt16 nPage, Reference< X
 
 /** export's the definition of the shapes inside this drawing page and adds the
     shape infos to the current PageInfo */
-void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, sal_Bool bStream )
+void FlashExporter::exportDrawPageContents( Reference< XDrawPage >& xPage, bool bStream, bool bMaster )
 {
     Reference< XShapes > xShapes( xPage, UNO_QUERY );
-    exportShapes(xShapes, bStream);
+    exportShapes(xShapes, bStream, bMaster);
 }
 
 // -----------------------------------------------------------------------------
 
 /** export's the definition of the shapes inside this XShapes container and adds the
     shape infos to the current PageInfo */
-void FlashExporter::exportShapes( Reference< XShapes >& xShapes, sal_Bool bStream)
+void FlashExporter::exportShapes( Reference< XShapes >& xShapes, bool bStream, bool bMaster )
 {
     OSL_ENSURE( (xShapes->getCount() <= 0xffff), "overflow in FlashExporter::exportDrawPageContents()" );
 
@@ -591,9 +591,9 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, sal_Bool bStrea
             if( xShapes.is() && xShape->getShapeType().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
                 // export the contents of group shapes, but we only ever stream at the top
                 // recursive level anyway, so pass false for streaming.
-                exportShapes( xShapes, false);
+                exportShapes( xShapes, false, bMaster);
             else
-                exportShape( xShape);
+                exportShape( xShape, bMaster);
         }
 
         if (bStream)
@@ -604,7 +604,7 @@ void FlashExporter::exportShapes( Reference< XShapes >& xShapes, sal_Bool bStrea
 // -----------------------------------------------------------------------------
 
 /** export this shape definition and adds it's info to the current PageInfo */
-void FlashExporter::exportShape( Reference< XShape >& xShape)
+void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
 {
     Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
     if( !xPropSet.is() )
@@ -619,6 +619,19 @@ void FlashExporter::exportShape( Reference< XShape >& xShape)
             xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ) ) >>= bEmpty;
             if( bEmpty )
                 return;
+
+            // don't export presentation placeholders on masterpage
+            // they can be non empty when user edits the default texts
+            if( bMaster )
+            {
+                OUString aShapeType( xShape->getShapeType() );
+                if( (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TitleTextShape" ))) ||
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.OutlinerShape" ))))
+                    return;
+            }
+
+
+
         }
         catch( Exception& )
         {

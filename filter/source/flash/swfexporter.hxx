@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-22 14:22:38 $
+ *  last change: $Author: cl $ $Date: 2002-12-03 15:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,9 +243,9 @@ private:
     sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage);
     sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xMasterPage);
 
-    void exportDrawPageContents( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, sal_Bool bStream  );
-    void exportShapes( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, sal_Bool bStream );
-    void exportShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
+    void exportDrawPageContents( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage, bool bStream, bool bMaster  );
+    void exportShapes( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes, bool bStream, bool bMaster );
+    void exportShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape, bool bMaster);
 
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape);
     sal_uInt32 ActionSummer(::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xShapes);
