@@ -1,0 +1,102 @@
+### 111714 ###
+sw.SwAccessibleTableView::com::sun::star::accessibility::XAccessibleSelection
+
+### 112862 ###
+sw.SwXTextTableCursor::com::sun::star::style::ParagraphProperties
+
+### 112864 ###
+sw.SwXCellRange::com::sun::star::style::ParagraphProperties
+
+### 113692 ###
+sw.SwXTextTableCursor::com::sun::star::style::ParagraphProperties
+
+### 113724 ###
+sw.SwXCellRange::com::sun::star::style::ParagraphProperties
+
+### 114134 ###
+sw.SwXDrawPage::com::sun::star::drawing::XShapeGrouper
+
+### 114164 ###
+sw.SwXShape::com::sun::star::beans::XPropertySet
+
+### 114514 ###
+sw.SwAccessiblePageView::com::sun::star::accessibility::XAccessibleEventBroadcaster
+
+### 114518 ###
+sw.SwXCellRange::com::sun::star::text::CellRange
+
+### 114520 ###
+sw.SwXTextEmbeddedObject::com::sun::star::beans::XPropertySet
+sw.SwXTextFrame::com::sun::star::beans::XPropertySet
+sw.SwXTextGraphicObject::com::sun::star::beans::XPropertySet
+sw.SwXTextDocument::com::sun::star::beans::XPropertySet
+
+### i22893 ###
+sw.SwXTextDocument::com::sun::star::document::XDocumentInfoSupplier
+sw.SwXTextDocument::com::sun::star::view::XPrintJobBroadcaster
+sw.SwXTextDocument::com::sun::star::document::XViewDataSupplier
+
+### i22896 ###
+sw.SwXTextDocument::com::sun::star::document::XEventBroadcaster
+
+### i23199 ###
+sw.SwXTextView::com::sun::star::view::XSelectionSupplier
+
+### i23293 ###
+sw.SwXAutoTextContainer::com::sun::star::container::XNameAccess
+
+### i23294 ###
+sw.SwXChapterNumbering::com::sun::star::container::XIndexReplace
+
+### i23295 ###
+sw.SwXDocumentIndex::com::sun::star::text::BaseIndex
+
+### i23298 ###
+sw.SwXDrawPage::com::sun::star::drawing::GenericDrawPage
+
+### i23300 ###
+sw.SwXNumberingRules::com::sun::star::container::XIndexReplace
+
+### i23301 ###
+sw.SwXParagraph::com::sun::star::text::TextTable
+
+### i23386 ###
+sw.SwXTableColumns::com::sun::star::table::XTableColumns
+
+### i23394 ###
+sw.XMLContentImporter::com::sun::star::xml::sax::XDocumentHandler
+sw.XMLMetaImporter::com::sun::star::xml::sax::XDocumentHandler
+sw.XMLStylesImporter::com::sun::star::xml::sax::XDocumentHandler
+
+### i23396 ###
+sw.SwXTextCursor::com::sun::star::text::XSentenceCursor
+
+### i23397 ###
+sw.SwXTextCursor::com::sun::star::text::XWordCursor
+
+### i23398 ###
+sw.SwXTextDocument::com::sun::star::text::XBookmarksSupplier
+sw.SwXTextDocument::com::sun::star::text::XDocumentIndexesSupplier
+sw.SwXTextDocument::com::sun::star::text::XTextFramesSupplier
+
+### i23411 ###
+sw.SwXTextDocument::com::sun::star::text::XPagePrintable
+
+### i23414 ###
+sw.SwXTextEmbeddedObject::com::sun::star::text::TextEmbeddedObject
+
+### i23415 ###
+sw.SwXTextFrame::com::sun::star::text::BaseFrameProperties
+
+### i23420 ###
+sw.SwXTextGraphicObject::com::sun::star::text::TextGraphicObject
+sw.SwXTextGraphicObject::com::sun::star::text::BaseFrameProperties
+
+### i23422 ###
+sw.SwXTextViewCursor::com::sun::star::beans::XMultiPropertyStates
+
+### i23426 ###
+sw.SwXMailMerge::com::sun::star::task::XJob
+
+### i23623 ###
+sw.SwXStyleFamily::com::sun::star::container::XNameReplace
