@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 10:10:08 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 10:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_bIsBookmarkMenu   = sal_False;
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
+    SvtMenuOptions aOptions;
     ::std::vector< USHORT > aQueryLabelItemIdVector;
 
     int nItemCount = pMenu->GetItemCount();
@@ -258,9 +259,12 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
-                if ( !!aImage )
-                    pMenu->SetItemImage( nItemId, aImage );
+                if ( aOptions.IsMenuIconsEnabled() )
+                {
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                    if ( !!aImage )
+                        pMenu->SetItemImage( nItemId, aImage );
+                }
 
                 m_aMenuItemHandlerVector.push_back( new MenuItemHandler( nItemId, NULL, REFERENCE< XDISPATCH >() ));
                 if ( pMenu->GetItemText( nItemId ).Len() == 0 )
