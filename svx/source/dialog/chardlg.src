@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-30 15:17:35 $
+ *  last change: $Author: os $ $Date: 2001-04-03 13:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4798,7 +4798,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_90_DEG
     {
-        Pos = MAP_APPFONT ( 46 , 68  );
+        Pos = MAP_APPFONT ( 56 , 68  );
         Size = MAP_APPFONT ( 45 , 10 );
         TabStop = TRUE;
         Text = "90 Grad";
@@ -4823,7 +4823,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_270_DEG
     {
-        Pos = MAP_APPFONT ( 94 , 68  );
+        Pos = MAP_APPFONT ( 106 , 68  );
         Size = MAP_APPFONT ( 45 , 10 );
         TabStop = TRUE;
         Text = "270 Grad";
