@@ -43,7 +43,6 @@ mkdir: %_DEST%\inc%_EXT%\sd
 hedabu: ..\inc\sddll.hxx %_DEST%\inc%_EXT%\sd\sddll.hxx
 hedabu: ..\inc\fadedef.h %_DEST%\inc%_EXT%\sd\fadedef.h
 hedabu: ..\inc\pres.hxx %_DEST%\inc%_EXT%\sd\pres.hxx
-hedabu: ..\inc\drawdoc.hxx %_DEST%\inc%_EXT%\sd\drawdoc.hxx
 hedabu: ..\inc\sdpage.hxx %_DEST%\inc%_EXT%\sd\sdpage.hxx
 hedabu: ..\inc\fadedef.hxx %_DEST%\inc%_EXT%\sd\fadedef.hxx
 hedabu: ..\inc\diadef.h %_DEST%\inc%_EXT%\sd\diadef.h
