@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-28 11:42:59 $
+ *  last change: $Author: sj $ $Date: 2001-08-31 14:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2365,18 +2365,23 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                 if ( i < 8 )
                 {
                     PresObjKind ePresObjKind = PRESOBJ_NONE;
-                    BOOL        bEmptyPresObj = TRUE;
+                    sal_Bool    bEmptyPresObj = sal_True;
+                    sal_Bool    bVertical = sal_False;
                     if ( ( pTextObj->GetShapeType() == mso_sptRectangle ) || ( pTextObj->GetShapeType() == mso_sptTextBox ) )
                     {
                         if ( pTextObj->Count() )
-                            bEmptyPresObj = FALSE;
+                            bEmptyPresObj = sal_False;
                         switch ( nPlaceholderId )
                         {
-                            case PPT_PLACEHOLDER_NOTESBODY :    ePresObjKind = PRESOBJ_NOTES;   break;
-                            case PPT_PLACEHOLDER_TITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PPT_PLACEHOLDER_BODY :         ePresObjKind = PRESOBJ_OUTLINE; break;
-                            case PPT_PLACEHOLDER_CENTEREDTITLE :ePresObjKind = PRESOBJ_TITLE;   break;
-                            case PPT_PLACEHOLDER_SUBTITLE :     ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
+                            case PPT_PLACEHOLDER_NOTESBODY :            ePresObjKind = PRESOBJ_NOTES;   break;
+                            case PPT_PLACEHOLDER_VERTICALTEXTTITLE :
+                                bVertical = sal_True;   // PASSTHROUGH !!!
+                            case PPT_PLACEHOLDER_TITLE :                ePresObjKind = PRESOBJ_TITLE;   break;
+                            case PPT_PLACEHOLDER_VERTICALTEXTBODY :
+                                bVertical = sal_True;   // PASSTHROUGH !!!
+                            case PPT_PLACEHOLDER_BODY :                 ePresObjKind = PRESOBJ_OUTLINE; break;
+                            case PPT_PLACEHOLDER_CENTEREDTITLE :        ePresObjKind = PRESOBJ_TITLE;   break;
+                            case PPT_PLACEHOLDER_SUBTITLE :             ePresObjKind = PRESOBJ_TEXT;    break;      // PRESOBJ_OUTLINE
 
                             default :
                             {
@@ -2399,7 +2404,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                     {
                         if ( !pTextObj->Count() && pObj->ISA( SdrGrafObj ) )
                         {
-                            bEmptyPresObj = FALSE;
+                            bEmptyPresObj = sal_False;
                             switch ( nPlaceholderId )
                             {
                                 case PPT_PLACEHOLDER_MEDIACLIP :
@@ -2420,7 +2425,7 @@ SdrObject* SdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj, Sd
                         }
                         else
                         {
-                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, FALSE, pText->GetLogicRect(), TRUE );
+                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect(), TRUE );
                             pPresObj->SetUserCall( pPage );
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
