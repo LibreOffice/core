@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:46:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ class Reader;
 USHORT AutoDetec(const String& FileName, USHORT & rVersion);
 bool IsDocShellRegistered();
 
-typedef void (*FnGetWriter)(const String&, WriterRef&);
+typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
 
 struct SwIoDetect
 {
@@ -110,8 +110,8 @@ struct SwIoDetect
     BOOL bDelReader;
 
     inline Reader* GetReader() const { return pReader; }
-    inline void GetWriter( const String& rNm, WriterRef& xWrt ) const
-        { if( fnGetWriter ) (*fnGetWriter)(rNm,xWrt); else xWrt = WriterRef(0); }
+    inline void GetWriter( const String& rNm, const String& rBaseURL, WriterRef& xWrt ) const
+        { if( fnGetWriter ) (*fnGetWriter)(rNm,rBaseURL,xWrt); else xWrt = WriterRef(0); }
 #endif
 
     const sal_Char* IsReader(const sal_Char* pHeader, ULONG nLen_,
