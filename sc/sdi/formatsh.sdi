@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: dr $ $Date: 2002-04-03 15:11:42 $ $Revision: 1.2 $
+ // $Author: nn $ $Date: 2002-05-02 11:38:41 $ $Revision: 1.3 $
  // $Logfile:   T:/sc/sdi/formatsh.sdv  $ $Workfile:   formatsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -45,51 +45,10 @@ interface FormatForSelection : Selection
     SID_STYLE_WATERCAN          [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_NEW_BY_EXAMPLE    [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     SID_STYLE_UPDATE_BY_EXAMPLE [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
-
-    SfxVoidItem NewTemplate SID_STYLE_NEW
-    (
-        SfxStringItem Param SID_STYLE_NEW,
-        SfxUInt16Item Family SID_STYLE_FAMILY
-    )
-    [
-        ExecMethod = ExecuteStyle ;
-        StateMethod = GetStyleState ;
-        GroupId = GID_VIEW ;
-        Cachable ;
-    ]
-
-     // !!! special
-    SfxTemplateItem PageStyleApply SID_STYLE_FAMILY4 ( )
-    [
-        ExecMethod = ExecuteStyle ;
-        StateMethod = GetStyleState ;
-        GroupId = GID_FORMAT ;
-        Cachable ;
-    ]
-
-    SfxVoidItem EditTemplate SID_STYLE_EDIT
-    (
-        SfxStringItem Param SID_STYLE_EDIT,
-        SfxUInt16Item Family SID_STYLE_FAMILY
-    )
-    [
-        ExecMethod = ExecuteStyle ;
-        StateMethod = GetStyleState ;
-        GroupId = GID_VIEW ;
-        Cachable ;
-    ]
-
-    SfxVoidItem DeleteTemplate SID_STYLE_DELETE
-    (
-        SfxStringItem Param SID_STYLE_DELETE,
-        SfxUInt16Item Family SID_STYLE_FAMILY
-    )
-    [
-        ExecMethod = ExecuteStyle ;
-        StateMethod = GetStyleState ;
-        GroupId = GID_VIEW ;
-        Cachable ;
-    ]
+    SID_STYLE_NEW               [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_FAMILY4           [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_EDIT              [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
+    SID_STYLE_DELETE            [ ExecMethod = ExecuteStyle; StateMethod = GetStyleState; ]
     // } Slot's die in der DrawShell disabled werden.
 
     SID_BACKGROUND_COLOR    [ ExecMethod = ExecuteAttr; StateMethod = GetAttrState; ]
@@ -99,15 +58,8 @@ interface FormatForSelection : Selection
     SID_ALIGNBOTTOM     [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNCENTERVER  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
     SID_ALIGNBLOCK      [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
+    SID_ALIGNCENTERHOR  [ ExecMethod = ExecuteTextAttr; StateMethod = GetTextAttrState; ]
 
-    SfxVoidItem AlignHCenter SID_ALIGNCENTERHOR ( )
-    [
-        ExecMethod = ExecuteTextAttr ;
-        StateMethod = GetTextAttrState ;
-        GroupId = GID_FORMAT ;  //FS
-        Cachable ;
-        ToolBoxConfig ;
-    ]
     SID_V_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
     SID_H_ALIGNCELL         [ ExecMethod = ExecuteAlignment; StateMethod = GetAlignState; ]
 
@@ -144,6 +96,9 @@ shell ScFormatShell
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/04/03 15:11:42  dr
+    #98410# Asian vertical writing
+
     Revision 1.1.1.1  2000/09/18 16:44:52  hr
     initial import
 
