@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:51:54 $
+ *  last change: $Author: dr $ $Date: 2002-07-18 08:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ italian ] = "Attributi cella" ;
     Text [ portuguese_brazilian ] = "Atributos da C?lula" ;
     Text [ portuguese ] = "Atributos de célula" ;
-    Text [ finnish ] = "Solun m??ritteet" ;
+    Text [ finnish ] = "Solun määritteet" ;
     Text [ danish ] = "Celleattributter" ;
     Text [ french ] = "Attributs de cellule" ;
     Text [ swedish ] = "Cellattribut" ;
@@ -120,6 +120,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ turkish ] = "Sayı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Números";
+                Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚";
             };
             PageItem
             {
@@ -141,14 +142,15 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
                 Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
                 Text[ korean ] = "ê¸€ê¼´";
                 Text[ turkish ] = "Yazıtipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fuente";
+                Text[ catalan ] = "Tipus de lletra";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -168,14 +170,15 @@ TabDialog RID_SCDLG_ATTR
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekt czcionki";
                 Text[ portuguese_brazilian ] = "Character Extension";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„åŠ¹æœ";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
                 Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
                 Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
-                Text[ catalan ] = "Efectos de fuente";
+                Text[ catalan ] = "Efectes de lletra";
                 Text[ finnish ] = "Fonttitehosteet";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -204,7 +207,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "ë§ì¶¤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineación";
+                Text[ catalan ] = "Alineació";
+                Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
             PageItem
             {
@@ -225,13 +229,14 @@ TabDialog RID_SCDLG_ATTR
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
-                Text[ korean ] = "ì•„ì‹œì•„ íƒ€ì´í¬ê·¸ë˜í”¼";
+                Text[ korean ] = "í•œê¸€ ì…ë ¥ ì²´ê³„";
                 Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
                 Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
-                Text[ catalan ] = "Tipografía asiática";
+                Text[ catalan ] = "Tipografia asiàtica";
                 Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¹à¸šà¸šà¹€à¸­à¹€à¸Šà¸µà¸¢";
             };
             PageItem
             {
@@ -260,7 +265,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ korean ] = "ì™¸ê³½ì„ ";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Borde";
+                Text[ catalan ] = "Vores";
+                Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸‚à¸­à¸š";
             };
             PageItem
             {
@@ -289,7 +295,8 @@ TabDialog RID_SCDLG_ATTR
                 Text[ greek ] = "Öüíôï";
                 Text[ korean ] = "ë°°ê²½";
                 Text[ turkish ] = "Artalan";
-                Text[ catalan ] = "Fondo";
+                Text[ catalan ] = "Fons";
+                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
             };
             PageItem
             {
@@ -311,28 +318,30 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_simplified ] = "å•å…ƒæ ¼ä¿æŠ¤";
                 Text[ russian ] = "Çàùèòà ÿ÷åéêè";
                 Text[ polish ] = "Ochrona komórek";
-                Text[ japanese ] = "ï½¾ï¾™ã®ä¿è­·";
+                Text[ japanese ] = "ã‚»ãƒ«ã®ä¿è­·";
                 Text[ chinese_traditional ] = "å„²å­˜æ ¼ä¿è­·";
                 Text[ arabic ] = "ÍãÇíÉ ÇáÎáíÉ";
                 Text[ greek ] = "Ğñïóôáóßá êåëéïı";
                 Text[ korean ] = "ì…€ ë³´í˜¸";
                 Text[ turkish ] = "Hücre koruması";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Protección de celda";
+                Text[ catalan ] = "Protecció de cel·les";
+                Text[ thai ] = "à¸›à¹‰à¸­à¸‡à¸à¸±à¸™à¹€à¸‹à¸¥à¸¥à¹Œ";
             };
         };
     };
     Text[ chinese_simplified ] = "å•å…ƒæ ¼å±æ€§";
     Text[ russian ] = "Àòğèáóòû ÿ÷åéêè";
     Text[ polish ] = "Atrybuty komórek";
-    Text[ japanese ] = "ï½¾ï¾™ã®å±æ€§";
+    Text[ japanese ] = "ã‚»ãƒ«ã®å±æ€§";
     Text[ chinese_traditional ] = "å„²å­˜æ ¼å±¬æ€§";
     Text[ arabic ] = "ÓãÇÊ ÇáÎáíÉ";
     Text[ greek ] = "Éäéüôçôåò êåëéïı";
     Text[ korean ] = "ì…€ ì†ì„±";
     Text[ turkish ] = "Hücre öznitelikleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Atributos de celda";
+    Text[ catalan ] = "Atributs de la cel·la";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸‹à¸¥à¸¥à¹Œ";
 };
 
  //================================================
@@ -347,8 +356,8 @@ TabPage RID_SCPAGE_PROTECTION
     Size = MAP_APPFONT ( 260 , 185 ) ;
     TriStateBox BTN_PROTECTED
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 22 , 28 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Gesperrt" ;
         Text [ ENGLISH ] = "~Protected" ;
         Text [ norwegian ] = "~Protected" ;
@@ -360,7 +369,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ french ] = "~Verrouiller" ;
         Text [ swedish ] = "Skydda~d" ;
         Text [ dutch ] = "~Beveiligd" ;
-        Text [ spanish ] = "~Protegido" ;
+        Text [ spanish ] = "Protegido" ;
         Text [ english_us ] = "~Protected" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é”å®šçš„(~P)";
@@ -373,12 +382,13 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ì¥í‰(~P)";
         Text[ turkish ] = "~Koruma altında";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Protegido";
+        Text[ catalan ] = "~Protegit";
+        Text[ thai ] = "~à¸›à¹‰à¸­à¸‡à¸à¸±à¸™";
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Pos = MAP_APPFONT ( 22 , 42 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Formel ausblenden" ;
         Text [ ENGLISH ] = "Hide ~Formulas" ;
         Text [ norwegian ] = "Hide ~Formulas" ;
@@ -403,11 +413,12 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ìˆ˜ì‹ ìˆ¨ê¸°ê¸°(~F)";
         Text[ turkish ] = "~Formulü gizle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ocultar ~fórmulas";
+        Text[ catalan ] = "Oculta la ~fórmula";
+        Text[ thai ] = "à¸‹à¹ˆà¸­à¸™~à¸ªà¸¹à¸•à¸£";
     };
     TriStateBox BTN_HIDE_ALL
     {
-        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Alles ausblenden" ;
         Text [ ENGLISH ] = "Hide ~All" ;
@@ -433,7 +444,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ì „ë¶€ ìˆ¨ê¸°ê¸°(~A)";
         Text[ turkish ] = "~Tümünü gizle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ocultar ~todo";
+        Text[ catalan ] = "Oculta-ho ~tot";
+        Text[ thai ] = "à¸‹à¹ˆà¸­à¸™~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     FixedText FT_HINT
     {
@@ -449,24 +461,25 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
         Text [ portuguese_brazilian ] = "Para ativar a prote??o da c?lula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
-        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun k?sitelt?v?n? oleva lomake on suojattu. \n\nValitse Ty?alut-valikosta Suojaa asiakirja ja m??rit? sitten Lomake." ;
+        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva lomake on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Lomake." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
         Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
-        Text [ swedish ] = "Cellskyddet är endast verksamt om den aktiva tabellen är skyddad.\n\nVälj kommandot 'Skydda dokument' i menyn 'Verktyg' och därefter kommandot 'Tabell' för att skydda tabellen." ;
+        Text [ swedish ] = "Cellskyddet är bara verksamt om den aktiva tabellen är skyddad.\n\nVälj 'Skydda dokument' på menyn 'Verktyg' och därefter 'Tabell' för att skydda tabellen." ;
         Text [ dutch ] = "De celbeveiliging functioneert alleen als het actieve werkblad beveiligd is.\n\nKies eerst in menu 'Extra' de optie \"Document beveiligen\" en vervolgens de optie 'Werkblad'." ;
-        Text [ spanish ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'." ;
+        Text [ spanish ] = "La protección de celdas será efectiva solamente si la hoja activa está protegida.\n\nEn 'Herramientas' seleccione el comando 'Proteger documento' y a continuación 'Hoja de cálculo'." ;
         Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text[ chinese_simplified ] = "åªæœ‰åœ¨ä½¿ç”¨ä¿æŠ¤å·¥ä½œè¡¨åï¼Œå•å…ƒæ ¼æ‰ä¼šå—åˆ°ä¿æŠ¤ã€‚\n\nè¯·ç‚¹å‡»èœå•å‘½ä»¤\"å·¥å…·\"ï¼Œ\"ä¿æŠ¤æ–‡æ¡£\"ï¼Œ\"å·¥ä½œè¡¨\"ã€‚";
         Text[ russian ] = "Çàùèòà ÿ÷åéêè äåéñòâóåò òîëüêî ïîñëå óñòàíîâëåíèÿ çàùèòû òåêóùåãî ëèñòà.\n\nÄëÿ çàùèòû ëèñòà âûáåğèòå â ìåíş 'Ñåğâèñ' êîìàíäó 'Çàùèòà äîêóìåíòà', à çàòåì êîìàíäó 'Ëèñò'.";
         Text[ polish ] = "Ochrona komórek aktywna bêdzie dopiero po zabezpieczeniu aktualnego arkusza.\n\nNale¿y wybraæ w tym celu z menu 'Narzêdzia' polecenie 'Chroñ dokument', a nastêpnie polecenie 'Arkusz'.";
-        Text[ japanese ] = "ï½¾ï¾™ã®ä¿è­·ã¯ç¾åœ¨ã®è¡¨ãŒä¿è­·ã•ã‚Œã¦ã„ã‚‹æ™‚ã®ã¿æœ‰åŠ¹ã§ã™ã€‚\n\nè¡¨ã‚’ä¿è­·ã™ã‚‹ã«ã¯ã€ï¾’ï¾†ï½­ï½°ã§ï¾‚ï½°ï¾™â†’ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ã®ä¿è­·â†’è¡¨ã‚’é¸æŠã—ã¾ã™ã€‚";
+        Text[ japanese ] = "ã‚»ãƒ«ã®ä¿è­·ã¯ç¾åœ¨ã®è¡¨ãŒä¿è­·ã•ã‚Œã¦ã„ã‚‹æ™‚ã®ã¿æœ‰åŠ¹ã§ã™ã€‚\n\nè¡¨ã‚’ä¿è­·ã™ã‚‹ã«ã¯ã€ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§ãƒ„ãƒ¼ãƒ«â†’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ä¿è­·â†’è¡¨ã‚’é¸æŠã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "åªæœ‰åœ¨å•Ÿå‹•ä¿è­·å·¥ä½œè¡¨å¾Œï¼Œå„²å­˜æ ¼æ‰æœƒå—åˆ°ä¿è­·ã€‚\n\nè«‹æŒ‰ä¸€ä¸‹é€™å€‹åŠŸèƒ½è¡¨æŒ‡ä»¤ï¼š<ä¿è­·æ–‡ä»¶>ï¼Œ<å·¥ä½œè¡¨>ã€‚";
         Text[ arabic ] = "áÇ ÊÕÈÍ ÍãÇíÉ ÇáÎáÇíÇ İÚøÇáÉ¡ ÅáÇ ÚäÏãÇ íßæä ÇáÌÏæá ÇáÍÇáí ãÍãí.\n\náÊäİíĞ Ğáß ÇáÑÌÇÁ ÇÎÊíÇÑ ÇáÃãÑ 'ÍãÇíÉ ÇáãÓÊäÏ' ãä ÇáŞÇÆãÉ 'ÃÏæÇÊ'¡ Ëã ÇáÃã?";
         Text[ greek ] = "Ç ğñïóôáóßá êåëéşí éó÷ıåé ìüíï óôçí ğåñßğôùóç ğïõ õğÜñ÷åé ğñïóôáóßá ãéá ôïí ôñİ÷ùí ğßíáêá.\n\nÃéá íá ãßíåé áõôü åğéëİîôå óôï ìåíïı 'Åñãáëåßá' ôçí åíôïëŞ 'Ğñïóôáóßá åããñÜöïõ' êáé óôç óõíİ÷åéá ôçí åíôïëŞ 'Ğßíáêáò'.";
-        Text[ korean ] = "ì…€ ë³´í˜¸ëŠ” í˜„ì¬ì˜ ì‹œíŠ¸ê°€ ë³´í˜¸ë˜ì—ˆì„ë•Œë§Œ ìœ íš¨í•©ë‹ˆë‹¤.  \n\n'ë„êµ¬'ë©”ë‰´ì—ì„œ 'ë¬¸ì„œë³´í˜¸'ë¥¼ ì„ íƒí•œ ë‹¤ìŒ, 'ì‹œíŠ¸'ë¥¼ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
+        Text[ korean ] = "ì…€ ë³´í˜¸ëŠ” í˜„ì¬ì˜ ì‹œíŠ¸ê°€ ë³´í˜¸ë˜ì—ˆì„ ë•Œë§Œ ìœ íš¨í•©ë‹ˆë‹¤.  \n\n'ë„êµ¬' ë©”ë‰´ì—ì„œ 'ë¬¸ì„œ ë³´í˜¸'ë¥¼ ì„ íƒí•œ ë‹¤ìŒ, 'ì‹œíŠ¸'ë¥¼ ì§€ì •í•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Hücre koruması, yalnızca aktif tablo da korunmuşsa etkindir.\n\nBunun için 'Araçlar' mönüsünden önce 'belgeyi koru' sonra 'Tablo' komutunu seçin.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "La protección de celdas es efectiva solamente si la hoja activa está protegida.\n\nSeleccione en 'Herramientas' la instrucción 'Proteger documento' y luego 'Hoja'.";
+        Text[ catalan ] = "La protecció de cel·les només és efectiva després d'haver protegit el full actual. \n\nSeleccioneu 'Protegeix el document' del menú 'Eines' i especifiqueu 'Full'.";
+        Text[ thai ] = "à¸à¸²à¸£à¸›à¹‰à¸­à¸‡à¸à¸±à¸™à¹€à¸‹à¸¥à¸¥à¹Œà¸¡à¸µà¸œà¸¥à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§à¸«à¸¥à¸±à¸‡à¸ˆà¸²à¸à¸›à¹‰à¸­à¸‡à¸à¸±à¸™à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™ \n\nà¹€à¸¥à¸·à¸­à¸ 'à¸›à¹‰à¸­à¸‡à¸à¸±à¸™à¹€à¸­à¸à¸ªà¸²à¸£' à¸ˆà¸²à¸à¹€à¸¡à¸™à¸¹ 'à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸¡à¸·à¸­' à¹à¸¥à¸°à¸£à¸°à¸šà¸¸à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™";
     };
     FixedLine FL_PROTECTION
     {
@@ -495,7 +508,8 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ë³´í˜¸";
         Text[ turkish ] = "Koruma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Protección";
+        Text[ catalan ] = "Protecció";
+        Text[ thai ] = "à¸›à¹‰à¸­à¸‡à¸à¸±à¸™";
     };
     TriStateBox BTN_HIDE_PRINT
     {
@@ -504,7 +518,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text = "Für Aus~druck ausblenden" ;
         Text [ ENGLISH ] = "Hide for ~Printing" ;
         Text [ norwegian ] = "Hide for ~Printing" ;
-        Text [ italian ] = "Non ~stampare" ;
+        Text [ italian ] = "~Non stampare" ;
         Text [ portuguese_brazilian ] = "Ocultar para ~Impress?o" ;
         Text [ portuguese ] = "Ocultar para ~impressão" ;
         Text [ finnish ] = "~Piilota tulostettaessa" ;
@@ -519,13 +533,14 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ russian ] = "Ñêğûòü äëÿ ïå÷àòè";
         Text[ polish ] = "U~kryj na wydruku";
         Text[ japanese ] = "å°åˆ·ã—ãªã„(~W)";
-        Text[ chinese_traditional ] = "æ‰“å°æ™‚éš±å…¥(~W)";
+        Text[ chinese_traditional ] = "åˆ—å°æ™‚éš±è—(~W)";
         Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
         Text[ greek ] = "Áğüêñõøç êáôÜ ôçí åêôığùóç";
         Text[ korean ] = "ì¸ì‡„ ì‹œ ìˆ¨ê¸°ê¸°(~W)";
         Text[ turkish ] = "~Yazdırırken gizle";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ocultar para la impresión";
+        Text[ catalan ] = "Oculta ~en imprimir";
+        Text[ thai ] = "à¸‹à¹ˆà¸­à¸™~à¸‚à¸“à¸°à¸à¸´à¸¡à¸à¹Œ";
     };
     FixedText FT_HINT2
     {
@@ -543,19 +558,20 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ french ] = "Les cellules sélectionnées ne seront pas imprimées." ;
         Text [ swedish ] = "De markerade cellerna kommer inte att skrivas ut." ;
         Text [ dutch ] = "De geselecteerde cellen worden bij het afdrukken weggelaten." ;
-        Text [ spanish ] = "No se imprimen las celdas de la selección actual." ;
+        Text [ spanish ] = "Las celdas seleccionadas no se imprimirán." ;
         Text [ english_us ] = "The cells selected will be omitted when printing." ;
         Text[ chinese_simplified ] = "å½“å‰é€‰ä¸­å•å…ƒæ ¼ä¸ä¼šè¢«æ‰“å°å‡ºæ¥ã€‚";
         Text[ russian ] = "Ïğè ïå÷àòè âûäåëåííûå ÿ÷åéêè ïîêàçàíû íå áóäóò.";
         Text[ polish ] = "Zaznaczone komórki zostan¹ pominiête przy wydruku.";
-        Text[ japanese ] = "ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ï½¾ï¾™ã¯å°åˆ·ã•ã‚Œã¾ã›ã‚“ã€‚";
-        Text[ chinese_traditional ] = "ç•¶å‰é¸å–çš„å„²å­˜æ ¼ä¸æœƒè¢«åˆ—å°å‡ºä¾†ã€‚";
+        Text[ japanese ] = "ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚»ãƒ«ã¯å°åˆ·ã•ã‚Œã¾ã›ã‚“ã€‚";
+        Text[ chinese_traditional ] = "ç›®å‰é¸å–çš„å„²å­˜æ ¼ä¸æœƒè¢«åˆ—å°å‡ºä¾†ã€‚";
         Text[ arabic ] = "ÓíÊã ÊÌÇåá ÎáÇíÇ ÇáÊÍÏíÏ ÇáÍÇáí ÚäÏ ÇáØÈÇÚÉ.";
         Text[ greek ] = "Ôá êåëéÜ ôçò ôñİ÷ïõóáò åğéëïãŞò èá ğáñáëçöèïıí êáôÜ ôçí åêôığùóç.";
         Text[ korean ] = "ì„ íƒëœ ì…€ì€ ì¸ì‡„ì—ì„œ ì œì™¸ë  ê²ƒì…ë‹ˆë‹¤.";
         Text[ turkish ] = "Yürürlükteki seçimin hücreleri yazdırmaya dahil olmayacak.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "No se imprimen las celdas de la selección actual.";
+        Text[ catalan ] = "En imprimir, les cel·les seleccionades s'ometran.";
+        Text[ thai ] = "à¹€à¸‹à¸¥à¸¥à¹Œà¹€à¸¥à¸·à¸­à¸à¸—à¸µà¹ˆà¸ˆà¸°à¸–à¸¹à¸à¹€à¸§à¹‰à¸™à¸‚à¸“à¸°à¸à¸´à¸¡à¸à¹Œ";
     };
     FixedLine FL_PRINT
     {
@@ -584,9 +600,13 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ korean ] = "ì¸ì‡„";
         Text[ turkish ] = "Yazdır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Impresión";
+        Text[ catalan ] = "Imprimeix";
+        Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
     };
 };
+
+
+
 
 
 

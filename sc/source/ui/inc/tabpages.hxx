@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:12:27 $
+ *  last change: $Author: dr $ $Date: 2002-07-18 08:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,9 @@ private:
 
 private:
     FixedLine   aFlProtect;
+    TriStateBox aBtnHideCell;
     TriStateBox aBtnProtect;
     TriStateBox aBtnHideFormula;
-    TriStateBox aBtnHideCell;
     FixedInfo   aTxtHint;
 
     FixedLine   aFlPrint;
