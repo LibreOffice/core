@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:15:41 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,17 +123,17 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        OSL_ENSHURE(0,"Exception occured");
+        OSL_ENSURE(0,"Exception occured");
     }
     catch(...)
     {
-        OSL_ENSHURE(0,"Unknown Exception occured");
+        OSL_ENSURE(0,"Unknown Exception occured");
     }
 }
 // -----------------------------------------------------------------------------
 void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQLException, RuntimeException)
 {
-    OSL_ENSHURE(_xTable.is(),"OCacheSet::fillTableName: PropertySet is empty!");
+    OSL_ENSURE(_xTable.is(),"OCacheSet::fillTableName: PropertySet is empty!");
     if(!m_aComposedTableName.getLength())
     {
         Reference<XDatabaseMetaData> xMeta(m_xConnection->getMetaData());
@@ -173,18 +173,36 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 
     aSql += aValues;
     // now create end execute the prepared statement
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
-    Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-    i = 1;
-    for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
     {
-        if(aIter->isNull())
-            xParameter->setNull(i,aIter->getTypeKind());
-        else
-            setParameter(i,xParameter,*aIter);
+        Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+        Reference< XParameters > xParameter(xPrep,UNO_QUERY);
+        i = 1;
+        for(aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter,++i)
+        {
+            if(aIter->isNull())
+                xParameter->setNull(i,aIter->getTypeKind());
+            else
+                setParameter(i,xParameter,*aIter);
+        }
+
+        m_bInserted = xPrep->executeUpdate() > 0;
     }
 
-    m_bInserted = xPrep->executeUpdate() > 0;
+//  ::rtl::OUString aCountSql = ::rtl::OUString::createFromAscii("SELECT COUNT(*) FROM ");
+//  aCountSql += m_aComposedTableName;
+//  try
+//  {
+//      Reference< XStatement > xStmt(m_xConnection->createStatement());
+//      Reference<XResultSet> xRes(xStmt->executeQuery(aCountSql));
+//      if(xRes.is() && xRes->next())
+//      {
+//          Reference<XRow> xRow(xRes,UNO_QUERY);
+//      }
+//  }
+//  catch(SQLException&)
+//  {
+//  }
+
     // TODO set the bookmark in the insert row
 }
 // -------------------------------------------------------------------------
@@ -546,6 +564,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2000/12/12 12:15:41  oj
+    use paramter instead of member and set member to ull
+
     Revision 1.12  2000/12/07 12:35:21  oj
     #81424# valueof(bool) has no opposite conversion
 

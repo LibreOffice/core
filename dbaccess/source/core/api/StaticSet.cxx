@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StaticSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-29 10:23:32 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ sal_Bool SAL_CALL OStaticSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aSetIter = m_aSet.begin() + getINT32(bookmark);
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
     return m_aSetIter != m_aSet.end();
 }
 // -------------------------------------------------------------------------
@@ -120,7 +120,7 @@ sal_Bool SAL_CALL OStaticSet::moveRelativeToBookmark( const Any& bookmark, sal_I
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aSetIter = m_aSet.begin() + getINT32(bookmark) + rows;
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
     return m_aSetIter != m_aSet.end();
 }
 // -------------------------------------------------------------------------
@@ -204,8 +204,8 @@ sal_Bool SAL_CALL OStaticSet::next(  ) throw(SQLException, RuntimeException)
         else if(m_aSetIter != m_aSet.end())
             ++m_aSetIter;
     }
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
-    OSL_ENSHURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
     return m_aSetIter != m_aSet.end();
 }
 // -------------------------------------------------------------------------
@@ -234,7 +234,7 @@ void SAL_CALL OStaticSet::beforeFirst(  ) throw(SQLException, RuntimeException)
     m_bBeforeFirst = sal_True;
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aSetIter = m_aSet.end();
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
@@ -243,7 +243,7 @@ void SAL_CALL OStaticSet::afterLast(  ) throw(SQLException, RuntimeException)
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     fillAllRows();
     m_aSetIter = m_aSet.end();
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
@@ -254,8 +254,8 @@ sal_Bool SAL_CALL OStaticSet::first(  ) throw(SQLException, RuntimeException)
     if(m_aSetIter == m_aSet.end() && !fetchRow())
         m_bBeforeFirst = sal_True;
 
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
-    OSL_ENSHURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
 
     return m_aSetIter != m_aSet.end();
 }
@@ -268,8 +268,8 @@ sal_Bool SAL_CALL OStaticSet::last(  ) throw(SQLException, RuntimeException)
     if(m_aSet.size())
         m_aSetIter = m_aSet.end()-1;
 
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
-    OSL_ENSHURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
 
     return !(m_bBeforeFirst = (m_aSetIter == m_aSet.end()));
 }
@@ -281,14 +281,14 @@ sal_Int32 SAL_CALL OStaticSet::getRow(  ) throw(SQLException, RuntimeException)
     if(isBeforeFirst())
         return 0;
     sal_Int32 nPos = m_aSet.size() - (m_aSet.end() - m_aSetIter) +1;
-    OSL_ENSHURE(nPos >= 0,"RowPos is < 0");
+    OSL_ENSURE(nPos >= 0,"RowPos is < 0");
     return nPos;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
-    OSL_ENSHURE(row,"OStaticSet::absolute: INVALID row number!");
+    OSL_ENSURE(row,"OStaticSet::absolute: INVALID row number!");
     // if row greater 0 than count from end - row means last
     if(row < 0)
     {
@@ -332,8 +332,8 @@ sal_Bool SAL_CALL OStaticSet::absolute( sal_Int32 row ) throw(SQLException, Runt
     else
         throw SQLException();
 
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
-    OSL_ENSHURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE(m_aSetIter <= m_aSet.end(),"Iterator behind end()!");
     return m_aSetIter != m_aSet.end();
 }
 // -------------------------------------------------------------------------
@@ -356,7 +356,7 @@ sal_Bool SAL_CALL OStaticSet::previous(  ) throw(SQLException, RuntimeException)
     else
         --m_aSetIter;
 
-    OSL_ENSHURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
+    OSL_ENSURE((m_aSet.size() - (m_aSet.end() - m_aSetIter)) >= 0,"Current row is not valid!");
     return sal_True;
 }
 // -------------------------------------------------------------------------
@@ -435,6 +435,9 @@ void SAL_CALL OStaticSet::moveToCurrentRow(  ) throw(SQLException, RuntimeExcept
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/11/29 10:23:32  oj
+    #80219# wrong use of keys
+
     Revision 1.5  2000/11/15 15:57:40  oj
     change for rowset
 

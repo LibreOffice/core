@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
+#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
+#include "RowSetCacheIterator.hxx"
+#endif
 
 namespace dbaccess
 {
@@ -84,7 +87,7 @@ namespace dbaccess
                                 public ORowSetDataColumn_PROP
     {
     protected:
-        ORowSetMatrix::iterator&    m_rColumnValue;
+        ORowSetCacheIterator        m_aColumnValue;
         ORowSetMatrix::iterator&    m_rEnd;             // end of the matrix to when we reach the end
         ::com::sun::star::uno::Any  m_aOldValue;
 
@@ -95,7 +98,7 @@ namespace dbaccess
                           const ::com::sun::star::uno::Reference < ::com::sun::star::sdbc::XRowUpdate >& _xRowUpdate,
                           sal_Int32 _nPos,
                           const ::rtl::OUString& _rDescription,
-                          ORowSetMatrix::iterator& _rColumnValue,
+                          const ORowSetCacheIterator& _rColumnValue,
                           ORowSetMatrix::iterator& _rEnd);
 
         ~ORowSetDataColumn();

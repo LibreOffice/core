@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 
 using namespace dbaccess;
@@ -98,12 +101,83 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
-//  using namespace ::cppu;
+using namespace ::cppu;
 using namespace ::osl;
+
+// -----------------------------------------------------------------------------
+OKeySetBookmark::~OKeySetBookmark()
+{
+    if(m_pKeySet)
+        m_pKeySet->RemoveBookmarkPos(m_aPosIter);
+}
+// -----------------------------------------------------------------------------
+void OKeySetBookmark::removeKeySet()
+{
+    m_pKeySet = NULL;
+    m_aPosIter = NULL;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OKeySetBookmark::getRealPos() const { return m_aPosIter->first; }
+// -----------------------------------------------------------------------------
+sal_Int64 SAL_CALL OKeySetBookmark::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException)
+{
+    if (_rIdentifier.getLength() != 16)
+        return NULL;
+
+    if (0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+        return reinterpret_cast<sal_Int64>(this);
+
+    return NULL;
+}
+
+//--------------------------------------------------------------------------
+Sequence< sal_Int8 > OKeySetBookmark::getUnoTunnelImplementationId()
+{
+    static OImplementationId * pId = 0;
+    if (! pId)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+// -----------------------------------------------------------------------------
+void OKeySetBookmark::setPosIterator(const OBookmarkMap::iterator& _rIter)
+{
+    m_aPosIter = _rIter;
+}
+// -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 OKeySet::OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet)
             : OCacheSet(_xDriverSet)
 {
+}
+// -----------------------------------------------------------------------------
+OKeySet::~OKeySet()
+{
+    OBookmarkMap::iterator aIter = m_aBookmarkMap.begin();
+    for(;aIter != m_aBookmarkMap.end();++aIter)
+    {
+        Reference< XUnoTunnel> xTunnel = aIter->second;
+        if(xTunnel.is())
+        {
+            OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+            if(pExistent)
+                pExistent->removeKeySet();
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OKeySet::RemoveBookmarkPos(OBookmarkMap::iterator& _rIter)
+{
+    sal_Int32 nSize = m_aBookmarkMap.size();
+
+    if(_rIter != m_aBookmarkMap.end())
+        m_aBookmarkMap.erase(_rIter->first);
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
@@ -111,16 +185,82 @@ Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException,
     sal_Int32 nPos = m_xDriverSet->getRow();
     if(!nPos)
         return Any();
-    return makeAny(nPos);
+
+    if(m_aDeletedRows.size())
+    {
+        sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
+        nPos += nDiff;
+    }
+
+    Reference< XUnoTunnel> xRef;
+    OBookmarkMap::iterator aIter = m_aBookmarkMap.find(nPos);
+    if(aIter == m_aBookmarkMap.end())
+    {
+        OKeySetBookmark* pBookmark= new OKeySetBookmark(this,m_aBookmarkMap.end());
+        xRef = pBookmark;
+        pBookmark->setPosIterator(m_aBookmarkMap.insert(OBookmarkMap::value_type(nPos,xRef)).first);
+
+    }
+    else
+        xRef = aIter->second;
+
+    return makeAny(xRef);
+}
+
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::moveToBookmark( const ::com::sun::star::uno::Any& bookmark ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    Reference< XUnoTunnel> xTunnel;
+    bookmark >>= xTunnel;
+    if(xTunnel.is())
+    {
+        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+        if(pExistent)
+        {
+
+            sal_Int32 nPos = pExistent->getRealPos();
+
+            if(m_aDeletedRows.size())
+            {
+                sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
+                nPos -= nDiff;
+            }
+            return m_xDriverSet->absolute(nPos);
+        }
+    }
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Bool SAL_CALL OKeySet::moveRelativeToBookmark( const ::com::sun::star::uno::Any& bookmark, sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
+    Reference< XUnoTunnel> xTunnel;
+    bookmark >>= xTunnel;
+    if(xTunnel.is())
+    {
+        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+        if(pExistent)
+        {
+            sal_Int32 nPos = pExistent->getRealPos() + rows;
+            if(m_aDeletedRows.size())
+            {
+                sal_Int32 nDiff = ::std::upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),nPos) - m_aDeletedRows.begin();
+                nPos -= nDiff;
+            }
+            return m_xDriverSet->absolute(nPos);
+        }
+    }
+    return sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nFirst,nSecond;
-    first >>= nFirst;
-    second >>= nSecond;
+    Reference< XUnoTunnel> xFirst,xSecond;
+    first >>= xFirst;
+    second >>= xSecond;
 
-    return (nFirst < nSecond) ? CompareBookmark::LESS : ((nFirst > nSecond ) ? CompareBookmark::GREATER : CompareBookmark::EQUAL);
+    return (xFirst != xSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
@@ -130,7 +270,17 @@ sal_Bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeEx
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
 {
-    return connectivity::getINT32(bookmark);
+    Reference< XUnoTunnel> xTunnel;
+    bookmark >>= xTunnel;
+    if(xTunnel.is())
+    {
+        OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+        if(pExistent)
+        {
+            return pExistent->getRealPos();
+        }
+    }
+    return -1;
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XDeleteRows
@@ -249,6 +399,28 @@ Sequence< sal_Int32 > SAL_CALL OKeySet::deleteRows( const Sequence< Any >& rows 
     sal_Bool bOk = xPrep->executeUpdate() > 0;
     Sequence< sal_Int32 > aRet(rows.getLength());
     memset(aRet.getArray(),bOk,sizeof(sal_Int32)*aRet.getLength());
+    if(bOk)
+    {
+        const Any* pBegin   = rows.getConstArray();
+        const Any* pEnd     = pBegin + rows.getLength();
+
+        for(;pBegin != pEnd;++pBegin)
+        {
+            Reference< XUnoTunnel> xTunnel;
+            *pBegin >>= xTunnel;
+            if(xTunnel.is())
+            {
+                OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+                if(pExistent)
+                {
+                    OBookmarkMap::iterator aIter = pExistent->getPosIterator();
+                    m_aDeletedRows.insert(upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),aIter->first),aIter->first);
+                    m_aBookmarkMap.erase(aIter);
+                    pExistent->setPosIterator(m_aBookmarkMap.end());
+                }
+            }
+        }
+    }
     return aRet;
 }
 // -------------------------------------------------------------------------
@@ -256,15 +428,75 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
 {
     OCacheSet::updateRow( _rInsertRow,_rOrginalRow,_xTable);
 }
-
+// -------------------------------------------------------------------------
+void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    OCacheSet::insertRow( _rInsertRow,_xTable);
+    if(rowInserted())
+    {
+        OBookmarkMap::iterator aIter = m_aBookmarkMap.begin();
+        for(;aIter != m_aBookmarkMap.end();++aIter)
+        {
+            Reference< XUnoTunnel> xTunnel = aIter->second;
+            if(xTunnel.is())
+            {
+                OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+                if(pExistent)
+                    pExistent->removeKeySet();
+            }
+        }
+        m_aBookmarkMap.clear();
+        m_aDeletedRows.clear();
+//      sal_Bool bFound = sal_False;
+//      if(m_xDriverSet->last()) // check if the driver append new rows at the end
+//      {
+//          ORowSetRow aRow;
+//          fillValueRow(aRow,m_xDriverRow->getRow());
+//          connectivity::ORowVector< ORowSetValue >::iterator aIter = aRow->begin()+1;
+//          connectivity::ORowVector< ORowSetValue >::iterator aCompareIter = _rInsertRow->begin()+1;
+//          for(;aIter != aRow->end();++aIter,++aCompareIter)
+//          {
+//              if(*aCompareIter != *aIter)
+//                  break;
+//          }
+//          bFound = aIter == aRow->end();
+//
+//      }
+//      if(!bFound)
+//      {
+//          m_xDriverSet->beforeFirst();
+//          while(m_xDriverSet->next())
+//          {
+//          }
+//      }
+//      (*_rInsertRow->begin()) = m_xRowLocate->getBookmark();
+    }
+}
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   ) throw(SQLException, RuntimeException)
 {
     OCacheSet::deleteRow(_rDeleteRow,_xTable);
+    if(rowDeleted())
+    {
+        Reference< XUnoTunnel> xTunnel;
+        (*_rDeleteRow)[0].getAny() >>= xTunnel;
+        if(xTunnel.is())
+        {
+            OKeySetBookmark* pExistent = (OKeySetBookmark*)xTunnel->getSomething(OKeySetBookmark::getUnoTunnelImplementationId());
+            if(pExistent)
+            {
+                OBookmarkMap::iterator aIter = pExistent->getPosIterator();
+                m_aDeletedRows.insert(upper_bound(m_aDeletedRows.begin(),m_aDeletedRows.end(),aIter->first),aIter->first);
+                m_aBookmarkMap.erase(pExistent->getPosIterator()->first);
+                pExistent->setPosIterator(m_aBookmarkMap.end());
+            }
+        }
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
 {
+    m_bInserted = m_bUpdated = m_bDeleted = sal_False;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OKeySet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
@@ -279,6 +511,9 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/11/15 15:57:40  oj
+    change for rowset
+
     Revision 1.5  2000/10/30 09:24:02  oj
     use tablecontainer if no tablesupplier is supported
 

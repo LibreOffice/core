@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 14:36:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,11 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       const Reference < XRowUpdate >& _xRowUpdate,
                                       sal_Int32 _nPos,
                                       const ::rtl::OUString& _rDescription,
-                                      ORowSetMatrix::iterator& _rColumnValue,
+                                      const ORowSetCacheIterator& _rColumnValue,
                                       ORowSetMatrix::iterator& _rEnd)
     : ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos)
     ,m_aDescription(_rDescription)
-    ,m_rColumnValue(_rColumnValue)
+    ,m_aColumnValue(_rColumnValue)
     ,m_rEnd(_rEnd)
 {
 
@@ -169,8 +169,8 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             OColumnSettings::getFastPropertyValue( rValue, nHandle );
             break;
         case PROPERTY_ID_VALUE:
-            if(m_rColumnValue != m_rEnd && (*m_rColumnValue).isValid())
-                rValue = (*(*m_rColumnValue))[m_nPos].makeAny();
+            if(m_aColumnValue != m_rEnd && m_aColumnValue->isValid())
+                rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
             break;
         default:
             ODataColumn::getFastPropertyValue(rValue,nHandle);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:15:41 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,6 +242,7 @@ namespace dbaccess
         // ::com::sun::star::sdbc::XResultSet
         virtual sal_Bool SAL_CALL next(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->next();
         }
         // -------------------------------------------------------------------------
@@ -267,21 +268,25 @@ namespace dbaccess
         // -------------------------------------------------------------------------
         virtual void SAL_CALL beforeFirst(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             m_xDriverSet->beforeFirst();
         }
         // -------------------------------------------------------------------------
         virtual void SAL_CALL afterLast(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             m_xDriverSet->afterLast();
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL first(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->first();
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL last(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->last();
         }
         // -------------------------------------------------------------------------
@@ -292,16 +297,19 @@ namespace dbaccess
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->absolute(row);
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->relative(rows);
         }
         // -------------------------------------------------------------------------
         virtual sal_Bool SAL_CALL previous(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
+            m_bInserted = m_bUpdated = m_bDeleted = sal_False;
             return m_xDriverSet->previous();
         }
         // -------------------------------------------------------------------------
@@ -352,6 +360,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/12/12 12:15:41  oj
+    use paramter instead of member and set member to ull
+
     Revision 1.5  2000/11/14 13:28:20  oj
     change for rowset when getRow returns 0
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 10:18:12 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
+#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
+#include "RowSetCacheIterator.hxx"
+#endif
 
 namespace dbaccess
 {
@@ -148,6 +151,7 @@ namespace dbaccess
         friend class ORowSetBase;
         friend class ORowSet;
         friend class ORowSetClone;
+        friend class ORowSetCacheIterator;
 
         ::osl::Mutex            m_aRowCountMutex, // mutex for rowcount changes
                                 // we need a extra mutex for columns to prevend deadlock when setting new values
@@ -163,6 +167,7 @@ namespace dbaccess
         ORowSetMatrix*                  m_pMatrix;              // represent the table struct
         ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
         ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
+        ORowSetCacheMap                 m_aCacheIterators;
 
         ORowSetMatrix*                  m_pInsertMatrix;        // represent the rows which should be inserted normally this is only one
         ORowSetMatrix::iterator         m_aInsertRow;           // represent a insert row
@@ -218,11 +223,12 @@ namespace dbaccess
         sal_Bool                    m_bIsBookmarable ;
         sal_Bool&                   m_bNew ;                // points to the rowset member m_bNew
 
-        sal_Bool fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos);
+        sal_Bool fillMatrix(sal_Int32 &_nNewStartPos,sal_Int32 _nNewEndPos);
         sal_Bool moveWindow();
 
         void firePropertyChange(sal_Int32 _nColumnIndex,const ::com::sun::star::uno::Any& _rOldValue);
 
+        void rotateCacheIterator(sal_Int16 _nDist);
     protected:
         ORowSetMatrix::iterator& getIterator() { return m_aMatrixIter;}
         ORowSetMatrix::iterator& getEnd() { return m_aMatrixEnd;}
@@ -237,6 +243,9 @@ namespace dbaccess
         ~ORowSetCache();
 
 
+        // called from the rowset when a updateXXX was called for the first time
+        void setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow);
+        ORowSetCacheIterator createIterator();
         // sets the size of the matrix
         void setMaxRowSize(sal_Int32 _nSize);
 
@@ -327,6 +336,7 @@ namespace dbaccess
     // ::com::sun::star::sdbc::XResultSetUpdate
         virtual void SAL_CALL insertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL updateRow( ORowSetMatrix::iterator& _rUpdateRow ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -354,6 +364,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/17 10:18:12  oj
+    some changes for the rowset
+
     Revision 1.4  2000/10/11 11:18:11  fs
     replace unotools with comphelper
 

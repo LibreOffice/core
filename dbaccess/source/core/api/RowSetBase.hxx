@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:53:45 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,10 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
+#include "RowSetCacheIterator.hxx"
+#endif
+
 
 
 namespace com { namespace sun { namespace star {
@@ -136,7 +140,7 @@ namespace dbaccess
                                                 ::com::sun::star::lang::XUnoTunnel> ORowSetBase_BASE;
     class ORowSetCache;
     class ORowSetDataColumns;
-
+    class ORowSetCacheIterator;
     class ORowSetBase : public ORowSetBase_BASE,
                         public ::comphelper::OPropertyContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
@@ -152,7 +156,8 @@ namespace dbaccess
                                                 m_aApproveListeners;// when clone -> they are empty
 
         ::com::sun::star::uno::Any              m_aBookmark;
-        ORowSetMatrix::iterator                 m_aCurrentRow;      // contains the actual fetched row
+        ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
+        ORowSetRow                              m_aOldRow;
 
         ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
         ORowSetCache*                           m_pCache;           // the cache is used by the rowset and his clone (shared)

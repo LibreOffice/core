@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:31:57 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,9 @@
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
+#include <com/sun/star/sdbcx/CompareBookmark.hpp>
 #endif
 
 using namespace utl;
@@ -731,7 +734,8 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, R
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     m_pCache->updateNull(columnIndex);
     firePropertyChange(columnIndex-1 ,Any());
     fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
@@ -745,7 +749,10 @@ void SAL_CALL ORowSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+
+    checkUpdateIterator();
+
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateBoolean(columnIndex,x);
     // we have to notify all listeners
@@ -762,7 +769,8 @@ void SAL_CALL ORowSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQL
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateByte(columnIndex,x);
     // we have to notify all listeners
@@ -779,8 +787,9 @@ void SAL_CALL ORowSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(S
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
 
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateShort(columnIndex,x);
     // we have to notify all listeners
@@ -797,7 +806,8 @@ void SAL_CALL ORowSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQL
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateInt(columnIndex,x);
     // we have to notify all listeners
@@ -814,7 +824,8 @@ void SAL_CALL ORowSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQ
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateLong(columnIndex,x);
     // we have to notify all listeners
@@ -831,7 +842,8 @@ void SAL_CALL ORowSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQLEx
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateFloat(columnIndex,x);
     // we have to notify all listeners
@@ -848,7 +860,8 @@ void SAL_CALL ORowSet::updateDouble( sal_Int32 columnIndex, double x ) throw(SQL
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateDouble(columnIndex,x);
     // we have to notify all listeners
@@ -865,7 +878,8 @@ void SAL_CALL ORowSet::updateString( sal_Int32 columnIndex, const ::rtl::OUStrin
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
 
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateString(columnIndex,x);
@@ -883,7 +897,8 @@ void SAL_CALL ORowSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_I
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateBytes(columnIndex,x);
     // we have to notify all listeners
@@ -900,7 +915,8 @@ void SAL_CALL ORowSet::updateDate( sal_Int32 columnIndex, const ::com::sun::star
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateDate(columnIndex,x);
     // we have to notify all listeners
@@ -917,7 +933,8 @@ void SAL_CALL ORowSet::updateTime( sal_Int32 columnIndex, const ::com::sun::star
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateTime(columnIndex,x);
     // we have to notify all listeners
@@ -934,7 +951,8 @@ void SAL_CALL ORowSet::updateTimestamp( sal_Int32 columnIndex, const ::com::sun:
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateTimestamp(columnIndex,x);
     // we have to notify all listeners
@@ -951,7 +969,8 @@ void SAL_CALL ORowSet::updateBinaryStream( sal_Int32 columnIndex, const Referenc
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     m_pCache->updateBinaryStream(columnIndex,x,length);
 
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
@@ -968,7 +987,8 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     m_pCache->updateCharacterStream(columnIndex,x,length);
 
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
@@ -985,7 +1005,8 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateObject(columnIndex,x);
     // we have to notify all listeners
@@ -1002,7 +1023,8 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
+    checkUpdateIterator();
     Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
     m_pCache->updateNumericObject(columnIndex,x,scale);
     // we have to notify all listeners
@@ -1028,7 +1050,7 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
 
     if(m_bModified)
     {
@@ -1038,10 +1060,13 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
         RowChangeEvent aEvt(*this,RowChangeAction::INSERT,1);
         notifyAllListenersRowBeforeChange(aEvt);
-        m_pCache->insertRow();
-        m_aBookmark     = m_pCache->getBookmark();
-        OSL_ENSHURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
-        m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        {
+            ::osl::MutexGuard aCacheGuard( m_rMutex);
+            m_pCache->insertRow();
+            m_aBookmark     = m_pCache->getBookmark();
+            OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
+            m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        }
 
         m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
 
@@ -1080,7 +1105,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
 
     if(m_bModified)
     {
@@ -1088,7 +1113,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
 
         RowChangeEvent aEvt(*this,RowChangeAction::UPDATE,1);
         notifyAllListenersRowBeforeChange(aEvt);
-        m_pCache->updateRow();
+        m_pCache->updateRow(m_aCurrentRow.operator ->());
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         notifyAllListenersRowChanged(aEvt);
@@ -1114,7 +1139,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 
     if(!m_pCache)
         throw FunctionSequenceException(*this);
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
 
     // this call position the cache indirect
     notifyClonesRowDelete(m_aBookmark);
@@ -1132,6 +1157,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
 
     m_aBookmark     = Any();
     m_aCurrentRow   = NULL;
+    m_aCurrentRow.setBookmark(Any());
 
     notifyAllListenersRowChanged(aEvt);
     ORowSetBase::firePropertyChange(aOldValues);
@@ -1145,7 +1171,19 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
 
     if(!m_pCache)
         throw FunctionSequenceException(*this);
+
+    ::osl::MutexGuard aGuard( m_rMutex );
     m_pCache->cancelRowUpdates();
+    ORowSetMatrix::iterator aOldValues = m_aCurrentRow;
+
+    m_aBookmark     = m_pCache->getBookmark();
+    m_aCurrentRow   = m_pCache->m_aMatrixIter;
+    m_aCurrentRow.setBookmark(m_aBookmark);
+
+    ORowSetBase::firePropertyChange(aOldValues);
+    // fire property modified
+    if(!m_bModified)
+        fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::addRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
@@ -1788,7 +1826,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
 
                     m_pCache = new ORowSetCache(xRs,m_xComposer,aComposedTableName,m_bModified,m_bNew);
-                    m_aCurrentRow = m_pCache->getEnd();
+                    m_aCurrentRow = m_pCache->createIterator();
 
                     // get the locale
                     ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
@@ -1796,7 +1834,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                     pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
 
                     // get the numberformatTypes
-                    OSL_ENSHURE(m_xActiveConnection.is(),"No ActiveConnection");
+                    OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
                     Reference< XNumberFormatTypes> xNumberFormatTypes;
                     Reference< XChild> xChild(m_xActiveConnection,UNO_QUERY);
                     if(xChild.is())
@@ -1948,7 +1986,7 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  ) throw(SQLException
 
     if(m_xStatement.is())
     {
-        ORowSetClone* pClone = new ORowSetClone(*this);
+        ORowSetClone* pClone = new ORowSetClone(*this,m_rMutex);
         Reference< XResultSet > xRet(pClone);
         m_aClones.push_back(WeakReferenceHelper(xRet));
         return xRet;
@@ -1977,7 +2015,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     if(!m_pCache)
         throw FunctionSequenceException(*this);
 
-    ::osl::MutexGuard aGuard( m_aColumnsMutex );
+    ::osl::MutexGuard aGuard( m_rMutex );
 
     RowChangeEvent aEvt(*this,RowChangeAction::DELETE,rows.getLength());
     // notify the rowset listeners
@@ -1989,7 +2027,7 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
     for(;pBegin != pEnd;++pBegin)
     {
         notifyClonesRowDelete(*pBegin);
-        if(*pBegin == m_aBookmark)
+        if(compareBookmarks( m_aBookmark,*pBegin) == 0)
         {
             if(m_aBookmark.hasValue())
                 m_pCache->moveToBookmark(m_aBookmark);
@@ -2004,16 +2042,17 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
 
     const sal_Int32* pRetBegin  = aRet.getConstArray();
     const sal_Int32* pRetEnd    = pRetBegin + aRet.getLength();
-    OSL_ENSHURE(aRet.getLength() == rows.getLength(),"ORowSet::deleteRows: The length of the rows and returnstatus is not equal!");
+    OSL_ENSURE(aRet.getLength() == rows.getLength(),"ORowSet::deleteRows: The length of the rows and returnstatus is not equal!");
     for(;pBegin != pEnd;++pBegin)
     {
         if(*pRetBegin)
         {
             notifyClonesRowDeleted(*pBegin);
-            if(*pBegin == m_aBookmark)
+            if(compareBookmarks( m_aBookmark,*pBegin) == 0)
             {
                 m_aBookmark     = Any();
                 m_aCurrentRow   = NULL;
+                m_aCurrentRow.setBookmark(Any());
             }
         }
     }
@@ -2130,7 +2169,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
             case CommandType::TABLE:
             {
 
-                OSL_ENSHURE(_rxRetTables.is(),"ORowSet::getCommand: We got no tables from the connection!");
+                OSL_ENSURE(_rxRetTables.is(),"ORowSet::getCommand: We got no tables from the connection!");
                 if (_rxRetTables.is() && _rxRetTables->hasByName(m_aCommand))
                 {
                     Reference< XPropertySet > xTable;
@@ -2601,14 +2640,24 @@ void ORowSet::checkInsert()
         fireProperty(PROPERTY_ID_ISNEW,sal_False,sal_True);
     }
 }
+// -----------------------------------------------------------------------------
+void ORowSet::checkUpdateIterator()
+{
+    if(!m_bModified && !m_bNew)
+    {
+        m_pCache->setUpdateIterator(m_aCurrentRow);
+        m_aCurrentRow = m_pCache->m_aInsertRow;
+    }
+}
+
 // ***********************************************************
 //  ORowSetClone
 // ***********************************************************
 DBG_NAME(ORowSetClone);
 //--------------------------------------------------------------------------
-ORowSetClone::ORowSetClone(ORowSet& rParent)
+ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
              :OSubComponent(m_aMutex, rParent)
-             ,ORowSetBase(OComponentHelper::rBHelper,m_aMutex)
+             ,ORowSetBase(OComponentHelper::rBHelper,_rMutex)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
              ,m_nResultSetConcurrency(ResultSetConcurrency::READ_ONLY)
@@ -2625,7 +2674,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent)
     m_bAfterLast            = rParent.m_bAfterLast;
     m_pCache                = rParent.m_pCache;
     m_aBookmark             = rParent.m_aBookmark;
-    m_aCurrentRow           = m_pCache->getEnd();
+    m_aCurrentRow           = m_pCache->createIterator();
     m_xNumberFormatTypes    = rParent.m_xNumberFormatTypes;
 
     ORowSetDataColumns_COLLECTION aColumns;
@@ -2805,7 +2854,8 @@ void ORowSetClone::rowDelete(const ::com::sun::star::uno::Any& _rBookmark)
 {
     if(compareBookmarks(_rBookmark,m_aBookmark) == 0)
     {
-        OSL_ENSHURE(m_aBookmark.hasValue(),"Bookamrk isn't valid!");
+        OSL_ENSURE(m_aBookmark.hasValue(),"Bookamrk isn't valid!");
+        ::osl::MutexGuard aGuard( m_rMutex );
         m_pCache->moveToBookmark(m_aBookmark);
         m_nPosition = m_pCache->getRow();
     }
@@ -2817,6 +2867,7 @@ void ORowSetClone::rowDeleted(const ::com::sun::star::uno::Any& _rBookmark)
     {
         m_aBookmark     = Any();
         m_aCurrentRow   = NULL;
+        m_aCurrentRow.setBookmark(Any());
     }
 }
 // -----------------------------------------------------------------------------

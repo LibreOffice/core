@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:29:09 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ namespace dbaccess
         void notifyClonesRowDeleted(const ::com::sun::star::uno::Any& _rBookmark);
         // inform the clones that we will delete some records
         void notifyClonesRowDelete(const ::com::sun::star::uno::Any& _rBookmark);
+        void checkUpdateIterator();
 
     protected:
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
@@ -402,7 +403,7 @@ namespace dbaccess
         // the clone can not insert anything
         virtual void checkInsert() {}
     public:
-        ORowSetClone(ORowSet& rParent);
+        ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex);
         virtual ~ORowSetClone();
 
     // com::sun::star::lang::XTypeProvider
@@ -455,6 +456,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/01/09 12:29:09  oj
+    two new properties
+
     Revision 1.12  2000/12/06 09:52:12  oj
     #80219# correted deleterow(s) and remeber position
 
