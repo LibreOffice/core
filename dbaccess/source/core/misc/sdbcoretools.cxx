@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdbcoretools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:28:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:04:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,20 +90,29 @@ namespace dbaccess
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-//=====================================================================
-void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,sal_Bool _bModified)
-{
-    Reference< XInterface > xParent = _xParent;
-    Reference< XModifiable > xModi;
-    while( xParent.is() )
+    // =========================================================================
+    // -------------------------------------------------------------------------
+    void notifyDataSourceModified(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject,sal_Bool _bModified)
     {
-        xModi.set(xParent,UNO_QUERY);
-        Reference<XChild> xChild(xParent,UNO_QUERY);
-        xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
+        Reference< XModifiable > xModi( getDataSource( _rxObject ), UNO_QUERY );
+        if ( xModi.is() )
+            xModi->setModified(_bModified);
     }
-    if ( xModi.is() )
-        xModi->setModified(_bModified);
-}
+
+    // -------------------------------------------------------------------------
+    Reference< XInterface > getDataSource( const Reference< XInterface >& _rxDependentObject )
+    {
+        Reference< XInterface > xParent = _rxDependentObject;
+        Reference< XInterface > xReturn;
+        while( xParent.is() )
+        {
+            xReturn = xParent;
+            Reference<XChild> xChild(xParent,UNO_QUERY);
+            xParent.set(xChild.is() ? xChild->getParent() : Reference< XInterface >(),UNO_QUERY);
+        }
+        return xReturn;
+    }
+
 // -----------------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaccess
