@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:34:36 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 23:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,9 +266,9 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ polish ] = "~Dalej>>";
     Text[ portuguese_brazilian ] = "C~ontinue>>";
     Text[ japanese ] = "æ¬¡ã¸(~O) >>";
-    Text[ korean ] = "ë‹¤ìŒ (~O) >>";
-    Text[ chinese_simplified ] = "ç»§ç»­  (~O) >>";
-    Text[ chinese_traditional ] = "ç¹¼çºŒ   (~O) >>";
+    Text[ korean ] = "ë‹¤ìŒ (~O)>>";
+    Text[ chinese_simplified ] = "ç»§ç»­(~O) >>";
+    Text[ chinese_traditional ] = "ç¹¼çºŒ(~O) >>";
     Text[ turkish ] = "~Ýleri>>";
     Text[ arabic ] = "~ÇáÊÇáí>>";
     Text[ finnish ] = "~Jatka>>";
@@ -2132,6 +2132,7 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ finnish ] = "Lomake on aina suojaamaton";
     Text[ catalan ] = "Anular siempre la protección de hoja";
 };
+
 
 
 
