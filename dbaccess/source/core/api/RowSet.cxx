@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:35:26 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,6 +1017,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         notifyAllListenersRowChanged(aEvt);
         ORowSetBase::firePropertyChange(aOldValues);
         fireRowcount();
+        checkInsert();
     }
 }
 // -------------------------------------------------------------------------
@@ -1045,7 +1046,7 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
 
     ORowSetBase::firePropertyChange(aOldValues);
     // fire property modified
-    if(!m_bModified)
+    if( !m_bModified )
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
 }
 // -------------------------------------------------------------------------
@@ -1785,6 +1786,8 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
         aEvt.Rows = aRet.getLength();
         notifyAllListenersRowChanged(aEvt);
         fireRowcount();
+        // we have to check if we stand on the insert row and if so we have to reset it
+        checkInsert();
     }
     return aRet;
 }
