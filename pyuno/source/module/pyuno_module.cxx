@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_module.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:06:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,16 @@ static OUString getLibDir()
     return *pLibDir;
 }
 
+static void raisePySystemException( const char * exceptionType, const OUString & message )
+{
+    OStringBuffer buf;
+    buf.append( "Error during bootstrapping uno (");
+    buf.append( exceptionType );
+    buf.append( "):" );
+    buf.append( OUStringToOString( message, osl_getThreadTextEncoding() ) );
+    PyErr_SetString( PyExc_SystemError, buf.makeStringAndClear().getStr() );
+}
+
 static PyObject* getComponentContext (PyObject* self, PyObject* args)
 {
     PyRef ret;
@@ -291,23 +301,26 @@ static PyObject* getComponentContext (PyObject* self, PyObject* args)
     }
     catch (com::sun::star::registry::InvalidRegistryException &e)
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        // can't use raisePyExceptionWithAny() here, because the function
+        // does any conversions, which will not work with a
+        // wrongly bootstrapped pyuno!
+        raisePySystemException( "InvalidRegistryException", e.Message );
     }
     catch( com::sun::star::lang::IllegalArgumentException & e)
     {
-        raisePyExceptionWithAny( makeAny(e));
+        raisePySystemException( "IllegalArgumentException", e.Message );
     }
     catch( com::sun::star::script::CannotConvertException & e)
     {
-        raisePyExceptionWithAny( makeAny(e));
+        raisePySystemException( "CannotConvertException", e.Message );
     }
     catch (com::sun::star::uno::RuntimeException & e)
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePySystemException( "RuntimeException", e.Message );
     }
     catch (com::sun::star::uno::Exception & e)
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePySystemException( "uno::Exception", e.Message );
     }
     return ret.getAcquired();
 }
