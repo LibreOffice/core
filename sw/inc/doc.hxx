@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 14:32:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ class SdrModel;
 class SdrObject;
 class SdrUndoAction;
 class SfxDocumentInfo;
+class VirtualDevice;
 class SfxPrinter;
 class SvData;
 class SvEmbeddedObjectRef;
@@ -264,6 +265,7 @@ enum SwMoveFlags
 #define DUMMY_PARASPACEMAX          0x04
 #define DUMMY_PARASPACEMAX_AT_PAGES 0x20
 #define DUMMY_TAB_COMPAT            0x40
+#define DUMMY_USE_VIRTUAL_DEVICE    0x80
 
 
 #define SW_HYPH_ERROR       0
@@ -343,7 +345,9 @@ class SwDoc
     SwFldTypes      *pFldTypes;         // Feldtypen
     SwNewDBMgr      *pNewDBMgr;         // Pointer auf den neuen DBMgr fuer
                                         // Evaluierung der DB-Fields
-    SfxPrinter      *pPrt;
+
+    VirtualDevice   *pVirDev;           // can be used for formatting
+    SfxPrinter      *pPrt;              // can be used for formatting
     SwPrintData     *pPrtData;          // Print configuration
 
     SwDoc           *pGlossaryDoc;      // Pointer auf das Glossary-Dokument. Dieses
@@ -454,6 +458,7 @@ class SwDoc
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
+
     // -------------------------------------------------------------------
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
@@ -479,7 +484,6 @@ class SwDoc
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
                                         // DrawModel
     void DrawNotifyUndoHdl();   // wegen CLOOKs
-    void DrawSetRefDevice();    // wegen CLOOKs
 
         // nur fuer den internen Gebrauch deshalb privat.
         // Kopieren eines Bereiches im oder in ein anderes Dokument !
@@ -510,7 +514,9 @@ class SwDoc
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt );
     SwFmt* FindFmtByName( const SvPtrarr& rFmtArr,
                                     const String& rName ) const;
-    SfxPrinter* _GetPrt() const;
+
+    VirtualDevice& _GetVirDev() const;
+    SfxPrinter& _GetPrt() const;
     void        PrtDataChanged();   //Printer oder JobSetup geandert, es muss
                                     //fuer entsprechende Invalidierungen und
                                     //Benachrichtigungen gesorgt werden.
@@ -591,7 +597,7 @@ public:
     sal_Bool IsIdleTimerActive() const  { return aIdleTimer.IsActive(); }
 
     sal_Bool IsOLEPrtNotifyPending() const  { return bOLEPrtNotifyPending; }
-    void SetOLEPrtNotifyPending()       { bOLEPrtNotifyPending = sal_True; }
+    inline void SetOLEPrtNotifyPending( sal_Bool bSet=sal_True );
     void PrtOLENotify( sal_Bool bAll ); //Alle oder nur Markierte
 
     sal_Bool IsPurgeOLE() const             { return bPurgeOLE; }
@@ -604,6 +610,7 @@ public:
     sal_Bool InXMLExport() const            { return bXMLExport; }
     void SetXMLExport( sal_Bool bFlag )     { bXMLExport = bFlag; }
 #endif
+
         // das Dokument im Browse-Modus anzeigen
     void SetBrowseMode( sal_Bool bFlag = sal_True )     { bBrowseMode = bFlag; }
     sal_Bool IsBrowseMode() const                       { return bBrowseMode; }
@@ -1203,11 +1210,26 @@ public:
     String GetCurWord(SwPaM&);
 
     //  JobSetup und Freunde
+
+    OutputDevice& GetRefDev() const;
+    OutputDevice* _GetRefDev() const;
+
+    VirtualDevice* GetVirDev( sal_Bool bCreate ) const
+        { if ( !bCreate || pVirDev ) return pVirDev; else return &_GetVirDev(); }
+    VirtualDevice* GetVirDev() const { return pVirDev; }
+
+    void SetVirDev( VirtualDevice* pVd, sal_Bool bCallVirDevDataChanged );
+
     SfxPrinter* GetPrt( sal_Bool bCreate ) const
-        { if( !bCreate || pPrt ) return pPrt; else return _GetPrt(); }
+        { if( !bCreate || pPrt ) return pPrt; else return &_GetPrt(); }
     SfxPrinter* GetPrt() const { return pPrt; }
+
     inline void _SetPrt( SfxPrinter *pP )   { pPrt = pP; }
     void        SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged = sal_True );
+
+    // sets the flag at the document and invalidates the layout if flag has changed
+    void SetUseVirtualDevice( sal_Bool bFlag );
+
     const JobSetup* GetJobsetup() const;
     void        SetJobsetup( const JobSetup& rJobSetup );
 
@@ -1801,6 +1823,13 @@ public:
         if( bNew ) n8Dummy1 |= DUMMY_TAB_COMPAT; else n8Dummy1 &= ~DUMMY_TAB_COMPAT;
     }
 
+    sal_Bool IsUseVirtualDevice() const { return n8Dummy1 & DUMMY_USE_VIRTUAL_DEVICE; }
+    void _SetUseVirtualDevice( sal_Bool bNew )
+    {
+        if( bNew ) n8Dummy1 |= DUMMY_USE_VIRTUAL_DEVICE;
+        else n8Dummy1 &= ~DUMMY_USE_VIRTUAL_DEVICE;
+    }
+
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
     SwLayoutCache* GetLayoutCache() const { return pLayoutCache; }
@@ -1871,6 +1900,12 @@ inline sal_Bool SwNodes::IsDocNodes() const
     return this == &pMyDoc->GetNodes();
 }
 
+inline void SwDoc::SetOLEPrtNotifyPending( sal_Bool bSet )
+{
+    bOLEPrtNotifyPending = bSet;
+    if( !bSet )
+        bAllOLENotify = sal_False;
+}
 
 
 #endif  //_DOC_HXX
