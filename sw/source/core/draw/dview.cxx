@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:55:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@
 #ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
 #endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
-
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -105,6 +101,10 @@
 #ifndef _OUTLINER_HXX //autogen
 #include <svx/outliner.hxx>
 #endif
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
+
+using namespace com::sun::star;
 
 // OD 18.06.2003 #108784#
 #ifndef _SVDVMARK_HXX //autogen
@@ -892,10 +892,6 @@ void SwDrawView::MakeVisible( const Rectangle &rRect, Window &rWin )
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );
 }
 
-#if SUPD<500
-#define SVOBJ_MISCSTATUS_NOTRESIZEABLE 0
-#endif
-
 void SwDrawView::CheckPossibilities()
 {
     FmFormView::CheckPossibilities();
@@ -925,14 +921,16 @@ void SwDrawView::CheckPossibilities()
                     SwOLENode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode();
                     if ( pNd )
                     {
-                        SvInPlaceObjectRef aRef = pNd->GetOLEObj().GetOleRef();
-                        if ( aRef.Is() )
+                        uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
+                        if ( xObj.is() )
                         {
                             // --> OD 2004-08-16 #110810# - improvement for
                             // the future, when more than one Writer fly frame
                             // can be selected.
-                            bSzProtect |= SVOBJ_MISCSTATUS_NOTRESIZEABLE & aRef->GetMiscStatus()
-                                            ? TRUE : FALSE;
+
+                            // TODO/LATER: retrieve Aspect - from where?!
+                            bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? TRUE : FALSE;
+
                             // <--
                         }
                     }
