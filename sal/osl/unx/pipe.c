@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mhu $ $Date: 2002-02-18 11:56:41 $
+ *  last change: $Author: hro $ $Date: 2002-07-11 14:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,12 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
             __osl_destroyPipeImpl(pPipe);
             return NULL;
         }
-        chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
+
+        /*  Only give access to all if no security handle was specified, otherwise security
+            depends on umask */
+
+        if ( !Security )
+            chmod(name,S_IRWXU | S_IRWXG |S_IRWXO);
 
 
         strncpy(pPipe->m_Name, name, sizeof(pPipe->m_Name));
