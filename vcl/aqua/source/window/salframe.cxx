@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-07 04:39:53 $
+ *  last change: $Author: pluby $ $Date: 2001-03-19 16:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,17 @@ void SalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 BOOL SalFrame::PostEvent( void *pData )
 {
-    return VCLWindow_PostEvent( maFrameData.mhWnd, pData );
+    VCLWINDOW hWindow = NULL;
+    SalFrame *pFrame = this;
+
+    // Search for the parent SalFrame that has a native window and
+    // use that window to post the event to
+    while ( !pFrame->maFrameData.mhWnd ) {
+        pFrame = pFrame->maFrameData.mpParent;
+        if ( !pFrame )
+            break;
+    }
+    return VCLWindow_PostEvent( pFrame->maFrameData.mhWnd, pData );
 }
 
 // -----------------------------------------------------------------------
