@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:10:49 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,7 @@ ModalDialog RID_FONTTYPEDIALOG
     Text [ swedish ] = "Teckensnitt" ;
     Text [ dutch ] = "Lettertypen" ;
     Text [ spanish ] = "Fuentes" ;
-    Text [ english_us ] = "Font Types" ;
+    Text [ english_us ] = "Fonts" ;
     Moveable = TRUE ;
     GroupBox 1
     {
@@ -10013,7 +10013,7 @@ String RID_ERR_UNEXPECTEDCHARACTER
     Text [ swedish ] = "Oväntat tecken" ;
     Text [ danish ] = "Uventet tegn" ;
     Text [ portuguese_brazilian ] = "Unerwartetes Zeichen" ;
-    Text [ portuguese ] = "Caracter não esperado" ;
+    Text [ portuguese ] = "Caracter imprevisto" ;
     Text[ chinese_simplified ] = "ÒâÍâµÄ×Ö·û";
     Text[ russian ] = "Íåîæèäàííûé çíàê";
     Text[ polish ] = "Nieoczekiwany znak";
@@ -10412,7 +10412,7 @@ String RID_PLUGINTOOLBOX
     Text [ spanish ] = "Barra de Plug-ins" ;
     Text [ french ] = "Barre de Plug-Ins" ;
     Text [ dutch ] = "PlugIn-balk" ;
-    Text [ swedish ] = "Funktionslist för PlugIns" ;
+    Text [ swedish ] = "Funktionslist för plug-ins" ;
     Text [ danish ] = "PlugInlinje" ;
     Text [ portuguese_brazilian ] = "PlugInleiste" ;
     Text [ portuguese ] = "Barra de Plugins" ;
