@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:40 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase7.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 
 #ifndef _DBASHARED_APITOOLS_HXX_
@@ -127,7 +127,7 @@ class OServerComponent;
 //                                          ::com::sun::star::lang::XServiceInfo > OTable_Base;
 class ODBTable;
 
-typedef ::utl::OPropertyArrayUsageHelper < ODBTable >   ODBTable_PROP;
+typedef ::comphelper::OPropertyArrayUsageHelper < ODBTable >    ODBTable_PROP;
 typedef connectivity::sdbcx::OTable                     OTable_Base;
 
 class ODBTable  :public ODataSettings_Base

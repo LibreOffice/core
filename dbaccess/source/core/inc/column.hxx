@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:39 $
+ *  last change: $Author: fs $ $Date: 2000-10-11 11:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #ifndef _CPPUHELPER_PROPSHLP_HXX
 #include <cppuhelper/propshlp.hxx>
 #endif
-#ifndef _UNOTOOLS_PROPERTY_ARRAY_HELPER_HXX_
-#include <unotools/proparrhlp.hxx>
+#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#include <comphelper/proparrhlp.hxx>
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
@@ -277,7 +277,7 @@ public:
 //= general columns map, could be used for readonly access
 //= no appending and dropping is supported
 //============================================================
-typedef ::std::hash_map<rtl::OUString, OColumn*, ::utl::UStringMixHash, ::utl::UStringMixEqual> OColumnMap;
+typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
 typedef ::std::vector<OColumn*> OColumnArray;
 
 //typedef ::cppu::WeakImplHelper4< ::com::sun::star::lang::XServiceInfo,
@@ -433,7 +433,7 @@ public:
 // com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
-// utl::OPropertyArrayUsageHelper
+// comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
 // cppu::OPropertySetHelper
@@ -488,7 +488,7 @@ protected:
 //============================================================
 //= OColumns
 //============================================================
-typedef ::std::hash_map<rtl::OUString, OColumn*, ::utl::UStringMixHash, ::utl::UStringMixEqual> OColumnMap;
+typedef ::std::hash_map<rtl::OUString, OColumn*, ::comphelper::UStringMixHash, ::comphelper::UStringMixEqual> OColumnMap;
 typedef ::std::vector<OColumn*> OColumnArray;
 
 typedef ::cppu::WeakImplHelper6< ::com::sun::star::lang::XServiceInfo,
