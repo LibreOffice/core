@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 12:47:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,55 @@ sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 }
 
 //----------------------------------------------
+void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState )
+{
+    if ( m_pInterfaceContainer )
+    {
+        ::cppu::OInterfaceContainerHelper* pContainer = m_pInterfaceContainer->getContainer(
+                            ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
+        if ( pContainer != NULL )
+        {
+            lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >( this ) );
+            ::cppu::OInterfaceIteratorHelper pIterator(*pContainer);
+
+            while (pIterator.hasMoreElements())
+            {
+                if ( bBeforeChange )
+                {
+                    try
+                    {
+                        ((embed::XStateChangeListener*)pIterator.next())->changingState( aSource, nOldState, nNewState );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // even if the listener complains ignore it for now
+                    }
+                }
+                else
+                {
+                       try
+                    {
+                        ((embed::XStateChangeListener*)pIterator.next())->stateChanged( aSource, nOldState, nNewState );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // if anything happened it is problem of listener, ignore it
+                    }
+                }
+            }
+        }
+    }
+}
+
+//----------------------------------------------
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
     // TODO: may be needs interaction handler to detect wherether the object state
     //       can be changed even after errors
 
-    if ( m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
-        if ( nNextState == embed::EmbedStates::EMBED_RUNNING )
+        if ( nNextState == embed::EmbedStates::RUNNING )
         {
             if ( m_bIsLink )
             {
@@ -151,16 +192,16 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             throw uno::RuntimeException(); // TODO
         }
     }
-    else if ( m_nObjectState == embed::EmbedStates::EMBED_RUNNING )
+    else if ( m_nObjectState == embed::EmbedStates::RUNNING )
     {
-        if ( nNextState == embed::EmbedStates::EMBED_LOADED )
+        if ( nNextState == embed::EmbedStates::LOADED )
         {
             // actually frame should not exist at this point
             m_pDocHolder->CloseDocument( sal_False, sal_False );
 
             m_nObjectState = nNextState;
         }
-        else if ( nNextState == embed::EmbedStates::EMBED_ACTIVE )
+        else if ( nNextState == embed::EmbedStates::ACTIVE )
         {
             if ( !m_xClientSite.is() )
                 throw embed::WrongStateException(); //TODO: client site is not set!
@@ -168,7 +209,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             // create frame and load document in the frame
             m_pDocHolder->Show();
 
-            m_xClientSite->onShowWindow( sal_True );
+            m_xClientSite->visibilityChanged( sal_True );
 
             m_nObjectState = nNextState;
         }
@@ -178,9 +219,9 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             throw uno::RuntimeException(); // TODO
         }
     }
-    else if ( m_nObjectState == embed::EmbedStates::EMBED_ACTIVE )
+    else if ( m_nObjectState == embed::EmbedStates::ACTIVE )
     {
-        if ( nNextState == embed::EmbedStates::EMBED_RUNNING )
+        if ( nNextState == embed::EmbedStates::RUNNING )
         {
             uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
             if ( !xModif.is() )
@@ -200,7 +241,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 }
                 catch( uno::Exception& e )
                 {
-                    throw embed::StorageWTException(
+                    throw embed::StorageWrappedTargetException(
                         ::rtl::OUString::createFromAscii( "The client could not store the object!" ),
                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
                         uno::makeAny( e ) );
@@ -209,7 +250,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
             m_pDocHolder->CloseFrame();
 
-            m_xClientSite->onShowWindow( sal_False );
+            m_xClientSite->visibilityChanged( sal_False );
             // when Hide() method is fixed the frame will not be closed but hided
             // m_pDocHolder->Hide();
 
@@ -272,13 +313,31 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
     if ( m_nObjectState == nNewState )
         return;
 
+    sal_Int32 nOldState = m_nObjectState;
+
     // retrieve sequence of states that should be passed to reach desired state
     uno::Sequence< sal_Int32 > aIntermediateStates = GetIntermediateStatesSequence_Impl( nNewState );
 
-    for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
-        SwitchStateTo_Impl( aIntermediateStates[nInd] );
+    // notify listeners that the object is going to change the state
+    StateChangeNotification_Impl( sal_True, nOldState, nNewState );
 
-    SwitchStateTo_Impl( nNewState );
+    try {
+        for ( sal_Int32 nInd = 0; nInd < aIntermediateStates.getLength(); nInd++ )
+            SwitchStateTo_Impl( aIntermediateStates[nInd] );
+
+        SwitchStateTo_Impl( nNewState );
+    }
+    catch( uno::Exception& )
+    {
+        if ( nOldState != m_nObjectState )
+            // notify listeners that the object has changed the state
+            StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+
+        throw;
+    }
+
+    // notify listeners that the object has changed the state
+    StateChangeNotification_Impl( sal_False, nOldState, nNewState );
 }
 
 //----------------------------------------------
@@ -334,7 +393,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 }
 
 //----------------------------------------------
-uno::Sequence< embed::VerbDescr > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
+uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
@@ -346,7 +405,7 @@ uno::Sequence< embed::VerbDescr > SAL_CALL OCommonEmbeddedObject::getSupportedVe
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    uno::Sequence< embed::VerbDescr > aResult;
+    uno::Sequence< embed::VerbDescriptor > aResult;
     sal_Int32 nResLen = 0;
 
     // verbs list will be set on initialization depending from document type
@@ -409,14 +468,14 @@ void SAL_CALL OCommonEmbeddedObject::update()
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_EXPLICIT_UPDATE )
+    if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
     {
         // TODO: update view representation
     }
     else
     {
         // the object must be up to date
-        OSL_ENSURE( m_nUpdateMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE, "Unknown update mode!\n" );
+        OSL_ENSURE( m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE, "Unknown update mode!\n" );
     }
 }
 
@@ -433,8 +492,8 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( nMode == embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE
-                    || nMode == embed::EmbedUpdateModes::EMBED_EXPLICIT_UPDATE,
+    OSL_ENSURE( nMode == embed::EmbedUpdateModes::ALWAYS_UPDATE
+                    || nMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE,
                 "Unknown update mode!\n" );
     m_nUpdateMode = nMode;
 }
@@ -452,4 +511,16 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 nAspect )
     // TODO:
     // the status information must be filled in from configuration during object contruction
 }
+
+//----------------------------------------------
+void SAL_CALL OCommonEmbeddedObject::setContainerName( const ::rtl::OUString& sName )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    m_aContainerName = sName;
+}
+
 
