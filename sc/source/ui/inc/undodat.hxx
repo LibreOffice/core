@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undodat.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:44:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #include "sortparam.hxx"
 #endif
 
+#ifndef SC_PIVOT_HXX
+#include "pivot.hxx"
+#endif
 
 class ScDocShell;
 class ScDocument;
@@ -89,7 +92,6 @@ class ScOutlineTable;
 class ScRangeName;
 class ScDBData;
 class ScDBCollection;
-class ScPivot;
 class ScDPObject;
 
 //----------------------------------------------------------------------------
