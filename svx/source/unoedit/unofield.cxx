@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:01:45 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ SfxItemPropertyMap* ImplGetFieldItemPropertyMap( sal_Int32 mnId )
 //  case ID_PAGESFIELD:
 //  case ID_FILEFIELD:
 //  case ID_TABLEFIELD:
+//  case ID_HEADERFIELD:
+//  case ID_FOOTERFIELD:
+//  case ID_DATETIMEFIELD::
     default:
         return aEmptyPropertyMap_Impl;
     }
@@ -227,6 +230,9 @@ static sal_Char* aFieldItemNameMap_Impl[] =
     "Author",
     "Measure",
     "ExtDate",
+    "Header",
+    "Footer",
+    "DateTime",
     "Unknown"
 };
 
@@ -555,6 +561,15 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         pData = new SdrMeasureField( eKind);
         break;
     }
+    case ID_HEADERFIELD:
+        pData = new SvxHeaderField();
+        break;
+    case ID_FOOTERFIELD:
+        pData = new SvxFooterField();
+        break;
+    case ID_DATETIMEFIELD:
+        pData = new SvxDateTimeField();
+        break;
     };
 
     return pData;
@@ -1069,6 +1084,12 @@ sal_Int32 SvxUnoTextField::GetFieldId( const SvxFieldData* pFieldData ) const th
         return ID_EXT_DATEFIELD;
     else if( pFieldData->ISA( SdrMeasureField ) )
         return ID_MEASUREFIELD;
+    else if( pFieldData->ISA( SvxHeaderField ) )
+        return ID_HEADERFIELD;
+    else if( pFieldData->ISA( SvxFooterField ) )
+        return ID_FOOTERFIELD;
+    else if( pFieldData->ISA( SvxDateTimeField ) )
+        return ID_DATETIMEFIELD;
 
     return ID_UNKNOWN;
 }
@@ -1092,7 +1113,10 @@ static const sal_Char* pServiceNames[] =
     "com.sun.star.text.TextField.FileName",
     "com.sun.star.text.TextField.Author",
     "com.sun.star.text.TextField.Measure",
-    "com.sun.star.text.TextField.DateTime"
+    "com.sun.star.text.TextField.DateTime",
+    "com.sun.star.presentation.TextField.Header",
+    "com.sun.star.presentation.TextField.Footer",
+    "com.sun.star.presentation.TextField.DateTime"
 };
 
 uno::Sequence< OUString > SAL_CALL SvxUnoTextField::getSupportedServiceNames()
