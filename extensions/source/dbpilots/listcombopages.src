@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:45:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ czech ] = "Ovládací prvek";
         Text[ hebrew ] = "Kontrollfeld";
         Text[ hindi ] = "नियंत्रण";
+        Text[ slovak ] = "Ovládací prvok";
     };
 
     FixedText FT_SELECTTABLE_LABEL
@@ -158,6 +159,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Text[ czech ] = "Na pravé straně vidíte všechny tabulky ze zdroje dat formuláře.\n\nZvolte tabulku, ze které mají být použita data pro obsah seznamu:";
         Text[ hebrew ] = "Auf der rechten Seite sehen Sie alle Tabellen aus der Datenquelle des Formulars.\n\n\nWählen Sie bitte die Tabelle, deren Daten die Grundlage für den Listeninhalt bilden sollen:";
         Text[ hindi ] = "दाहिना भाग पर, फ़ॉर्म का ड़ॉटा मूल का सभी सारणियों को आप देख सकते है ।\n\n\nसारणी को चुनिए जिसका ड़ॉटा को सूची विषय केलिए आधार जैसे उपयोग किया जायेगा :";
+        Text[ slovak ] = "Na pravej strane, vidíte všetky popisky zdroja dát formulára.\n\nVyberte tabuľku, z ktorej by mali byť použité dáta ako základ zoznamu:";
     };
     ListBox LB_SELECTTABLE
     {
@@ -175,6 +177,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     Text[ czech ] = "Výběr tabulky";
     Text[ hebrew ] = "Tabellenauswahl";
     Text[ hindi ] = "सारणी चुनाव";
+    Text[ slovak ] = "Výber tabuľky";
 };
 
 TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
@@ -245,6 +248,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ czech ] = "Existující pole";
         Text[ hebrew ] = "~Vorhandene Felder";
         Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्रें";
+        Text[ slovak ] = "Existujúce polia";
     };
     ListBox LB_SELECTFIELD
     {
@@ -287,6 +291,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ czech ] = "Zobrazit pole";
         Text[ hebrew ] = "~Anzeigefeld";
         Text[ hindi ] = "क्षेत्र को दिखाओ";
+        Text[ slovak ] = "Zobraziť pole";
     };
     Edit ET_DISPLAYEDFIELD
     {
@@ -332,6 +337,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu.";
         Text[ hebrew ] = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
         Text[ hindi ] = "चुने हुए क्षेत्र का विषयों कॉम्बो बॉक्स् सूची में दिखलाया जाएगा ।";
+        Text[ slovak ] = "Obsah vybraného poľa bude zobrazený v zozname.";
     };
 
     String STR_FIELDINFO_LISTBOX
@@ -362,6 +368,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu, pokud jsou propojená pole identická.";
         Text[ hebrew ] = "Der Inhalt des ausgewählten Feldes wird in dem Listenfeld angezeigt, wenn die ver- knüpften Felder überein- stimmen";
         Text[ hindi ] = "अगर लिंक की हुयी क्षेत्र समान है तो चुने हुए क्षेत्र का विषय को सूची बॉक्स में दिखाया जाएगा ।";
+        Text[ slovak ] = "Obsah vybraného poľa bude zobrazený v zozname ak sú pripojené polia rovnaké.";
     };
     Text[ catalan ] = "Selecci� de camp";
     Text[ finnish ] = "Kent�n valinta";
@@ -369,6 +376,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     Text[ czech ] = "Výběr polí";
     Text[ hebrew ] = "Feldauswahl";
     Text[ hindi ] = "क्षेत्र चुनाव";
+    Text[ slovak ] = "Výber poľa";
 };
 
 TabPage RID_PAGE_LCW_FIELDLINK
@@ -430,6 +438,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text[ czech ] = "Zde vybíráte pole s odpovídajícím obsahem tak, aby se ukázala hodnota z políčka zobrazení.";
         Text[ hebrew ] = "Wählen Sie hier die Felder aus, deren Inhalt übereinstimmen muss, damit der Wert aus dem Anzeigefeld angezeigt wird.";
         Text[ hindi ] = "यहाँ पर आप समान विषय के क्षेत्रों को चुन सकते है, जिससे दिखाव क्षेत्र का मूल्य को दिखा सकते है । ";
+        Text[ slovak ] = "Tu môžete vybrať polia s prislúchajúcim obsahom, tak že hodnota zo zobrazovacieho poľa bude zobrazená.";
     };
     FixedLine FL_FRAME
     {
@@ -469,6 +478,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text[ czech ] = "Pole z tabulky hodnot";
         Text[ hebrew ] = "Feld aus der ~Wertetabelle";
         Text[ hindi ] = "मूल्य ~सारणी का क्षेत्र";
+        Text[ slovak ] = "Pole z ~hodnotovej tabuľky";
     };
     ComboBox CMB_VALUELISTFIELD
     {
@@ -513,6 +523,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Text[ czech ] = "Pole z tabulky seznamu";
         Text[ hebrew ] = "Feld aus der ~Listentabelle";
         Text[ hindi ] = "सूची सार~णी का क्षेत्र";
+        Text[ slovak ] = "Po~le z tabuľky zoznamu";
     };
     ComboBox CMB_TABLEFIELD
     {
@@ -530,6 +541,7 @@ TabPage RID_PAGE_LCW_FIELDLINK
     Text[ czech ] = "Propojení polí";
     Text[ hebrew ] = "Feldverknüpfung";
     Text[ hindi ] = "क्षेत्र लिंक";
+    Text[ slovak ] = "Prepojenie polí";
 };
 
 String RID_STR_COMBOWIZ_DBFIELD
@@ -562,7 +574,10 @@ String RID_STR_COMBOWIZ_DBFIELD
     Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
     Text[ hebrew ] = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
     Text[ hindi ] = "आप कॉम्बो क्षेत्र का मूल्य को लेखासंचय क्षेत्र में संचित कर सकते है अथवा दिखाने के लिए उपयोग कर सकते है ।";
+    Text[ slovak ] = "Môžete alebo uložiť hodnotu combo boxu do databázového poľa, alebo ju použiť na zobrazenie.";
 };
+
+
 
 
 
