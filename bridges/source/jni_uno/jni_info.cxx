@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:24 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,11 +376,27 @@ JNI_type_info const * JNI_info::create_type_info(
     {
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-        new_info = new JNI_compound_type_info( jni, td );
+    {
+#if defined SOLARIS
+        css::uno::TypeDescription rtd( td );
+#else
+        css::uno::TypeDescription const & rtd =
+            *reinterpret_cast< css::uno::TypeDescription const * >( &td );
+#endif
+        new_info = new JNI_compound_type_info( jni, rtd );
         break;
+    }
     case typelib_TypeClass_INTERFACE:
-        new_info = new JNI_interface_type_info( jni, td );
+    {
+#if defined SOLARIS
+        css::uno::TypeDescription rtd( td );
+#else
+        css::uno::TypeDescription const & rtd =
+            *reinterpret_cast< css::uno::TypeDescription const * >( &td );
+#endif
+        new_info = new JNI_interface_type_info( jni, rtd );
         break;
+    }
     default:
     {
         OUStringBuffer buf( 128 );
