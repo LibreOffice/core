@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:22:13 $
+ *  last change: $Author: hdu $ $Date: 2001-07-11 15:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,7 +1251,7 @@ bool SalGraphicsData::DrawServerAAForcedString( int nX, int nY,
 void SalGraphicsData::DrawServerSimpleFontString(
     int nX, int nY, ServerFont *pFont, const sal_uInt32* pGlyph, int nLength, const long* pDXAry )
 {
-    Display* pDisplay   = GetXDisplay();
+    Display* pDisplay = GetXDisplay();
     GC nGC = SelectFont();
 
     XGCValues aGCVal;
@@ -2178,10 +2178,12 @@ SalGraphics::GetGlyphBoundRect( xub_Unicode cChar,
         const int nGlyphIndex = rSF.GetGlyphIndex( cChar );
         const GlyphMetric& rGM = rSF.GetGlyphMetric( nGlyphIndex );
 
+        int nHeight = maGraphicsData.mpServerSideFont->GetFontSelData().mnHeight;
         *pX = rGM.GetOffset().X();
-        *pY = rGM.GetOffset().Y();
+        *pY = nHeight - rGM.GetOffset().Y();
         *pDX = rGM.GetSize().Width();
         *pDY = rGM.GetSize().Height();
+
         return TRUE;
     }
 #endif //USE_BUILTIN_RASTERIZER
