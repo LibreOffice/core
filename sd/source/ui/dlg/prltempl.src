@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:43 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text [ ENGLISH ] = "Presentation layout" ;
     Text [ norwegian ] = "Presentation layout" ;
     Text [ italian ] = "Layout di presentazione" ;
-    Text [ portuguese_brazilian ] = "Layout de apresenta??o" ;
+    Text [ portuguese_brazilian ] = "Layout da Apresenta��o" ;
     Text [ portuguese ] = "Configura��o da apresenta��o" ;
     Text [ finnish ] = "Esityksen asettelu" ;
     Text [ danish ] = "Pr�sentationslayout" ;
@@ -117,6 +117,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nia";
                 Text[ thai ] = "บรรทัด";
+                Text[ czech ] = "Čára";
+                Text[ hebrew ] = "Linie";
+                Text[ hindi ] = "रेखा";
             };
             PageItem
             {
@@ -125,7 +128,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Fill" ;
                 Text [ norwegian ] = "Fill" ;
                 Text [ italian ] = "Area" ;
-                Text [ portuguese_brazilian ] = "Preenchimento" ;
+                Text [ portuguese_brazilian ] = "�rea" ;
                 Text [ portuguese ] = "Preenchimento" ;
                 Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
@@ -137,7 +140,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 PageResID = RID_SVXPAGE_AREA ;
                 Text[ chinese_simplified ] = "充填";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Powierzchnia";
+                Text[ polish ] = "Obszar";
                 Text[ japanese ] = "表面";
                 Text[ chinese_traditional ] = "充填";
                 Text[ arabic ] = "�����";
@@ -147,6 +150,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "�rea";
                 Text[ thai ] = "พื้นที่";
+                Text[ czech ] = "Oblast";
+                Text[ hebrew ] = "Fläche";
+                Text[ hindi ] = "विस्तीर्ण";
             };
             PageItem
             {
@@ -162,7 +168,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ swedish ] = "Skugga" ;
                 Text [ danish ] = "Skygge" ;
                 Text [ portuguese ] = "Sombras" ;
-                Text [ portuguese_brazilian ] = "Schatten" ;
+                Text [ portuguese_brazilian ] = "Sombra" ;
                 Text[ chinese_simplified ] = "阴影";
                 Text[ russian ] = "���������";
                 Text[ polish ] = "Cie�";
@@ -176,6 +182,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ catalan ] = "Ombra";
                 Text[ finnish ] = "Varjostus";
                 Text[ thai ] = "เงา";
+                Text[ czech ] = "Stín";
+                Text[ hebrew ] = "‮הצללה‬";
+                Text[ hindi ] = "छाया";
             };
             PageItem
             {
@@ -193,7 +202,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ danish ] = "Transparens";
                 Text[ swedish ] = "Transparens";
                 Text[ polish ] = "Przezroczysto��";
-                Text[ portuguese_brazilian ] = "Transparence";
+                Text[ portuguese_brazilian ] = "Transpar�ncia";
                 Text[ japanese ] = "透過性";
                 Text[ korean ] = "투명도";
                 Text[ chinese_simplified ] = "透明";
@@ -203,6 +212,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ catalan ] = "Transparencia";
                 Text[ finnish ] = "L�pin�kyvyys";
                 Text[ thai ] = "โปร่งแสง";
+                Text[ czech ] = "Průhlednost";
+                Text[ hebrew ] = "Transparenz";
+                Text[ hindi ] = "पारदर्शकता";
             };
             PageItem
             {
@@ -229,10 +241,13 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ arabic ] = "����";
                 Text[ greek ] = "�������������";
                 Text[ korean ] = "글꼴";
-                Text[ turkish ] = "Yaz�tipi";
+                Text[ turkish ] = "Yaz� Tipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "फ़ॉन्ट";
             };
             PageItem
             {
@@ -241,7 +256,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
                 Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extens�o de Caracter" ;
+                Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
@@ -253,16 +268,19 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ russian ] = "������� ������";
-                Text[ polish ] = "Efekt czcionki";
+                Text[ polish ] = "Efekty czcionki";
                 Text[ japanese ] = "フォント効果";
                 Text[ chinese_traditional ] = "字型效果";
                 Text[ arabic ] = "������� ������";
                 Text[ greek ] = "��� ����������";
                 Text[ korean ] = "글꼴 효과";
-                Text[ turkish ] = "Yaz�tipi efekti";
+                Text[ turkish ] = "Yaz�tipi Efektleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ thai ] = "ลักษณะตัวอักษร";
+                Text[ czech ] = "Efekty písma";
+                Text[ hebrew ] = "‮אפרים לגופנים‬";
+                Text[ hindi ] = "Font Effects";
             };
             PageItem
             {
@@ -271,7 +289,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamentos" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -293,6 +311,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats i espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení a proklad";
+                Text[ hebrew ] = "‮שוליים ורווחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
         };
     };
@@ -308,6 +329,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Disseny de presentaci�";
     Text[ thai ] = "เค้าโครงการนำเสนอ";
+    Text[ czech ] = "Rozvržení prezentace";
+    Text[ hebrew ] = "Präsentationslayout";
+    Text[ hindi ] = "प्रस्तुति का अभिन्यास";
 };
 TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
 {
@@ -351,6 +375,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "L�nia";
                 Text[ thai ] = "บรรทัด";
+                Text[ czech ] = "Čára";
+                Text[ hebrew ] = "Linie";
+                Text[ hindi ] = "रेखा";
             };
         };
     };
@@ -375,7 +402,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text [ ENGLISH ] = "Fill" ;
                 Text [ norwegian ] = "Fill" ;
                 Text [ italian ] = "Area" ;
-                Text [ portuguese_brazilian ] = "Preenchimento" ;
+                Text [ portuguese_brazilian ] = "�rea" ;
                 Text [ portuguese ] = "Preenchimento" ;
                 Text [ finnish ] = "Alue" ;
                 Text [ danish ] = "Flade" ;
@@ -387,7 +414,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 PageResID = RID_SVXPAGE_AREA ;
                 Text[ chinese_simplified ] = "充填";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Wype�nienie";
+                Text[ polish ] = "Obszar";
                 Text[ japanese ] = "表面";
                 Text[ chinese_traditional ] = "充填";
                 Text[ arabic ] = "�����";
@@ -397,6 +424,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "�rea";
                 Text[ thai ] = "พื้นที่";
+                Text[ czech ] = "Oblast";
+                Text[ hebrew ] = "Fläche";
+                Text[ hindi ] = "विस्तीर्ण";
             };
         };
     };
@@ -439,10 +469,13 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ arabic ] = "����";
                 Text[ greek ] = "�������������";
                 Text[ korean ] = "글꼴";
-                Text[ turkish ] = "Yaz�tipi";
+                Text[ turkish ] = "Yaz� Tipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tipus de lletra";
                 Text[ thai ] = "ตัวอักษร";
+                Text[ czech ] = "Písmo";
+                Text[ hebrew ] = "‮גופן‬";
+                Text[ hindi ] = "फ़ॉन्ट";
             };
             PageItem
             {
@@ -451,7 +484,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ ENGLISH ] = "Character Extension" ;
                 Text [ norwegian ] = "Character Extension" ;
                 Text [ italian ] = "Effetto carattere" ;
-                Text [ portuguese_brazilian ] = "Extens�o de Caracter" ;
+                Text [ portuguese_brazilian ] = "Efeitos da Fonte" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
                 Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
@@ -463,16 +496,19 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
                 Text[ chinese_simplified ] = "字体效果";
                 Text[ russian ] = "������� ������";
-                Text[ polish ] = "Efekt czcionki";
+                Text[ polish ] = "Efekty czcionki";
                 Text[ japanese ] = "フォント効果";
                 Text[ chinese_traditional ] = "字型效果";
                 Text[ arabic ] = "������� ������";
                 Text[ greek ] = "��� ����������";
                 Text[ korean ] = "글꼴 효과";
-                Text[ turkish ] = "Yaz�tipi efekti";
+                Text[ turkish ] = "Yaz� Tipi Efektleri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Efectes de lletra";
                 Text[ thai ] = "ลักษณะตัวอักษร";
+                Text[ czech ] = "Efekty písma";
+                Text[ hebrew ] = "‮אפקטים לגופנים‬";
+                Text[ hindi ] = "Font Effects";
             };
             PageItem
             {
@@ -481,7 +517,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -503,6 +539,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats i espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení a proklad";
+                Text[ hebrew ] = "‮שוליים ורווחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
             PageItem
             {
@@ -510,7 +549,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text = "Bullets" ;
                 Text [ ENGLISH ] = "Bullets" ;
                 Text [ english_us ] = "Bullets" ;
-                Text [ portuguese_brazilian ] = "Bullets" ;
+                Text [ portuguese_brazilian ] = "Marcas" ;
                 Text [ swedish ] = "Punkter" ;
                 Text [ danish ] = "Punkttegn" ;
                 Text [ italian ] = "Punti" ;
@@ -531,6 +570,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
                 Text[ thai ] = "สัญลักษณ์แสดงหัวข้อย่อย";
+                Text[ czech ] = "Odrážky";
+                Text[ hebrew ] = "Bullets";
+                Text[ hindi ] = "बुल्लेट्स";
             };
             PageItem
             {
@@ -538,7 +580,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text = "Nummerierungsart" ;
                 Text [ ENGLISH ] = "Digits" ;
                 Text [ english_us ] = "Numbering type" ;
-                Text [ portuguese_brazilian ] = "Numerierungsart" ;
+                Text [ portuguese_brazilian ] = "Tipo de numera��o" ;
                 Text [ swedish ] = "Numreringstyp" ;
                 Text [ danish ] = "Nummereringstype" ;
                 Text [ italian ] = "Tipo di numerazione" ;
@@ -548,7 +590,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ portuguese ] = "Tipo de numera��o" ;
                 Text[ chinese_simplified ] = "编号类型";
                 Text[ russian ] = "��� ���������";
-                Text[ polish ] = "Rodzaj numeracji";
+                Text[ polish ] = "Typ numeracji";
                 Text[ japanese ] = "番号付けの種類";
                 Text[ chinese_traditional ] = "編號類型";
                 Text[ language_user1 ] = "MS Word";
@@ -559,6 +601,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ catalan ] = "Tipus de numeraci�";
                 Text[ finnish ] = "Numerointityyppi";
                 Text[ thai ] = "ชนิดลำดับตัวเลข";
+                Text[ czech ] = "Typ číslování";
+                Text[ hebrew ] = "Nummerierungsart";
+                Text[ hindi ] = "संख्या देना का क्रम";
             };
             PageItem
             {
@@ -566,7 +611,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text = "Grafiken" ;
                 Text [ ENGLISH ] = "Images" ;
                 Text [ english_us ] = "Graphics" ;
-                Text [ portuguese_brazilian ] = "Grafiken" ;
+                Text [ portuguese_brazilian ] = "Figuras" ;
                 Text [ swedish ] = "Grafik" ;
                 Text [ danish ] = "Grafik" ;
                 Text [ italian ] = "Immagini" ;
@@ -576,7 +621,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ portuguese ] = "Imagens" ;
                 Text[ chinese_simplified ] = "图形";
                 Text[ russian ] = "�������";
-                Text[ polish ] = "Grafiki";
+                Text[ polish ] = "Grafika";
                 Text[ japanese ] = "図";
                 Text[ chinese_traditional ] = "圖形";
                 Text[ arabic ] = "���";
@@ -587,6 +632,9 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ catalan ] = "Imatges";
                 Text[ finnish ] = "Grafiikka";
                 Text[ thai ] = "กราฟิค";
+                Text[ czech ] = "Grafika";
+                Text[ hebrew ] = "‮גרפיקה‬";
+                Text[ hindi ] = "सुचित्र";
             };
             PageItem
             {
@@ -594,7 +642,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text = "Optionen" ;
                 Text [ ENGLISH ] = "Customize" ;
                 Text [ english_us ] = "Customize" ;
-                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ portuguese_brazilian ] = "Personalizar" ;
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
@@ -604,7 +652,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ portuguese ] = "Op��es" ;
                 Text[ chinese_simplified ] = "选项";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Opcje";
+                Text[ polish ] = "Dostosuj";
                 Text[ japanese ] = "オプション";
                 Text[ chinese_traditional ] = "選項";
                 Text[ arabic ] = "������";
@@ -615,10 +663,22 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text[ catalan ] = "Personalitza";
                 Text[ finnish ] = "Mukauta";
                 Text[ thai ] = "กำหนดเอง";
+                Text[ czech ] = "Přizpůsobit";
+                Text[ hebrew ] = "‮התאמה אישית‬";
+                Text[ hindi ] = "व्यवस्था करो";
             };
         };
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
