@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formstrings.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:27:27 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,10 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ENABLED,                "Enabled");
     PCR_CONSTASCII_STRING( PROPERTY_READONLY,               "ReadOnly");
     PCR_CONSTASCII_STRING( PROPERTY_ISREADONLY,             "IsReadOnly");
-    PCR_CONSTASCII_STRING( PROPERTY_FILTER_CRITERIA,        "Filter");
+    PCR_CONSTASCII_STRING( PROPERTY_FILTER,                 "Filter");
     PCR_CONSTASCII_STRING( PROPERTY_WIDTH,                  "Width");
     PCR_CONSTASCII_STRING( PROPERTY_MULTILINE,              "MultiLine");
+    PCR_CONSTASCII_STRING( PROPERTY_WORDBREAK,              "WordBreak");
     PCR_CONSTASCII_STRING( PROPERTY_TARGET_URL,             "TargetURL");
     PCR_CONSTASCII_STRING( PROPERTY_TARGET_FRAME,           "TargetFrame");
     PCR_CONSTASCII_STRING( PROPERTY_MAXTEXTLEN,             "MaxTextLen");
@@ -143,9 +144,9 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_LINECOLOR,              "LineColor");
     PCR_CONSTASCII_STRING( PROPERTY_BORDER,                 "Border");
     PCR_CONSTASCII_STRING( PROPERTY_DROPDOWN,               "Dropdown");
-    PCR_CONSTASCII_STRING( PROPERTY_MULTI,                  "Multi");
     PCR_CONSTASCII_STRING( PROPERTY_HSCROLL,                "HScroll");
     PCR_CONSTASCII_STRING( PROPERTY_VSCROLL,                "VScroll");
+    PCR_CONSTASCII_STRING( PROPERTY_SHOW_SCROLLBARS,        "ShowScrollbars");
     PCR_CONSTASCII_STRING( PROPERTY_TABSTOP,                "Tabstop");
     PCR_CONSTASCII_STRING( PROPERTY_AUTOCOMPLETE,           "Autocomplete");
     PCR_CONSTASCII_STRING( PROPERTY_PRINTABLE,              "Printable");
@@ -200,6 +201,7 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_ORIENTATION,            "Orientation");
     PCR_CONSTASCII_STRING( PROPERTY_IMAGEALIGN,             "ImageAlign");
     PCR_CONSTASCII_STRING( PROPERTY_ACTIVE_CONNECTION,      "ActiveConnection");
+    PCR_CONSTASCII_STRING( PROPERTY_ACTIVECOMMAND,          "ActiveCommand");
     PCR_CONSTASCII_STRING( PROPERTY_DATE,                   "Date");
     PCR_CONSTASCII_STRING( PROPERTY_STATE,                  "State");
     PCR_CONSTASCII_STRING( PROPERTY_TIME,                   "Time");
@@ -227,16 +229,24 @@ namespace pcr
     PCR_CONSTASCII_STRING( PROPERTY_CELL_EXCHANGE_TYPE,     "ExchangeSelectionIndex");
 
     // services
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox");
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FIXEDTEXT,     "com.sun.star.form.component.FixedText");
-    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField");
-    PCR_CONSTASCII_STRING( SERVICE_DATABASE_CONTEXT,        "com.sun.star.sdb.DatabaseContext");
-    PCR_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument");
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "drafts.com.sun.star.table.CellValueBinding");
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "drafts.com.sun.star.table.ListPositionCellBinding");
-    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "drafts.com.sun.star.table.CellRangeListSource");
-    PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion");
-    PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion");
+    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_GROUPBOX,      "com.sun.star.form.component.GroupBox" );
+    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FIXEDTEXT,     "com.sun.star.form.component.FixedText" );
+    PCR_CONSTASCII_STRING( SERVICE_COMPONENT_FORMATTEDFIELD,"com.sun.star.form.component.FormattedField" );
+    PCR_CONSTASCII_STRING( SERVICE_DATABASE_CONTEXT,        "com.sun.star.sdb.DatabaseContext" );
+
+    PCR_CONSTASCII_STRING( SERVICE_TEXT_DOCUMENT,           "com.sun.star.text.TextDocument" );
+    PCR_CONSTASCII_STRING( SERVICE_WEB_DOCUMENT,            "com.sun.star.text.WebDocument" );
+    PCR_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument" );
+    PCR_CONSTASCII_STRING( SERVICE_DRAWING_DOCUMENT,        "com.sun.star.drawing.DrawingDocument" );
+    PCR_CONSTASCII_STRING( SERVICE_PRESENTATION_DOCUMENT,   "com.sun.star.presentation.PresentationDocument" );
+
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_BINDING,      "drafts.com.sun.star.table.CellValueBinding" );
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELL_INT_BINDING,  "drafts.com.sun.star.table.ListPositionCellBinding" );
+    PCR_CONSTASCII_STRING( SERVICE_SHEET_CELLRANGE_LISTSOURCE, "drafts.com.sun.star.table.CellRangeListSource" );
+    PCR_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion" );
+    PCR_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion" );
+
+    PCR_CONSTASCII_STRING( SERVICE_DESKTOP,                 "com.sun.star.frame.Desktop" );
 
 //............................................................................
 } // namespace pcr
