@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mcnttype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-13 13:04:11 $
+ *  last change: $Author: tra $ $Date: 2001-02-26 06:59:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ using namespace osl;
 const OUString TSPECIALS = OUString::createFromAscii( "()<>@,;:\\\"/[]?=" );
 const OUString TOKEN     = OUString::createFromAscii( "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~." );
 const OUString SPACE     = OUString::createFromAscii( " " );
+const OUString SEMICOLON = OUString::createFromAscii( ";" );
 
 //------------------------------------------------------------------------
 // ctor
@@ -381,19 +382,28 @@ OUString SAL_CALL CMimeContentType::pValue( )
 }
 
 //------------------------------------------------------------------------
-//
+// the following combinations within a quoted value are not allowed:
+// '";' (quote sign followed by semicolon) and '" ' (quote sign followed
+// by space)
 //------------------------------------------------------------------------
 
 OUString SAL_CALL CMimeContentType::quotedPValue( )
 {
     OUString pvalue;
+    sal_Bool bAfterQuoteSign = sal_False;
 
-    while (  m_nxtSym.getLength( ) )
+    while ( m_nxtSym.getLength( ) )
     {
-        if ( isInRange( m_nxtSym, TOKEN + TSPECIALS ) )
-            pvalue += m_nxtSym;
-        else if ( m_nxtSym == SPACE )
+        if ( bAfterQuoteSign && ((m_nxtSym == SPACE)||(m_nxtSym == SEMICOLON) ) )
             break;
+        else if ( isInRange( m_nxtSym, TOKEN + TSPECIALS + SPACE ) )
+        {
+            pvalue += m_nxtSym;
+            if ( m_nxtSym == OUString::createFromAscii( "\"" ) )
+                bAfterQuoteSign = sal_True;
+            else
+                bAfterQuoteSign = sal_False;
+        }
         else
             throw IllegalArgumentException( );
         getSym( );
