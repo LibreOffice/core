@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:00:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,6 +803,9 @@ void SwLayAction::InternalAction()
     // --> OD 2004-10-22 #i35911#
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
     // <--
+    // --> OD 2005-01-12 #i40155#
+    SwLayouter::ClearFrmsNotToWrap( *(pRoot->GetFmt()->GetDoc()) );
+    // <--
 
     ASSERT( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
 
@@ -1122,6 +1125,9 @@ void SwLayAction::InternalAction()
     SwLayouter::ClearMovedFwdFrms( *(pRoot->GetFmt()->GetDoc()) );
     // --> OD 2004-10-22 #i35911#
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *(pRoot->GetFmt()->GetDoc()) );
+    // <--
+    // --> OD 2005-01-12 #i40155#
+    SwLayouter::ClearFrmsNotToWrap( *(pRoot->GetFmt()->GetDoc()) );
     // <--
 }
 /*************************************************************************
