@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:34:43 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 14:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,13 +381,14 @@ void SwFrm::CheckDirChange()
 SwFrm::~SwFrm()
 {
 #ifdef ACCESSIBLE_LAYOUT
-    if( IsAccessibleFrm() && GetRegisteredIn() )
+    if( IsAccessibleFrm() && GetDep() )
     {
         ViewShell *pVSh = GetShell();
-        ASSERT( pVSh || (!pVSh && FindRootFrm()),
-                "no shell: accessible object might get invalid" );
-        if( pVSh )
+        if( pVSh && pVSh->Imp() )
+        {
+            ASSERT( !GetLower(), "Lowers should be dispose already!" );
             pVSh->Imp()->DisposeAccessibleFrm( this );
+        }
     }
 #endif
 

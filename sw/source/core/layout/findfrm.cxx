@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:32:26 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 14:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,8 +394,17 @@ const SwLayoutFrm *SwFrm::GetNextLayoutLeaf() const
 |*************************************************************************/
 SwRootFrm* SwFrm::FindRootFrm()
 {
-    SwDoc *pDoc = IsLayoutFrm() ? ((SwLayoutFrm*)this)->GetFmt()->GetDoc()
-                                : ((SwCntntFrm*)this)->GetNode()->GetDoc();
+    // MIB: A layout frame is always registerd at a SwFrmFmt and a content
+    // frame alyways at a SwCntntNode. For any other case we won't find
+    // a root frame.
+    // Casting the GetDep() result instead of the frame itself (that has
+    // been done before) makes it save to use that method in constructors
+    // and destructors.
+    ASSERT( GetDep(), "frame is not registered any longer" );
+    ASSERT( IsLayoutFrm() || IsCntntFrm(), "invalid frame type" );
+    SwDoc *pDoc = IsLayoutFrm()
+                        ? static_cast < SwFrmFmt * >( GetDep() )->GetDoc()
+                        : static_cast < SwCntntNode * >( GetDep() )->GetDoc();
     return pDoc->GetRootFrm();
 }
 

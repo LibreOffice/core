@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-10 10:52:57 $
+ *  last change: $Author: mib $ $Date: 2002-04-11 14:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,7 @@ ViewShell::~ViewShell()
         }
 
         delete pImp; //Erst loeschen, damit die LayoutViews vernichtet werden.
+        pImp = 0;   // Set to zero, because ~SwFrm relies on it.
 
         if ( pDoc )
         {
@@ -393,6 +394,9 @@ SdrView* ViewShell::GetDrawViewWithValidMarkList()
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/08/10 10:52:57  rt
+      #87576# so3/advise.hxx is obsolete
+
       Revision 1.5  2001/07/31 16:51:18  jp
       Task #90434#: add author to the profiling statements
 
