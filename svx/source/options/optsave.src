@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 09:25:10 $
+ *  last change: $Author: os $ $Date: 2001-10-26 10:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
     Sizeable = FALSE ;
     Border = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT( 175 + 39 + (3 * 6), (4 * 9)+ 12 + (3 * 12) + 6 );
+    Size = MAP_APPFONT( 175 + 39 + (3 * 6), (4 * 9)+ 12 + (3 * 12) + 6 - 21 );
     Text = "%PRODUCTNAME %PRODUCTVERSION" ;
     FixedImage IMG_WARNING
     {
@@ -760,22 +760,23 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Text [ English ] = "Saving with \"%1\" may cause information loss.\n"\
         "Should the changes be applied?" ;
     };
-    CheckBox CB_DONT_SHOW_AGAIN
+/*    CheckBox CB_DONT_SHOW_AGAIN
     {
         Pos = MAP_APPFONT( 39, (4 * 9) + 9 );
         Size = MAP_APPFONT( 175, 12 );
         Text = "~Diese Warnung nicht mehr anzeigen" ;
         Text [ English ] = "~Don't show this warning again." ;
     };
+*/
     OKButton PB_OK
     {
-        Pos = MAP_APPFONT( 60, (4 * 9)+ 12 + 13 );
+        Pos = MAP_APPFONT( 60, (4 * 9)/*+ 12*/ + 13 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
     };
     CancelButton PB_CANCEL
     {
-        Pos = MAP_APPFONT( 120, (4 * 9)+ 12 + 13 );
+        Pos = MAP_APPFONT( 120, (4 * 9)/*+ 12*/ + 13 );
         Size = MAP_APPFONT( 50, 14 );
     };
 };
