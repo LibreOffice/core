@@ -2,9 +2,9 @@
  *
  *  $RCSfile: limitedformats.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-18 14:47:28 $
+ *  last change: $Author: fs $ $Date: 2001-05-23 10:12:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace frm
         void releaseSupplier();
 
         static void ensureTableInitialized(const sal_Int16 _nTableId);
+        static void clearTable(const sal_Int16 _nTableId);
     };
 
 //.........................................................................
@@ -145,6 +146,9 @@ namespace frm
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/18 14:47:28  fs
+ *  initial checkin - helper for control models with limited formatting capabilities
+ *
  *
  *  Revision 1.0 18.05.01 10:38:19  fs
  ************************************************************************/
