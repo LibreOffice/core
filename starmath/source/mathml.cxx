@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:50:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:08:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,17 +407,8 @@ ULONG SmXMLWrapper::Import(SfxMedium &rMedium)
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     // Set base URI
-    ::rtl::OUString aBaseURL( INetURLObject::GetBaseURL() );
-    if ( rMedium.GetItemSet() )
-    {
-        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                rMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
-        if ( pBaseURLItem )
-            aBaseURL = pBaseURLItem->GetValue();
-    }
-
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL() ) );
 
     sal_Int32 nSteps=3;
     if( !(rMedium.IsStorage()))
@@ -1146,16 +1137,8 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // Set base URI
-    ::rtl::OUString aBaseURL;
-    if ( rMedium.GetItemSet() )
-    {
-        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                rMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
-        if ( pBaseURLItem )
-            aBaseURL = pBaseURLItem->GetValue();
-    }
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL( true ) ) );
 
     sal_Int32 nSteps=0;
     if (xStatusIndicator.is())
