@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Converter.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,6 @@
     <li>union: (any *3), (union *14)</li>
     <li>sequence: (any *3), (sequence *15)</li>
     </ul>
-
     rules:
     <ul>
     <li>1: only converts if the value is in the range of the target type.</li>
@@ -121,7 +120,7 @@
     of the destination sequence.</li>
     </ul>
 */
-service Converter
+published service Converter
 {
     /** Conversion interface.
     */
