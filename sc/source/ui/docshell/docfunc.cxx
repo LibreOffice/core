@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 10:43:22 $
+ *  last change: $Author: sab $ $Date: 2001-10-15 11:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <svtools/zforlist.hxx>
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
+#endif
+#ifndef __SGI_STL_LIST
+#include <list>
 #endif
 
 #include "docfunc.hxx"
@@ -826,6 +829,17 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     return TRUE;
 }
 
+        struct ScMyRememberItem
+        {
+            USHORT      nIndex;
+            SfxItemSet  aItemSet;
+
+            ScMyRememberItem(const SfxItemSet& rItemSet, USHORT nTempIndex) :
+                aItemSet(rItemSet), nIndex(nTempIndex) {}
+        };
+
+        typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
+
 BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInterpret, BOOL bApi )
 {
     //  PutData ruft PutCell oder SetNormalString
@@ -836,30 +850,51 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
     BOOL bEditCell = aTester.NeedsObject();
     if ( bEditCell )
     {
-        //  copy data into new edit engine so alignment isn't removed
-        //  from source edit engine
-        EditEngine aCopyEngine( rEngine.GetEmptyItemSet().GetPool() );
-        aCopyEngine.SetEditTextObjectPool( rEngine.GetEditTextObjectPool() );
-        EditTextObject* pOldData = rEngine.CreateTextObject();
-        aCopyEngine.SetText( *pOldData );
-        delete pOldData;
+        sal_Bool bUpdateMode(rEngine.GetUpdateMode());
+        if (bUpdateMode)
+            rEngine.SetUpdateMode(sal_False);
+
+        ScMyRememberItemList aRememberItems;
+        ScMyRememberItem* pRememberItem = NULL;
 
         //  All paragraph attributes must be removed before calling CreateTextObject,
         //  not only alignment, so the object doesn't contain the cell attributes as
-        //  paragraph attributes.
-        USHORT nCount = aCopyEngine.GetParagraphCount();
+        //  paragraph attributes. Before remove the attributes store they in a list to
+        //  set they back to the EditEngine.
+        USHORT nCount = rEngine.GetParagraphCount();
         for (USHORT i=0; i<nCount; i++)
         {
-            const SfxItemSet& rOld = aCopyEngine.GetParaAttribs( i );
+            const SfxItemSet& rOld = rEngine.GetParaAttribs( i );
             if ( rOld.Count() )
-                aCopyEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
+            {
+                pRememberItem = new ScMyRememberItem(rEngine.GetParaAttribs(i), i);
+                aRememberItems.push_back(pRememberItem);
+                rEngine.SetParaAttribs( i, SfxItemSet( *rOld.GetPool(), rOld.GetRanges() ) );
+            }
         }
 
-        EditTextObject* pNewData = aCopyEngine.CreateTextObject();
+        EditTextObject* pNewData = rEngine.CreateTextObject();
         bRet = PutCell( rPos,
                         new ScEditCell( pNewData, pDoc, rEngine.GetEditTextObjectPool() ),
                         bApi );
-        delete pNewData;
+
+        // Set the paragraph attributes back to the EditEngine.
+        if (!aRememberItems.empty())
+        {
+            ScMyRememberItem* pRememberItem = NULL;
+            ScMyRememberItemList::iterator aItr = aRememberItems.begin();
+            while (aItr != aRememberItems.end())
+            {
+                pRememberItem = *aItr;
+                rEngine.SetParaAttribs(pRememberItem->nIndex, pRememberItem->aItemSet);
+                delete pRememberItem;
+                aItr = aRememberItems.erase(aItr);
+            }
+        }
+
+        if (bUpdateMode)
+            rEngine.SetUpdateMode(sal_True);
+
     }
     else
     {
