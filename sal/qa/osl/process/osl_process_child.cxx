@@ -2,9 +2,9 @@
  *
  *  $RCSfile: osl_process_child.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:41:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,14 +95,14 @@ void wait(char* time)
 }
 
 //########################################
+
+#ifdef WNT
+//########################################
 void w_to_a(LPCTSTR strW, LPSTR strA, DWORD size)
 {
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, NULL, NULL);
 }
-
 //########################################
-
-#ifdef WNT
     void dump_env(char* file_path)
     {
         LPTSTR env = reinterpret_cast<LPTSTR>(
@@ -136,18 +136,19 @@ int main(int argc, char* argv[])
 {
     rtl::OUString s;
 
-    printf("Parameter: ");
+    //t_print("Parameter: ");
+    printf("child process Parameter: ");
     for (int i = 1; i < argc; i++)
         printf("%s ", argv[i]);
     printf("\n");
 
     if (argc > 2)
     {
-        if (0 == stricmp("-join", argv[1]))
+        if (0 == strcmp("-join", argv[1]))
         {
             wait(argv[2]);
         }
-        else if (0 == stricmp("-env", argv[1]))
+        else if (0 == strcmp("-env", argv[1]))
         {
             dump_env(argv[2]);
         }
