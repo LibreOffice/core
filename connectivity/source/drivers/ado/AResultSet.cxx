@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:25:58 $
+ *  last change: $Author: oj $ $Date: 2002-07-05 09:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,9 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
 
     OLEVariant aEmpty;
     aEmpty.setNoArg();
+    sal_Int32 nNewPos = row;
+    if ( m_bOnFirstAfterOpen && nNewPos > 0 )
+        --nNewPos;
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
     if(bRet)
     {
@@ -573,7 +576,6 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-
 
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
     if(bRet)
