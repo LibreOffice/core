@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 07:33:53 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 08:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,8 +334,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
         }
         else
         {
-            ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,m_xConnection);
-            aSql += ::dbtools::createStandardKeyStatement(descriptor,m_xConnection);
+            ::rtl::OUString aSql = ::dbtools::createSqlCreateTableStatement(descriptor,m_xConnection);
 
             OSL_ENSURE(m_xConnection.is(),"Connection is null!");
             Reference< XStatement > xStmt = m_xConnection->createStatement(  );
