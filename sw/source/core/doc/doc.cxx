@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:47:09 $
+ *  last change: $Author: mib $ $Date: 2000-11-27 15:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,6 +550,22 @@ SwFlyFrmFmt* SwDoc::Insert(const SwPaM &rRg, SvInPlaceObject *pObj,
     return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeOLENode(
                             SwNodeIndex( GetNodes().GetEndOfAutotext() ),
                             pObj,
+                            pDfltGrfFmtColl ),
+                            pFlyAttrSet, pGrfAttrSet,
+                            pFrmFmt );
+}
+
+SwFlyFrmFmt* SwDoc::InsertOLE(const SwPaM &rRg, String& rObjName,
+                        const SfxItemSet* pFlyAttrSet,
+                        const SfxItemSet* pGrfAttrSet,
+                        SwFrmFmt* pFrmFmt )
+{
+    if( !pFrmFmt )
+        pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_OLE );
+
+    return _InsNoTxtNode( *rRg.GetPoint(), GetNodes().MakeOLENode(
+                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+                            rObjName,
                             pDfltGrfFmtColl ),
                             pFlyAttrSet, pGrfAttrSet,
                             pFrmFmt );
