@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWeb.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-22 06:57:34 $
+ *  last change: $Author: tl $ $Date: 2002-07-26 09:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,23 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="WriterWeb" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+  <!-- Responsible: OS -->
+  <info>
+    <desc xml:lang="en-US">Contains settings for the HTML editor.</desc>
+  </info>
   <import oor:component="org.openoffice.Office.Common"/>
   <component>
+    <info>
+      <desc xml:lang="en-US">Contains settings for the HTML editor.</desc>
+    </info>
     <group oor:name="Content">
+      <info>
+        <desc xml:lang="en-US">Contains settings for various content elements.</desc>
+      </info>
       <group oor:name="Display">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the visibility of various elements.</desc>
+        </info>
         <prop oor:name="GraphicObject" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Display -->
           <!-- OldLocation: Soffice.cfg -->
@@ -131,6 +144,9 @@
         </prop>
       </group>
       <group oor:name="NonprintingCharacter">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the visibility of various non-printing characters.</desc>
+        </info>
         <prop oor:name="MetaCharacters" oor:type="xs:boolean">
           <!-- Responsible: OS -->
           <!-- UIHints: View - Nonprinting Characters -->
@@ -197,6 +213,9 @@
         </prop>
       </group>
       <group oor:name="Highlighting">
+        <info>
+          <desc xml:lang="en-US">Contains settings for the highlighting of contents.</desc>
+        </info>
         <prop oor:name="Field" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Content/Highlighting -->
           <!-- OldLocation: Soffice.cfg -->
@@ -211,7 +230,13 @@
       </group>
     </group>
     <group oor:name="Layout">
+      <info>
+        <desc xml:lang="en-US">Contains layout specific settings.</desc>
+      </info>
       <group oor:name="Line">
+        <info>
+          <desc xml:lang="en-US">Contains settings for guiding lines or points (for example when selcting/moving an aobject or frame).</desc>
+        </info>
         <prop oor:name="Guide" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Lines -->
           <!-- OldLocation: Soffice.cfg -->
@@ -247,6 +272,9 @@
         </prop>
       </group>
       <group oor:name="Window">
+        <info>
+          <desc xml:lang="en-US">Contains vaious settings for the window like scrollbars, rules, etc.</desc>
+        </info>
         <prop oor:name="HorizontalScroll" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
@@ -416,6 +444,9 @@
         </prop>
       </group>
       <group oor:name="Other">
+        <info>
+            <desc xml:lang="en-US">Contains misceallenous settings.</desc>
+        </info>
         <prop oor:name="MeasureUnit" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Layout/Window -->
           <!-- OldLocation: Soffice.cfg -->
@@ -476,6 +507,9 @@
         </prop>
       </group>
       <group oor:name="Zoom">
+        <info>
+          <desc xml:lang="en-US">Contains zoom specific settings.</desc>
+        </info>
         <prop oor:name="Type" oor:type="xs:int">
           <!-- Responsible: OS -->
           <!-- UIHints: (Status Bar) -->
@@ -514,7 +548,13 @@
       </group>
     </group>
     <group oor:name="Grid">
+      <info>
+        <desc xml:lang="en-US">Contains various for the grid that are not listed in other sections.</desc>
+      </info>
       <group oor:name="Option">
+        <info>
+          <desc xml:lang="en-US">Contains options settings for the grid.</desc>
+        </info>
         <prop oor:name="SnapToGrid" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Grid/Option -->
           <!-- OldLocation: Soffice.cfg -->
@@ -550,6 +590,9 @@
         </prop>
       </group>
       <group oor:name="Resolution">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the grid resolution.</desc>
+        </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Resolution -->
           <!-- OldLocation: Soffice.cfg -->
@@ -574,6 +617,9 @@
         </prop>
       </group>
       <group oor:name="Subdivision">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the subdivision of the grid.</desc>
+        </info>
         <prop oor:name="XAxis" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Grid/Subdivision -->
           <!-- OldLocation: Soffice.cfg -->
@@ -599,7 +645,13 @@
       </group>
     </group>
     <group oor:name="Print">
+      <info>
+        <desc xml:lang="en-US">Contains printing relevant settings.</desc>
+      </info>
       <group oor:name="Content">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing which content types hould be printed.</desc>
+        </info>
         <prop oor:name="Graphic" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Contents -->
           <!-- OldLocation: Soffice.cfg -->
@@ -689,6 +741,9 @@
         </prop>
       </group>
       <group oor:name="Page">
+        <info>
+          <desc xml:lang="en-US">Contains settings which or how pages should be printed.</desc>
+        </info>
         <prop oor:name="Reversed" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Pages -->
           <!-- OldLocation: Soffice.cfg -->
@@ -713,6 +768,9 @@
         </prop>
       </group>
       <group oor:name="Output">
+        <info>
+          <desc xml:lang="en-US">Contains other output specific settings.</desc>
+        </info>
         <prop oor:name="SinglePrintJob" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Print/Output -->
           <!-- OldLocation: Soffice.cfg -->
@@ -736,6 +794,9 @@
         </prop>
       </group>
       <group oor:name="Papertray">
+        <info>
+          <desc xml:lang="en-US">Contains settings for printers with multiple paper trays.</desc>
+        </info>
         <prop oor:name="FromPrinterSetup" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Papertray -->
           <!-- OldLocation: Soffice.cfg -->
@@ -750,7 +811,13 @@
       </group>
     </group>
     <group oor:name="Table">
+      <info>
+        <desc xml:lang="en-US">Contains settings for tables.</desc>
+      </info>
       <group oor:name="Shift">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when shifting table rows/columns.</desc>
+        </info>
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Shift -->
           <!-- OldLocation: Soffice.cfg -->
@@ -777,6 +844,9 @@
         </prop>
       </group>
       <group oor:name="Insert">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when insertimng table rows/columns.</desc>
+        </info>
         <prop oor:name="Row" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table/Insert -->
           <!-- OldLocation: Soffice.cfg -->
@@ -803,6 +873,9 @@
         </prop>
       </group>
       <group oor:name="Change">
+        <info>
+          <desc xml:lang="en-US">Contains settings specifing the effect to the table when modifying rows/columns.</desc>
+        </info>
         <prop oor:name="Effect" oor:type="xs:int">
           <!-- OldPath: HTML_Editor/Table -->
           <!-- OldLocation: Soffice.cfg -->
@@ -832,6 +905,9 @@
         </prop>
       </group>
       <group oor:name="Input">
+        <info>
+          <desc xml:lang="en-US">Contains settings used when inputing text or data in tables.</desc>
+        </info>
         <prop oor:name="NumberRecognition" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/IntoTables -->
           <!-- OldLocation: Soffice.cfg -->
@@ -868,7 +944,13 @@
       </group>
     </group>
     <group oor:name="Insert">
+      <info>
+        <desc xml:lang="en-US">Settings for insertion of various object types.</desc>
+      </info>
       <group oor:name="Table">
+        <info>
+          <desc xml:lang="en-US">Default settings for tables to be inserted.</desc>
+        </info>
         <prop oor:name="Header" oor:type="xs:boolean">
           <!-- OldPath: HTML_Editor/Insert/Tables -->
           <!-- OldLocation: Soffice.cfg -->
@@ -906,6 +988,9 @@
     </group>
     <group oor:name="ObjectBar">
       <!-- Responsible: OS -->
+      <info>
+        <desc xml:lang="en-US">Specifies the settings for the object bar.</desc>
+      </info>
       <group oor:name="Selection">
         <!-- OldLocation: Soffice.cfg -->
         <!-- Responsible: OS/OS-->
@@ -946,7 +1031,13 @@
       </group>
     </group>
     <group oor:name="SourceText">
+      <info>
+        <desc xml:lang="en-US">Contains settings for the source code.</desc>
+      </info>
       <group oor:name="Font">
+        <info>
+          <desc xml:lang="en-US">Contains font specific settings for the source code.</desc>
+        </info>
         <prop oor:name="Name" oor:type="xs:string">
           <!-- OldPath: HTML_Editor/SourceText/Font -->
           <!-- OldLocation: Soffice.cfg -->
@@ -972,6 +1063,9 @@
       </group>
     </group>
     <group oor:name="Background">
+      <info>
+        <desc xml:lang="en-US">Contains settings for the documents background.</desc>
+      </info>
       <prop oor:name="Color" oor:type="xs:int">
         <!-- OldPath: HTML_Editor/Background -->
         <!-- OldLocation: Soffice.cfg -->
@@ -984,6 +1078,9 @@
       </prop>
     </group>
     <group oor:name="Gallery">
+      <info>
+        <desc xml:lang="en-US">Contains settings for gallery items that can be added to the document.</desc>
+      </info>
       <prop oor:name="AddGraphic" oor:type="xs:boolean">
         <!--OldLocation: Soffice.cfg -->
         <!--Responsible: OS-->
