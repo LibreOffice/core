@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2000-11-06 22:27:10 $
+ *  last change: $Author: th $ $Date: 2000-11-24 18:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4323,7 +4323,7 @@ long Window::PreNotify( NotifyEvent& rNEvt )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     }
 
-    BOOL bDone = FALSE;
+    long bDone = FALSE;
     if ( mpParent && !ImplIsOverlapWindow() )
         bDone = mpParent->PreNotify( rNEvt );
 
