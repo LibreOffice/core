@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:30:56 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-namespace drafts {
 namespace com { namespace sun { namespace star { namespace configuration { namespace backend {
     class XUpdateHandler;
 } } } } }
-}
 
 namespace configmgr
 {
@@ -94,7 +92,7 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
         namespace uno       = ::com::sun::star::uno;
-        namespace backenduno = ::drafts::com::sun::star::configuration::backend;
+        namespace backenduno = ::com::sun::star::configuration::backend;
 
 // -----------------------------------------------------------------------------
 
@@ -108,7 +106,7 @@ namespace configmgr
             void dispatchUpdate(configuration::AbsolutePath const & _aRootPath, SubtreeChange const& _anUpdate);
 
         private:
-            void startUpdate(configuration::AbsolutePath const & _aContextPath);
+            void startUpdate();
             void endUpdate();
 
             virtual void handle(ValueChange const& aValueNode);
@@ -126,6 +124,7 @@ namespace configmgr
 
             bool testReplacedAndGetName(data::NodeAccessRef const & _aNode, OUString & _aName);
         private:
+            configuration::AbsolutePath const * m_pContextPath;
             UpdateHandler   m_xUpdateHandler;
             OUString        m_aLocale;
             OUString        m_aElementName;
