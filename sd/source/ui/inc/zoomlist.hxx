@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomlist.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 08:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,16 @@
 #include <tools/list.hxx>
 #endif
 
+class SfxViewShell;
+
 class ZoomList : public List
 {
 private:
-    ULONG nCurPos;
+    SfxViewShell* pViewSh;
+    ULONG         nCurPos;
 
 public:
-    ZoomList();
+    ZoomList( SfxViewShell* pViewShell );
     virtual     ~ZoomList();
 
     void        InsertZoomRect(const Rectangle& rRect);

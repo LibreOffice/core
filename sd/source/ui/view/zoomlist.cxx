@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoomlist.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:21 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 08:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
 #endif
+#ifndef _SFXVIEWSHELL_HXX
+#include <sfx2/viewsh.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -81,8 +84,9 @@
 |*
 \************************************************************************/
 
-ZoomList::ZoomList()
+ZoomList::ZoomList( SfxViewShell* pViewShell )
     : List(),
+    pViewSh( pViewShell ),
     nCurPos(0)
 {
 }
@@ -135,7 +139,7 @@ void ZoomList::InsertZoomRect(const Rectangle& rRect)
     Rectangle* pRect = new Rectangle(rRect);
     Insert(pRect, nCurPos);
 
-    SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
+    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 }
@@ -169,7 +173,7 @@ Rectangle ZoomList::GetNextZoomRect()
         nCurPos = nCount - 1;
     }
 
-    SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
+    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 
@@ -190,7 +194,7 @@ Rectangle ZoomList::GetPreviousZoomRect()
         nCurPos--;
     }
 
-    SfxBindings& rBindings = SfxViewFrame::Current()->GetBindings();
+    SfxBindings& rBindings = pViewSh->GetViewFrame()->GetBindings();
     rBindings.Invalidate( SID_ZOOM_NEXT );
     rBindings.Invalidate( SID_ZOOM_PREV );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:19 $
+ *  last change: $Author: dl $ $Date: 2000-10-18 08:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void SdViewShell::Construct(void)
 {
     pDocSh->Connect(this);
 
-    pZoomList = new ZoomList();
+    pZoomList = new ZoomList( this );
 
     pWindow = NULL;
     SetActiveWindow(new SdWindow(&GetViewFrame()->GetWindow()));
