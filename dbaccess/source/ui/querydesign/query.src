@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 15:39:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ String STR_QUERY_UNDO_MOVETABWIN
     Text [ portuguese ] = "Mover janela da tabela" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯±í¸ñ´°¿Ú";
     Text[ russian ] = "Ïåğåìåñòèòü îêíî òàáëèöû";
-    Text[ polish ] = "Przenie? okno tabeli";
+    Text[ polish ] = "Przenieœ okno tabeli";
     Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Êªí®æµ¡¤f";
     Text[ dutch ] = "Tabelvenster verplaatsen";
@@ -241,7 +241,7 @@ String STR_QUERY_UNDO_SIZETABWIN
     Text [ portuguese ] = "Janela da tabela - modificar tamanho" ;
     Text[ chinese_simplified ] = "¸ü¸Ä±í¸ñ´°¿Ú´óĞ¡";
     Text[ russian ] = "Èçìåíèòü ğàçìåğ îêíà òàáëèöû";
-    Text[ polish ] = "Zmieñ wielko?æ okna tabeli";
+    Text[ polish ] = "Zmieñ wielkoœæ okna tabeli";
     Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚Ì»²½Ş•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§óªí®æµ¡¤f¤j¤p";
     Text[ dutch ] = "Tabelvenster - Grootte veranderen";
@@ -362,7 +362,7 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text[ chinese_traditional ] = "¦]µLªk½T©wÄæ¦ì¦WºÙ '$name$' ¦Ó³y¦¨³o­Óªí¹F¦¡µL®Ä¡T";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de veldnaam '$name$' niet kan worden herleid !";
     Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎªÎŞ·¨È·ÈÏ×Ö¶ÎÃû³Æ '$name$' £¡";
-    Text[ greek ] = "Ç İêöñáóç äåí åßíáé İãêõñç åğåéäŞ äåí åßíáé äõíáôüí íá ğñïóäéïñéóôåß ôï üíïìá ôïõ ğåäßïõ '$name$'!";
+    Text[ greek ] = "Ç İêöñáóç äåí åßíáé İãêõñç åğåéäŞ äåí ìğïñåß íá ğñïóäéïñéóôåß ôï üíïìá ôïõ ğåäßïõ '$name$'!";
     Text[ korean ] = "ÇÊµå¸í'$name$'ÀÌ ÁöÁ¤µÉ ¼ö ¾øÀ¸¹Ç·Î ÀÌ ¹®ÀåÀº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù!";
     Text[ arabic ] = "ÇáÚÈÇÑÉ ÛíÑ ÕÇáÍÉ áÚÏã ÊæİÑ ÇÓã ÇáÍŞá '$name$'!";
     Text[ turkish ] = "Geçersiz deyim. Alan adı '$name$' atanamıyor !";
@@ -472,7 +472,7 @@ String STR_QUERY_UNDO_SIZE_COLUMN
     Text[ english_us ] = "Adjust column width";
     Text[ chinese_simplified ] = "¸ü¸ÄÁĞ¿í";
     Text[ russian ] = "Èçìåíèòü øèğèíó êîëîíêè";
-    Text[ polish ] = "Zmieñ szeroko?æ kolumn";
+    Text[ polish ] = "Zmieñ szerokoœæ kolumn";
     Text[ japanese ] = "—ñ•‚Ì•ÏX";
     Text[ chinese_traditional ] = "ÅÜ§óÄæ¼e";
     Text[ dutch ] = "Kolombreedte wijzigen";
@@ -528,7 +528,7 @@ String STR_QUERY_FUNCTIONS
     Text[ italian ] = "(nessuna funzione);Media;Quantità;Massimo;Minimo;Somma;Gruppo";
     Text[ danish ] = "(ingen funktion);Middeltal;Antal;Maksimum;Minimum;Sum;Gruppering";
     Text[ swedish ] = "(ingen funktion);Genomsnitt;Antal;Maximum;Minimum;Summa;Gruppering";
-    Text[ polish ] = "(brak funkcji);?rednia;Liczba;Maksimum;Minimum;Suma;Grupowanie";
+    Text[ polish ] = "(brak funkcji);Œrednia;Liczba;Maksimum;Minimum;Suma;Grupowanie";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "(ŠÖ”‚È‚µ);•½‹Ï;”;Å‘å;Å¬;‡Œv;¸ŞÙ°Ìß";
     Text[ chinese_simplified ] = "(ÎŞ¹¦ÄÜ);Æ½¾ùÖµ;ÊıÄ¿;×î´ó;×îĞ¡;×ÜÊı;·Ö×é";
@@ -561,7 +561,7 @@ String STR_QUERY_NOTABLE
     Text[ polish ] = "(bez tabeli)";
     Text[ portuguese_brazilian ] = "(no table)";
     Text[ japanese ] = "(Ã°ÌŞÙ‚È‚µ)";
-    Text[ korean ] = "(Ç¥¾øÀ½)";
+    Text[ korean ] = "(Å×ÀÌºí ¾øÀ½)";
     Text[ chinese_simplified ] = "(ÎŞ±í¸ñ)";
     Text[ chinese_traditional ] = "(µLªí®æ)";
     Text[ arabic ] = "(ÈÏæä ÌÏæá)";
@@ -714,7 +714,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
             Text[ italian ] = "Valori distinti";
             Text[ danish ] = "Entydige værdier";
             Text[ swedish ] = "Entydiga värden";
-            Text[ polish ] = "Jednoznaczne warto?ci";
+            Text[ polish ] = "Jednoznaczne wartoœci";
             Text[ portuguese_brazilian ] = "Distinct values";
             Text[ japanese ] = "–¾—Ä’l";
             Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
@@ -752,7 +752,7 @@ String STR_QUERY_HANDLETEXT
     Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
     Text[ chinese_simplified ] = "×Ö¶Î;±ğÃû;±í¸ñ;ÅÅĞò;¿É¼ûµÄ;¹¦ÄÜ;Ìõ¼ş;»òÕß;»òÕß";
     Text[ greek ] = "Ğåäßï;Øåõäşíõìï;Ğßíáêáò;Ôáîéíüìçóç;Ïñáôü;ÓõíÜñôçóç;ÊñéôŞñéï;Åßôå;Åßôå";
-    Text[ korean ] = "ÇÊµå:¿¡ÀÏ¸®¾î½º;Ç¥;Á¤·Ä;°¡½ÃÀû;±â´É;±âÁØ;¶Ç´Â;¶Ç´Â";
+    Text[ korean ] = "ÇÊµå:¿¡ÀÏ¸®¾î½º;Å×ÀÌºí;Á¤·Ä;°¡½ÃÀû;±â´É;±âÁØ;¶Ç´Â;¶Ç´Â";
     Text[ arabic ] = "ÍŞá;ÇÓã ãÓÊÚÇÑ;ÌÏæá;İÑÒ;ãÑÆí;ãåãÉ;ãÚíÇÑ;Ãæ;Ãæ";
     Text[ turkish ] = "Alan;Diğer ad;Tablo;Sıralama;Görünür;İşlev;Ölçüt;ya da;ya da";
     Text[ language_user1 ] = " ";
@@ -781,7 +781,7 @@ ErrorBox ERR_QRY_TOO_MANY_COLUMNS
     Message[ dutch ] = "Er zijn teveel kolommen";
     Message[ chinese_simplified ] = "ÓĞÌ«¶àµÄÁĞ¡£";
     Message[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëİò óôŞëåò.";
-    Message[ korean ] = "ÁúÀÇ¿¡ ¿­ÀÌ ³Ê¹« ¸¹ÀÌ µé¾î ÀÖ½À´Ï´Ù.";
+    Message[ korean ] = "¿­ÀÌ ³Ê¹« ¸¹ÀÌ µé¾î ÀÖ½À´Ï´Ù.";
     Message[ arabic ] = "ÊæÌÏ ÃÚãÏÉ ßËíÑÉ ÌÏÇğ.";
     Message[ turkish ] = "Mevcut sütun sayısı çok fazla.";
     Message[ language_user1 ] = " ";
@@ -889,12 +889,12 @@ ErrorBox ERR_QRY_NOSELECT
     Message [ english_us ] = "Nothing has been selected!" ;
     Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡Ôñ£¡";
     Message[ russian ] = "Íåîáõîäèìî âûäåëåíèå!";
-    Message[ polish ] = "Nale¿y co? wybraæ!";
+    Message[ polish ] = "Nale¿y coœ wybraæ!";
     Message[ japanese ] = "‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¯Ê¤Ö¤@­Ó¿ï¾Ü¡I";
     Message[ dutch ] = "De selectie ontbreekt!";
     Message[ chinese_simplified ] = "Ã»ÓĞÈÎºÎÑ¡Ôñ£¡";
-    Message[ greek ] = "Ëåßğåé ìéá åğéëïãŞ";
+    Message[ greek ] = "Äåí İãéíå åğéëïãŞ!";
     Message[ korean ] = "¾Æ¹« ¼±ÅÃµµ µÇ¾îÀÖÁö ¾ÊÀ½";
     Message[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
     Message[ turkish ] = "Seçim yapılmadı";
@@ -1263,7 +1263,26 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             HelpId = SID_FM_ADDTABLE ;
             Text = "Tabellen hinzufügen..." ;
             Text [ ENGLISH ] = "Add tables..." ;
-            Text[ english_us ] = "Add Tables...";
+            Text[ english_us ] = "Add Tables";
+            Text[ portuguese ] = "Adicionar tabelas";
+            Text[ russian ] = "Äîáàâèòü òàáëèöû";
+            Text[ greek ] = "ĞñïóèŞêç ğßíáêá";
+            Text[ dutch ] = "Tabellen toevoegen";
+            Text[ french ] = "Ajouter des tables";
+            Text[ spanish ] = "Añadir tablas";
+            Text[ finnish ] = "Lisää taulukoita";
+            Text[ italian ] = "Aggiungi tabelle";
+            Text[ danish ] = "Add tables";
+            Text[ swedish ] = "Lägg till tabeller";
+            Text[ polish ] = "Dodaj tabelê";
+            Text[ portuguese_brazilian ] = "Add tables";
+            Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á";
+            Text[ korean ] = "Å×ÀÌºí Ãß°¡";
+            Text[ chinese_simplified ] = "Add tables";
+            Text[ chinese_traditional ] = "¼W¥[ªí®æ";
+            Text[ turkish ] = "Add tables";
+            Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
+            Text[ catalan ] = "Añadir tablas";
         };
         ToolBoxItem
         {
@@ -1285,10 +1304,10 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ italian ] = "Esegui direttamente comando SQL";
             Text[ danish ] = "Native sql command";
             Text[ swedish ] = "Utför SQL-kommandot direkt";
-            Text[ polish ] = "Wykonaj bezpo?rednio polecenie SQL";
+            Text[ polish ] = "Wykonaj bezpoœrednio polecenie SQL";
             Text[ portuguese_brazilian ] = "Native sql command";
             Text[ japanese ] = "SQL ºÏİÄŞ‚ğ’¼ÚÀs";
-            Text[ korean ] = " sql ¸í·É Á÷Á¢ ½ÇÇà";
+            Text[ korean ] = " SQL ¸í·É Á÷Á¢ ½ÇÇà";
             Text[ chinese_simplified ] = "Ö±½ÓÖ´ĞĞSQLÖ¸Áî";
             Text[ chinese_traditional ] = "ª½±µ°õ¦æSQL«ü¥O";
             Text[ turkish ] = "Native sql command";
@@ -1349,7 +1368,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ dutch ] = "Tabelnaam";
             Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
             Text[ greek ] = "¼íïìá ğßíáêá";
-            Text[ korean ] = "Å×ÀÌºí¸í";
+            Text[ korean ] = "Å×ÀÌºí ÀÌ¸§";
             Text[ arabic ] = "ÇÓã ÇáÌÏæá";
             Text[ turkish ] = "Tablo adı";
             Text[ language_user1 ] = " ";
@@ -1401,7 +1420,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ italian ] = "Valori univoci";
             Text[ danish ] = "Entydige værdier";
             Text[ swedish ] = "Entydiga värden";
-            Text[ polish ] = "Jednoznaczne warto?ci";
+            Text[ polish ] = "Jednoznaczne wartoœci";
             Text[ portuguese_brazilian ] = "Distinct values";
             Text[ japanese ] = "–¾—Ä’l";
             Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
@@ -1700,7 +1719,26 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     DefButton = WB_DEF_YES ;
     Message = "Die Tabellensicht wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The view has been modified.\nDo you want to save your changes?" ;
-    Message [ english_us ] = "The view has been changed.\nDo you want to save the changes?" ;
+    Message [ english_us ] = "The table view has been changed.\nDo you want to save the changes?" ;
+    Message[ portuguese ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ russian ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ greek ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ dutch ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ french ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ spanish ] = "Se ha modificaco la visualización de la tabla.\n¿Desea guardar las modificaciones?";
+    Message[ finnish ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ italian ] = "La vista tabelle è stata modificata.\nVolete salvare le modifiche?";
+    Message[ danish ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ swedish ] = "Tabellvyn har ändrats.\nSka ändringarna sparas?";
+    Message[ polish ] = "Zmieniono widok tabeli.\nZapisaæ zmiany?";
+    Message[ portuguese_brazilian ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ japanese ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ korean ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ chinese_simplified ] = "Õâ¸ö±í¸ñÊÓÍ¼ÒÑ¾­¸Ä±ä¡£\nÒª´æÅÌ¸ü¸ÄµÄÄÚÈİ?";
+    Message[ chinese_traditional ] = "³o­ÓÀËµø¤w¸gÅÜ§ó¡C\n­nÀx¦sÅÜ§ó?®e?";
+    Message[ turkish ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ arabic ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ catalan ] = "The view has been changed.\nDo you want to save the changes?";
 };
 String STR_SVT_SQL_INTERNATIONAL
 {
@@ -1717,7 +1755,7 @@ String STR_SVT_SQL_INTERNATIONAL
     Text [ dutch ] = "ALS;NIET;LEEG;WAAR;ONWAAR;IS;TUSSEN;OF;EN;Gemiddelde;Aantal;Maximum;Minimum;Som" ;
     Text[ chinese_simplified ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
     Text[ russian ] = "ÊÀÊ;ÍÅ;ÏÓÑÒÎ;ÈÑÒÈÍÀ;ËÎÆÜ;ÅÑÒÜ;ÌÅÆÄÓ;ÈËÈ;È;ñğäíåå;êîëè÷åñòâî;ìàêñèìóì;ìèíèìóì;ñóììà";
-    Text[ polish ] = "JAK;NIE;PUSTY;PRAWDA;FA£SZ;JEST;POMIÊDZY;LUB;I;?rednia;Numer;Maksimum;Minimum;Suma";
+    Text[ polish ] = "JAK;NIE;PUSTY;PRAWDA;FA£SZ;JEST;POMIÊDZY;LUB;I;Œrednia;Numer;Maksimum;Minimum;Suma";
     Text[ japanese ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
     Text[ chinese_traditional ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;average;number;maximum;minimum;sum";
     Text[ arabic ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum";
@@ -1800,10 +1838,10 @@ String STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
     Text[ russian ] = "Çíà÷åíèå #1 íå ìîæåò èñïîëüçîâàòüñÿ ñ ÊÀÊ!";
     Text[ italian ] = "Il valore #1 non può essere usato con COME!";
     Text[ danish ] = "Det er ikke muligt at bruge værdien #1sammen med SOM!";
-    Text[ polish ] = "Warto?ci #1 nie mo¿na zastosowaæ z JAK!";
+    Text[ polish ] = "Wartoœci #1 nie mo¿na zastosowaæ z JAK!";
     Text[ portuguese_brazilian ] = "The value #1 can not be used with LIKE!";
     Text[ japanese ] = "#1 ‚Ì’l‚Í LIKE ‚Æˆê‚Ég—p‚Å‚«‚Ü‚¹‚ñB";
-    Text[ korean ] = "°ª #1Àº LIKE·Î »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù!";
+    Text[ korean ] = "°ª #1Àº LIKE¿Í °°ÀÌ »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÊıÖµ #1²»ÄÜÓëLIKEÍ¬Ê±Ê¹ÓÃ£¡";
     Text[ chinese_traditional ] = "LIKE ©M¼Æ­È #1 ¤£¥i¥H¤@°_¨Ï¥Î¡I";
     Text[ arabic ] = "áÇ íãßä ÇÓÊÎÏÇã ÇáŞíãÉ #1 ãÚ LIKE!";
@@ -1883,7 +1921,7 @@ String STR_SVT_SQL_SYNTAX_ACCESS_DAT_NO_VALID
     Text[ japanese ] = "‚±‚ÌÌ¨°ÙÄŞ‚Í“ú•t‚Å”äŠr‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "ÇÊµå¸¦ ³¯Â¥¿Í ºñ±³ÇÒ ¼ö ¾ø½À´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸ö×Ö¶Î²»ÄÜÓëÈÕÆÚÏà±È½Ï£¡";
-    Text[ chinese_traditional ] = "&#36889;&#27396;&#30340;&#20839;&#23481;&#19981;&#21487;&#20197;&#21644;&#26085;&#26399;&#30456;&#27604;&#36611;&#65281;";
+    Text[ chinese_traditional ] = "³oÄæªº¤º®e¤£¥i¥H©M¤@­Ó¤é´Á¬Û¤ñ¸û¡I";
     Text[ arabic ] = "áÇ íãßä ãŞÇÑäÉ ÇáÍŞá ÈÊÇÑíÎı!";
     Text[ turkish ] = "Alan, bir tarih ile karşılaştırılamaz!";
     Text[ finnish ] = "Kenttää ei voi verrata päivämäärään.";
@@ -1932,7 +1970,7 @@ String STR_SVT_SQL_SYNTAX_TABLE
     Text[ polish ] = "Tabela \"#\" jest nieznana w bazie danych!";
     Text[ portuguese_brazilian ] = "The table \"#\" is unknown in the database!";
     Text[ japanese ] = "Ã°ÌŞÙ \"#\" ‚ÍAÃŞ°ÀÍŞ°½‚Å‚Í•s–¾‚Å‚·B";
-    Text[ korean ] = "\"#\" Ç¥´Â µ¥ÀÌÅÍº£ÀÌ½º¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾Ê½À´Ï´Ù!";
+    Text[ korean ] = "\"#\" Å×ÀÌºíÀº µ¥ÀÌÅÍº£ÀÌ½º¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸ö±í¸ñ \"#\" ¶ÔÊı¾İ¿â¶øÑÔÊÇ²»Ã÷µÄ£¡";
     Text[ chinese_traditional ] = "³o­Óªí®æ \"#\" ¹ï¸ê®Æ®w¦Ó¨¥¬O¤£©úªº¡I";
     Text[ turkish ] = "The table \"#\" is unknown in the database!";
@@ -1957,7 +1995,7 @@ String STR_SVT_SQL_SYNTAX_COLUMN
     Text[ polish ] = "Kolumna \"#\" jest w tabeli \"#\" nieznana!";
     Text[ portuguese_brazilian ] = "The column \"#\" is unknown in the table \"#\"!";
     Text[ japanese ] = "—ñ \"#\" ‚ÍA\"#\" ‚ÌÃ°ÌŞÙ‚Å‚Í•s–¾‚Å‚·B";
-    Text[ korean ] = "\"#\"¿­Àº  \"#\"Ç¥¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾Ê½À´Ï´Ù!";
+    Text[ korean ] = "\"#\"¿­Àº \"#\" Å×ÀÌºí¿¡ ¾Ë·ÁÁ® ÀÖÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸öÁĞ \"#\" ¶ÔÊı¾İ¿â \"#\" ¶øÑÔÊÇ²»Ã÷µÄ!";
     Text[ chinese_traditional ] = "³oÄæ¦ì \"#\" ¹ï³o­Óªí®æ \"#\" ¦Ó¨¥¬O¤£©úªº!";
     Text[ turkish ] = "The column \"#\" is unknown in the table \"#\"!";
