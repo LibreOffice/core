@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-22 14:57:03 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,6 +1331,8 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
 {
     FreeResource();
 
+    InitControls();
+
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
     maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
@@ -1369,7 +1371,7 @@ namespace
         if( _eMode != SvxSecurityTabPage::RL_NONE )
         {
             USHORT nSlot;
-            if( _eMode == SvxSecurityTabPage::RL_WRITER )
+            if ( _eMode == SvxSecurityTabPage::RL_WRITER )
                 nSlot = ( _eFunc == RF_ON )? FN_REDLINE_ON : FN_REDLINE_PROTECT;
             else
                 nSlot = ( _eFunc == RF_ON )? FID_CHG_RECORD : SID_CHG_PROTECT;
@@ -1378,15 +1380,19 @@ namespace
             SfxViewShell* pViewSh = SfxViewShell::Current();
             if( pViewSh )
             {
-                SfxBoolItem aItem( nSlot, _bVal );
+                bool bNeedItem = ( _eMode == SvxSecurityTabPage::RL_WRITER || _eFunc != RF_ON );
+                SfxBoolItem* pItem = bNeedItem ? new SfxBoolItem( nSlot, _bVal ) : NULL;
                 SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-                if( _pParent )
+                if ( _pParent )
                 {
                     OfaPtrItem aParentItem( SID_ATTR_PARENTWINDOW, _pParent );
-                    pRet = static_cast< const SfxBoolItem* >( pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aItem, &aParentItem, 0L ) );
+                    pRet = static_cast< const SfxBoolItem* >(
+                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aParentItem, pItem, 0L ) );
                 }
                 else
-                    pRet = static_cast< const SfxBoolItem* >( pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aItem, 0L ) );
+                    pRet = static_cast< const SfxBoolItem* >(
+                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, pItem, 0L ) );
+                delete pItem;
             }
         }
 
@@ -1439,14 +1445,9 @@ namespace
 
 IMPL_LINK( SvxSecurityTabPage, RecordChangesCBHdl, void*, EMPTYARG )
 {
-    const SfxBoolItem* pItem = ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
-
+    const SfxBoolItem* pItem =
+        ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
     CheckRecordChangesState();
-/*  if( pItem )
-        maRecordChangesCB.Check( pItem->GetValue() );
-    else
-        maRecordChangesCB.Disable();        // because now we don't know the state!*/
-
     return 0;
 }
 
@@ -1480,6 +1481,49 @@ void SvxSecurityTabPage::CheckRecordChangesState( void )
         maRecordChangesCB.Disable();        // because now we don't know the state!
 
     maProtectRecordsPB.Enable( QueryRecordChangesProtectionState( meRedlingMode, bVal ) );
+}
+
+void SvxSecurityTabPage::InitControls()
+{
+    // if the button text is too wide, then broaden the button
+    const long nOffset = 10;
+    String sText = maMacroSecPB.GetText();
+    long nTxtW = maMacroSecPB.GetTextWidth( sText );
+    if ( sText.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW += nOffset;
+    long nBtnW = maMacroSecPB.GetSizePixel().Width();
+    if ( nTxtW > nBtnW )
+    {
+        // broaden the button
+        long nDelta = nTxtW - nBtnW;
+        Size aNewSize = maMacroSecPB.GetSizePixel();
+        aNewSize.Width() += nDelta;
+        maMacroSecPB.SetSizePixel( aNewSize );
+        Point aNewPos = maMacroSecPB.GetPosPixel();
+        aNewPos.X() -= nDelta;
+        maMacroSecPB.SetPosPixel( aNewPos );
+        // and narrow the fixedtext of the left side
+        aNewSize = maMacroSecFI.GetSizePixel();
+        aNewSize.Width() -= nDelta;
+        maMacroSecFI.SetSizePixel( aNewSize );
+    }
+
+    long nTxtW1 = maProtectRecordsPB.GetTextWidth( msProtectRecordsStr );
+    if ( msProtectRecordsStr.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW1 += nOffset;
+    long nTxtW2 = maProtectRecordsPB.GetTextWidth( msUnprotectRecordsStr );
+    if ( msUnprotectRecordsStr.Search( '~' ) == STRING_NOTFOUND )
+        nTxtW2 += nOffset;
+    nTxtW = Max( nTxtW1, nTxtW2 );
+    nBtnW = maProtectRecordsPB.GetSizePixel().Width();
+    if ( nTxtW > nBtnW )
+    {
+        // broaden the button
+        long nDelta = nTxtW - nBtnW;
+        Size aNewSize = maProtectRecordsPB.GetSizePixel();
+        aNewSize.Width() += nDelta;
+        maProtectRecordsPB.SetSizePixel( aNewSize );
+    }
 }
 
 SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
