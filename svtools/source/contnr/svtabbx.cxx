@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:57:48 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,10 +1016,14 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16& _rnColPos, 
 
         case ::svt::BBTYPE_TABLECELL:
         {
-            sal_uInt16 nColumnCount = GetColumnCount();
-            sal_Int32 nRow = _nPos / nColumnCount;
-            sal_uInt16 nColumn  = _nPos % nColumnCount;
-            aRetText = GetEntryText( nRow, nColumn );
+            // here we need a valid pos, we can not handle -1
+            if ( _nPos >= 0 )
+            {
+                sal_uInt16 nColumnCount = GetColumnCount();
+                sal_Int32 nRow = _nPos / nColumnCount;
+                sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
+                aRetText = GetEntryText( nRow, nColumn );
+            }
             break;
         }
         case ::svt::BBTYPE_COLUMNHEADERCELL:
@@ -1052,7 +1056,7 @@ sal_Bool SvHeaderTabListBox::ConvertPointToColumnHeader( sal_uInt16& _rnColPos, 
 
             sal_uInt16 nColumnCount = GetColumnCount();
             sal_Int32 nRow = _nPos / nColumnCount;
-            sal_uInt16 nColumn  = _nPos % nColumnCount;
+            sal_uInt16 nColumn  = static_cast< sal_uInt16 >( _nPos % nColumnCount );
 
             String aText( SvtResId( STR_SVT_ACC_DESC_TABLISTBOX ) );
             aText.SearchAndReplace( sVar1, String::CreateFromInt32( nRow ) );
@@ -1186,7 +1190,7 @@ Rectangle SvHeaderTabListBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 
 // -----------------------------------------------------------------------------
 sal_Int32 SvHeaderTabListBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
-    String sText = GetAccessibleCellText(_nRow,_nColumnPos);
+    String sText = GetAccessibleCellText( _nRow, static_cast< USHORT >( _nColumnPos ) );
     MetricVector aRects;
     if ( GetGlyphBoundRects(Point(0,0),sText,0,STRING_LEN,0,aRects) )
     {
