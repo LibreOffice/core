@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:23:19 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
 #include <rtl/logfile.hxx>
 
 using namespace ::rtl;
@@ -263,6 +266,20 @@ BOOL SVMain()
         pSVData->maAppData.mbInAppMain = TRUE;
         pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = FALSE;
+    }
+
+    // This is a hack to work around the problem of the asynchronous nature
+    // of bridging accessibility through Java: on shutdown there might still
+    // be some events in the AWT EventQueue, which need the SolarMutex which
+    // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
+    // here ..
+    Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
+    if( xComponent.is() )
+    {
+      ULONG nCount = Application::ReleaseSolarMutex();
+      xComponent->dispose();
+      Application::AcquireSolarMutex(nCount);
+      pSVData->mxAccessBridge.clear();
     }
 
     DeInitVCL();
