@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperlabel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:25:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,14 +121,14 @@ namespace svt
 
     HyperLabel::HyperLabel( Window* _pParent, const ResId& _rId )
         :FixedText( _pParent, _rId )
-        ,m_pImpl( NULL )
+        ,m_pImpl( new HyperLabelImpl )
     {
         implInit(_pParent);
     }
 
     HyperLabel::HyperLabel( Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
-        ,m_pImpl( NULL )
+        ,m_pImpl( new HyperLabelImpl )
     {
         implInit(_pParent);
     }
@@ -173,7 +173,6 @@ namespace svt
     void HyperLabel::implInit(Window* _pParent)
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        m_pImpl = new HyperLabelImpl;
         ToggleBackgroundColor( COL_TRANSPARENT );
 
         WinBits nWinStyle = GetStyle();
