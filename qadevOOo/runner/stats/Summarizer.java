@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Summarizer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:47 $
+ *  last change:$Date: 2003-05-27 12:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@ public class Summarizer {
      *
      * gets the state for a SuperEntry according to its subentries
      */
-
     public void summarizeUp(DescEntry entry) {
         if ( ( entry.State != null ) && entry.State != "UNKNOWN") return;
         int count = entry.SubEntryCount;
@@ -107,12 +106,10 @@ public class Summarizer {
     }
 
     public static void summarizeDown(DescEntry entry, String state) {
-        entry.State = state;
+        if ( ( entry.State == null ) || entry.State == "UNKNOWN")
+            entry.State = state;
         for (int i=0; i<entry.SubEntryCount; i++) {
-            entry.SubEntries[i].State = state;
-            for (int j=0;j<entry.SubEntries[i].SubEntryCount;j++) {
-                summarizeDown(entry.SubEntries[i].SubEntries[j],state);
-            }
+            summarizeDown(entry.SubEntries[i], entry.State);
         }
     }
 
