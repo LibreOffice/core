@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2000-09-27 12:28:24 $
+#   last change: $Author: mba $ $Date: 2000-09-28 11:24:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ LIB1FILES=\
         $(SLB)$/evtattmgr.lib \
         $(SLB)$/config.lib \
         $(SLB)$/container.lib \
+                $(SLB)$/ucbhelp.lib \
         $(SLB)$/procfact.lib
 
 # NETBSD: somewhere we have to instantiate the static data members.
@@ -110,34 +111,17 @@ SHL1STDLIBS= \
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-DEF1EXPORTFILE=$(TARGET).dxp
 
 SHL1DEPN=$(LIB1TARGET)
+
+DEF1NAME	=$(SHL1TARGET)
+DEF1DEPN        =$(MISC)$/$(SHL1TARGET).flt
+DEFLIB1NAME     =untools
+DEF1DES         =unotools
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-# === .def file ==========================================================
-# --- W32 ----------------------------------------------------------------
-
-.IF "$(GUI)" == "WNT"
-
-$(MISC)$/$(SHL1TARGET).def: $(MISC)$/$(SHL1TARGET).flt makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY	  $(SHL1TARGET) 								 >$@
-    @echo DESCRIPTION 'UTL'                                         >>$@
-    @echo DATA		  READWRITE NONSHARED							>>$@
-    @echo EXPORTS													>>$@
-    $(LIBMGR) -EXTRACT:/ /OUT:$(TARGET).exp $(LIB1TARGET)
-    @$(LDUMP) -E20 -F$(MISC)$/$(SHL1TARGET).flt $(TARGET).exp		>>$@
-    +-del $(TARGET).exp
-
-.ENDIF
-
-
-# --- Allgemein ----------------------------------------------------------
 
 # --- Filter-Datei ---
 
