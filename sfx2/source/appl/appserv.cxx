@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:34:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
@@ -155,6 +158,9 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #include <svtools/pathoptions.hxx>
@@ -392,13 +398,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     const short nRet = pDlg->Execute();
 
-                    for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
-                             pFrame;
-                             pFrame = SfxViewFrame::GetNext( *pFrame ) )
-                    {
-                        pFrame->GetDispatcher()->Update_Impl( TRUE );
-                    }
-
                     if ( nRet )
                         bDone = TRUE;
 
@@ -606,6 +605,60 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             bDone = true;
             break;
+
+        case SID_AVAILABLE_TOOLBARS:
+        {
+            SfxStringItem const * pToolbarName = static_cast< SfxStringItem const *>(
+                    rReq.GetArg(SID_AVAILABLE_TOOLBARS, false, TYPE(SfxStringItem)));
+
+            if ( pToolbarName )
+            {
+                com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame;
+                Reference < XFramesSupplier > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance(
+                                                            DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+                xFrame = xDesktop->getActiveFrame();
+
+                Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                if ( xPropSet.is() )
+                {
+                    try
+                    {
+                        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                        aValue >>= xLayoutManager;
+                    }
+                    catch ( ::com::sun::star::uno::RuntimeException& e )
+                    {
+                        throw e;
+                    }
+                    catch ( ::com::sun::star::uno::Exception& )
+                    {
+                    }
+                }
+
+                if ( xLayoutManager.is() )
+                {
+                    rtl::OUString aToolbarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+                    rtl::OUStringBuffer aBuf( aToolbarResName );
+                    aBuf.append( pToolbarName->GetValue() );
+
+                    // Parameter auswerten
+                    rtl::OUString aToolbarName( aBuf.makeStringAndClear() );
+                    BOOL bShow( !xLayoutManager->isElementVisible( aToolbarName ));
+
+                    if ( bShow )
+                    {
+                        xLayoutManager->createElement( aToolbarName );
+                        xLayoutManager->showElement( aToolbarName );
+                    }
+                    else
+                        xLayoutManager->hideElement( aToolbarName );
+                }
+            }
+
+            bDone = true;
+            break;
+        }
 
         default:
             break;
