@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 19:07:53 $
+ *  last change: $Author: nn $ $Date: 2000-10-27 19:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,12 +1743,12 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 
             if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
             {
-                if ( !rMed.GetError() )
-                    rMed.SetError( eError );
+//!             if ( !rMed.GetError() )
+//!                 rMed.SetError( eError );
                 eError = eERR_OK;
             }
-            else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
-                rMed.SetError( SCWARN_EXPORT_ASCII );
+//!         else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
+//!             rMed.SetError( SCWARN_EXPORT_ASCII );
             if ( bHasMemo )
                 aTmpFile.SetExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
             if ( eError != eERR_OK )
