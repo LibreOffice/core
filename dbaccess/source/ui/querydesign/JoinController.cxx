@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-29 08:30:22 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 08:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,9 +431,12 @@ void OJoinController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddTable")] = ID_BROWSER_ADDTABLE;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OJoinController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
 {
-    return saveModified() != RET_CANCEL;
+    sal_Bool bCheck = saveModified() != RET_CANCEL;
+    if ( bCheck )
+        OSingleDocumentController::suspend(_bSuspend);
+    return bCheck;
 }
 // -----------------------------------------------------------------------------
 

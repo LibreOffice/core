@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 08:50:00 $
+ *  last change: $Author: oj $ $Date: 2002-07-08 08:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ namespace dbaui
         :OSingleDocumentController_CBASE( _rxORB )
         ,OSingleDocumentController_PBASE( getBroadcastHelper() )
         ,m_bOwnConnection( sal_False )
+        ,m_bSuspended( sal_False )
     {
         registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
             &m_xConnection, ::getCppuType( &m_xConnection ) );
@@ -324,6 +325,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OSingleDocumentController::reconnect( sal_Bool _bUI )
     {
+        OSL_ENSURE(!m_bSuspended, "Cannot reconnect while suspended!");
         OConnectionChangeBroadcaster( this );
 
         stopConnectionListening(m_xConnection);
@@ -408,7 +410,12 @@ namespace dbaui
     //--------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing(const EventObject& _rSource) throw( RuntimeException )
     {
-        if ( !getBroadcastHelper().bInDispose  && !getBroadcastHelper().bDisposed && isConnected() && ( _rSource.Source == getConnection() ) )
+        if ( !m_bSuspended // when already suspended then we don't have to reconnect
+            &&  !getBroadcastHelper().bInDispose
+            &&  !getBroadcastHelper().bDisposed
+            &&  isConnected()
+            &&  ( _rSource.Source == getConnection() )
+            )
         {
             losingConnection();
         }
@@ -471,6 +478,17 @@ namespace dbaui
         return m_aCurrentError.hasValue();
     }
     //--------------------------------------------------------------------
+    sal_Bool SAL_CALL OSingleDocumentController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+    {
+        m_bSuspended = bSuspend;
+        if ( !bSuspend && !isConnected() )
+            reconnect(sal_True);
+
+
+        return sal_True;
+    }
+    // -----------------------------------------------------------------------------
+
     //--------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaui
@@ -479,6 +497,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/05/06 08:50:00  oj
+ *  #96363# impl new interface
+ *
  *  Revision 1.5  2001/09/07 10:03:53  fs
  *  ::disposing: don't reconnect if we're InDispose
  *
