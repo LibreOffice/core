@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-03-18 10:22:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <svx/AccessibleShape.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 namespace accessibility {
@@ -101,7 +101,7 @@ enum SdShapeTypes
 */
 AccessibleShape*
     CreateSdAccessibleShape (const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape
         );
