@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvmain.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:23:33 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,7 +1035,6 @@ void SkipObjkList(SvStream& rInp)
 BOOL SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 {
     BOOL          bRet = FALSE;
-    ObjkType      aObjk;
     PageType      aPage;
     VirtualDevice aOutDev;
     OutputDevice* pOutDev;
