@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 10:17:18 $
+ *  last change: $Author: gt $ $Date: 2001-05-30 11:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/solmath.hxx>
+#include <string.h>
 
 
 #define ADDIN_SERVICE       "com.sun.star.sheet.AddIn"
@@ -341,7 +342,7 @@ const sal_Char* pFuncDatas[] =
         "pnumber", "pstep",
         "Pnumber", "Pstep",
         EOE,
-    "igetFactdouble", "1Zweifakultaet", "2Factdouble",
+    "igetFactdouble", "1Zweifakultät", "2Factdouble",
         "dReturns the double factorial of a number",
         "pnumber",
         "Pnumber",
@@ -351,7 +352,7 @@ const sal_Char* pFuncDatas[] =
         "pinumber",
         "Pinumber",
         EOE,
-    "igetImaginary", "1Imaginaerteil", "2Imaginary",
+    "igetImaginary", "1Imaginärteil", "2Imaginary",
         "dReturns the imaginary coefficient of a complex number",
         "pinumber",
         "Pinumber",
@@ -779,7 +780,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayFunctionName( const STRING& aProgrammat
 
     const FuncData* p = pFD->Get( aProgrammaticName );
     if( p )
-        aRet = STRFROMASCII( bGerman ? p->pGerman : p->pEnglish );
+        aRet = STRFROMANSI( bGerman ? p->pGerman : p->pEnglish );
 
     return aRet;
 }
@@ -793,7 +794,7 @@ STRING SAL_CALL AnalysisAddIn::getFunctionDescription( const STRING& aProgrammat
 
     const FuncData* p = pFD->Get( aProgrammaticName );
     if( p )
-        aRet = STRFROMASCII( p->pDescr );
+        aRet = STRFROMANSI( p->pDescr );
 
     return aRet;
 }
@@ -806,7 +807,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayArgumentName( const STRING& aName, sal_
 
     const FuncData* p = pFD->Get( aName );
     if( p )
-        aRet = STRFROMASCII( p->GetParam( nArg ) );
+        aRet = STRFROMANSI( p->GetParam( nArg ) );
 
     return aRet;
 }
@@ -818,7 +819,7 @@ STRING SAL_CALL AnalysisAddIn::getArgumentDescription( const STRING& aName, sal_
     STRING          aRet;
     const FuncData* p = pFD->Get( aName );
     if( p )
-        aRet = STRFROMASCII( p->GetParamDescr( nArg ) );
+        aRet = STRFROMANSI( p->GetParamDescr( nArg ) );
 
     return aRet;
 }

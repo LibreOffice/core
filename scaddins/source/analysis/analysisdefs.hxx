@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisdefs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: gt $ $Date: 2001-05-30 11:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #define SEQ_ANY             SEQ(ANY)
 #define STRING              ::rtl::OUString
 #define STRFROMASCII(s)     STRING::createFromAscii( s )
+#define STRFROMANSI(s)      STRING( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
 #define THROWDEF_RTE        throw(CSS::uno::RuntimeException)
 #define THROWDEF_RTE_IAE    throw(CSS::uno::RuntimeException,CSS::lang::IllegalArgumentException)
 #define THROW_IAE           throw CSS::lang::IllegalArgumentException()
