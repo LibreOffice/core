@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:22:20 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
+, m_bFromClipboard( sal_False )
 {
 }
 
@@ -135,9 +136,36 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
 , m_pOwnView( NULL )
+, m_bFromClipboard( sal_False )
 {
 }
 
+//------------------------------------------------------
+// this constructor let object be initialized from clipboard
+OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+: m_pOleComponent( NULL )
+, m_pInterfaceContainer( NULL )
+, m_bReadOnly( sal_False )
+, m_bDisposed( sal_False )
+, m_nObjectState( -1 )
+, m_nTargetState( -1 )
+, m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
+, m_xFactory( xFactory )
+, m_bWaitSaveCompleted( sal_False )
+, m_bVisReplInStream( sal_True )
+, m_bStoreVisRepl( sal_True )
+, m_bNewVisReplInStream( sal_True )
+, m_bIsLink( sal_False )
+, m_bHasCachedSize( sal_False )
+, m_bHasSizeToSet( sal_False )
+, m_nCachedAspect( 0 )
+, m_bGotStatus( sal_False )
+, m_nStatus( 0 )
+, m_nStatusAspect( 0 )
+, m_pOwnView( NULL )
+, m_bFromClipboard( sal_True )
+{
+}
 
 //------------------------------------------------------
 OleEmbeddedObject::~OleEmbeddedObject()
