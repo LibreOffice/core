@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-29 14:39:48 $
+ *  last change: $Author: aw $ $Date: 2002-05-31 11:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1594,7 +1594,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
         long y2=pPage->GetHgt()-pPage->GetLwrBorder()-1+nWrY;
         const SdrPageGridFrameList* pFrames=pPage->GetGridFrameList(this,NULL);
         USHORT nBufSiz=1024; // 4k Buffer = max. 512 Punkte
-        long* pBuf = NULL;
+        // #90353# long* pBuf = NULL;
         unsigned nGridPaintAnz=1;
         if (pFrames!=NULL) nGridPaintAnz=pFrames->GetCount();
         for (unsigned nGridPaintNum=0; nGridPaintNum<nGridPaintAnz; nGridPaintNum++) {
@@ -1691,7 +1691,7 @@ void SdrPageView::DrawGrid(OutputDevice& rOut, const Rectangle& rRect, Color aCo
                 }
             }
         }
-        delete [] pBuf;
+        // #90353# delete [] pBuf;
         rOut.EnableMapMode(bMap0);
         rOut.SetLineColor(aColorMerk);
 #ifdef OS2 // SetPixel-Profiling fuer OS/2
