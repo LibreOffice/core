@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-14 01:45:42 $
+#   last change: $Author: pluby $ $Date: 2001-02-15 01:23:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,15 @@ SLOFILES =\
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
 SYMBOLPREFIX=sax
+.ENDIF
+
+# gcc on Mac OS X optimizes out some temporary variables when optimization is
+# turned on for compiling 
+.IF "$(OS)"=="MACOSX"
+NOOPTFILES+=$(SLOFILES)
+.IF "$(NOOPT_FLAG)"!=""
+CFLAGSNOOPT=
+.ENDIF
 .ENDIF
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
