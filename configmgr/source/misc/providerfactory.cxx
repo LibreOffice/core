@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:03:36 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,9 @@ namespace configmgr
     //---------------------------------------------------------------------------------------
     static bool isReusableConnection(const ConnectionSettings& _rSettings)
     {
+        if (_rSettings.isUnoBackend())
+            return false;
+
         // #78409
         // if a provider is queried with a password, we always create a new instance for it,
         // as don't wan't to remember the passwords for the user.
@@ -428,6 +431,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/11/09 12:03:36  jb
+ *  #86080# Corrected exception thrown for creation failures
+ *
  *  Revision 1.14  2001/11/02 12:22:35  jb
  *  #91782# Adjusted to change in BootstrapSettings
  *

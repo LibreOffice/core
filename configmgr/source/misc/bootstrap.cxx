@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-04-25 15:48:42 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,18 @@
 // ---------------------------------------------------------------------------------------
 #define BOOTSTRAP_CONFIGMGR_DATA            SAL_CONFIGFILE("configmgr")
 // ---------------------------------------------------------------------------------------
+#define SETTING_UNOSERVICE                  "BackendService"
+#define SETTING_UNOWRAPPER                  "BackendWrapper"
+#define SETTING_OFFLINE                     "Offline"
+// ---------------------------------------------------------------------------------------
 // configuration bootstrap items
+#define BOOTSTRAP_ITEM_PREFIX_              "CFG_"
+
 #define BOOTSTRAP_ITEM_SERVERTYPE           "CFG_ServerType"
-#define BOOTSTRAP_ITEM_LOCALE               "CFG_Locale"
-#define BOOTSTRAP_ITEM_ASYNCENABLE          "CFG_EnableAsync"
+#define BOOTSTRAP_ITEM_UNOSERVICE           BOOTSTRAP_ITEM_PREFIX_ SETTING_UNOSERVICE
+#define BOOTSTRAP_ITEM_UNOWRAPPER           BOOTSTRAP_ITEM_PREFIX_ SETTING_UNOWRAPPER
+#define BOOTSTRAP_ITEM_LOCALE               BOOTSTRAP_ITEM_PREFIX_ "Locale"
+#define BOOTSTRAP_ITEM_ASYNCENABLE          BOOTSTRAP_ITEM_PREFIX_ "EnableAsync"
 
 #define BOOTSTRAP_ITEM_SOURCE_PATH          "CFG_BaseDataURL"
 #define BOOTSTRAP_ITEM_UPDATE_PATH          "CFG_UserDataURL"
@@ -135,6 +143,9 @@
 #define BOOTSTRAP_FROM_PROFILE(sect,key) "${$" BOOTSTRAP_ITEM_PROFILE_NAME ":" sect ":" key "}"
 
 #define BOOTSTRAP_SERVERTYPE_FROM_PROFILE   BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_SERVERTYPE)
+#define BOOTSTRAP_UNOSERVICE_FROM_PROFILE   BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,BOOTSTRAP_ITEM_UNOSERVICE)
+#define BOOTSTRAP_UNOWRAPPER_FROM_PROFILE   BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,BOOTSTRAP_ITEM_UNOWRAPPER)
+
 #define BOOTSTRAP_LOCALE_FROM_PROFILE       BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_LOCALE)
 #define BOOTSTRAP_ASYNCENABLE_FROM_PROFILE  BOOTSTRAP_FROM_PROFILE(SREGISTRY_SECTION_CONFIGURATION,SREGISTRY_KEY_ASYNC)
 
@@ -168,9 +179,11 @@
 #define SREGISTRY_KEY_PASSWORD              "Password"
 // ---------------------------------------------------------------------------------------
 
-// general settings
+// legacy settings
 #define SETTING_SERVERTYPE                  "servertype"
 #define SETTING_SESSIONCLASS               "_session_class_"
+#define SETTING_LOCALE                      "locale"
+#define SETTING_ASYNC                       "lazywrite"
 
 // portal settings
 #define SETTING_SERVICE                     "service"
@@ -186,8 +199,6 @@
 #define SETTING_USER                        "user"
 #define SETTING_PASSWORD                    "password"
 // 'option' settings
-#define SETTING_LOCALE                      "locale"
-#define SETTING_ASYNC                       "lazywrite"
 
 // ---------------------------------------------------------------------------------------
 #define SERVICE_USERSESSION                 "configuration"
@@ -226,11 +237,11 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     SessionClass const aSessionClasses[] =
     {
+        { UNO_SESSION_IDENTIFIER,           createNoSession },
         { REMOTE_SESSION_IDENTIFIER,        createRemoteSession },
         { LOCAL_SESSION_IDENTIFIER,         createLocalSession  },
         { PORTAL_SESSION_IDENTIFIER,        createPortalSession },
-        { SETUP_SESSION_IDENTIFIER,         createSetupSession },
-//      { PLUGIN_SESSION_IDENTIFIER,        createPluginSession }
+        { SETUP_SESSION_IDENTIFIER,         createSetupSession }
     };
     int const nSessionClasses = sizeof(aSessionClasses)/sizeof(aSessionClasses[0]);
 
@@ -372,7 +383,6 @@ namespace configmgr
                 return true;
             }
         }
-        #if 0
         {
             NamedValue aCurrentArgNV;
             // or a NamedValue
@@ -384,7 +394,7 @@ namespace configmgr
                 return true;
             }
         }
-        #endif
+
         return false;
     }
 
@@ -516,6 +526,26 @@ namespace configmgr
     }
 
 // ---------------------------------------------------------------------------------------
+
+    uno::Sequence< beans::NamedValue > ConnectionSettings::getUnoSettings() const
+    {
+        uno::Sequence< beans::NamedValue > aResult( m_aSettings.size() );
+
+        beans::NamedValue * p = aResult.getArray();
+
+        for ( Settings::Iterator it = m_aSettings.begin(); it != m_aSettings.end(); ++it )
+        {
+            p->Name  = it->first;
+            p->Value = it->second.value();
+            ++p;
+        }
+
+        OSL_ASSERT(p - aResult.getConstArray() == aResult.getLength());
+
+        return aResult;
+    }
+// ---------------------------------------------------------------------------------------
+
     void ConnectionSettings::setSessionType(const OUString& _rSessionIdentifier, Settings::Origin _eOrigin)
     {
         putSetting(NAME(SETTING_SERVERTYPE), Settings::Setting(_rSessionIdentifier, _eOrigin));
@@ -529,6 +559,8 @@ namespace configmgr
 
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::isSessionTypeKnown() const { return haveSetting(NAME(SETTING_SERVERTYPE)); }
+    sal_Bool ConnectionSettings::hasUnoBackendService() const { return haveSetting(NAME(SETTING_UNOSERVICE)); }
+    sal_Bool ConnectionSettings::hasUnoBackendWrapper() const { return haveSetting(NAME(SETTING_UNOWRAPPER)); }
     sal_Bool ConnectionSettings::hasUser() const            { return haveSetting(NAME(SETTING_USER)); }
     sal_Bool ConnectionSettings::hasPassword() const        { return haveSetting(NAME(SETTING_PASSWORD)); }
     sal_Bool ConnectionSettings::hasLocale() const          { return haveSetting(NAME(SETTING_LOCALE)); }
@@ -537,10 +569,13 @@ namespace configmgr
     sal_Bool ConnectionSettings::hasPort() const            { return haveSetting(NAME(SETTING_PORT)); }
     sal_Bool ConnectionSettings::hasTimeout() const         { return haveSetting(NAME(SETTING_TIMEOUT)); }
     sal_Bool ConnectionSettings::hasAsyncSetting() const    { return haveSetting(NAME(SETTING_ASYNC)); }
+    sal_Bool ConnectionSettings::hasOfflineSetting() const  { return haveSetting(NAME(SETTING_OFFLINE)); }
     sal_Bool ConnectionSettings::hasReinitializeFlag() const { return haveSetting(NAME(SETTING_REINITIALIZE)); }
 
 // ---------------------------------------------------------------------------------------
     OUString    ConnectionSettings::getSessionType() const  { return m_aSettings.getStringSetting(NAME(SETTING_SERVERTYPE)); }
+    OUString    ConnectionSettings::getUnoBackendService() const { return m_aSettings.getStringSetting(NAME(SETTING_UNOSERVICE)); }
+    OUString    ConnectionSettings::getUnoBackendWrapper() const { return m_aSettings.getStringSetting(NAME(SETTING_UNOWRAPPER)); }
     OUString    ConnectionSettings::getUser() const         { return m_aSettings.getStringSetting(NAME(SETTING_USER)); }
     OUString    ConnectionSettings::getPassword() const     { return m_aSettings.getStringSetting(NAME(SETTING_PASSWORD)); }
     OUString    ConnectionSettings::getLocale() const       { return m_aSettings.getStringSetting(NAME(SETTING_LOCALE)); }
@@ -551,6 +586,7 @@ namespace configmgr
     sal_Int32   ConnectionSettings::getPort() const         { return m_aSettings.getIntSetting(NAME(SETTING_PORT)); }
     sal_Int32   ConnectionSettings::getTimeout() const      { return m_aSettings.getIntSetting(NAME(SETTING_TIMEOUT)); }
     sal_Bool ConnectionSettings::getAsyncSetting() const    { return m_aSettings.getBoolSetting(NAME(SETTING_ASYNC)); }
+    sal_Bool ConnectionSettings::getOfflineSetting() const  { return m_aSettings.getBoolSetting(NAME(SETTING_OFFLINE)); }
     sal_Bool ConnectionSettings::getReinitializeFlag() const { return m_aSettings.getBoolSetting(NAME(SETTING_REINITIALIZE)); }
 
 // ---------------------------------------------------------------------------------------
@@ -722,6 +758,13 @@ namespace configmgr
             return !! isSourcePathValid();
         }
 
+        else if(0 == sSessionType.compareToAscii(UNO_SESSION_IDENTIFIER) )
+        {
+            // cannot check backend-specific arguments here
+            return hasUnoBackendService() ||
+                    hasUnoBackendWrapper() && hasOfflineSetting() && getOfflineSetting();
+        }
+
         else if(0 == sSessionType.compareToAscii(PORTAL_SESSION_IDENTIFIER) )
         {
             return true;
@@ -814,7 +857,11 @@ namespace configmgr
             CFG_TRACE_INFO("provider bootstrapping: no session type. looking for fallback");
 
             char const * psSessionType = NULL;
-            if (haveSetting(NAME(SETTING_SOURCEPATH)) && haveSetting(NAME(SETTING_UPDATEPATH)))
+            if (haveSetting(NAME(SETTING_UNOSERVICE)))
+            {
+                psSessionType = UNO_SESSION_IDENTIFIER;
+            }
+            else if (haveSetting(NAME(SETTING_SOURCEPATH)) && haveSetting(NAME(SETTING_UPDATEPATH)))
             {
                 psSessionType = LOCAL_SESSION_IDENTIFIER;
             }
@@ -829,7 +876,7 @@ namespace configmgr
             else
             {
                 CFG_TRACE_WARNING_NI("provider bootstrapping: cannot determine session type"
-                                     "- using deprecated fallback to '"PORTAL_SESSION_IDENTIFIER"'");
+                                     "- using fallback to '"UNO_SESSION_IDENTIFIER"'");
                 psSessionType = PORTAL_SESSION_IDENTIFIER;
             }
 
@@ -848,6 +895,15 @@ namespace configmgr
         return true;
     }
 
+// ---------------------------------------------------------------------------------------
+
+    bool ConnectionSettings::isUnoBackend() const
+    {
+        if (!isSessionTypeKnown()) return false;
+
+        OUString const sSessionType = getSessionType();
+        return  (0 == sSessionType.compareToAscii(UNO_SESSION_IDENTIFIER));
+    }
 // ---------------------------------------------------------------------------------------
     sal_Bool ConnectionSettings::isPlugin() const
     {
@@ -901,7 +957,7 @@ namespace configmgr
 
     void ConnectionSettings::setUserSession()
     {
-        OSL_ENSURE(isLocalSession() || isRemoteSession(),"Invalid/No session type for user session");
+        OSL_ENSURE(isUnoBackend() || isLocalSession() || isRemoteSession(),"Invalid/No session type for user session");
         OSL_ENSURE(getSessionType().compareToAscii(SETUP_SESSION_IDENTIFIER) != 0, "WARNING: Explicit creation of 'setup' sessions is obsolete. Create 'AdministrationProvider' service instead");
 
         OUString const sService( RTL_CONSTASCII_USTRINGPARAM(SERVICE_USERSESSION) );
@@ -926,7 +982,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::setAdminSession()
     {
-        OSL_ENSURE(isLocalSession() || isRemoteSession(),"Invalid/No session type for admin session");
+        OSL_ENSURE(isUnoBackend() || isLocalSession() || isRemoteSession(),"Invalid/No session type for admin session");
         if (isLocalSession())
         {
             OSL_ENSURE(!hasUser(), "Local Admin Session has 'user' parameter - ignoring (admin data will be used)");
@@ -998,11 +1054,7 @@ namespace configmgr
         {
             if (0 == sSessionType.compareToAscii(aSessionClasses[i].name))
             {
-                if (IConfigSession* pSession = aSessionClasses[i].create(_rxServiceMgr, *this))
-                {
-                    OSL_ASSERT(pSession);
-                    return pSession;
-                }
+                return aSessionClasses[i].create(_rxServiceMgr, *this);
             }
         }
 
@@ -1026,7 +1078,12 @@ namespace configmgr
             sConnect.append(_rSettings.getService());
         }
 #endif
-        if (_rSettings.isLocalSession())
+        if (_rSettings.isUnoBackend())
+        {
+            // no support for connection strings
+            return OUString();
+        }
+        else if (_rSettings.isLocalSession())
         {
             if (_rSettings.isSourcePathValid())
             {
@@ -1281,13 +1338,13 @@ namespace {
         return aFileURL.copy(0, aFileURL.lastIndexOf('/'));
     }
 // ---------------------------------------------------------------------------------------
-    static OUString getConfigurationBootstrapURL()
+    OUString BootstrapSettings::getURL()
     {
         return getCurrentModuleDirectory() + OUString(RTL_CONSTASCII_USTRINGPARAM("/"BOOTSTRAP_CONFIGMGR_DATA));
     }
 // ---------------------------------------------------------------------------------------
     BootstrapSettings::Impl::Impl()
-    : m_data(getConfigurationBootstrapURL())
+    : m_data(getURL())
     {
     }
 // ---------------------------------------------------------------------------------------
@@ -1373,6 +1430,8 @@ namespace {
     {
         OUString sDummy;
         maybeAddWithDefault(_rSettings, NAME(SETTING_SERVERTYPE), ITEM(BOOTSTRAP_ITEM_SERVERTYPE),  ITEM(BOOTSTRAP_SERVERTYPE_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_UNOSERVICE), ITEM(BOOTSTRAP_ITEM_UNOSERVICE),  ITEM(BOOTSTRAP_UNOSERVICE_FROM_PROFILE) );
+        maybeAddWithDefault(_rSettings, NAME(SETTING_UNOWRAPPER), ITEM(BOOTSTRAP_ITEM_UNOWRAPPER),  ITEM(BOOTSTRAP_UNOWRAPPER_FROM_PROFILE) );
         maybeAddWithDefault(_rSettings, NAME(SETTING_LOCALE),     ITEM(BOOTSTRAP_ITEM_LOCALE),      ITEM(BOOTSTRAP_LOCALE_FROM_PROFILE) );
         maybeAddWithDefault(_rSettings, NAME(SETTING_ASYNC),      ITEM(BOOTSTRAP_ITEM_ASYNCENABLE), ITEM(BOOTSTRAP_ASYNCENABLE_FROM_PROFILE) );
         maybeAddWithDefault(_rSettings, NAME(SETTING_SOURCEPATH), ITEM(BOOTSTRAP_ITEM_SOURCE_PATH), ITEM(BOOTSTRAP_BASEPATH_FROM_PROFILE) );
@@ -1388,6 +1447,8 @@ namespace {
     void BootstrapSettings::Impl::collectSettings(Settings& _rSettings)
     {
         addSetting(_rSettings, NAME(SETTING_SERVERTYPE), ITEM(BOOTSTRAP_ITEM_SERVERTYPE) );
+        addSetting(_rSettings, NAME(SETTING_UNOSERVICE), ITEM(BOOTSTRAP_ITEM_UNOSERVICE) );
+        addSetting(_rSettings, NAME(SETTING_UNOWRAPPER), ITEM(BOOTSTRAP_ITEM_UNOWRAPPER) );
         addSetting(_rSettings, NAME(SETTING_LOCALE),     ITEM(BOOTSTRAP_ITEM_LOCALE) );
         addSetting(_rSettings, NAME(SETTING_ASYNC),      ITEM(BOOTSTRAP_ITEM_ASYNCENABLE) );
         addSetting(_rSettings, NAME(SETTING_SOURCEPATH), ITEM(BOOTSTRAP_ITEM_SOURCE_PATH) );

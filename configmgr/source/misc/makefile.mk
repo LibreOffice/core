@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+#   last change: $Author: jb $ $Date: 2002-06-12 16:44:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ SLOFILES=	\
         $(SLO)$/serviceinfohelper.obj \
         $(SLO)$/trivialbufferedfile.obj \
         $(SLO)$/requestoptions.obj	\
+        $(SLO)$/bootstrapcontext.obj	\
 
 #		$(SLO)$/synchronize.obj	\
 #		$(SLO)$/memory.obj \

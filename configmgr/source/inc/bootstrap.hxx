@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-02 12:21:42 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
@@ -98,9 +101,11 @@ namespace configmgr
 
     namespace uno = ::com::sun::star::uno;
     namespace lang = ::com::sun::star::lang;
+    namespace beans = ::com::sun::star::beans;
     using ::rtl::OUString;
 
     // ===================================================================================
+    #define UNO_SESSION_IDENTIFIER              "uno"
     #define PORTAL_SESSION_IDENTIFIER           "portal"
     #define REMOTE_SESSION_IDENTIFIER           "remote"
     #define LOCAL_SESSION_IDENTIFIER            "local"
@@ -108,6 +113,7 @@ namespace configmgr
     #define PLUGIN_SESSION_IDENTIFIER           "plugin"
 
 
+    // ===================================================================================
     // ===================================================================================
     // = Settings
     // ===================================================================================
@@ -179,15 +185,16 @@ namespace configmgr
         Setting         getSetting(Name const& _pName) const;
         Setting         getMaybeSetting(Name const& _pName) const;
 
+        SettingsImpl::size_type size() const { return m_aImpl.size(); }
         Iterator begin()    const { return m_aImpl.begin(); }
         Iterator end()      const { return m_aImpl.end(); }
 
         void swap(Settings& _rOther) { m_aImpl.swap(_rOther.m_aImpl); }
-
     private:
         void implAddOverrides(const uno::Sequence< uno::Any >& _rOverrides, Origin _eOrigin);
         bool implExtractOverride(const uno::Any & _rOverride, Name& _rName, uno::Any& _rValue);
     };
+
 
     class ConnectionSettings
     {
@@ -225,6 +232,7 @@ namespace configmgr
 
         sal_Bool    hasLocale() const;
         sal_Bool    hasAsyncSetting() const;
+        sal_Bool    hasOfflineSetting() const;
 
         sal_Bool    hasServer() const;
         sal_Bool    hasPort() const;
@@ -234,6 +242,10 @@ namespace configmgr
         sal_Bool    isPlugin() const;
         sal_Bool    isLocalSession() const;
         sal_Bool    isRemoteSession() const;
+        bool        isUnoBackend() const;
+
+        sal_Bool    hasUnoBackendService() const;
+        sal_Bool    hasUnoBackendWrapper() const;
 
         sal_Bool    isSourcePathValid() const;
         sal_Bool    isUpdatePathValid() const;
@@ -243,11 +255,15 @@ namespace configmgr
         OUString    getSessionType() const;
         sal_Bool    isAdminSession() const;
 
+        OUString    getUnoBackendService() const;
+        OUString    getUnoBackendWrapper() const;
+
         OUString    getUser() const;
         OUString    getPassword() const;
 
         OUString    getLocale() const;
         sal_Bool    getAsyncSetting() const;
+        sal_Bool    getOfflineSetting() const;
 
         OUString    getSourcePath() const;
         OUString    getUpdatePath() const;
@@ -280,6 +296,8 @@ namespace configmgr
             uno::Reference< lang::XMultiServiceFactory > const& _rxServiceMgr) const;
 
         void swap(ConnectionSettings& _rOther) { m_aSettings.swap(_rOther.m_aSettings); }
+
+        uno::Sequence< beans::NamedValue > getUnoSettings() const;
 
     private:
         bool checkSettings() const;
@@ -325,6 +343,7 @@ namespace configmgr
 
 // ===================================================================================
 
+// ===================================================================================
     class BootstrapSettings
     {
     public:
@@ -339,6 +358,8 @@ namespace configmgr
         }
 
         void raiseBootstrapException( uno::Reference< uno::XInterface > const & xContext ) const;
+
+        static OUString getURL();
     private:
         void bootstrap();
 
