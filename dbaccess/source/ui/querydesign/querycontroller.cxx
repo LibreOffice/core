@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 14:27:47 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
+#include <com/sun/star/frame/XLoadEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
@@ -211,6 +214,8 @@ extern "C" void SAL_CALL createRegistryInfo_OQueryControl()
     static ::dbaui::OMultiInstanceAutoRegistration< ::dbaui::OQueryController > aAutoRegistration;
 }
 
+namespace dbaui
+{
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -226,7 +231,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::awt;
 using namespace ::connectivity;
 using namespace ::dbtools;
-using namespace ::dbaui;
+
 using namespace ::comphelper;
 
 //------------------------------------------------------------------------------
@@ -496,7 +501,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             setModified(sal_True);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
-            if(getContainer()->checkStatement())
+            if ( getContainer()->checkStatement() )
                 executeQuery();
             break;
         case ID_QUERY_ZOOM_IN:
@@ -858,6 +863,31 @@ Reference<XNameAccess> OQueryController::getElements()  const
     }
     return xElements;
 }
+
+//typedef ::cppu::ImplHelper1< XLoadEventListener > OQueryControllerLoadListener_BASE;
+//class OQueryControllerLoadListener : public OQueryControllerLoadListener_BASE
+//{
+//  OQueryController* m_pController;
+//public:
+//  OQueryControllerLoadListener(OQueryController* _pController) : m_pController(_pController)
+//  {
+//      OSL_ENSURE(m_pController,"Controller can not be NULL!");
+//  }
+//  // -----------------------------------------------------------------------------
+//  virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException)
+//  {
+//  }
+//  // -----------------------------------------------------------------------------
+//  // XLoadEventListener
+//  virtual void SAL_CALL loadFinished( const Reference< XFrameLoader >& aLoader ) throw (RuntimeException)
+//  {
+//  }
+//  // -----------------------------------------------------------------------------
+//  virtual void SAL_CALL loadCancelled( const Reference< XFrameLoader >& aLoader ) throw (RuntimeException)
+//  {
+//      m_pController->Execute(ID_BROWSER_CLOSE);
+//  }
+//};
 // -----------------------------------------------------------------------------
 void OQueryController::executeQuery()
 {
@@ -865,24 +895,28 @@ void OQueryController::executeQuery()
     // which can't live without his connection
     ::rtl::OUString sTranslatedStmt = translateStatement();
 
-    if(getDataSourceName().getLength() && sTranslatedStmt.getLength())
+    if ( getDataSourceName().getLength() && sTranslatedStmt.getLength() )
     {
         try
         {
             getContainer()->showPreview(m_xCurrentFrame);
 
+//          Reference< XFrame > xBeamer = getContainer()->getPreviewFrame();
+//          Reference< XLoadEventListener> xLoadEvtL = new OQueryControllerLoadListener(this);
+//          xBeamer->addFrameActionListener( xLoadEvtL );
+
             URL aWantToDispatch;
             aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
 
             ::rtl::OUString sFrameName = FRAME_NAME_QUERY_PREVIEW;
-            //  | ::com::sun::star::frame::FrameSearchFlag::CREATE
+            //  | FrameSearchFlag::CREATE
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
 
-            Reference< ::com::sun::star::frame::XDispatch> xDisp;
-            Reference< ::com::sun::star::frame::XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
+            Reference< XDispatch> xDisp;
+            Reference< XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
             if(!xProv.is())
             {
-                xProv = Reference< ::com::sun::star::frame::XDispatchProvider>(m_xCurrentFrame, UNO_QUERY);
+                xProv = Reference< XDispatchProvider>(m_xCurrentFrame, UNO_QUERY);
                 if (xProv.is())
                     xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
             }
@@ -931,7 +965,7 @@ void OQueryController::executeQuery()
                 {
                     OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
                         "OQueryController::executeQuery: oops ... which window do I have here?");
-                    Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                    Reference< XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                     xComponent->addEventListener(xEvtL);
                 }
             }
@@ -1200,6 +1234,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         {
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
+            // an error occured so we clear the statement
+            sTranslatedStmt = ::rtl::OUString();
         }
     }
     else if(!m_sStatement.getLength())
@@ -1314,5 +1350,5 @@ void OQueryController::reset()
     getUndoMgr()->Clear();
 }
 // -----------------------------------------------------------------------------
-
-
+} // namespace dbaui
+// -----------------------------------------------------------------------------
