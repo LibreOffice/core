@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:52:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,8 +324,8 @@ private:
     typedef ScfDelList< XclImpCachedValue > XclImpValueList;
 
     XclImpValueList             maValueList;    /// List of cached cell values.
-    USHORT                      mnScCols;       /// Number of cached columns.
-    USHORT                      mnScRows;       /// Number of cached rows.
+    SCSIZE                      mnScCols;       /// Number of cached columns.
+    SCSIZE                      mnScRows;       /// Number of cached rows.
 
 };
 
