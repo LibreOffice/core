@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:07:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,8 +780,9 @@ const SfxFilter* SfxFilterMatcher::GetFilterForProps( const com::sun::star::uno:
             if ( (aProps[::rtl::OUString::createFromAscii("PreferredFilter")] >>= aValue) && aValue.getLength() )
             {
                 const SfxFilter* pFilter = SfxFilter::GetFilterByName( aValue );
-                if ( !pFilter )
-                    // if preferred filter is a Writer filter, but Writer module is not installed
+                if ( !pFilter || (pFilter->GetFilterFlags() & nMust) != nMust || (pFilter->GetFilterFlags() & nDont ) )
+                    // check for filter flags
+                    // pFilter == 0: if preferred filter is a Writer filter, but Writer module is not installed
                     continue;
 
                 if ( pImpl->aName.getLength() )
