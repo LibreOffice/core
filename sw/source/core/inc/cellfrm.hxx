@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:22:10 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
 
 public:
-    SwCellFrm( const SwTableBox & );
+    SwCellFrm( const SwTableBox &, bool bInsertContent = true );
     ~SwCellFrm();
 
     virtual BOOL   GetCrsrOfst( SwPosition *, Point&,
@@ -87,6 +87,11 @@ public:
     virtual void   Modify( SfxPoolItem*, SfxPoolItem* );
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
+
+    // used for breaking table rows:
+    SwCellFrm* GetFollowCell() const;
+    SwCellFrm* GetPreviousCell() const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrm)
 };
 
