@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberingRulesSupplier.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:46 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module text {
 /** This interface enables the object to handle numbering rules.
      @see com.sun.star.text.NumberingRules
 */
-interface XNumberingRulesSupplier : com::sun::star::uno::XInterface
+published interface XNumberingRulesSupplier : com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** @returns
