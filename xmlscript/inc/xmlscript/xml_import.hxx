@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_import.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:07 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,58 +58,31 @@
  *
  *
  ************************************************************************/
-#ifndef _XMLSCRIPT_XML_IMPORT_HXX_
+#if ! defined _XMLSCRIPT_XML_IMPORT_HXX_
 #define _XMLSCRIPT_XML_IMPORT_HXX_
 
-#ifndef _COM_SUN_STAR_XML_XIMPORTER_HPP_
-#include <com/sun/star/xml/XImporter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
+#include "com/sun/star/xml/input/XRoot.hpp"
+#include "com/sun/star/xml/sax/XExtendedDocumentHandler.hpp"
 
 
 namespace xmlscript
 {
 
-/*##################################################################################################
+/*##############################################################################
 
     IMPORTING
 
-##################################################################################################*/
+##############################################################################*/
 
-//==================================================================================================
-struct NameSpaceUid
-{
-    /** URI defining XML namespace
-    */
-    ::rtl::OUString     sURI;
-    /** Identifier given for URI (given back in createRootContext(), createChildContext() callbacks
-    */
-    sal_Int32           nUid;
-
-    inline NameSpaceUid( ::rtl::OUString const & sURI_, sal_Int32 nUid_ ) SAL_THROW( () )
-        : sURI( sURI_ )
-        , nUid( nUid_ )
-        {}
-};
-
-/** Creates a document handler to be used for SAX1 parser that can handle namespaces.
-    Give a list of NameSpaceUid structs defining namespace mappings to integers (performance).
-    Implementing the XImporter interface, you will get a createRootContext() for the root
-    element of your XML document and subsequent createChildContext() callbacks for each
-    sub element.
+/** Creates a document handler to be used for SAX1 parser that can handle
+    namespaces.  Namespace URI are mapped to integer ids for performance.
+    Implementing the XImporter interface, you will get a startRootElement()
+    for the root element of your XML document and subsequent
+    startChildElement() callbacks for each sub element.
     Namespaces of tags are identified by their integer value.
 
-    @param pNamespaceUids
-           array of namespace mappings
-    @param nNameSpaceUids
-           number of element in namespace mappings array
-    @param nUnknownNamespaceUid
-           namespace id given for unrecognized namespace prefix
-           (one that is not given via pNamespaceUids)
-    @param xImporter
-           initial import object being called for root context
+    @param xRoot
+           initial object being called for root context
     @param bSingleThreadedUse
            flag whether context management is synchronized.
     @return
@@ -117,9 +90,8 @@ struct NameSpaceUid
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL createDocumentHandler(
-    NameSpaceUid const * pNamespaceUids, sal_Int32 nNameSpaceUids,
-    sal_Int32 nUnknownNamespaceUid,
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::XImporter > const & xImporter,
+    ::com::sun::star::uno::Reference<
+    ::com::sun::star::xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse = true )
     SAL_THROW( () );
 
