@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:42:31 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,7 +569,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ chinese_traditional ] = "«O«ωΕγ₯ά€ρ¨Ò(~S)";
         Text[ arabic ] = "ΗαΗΝΚέΗΩ ΘΗαγήνΗΣ";
         Text[ greek ] = "Διατήρηση κλί~μακας";
-        Text[ korean ] = "Ίρΐ² ΐ―Αφ(~S)";
+        Text[ korean ] = "Ήθΐ² ΐ―Αφ(~S)";
         Text[ turkish ] = "~Orantύyύ koru";
     };
     GroupBox GB_EXAMPLE
