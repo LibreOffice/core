@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowPeer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,43 +78,38 @@ interface XPointer;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XWindowPeer
 /** gives access to the actual window implementation on the device.
  */
 interface XWindowPeer: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowPeer::getToolkit
-    /** returns the vcl which created this object.
+    /** returns the toolkit which created this object.
      */
     XToolkit getToolkit();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowPeer::setPointer
     /** sets the mouse pointer.
      */
     [oneway] void setPointer( [in] XPointer Pointer );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowPeer::setBackground
     /** sets the background color.
      */
     [oneway] void setBackground( [in] long Color );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowPeer::invalidate
-    /** invalidated the whole window using an <type>InvalidateStyle</type>.
+    /** invalidates the whole window with the specified
+        <type>InvalidateStyle</type>.
      */
     [oneway] void invalidate( [in] short Flags );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XWindowPeer::invalidateRect
-    /** invalidated a rectangular area of the window using an
+    /** invalidates a rectangular area of the window with the specified
         <type>InvalidateStyle</type>.
      */
     [oneway] void invalidateRect( [in] Rectangle Rect, [in] short Flags );
