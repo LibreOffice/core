@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:11:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2173,8 +2173,11 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     // Note: These adjustments causes wrong horizontal positions for frames,
     //       which are aligned inside|outside to page|margin on even pages,
     //       the left and right border distances are different.
+    // --> OD 2005-01-19 #119176# - no adjustments possible, if frame has
+    // automatic width.
     // determine left border distance
     INT16 nLeBorderMgn( 0L );
+    if ( !bAutoWidth )
     {
         INT16 nTemp = rWW.brc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67,
             &nLeBorderMgn);
@@ -2182,12 +2185,13 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     }
     // determine right border distance
     INT16 nRiBorderMgn( 0L );
+    if ( !bAutoWidth )
     {
         INT16 nTemp = rWW.brc[WW8_RIGHT].DetermineBorderProperties(rWW.bVer67,
             &nRiBorderMgn);
         nRiBorderMgn += nTemp;
     }
-    if ( eHAlign == HORI_LEFT && eHRel == REL_PG_FRAME )
+    if ( !bAutoWidth && eHAlign == HORI_LEFT && eHRel == REL_PG_FRAME )
     {
         // convert 'left to page' to
         // 'from left -<width>-<2*left border distance>-<right wrap distance>
@@ -2198,7 +2202,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         // re-set left wrap distance
         nLeMgn = rWW.nLeMgn;
     }
-    else if ( eHAlign == HORI_RIGHT && eHRel == REL_PG_FRAME )
+    else if ( !bAutoWidth && eHAlign == HORI_RIGHT && eHRel == REL_PG_FRAME )
     {
         // convert 'right to page' to
         // 'from left <right border distance-left border distance>+<left wrap distance>
@@ -2209,7 +2213,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         // re-set right wrap distance
         nRiMgn = rWW.nRiMgn;
     }
-    else if ( eHAlign == HORI_LEFT && eHRel == REL_PG_PRTAREA )
+    else if ( !bAutoWidth && eHAlign == HORI_LEFT && eHRel == REL_PG_PRTAREA )
     {
         // convert 'left to margin' to
         // 'from left -<left border distance> to page text area'
@@ -2219,7 +2223,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
         // re-set left wrap distance
         nLeMgn = rWW.nLeMgn;
     }
-    else if ( eHAlign == HORI_RIGHT && eHRel == REL_PG_PRTAREA )
+    else if ( !bAutoWidth && eHAlign == HORI_RIGHT && eHRel == REL_PG_PRTAREA )
     {
         // convert 'right to margin' to
         // 'from left -<width>-<left border distance> to right page border'
