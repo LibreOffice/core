@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-12-14 13:38:37 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,4 +902,25 @@ SalObject* SalInstance::CreateObject( SalFrame* pParent )
 void SalInstance::DestroyObject( SalObject* pObject )
 {
     ImplSendMessage( maInstData.mhComWnd, SAL_MSG_DESTROYOBJECT, 0, (LPARAM)pObject );
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+{
+    rReturnedBytes  = 1;
+    rReturnedType   = AsciiCString;
+    return "";
 }

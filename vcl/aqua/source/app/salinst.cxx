@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pluby $ $Date: 2001-01-05 18:04:34 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,4 +409,25 @@ SalSystem* SalInstance::CreateSystem()
 void SalInstance::DestroySystem( SalSystem* pSystem )
 {
     delete pSystem;
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+{
+    rReturnedBytes  = 1;
+    rReturnedType   = AsciiCString;
+    return "";
 }

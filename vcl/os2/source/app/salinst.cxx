@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:34 $
+ *  last change: $Author: pl $ $Date: 2001-02-01 14:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,4 +751,25 @@ void SalTimer::Start( ULONG nMS )
     }
     else
         ImplSalStartTimer();
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+void* SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+{
+    rReturnedBytes  = 1;
+    rReturnedType   = AsciiCString;
+    return "";
 }
