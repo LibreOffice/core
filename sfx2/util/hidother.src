@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:37:11 $
+ *  last change: $Author: gt $ $Date: 2002-11-05 09:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,3 +228,7 @@ hidspecial HID_CLOSE_WARNING                    { HelpID = HID_CLOSE_WARNING; };
 hidspecial HID_DID_SAVE_PACKED_XML              { HelpID = HID_DID_SAVE_PACKED_XML; };
 hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
 hidspecial HID_HELP_TEXT_SELECTION_MODE         { HelpID = HID_HELP_TEXT_SELECTION_MODE; };
+hidspecial SID_INSERT_GRAPHIC                   { HelpID = SID_INSERT_GRAPHIC; };
+hidspecial SID_INSERT_SOUND                     { HelpID = SID_INSERT_SOUND; };
+hidspecial SID_INSERT_VIDEO                     { HelpID = SID_INSERT_VIDEO; };
+hidspecial HID_CONFIG_SAVE                      { HelpID = HID_CONFIG_SAVE; };
