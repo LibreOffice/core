@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside.sdi,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:37:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,12 @@ shell BasicIDEShell
     ]
 
     FID_SEARCH_NOW
+    [
+        ExecMethod  = ExecuteCurrent;
+        StateMethod = GetState;
+    ]
+
+    FID_SEARCH_OFF
     [
         ExecMethod  = ExecuteCurrent;
         StateMethod = GetState;
