@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:46:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@
 #define HID_EVT_ROWCHANGE                       (HID_EVT_START +  47)
 #define HID_EVT_RELOADING                       (HID_EVT_START +  48)
 #define HID_EVT_UNLOADING                       (HID_EVT_START +  49)
+#define HID_EVT_ADJUSTMENTVALUECHANGED          (HID_EVT_START +  50)
 
 // Fuer den Button "Makro zuweisen"- Dialog im Property-Editor
 #define UID_EVT_MACRODLG                        (HID_EVT_START +  99)
