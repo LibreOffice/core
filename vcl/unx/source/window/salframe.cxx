@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2000-09-28 12:02:01 $
+ *  last change: $Author: pl $ $Date: 2000-10-19 18:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1772,9 +1772,10 @@ GetAlternateKeyCode( const USHORT nKeyCode )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
 {
+    KeySym          nKeySym;
     int             nLen = 16;
     unsigned char   *pPrintable = (unsigned char*)alloca( nLen );
-    KeySym          nKeySym;
+    pPrintable[0] = 0;
 
     // if we haven't got an input context yet then it's time to build it
     if ( mpInputContext == NULL )
@@ -1791,8 +1792,9 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
                 &nStatus, mpInputContext->GetContext() );
         if ( nStatus == XBufferOverflow )
         {
-            nLen += 1;
+            nLen *= 2;
             pPrintable = (unsigned char*)alloca( nLen );
+            pPrintable[ 0 ] = 0;
             nKeySym = pDisplay_->GetKeySym( pEvent, pPrintable, &nLen,
                     &nStatus, mpInputContext->GetContext() );
         }
@@ -1876,7 +1878,8 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         sal_uInt32  nConversionInfo;
         sal_Size    nConvertedChars;
 
-        pBuffer = (sal_Unicode*) alloca( nBufferSize + 1);
+        pBuffer = (sal_Unicode*) alloca( nBufferSize + 2 );
+        pBuffer[ 0 ] = 0;
 
         // convert to single byte text stream
         nSize = rtl_convertTextToUnicode(
