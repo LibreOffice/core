@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdmenu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:53 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,8 @@ private:
     XubString       maCurStyle;
     Link            maSelectHdl;
     Link            maHighlightHdl;
+
+    BOOL            ImplIsAlreadyInserted( const XubString& rStyleName, USHORT nCount );
 
 public:
                     FontStyleMenu();

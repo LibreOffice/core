@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-07 16:06:56 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:42:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,6 +495,7 @@ public:
                     FontSizeBox( Window* pParent, const ResId& rResId );
     virtual         ~FontSizeBox();
 
+    void            Reformat();
     void            Modify();
 
     void            Fill( const FontInfo& rInfo, const FontList* pList );
@@ -506,13 +507,17 @@ public:
     BOOL            IsRelativeMode() const { return bRelativeMode; }
     void            SetRelative( BOOL bRelative = FALSE );
     BOOL            IsRelative() const { return bRelative; }
-    BOOL            IsPtRelative() const { return bPtRelative; }
     void            SetPtRelative( BOOL bPtRel = TRUE )
                         { bPtRelative = bPtRel; SetRelative( TRUE ); }
+    BOOL            IsPtRelative() const { return bPtRelative; }
 
-    long            GetValue( FieldUnit eOutUnit = FUNIT_NONE ) const;
+    virtual void    SetValue( long nNewValue, FieldUnit eInUnit );
+    virtual void    SetValue( long nNewValue  );
+    virtual long    GetValue( FieldUnit eOutUnit ) const;
+    virtual long    GetValue() const;
     long            GetValue( USHORT nPos, FieldUnit eOutUnit ) const;
-    void            SetValue( long nNewValue, FieldUnit eInUnit = FUNIT_NONE );
+    void            SetUserValue( long nNewValue, FieldUnit eInUnit );
+    void            SetUserValue( long nNewValue ) { SetUserValue( nNewValue, FUNIT_NONE ); }
 
 private:
     // declared as private because some compilers would generate the default functions
