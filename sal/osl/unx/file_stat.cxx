@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_stat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,11 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
     if (osl_File_E_None != osl_error)
         return osl_error;
 
+#if defined(__GNUC__) && (__GNUC__ < 3)
+    struct ::stat file_stat;
+#else
     struct stat file_stat;
+#endif
     if (is_stat_call_necessary(uFieldMask) && (0 != osl::lstat(file_path, file_stat)))
         return oslTranslateFileError(OSL_FET_ERROR, errno);
 
