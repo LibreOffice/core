@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-28 18:18:56 $
+ *  last change: $Author: nn $ $Date: 2000-10-06 17:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #pragma hdrstop
 
 #include <tools/debug.hxx>
+#include <sfx2/app.hxx>
 
 #include "funcuno.hxx"
 #include "miscuno.hxx"
@@ -88,14 +89,111 @@ SC_SIMPLE_SERVICE_INFO( ScFunctionAccess, "ScFunctionAccess", SCFUNCTIONACCESS_S
 
 //------------------------------------------------------------------------
 
-ScFunctionAccess::ScFunctionAccess() :
-    pDoc( NULL )
+// helper to use cached document if not in use, temporary document otherwise
+
+class ScTempDocSource
 {
+private:
+    ScTempDocCache& rCache;
+    ScDocument*     pTempDoc;
+
+    static ScDocument*  CreateDocument();       // create and initialize doc
+
+public:
+                ScTempDocSource( ScTempDocCache& rDocCache );
+                ~ScTempDocSource();
+
+    ScDocument*     GetDocument();
+};
+
+//------------------------------------------------------------------------
+
+// static
+ScDocument* ScTempDocSource::CreateDocument()
+{
+    ScDocument* pDoc = new ScDocument;                  // SCDOCMODE_DOCUMENT
+    pDoc->MakeTable( 0 );
+    return pDoc;
+}
+
+ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
+    rCache( rDocCache ),
+    pTempDoc( NULL )
+{
+    if ( rCache.IsInUse() )
+        pTempDoc = CreateDocument();
+    else
+    {
+        rCache.SetInUse( TRUE );
+        if ( !rCache.GetDocument() )
+            rCache.SetDocument( CreateDocument() );
+    }
+}
+
+ScTempDocSource::~ScTempDocSource()
+{
+    if ( pTempDoc )
+        delete pTempDoc;
+    else
+        rCache.SetInUse( FALSE );
+}
+
+ScDocument* ScTempDocSource::GetDocument()
+{
+    if ( pTempDoc )
+        return pTempDoc;
+    else
+        return rCache.GetDocument();
+}
+
+//------------------------------------------------------------------------
+
+ScTempDocCache::ScTempDocCache() :
+    pDoc( NULL ),
+    bInUse( FALSE )
+{
+}
+
+ScTempDocCache::~ScTempDocCache()
+{
+    DBG_ASSERT( !bInUse, "ScTempDocCache dtor: bInUse" );
+    delete pDoc;
+}
+
+void ScTempDocCache::SetDocument( ScDocument* pNew )
+{
+    DBG_ASSERT( !pDoc, "ScTempDocCache::SetDocument: already set" );
+    pDoc = pNew;
+}
+
+void ScTempDocCache::Clear()
+{
+    DBG_ASSERT( !bInUse, "ScTempDocCache::Clear: bInUse" );
+    delete pDoc;
+    pDoc = NULL;
+}
+
+//------------------------------------------------------------------------
+
+ScFunctionAccess::ScFunctionAccess() :
+    bInvalid( FALSE )
+{
+    StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
 }
 
 ScFunctionAccess::~ScFunctionAccess()
 {
-    delete pDoc;
+}
+
+void ScFunctionAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA(SfxSimpleHint) &&
+        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING )
+    {
+        //  document must not be used anymore
+        aDocCache.Clear();
+        bInvalid = TRUE;
+    }
 }
 
 // stuff for exService_...
@@ -185,11 +283,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
 {
     ScUnoGuard aGuard;
 
-    if (!pDoc)
-    {
-        pDoc = new ScDocument;                  // SCDOCMODE_DOCUMENT
-        pDoc->MakeTable( 0 );
-    }
+    if (bInvalid)
+        throw uno::RuntimeException();
+
+    // use cached document if not in use, temporary document otherwise
+    //  (deleted in ScTempDocSource dtor)
+    ScTempDocSource aSource( aDocCache );
+    ScDocument* pDoc = aSource.GetDocument();
 
     if (!ScCompiler::pSymbolTableEnglish)
     {
@@ -419,12 +519,14 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos, &aTokenArr, MM_FORMULA );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
+        //  call GetMatrix before GetErrCode because GetMatrix always recalculates
+        //  if there is no matrix result
 
+        ScMatrix* pMat = NULL;
+        pFormula->GetMatrix(&pMat);
         USHORT nErrCode = pFormula->GetErrCode();
         if ( nErrCode == 0 )
         {
-            ScMatrix* pMat = NULL;
-            pFormula->GetMatrix(&pMat);
             if ( pMat )
             {
                 // array result

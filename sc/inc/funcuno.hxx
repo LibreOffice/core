@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-28 18:17:52 $
+ *  last change: $Author: nn $ $Date: 2000-10-06 17:45:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <cppuhelper/implbase2.hxx>
 #endif
 
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+
 class ScDocument;
 
 
@@ -82,12 +86,32 @@ class ScDocument;
             ::com::sun::star::lang::XMultiServiceFactory >& );
 
 
-class ScFunctionAccess : public cppu::WeakImplHelper2<
-                                        com::sun::star::sheet::XFunctionAccess,
-                                        com::sun::star::lang::XServiceInfo>
+class ScTempDocCache
 {
 private:
     ScDocument*     pDoc;
+    BOOL            bInUse;
+
+public:
+                ScTempDocCache();
+                ~ScTempDocCache();
+
+    ScDocument* GetDocument() const     { return pDoc; }
+    BOOL        IsInUse() const         { return bInUse; }
+    void        SetInUse( BOOL bSet )   { bInUse = bSet; }
+
+    void        SetDocument( ScDocument* pNew );
+    void        Clear();
+};
+
+class ScFunctionAccess : public cppu::WeakImplHelper2<
+                                        com::sun::star::sheet::XFunctionAccess,
+                                        com::sun::star::lang::XServiceInfo>,
+                         public SfxListener
+{
+private:
+    ScTempDocCache  aDocCache;
+    BOOL            bInvalid;
 
 public:
                             ScFunctionAccess();
@@ -95,6 +119,8 @@ public:
 
     static ::rtl::OUString  getImplementationName_Static();
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static();
+
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // XFunctionAccess
     virtual ::com::sun::star::uno::Any SAL_CALL callFunction(
