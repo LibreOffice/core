@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:18:50 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 13:43:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,21 +106,21 @@ _COMPHELPER_COMPONENT_WRITEINFO
 // extern "C" component_getFactory()
 _COMPHELPER_COMPONENT_GETFACTORY
 (
-    _COMPHELPER_ONEINSTANCEFACTORY( TypeDetection::impl_getImplementationName()   ,
-                                    TypeDetection::impl_getSupportedServiceNames(),
-                                    TypeDetection::impl_createInstance            )
+    _COMPHELPER_MULTIINSTANCEFACTORY( TypeDetection::impl_getImplementationName()   ,
+                                      TypeDetection::impl_getSupportedServiceNames(),
+                                      TypeDetection::impl_createInstance            )
 
-    _COMPHELPER_ONEINSTANCEFACTORY( FilterFactory::impl_getImplementationName()   ,
-                                    FilterFactory::impl_getSupportedServiceNames(),
-                                    FilterFactory::impl_createInstance            )
+    _COMPHELPER_MULTIINSTANCEFACTORY( FilterFactory::impl_getImplementationName()   ,
+                                      FilterFactory::impl_getSupportedServiceNames(),
+                                      FilterFactory::impl_createInstance            )
 
-    _COMPHELPER_ONEINSTANCEFACTORY( ContentHandlerFactory::impl_getImplementationName()   ,
-                                    ContentHandlerFactory::impl_getSupportedServiceNames(),
-                                    ContentHandlerFactory::impl_createInstance            )
+    _COMPHELPER_MULTIINSTANCEFACTORY( ContentHandlerFactory::impl_getImplementationName()   ,
+                                      ContentHandlerFactory::impl_getSupportedServiceNames(),
+                                      ContentHandlerFactory::impl_createInstance            )
 
-    _COMPHELPER_ONEINSTANCEFACTORY( FrameLoaderFactory::impl_getImplementationName()   ,
-                                    FrameLoaderFactory::impl_getSupportedServiceNames(),
-                                    FrameLoaderFactory::impl_createInstance            )
+    _COMPHELPER_MULTIINSTANCEFACTORY( FrameLoaderFactory::impl_getImplementationName()   ,
+                                      FrameLoaderFactory::impl_getSupportedServiceNames(),
+                                      FrameLoaderFactory::impl_createInstance            )
 )
 
     } // namespace config
