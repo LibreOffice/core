@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:25:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,3 +539,55 @@ void SpinButton::ImplCalcFocusRect( BOOL _bUpper )
     maFocusRect.Bottom() -= 2;
     mbUpperIsFocused = _bUpper;
 }
+
+// -----------------------------------------------------------------------
+
+Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
+{
+    if( maUpperRect.IsInside( rPt ) )
+        return &maUpperRect;
+    else if( maLowerRect.IsInside( rPt ) )
+        return &maLowerRect;
+    else
+        return NULL;
+}
+
+long SpinButton::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        {
+            // trigger redraw if mouse over state has changed
+            if( IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) ||
+                IsNativeControlSupported(CTRL_SPINBOX, PART_ALL_BUTTONS) )
+            {
+                Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
+                Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
+                if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
+                {
+                    Region aRgn( GetActiveClipRegion() );
+                    if( pLastRect )
+                    {
+                        SetClipRegion( *pLastRect );
+                        Paint( *pLastRect );
+                        SetClipRegion( aRgn );
+                    }
+                    if( pRect )
+                    {
+                        SetClipRegion( *pRect );
+                        Paint( *pRect );
+                        SetClipRegion( aRgn );
+                    }
+                }
+            }
+        }
+    }
+
+    return nDone ? nDone : Control::PreNotify(rNEvt);
+}
+
+// -----------------------------------------------------------------------
