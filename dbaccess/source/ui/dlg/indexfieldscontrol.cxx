@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:33 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 14:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace dbaui
     //==================================================================
     //------------------------------------------------------------------
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex)
-        :EditBrowseBox(_pParent, _rId, EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
+        :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
         ,m_pFieldNameCell(NULL)
@@ -544,6 +544,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2002/08/19 07:40:33  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.9  2002/04/09 07:43:43  oj
  *  #98286# new virtual method GetCellText
  *
