@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:11:38 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,15 +145,19 @@ void SdDLL::Init()
 
     if (SvtModuleOptions().IsImpress())
     {
-        ::sd::DrawDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
-
-                // Register the Impress shape types in order to make the shapes
-                // accessible.
-                ::accessibility::RegisterImpressShapeTypes ();
+        // Register the Impress shape types in order to make the shapes accessible.
+        ::accessibility::RegisterImpressShapeTypes ();
+        ::sd::DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
+        ::sd::DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
+        ::sd::DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
     }
 
     if (SvtModuleOptions().IsDraw())
-        ::sd::GraphicDocShell::RegisterFactory( SDT_SD_DOCFACTPRIO );
+    {
+        ::sd::GraphicDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) );
+        ::sd::GraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
+        ::sd::GraphicDocShell::Factory().RegisterAccel( SdResId( RID_GRAPHIC_DEFAULTACCEL ) );
+    }
 
     // register your view-factories here
     RegisterFactorys();
@@ -202,7 +206,7 @@ void SdDLL::Exit()
     (*ppShlPtr) = NULL;
 }
 
-
+/*
 ULONG SdDLL::DetectFilter(SfxMedium& rMedium, const SfxFilter** ppFilter,
                           SfxFilterFlags nMust, SfxFilterFlags nDont)
 {
@@ -379,9 +383,4 @@ ULONG SdDLL::DetectFilter(SfxMedium& rMedium, const SfxFilter** ppFilter,
     }
 
     return nReturn;
-}
-
-
-
-
-
+} */
