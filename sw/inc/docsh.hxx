@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:49:15 $
+ *  last change: $Author: os $ $Date: 2001-02-12 11:27:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
+                                   long nVersion = SOFFICE_FILEFORMAT_NOW ) const;
     virtual void    FillRegInfo( SvEmbeddedRegistryInfo * );
 
     virtual SvDataMemberObjectRef CreateSnapshot();
@@ -306,6 +306,10 @@ public:
                                 BOOL bUnoCall );
     void InvalidateModel();
     void ReactivateModel();
+
+#if SUPD>620
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >  GetEventNames();
+#endif
 };
 
 inline BOOL SwDocShell::SaveAsChilds( SvStorage *pStor )
