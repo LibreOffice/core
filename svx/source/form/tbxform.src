@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:20:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,7 +595,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ italian ] = "Vai al record di dati";
         Text[ danish ] = "gå til datapost";
         Text[ swedish ] = "gå till datapost";
-        Text[ polish ] = "przejd? do rekordu";
+        Text[ polish ] = "przejdŸ do rekordu";
         Text[ portuguese_brazilian ] = "go to record";
         Text[ japanese ] = "Úº°ÄÞ‚Ö";
         Text[ korean ] = "·¹ÄÚµå·Î °¡±â";
@@ -634,4 +634,5 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ catalan ] = "Número de registro";
     Text[ finnish ] = "Tietueen numero";
 };
+
 
