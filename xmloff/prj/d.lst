@@ -52,9 +52,6 @@ hedabu: ..\inc\txtstyle.hxx %_DEST%\inc%_EXT%\xmloff\txtstyle.hxx
 hedabu: ..\inc\prstylei.hxx %_DEST%\inc%_EXT%\xmloff\prstylei.hxx
 hedabu: ..\inc\txtstyli.hxx %_DEST%\inc%_EXT%\xmloff\txtstyli.hxx
 hedabu: ..\inc\txtprmap.hxx %_DEST%\inc%_EXT%\xmloff\txtprmap.hxx
-hedabu: ..\inc\txtflde.hxx %_DEST%\inc%_EXT%\xmloff\txtflde.hxx
-hedabu: ..\inc\txtfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtfldi.hxx
-hedabu: ..\inc\txtvfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtvfldi.hxx
 hedabu: ..\inc\txtparae.hxx %_DEST%\inc%_EXT%\xmloff\txtparae.hxx
 hedabu: ..\inc\txtimp.hxx %_DEST%\inc%_EXT%\xmloff\txtimp.hxx
 hedabu: ..\inc\prhdlfac.hxx %_DEST%\inc%_EXT%\xmloff\prhdlfac.hxx
@@ -111,6 +108,8 @@ hedabu: ..\inc\xmlerror.hxx %_DEST%\inc%_EXT%\xmloff\xmlerror.hxx
 hedabu: ..\inc\SinglePropertySetInfoCache.hxx %_DEST%\inc%_EXT%\xmloff\SinglePropertySetInfoCache.hxx
 hedabu: ..\inc\PropertySetInfoHash.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoHash.hxx
 hedabu: ..\inc\PropertySetInfoKey.hxx %_DEST%\inc%_EXT%\xmloff\PropertySetInfoKey.hxx
+hedabu: ..\inc\xformsimport.hxx %_DEST%\inc%_EXT%\xmloff\xformsimport.hxx
+hedabu: ..\inc\xformsexport.hxx %_DEST%\inc%_EXT%\xmloff\xformsexport.hxx
 hedabu: ..\inc\controlpropertyhdl.hxx %_DEST%\inc%_EXT%\xmloff\controlpropertyhdl.hxx
 hedabu: ..\inc\ControlBorderHandler.hxx %_DEST%\inc%_EXT%\xmloff\ControlBorderHandler.hxx
 hedabu: ..\inc\XMLConstantsPropertyHandler.hxx %_DEST%\inc%_EXT%\xmloff\XMLConstantsPropertyHandler.hxx
