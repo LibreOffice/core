@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.128 $
+#   $Revision: 1.129 $
 #
-#   last change: $Author: vg $ $Date: 2004-12-03 14:52:01 $
+#   last change: $Author: vg $ $Date: 2004-12-03 16:42:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.128 $ ';
+    $id_str = ' $Revision: 1.129 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1320,6 +1320,10 @@ sub build_multiprocessing {
 #        };
     } while (scalar (keys %global_deps_hash));
     # Let all children finish their work
+    while (children_number()) {
+        handle_dead_children();
+        sleep 1;
+    }
     cancel_build() if (scalar keys %broken_build);
     mp_success_exit();
 };
