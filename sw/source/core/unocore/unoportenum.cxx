@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 07:11:07 $
+ *  last change: $Author: os $ $Date: 2001-05-23 09:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,51 +174,28 @@ Sequence< OUString > SwXTextPortionEnumeration::getSupportedServiceNames(void) t
 /*-- 27.01.99 10:44:43---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXTextPortionEnumeration::SwXTextPortionEnumeration(SwPaM& rParaCrsr, uno::Reference< XText >  xParentText) :
+SwXTextPortionEnumeration::SwXTextPortionEnumeration(
+    SwPaM& rParaCrsr,
+    uno::Reference< XText >  xParentText,
+    sal_Int32 nStart,
+    sal_Int32 nEnd
+    ) :
     xParent(xParentText),
     bAtEnd(sal_False),
-    bFirstPortion(sal_True)
+    bFirstPortion(sal_True),
+    nStartPos(nStart),
+    nEndPos(nEnd)
 {
     SwUnoCrsr* pUnoCrsr = rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
     pUnoCrsr->Add(this);
 
+    DBG_ASSERT(nEnd == -1 || (nStart <= nEnd &&
+        nEnd < pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
+            "start or end value invalid!")
     //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // AM ZEICHEN gebunden sind
     ::CollectFrameAtNode( *this, pUnoCrsr->GetPoint()->nNode,
                             aFrameArr, TRUE );
-#if 0
-    SwDoc* pDoc = pUnoCrsr->GetDoc();
-    const SwNodeIndex& rOwnNode = pUnoCrsr->GetPoint()->nNode;
-    const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-    sal_uInt16 nCount = rFmts.Count();
-    const SwPosition* pAnchorPos;
-    SvXub_StrLens aSortArr( 8, 8 );
-
-    for( sal_uInt16 i = 0; i < nCount; i++)
-    {
-        SwFrmFmt* pFmt = rFmts[ i ];
-        const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-
-        //steht der Anker in diesem Node und ist er absatzgebunden?
-        if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() &&
-            0 != ( pAnchorPos = rAnchor.GetCntntAnchor() ) &&
-            RES_FLYFRMFMT == pFmt->Which() &&
-            pAnchorPos->nNode == rOwnNode )
-        {
-            //jetzt einen SwDepend anlegen und sortiert in das Array einfuegen
-            SwDepend* pNewDepend = new SwDepend(this, pFmt);
-            xub_StrLen nInsertIndex = pAnchorPos->nContent.GetIndex();
-
-            USHORT nInsPos = 0, nEnd = aSortArr.Count();
-            for( ; nInsPos < nEnd; ++nInsPos )
-                if( aSortArr[ nInsPos ] > nInsertIndex )
-                    break;
-
-            aSortArr.Insert( nInsertIndex, nInsPos );
-            aFrameArr.C40_INSERT( SwDepend, pNewDepend, nInsPos );
-        }
-    }
-#endif
     CreatePortions();
 }
 /*-- 27.01.99 10:44:44---------------------------------------------------
@@ -448,7 +425,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                                 SwTextPortionType& ePortionType,
                                 const xub_StrLen& nFirstFrameIndex,
                                 SwXBookmarkPortionArr& aBkmArr,
-                                SwXRedlinePortionArr& aRedArr )
+                                SwXRedlinePortionArr& aRedArr,
+                                sal_Int32 nEndPos )
 {
     Reference<XTextRange> xRef;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
@@ -600,9 +578,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
 
     if(!bAttrFound)
     {
-        // hier wird nach Uebergaengen zwischen Attributen gesucht, die nach der
-        // aktuellen Cursorposition liegen
-        // wenn dabei ein Rahmen 'ueberholt' wird, dann muss auch in der TextPortion unterbrochen werden
+        // search for attribute changes behind the current cursor position
+        // break up at frames, bookmarks, redlines
 
         nStartIndex = 0;
         nNextStart = 0;
@@ -620,18 +597,21 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
         if (nMovePos <= nCurrentIndex)
             nMovePos = pUnoCrsr->GetCntntNode()->Len();
 
+        if(nEndPos > 0 && nMovePos > nEndPos)
+            nMovePos = (USHORT)nEndPos;
+
         if(aBkmArr.Count() && aBkmArr.GetObject(0)->nIndex < nMovePos)
         {
             DBG_ASSERT(aBkmArr.GetObject(0)->nIndex > nCurrentIndex,
                 "forgotten bookmark(s)")
             nMovePos = aBkmArr.GetObject(0)->nIndex;
         }
-        // break portions up for redlines
+        // break up portions for redlines
         if (aRedArr.Count() && aRedArr.GetObject(0)->GetIndexPos() < nMovePos)
         {
             nMovePos = aRedArr.GetObject(0)->GetIndexPos();
         }
-        // liegt die Endposition nach dem naechsten Rahmen, dann aufbrechen
+        // break up if the destination is behind a frame
         if(nFirstFrameIndex != STRING_MAXLEN && nMovePos > nFirstFrameIndex)
             nMovePos = nFirstFrameIndex;
 
@@ -643,7 +623,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
             // (this should not be necessary any more; we assert it only
             //  happens when the above would move to the end of the
             //  paragraph anyway)
-            DBG_ASSERT(nMovePos == pUnoCrsr->GetCntntNode()->Len(),
+            DBG_ASSERT(nMovePos == pUnoCrsr->GetCntntNode()->Len()||
+            (nEndPos > 0 && nMovePos == nEndPos),
                        "may only happen at paragraph end");
             pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
         }
@@ -778,6 +759,16 @@ void SwXTextPortionEnumeration::CreatePortions()
 {
     uno::Any aRet;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
+    // set the start if a selection should be exported
+    if(nStartPos > 0 && pUnoCrsr->Start()->nContent.GetIndex() != nStartPos)
+    {
+        if(pUnoCrsr->HasMark())
+            pUnoCrsr->DeleteMark();
+        DBG_ASSERT(pUnoCrsr->Start()->nNode.GetNode().GetTxtNode() &&
+            nStartPos <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len(),
+                "Incorrect start position"  )
+        pUnoCrsr->Right((xub_StrLen)nStartPos);
+    }
     if(pUnoCrsr /*&& !bAtEnd*/)
     {
         SwXBookmarkPortionArr aBkmArr;
@@ -860,6 +851,8 @@ void SwXTextPortionEnumeration::CreatePortions()
                             const SwPosition* pAnchorPos = rAnchor.GetCntntAnchor();
                             pFirstFrameDepend = pCurDepend;
                             nFirstFrameIndex = pAnchorPos->nContent.GetIndex();
+                            if(nEndPos > 0 && nFirstFrameIndex >= nEndPos)
+                                nFirstFrameIndex = USHRT_MAX;
                         }
 
                         SwXTextCursor::SelectPam(*pUnoCrsr, sal_True);
@@ -887,7 +880,8 @@ void SwXTextPortionEnumeration::CreatePortions()
                                 ePortionType,
                                 nFirstFrameIndex,
                                 aBkmArr,
-                                aRedArr);
+                                aRedArr,
+                                nEndPos);
 
                         }
                         else if(USHRT_MAX != nFirstFrameIndex)
@@ -896,8 +890,12 @@ void SwXTextPortionEnumeration::CreatePortions()
                         }
                         else
                         {
-//                          lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nCurrentIndex, pUnoCrsr, xParent, aPortionArr);
                             sal_Int32 nNextIndex = lcl_GetNextIndex(aBkmArr, aRedArr);
+                            if(nEndPos > 0 && (nNextIndex > nEndPos || nNextIndex < 0))
+                            {
+                                nNextIndex = nEndPos;
+                                bAtEnd = sal_True;
+                            }
                             if(nNextIndex < 0)
                                 sal_Bool bMove = pUnoCrsr->MovePara(fnParaCurr, fnParaEnd);
                             else
@@ -921,11 +919,12 @@ void SwXTextPortionEnumeration::CreatePortions()
                     pUnoCrsr->Exchange();
 
             // Absatzende ?
+            sal_Int32 nLocalEnd = nEndPos > 0 ? nEndPos : pUnoCrsr->GetCntntNode()->Len();
             if(pUnoCrsr->GetCntntNode() &&
-                    pUnoCrsr->GetPoint()->nContent == pUnoCrsr->GetCntntNode()->Len())
+                    pUnoCrsr->GetPoint()->nContent == (xub_StrLen)nLocalEnd)
             {
                 bAtEnd = sal_True;
-                lcl_ExportBkmAndRedline(aBkmArr, aRedArr, pUnoCrsr->GetCntntNode()->Len(),
+                lcl_ExportBkmAndRedline(aBkmArr, aRedArr, nLocalEnd,
                                             pUnoCrsr, xParent, aPortionArr);
                 SwNode* pNode = pUnoCrsr->GetNode();
                 if(ND_TEXTNODE == pNode->GetNodeType())
@@ -939,11 +938,12 @@ void SwXTextPortionEnumeration::CreatePortions()
                             aPortionArr,
                             pUnoCrsr,
                             xParent,
-                            pUnoCrsr->GetCntntNode()->Len(),
+                            nLocalEnd,
                             ePortionType,
                             STRING_MAXLEN,
                             aBkmArr,
-                            aRedArr);
+                            aRedArr,
+                            nEndPos);
                         if(xRef.is())
                             aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-11 15:24:08 $
+ *  last change: $Author: os $ $Date: 2001-05-23 09:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,19 +199,23 @@ SwXParagraph::SwXParagraph() :
     aLstnrCntnr( (XTextRange*)this),
     xParentText(0),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
-    m_bIsDescriptor(TRUE)
+    m_bIsDescriptor(TRUE),
+    nSelectionStartPos(-1),
+    nSelectionEndPos(-1)
 {
 }
 
 /*-- 11.12.98 08:12:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXParagraph::SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr) :
+SwXParagraph::SwXParagraph(SwXText* pParent, SwUnoCrsr* pCrsr, sal_Int32 nSelStart, sal_Int32 nSelEnd) :
     SwClient(pCrsr),
     xParentText(pParent),
     aLstnrCntnr( (XTextRange*)this),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH)),
-    m_bIsDescriptor(FALSE)
+    m_bIsDescriptor(FALSE),
+    nSelectionStartPos(nSelStart),
+    nSelectionEndPos(nSelEnd)
 {
 }
 /*-- 11.12.98 08:12:48---------------------------------------------------
@@ -723,7 +727,7 @@ uno::Reference< container::XEnumeration >  SwXParagraph::createEnumeration(void)
     uno::Reference< container::XEnumeration >  aRef;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
-        aRef = new SwXTextPortionEnumeration(*pUnoCrsr, xParentText);
+        aRef = new SwXTextPortionEnumeration(*pUnoCrsr, xParentText, nSelectionStartPos, nSelectionEndPos);
     else
         throw uno::RuntimeException();
     return aRef;
