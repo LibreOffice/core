@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mib $ $Date: 2001-09-07 06:06:55 $
+ *  last change: $Author: ka $ $Date: 2001-09-13 11:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2336,13 +2336,16 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
         if( !mbIsPlaceholder && maHref.getLength() )
         {
-            uno::Reference< container::XNamed > xNamed( mxShape, uno::UNO_QUERY );
-            if( xNamed.is() )
+            uno::Reference< beans::XPropertySet > xProps( mxShape, uno::UNO_QUERY );
+
+            if( xProps.is() )
             {
-                OUString aName( GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID ) );
-                const OUString sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
-                aName = aName.copy( sURL.getLength() );
-                xNamed->setName( aName );
+                uno::Any        aAny;
+                OUString        aPersistName( GetImport().ResolveEmbeddedObjectURL( maHref, maCLSID ) );
+                const OUString  sURL(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ));
+
+                aAny <<= ( aPersistName = aPersistName.copy( sURL.getLength() ) );
+                xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PersistName" ) ), aAny );
             }
         }
 
