@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:12:27 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ TabDialog DLG_ENV
                 Text[ korean ] = "ºÀÅõ";
                 Text[ turkish ] = "Zarf";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sobre";
             };
             PageItem
             {
@@ -139,6 +140,7 @@ TabDialog DLG_ENV
                 Text[ chinese_traditional ] = "®æ¦¡";
                 Text[ turkish ] = "Format";
                 Text[ arabic ] = "ÇáÊäÓíÞ";
+                Text[ catalan ] = "Formato";
             };
             PageItem
             {
@@ -167,6 +169,7 @@ TabDialog DLG_ENV
                 Text[ korean ] = "ÇÁ¸°ÅÍ";
                 Text[ turkish ] = "Yazýcý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Impresora";
             };
         };
     };
@@ -197,6 +200,7 @@ TabDialog DLG_ENV
         Text[ korean ] = "»ðÀÔ(~I)";
         Text[ turkish ] = "~Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~nsertar";
     };
     String ST_CHANGE
     {
@@ -225,6 +229,7 @@ TabDialog DLG_ENV
         Text[ korean ] = "¼öÁ¤(~M)";
         Text[ turkish ] = "D~eðiþtir";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Modificar";
     };
     Text[ chinese_simplified ] = "ÐÅ·â";
     Text[ russian ] = "Êîíâåðò";
@@ -236,6 +241,7 @@ TabDialog DLG_ENV
     Text[ korean ] = "ºÀÅõ";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sobre";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -272,6 +278,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "¹Þ´Â »ç¶÷(~E)";
         Text[ turkish ] = "Alýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Destinatario";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -311,6 +318,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
         Text[ turkish ] = "Veritabaný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Base de datos";
     };
     ListBox LB_DATABASE
     {
@@ -345,6 +353,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "Ç¥";
         Text[ turkish ] = "Tablo";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tabla";
     };
     ListBox LB_TABLE
     {
@@ -389,6 +398,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå(~D)";
         Text[ turkish ] = "Veritabaný alaný";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Campo base de datos";
     };
     ListBox LB_DBFIELD
     {
@@ -426,6 +436,7 @@ TabPage TP_ENV_ENV
         Text[ korean ] = "º¸³½ »ç¶÷(~S)";
         Text[ turkish ] = "Gönderen";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "R~emitente";
     };
     MultiLineEdit EDT_SEND
     {
@@ -471,4 +482,5 @@ String STR_DOC_TITLE
     Text[ korean ] = "ºÀÅõ";
     Text[ turkish ] = "Zarf";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sobre";
 };
