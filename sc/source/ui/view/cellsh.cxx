@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:57:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,8 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-//#include <sfx2/objitem.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/langitem.hxx>
 
@@ -498,7 +499,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     // removed: SID_BORDER_OBJECT (old Basic)
 
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    BOOL bOle = pTabViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
+    BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     SfxApplication* pSfxApp = SFX_APP();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
