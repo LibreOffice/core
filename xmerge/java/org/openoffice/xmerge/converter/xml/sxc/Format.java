@@ -67,11 +67,16 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class Format implements Cloneable {
 
-    /**  Alignment Constants. */
+    /**  Horizontal Alignment Constants. */
     final public static int RIGHT_ALIGN     = 0x01;
     final public static int CENTER_ALIGN    = 0x02;
     final public static int LEFT_ALIGN      = 0x03;
     final public static int JUST_ALIGN      = 0x04;
+
+    /**  Vertical Alignment Constants. */
+    final public static int TOP_ALIGN       = 0x01;
+    final public static int MIDDLE_ALIGN    = 0x02;
+    final public static int BOTTOM_ALIGN    = 0x03;
 
     /** Indicates <i>bold</i> text. */
     final public static int BOLD        = 0x01;
@@ -94,6 +99,7 @@ public class Format implements Cloneable {
     final public static int WORD_WRAP       = 0x400;
 
     private int align;
+    private int vertAlign;
     private String category;
     private String value;
     private String formatSpecifier;
@@ -119,7 +125,8 @@ public class Format implements Cloneable {
         value = "";
         formatSpecifier = "";
         fontName = "";
-        align = 0;
+        align = LEFT_ALIGN;
+        vertAlign = BOTTOM_ALIGN;
         attributes = 0;
         foreground = Color.black;
         background = Color.white;
@@ -155,6 +162,7 @@ public class Format implements Cloneable {
 
         fontName = fmt.getFontName();
         align = fmt.getAlign();
+        vertAlign = fmt.getVertAlign();
         foreground = fmt.getForeground();
         background = fmt.getBackground();
     }
@@ -170,7 +178,8 @@ public class Format implements Cloneable {
        decimalPlaces = 0;
        attributes = 0;
        mask = 0;
-       align = 0;
+       align = LEFT_ALIGN;
+       vertAlign = BOTTOM_ALIGN;
        fontName = "";
        foreground = Color.black;
        background = Color.white;
@@ -342,6 +351,26 @@ public class Format implements Cloneable {
      public int getFontSize() {
          return sizeInPoints;
      }
+
+      /**
+      *  Set the alignmen used for this cell.
+      *
+      *  @param  fontName  The name of the font.
+      */
+     public void setVertAlign(int vertAlign) {
+         this.vertAlign = vertAlign;
+     }
+
+
+     /**
+      *  Get the alignment used for this cell.
+      *
+      *  @return  The font name.
+      */
+     public int getVertAlign() {
+         return vertAlign;
+     }
+
       /**
       *  Set the alignmen used for this cell.
       *
@@ -455,6 +484,9 @@ public class Format implements Cloneable {
         }
 
         if (rhs.align!= align)
+                return false;
+
+        if (rhs.vertAlign!= vertAlign)
                 return false;
 
         return true;

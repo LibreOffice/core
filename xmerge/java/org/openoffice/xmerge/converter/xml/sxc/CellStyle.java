@@ -271,7 +271,7 @@ public class CellStyle extends Style implements Cloneable {
             fmt.setBackground(parseColorString(value));
 
         else if (attr.equals("fo:text-align")) {
-            fmt.setAlign(Format.RIGHT_ALIGN);
+            // fmt.setAlign(Format.RIGHT_ALIGN);
             if(value.equals("center")) {
                 fmt.setAlign(Format.CENTER_ALIGN);
             } else if(value.equals("end")) {
@@ -280,11 +280,23 @@ public class CellStyle extends Style implements Cloneable {
                 fmt.setAlign(Format.LEFT_ALIGN);
             }
         }
+
+        else if (attr.equals("fo:vertical-align")) {
+            // fmt.setVertAlign(Format.TOP_ALIGN);
+            if(value.equals("top")) {
+                fmt.setVertAlign(Format.TOP_ALIGN);
+            } else if(value.equals("middle")) {
+                fmt.setVertAlign(Format.MIDDLE_ALIGN);
+            } else if(value.equals("bottom")) {
+                fmt.setVertAlign(Format.BOTTOM_ALIGN);
+            }
+        }
+
         else if (attr.equals("fo:border")) {
-            fmt.setAttribute(Format.TOP_BORDER, true);
-            fmt.setAttribute(Format.BOTTOM_BORDER, true);
-            fmt.setAttribute(Format.LEFT_BORDER, true);
-            fmt.setAttribute(Format.RIGHT_BORDER, true);
+            fmt.setAttribute(Format.TOP_BORDER, !value.equals("none"));
+            fmt.setAttribute(Format.BOTTOM_BORDER, !value.equals("none"));
+            fmt.setAttribute(Format.LEFT_BORDER, !value.equals("none"));
+            fmt.setAttribute(Format.RIGHT_BORDER, !value.equals("none"));
         }
         else if (attr.equals("fo:border-top")) {
                 fmt.setAttribute(Format.TOP_BORDER, !value.equals("none"));
@@ -355,6 +367,10 @@ public class CellStyle extends Style implements Cloneable {
             Format parentFormat = parentStyle.getFormat();
             Format resolvedFormat = resolved.getFormat();
 
+            if ((fmt.getAlign() == Format.LEFT_ALIGN) && (parentFormat.getAlign() != Format.LEFT_ALIGN))
+                resolvedFormat.setAlign(parentFormat.getAlign());
+            if ((fmt.getVertAlign() == Format.BOTTOM_ALIGN) && (parentFormat.getVertAlign() != Format.BOTTOM_ALIGN))
+                resolvedFormat.setVertAlign(parentFormat.getVertAlign());
             if ((fmt.getFontSize() == 0) && (parentFormat.getFontSize() != 0))
                 resolvedFormat.setFontSize(parentFormat.getFontSize());
             if ((fmt.getFontName() == null) && (parentFormat.getFontName() != null))
@@ -435,6 +451,15 @@ public class CellStyle extends Style implements Cloneable {
 
         if (fmt.getAlign()==Format.CENTER_ALIGN)
             node.setAttribute("fo:text-align", "center");
+
+         if (fmt.getVertAlign()==Format.TOP_ALIGN)
+            node.setAttribute("fo:vertical-align", "top");
+
+        if (fmt.getVertAlign()==Format.MIDDLE_ALIGN)
+            node.setAttribute("fo:vertical-align", "middle");
+
+        if (fmt.getVertAlign()==Format.BOTTOM_ALIGN)
+            node.setAttribute("fo:vertical-align", "bottom");
 
         if (fmt.getAttribute(Format.BOLD))
             node.setAttribute("fo:font-weight", "bold");

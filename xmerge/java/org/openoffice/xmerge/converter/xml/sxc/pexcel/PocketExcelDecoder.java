@@ -442,6 +442,7 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         fmt.setAttribute(Format.UNDERLINE, fd.isUnderline());
 
         fmt.setAlign(xf.getAlign());
+        fmt.setVertAlign(xf.getVertAlign());
         fmt.setAttribute(Format.WORD_WRAP, xf.isWordWrap());
 
         fmt.setAttribute(Format.TOP_BORDER, xf.isBorder(ExtendedFormat.TOP_BORDER));

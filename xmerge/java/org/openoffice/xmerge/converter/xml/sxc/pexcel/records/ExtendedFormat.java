@@ -97,6 +97,11 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     public static final int CENTER_ALIGN    = 0x02;
     public static final int RIGHT_ALIGN     = 0x03;
 
+    // Vertical Alignment Styles
+    public static final int TOP_ALIGN       = 0x10;
+    public static final int MIDDLE_ALIGN    = 0x20;
+    public static final int BOTTOM_ALIGN    = 0x30;
+
     public static final int WORD_WRAP       = 0x08;
 
     /**
@@ -132,10 +137,11 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
         this.fattributes    = new byte[] {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
         this.fBaseAttr      = new byte[] {(byte)0x02,(byte)0x00};
 
-        this.fTextAttr      = new byte[] {(byte)0x30, (byte)0x00};
+        this.fTextAttr      = new byte[] {(byte)0x00, (byte)0x00};
 
         int align = fmt.getAlign();
 
+        // Horizontal alignment
         if(align==Format.CENTER_ALIGN) {
             fTextAttr[0] |= CENTER_ALIGN;
         } else if(align==Format.LEFT_ALIGN) {
@@ -144,6 +150,19 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
             fTextAttr[0] |= RIGHT_ALIGN;
         } else {
             fTextAttr[0] |= NORMAL_ALIGN;
+        }
+
+        int vertAlign = fmt.getVertAlign();
+
+        // Vertical alignment
+        if(vertAlign==Format.TOP_ALIGN) {
+            fTextAttr[0] |= TOP_ALIGN;
+        } else if(vertAlign==Format.BOTTOM_ALIGN) {
+            fTextAttr[0] |= BOTTOM_ALIGN;
+        } else if(vertAlign==Format.MIDDLE_ALIGN) {
+            fTextAttr[0] |= MIDDLE_ALIGN;
+        } else {
+            fTextAttr[0] |= BOTTOM_ALIGN;
         }
 
         if(fmt.getAttribute(Format.WORD_WRAP)) {
@@ -202,30 +221,47 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     }
 
     /**
+     * Get the Vertical alignment for this Format
+     *
+     * @return the alignment
+     */
+    public int getVertAlign() {
+
+        int mask = MIDDLE_ALIGN | BOTTOM_ALIGN | TOP_ALIGN;
+        int masked = fTextAttr[0] & mask;
+
+        if(masked == MIDDLE_ALIGN)
+            return Format.MIDDLE_ALIGN;
+
+        if(masked == BOTTOM_ALIGN)
+            return Format.BOTTOM_ALIGN;
+
+        if(masked == TOP_ALIGN)
+            return Format.TOP_ALIGN;
+
+        return Format.BOTTOM_ALIGN;
+    }
+
+    /**
      * Get the alignment for this Format
      *
      * @return the alignment
      */
     public int getAlign() {
 
-        int align;
+        int mask = LEFT_ALIGN | CENTER_ALIGN | RIGHT_ALIGN;
+        int masked = fTextAttr[0] & mask;
 
-        switch(fTextAttr[0]) {
-            case 0x31:
-                align = Format.LEFT_ALIGN;
-                break;
-            case 0x32:
-                align = Format.CENTER_ALIGN;
-                break;
-            case 0x33:
-                align = Format.RIGHT_ALIGN;
-                break;
-            default:
-                align = Format.LEFT_ALIGN;
-                break;
-        }
+        if(masked == MIDDLE_ALIGN)
+            return Format.LEFT_ALIGN;
 
-        return align;
+        if(masked == CENTER_ALIGN)
+            return Format.CENTER_ALIGN;
+
+        if(masked == RIGHT_ALIGN)
+            return Format.RIGHT_ALIGN;
+
+        return Format.LEFT_ALIGN;
     }
 
     /**
@@ -255,6 +291,9 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     public boolean compareTo(ExtendedFormat rhs) {
 
         if(this.getTextAttr() != rhs.getTextAttr())
+            return false;
+
+        if(this.getVertAlign() != rhs.getVertAlign())
             return false;
 
         if(this.getAlign() != rhs.getAlign())
