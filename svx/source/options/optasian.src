@@ -1,0 +1,202 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optasian.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: os $ $Date: 2001-01-09 14:21:48 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <optasian.hrc>
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include "dialogs.hrc"
+
+TabPage RID_SVXPAGE_ASIAN_LAYOUT
+{
+    HelpId = HID_OPTIONS_ASIAN_LAYOUT ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Text = "Proxy" ;
+    Text [ English ] = "Proxy" ;
+    GroupBox GB_KERNING
+    {
+        Pos = MAP_APPFONT ( 6, 3 ) ;
+        Size = MAP_APPFONT ( 251 , 39 ) ;
+        Text = "Unterschneidung" ;
+        Text [ English ] = "Kerning" ;
+    };
+    RadioButton RB_CHAR_KERNING
+    {
+        Pos = MAP_APPFONT ( 12, 13 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        Text = "Nur westliche Zeichen" ;
+        Text [ English ] = "Western characters only" ;
+    };
+    RadioButton RB_CHAR_PUNCT
+    {
+        Pos = MAP_APPFONT ( 12, 26 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        Text = "Westlicher Text und Interpunktion" ;
+        Text [ English ] = "Western text and punctuation" ;
+    };
+    GroupBox GB_CHAR_DIST
+    {
+        Pos = MAP_APPFONT ( 6, 45 ) ;
+        Size = MAP_APPFONT ( 251 , 52 ) ;
+        Text = "Zeichenabstand" ;
+        Text [ English ] = "Character distance" ;
+    };
+    RadioButton RB_NO_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 55 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        Text = "Keine Kompression" ;
+        Text [ English ] = "No compression" ;
+    };
+    RadioButton RB_PUNCT_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 68) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        Text = "Nur Interpunktion komprimieren" ;
+        Text [ English ] = "Compress punctuation only" ;
+    };
+    RadioButton RB_PUNCT_KANA_COMP
+    {
+        Pos = MAP_APPFONT ( 12, 81 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+        Text = "Interpunktion und japanische Kana komprimieren" ;
+        Text [ English ] = "Compress punctuation and japanese Kana" ;
+    };
+    GroupBox GB_START_END
+    {
+        Pos = MAP_APPFONT ( 6, 100 ) ;
+        Size = MAP_APPFONT ( 251 , 81 ) ;
+        Text = "Anfangs- und Endzeichen" ;
+        Text [ English ] = "Start and end characters" ;
+    };
+    RadioButton RB_STANDARD
+    {
+        Pos = MAP_APPFONT ( 12, 110 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
+        Text = "Standard" ;
+        Text [ English ] = "Standard" ;
+    };
+    RadioButton RB_CUSTOM
+    {
+        Pos = MAP_APPFONT ( 125, 110 ) ;
+        Size = MAP_APPFONT ( 110 , 12 ) ;
+        Text = "Benutzerdefiniert" ;
+        Text [ English ] = "Custom" ;
+    };
+    FixedText FT_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 123 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Sprache" ;
+        Text [ English ] = "Language" ;
+    };
+    ListBox LB_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 65 , 122 ) ;
+        Size = MAP_APPFONT ( 80 , 48 ) ;
+        Border = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Chinesisch Taiwan" ; > ;
+            < "Japanisch" ; > ;
+        };
+        StringList [ English ] =
+        {
+            < "Chinese Taiwan" ; > ;
+            < "Japanese" ; > ;
+        };
+    };
+    FixedText FT_START
+    {
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Kein Zeilenbeginn:" ;
+        Text [ English ] = "No start of line:" ;
+    };
+    Edit ED_START
+    {
+        Pos = MAP_APPFONT ( 65 , 135 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+    };
+    FixedText FT_END
+    {
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "Kein Zeilenende:" ;
+        Text [ English ] = "No end of line:" ;
+    };
+    Edit ED_END
+    {
+        Pos = MAP_APPFONT ( 65 , 148 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+    };
+    FixedText FT_HINT
+    {
+        Pos = MAP_APPFONT ( 12 , 161 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
+        Text = "Ohne benutzerdefinierte Zeilenwechselzeichen" ;
+        Text [ English ] = "Without user-defined line break symbols" ;
+    };
+};
+

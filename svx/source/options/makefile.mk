@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tl $ $Date: 2000-12-07 09:11:52 $
+#   last change: $Author: os $ $Date: 2001-01-09 14:22:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ CFLAGS+=-DDG_DLL
 #BMP_IN=$(PRJ)$/win/res
 
 CXXFILES = \
+        optasian.cxx		\
         optpath.cxx		\
         optdict.cxx		\
         optitems.cxx	\
@@ -106,6 +107,7 @@ CXXFILES = \
         optextbr.cxx
 
 SRCFILES =  \
+        optasian.src	\
         optgenrl.src	\
         optspell.src	\
         optdict.src		\
@@ -118,6 +120,7 @@ SRCFILES =  \
         optextbr.src
 
 SLOFILES=	\
+        $(SLO)$/optasian.obj	\
         $(SLO)$/optpath.obj	\
         $(SLO)$/optdict.obj	\
         $(SLO)$/optitems.obj	\
