@@ -1,0 +1,14 @@
+mkdir: %_DEST%\inc%_EXT%\mozilla
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\md
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\private
+
+..\%__SRC%\inc\mozilla\* %_DEST%\inc%_EXT%\mozilla
+..\%__SRC%\inc\mozilla\nspr\* %_DEST%\inc%_EXT%\mozilla\nspr
+..\%__SRC%\inc\mozilla\nspr\md\* %_DEST%\inc%_EXT%\mozilla\nspr\md
+..\%__SRC%\inc\mozilla\nspr\obsolete\* %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
+..\%__SRC%\inc\mozilla\nspr\private\* %_DEST%\inc%_EXT%\mozilla\nspr\private
+..\%__SRC%\lib\* %_DEST%\lib%_EXT%
+..\%__SRC%\bin\*.zip %_DEST%\bin%_EXT%
+
