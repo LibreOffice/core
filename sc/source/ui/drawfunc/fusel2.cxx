@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:27:24 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
     SdrObject* pObject = aIter.Next();
     while (pObject)
     {
-        if ( pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
+        if ( pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj)
             && pObject->GetLogicRect().IsInside( rPos ) )
         {
             pFoundObj = pObject;
@@ -171,30 +171,15 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
         pObject = aIter.Next();
     }
 
+
     if ( pFoundObj )
     {
-        pViewShell->GetViewData()->GetDispatcher().
-            Execute(SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
-        // now get the created FuText and put in EditMode
-        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-        if ( pPoor && pPoor->GetSlotID() == SID_DRAW_NOTEEDIT )  // no RTTI
-        {
-            FuText* pText = (FuText*)pPoor;
-            Point aPixel = pWindow->LogicToPixel( rPos );
-            pText->SetInEditMode( pFoundObj, &aPixel );
-        }
+        SdrLayer* pLockLayer = NULL;
 
-        //  repaint outliner view with background now
-
-        OutlinerView* pOlView = pView->GetTextEditOutlinerView();
-        if ( pOlView && pOlView->GetWindow() == pWindow )
-        {
-            Rectangle aEditRect = pOlView->GetOutputArea();
-            pWindow->SetFillColor( pOlView->GetBackgroundColor() );
-            pWindow->SetLineColor();
-            pWindow->DrawRect( aEditRect );
-            pOlView->Paint( aEditRect );
-        }
+        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
+        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+        if (pLockLayer)
+            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
     }
 
     return (pFoundObj != NULL);
