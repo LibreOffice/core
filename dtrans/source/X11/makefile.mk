@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:45:53 $
+#   last change: $Author: hr $ $Date: 2004-11-09 16:41:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,7 +96,8 @@ SLOFILES=\
     $(SLO)$/X11_selection.obj		\
     $(SLO)$/X11_droptarget.obj		\
     $(SLO)$/X11_service.obj			\
-    $(SLO)$/bmp.obj
+    $(SLO)$/bmp.obj					\
+    $(SLO)$/config.obj
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -107,6 +108,7 @@ SHL1STDLIBS= $(CPPUHELPERLIB)
 .ENDIF
 
 SHL1STDLIBS+= \
+        $(UNOTOOLSLIB)	\
         $(CPPULIB) 	\
         $(SALLIB)	\
         -lX11
