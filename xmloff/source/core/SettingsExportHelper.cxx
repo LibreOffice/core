@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 09:09:46 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -166,6 +169,12 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                 rAny >>= aIndexed;
                 exportIndexAccess(aIndexed, rName);
             }
+            else if (aType.equals(getCppuType( (util::DateTime *)0 ) ) )
+            {
+                util::DateTime aDateTime;
+                rAny >>= aDateTime;
+                exportDateTime(aDateTime, rName);
+            }
             else
                 DBG_ERROR("this type is not implemented now");
         }
@@ -178,7 +187,7 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_boolean);
-    SvXMLElementExport aBoolElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aBoolElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rtl::OUString sValue;
     if (bValue)
         sValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true));
@@ -192,7 +201,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUS
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_short);
-    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aShortElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, sal_Int32(nValue));
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -203,7 +212,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const rtl::OUStr
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_int);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertNumber(sBuffer, nValue);
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -214,7 +223,7 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const rtl::OUSt
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_long);
-    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aIntElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rtl::OUString sValue(rtl::OUString::valueOf(nValue));
     rExport.GetDocHandler()->characters(sValue);
 }
@@ -224,7 +233,7 @@ void XMLSettingsExportHelper::exportDouble(const double fValue, const rtl::OUStr
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_double);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rtl::OUStringBuffer sBuffer;
     SvXMLUnitConverter::convertDouble(sBuffer, fValue);
     rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
@@ -235,8 +244,19 @@ void XMLSettingsExportHelper::exportString(const rtl::OUString& sValue, const rt
     DBG_ASSERT(rName.getLength(), "no name");
     rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
     rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_string);
-    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_False, sal_False);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
     rExport.GetDocHandler()->characters(sValue);
+}
+
+void XMLSettingsExportHelper::exportDateTime(const util::DateTime& aValue, const rtl::OUString& rName) const
+{
+    DBG_ASSERT(rName.getLength(), "no name");
+    rExport.AddAttribute(XML_NAMESPACE_CONFIG, sXML_name, rName);
+    rExport.AddAttributeASCII(XML_NAMESPACE_CONFIG, sXML_type, sXML_datetime);
+    rtl::OUStringBuffer sBuffer;
+    SvXMLUnitConverter::convertDateTime(sBuffer, aValue);
+    SvXMLElementExport aDoubleElem(rExport, XML_NAMESPACE_CONFIG, sXML_config_item, sal_True, sal_False);
+    rExport.GetDocHandler()->characters(sBuffer.makeStringAndClear());
 }
 
 void XMLSettingsExportHelper::exportSequencePropertyValue(
