@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:39 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 12:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ public:
     void        ExecClpbrd(SfxRequest &rReq);
     void        StateClpbrd(SfxItemSet &rSet);
     void        StateInsert(SfxItemSet &rSet);
+    void        ExecTransliteration(SfxRequest &);
 
     void        Init();
     void        StateStatusline(SfxItemSet &rSet);

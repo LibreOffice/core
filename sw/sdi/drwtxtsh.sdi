@@ -2,7 +2,7 @@
 
     $Workfile:   drwtxtsh.sdi  $
 
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/drwtxtsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/drwtxtsh.sdi,v 1.2 2001-03-09 12:00:37 jp Exp $
 
     Beschreibung:   IDL - File DrawTextshell fuer Sw3
 
@@ -353,6 +353,42 @@ interface TextDrawText : Selection
     [
         StateMethod = StateInsert ;
     ]
+    SID_TRANSLITERATE_UPPER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_LOWER
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_HALFWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_FULLWIDTH
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_HIRAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_TRANSLITERATE_KATAGANA
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 }
 
 interface TextDrawFont : Object
@@ -393,6 +429,9 @@ shell SwDrawTextShell
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:30  hr
+    initial import
+
     Revision 1.72  2000/05/26 07:06:16  os
     old SW Basic API Slots removed
 

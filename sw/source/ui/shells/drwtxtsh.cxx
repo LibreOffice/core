@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-21 17:38:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-09 12:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _XDEF_HXX //autogen
 #include <xdef.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
+#include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 
 #ifndef _SWTYPES_HXX
@@ -600,11 +603,47 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
     }
 }
 
+void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
+{
+    using namespace ::com::sun::star::i18n;
+    {
+        sal_uInt32 nMode = 0;
+
+        switch( rReq.GetSlot() )
+        {
+        case SID_TRANSLITERATE_UPPER:
+            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            break;
+        case SID_TRANSLITERATE_LOWER:
+            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            break;
+
+        case SID_TRANSLITERATE_HALFWIDTH:
+            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+            break;
+        case SID_TRANSLITERATE_FULLWIDTH:
+            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+            break;
+
+        case SID_TRANSLITERATE_HIRAGANA:
+            nMode = TransliterationModules_KATAKANA_HIRAGANA;
+            break;
+        case SID_TRANSLITERATE_KATAGANA:
+            nMode = TransliterationModules_HIRAGANA_KATAKANA;
+            break;
+
+        default:
+            ASSERT(!this, "falscher Dispatcher");
+        }
+
+        if( nMode )
+            pOLV->TransliterateText( nMode );
+    }
+}
+
 /*--------------------------------------------------------------------
     Beschreibung:   Sonderzeichen einfuegen (siehe SDraw: FUBULLET.CXX)
  --------------------------------------------------------------------*/
-
-
 
 void SwDrawTextShell::InsertSymbol()
 {
@@ -673,6 +712,9 @@ void SwDrawTextShell::InsertSymbol()
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/21 17:38:28  jp
+      use new function GetWhichOfScript/GetScriptTypeOfLanguage
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 
