@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTemplateInstance.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:17 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 21:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,11 @@
 
 /** implemented by objects that are instances of a named template.
 
-    <p> Template names are similar service names, but apply to structure and
+    <p> Template names are similar to service names, but apply to structure and
         content, rather than to type.
     </p>
-    <p> Often a template description can be retrieved from a repository, and then be
-        interpreted by a factory object. So templates provide a means to build
+    <p> Often a template description can be retrieved from a repository and then be
+        interpreted by a factory object. Templates provide a means to build
         new kinds of objects dynamically.
     </p>
 
@@ -101,6 +101,9 @@ interface XTemplateInstance: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 16:41:17  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2001/03/01 01:19:50  arellano
     Edited by Dennis
 
