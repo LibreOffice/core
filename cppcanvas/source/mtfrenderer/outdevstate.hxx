@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdevstate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:25:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
 #endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 
 
 namespace cppcanvas
@@ -122,7 +125,7 @@ namespace cppcanvas
 
                 xFont(),
                 transform(),
-                fontTransform(),
+                fontRotation(0.0),
 
                 textEmphasisMarkStyle(EMPHASISMARK_NONE),
                 pushFlags(PUSH_ALL),
@@ -132,6 +135,7 @@ namespace cppcanvas
                 textReliefStyle(RELIEF_NONE),
                 textUnderlineStyle(UNDERLINE_NONE),
                 textStrikeoutStyle(STRIKEOUT_NONE),
+                textReferencePoint(ALIGN_BASELINE),
 
                 isTextOutlineModeSet( false ),
                 isTextEffectShadowSet( false ),
@@ -143,44 +147,44 @@ namespace cppcanvas
                 isTextLineColorSet( false )
             {
                 transform.identity();
-                fontTransform.identity();
             }
 
-            ::basegfx::B2DPolyPolygon                                                               clip;
-            ::Rectangle                                                                             clipRect;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >         xClipPoly;
+            ::basegfx::B2DPolyPolygon                                                           clip;
+            ::Rectangle                                                                         clipRect;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >     xClipPoly;
 
-            ::com::sun::star::uno::Sequence< double >                                               lineColor;
-            ::com::sun::star::uno::Sequence< double >                                               fillColor;
-            ::com::sun::star::uno::Sequence< double >                                               textColor;
-            ::com::sun::star::uno::Sequence< double >                                               textFillColor;
-            ::com::sun::star::uno::Sequence< double >                                               textLineColor;
+            ::com::sun::star::uno::Sequence< double >                                           lineColor;
+            ::com::sun::star::uno::Sequence< double >                                           fillColor;
+            ::com::sun::star::uno::Sequence< double >                                           textColor;
+            ::com::sun::star::uno::Sequence< double >                                           textFillColor;
+            ::com::sun::star::uno::Sequence< double >                                           textLineColor;
 
             /** Current font.
 
                 @attention Beware, this member can be NULL, and
                 nevertheless text output is generated.
              */
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >    xFont;
-            ::basegfx::B2DHomMatrix                                                                 transform;
-            ::basegfx::B2DHomMatrix                                                                 fontTransform;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >        xFont;
+            ::basegfx::B2DHomMatrix                                                             transform;
+            double                                                                              fontRotation;
 
-            sal_uInt16                                                                              textEmphasisMarkStyle;
-            sal_uInt16                                                                              pushFlags;
-            sal_Int8                                                                                textDirection;
-            sal_Int8                                                                                textAlignment;
-            sal_Int8                                                                                textReliefStyle;
-            sal_Int8                                                                                textUnderlineStyle;
-            sal_Int8                                                                                textStrikeoutStyle;
+            sal_uInt16                                                                          textEmphasisMarkStyle;
+            sal_uInt16                                                                          pushFlags;
+            sal_Int8                                                                            textDirection;
+            sal_Int8                                                                            textAlignment;
+            sal_Int8                                                                            textReliefStyle;
+            sal_Int8                                                                            textUnderlineStyle;
+            sal_Int8                                                                            textStrikeoutStyle;
+            TextAlign                                                                           textReferencePoint;
 
-            bool                                                                                    isTextOutlineModeSet;
-            bool                                                                                    isTextEffectShadowSet;
-            bool                                                                                    isTextWordUnderlineSet;
+            bool                                                                                isTextOutlineModeSet;
+            bool                                                                                isTextEffectShadowSet;
+            bool                                                                                isTextWordUnderlineSet;
 
-            bool                                                                                    isLineColorSet;
-            bool                                                                                    isFillColorSet;
-            bool                                                                                    isTextFillColorSet;
-            bool                                                                                    isTextLineColorSet;
+            bool                                                                                isLineColorSet;
+            bool                                                                                isFillColorSet;
+            bool                                                                                isTextFillColorSet;
+            bool                                                                                isTextLineColorSet;
         };
     }
 }
