@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-18 07:31:56 $
+ *  last change: $Author: jbu $ $Date: 2001-04-18 08:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,6 @@ void OWriterThread::insertReleaseRemoteCall(
               m_bEnterBlockingWait = sal_False;
         }
     }
-    fprintf( stderr , "%d\n" , m_lstReleaseCalls.size() );
 }
 
 /* The release calls for doubled interfaces
