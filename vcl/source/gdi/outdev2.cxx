@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:32:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,9 +112,6 @@
 #ifndef _SV_WINDOW_HXX
 #include <window.hxx>
 #endif
-#ifdef REMOTE_APPSERVER
-#include <rmoutdev.hxx>
-#endif
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif
@@ -129,8 +126,6 @@ DBG_NAMEEX( OutputDevice );
 // -----------
 // - Defines -
 // -----------
-
-#ifndef REMOTE_APPSERVER
 
 #define OUTDEV_INIT()                       \
 {                                           \
@@ -148,24 +143,7 @@ DBG_NAMEEX( OutputDevice );
         return;                             \
 }
 
-#else // !REMOTE_APPSERVER
-
-#define OUTDEV_INIT()                                           \
-{                                                               \
-    if ( !IsDeviceOutputNecessary() )                           \
-        return;                                                 \
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();    \
-    if ( !pGraphics )                                           \
-        return;                                                 \
-}
-
-#endif // REMOTE_APPSERVER
-
-#ifndef REMOTE_APPSERVER
 #define TwoRect     SalTwoRect
-#else
-#define TwoRect     RemoteTwoRect
-#endif
 
 // -------------
 // - externals -
@@ -241,11 +219,7 @@ ULONG ImplAdjustTwoRect( TwoRect& rTwoRect, const Size& rSizePix )
 void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoidPosAry )
 {
     TwoRect*            pPosAry = (TwoRect*)pVoidPosAry;
-#ifndef REMOTE_APPSERVER
     SalGraphics*        pGraphics2;
-#else
-    ImplServerGraphics* pGraphics2;
-#endif
 
     if ( pPosAry->mnSrcWidth && pPosAry->mnSrcHeight && pPosAry->mnDestWidth && pPosAry->mnDestHeight )
     {
@@ -256,13 +230,11 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
             if ( (GetOutDevType() != pSrcDev->GetOutDevType()) ||
                  (GetOutDevType() != OUTDEV_WINDOW) )
             {
-#ifndef REMOTE_APPSERVER
                 if ( !pSrcDev->mpGraphics )
                 {
                     if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
                         return;
                 }
-#endif
                 pGraphics2 = pSrcDev->mpGraphics;
             }
             else
@@ -271,16 +243,13 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
                     pGraphics2 = NULL;
                 else
                 {
-#ifndef REMOTE_APPSERVER
                     if ( !pSrcDev->mpGraphics )
                     {
                         if ( !((OutputDevice*)pSrcDev)->ImplGetGraphics() )
                             return;
                     }
-#endif
                     pGraphics2 = pSrcDev->mpGraphics;
 
-#ifndef REMOTE_APPSERVER
                     if ( !mpGraphics )
                     {
                         if ( !ImplGetGraphics() )
@@ -288,7 +257,6 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
                     }
                     DBG_ASSERT( mpGraphics && pSrcDev->mpGraphics,
                                 "OutputDevice::DrawOutDev(): We need more than one Graphics" );
-#endif
                 }
             }
         }
@@ -526,17 +494,10 @@ void OutputDevice::CopyArea( const Point& rDestPt,
                                                                aPosAry.mnDestY-aPosAry.mnSrcY,
                                                                FALSE );
 
-#ifndef REMOTE_APPSERVER
                 mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
                                       aPosAry.mnSrcX, aPosAry.mnSrcY,
                                       aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
                                       SAL_COPYAREA_WINDOWINVALIDATE, this );
-#else
-                mpGraphics->CopyArea( aPosAry.mnDestX, aPosAry.mnDestY,
-                                      aPosAry.mnSrcX, aPosAry.mnSrcY,
-                                      aPosAry.mnSrcWidth, aPosAry.mnSrcHeight,
-                                      COPYAREA_WINDOWINVALIDATE );
-#endif
             }
             else
             {
@@ -567,7 +528,6 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
     mbMap = FALSE;
     SetRasterOp( ROP_OVERPAINT );
 
-#ifndef REMOTE_APPSERVER
     if ( !IsDeviceOutputNecessary() )
         return;
 
@@ -576,24 +536,12 @@ void OutputDevice::ImplDrawFrameDev( const Point& rPt, const Point& rDevPt, cons
         if ( !ImplGetGraphics() )
             return;
     }
-#else
-    if ( !IsDeviceOutputNecessary() )
-        return;
-
-#endif
 
     // ClipRegion zuruecksetzen
-#ifndef REMOTE_APPSERVER
     if ( rRegion.IsNull() )
         mpGraphics->ResetClipRegion();
     else
         ImplSelectClipRegion( mpGraphics, rRegion, this );
-#else
-    if ( rRegion.IsNull() )
-        mpGraphics->SetClipRegion();
-    else
-        mpGraphics->SetClipRegion( rRegion );
-#endif
 
     TwoRect aPosAry;
     aPosAry.mnSrcX       = rDevPt.X();
@@ -763,15 +711,7 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
             if ( nMirrFlags )
                 aBmp.Mirror( nMirrFlags );
 
-#ifndef REMOTE_APPSERVER
             mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
-#else
-            aBmp.ImplDrawRemote( this,
-                        Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                        Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
-                        Point( aPosAry.mnDestX, aPosAry.mnDestY ),
-                        Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ) );
-#endif
         }
     }
 }
@@ -915,13 +855,11 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
         }
         return;
     }
-#ifndef REMOTE_APPSERVER
     else if( rBitmapEx.IsAlpha() )
     {
         ImplDrawAlpha( aBmpEx.GetBitmap(), aBmpEx.GetAlpha(), rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
         return;
     }
-#endif
 
     if( !( !aBmpEx ) )
     {
@@ -940,7 +878,6 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
-#ifndef REMOTE_APPSERVER
 
             if( nMirrFlags )
                 aBmpEx.Mirror( nMirrFlags );
@@ -965,19 +902,6 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 if( mpAlphaVDev )
                     mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
             }
-
-#else
-
-            if( nMirrFlags )
-                aBmpEx.Mirror( nMirrFlags );
-
-            aBmpEx.ImplDrawRemote( this,
-                    Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                    Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
-                    Point( aPosAry.mnDestX, aPosAry.mnDestY ),
-                    Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ) );
-
-#endif
         }
     }
 }
@@ -1073,16 +997,13 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
 
     OUTDEV_INIT();
 
-#ifndef REMOTE_APPSERVER
     if ( OUTDEV_PRINTER == meOutDevType )
     {
         ImplPrintMask( rBitmap, rMaskColor, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
         return;
     }
-#endif
 
     const ImpBitmap* pImpBmp = rBitmap.ImplGetImpBitmap();
-
     if ( pImpBmp )
     {
         TwoRect aPosAry;
@@ -1102,7 +1023,6 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
         // check if output is necessary
         if( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
         {
-#ifndef REMOTE_APPSERVER
 
             if( nMirrFlags )
             {
@@ -1115,28 +1035,6 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
                 mpGraphics->DrawMask( &aPosAry, *pImpBmp->ImplGetSalBitmap(),
                                       ImplColorToSal( rMaskColor ), this );
 
-#else
-
-            if( nMirrFlags )
-            {
-                Bitmap aTmp( rBitmap );
-                aTmp.Mirror( nMirrFlags );
-                aTmp.ImplDrawRemoteMask( this,
-                    Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                    Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
-                    Point( aPosAry.mnDestX, aPosAry.mnDestY ),
-                    Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ),
-                    rMaskColor );
-            }
-            else
-                rBitmap.ImplDrawRemoteMask( this,
-                    Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
-                    Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
-                    Point( aPosAry.mnDestX, aPosAry.mnDestY ),
-                    Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ),
-                    rMaskColor );
-
-#endif
         }
     }
 }
@@ -1153,13 +1051,10 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     long    nWidth = ImplLogicWidthToDevicePixel( rSize.Width() );
     long    nHeight = ImplLogicHeightToDevicePixel( rSize.Height() );
 
-#ifndef REMOTE_APPSERVER
     if ( mpGraphics || ( (OutputDevice*) this )->ImplGetGraphics() )
-#endif
     {
         if ( nWidth && nHeight )
         {
-#ifndef REMOTE_APPSERVER
             Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
             BOOL        bClipped = FALSE;
 
@@ -1239,9 +1134,6 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
                     aBmp.ImplSetImpBitmap( pImpBmp );
                 }
             }
-#else
-            aBmp.ImplGetRemoteBmp( (OutputDevice*) this, Point( nX, nY ), Size( nWidth, nHeight ) );
-#endif
         }
     }
 
@@ -1294,7 +1186,6 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
 
     Color aColor;
 
-#ifndef REMOTE_APPSERVER
     if ( mpGraphics || ((OutputDevice*)this)->ImplGetGraphics() )
     {
         if ( mbInitClipRegion )
@@ -1310,16 +1201,6 @@ Color OutputDevice::GetPixel( const Point& rPt ) const
             aColor.SetBlue( SALCOLOR_BLUE( aSalCol ) );
         }
     }
-#else // REMOTE_APPSERVER
-    ImplServerGraphics* pGraphics = ( (OutputDevice*) this )->ImplGetServerGraphics();
-    if( pGraphics )
-    {
-        const long nX = ImplLogicXToDevicePixel( rPt.X() );
-        const long nY = ImplLogicYToDevicePixel( rPt.Y() );
-        aColor = pGraphics->GetPixel( Point( nX, nY ) );
-    }
-#endif // REMOTE_APPSERVER
-
     return aColor;
 }
 
@@ -1334,7 +1215,6 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
 
     if( nSize )
     {
-#ifndef REMOTE_APPSERVER
         if ( mpGraphics || ((OutputDevice*)this)->ImplGetGraphics() )
         {
             if ( mbInitClipRegion )
@@ -1357,13 +1237,6 @@ Color* OutputDevice::GetPixel( const Polygon& rPts ) const
                 }
             }
         }
-#else // REMOTE_APPSERVER
-        ImplServerGraphics* pGraphics = ( (OutputDevice*) this )->ImplGetServerGraphics();
-        if( pGraphics )
-        {
-            pColors = pGraphics->GetPixel( ImplLogicToDevicePixel( rPts ) );
-        }
-#endif // REMOTE_APPSERVER
     }
 
     return pColors;
@@ -1382,7 +1255,6 @@ void OutputDevice::DrawPixel( const Point& rPt )
     if ( !IsDeviceOutputNecessary() || !mbLineColor || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     Point aPt = ImplLogicToDevicePixel( rPt );
 
     // we need a graphics
@@ -1401,15 +1273,6 @@ void OutputDevice::DrawPixel( const Point& rPt )
         ImplInitLineColor();
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), this );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-    {
-        if ( mbInitLineColor )
-            ImplInitLineColor();
-        pGraphics->DrawPixel( ImplLogicToDevicePixel( rPt ) );
-    }
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );
@@ -1463,7 +1326,6 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
     if ( !IsDeviceOutputNecessary() || ImplIsColorTransparent( aColor ) || ImplIsRecordLayout() )
         return;
 
-#ifndef REMOTE_APPSERVER
     Point aPt = ImplLogicToDevicePixel( rPt );
 
     // we need a graphics
@@ -1479,11 +1341,6 @@ void OutputDevice::DrawPixel( const Point& rPt, const Color& rColor )
         return;
 
     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( aColor ), this );
-#else
-    ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-    if ( pGraphics )
-        pGraphics->DrawPixel( ImplLogicToDevicePixel( rPt ), aColor );
-#endif
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawPixel( rPt );
@@ -1512,7 +1369,6 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
             if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
                 return;
 
-#ifndef REMOTE_APPSERVER
             // we need a graphics
             if ( mpGraphics || ImplGetGraphics() )
             {
@@ -1528,13 +1384,6 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color* pColors )
                     mpGraphics->DrawPixel( aPt.X(), aPt.Y(), ImplColorToSal( pColors[ i ] ), this );
                 }
             }
-#else
-            ImplServerGraphics* pGraphics = ImplGetServerGraphics();
-            if ( pGraphics )
-            {
-                pGraphics->DrawPixel( ImplLogicToDevicePixel( rPts ), pColors );
-            }
-#endif
         }
     }
 
