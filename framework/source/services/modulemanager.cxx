@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:42:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ DEFINE_XTYPEPROVIDER_5(ModuleManager                 ,
 /*-----------------------------------------------
     04.12.2003 09:35
 -----------------------------------------------*/
-DEFINE_XSERVICEINFO_MULTISERVICE(ModuleManager                   ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(ModuleManager                   ,
                                  ::cppu::OWeakObject             ,
                                  SERVICENAME_MODULEMANAGER       ,
                                  IMPLEMENTATIONNAME_MODULEMANAGER)
