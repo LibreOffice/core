@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:50:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@ class SwVirtFlyDrawObj;
 class SwSpzFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
-// OD 01.08.2003 #110978#
-namespace objectpositioning
-{
-    class SwAnchoredObjectPosition;
-}
 
 #include <orntenum.hxx>
+
+// OD 2004-03-22 #i26791#
+#ifndef _ANCHOREDOBJECT_HXX
+#include <anchoredobject.hxx>
+#endif
 
 //Sucht ausgehend von pOldAnch einen Anker fuer Absatzgebundene Rahmen.
 //Wird beim Draggen von Absatzgebundenen Objekten zur Ankeranzeige sowie
@@ -91,18 +91,14 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove = TRUE );
 
 //allg. Basisklasse fuer alle Freifliegenden Rahmen
-class SwFlyFrm : public SwLayoutFrm
+// OD 2004-03-22 #i26791# - inherit also from <SwAnchoredFlyFrm>
+class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
     friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
     friend void AppendAllObjs( const SwSpzFrmFmts * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
-    //darf die Pos berechnen (lassen)
-    friend void lcl_MakeFlyPosition( SwFlyFrm *pFly );
-
-    // OD 01.08.2003 #110978# - access for calculation of position
-    friend class objectpositioning::SwAnchoredObjectPosition;
 
     void InitDrawObj( BOOL bNotify );   //Wird von den CToren gerufen.
     void FinitDrawObj();                //Wird vom CTor gerufen.
@@ -112,13 +108,11 @@ class SwFlyFrm : public SwLayoutFrm
 
 protected:
 
-    SwVirtFlyDrawObj *pDrawObj; // das Drawingobject zum Fly
-    SwFrm *pAnchor;             // An diesem LayoutFrm haengt der Frm, kann 0 sein
-
     SwFlyFrm *pPrevLink,        // Vorgaenger/Nachfolger fuer Verkettung mit
              *pNextLink;        // Textfluss
 
-    Point aRelPos;   //Die Relative Position zum Master
+    // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
+//    Point aRelPos;   //Die Relative Position zum Master
 
 private:
     BOOL bLocked    :1; //Cntnt-gebundene Flys muessen derart blockiert werden
@@ -161,9 +155,6 @@ protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
                                    const SwRect& rRect, PrepareHint eHint) = 0;
 
-    //Wird nur von SwXFrm::MakeAll() gerufen; wer es anders macht wird
-    //in einen Sack gesteckt und muss zwei Tage drin hocken bleiben.
-    virtual void MakeFlyPos();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
 
@@ -179,6 +170,8 @@ protected:
     SwFlyFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
 public:
+    // OD 2004-03-23 #i26791#
+    TYPEINFO();
 
     virtual ~SwFlyFrm();
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
@@ -201,10 +194,6 @@ public:
 
     BOOL FrmSizeChg( const SwFmtFrmSize & );
 
-    const SwFrm *GetAnchor() const { return pAnchor; }
-          SwFrm *GetAnchor() { return pAnchor; }
-          void   ChgAnchor( SwFrm *pNew ) { pAnchor = pNew; }
-
     SwFlyFrm *GetPrevLink() { return pPrevLink; }
     SwFlyFrm *GetNextLink() { return pNextLink; }
 
@@ -213,11 +202,11 @@ public:
 
     SwFlyFrm *FindChainNeighbour( SwFrmFmt &rFmt, SwFrm *pAnch = 0 );
 
-    const SwVirtFlyDrawObj *GetVirtDrawObj() const { return pDrawObj; }
-          SwVirtFlyDrawObj *GetVirtDrawObj()       { return pDrawObj; }
+    // OD 2004-03-24 #i26791#
+    const SwVirtFlyDrawObj* GetVirtDrawObj() const;
+    SwVirtFlyDrawObj *GetVirtDrawObj();
     void NotifyDrawObj();
 
-    const Point& GetCurRelPos() const { return aRelPos; }
     void ChgRelPos( const Point &rAbsPos );
     BOOL IsInvalid() const { return bInvalid; }
     void Invalidate() const { ((SwFlyFrm*)this)->bInvalid = TRUE; }
@@ -244,8 +233,11 @@ public:
     BOOL IsHeightClipped()  const   { return bHeightClipped; }
     BOOL IsWidthClipped()   const   { return bWidthClipped;  }
 
-    BOOL IsLowerOf( const SwLayoutFrm *pUpper ) const;
-    inline BOOL IsUpperOf( const SwFlyFrm *pLower ) const;
+    BOOL IsLowerOf( const SwLayoutFrm* pUpper ) const;
+    inline BOOL IsUpperOf( const SwFlyFrm& _rLower ) const
+    {
+        return _rLower.IsLowerOf( this );
+    }
 
     SwFrm *FindLastLower();
 
@@ -294,11 +286,15 @@ public:
     // OD 2004-02-12 #110582#-2
     void InsertColumns();
 
+    // OD 2004-03-23 #i26791# - pure virtual methods of base class <SwAnchoredObject>
+    virtual void MakeObjPos();
+    virtual void InvalidateObjPos();
+
+    virtual SwFrmFmt& GetFrmFmt();
+    virtual const SwFrmFmt& GetFrmFmt() const;
+
+    virtual const SwRect GetObjRect() const;
+    virtual void SetObjTop( const SwTwips _nTop );
+    virtual void SetObjLeft( const SwTwips _nLeft );
 };
-
-inline BOOL SwFlyFrm::IsUpperOf( const SwFlyFrm *pLower ) const
-{
-    return pLower->IsLowerOf( this );
-}
-
 #endif
