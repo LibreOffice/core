@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:48:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ namespace connectivity
 
         virtual ~OConnectionWrapper();
         void setDelegation(::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >& _rxProxyConnection,oslInterlockedCount& _rRefCount);
+        void setDelegation(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _xORB
+            ,oslInterlockedCount& _rRefCount);
         // must be called from derived classes
         void disposing();
     public:
