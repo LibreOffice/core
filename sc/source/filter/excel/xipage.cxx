@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:38:41 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #endif
 #ifndef SC_STLSHEET_HXX
 #include "stlsheet.hxx"
+#endif
+#ifndef SC_SCATTR_HXX
+#include "attrib.hxx"
 #endif
 
 #ifndef SC_XIHELPER_HXX
@@ -365,13 +368,10 @@ void XclImpPageSettings::CreatePageStyle()
         ScfTools::PutItem( rItemSet, SvxSizeItem( ATTR_PAGE_SIZE, maData.GetScPaperSize( GetPrinter() ) ), true );
     }
 
-    if( maData.mbValid )
-        if( !maData.mbFitToPages || !maData.mnFitToWidth || !maData.mnFitToHeight )
-            rItemSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, maData.mnScaling ) );
-
     if( maData.mbFitToPages )
-        if( sal_uInt16 nPages = maData.mnFitToWidth * maData.mnFitToHeight )
-            rItemSet.Put( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, nPages ) );
+        rItemSet.Put( ScPageScaleToItem( maData.mnFitToWidth, maData.mnFitToHeight ) );
+    else if( maData.mbValid )
+        rItemSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, maData.mnScaling ) );
 
     // *** header and footer ***
 
