@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obr $ $Date: 2002-04-30 15:02:18 $
+ *  last change: $Author: ssa $ $Date: 2002-05-10 07:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1633,7 +1633,10 @@ static void ImplHandleGetFocus( Window* pWindow )
     if ( !pWindow->mpFrameData->mnFocusId )
     {
         pWindow->mpFrameData->mbStartFocusState = !pWindow->mpFrameData->mbHasFocus;
-        Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        // #98888 execute focus event synchronously
+        //  otherwise its nearly impossible to actively set the focus into another system window
+        //Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        pWindow->ImplAsyncFocusHdl( NULL );
         Window* pFocusWin = pWindow->mpFrameData->mpFocusWin;
         if ( pFocusWin && pFocusWin->mpCursor )
             pFocusWin->mpCursor->ImplShow();
@@ -1673,7 +1676,10 @@ static void ImplHandleLoseFocus( Window* pWindow )
     if ( !pWindow->mpFrameData->mnFocusId )
     {
         pWindow->mpFrameData->mbStartFocusState = !pWindow->mpFrameData->mbHasFocus;
-        Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        // #98888 execute focus event synchronously
+        //  otherwise its nearly impossible to actively set the focus into another system window
+        //Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        pWindow->ImplAsyncFocusHdl( NULL );
     }
 
     Window* pFocusWin = pWindow->mpFrameData->mpFocusWin;
