@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 17:00:17 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2463,7 +2463,7 @@ class EventsNameReplace_Impl:
                 ::std::vector< sal_Int32 >::const_iterator aProperty = aActuatingProperties.begin();
                 ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
                 for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
-                    updateDependentProperties( *aProperty, *aPropertyValue, *aPropertyValue, false );
+                    actuatingPropertyChanged( *aProperty, *aPropertyValue, *aPropertyValue, true );
             }
 
             SetCursorSource( sal_True, sal_True );
@@ -2825,12 +2825,12 @@ class EventsNameReplace_Impl:
 
             // care for any inter-property dependencies
             if ( bIsActuatingProperty )
-                updateDependentProperties( nPropId, aValue, aOldValue, true );
+                actuatingPropertyChanged( nPropId, aValue, aOldValue, false );
 
             // and display it again. This ensures proper formatting
             getPropertyBox()->SetPropertyValue( rName, sNewStrVal );
 
-            // TODO: I think all of the stuff below can be moved into updateDependentProperties
+            // TODO: I think all of the stuff below can be moved into actuatingPropertyChanged
             // but I'm uncertain, and it's too risky for 1.1.1
             switch ( nPropId )
             {
@@ -3226,9 +3226,9 @@ class EventsNameReplace_Impl:
     array + sizeof( array ) / sizeof( array[0] )
 
     //------------------------------------------------------------------------
-    void OPropertyBrowserController::updateDependentProperties( sal_Int32 _nPropId, const Any& _rNewValue, const Any& _rOldValue, bool _bIsRealPropertyChange )
+    void OPropertyBrowserController::actuatingPropertyChanged( sal_Int32 _nPropId, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit )
     {
-        DBG_ASSERT( getPropertyBox(), "OPropertyBrowserController::updateDependentProperties: no view!" );
+        DBG_ASSERT( getPropertyBox(), "OPropertyBrowserController::actuatingPropertyChanged: no view!" );
         if ( !getPropertyBox() )
             return;
 
@@ -3240,7 +3240,7 @@ class EventsNameReplace_Impl:
             PropertyHandlerMultiRepository::iterator aLoop = aInterestedHandlers.first;
             while ( aLoop != aInterestedHandlers.second )
             {
-                aLoop->second->updateDependentProperties( _nPropId, _rNewValue, _rOldValue, this );
+                aLoop->second->actuatingPropertyChanged( _nPropId, _rNewValue, _rOldValue, this, _bFirstTimeInit );
                 ++aLoop;
             }
 
@@ -3306,7 +3306,7 @@ class EventsNameReplace_Impl:
 
             // also reset the list entries if the cell range is reset
             // #i28319# - 2004-04-27 - fs@openoffice.org
-            if ( _bIsRealPropertyChange )
+            if ( !_bFirstTimeInit )
             {
                 try
                 {
@@ -3315,7 +3315,7 @@ class EventsNameReplace_Impl:
                 }
                 catch( const Exception& )
                 {
-                    OSL_ENSURE( sal_False, "OPropertyBrowserController::updateDependentProperties( ListCellRange ): caught an exception while resetting the string items!" );
+                    OSL_ENSURE( sal_False, "OPropertyBrowserController::actuatingPropertyChanged( ListCellRange ): caught an exception while resetting the string items!" );
                 }
             }
         }
@@ -3445,7 +3445,7 @@ class EventsNameReplace_Impl:
         break;
 
         default:
-            DBG_ERROR( "OPropertyBrowserController::updateDependentProperties: this is no actuating property!" );
+            DBG_ERROR( "OPropertyBrowserController::actuatingPropertyChanged: this is no actuating property!" );
             break;
         }
 
