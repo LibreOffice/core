@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:16:34 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
     END_CATCH
 
-    rOutliner.SetDefaultLanguage( eLanguage );
+    rOutliner.SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
     aOldNotifyUndoActionHdl = GetNotifyUndoActionHdl();
     SetNotifyUndoActionHdl(LINK(this, SdDrawDocument, NotifyUndoActionHdl));
@@ -422,7 +422,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     }
     END_CATCH
 
-    pHitTestOutliner->SetDefaultLanguage( eLanguage );
+    pHitTestOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguage() );
 
     ULONG nCntrl2 = pHitTestOutliner->GetControlWord();
     nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
