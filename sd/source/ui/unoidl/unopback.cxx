@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 09:52:59 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SdUnoPageBackground::SdUnoPageBackground( SdDrawDocument* pDoc /* = NULL */, Sdr
         mpSet = new SfxItemSet( pDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILLRESERVED_LAST );
 
         if( pObj )
-            mpSet->Put(pObj->GetItemSet());
+            mpSet->Put(pObj->GetMergedItemSet());
     }
 }
 
