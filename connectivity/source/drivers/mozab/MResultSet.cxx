@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:16:18 $
+ *  last change: $Author: vg $ $Date: 2002-07-05 08:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1297,7 +1297,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 #endif
                     for ( sal_Int32 nRow = 1; nRow <= m_aQuery.getRowCount(); nRow++ ) {
 
-                        OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow);
+                        OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow));
 
                         ::std::vector<sal_Int32>::iterator aIter = m_aOrderbyColumnNumber.begin();
                         for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
