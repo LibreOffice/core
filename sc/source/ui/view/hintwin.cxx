@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 11:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -80,12 +75,7 @@
 #define HINT_INDENT     3
 #define HINT_MARGIN     4
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
 //==================================================================
-#pragma SEG_FUNCDEF(hintwin_01)
 
 ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& rMsg ) :
     Window( pParent, WinBits( WB_BORDER ) ),
@@ -129,13 +119,11 @@ ScHintWindow::ScHintWindow( Window* pParent, const String& rTit, const String& r
     SetOutputSizePixel( aWinSize );
 }
 
-#pragma SEG_FUNCDEF(hintwin_02)
 
 ScHintWindow::~ScHintWindow()
 {
 }
 
-#pragma SEG_FUNCDEF(hintwin_03)
 
 void __EXPORT ScHintWindow::Paint( const Rectangle& rRect )
 {
@@ -152,37 +140,3 @@ void __EXPORT ScHintWindow::Paint( const Rectangle& rRect )
         aLineStart.Y() += nTextHeight;
     }
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2000/09/17 14:09:33  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.6  2000/08/31 16:38:46  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.5  2000/05/26 15:07:49  er
-    NOOLDSV
-
-    Revision 1.4  2000/04/14 08:31:37  nn
-    unicode changes
-
-    Revision 1.3  1997/10/10 14:35:00  NN
-    Hint-Window auch unter VCL in richtiger Farbe anzeigen
-
-
-      Rev 1.2   10 Oct 1997 16:35:00   NN
-   Hint-Window auch unter VCL in richtiger Farbe anzeigen
-
-      Rev 1.1   16 Dec 1996 16:51:50   NN
-   auch mehrzeiliger Text
-
-      Rev 1.0   28 Oct 1996 10:56:14   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
-
