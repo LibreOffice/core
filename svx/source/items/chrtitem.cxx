@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:59:59 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TYPEINIT1(SvxChartTextOrientItem, SfxEnumItem);
 TYPEINIT1(SvxChartIndicateItem, SfxEnumItem);
 TYPEINIT1(SvxChartKindErrorItem, SfxEnumItem);
 TYPEINIT1(SvxChartRegressItem, SfxEnumItem);
-TYPEINIT1(SvxDoubleItem, SfxPoolItem);
+TYPEINIT1_AUTOFACTORY(SvxDoubleItem, SfxPoolItem);
 
 /*************************************************************************
 |*
