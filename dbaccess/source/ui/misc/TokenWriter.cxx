@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-27 08:08:18 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 13:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ ODatabaseImportExport::ODatabaseImportExport(const Sequence< PropertyValue >& _a
             pBegin->Value >>= m_sDataSourceName;
         else if(pBegin->Name == PROPERTY_COMMANDTYPE)
             pBegin->Value >>= m_nCommandType;
-        else if(pBegin->Name == PROPERTY_NAME)
+        else if(pBegin->Name == PROPERTY_COMMAND)
             pBegin->Value >>= m_sName;
         else if(pBegin->Name == PROPERTY_ACTIVECONNECTION)
             pBegin->Value >>= m_xConnection;
