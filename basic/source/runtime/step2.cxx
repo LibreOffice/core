@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:10:01 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ SbxVariable* SbiRuntime::FindElement
                     SbiInstance* pInst = pINST;
                     if( pInst && pInst->IsCompatibility() && pObj != pElem->GetParent() )
                         pElem = NULL;   // Found but in wrong module!
+
+                    // Interfaces: Use SBX_EXTFOUND
                 }
             }
             rBasic.bNoRtl = bSave;
@@ -978,7 +980,6 @@ void SbiRuntime::StepDCREATE_IMPL( USHORT nOp1, USHORT nOp2, BOOL bRedimp )
 // Objekt aus User-Type kreieren  (+StringID+StringID)
 
 SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
-TYPEINIT1(TypeHolderObject,SbxObject)
 
 void SbiRuntime::StepTCREATE( USHORT nOp1, USHORT nOp2 )
 {
@@ -987,19 +988,10 @@ void SbiRuntime::StepTCREATE( USHORT nOp1, USHORT nOp2 )
 
     SbxObject* pCopyObj = createUserTypeImpl( aClass );
     if( pCopyObj )
-    {
         pCopyObj->SetName( aName );
-        SbxVariable* pNew = new SbxVariable;
-        pNew->PutObject( pCopyObj );
-        PushVar( pNew );
-    }
-    else
-    {
-        SbxVariable* pNew = new SbxVariable();
-        SbxObject* pObj = new TypeHolderObject( aClass );
-        pNew->PutObject( pObj );
-        PushVar( pNew );
-    }
+    SbxVariable* pNew = new SbxVariable;
+    pNew->PutObject( pCopyObj );
+    PushVar( pNew );
 }
 
 
