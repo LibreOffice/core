@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:57:39 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,9 +447,10 @@ IMPL_LINK(TaskPaneViewShell, ToolboxClickHandler, ToolBox*, pToolBox)
         pMenu->SetSelectHdl (
             LINK(this, TaskPaneViewShell, MenuSelectHandler));
 
-        Point aMenuPosition = pToolBox->GetItemRect(mnMenuId).BottomLeft();
-        aMenuPosition += pToolBox->GetPosPixel();
-        pMenu->Execute (pDockingWindow, aMenuPosition);
+        // pass toolbox button rect so the menu can stay open on button up
+        Rectangle aRect = pToolBox->GetItemRect(mnMenuId);
+        aRect.SetPos(pToolBox->GetPosPixel() );
+        pMenu->Execute (pDockingWindow, aRect, POPUPMENU_EXECUTE_DOWN);
     }
 
     return 0;
