@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callbacks.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:56:22 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 #endif
 
 class CommandEvent;
+class SvLBoxEntry;
+class String;
 struct AcceptDropEvent;
 struct ExecuteDropEvent;
 
@@ -80,6 +82,7 @@ struct ExecuteDropEvent;
 namespace dbaui
 {
 //........................................................................
+
     //====================================================================
     //= IControlActionListener
     //====================================================================
@@ -90,6 +93,11 @@ namespace dbaui
             @return <TRUE/> if the request was handled
         */
         virtual sal_Bool    requestContextMenu( const CommandEvent& _rEvent ) = 0;
+
+        /** requests a quick help text to display
+            @return <FALSE/> if the default quick help text should be used
+        */
+        virtual sal_Bool    requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const = 0;
 
         /** handler for StartDrag requests
             @return <TRUE/> if a drag operation was started
