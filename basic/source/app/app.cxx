@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: gh $ $Date: 2002-07-30 06:51:58 $
+ *  last change: $Author: gh $ $Date: 2002-10-17 10:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,6 @@ void BasicApp::Main( )
 //      aInternational = GetSettings().GetInternational();
     }
 
-
 //  ResMgr::CreateResMgr( CREATEVERSIONRESMGR( stt ),  )
 //const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 
@@ -685,6 +684,7 @@ BasicFrame::BasicFrame() : WorkWindow( NULL,
     if (Basic().pTestObject )       // Wir sind also TestTool
     {
         pRunMenu->RemoveItem( pRunMenu->GetItemPos( RID_RUNDISAS ) );
+        pRunMenu->RemoveItem( pRunMenu->GetItemPos( RID_RUNCOMPILE ) );
     }
 
     PopupMenu *pExtras;
