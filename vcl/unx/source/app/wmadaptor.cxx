@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-23 17:26:06 $
+ *  last change: $Author: cp $ $Date: 2001-08-24 15:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,8 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
     { "SAL_QUITEVENT", WMAdaptor::SAL_QUITEVENT },
     { "SAL_USEREVENT", WMAdaptor::SAL_USEREVENT },
-    { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT }
+    { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },
+    { "DTWM_IS_RUNNING", WMAdaptor::DTWM_IS_RUNNING }
 };
 
 extern "C" {
@@ -408,6 +409,30 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             )
             m_bNetWM = false;
     }
+    else
+    {
+        // check for dtwm running
+        if( m_aWMAtoms[ DTWM_IS_RUNNING ]
+            && XGetWindowProperty( m_pDisplay,
+                    m_pSalDisplay->GetRootWindow(),
+                    m_aWMAtoms[ DTWM_IS_RUNNING ],
+                    0, 1,
+                    False,
+                    XA_INTEGER,
+                    &aRealType,
+                    &nFormat,
+                    &nItems,
+                    &nBytesLeft,
+                    &pProperty) == 0)
+        {
+            if (*(XLIB_Boolean*)pProperty)
+            {
+                m_aWMName = String(RTL_CONSTASCII_USTRINGPARAM("Dtwm"));
+            }
+            XFree (pProperty);
+        }
+    }
+
 #ifdef DEBUG
     fprintf( stderr, "WM %s NET_WM\n", m_bNetWM ? "supports" : "does not support" );
     fprintf( stderr, "Window Manager's name is \"%s\"\n",

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-24 10:22:30 $
+ *  last change: $Author: cp $ $Date: 2001-08-24 16:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,20 +1040,6 @@ SalFrame::SetWindowState( const SalFrameState *pState )
     if (pState == NULL)
         return;
 
-    // demand correct positioning from the WM
-    XSizeHints  hints;
-    XSizeHints  supplied;
-
-    Display*    pDisplay = _GetXDisplay();
-    XLIB_Window hWindow  = maFrameData.GetShellWindow();
-    if( XGetWMNormalHints (pDisplay, hWindow, &hints, (long*)&supplied ) )
-    {
-        hints.flags         |= PWinGravity;
-        hints.win_gravity    = StaticGravity;
-        XSetWMNormalHints (pDisplay, hWindow, &hints );
-        XSync (pDisplay, False);
-    }
-
     // Request for position or size change
     if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
     {
@@ -1083,15 +1069,31 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             aPosSize.setHeight (nHeight);
         }
 
+        // demand correct positioning from the WM
+        XSizeHints* pHints = XAllocSizeHints();
+        long nSuppliedFlag;
+        const WMAdaptor *pWM = _GetDisplay()->getWMAdaptor();
+
+        Display*    pDisplay = _GetXDisplay();
+        XLIB_Window hWindow  = maFrameData.GetShellWindow();
+        if (XGetWMNormalHints (pDisplay, hWindow, pHints, &nSuppliedFlag))
+        {
+            pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+            pHints->win_gravity = pWM->getPositionWinGravity();
+            pHints->x           = aPosSize.getX();
+            pHints->y           = aPosSize.getY();
+
+            XSetWMNormalHints (pDisplay, hWindow, pHints);
+            XSync (pDisplay, False);
+        }
+
+        XFree (pHints);
+
         // resize with new args
-        if (maFrameData.pDisplay_->getWMAdaptor()->supportsICCCMPos())
-        {
+        if (pWM->supportsICCCMPos())
             maFrameData.SetPosSize( aPosSize );
-        }
         else
-        {
             SetClientSize (aPosSize.GetWidth(), aPosSize.GetHeight());
-        }
     }
 
     // request for status change
@@ -2337,26 +2339,28 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
     {
         nShowState_ = SHOWSTATE_NORMAL;
 
-        XSizeHints  hints;
-        long        supplied;
+        XSizeHints* pHints = XAllocSizeHints ();
+        long        nSuppliedFlags;
         if( XGetWMNormalHints( pEvent->display,
                                pEvent->window,
-                               &hints,
-                               &supplied ) )
+                               pHints,
+                               &nSuppliedFlags ) )
         {
-            if( hints.flags & PMaxSize ) // supplied
+            if( pHints->flags & PMaxSize ) // supplied
             {
-                nMaxWidth_  = hints.max_width;
-                nMaxHeight_ = hints.max_height;
+                nMaxWidth_  = pHints->max_width;
+                nMaxHeight_ = pHints->max_height;
                 DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
             }
-            hints.flags |= PWinGravity;
-            hints.win_gravity = StaticGravity;
+            pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+            pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
             XSetWMNormalHints( pEvent->display,
                                GetShellWindow(),
-                               &hints );
+                               pHints );
             XSync( pEvent->display, False );
         }
+
+        XFree (pHints);
     }
 
     XLIB_Window hDummy;
@@ -2509,26 +2513,28 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     nRight_     = wp - w - nLeft_;
     nBottom_    = hp - h - nTop_;
 
-    XSizeHints  hints;
-    XSizeHints  supplied;
+    XSizeHints* pHints = XAllocSizeHints();
+    long nSuppliedFlags;
     if( XGetWMNormalHints( pEvent->display,
                 pEvent->window,
-                &hints,
-                (long*)&supplied ) )
+                pHints,
+                &nSuppliedFlags ) )
     {
-        if( hints.flags & PMaxSize ) // supplied
+        if( pHints->flags & PMaxSize ) // supplied
         {
-            nMaxWidth_  = hints.max_width;
-            nMaxHeight_ = hints.max_height;
+            nMaxWidth_  = pHints->max_width;
+            nMaxHeight_ = pHints->max_height;
             DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
         }
-        hints.flags |= PWinGravity;
-        hints.win_gravity = StaticGravity;
+        pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+        pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
         XSetWMNormalHints( pEvent->display,
                 GetShellWindow(),
-                &hints );
+                pHints );
         XSync( pEvent->display, False );
     }
+
+    XFree (pHints);
 
     if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( XtWindow( hShell_ ) ) )
         && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
@@ -2559,7 +2565,6 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
             SetSize (aSize);
         }
     }
-
 
     return 1;
 }

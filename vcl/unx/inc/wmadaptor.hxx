@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-23 17:26:56 $
+ *  last change: $Author: cp $ $Date: 2001-08-24 15:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ public:
         SAL_QUITEVENT,
         SAL_USEREVENT,
         SAL_EXTTEXTEVENT,
+        DTWM_IS_RUNNING,
         NetAtomMax
     };
 
@@ -191,9 +192,17 @@ public:
 
     bool supportsICCCMPos () const
     {
-        return m_bNetWM || m_aWMName.EqualsAscii ("Sawfish");
+        return     m_bNetWM
+                || m_aWMName.EqualsAscii ("Sawfish")
+                || m_aWMName.EqualsAscii ("Dtwm");
     }
 
+    int getPositionWinGravity () const
+    {
+        if (m_aWMName.EqualsAscii ("Dtwm"))
+            return CenterGravity;
+        return StaticGravity;
+    }
 };
 
 } // namespace
