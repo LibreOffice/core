@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:02:44 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,6 +472,28 @@ private:
     String  aNewName;
 
     SdrObject*  GetObject();
+};
+
+
+class ScUndoLayoutRTL : public ScSimpleUndo
+{
+public:
+                    TYPEINFO();
+                    ScUndoLayoutRTL( ScDocShell* pShell, USHORT nNewTab, BOOL bNewRTL );
+    virtual         ~ScUndoLayoutRTL();
+
+    virtual void    Undo();
+    virtual void    Redo();
+    virtual void    Repeat(SfxRepeatTarget& rTarget);
+    virtual BOOL    CanRepeat(SfxRepeatTarget& rTarget) const;
+
+    virtual String  GetComment() const;
+
+private:
+    USHORT  nTab;
+    BOOL    bRTL;
+
+    void DoChange( BOOL bNew );
 };
 
 
