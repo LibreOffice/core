@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog TAB_PAGE
     Text [ ENGLISH ] = "Page Setup" ;
     Text [ norwegian ] = "Side Oppsett" ;
     Text [ italian ] = "Impostazione pagina" ;
-    Text [ portuguese_brazilian ] = "Configura??o da P?gina" ;
+    Text [ portuguese_brazilian ] = "Configurar P�gina" ;
     Text [ portuguese ] = "Configurar p�gina" ;
     Text [ finnish ] = "Sivun asetukset" ;
     Text [ danish ] = "Sideops�tning" ;
@@ -95,7 +95,7 @@ TabDialog TAB_PAGE
                 Text [ ENGLISH ] = "Page" ;
                 Text [ norwegian ] = "Page" ;
                 Text [ italian ] = "Pagina" ;
-                Text [ portuguese_brazilian ] = "P?gina" ;
+                Text [ portuguese_brazilian ] = "P�gina" ;
                 Text [ portuguese ] = "P�gina" ;
                 Text [ finnish ] = "Sivu" ;
                 Text [ danish ] = "Side" ;
@@ -117,6 +117,9 @@ TabDialog TAB_PAGE
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "P�gina";
                 Text[ thai ] = "หน้า";
+                Text[ czech ] = "Stránka";
+                Text[ hebrew ] = "‮דף‬";
+                Text[ hindi ] = "पृष्ठ";
             };
 
             PageItem
@@ -126,7 +129,7 @@ TabDialog TAB_PAGE
                 Text [ ENGLISH ] = "Background";
                 PageResID = RID_SVXPAGE_AREA;
                 Text[ italian ] = "Sfondo";
-                Text[ portuguese_brazilian ] = "Background";
+                Text[ portuguese_brazilian ] = "Plano de fundo";
                 Text[ portuguese ] = "Plano de fundo";
                 Text[ danish ] = "Baggrund";
                 Text[ french ] = "Arri�re-plan";
@@ -147,6 +150,9 @@ TabDialog TAB_PAGE
                 Text[ catalan ] = "Fons";
                 Text[ finnish ] = "Tausta";
                 Text[ thai ] = "พื้นหลัง";
+                Text[ czech ] = "Pozadí";
+                Text[ hebrew ] = "‮רקע‬";
+                Text[ hindi ] = "पृष्ठभाग";
             };
         };
     };
@@ -177,7 +183,7 @@ TabDialog TAB_PAGE
         Text [ ENGLISH ] = "Return" ;
         Text [ norwegian ] = "Return" ;
         Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese_brazilian ] = "Retornar" ;
         Text [ portuguese ] = "Anterior" ;
         Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
@@ -199,10 +205,13 @@ TabDialog TAB_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Torna";
         Text[ thai ] = "ส่งกลับ";
+        Text[ czech ] = "Návrat";
+        Text[ hebrew ] = "Zurück";
+        Text[ hindi ] = "लौटना";
     };
     Text[ chinese_simplified ] = "设定页面";
     Text[ russian ] = "��������� ��������";
-    Text[ polish ] = "Uk�ad strony";
+    Text[ polish ] = "Ustawienia strony";
     Text[ japanese ] = "ページ設定";
     Text[ chinese_traditional ] = "頁面設定";
     Text[ arabic ] = "����� ������";
@@ -212,7 +221,19 @@ TabDialog TAB_PAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Prepara la p�gina";
     Text[ thai ] = "ตั้งค่าหน้ากระดาษ";
+    Text[ czech ] = "Nastavení stránky";
+    Text[ hebrew ] = "Seite einrichten";
+    Text[ hindi ] = "पृष्ठ सेटप";
 };
+
+
+
+
+
+
+
+
+
 
 
 
