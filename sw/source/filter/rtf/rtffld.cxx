@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 15:57:05 $
+ *  last change: $Author: jp $ $Date: 2001-08-06 17:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,8 +438,10 @@ void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
                         // not all handled here, so set new into the RFS
                         aRFS.Insert( sParam.Copy( nEnd + 1,
                                                 nLen - nStt - nEnd - 2 ));
+                        sal_Unicode cCh;
                         if( aRFS.GetStr().Len() &&
-                            ',' == aRFS.GetStr().GetChar(0) )
+                            ( ',' == (cCh = aRFS.GetStr().GetChar(0)) ||
+                              ';' == cCh ))
                             aRFS.Erase( 1 );
                     }
 
@@ -1078,11 +1080,14 @@ INSINGLECHAR:
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.6 2001-07-31 15:57:05 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtffld.cxx,v 1.7 2001-08-06 17:09:49 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/07/31 15:57:05  jp
+      Bug #90441#: change GetUIName to FillUIName or use GetUIName in the correct way
+
       Revision 1.5  2001/07/20 10:10:48  mtg
       #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
 
