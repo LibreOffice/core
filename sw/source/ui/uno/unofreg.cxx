@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:21:56 $
+ *  last change: $Author: os $ $Date: 2002-06-24 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
 #ifndef _SWXFILTEROPTIONS_HXX
-#include <swxfilteroptions.hxx>
+#include <SwXFilterOptions.hxx>
 #endif
 
 using namespace rtl;

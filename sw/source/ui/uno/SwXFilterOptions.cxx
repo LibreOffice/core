@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2002-06-21 14:17:39 $
+ *  last change: $Author: os $ $Date: 2002-06-24 13:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #pragma hdrstop
 
 #ifndef _SWXFILTEROPTIONS_HXX
-#include <swxfilteroptions.hxx>
+#include <SwXFilterOptions.hxx>
 #endif
 
 #ifndef _SHELLIO_HXX
