@@ -1,11 +1,11 @@
 cn	connectivity	:	comphelper moz svtools NULL
 cn	connectivity							usr1	-	all	cn_mkout NULL
 cn	connectivity\source\types				nmake	-	all	cn_types NULL
-cn	connectivity\source\commontools			nmake	-	all	cn_cmtools NULL
+cn	connectivity\source\commontools			nmake	-	all	cn_cmtools cn_types NULL
 cn	connectivity\source\manager				nmake	-	all	cn_manager cn_types NULL
-cn	connectivity\source\cpool				nmake	-	all	cn_cpool cn_dbtools cn_types NULL
+cn	connectivity\source\cpool				nmake	-	all	cn_cpool cn_dbtools NULL
 cn	connectivity\source\resource			nmake	-	all	cn_res NULL
-cn	connectivity\source\sdbcx				nmake	-	all	cn_sdbcx NULL
+cn	connectivity\source\sdbcx				nmake	-	all	cn_sdbcx cn_types NULL
 cn	connectivity\source\drivers\ado			nmake	-	w	cn_ado cn_dbtools NULL
 cn	connectivity\source\drivers\mozaddressbook\mozillasrc		nmake	-	all	cn_mozillasrc cn_file NULL
 cn	connectivity\source\drivers\mozaddressbook	nmake	-	all	cn_mozillaadb cn_mozillasrc NULL
@@ -16,6 +16,6 @@ cn	connectivity\source\drivers\adabas		nmake	-	all	cn_adabas cn_dbtools cn_odbc 
 cn	connectivity\source\drivers\file		nmake	-	all	cn_file cn_dbtools NULL
 cn	connectivity\source\drivers\flat		nmake	-	all	cn_flat cn_dbtools cn_file NULL
 cn	connectivity\source\drivers\dbase		nmake	-	all	cn_dbase cn_dbtools cn_file NULL
-cn	connectivity\source\parse				nmake	-	all	cn_parse NULL
+cn	connectivity\source\parse				nmake	-	all	cn_parse cn_types NULL
 cn	connectivity\source\simpledbt			nmake	-	all	cn_simpledbt cn_cmtools NULL
 cn	connectivity\source\dbtools				nmake	-	all	cn_dbtools cn_types cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx NULL
