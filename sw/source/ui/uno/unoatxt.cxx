@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:53:27 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@
 #ifndef _OFAACCFG_HXX //autogen
 #include <offmgr/ofaaccfg.hxx>
 #endif
-
+#ifndef _SFXEVENT_HXX
+#include <sfx2/event.hxx>
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -147,6 +149,7 @@
 SV_IMPL_REF ( SwDocShell )
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
@@ -1045,6 +1048,15 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 // stop listening at the docu
                 EndListening( *&xDocSh );
                 // and release our reference
+                xDocSh.Clear();
+            }
+        }
+        else if(_rHint.ISA(SfxEventHint))
+        {
+            if(SFX_EVENT_PREPARECLOSEDOC == static_cast< const SfxEventHint& >( _rHint ).GetEventId())
+            {
+                implFlushDocument( sal_False );
+                xBodyText = 0;
                 xDocSh.Clear();
             }
         }
