@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 19:33:14 $
+ *  last change: $Author: jbu $ $Date: 2001-06-07 16:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1683,7 +1683,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRINGNAME( getToken )( IMPL_RTL_STRINGDATA** ppThis
         if( (nToken < 0) || (nTokCount < nToken ) )
             return -1;
         else if( nLen > 0 )
-            return nIndex+1;
+            return nIndex+(pCharStr-pOrgCharStr)+1;
         else return -1;
     }
     else
