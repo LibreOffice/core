@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2000-11-16 15:59:14 $
+#   last change: $Author: dv $ $Date: 2001-07-02 11:49:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
-        $(SLO)$/streams.obj				\
-        $(SLO)$/downimpl.obj			\
         $(SLO)$/plugwin.obj				\
-        $(SLO)$/downloadcontroller.obj	\
         $(SLO)$/propset.obj				\
         $(SLO)$/itmfac.obj				\
         $(SLO)$/sfxhtml.obj				\
