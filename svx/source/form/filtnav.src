@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.src,v $
  *
- *  $Revision: 1.1.1.2 $
+ *  $Revision: 1.1.1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:39:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ Menu RID_FM_FILTER_MENU
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Eliminar";
+            Text[ finnish ] = "~Poista";
         };
         MenuItem
         {
@@ -117,6 +118,7 @@ Menu RID_FM_FILTER_MENU
             Text[ turkish ] = "Düzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Editar";
+            Text[ finnish ] = "~Muokkaa";
         };
         MenuItem
         {
@@ -143,6 +145,7 @@ Menu RID_FM_FILTER_MENU
             Text[ arabic ] = "ÎÇáí";
             Text[ turkish ] = "Boþ";
             Text[ catalan ] = "~Vacío";
+            Text[ finnish ] = "~Ei päde";
         };
         MenuItem
         {
@@ -169,6 +172,7 @@ Menu RID_FM_FILTER_MENU
             Text[ arabic ] = "ÛíÑ ÎÇáí";
             Text[ turkish ] = "Boþ deðil";
             Text[ catalan ] = "~No Vacío";
+            Text[ finnish ] = "~Pätee";
         };
     };
 };
