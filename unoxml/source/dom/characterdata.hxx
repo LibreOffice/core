@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-26 14:43:14 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ using namespace com::sun::star::xml::dom;
 namespace DOM
 {
     class CCharacterData : public cppu::ImplInheritanceHelper1< CNode, XCharacterData >
-    {        
+    {
 
 
     protected:
@@ -95,11 +95,11 @@ namespace DOM
         */
         virtual void SAL_CALL appendData(const OUString& arg)
             throw (DOMException);
-        
+
         /**
         Remove a range of 16-bit units from the node.
         */
-        virtual void SAL_CALL deleteData(sal_Int32 offset, sal_Int32 count) 
+        virtual void SAL_CALL deleteData(sal_Int32 offset, sal_Int32 count)
             throw (DOMException);
 
         /**
@@ -120,7 +120,7 @@ namespace DOM
             throw (DOMException);
 
         /**
-        Replace the characters starting at the specified 16-bit unit offset 
+        Replace the characters starting at the specified 16-bit unit offset
         with the specified string.
         */
         virtual void SAL_CALL replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)

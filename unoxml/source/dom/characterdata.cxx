@@ -2,9 +2,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: lo $ $Date: 2004-02-27 16:14:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,18 +66,18 @@
 namespace DOM
 {
 
-    CCharacterData::CCharacterData()        
+    CCharacterData::CCharacterData()
     {}
 
     void CCharacterData::_dispatchEvent(const OUString& prevValue, const OUString& newValue)
     {
-        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+        Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             OUString::createFromAscii("DOMCharacterDataModified")), UNO_QUERY);
         event->initMutationEvent(
-                OUString::createFromAscii("DOMCharacterDataModified"), 
+                OUString::createFromAscii("DOMCharacterDataModified"),
                 sal_True, sal_False, Reference< XNode >(),
-                prevValue, newValue, OUString(), (AttrChangeType)0 );        
+                prevValue, newValue, OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
     }
 
@@ -100,11 +100,11 @@ namespace DOM
             _dispatchEvent(oldValue, newValue);
         }
     }
-    
+
     /**
     Remove a range of 16-bit units from the node.
     */
-    void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count) 
+    void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count)
         throw (DOMException)
     {
         if (m_aNodePtr != NULL)
@@ -189,7 +189,7 @@ namespace DOM
 
 
     /**
-    Replace the characters starting at the specified 16-bit unit offset 
+    Replace the characters starting at the specified 16-bit unit offset
     with the specified string.
     */
     void SAL_CALL CCharacterData::replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
@@ -204,7 +204,7 @@ namespace DOM
                 DOMException e;
                 e.Code = DOMExceptionType_INDEX_SIZE_ERR;
                 throw e;
-            } 
+            }
             if ((offset+count) > tmp.getLength())
                 count = tmp.getLength() - offset;
 
