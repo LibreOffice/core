@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:30:26 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,18 +268,18 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
 }
 
 
-sal_Int32 XclTools::CalcX( sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale, ScDocument* pDoc )
+sal_Int32 XclTools::CalcX( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nCol, sal_uInt16 nColOffset, double fScale )
 {
     return static_cast< sal_Int32 >( fScale *
-        (pDoc->GetColOffset( nCol, nTab ) +
-        ::std::min< sal_uInt16 >( nColOffset, 1024 ) / 1024.0 * pDoc->GetColWidth( nCol, nTab )) );
+        (rDoc.GetColOffset( nCol, nTab ) +
+        ::std::min< sal_uInt16 >( nColOffset, 1024 ) / 1024.0 * rDoc.GetColWidth( nCol, nTab )) );
 }
 
-sal_Int32 XclTools::CalcY( sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale, ScDocument* pDoc )
+sal_Int32 XclTools::CalcY( ScDocument& rDoc, sal_uInt16 nTab, sal_uInt16 nRow, sal_uInt16 nRowOffset, double fScale )
 {
     return static_cast< sal_Int32 >( fScale *
-        (pDoc->GetRowOffset( nRow, nTab ) +
-        ::std::min< sal_uInt16 >( nRowOffset, 256 ) / 256.0 * pDoc->GetRowHeight( nRow, nTab )) );
+        (rDoc.GetRowOffset( nRow, nTab ) +
+        ::std::min< sal_uInt16 >( nRowOffset, 256 ) / 256.0 * rDoc.GetRowHeight( nRow, nTab )) );
 }
 
 
@@ -556,6 +556,19 @@ XclExpStream& operator<<( XclExpStream& rStrm, const ScRangeList& rRanges )
             rStrm.WriteZeroBytes( 8 );
     }
     return rStrm;
+}
+
+
+// Rich-string formatting runs ================================================
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclFormatRun& rRun )
+{
+    return rStrm >> rRun.mnChar >> rRun.mnFontIx;
+}
+
+XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun )
+{
+    return rStrm << rRun.mnChar << rRun.mnFontIx;
 }
 
 
