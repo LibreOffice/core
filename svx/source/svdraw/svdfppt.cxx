@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
+ *  last change: $Author: sj $ $Date: 2001-07-31 14:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5627,12 +5627,7 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
             case PPT_CharAttr_Shadow :
             case PPT_CharAttr_Strikeout :
             case PPT_CharAttr_Embossed :
-            {
-                if ( nInstanceInSheet == TSS_TYPE_TEXT_IN_SHAPE )   // no inheritance for standard textobjects
-                    nRetValue = 1;                                  // charset flags does not matter
-                else
-                    nRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
-            }
+                nRetValue = ( pCharSet->mnFlags & nMask ) ? 1 : 0;
             break;
             case PPT_CharAttr_Font :
                 nRetValue = pCharSet->mnFont;
