@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 12:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,44 @@
 #ifndef _SD_FUINSFIL_HXX
 #define _SD_FUINSFIL_HXX
 
-struct StyleRequestData;
-
 #ifndef _SD_FUPOOR_HXX
 #include "fupoor.hxx"
 #endif
+#include <vector>
 
 class SfxMedium;
+struct StyleRequestData;
+
+// ----------------
+// - FuInsertFile -
+// ----------------
 
 class FuInsertFile : public FuPoor
 {
 private:
-    String aLayoutName;         // Layoutname der aktuell eingefuegten Seite
-    String aFilterName;         // gewaehlter Dateifilter
-    String aFile;               // gewaehlter Dateiname
 
-    void InsTextOrRTFinOlMode(SfxMedium* pMedium);
-    void InsSDDinOlMode(SfxMedium* pMedium);
-    void InsTextOrRTFinDrMode(SfxMedium* pMedium);
-    BOOL InsSDDinDrMode(SfxMedium* pMedium);   // abbrechbar
+    String          aLayoutName;    // Layoutname der aktuell eingefuegten Seite
+    String          aFilterName;    // gewaehlter Dateifilter
+    String          aFile;          // gewaehlter Dateiname
+
+    void            InsTextOrRTFinOlMode(SfxMedium* pMedium);
+    void            InsSDDinOlMode(SfxMedium* pMedium);
+    void            InsTextOrRTFinDrMode(SfxMedium* pMedium);
+    BOOL            InsSDDinDrMode(SfxMedium* pMedium);
 
 public:
     TYPEINFO();
 
-    FuInsertFile(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                 SdDrawDocument* pDoc, SfxRequest& rReq);
-    virtual ~FuInsertFile();
+                    FuInsertFile(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
+                                 SdDrawDocument* pDoc, SfxRequest& rReq);
+    virtual         ~FuInsertFile();
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void    Activate();     // Function aktivieren
+    virtual void    Deactivate();   // Function deaktivieren
+
+public:
+
+    static void     GetSupportedFilterVector( ::std::vector< String >& rFilterVector );
 };
 
-#endif      // _SD_FUINSFIL_HXX
-
+#endif // _SD_FUINSFIL_HXX

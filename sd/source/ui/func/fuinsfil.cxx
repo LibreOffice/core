@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-08 11:19:15 $
+ *  last change: $Author: ka $ $Date: 2002-03-14 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,15 +101,6 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
-#endif
 #ifndef _SOT_FORMATS_HXX //autogen
 #include <sot/formats.hxx>
 #endif
@@ -119,14 +110,31 @@
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
 #endif
-
-
-#pragma hdrstop
-
-#include <svx/dialogs.hrc>
-
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX //autogen
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef _SFX_DOCFILT_HACK_HXX //autogen
+#include <sfx2/docfilt.hxx>
+#endif
+#ifndef _SFX_FCONTNR_HXX //autogen
+#include <sfx2/fcontnr.hxx>
+#endif
 #ifndef _SVDPAGV_HXX //autogen
 #include <svx/svdpagv.hxx>
+#endif
+#include <svx/dialogs.hrc>
+
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
 
 #include "sdresid.hxx"
@@ -146,18 +154,6 @@
 #include "app.hrc"
 #include "unmovss.hxx"
 #include "inspagob.hxx"
-
-#include <tools/urlobj.hxx>
-
-#ifndef _SFXDOCFILE_HXX //autogen
-#include <sfx2/docfile.hxx>
-#endif
-#ifndef _SFX_DOCFILT_HACK_HXX //autogen
-#include <sfx2/docfilt.hxx>
-#endif
-#ifndef _SFX_FCONTNR_HXX //autogen
-#include <sfx2/fcontnr.hxx>
-#endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -186,8 +182,10 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
            : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
-    ::std::vector< String > aTextFilterVector;
+    ::std::vector< String > aFilterVector;
     const SfxItemSet*       pArgs = rReq.GetArgs ();
+
+    FuInsertFile::GetSupportedFilterVector( aFilterVector );
 
     if (!pArgs)
     {
@@ -263,41 +261,15 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // Get text filters
-                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/plain" ) ) );
-                if( pFilter )
-                {
-                    aTextFilterVector.push_back( pFilter->GetUIName() );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
-                }
-                else
-                {
-                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_STRING ) ) );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
-                }
+                // add additional supported filters
+                ::std::vector< String >::const_iterator aIter( aFilterVector.begin() );
 
-                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "application/rtf" ) ) );
-                if( pFilter )
+                while( aIter != aFilterVector.end() )
                 {
-                    aTextFilterVector.push_back( pFilter->GetUIName() );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
-                }
-                else
-                {
-                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_RTF ) ) );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ) );
-                }
+                    if( ( pFilter = rMatcher.GetFilter4Mime( *aIter ) ) != NULL )
+                        xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/html" ) ) );
-                if( pFilter )
-                {
-                    aTextFilterVector.push_back( pFilter->GetUIName() );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
-                }
-                else
-                {
-                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_HTML ) ) );
-                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ) );
+                    ++aIter;
                 }
             }
             catch(IllegalArgumentException)
@@ -369,17 +341,12 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
     }
     else if( pFilter )
     {
-        ::std::vector< String >::const_iterator aIter( aTextFilterVector.begin() ), aEnd( aTextFilterVector.end() );
-        BOOL                                    bFound = FALSE;
-
-        while( !bFound && ( aIter != aEnd ) )
-            if( *aIter++ == pFilter->GetUIName() )
-                bFound = TRUE;
+        BOOL bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
 
         if( !bFound &&
             ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
-              aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
+              aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
               aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
         {
             bFound = TRUE;
@@ -403,43 +370,27 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
     pDocSh->SetWaitCursor( FALSE );
 }
 
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 FuInsertFile::~FuInsertFile()
 {
 }
 
-/*************************************************************************
-|*
-|* Function aktivieren
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void FuInsertFile::Activate()
 {
     FuPoor::Activate();
 }
 
-/*************************************************************************
-|*
-|* Function deaktivieren
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void FuInsertFile::Deactivate()
 {
     FuPoor::Deactivate();
 }
 
-/*************************************************************************
-|*
-|* SDD im Draw-Mode einlesen
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
@@ -584,11 +535,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     return (bOK);
 }
 
-/*************************************************************************
-|*
-|* Text oder RTF im Draw-Mode einlesen
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
@@ -725,11 +672,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     delete pDlg;
 }
 
-/*************************************************************************
-|*
-|* Text oder RTF im Outline-Mode einlesen
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
@@ -863,11 +806,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     delete pOutliner;
 }
 
-/*************************************************************************
-|*
-|* SDD im Outline-Mode einlesen
-|*
-\************************************************************************/
+// -----------------------------------------------------------------------------
 
 void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
@@ -909,4 +848,21 @@ void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
     }
 }
 
+// -----------------------------------------------------------------------------
 
+void FuInsertFile::GetSupportedFilterVector( ::std::vector< String >& rFilterVector )
+{
+    SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
+    const SfxFilter*    pSearchFilter = NULL;
+
+    rFilterVector.clear();
+
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/plain" ) ) ) ) != NULL )
+        rFilterVector.push_back( pSearchFilter->GetMimeType() );
+
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "application/rtf" ) ) ) ) != NULL )
+        rFilterVector.push_back( pSearchFilter->GetMimeType() );
+
+    if( ( pSearchFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/html" ) ) ) ) != NULL )
+        rFilterVector.push_back( pSearchFilter->GetMimeType() );
+}
