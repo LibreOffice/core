@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedDocumentHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module xml {  module sax {
     <p>Note: Whether or not every callback is supported is dependent
     on the parser implementation.
  */
-interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumentHandler
+published interface XExtendedDocumentHandler: com::sun::star::xml::sax::XDocumentHandler
 {
     //-------------------------------------------------------------------------
     /** receives notification about the start of a CDATA section in the
