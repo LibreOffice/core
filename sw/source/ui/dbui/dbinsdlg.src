@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:15:40 $
+ *  last change: $Author: rt $ $Date: 2001-12-04 18:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,8 +611,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ portuguese_brazilian ] = "lee~r";
         Text[ japanese ] = "行のみ作成";
         Text[ korean ] = "행만 만들기";
-        Text[ chinese_simplified ] = "只新增行(~E)";
-        Text[ chinese_traditional ] = "僅新增列(~E)";
+        Text[ chinese_simplified ] = "只新增行";
+        Text[ chinese_traditional ] = "僅新增列";
         Text[ turkish ] = "bo�";
         Text[ arabic ] = "����";
         Text[ catalan ] = "~vac�o";
@@ -728,6 +728,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ catalan ] = "Insertar columnas de la base de datos";
     Text[ finnish ] = "Lis�� tietokantasarakkeet";
 };
+
 
 
 
