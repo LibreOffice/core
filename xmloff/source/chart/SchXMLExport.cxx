@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-27 12:39:43 $
+ *  last change: $Author: bm $ $Date: 2001-03-01 08:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,7 +1881,20 @@ void SchXMLExport::_ExportContent()
             AddAttribute( XML_NAMESPACE_SVG, sXML_height, sString );
         }
 
-        maExportHelper.exportChart( xChartDoc, sal_True );
+        // determine if data comes from the outside
+        sal_Bool bIncludeTable = sal_True;
+        uno::Reference< beans::XPropertySet > xProp( xChartDoc, uno::UNO_QUERY );
+        if( xProp.is())
+        {
+            uno::Any aAny( xProp->getPropertyValue(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SeriesAddresses" ))));
+            uno::Sequence< chart::ChartSeriesAddress > aAddresses;
+            aAny >>= aAddresses;
+            if( aAddresses.getLength())
+                bIncludeTable = sal_False;
+        }
+
+        maExportHelper.exportChart( xChartDoc, bIncludeTable );
     }
     else
     {
