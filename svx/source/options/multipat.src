@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-05 12:23:01 $
+ *  last change: $Author: obo $ $Date: 2001-12-07 22:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,12 +299,50 @@ String RID_SVXSTR_ARCHIVE_TITLE
     Text = "Archive ausw�hlen" ;
     Text [ English ] = "Select archives" ;
     Text [ english_us ] = "Select archives" ;
+    Text[ portuguese ] = "Select archives";
+    Text[ russian ] = "Select archives";
+    Text[ greek ] = "Select archives";
+    Text[ dutch ] = "Select archives";
+    Text[ french ] = "S�lection des archives";
+    Text[ spanish ] = "Seleccionar archivos";
+    Text[ finnish ] = "Select archives";
+    Text[ italian ] = "Select archives";
+    Text[ danish ] = "Select archives";
+    Text[ swedish ] = "V�lj arkiv";
+    Text[ polish ] = "Select archives";
+    Text[ portuguese_brazilian ] = "Select archives";
+    Text[ japanese ] = "ｱｰｶｲﾌﾞの選択";
+    Text[ korean ] = "Select archives";
+    Text[ chinese_simplified ] = "选择备件";
+    Text[ chinese_traditional ] = "選擇備件";
+    Text[ turkish ] = "Select archives";
+    Text[ arabic ] = "Select archives";
+    Text[ catalan ] = "Select archives";
 };
 String RID_SVXSTR_ARCHIVE_HEADLINE
 {
     Text = "Archive" ;
     Text [ English ] = "Archives" ;
     Text [ english_us ] = "Archives" ;
+    Text[ portuguese ] = "Archives";
+    Text[ russian ] = "Archives";
+    Text[ greek ] = "Archives";
+    Text[ dutch ] = "Archives";
+    Text[ french ] = "Archives";
+    Text[ spanish ] = "Archivos";
+    Text[ finnish ] = "Archives";
+    Text[ italian ] = "Archives";
+    Text[ danish ] = "Archives";
+    Text[ swedish ] = "Arkiv";
+    Text[ polish ] = "Archives";
+    Text[ portuguese_brazilian ] = "Archives";
+    Text[ japanese ] = "ｱｰｶｲﾌﾞ";
+    Text[ korean ] = "Archives";
+    Text[ chinese_simplified ] = "备件";
+    Text[ chinese_traditional ] = "備件";
+    Text[ turkish ] = "Archives";
+    Text[ arabic ] = "Archives";
+    Text[ catalan ] = "Archives";
 };
 String RID_SVXSTR_MULTIFILE_DBL_ERR
 {
@@ -334,6 +372,7 @@ String RID_SVXSTR_MULTIFILE_DBL_ERR
     Text[ catalan ] = "El archivo %1 ya existe.";
     Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
 };
+
 
 
 
