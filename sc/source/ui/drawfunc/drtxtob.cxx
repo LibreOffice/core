@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 15:43:09 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         return;
     }
 
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
     BOOL bPaste = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
 
     SfxWhichIter aIter( rSet );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 16:58:49 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 17:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
     pDlg->Insert( SOT_FORMAT_STRING, ScResId( SCSTR_CLIP_STRING ) );
     pDlg->Insert( SOT_FORMAT_RTF,    ScResId( SCSTR_CLIP_RTF ) );
 
-    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
+    TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
     ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
 
