@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-19 15:58:37 $
+#   last change: $Author: vg $ $Date: 2003-05-19 12:57:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,8 @@ SLOFILES=	\
             $(SLO)$/accessibleeventbuffer.obj	\
             $(SLO)$/weakeventlistener.obj	\
             $(SLO)$/accessibleeventnotifier.obj	 \
-            $(SLO)$/accessiblewrapper.obj
+            $(SLO)$/accessiblewrapper.obj	\
+            $(SLO)$/proxyaggregation.obj
 
 
 # --- Targets ----------------------------------
