@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:58:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,8 +544,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 {
     Any aRet;
     ::osl::MutexGuard aGuard(m_aMutex);
-    sal_Bool bOpenInDesign;
-    if ( aCommand.Name.compareToAscii( "open" ) == 0 || (bOpenInDesign = aCommand.Name.compareToAscii( "openDesign" ) == 0) )
+    sal_Bool bOpenInDesign = aCommand.Name.equalsAscii("openDesign");
+    if ( aCommand.Name.compareToAscii( "open" ) == 0 || (bOpenInDesign) )
     {
         //////////////////////////////////////////////////////////////////
         // open command for a folder content
@@ -677,9 +677,8 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                             }
                             Reference<XStateChangeBroadcaster> xBrd(m_xEmbeddedObject,UNO_QUERY);
                             m_xListener = new OEmbedObjectHolder(xBrd,this);
-
-                            fillReportData(!bOpenInDesign);
                         }
+                        fillReportData(!bOpenInDesign);
                         aRet <<= xModel;
                     }
                 }
