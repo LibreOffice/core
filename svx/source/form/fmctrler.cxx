@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 08:26:16 $
+ *  last change: $Author: oj $ $Date: 2000-09-29 08:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1957,7 +1957,7 @@ IMPL_LINK(FmXFormController, OnLoad, void*, EMPTYARG)
         startListening();
 
     // just one exception toggle the auto values
-    if (m_bCurrentRecordNew)
+    if (m_bCurrentRecordNew && m_pView)
         toggleAutoFields(sal_True);
 
     return 1L;
@@ -2005,7 +2005,7 @@ void FmXFormController::unload() throw( RuntimeException )
     }
 
     // be sure not to have autofields
-    if (m_bCurrentRecordNew)
+    if (m_bCurrentRecordNew && m_pView)
         toggleAutoFields(sal_False);
 
     if (m_bDBConnection && isListeningForChanges())
