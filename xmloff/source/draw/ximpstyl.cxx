@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:18 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,8 @@ public:
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+
+    virtual void Finish( sal_Bool bOverwrite );
 };
 
 TYPEINIT1( SdXMLDrawingPageStyleContext, XMLPropStyleContext );
@@ -309,6 +311,45 @@ SvXMLImportContext *SdXMLDrawingPageStyleContext::CreateChildContext(
                                                           xAttrList );
 
     return pContext;
+}
+
+void SdXMLDrawingPageStyleContext::Finish( sal_Bool bOverwrite )
+{
+    XMLPropStyleContext::Finish( bOverwrite );
+
+    ::std::vector< XMLPropertyState > &rProperties = GetProperties();
+
+    const UniReference< XMLPropertySetMapper >& rImpPrMap = GetStyles()->GetImportPropertyMapper( GetFamily() )->getPropertySetMapper();
+
+    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+    for (property; property != rProperties.end(); property++)
+    {
+        if( property->mnIndex == -1 )
+            continue;
+
+        sal_Int16 nContextID = rImpPrMap->GetEntryContextId(property->mnIndex);
+        switch( nContextID )
+        {
+            case CTF_DATE_TIME_FORMAT:
+            {
+                OUString sStyleName;
+                (*property).maValue >>= sStyleName;
+
+                sal_Int32 nStyle = 0;
+
+                SdXMLNumberFormatImportContext* pSdNumStyle =
+                    PTR_CAST( SdXMLNumberFormatImportContext,
+                        GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, sal_True ) );
+
+                if( pSdNumStyle )
+                    nStyle = pSdNumStyle->GetDrawKey();
+
+                (*property).maValue <<= nStyle;
+            }
+            break;
+        }
+    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -850,69 +891,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         SetPageMaster( msPageMasterName );
     }
 
-    // set PageProperties?
-    if(!bHandoutMaster && msStyleName.getLength())
-    {
-        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
-
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
-        {
-            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
-            if(pStyles)
-            {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID, msStyleName);
-
-                if(pStyle && pStyle->ISA(XMLPropStyleContext))
-                {
-                    XMLPropStyleContext* pPropStyle = (XMLPropStyleContext*)pStyle;
-
-                    uno::Reference <beans::XPropertySet> xPropSet1(rShapes, uno::UNO_QUERY);
-                    if(xPropSet1.is())
-                    {
-                        const OUString aBackground(RTL_CONSTASCII_USTRINGPARAM("Background"));
-                        uno::Reference< beans::XPropertySet > xPropSet2;
-                        uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet1->getPropertySetInfo() );
-                        if( xInfo.is() && xInfo->hasPropertyByName( aBackground ) )
-                        {
-                            uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                            if(xServiceFact.is())
-                            {
-                                uno::Reference< beans::XPropertySet > xTempSet(
-                                    xServiceFact->createInstance(
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Background"))),
-                                    uno::UNO_QUERY);
-
-                                xPropSet2 = xTempSet;
-                            }
-                        }
-
-                        uno::Reference< beans::XPropertySet > xPropSet;
-                        if( xPropSet2.is() )
-                            xPropSet = PropertySetMerger_CreateInstance( xPropSet1, xPropSet2 );
-                        else
-                            xPropSet = xPropSet1;
-
-                        if(xPropSet.is())
-                        {
-                            try
-                            {
-                                pPropStyle->FillPropertySet(xPropSet);
-
-                                uno::Any aAny;
-                                aAny <<= xPropSet2;
-                                xPropSet1->setPropertyValue( aBackground, aAny );
-                            }
-                            catch( uno::Exception )
-                            {
-                                DBG_ERROR( "uno::Exception catched!" );
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    SetStyle( msStyleName );
 
     SetLayout();
 
