@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:07 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,14 @@ class SwTxtNode;
 
 extern char __FAR_DATA sOutlineStr[];   // SWG-Filter
 
-inline BYTE GetRealLevel( const BYTE nLvl )
-{
-    return nLvl & (NO_NUMLEVEL - 1);
-}
+BYTE GetRealLevel( const BYTE nLvl );
+
+BOOL IsNum( BYTE nLvl );
+
+BOOL IsShowNum( BYTE nLvl );
+
+void SetNoNum( BYTE * nLvl, BOOL nVal = TRUE );
+
 const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
 
 class SwNumFmt : public SvxNumberFormat, public SwClient
@@ -177,21 +181,21 @@ public:
     BOOL operator==( const SwNumRule& ) const;
     BOOL operator!=( const SwNumRule& r ) const { return !(*this == r); }
 
-    inline const SwNumFmt* GetNumFmt( USHORT i ) const;
-    inline const SwNumFmt& Get( USHORT i ) const;
+    const SwNumFmt* GetNumFmt( USHORT i ) const;
+    const SwNumFmt& Get( USHORT i ) const;
     void Set( USHORT i, const SwNumFmt* );
     void Set( USHORT i, const SwNumFmt& );
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
 
-    inline sal_Unicode GetBulletChar( const SwNodeNum& ) const;
-    inline const Font* GetBulletFont( const SwNodeNum& ) const;
-    static inline const Font& GetDefBulletFont();
+    sal_Unicode GetBulletChar( const SwNodeNum& ) const;
+    const Font* GetBulletFont( const SwNodeNum& ) const;
+    static const Font& GetDefBulletFont();
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 
-    static inline USHORT GetNumIndent( BYTE nLvl );
-    static inline USHORT GetBullIndent( BYTE nLvl );
+    static USHORT GetNumIndent( BYTE nLvl );
+    static USHORT GetBullIndent( BYTE nLvl );
 
     SwNumRuleType GetRuleType() const           { return eRuleType; }
     void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
@@ -252,10 +256,12 @@ class SwNodeNum
     USHORT nSetValue;                   // vorgegeben Nummer
     BYTE nMyLevel;                      // akt. Level
     BOOL bStartNum;                     // Numerierung neu starten
+    BOOL bContNum;                      // #111955#
+                                        // TRUE -> in continuous numbering
 
 public:
-    inline SwNodeNum( BYTE nLevel = NO_NUM, USHORT nSetVal = USHRT_MAX );
-    inline SwNodeNum& operator=( const SwNodeNum& rCpy );
+    SwNodeNum( BYTE nLevel = NO_NUMBERING, USHORT nSetVal = USHRT_MAX );
+    SwNodeNum& operator=( const SwNodeNum& rCpy );
 
     BOOL operator==( const SwNodeNum& ) const;
 
@@ -265,74 +271,28 @@ public:
     BOOL IsStart() const                    { return bStartNum; }
     void SetStart( BOOL bFlag = TRUE )      { bStartNum = bFlag; }
 
+    // -> #111955#
+    BOOL IsContinuousNum() const { return bContNum; }
+    void SetContinuousNum( BOOL bFlag = TRUE ) { bContNum = bFlag; }
+    // <- #111955#
+
+    BOOL HasSetValue() const { return USHRT_MAX != nSetValue; }
     USHORT GetSetValue() const              { return nSetValue; }
     void SetSetValue( USHORT nVal )         { nSetValue = nVal; }
 
     const USHORT* GetLevelVal() const       { return nLevelVal; }
           USHORT* GetLevelVal()             { return nLevelVal; }
+
+    BYTE GetRealLevel() const { return ::GetRealLevel(nMyLevel); }
+    BOOL IsNum() const { return ::IsNum(nMyLevel); }
+    BOOL IsShowNum() const { return ::IsShowNum(nMyLevel); }
+
+    void SetNoNum(BOOL nVal = TRUE)
+    {
+        nMyLevel = nVal ? nMyLevel | NO_NUMLEVEL : nMyLevel & ~NO_NUMLEVEL;
+    }
+
 };
-
-
-
-
-// ------------ inline Methoden ----------------------------
-
-inline const SwNumFmt& SwNumRule::Get( USHORT i ) const
-{
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
-    return aFmts[ i ] ? *aFmts[ i ]
-                      : *aBaseFmts[ eRuleType ][ i ];
-}
-
-inline const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
-{
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
-    return aFmts[ i ];
-}
-inline const Font& SwNumRule::GetDefBulletFont()
-{
-    if( !pDefBulletFont )
-        SwNumRule::_MakeDefBulletFont();
-    return *pDefBulletFont;
-}
-
-inline USHORT SwNumRule::GetNumIndent( BYTE nLvl )
-{
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return aDefNumIndents[ nLvl ];
-}
-inline USHORT SwNumRule::GetBullIndent( BYTE nLvl )
-{
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
-    return aDefNumIndents[ nLvl ];
-}
-
-inline sal_Unicode SwNumRule::GetBulletChar( const SwNodeNum& rNum ) const
-{
-    return Get( rNum.GetLevel() & ~NO_NUMLEVEL ).GetBulletChar();
-}
-inline const Font* SwNumRule::GetBulletFont( const SwNodeNum& rNum ) const
-{
-    return Get( rNum.GetLevel() & ~NO_NUMLEVEL ).GetBulletFont();
-}
-
-
-
-SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
-    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE )
-{
-    memset( nLevelVal, 0, sizeof( nLevelVal ) );
-}
-
-inline SwNodeNum& SwNodeNum::operator=( const SwNodeNum& rCpy )
-{
-    nSetValue = rCpy.nSetValue;
-    nMyLevel = rCpy.nMyLevel;
-    bStartNum = rCpy.bStartNum;
-
-    memcpy( nLevelVal, rCpy.nLevelVal, sizeof( nLevelVal ) );
-    return *this;
-}
 
 
 #endif  // _NUMRULE_HXX
