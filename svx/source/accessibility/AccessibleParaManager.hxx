@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-24 16:19:18 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
 
 class SvxEditSourceAdapter;
@@ -192,10 +192,10 @@ namespace accessibility
     class AccessibleParaManager
     {
     public:
-        typedef WeakCppRef < ::drafts::com::sun::star::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
+        typedef WeakCppRef < ::com::sun::star::accessibility::XAccessible, AccessibleEditableTextPara > WeakPara;
         typedef ::std::pair< WeakPara, ::com::sun::star::awt::Rectangle > WeakChild;
         typedef ::std::pair< ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible > , ::com::sun::star::awt::Rectangle > Child;
+            ::com::sun::star::accessibility::XAccessible > , ::com::sun::star::awt::Rectangle > Child;
         typedef ::std::vector< WeakChild > VectorOfChildren;
 
         AccessibleParaManager();
@@ -233,7 +233,7 @@ namespace accessibility
         static void ShutdownPara( const WeakChild& rChild );
 
         Child CreateChild( sal_Int32                                                                                        nChild,
-                           const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xFrontEnd,
+                           const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& xFrontEnd,
                            SvxEditSourceAdapter&                                                                            rEditSource,
                            sal_uInt32                                                                                       nParagraphIndex );
 
@@ -322,7 +322,7 @@ namespace accessibility
         template < typename Argument > class MemFunAdapter : public ::std::unary_function< const WeakChild&, void >
         {
         public:
-            typedef void (accessibility::AccessibleEditableTextPara::*FunctionPointer)( Argument );
+            typedef void (::accessibility::AccessibleEditableTextPara::*FunctionPointer)( Argument );
 
             MemFunAdapter( FunctionPointer aFunPtr, Argument aArg ) : maFunPtr(aFunPtr), maArg(aArg) {}
             void operator()( const WeakChild& rPara )
