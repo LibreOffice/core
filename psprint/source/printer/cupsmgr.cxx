@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,12 @@ void CUPSManager::initialize()
         // behaviour
         aPrinter.m_aInfo.m_pParser = NULL;
         aPrinter.m_aInfo.m_aContext.setParser( NULL );
+        std::hash_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
+        if( c_it != m_aDefaultContexts.end() )
+        {
+            aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
+            aPrinter.m_aInfo.m_aContext = c_it->second;
+        }
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
@@ -494,7 +500,7 @@ void CUPSManager::initialize()
 }
 
 #ifdef ENABLE_CUPS
-static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PrinterInfo& rInfo )
+static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rContext )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     for( int i = 0; i < pPPDGroup->num_options; i++ )
@@ -505,7 +511,7 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PrinterInfo& rInfo
             ppd_choice_t* pChoice = pOption->choices + n;
             if( pChoice->marked )
             {
-                const PPDKey* pKey = rInfo.m_pParser->getKey( OStringToOUString( pOption->keyword, aEncoding ) );
+                const PPDKey* pKey = rContext.getParser()->getKey( OStringToOUString( pOption->keyword, aEncoding ) );
                 if( pKey )
                 {
                     const PPDValue* pValue = pKey->getValue( OStringToOUString( pChoice->choice, aEncoding ) );
@@ -513,7 +519,7 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PrinterInfo& rInfo
                     {
                         if( pValue != pKey->getDefaultValue() )
                         {
-                            rInfo.m_aContext.setValue( pKey, pValue, true );
+                            rContext.setValue( pKey, pValue, true );
 #if OSL_DEBUG_LEVEL > 1
                             fprintf( stderr, "key %s is set to %s\n", pOption->keyword, pChoice->choice );
 #endif
@@ -540,7 +546,7 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PrinterInfo& rInfo
     // recurse through subgroups
     for( int g = 0; g < pPPDGroup->num_subgroups; g++ )
     {
-        updatePrinterContextInfo( pPPDGroup->subgroups + g, rInfo );
+        updatePrinterContextInfo( pPPDGroup->subgroups + g, rContext );
     }
 }
 #endif // ENABLE_CUPS
@@ -589,13 +595,19 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 #endif
                 PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
-                rInfo.m_pParser = pNewParser;
-                rInfo.m_aContext.setParser( pNewParser );
+                // remember the default context for later use
+                PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
+                rContext.setParser( pNewParser );
                 for( int i = 0; i < pPPD->num_groups; i++ )
-                    updatePrinterContextInfo( pPPD->groups + i, rInfo );
+                    updatePrinterContextInfo( pPPD->groups + i, rContext );
+
+                rInfo.m_pParser = pNewParser;
+                rInfo.m_aContext = rContext;
 
                 // clean up the mess
                 m_pCUPSWrapper->ppdClose( pPPD );
+
+
 
                 // remove temporary PPD file
                 unlink( pPPDFile );
@@ -647,6 +659,16 @@ void CUPSManager::setupJobContextData( JobData& rData )
         // in turn calls createCUPSParser
         // which updates the printer info
         p_it->second.m_aInfo.m_pParser = PPDParser::getParser( p_it->second.m_aInfo.m_aDriverName );
+    }
+    if( p_it->second.m_aInfo.m_aContext.getParser() == NULL )
+    {
+        OUString aPrinter;
+        if( p_it->second.m_aInfo.m_aDriverName.compareToAscii( "CUPS:", 5 ) == 0 )
+            aPrinter = p_it->second.m_aInfo.m_aDriverName.copy( 5 );
+        else
+            aPrinter = p_it->second.m_aInfo.m_aDriverName;
+
+        p_it->second.m_aInfo.m_aContext = m_aDefaultContexts[ aPrinter ];
     }
 
     rData.m_pParser     = p_it->second.m_aInfo.m_pParser;
