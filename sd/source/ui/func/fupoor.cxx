@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:20:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,11 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "zoomlist.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef SD_CLIENT_HXX
+#include "Client.hxx"
+#endif
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "LayerTabBar.hxx"
 
@@ -347,11 +350,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 {
     USHORT          nCode = rKEvt.GetKeyCode().GetCode();
     BOOL            bReturn = FALSE;
-    BOOL            bSlideShow = FALSE;
-     FuSlideShow*    pFuSlideShow = pViewShell->GetSlideShow();
-
-    if( pFuSlideShow )
-        bSlideShow = TRUE;
+    BOOL            bSlideShow = pViewShell->GetSlideShow() != 0;
 
     switch (nCode)
     {
