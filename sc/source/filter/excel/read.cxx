@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-08 14:14:08 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,248 +1142,176 @@ FltError ImportExcel8::Read( void )
             }
                 break;
             case Z_Biff8I:      // --------------------------------- Z_Biff8I -
-            {
-                switch( nOpcode )
-                {
-                    case 0x01:                          // BLANK        [ 2  5   ]
-                        Blank25();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x03:                          // NUMBER       [ 2  5   ]
-                        Number25();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x04:                          // LABEL        [ 2  5   ]
-                        Label();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x05:                          // BOOLERR      [ 2  5   ]
-                        Boolerr25();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x06:                          // FORMULA      [ 2  5   ]
-                    case 0x0206:
-                    case 0x0406:
-                        Formula25();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0A:                          // EOF          [ 2345   ]
-                        EndSheet();
-                        eAkt = Z_Biff8E;
-                        nTab++;
-                        bCond4EscherCont = FALSE;
-                        break;
-                    case 0x14:  Header(); break;        // HEADER       [ 2345   ]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345   ]
-                    case 0x1C:                          // NOTE         [ 2345   ]
-                        Note();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x1D:  Selection(); break;     // SELECTION    [ 2345   ]
-                    case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5   ]
-                    case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345   ]
-                    case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345   ]
-                    case 0x28:  Topmargin(); break;     // TOPMARGIN    [ 2345   ]
-                    case 0x29:  Bottommargin(); break;  // BOTTOMMARGIN [ 2345   ]
-                    case 0x2A:  Printheaders(); break;  // PRINTHEADERS [ 2345   ]
-                    case 0x2B:  Prntgrdlns(); break;    // PRINTGRIDLINE[ 2345   ]
-                    case 0x2F:                          // FILEPASS     [ 2345   ]
-                        if( Filepass() )
-                        {
-                            eLastErr = eERR_FILEPASSWD;
-                            eAkt = Z_Ende;
-                        }
-                        break;
-                    case 0x5D:
-                        if( bWithDrawLayer )
-                            Obj();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x7E:                          // RK           [    5   ]
-                        Rk();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x82:  Gridset(); break;       // GRIDSET      [  345   ]
-                    case 0x83:  Hcenter(); break;       // HCENTER      [  345   ]
-                    case 0x84:  Vcenter(); break;       // VCENTER      [  345   ]
-                    case 0xA1:  Setup(); break;         // SETUP        [   45   ]
-                    case 0xAE:  Scenman(); break;
-                    case 0xAF:
-                        Scenario();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xBD:                          // MULRK        [    5   ]
-                        Mulrk();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xBE:                          // MULBLANK     [    5   ]
-                        Mulblank();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xD6:                          // RSTRING      [    5   ]
-                        Rstring();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xE5:  Cellmerging(); break;
-                    case 0xEC:
-                        Msodrawing();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xED:
-                        Msodrawingselection();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0xFD:                          // LABELSST     [      8 ]
-                        Labelsst();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x01B0:
-                        Condfmt();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x01B2:
-                        Dval();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x01B6:
-                        Txo();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x01B8:
-                        Hlink();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x01BE:
-                        Dv();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0200: Dimensions(); break;   // DIMENSIONS   [      8 ]
-                    case 0x0201:                        // BLANK        [  34    ]
-                        Blank34();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0203:                        // NUMBER       [  34    ]
-                        Number34();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0204:                        // LABEL        [  34    ]
-                        Label();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0205:                        // BOOLERR      [  34    ]
-                        Boolerr34();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0236:
-                        TableOp();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x027E:                        // RK           [  34    ]
-                        Rk();
-                        eAkt = Z_Biff8T;
-                        break;
-                    case 0x0809:                        // BOF          [    5   ]
-                        Bof5();
-                        NeueTabelle();
-                        if( pExcRoot->eDateiTyp == Biff8C )
-                        {
-                            if( bWithDrawLayer && pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
-                                ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
-                            else
-                            {// Stream-Teil mit Chart ueberlesen
-                                ePrev = eAkt;
-                                eAkt = Z_Biff8C;
-                            }
-                        }
-#ifdef DBG_UTIL
-                        else
-                        {
-                            DBG_ASSERT( pExcRoot->eDateiTyp == Biff5C,
-                                "-ImportExcel8::Read(): Sofort zu mir (GT)!" );
-                        }
-#endif
-                        break;
-                }
-
-            }
-                break;
-            // ----------------------------------------------------------------
             case Z_Biff8T:      // --------------------------------- Z_Biff8T -
             {
-                switch( nOpcode )
-                {
-                    case 0x01:  Blank25(); break;       // BLANK        [ 2  5   ]
-                    case 0x03:  Number25(); break;      // NUMBER       [ 2  5   ]
-                    case 0x04:  Label(); break;         // LABEL        [ 2  5   ]
-                    case 0x05:  Boolerr25(); break;     // BOOLERR      [ 2  5   ]
-                    case 0x0206:
-                    case 0x0406:
-                    case 0x06:  Formula(); break;       // FORMULA      [      8 ]
-                    case 0x07:  RecString(); break;     // STRING       [ 2345   ]
-                    case 0x0A:                          // EOF          [ 2345   ]
-                        EndSheet();
-                        nTab++;
-                        eAkt = Z_Biff8E;
-                        bCond4EscherCont = FALSE;
-                        break;
-                    case 0x1C:  Note(); break;          // NOTE         [ 2345   ]
-                    case 0x3C:  Cont(); break;
-                    case 0x5D:                          // OBJ          [ 2345   ]
-                        if( bWithDrawLayer )
-                            Obj();
-                        break;
-                    case 0x7E:  Rk(); break;            // RK           [    5   ]
-                    case 0xA0:  Scl(); break;           // SCL          [   45   ]
-                    case 0xAE:  Scenman(); break;
-                    case 0xAF:  Scenario(); break;
-                    case 0xB0:  SXView(); break;        // SXVIEW                 ##++##
-                    case 0xB1:  SXVd(); break;          // SXVD                   ##++##
-                    case 0xB2:  SXVi(); break;          // SXVI                   ##++##
-                    case 0xB4:  SXIvd(); break;         // SXIVD                  ##++##
-                    case 0xB5:  SXLi(); break;          // SXLI                   ##++##
-                    case 0xB6:  SXPi(); break;          //                        ##++##
-                    case 0xBD:  Mulrk(); break;         // MULRK        [    5   ]
-                    case 0xBE:  Mulblank(); break;      // MULBLANK     [    5   ]
-                    case 0xC5:  SXDi(); break;          // SXDI                   ##++##
-                    case 0xD6:  Rstring(); break;       // RSTRING      [    5   ]
-                    case 0xE5:  Cellmerging(); break;
-                    case 0xEC:  Msodrawing(); break;
-                    case 0xED:  Msodrawingselection(); break;
-                    case 0xF0:  SXRule(); break;        // SXRULE                 ##++##
-                    case 0xF1:  SXEx(); break;          // SXEX                   ##++##
-                    case 0xF2:  SXFilt(); break;        // SXFILT                 ##++##
-                    case 0xF7:  SXSelect(); break;      // SXSELECT               ##++##
-                    case 0xFD:  Labelsst(); break;      // LABELSST     [      8 ]
-                    case 0x0100: SXVdex(); break;       // SXVDEX                 ##++##
-                    case 0x01B0: Condfmt(); break;
-                    case 0x01B1: Cf(); break;
-                    case 0x01B2: Dval(); break;
-                    case 0x01B6: Txo(); break;
-                    case 0x01B8: Hlink(); break;
-                    case 0x01BE: Dv(); break;
-                    case 0x0201: Blank34(); break;      // BLANK        [  34    ]
-                    case 0x0203: Number34(); break;     // NUMBER       [  34    ]
-                    case 0x0204: Label(); break;        // LABEL        [  34    ]
-                    case 0x0205: Boolerr34(); break;    // BOOLERR      [  34    ]
-                    case 0x0207: RecString(); break;    // STRING       [ 2345   ]
-                    case 0x0236: TableOp(); break;      // TABLE
-                    case 0x027E: Rk(); break;           // RK           [  34    ]
-                    case 0x0809:                        // BOF          [    5   ]
-                        Bof5();
-                        if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
-                            pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
-                            ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
-                        else
-                        {
-                            ePrev = eAkt;
-                            eAkt = Z_Biffn0;
-                        }
+                // Z_Biff8I (initial records) and Z_Biff8T (common table records) together
+                BOOL bFound = FALSE;
 
-                        DBG_ASSERT( pExcRoot->eDateiTyp == Biff8C,
-                            "-ImportExcel8::Read(): Sofort zu mir (GT)!" );
+                // 1st: read records for Z_Biff8I only
+                if( (eAkt == Z_Biff8I) && !bFound )
+                {
+                    bFound = TRUE;
+                    switch( nOpcode )
+                    {
+                        case 0x0014:    Header();               break;  // HEADER       [ 2345   ]
+                        case 0x0015:    Footer();               break;  // FOOTER       [ 2345   ]
+                        case 0x001D:    Selection();            break;  // SELECTION    [ 2345   ]
+                        case 0x0023:    Externname25();         break;  // EXTERNNAME   [ 2  5   ]
+                        case 0x0026:    Leftmargin();           break;  // LEFTMARGIN   [ 2345   ]
+                        case 0x0027:    Rightmargin();          break;  // RIGHTMARGIN  [ 2345   ]
+                        case 0x0028:    Topmargin();            break;  // TOPMARGIN    [ 2345   ]
+                        case 0x0029:    Bottommargin();         break;  // BOTTOMMARGIN [ 2345   ]
+                        case 0x002A:    Printheaders();         break;  // PRINTHEADERS [ 2345   ]
+                        case 0x002B:    Prntgrdlns();           break;  // PRINTGRIDLINE[ 2345   ]
+                        case 0x0082:    Gridset();              break;  // GRIDSET      [  345   ]
+                        case 0x0083:    Hcenter();              break;  // HCENTER      [  345   ]
+                        case 0x0084:    Vcenter();              break;  // VCENTER      [  345   ]
+                        case 0x00A1:    Setup();                break;  // SETUP        [   45   ]
+                        case 0x0200:    Dimensions();           break;  // DIMENSIONS   [      8 ]
+                        case 0x0809:                                    // BOF          [    5   ]
+                        {
+                            Bof5();
+                            NeueTabelle();
+                            if( pExcRoot->eDateiTyp == Biff8C )
+                            {
+                                if( bWithDrawLayer && pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
+                                    ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
+                                else
+                                {// Stream-Teil mit Chart ueberlesen
+                                    ePrev = eAkt;
+                                    eAkt = Z_Biff8C;
+                                }
+                            }
+#ifdef DBG_UTIL
+                            else
+                            {
+                                DBG_ASSERT( pExcRoot->eDateiTyp == Biff5C,
+                                    "-ImportExcel8::Read(): Sofort zu mir (GT)!" );
+                            }
+#endif
+                        }
                         break;
+                        default:        bFound = FALSE;
+                    }
                 }
 
+                // 2nd: common table records, change mode to Z_Biff8T
+                if( !bFound )
+                {
+                    bFound = TRUE;
+                    switch( nOpcode )
+                    {
+                        case 0x0001:    Blank25();              break;  // BLANK        [ 2  5   ]
+                        case 0x0003:    Number25();             break;  // NUMBER       [ 2  5   ]
+                        case 0x0004:    Label();                break;  // LABEL        [ 2  5   ]
+                        case 0x0005:    Boolerr25();            break;  // BOOLERR      [ 2  5   ]
+                        case 0x0006:
+                        case 0x0206:
+                        case 0x0406:    Formula25();            break;  // FORMULA      [ 2  5   ]
+                        case 0x001C:    Note();                 break;  // NOTE         [ 2345   ]
+                        case 0x005D:    if( bWithDrawLayer ) Obj(); break;  // OBJ      [ 2345   ]
+                        case 0x007E:
+                        case 0x027E:    Rk();                   break;  // RK           [    5   ]
+                        case 0x00AE:    Scenman();              break;  // SCENMAN
+                        case 0x00AF:    Scenario();             break;  // SCENARIO
+                        case 0x00BD:    Mulrk();                break;  // MULRK        [    5   ]
+                        case 0x00BE:    Mulblank();             break;  // MULBLANK     [    5   ]
+                        case 0x00D6:    Rstring();              break;  // RSTRING      [    5   ]
+                        case 0x00E5:    Cellmerging();          break;  // CELLMERGING
+                        case 0x00EC:    Msodrawing();           break;  // MSODRAWING
+                        case 0x00ED:    Msodrawingselection();  break;  // MSODRAWINGSELECTION
+                        case 0x00FD:    Labelsst();             break;  // LABELSST     [      8 ]
+                        case 0x01AD:    Qsi();                  break;  // QSI
+                        case 0x01B0:    Condfmt();              break;  // CONDFMT
+                        case 0x01B2:    Dval();                 break;  // DVAL
+                        case 0x01B6:    Txo();                  break;  // TXO
+                        case 0x01B8:    Hlink();                break;  // HLINK
+                        case 0x01BE:    Dv();                   break;  // DV
+                        case 0x0201:    Blank34();              break;  // BLANK        [  34    ]
+                        case 0x0203:    Number34();             break;  // NUMBER       [  34    ]
+                        case 0x0204:    Label();                break;  // LABEL        [  34    ]
+                        case 0x0205:    Boolerr34();            break;  // BOOLERR      [  34    ]
+                        case 0x0236:    TableOp();              break;  // TABLE
+                        default:
+                            bFound = FALSE;
+                    }
+                    if( bFound )
+                        eAkt = Z_Biff8T;
+                }
+
+                // 3rd: read records for Z_Biff8T only
+                if( (eAkt == Z_Biff8T) && !bFound )
+                {
+                    bFound = TRUE;
+                    switch( nOpcode )
+                    {
+                        case 0x0007:    RecString();            break;  // STRING       [ 2345   ]
+                        case 0x003C:    Cont();                 break;  // CONTINUE
+                        case 0x00A0:    Scl();                  break;  // SCL          [   45   ]
+                        case 0x00B0:    SXView();               break;  // SXVIEW
+                        case 0x00B1:    SXVd();                 break;  // SXVD
+                        case 0x00B2:    SXVi();                 break;  // SXVI
+                        case 0x00B4:    SXIvd();                break;  // SXIVD
+                        case 0x00B5:    SXLi();                 break;  // SXLI
+                        case 0x00B6:    SXPi();                 break;  // SXPI
+                        case 0x00C5:    SXDi();                 break;  // SXDI
+                        case 0x00CD:    SXString();             break;  // SXSTRING
+                        case 0x00DC:    SXExt_ParamQry();       break;  // SXEXT or PARAMQRY
+                        case 0x00F0:    SXRule();               break;  // SXRULE
+                        case 0x00F1:    SXEx();                 break;  // SXEX
+                        case 0x00F2:    SXFilt();               break;  // SXFILT
+                        case 0x00F7:    SXSelect();             break;  // SXSELECT
+                        case 0x0100:    SXVdex();               break;  // SXVDEX
+                        case 0x01B1:    Cf();                   break;  // CF
+                        case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
+                        case 0x0803:    WebQrySettings();       break;  // WEBQRYSETTINGS
+                        case 0x0804:    WebQryTables();         break;  // WEBQRYTABLES
+                        case 0x0809:                                    // BOF          [    5   ]
+                        {
+                            Bof5();
+                            if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
+                                pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
+                                ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
+                            else
+                            {
+                                ePrev = eAkt;
+                                eAkt = Z_Biffn0;
+                            }
+
+                            DBG_ASSERT( pExcRoot->eDateiTyp == Biff8C,
+                                "-ImportExcel8::Read(): Sofort zu mir (GT)!" );
+                        }
+                        break;
+                        default:        bFound = FALSE;
+                    }
+                }
+
+                // 4th: read records for Z_Biff8I and Z_Biff8T
+                if( !bFound )
+                {
+                    bFound = TRUE;
+                    switch( nOpcode )
+                    {
+                        case 0x000A:                            // EOF          [ 2345   ]
+                        {
+                            EndSheet();
+                            eAkt = Z_Biff8E;
+                            nTab++;
+                            bCond4EscherCont = FALSE;
+                        }
+                        break;
+                        case 0x002F:                            // FILEPASS     [ 2345   ]
+                        {
+                            if( Filepass() )
+                            {
+                                eLastErr = eERR_FILEPASSWD;
+                                eAkt = Z_Ende;
+                            }
+                        }
+                        break;
+                        default:    bFound = FALSE;
+                    }
+                }
             }
                 break;
             // ----------------------------------------------------------------
