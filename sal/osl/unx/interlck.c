@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:03 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
         "   bne-    1b"
         : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
-        : "r4", "memory");
+        : "memory");
 
     return nCount;
 }
@@ -140,7 +140,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         "   bne-    1b"
         : "=&r" (nCount), "=m" (*pCount)
         : "r" (pCount)
-        : "r4", "memory");
+        : "memory");
 
     return nCount;
 }
