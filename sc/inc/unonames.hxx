@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:56:35 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,14 @@
 #define SC_UNONAME_OHEIGHT          "OptimalHeight"
 #define SC_UNONAME_OWIDTH           "OptimalWidth"
 #define SC_UNONAME_PAGESTL          "PageStyle"
+#define SC_UNONAME_ISACTIVE         "IsActive"
+#define SC_UNONAME_BORDCOL          "BorderColor"
+#define SC_UNONAME_PROTECT          "Protected"
+#define SC_UNONAME_SHOWBORD         "ShowBorder"
+#define SC_UNONAME_PRINTBORD        "PrintBorder"
+#define SC_UNONAME_COPYBACK         "CopyBack"
+#define SC_UNONAME_COPYSTYL         "CopyStyles"
+#define SC_UNONAME_COPYFORM         "CopyFormulas"
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
 
@@ -256,7 +264,7 @@
 #define SC_UNONAME_KEEPFORM         "KeepFormats"
 #define SC_UNONAME_MOVCELLS         "MoveCells"
 #define SC_UNONAME_ISUSER           "IsUserDefined"
-#define SC_UNONAME_NATIVE           "Native"
+#define SC_UNONAME_ISNATIVE         "IsNative"
 #define SC_UNONAME_REGEXP           "RegularExpressions"
 #define SC_UNONAME_SAVEOUT          "SaveOutputPosition"
 #define SC_UNONAME_SKIPDUP          "SkipDuplicates"
@@ -286,6 +294,7 @@
 #define SC_UNONAME_FLTCRT           "FilterCriteriaSource"
 #define SC_UNONAME_USEFLTCRT        "UseFilterCriteriaSource"
 #define SC_UNONAME_ENABSORT         "EnableSort"
+#define SC_UNONAME_FROMSELECT       "FromSelection"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"
@@ -321,7 +330,8 @@
 #define SC_UNONAME_FILTER           "Filter"
 #define SC_UNONAME_FILTOPT          "FilterOptions"
 #define SC_UNONAME_LINKURL          "Url"
-#define SC_UNONAME_REFDELAY         "RefreshDelay"
+#define SC_UNONAME_REFPERIOD        "RefreshPeriod"
+#define SC_UNONAME_REFDELAY         "RefreshDelay" // deprecated, don't use anymore
 
 //  search descriptor
 #define SC_UNO_SRCHBACK             "SearchBackwards"
@@ -389,6 +399,8 @@
 #define SC_UNO_PAGE_PRINTDOWN       "PrintDownFirst"
 #define SC_UNO_PAGE_SCALEVAL        "PageScale"
 #define SC_UNO_PAGE_SCALETOPAG      "ScaleToPages"
+#define SC_UNO_PAGE_SCALETOX        "ScaleToPagesX"
+#define SC_UNO_PAGE_SCALETOY        "ScaleToPagesY"
 #define SC_UNO_PAGE_FIRSTPAGE       "FirstPageNumber"
 #define SC_UNO_PAGE_LEFTHDRCONT     "LeftPageHeaderContent"
 #define SC_UNO_PAGE_LEFTFTRCONT     "LeftPageFooterContent"
