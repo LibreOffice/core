@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-08 16:30:45 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 18:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #ifndef _SVX_IMPGRF_HXX
 #include <svx/impgrf.hxx>
 #endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
@@ -242,6 +245,9 @@
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
+#endif
+#ifndef _SWUNODEF_HXX
+#include <swunodef.hxx>
 #endif
 
 #ifndef _SWSWERROR_H
@@ -2987,19 +2993,30 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
         }
     }
 
-    BOOL bInWrd = rShell.IsInWrd(),
-         bSmart = eBufferType & TRNSFR_DOCUMENT_WORD &&
-                  (bInWrd || rShell.IsEndWrd()),
-         bSttWrd = rShell.IsSttWrd(),
-         bEndWrd = rShell.IsEndWrd();
-
-    if ( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
-        rShell.SwEditShell::Insert(' ');
+    BOOL bInWrd, bEndWrd, bSttWrd,
+         bSmart = TRNSFR_DOCUMENT_WORD & eBufferType;
+    if( bSmart )
+    {
+        if( SCRIPTTYPE_LATIN != rShell.GetScriptType() )
+            bSmart = FALSE;
+        else
+        {
+            bInWrd = rShell.IsInWrd();
+             bEndWrd = rShell.IsEndWrd();
+            bSmart = bInWrd || bEndWrd;
+            if( bSmart )
+            {
+                 bSttWrd = rShell.IsSttWrd();
+                if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
+                    rShell.SwEditShell::Insert(' ');
+            }
+        }
+    }
 
     int nRet = rShell.Paste( pClpDocFac->GetDoc() );
 
     // Wenn Smart Paste dann Leerzeichen einfuegen
-    if ( nRet && bSmart && (bInWrd || bSttWrd) )
+    if( nRet && bSmart && (bInWrd || bSttWrd) )
         rShell.SwEditShell::Insert(' ');
 
     return nRet;

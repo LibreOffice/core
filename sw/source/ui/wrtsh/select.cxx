@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:18:49 $
+ *  last change: $Author: jp $ $Date: 2001-05-16 18:07:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 
 
@@ -862,7 +865,8 @@ int SwWrtShell::IntelligentCut(int nSelection, BOOL bCut)
         // ist kein Wort selektiert.
     sal_Unicode cPrev = GetChar(FALSE);
     sal_Unicode cNext = GetChar(TRUE, -1);
-    if( !cPrev || !cNext || !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) ||
+    if( !cPrev || !cNext || SCRIPTTYPE_LATIN != GetScriptType() ||
+        !rCC.isLetterNumeric( ( sTxt = cPrev), 0 ) ||
         !rCC.isLetterNumeric( ( sTxt = cNext), 0 ) )
         return NO_WORD;
 
@@ -973,11 +977,14 @@ long SwWrtShell::MoveText(const Point *pPt,BOOL)
 
           Source Code Control System - Header
 
-          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.6 2001-03-12 08:18:49 tl Exp $
+          $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/wrtsh/select.cxx,v 1.7 2001-05-16 18:07:35 jp Exp $
 
           Source Code Control System - Update
 
           $Log: not supported by cvs2svn $
+          Revision 1.6  2001/03/12 08:18:49  tl
+          SearcParam => SearchOptions and implied changes
+
           Revision 1.5  2000/11/28 18:46:55  jp
           Bug #80312#: OverwriteCursor for CJK
 
