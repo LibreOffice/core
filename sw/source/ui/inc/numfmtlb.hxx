@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:05:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,13 @@
 #include <svtools/zforlist.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwView;
 
-class NumFormatListBox : public ListBox
+class SW_DLLPUBLIC NumFormatListBox : public ListBox
 {
     short               nCurrFormatType;
     USHORT              nStdEntry;
@@ -84,11 +88,11 @@ class NumFormatListBox : public ListBox
                                               //to be shown in the number format dialog
     BOOL                bUseAutomaticLanguage;//determine whether language is automatically assigned
 
-    DECL_LINK( SelectHdl, ListBox * );
+    SW_DLLPRIVATE DECL_LINK( SelectHdl, ListBox * );
 
-    double          GetDefValue(const short nFormatType) const;
-    void            Init(short nFormatType, BOOL bUsrFmts);
-    SwView*         GetView();
+    SW_DLLPRIVATE double          GetDefValue(const short nFormatType) const;
+    SW_DLLPRIVATE void            Init(short nFormatType, BOOL bUsrFmts);
+    SW_DLLPRIVATE SwView*           GetView();
 
 public:
     NumFormatListBox( Window* pWin, const ResId& rResId,
