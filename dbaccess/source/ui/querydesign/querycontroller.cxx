@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:12:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,9 +198,6 @@
 #endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
 #endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
@@ -399,6 +396,13 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
 OQueryController::~OQueryController()
 {
     DBG_DTOR(OQueryController,NULL);
+    if ( !getBroadcastHelper().bDisposed && !getBroadcastHelper().bInDispose )
+    {
+        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        // increment ref count to prevent double call of Dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
 }
 // -----------------------------------------------------------------------------
 void OQueryController::deleteIterator()
@@ -712,10 +716,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
     InvalidateFeature(_nId);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    OJoinController::initialize(aArguments);
+    OJoinController::impl_initialize(aArguments);
 
     PropertyValue aValue;
     const Any* pBegin   = aArguments.getConstArray();
@@ -732,12 +735,6 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             aValue.Value >>= xConn;
             if ( xConn.is() )
                 initializeConnection( xConn );
-        }
-        else if(0 == aValue.Name.compareToAscii(PROPERTY_DATASOURCENAME))
-        {
-            ::rtl::OUString sDataSource;
-            aValue.Value >>= sDataSource;
-            initializeDataSourceName( sDataSource );
         }
         else if(0 == aValue.Name.compareToAscii(PROPERTY_CURRENTQUERY))
         {
@@ -840,9 +837,6 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
         }
 
         setModified(sal_False);
-
-        // update the title of our window
-        updateTitle();
     }
     catch(SQLException& e)
     {
@@ -860,13 +854,11 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
 // -----------------------------------------------------------------------------
 void OQueryController::updateTitle()
 {
-    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-    if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE) )
+    ::rtl::OUString sName = m_sName;
+    if ( !sName.getLength() )
     {
-        ::rtl::OUString sName;
         if ( !m_bIndependent )
         {
-            sName = m_sName;
             if ( !sName.getLength() )
             {
                 String aDefaultName = String( ModuleRes( m_bCreateView ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
@@ -874,11 +866,11 @@ void OQueryController::updateTitle()
                 sName = ::dbtools::createUniqueName( getElements(),aDefaultName );
             }
             String sTitlePrefix = String( ModuleRes( m_bCreateView ? STR_VIEWDESIGN : STR_QUERYDESIGN ) );
-            sName = sTitlePrefix + ::rtl::OUString::createFromAscii(" ") + sName;
+            sName += sTitlePrefix;
         }
 
-        xProp->setPropertyValue( PROPERTY_TITLE, makeAny( sName ) );
     }
+    OGenericUnoController::setTitle(sName);
 }
 // -----------------------------------------------------------------------------
 void OQueryController::setQueryComposer()
@@ -1004,16 +996,8 @@ void OQueryController::reconnect(sal_Bool _bUI)
     }
 }
 // -----------------------------------------------------------------------------
-void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
+void OQueryController::saveViewSettings(Sequence<PropertyValue>& _rViewProps)
 {
-    OJoinController::Save(_rxOut);
-    OStreamSection aSection(_rxOut.get());
-
-    // some data
-    _rxOut->writeLong(m_nSplitPos);
-    _rxOut->writeLong(m_nVisibleRows);
-
-    // the fielddata
     OTableFields::const_iterator aFieldIter = m_vTableFieldDesc.begin();
     sal_Int32 nCount = 0;
     for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
@@ -1021,48 +1005,72 @@ void OQueryController::Save(const Reference< XObjectOutputStream>& _rxOut)
         if(!(*aFieldIter)->IsEmpty())
             ++nCount;
     }
-    _rxOut->writeLong(nCount);
-    aFieldIter = m_vTableFieldDesc.begin();
-    for(;aFieldIter != m_vTableFieldDesc.end();++aFieldIter)
+
+    sal_Int32 nLen = _rViewProps.getLength();
+
+    _rViewProps.realloc( nLen + 2 + (nCount != 0 ? 1 : 0) );
+    PropertyValue *pIter = _rViewProps.getArray() + nLen;
+
+    if ( nCount != 0 )
     {
-        if(!(*aFieldIter)->IsEmpty())
-            (*aFieldIter)->Save(_rxOut);
+        pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields"));
+
+        Sequence<PropertyValue> aFields(nCount);
+        PropertyValue *pFieldsIter = aFields.getArray();
+        // the fielddata
+        aFieldIter = m_vTableFieldDesc.begin();
+        for(sal_Int32 i = 1;aFieldIter != m_vTableFieldDesc.end();++aFieldIter,++i)
+        {
+            if ( !(*aFieldIter)->IsEmpty() )
+            {
+                pFieldsIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Field")) + ::rtl::OUString::valueOf(i);
+                (*aFieldIter)->Save(*pFieldsIter++);
+            }
+        }
+        pIter->Value <<= aFields;
+        ++pIter;
     }
-    _rxOut->writeLong(m_nVisibleRows);
+
+    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition"));
+    pIter->Value <<= m_nSplitPos;
+    ++pIter;
+    pIter->Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows"));
+    pIter->Value <<= m_nVisibleRows;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
+void OQueryController::loadViewSettings(const Sequence<PropertyValue>& _rViewProps)
 {
-    OJoinController::Load(_rxIn);
-    OStreamSection aSection(_rxIn.get());
-    try
+    //////////////////////////////////////////////////////////////////////
+    // Liste loeschen
+    OTableFields().swap(m_vTableFieldDesc);
+
+    const PropertyValue *pIter = _rViewProps.getConstArray();
+    const PropertyValue *pEnd = pIter + _rViewProps.getLength();
+    for (; pIter != pEnd; ++pIter)
     {
-        // some data
-        m_nSplitPos = _rxIn->readLong();
-        m_nVisibleRows = _rxIn->readLong();
-
-        //////////////////////////////////////////////////////////////////////
-        // Liste loeschen
-        OTableFields().swap(m_vTableFieldDesc);
-
-        sal_Int32 nCount = 0;
-        nCount = _rxIn->readLong();
-        m_vTableFieldDesc.reserve(nCount);
-        for(sal_Int32 j=0;j<nCount;++j)
+        if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SplitterPosition")) )
         {
-            if(aSection.available())
+            pIter->Value >>= m_nSplitPos;
+        }
+        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleRows")) )
+        {
+            pIter->Value >>= m_nVisibleRows;
+        }
+        else if ( pIter->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fields")) )
+        {
+            Sequence<PropertyValue> aFields;
+            pIter->Value >>= aFields;
+            m_vTableFieldDesc.reserve(aFields.getLength() + 1);
+            const PropertyValue *pFieldIter = aFields.getConstArray();
+            const PropertyValue *pFieldEnd = pFieldIter + aFields.getLength();
+            for (; pFieldIter != pFieldEnd; ++pFieldIter)
             {
                 OTableFieldDescRef pData = new OTableFieldDesc();
-                pData->Load(_rxIn);
+                pData->Load(*pFieldIter);
                 m_vTableFieldDesc.push_back(pData);
             }
         }
     }
-    catch(Exception&)
-    {
-    }
-    if(aSection.available())
-        m_nVisibleRows = _rxIn->readLong();
 }
 
 // -----------------------------------------------------------------------------
@@ -1126,7 +1134,8 @@ void OQueryController::executeQuery()
     // which can't live without his connection
     ::rtl::OUString sTranslatedStmt = translateStatement( false );
 
-    if ( getDataSourceName().getLength() && sTranslatedStmt.getLength() )
+    ::rtl::OUString sDataSourceName = getDataSourceName();
+    if ( sDataSourceName.getLength() && sTranslatedStmt.getLength() )
     {
         try
         {
@@ -1147,7 +1156,7 @@ void OQueryController::executeQuery()
             Reference< XDispatchProvider> xProv(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags),UNO_QUERY);
             if(!xProv.is())
             {
-                xProv = Reference< XDispatchProvider>(m_xCurrentFrame, UNO_QUERY);
+                xProv.set(m_xCurrentFrame,UNO_QUERY);
                 if (xProv.is())
                     xDisp = xProv->queryDispatch(aWantToDispatch, sFrameName, nSearchFlags);
             }
@@ -1159,7 +1168,7 @@ void OQueryController::executeQuery()
             {
                 Sequence< PropertyValue> aProps(10);
                 aProps[0].Name = PROPERTY_DATASOURCENAME;
-                aProps[0].Value <<= getDataSourceName();
+                aProps[0].Value <<= sDataSourceName;
 
                 aProps[1].Name = PROPERTY_COMMANDTYPE;
                 aProps[1].Value <<= CommandType::COMMAND;
@@ -1210,11 +1219,6 @@ void OQueryController::executeQuery()
             OSL_ENSURE(0,"Couldn't create a beamer window!");
         }
     }
-}
-// -----------------------------------------------------------------------------
-String OQueryController::getMenu() const
-{
-    return String::CreateFromInt32(RID_QUERY_DESIGN_MAIN_MENU);
 }
 // -----------------------------------------------------------------------------
 sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
@@ -1271,11 +1275,8 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
 // -----------------------------------------------------------------------------
 void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 {
-    OSL_ENSURE(isEditable(),"OQueryController::doSaveAsDoc: Slot ID_BROWSER_SAVEDOC should not be enabled!");
-
-    if  (  !m_bIndependent
-        && !::dbaui::checkDataSourceAvailable( ::comphelper::getString( getDataSource()->getPropertyValue( PROPERTY_NAME ) ), getORB() )
-        )
+    OSL_ENSURE(isEditable(),"Slot ID_BROWSER_SAVEDOC should not be enabled!");
+    if ( !m_bIndependent && !haveDataSource() )
     {
         String aMessage(ModuleRes(STR_DATASOURCE_DELETED));
         String sTitle(ModuleRes(STR_STAT_WARNING));
@@ -1369,23 +1370,14 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                     xQuery->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,::cppu::bool2any(m_bEsacpeProcessing));
 
                     // now we save the layout information
-                    //  create the output stream
                     getContainer()->SaveUIConfig();
-                    Sequence< sal_Int8 > aOutputSeq;
-                    {
-                        Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
-                        Reference< XObjectOutputStream> xOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")),UNO_QUERY);
-                        Reference< XOutputStream>   xMarkOutStream(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")),UNO_QUERY);
-                        Reference< XActiveDataSource >(xMarkOutStream,UNO_QUERY)->setOutputStream(xOutStreamHelper);
-                        Reference< XActiveDataSource > xOutDataSource(xOutStream, UNO_QUERY);
-                        OSL_ENSURE(xOutDataSource.is(),"Couldn't create com.sun.star.io.ObjectOutputStream!");
-                        xOutDataSource->setOutputStream(xMarkOutStream);
-                        Save(xOutStream);
-                    }
-                    xQuery->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aOutputSeq));
+                    Sequence<PropertyValue> aWindows;
+                    saveTableWindows(aWindows);
+                    saveViewSettings(aWindows);
+                    xQuery->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
                 }
 
-                if ( bNew )
+                if(bNew)
                 {
                     Reference<XAppend> xAppend(xElements,UNO_QUERY);
                     if(xAppend.is())
@@ -1399,33 +1391,21 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                             xCont->insertByName(m_sName,makeAny(xQuery));
                     }
 
-                    if(m_bCreateView)
+                    if ( m_bCreateView )
                     {
                         Reference<XPropertySet> xProp2;
-                        if(xElements->hasByName(m_sName))
-                            xElements->getByName(m_sName) >>= xProp2;
-                        if(!xProp2.is()) // correct name and try again
+                        if ( xElements->hasByName(m_sName) )
+                            xProp2.set(xElements->getByName(m_sName),UNO_QUERY);
+                        if ( !xProp2.is() ) // correct name and try again
                         {
-                            // it can be that someone inserted new data for us
-                            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-                            xQuery->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                            xQuery->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                            xQuery->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-                            ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
-                            m_sName = sComposedName;
+                            sal_Bool bUseCatalogInSelect = ::dbtools::isDataSourcePropertyEnabled(getDataSource(),PROPERTY_USECATALOGINSELECT,sal_True);
+                            sal_Bool bUseSchemaInSelect = ::dbtools::isDataSourcePropertyEnabled(getDataSource(),PROPERTY_USESCHEMAINSELECT,sal_True);
+                            m_sName = ::dbtools::composeTableName(getMetaData(),xQuery,sal_False,::dbtools::eInDataManipulation,bUseCatalogInSelect,bUseSchemaInSelect);
                         }
                         // now check if our datasource has set a tablefilter and if append the new table name to it
                         ::dbaui::appendToFilter(getConnection(),m_sName,getORB(),getView()); // we are not interessted in the return value
                     }
                 }
-                else
-                {
-                    Reference<XFlushable> xFlush(xQuery,UNO_QUERY);
-                    if(xFlush.is())
-                        xFlush->flush();
-                }
-
                 setModified(sal_False);
             }
             catch(SQLContext& e)
@@ -1500,6 +1480,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 // -----------------------------------------------------------------------------
 short OQueryController::saveModified()
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard aGuard(m_aMutex);
     short nRet = RET_YES;
     if ( !isConnected() || !isModified() )
         return nRet;
@@ -1538,7 +1520,7 @@ short OQueryController::saveModified()
 void OQueryController::resetImpl()
 {
     bool bValid = false;
-    Sequence< sal_Int8 > aLayoutInformation;
+    Sequence< PropertyValue > aLayoutInformation;
 
     // get command from the query if a query name was supplied
     if ( !m_bIndependent )
@@ -1584,19 +1566,10 @@ void OQueryController::resetImpl()
         {
             try
             {
-                Reference< XInputStream>       xInStreamHelper = new SequenceInputStream( aLayoutInformation );
-                Reference< XObjectInputStream> xInStream = Reference< XObjectInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")),UNO_QUERY);
-                Reference< XInputStream> xMarkInStream = Reference< XInputStream >(getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")),UNO_QUERY);
-                Reference< XActiveDataSink >(xMarkInStream,UNO_QUERY)->setInputStream(xInStreamHelper);
-                Reference< XActiveDataSink >   xInDataSource(xInStream, UNO_QUERY);
-                OSL_ENSURE( xInDataSource.is(),"Couldn't create com.sun.star.io.ObjectInputStream!" );
+                // load the layoutInformation
 
-                if ( xInDataSource.is() )
-                {
-                    xInDataSource->setInputStream( xMarkInStream );
-                    if ( xInStream.is() )
-                        Load( xInStream );
-                }
+                loadTableWindows(aLayoutInformation);
+                loadViewSettings(aLayoutInformation);
             }
             catch(Exception&)
             {
