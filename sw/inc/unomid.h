@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-10-24 09:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 
 
 #define MID_MIRROR_VERT                         0
-#define MID_MIRROR_HORZ                         1
-#define MID_MIRROR_HORZ_PAGETOGGLE              2
+#define MID_MIRROR_HORZ_EVEN_PAGES              1
+#define MID_MIRROR_HORZ_ODD_PAGES               2
 
 #define MID_PAGEDESC_PAGEDESCNAME               0
 #define MID_PAGEDESC_PAGENUMOFFSET              1
