@@ -1,4 +1,4 @@
-UDK_2_0_0 {
+UDK_3_0_0 {
     global:
         GetVersionInfo;
         osl_acceptConnectionOnSocket;
