@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStream.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,11 @@ namespace connectivity
         static jclass theClass;
         // der Destruktor um den Object-Counter zu aktualisieren
         static void saveClassRef( jclass pClass );
+        virtual ~java_io_InputStream();
     public:
         static jclass getMyClass();
-        virtual ~java_io_InputStream();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_io_InputStream( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
+        java_io_InputStream( JNIEnv * pEnv, jobject myObj );
         // XInputStream
         virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
