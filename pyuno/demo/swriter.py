@@ -17,9 +17,6 @@ def insertTextIntoCell( table, cellName, text, color ):
     tableText.setString( text )
 
 localContext = uno.getComponentContext()
-unohelper.addComponentsToContext(  localContext , localContext,
-				   ("connectr","uuresolver","remotebridge","brdgfctr"),
-				   "com.sun.star.loader.SharedLibrary" )
 				   
 resolver = localContext.ServiceManager.createInstanceWithContext(
 				"com.sun.star.bridge.UnoUrlResolver", localContext )
