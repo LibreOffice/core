@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svx3ditems.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:16 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,34 @@ Svx3DEndAngleItem::Svx3DEndAngleItem(sal_uInt32 nVal)
 Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(BOOL bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal)
 {}
+
+//////////////////////////////////////////////////////////////////////////////
+// #i28528#
+// Added extra Item (Bool) for chart2 to be able to show reduced line geometry
+
+Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(BOOL bVal)
+:   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
+{}
+
+sal_uInt16 Svx3DReducedLineGeometryItem::GetVersion(sal_uInt16 nFileFormatVersion) const
+{
+    return 1;
+}
+
+SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) const
+{
+    SfxBoolItem* pRetval = new Svx3DReducedLineGeometryItem();
+
+    if(nItemVersion > 0)
+    {
+        SfxBoolItem aBoolItem(Which(), rIn);
+        pRetval->SetValue(aBoolItem.GetValue());
+    }
+
+    return pRetval;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
