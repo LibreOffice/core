@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 13:41:49 $
+ *  last change: $Author: kso $ $Date: 2001-07-16 11:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,8 @@
 
  *************************************************************************/
 
-#ifndef __HASH_MAP__
 #include <hash_map>
-#endif
+
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
@@ -83,8 +82,8 @@
 #ifndef _COM_SUN_STAR_UCB_XPROPERTYSETREGISTRY_HPP_
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 #ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
 #include <ucbhelper/contentidentifier.hxx>
@@ -291,10 +290,6 @@ void ContentProviderImplHelper::addContent(
     Contents::const_iterator it = m_pImpl->m_aContents.find( aURL );
     if ( it == m_pImpl->m_aContents.end() )
         m_pImpl->m_aContents[ aURL ] = pContent;
-    else
-        VOS_ENSURE( (*it).second == pContent,
-                    "ContentProviderImplHelper::addContent - "
-                    "Another content already registered for this URL!" );
 }
 
 //=========================================================================
@@ -313,9 +308,6 @@ void ContentProviderImplHelper::removeContent( const OUString& rURL )
     vos::OGuard aGuard( m_aMutex );
 
     Contents::iterator it = m_pImpl->m_aContents.find( rURL );
-
-//  VOS_ENSURE( it != m_pImpl->m_aContents.end(),
-//              "ContentProviderImplHelper::removeContent - Not registered!" );
 
     if ( it != m_pImpl->m_aContents.end() )
         m_pImpl->m_aContents.erase( it );
@@ -378,7 +370,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
                     OUString::createFromAscii( "com.sun.star.ucb.Store" ) ),
                 UNO_QUERY );
 
-        VOS_ENSURE( xRegFac.is(),
+        OSL_ENSURE( xRegFac.is(),
                     "ContentProviderImplHelper::getAdditionalPropertySet - "
                     "No UCB-Store service!" );
 
@@ -388,7 +380,7 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
             m_pImpl->m_xPropertySetRegistry
                             = xRegFac->createPropertySetRegistry( OUString() );
 
-            VOS_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
+            OSL_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
                     "ContentProviderImplHelper::getAdditionalPropertySet - "
                     "Error opening registry!" );
         }
