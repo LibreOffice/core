@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:49:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 16:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,6 +950,8 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
             aLogPos.Y() -= ( aLogSize.Height() - 1L );
         }
 
+        bool bDidPaint( false );
+
         if( pGraphic->GetType() == GRAPHIC_BITMAP )
         {
             if( pGraphic->IsAnimated() )
@@ -972,6 +974,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                             pGraphic->StopAnimation();
                             pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
                             bEnable = FALSE;
+                            bDidPaint = true;
                         }
                     }
                 }
@@ -985,6 +988,8 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                     }
                     else if( eAnimMode == SDR_ANIMATION_DONT_ANIMATE )
                         pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
+
+                    bDidPaint = true;
                 }
             }
             else
@@ -993,6 +998,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                     aAttr.SetRotation( nDrehWink / 10 );
 
                 pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
+                bDidPaint = true;
             }
         }
         else
@@ -1013,7 +1019,15 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
 
             pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr, nGraphicManagerDrawMode );
             pOutDev->SetDrawMode( nOldDrawMode );
+
+            bDidPaint = true;
         }
+
+        // #110290# Remove the SdrGraphObj from the list of objects to be removed on
+        // page switch. This is permissible, as the Draw above reenabled the swapout
+        // timer.
+        if( bDidPaint )
+            ( (SdrView*) pView )->ImpAsyncPaintDone( this );
     }
 
     // auch GRAPHIC_NONE oder SwappedOut( AsyncSwap )
