@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-20 12:36:12 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 11:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,14 +210,14 @@ SvxEditEngineSourceImpl::~SvxEditEngineSourceImpl()
 
 //------------------------------------------------------------------------
 
-void SAL_CALL SvxEditEngineSourceImpl::acquire() throw()
+void SAL_CALL SvxEditEngineSourceImpl::acquire()
 {
     osl_incrementInterlockedCount( &maRefCount );
 }
 
 //------------------------------------------------------------------------
 
-void SAL_CALL SvxEditEngineSourceImpl::release() throw()
+void SAL_CALL SvxEditEngineSourceImpl::release()
 {
     if( ! osl_decrementInterlockedCount( &maRefCount ) )
         delete this;
