@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:00:53 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,12 +2092,6 @@ void WW8TabDesc::CreateSwTable()
             aSur.SetAnchorOnly(true);
             pIo->pFmtOfJustInsertedApo->SetAttr(aSur);
         }
-    }
-
-    if (!bInsNode && pIo->pNode_FLY_AT_CNTNT == &pPoint->nNode.GetNode())
-    {
-        bInsNode = true;
-        bSetMinHeight = true;
     }
 
     if (bSetMinHeight == true)
