@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 10:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1856,4 +1856,8 @@ SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
     return *pImp->pObjShells;
 }
 
-
+void SfxApplication::Invalidate( USHORT nId )
+{
+    for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
+        Invalidate_Impl( pFrame->GetBindings(), nId );
+}
