@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 13:40:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -106,9 +108,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
-
-#include <com/sun/star/uno/Reference.h>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -196,6 +198,10 @@ using namespace ucb;
 #include "sfxresid.hxx"
 #include "doc.hrc"
 #include "fcontnr.hxx"
+
+#ifndef SFX2_TEMPLATEFOLDERCACHE_HXX
+#include <svtools/templatefoldercache.hxx>
+#endif
 
 //========================================================================
 
@@ -333,7 +339,7 @@ public:
                         SfxDocTemplate_Impl();
                         ~SfxDocTemplate_Impl();
 
-    sal_Bool            Construct();
+    sal_Bool            Construct( );
     void                CreateFromHierarchy( Content &rTemplRoot );
     void                AddRegion( const OUString& rTitle,
                                    Content& rContent );
@@ -1693,6 +1699,19 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
     pImp = NULL;
 }
 
+    //---------------------------------------------------------------------
+    //--- 05.12.01 17:49:58 -----------------------------------------------
+    void SfxDocumentTemplates::Update( sal_Bool _bSmart )
+    {
+        if  (   !_bSmart                                                // don't be smart
+            ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    // update is really necessary
+            )
+        {
+            if ( pImp->Construct() )
+                pImp->Rescan();
+        }
+    }
+
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
@@ -2212,7 +2231,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 }
 
 // ------------------------------------------------------------------------
-sal_Bool SfxDocTemplate_Impl::Construct()
+sal_Bool SfxDocTemplate_Impl::Construct( )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2378,16 +2397,27 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
 // -----------------------------------------------------------------------
 void SfxDocTemplate_Impl::Rescan()
 {
-    Reference< XDocumentTemplates > xTemplates = getDocTemplates();
-    xTemplates->update();
-
     Clear();
 
-    Reference < XContent > aRootContent = xTemplates->getContent();
-    Reference < XCommandEnvironment > aCmdEnv;
+    try
+    {
+        Reference< XDocumentTemplates > xTemplates = getDocTemplates();
+        DBG_ASSERT( xTemplates.is(), "SfxDocTemplate_Impl::Rescan:invalid template instance!" );
+        if ( xTemplates.is() )
+        {
+            xTemplates->update();
 
-    Content aTemplRoot( aRootContent, aCmdEnv );
-    CreateFromHierarchy( aTemplRoot );
+            Reference < XContent > aRootContent = xTemplates->getContent();
+            Reference < XCommandEnvironment > aCmdEnv;
+
+            Content aTemplRoot( aRootContent, aCmdEnv );
+            CreateFromHierarchy( aTemplRoot );
+        }
+    }
+    catch( const Exception& )
+    {
+        DBG_ERRORFILE( "SfxDocTemplate_Impl::Rescan: caught an exception while doing the update!" );
+    }
 }
 
 // -----------------------------------------------------------------------
