@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:07:44 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,12 +146,11 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 
 //========================================================================
 // class OComboBoxModel
 //========================================================================
-sal_Int32 OComboBoxModel::nTextHandle = -1;
-
 //------------------------------------------------------------------
 InterfaceRef SAL_CALL OComboBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
@@ -163,6 +162,7 @@ Sequence<Type> OComboBoxModel::_getTypes()
 {
     return ::comphelper::concatSequences(
         OBoundControlModel::_getTypes(),
+        OEntryListHelper::getTypes(),
         OErrorBroadcaster::getTypes()
     );
 }
@@ -172,9 +172,10 @@ Sequence<Type> OComboBoxModel::_getTypes()
 StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     ::rtl::OUString* pArray = aSupported.getArray();
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_COMBOBOX;
     pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_COMBOBOX;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_COMBOBOX;
     return aSupported;
@@ -184,15 +185,20 @@ StringSequence SAL_CALL OComboBoxModel::getSupportedServiceNames() throw(Runtime
 Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControlModel::queryAggregation( _rType );
-    return aReturn.hasValue() ? aReturn : OErrorBroadcaster::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OEntryListHelper::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OErrorBroadcaster::queryInterface( _rType );
+    return aReturn;
 }
 
 //------------------------------------------------------------------
 DBG_NAME( OComboBoxModel )
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel(_rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX)
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_CONTROL_COMBOBOX, sal_True, sal_True )
                     // use the old control name for compytibility reasons
+    ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_eListSourceType(ListSourceType_TABLE)
     ,m_bEmptyIsNull(sal_True)
@@ -204,14 +210,13 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
     DBG_CTOR( OComboBoxModel, NULL );
 
     m_nClassId = FormComponentType::COMBOBOX;
-    m_sDataFieldConnectivityProperty = PROPERTY_TEXT;
-    if (OComboBoxModel::nTextHandle == -1)
-        OComboBoxModel::nTextHandle = getOriginalHandle(PROPERTY_ID_TEXT);
+    initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
 //------------------------------------------------------------------
 OComboBoxModel::OComboBoxModel( const OComboBoxModel* _pOriginal, const Reference<XMultiServiceFactory>& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
+    ,OEntryListHelper( m_aMutex )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aNullDate(DBTypeConversion::getStandardDate())
     ,m_nKeyType(NumberFormat::UNDEFINED)
@@ -246,6 +251,7 @@ IMPLEMENT_DEFAULT_CLONING( OComboBoxModel )
 void OComboBoxModel::disposing()
 {
     OBoundControlModel::disposing();
+    OEntryListHelper::disposing();
     OErrorBroadcaster::disposing();
     m_xFormatter = NULL;
 }
@@ -255,10 +261,26 @@ void OComboBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) cons
 {
     switch (_nHandle)
     {
-        case PROPERTY_ID_LISTSOURCETYPE : _rValue <<= m_eListSourceType; break;
-        case PROPERTY_ID_LISTSOURCE     : _rValue <<= m_aListSource; break;
-        case PROPERTY_ID_EMPTY_IS_NULL  : _rValue <<= m_bEmptyIsNull; break;
-        case PROPERTY_ID_DEFAULT_TEXT   : _rValue <<= m_aDefaultText; break;
+        case PROPERTY_ID_LISTSOURCETYPE:
+            _rValue <<= m_eListSourceType;
+            break;
+
+        case PROPERTY_ID_LISTSOURCE:
+            _rValue <<= m_aListSource;
+            break;
+
+        case PROPERTY_ID_EMPTY_IS_NULL:
+            _rValue <<= m_bEmptyIsNull;
+            break;
+
+        case PROPERTY_ID_DEFAULT_TEXT:
+            _rValue <<= m_aDefaultText;
+            break;
+
+        case PROPERTY_ID_STRINGITEMLIST:
+            _rValue <<= getStringItemList();
+            break;
+
         default:
             OBoundControlModel::getFastPropertyValue(_rValue, _nHandle);
     }
@@ -277,29 +299,34 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             break;
 
         case PROPERTY_ID_LISTSOURCE :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aListSource;
             // die ListSource hat sich geaendert -> neu laden
             if (ListSourceType_VALUELIST != m_eListSourceType)
             {
-                if (m_xCursor.is() && !getField().is()) // combobox bereits mit Datenbank verbunden ?
-                    // neu laden
+                if ( m_xCursor.is() && !getField().is() && !hasExternalListSource() )
+                    // combo box is already connected to a database, and no external list source
+                    // data source changed -> refresh
                     loadData();
             }
             break;
 
         case PROPERTY_ID_EMPTY_IS_NULL :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN,
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_BOOLEAN,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_bEmptyIsNull;
             break;
 
         case PROPERTY_ID_DEFAULT_TEXT :
-                        DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
+            DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aDefaultText;
-            _reset();
+            resetNoBroadcast();
+            break;
+
+        case PROPERTY_ID_STRINGITEMLIST:
+            setNewStringItemList( _rValue );
             break;
 
         default:
@@ -331,6 +358,10 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
             bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_aDefaultText);
             break;
 
+        case PROPERTY_ID_STRINGITEMLIST:
+            bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
+            break;
+
         default:
             bModified = OBoundControlModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
             break;
@@ -356,7 +387,10 @@ void OComboBoxModel::fillProperties(
                 Sequence< Property >& _rProps,
                 Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(12)
+    FRM_BEGIN_PROP_HELPER(13)
+        RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
+            // we want to "override" this property
+
         DECL_PROP2(CLASSID,             sal_Int16,                  READONLY, TRANSIENT);
         DECL_PROP1(NAME,                ::rtl::OUString,            BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,            BOUND);
@@ -369,6 +403,7 @@ void OComboBoxModel::fillProperties(
         DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,               BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,               BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,          READONLY, TRANSIENT);
+        DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,BOUND);
     FRM_END_PROP_HELPER();
 }
 
@@ -482,10 +517,11 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 
     // Stringliste muß geleert werden, wenn eine Listenquelle gesetzt ist
     // dieses kann der Fall sein wenn im alive modus gespeichert wird
-    if (m_aListSource.getLength() && m_xAggregateSet.is())
+    if  (   m_aListSource.getLength()
+        &&  !hasExternalListSource()
+        )
     {
-        StringSequence aSequence;
-        m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aSequence));
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
     }
 
     if (nVersion > 0x0004)
@@ -498,7 +534,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (m_aControlSource.getLength())
     {
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
-        _reset();
+        resetNoBroadcast();
     }
 }
 
@@ -506,7 +542,11 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
 void OComboBoxModel::loadData()
 {
     DBG_ASSERT(m_eListSourceType != ListSourceType_VALUELIST, "OComboBoxModel::loadData : do not call for a value list !");
-    ////
+    DBG_ASSERT( !hasExternalListSource(), "OComboBoxModel::loadData: cannot load from DB when I have an external list source!" );
+
+    if ( hasExternalListSource() )
+        return;
+
     // Connection holen
     Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
     if (!xForm.is())
@@ -723,7 +763,7 @@ void OComboBoxModel::loadData()
         pStringAry[i] = aStringList[i];
 
     // String-Sequence an ListBox setzen
-    m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(aStringSeq));
+    setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringSeq ) );
 
     // destroy cursor & statement
     disposeComponent(xListCursor);
@@ -731,7 +771,7 @@ void OComboBoxModel::loadData()
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::_loaded(const EventObject& rEvent)
+void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference<XPropertySet> xField = getField();
     if (xField.is())
@@ -741,8 +781,8 @@ void OComboBoxModel::_loaded(const EventObject& rEvent)
         xField->getPropertyValue(PROPERTY_FORMATKEY) >>= m_nFormatKey;
 
         // XNumberFormatter besorgen
-                Reference<XRowSet> xRowSet(rEvent.Source, UNO_QUERY);
-        DBG_ASSERT(xRowSet.is(), "OComboBoxModel::_loaded : invalid event source !");
+        Reference< XRowSet > xRowSet( _rxForm, UNO_QUERY );
+        DBG_ASSERT(xRowSet.is(), "OComboBoxModel::onConnectedDbColumn : invalid event source !");
                 Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(getConnection(xRowSet), sal_False, m_xServiceFactory);
         if (xSupplier.is())
         {
@@ -757,15 +797,15 @@ void OComboBoxModel::_loaded(const EventObject& rEvent)
         }
     }
 
-    m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST) >>= m_aDesignModeStringItems;
+    getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
     // Daten nur laden, wenn eine Listenquelle angegeben wurde
-    if (m_aListSource.getLength() && m_xCursor.is())
+    if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
         loadData();
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::_unloaded()
+void OComboBoxModel::onDisconnectedDbColumn()
 {
     if (getField().is())
     {
@@ -777,7 +817,8 @@ void OComboBoxModel::_unloaded()
     }
 
     // reset the string item list
-    m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, makeAny(m_aDesignModeStringItems));
+    if ( !hasExternalListSource() )
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( m_aDesignModeStringItems ) );
 }
 
 //------------------------------------------------------------------------------
@@ -786,18 +827,18 @@ void SAL_CALL OComboBoxModel::reloaded( const EventObject& aEvent ) throw(Runtim
     OBoundControlModel::reloaded(aEvent);
 
     // reload data if we have a list source
-    if (m_aListSource.getLength() && m_xCursor.is())
+    if ( m_aListSource.getLength() && m_xCursor.is() && !hasExternalListSource() )
         loadData();
 }
 
-// XBoundComponent
-//------------------------------------------------------------------------------
-sal_Bool OComboBoxModel::_commit()
+//-----------------------------------------------------------------------------
+sal_Bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 {
     ::rtl::OUString aNewValue;
-    m_xAggregateFastSet->getFastPropertyValue(OComboBoxModel::nTextHandle) >>= aNewValue;
-    sal_Bool bModified = (aNewValue != m_aSaveValue);
-    if (bModified)
+    m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= aNewValue;
+    sal_Bool bModified = ( aNewValue != m_aSaveValue );
+
+    if ( bModified )
     {
         if (!aNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
@@ -817,33 +858,32 @@ sal_Bool OComboBoxModel::_commit()
     }
 
     // add the new value to the list
-    sal_Bool bAddToList = bModified;
-    // (only if this is not the "commit" triggered by a "reset")
-    if  (m_bResetting)
-        bAddToList = sal_False;
+    sal_Bool bAddToList = bModified && !_bPostReset;
+        // (only if this is not the "commit" triggered by a "reset")
 
-    Any aAnyList = m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST);
-    if (bAddToList && aAnyList.getValueType().equals(::getCppuType(reinterpret_cast<StringSequence*>(NULL))))
+    if ( bAddToList )
     {
-        StringSequence aStringItemList = *(StringSequence*)aAnyList.getValue();
-        const ::rtl::OUString* pStringItems = aStringItemList.getConstArray();
-        sal_Int32 i;
-        for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
+        StringSequence aStringItemList;
+        if ( getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aStringItemList )
         {
-            if (pStringItems->equals(aNewValue))
-                break;
-        }
+            const ::rtl::OUString* pStringItems = aStringItemList.getConstArray();
+            sal_Int32 i;
+            for (i=0; i<aStringItemList.getLength(); ++i, ++pStringItems)
+            {
+                if (pStringItems->equals(aNewValue))
+                    break;
+            }
 
-        // not found -> add
-        if (i >= aStringItemList.getLength())
-        {
-            sal_Int32 nOldLen = aStringItemList.getLength();
-            aStringItemList.realloc(nOldLen + 1);
-            ::rtl::OUString* pStringItems = aStringItemList.getArray() + nOldLen;
-            *pStringItems = aNewValue;
+            // not found -> add
+            if (i >= aStringItemList.getLength())
+            {
+                sal_Int32 nOldLen = aStringItemList.getLength();
+                aStringItemList.realloc(nOldLen + 1);
+                ::rtl::OUString* pStringItems = aStringItemList.getArray() + nOldLen;
+                *pStringItems = aNewValue;
 
-            aAnyList <<= aStringItemList;
-            m_xAggregateSet->setPropertyValue(PROPERTY_STRINGITEMLIST, aAnyList);
+                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
+            }
         }
     }
 
@@ -852,35 +892,58 @@ sal_Bool OComboBoxModel::_commit()
 
 // XPropertiesChangeListener
 //------------------------------------------------------------------------------
-void OComboBoxModel::_onValueChanged()
+Any OComboBoxModel::translateDbColumnToControlValue()
 {
-    // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-    // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-    // our own mutex locked
-    // and in this special case do it before calling DBTypeConversion::getValue, as this uses the number formatter
-    // which's implementation locks the SM, too :(
-    // FS - 72451 - 31.01.00
-    MutexRelease aRelease(m_aMutex);
-    DBG_ASSERT(m_xColumn.is(), "OComboBoxModel::_onValueChanged : have no column !");
+    DBG_ASSERT( m_xColumn.is(), "OComboBoxModel::translateDbColumnToControlValue: have no column!" );
     m_aSaveValue = DBTypeConversion::getValue(m_xColumn,
                                               m_xFormatter,
                                               m_aNullDate,
                                               m_nFormatKey,
                                               m_nKeyType);
 
-        m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, makeAny(m_aSaveValue));
+    return makeAny( m_aSaveValue );
 }
 
 //------------------------------------------------------------------------------
-void OComboBoxModel::_reset()
+Any OComboBoxModel::getDefaultForReset() const
 {
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-                m_xAggregateFastSet->setFastPropertyValue(OComboBoxModel::nTextHandle, makeAny(m_aDefaultText));
-    }
+    return makeAny( m_aDefaultText );
+}
+
+//------------------------------------------------------------------------------
+sal_Bool OComboBoxModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
+{
+    OSL_PRECOND( _rxBinding.is(), "OComboBoxModel::approveValueBinding: invalid binding!" );
+
+    // only strings are accepted for simplicity
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) ) );
+}
+
+//--------------------------------------------------------------------
+void OComboBoxModel::stringItemListChanged( )
+{
+    if ( m_xAggregateSet.is() )
+        m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( getStringItemList() ) );
+}
+
+//--------------------------------------------------------------------
+void OComboBoxModel::connectedExternalListSource( )
+{
+    // TODO?
+}
+
+//--------------------------------------------------------------------
+void OComboBoxModel::disconnectedExternalListSource( )
+{
+    // TODO?
+}
+
+//--------------------------------------------------------------------
+void SAL_CALL OComboBoxModel::disposing( const EventObject& _rSource ) throw ( RuntimeException )
+{
+    if ( !OEntryListHelper::handleDisposing( _rSource ) )
+        OBoundControlModel::disposing( _rSource );
 }
 
 //========================================================================
