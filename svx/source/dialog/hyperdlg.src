@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:18:21 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,9 +137,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 57, 10 );
-        Text = "~Internet";
-        Text [ ENGLISH ] = "~Internet";
-        Text[ english_us ] = "~Internet";
+        Text = "~Web";
+        Text[ english_us ] = "~Web";
         Text[ portuguese ] = "~Internet";
         Text[ russian ] = "Интернет";
         Text[ greek ] = "Internet";
