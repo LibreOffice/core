@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrow.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 //using namespace com::sun::star::ucb;
 
 
@@ -155,6 +156,10 @@ XRow_impl::queryInterface(
   return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
+
+XTYPEPROVIDER_IMPL_2( XRow_impl,
+                         lang::XTypeProvider,
+                      sdbc::XRow )
 
 
 sal_Bool SAL_CALL

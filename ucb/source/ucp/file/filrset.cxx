@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-14 08:49:59 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,14 +104,15 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 
 XResultSet_impl::XResultSet_impl( shell* pMyShell,
                                   const rtl::OUString& aUnqPath,
                                   sal_Int32 OpenMode,
-                                  const uno::Sequence< beans::Property >& seq,
-                                  const uno::Sequence< NumberedSortingInfo >& seqSort )
+                                  const Sequence< beans::Property >& seq,
+                                  const Sequence< NumberedSortingInfo >& seqSort )
     : m_pMyShell( pMyShell ),
       m_xProvider( pMyShell->m_pProvider ),
       m_sProperty( seq ),
@@ -165,7 +166,7 @@ sal_Bool SAL_CALL XResultSet_impl::CtorSuccess()
 void SAL_CALL
 XResultSet_impl::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::acquire();
 }
@@ -174,19 +175,19 @@ XResultSet_impl::acquire(
 void SAL_CALL
 XResultSet_impl::release(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::release();
 }
 
 
 
-uno::Any SAL_CALL
+Any SAL_CALL
 XResultSet_impl::queryInterface(
-    const uno::Type& rType )
-    throw( uno::RuntimeException )
+    const Type& rType )
+    throw( RuntimeException )
 {
-    uno::Any aRet = cppu::queryInterface( rType,
+    Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( lang::XComponent*, this),
                                           SAL_STATIC_CAST( lang::XEventListener*, this),
                                           SAL_STATIC_CAST( sdbc::XRow*, this),
@@ -202,16 +203,29 @@ XResultSet_impl::queryInterface(
 
 void SAL_CALL
 XResultSet_impl::disposing( const lang::EventObject& Source )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     // To do, but what
 }
 
 
+XTYPEPROVIDER_IMPL_10( XResultSet_impl,
+                       lang::XTypeProvider,
+                       lang::XTypeProvider,
+                       lang::XEventListener,
+                       sdbc::XRow,
+                       sdbc::XResultSet,
+                       XDynamicResultSet,
+                       sdbc::XCloseable,
+                       sdbc::XResultSetMetaDataSupplier,
+                       beans::XPropertySet,
+                       XContentAccess )
+
+
 void SAL_CALL
 XResultSet_impl::addEventListener(
-    const uno::Reference< lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< lang::XEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -225,8 +239,8 @@ XResultSet_impl::addEventListener(
 
 void SAL_CALL
 XResultSet_impl::removeEventListener(
-    const uno::Reference< lang::XEventListener >& Listener )
-    throw( uno::RuntimeException )
+    const Reference< lang::XEventListener >& Listener )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -238,7 +252,7 @@ XResultSet_impl::removeEventListener(
 
 void SAL_CALL
 XResultSet_impl::dispose()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
@@ -264,7 +278,7 @@ XResultSet_impl::dispose()
 void XResultSet_impl::rowCountChanged()
 {
     sal_Int32 aOldValue,aNewValue;
-    uno::Sequence< uno::Reference< uno::XInterface > > seq;
+    Sequence< Reference< XInterface > > seq;
     {
         vos::OGuard aGuard( m_aMutex );
         if( m_pRowCountListeners )
@@ -280,7 +294,7 @@ void XResultSet_impl::rowCountChanged()
     aEv.NewValue <<= aNewValue;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
     {
-        uno::Reference< beans::XPropertyChangeListener > listener( seq[i],uno::UNO_QUERY );
+        Reference< beans::XPropertyChangeListener > listener( seq[i],UNO_QUERY );
         if( listener.is() )
             listener->propertyChange( aEv );
     }
@@ -289,7 +303,7 @@ void XResultSet_impl::rowCountChanged()
 
 void XResultSet_impl::isFinalChanged()
 {
-    uno::Sequence< uno::Reference< uno::XInterface > > seq;
+    Sequence< Reference< XInterface > > seq;
     {
         vos::OGuard aGuard( m_aMutex );
         if( m_pIsFinalListeners )
@@ -306,7 +320,7 @@ void XResultSet_impl::isFinalChanged()
     aEv.NewValue <<= tval;
     for( sal_Int32 i = 0; i < seq.getLength(); ++i )
     {
-        uno::Reference< beans::XPropertyChangeListener > listener( seq[i],uno::UNO_QUERY );
+        Reference< beans::XPropertyChangeListener > listener( seq[i],UNO_QUERY );
         if( listener.is() )
             listener->propertyChange( aEv );
     }
@@ -316,7 +330,7 @@ void XResultSet_impl::isFinalChanged()
 sal_Bool SAL_CALL
 XResultSet_impl::OneMoreFaked( void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     sal_uInt32 k = m_aItems.size();
     if( k < m_pMyShell->m_vecMountPoint.size() &&
@@ -326,10 +340,10 @@ XResultSet_impl::OneMoreFaked( void )
         rtl::OUString aUnqPath = m_pMyShell->m_vecMountPoint[k].m_aDirectory;
         osl::DirectoryItem aDirItem;
         osl::DirectoryItem::get( aUnqPath,aDirItem );
-        uno::Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,aDirItem,aUnqPath,IsRegular );
+        Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,aDirItem,aUnqPath,IsRegular );
         vos::OGuard aGuard( m_aMutex );
         m_aItems.push_back( aRow );
-        m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+        m_aIdents.push_back( Reference< XContentIdentifier >() );
         m_aUnqPath.push_back( aUnqPath );
         rowCountChanged();
         return true;
@@ -343,7 +357,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::OneMore(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     if( ! m_nIsOpen ) return false;
 
@@ -354,7 +368,7 @@ XResultSet_impl::OneMore(
     sal_Bool IsRegular;
     rtl::OUString aUnqPath;
     osl::DirectoryItem  m_aDirIte;
-    uno::Reference< sdbc::XRow > aRow;
+    Reference< sdbc::XRow > aRow;
 
     while( true )
     {
@@ -374,7 +388,7 @@ XResultSet_impl::OneMore(
             {
                 vos::OGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+                m_aIdents.push_back( Reference< XContentIdentifier >() );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;
@@ -388,7 +402,7 @@ XResultSet_impl::OneMore(
             {
                 vos::OGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+                m_aIdents.push_back( Reference< XContentIdentifier >() );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;
@@ -401,7 +415,7 @@ XResultSet_impl::OneMore(
             {
                 vos::OGuard aGuard( m_aMutex );
                 m_aItems.push_back( aRow );
-                m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+                m_aIdents.push_back( Reference< XContentIdentifier >() );
                 m_aUnqPath.push_back( aUnqPath );
                 rowCountChanged();
                 return true;
@@ -423,7 +437,7 @@ XResultSet_impl::OneMore(
   XResultSet_impl::OneMore(
   void )
   throw( sdbc::SQLException,
-  uno::RuntimeException )
+  RuntimeException )
   {
   if( m_bFaked )
   return OneMoreFaked();
@@ -444,7 +458,7 @@ XResultSet_impl::OneMore(
   {
   sal_Bool IsRegular;
   rtl::OUString aUnqPath;
-  uno::Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
+  Reference< sdbc::XRow > aRow = m_pMyShell->getv( -1,this,m_sProperty,m_aDirIte,aUnqPath,IsRegular );
 
   if( m_nOpenMode == OpenMode::DOCUMENTS )
   {
@@ -452,7 +466,7 @@ XResultSet_impl::OneMore(
   {
   vos::OGuard aGuard( m_aMutex );
   m_aItems.push_back( aRow );
-  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aIdents.push_back( Reference< XContentIdentifier >() );
   m_aUnqPath.push_back( aUnqPath );
   rowCountChanged();
   return true;
@@ -468,7 +482,7 @@ XResultSet_impl::OneMore(
   {
   vos::OGuard aGuard( m_aMutex );
   m_aItems.push_back( aRow );
-  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aIdents.push_back( Reference< XContentIdentifier >() );
   m_aUnqPath.push_back( aUnqPath );
   rowCountChanged();
   return true;
@@ -482,7 +496,7 @@ XResultSet_impl::OneMore(
   {
   vos::OGuard aGuard( m_aMutex );
   m_aItems.push_back( aRow );
-  m_aIdents.push_back( uno::Reference< XContentIdentifier >() );
+  m_aIdents.push_back( Reference< XContentIdentifier >() );
   m_aUnqPath.push_back( aUnqPath );
   rowCountChanged();
   return true;
@@ -501,7 +515,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::next(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     sal_Bool test;
     if( ++m_nRow < m_aItems.size() ) test = true;
@@ -514,7 +528,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::isBeforeFirst(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return m_nRow == -1;
 }
@@ -524,7 +538,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::isAfterLast(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return m_nRow >= m_aItems.size();   // Cannot happen, if m_aFolder.isOpen()
 }
@@ -534,7 +548,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::isFirst(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return m_nRow == 0;
 }
@@ -544,7 +558,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::isLast(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( m_nRow ==  m_aItems.size() - 1 )
         return ! OneMore();
@@ -557,7 +571,7 @@ void SAL_CALL
 XResultSet_impl::beforeFirst(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     m_nRow = -1;
 }
@@ -567,7 +581,7 @@ void SAL_CALL
 XResultSet_impl::afterLast(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     m_nRow = m_aItems.size();
     while( OneMore() )
@@ -579,7 +593,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::first(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     m_nRow = -1;
     return next();
@@ -590,7 +604,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::last(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     m_nRow = m_aItems.size() - 1;
     while( OneMore() )
@@ -603,7 +617,7 @@ sal_Int32 SAL_CALL
 XResultSet_impl::getRow(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     // Test, whether behind last row
     if( -1 == m_nRow || m_nRow >= m_aItems.size() )
@@ -617,7 +631,7 @@ XResultSet_impl::getRow(
 //  XResultSet_impl::absolute(
 //      sal_Int32 row )
 //      throw( sdbc::SQLException,
-//             uno::RuntimeException)
+//             RuntimeException)
 //  {
 //      if( !row )
 //        throw sdbc::SQLException();
@@ -639,7 +653,7 @@ XResultSet_impl::getRow(
 
 
 sal_Bool SAL_CALL XResultSet_impl::absolute( sal_Int32 row )
-    throw( sdbc::SQLException, uno::RuntimeException)
+    throw( sdbc::SQLException, RuntimeException)
 {
     if( row >= 0 )
     {
@@ -666,7 +680,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::relative(
     sal_Int32 row )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( isAfterLast() || isBeforeFirst() )
         throw sdbc::SQLException();
@@ -684,7 +698,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::previous(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( m_nRow > m_aItems.size() )
         m_nRow = m_aItems.size();  // Correct Handling of afterLast
@@ -698,7 +712,7 @@ void SAL_CALL
 XResultSet_impl::refreshRow(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     // get the row from the filesystem
     return;
@@ -709,7 +723,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::rowUpdated(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return false;
 }
@@ -718,7 +732,7 @@ sal_Bool SAL_CALL
 XResultSet_impl::rowInserted(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return false;
 }
@@ -727,19 +741,19 @@ sal_Bool SAL_CALL
 XResultSet_impl::rowDeleted(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     return false;
 }
 
 
-uno::Reference< uno::XInterface > SAL_CALL
+Reference< XInterface > SAL_CALL
 XResultSet_impl::getStatement(
     void  )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
-    uno::Reference< uno::XInterface > test( 0 );
+    Reference< XInterface > test( 0 );
     return test;
 }
 
@@ -750,7 +764,7 @@ void SAL_CALL
 XResultSet_impl::close(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( m_nIsOpen )
     {
@@ -768,9 +782,9 @@ XResultSet_impl::close(
 rtl::OUString SAL_CALL
 XResultSet_impl::queryContentIdentifierString(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
-    uno::Reference< XContentIdentifier > xContentId = queryContentIdentifier();
+    Reference< XContentIdentifier > xContentId = queryContentIdentifier();
 
     if( xContentId.is() )
         return xContentId->getContentIdentifier();
@@ -779,33 +793,33 @@ XResultSet_impl::queryContentIdentifierString(
 }
 
 
-uno::Reference< XContentIdentifier > SAL_CALL
+Reference< XContentIdentifier > SAL_CALL
 XResultSet_impl::queryContentIdentifier(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     if( 0 <= m_nRow && m_nRow < m_aItems.size() )
     {
         if( ! m_aIdents[m_nRow].is() )
         {
             FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUnqPath[  m_nRow ] );
-            m_aIdents[m_nRow] = uno::Reference< XContentIdentifier >(p);
+            m_aIdents[m_nRow] = Reference< XContentIdentifier >(p);
         }
         return m_aIdents[m_nRow];
     }
-    return uno::Reference< XContentIdentifier >();
+    return Reference< XContentIdentifier >();
 }
 
 
-uno::Reference< XContent > SAL_CALL
+Reference< XContent > SAL_CALL
 XResultSet_impl::queryContent(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     if( 0 <= m_nRow && m_nRow < m_aItems.size() )
         return m_pMyShell->m_pProvider->queryContent( queryContentIdentifier() );
     else
-        return uno::Reference< XContent >();
+        return Reference< XContent >();
 }
 
 
@@ -813,26 +827,26 @@ XResultSet_impl::queryContent(
 
 
 // virtual
-uno::Reference< sdbc::XResultSet > SAL_CALL
+Reference< sdbc::XResultSet > SAL_CALL
 XResultSet_impl::getStaticResultSet()
     throw( ListenerAlreadySetException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
     if ( m_xListener.is() )
         throw ListenerAlreadySetException();
 
-    return uno::Reference< sdbc::XResultSet >( this );
+    return Reference< sdbc::XResultSet >( this );
 }
 
 //=========================================================================
 // virtual
 void SAL_CALL
 XResultSet_impl::setListener(
-    const uno::Reference< XDynamicResultSetListener >& Listener )
+    const Reference< XDynamicResultSetListener >& Listener )
     throw( ListenerAlreadySetException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     vos::OClearableGuard aGuard( m_aMutex );
 
@@ -850,11 +864,11 @@ XResultSet_impl::setListener(
     //       are a fake. This implementation will never call "notify" at the
     //       listener to propagate any changes!!!
 
-    uno::Any aInfo;
+    Any aInfo;
     aInfo <<= WelcomeDynamicResultSetStruct( this, /* "old" */
                                              this /* "new" */ );
 
-    uno::Sequence< ListAction > aActions( 1 );
+    Sequence< ListAction > aActions( 1 );
     aActions.getArray()[ 0 ] = ListAction( 0, // Position; not used
                                            0, // Count; not used
                                            ListActionType::WELCOME,
@@ -869,13 +883,13 @@ XResultSet_impl::setListener(
 // virtual
 void SAL_CALL
 XResultSet_impl::connectToCache(
-    const uno::Reference< XDynamicResultSet > & xCache )
+    const Reference< XDynamicResultSet > & xCache )
     throw( ListenerAlreadySetException,
            AlreadyInitializedException,
            ServiceNotFoundException,
-           uno::RuntimeException )
+           RuntimeException )
 {
-    uno::Reference< lang::XMultiServiceFactory > mxSMgr
+    Reference< lang::XMultiServiceFactory > mxSMgr
         = m_pMyShell->m_xMultiServiceFactory;
 
     if( m_xListener.is() )
@@ -883,19 +897,19 @@ XResultSet_impl::connectToCache(
     if( m_bStatic )
         throw ListenerAlreadySetException();
 
-    uno::Reference< XSourceInitialization > xTarget( xCache, uno::UNO_QUERY );
+    Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
     if( xTarget.is() && mxSMgr.is() )
     {
-        uno::Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
         try
         {
-            xStubFactory = uno::Reference< XCachedDynamicResultSetStubFactory >(
+            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 mxSMgr->createInstance(
                     rtl::OUString::createFromAscii(
                         "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-                uno::UNO_QUERY );
+                UNO_QUERY );
         }
-        catch ( uno::Exception const & )
+        catch ( Exception const & )
         {
         }
 
@@ -913,7 +927,7 @@ XResultSet_impl::connectToCache(
 // virtual
 sal_Int16 SAL_CALL
 XResultSet_impl::getCapabilities()
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
     // Never set ContentResultSetCapability::SORTED
     //  - Underlying content cannot provide sorted data...
@@ -921,11 +935,11 @@ XResultSet_impl::getCapabilities()
 }
 
 // XResultSetMetaDataSupplier
-uno::Reference< sdbc::XResultSetMetaData > SAL_CALL
+Reference< sdbc::XResultSetMetaData > SAL_CALL
 XResultSet_impl::getMetaData(
     void )
     throw( sdbc::SQLException,
-           uno::RuntimeException )
+           RuntimeException )
 {
     for ( sal_Int32 n = 0; n < m_sProperty.getLength(); ++n )
     {
@@ -941,25 +955,25 @@ XResultSet_impl::getMetaData(
             ::ucb::ResultSetMetaData* p =
                 new ::ucb::ResultSetMetaData(
                     m_pMyShell->m_xMultiServiceFactory, m_sProperty, aColumnData );
-            return uno::Reference< sdbc::XResultSetMetaData >( p );
+            return Reference< sdbc::XResultSetMetaData >( p );
         }
     }
 
     ::ucb::ResultSetMetaData* p =
             new ::ucb::ResultSetMetaData(
                 m_pMyShell->m_xMultiServiceFactory, m_sProperty );
-    return uno::Reference< sdbc::XResultSetMetaData >( p );
+    return Reference< sdbc::XResultSetMetaData >( p );
 }
 
 
 
 // XPropertySet
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
 XResultSet_impl::getPropertySetInfo()
-    throw( uno::RuntimeException)
+    throw( RuntimeException)
 {
 
-    uno::Sequence< beans::Property > seq(2);
+    Sequence< beans::Property > seq(2);
     seq[0].Name = rtl::OUString::createFromAscii( "RowCount" );
     seq[0].Handle = -1;
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
@@ -972,18 +986,18 @@ XResultSet_impl::getPropertySetInfo()
 
     XPropertySetInfo_impl* p = new XPropertySetInfo_impl( m_pMyShell,
                                                           seq );
-    return uno::Reference< beans::XPropertySetInfo > ( p );
+    return Reference< beans::XPropertySetInfo > ( p );
 }
 
 
 
 void SAL_CALL XResultSet_impl::setPropertyValue(
-    const rtl::OUString& aPropertyName, const uno::Any& aValue )
+    const rtl::OUString& aPropertyName, const Any& aValue )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) ||
         aPropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
@@ -992,21 +1006,21 @@ void SAL_CALL XResultSet_impl::setPropertyValue(
 }
 
 
-uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
+Any SAL_CALL XResultSet_impl::getPropertyValue(
     const rtl::OUString& PropertyName )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( PropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
     {
-        uno::Any aAny;
+        Any aAny;
         aAny <<= m_bRowCountFinal;
         return aAny;
     }
     else if ( PropertyName == rtl::OUString::createFromAscii( "RowCount" ) )
     {
-        uno::Any aAny;
+        Any aAny;
         sal_Int32 count = m_aItems.size();
         aAny <<= count;
         return aAny;
@@ -1018,10 +1032,10 @@ uno::Any SAL_CALL XResultSet_impl::getPropertyValue(
 
 void SAL_CALL XResultSet_impl::addPropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const Reference< beans::XPropertyChangeListener >& xListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) )
     {
@@ -1047,10 +1061,10 @@ void SAL_CALL XResultSet_impl::addPropertyChangeListener(
 
 void SAL_CALL XResultSet_impl::removePropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const Reference< beans::XPropertyChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     if( aPropertyName == rtl::OUString::createFromAscii( "IsRowCountFinal" ) &&
         m_pIsFinalListeners )
@@ -1071,20 +1085,20 @@ void SAL_CALL XResultSet_impl::removePropertyChangeListener(
 
 void SAL_CALL XResultSet_impl::addVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const Reference< beans::XVetoableChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
 }
 
 
 void SAL_CALL XResultSet_impl::removeVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const Reference< beans::XVetoableChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           uno::RuntimeException)
+           RuntimeException)
 {
 }
 

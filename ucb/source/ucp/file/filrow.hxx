@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #define _FILROW_HXX_
 #endif
 
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
@@ -74,6 +77,9 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
@@ -84,6 +90,7 @@ namespace fileaccess {
 
     class XRow_impl:
         public cppu::OWeakObject,
+        public com::sun::star::lang::XTypeProvider,
         public com::sun::star::sdbc::XRow
     {
     public:
@@ -104,6 +111,10 @@ namespace fileaccess {
         release(
             void )
             throw( com::sun::star::uno::RuntimeException);
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
 
         virtual sal_Bool SAL_CALL
         wasNull(

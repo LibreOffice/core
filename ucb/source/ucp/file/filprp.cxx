@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filprp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-24 13:15:23 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 
 
@@ -104,7 +105,7 @@ XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const rtl::OUStrin
 }
 
 
-XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const uno::Sequence< beans::Property >& seq )
+XPropertySetInfo_impl::XPropertySetInfo_impl( shell* pMyShell,const Sequence< beans::Property >& seq )
     : m_pMyShell( pMyShell ),
       m_count( seq.getLength() ),
       m_seq( seq )
@@ -122,7 +123,7 @@ XPropertySetInfo_impl::~XPropertySetInfo_impl()
 void SAL_CALL
 XPropertySetInfo_impl::acquire(
                   void )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   OWeakObject::acquire();
 }
@@ -131,18 +132,24 @@ XPropertySetInfo_impl::acquire(
 void SAL_CALL
 XPropertySetInfo_impl::release(
               void )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   OWeakObject::release();
 }
 
 
-uno::Any SAL_CALL
+
+XTYPEPROVIDER_IMPL_2( XPropertySetInfo_impl,
+                         lang::XTypeProvider,
+                      beans::XPropertySetInfo )
+
+
+Any SAL_CALL
 XPropertySetInfo_impl::queryInterface(
-                     const uno::Type& rType )
-  throw( uno::RuntimeException )
+                     const Type& rType )
+  throw( RuntimeException )
 {
-  uno::Any aRet = cppu::queryInterface( rType,
+  Any aRet = cppu::queryInterface( rType,
                     SAL_STATIC_CAST( beans::XPropertySetInfo*,this) );
   return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -152,7 +159,7 @@ beans::Property SAL_CALL
 XPropertySetInfo_impl::getPropertyByName(
                      const rtl::OUString& aName )
   throw( beans::UnknownPropertyException,
-     uno::RuntimeException)
+     RuntimeException)
 {
   for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
     if( m_seq[i].Name == aName ) return m_seq[i];
@@ -162,10 +169,10 @@ XPropertySetInfo_impl::getPropertyByName(
 
 
 
-uno::Sequence< beans::Property > SAL_CALL
+Sequence< beans::Property > SAL_CALL
 XPropertySetInfo_impl::getProperties(
                     void )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   return m_seq;
 }
@@ -174,7 +181,7 @@ XPropertySetInfo_impl::getProperties(
 sal_Bool SAL_CALL
 XPropertySetInfo_impl::hasPropertyByName(
                      const rtl::OUString& aName )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
     if( m_seq[i].Name == aName ) return true;

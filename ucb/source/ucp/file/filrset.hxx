@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2001-04-03 12:06:25 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
-
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -73,6 +75,9 @@
 #endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTACCESS_HPP_
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -120,6 +125,7 @@ namespace fileaccess {
 
     class XResultSet_impl
         : public cppu::OWeakObject,
+          public com::sun::star::lang::XTypeProvider,
           public com::sun::star::lang::XEventListener,
           public com::sun::star::sdbc::XRow,
           public com::sun::star::sdbc::XResultSet,
@@ -187,6 +193,12 @@ namespace fileaccess {
         release(
             void )
             throw( com::sun::star::uno::RuntimeException);
+
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
+
 
         // XEventListener
         virtual void SAL_CALL

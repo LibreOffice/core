@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filprp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 12:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 #ifndef _FILPRP_HXX_
 #define _FILPRP_HXX_
 
-
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -71,6 +73,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
+#endif
 
 
 namespace fileaccess {
@@ -79,6 +84,7 @@ namespace fileaccess {
 
     class XPropertySetInfo_impl
         : public cppu::OWeakObject,
+          public com::sun::star::lang::XTypeProvider,
           public com::sun::star::beans::XPropertySetInfo
     {
     public:
@@ -103,6 +109,10 @@ namespace fileaccess {
             void )
             throw( com::sun::star::uno::RuntimeException );
 
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
 
         virtual com::sun::star::uno::Sequence< com::sun::star::beans::Property > SAL_CALL
         getProperties(
