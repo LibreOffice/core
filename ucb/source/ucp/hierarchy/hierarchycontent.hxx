@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 09:34:20 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _HIERARCHYDATA_HXX
 #include "hierarchydata.hxx"
 #endif
+#ifndef _HIERARCHYPROVIDER_HXX
+#include "hierarchyprovider.hxx"
+#endif
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct Property;
@@ -107,14 +110,47 @@ namespace hierarchy_ucp
 
 //=========================================================================
 
-struct HierarchyContentProperties : HierarchyEntryData
+class HierarchyContentProperties
 {
-    ::rtl::OUString aContentType;   // ContentType
-    sal_Bool        bIsDocument;    // IsDocument
-    sal_Bool        bIsFolder;      // IsFolder
+public:
+    HierarchyContentProperties() {};
 
-    HierarchyContentProperties()
-    : bIsDocument( sal_False ), bIsFolder( sal_True ) {}
+    HierarchyContentProperties( const HierarchyEntryData::Type & rType )
+    : m_aData( rType ),
+      m_aContentType( rType == HierarchyEntryData::FOLDER
+        ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
+        : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+
+    HierarchyContentProperties( const HierarchyEntryData & rData )
+    : m_aData( rData ),
+      m_aContentType( rData.getType() == HierarchyEntryData::FOLDER
+        ? rtl::OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE )
+        : rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) ) {}
+
+    const rtl::OUString & getName() const { return m_aData.getName(); }
+    void setName( const rtl::OUString & rName ) { m_aData.setName( rName ); };
+
+    const rtl::OUString & getTitle() const { return m_aData.getTitle(); }
+    void setTitle( const rtl::OUString & rTitle )
+    { m_aData.setTitle( rTitle ); };
+
+    const rtl::OUString & getTargetURL() const
+    { return m_aData.getTargetURL(); }
+    void setTargetURL( const rtl::OUString & rURL )
+    { m_aData.setTargetURL( rURL ); };
+
+    const rtl::OUString & getContentType() const { return m_aContentType; }
+
+    sal_Bool getIsFolder() const
+    { return m_aData.getType() == HierarchyEntryData::FOLDER; }
+
+    sal_Bool getIsDocument() const { return !getIsFolder(); }
+
+    const HierarchyEntryData & getHierarchyEntryData() const { return m_aData; }
+
+private:
+    HierarchyEntryData m_aData;
+    rtl::OUString m_aContentType;
 };
 
 //=========================================================================

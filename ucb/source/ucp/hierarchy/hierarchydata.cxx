@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 15:00:20 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,6 @@
 
  *************************************************************************/
 
-// Commit every single write operation vs. commit multiple write operations
-#define MULTI_COMMIT
-
 #ifndef _HIERARCHYDATA_HXX
 #include "hierarchydata.hxx"
 #endif
@@ -100,11 +97,6 @@
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
-#if SUPD<638
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
-#include <com/sun/star/util/XStringEscape.hpp>
-#endif
-#endif
 #ifndef _HIERARCHYPROVIDER_HXX
 #include "hierarchyprovider.hxx"
 #endif
@@ -128,9 +120,6 @@ struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                   entry;
     Reference< XHierarchicalNameAccess > dir;
-#if SUPD<638
-    Reference< XStringEscape >           esc;
-#endif
     Sequence< OUString>                  names;
     sal_Int32                            pos;
 
@@ -259,9 +248,11 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             if ( !xRootReadAccess->hasByHierarchicalName( aTitlePath ) )
                 return sal_False;
 
+            OUString aValue;
+
             // Get Title value.
             if ( !( xRootReadAccess->getByHierarchicalName(
-                            aTitlePath ) >>= rData.aTitle ) )
+                            aTitlePath ) >>= aValue ) )
             {
                 OSL_ENSURE( sal_False,
                             "HierarchyEntry::getData - "
@@ -269,11 +260,13 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 return sal_False;
             }
 
+            rData.setTitle( aValue );
+
             // Get TargetURL value.
             OUString aTargetURLPath = m_aPath;
             aTargetURLPath += OUString::createFromAscii( "/TargetURL" );
             if ( !( xRootReadAccess->getByHierarchicalName(
-                            aTargetURLPath ) >>= rData.aTargetURL ) )
+                            aTargetURLPath ) >>= aValue ) )
             {
                 OSL_ENSURE( sal_False,
                             "HierarchyEntry::getData - "
@@ -281,15 +274,48 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 return sal_False;
             }
 
-            rData.aName = m_aName;
+            rData.setTargetURL( aValue );
+
+            OUString aTypePath = m_aPath;
+            aTypePath += OUString::createFromAscii( "/Type" );
+            if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
+            {
+                // Might not be present since it was introduced long after
+                // Title and TargetURL (#82433#)... So not getting it is
+                // not an error.
+
+                // Get Type value.
+                sal_Int32 nType = 0;
+                if ( xRootReadAccess->getByHierarchicalName( aTypePath )
+                        >>= nType )
+                {
+                    if ( nType == 0 )
+                    {
+                        rData.setType( HierarchyEntryData::LINK );
+                    }
+                    else if ( nType == 1 )
+                    {
+                        rData.setType( HierarchyEntryData::FOLDER );
+                    }
+                    else
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "HierarchyEntry::getData - "
+                                    "Unknown Type value!" );
+                        return sal_False;
+                    }
+                }
+            }
+
+            rData.setName( m_aName );
             return sal_True;
         }
     }
-    catch ( RuntimeException& )
+    catch ( RuntimeException const & )
     {
         throw;
     }
-    catch ( NoSuchElementException& )
+    catch ( NoSuchElementException const & )
     {
         // getByHierarchicalName
 
@@ -452,12 +478,19 @@ sal_Bool HierarchyEntry::setData(
                     // Set Title value.
                     xNameReplace->replaceByName(
                                 OUString::createFromAscii( "Title" ),
-                                makeAny( rData.aTitle ) );
+                                makeAny( rData.getTitle() ) );
 
                     // Set TargetURL value.
                     xNameReplace->replaceByName(
                                 OUString::createFromAscii( "TargetURL" ),
-                                makeAny( rData.aTargetURL ) );
+                                makeAny( rData.getTargetURL() ) );
+
+                    // Set Type value.
+                    sal_Int32 nType
+                        = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
+                    xNameReplace->replaceByName(
+                                OUString::createFromAscii( "Type" ),
+                                makeAny( nType ) );
 
                     if ( xContainer.is() )
                         xContainer->insertByName(
@@ -764,10 +797,14 @@ sal_Bool HierarchyEntry::move(
 
         xNewNameReplace->replaceByName(
                             OUString::createFromAscii( "Title" ),
-                            makeAny( rData.aTitle ) );
+                            makeAny( rData.getTitle() ) );
         xNewNameReplace->replaceByName(
                             OUString::createFromAscii( "TargetURL" ),
-                            makeAny( rData.aTargetURL ) );
+                            makeAny( rData.getTargetURL() ) );
+        sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
+        xNewNameReplace->replaceByName(
+                            OUString::createFromAscii( "Type" ),
+                            makeAny( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
         xNewParentBatch->commitChanges();
@@ -992,12 +1029,6 @@ sal_Bool HierarchyEntry::first( iterator& it )
                             "HierarchyEntry::first - No hier. name access!" );
 
                 it.m_pImpl->dir = xHierNameAccess;
-
-#if SUPD<638
-                Reference< XStringEscape > xEscaper(
-                                            xRootHierNameAccess, UNO_QUERY );
-                it.m_pImpl->esc = xEscaper;
-#endif
             }
         }
         catch ( RuntimeException& )
@@ -1041,61 +1072,6 @@ sal_Bool HierarchyEntry::next( iterator& it )
 //=========================================================================
 OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
 {
-#if SUPD<638
-    Reference< XStringEscape > xEscaper( getRootReadAccess(), UNO_QUERY );
-
-//    OSL_ENSURE( xEscaper.is(),
-//                "HierarchyEntry::createPathFromHierarchyURL - No escaper!" );
-
-    // Transform path....
-    // folder/subfolder/subsubfolder
-    //      --> folder/Children/subfolder/Children/subsubfolder
-
-    OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
-    sal_Int32 nLen = aPath.getLength();
-
-    OUString aNewPath;
-    if ( nLen )
-    {
-        const OUString aChildren = OUString::createFromAscii( "/Children/" );
-        sal_Int32 nStart = 0;
-        sal_Int32 nEnd   = aPath.indexOf( '/' );
-
-        do
-        {
-            if ( nEnd == -1 )
-                nEnd = nLen;
-
-            OUString aToken = aPath.copy( nStart, nEnd - nStart );
-
-            if ( xEscaper.is() )
-            {
-                try
-                {
-                    aToken = xEscaper->escapeString( aToken );
-                }
-                catch ( IllegalArgumentException& )
-                {
-                    OSL_ENSURE( sal_False,
-                                "HierarchyEntry::createPathFromHierarchyURL - "
-                                "caught IllegalArgumentException!" );
-                }
-            }
-
-            aNewPath += aToken;
-
-            if ( nEnd != nLen )
-            {
-                aNewPath += aChildren;
-                nStart = nEnd + 1;
-                nEnd = aPath.indexOf( '/', nStart );
-            }
-        }
-        while ( nEnd != nLen );
-    }
-
-    return aNewPath;
-#else
     // Transform path....
     // folder/subfolder/subsubfolder
     //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
@@ -1134,7 +1110,6 @@ OUString HierarchyEntry::createPathFromHierarchyURL( const HierarchyUri& rURI )
     }
 
     return aPath;
-#endif
 }
 
 //=========================================================================
@@ -1227,35 +1202,6 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
     {
         try
         {
-#if SUPD<638
-            OUString aKey = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
-            OUString aTitle     = aKey;
-            OUString aTargetURL = aKey;
-            aTitle     += OUString::createFromAscii( "/Title" );
-            aTargetURL += OUString::createFromAscii( "/TargetURL" );
-
-            m_pImpl->dir->getByHierarchicalName( aTitle )
-                >>= m_pImpl->entry.aTitle;
-            m_pImpl->dir->getByHierarchicalName( aTargetURL )
-                >>= m_pImpl->entry.aTargetURL;
-
-            // key may be encoded!
-            if ( m_pImpl->esc.is() )
-            {
-                 try
-                 {
-                    aKey = m_pImpl->esc->unescapeString( aKey );
-                }
-                catch ( IllegalArgumentException& )
-                {
-                }
-                catch ( Exception& )
-                {
-                }
-            }
-
-            m_pImpl->entry.aName = aKey;
-#else
             rtl::OUStringBuffer aKey;
             aKey.appendAscii( "['" );
             makeXMLName( m_pImpl->names.getConstArray()[ m_pImpl->pos ], aKey );
@@ -1263,20 +1209,50 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 
             rtl::OUString aTitle     = aKey.makeStringAndClear();
             rtl::OUString aTargetURL = aTitle;
+            rtl::OUString aType      = aTitle;
 
             aTitle     += OUString::createFromAscii( "/Title" );
             aTargetURL += OUString::createFromAscii( "/TargetURL" );
+            aType      += OUString::createFromAscii( "/Type" );
 
-            m_pImpl->dir->getByHierarchicalName( aTitle )
-                >>= m_pImpl->entry.aTitle;
-            m_pImpl->dir->getByHierarchicalName( aTargetURL )
-                >>= m_pImpl->entry.aTargetURL;
+            OUString aValue;
+            m_pImpl->dir->getByHierarchicalName( aTitle ) >>= aValue;
+            m_pImpl->entry.setTitle( aValue );
 
-            m_pImpl->entry.aName
-                = m_pImpl->names.getConstArray()[ m_pImpl->pos ];
-#endif
+            m_pImpl->dir->getByHierarchicalName( aTargetURL ) >>= aValue;
+            m_pImpl->entry.setTargetURL( aValue );
+
+            if ( m_pImpl->dir->hasByHierarchicalName( aType ) )
+            {
+                // Might not be present since it was introduced long
+                // after Title and TargetURL (#82433#)... So not getting
+                // it is not an error.
+
+                // Get Type value.
+                sal_Int32 nType = 0;
+                if ( m_pImpl->dir->getByHierarchicalName( aType ) >>= nType )
+                {
+                    if ( nType == 0 )
+                    {
+                        m_pImpl->entry.setType( HierarchyEntryData::LINK );
+                    }
+                    else if ( nType == 1 )
+                    {
+                        m_pImpl->entry.setType( HierarchyEntryData::FOLDER );
+                    }
+                    else
+                    {
+                        OSL_ENSURE( sal_False,
+                                    "HierarchyEntry::getData - "
+                                    "Unknown Type value!" );
+                    }
+                }
+            }
+
+            m_pImpl->entry.setName(
+                m_pImpl->names.getConstArray()[ m_pImpl->pos ] );
         }
-        catch ( NoSuchElementException& )
+        catch ( NoSuchElementException const & )
         {
             m_pImpl->entry = HierarchyEntryData();
         }

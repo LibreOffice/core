@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ rtl::OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
             aId += rtl::OUString::createFromAscii( "/" );
 
-        aId += m_pImpl->m_aResults[ nIndex ]->aData.aName;
+        aId += m_pImpl->m_aResults[ nIndex ]->aData.getName();
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -413,13 +413,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
         static rtl::OUString aLinkType(
             rtl::OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE ) );
 
-        HierarchyContentProperties aData;
-
-        aData.aTitle       = m_pImpl->m_aResults[ nIndex ]->aData.aTitle;
-        aData.aTargetURL   = m_pImpl->m_aResults[ nIndex ]->aData.aTargetURL;
-        aData.bIsDocument  = ( aData.aTargetURL.getLength() > 0 );
-        aData.bIsFolder    = !aData.bIsDocument;
-        aData.aContentType = aData.bIsFolder ? aFolderType : aLinkType;
+        HierarchyContentProperties aData( m_pImpl->m_aResults[ nIndex ]->aData );
 
         uno::Reference< sdbc::XRow > xRow = HierarchyContent::getPropertyValues(
                         m_pImpl->m_xSMgr,
@@ -465,7 +459,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
     switch ( m_pImpl->m_nOpenMode )
     {
         case star::ucb::OpenMode::FOLDERS:
-            if ( rResult.aTargetURL.getLength() > 0 )
+            if ( rResult.getType() == HierarchyEntryData::LINK )
             {
                 // Entry is a link.
                 return sal_False;
@@ -473,7 +467,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
             break;
 
         case star::ucb::OpenMode::DOCUMENTS:
-            if ( rResult.aTargetURL.getLength() == 0 )
+            if ( rResult.getType() == HierarchyEntryData::FOLDER )
             {
                 // Entry is a folder.
                 return sal_False;

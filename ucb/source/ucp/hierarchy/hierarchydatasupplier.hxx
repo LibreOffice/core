@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydatasupplier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 09:08:40 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 
 namespace hierarchy_ucp {
 
-struct HierarchyEntryData;
+class HierarchyEntryData;
 struct DataSupplier_Impl;
 class HierarchyContent;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-28 07:48:54 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,34 +242,15 @@ HierarchyContent::HierarchyContent(
             const uno::Reference< star::ucb::XContentIdentifier >& Identifier,
             const star::ucb::ContentInfo& Info )
 : ContentImplHelper( rxSMgr, pProvider, Identifier, sal_False ),
+  m_aProps( Info.Type.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) )
+            ? HierarchyEntryData::FOLDER
+            : HierarchyEntryData::LINK ),
   m_eState( TRANSIENT ),
   m_pProvider( pProvider ),
   m_bCheckedReadOnly( false ),
   m_bIsReadOnly( true )
 {
-    if ( Info.Type.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM( HIERARCHY_FOLDER_CONTENT_TYPE ) ) )
-    {
-        // New folder...
-        m_aProps.aContentType = Info.Type;
-//      m_aProps.aTitle       =
-        m_aProps.bIsFolder    = sal_True;
-        m_aProps.bIsDocument  = sal_False;
-    }
-    else
-    {
-        OSL_ENSURE(
-            Info.Type.equalsAsciiL(
-                RTL_CONSTASCII_STRINGPARAM( HIERARCHY_LINK_CONTENT_TYPE ) ),
-            "HierarchyContent::HierarchyContent - Wrong content info!" );
-
-        // New link...
-        m_aProps.aContentType = Info.Type;
-//      m_aProps.aTitle       =
-        m_aProps.bIsFolder    = sal_False;
-        m_aProps.bIsDocument  = sal_True;
-    }
-
     setKind( Identifier );
 }
 
@@ -425,7 +406,7 @@ HierarchyContent::getSupportedServiceNames()
 rtl::OUString SAL_CALL HierarchyContent::getContentType()
     throw( uno::RuntimeException )
 {
-    return m_aProps.aContentType;
+    return m_aProps.getContentType();
 }
 
 //=========================================================================
@@ -809,10 +790,7 @@ sal_Bool HierarchyContent::hasData(
         return sal_True;
     }
 
-    HierarchyEntry aEntry( rxSMgr, pProvider, aURL );
-    HierarchyEntryData aData;
-
-    return aEntry.hasData();
+    return HierarchyEntry( rxSMgr, pProvider, aURL ).hasData();
 }
 
 //=========================================================================
@@ -829,36 +807,16 @@ sal_Bool HierarchyContent::loadData(
     HierarchyUri aUri( aURL );
     if ( aUri.isRootFolder() )
     {
-        // loadData must always return 'true' for root folder
-        // even if no persistent data exist!!! --> Fill props!!!
-
-        rProps.aContentType = rtl::OUString::createFromAscii(
-                                            HIERARCHY_FOLDER_CONTENT_TYPE );
-//      rProps.aTitle       = rtl::OUString();
-//      rProps.aTargetURL   = rtl::OUString();
-        rProps.bIsFolder    = sal_True;
-        rProps.bIsDocument  = sal_False;
+        rProps = HierarchyContentProperties( HierarchyEntryData::FOLDER );
     }
     else
     {
         HierarchyEntry aEntry( rxSMgr, pProvider, aURL );
-        if ( !aEntry.getData( rProps ) )
+        HierarchyEntryData aData;
+        if ( !aEntry.getData( aData ) )
             return sal_False;
 
-        if ( rProps.aTargetURL.getLength() > 0 )
-        {
-            rProps.aContentType = rtl::OUString::createFromAscii(
-                                            HIERARCHY_LINK_CONTENT_TYPE );
-            rProps.bIsFolder    = sal_False;
-            rProps.bIsDocument  = sal_True;
-        }
-        else
-        {
-            rProps.aContentType = rtl::OUString::createFromAscii(
-                                            HIERARCHY_FOLDER_CONTENT_TYPE );
-            rProps.bIsFolder    = sal_True;
-            rProps.bIsDocument  = sal_False;
-        }
+        rProps = HierarchyContentProperties( aData );
     }
     return sal_True;
 }
@@ -868,7 +826,7 @@ sal_Bool HierarchyContent::storeData()
 {
     HierarchyEntry aEntry(
             m_xSMgr, m_pProvider, m_xIdentifier->getContentIdentifier() );
-    return aEntry.setData( m_aProps, sal_True );
+    return aEntry.setData( m_aProps.getHierarchyEntryData(), sal_True );
 }
 
 //=========================================================================
@@ -878,7 +836,8 @@ sal_Bool HierarchyContent::renameData(
 {
     HierarchyEntry aEntry(
             m_xSMgr, m_pProvider, xOldId->getContentIdentifier() );
-    return aEntry.move( xNewId->getContentIdentifier(), m_aProps );
+    return aEntry.move( xNewId->getContentIdentifier(),
+                        m_aProps.getHierarchyEntryData() );
 }
 
 //=========================================================================
@@ -893,7 +852,7 @@ sal_Bool HierarchyContent::removeData()
 void HierarchyContent::setKind(
             const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
 {
-    if ( m_aProps.bIsFolder )
+    if ( m_aProps.getIsFolder() )
     {
         // Am I a root folder?
         HierarchyUri aUri( Identifier->getContentIdentifier() );
@@ -1123,30 +1082,30 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
             if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
             {
-                xRow->appendString ( rProp, rData.aContentType );
+                xRow->appendString ( rProp, rData.getContentType() );
             }
             else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM(  "Title" ) ) )
             {
-                xRow->appendString ( rProp, rData.aTitle );
+                xRow->appendString ( rProp, rData.getTitle() );
             }
             else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
             {
-                xRow->appendBoolean( rProp, rData.bIsDocument );
+                xRow->appendBoolean( rProp, rData.getIsDocument() );
             }
             else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
             {
-                xRow->appendBoolean( rProp, rData.bIsFolder );
+                xRow->appendBoolean( rProp, rData.getIsFolder() );
             }
             else if ( rProp.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "TargetURL" ) ) )
             {
                 // TargetURL is only supported by links.
 
-                if ( rData.bIsDocument )
-                    xRow->appendString( rProp, rData.aTargetURL );
+                if ( rData.getIsDocument() )
+                    xRow->appendString( rProp, rData.getTargetURL() );
                 else
                     xRow->appendVoid( rProp );
             }
@@ -1191,30 +1150,30 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
-            rData.aContentType );
+            rData.getContentType() );
         xRow->appendString (
             beans::Property( rtl::OUString::createFromAscii( "Title" ),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                           // @@@ Might actually be read-only!
                       beans::PropertyAttribute::BOUND ),
-            rData.aTitle );
+            rData.getTitle() );
         xRow->appendBoolean(
             beans::Property( rtl::OUString::createFromAscii( "IsDocument" ),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
-            rData.bIsDocument );
+            rData.getIsDocument() );
         xRow->appendBoolean(
             beans::Property( rtl::OUString::createFromAscii( "IsFolder" ),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
-            rData.bIsFolder );
+            rData.getIsFolder() );
 
-        if ( rData.bIsDocument )
+        if ( rData.getIsDocument() )
             xRow->appendString(
                 beans::Property( rtl::OUString::createFromAscii( "TargetURL" ),
                           -1,
@@ -1222,7 +1181,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                             static_cast< const rtl::OUString * >( 0 ) ),
                           // @@@ Might actually be read-only!
                           beans::PropertyAttribute::BOUND ),
-                rData.aTargetURL );
+                rData.getTargetURL() );
 
         // Append all Additional Core Properties.
 
@@ -1327,18 +1286,18 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     // No empty titles!
                     if ( aNewValue.getLength() > 0 )
                     {
-                        if ( aNewValue != m_aProps.aTitle )
+                        if ( aNewValue != m_aProps.getTitle() )
                         {
                             // modified title -> modified URL -> exchange !
                             if ( m_eState == PERSISTENT )
                                 bExchange = sal_True;
 
-                            aOldTitle = m_aProps.aTitle;
-                            aOldName  = m_aProps.aName;
+                            aOldTitle = m_aProps.getTitle();
+                            aOldName  = m_aProps.getName();
 
-                            m_aProps.aTitle = aNewValue;
-                            m_aProps.aName
-                                = HierarchyUri::encodeSegment( aNewValue );
+                            m_aProps.setTitle( aNewValue );
+                            m_aProps.setName(
+                                    HierarchyUri::encodeSegment( aNewValue ) );
 
                             // property change event will be set later...
 
@@ -1387,17 +1346,17 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                         // No empty target URL's!
                         if ( aNewValue.getLength() > 0 )
                         {
-                            if ( aNewValue != m_aProps.aTargetURL )
+                            if ( aNewValue != m_aProps.getTargetURL() )
                             {
                                 aEvent.PropertyName = rValue.Name;
                                 aEvent.OldValue
-                                    = uno::makeAny( m_aProps.aTargetURL );
+                                    = uno::makeAny( m_aProps.getTargetURL() );
                                 aEvent.NewValue
                                     = uno::makeAny( aNewValue );
 
                                 aChanges.getArray()[ nChanged ] = aEvent;
 
-                                m_aProps.aTargetURL = aNewValue;
+                                m_aProps.setTargetURL( aNewValue );
                                 nChanged++;
                             }
                         }
@@ -1488,7 +1447,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         uno::Reference< star::ucb::XContentIdentifier > xOldId
             = m_xIdentifier;
         uno::Reference< star::ucb::XContentIdentifier > xNewId
-            = makeNewIdentifier( m_aProps.aTitle );
+            = makeNewIdentifier( m_aProps.getTitle() );
 
         aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
@@ -1504,8 +1463,8 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         else
         {
             // Roll-back.
-            m_aProps.aTitle = aOldTitle;
-            m_aProps.aName  = aOldName;
+            m_aProps.setTitle( aOldTitle );
+            m_aProps.setName ( aOldName );
 
             aOldTitle = aOldName = rtl::OUString();
 
@@ -1520,7 +1479,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     {
         aEvent.PropertyName = rtl::OUString::createFromAscii( "Title" );
         aEvent.OldValue     = uno::makeAny( aOldTitle );
-        aEvent.NewValue     = uno::makeAny( m_aProps.aTitle );
+        aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
 
         aChanges.getArray()[ nChanged ] = aEvent;
         nChanged++;
@@ -1583,7 +1542,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     }
 
     // Check, if all required properties were set.
-    if ( m_aProps.aTitle.getLength() == 0 )
+    if ( m_aProps.getTitle().getLength() == 0 )
     {
         uno::Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
@@ -1599,7 +1558,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     // Assemble new content identifier...
 
     uno::Reference< star::ucb::XContentIdentifier > xId
-        = makeNewIdentifier( m_aProps.aTitle );
+        = makeNewIdentifier( m_aProps.getTitle() );
 
     // Handle possible name clash...
 
@@ -1615,7 +1574,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                             rtl::OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
                             task::InteractionClassification_ERROR,
-                            m_aProps.aTitle ) ),
+                            m_aProps.getTitle() ) ),
                     xEnv );
                 // Unreachable
             }
@@ -1654,8 +1613,10 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 }
                 else
                 {
-                    m_aProps.aTitle += rtl::OUString::createFromAscii( "_" );
-                    m_aProps.aTitle += rtl::OUString::valueOf( nTry );
+                    rtl::OUString aNewTitle( m_aProps.getTitle() );
+                    aNewTitle += rtl::OUString::createFromAscii( "_" );
+                    aNewTitle += rtl::OUString::valueOf( nTry );
+                    m_aProps.setTitle( aNewTitle );
                 }
             }
             break;
@@ -2001,7 +1962,7 @@ void HierarchyContent::transfer(
             if ( ( aChildId.lastIndexOf( '/' ) + 1 ) != aChildId.getLength() )
                 aChildId += rtl::OUString::createFromAscii( "/" );
 
-            aChildId += rResult.aName;
+            aChildId += rResult.getName();
 
             star::ucb::TransferInfo aInfo;
             aInfo.MoveData  = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-04 09:08:28 $
+ *  last change: $Author: kso $ $Date: 2002-09-27 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,17 +81,35 @@ namespace hierarchy_ucp
 
 //=========================================================================
 
-struct HierarchyEntryData
+class HierarchyEntryData
 {
-    ::rtl::OUString aName;      // language independent name of the entry
+public:
+    enum Type { NONE, LINK, FOLDER };
 
-    ::rtl::OUString aTitle;     // Title (language dependent)
-    ::rtl::OUString aTargetURL; // Target URL ( links only )
+    HierarchyEntryData() : m_aType( NONE ) {}
+    HierarchyEntryData( const Type & rType ) : m_aType( rType ) {}
 
-    HierarchyEntryData() {}
-    HierarchyEntryData( const ::rtl::OUString& rTitle,
-                        const ::rtl::OUString& rTargetURL )
-    : aTitle( rTitle ), aTargetURL( rTargetURL ) {}
+    const rtl::OUString & getName() const { return m_aName; }
+    void setName( const rtl::OUString & rName ) { m_aName = rName; }
+
+    const rtl::OUString & getTitle() const { return m_aTitle; }
+    void setTitle( const rtl::OUString & rTitle ) { m_aTitle = rTitle; }
+
+    const rtl::OUString & getTargetURL() const { return m_aTargetURL; }
+    void setTargetURL( const rtl::OUString & rURL ) { m_aTargetURL = rURL; }
+
+    Type getType() const
+    { return ( m_aType != NONE ) ? m_aType
+                                 : m_aTargetURL.getLength()
+                                    ? LINK
+                                    : FOLDER; }
+    void setType( const Type & rType ) { m_aType = rType; }
+
+private:
+    rtl::OUString m_aName;      // Name (language independent)
+    rtl::OUString m_aTitle;     // Title (language dependent)
+    rtl::OUString m_aTargetURL; // Target URL ( links only )
+    Type          m_aType;      // Type
 };
 
 //=========================================================================
