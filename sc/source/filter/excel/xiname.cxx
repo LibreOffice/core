@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiname.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:05:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
 
     switch( GetBiff() )
     {
-        case xlBiff2:
+        case EXC_BIFF2:
         {
             sal_uInt8 nFlagsBiff2;
             rStrm >> nFlagsBiff2;
@@ -112,16 +112,15 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
         }
         break;
 
-        case xlBiff3:
-        case xlBiff4:
+        case EXC_BIFF3:
+        case EXC_BIFF4:
         {
             rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
         }
         break;
 
-        case xlBiff5:
-        case xlBiff7:
-        case xlBiff8:
+        case EXC_BIFF5:
+        case EXC_BIFF8:
         {
             rStrm >> nFlags >> nShortCut >> nNameLen >> nFmlaSize;
             rStrm.Ignore( 2 );
@@ -133,7 +132,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
         default: DBG_ERROR_BIFF();
     }
 
-    if( GetBiff() < xlBiff8 )
+    if( GetBiff() <= EXC_BIFF5 )
         maXclName = rStrm.ReadRawByteString( nNameLen );
     else
         maXclName = rStrm.ReadUniString( nNameLen );
@@ -147,8 +146,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
     bool bBuiltIn = ::get_flag( nFlags, EXC_NAME_BUILTIN );
 
     // special case for BIFF5 filter range - name appears as plain text without built-in flag
-    if( ((GetBiff() == xlBiff5) || (GetBiff() == xlBiff7)) &&
-        (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE )) )
+    if( (GetBiff() == EXC_BIFF5) && (maXclName == XclTools::GetXclBuiltInDefName( EXC_BUILTIN_FILTERDATABASE )) )
     {
         bBuiltIn = true;
         maXclName.Assign( EXC_BUILTIN_FILTERDATABASE );
@@ -223,7 +221,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
         rFmlaConv.Convert( pTokArr, nFmlaSize, FT_RangeName );
 
         // --- auto or advanced filter ---
-        if( (GetBiff() >= xlBiff8) && pTokArr && bBuiltIn )
+        if( (GetBiff() == EXC_BIFF8) && pTokArr && bBuiltIn )
         {
             ScRange aRange;
             if( pTokArr->IsReference( aRange ) )
@@ -231,7 +229,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nScIndex ) :
                 switch( mcBuiltIn )
                 {
                     case EXC_BUILTIN_FILTERDATABASE:
-                        GetFilterManager().Insert( mpRD, aRange, maScName );
+                        GetFilterManager().Insert( &GetOldRoot(), aRange, maScName );
                     break;
                     case EXC_BUILTIN_CRITERIA:
                         GetFilterManager().AddAdvancedRange( aRange );
