@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:04:28 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,14 @@
 #endif
 
 #include <svtools/globalnameitem.hxx>
+#include <sfx2/objface.hxx>
+#include <sfx2/lnkbase.hxx>
 
 #ifndef __RSC //autogen
 #include <tools/errinf.hxx>
 #endif
 #ifndef _SVDVIEW_HXX //autogen
 #include <svx/svdview.hxx>
-#endif
-#ifndef _PLUGIN_HXX //autogen wg. SvPlugInObject
-#include <so3/plugin.hxx>
 #endif
 #ifndef _SFXPTITEM_HXX //autogen
 #include <svtools/ptitem.hxx>
@@ -303,6 +302,22 @@
 #include <comcore.hrc>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
+#include <com/sun/star/embed/XVisualObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
+#include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
+#include <com/sun/star/embed/XComponentSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+
+using namespace ::com::sun::star;
+
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
 #include "swabstdlg.hxx" //CHINA001
@@ -417,14 +432,21 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             if ( pURL->SetURL( aStrURL, INetURLObject::WAS_ENCODED ) )
             {
-                SvFactory *pFactory = (SvFactory*) SvPlugInObject::ClassFactory();
-                SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-                SvPlugInObjectRef xObj = &pFactory->CreateAndInit( *pFactory, aStor );
-                xObj->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-                xObj->SetURL( *pURL );
-                SvPlugInObject* pObj = &xObj;
-                SvInPlaceObjectRef *pxIns = new SvInPlaceObjectRef(pObj);
-                rSh.Insert( pxIns, 0, TRUE, nSlot, &rReq);
+                ::rtl::OUString aName;
+                comphelper::EmbeddedObjectContainer aCnt;
+                svt::EmbeddedObjectRef xObj( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
+                if ( xObj.is() )
+                {
+                    // set properties from dialog
+                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xSet.is() )
+                    {
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                uno::makeAny( ::rtl::OUString( pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
+                    }
+                }
+
+                rSh.InsertObject( xObj, 0, TRUE, nSlot, &rReq);
             }
         }
     }
@@ -445,6 +467,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         SFX_REQUEST_ARG( rReq, pClassItem,          SfxStringItem, FN_PARAM_1, sal_False );
         SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, sal_False );
         SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, sal_False );
+        //TODO/LATER: recording currently not working, need code for Commandlist
+        svt::EmbeddedObjectRef xObj;
         if((SID_INSERT_APPLET == nSlot || SID_INSERT_PLUGIN)
                 && (pClassItem || pClassLocationItem || pCommandsItem))
         {
@@ -454,6 +478,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 sClass = pClassItem->GetValue();
             if(pClassLocationItem)
                 sClassLocation = pClassLocationItem->GetValue();
+
             SvCommandList aCommandList;
             if(pCommandsItem)
             {
@@ -461,45 +486,70 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 aCommandList.AppendCommands( pCommandsItem->GetValue(), &nTemp );
             }
 
-            SvInPlaceObjectRef xIPObj;
             if(SID_INSERT_APPLET == nSlot)
             {
                 SwApplet_Impl aApplImpl( rSh.GetAttrPool(),
                                          RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
                 aApplImpl.CreateApplet(sClass, aEmptyStr, FALSE, sClassLocation);
                 aApplImpl.FinishApplet();
-                xIPObj = aApplImpl.GetApplet();
-                SvAppletObjectRef xApplet ( xIPObj );
-                if(aCommandList.Count() && xApplet.Is())
-                    xApplet->SetCommandList( aCommandList );
+                xObj.Assign( aApplImpl.GetApplet() );
+                if( aCommandList.Count() )
+                {
+                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xSet.is() )
+                    {
+                        uno::Sequence < beans::PropertyValue > aSeq;
+                        aCommandList.FillSequence( aSeq );
+                        try
+                        {
+                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), uno::makeAny( aSeq ) );
+                        }
+                        catch ( uno::Exception& )
+                        {
+                        }
+                    }
+                }
             }
             else
             {
-                SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE);
-                SvFactory *pPlugInFactory = (SvFactory*) SvPlugInObject::ClassFactory();
-                SvPlugInObjectRef xPlugin = &pPlugInFactory->CreateAndInit( *pPlugInFactory, pStor );
-                xIPObj = xPlugin;
-                xPlugin->EnableSetModified( FALSE );
-                xPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-                if( sClassLocation.Len() )
-                    xPlugin->SetURL( URIHelper::SmartRelToAbs(sClassLocation) );
-                if(aCommandList.Count())
-                    xPlugin->SetCommandList( aCommandList );
-                xPlugin->EnableSetModified ( TRUE );
+                comphelper::EmbeddedObjectContainer aCnt;
+                ::rtl::OUString aName;
+                xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName ) );
+                uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                if ( xSet.is() )
+                {
+                    try
+                    {
+                        if ( sClassLocation.Len() )
+                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                uno::makeAny( ::rtl::OUString( URIHelper::SmartRelToAbs(sClassLocation) ) ) );
+                        uno::Sequence< beans::PropertyValue > aSeq;
+                        if ( aCommandList.Count() )
+                        {
+                            aCommandList.FillSequence( aSeq );
+                            xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), uno::makeAny( aSeq ) );
+                        }
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
             }
-            if(xIPObj.Is())
-                rSh.InsertOle( xIPObj );
+
+            if(xObj.is())
+                rSh.InsertOleObject( xObj );
         }
         else
         {
             DBG_ASSERT( !pNameItem || nSlot == SID_INSERT_OBJECT, "Superfluous argument!" );
-            rSh.Insert( (SvInPlaceObjectRef*)0, pName, TRUE, nSlot, &rReq);
+            rSh.InsertObject( xObj, pName, TRUE, nSlot, &rReq);
             rReq.Done();
         }
         break;
     }
     case SID_INSERT_FLOATINGFRAME:
     {
+        svt::EmbeddedObjectRef xObj;
         SFX_REQUEST_ARG( rReq, pNameItem,   SfxStringItem, FN_PARAM_1, sal_False );
         SFX_REQUEST_ARG( rReq, pURLItem,    SfxStringItem, FN_PARAM_2, sal_False );
         SFX_REQUEST_ARG( rReq, pMarginItem, SvxSizeItem, FN_PARAM_3, sal_False );
@@ -508,29 +558,61 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         if(pURLItem) // URL is a _must_
         {
-            SfxFrameDescriptor aFrameDesc(0);
-            aFrameDesc.SetURL(pURLItem->GetValue());
-            if(pNameItem)
-                aFrameDesc.SetName(pNameItem->GetValue());
-            if(pMarginItem)
-                aFrameDesc.SetMargin(pMarginItem->GetSize());
-            if(pScrollingItem && pScrollingItem->GetValue() <= ScrollingAuto)
-                aFrameDesc.SetScrollingMode((ScrollingMode)pScrollingItem->GetValue());
-            if(pBorderItem)
-                aFrameDesc.SetFrameBorder(pBorderItem->GetValue());
-            SvStorageRef pStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-            SfxFrameObjectRef xFrame = new SfxFrameObject();
-            xFrame->DoInitNew( pStor );
+            comphelper::EmbeddedObjectContainer aCnt;
+            ::rtl::OUString aName;
+            xObj.Assign( aCnt.CreateEmbeddedObject( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence(), aName ) );
+            uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+            if ( xSet.is() )
+            {
+                try
+                {
+                    ScrollingMode eScroll = ScrollingAuto;
+                    if( pScrollingItem && pScrollingItem->GetValue() <= ScrollingAuto )
+                        eScroll = (ScrollingMode) pScrollingItem->GetValue();
 
-            xFrame->EnableSetModified( FALSE );
-            xFrame->SetFrameDescriptor( &aFrameDesc );
-            xFrame->EnableSetModified( TRUE );
-            SvInPlaceObjectRef xIP(xFrame);
-            rSh.InsertOle( xIP );
+                    Size aMargin;
+                    if ( pMarginItem )
+                        aMargin = pMarginItem->GetSize();
+
+                    if ( pURLItem )
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), uno::makeAny( ::rtl::OUString( pURLItem->GetValue() ) ) );
+                    if ( pNameItem )
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), uno::makeAny( ::rtl::OUString( pNameItem->GetValue() ) ) );
+
+                    if ( eScroll == ScrollingAuto )
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
+                            uno::makeAny( sal_True ) );
+                    else
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
+                            uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
+
+                    //if ( aFrmDescr.IsFrameBorderSet() )
+                    if ( pBorderItem )
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
+                            uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
+                    /*else
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                            makeAny( sal_True ) );*/
+
+                    if ( pMarginItem )
+                    {
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
+                            uno::makeAny( sal_Int32( aMargin.Width() ) ) );
+
+                        xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
+                            uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+                    }
+                }
+                catch ( uno::Exception& )
+                {
+                }
+            }
+
+            rSh.InsertOleObject( xObj );
         }
         else
         {
-            rSh.Insert( (SvInPlaceObjectRef*)0, 0, TRUE, nSlot, &rReq);
+            rSh.InsertObject( xObj, 0, TRUE, nSlot, &rReq);
             rReq.Done();
         }
     }
@@ -561,10 +643,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 else
                 {
                     SvGlobalName aGlobalName( SO3_SCH_CLASSID );
-                    rSh.Insert( 0, &aGlobalName, TRUE, 0, &rReq );
+                    rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0, &rReq );
                 }
-                SvInPlaceObjectRef xOLE = rSh.GetOLEObj();
-                if(pItem && xOLE.Is())
+
+                svt::EmbeddedObjectRef& xObj = rSh.GetOLEObject();
+                if(pItem && xObj.is())
                 {
                     Size aSize(((SvxSizeItem*)pItem)->GetSize());
                     aSize = OutputDevice::LogicToLogic
@@ -572,9 +655,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                     if(aSize.Width() > MINLAY&& aSize.Height()> MINLAY)
                     {
-                        Rectangle aRect = xOLE->GetVisArea();
-                        aRect.SetSize(aSize);
-                        xOLE->SetVisArea( aRect );
+                        awt::Size aSz;
+                        aSz.Width = aSize.Width();
+                        aSz.Height = aSize.Height();
+                        xObj->setVisualAreaSize( xObj.GetViewAspect(), aSz );
                     }
                 }
             }
@@ -584,7 +668,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     case FN_INSERT_SMA:
         {
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
-            rSh.Insert( 0, &aGlobalName, TRUE, 0, &rReq );
+            rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, TRUE, 0, &rReq );
         }
         break;
 
