@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invocation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-10-06 14:25:13 $
+ *  last change: $Author: ganaya $ $Date: 2000-10-10 05:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,9 @@
 #include <rtl/strbuf.hxx>
 
 #include <stdlib.h>
+#ifndef MACOSX
 #include <search.h>
-
+#endif
 
 #define SERVICE_NAME "com.sun.star.script.Invocation"
 #define IMPL_NAME    "com.sun.star.comp.stoc.Invocation"
