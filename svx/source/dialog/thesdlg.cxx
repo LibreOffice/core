@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thesdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-21 09:53:56 $
+ *  last change: $Author: tl $ $Date: 2002-04-09 11:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,33 @@ using namespace ::com::sun::star::linguistic2;
 
 #define S2U(s)                      StringToOUString(s, CHARSET_SYSTEM)
 #define U2S(s)                      OUStringToString(s, CHARSET_SYSTEM)
+
+// GetReplaceEditString -------------------------------
+
+static void GetReplaceEditString( String &rText )
+{
+    // The strings returned by the thesaurus saometimes have some
+    // explanation text put in between '(' and ')' or a trailing '*'.
+    // These parts should not be put in the ReplaceEdit Text that may get
+    // inserted into the document. Thus we strip them from the text.
+
+    xub_StrLen nPos = rText.Search( sal_Unicode('(') );
+    if (STRING_NOTFOUND != nPos)
+    {
+        xub_StrLen nEnd = rText.Search( sal_Unicode(')'), nPos );
+        if (STRING_NOTFOUND != nEnd)
+            rText.Erase( nPos, nEnd );
+    }
+
+    nPos = rText.Search( sal_Unicode('*') );
+    if (STRING_NOTFOUND != nPos)
+        rText.Erase( nPos );
+
+    // remove any possible remaining ' ' that may confuse the thesaurus
+    // when it gets called with the text
+    rText.EraseLeadingAndTrailingChars( sal_Unicode(' ') );
+}
+
 // struct ThesDlg_Impl ---------------------------------------------------
 
 struct ThesDlg_Impl
@@ -402,9 +429,7 @@ IMPL_LINK( SvxThesaurusDialog, LookUpHdl_Impl, Button *, pBtn )
     aMeanLB.SelectEntryPos( 0 );
 
     String aStr( aMeanLB.GetSelectEntry() );
-    aStr = aStr.Erase( 0, aStr.Search( sal_Unicode( '*' ) ) );  // '*' follows an IPR synonym
-                                                // that has crossreferences
-    aStr = aStr.Erase( 0, aStr.Search( sal_Unicode( '(' ) ) );
+    GetReplaceEditString( aStr );
     aReplaceEdit.SetText( aStr );
     aSynonymLB.SetNoSelection();
 
@@ -441,12 +466,7 @@ IMPL_LINK( SvxThesaurusDialog, SynonymHdl_Impl, ListBox *, EMPTYARG )
     if ( aSynonymLB.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
     {
         String aStr( aSynonymLB.GetSelectEntry() );
-        xub_StrLen nPos = aStr.Search( sal_Unicode( '*' ) );
-        if (STRING_NOTFOUND != nPos)
-            aStr = aStr.Erase( 0, nPos );
-        nPos = aStr.Search( sal_Unicode( '(' ) );
-        if (STRING_NOTFOUND != nPos)
-            aStr = aStr.Erase( 0, nPos );
+        GetReplaceEditString( aStr );
         aReplaceEdit.SetText( aStr );
     }
     return 0;
@@ -457,12 +477,7 @@ IMPL_LINK( SvxThesaurusDialog, SynonymHdl_Impl, ListBox *, EMPTYARG )
 IMPL_LINK( SvxThesaurusDialog, SelectHdl_Impl, ListBox *, pBox )
 {
     String aStr( pBox->GetSelectEntry() );
-    xub_StrLen nPos = aStr.Search( sal_Unicode( '*' ) );
-    if (STRING_NOTFOUND != nPos)
-        aStr = aStr.Erase( 0, nPos );
-    nPos = aStr.Search( sal_Unicode( '(' ) );
-    if (STRING_NOTFOUND != nPos)
-        aStr = aStr.Erase( 0, nPos );
+    GetReplaceEditString( aStr );
     aReplaceEdit.SetText( aStr );
 
     //! 'aCancelBtn' is used to indicate that the handler is called as result
