@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:33:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,18 +190,6 @@ public:
     void SetDrawMode(ULONG nNewDrawMode) { nDrawMode = nNewDrawMode; };
     ULONG GetDrawMode() const { return nDrawMode; };
 
-    void SetPreviewDrawMode(ULONG nNewPrvDrawMode) { nPreviewDrawMode = nNewPrvDrawMode; };
-    ULONG GetPreviewDrawMode() const { return nPreviewDrawMode; };
-
-    void SetShowPreviewInPageMode(BOOL bShowPreview) { bShowPreviewInPageMode = bShowPreview; };
-    ULONG IsShowPreviewInPageMode() const { return bShowPreviewInPageMode; };
-
-    void SetShowPreviewInMasterPageMode(BOOL bShowPreview) { bShowPreviewInMasterPageMode = bShowPreview; };
-    ULONG IsShowPreviewInMasterPageMode() const { return bShowPreviewInMasterPageMode; };
-
-    void SetShowPreviewInOutlineMode(BOOL bShowPreview) { bShowPreviewInOutlineMode = bShowPreview; };
-    ULONG IsShowPreviewInOutlineMode() const { return bShowPreviewInOutlineMode; };
-
     void SetTabCtrlPercent( double nPercent ) { nTabCtrlPercent = nPercent; }
     double GetTabCtrlPercent() const { return nTabCtrlPercent; }
 
@@ -239,10 +227,6 @@ private:
     USHORT          nSlotId;           // SlotId, welche initial ausgefuehrt wird
     USHORT          nSlidesPerRow;     // Dias pro Reihe auf dem Diatisch
     ULONG           nDrawMode;         // Drawmode fuer das normale Fenster
-    ULONG           nPreviewDrawMode;  // Drawmode fuer das preview Fenster
-    BOOL            bShowPreviewInPageMode;       // Preview in EM_PAGE automatisch anzeigen
-    BOOL            bShowPreviewInMasterPageMode; // Preview in EM_MASTERPAGE automatisch anzeigen
-    BOOL            bShowPreviewInOutlineMode;    // Preview im Gliederungsmodus automatisch anzeigen
     double          nTabCtrlPercent;
 
     /** The type of the previous view shell.  The (default) value
