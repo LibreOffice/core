@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ private:
     USHORT          nEdFocus;
 //    Selection       theCurSel;
     BOOL            bEditFlag;
-    ScFuncDesc*     pFuncDesc;
+    const ScFuncDesc*   pFuncDesc;
     USHORT          nArgs;
     String**        pArgArr;
     Selection       aFuncSel;
@@ -237,7 +237,7 @@ protected:
     ULONG           FindFocusWin(Window *pWin);
     void            SetFocusWin(Window *pWin,ULONG nUniqueId);
     String          RepairFormula(const String& aFormula);
-    void            SaveLRUEntry(ScFuncDesc*    pFuncDesc);
+    void            SaveLRUEntry(const ScFuncDesc*  pFuncDesc);
     void            HighlightFunctionParas(const String& aFormula);
 
 private:
@@ -265,7 +265,7 @@ private:
     void            UpdateSelection();
     void            DoEnter( BOOL bOk );
     void            UpdateFunctionDesc();
-    void            ResizeArgArr( ScFuncDesc* pNewFunc );
+    void            ResizeArgArr( const ScFuncDesc* pNewFunc );
     void            FillListboxes();
     void            FillControls();
 
