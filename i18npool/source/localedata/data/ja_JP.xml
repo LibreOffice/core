@@ -181,8 +181,8 @@
 </FormatElement>
 </LC_FORMAT>
 <LC_COLLATION>
-<Collator unoid="phonetic (alphanumeric first)" default="false"/>
-<Collator unoid="phonetic (alphanumeric last)" default="true"/>
+<Collator unoid="phonetic (alphanumeric first)" default="true"/>
+<Collator unoid="phonetic (alphanumeric last)" default="false"/>
 <Collator unoid="charset" default="false"/>
 <CollationOptions>
 <TransliterationModules>IGNORE_CASE</TransliterationModules>
