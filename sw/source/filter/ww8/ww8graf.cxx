@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:02:34 $
+ *  last change: $Author: jp $ $Date: 2002-01-11 14:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,7 +1388,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
         delete pObj;
 
         SdrObject* pOurNewObject = CreateContactObject( pRetFrmFmt );
-        if( pOurNewObject )
+        if( pOurNewObject && !pOurNewObject->IsInserted() )
             pDrawPg->InsertObject( pOurNewObject );
     }
 }
@@ -2066,7 +2066,10 @@ SdrObject* SwWW8ImplReader::CreateContactObject( SwFlyFrmFmt* pFlyFmt )
 {
     if( pFlyFmt )
     {
-        SdrObject* pNewObject = pFlyFmt->FindSdrObject();
+        //JP 11.1.2002: task 96329
+        SdrObject* pNewObject = bNew ? 0 : pFlyFmt->FindRealSdrObject();
+        if( !pNewObject )
+            pNewObject = pFlyFmt->FindSdrObject();
         if( !pNewObject )
         {
             SwFlyDrawContact* pContactObject
@@ -2687,7 +2690,8 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit
             // in SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden
             // kann !!!
-            pDrawPg->InsertObject( rpOurNewObject );
+            if( !rpOurNewObject->IsInserted() )
+                pDrawPg->InsertObject( rpOurNewObject );
         }
 
         // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden,
@@ -2848,7 +2852,8 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
 
         // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit in
         // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!
-        pDrawPg->InsertObject( rpOurNewObject );
+        if( !rpOurNewObject->IsInserted() )
+            pDrawPg->InsertObject( rpOurNewObject );
     }
     return pRetFrmFmt;
 }
