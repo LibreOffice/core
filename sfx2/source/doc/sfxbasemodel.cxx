@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:15:48 $
+ *  last change: $Author: rt $ $Date: 2005-02-07 14:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3715,7 +3715,8 @@ void SAL_CALL SfxBaseModel::storeToStorage( const REFERENCE< XSTORAGE >& xStorag
     }
     else
     {
-        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion );
+        // TODO/LATER: is it possible to have a template here?
+        m_pData->m_pObjectShell->SetupStorage( xStorage, nVersion, sal_False );
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, String(), &aSet );
