@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:28:40 $
+ *  last change: $Author: mib $ $Date: 2002-10-17 11:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,14 +912,28 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 
             if( IsNewDoc() )
             {
-                if( pDoc->GetNodes()[ nNodeIdx -1 ]->IsCntntNode() &&
-                    !pPam->GetPoint()->nContent.GetIndex() )
+                const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
+                if( !pPam->GetPoint()->nContent.GetIndex() &&
+                    ( pPrev->IsCntntNode() ||
+                      (pPrev->IsEndNode() &&
+                      pPrev->StartOfSectionNode()->IsSectionNode()) ) )
                 {
-                    nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
                     SwCntntNode* pCNd = pPam->GetCntntNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
                         pCNd->EndOfSectionIndex() && !bHasFlysOrMarks )
                     {
+                        ViewShell *pVSh = CheckActionViewShell();
+                        SwCrsrShell *pCrsrSh = pVSh && pVSh->ISA(SwCrsrShell)
+                                        ? static_cast < SwCrsrShell * >( pVSh )
+                                        : 0;
+                        if( pCrsrSh &&
+                            pCrsrSh->GetCrsr()->GetPoint()
+                                   ->nNode.GetIndex() == nNodeIdx )
+                        {
+                            pCrsrSh->MovePara(fnParaPrev, fnParaEnd );
+                            pCrsrSh->SetMark();
+                            pCrsrSh->ClearMark();
+                        }
                         pPam->GetBound(TRUE).nContent.Assign( 0, 0 );
                         pPam->GetBound(FALSE).nContent.Assign( 0, 0 );
                         pDoc->GetNodes().Delete( pPam->GetPoint()->nNode );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-18 07:58:18 $
+ *  last change: $Author: mib $ $Date: 2002-10-17 11:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,10 @@ void SwXMLImport::endDocument( void )
             if( !IsInsertMode() )
             {
                 // If we're not in insert mode, the last node is deleted.
-                if( pDoc->GetNodes()[nNodeIdx -1]->IsCntntNode() )
+                const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
+                if( pPrev->IsCntntNode() ||
+                     ( pPrev->IsEndNode() &&
+                      pPrev->StartOfSectionNode()->IsSectionNode() ) )
                 {
                     SwCntntNode* pCNd = pPaM->GetCntntNode();
                     if( pCNd && pCNd->StartOfSectionIndex()+2 <
