@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 11:51:27 $
+ *  last change: $Author: sab $ $Date: 2001-02-06 14:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,11 @@ extern uno::Sequence< OUString > SAL_CALL SchXMLExport_getSupportedServiceNames(
 extern OUString SAL_CALL SchXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL SchXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// meta export
+extern uno::Sequence< OUString > SAL_CALL XMLMetaExportComponent_getSupportedServiceNames() throw();
+extern OUString SAL_CALL XMLMetaExportComponent_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // writer autotext event export
 extern uno::Sequence< OUString > SAL_CALL XMLAutoTextEventExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL XMLAutoTextEventExport_getImplementationName() throw();
@@ -156,6 +161,10 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             // chart
             writeInfo( pKey, SchXMLImport_getImplementationName(), SchXMLImport_getSupportedServiceNames() );
             writeInfo( pKey, SchXMLExport_getImplementationName(), SchXMLExport_getSupportedServiceNames() );
+
+            // meta
+            writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
+            writeInfo( pKey, XMLMetaExportComponent_getImplementationName(), XMLMetaExportComponent_getSupportedServiceNames() );
 
             // writer auto text events
             writeInfo( pKey, XMLAutoTextEventExport_getImplementationName(), XMLAutoTextEventExport_getSupportedServiceNames() );
@@ -220,6 +229,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 SchXMLExport_getImplementationName(),
                 SchXMLExport_createInstance,
                 SchXMLExport_getSupportedServiceNames() );
+        }
+        else if ( XMLMetaExportComponent_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                XMLMetaExportComponent_getImplementationName(),
+                XMLMetaExportComponent_createInstance,
+                XMLMetaExportComponent_getSupportedServiceNames() );
         }
         else if( XMLAutoTextEventExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
