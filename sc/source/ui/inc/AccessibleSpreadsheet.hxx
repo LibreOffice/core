@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:41:12 $
+ *  last change: $Author: sab $ $Date: 2002-08-15 10:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ private:
     sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+    sal_Bool IsFocused();
     sal_Bool IsCompleteSheetSelected();
 
     void SelectCell(sal_Int32 nRow, sal_Int32 nCol, sal_Bool bDeselect);
