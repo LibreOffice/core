@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:43:18 $
+ *  last change: $Author: kz $ $Date: 2001-07-04 14:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,7 +677,7 @@ Resource RID_ERRHDLSC
         Text[ japanese ] = "Δή·­ÒέΔ‚Ι‚Ν‚±‚ΜΜίΫΈήΧΡ‚ΜΚή°Όή®έ‚Ε‚Ν”F’m‚Ε‚«‚Θ‚Άξ•ρ‚ªά‚ά‚κ‚Δ‚Ά‚ά‚·B\n•Ϋ‘¶‚µ‚Θ‚¨‚·‚ΖA‚±‚Μξ•ρ‚ΝΈ‚ν‚κ‚ά‚·B";
         Text[ chinese_traditional ] = "³o­Σµ{§ΗµLªk³B²z³o­Σ¤ε¥σ¤¤¤£©ϊªΊΈκ°T΅C\n¦b­«·sΐx¦s®Ι³o¨ΗΈκ°T·|¬y¥Ά΅I";
         Text[ arabic ] = "νΝΚζν ΗαγΣΚδΟ Ϊαμ γΪαζγΗΚ ΫΡνΘΙ Ϊαμ ΕΥΟΗΡ ΗαΘΡδΗγΜ εΠΗ.\nεΠε ΗαΘνΗδΗΚ Σζέ ΚΦνΪ ΪδΟ ΕΪΗΟΙ ΝέΩ ΗαγΣΚδΟ!";
-        Text[ greek ] = "Το έγγραφο περιέχει πληροφορίες οι οποίες είναι άγνωστες για αυτή τη έκδοση του \nπρογράμματος. Οι πληροφορίες αυτές θα χαθούν αν επαναλαμ";
+        Text[ greek ] = "Το έγγραφο περιέχει πληροφορίες οι οποίες είναι άγνωστες για αυτή τη έκδοση του \nπρογράμματος. Οι πληροφορίες αυτές θα χαθούν αν επαναλαμβ ";
         Text[ korean ] = "Ή®Ό­Ώ΅΄Β ΐΜ ΗΑ·Ξ±Χ·¥ΐΗ ΉφΐόΏ΅ ΐΗΗΨΌ­΄Β ΐΞ½ΔµΙ Όφ Ύψ΄Β Α¤ΊΈ°΅ ΖχΗΤµΗΎξ ΐΦ½ΐ΄Ο΄Ω.\n΄Ω½Γ ΐϊΐε½ΓΏ΅ ΐΜ Α¤ΊΈ΄Β »σ½ΗµΛ΄Ο΄Ω!";
         Text[ turkish ] = "Belgede, bu program sόrόmόnde bilinmeyen bilgiler mevcut.\nBu bilgiler, yeniden kayύtta kaybolacak!";
         Text[ language_user1 ] = " ";
@@ -711,6 +711,7 @@ Resource RID_ERRHDLSC
         Text[ finnish ] = "Kaikkia solujen sisδltφjδ ei voitu tallentaa mδδritetyssδ muodossa.";
     };
 };
+
 
 
 
