@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,8 +307,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_CHARMAP:
             {
+                USHORT nScript = pTableView->GetSelectedScriptType();
+                USHORT nFontWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_FONTINFO_CJK :
+                                ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
+                                                                        EE_CHAR_FONTINFO );
                 const SvxFontItem& rItem = (const SvxFontItem&)
-                            pTableView->GetAttribs().Get(EE_CHAR_FONTINFO);
+                            pTableView->GetAttribs().Get(nFontWhich);
 
                 String aString;
                 SvxFontItem aNewItem( EE_CHAR_FONTINFO );
@@ -324,8 +328,19 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
                 if (bOk)
                 {
+                    //  if string contains WEAK characters, set all fonts
+                    BYTE nScript;
+                    ScDocument* pDoc = pViewData->GetDocument();
+                    if ( pDoc->HasStringWeakCharacters( aString ) )
+                        nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    else
+                        nScript = pDoc->GetStringScriptType( aString );
+
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
-                    aSet.Put( aNewItem );
+                    SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
+                    aSetItem.PutItemForScriptType( nScript, aNewItem );
+                    aSet.Put( aSetItem.GetItemSet(), FALSE );
+
                     //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
                     pTableView->GetEditEngine()->QuickSetAttribs( aSet, pTableView->GetSelection() );
                     pTableView->InsertText(aString);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:11:53 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #define _SVSTDARR_STRINGS
 #include <svx/boxitem.hxx>
 #include <svx/fontitem.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svx/srchitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
@@ -2466,7 +2467,18 @@ void ScViewFunc::InsertSpecialChar( const String& rStr, const Font& rFont )
                                rFont.GetPitch(),
                                rFont.GetCharSet(),
                                ATTR_FONT );
-    ApplyAttr( aFontItem );
+
+    //  if string contains WEAK characters, set all fonts
+    BYTE nScript;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    if ( pDoc->HasStringWeakCharacters( rStr ) )
+        nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+    else
+        nScript = pDoc->GetStringScriptType( rStr );
+
+    SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, pViewShell->GetPool() );
+    aSetItem.PutItemForScriptType( nScript, aFontItem );
+    ApplyUserItemSet( aSetItem.GetItemSet() );
 
     while ( *pChar )
         pViewShell->TabKeyInput( KeyEvent( *(pChar++), KeyCode() ) );

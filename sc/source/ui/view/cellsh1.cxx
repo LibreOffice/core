@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:31:07 $
+ *  last change: $Author: nn $ $Date: 2001-11-14 15:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,7 +1736,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SvxCharacterMap* pDlg = new SvxCharacterMap(    pTabViewShell->GetDialogParent(), FALSE );
                 Font             aCurFont;
 
-                pTabViewShell->GetSelectionPattern()->GetFont( aCurFont );
+                pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, NULL, NULL, NULL,
+                                                                pTabViewShell->GetSelectionScriptType() );
                 pDlg->SetCharFont( aCurFont );
 
                 if ( pDlg->Execute() == RET_OK )
