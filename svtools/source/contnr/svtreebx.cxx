@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-22 12:41:29 $
+ *  last change: $Author: gt $ $Date: 2002-08-12 14:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,19 @@ SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle )
 {
     DBG_CTOR(SvTreeListBox,0);
     InitTreeView( nWinStyle );
+
+    SetSublistOpenWithLeftRight();
 }
 
 SvTreeListBox::SvTreeListBox( Window* pParent , const ResId& rResId )
     : SvLBox( pParent,rResId )
 {
     DBG_CTOR(SvTreeListBox,0);
+
     InitTreeView( 0 );
     Resize();
+
+    SetSublistOpenWithLeftRight();
 }
 
 void SvTreeListBox::InitTreeView( WinBits nWinStyle )
