@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:05:23 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÇÁ¸°ÅÍ";
         Text[ turkish ] = "Yazýcý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Impresora";
     };
     FixedText FT_NAME
     {
@@ -133,6 +134,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Nombre";
     };
     ListBox LB_NAMES
     {
@@ -167,6 +169,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Propiedades...";
     };
     FixedText FT_STATUS
     {
@@ -193,6 +196,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "»óÅÂ";
         Text[ turkish ] = "Durum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Estado";
     };
     FixedText FI_STATUS
     {
@@ -224,6 +228,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     FixedText FI_TYPE
     {
@@ -255,6 +260,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "À§Ä¡";
         Text[ turkish ] = "Yer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ubicación";
     };
     FixedText FI_LOCATION
     {
@@ -286,6 +292,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÁÖ¼®";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Comentario";
     };
     FixedText FI_COMMENT
     {
@@ -316,6 +323,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "¶Ç¯u¸¹½X";
         Text[ turkish ] = "Fax number";
         Text[ arabic ] = "ÑÞã ÇáÝÇßÓ";
+        Text[ catalan ] = "Número de fax";
     };
     Edit EDT_FAXNO
     {
@@ -348,6 +356,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÆÄÀÏ·Î ÀÎ¼â";
         Text[ turkish ] = "D~osyaya yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir ~en archivo";
     };
     FixedText FI_PRINTFILE
     {
@@ -385,6 +394,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÀÎ¼â ¹üÀ§";
         Text[ turkish ] = "Yazdýrma aralýðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de impresión";
     };
     RadioButton RBT_ALL
     {
@@ -411,6 +421,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "¸ðµÎ";
         Text[ turkish ] = "~Tümü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Todo";
     };
     RadioButton RBT_PAGES
     {
@@ -437,6 +448,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "ÂÊ";
         Text[ turkish ] = "~Sayfa";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Páginas";
     };
     RadioButton RBT_SELECTION
     {
@@ -463,6 +475,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Selección";
     };
     Edit EDT_PAGES
     {
@@ -495,6 +508,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "º¹»ç";
         Text[ turkish ] = "Kopya";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Copias";
     };
     FixedText FT_COPIES
     {
@@ -523,6 +537,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "º¹»çº» ¼ö";
         Text[ turkish ] = "~Kopya sayýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ejemplares";
     };
     NumericField NUM_COPIES
     {
@@ -566,6 +581,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "Á¤·Ä(~L)";
         Text[ turkish ] = "S~ýrala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ordenar";
     };
     FixedImage IMG_COLLATE
     {
@@ -617,6 +633,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ korean ] = "¿É¼Ç(~O)...";
         Text[ turkish ] = "~Seçenekler...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones...";
     };
     OKButton BTN_OK
     {
@@ -644,4 +661,5 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ korean ] = "ÀÎ¼â";
     Text[ turkish ] = "Yazdýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imprimir";
 };
