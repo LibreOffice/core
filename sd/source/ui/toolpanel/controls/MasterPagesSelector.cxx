@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:39:03 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #include "../TaskPaneShellManager.hxx"
 #include "../TitledControl.hxx"
 #include "../ControlContainer.hxx"
+#include "controller/SlideSorterController.hxx"
+#include "controller/SlsPageSelector.hxx"
 
 #ifndef _SFXOBJFACE_HXX
 #include <sfx2/objface.hxx>
@@ -306,6 +308,90 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         if (nPageCount == 0)
             break;
 
+        // Get a list of selected pages.
+        String sFullLayoutName (pMasterPage->GetLayoutName());
+        ::std::vector<SdPage*> aPageList;
+        for (USHORT nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        {
+            SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
+            if (pPage != NULL
+                && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+            {
+                aPageList.push_back (pPage);
+            }
+        }
+
+        AssignMasterPageToPageList (pMasterPage, aPageList);
+    }
+    while (false);
+}
+
+
+
+
+void MasterPagesSelector::AssignMasterPageToSelectedSlides (
+    SdPage* pMasterPage)
+{
+    do
+    {
+        using namespace ::std;
+        using namespace ::sd::slidesorter;
+        using namespace ::sd::slidesorter::controller;
+
+        if (pMasterPage == NULL)
+            break;
+
+        // Find a slide sorter to get the selection from.  When one is
+        // displayed in the center pane use that.  Otherwise use the one in
+        // the left pane.
+        ViewShell* pSlideSorter = mrBase.GetPaneManager().GetViewShell (
+            PaneManager::PT_CENTER);
+        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+            pSlideSorter = mrBase.GetPaneManager().GetViewShell (
+                PaneManager::PT_LEFT);
+        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
+            break;
+
+        SlideSorterViewShell* pShell = static_cast<SlideSorterViewShell*>(
+            pSlideSorter);
+        PageSelector& rSelector (
+            pShell->GetSlideSorterController().GetPageSelector());
+        auto_ptr<PageSelector::PageSelection> pSelection (
+            rSelector.GetPageSelection());
+        {
+            SlideSorterController::ModelChangeLock aLock (
+                pShell->GetSlideSorterController());
+
+            // Get a list of selected pages.
+            vector<SdPage*> aSelectedPages;
+            pShell->GetSelectedPages(aSelectedPages);
+            if (aSelectedPages.size() == 0)
+                break;
+
+            AssignMasterPageToPageList (pMasterPage, aSelectedPages);
+        }
+
+        // Restore the previous selection.
+        rSelector.SetPageSelection(*pSelection.get());
+
+    }
+    while (false);
+}
+
+
+
+
+void MasterPagesSelector::AssignMasterPageToPageList (
+    SdPage* pMasterPage,
+    const ::std::vector<SdPage*>& rPageList)
+{
+    do
+    {
+        if (pMasterPage == NULL)
+            break;
+        if (rPageList.size() == 0)
+            break;
+
         // Make the layout name by stripping ouf the layout postfix from the
         // layout name of the given master page.
         String sFullLayoutName (pMasterPage->GetLayoutName());
@@ -315,12 +401,13 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         // Test whether there are pages that are not already associated with
         // the master page.
         bool bAssignmentNecessary (false);
-        USHORT nPageIndex;
-        for (nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        ::std::vector<SdPage*>::const_iterator iPage;
+        for (iPage=rPageList.begin();
+             iPage!=rPageList.end();
+             ++iPage)
         {
-            SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-            if (pPage != NULL
-                && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+            if (*iPage != NULL
+                && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
             {
                 bAssignmentNecessary = true;
                 break;
@@ -337,25 +424,29 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
         if (pNotesMasterPage == NULL)
             break;
 
-        // Add copies of the master pages.
-        SdPage* pClonedMasterPage = AddMasterPage (&mrDocument, pMasterPage);
-        AddMasterPage (&mrDocument, pNotesMasterPage);
-
-        // Set the master page at the rest of the slides.  This time it is
-        // taken from the target document.
-        for (nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
+        // Determine the position where the new master pages are inserted.
+        // By default they are inserted at the end.  When we assign to a
+        // master page then insert after the last of the (selected) pages.
+        USHORT nInsertionIndex = mrDocument.GetMasterPageCount();
+        if (rPageList.front()->IsMasterPage())
         {
-            SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PK_STANDARD);
-            if (pPage != NULL
-                && pPage->GetLayoutName().CompareTo(sFullLayoutName)!=0)
-            {
-                mrDocument.SetMasterPage (
-                    nPageIndex,
-                    sBaseLayoutName,
-                    &mrDocument,
-                    FALSE,
-                    TRUE);
-            }
+            nInsertionIndex = rPageList.back()->GetPageNum();
+        }
+
+        // Add copies of the master pages.
+        SdPage* pClonedMasterPage = AddMasterPage (
+            &mrDocument, pMasterPage, nInsertionIndex);
+        AddMasterPage (&mrDocument, pNotesMasterPage, nInsertionIndex+2);
+
+        // Assign the master pages to the selected pages.
+        for (iPage=rPageList.begin();
+             iPage!=rPageList.end();
+             ++iPage)
+        {
+            AssignMasterPageToPage (
+                pClonedMasterPage,
+                sBaseLayoutName,
+                *iPage);
         }
     }
     while (false);
@@ -364,86 +455,74 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
 
 
 
-void MasterPagesSelector::AssignMasterPageToSelectedSlides (
-    SdPage* pMasterPage)
+/** In here we have to handle three cases:
+    1. pPage is a normal slide.  We can use SetMasterPage to assign the
+    master pages to it.
+    2. pPage is a master page that is used by at least one slide.  We can
+    assign the master page to these slides.
+    3. pPage is a master page that is currently not used by any slide.
+    We can delete that page and add copies of the given master pages
+    instead.
+
+    For points 2 and 3 where one master page A is assigned to another B we have
+    to keep in mind that the master page that page A has already been
+    inserted into the target document.
+*/
+void MasterPagesSelector::AssignMasterPageToPage (
+    SdPage* pMasterPage,
+    const String& rsBaseLayoutName,
+    SdPage* pPage)
 {
-    do
+    // Leave early when the parameters are invalid.
+    if (pPage == NULL || pMasterPage == NULL)
+        return;
+
+    if ( ! pPage->IsMasterPage())
     {
-        if (pMasterPage == NULL)
-            break;
-
-        // Find a slide sorter to get the selection from.  When one is
-        // displayed in the center pane use that.  Otherwise use the one in
-        // the left pane.
-        ViewShell* pSlideSorter = mrBase.GetPaneManager().GetViewShell (
-            PaneManager::PT_CENTER);
-        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-            pSlideSorter = mrBase.GetPaneManager().GetViewShell (
-                PaneManager::PT_LEFT);
-        if (pSlideSorter->GetShellType() != ViewShell::ST_SLIDE_SORTER)
-            break;
-
-        // Make the layout name by stripping ouf the layout postfix from the
-        // layout name of the given master page.
-        String sFullLayoutName (pMasterPage->GetLayoutName());
-        String sBaseLayoutName (sFullLayoutName);
-        sBaseLayoutName.Erase (sBaseLayoutName.SearchAscii (SD_LT_SEPARATOR));
-
-        // Get a list of selected pages.
-        ::std::vector<SdPage*> aSelectedPages;
-        static_cast< ::sd::slidesorter::SlideSorterViewShell*>(
-            pSlideSorter)->GetSelectedPages(aSelectedPages);
-        if (aSelectedPages.size() == 0)
-            break;
-
-        // Test whether there are pages that are not already associated with
-        // the master page.
-        bool bAssignmentNecessary (false);
-        ::std::vector<SdPage*>::iterator iPage;
-        for (iPage=aSelectedPages.begin();
-             iPage!=aSelectedPages.end();
-             ++iPage)
+        // 1. Assign master pages to regular slide.
+        mrDocument.SetMasterPage (
+            (pPage->GetPageNum()-1)/2,
+            rsBaseLayoutName,
+            &mrDocument,
+            FALSE,
+            FALSE);
+    }
+    else
+    {
+        // Find first slide that uses the master page.
+        SdPage* pSlide = NULL;
+        USHORT nPageCount = mrDocument.GetSdPageCount(PK_STANDARD);
+        for (USHORT nPage=0; nPage<nPageCount&&pSlide==NULL; nPage++)
         {
-            if (*iPage != NULL
-                && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
+            SdrPage* pCandidate = mrDocument.GetSdPage(nPage,PK_STANDARD);
+            if (pCandidate != NULL
+                && pCandidate->TRG_HasMasterPage()
+                && &(pCandidate->TRG_GetMasterPage()) == pPage)
             {
-                bAssignmentNecessary = true;
-                break;
+                pSlide = static_cast<SdPage*>(pCandidate);
             }
         }
-        if ( ! bAssignmentNecessary)
-            break;
 
-        SdDrawDocument* pSourceDocument
-            = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-        SdPage* pNotesMasterPage = static_cast<SdPage*>(
-            pSourceDocument->GetMasterPage (pMasterPage->GetPageNum()+1));
-        if (pNotesMasterPage == NULL)
-            break;
-
-        // Add copies of the master pages.
-        SdPage* pClonedMasterPage = AddMasterPage (&mrDocument, pMasterPage);
-        AddMasterPage (&mrDocument, pNotesMasterPage);
-
-
-        // Assign the master pages to the selected pages.
-        for (iPage=aSelectedPages.begin();
-             iPage!=aSelectedPages.end();
-             ++iPage)
+        USHORT nIndex = pPage->GetPageNum();
+        if (pSlide != NULL)
         {
-            if (*iPage != NULL
-                && (*iPage)->GetLayoutName().CompareTo(sFullLayoutName)!=0)
-            {
-                mrDocument.SetMasterPage (
-                    (*iPage)->GetPageNum()/2,
-                    sBaseLayoutName,
-                    &mrDocument,
-                    FALSE,
-                    TRUE);
-            }
+            // 2. Assign the given master pages to the first slide that was
+            // found above that uses the master page.
+            mrDocument.SetMasterPage (
+                (pSlide->GetPageNum()-1)/2,
+                rsBaseLayoutName,
+                &mrDocument,
+                FALSE,
+                FALSE);
+        }
+        else
+        {
+            // 3. Replace the master page A by a copy of the given master
+            // page B.
+            mrDocument.RemoveUnnessesaryMasterPages (
+                pPage, FALSE);
         }
     }
-    while (false);
 }
 
 
@@ -451,7 +530,8 @@ void MasterPagesSelector::AssignMasterPageToSelectedSlides (
 
 SdPage* MasterPagesSelector::AddMasterPage (
     SdDrawDocument* pTargetDocument,
-    SdPage* pMasterPage)
+    SdPage* pMasterPage,
+    USHORT nInsertionIndex)
 {
     SdPage* pClonedMasterPage = NULL;
 
@@ -467,7 +547,7 @@ SdPage* MasterPagesSelector::AddMasterPage (
 
         // Now that the styles are available we can insert the cloned master
         // page.
-        pTargetDocument->InsertMasterPage (pClonedMasterPage);
+        pTargetDocument->InsertMasterPage (pClonedMasterPage, nInsertionIndex);
     }
 
     return pClonedMasterPage;
@@ -582,25 +662,28 @@ void MasterPagesSelector::AddItemForToken (
     MasterPageContainer::Token aToken,
     bool bCreatePreview)
 {
-    int nIndex = mpPageSet->GetItemCount() + 1;
-    Image aPreview;
-    if (bCreatePreview)
-        aPreview = MasterPageContainer::Instance().GetPreviewForToken(
-            aToken,
-            mnPreviewWidth,
-            LINK(this,MasterPagesSelector,PreviewAvailableCallback),
-            new UserData(nIndex, aToken));
-    else
-        aPreview = MasterPageContainer::Instance().GetPreviewForToken(
-            aToken,
-            mnPreviewWidth);
-    mpPageSet->InsertItem (
-        nIndex,
-        aPreview,
-        MasterPageContainer::Instance().GetPageNameForToken (aToken));
-    mpPageSet->SetItemData (
-        nIndex,
-        new MasterPageContainer::Token(aToken));
+    if (aToken != MasterPageContainer::NIL_TOKEN)
+    {
+        int nIndex = mpPageSet->GetItemCount() + 1;
+        Image aPreview;
+        if (bCreatePreview)
+            aPreview = MasterPageContainer::Instance().GetPreviewForToken(
+                aToken,
+                mnPreviewWidth,
+                LINK(this,MasterPagesSelector,PreviewAvailableCallback),
+                new UserData(nIndex, aToken));
+        else
+            aPreview = MasterPageContainer::Instance().GetPreviewForToken(
+                aToken,
+                mnPreviewWidth);
+        mpPageSet->InsertItem (
+            nIndex,
+            aPreview,
+            MasterPageContainer::Instance().GetPageNameForToken (aToken));
+        mpPageSet->SetItemData (
+            nIndex,
+            new MasterPageContainer::Token(aToken));
+    }
 }
 
 
