@@ -19725,3 +19725,4 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?lock@SvxTextEditSource@@QAEXXZ
 ?unlock@SvxTextEditSource@@QAEXXZ
 ??0?$Reference@VXDropTargetDropContext@dnd@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+?addDataToContainer@OColumnTransferable@svx@@QAEXPAVTransferDataContainer@@@Z
