@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@
 #ifdef WNT
 #pragma optimize ( "", off )
 #endif
+
+#include <tools/urlobj.hxx>
 
 #include <helpid.hrc>
 #include <app.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:41:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@
 #include <svtools/eitem.hxx>
 #include <unotools/processfactory.hxx>
 #include <ucbhelper/content.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace com::sun::star::chaos;
 using namespace com::sun::star::lang;

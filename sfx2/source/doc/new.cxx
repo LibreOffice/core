@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 11:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
+
+#include <tools/urlobj.hxx>
 
 #include "new.hrc"
 #include "doc.hrc"
