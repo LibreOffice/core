@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-09-22 09:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,19 @@ class SwTableCursor;
 class SwTableBoxFmt;
 class SwTableLine;
 class SwTableCursor;
+/* -----------------------------22.09.00 11:10--------------------------------
 
+ ---------------------------------------------------------------------------*/
+class SwChartEventListenerContainer : public SwEventListenerContainer
+{
+    public:
+        SwChartEventListenerContainer( ::com::sun::star::uno::XInterface* pxParent) :
+            SwEventListenerContainer(pxParent){}
+        void ChartDataChanged();
+};
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 typedef
 cppu::WeakImplHelper4
 <
@@ -298,7 +310,8 @@ class SwXTextTable : public cppu::WeakImplHelper9
 >,
     public SwClient
 {
-    SwEventListenerContainer    aLstnrCntnr;
+    SwEventListenerContainer        aLstnrCntnr;
+    SwChartEventListenerContainer   aChartLstnrCntnr;
     SfxItemPropertySet          aPropSet;
     const SfxItemPropertyMap*   _pMap;
     SwSortOptions*              pLastSortOptions;
@@ -418,7 +431,8 @@ class SwXCellRange : public cppu::WeakImplHelper6
 >,
     public SwClient
 {
-    SwDepend                    aCursorDepend; //the cursor is removed after the doc has been removed
+    SwDepend                        aCursorDepend; //the cursor is removed after the doc has been removed
+    SwChartEventListenerContainer   aChartLstnrCntnr;
 
     SwRangeDescriptor           aRgDesc;
     SfxItemPropertySet          aPropSet;

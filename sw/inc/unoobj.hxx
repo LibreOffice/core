@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: os $ $Date: 2000-09-22 09:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
+#endif
+#ifndef _SVARRAY_HXX //autogen
+#include <svtools/svarray.hxx>
 #endif
 #ifndef _CALBCK_HXX //autogen
 #include <calbck.hxx>
@@ -277,10 +280,15 @@ void ClientModify(SwClient* pClient, SfxPoolItem *pOld, SfxPoolItem *pNew);
 /* -----------------22.04.99 11:18-------------------
  *  Verwaltung der EventListener
  * --------------------------------------------------*/
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *  XEventListenerPtr;
+SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4);
 class SwEventListenerContainer
 {
     SwEvtLstnrArray*                            pListenerArr;
      ::com::sun::star::uno::XInterface*         pxParent;
+    protected:
+        SwEvtLstnrArray*                    GetListenerArray() {return pListenerArr;}
+         ::com::sun::star::uno::XInterface* GetParent() {return     pxParent;}
     public:
         SwEventListenerContainer( ::com::sun::star::uno::XInterface* pxParent);
         ~SwEventListenerContainer();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-09-22 09:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,6 @@
 #include <tools/urlobj.hxx>
 #endif
 #include <pam.hxx>
-#ifndef _SVARRAY_HXX //autogen
-#include <svtools/svarray.hxx>
-#endif
 #ifndef _CACHESTR_HXX //autogen
 #include <tools/cachestr.hxx>
 #endif
@@ -5810,8 +5807,6 @@ void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 /* -----------------22.04.99 11:24-------------------
  *
  * --------------------------------------------------*/
-typedef uno::Reference< lang::XEventListener > *  XEventListenerPtr;
-SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4);
 SV_IMPL_PTRARR(SwEvtLstnrArray, XEventListenerPtr);
 
 /*-- 22.04.99 11:24:59---------------------------------------------------
@@ -5884,141 +5879,4 @@ void    SwEventListenerContainer::Disposing()
     }
     pListenerArr->DeleteAndDestroy(0, pListenerArr->Count());
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.262  2000/09/18 16:04:33  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.261  2000/09/12 13:03:59  os
-    #78700# types of text content properties corrected
-
-    Revision 1.260  2000/09/12 11:42:58  os
-    #78682# support of service TextContent
-
-    Revision 1.259  2000/09/11 08:33:01  os
-    #76672# get page no corrected
-
-    Revision 1.258  2000/09/11 06:57:15  os
-    bookmarks start/end corrected
-
-    Revision 1.257  2000/09/07 07:57:47  os
-    SwXTextPortion - new properties: IsCollapsed, IsStart
-
-    Revision 1.256  2000/09/05 15:21:03  os
-    footnote property at SwTextPortion
-
-    Revision 1.255  2000/09/05 09:40:58  os
-    CreatePortions: create selected textportion for footnotes
-
-    Revision 1.254  2000/09/04 12:50:48  os
-    TextPortionEnumeration almost completed
-
-    Revision 1.253  2000/09/01 14:35:51  os
-    text portion generation almost completed
-
-    Revision 1.252  2000/08/31 15:01:59  os
-    SwXTextPortionEnumeration: Fill Array of portions in Ctor
-    getPropertyState corrected
-
-    Revision 1.251  2000/08/30 16:49:58  jp
-    use CharClass instead of international
-
-    Revision 1.250  2000/08/29 11:29:20  os
-    prevent reading of inherited properties
-
-    Revision 1.249  2000/08/25 08:46:58  os
-    +property DropCapCharStyleName
-
-    Revision 1.248  2000/08/24 15:14:27  os
-    new Property: NumberingIsNumber
-
-    Revision 1.247  2000/08/24 11:14:34  mib
-    bug fixes for XML import
-
-    Revision 1.246  2000/08/22 14:52:17  os
-    #77933# GotoNextWord: if GoNextWord fails goto next paragraph
-
-    Revision 1.245  2000/08/18 08:37:11  os
-    #77726# SwSriter - additional parameter
-
-    Revision 1.244  2000/08/09 14:50:16  os
-    create cell objects without SwTableBox*
-
-    Revision 1.243  2000/08/02 14:56:21  mib
-    - NumberingLevel, NumberingStartValue now sal_Int16
-    - TextField property fixed
-    - ParaStyleName and ParaConditionalStyleName fixed
-
-    Revision 1.242  2000/07/27 12:33:04  jp
-    GetCurTxtFmtColl(): returns the right Collection
-
-    Revision 1.241  2000/07/21 11:59:42  os
-    #76495# SwXParagraph: TextContent service corrected
-
-    Revision 1.240  2000/07/19 10:59:43  os
-    properties added/renamed
-
-    Revision 1.239  2000/07/11 13:43:43  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.238  2000/06/29 09:18:05  os
-    #76417# gotoStartOfWord returns correctly
-
-    Revision 1.237  2000/06/29 08:48:43  os
-    #76365# SwXParagraph::set/getPropertyValue: call SwXTextCursor::Get/SetPropertyValue
-
-    Revision 1.236  2000/06/29 08:10:23  os
-    #76495# SwXParagraph::set/getPropertyValue corrected;
-
-    Revision 1.235  2000/06/27 12:10:33  os
-    #76423# programmatic style names
-
-    Revision 1.234  2000/05/30 11:20:14  os
-    #76026# SwXParagraph::XServiceInfo completed
-
-    Revision 1.233  2000/05/16 17:21:32  jp
-    Changes for Unicode
-
-    Revision 1.232  2000/05/16 09:14:55  os
-    project usr removed
-
-    Revision 1.231  2000/05/04 15:16:36  os
-    reduce size of unoobj.cxx
-
-    Revision 1.230  2000/05/04 08:58:12  os
-    #75145# XPropertySet/XPropertyState now available at SwXTextRange
-
-    Revision 1.229  2000/04/27 10:46:56  os
-    UNICODE
-
-    Revision 1.228  2000/04/26 11:35:19  os
-    GetName() returns String&
-
-    Revision 1.227  2000/04/19 13:35:30  os
-    UNICODE
-
-    Revision 1.226  2000/04/11 08:31:03  os
-    UNICODE
-
-    Revision 1.225  2000/04/04 15:08:03  os
-    #74484# XTextRangeCompare impl. #74483# ContentEnumeration available at SwXTextRange/SwXTextCursor
-
-    Revision 1.224  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.223  2000/03/24 10:31:52  os
-    #65681# SwXReferenceMark: always add to UnoCallBack
-
-    Revision 1.222  2000/03/21 15:42:24  os
-    UNOIII
-
-    Revision 1.221  2000/03/13 16:08:18  os
-    #74154# Exceptions have to be declared
-
-    Revision 1.220  2000/03/07 17:00:32  hjs
-    #65293# includes
-
-
-------------------------------------------------------------------------*/
 

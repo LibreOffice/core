@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: os $ $Date: 2000-09-22 09:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,12 @@
 #ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_XCHARTDATACHANGEEVENTLISTENER_HPP_
+#include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATACHANGEEVENT_HPP_
+#include <com/sun/star/chart/ChartDataChangeEvent.hpp>
+#endif
 #ifndef _UNOTBL_HXX
 #include <unotbl.hxx>
 #endif
@@ -220,6 +226,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::chart;
 using namespace ::rtl;
 //collectn.cxx
 BOOL lcl_IsNumeric(const String&);
@@ -2083,6 +2090,7 @@ TYPEINIT1(SwXTextTable, SwClient)
 SwXTextTable::SwXTextTable() :
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
     aLstnrCntnr( (XTextTable*)this),
+    aChartLstnrCntnr( (XTextTable*)this),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
     pLastSortOptions(0),
@@ -2100,6 +2108,7 @@ SwXTextTable::SwXTextTable() :
 SwXTextTable::SwXTextTable(SwFrmFmt& rFrmFmt) :
     SwClient( &rFrmFmt ),
     aLstnrCntnr( (XTextTable*)this),
+    aChartLstnrCntnr( (XTextTable*)this),
     bFirstRowAsLabel(sal_False),
     bFirstColumnAsLabel(sal_False),
     aPropSet(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_TEXT_TABLE)),
@@ -2724,16 +2733,23 @@ void SwXTextTable::setColumnDescriptions(const uno::Sequence< OUString >& rColum
 /*-- 11.12.98 12:42:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextTable::addChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextTable::addChartDataChangeEventListener(
+    const uno::Reference< chart::XChartDataChangeEventListener > & aListener)
+        throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    if(!GetRegisteredIn())
+        throw uno::RuntimeException();
+    aChartLstnrCntnr.AddListener(aListener.get());
 }
 /*-- 11.12.98 12:42:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXTextTable::removeChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
+void SwXTextTable::removeChartDataChangeEventListener(
+    const uno::Reference< chart::XChartDataChangeEventListener > & aListener)
+        throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    if(!GetRegisteredIn() || !aChartLstnrCntnr.RemoveListener(aListener.get()))
+        throw uno::RuntimeException();
 }
 /* -----------------08.03.99 15:33-------------------
  *
@@ -2878,7 +2894,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
-                        DBG_ERROR("Listener am CharData-interface benachrichtigen")
+                        aChartLstnrCntnr.ChartDataChanged();
                         bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -2888,7 +2904,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
-                        DBG_ERROR("Listener am CharData-interface benachrichtigen")
+                        aChartLstnrCntnr.ChartDataChanged();
                         bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3296,7 +3312,12 @@ void SwXTextTable::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     else
         ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
+    {
         aLstnrCntnr.Disposing();
+        aChartLstnrCntnr.Disposing();
+    }
+    else
+        aChartLstnrCntnr.ChartDataChanged();
 }
 /* -----------------14.01.99 10:43-------------------
  *
@@ -3403,6 +3424,7 @@ Sequence< OUString > SwXCellRange::getSupportedServiceNames(void) throw( Runtime
   -----------------------------------------------------------------------*/
 SwXCellRange::SwXCellRange() :
     aCursorDepend(this, 0),
+    aChartLstnrCntnr((cppu::OWeakObject*)this),
     pTblCrsr(0),
     pLastSortOptions(0),
     aPropSet(0),
@@ -3418,6 +3440,7 @@ SwXCellRange::SwXCellRange() :
 SwXCellRange::SwXCellRange(SwUnoCrsr* pCrsr, SwFrmFmt& rFrmFmt,
                                             SwRangeDescriptor& rDesc) :
     SwClient(&rFrmFmt),
+    aChartLstnrCntnr((cppu::OWeakObject*)this),
     aCursorDepend(this, pCrsr),
     aRgDesc(rDesc),
     pTblCrsr(pCrsr),
@@ -3575,7 +3598,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstRowAsLabel != bTmp)
                     {
-                        DBG_ERROR("Listener am CharData-interface benachrichtigen")
+                        aChartLstnrCntnr.ChartDataChanged();
                         bFirstRowAsLabel = bTmp;
                     }
                 }
@@ -3585,7 +3608,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
                     if(bFirstColumnAsLabel != bTmp)
                     {
-                        DBG_ERROR("Listener am CharData-interface benachrichtigen")
+                        aChartLstnrCntnr.ChartDataChanged();
                         bFirstColumnAsLabel = bTmp;
                     }
                 }
@@ -3928,14 +3951,17 @@ void SwXCellRange::setColumnDescriptions(const uno::Sequence< OUString >& Column
   -----------------------------------------------------------------------*/
 void SwXCellRange::addChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    if(!GetRegisteredIn())
+        throw uno::RuntimeException();
+    aChartLstnrCntnr.AddListener(aListener.get());
 }
 /*-- 11.12.98 14:27:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 void SwXCellRange::removeChartDataChangeEventListener(const uno::Reference< chart::XChartDataChangeEventListener > & aListener) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
+    if(!GetRegisteredIn() || !aChartLstnrCntnr.RemoveListener(aListener.get()))
+        throw uno::RuntimeException();
 }
 /* -----------------08.03.99 15:36-------------------
  *
@@ -4013,7 +4039,12 @@ void SwXCellRange::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew );
     if(!aCursorDepend.GetRegisteredIn())
+    {
         pTblCrsr = 0;
+        aChartLstnrCntnr.Disposing();
+    }
+    else
+        aChartLstnrCntnr.ChartDataChanged();
 }
 /******************************************************************
  *  SwXTableRows
@@ -4400,384 +4431,37 @@ void SwXTableColumns::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.123  2000/09/18 16:04:35  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.122  2000/09/15 07:24:04  os
-    #78563# survive setPropertyValue with void
-
-    Revision 1.121  2000/09/12 13:03:59  os
-    #78700# types of text content properties corrected
-
-    Revision 1.120  2000/09/05 15:15:18  os
-    string length available again
-
-    Revision 1.119  2000/08/24 11:14:34  mib
-    bug fixes for XML import
-
-    Revision 1.118  2000/08/18 15:01:26  os
-    #77094# getCellRangeByName corrected
-
-    Revision 1.117  2000/08/18 10:25:43  os
-    #77790# obsolete type casts removed
-
-    Revision 1.116  2000/08/15 10:09:19  os
-    throw exception if cell doesn't exist in CreateCursorByCellName
-
-    Revision 1.115  2000/08/09 14:50:16  os
-    create cell objects without SwTableBox*
-
-    Revision 1.114  2000/08/09 13:50:02  os
-    #77094# SwXCellRange: check for illegal parameters
-
-    Revision 1.113  2000/07/19 11:26:27  os
-    #76861# getError - implemented via string compare
-
-    Revision 1.112  2000/07/19 11:01:49  os
-    properties added/renamed
-
-    Revision 1.111  2000/07/11 13:43:44  os
-    #76708# insert/remove paragraphs before/behind tables
-
-    Revision 1.110  2000/07/10 12:32:18  os
-    chg: acquire/release don't throw exceptions
-
-    Revision 1.109  2000/07/03 14:18:36  os
-    #76590# ::getCellByName: reject negative positions
-
-    Revision 1.108  2000/07/03 13:26:34  os
-    #76457# support service TextContent
-
-    Revision 1.107  2000/07/03 10:46:46  os
-    #76404# SwXTableColumns::getByIndex: check index value
-
-    Revision 1.106  2000/06/30 12:45:52  os
-    getByIndex: return type correced
-
-    Revision 1.105  2000/06/27 16:33:57  os
-    #76407# IndexOutOfBoundsException instead of RuntimeException
-
-    Revision 1.104  2000/06/27 12:10:33  os
-    #76423# programmatic style names
-
-    Revision 1.103  2000/06/13 13:42:23  os
-    #75719# special handling of AnchorType of text tables
-
-    Revision 1.102  2000/05/30 11:27:26  os
-    #76028# service CellProperties
-
-    Revision 1.101  2000/05/26 07:21:48  os
-    old SW Basic API Slots removed
-
-    Revision 1.100  2000/05/18 08:36:32  os
-    XInterface - mothods
-
-    Revision 1.99  2000/05/16 17:21:40  jp
-    Changes for Unicode
-
-    Revision 1.98  2000/05/16 09:14:55  os
-    project usr removed
-
-    Revision 1.97  2000/05/04 15:16:37  os
-    reduce size of unoobj.cxx
-
-    Revision 1.96  2000/04/27 10:46:56  os
-    UNICODE
-
-    Revision 1.95  2000/04/26 11:35:20  os
-    GetName() returns String&
-
-    Revision 1.94  2000/04/19 13:35:31  os
-    UNICODE
-
-    Revision 1.93  2000/04/12 13:26:02  os
-    SfxItemPropertyMap/Set use OUString
-
-    Revision 1.92  2000/03/27 10:21:11  os
-    UNO III
-
-    Revision 1.91  2000/03/21 15:42:25  os
-    UNOIII
-
-    Revision 1.90  2000/03/09 21:53:59  jp
-    Changes: SchMemChart in new headerfile
-
-    Revision 1.89  2000/02/17 12:13:55  os
-    #70258# Range corrected
-
-    Revision 1.88  2000/02/11 14:36:00  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.87  2000/01/07 12:56:43  os
-    #67022# SwXTextTable: react to deleted table
-
-    Revision 1.86  1999/11/25 15:43:27  os
-    headers corrected
-
-    Revision 1.85  1999/11/22 10:37:58  os
-    missing headers added
-
-    Revision 1.84  1999/11/19 16:40:19  os
-    modules renamed
-
-    Revision 1.83  1999/10/26 14:35:33  os
-    LinkTargetSupplier
-
-    Revision 1.82  1999/10/13 11:52:34  os
-    #69150# convert Distance in TableBorder
-
-    Revision 1.81  1999/10/11 09:45:01  os
-    #69081# missing break
-
-    Revision 1.80  1999/10/08 11:37:00  os
-    call MakeBoxSels after Merge or Split
-
-    Revision 1.79  1999/10/07 12:54:09  os
-    #69017# call MakeBoxSels before any other operation
-
-    Revision 1.78  1999/10/06 14:12:05  os
-    #69022# GetRangeByName: use a Reference not a pointer
-
-    Revision 1.77  1999/09/23 11:49:30  os
-    #68802# getTableNames - dont include empty boxes
-
-    Revision 1.76  1999/07/19 06:43:46  OS
-    syntax error, SwWait removed
-
-
-      Rev 1.75   19 Jul 1999 08:43:46   OS
-   syntax error, SwWait removed
-
-      Rev 1.74   13 Jul 1999 16:05:24   MA
-   use internal object to toggle wait cursor
-
-      Rev 1.73   08 Jul 1999 11:26:14   OS
-   #67500# cursor handling in protected sections
-
-      Rev 1.72   27 Apr 1999 13:01:02   OS
-   #65400# Formel zuruecksetzen, wenn setString an der Zelle gerufen wird
-
-      Rev 1.71   26 Apr 1999 11:52:02   OS
-   #65199# Tabellenname aus dem Descriptor uebernehmen
-
-      Rev 1.70   23 Apr 1999 08:26:36   OS
-   #65194# Semikolon muss weg
-
-      Rev 1.69   22 Apr 1999 16:13:58   OS
-   #65194# throw -> throw; #65124# not impl. nur noch warning EventListener
-
-      Rev 1.68   31 Mar 1999 06:45:28   OS
-   #63852# AnchorType fuer Tabelle
-
-      Rev 1.67   16 Mar 1999 10:36:52   OS
-   #63310# Tabelle mit den richtigen Flags einfuegen
-
-      Rev 1.66   15 Mar 1999 14:37:56   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.65   12 Mar 1999 09:41:34   OS
-   #62845# XServiceInfo impl.
-
-      Rev 1.64   11 Mar 1999 10:14:04   OS
-   #63101# SetValue/Formula: richtiges Format uebergeben
-
-      Rev 1.63   11 Mar 1999 08:33:00   OS
-   #63110# Text-Intefaces fuer XCell im queryInterface
-
-
-      Rev 1.62   09 Mar 1999 12:41:30   OS
-   #62008# Solar-Mutex
-
-      Rev 1.61   08 Mar 1999 13:51:42   OS
-   #62751# XChartDataArray
-
-      Rev 1.60   08 Mar 1999 07:42:42   MH
-   update 515
-
-      Rev 1.59   05 Mar 1999 08:43:10   OS
-   #62191# INT statt UINT
-
-      Rev 1.58   04 Mar 1999 15:01:28   OS
-   #62191# UINT nicht mehr verwenden
-
-      Rev 1.57   25 Feb 1999 13:32:52   OS
-   #62405# richtiges Split fuer Tabellen mit korrektem Namen
-
-      Rev 1.56   19 Feb 1999 17:01:08   OS
-   #62124# ParagraphEnumeration soll sich in Tabellen nicht verlaufen, #62118# eigener TextRange fuer Tabelle
-
-      Rev 1.55   18 Feb 1999 14:25:54   OS
-   #52654# insertTextContent statt attach
-
-      Rev 1.54   11 Feb 1999 16:43:52   OS
-   #52654# fehlendes break
-
-      Rev 1.53   11 Feb 1999 16:16:12   OS
-   #52654# GetProperty ohne const
-
-      Rev 1.52   05 Feb 1999 14:31:14   OS
-   #56371# XCellRange interface veraendert
-
-      Rev 1.51   03 Feb 1999 11:45:12   OS
-   #56371# SwXTableRows/Columns
-
-      Rev 1.50   28 Jan 1999 16:46:26   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.49   27 Jan 1999 12:06:50   OS
-   #56371# TF_ONE51
-
-      Rev 1.48   22 Jan 1999 15:09:24   OS
-   #56371# Draw wieder verfuegbar
-
-      Rev 1.47   14 Jan 1999 16:21:48   OS
-   #56371# TF_ONE51
-
-      Rev 1.46   15 Dec 1998 10:09:56   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.45   10 Dec 1998 15:53:38   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.44   09 Nov 1998 14:47:22   OS
-   #58785# getSelection an der XTextView vollstaendig
-
-      Rev 1.43   04 Nov 1998 13:10:26   OS
-   #58229# Zugriffe auf das Layout von unsichtbaren Tabellen verhindern
-
-      Rev 1.42   15 Oct 1998 12:19:32   OS
-   #52654# Tabellenformatierung mit SetONECalcLowers
-
-      Rev 1.41   02 Oct 1998 16:09:18   OS
-   #52654# CalcLayout fuer Tabelle, Range und TableCursor
-
-      Rev 1.40   30 Sep 1998 10:30:02   OS
-   #52654# Sortable und SortDescriptor eingebaut
-
-      Rev 1.39   15 Sep 1998 16:15:10   OS
-   #52654# Cursor nach setPropertyValue wieder loeschen
-
-      Rev 1.38   29 Jul 1998 13:05:16   OS
-   Height und IsAutoHeight an der TableRow #52654#
-
-      Rev 1.37   24 Jul 1998 10:51:36   OS
-   leere BorderLines muessen mit Null gesetzt werden #52654#
-
-      Rev 1.36   21 Jul 1998 17:03:34   OS
-   ParagraphStyle am Range und am TextTableCursor  #52654#
-
-      Rev 1.35   21 Jul 1998 14:23:30   OS
-   include #52654#
-
-      Rev 1.34   21 Jul 1998 09:15:58   OS
-   beans::XPropertySet fuer TextTableCursor #52654#
-
-      Rev 1.33   20 Jul 1998 17:30:04   OS
-   neu: SwXTextTableCursor; chg: SwXTextTable erwietert #52654#
-
-      Rev 1.32   18 Jul 1998 16:12:18   OS
-   Border und Tabellenspaltenbreiten fuer UNO #54654#
-
-      Rev 1.31   15 Jul 1998 13:18:02   OS
-   XChartData an der Table und am Range unterstuetzen #52656#
-
-      Rev 1.30   10 Jul 1998 18:09:04   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.29   09 Jul 1998 09:14:44   OS
-   UnoActionRemoveContext
-
-      Rev 1.28   29 Jun 1998 17:24:10   OS
-   Properties Tabellenzeile
-
-      Rev 1.27   27 Jun 1998 16:22:36   OS
-   SwXTextTableRow angefangen
-
-      Rev 1.26   26 Jun 1998 18:17:54   OS
-   PageDesc setzen
-
-      Rev 1.25   25 Jun 1998 11:14:56   OS
-   PreopertyMaps nur noch vom PropertyMapProvider
-
-      Rev 1.24   23 Jun 1998 09:51:26   TRI
-   ICC brauchte temp. Objekte
-
-      Rev 1.23   18 Jun 1998 08:10:50   OS
-   Property-Namen veraendert
-
-      Rev 1.22   16 Jun 1998 16:53:46   OS
-   Bold/Italic/Underlined ersetzt durch Weight, Posture, Underline
-
-      Rev 1.21   15 Jun 1998 09:08:38   OS
-   setPropertyValue am CellRange berichtigt
-
-      Rev 1.20   12 Jun 1998 09:46:44   OS
-   Tabellenboxen anders suchen
-
-      Rev 1.19   10 Jun 1998 15:57:52   OS
-   SwXCellRange::getColumn/RowCount und ::getSubRange berichtigt
-
-      Rev 1.18   10 Jun 1998 08:20:42   OS
-   get/setFormula/Value eingebaut
-
-      Rev 1.17   08 Jun 1998 16:29:02   OS
-   get/setText korrigiert
-
-      Rev 1.16   08 Jun 1998 10:34:32   OS
-   Map-Reihenfolge
-
-      Rev 1.15   04 Jun 1998 09:40:04   OS
-   getIdlClasses
-
-
-      Rev 1.14   03 Jun 1998 09:53:44   OS
-   ParagraphEnumeratable
-
-      Rev 1.13   02 Jun 1998 10:33:58   JP
-   TabellenAutoFormat: Load/Save ohne Stream - erzeugen diesen selbst
-
-      Rev 1.12   29 May 1998 13:49:18   OS
-   UNO_NAME_REGISTER -> _REGISTER_MODE_ACTIVE
-
-      Rev 1.11   22 May 1998 15:10:38   OS
-   CreateTextCursorAtPos eingebaut
-
-      Rev 1.10   18 May 1998 12:22:54   OS
-   Container fuer Suchergebnis
-
-      Rev 1.9   05 May 1998 10:04:30   OS
-   Actions
-
-      Rev 1.8   04 May 1998 08:55:14   OS
-   Zeilen+Spalten einfuegen und loeschen
-
-      Rev 1.7   29 Apr 1998 08:00:56   OS
-   SwXCellRange
-
-      Rev 1.6   22 Apr 1998 13:43:06   OS
-   Tabellenname nur ohne Space und Punkt
-
-      Rev 1.5   17 Apr 1998 13:35:28   OS
-   Tabellennamen setzen
-
-      Rev 1.4   09 Apr 1998 15:10:52   OS
-   Uno-Umstellung
-
-      Rev 1.3   07 Apr 1998 17:06:22   OS
-   ParagraphEnumerator eingebaut
-
-      Rev 1.2   07 Apr 1998 14:07:38   OS
-   SwXTextTable hierher verschoben
-
-      Rev 1.1   12 Mar 1998 16:44:06   TJ
-   include
-
-      Rev 1.0   10 Mar 1998 12:12:34   OS
-   Initial revision.
-
-
-------------------------------------------------------------------------*/
+/* -----------------------------22.09.00 11:11--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwChartEventListenerContainer::ChartDataChanged()
+{
+    SwEvtLstnrArray* pListenerArr = GetListenerArray();
+    if(pListenerArr)
+    {
+        //TODO: find appropriate settings of the Event
+        lang::EventObject aObj(GetParent());
+        chart::ChartDataChangeEvent aEvent;
+        aEvent.Type = chart::ChartDataChangeType_ALL;
+        aEvent.StartColumn = 0;
+        aEvent.EndColumn = 1;
+        aEvent.StartRow = 0;
+        aEvent.EndRow = 1;
+
+        for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
+        {
+            XEventListenerPtr pElem = pListenerArr->GetObject(i);
+            try
+            {
+                XEventListenerPtr pElem = pListenerArr->GetObject(i);
+                Reference<XEventListener> xEventListener = *pElem;
+                Reference<XChartDataChangeEventListener> XChartEventListener = (XChartDataChangeEventListener*)(*pElem).get();
+                XChartEventListener->chartDataChanged( aEvent );
+            }
+            catch(Exception&)
+            {
+            }
+        }
+    }
+}
 
