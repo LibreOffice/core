@@ -474,25 +474,18 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                 CHAR    szTitle[1024] = "";
                 CHAR    szBuildId[1024] = "";
                 CHAR    szEmail[1024] = "";
-                CHAR    szUserName[256] = "";
-                TCHAR   tszUserName[256] = TEXT("");
-                DWORD   dwUserNameSize = elementsof(tszUserName);
                 const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
                 const char *pszProductName = getenv( "PRODUCTNAME" );
-
-                GetUserName( tszUserName, &dwUserNameSize );
 
                 WideCharToMultiByte( CP_UTF8, 0, pParams->szTitle, -1, szTitle, sizeof(szTitle), NULL, NULL );
                 WideCharToMultiByte( CP_UTF8, 0, g_szBuildId, -1, szBuildId, sizeof(szBuildId), NULL, NULL );
                 WideCharToMultiByte( CP_UTF8, 0, pParams->szEmail, -1, szEmail, sizeof(szEmail), NULL, NULL );
-                WideCharToMultiByte( CP_UTF8, 0, tszUserName, -1, szUserName, sizeof(szUserName), NULL, NULL );
 
                 fprintf( fp,
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                     "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
-                    "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" uid=\"%s\" usertype=\"%s\">\n"
+                    "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
                     "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.0\" feedback=\"%s\" email=\"%s\">\n",
-                    szUserName,
                     pszUserType ? pszUserType : "",
                     pParams->fAllowContact ? "true" : "false",
                     pParams->fAllowContact ? xml_encode(szEmail).c_str() : ""
