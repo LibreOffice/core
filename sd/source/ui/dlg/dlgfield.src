@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:11:10 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,10 +69,10 @@ ModalDialog DLG_FIELD_MODIFY
     Text [ ENGLISH ] = "Modify field" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    GroupBox GRP_TYPE
+    FixedLine GRP_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 70 , 37 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Feldtyp" ;
         Text [ ENGLISH ] = "field type" ;
         Text [ english_us ] = "Field type" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:48:33 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,8 @@ __EXPORT SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
     aNumFldBitmap.SetModifyHdl( LINK( this, SdAnimationWin, ModifyBitmapHdl ) );
     aTimeField.SetModifyHdl( LINK( this, SdAnimationWin, ModifyTimeHdl ) );
 
+    // disable 3D border
+    aCtlDisplay.SetBorderStyle(WINDOW_BORDER_MONO);
     aDisplaySize = aCtlDisplay.GetOutputSize();
 
     aSize = GetOutputSizePixel();

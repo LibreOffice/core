@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,14 @@
 #include <drawdoc.hxx>
 #endif
 
+#ifndef _SD_SDRESID_HXX
+#include "sdresid.hxx"
+#endif
+
 #include "glob.hrc"
 #include "dlgolbul.hxx"
 #include "dlgolbul.hrc"
-#include "enumdlg.hxx"
+//#include "enumdlg.hxx"
 #include "bulmaper.hxx"
 #include "docshell.hxx"
 

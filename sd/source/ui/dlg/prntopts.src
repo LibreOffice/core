@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:54:33 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_FRONT
     {
-        Pos = MAP_APPFONT ( 142 , 139  ) ;
+        Pos = MAP_APPFONT ( 144 , 139  ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Text = "~Vorderseite" ;
         Text [ ENGLISH ] = "Front" ;
@@ -676,7 +676,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_BACK
     {
-        Pos = MAP_APPFONT ( 200 , 139  ) ;
+        Pos = MAP_APPFONT ( 202 , 139  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "Rücks~eite" ;
         Text [ ENGLISH ] = "Back" ;

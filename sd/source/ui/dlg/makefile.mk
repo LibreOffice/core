@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: af $ $Date: 2001-04-06 12:17:10 $
+#   last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,6 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         animobjs.cxx \
         prltempl.cxx \
         prntopts.cxx \
-        enumdlg.cxx  \
         dlgsnap.cxx  \
         copydlg.cxx  \
         dlgolbul.cxx \
@@ -141,7 +140,6 @@ SRCFILES =\
     animobjs.src\
     prltempl.src\
     prntopts.src\
-    enumdlg.src\
     dlgsnap.src\
     copydlg.src\
     tpoption.src\
@@ -181,7 +179,6 @@ SLOFILES =  \
         $(SLO)$/animobjs.obj \
         $(SLO)$/prltempl.obj \
         $(SLO)$/prntopts.obj \
-        $(SLO)$/enumdlg.obj  \
         $(SLO)$/dlgsnap.obj  \
         $(SLO)$/copydlg.obj  \
         $(SLO)$/dlgolbul.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:49:34 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,10 @@ SdVectorizeDlg::SdVectorizeDlg( Window* pParent, const Bitmap& rBmp, SdDrawDocSh
     aMtReduce.SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
     aMtFillHoles.SetModifyHdl( LINK( this, SdVectorizeDlg, ModifyHdl ) );
     aCbFillHoles.SetToggleHdl( LINK( this, SdVectorizeDlg, ToggleHdl ) );
+
+    // disable 3D border
+    aBmpWin.SetBorderStyle(WINDOW_BORDER_MONO);
+    aMtfWin.SetBorderStyle(WINDOW_BORDER_MONO);
 
     LoadSettings();
     InitPreviewBmp();

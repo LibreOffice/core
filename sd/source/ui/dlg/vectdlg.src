@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 00:11:26 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,10 @@ ModalDialog DLG_VECTORIZE
         Text[ finnish ] = "Esikatselu";
     };
 
-    GroupBox GRP_SETTINGS
+    FixedLine GRP_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 132 , 74 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ ENGLISH ] = "Settings" ;
         Text [ english_us ] = "Settings" ;
@@ -334,7 +334,7 @@ ModalDialog DLG_VECTORIZE
 
     FixedText FT_ORIGINAL
     {
-        Pos = MAP_APPFONT ( 6 , 83 );
+        Pos = MAP_APPFONT ( 6 , 87 );
         Size = MAP_APPFONT ( 92 , 12 );
         Text = "Originalbild:";
         Text [ ENGLISH ] = "Source image:";
@@ -364,14 +364,13 @@ ModalDialog DLG_VECTORIZE
     Control CTL_BMP
     {
         Border = TRUE ;
-        SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6, 98 ) ;
         Size = MAP_APPFONT ( 92, 100 ) ;
     };
 
     FixedText FT_VECTORIZED
     {
-        Pos = MAP_APPFONT ( 101 , 83 );
+        Pos = MAP_APPFONT ( 101 , 87 );
         Size = MAP_APPFONT ( 92 , 12 );
         Text = "Vektorisiertes Bild:";
         Text [ ENGLISH ] = "Vectorized image:";
@@ -401,15 +400,14 @@ ModalDialog DLG_VECTORIZE
     Control CTL_WMF
     {
         Border = TRUE ;
-        SVLook = TRUE ;
         Pos = MAP_APPFONT ( 101, 98 ) ;
         Size = MAP_APPFONT ( 93, 100 ) ;
     };
 
-    GroupBox GRP_PRGS
+    FixedText GRP_PRGS
     {
         Pos = MAP_APPFONT ( 6, 204 );
-        Size = MAP_APPFONT( 188, 27 );
+        Size = MAP_APPFONT( 188, 8 );
         Text = "Fortschritt";
         Text [ ENGLISH ] = "Progress";
         Text [ english_us ] = "Progress";
@@ -439,8 +437,8 @@ ModalDialog DLG_VECTORIZE
     {
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 12, 215 ) ;
-        Size = MAP_APPFONT ( 176, 10 ) ;
+        Pos = MAP_APPFONT ( 6, 215 ) ;
+        Size = MAP_APPFONT ( 188, 10 ) ;
     };
     Text[ italian ] = "Converti in poligono";
     Text[ portuguese_brazilian ] = "Convert to polygon";

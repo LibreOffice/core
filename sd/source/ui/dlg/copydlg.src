@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:02:16 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,53 @@ ModalDialog DLG_COPY
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    FixedText FT_COPIES
+    {
+        Pos = MAP_APPFONT ( 6 , 8  ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Anzahl an ~Kopien" ;
+        Text [ ENGLISH ] = "Number of ~Copies" ;
+        Text [ norwegian ] = "Antall ~Kopier" ;
+        Text [ italian ] = "Numero di ~copie" ;
+        Text [ portuguese_brazilian ] = "N?ero de ~C?ias" ;
+        Text [ portuguese ] = "N˙mero de ~cÛpias" ;
+        Text [ finnish ] = "~Kopioiden m‰‰r‰" ;
+        Text [ danish ] = "Antal kopier" ;
+        Text [ french ] = "Nombre de co~pies" ;
+        Text [ swedish ] = "Antal ~kopior" ;
+        Text [ dutch ] = "~Aantal kopieÎn" ;
+        Text [ spanish ] = "N˙mero de c~opias" ;
+        Text [ english_us ] = "Number of ~copies" ;
+        Text[ chinese_simplified ] = "∏¥÷∆º˛ ˝(~C)";
+        Text[ russian ] = "◊ËÒÎÓ ÍÓÔËÈ";
+        Text[ polish ] = "Liczba kopii";
+        Text[ japanese ] = "∫Àﬂ∞ÇÃêî(~C)";
+        Text[ chinese_traditional ] = "Ω∆¶L•Ûº∆(~C)";
+        Text[ arabic ] = "⁄œœ «·‰”Œ";
+        Text[ greek ] = "¡ÒÈËÏ¸Ú ·ÌÙÈ„Ò‹ˆ˘Ì";
+        Text[ korean ] = "∫πªÁ ºˆ∑Æ(~C)";
+        Text[ turkish ] = "Kopya say˝s˝";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N˙mero de c~opias";
+    };
+    NumericField NUM_FLD_COPIES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 76 , 6  ) ;
+        Size = MAP_APPFONT ( 37 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        StrictFormat = TRUE ;
+        First = 1 ;
+        Last = 999 ;
+        SpinSize = 1 ;
+    };
     ImageButton BTN_SET_VIEWDATA
     {
-        Pos = MAP_APPFONT ( 122 , 5  ) ;
+        Pos = MAP_APPFONT ( 125 , 5  ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         QuickHelpText = "Werte von Selektion aufnehmen" ;
         QuickHelpText [ ENGLISH ] = "Get values from selection" ;
@@ -134,21 +178,6 @@ ModalDialog DLG_COPY
         QuickHelpText[ turkish ] = "Werte von Selektion aufnehmen";
         QuickHelpText[ catalan ] = "Valores seleccionados";
         QuickHelpText[ finnish ] = "Valinnan arvot!";
-    };
-    NumericField NUM_FLD_COPIES
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 72 , 6  ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 999 ;
-        StrictFormat = TRUE ;
-        First = 1 ;
-        Last = 999 ;
-        SpinSize = 1 ;
     };
     PushButton BTN_SET_DEFAULT
     {
@@ -215,35 +244,6 @@ ModalDialog DLG_COPY
         CustomUnitText[ language_user1 ] = " ";
         CustomUnitText[ catalan ] = "grados";
         CustomUnitText[ finnish ] = " asteet";
-    };
-    FixedText FT_COPIES
-    {
-        Pos = MAP_APPFONT ( 6 , 8  ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text = "Anzahl an ~Kopien" ;
-        Text [ ENGLISH ] = "Number of ~Copies" ;
-        Text [ norwegian ] = "Antall ~Kopier" ;
-        Text [ italian ] = "Numero di ~copie" ;
-        Text [ portuguese_brazilian ] = "N?ero de ~C?ias" ;
-        Text [ portuguese ] = "N˙mero de ~cÛpias" ;
-        Text [ finnish ] = "~Kopioiden m‰‰r‰" ;
-        Text [ danish ] = "Antal kopier" ;
-        Text [ french ] = "Nombre de co~pies" ;
-        Text [ swedish ] = "Antal ~kopior" ;
-        Text [ dutch ] = "~Aantal kopieÎn" ;
-        Text [ spanish ] = "N˙mero de c~opias" ;
-        Text [ english_us ] = "Number of ~copies" ;
-        Text[ chinese_simplified ] = "∏¥÷∆º˛ ˝(~C)";
-        Text[ russian ] = "◊ËÒÎÓ ÍÓÔËÈ";
-        Text[ polish ] = "Liczba kopii";
-        Text[ japanese ] = "∫Àﬂ∞ÇÃêî(~C)";
-        Text[ chinese_traditional ] = "Ω∆¶L•Ûº∆(~C)";
-        Text[ arabic ] = "⁄œœ «·‰”Œ";
-        Text[ greek ] = "¡ÒÈËÏ¸Ú ·ÌÙÈ„Ò‹ˆ˘Ì";
-        Text[ korean ] = "∫πªÁ ºˆ∑Æ(~C)";
-        Text[ turkish ] = "Kopya say˝s˝";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "N˙mero de c~opias";
     };
     FixedText FT_ANGLE
     {

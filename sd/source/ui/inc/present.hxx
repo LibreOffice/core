@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:40 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
 #endif
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
@@ -92,14 +92,14 @@ class SdStartPresentationDlg : public ModalDialog
 {
 private:
 
-    GroupBox            aGrpRange;
+    FixedLine           aGrpRange;
     RadioButton         aRbtAll;
     RadioButton         aRbtAtDia;
     RadioButton         aRbtCustomshow;
     ListBox             aLbDias;
     ListBox             aLbCustomshow;
 
-    GroupBox            aGrpKind;
+    FixedLine           aGrpKind;
     RadioButton         aRbtStandard;
     RadioButton         aRbtWindow;
     RadioButton         aRbtAuto;
@@ -107,7 +107,7 @@ private:
     TimeField           aTmfPause;
     CheckBox            aCbxAutoLogo;
 
-    GroupBox            aGrpOptions;
+    FixedLine           aGrpOptions;
     CheckBox            aCbxManuel;
     CheckBox            aCbxMousepointer;
     CheckBox            aCbxPen;

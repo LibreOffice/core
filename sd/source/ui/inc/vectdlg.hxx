@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class SdDrawDocShell;
 class SdVectorizeDlg : public ModalDialog
 {
     SdDrawDocShell *    pDocSh;
-    GroupBox            aGrpSettings;
+    FixedLine           aGrpSettings;
     FixedText           aFtLayers;
     NumericField        aNmLayers;
     FixedText           aFtReduce;
@@ -114,7 +114,7 @@ class SdVectorizeDlg : public ModalDialog
     FixedText           aFtVectorized;
     GraphCtrl           aMtfWin;
 
-    GroupBox            aGrpPrgs;
+    FixedText           aGrpPrgs;
     ProgressBar         aPrgs;
 
     OKButton            aBtnOK;

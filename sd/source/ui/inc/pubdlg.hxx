@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-31 13:26:19 $
+ *  last change: $Author: thb $ $Date: 2001-06-15 18:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,11 +203,11 @@ private:
 
     // standard controls
     FixedLine       aBottomLine;
-    OKButton        aFinishButton;
-    CancelButton    aCancelButton;
     HelpButton      aHelpButton;
-    PushButton      aNextPageButton;
+    CancelButton    aCancelButton;
     PushButton      aLastPageButton;
+    PushButton      aNextPageButton;
+    OKButton        aFinishButton;
 
     Assistent       aAssistentFunc;
 
