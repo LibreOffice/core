@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:25:49 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,26 +70,6 @@ String STR_ACCESS_DOC_DESC
 {
     Text [ de ] = "Dokument-Ansicht" ;
     Text [ en-US ] = "Document view";
-};
-String STR_ACCESS_PARAGRAPH_NAME
-{
-    Text [ de ] = "Absatz $(ARG1)" ;
-    Text [ en-US ] = "Paragraph $(ARG1)";
-};
-String STR_ACCESS_PARAGRAPH_DESC
-{
-    Text [ de ] = "Absatz: $(ARG1) " ;
-    Text [ en-US ] = "Paragraph: $(ARG1) ";
-};
-String STR_ACCESS_HEADING_NAME
-{
-    Text [ de ] = "Überschrift $(ARG1)" ;
-    Text [ en-US ] = "Heading $(ARG1)";
-};
-String STR_ACCESS_HEADING_DESC
-{
-    Text [ de ] = "Überschrift: $(ARG1)" ;
-    Text [ en-US ] = "Heading: $(ARG1)";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
