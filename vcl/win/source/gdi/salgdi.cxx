@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1597,14 +1597,7 @@ static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSi
 static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
 {
     BOOL    bRetValue = FALSE;
-    ULONG   nBytesRead;
-
-    if ( nSize < POSTSCRIPT_BOUNDINGSEARCH )
-        nBytesRead = nSize;
-    else
-        nBytesRead = POSTSCRIPT_BOUNDINGSEARCH;
-
-    BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nBytesRead, 14 );
+    BYTE* pDest = ImplSearchEntry( pSource, (BYTE*)"%%BoundingBox:", nSize, 14 );
     if ( pDest )
     {
         nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
@@ -1656,7 +1649,7 @@ static BOOL ImplGetBoundingBox( double* nNumb, BYTE* pSource, ULONG nSize )
             if ( bDivision && ( nDivision != 1 ) )
                 nNumb[i] /= nDivision;
         }
-        if ( nSizeLeft )
+        if ( i == 4 )
             bRetValue = TRUE;
     }
     return bRetValue;
@@ -1690,21 +1683,58 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
 
             if ( pBuf && ImplGetBoundingBox( nBoundingBox, (BYTE*)pPtr, nSize ) )
             {
+                // #107797# Write out EPS encapsulation header
+                // ----------------------------------------------------------------------------------
+
+                // directly taken from the PLRM 3.0, p. 726. Note:
+                // this will definitely cause problems when
+                // recursively creating and embedding PostScript files
+                // in OOo, since we use statically-named variables
+                // here (namely, b4_Inc_state_salWin, dict_count_salWin and
+                // op_count_salWin). Currently, I have no idea on how to
+                // work around that, except from scanning and
+                // interpreting the EPS for unused identifiers.
+                BYTE*   pTemp = pBuf + 2;       // +2 because we want to insert the size later
+                ImplWriteString( &pTemp, "\n\n/b4_Inc_state_salWin save def\n" );
+                ImplWriteString( &pTemp, "/dict_count_salWin countdictstack def\n" );
+                ImplWriteString( &pTemp, "/op_count_salWin count 1 sub def\n" );
+                ImplWriteString( &pTemp, "userdict begin\n" );
+                ImplWriteString( &pTemp, "/showpage {} def\n" );
+                ImplWriteString( &pTemp, "0 setgray 0 setlinecap\n" );
+                ImplWriteString( &pTemp, "1 setlinewidth 0 setlinejoin\n" );
+                ImplWriteString( &pTemp, "10 setmiterlimit [] 0 setdash newpath\n" );
+                ImplWriteString( &pTemp, "/languagelevel where\n" );
+                ImplWriteString( &pTemp, "{\n" );
+                ImplWriteString( &pTemp, "  pop languagelevel\n" );
+                ImplWriteString( &pTemp, "  1 ne\n" );
+                ImplWriteString( &pTemp, "  {\n" );
+                ImplWriteString( &pTemp, "    false setstrokeadjust false setoverprint\n" );
+                ImplWriteString( &pTemp, "  } if\n" );
+                ImplWriteString( &pTemp, "} if\n\n" );
+                *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
+                Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
+
+
+                // #107797# Write out EPS transformation code
+                // ----------------------------------------------------------------------------------
                 double  dM11 = nWidth / ( nBoundingBox[2] - nBoundingBox[0] );
                 double  dM22 = nHeight / (nBoundingBox[1] - nBoundingBox[3] );
-                BYTE*   pTemp = pBuf + 2;       // +2 because we want to insert the size later
-                ImplWriteString( &pTemp, "\n\nsave\n[ " );
+                pTemp = pBuf + 2;       // +2 because we want to insert the size later
+                ImplWriteString( &pTemp, "\n\n[ " );
                 ImplWriteDouble( &pTemp, dM11 );
                 ImplWriteDouble( &pTemp, 0 );
                 ImplWriteDouble( &pTemp, 0 );
                 ImplWriteDouble( &pTemp, dM22 );
                 ImplWriteDouble( &pTemp, nX - ( dM11 * nBoundingBox[0] ) );
                 ImplWriteDouble( &pTemp, nY - ( dM22 * nBoundingBox[3] ) );
-                ImplWriteString( &pTemp, "] concat /showpage {} def\n" );
+                ImplWriteString( &pTemp, "] concat\n" );
                 ImplWriteString( &pTemp, "%%BeginDocument:\n" );
                 *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
                 Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
 
+
+                // #107797# Write out actual EPS content
+                // ----------------------------------------------------------------------------------
                 ULONG   nToDo = nSize;
                 ULONG   nDoNow;
                 while ( nToDo )
@@ -1719,9 +1749,15 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight, void* pP
                         break;
                     nToDo -= nResult;
                 }
+
+
+                // #107797# Write out EPS encapsulation footer
+                // ----------------------------------------------------------------------------------
                 pTemp = pBuf + 2;
                 ImplWriteString( &pTemp, "%%EndDocument\n" );
-                ImplWriteString( &pTemp, "restore\n\n" );
+                ImplWriteString( &pTemp, "count op_count_salWin sub {pop} repeat\n" );
+                ImplWriteString( &pTemp, "countdictstack dict_count_salWin sub {end} repeat\n" );
+                ImplWriteString( &pTemp, "b4_Inc_state_salWin restore\n\n" );
                 *((USHORT*)pBuf) = (USHORT)( pTemp - pBuf - 2 );
                 Escape ( maGraphicsData.mhDC, nEscape, pTemp - pBuf, (LPTSTR)((BYTE*)pBuf), 0 );
                 bRetValue = TRUE;
