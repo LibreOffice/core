@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwhead.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 11:48:15 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 //===================================================================
 
 BrowserHeader::BrowserHeader( BrowseBox* pParent, WinBits nWinBits )
-:   HeaderBar( pParent, nWinBits ),
-    _pBrowseBox( pParent )
+ :HeaderBar( pParent, nWinBits )
+ ,_pBrowseBox( pParent )
 {
     long nHeight = pParent->IsZoom() ? pParent->CalcZoom(pParent->GetTitleHeight()) : pParent->GetTitleHeight();
 
@@ -85,6 +85,8 @@ void BrowserHeader::Command( const CommandEvent& rCEvt )
     if ( !GetCurItemId() && COMMAND_CONTEXTMENU == rCEvt.GetCommand() )
     {
         Point aPos( rCEvt.GetMousePosPixel() );
+        if ( _pBrowseBox->IsFrozen(0) )
+            aPos.X() += _pBrowseBox->GetColumnWidth(0);
         _pBrowseBox->GetDataWindow().Command( CommandEvent(
                 Point( aPos.X(), aPos.Y() - GetSizePixel().Height() ),
                 COMMAND_CONTEXTMENU, rCEvt.IsMouseEvent() ) );
@@ -140,5 +142,8 @@ void BrowserHeader::EndDrag()
         }
     }
 }
+// -----------------------------------------------------------------------------
+
+
 
 
