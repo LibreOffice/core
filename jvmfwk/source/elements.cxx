@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-05 10:14:01 $
+ *  last change: $Author: jl $ $Date: 2004-05-10 13:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,6 +577,13 @@ javaFrameworkError CNodeJava::loadShareSettings()
 {
     javaFrameworkError errcode = JFW_E_NONE;
     CXmlDocPtr docShare;
+
+    //test if the file exist to avoid warning messages from libxml
+    rtl::OUString sSettingsUrl = getSharedSettingsURL();
+    osl::DirectoryItem testFileItem;
+    osl::File::RC fileError = osl::DirectoryItem::get(sSettingsUrl, testFileItem);
+    if (fileError == osl::FileBase::E_NOENT)
+        return JFW_E_NONE;
 
     //Read the share elements, do not heed the nil attributes
     rtl::OString sSettingsPath = jfw::getSharedSettingsPath();
