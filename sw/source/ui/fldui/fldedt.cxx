@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:10:57 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
             break;
         case GRP_DB:
             pPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
+            static_cast<SwFldDBPage*>(pPage)->SetWrtShell(*pSh);
             nHelpId = HID_EDIT_FLD_DB;
             break;
         case GRP_VAR:
@@ -362,14 +363,16 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 
     SwFieldType *pOldTyp = 0;
     SwFldPage* pPage = (SwFldPage*)GetTabPage();
-    SwFldMgr& rMgr = pPage->GetFldMgr();
-    SwField *pCurFld = rMgr.GetCurFld();
 
-    if (pCurFld->GetTypeId() == TYP_DBFLD)
-        pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
-
+    //#112462# FillItemSet may delete the current field
+    //that's why it has to be called before accessing the current field
     if( GetOKButton()->IsEnabled() )
         pPage->FillItemSet(*(SfxItemSet*)0);
+
+    SwFldMgr& rMgr = pPage->GetFldMgr();
+    SwField *pCurFld = rMgr.GetCurFld();
+    if (pCurFld->GetTypeId() == TYP_DBFLD)
+        pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
 
     rMgr.GoNextPrev( bNext, pOldTyp );
     pCurFld = rMgr.GetCurFld();
