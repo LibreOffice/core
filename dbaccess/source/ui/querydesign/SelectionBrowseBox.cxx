@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 06:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2303,7 +2303,7 @@ void OSelectionBrowseBox::startTimer()
 ::std::vector<OTableFieldDesc*>* OSelectionBrowseBox::getFields() const
 {
     OQueryController* pController = static_cast<OQueryController*>(getDesignView()->getController());
-    return getFields();
+    return pController->getTableFieldDesc();
 }
 // -----------------------------------------------------------------------------
 
