@@ -62,12 +62,14 @@ import java.io.IOException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.sxc.Format;
 
 /**
  * Represents a BIFF Record descibing extended formatting information
  *
  */
-public class ExtendedFormat implements BIFFRecord {
+public class ExtendedFormat implements BIFFRecord,
+org.openoffice.xmerge.converter.xml.OfficeConstants {
 
     private byte[] ixfnt        = new byte[2];  // Index to Font Record
     private byte[] ixnf         = new byte[2];
@@ -99,10 +101,19 @@ public class ExtendedFormat implements BIFFRecord {
       *
       * @param  ixfnt   index of the font this format should use
       */
-    public ExtendedFormat(int ixfnt) {
+    public ExtendedFormat(int ixfnt, Format fmt) {
 
         this.ixfnt          = EndianConverter.writeShort((short)ixfnt);
-        this.ixnf           = EndianConverter.writeShort((short) 0);
+        String category = fmt.getCategory();
+        if(category.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
+            this.ixnf           = EndianConverter.writeShort((short) 0);
+        } else if(category.equalsIgnoreCase(CELLTYPE_DATE)) {
+            this.ixnf           = EndianConverter.writeShort((short) 0x12);
+        } else if(category.equalsIgnoreCase(CELLTYPE_TIME)) {
+            this.ixnf           = EndianConverter.writeShort((short) 0x1E);
+        } else {
+            this.ixnf           = EndianConverter.writeShort((short) 0);
+        }
         this.fattributes    = new byte[] {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
         this.fBaseAttr      = new byte[] {(byte)0x02,(byte)0x00};
         this.fTextAttr      = new byte[] {(byte)0x30,(byte)0x00};
@@ -122,10 +133,18 @@ public class ExtendedFormat implements BIFFRecord {
      *
      * @return the font index
      */
-    public int getIndex() {
+    public int getFontIndex() {
         return EndianConverter.readShort(ixfnt);
     }
 
+    /**
+     * Get the font index this format uses
+     *
+     * @return the font index
+     */
+    public int getFormatIndex() {
+        return EndianConverter.readShort(ixnf);
+    }
     /**
      * Compare two ExtendedFormat to see if the font index is the same
      *
@@ -134,7 +153,8 @@ public class ExtendedFormat implements BIFFRecord {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
-        if (this.getIndex() == rhs.getIndex())
+        if (this.getFontIndex() == rhs.getFontIndex() &&
+            this.getFormatIndex() == rhs.getFormatIndex())
             return true;
         else
             return false;

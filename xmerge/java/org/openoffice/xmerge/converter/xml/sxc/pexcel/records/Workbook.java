@@ -72,7 +72,8 @@ import org.openoffice.xmerge.util.IntArrayList;
  *
  *  @author  Martin Maher
  */
-public class Workbook implements org.openoffice.xmerge.Document {
+public class Workbook implements org.openoffice.xmerge.Document,
+OfficeConstants {
 
     private Vector fonts                = new Vector();
     private Vector extendedFormats      = new Vector();
@@ -255,10 +256,11 @@ public class Workbook implements org.openoffice.xmerge.Document {
 
         for(Enumeration e = extendedFormats.elements();e.hasMoreElements();) {
             ExtendedFormat currentXF = (ExtendedFormat) e.nextElement();
-            if(xf.compareTo(currentXF))
+            if(xf.compareTo(currentXF)) {
                 alreadyExists = true;
-            else
+            } else if(!alreadyExists) {
                 i++;
+            }
         }
 
         if(!alreadyExists)
@@ -319,16 +321,21 @@ public class Workbook implements org.openoffice.xmerge.Document {
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
         FontDescription fd = new FontDescription(fmt.isItalic(), fmt.isBold(), fmt.isUnderline());
         int ixfnt = addFont(fd);
-        ExtendedFormat xf = new ExtendedFormat(ixfnt);
+        ExtendedFormat xf = new ExtendedFormat(ixfnt, fmt);
         int ixfe = addExtendedFormat(xf);
 
         String category = fmt.getCategory();
 
         // Now the formatting is out of the way add the cell
+        Debug.log(Debug.TRACE,"Cell Format: " + fmt);
         if(cellContents.startsWith("=")) {
             try {
-                Formula f = new Formula(row, col, cellContents, ixfe, fmt.getValue());
+                Formula f = new Formula(row, col, cellContents, ixfe, fmt);
                 currentWS.addCell(f);
+                if(category.equalsIgnoreCase(CELLTYPE_STRING)) {
+                    StringValue sv = new StringValue(fmt.getValue());
+                    currentWS.addCell(sv);
+                }
             } catch(Exception e) {
                 Debug.log(Debug.TRACE, "Parsing Exception thrown : " + e.getMessage());
                 BoolErrCell errorCell = new BoolErrCell(row, col, ixfe, 0x2A, 1);
