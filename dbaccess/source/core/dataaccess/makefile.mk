@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2002-08-12 08:54:24 $
+#   last change: $Author: hr $ $Date: 2004-08-02 15:11:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,16 +75,22 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES=	\
         $(SLO)$/SharedConnection.obj	\
+        $(SLO)$/ContentHelper.obj		\
         $(SLO)$/bookmarkcontainer.obj	\
         $(SLO)$/definitioncontainer.obj	\
         $(SLO)$/commanddefinition.obj	\
         $(SLO)$/documentcontainer.obj	\
         $(SLO)$/commandcontainer.obj	\
         $(SLO)$/documentdefinition.obj	\
-        $(SLO)$/containerelement.obj	\
-        $(SLO)$/databasecontext.obj	\
-        $(SLO)$/connection.obj	\
-        $(SLO)$/datasource.obj	\
+        $(SLO)$/ComponentDefinition.obj	\
+        $(SLO)$/databasecontext.obj		\
+        $(SLO)$/connection.obj			\
+        $(SLO)$/datasource.obj			\
+        $(SLO)$/intercept.obj			\
+        $(SLO)$/myucp_datasupplier.obj	\
+        $(SLO)$/myucp_resultset.obj		\
+        $(SLO)$/commitlistener.obj		\
+        $(SLO)$/databasedocument.obj
 
 # --- Targets ----------------------------------
 
