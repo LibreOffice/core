@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediacontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-03 15:53:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,8 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     const String aTimeText( RTL_CONSTASCII_USTRINGPARAM( " 00:00:00/00:00:00 " ) );
 
     SetBackground();
+    SetPaintTransparent( TRUE );
+    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
     {
@@ -612,7 +614,7 @@ IMPL_LINK( MediaControl, implSelectHdl, ToolBox*, p )
     }
 
     update();
-    p->Invalidate();
+    p->Invalidate( INVALIDATE_UPDATE );
 
     return 0;
 }
