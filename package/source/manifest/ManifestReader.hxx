@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:54:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class ManifestReader: public ::cppu::WeakImplHelper2
 >
 {
 protected:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
 public:
     ManifestReader( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xNewFactory );
     virtual ~ManifestReader();

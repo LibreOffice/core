@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestWriter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 20:55:07 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:10:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ class ManifestWriter: public ::cppu::WeakImplHelper2
 >
 {
 protected:
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory;
 public:
     ManifestWriter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xNewFactory );
     virtual ~ManifestWriter();
