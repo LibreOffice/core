@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-14 18:24:47 $
+#   last change: $Author: hjs $ $Date: 2002-01-14 19:35:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2180,6 +2180,9 @@ $(SCP_PRODUCT_TYPE):
     @+-$(MKDIRHIER) $(BIN)$/$@ >& $(NULLDEV)
 
 .ENDIF			# "$(PARFILES)"!=""
+
+$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg :
+    +$(TOUCH) $@
 
 .IF "$(COMPVERMK)"!=""
 "$(COMPVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
