@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,13 @@ public:
 
     // Hack fuer X, Y, Width, Height
     static ERRTYPE SetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
-                                    long lValue, USHORT nTupelIdx );
-    ERRTYPE     SetNumber( HASHID nVarName, long );
+                                    INT32 lValue, USHORT nTupelIdx );
+    ERRTYPE     SetNumber( HASHID nVarName, INT32 );
 
     ERRTYPE     SetString( HASHID nVarName, const char * );
     ERRTYPE     SetConst( HASHID nConstId );
     ERRTYPE     SetBool( BOOL );
-    ERRTYPE     SetNumber( long );
+    ERRTYPE     SetNumber( INT32 );
     ERRTYPE     SetString( const char * );
     ERRTYPE     SetRef( const RscId & rRscId );
     ERRTYPE     SetDefault( HASHID nVarName );
@@ -136,9 +136,9 @@ public:
     BOOL        GetBool( HASHID nVarName = HASH_NONAME );
 
     // Hack fuer X, Y, Width, Height
-    static long GetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
+    static INT32 GetCorrectValues( RSCINST & rInst, RSCINST & rVarInst,
                                     USHORT nTupelIdx );
-    long        GetNumber( HASHID nVarName = HASH_NONAME );
+    INT32       GetNumber( HASHID nVarName = HASH_NONAME );
 
     const char *GetString( HASHID nVarName = HASH_NONAME );
     RscId       GetRef();
@@ -236,11 +236,11 @@ public:
     RscDefineList * GetDefineList();
                 // Suche ueber all DEFINES im Zugriff
     RscDefine * FindDef( const ByteString & rName );
-    ERRTYPE     NewDef( const ByteString & rMacroName, long lValue,
+    ERRTYPE     NewDef( const ByteString & rMacroName, INT32 lValue,
                         ULONG lPos );
     ERRTYPE     NewDef( const ByteString & rMacroName, const ByteString & rMacro,
                         ULONG lPos );
-    ERRTYPE     ChangeDef( const ByteString & rMacroName, long lValue );
+    ERRTYPE     ChangeDef( const ByteString & rMacroName, INT32 lValue );
     ERRTYPE     ChangeDef( const ByteString & rMacroName,
                            const ByteString & rMacro );
     BOOL        IsDefUsed( const ByteString & );

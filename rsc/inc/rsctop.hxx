@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsctop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:13 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ public:
 
                     // Liefert Instanz aus einem Feld zurueck
                     // pGetInst im return kann NULL sein
-    virtual ERRTYPE GetValueEle( const RSCINST & rInst, long lValue,
+    virtual ERRTYPE GetValueEle( const RSCINST & rInst, INT32 lValue,
                                 RscTop * pCreateClass,
                                 RSCINST * pGetInst );
 
@@ -203,21 +203,21 @@ public:
     virtual USHORT GetCount( const RSCINST & rInst );
 
                     // Eine Zuweisung an eine Variable
-    virtual ERRTYPE SetNumber( const RSCINST & rInst, long lValue );
+    virtual ERRTYPE SetNumber( const RSCINST & rInst, INT32 lValue );
 
                     // Eine Zuweisung an eine Variable
     virtual ERRTYPE SetBool( const RSCINST & rInst, BOOL bValue );
 
                     // Eine Zuweisung an eine Variable
     virtual ERRTYPE SetConst( const RSCINST & rInst, HASHID nValueId,
-                              long nValue );
+                              INT32 nValue );
 
                     // Eine Zuweisung an eine Variable
     virtual ERRTYPE SetNotConst( const RSCINST & rInst, HASHID nId );
 
     virtual ERRTYPE SetString( const RSCINST & rInst, char * pStr );
 
-    virtual ERRTYPE GetNumber( const RSCINST & rInst, long * pN );
+    virtual ERRTYPE GetNumber( const RSCINST & rInst, INT32 * pN );
 
     virtual ERRTYPE GetBool( const RSCINST & rInst, BOOL * pB );
 
