@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:49:05 $
+ *  last change: $Author: as $ $Date: 2004-12-02 09:14:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 #ifndef _UTL__HXX_
 #include <unotools/configmgr.hxx>
@@ -1177,12 +1180,10 @@ USHORT Desktop::Exception(USHORT nError)
     BOOL bRecovery = FALSE;
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
-    // save all modified documents
-    sal_Bool bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
-    /* WarningBox was replaced by new crash-recovery wizard UI
-    if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
-            WarningBox( NULL, DesktopResId(STR_RECOVER_PREPARED) ).Execute();
-    */
+    // save all modified documents ... if it's allowed doing so.
+    sal_Bool bRestart = sal_False;
+    if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY )
+        bRestart = SaveTasks(DESKTOP_SAVETASKS_MOD);
 
     // because there is no method to flush the condiguration data, we must dispose the ConfigManager
     Reference < XFlushable > xCFGFlush( ::utl::ConfigManager::GetConfigManager()->GetConfigurationProvider(), UNO_QUERY );
@@ -1237,21 +1238,7 @@ USHORT Desktop::Exception(USHORT nError)
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     DELETEZ( pSignalHandler );
-/*
-                ::rtl::OUString aProgName, aTmp;
-                ::vos::OStartupInfo aInfo;
-                aInfo.getExecutableFile( aProgName );
 
-                Reference< XSystemShellExecute > xSystemShellExecute( ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
-                if ( xSystemShellExecute.is() )
-                {
-                    ::rtl::OUString aSysPathFileName;
-                    ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aProgName, aSysPathFileName );
-                    if ( nError == ::osl::FileBase::E_None )
-                         xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                }
-*/
                 if (m_pLockfile != NULL) {
                     m_pLockfile->clean();
                 }
@@ -1973,6 +1960,24 @@ void Desktop::OpenClients()
             pHelp->Start(aHelpURLBuffer.makeStringAndClear(), NULL);
             return;
         }
+    }
+
+    // Disable AutoSave feature in case "-norestore" is given on the command line.
+    // The reason behind: AutoSave/EmergencySave/AutoRecovery share the same data.
+    // But the require that all documents, which are saved as backup should exists inside
+    // memory. May be this mechanism will be inconsistent if the configuration exists ...
+    // but no document inside memory corrspodn to this data.
+    // Furter it's not acceptable to recover such documents without any UI. It can
+    // need some time, where the user wont see any results and wait for finishing the office startup ...
+    if ( pArgs->IsNoRestore() )
+    {
+        ::comphelper::ConfigurationHelper::writeDirectKey(
+                ::comphelper::getProcessServiceFactory(),
+                ::rtl::OUString::createFromAscii("org.openoffice.Office.Recovery"),
+                ::rtl::OUString::createFromAscii("AutoSave"),
+                ::rtl::OUString::createFromAscii("Enabled"),
+                ::com::sun::star::uno::makeAny(sal_False),
+                ::comphelper::ConfigurationHelper::E_STANDARD);
     }
 
     if ( !pArgs->IsServer() && !pArgs->IsNoRestore())
