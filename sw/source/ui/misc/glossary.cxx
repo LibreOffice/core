@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 14:12:36 $
+ *  last change: $Author: os $ $Date: 2001-06-27 09:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
 
     SvxStandardDialog(&pViewFrame->GetWindow(), SW_RES(DLG_GLOSSARY)),
     aExampleWIN   (this, SW_RES(WIN_EXAMPLE )),
+    aExampleDummyWIN(this, SW_RES(WIN_EXAMPLE_DUMMY )),
     aShowExampleCB(this, SW_RES(CB_SHOW_EXAMPLE )),
     aInsertTipCB  (this, SW_RES(CB_INSERT_TIP)),
     aNameLbl      (this, SW_RES(FT_NAME)),
@@ -1321,7 +1322,9 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
         }
     }
 
-    aExampleWIN.Show( pBox->IsChecked() && !bCreated );
+    BOOL bShow = pBox->IsChecked() && !bCreated;
+    aExampleWIN.Show( bShow );
+    aExampleDummyWIN.Show(!bShow);
     if( pCurrGlosGroup )
         ShowAutoText(*pCurrGlosGroup, aShortNameEdit.GetText());
 
@@ -1330,9 +1333,11 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
 /* -----------------18.11.99 17:09-------------------
 
  --------------------------------------------------*/
-IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl, void *, EMPTYARG )
+IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl,  void *, EMPTYARG )
 {
-    aExampleWIN.Show(aShowExampleCB.IsChecked());
+    BOOL bShow = aShowExampleCB.IsChecked();
+    aExampleWIN.Show( bShow );
+    aExampleDummyWIN.Show(!bShow);
     ResumeShowAutoText();
     return 0;
 }
