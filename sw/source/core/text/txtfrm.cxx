@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:48:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2047,7 +2047,7 @@ KSHORT SwTxtFrm::GetParHeight() const
  *************************************************************************/
 
 // returnt this _immer_ im formatierten Zustand!
-SwTxtFrm *SwTxtFrm::GetFormatted()
+SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 {
     SWAP_IF_SWAPPED( this )
 
@@ -2064,7 +2064,7 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
         // nicht anstiess (weil wir einst vom Idle-Zerstoerer
         // aufgefordert wurden unsere Formatinformationen wegzuschmeissen).
         // 6995: Optimierung mit FormatQuick()
-        if( bFormat && !FormatQuick() )
+        if( bFormat && !FormatQuick( bForceQuickFormat ) )
             Format();
     }
 
