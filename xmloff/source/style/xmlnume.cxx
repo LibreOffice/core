@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:18 $
+ *  last change: $Author: dvo $ $Date: 2001-08-21 16:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
                                       XML_NUM_LETTER_SYNC,
                                            sTmp.makeStringAndClear() );
 
-        if( nStartValue > 1 )
+        if( nStartValue != 1 )
         {
             sTmp.append( (sal_Int32)nStartValue );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_START_VALUE,
