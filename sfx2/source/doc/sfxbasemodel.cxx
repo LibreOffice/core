@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 08:53:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2019,12 +2019,7 @@ void SAL_CALL SfxBaseModel::storeSelf( const    SEQUENCE< PROPERTYVALUE >&  aSeq
             }
             else
             {
-                // TODO/LATER: not a nice solution, should be removed
-                //             but for now it is unavoidable since the persistence part of the link document handling
-                //             must be done as for nonembedded document
-                m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_STANDARD );
                 bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
-                m_pData->m_pObjectShell->SetCreateMode_Impl( SFX_CREATE_MODE_EMBEDDED );
             }
         }
         else
@@ -2837,7 +2832,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 // other events are used to detect storage change
                 // NotifyStorageListeners_Impl();
 
-                if ( m_pData->m_xUIConfigurationManager.is() )
+                if ( m_pData->m_xUIConfigurationManager.is()
+                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     REFERENCE< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
@@ -2863,7 +2859,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             else if ( SFX_EVENT_SAVEASDOC == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is() )
+                if ( m_pData->m_xUIConfigurationManager.is()
+                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
@@ -2872,7 +2869,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             else if ( SFX_EVENT_SAVEDOC == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is() )
+                if ( m_pData->m_xUIConfigurationManager.is()
+                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
@@ -2881,7 +2879,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             else if ( SFX_EVENT_SAVEDOCDONE == pNamedHint->GetEventId() )
             {
                 // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is() )
+                if ( m_pData->m_xUIConfigurationManager.is()
+                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     REFERENCE< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
@@ -2907,7 +2906,8 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 attachResource( m_pData->m_pObjectShell->GetMedium()->GetName(), aArgs );
 
                 // Temporary solution for storage problem
-                if ( m_pData->m_xUIConfigurationManager.is() )
+                if ( m_pData->m_xUIConfigurationManager.is()
+                  && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     REFERENCE< XSTORAGE > xConfigStorage;
                     rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
@@ -3481,26 +3481,31 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
         Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( xNewUIConfMan, UNOQUERY );
         if ( xUIConfigStorage.is() )
         {
-            rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
             REFERENCE< XSTORAGE > xConfigStorage;
 
-            // First try to open with READWRITE and then READ
-            xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READWRITE );
-            if ( xConfigStorage.is() )
+            // in case of embedded object the module configuration should be used
+            if ( m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
             {
-                rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
-                rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
-                rtl::OUString aMediaType;
-                REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNOQUERY );
-                Any a = xPropSet->getPropertyValue( aMediaTypeProp );
-                if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
+                // First try to open with READWRITE and then READ
+                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READWRITE );
+                if ( xConfigStorage.is() )
                 {
-                    a <<= aUIConfigMediaType;
-                    xPropSet->setPropertyValue( aMediaTypeProp, a );
+                    rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
+                    rtl::OUString aUIConfigMediaType(
+                            RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ) );
+                    rtl::OUString aMediaType;
+                    REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNOQUERY );
+                    Any a = xPropSet->getPropertyValue( aMediaTypeProp );
+                    if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
+                    {
+                        a <<= aUIConfigMediaType;
+                        xPropSet->setPropertyValue( aMediaTypeProp, a );
+                    }
                 }
+                else
+                    xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, embed::ElementModes::READ );
             }
-            else
-                xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::READ );
 
             // initialize ui configuration manager with document substorage
             xUIConfigStorage->setStorage( xConfigStorage );
