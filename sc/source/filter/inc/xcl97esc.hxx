@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:41:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ public:
 class XclExpEscherDropDownAnchor : public XclExpEscherAnchor
 {
 public:
-    explicit                    XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rPos );
+    explicit                    XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos );
 };
 
 
