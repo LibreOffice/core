@@ -649,9 +649,7 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
 STD_JAR_FILE( gid_File_Jar_Js, js )
-#endif
 #endif
 
 #ifdef SOLAR_JAVA
@@ -751,27 +749,10 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-#endif
-#endif
-
-#ifdef SOLAR_JAVA
-#ifndef GCJ
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
-#endif
 #endif
 
 #ifdef SOLAR_JAVA
