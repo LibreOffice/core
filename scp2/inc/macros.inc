@@ -95,7 +95,7 @@
 #define FILE_BODY \
         Carrier      = gid_Datacarrier; \
         Time         = "0200"; \
-        Date         = "31012004";
+        Date         = "29022004";
 
 #define BIN_FILE_BODY \
         FILE_BODY \
