@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:00:32 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,9 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     ::vos::OGuard aGuard(Application::GetSolarMutex());
 
     Reference< text::XAutoTextGroup > xGroup;
-    if ( pGlossaries )
-        xGroup = pGlossaries->GetAutoTextGroup( GroupName, FALSE );
+    if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
+        // TRUE = create group if not already available
+        xGroup = pGlossaries->GetAutoTextGroup( GroupName, TRUE );
 
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
