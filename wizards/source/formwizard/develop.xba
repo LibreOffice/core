@@ -269,7 +269,7 @@ Dim oGroupShape as Object
 		oTimeShape.SetSize(aSize)
 		nDBWidth = nDateWidth + nTimeWidth + 10
 		oGroupShape.Position = aPoint
-		oGroupShape.Size = GetSize(nDBWidth + 10 + nTimeWidth, nDBHeight)
+		oGroupShape.Size = GetSize(nDBWidth, nDBHeight)
 		Set oDBShapeList(i)= oGroupShape
 	End If
 	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
