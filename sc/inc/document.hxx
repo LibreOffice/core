@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:13 $
+ *  last change: $Author: er $ $Date: 2002-10-01 17:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ private:
     CharSet             eSrcSet;                        // Einlesen: Quell-Zeichensatz
 
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
+    ULONG               nXMLImportedFormulaCount;        // progress count during XML import
     USHORT              nInterpretLevel;                // >0 wenn im Interpreter
     USHORT              nMacroInterpretLevel;           // >0 wenn Macro im Interpreter
     USHORT              nInterpreterTableOpLevel;       // >0 if in Interpreter TableOp
@@ -1521,6 +1522,20 @@ public:
 
     void                IncSizeRecalcLevel( USHORT nTab );
     void                DecSizeRecalcLevel( USHORT nTab );
+
+    ULONG               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
+    void                IncXMLImportedFormulaCount( ULONG nVal )
+                            {
+                                if ( nXMLImportedFormulaCount + nVal > nXMLImportedFormulaCount )
+                                    nXMLImportedFormulaCount += nVal;
+                            }
+    void                DecXMLImportedFormulaCount( ULONG nVal )
+                            {
+                                if ( nVal <= nXMLImportedFormulaCount )
+                                    nXMLImportedFormulaCount -= nVal;
+                                else
+                                    nXMLImportedFormulaCount = 0;
+                            }
 
     void                StartTrackTimer();
 
