@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.166 $
+ *  $Revision: 1.167 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 13:45:19 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1306,7 +1306,9 @@ void Desktop::Main()
             new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
         // Startup screen
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main { OpenSplashScreen" );
         OpenSplashScreen();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main } OpenSplashScreen" );
 
         // Use a temporary error handler during user install.
         ConfigurationErrorHandler aConfigErrHandler;
@@ -1375,6 +1377,7 @@ void Desktop::Main()
             aConfigErrHandler.activate();
 
         // check if accessibility is enabled but not working and allow to quit
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             BOOL bQuitApp;
@@ -1383,6 +1386,7 @@ void Desktop::Main()
                 if( bQuitApp )
                     return;
         }
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
 
         // terminate if requested...
         if( pCmdLineArgs->IsTerminateAfterInit() ) return;
@@ -1483,9 +1487,12 @@ void Desktop::Main()
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
         // initialize test-tool library (if available)
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ tools::InitTestToolLib" );
         tools::InitTestToolLib();
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
         // First Start Wizard
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ FirstStartWizard" );
         FirstStartWizard fsw(NULL);
         if (!fsw.Execute()) {
             Reference< XDesktop > xDesktop( xSMgr->createInstance(
@@ -1493,6 +1500,7 @@ void Desktop::Main()
             xDesktop.is() && xDesktop->terminate();
             return;
         }
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
 
         if (xGlobalBroadcaster.is())
         {
@@ -1506,9 +1514,13 @@ void Desktop::Main()
         // Backing Component
         sal_Bool bCrashed            = sal_False;
         sal_Bool bExistsRecoveryData = sal_False;
+
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ impl_checkRecoveryState" );
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData);
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
+
         if (
-            (pCmdLineArgs->IsEmpty()                                               ) &&
+            (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
             (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
             (!bExistsRecoveryData                                                  )
            )
@@ -1662,7 +1674,7 @@ void Desktop::Main()
         Application::AcquireSolarMutex( nAcquireCount );
 
     // call Application::Execute to process messages in vcl message loop
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
+    RTL_LOGFILE_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
     try
     {
@@ -1884,7 +1896,7 @@ IMPL_STATIC_LINK( Desktop, AsyncTerminate, void*, NOTINTERESTEDIN )
 
 IMPL_LINK( Desktop, OpenClients_Impl, void*, pvoid )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenClients_Impl" );
+    RTL_LOGFILE_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
     OpenClients();
 
