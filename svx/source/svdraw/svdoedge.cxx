@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:13:01 $
+ *  last change: $Author: cl $ $Date: 2002-10-11 12:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1810,6 +1810,25 @@ void __EXPORT SdrEdgeObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId&, const S
             SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         }
         ((SdrEdgeObj*)this)->nNotifyingCount--;
+    }
+}
+
+/** updates edges that are connected to the edges of this object
+    as if the connected objects send a repaint broadcast
+    #103122#
+*/
+void SdrEdgeObj::Reformat()
+{
+    if( NULL != aCon1.pObj )
+    {
+        SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
+        SFX_NOTIFY( *const_cast<SfxBroadcaster*>(aCon1.pObj->GetBroadcaster()), NULL, aHint, NULL );
+    }
+
+    if( NULL != aCon2.pObj )
+    {
+        SfxSimpleHint aHint( SFX_HINT_DATACHANGED );
+        SFX_NOTIFY( *const_cast<SfxBroadcaster*>(aCon2.pObj->GetBroadcaster()), NULL, aHint, NULL );
     }
 }
 
