@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-16 01:04:00 $
+ *  last change: $Author: svesik $ $Date: 2001-05-02 00:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #include <stdio.h>
-#if defined(NETBSD)
+#if defined(NETBSD) || defined(FREEBSD)
 # include <stdlib.h>
 #else
 # include <alloca.h>
@@ -242,7 +242,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             mnStatusStyle( 0 ),
             mnPreeditStyle( 0 ),
             mnSupportedStatusStyle(
-                    #ifdef LINUX
+                    #if defined LINUX || defined FREEBSD
                     XIMStatusCallbacks |
                     #endif
                     XIMStatusNothing | XIMStatusNone
