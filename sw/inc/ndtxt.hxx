@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:51:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ public:
     SwNumRule *GetNumRule() const;
     const SwNodeNum* GetNum() const             { return pNdNum; }
     const SwNodeNum* GetOutlineNum() const;
-    BOOL MayBeNumbered() const;
+    BOOL MayBeNumbered() const; // #i23730#
     BOOL IsOutlineNum() const;
     void NumRuleChgd();                 // Frames benachrichtigen
     XubString GetNumString() const;     // returnt Outline oder Num - String
