@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:50:13 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,26 +605,36 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     // errechne das Verhaeltnis aus dem default Font zu der
                     // Size Angabe. Der Abstand besteht aus der Zeilenhoehe
                     // (100%) und dem Leerraum ueber der Zeile (20%).
-                    SvxLineSpacingItem aLSpace( 0, PARDID->nLinespacing );
+                    SvxLineSpacingItem aLSpace(0, PARDID->nLinespacing);
 
-                    if( !nTokenValue || 1000 == nTokenValue )
+                    //It is stupid to have -1 as uninitialized, bah!
+                    nTokenValue = -1 == nTokenValue ? 0 : nTokenValue;
+                    if (1000 == nTokenValue )
                         nTokenValue = 240;
 
                     SvxLineSpace eLnSpc;
-                    if( 0 > nTokenValue )
+                    if (nTokenValue < 0)
                     {
                         eLnSpc = SVX_LINE_SPACE_FIX;
                         nTokenValue = -nTokenValue;
                     }
+                    else if (nTokenValue == 0)
+                    {
+                        //if \sl0 is used, the line spacing is automatically
+                        //determined
+                        eLnSpc = SVX_LINE_SPACE_AUTO;
+                    }
                     else
                         eLnSpc = SVX_LINE_SPACE_MIN;
 
-                    if( IsCalcValue() )
+                    if (IsCalcValue())
                         CalcValue();
-                    aLSpace.SetLineHeight( (const USHORT)nTokenValue );
-                    aLSpace.GetLineSpaceRule() = eLnSpc;
 
-                    pSet->Put( aLSpace );
+                    if (eLnSpc != SVX_LINE_SPACE_AUTO)
+                        aLSpace.SetLineHeight( (const USHORT)nTokenValue );
+
+                    aLSpace.GetLineSpaceRule() = eLnSpc;
+                    pSet->Put(aLSpace);
                 }
                 break;
 
@@ -1077,8 +1087,11 @@ ATTR_SETEMPHASIS:
                 break;
 
             case RTF_CHARSCALEX :
-                if( PLAINID->nCharScaleX )
+                if (PLAINID->nCharScaleX)
                 {
+                    //i21372
+                    if (nTokenValue < 1 || nTokenValue > 600)
+                        nTokenValue = 100;
                     pSet->Put( SvxCharScaleWidthItem( USHORT(nTokenValue),
                                                        PLAINID->nCharScaleX ));
                 }
