@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-24 17:16:59 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 09:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Yazýtipi efektleri";
                 Text[ language_user1 ] = " ";
             };
+#ifdef DEBUG
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
@@ -213,7 +214,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             };
             PageItem
             {
-                Identifier = RID_SVXPAGE_CHAR_ASIAN ;
+                Identifier = RID_SVXPAGE_CHAR_TWOLINES ;
                 Text = "Asiatisches Layout" ;
                 Text [ english_us ] = "Asian Layout" ;
                 Text[ portuguese ] = "Asian Layout";
@@ -234,6 +235,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
+#endif
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
