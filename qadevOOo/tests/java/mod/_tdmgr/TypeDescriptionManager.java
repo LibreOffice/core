@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:06 $
+ *  last change:$Date: 2003-05-27 13:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ public class TypeDescriptionManager extends TestCase {
         Object oInterface = null;
 
         try {
-            XMultiServiceFactory xMSF = Param.getMSF();
+            XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
             XPropertySet xProp = (XPropertySet)UnoRuntime.queryInterface(
                                                 XPropertySet.class, xMSF);
             // get context
