@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 06:46:22 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 12:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,9 @@
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
+#endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
 #endif
 // .........................................................................
 namespace dbaui
@@ -746,6 +749,7 @@ namespace dbaui
                                 }
                             case OCopyTableWizard::WIZARD_APPEND_DATA:
                                 {
+                                    WaitObject aWO(getBrowserView());
                                     if(!xTable.is())
                                         xTable = aWizard.createTable();
                                     if(!xTable.is())
@@ -1395,6 +1399,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.55  2002/10/08 06:46:22  oj
+ *  #104025# check if name is empty
+ *
  *  Revision 1.54  2002/10/07 13:06:32  oj
  *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
  *
