@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:29:50 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,7 @@ RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
 //-----------------------------------------------------------------------------
 bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                         Tree const& aBaseTree, NodeRef const& aBaseNode,
-                        Change const& aExternalChange,
-                        TemplateProvider const& aTemplateProvider)
+                        Change const& aExternalChange)
 {
     OSL_PRECOND( !aBaseTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  aBaseTree.isValidNode(aBaseNode), "ERROR: Configuration: NodeRef does not match Tree");
@@ -111,7 +110,7 @@ bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
     {
         OSL_ENSURE(rLocalChanges.empty(), "Should pass empty container to adjustToChanges(...)");
 
-        TreeImplHelper::impl(aBaseTree)->adjustToChanges(rLocalChanges, TreeImplHelper::offset(aBaseNode), aExternalChange,aTemplateProvider);
+        TreeImplHelper::impl(aBaseTree)->adjustToChanges(rLocalChanges, TreeImplHelper::offset(aBaseNode), aExternalChange);
 
         return !rLocalChanges.empty();
     }

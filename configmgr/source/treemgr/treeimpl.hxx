@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:59 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,9 +235,9 @@ namespace configmgr
             TreeImpl( );
 
             /// creates a TreeImpl with a parent tree
-            TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode );
+            TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode);
 
-            /// fills this TreeImpl starting from rNode, using the given factory and template provider
+            /// fills this TreeImpl starting from rNode, using the given factory and the tree's template provider
             void build(NodeFactory& rFactory, INode& rNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
 
         public:
@@ -299,10 +299,8 @@ namespace configmgr
             void    commitChanges();
             void    makeIndirect(bool bIndirect);
         // external update
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange,
-                                    TemplateProvider const& aTemplateProvider);
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange,
-                                    TemplateProvider const& aTemplateProvider);
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange);
+            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange);
 
 
         // Node iteration and access
@@ -377,14 +375,14 @@ namespace configmgr
             void doRevertCommit(Change& rChange, NodeOffset nNode);
             void doFailedCommit(Change& rChange, NodeOffset nNode);
             void doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode,
-                                    TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+                                    TreeDepth nDepth);
 
             void doCommitSubChanges(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
             void doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
-                                        TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+                                        TreeDepth nDepth);
         protected:
             /// set a new parent context for this tree
             void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,11 +224,12 @@ namespace configmgr
         {
             ISubtree&       m_rOriginal;
             TemplateHolder  m_aTemplate;
+            TemplateProvider m_aTemplateProvider;
             TreeImpl*       m_pParentTree;
             NodeOffset      m_nContextPos;
 
-            struct InitHelper;
-            std::auto_ptr<InitHelper> m_pInit;
+            typedef NodeOffset InitHelper;
+            InitHelper      m_aInit;
         public:
             /// construct a set node referring to rOriginal as data node with the given element-template
             explicit SetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
@@ -260,6 +261,9 @@ namespace configmgr
             /// Get the template that describes elements of this set
             TemplateHolder getElementTemplate() const { return m_aTemplate; }
 
+            /// Get a template provider that can create new elements for this set
+            TemplateProvider getTemplateProvider() const { return m_aTemplateProvider; }
+
             /// Prepare committing the changes in this set and its descendants, if any - builds a SubtreeChange describing pending changes.
             std::auto_ptr<SubtreeChange> preCommitChanges();
             /// Finalize committing the changes - patch the original state wrapper, reset the pending changes
@@ -271,7 +275,7 @@ namespace configmgr
 
         // does not load elements:
             /// Adjust the internal representation after external changes to the original data - build NodeChangeInformation objects for notification
-            void adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            void adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeDepth nDepth);
 
         // legacy commit - default is 'Not supported'
         protected:
@@ -293,10 +297,10 @@ namespace configmgr
             virtual void        doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             virtual void        doRemoveElement(Name const& aName) = 0;
 
-            virtual void        doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth) = 0;
+            virtual void        doInitElements(ISubtree& rTree, TreeDepth nDepth) = 0;
             virtual void        doClearElements() = 0;
 
-            virtual void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth) = 0;
+            virtual void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeDepth nDepth) = 0;
 
             virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor) = 0;
 

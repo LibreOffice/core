@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,24 +451,24 @@ void TreeImpl::legacyFailedCommit(Change& rRootChange)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Change const& aExternalChange)
 {
     OSL_PRECOND( name(root()).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
     TreeDepth nDepth = getAvailableDepth();
 
-    doAdjustToChanges(rLocalChanges,aExternalChange,root(),aTemplateProvider, nDepth);
+    doAdjustToChanges(rLocalChanges,aExternalChange,root(), nDepth);
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange, TemplateProvider const& aTemplateProvider)
+void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, Change const& aExternalChange)
 {
     OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
     OSL_PRECOND( name(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
 
     TreeDepth nDepth = remainingDepth(getAvailableDepth(),depthTo(nNode));
 
-    doAdjustToChanges(rLocalChanges,aExternalChange,nNode,aTemplateProvider, nDepth);
+    doAdjustToChanges(rLocalChanges,aExternalChange,nNode, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -624,7 +624,7 @@ void TreeImpl::doFailedCommit(Change& rChange, NodeOffset nNode)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change const& rChange, NodeOffset nNode, TreeDepth nDepth)
 {
     OSL_ASSERT(isValidNode(nNode));
     Node* pNode = node(nNode);
@@ -646,7 +646,7 @@ void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change c
 
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
-        pNode->setImpl().adjustToChanges(rLocalChanges, rSubtreeChange, aTemplateProvider, nDepth);
+        pNode->setImpl().adjustToChanges(rLocalChanges, rSubtreeChange, nDepth);
     }
     else
     {
@@ -656,7 +656,7 @@ void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, Change c
 
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
-        doAdjustToSubChanges( rLocalChanges, rSubtreeChange, nNode, aTemplateProvider, nDepth);
+        doAdjustToSubChanges( rLocalChanges, rSubtreeChange, nNode, nDepth);
     }
 }
 //-----------------------------------------------------------------------------
@@ -720,7 +720,7 @@ void TreeImpl::doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nP
 //-----------------------------------------------------------------------------
 
 void TreeImpl::doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aChangesParent, NodeOffset nParentNode,
-                                    TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+                                    TreeDepth nDepth)
 {
     for(SubtreeChange::ChildIterator
             it = aChangesParent.begin(),
@@ -734,7 +734,7 @@ void TreeImpl::doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, Subtr
         if (nNode != 0)
         {
             OSL_ENSURE( nDepth > 0, "Depth is smaller than expected for tree");
-            doAdjustToChanges(rLocalChanges, *it,nNode,aTemplateProvider,childDepth(nDepth));
+            doAdjustToChanges(rLocalChanges, *it,nNode,childDepth(nDepth));
         }
     }
 }
@@ -942,7 +942,7 @@ RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
 : TreeImpl()
 , m_aContextPath(aContextPath)
 {
-    TreeImpl::build(rNodeFactory,rCacheNode,nDepth, aTemplateProvider);
+    TreeImpl::build(rNodeFactory,rCacheNode,nDepth,aTemplateProvider);
 }
 //-----------------------------------------------------------------------------
 // class ElementTreeImpl
@@ -965,7 +965,7 @@ ElementTreeImpl::ElementTreeImpl(   NodeFactory& rFactory,
                                     INode& rCacheNode, TreeDepth nDepth,
                                     TemplateHolder aTemplateInfo,
                                     TemplateProvider const& aTemplateProvider )
-: TreeImpl( rParentTree, nParentNode)
+: TreeImpl( rParentTree, nParentNode )
 , m_aInstanceInfo(aTemplateInfo)
 , m_pOwnedNode(0)
 {

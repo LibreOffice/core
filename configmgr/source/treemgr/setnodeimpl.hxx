@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:20:54 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ namespace configmgr
 
             void        doClearElements();
 
-            void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            void        doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeDepth nDepth);
 
             SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
@@ -198,12 +198,12 @@ namespace configmgr
             void    implInitElement(Element const& aNewElement);
             void    implMakeIndirect(bool bIndirect); // ensures kids are (in)direct
 
-            void implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            void implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TreeDepth nDepth);
 
         // new overrideables
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth) = 0;
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth) = 0;
 
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
@@ -246,8 +246,8 @@ namespace configmgr
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;
 
-            void initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth);
-            Element makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth);
+            void initHelper(NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth);
+            Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth);
 
             ElementTreeHolder implMakeElement(ElementTreeHolder const& aNewEntry);
         };
@@ -268,8 +268,8 @@ namespace configmgr
             void doInsertElement(Name const& aName, SetEntry const& aNewEntry) = 0;
             void doRemoveElement(Name const& aName) = 0;
 
-            void initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rTree);
-            Element makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange);
+            void initHelper( NodeFactory& rFactory, ISubtree& rTree);
+            Element makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange);
 
             ElementTreeHolder implMakeElement(ElementTreeHolder const& aNewEntry);
         };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-23 10:50:58 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,8 +272,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -297,8 +297,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
         // NodeImpl implementation
             virtual Attributes doGetAttributes() const;
@@ -328,8 +328,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -355,8 +355,8 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
             virtual bool doHasChanges() const;
             virtual void doCollectChanges(NodeChanges& rChanges) const;
@@ -393,10 +393,10 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
@@ -445,10 +445,10 @@ namespace configmgr
             virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
             virtual void doRemoveElement(Name const& aName);
 
-            virtual void doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth);
+            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
+            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
 
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider);
+            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
             virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);

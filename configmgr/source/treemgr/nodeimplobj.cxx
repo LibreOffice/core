@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,15 +690,15 @@ void ReadOnlyTreeSetNodeImpl::doRemoveElement(Name const& )
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
+void ReadOnlyTreeSetNodeImpl::doInitElements( ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(aTemplateProvider, NodeType::getReadAccessFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper( NodeType::getReadAccessFactory(), rTree, nDepth);
 }
 //-----------------------------------------------------------------------------
 
-ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
 {
-    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getReadAccessFactory(), aAddNodeChange, nDepth);
+    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getReadAccessFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -753,15 +753,15 @@ void ReadOnlyValueSetNodeImpl::doRemoveElement(Name const& )
 }
 //-----------------------------------------------------------------------------
 
-void ReadOnlyValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
+void ReadOnlyValueSetNodeImpl::doInitElements( ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getReadAccessFactory(), rTree);
+    ValueSetNodeImpl::initHelper( NodeType::getReadAccessFactory(), rTree);
 }
 //-----------------------------------------------------------------------------
 
-ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
 {
-    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getReadAccessFactory(), aAddNodeChange);
+    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getReadAccessFactory(), aAddNodeChange);
 }
 //-----------------------------------------------------------------------------
 
@@ -831,15 +831,15 @@ void DirectTreeSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DirectTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
+void DirectTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(aTemplateProvider,NodeType::getDirectAccessFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper(NodeType::getDirectAccessFactory(), rTree, nDepth);
 }
 //-----------------------------------------------------------------------------
 
-DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
 {
-    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDirectAccessFactory(), aAddNodeChange, nDepth);
+    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getDirectAccessFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -905,15 +905,15 @@ void DirectValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DirectValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
+void DirectValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDirectAccessFactory(), rTree);
+    ValueSetNodeImpl::initHelper( NodeType::getDirectAccessFactory(), rTree);
 }
 //-----------------------------------------------------------------------------
 
-DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
 {
-    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDirectAccessFactory(), aAddNodeChange);
+    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getDirectAccessFactory(), aAddNodeChange);
 }
 //-----------------------------------------------------------------------------
 
@@ -1054,15 +1054,15 @@ void DeferredTreeSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth nDepth)
+void DeferredTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
 {
-    TreeSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDeferredChangeFactory(), rTree, nDepth);
+    TreeSetNodeImpl::initHelper(NodeType::getDeferredChangeFactory(), rTree, nDepth);
 }
 //-----------------------------------------------------------------------------
 
-DeferredTreeSetNodeImpl::Element DeferredTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+DeferredTreeSetNodeImpl::Element DeferredTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
 {
-    return TreeSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDeferredChangeFactory(), aAddNodeChange, nDepth);
+    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getDeferredChangeFactory(), aAddNodeChange, nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -1602,7 +1602,7 @@ void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -1626,7 +1626,7 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
 
             OSL_ASSERT(pElement->isValid());
             //NodeChanges aIgnoredChanges;
-            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange,aTemplateProvider);
+            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange);
         }
         else
         {
@@ -1636,7 +1636,7 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
     }
     else
     {
-        TreeSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange,aTemplateProvider);
+        TreeSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange);
     }
 }
 //-----------------------------------------------------------------------------
@@ -1813,15 +1813,15 @@ void DeferredValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::doInitElements(TemplateProvider const& aTemplateProvider, ISubtree& rTree, TreeDepth )
+void DeferredValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
 {
-    ValueSetNodeImpl::initHelper(aTemplateProvider, NodeType::getDeferredChangeFactory(), rTree);
+    ValueSetNodeImpl::initHelper( NodeType::getDeferredChangeFactory(), rTree);
 }
 //-----------------------------------------------------------------------------
 
-DeferredValueSetNodeImpl::Element DeferredValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TemplateProvider const& aTemplateProvider, TreeDepth )
+DeferredValueSetNodeImpl::Element DeferredValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
 {
-    return ValueSetNodeImpl::makeAdditionalElement(aTemplateProvider, NodeType::getDeferredChangeFactory(), aAddNodeChange);
+    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getDeferredChangeFactory(), aAddNodeChange);
 }
 //-----------------------------------------------------------------------------
 
@@ -2356,7 +2356,7 @@ void DeferredValueSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -2380,7 +2380,7 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rL
 
             OSL_ASSERT(pElement->isValid());
             //NodeChanges aIgnoredChanges;
-            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange,aTemplateProvider);
+            (*pElement)->adjustToChanges(rLocalChanges/*aIgnoredChanges*/,aChange);
         }
         else
         {
@@ -2390,7 +2390,7 @@ void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rL
     }
     else
     {
-        ValueSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange,aTemplateProvider);
+        ValueSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange);
     }
 }
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-12 15:04:12 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,38 +174,16 @@ SetEntry::SetEntry(ElementTreeImpl* pTree_)
 }
 
 //-----------------------------------------------------------------------------
-// struct SetNodeImpl::InitHelper
-//-----------------------------------------------------------------------------
-
-struct SetNodeImpl::InitHelper
-{
-    TemplateProvider    aTemplateProvider;
-    TreeDepth           nLoadDepth;
-
-    InitHelper()
-        : aTemplateProvider()
-        , nLoadDepth(0)
-    {
-    }
-
-    InitHelper(TemplateProvider const& aTP_, TreeDepth nDepth_)
-        : aTemplateProvider(aTP_)
-        , nLoadDepth(nDepth_)
-    {
-        OSL_ASSERT(nDepth_ > 0 || !aTP_.isValid());
-    }
-};
-
-//-----------------------------------------------------------------------------
 // class SetNodeImpl
 //-----------------------------------------------------------------------------
 
 SetNodeImpl::SetNodeImpl(ISubtree& rOriginal,Template* pTemplate)
 : m_rOriginal(rOriginal)
 ,m_aTemplate(pTemplate)
+,m_aTemplateProvider()
 ,m_pParentTree(0)
 ,m_nContextPos(0)
-,m_pInit(new InitHelper())
+,m_aInit(0)
 {
 }
 //-----------------------------------------------------------------------------
@@ -213,12 +191,14 @@ SetNodeImpl::SetNodeImpl(ISubtree& rOriginal,Template* pTemplate)
 SetNodeImpl::SetNodeImpl(SetNodeImpl& rOriginal)
 : m_rOriginal(rOriginal.m_rOriginal)
 ,m_aTemplate(rOriginal.m_aTemplate)
+,m_aTemplateProvider(rOriginal.m_aTemplateProvider)
 ,m_pParentTree(rOriginal.m_pParentTree)
 ,m_nContextPos(rOriginal.m_nContextPos)
-,m_pInit(rOriginal.m_pInit)
+,m_aInit(rOriginal.m_aInit)
 {
     // unbind the original
     rOriginal.m_aTemplate.unbind();
+    rOriginal.m_aTemplateProvider = TemplateProvider();
     rOriginal.m_pParentTree = 0;
     rOriginal.m_nContextPos = 0;
 
@@ -318,21 +298,21 @@ void SetNodeImpl::doDispatch(INodeHandler& rHandler)
 //-----------------------------------------------------------------------------
 bool SetNodeImpl::implHasLoadedElements() const
 {
-    return m_pInit.get() == 0; // cannot check whether init was called though ...
+    return m_aInit == 0; // cannot check whether init was called though ...
 }
 
 //-----------------------------------------------------------------------------
 bool SetNodeImpl::implLoadElements()
 {
-    if (m_pInit.get() != 0 && m_pInit->nLoadDepth > 0)
+    if (m_aInit > 0)
     {
-        implInitElements(*m_pInit);
-        m_pInit.reset();
+        implInitElements(m_aInit);
+        m_aInit = 0;
 
     }
-    OSL_ASSERT(implHasLoadedElements() || m_pInit->nLoadDepth == 0);
+    OSL_ASSERT(implHasLoadedElements());
 
-    return m_pInit.get() == 0;
+    return m_aInit == 0;
 }
 
 //-----------------------------------------------------------------------------
@@ -345,13 +325,13 @@ void SetNodeImpl::implEnsureElementsLoaded()
 //-----------------------------------------------------------------------------
 bool SetNodeImpl::implInitElements(InitHelper const& aInit)
 {
-    TreeDepth nDepth = aInit.nLoadDepth;
+    TreeDepth nDepth = aInit;
     if (nDepth > 0)
     {
         OSL_ENSURE(m_aTemplate.isEmpty() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
-        OSL_ENSURE(aInit.aTemplateProvider.isValid() || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
+        OSL_ENSURE(m_aTemplateProvider.isValid() || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
 
-        doInitElements(aInit.aTemplateProvider,m_rOriginal,childDepth(nDepth));
+        doInitElements(m_rOriginal,childDepth(nDepth));
         return true;
     }
     else
@@ -366,11 +346,17 @@ void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImp
     m_pParentTree = &rParentTree;
     m_nContextPos = nPos;
 
-    OSL_ENSURE(!implHasLoadedElements(),"ERROR: Reinitializing set"); //doClearElements();
+    OSL_ENSURE(!m_aTemplateProvider.isValid() || !implHasLoadedElements(),"ERROR: Reinitializing set"); //doClearElements();
     OSL_ASSERT(doIsEmpty()); //doClearElements();
 
-    if (nDepth > 0)
-        m_pInit.reset( new InitHelper(aTemplateProvider,nDepth) );
+    OSL_ENSURE(m_aTemplate.isEmpty() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
+    OSL_ENSURE(aTemplateProvider.isValid() || nDepth == 0 || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
+
+    if (nDepth > 0) // dont set a template provider for zero-depth sets
+    {
+        m_aInit = nDepth;
+        m_aTemplateProvider = aTemplateProvider;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -552,15 +538,15 @@ void SetNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pP
 }
 //-----------------------------------------------------------------------------
 
-void SetNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+void SetNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TreeDepth nDepth)
 {
     if (nDepth > 0)
     {
-        OSL_ASSERT( aTemplateProvider.isValid() );
+        OSL_ENSURE( m_aTemplateProvider.isValid(), "SetNodeImpl: Cannot adjust to changes - node was never initialized" );
 
         if (implHasLoadedElements())
         {
-            doAdjustToChanges(rLocalChanges, rExternalChange, aTemplateProvider, childDepth(nDepth));
+            doAdjustToChanges(rLocalChanges, rExternalChange, childDepth(nDepth));
         }
         else
         {

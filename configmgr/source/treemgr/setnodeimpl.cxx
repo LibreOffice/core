@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:05:04 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,16 +363,16 @@ void AbstractSetNodeImpl::implInitElement(Element const& aNewElement)
 //-------------------------------------------------------------------------
 
 void AbstractSetNodeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges,
-                                            TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+                                            TreeDepth nDepth)
 {
     for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
     {
-        implAdjustToElementChange(rLocalChanges, *it, aTemplateProvider, nDepth);
+        implAdjustToElementChange(rLocalChanges, *it, nDepth);
     }
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TemplateProvider const& aTemplateProvider, TreeDepth nDepth)
+void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TreeDepth nDepth)
 {
     OSL_ENSURE( implHasLoadedElements() , "Unexpected call: Processing element change in uninitialized set");
 
@@ -383,7 +383,7 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
     {
         AddNode const& aAddNode = static_cast<AddNode const&>(aChange);
 
-        Element aNewElement = doMakeAdditionalElement(aAddNode,aTemplateProvider,nDepth);
+        Element aNewElement = doMakeAdditionalElement(aAddNode,nDepth);
 
         pThisChange = doAdjustToAddedElement(aName, aAddNode,aNewElement);
     }
@@ -394,7 +394,7 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
     }
     else if (nDepth > 0)
     {
-        doAdjustChangedElement(rLocalChanges,aName, aChange,aTemplateProvider);
+        doAdjustChangedElement(rLocalChanges,aName, aChange);
     }
     else
     {
@@ -402,7 +402,7 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
 
         if (aCheck.isValid()) // found even beyond nDepth
         {
-            doAdjustChangedElement(rLocalChanges,aName, aChange,aTemplateProvider);
+            doAdjustChangedElement(rLocalChanges,aName, aChange);
         }
     }
 
@@ -415,13 +415,13 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
 // Default implementations
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange, TemplateProvider const& aTemplateProvider)
+void AbstractSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
 {
     if (Element* pElement = getStoredElement(aName))
     {
         // recurse to element tree
         OSL_ASSERT(pElement->isValid());
-        (*pElement)->adjustToChanges(rLocalChanges,aChange,aTemplateProvider);
+        (*pElement)->adjustToChanges(rLocalChanges,aChange);
     }
     else
     {
@@ -655,10 +655,10 @@ void ValueSetNodeImpl::doRemoveElement(Name const& aName)
 }
 //-------------------------------------------------------------------------
 
-void TreeSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
+void TreeSetNodeImpl::initHelper( NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
 {
     CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
-                                    nDepth, getElementTemplate(), aTemplateProvider );
+                                    nDepth, getElementTemplate(), getTemplateProvider() );
     aCollector.collect(rTree);
 
     typedef CollectElementTrees::Collection::const_iterator Iter;
@@ -670,10 +670,10 @@ void TreeSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, Node
 }
 //-------------------------------------------------------------------------
 
-void ValueSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, ISubtree& rSet)
+void ValueSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rSet)
 {
     CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
-                                    0, getElementTemplate(), aTemplateProvider );
+                                    0, getElementTemplate(), getTemplateProvider() );
     aCollector.collect(rSet);
 
     typedef CollectElementTrees::Collection::const_iterator Iter;
@@ -685,7 +685,7 @@ void ValueSetNodeImpl::initHelper(TemplateProvider const& aTemplateProvider, Nod
 }
 //-------------------------------------------------------------------------
 
-ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth)
+ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth)
 {
     // need 'unsafe', because ownership would be gone when notifications are sent
     if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
@@ -695,7 +695,7 @@ ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(TemplateProvider const&
         if ( ISubtree* pTreeNode = pNode->asISubtree() )
         {
             CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
-                                        nDepth, getElementTemplate(), aTemplateProvider );
+                                        nDepth, getElementTemplate(), getTemplateProvider() );
 
             return implMakeElement(aCollector.create(*pTreeNode));
         }
@@ -708,7 +708,7 @@ ElementTreeHolder TreeSetNodeImpl::makeAdditionalElement(TemplateProvider const&
 }
 //-------------------------------------------------------------------------
 
-ElementTreeHolder ValueSetNodeImpl::makeAdditionalElement(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, AddNode const& aAddNodeChange)
+ElementTreeHolder ValueSetNodeImpl::makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange)
 {
     // need 'unsafe', because ownership would be gone when notifications are sent
     if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
@@ -717,7 +717,7 @@ ElementTreeHolder ValueSetNodeImpl::makeAdditionalElement(TemplateProvider const
         if ( ValueNode* pValueNode = pNode->asValueNode() )
         {
             CollectElementTrees aCreator( rFactory, getParentTree(), getContextOffset(),
-                                            0, getElementTemplate(), aTemplateProvider );
+                                            0, getElementTemplate(), getTemplateProvider() );
 
             return implMakeElement(aCreator.create(*pValueNode));
         }
