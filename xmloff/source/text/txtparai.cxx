@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,7 +1795,11 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
             XMLTextFieldImportContext::CreateTextFieldImportContext(
                 rImport, *rImport.GetTextImport().get(), nPrefix, rLocalName,
                 nToken);
-        if( !pContext && !rImport.GetTextImport()->IsInHeaderFooter() )
+        // #108784# import draw elements (except control shapes in headers)
+        if( pContext == NULL &&
+            !( rImport.GetTextImport()->IsInHeaderFooter() &&
+               nPrefix == XML_NAMESPACE_DRAW &&
+               IsXMLToken( rLocalName, XML_CONTROL ) ) )
         {
             Reference < XShapes > xShapes;
             pContext = rImport.GetShapeImport()->CreateGroupChildContext(
@@ -1813,8 +1817,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
 
     if( bInsertTextFrame )
     {
-        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) ||
-              rImport.GetTextImport()->IsInHeaderFooter() )
+        if( XMLTextImportHelper::HasDrawNameAttribute( xAttrList, rImport.GetNamespaceMap() ) )
         {
             Reference < XTextRange > xAnchorPos =
                 rImport.GetTextImport()->GetCursor()->getStart();
