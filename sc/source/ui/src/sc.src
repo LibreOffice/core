@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:05 $
+ *  last change: $Author: tbe $ $Date: 2000-10-23 11:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,13 @@
  // StarCalc Applikations Resource
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: hr $ $Date: 2000-09-18 16:45:05 $ $Revision: 1.1.1.1 $
+ // $Author: tbe $ $Date: 2000-10-23 11:54:12 $ $Revision: 1.2 $
  // $Logfile:   T:/sc/source/ui/src/sc.srv  $ $Workfile:   sc.src  $
  //==================================================================
 
 
 #include "sc.hrc" // -> #include <sfx.hrc>
-#include <basctl/basicide.hrc>
+//#include <basctl/basicide.hrc>
 
 
 
