@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:09:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ void OTableEditorCtrl::InitCellController()
         xCon = GetView()->getController()->getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
-        nMaxTextLen = ((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
+        nMaxTextLen = ((xub_StrLen)xMetaData.is() ? static_cast<xub_StrLen>(xMetaData->getMaxColumnNameLength()) : 0);
 
         if( nMaxTextLen == 0 )
             nMaxTextLen = EDIT_NOLIMIT;
@@ -907,11 +907,15 @@ void OTableEditorCtrl::CopyRows()
     ::std::vector<OTableRow*> vClipboardList;
     vClipboardList.reserve(GetSelectRowCount());
 
-    for( long nIndex=FirstSelectedRow(); nIndex>=0; nIndex=NextSelectedRow() )
+    for( long nIndex=FirstSelectedRow(); nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()); nIndex=NextSelectedRow() )
     {
         pRow = (*m_pRowList)[nIndex];
-        pClipboardRow = new OTableRow( *pRow );
-        vClipboardList.push_back( pClipboardRow);
+        OSL_ENSURE(pRow,"OTableEditorCtrl::CopyRows: Row is NULL!");
+        if ( pRow )
+        {
+            pClipboardRow = new OTableRow( *pRow );
+            vClipboardList.push_back( pClipboardRow);
+        }
     }
     if(!vClipboardList.empty())
     {
@@ -1023,7 +1027,7 @@ void OTableEditorCtrl::DeleteRows()
     nOldDataPos = nIndex;
     bSaveOnMove = sal_False;
 
-    while( nIndex >= 0 )
+    while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
     {
         //////////////////////////////////////////////////////////////////////
         // Zeile entfernen
@@ -1379,7 +1383,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long nRow )
         // Wenn eine der markierten Zeilen leer ist, kein Copy moeglich
         OTableRow* pRow;
         long nIndex = FirstSelectedRow();
-        while( nIndex >= 0 )
+        while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             pRow = (*m_pRowList)[nIndex];
             if( !pRow->GetActFieldDescr() )
@@ -1553,7 +1557,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long nRow )
     // - kein DROP erlaubt ist (s.o.) und die Spalte noch kein Required (not null) gesetzt hatte.
     long nIndex = FirstSelectedRow();
     OTableRow* pRow;
-    while( nIndex >= 0 )
+    while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
     {
         pRow = (*m_pRowList)[nIndex];
         OFieldDescription* pFieldDescr = pRow->GetActFieldDescr();
@@ -1653,6 +1657,9 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
 
                     // jetzt alles, was disabled wurde, wech
                     aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
+
+                    if( SetDataPtr(m_nDataPos) )
+                        pDescrWin->SaveData( pActRow->GetActFieldDescr() );
 
                     //////////////////////////////////////////////////////////////
                     // Alle Aktionen, die die Zeilenzahl veraendern, muessen asynchron
@@ -1804,7 +1811,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     if( bSet )
     {
         nIndex = FirstSelectedRow();
-        while( nIndex >= 0 )
+        while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             //////////////////////////////////////////////////////////////////////
             // Key setzen
@@ -1864,6 +1871,8 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
         // Alte Beschreibung speichern
         pDescrWin->SaveData( pActFieldDescr );
 
+    if ( nRow < 0 || nRow > static_cast<long>(m_pRowList->size()) )
+        return;
     //////////////////////////////////////////////////////////////////////
     // Neue Beschreibung darstellen
     OTableRow* pRow = (*m_pRowList)[nRow];
