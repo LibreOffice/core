@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 15:00:29 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:21:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,6 @@ LIB1FILES=  $(SLB)$/appl.lib		\
             $(SLB)$/notify.lib		\
             $(SLB)$/menu.lib		\
             $(SLB)$/inet.lib		\
-            $(SLB)$/accel.lib		\
             $(SLB)$/toolbox.lib		\
             $(SLB)$/statbar.lib		\
             $(SLB)$/dialog.lib		\
