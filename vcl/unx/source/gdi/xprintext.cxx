@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xprintext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oisin $ $Date: 2001-02-08 13:59:11 $
+ *  last change: $Author: svesik $ $Date: 2001-04-18 10:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ SalInstance::GetDefaultPrinter()
 //
 // =======================================================================
 
-final void SalGraphicsData::Init( ImplSalPrinterData *pPrinter )
+void SalGraphicsData::Init(ImplSalPrinterData *pPrinter)
 {
 if (pPrinter->GetStatus()) {
   xColormap_    = &(pPrinter->GetColormap());
