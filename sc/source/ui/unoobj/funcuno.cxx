@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:25:12 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "compiler.hxx"
+#include "errorcodes.hxx"
 #include "callform.hxx"
 #include "addincol.hxx"
 #include "rangeseq.hxx"
@@ -705,8 +706,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
 
-        ScMatrix* pMat = NULL;
-        pFormula->GetMatrix(&pMat);
+        const ScMatrix* pMat = pFormula->GetMatrix();
         USHORT nErrCode = pFormula->GetErrCode();
         if ( nErrCode == 0 )
         {
