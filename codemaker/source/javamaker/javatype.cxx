@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-25 08:56:49 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1895,7 +1895,33 @@ sal_Bool produceType(const OString& typeName,
     if (typeDependencies.isGenerated(typeName))
         return sal_True;
 
-    RegistryKey     typeKey = typeMgr.getTypeKey(typeName);
+    sal_Bool bIsExtraType = sal_False;
+    TypeReader reader(typeMgr.getTypeReader(typeName, &bIsExtraType));
+    if (bIsExtraType)
+    {
+        typeDependencies.setGenerated(typeName);
+        return sal_True;
+    }
+
+    if (!reader.isValid())
+    {
+        if (typeName.equals("/"))
+            return sal_True;
+        else
+            return sal_False;
+    }
+
+    if( !checkTypeDependencies(typeMgr, typeDependencies, typeName))
+        return sal_False;
+
+/*
+    sal_Bool bIsExtraType = sal_False;
+    RegistryKey     typeKey = typeMgr.getTypeKey(typeName, &bIsExtraType);
+    if (bIsExtraType)
+    {
+        typeDependencies.setGenerated(typeName);
+        return sal_True;
+    }
 
     if (!typeKey.isValid())
         return sal_False;
@@ -1926,7 +1952,7 @@ sal_Bool produceType(const OString& typeName,
     TypeReader reader(rReaderLoader, pBuffer, valueSize, sal_True);
 
     rtl_freeMemory(pBuffer);
-
+*/
     RTTypeClass typeClass = reader.getTypeClass();
     sal_Bool    ret = sal_False;
     switch (typeClass)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,5 +134,19 @@ const OString Options::getInputFile(sal_uInt16 index)
 const StringVector& Options::getInputFiles()
 {
     return m_inputFiles;
+}
+
+OString Options::getExtraInputFile(sal_uInt16 index) const
+    throw( IllegalArgument )
+{
+    if (index < m_extra_input_files.size())
+    {
+        return m_extra_input_files[index];
+    } else
+    {
+        throw IllegalArgument("index is out of bound.");
+    }
+
+    return OString();
 }
 

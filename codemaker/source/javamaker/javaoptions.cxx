@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:41:39 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,34 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         m_options["-T"] = OString(s);
                     }
                     break;
+
+                case 'X': // support for eXtra type rdbs
+                {
+                    if (av[i][2] == '\0')
+                    {
+                        if (i < ac - 1 && av[i+1][0] != '-')
+                        {
+                            i++;
+                            s = av[i];
+                        } else
+                        {
+                            OString tmp("'-X', please check");
+                            if (i <= ac - 1)
+                            {
+                                tmp += " your input '" + OString(av[i+1]) + "'";
+                            }
+
+                            throw IllegalArgument(tmp);
+                        }
+                    } else
+                    {
+                        s = av[i] + 2;
+                    }
+
+                    m_extra_input_files.push_back( s );
+                    break;
+                }
+
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
                     break;
@@ -232,7 +260,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 OString JavaOptions::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " [-options] file_1 ... file_n\nOptions:\n";
+    help += m_program + " [-options] file_1 ... file_n -Xfile_n+1 -Xfile_n+2\nOptions:\n";
     help += "    -O<path>   = path describes the root directory for the generated output.\n";
     help += "                 The output directory tree is generated under this directory.\n";
     help += "    -T<name>   = name specifies a type or a list of types. The output for this\n";
@@ -242,6 +270,7 @@ OString JavaOptions::prepareHelp()
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -nD        = no dependent types are generated.\n";
+    help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
     help += prepareVersion();
 
     return help;

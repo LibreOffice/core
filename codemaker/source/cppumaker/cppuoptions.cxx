@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:35:11 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,34 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-G"] = OString("");
                     break;
+
+                case 'X': // support for eXtra type rdbs
+                {
+                    if (av[i][2] == '\0')
+                    {
+                        if (i < ac - 1 && av[i+1][0] != '-')
+                        {
+                            i++;
+                            s = av[i];
+                        } else
+                        {
+                            OString tmp("'-X', please check");
+                            if (i <= ac - 1)
+                            {
+                                tmp += " your input '" + OString(av[i+1]) + "'";
+                            }
+
+                            throw IllegalArgument(tmp);
+                        }
+                    } else
+                    {
+                        s = av[i] + 2;
+                    }
+
+                    m_extra_input_files.push_back( s );
+                    break;
+                }
+
                 default:
                     throw IllegalArgument("the option is unknown" + OString(av[i]));
                     break;
@@ -324,6 +352,7 @@ OString CppuOptions::prepareHelp()
     help += "    -C         = getCppuType function keeps comprehensive type information.\n";
     help += "    -G         = generate only target files which does not exists.\n";
     help += "    -Gc        = generate only target files which content will be changed.\n";
+    help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
     help += prepareVersion();
 
     return help;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jsc $ $Date: 2002-06-18 17:26:56 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3972,7 +3972,13 @@ sal_Bool produceType(const OString& typeName,
     if (typeDependencies.isGenerated(typeName))
         return sal_True;
 
-    TypeReader reader(typeMgr.getTypeReader(typeName));
+    sal_Bool bIsExtraType = sal_False;
+    TypeReader reader(typeMgr.getTypeReader(typeName, &bIsExtraType));
+    if (bIsExtraType)
+    {
+        typeDependencies.setGenerated(typeName);
+        return sal_True;
+    }
 
     if (!reader.isValid())
     {

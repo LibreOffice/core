@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppumaker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 14:16:40 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ int _cdecl main( int argc, char * argv[] )
     RegistryTypeManager typeMgr;
     TypeDependency      typeDependencies;
 
-    if (!typeMgr.init(!options.isValid("-T"), options.getInputFiles()))
+    if (!typeMgr.init(options.getInputFiles(), options.getExtraInputFiles()))
     {
         fprintf(stderr, "%s : init registries failed, check your registry files.\n", options.getProgramName().getStr());
         exit(99);

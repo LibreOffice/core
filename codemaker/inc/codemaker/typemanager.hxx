@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:21 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,17 +121,14 @@ public:
         return *this;
     }
 
-    virtual sal_Bool init(sal_Bool bMerge, const StringVector& regFiles)
-        { return sal_False; }
-    virtual sal_Bool init(const ::rtl::OString& registryName)
-        { return sal_False; }
-
     virtual sal_Bool isValidType(const ::rtl::OString& name)
         { return sal_False; }
 
-    virtual RegistryKey getTypeKey(const ::rtl::OString& name)
+    virtual RegistryKey getTypeKey(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
         { return RegistryKey(); }
-    virtual TypeReader getTypeReader(const ::rtl::OString& name)
+    virtual TypeReader getTypeReader(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
         { return TypeReader(); }
     virtual RTTypeClass getTypeClass(const ::rtl::OString& name)
         { return RT_TYPE_INVALID; }
@@ -153,16 +150,13 @@ protected:
 struct RegistryTypeManagerImpl
 {
     RegistryTypeManagerImpl()
-        : m_pMergedRegistry(NULL)
-        , m_isMerged(sal_False)
-        , m_base("/")
+        : m_base("/")
         {}
 
     T2TypeClassMap  m_t2TypeClass;
     RegistryList    m_registries;
-    Registry*       m_pMergedRegistry;
+    RegistryList    m_extra_registries;
     ::rtl::OString  m_base;
-    sal_Bool        m_isMerged;
 };
 
 class RegistryTypeManager : public TypeManager
@@ -186,13 +180,15 @@ public:
         return *this;
     }
 */
-    sal_Bool init(sal_Bool bMerge, const StringVector& regFiles);
+    sal_Bool init(const StringVector& regFiles, const StringVector& extraFiles = StringVector() );
 
     sal_Bool    isValidType(const ::rtl::OString& name)
-        { return searchTypeKey(name).isValid(); }
-    RegistryKey getTypeKey(const ::rtl::OString& name)
-        { return searchTypeKey(name); }
-    TypeReader  getTypeReader(const ::rtl::OString& name);
+        { return searchTypeKey(name, 0).isValid(); }
+    RegistryKey getTypeKey(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 )
+        { return searchTypeKey(name, pIsExtraType); }
+    TypeReader  getTypeReader(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 );
     RTTypeClass getTypeClass(const ::rtl::OString& name);
 
     void setBase(const ::rtl::OString& base);
@@ -200,7 +196,8 @@ public:
 
     sal_Int32 getSize() { return m_pImpl->m_t2TypeClass.size(); }
 protected:
-    RegistryKey searchTypeKey(const ::rtl::OString& name);
+    RegistryKey searchTypeKey(
+        const ::rtl::OString& name, sal_Bool * pIsExtraType = 0 );
     void        freeRegistries();
 
     void acquire();

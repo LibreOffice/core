@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:15:48 $
+ *  last change: $Author: dbo $ $Date: 2002-07-31 12:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,29 +157,16 @@ void RegistryTypeManager::release()
 {
     if (0 == TypeManager::release())
     {
-        if (m_pImpl->m_pMergedRegistry)
-        {
-            if (m_pImpl->m_pMergedRegistry->isValid())
-            {
-                m_pImpl->m_pMergedRegistry->destroy(OUString());
-            }
-
-            delete m_pImpl->m_pMergedRegistry;
-        }
-
-        if (m_pImpl->m_registries.size() > 0)
-        {
-            freeRegistries();
-        }
+        freeRegistries();
 
         delete m_pImpl;
     }
 }
 
-sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFiles)
+sal_Bool RegistryTypeManager::init(
+    const StringVector& regFiles,
+    StringVector const & extraFiles )
 {
-    m_pImpl->m_isMerged = bMerged && (regFiles.size() > 1);
-
     if (regFiles.empty())
         return sal_False;
 
@@ -198,53 +185,27 @@ sal_Bool RegistryTypeManager::init(sal_Bool bMerged, const StringVector& regFile
         }
         ++iter;
     }
-
-    if (m_pImpl->m_isMerged)
+    iter = extraFiles.begin();
+    while (iter != extraFiles.end())
     {
-        Registry *pTmpReg = new Registry(loader);
-        OString tmpName(makeTempName(NULL));
-
-        if (!pTmpReg->create( convertToFileUrl(tmpName) ) )
+        if (!tmpReg.open( convertToFileUrl(*iter), REG_READONLY))
+            m_pImpl->m_extra_registries.push_back(new Registry(tmpReg));
+        else
         {
-            RegistryKey rootKey;
-            RegError ret = REG_NO_ERROR;
-            OUString aRoot( RTL_CONSTASCII_USTRINGPARAM("/") );
-            iter = regFiles.begin();
-            pTmpReg->openRootKey(rootKey);
-
-            while (iter != regFiles.end())
-            {
-                if ( ret = pTmpReg->mergeKey(rootKey, aRoot, convertToFileUrl( *iter )) )
-                {
-                    if (ret != REG_MERGE_CONFLICT)
-                    {
-                        freeRegistries();
-                        rootKey.closeKey();
-                        pTmpReg->destroy( OUString() );
-                        delete pTmpReg;
-                        return sal_False;
-                    }
-                }
-                iter++;
-            }
-
-            m_pImpl->m_pMergedRegistry = pTmpReg;
-            freeRegistries();
-        } else
-        {
-            delete pTmpReg;
             freeRegistries();
             return sal_False;
         }
+        ++iter;
     }
 
     return sal_True;
 }
 
-TypeReader RegistryTypeManager::getTypeReader(const OString& name)
+TypeReader RegistryTypeManager::getTypeReader(
+    const OString& name, sal_Bool * pIsExtraType )
 {
     TypeReader reader;
-    RegistryKey key(searchTypeKey(name));
+    RegistryKey key(searchTypeKey(name, pIsExtraType));
 
     if (key.isValid())
     {
@@ -317,38 +278,51 @@ void RegistryTypeManager::setBase(const OString& base)
 void RegistryTypeManager::freeRegistries()
 {
     RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
-
     while (iter != m_pImpl->m_registries.end())
     {
         delete *iter;
         ++iter;
     }
-
+    iter = m_pImpl->m_extra_registries.begin();
+    while (iter != m_pImpl->m_extra_registries.end())
+    {
+        delete *iter;
+        ++iter;
+    }
 }
 
-RegistryKey RegistryTypeManager::searchTypeKey(const OString& name)
+RegistryKey RegistryTypeManager::searchTypeKey(const OString& name_, sal_Bool * pIsExtraType )
 {
+    OUString name( OStringToOUString(m_pImpl->m_base + name_, RTL_TEXTENCODING_UTF8) );
     RegistryKey key, rootKey;
 
-    if (m_pImpl->m_isMerged)
+    RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
+    while (iter != m_pImpl->m_registries.end())
     {
-        if (!m_pImpl->m_pMergedRegistry->openRootKey(rootKey))
+        if (!(*iter)->openRootKey(rootKey))
         {
-            rootKey.openKey(OStringToOUString(m_pImpl->m_base + name, RTL_TEXTENCODING_UTF8), key);
-        }
-    } else
-    {
-        RegistryList::const_iterator iter = m_pImpl->m_registries.begin();
-
-        while (iter != m_pImpl->m_registries.end())
-        {
-            if (!(*iter)->openRootKey(rootKey))
+            if (!rootKey.openKey(name, key))
             {
-                if (!rootKey.openKey(OStringToOUString(m_pImpl->m_base + name, RTL_TEXTENCODING_UTF8), key))
-                    break;
+                if (pIsExtraType)
+                    *pIsExtraType = sal_False;
+                return key;
             }
-            ++iter;
         }
+        ++iter;
+    }
+    iter = m_pImpl->m_extra_registries.begin();
+    while (iter != m_pImpl->m_extra_registries.end())
+    {
+        if (!(*iter)->openRootKey(rootKey))
+        {
+            if (!rootKey.openKey(name, key))
+            {
+                if (pIsExtraType)
+                    *pIsExtraType = sal_True;
+                break;
+            }
+        }
+        ++iter;
     }
 
     return key;
