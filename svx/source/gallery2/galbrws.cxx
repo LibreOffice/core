@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 13:23:43 $
+ *  last change: $Author: ka $ $Date: 2001-05-16 10:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,11 @@ void GalleryBrowser::Resize()
     Point       aSplitPos( mpSplitter->GetPosPixel() );
     const Size  aSplitSize( mpSplitter->GetOutputSizePixel() );
 
-    if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aNewSize.Width() - nFrameWidth ) )
-        aSplitPos.X() = aNewSize.Width() - nFrameWidth - aSplitSize.Width();
-
     mpBrowser1->SetPosSizePixel( Point( nFrameWidth, nFrameWidth ),
                                  Size( aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
 
     mpSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() ) );
-    mpSplitter->SetDragRectPixel( Rectangle( Point( nFrameWidth, 0 ), Size( aNewSize.Width() - nFrameWidth2, aNewSize.Height() ) ) );
+    mpSplitter->SetDragRectPixel( Rectangle( Point( nFrameWidth2, 0 ), Size( aNewSize.Width() - ( nFrameWidth2 << 1 ) - aSplitSize.Width(), aNewSize.Height() ) ) );
 
     mpBrowser2->SetPosSizePixel( Point( aSplitPos.X() + aSplitSize.Width(), nFrameWidth ),
                                  Size( aNewSize.Width() - aSplitSize.Width() - aSplitPos.X() - nFrameWidth, aNewSize.Height() - nFrameWidth2 ) );
