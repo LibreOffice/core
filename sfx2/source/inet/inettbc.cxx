@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-26 19:23:50 $
+ *  last change: $Author: mba $ $Date: 2001-04-27 12:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,11 +347,12 @@ void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch,
 String ParseSmart( String aText, String aBaseURL, String aWorkDir )
 {
     String aMatch;
+/*
     USHORT nPos = aText.Search( ':' );
     if( nPos != STRING_NOTFOUND && ( nPos != 1 || aText.Len() < 3 || aText.GetChar( 2 ) != '\\' ) )
         // cannot be handled correctly by generic URLObject
         return aMatch;
-
+*/
     INetURLObject aURLObject;
     if( aBaseURL.Len() )
     {
