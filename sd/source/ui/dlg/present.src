@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:26:56 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ portuguese_brazilian ] = "Kind";
         Text[ japanese ] = "Ží—Þ";
         Text[ chinese_simplified ] = "ÖÖÀà";
-        Text[ chinese_traditional ] = "ºØÃþ";
+        Text[ chinese_traditional ] = "Ãþ«¬";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôýðïò";
         Text[ korean ] = "Á¾·ù";
@@ -693,4 +693,5 @@ ModalDialog DLG_START_PRESENTATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Iniciar presentación";
 };
+
 
