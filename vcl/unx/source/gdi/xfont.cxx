@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:34:21 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,8 +234,9 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
         pFontMetric->mnWidth     = aBoundingBox.width;
         pFontMetric->mnAscent    = aBoundingBox.ascent;
         pFontMetric->mnDescent   = aBoundingBox.descent;
-        pFontMetric->mnLeading   = std::max(0, aBoundingBox.ascent  - nAscent
+        pFontMetric->mnIntLeading = std::max(0, aBoundingBox.ascent  - nAscent
                                           + aBoundingBox.descent - nDescent );
+        pFontMetric->mnExtLeading = 0; // TODO!!!
         // XXX Fix me
         pFontMetric->mnFirstChar =   0;
         pFontMetric->mnLastChar  = 255;
