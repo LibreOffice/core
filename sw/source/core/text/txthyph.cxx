@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:02:48 $
+ *  last change: $Author: ama $ $Date: 2000-10-26 08:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,11 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _WORDSEL_HXX //autogen
-#include <svtools/wordsel.hxx>
-#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
+#include <com/sun/star/text/WordType.hpp>
 #endif
 
 #ifndef _VIEWOPT_HXX
@@ -118,6 +118,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic;
+using namespace ::com::sun::star::text;
 
 /*************************************************************************
  *                      SwTxtFormatInfo::HyphWord()
@@ -134,7 +135,7 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
     if( xHyph.is() )
         xHyphWord = xHyph->hyphenate( OUString(rTxt),
-                            SvxCreateLocale( pFnt->GetLanguage() ),
+                            pBreakIt->GetLocale( pFnt->GetLanguage() ),
                             rTxt.Len() - nMinTrail );
     return xHyphWord;
 
@@ -148,6 +149,8 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
+    if( !pBreakIt->xBreak.is() )
+        return sal_False;;
     // Wir machen den Laden erstmal dicht:
     ASSERT( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
     // 4935: Der ::com::sun::star::frame::Frame muss eine gueltige SSize haben!
@@ -301,9 +304,12 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
         // Wir suchen vorwaerts
         Reference< XHyphenatedWord > xHyphWord;
-        WordSelection::ResetWordDelimiter();
-        nWrdStart = WordSelection::GoStartWord( rInf.GetTxt(), nWrdStart );
-        nLen = WordSelection::GoEndWord( rInf.GetTxt(), nWrdStart ) - nWrdStart;
+
+        Boundary aBound =
+            pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nWrdStart,
+            pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ), WordType::DICTIONARY_WORD, sal_True );
+        nWrdStart = aBound.startPos;
+        nLen = aBound.endPos - nWrdStart;
         bRet = 0 != nLen;
         if( bRet )
         {
@@ -493,9 +499,15 @@ sal_Bool SwTxtPortion::IsHyphenate( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     }
 
     xub_StrLen nWordStart, nWordLen;
-    WordSelection::ResetWordDelimiter();
-    nWordStart = WordSelection::GoStartWord( rInf.GetTxt(), nLastChar );
-    nWordLen = WordSelection::GoEndWord( rInf.GetTxt(), nLastChar ) -nWordStart;
+
+    if( !pBreakIt->xBreak.is() )
+        return sal_False;
+    Boundary aBound =
+        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nLastChar,
+        pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
+        WordType::DICTIONARY_WORD, sal_True );
+    nWordStart = aBound.startPos;
+    nWordLen = aBound.endPos - nWordStart;
 
     // Textabschnitte unter 2 Zeichen trennen wir nicht mehr
     if( 2 > nWordLen )
