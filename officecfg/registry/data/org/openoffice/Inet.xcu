@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Inet.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:36:28 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 17:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,307 +67,311 @@
     </prop>
   </node>
   <node oor:name="SearchEngines">
-    <node oor:name="AltaVista" oor:op="replace">
-      <node oor:name="And">
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.altavista.com/sites/search/web?q=</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;kl=XX&amp;pg=q</value>
-        </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.altavista.com/sites/search/web?q=</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+OR+</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;kl=XX&amp;search=Search</value>
-        </prop>
-      </node>
-      <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.altavista.com/sites/search/web?q=%22</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>%22&amp;kl=XX&amp;search=Search</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-      </node>
-    </node>
-    <node oor:name="Google" oor:op="replace">
-      <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.google.com/search?as_q=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;num=10&amp;btnG=Google+Search&amp;as_epq=&amp;as_oq=&amp;as_eq=&amp;lr=&amp;as_occt=any&amp;as_dt=i&amp;as_sitesearch=&amp;safe=off</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.google.com/search?as_q=&amp;num=10&amp;btnG=Google+Search&amp;as_epq=&amp;as_oq=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;as_eq=&amp;lr=&amp;as_occt=any&amp;as_dt=i&amp;as_sitesearch=&amp;safe=off</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-      </node>
-      <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.google.com/search?as_q=&amp;num=10&amp;btnG=Google+Search&amp;as_epq=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;as_oq=&amp;as_eq=&amp;lr=&amp;as_occt=any&amp;as_dt=i&amp;as_sitesearch=&amp;safe=off</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-      </node>
-    </node>
     <node oor:name="Euroseek" oor:op="replace">
       <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.euroseek.com/query?ilang=de&amp;width=468&amp;height=60&amp;lang=world&amp;domain=world&amp;query=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;Suchen.x=53&amp;Suchen.y=7</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
           <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
-        </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.euroseek.com/query?ilang=de&amp;width=468&amp;height=60&amp;lang=world&amp;domain=world&amp;query=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;Suchen.x=47&amp;Suchen.y=2</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+OR+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
         </prop>
       </node>
       <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://www.euroseek.com/query?ilang=en&amp;width=468&amp;height=60&amp;lang=world&amp;domain=world&amp;query=%22</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>%22&amp;Search.x=19&amp;Search.y=11</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
         </prop>
-      </node>
-    </node>
-    <node oor:name="Hotbot" oor:op="replace">
-      <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://hotbot.lycos.com/?MT=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;SM=MC&amp;DV=0&amp;LG=any&amp;DC=10&amp;DE=2&amp;AM1=MC&amp;x=45&amp;y=8</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
         </prop>
       </node>
       <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://hotbot.lycos.com/?MT=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.euroseek.com/system/search.cgi?mode=internet&amp;string=</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;SM=SC&amp;DV=0&amp;LG=any&amp;DC=10&amp;DE=2&amp;AM1=MC&amp;x=31&amp;y=9</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;language=en</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
         </prop>
-      </node>
-      <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://hotbot.lycos.com/?MT=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;SM=phrase&amp;DV=0&amp;LG=any&amp;DC=10&amp;DE=2&amp;AM1=MC&amp;x=36&amp;y=5</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
           <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
         </prop>
       </node>
     </node>
     <node oor:name="Lycos" oor:op="replace">
       <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://lycospro.lycos.com/srchpro/?aloc=sb_init_content&amp;first=1&amp;lpv=1&amp;query=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?loc=searchbox&amp;query=&amp;adv=1&amp;tab=web&amp;wfr=%2B&amp;wfw=&amp;wfq=</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;t=all&amp;type=advwebsites&amp;x=48&amp;y=2</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;wfr=&amp;wfw=&amp;wfq=&amp;wfr=-&amp;wfw=&amp;wfq=&amp;wfc=3&amp;df0=i&amp;dfq=&amp;df1=e&amp;dfq=&amp;dfc=2&amp;lang=&amp;adf=-2&amp;ca=&amp;submit_button=Submit+Search</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
         </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://lycospro.lycos.com/srchpro/?aloc=sb_init_content&amp;first=1&amp;lpv=1&amp;query=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;t=any&amp;type=advwebsites&amp;x=15&amp;y=3</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
           <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
         </prop>
       </node>
       <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://lycospro.lycos.com/srchpro/?aloc=sb_init_content&amp;first=1&amp;lpv=1&amp;query=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?lpv=1&amp;loc=searchhp&amp;tab=web&amp;query=%22</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;t=phrase&amp;type=advwebsites&amp;x=39&amp;y=12</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.lycos.com/default.asp?loc=searchbox&amp;query=&amp;adv=1&amp;tab=web&amp;wfr=&amp;wfw=&amp;wfq=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;wfr=&amp;wfw=&amp;wfq=&amp;wfr=-&amp;wfw=&amp;wfq=&amp;wfc=3&amp;df0=i&amp;dfq=&amp;df1=e&amp;dfq=&amp;dfc=2&amp;lang=&amp;adf=-2&amp;ca=&amp;submit_button=Submit+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
         </prop>
       </node>
     </node>
-    <node oor:name="Webcrawler" oor:op="replace">
-      <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.excite.com/search.gw?lk=webcrawler&amp;s=</value>
+    <node oor:name="AltaVista" oor:op="replace">
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=&amp;aqp=&amp;aqo=</value>
         </prop>
-        <prop oor:name="ooInetSuffix"/>
-        <prop oor:name="ooInetSeparator">
-          <value>+AND+</value>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
         </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
         </prop>
       </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.excite.com/search.gw?lk=webcrawler&amp;s=</value>
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results/?qbmode=&amp;aqa=</value>
         </prop>
-        <prop oor:name="ooInetSuffix"/>
-        <prop oor:name="ooInetSeparator">
-          <value>+OR+</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;aqp=&amp;aqo=&amp;aqn=&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
         </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
         </prop>
       </node>
       <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.excite.com/search.gw?lk=webcrawler&amp;s=%22</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.altavista.com/web/results?q=%22</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>%22</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;kgs=0&amp;kls=1&amp;avkw=aapt</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Google" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;btnG=Google+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?hl=en&amp;lr=&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
           <value>+</value>
         </prop>
-        <prop oor:name="ooInetCaseMatch">
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?hl=en&amp;ie=UTF-8&amp;oe=UTF-8&amp;q=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;btnG=Google+Search</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.google.com/search?as_q=&amp;num=10&amp;hl=en&amp;ie=UTF-8&amp;oe=UTF-8&amp;btnG=Google+Search&amp;as_epq=&amp;as_oq=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;as_eq=&amp;lr=&amp;as_ft=i&amp;as_filetype=&amp;as_qdr=all&amp;as_occt=any&amp;as_dt=i&amp;as_sitesearch=&amp;safe=images</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Hotbot" oor:op="replace">
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/default.asp?prov=HotBot&amp;query=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;ps=&amp;loc=searchbox&amp;tab=web</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="And">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/adv.asp?prov=HotBot&amp;query=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;ps=&amp;loc=searchbox&amp;tab=web&amp;lang=&amp;dfi=&amp;dfe=&amp;region=&amp;wfc=2&amp;wfr=%2B&amp;wfw=&amp;wfq=&amp;wfr=&amp;wfw=&amp;wfq=&amp;date=0&amp;past=&amp;dateop=after</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://www.hotbot.com/default.asp?prov=HotBot&amp;query=%22</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;ps=&amp;loc=searchbox&amp;tab=web&amp;wfc=2&amp;wfr=%22&amp;wfr=&amp;wfw=&amp;wfw=&amp;wfq=&amp;wfq=</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+    </node>
+    <node oor:name="Excite" oor:op="replace">
+      <node oor:name="And">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2Z31TR6046OF684__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;ran=30967&amp;qkw=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;submit=Search&amp;method=0&amp;dpcollation=1&amp;eng1=About&amp;eng2=askjeeves&amp;eng3=Fast&amp;eng4=FindWhat&amp;eng5=LookSmart&amp;eng6=OpenDirectory&amp;eng7=Overture&amp;eng8=Sprinks&amp;eng9=MetaSearchPicks&amp;eng10=paidinclusion&amp;eng11=Google&amp;eng12=Inktomi&amp;eng13=SearchHippo&amp;eng14=teoma&amp;qk=20&amp;rpe=10&amp;timeout=0&amp;top=1&amp;start=&amp;ver=28494</value>
+        </prop>
+      </node>
+      <node oor:name="Exact">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2MDNTR6046U4NZ2__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;qkw=%22</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;qk=20&amp;method=&amp;top=1&amp;start=&amp;ver=4734</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://msxml.excite.com/_1_2V4FTR6046L4NP8__info.xcite/dog/results?otmpl=dog/webresults.htm&amp;qcat=web&amp;ran=30967&amp;qkw=</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;submit=Search&amp;method=1&amp;dpcollation=1&amp;eng1=About&amp;eng2=askjeeves&amp;eng3=Fast&amp;eng4=FindWhat&amp;eng5=LookSmart&amp;eng6=OpenDirectory&amp;eng7=Overture&amp;eng8=Sprinks&amp;eng9=MetaSearchPicks&amp;eng10=paidinclusion&amp;eng11=Google&amp;eng12=Inktomi&amp;eng13=SearchHippo&amp;eng14=teoma&amp;qk=20&amp;rpe=10&amp;timeout=0&amp;top=1&amp;start=&amp;ver=9634</value>
         </prop>
       </node>
     </node>
     <node oor:name="Yahoo" oor:op="replace">
       <node oor:name="And">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.yahoo.com/search?p=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?x=op&amp;va=</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;d=y&amp;o=a&amp;h=c&amp;g=0&amp;n=20</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;va_vt=any&amp;vst=0&amp;vd=all&amp;fl=0&amp;ei=ISO-8859-1&amp;vm=p&amp;n=20</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
         </prop>
-      </node>
-      <node oor:name="Or">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.yahoo.com/search?p=</value>
-        </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;d=y&amp;o=o&amp;h=c&amp;g=0&amp;n=20</value>
-        </prop>
-        <prop oor:name="ooInetSeparator">
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
           <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
-          <value>0</value>
         </prop>
       </node>
       <node oor:name="Exact">
-        <prop oor:name="ooInetPrefix">
-          <value>http://search.yahoo.com/search?p=</value>
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?p=%22</value>
         </prop>
-        <prop oor:name="ooInetSuffix">
-          <value>&amp;d=y&amp;o=p&amp;h=c&amp;g=0&amp;n=20</value>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>%22&amp;fr=fp-top</value>
         </prop>
-        <prop oor:name="ooInetSeparator">
-          <value>+</value>
-        </prop>
-        <prop oor:name="ooInetCaseMatch">
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
           <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>%20</value>
+        </prop>
+      </node>
+      <node oor:name="Or">
+        <prop oor:name="ooInetPrefix" oor:type="xs:string">
+          <value>http://search.yahoo.com/search?x=op&amp;vo=</value>
+        </prop>
+        <prop oor:name="ooInetSuffix" oor:type="xs:string">
+          <value>&amp;vo_vt=any&amp;vst=0&amp;vd=all&amp;fl=0&amp;ei=ISO-8859-1&amp;vm=p&amp;n=20</value>
+        </prop>
+        <prop oor:name="ooInetCaseMatch" oor:type="xs:int">
+          <value>0</value>
+        </prop>
+        <prop oor:name="ooInetSeparator" oor:type="xs:string">
+          <value>+</value>
         </prop>
       </node>
     </node>
