@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.y,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hjs $ $Date: 2002-07-10 09:43:18 $
+ *  last change: $Author: obo $ $Date: 2002-10-29 12:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@ int fprintf(FILE* stream, const char* format, ...)
     return res;
 }
 
+/*
+   Following code not for msvc7.net compiler
+*/
+#ifndef M1300
 void* malloc( size_t size )
 {
     return ::malloc(size);
@@ -153,6 +157,7 @@ void free( void *memblock )
 {
     ::free(memblock);
 }
+#endif
     
 };
 #endif
