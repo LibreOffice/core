@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: toconnor $ $Date: 2002-11-13 16:54:09 $
+#   last change: $Author: dfoster $ $Date: 2002-11-20 15:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,9 +97,9 @@
   </path>
 
   <path id="jedit.class.path">
-    <pathelement location="${jedit.install.dir}/jedit.jar"/>
-    <pathelement location="${install.dir}/Console.jar"/>
-    <pathelement location="${install.dir}/xerces.jar"/>
+    <pathelement path="${jedit.install.dir}/jedit.jar"/>
+    <pathelement path="${install.dir}/Console.jar"/>
+    <pathelement path="${install.dir}/xerces.jar"/>
   </path>
 
   <!-- ===================== Prepare Directories ========================= -->
