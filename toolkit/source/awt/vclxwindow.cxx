@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:11:08 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ void VCLXWindow::SetWindow( Window* pWindow )
     SetOutputDevice( pWindow );
 
     if ( GetWindow() )
-    GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
+        GetWindow()->AddEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
 }
 
 void VCLXWindow::suspendVclEventListening( )
