@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:15:05 $
+ *  last change: $Author: rt $ $Date: 2001-07-24 20:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,19 +329,19 @@ ModalDialog DLG_PASSWORD
         Text = "Benutzer \"$Name: not supported by cvs2svn $\"" ;
         Text [ English ] = "User \"$Name: not supported by cvs2svn $\"" ;
         Text[ english_us ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ portuguese ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ russian ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ portuguese ] = "Utilizador \"$Name: not supported by cvs2svn $\"";
+        Text[ russian ] = "Ïîëüçîâàòåëü \"$Name: not supported by cvs2svn $\"";
         Text[ greek ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ dutch ] = "Gebruiker \"$Name: not supported by cvs2svn $\"";
-        Text[ french ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ french ] = "Utilisateur \"$Name: not supported by cvs2svn $\"";
         Text[ spanish ] = "Usuario \"$Name: not supported by cvs2svn $\"";
         Text[ finnish ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ italian ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ italian ] = "Utente \"$Name: not supported by cvs2svn $\"";
         Text[ danish ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ swedish ] = "Användare \"$Name: not supported by cvs2svn $\"";
-        Text[ polish ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ polish ] = "U¿ytkownik \"$Name: not supported by cvs2svn $\"";
         Text[ portuguese_brazilian ] = "User \"$Name: not supported by cvs2svn $\"";
-        Text[ japanese ] = "User \"$Name: not supported by cvs2svn $\"";
+        Text[ japanese ] = "Õ°»Ş° \"$Name: not supported by cvs2svn $\"";
         Text[ korean ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_simplified ] = "User \"$Name: not supported by cvs2svn $\"";
         Text[ chinese_traditional ] = "User \"$Name: not supported by cvs2svn $\"";
@@ -358,18 +358,18 @@ ModalDialog DLG_PASSWORD
         Text [ English ] = "old p~assword" ;
         Text[ english_us ] = "old p~assword";
         Text[ portuguese ] = "old p~assword";
-        Text[ russian ] = "old p~assword";
+        Text[ russian ] = "Ñòàğûé ïàğîëü";
         Text[ greek ] = "old p~assword";
         Text[ dutch ] = "Oud w~achtwoord";
-        Text[ french ] = "old p~assword";
+        Text[ french ] = "Ancien mot de passe";
         Text[ spanish ] = "Contraseña anterior";
         Text[ finnish ] = "old p~assword";
-        Text[ italian ] = "old p~assword";
+        Text[ italian ] = "Vecchia password";
         Text[ danish ] = "old p~assword";
         Text[ swedish ] = "Gammalt lös~enord";
-        Text[ polish ] = "old p~assword";
+        Text[ polish ] = "Stare has³o";
         Text[ portuguese_brazilian ] = "old p~assword";
-        Text[ japanese ] = "old p~assword";
+        Text[ japanese ] = "‹ŒÊß½Ü°ÄŞ";
         Text[ korean ] = "old p~assword";
         Text[ chinese_simplified ] = "old p~assword";
         Text[ chinese_traditional ] = "old p~assword";
@@ -393,18 +393,18 @@ ModalDialog DLG_PASSWORD
         Text [ English ] = " ~password" ;
         Text[ english_us ] = " password";
         Text[ portuguese ] = " password";
-        Text[ russian ] = " password";
+        Text[ russian ] = "Ïàğîëü";
         Text[ greek ] = " password";
         Text[ dutch ] = "~wachtwoord";
-        Text[ french ] = " password";
+        Text[ french ] = "Mot de passe";
         Text[ spanish ] = "~Contraseña";
         Text[ finnish ] = " password";
-        Text[ italian ] = " password";
+        Text[ italian ] = "~Password";
         Text[ danish ] = " password";
         Text[ swedish ] = "Lö~senord";
-        Text[ polish ] = " password";
+        Text[ polish ] = "Has³o";
         Text[ portuguese_brazilian ] = " password";
-        Text[ japanese ] = " password";
+        Text[ japanese ] = "Êß½Ü°ÄŞ";
         Text[ korean ] = " password";
         Text[ chinese_simplified ] = " password";
         Text[ chinese_traditional ] = " password";
@@ -427,18 +427,18 @@ ModalDialog DLG_PASSWORD
         Text [ English ] = "~Confirm  password" ;
         Text[ english_us ] = "~Confirm  password";
         Text[ portuguese ] = "~Confirm  password";
-        Text[ russian ] = "~Confirm  password";
+        Text[ russian ] = "~Ïîäòâåğäèòü ïàğîëü";
         Text[ greek ] = "~Confirm  password";
         Text[ dutch ] = "~Wachtwoord bevestigen";
-        Text[ french ] = "~Confirm  password";
+        Text[ french ] = "Confirmation du mot de passe";
         Text[ spanish ] = "~Repetir contraseña";
         Text[ finnish ] = "~Confirm  password";
-        Text[ italian ] = "~Confirm  password";
+        Text[ italian ] = "~Conferma password";
         Text[ danish ] = "~Confirm  password";
         Text[ swedish ] = "~Bekräfta lösenord";
-        Text[ polish ] = "~Confirm  password";
+        Text[ polish ] = "PotwierdŸ has³o";
         Text[ portuguese_brazilian ] = "~Confirm  password";
-        Text[ japanese ] = "~Confirm  password";
+        Text[ japanese ] = "Êß½Ü°ÄŞ‚ÌŠm”F";
         Text[ korean ] = "~Confirm  password";
         Text[ chinese_simplified ] = "~Confirm  password";
         Text[ chinese_traditional ] = "~Confirm  password";
@@ -472,18 +472,18 @@ ModalDialog DLG_PASSWORD
     };
     Text[ english_us ] = "Change password";
     Text[ portuguese ] = "Change password";
-    Text[ russian ] = "Change password";
+    Text[ russian ] = "Èçìåíèòü ïàğîëü";
     Text[ greek ] = "Change password";
     Text[ dutch ] = "Wachtwoord wijzigen";
-    Text[ french ] = "Change password";
+    Text[ french ] = "Modification du mot de passe";
     Text[ spanish ] = "Modificar contraseña";
     Text[ finnish ] = "Change password";
-    Text[ italian ] = "Change password";
+    Text[ italian ] = "Cambia password";
     Text[ danish ] = "Change password";
     Text[ swedish ] = "Ändra lösenord";
-    Text[ polish ] = "Change password";
+    Text[ polish ] = "Zmieñ has³o";
     Text[ portuguese_brazilian ] = "Change password";
-    Text[ japanese ] = "Change password";
+    Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•ÏX";
     Text[ korean ] = "Change password";
     Text[ chinese_simplified ] = "Change password";
     Text[ chinese_traditional ] = "Change password";
@@ -498,10 +498,10 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text [ English ] = "Passwords are different, please enter again!" ;
     Text[ english_us ] = "The passwords do not match. Please enter the password again.";
     Text[ portuguese ] = "Passwords are different, please enter again";
-    Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò. Ïîâòîğèòå ââîä.";
+    Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò. Ïîâòîğèòå ââîä ïàğîëÿ";
     Text[ greek ] = "Passwords are different, please enter again";
     Text[ dutch ] = "De beide wachtwoorden komen niet overeen. Nogmaals invoeren!";
-    Text[ french ] = "Les deux mots de passe sont différents. Répétez la saisie ";
+    Text[ french ] = "Les deux mots de passe sont différents. Répétez la saisie  !";
     Text[ spanish ] = "Las contraseñas no coinciden. Introdúzcalas otra vez.";
     Text[ finnish ] = "Passwords are different, please enter again";
     Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
@@ -517,5 +517,6 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again";
     Text[ catalan ] = "Passwords are different, please enter again";
 };
+
 
 
