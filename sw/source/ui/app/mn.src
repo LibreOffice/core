@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:13:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,24 +125,7 @@ Menu MN_TAB_POPUPMENU
     };
 };
 
-
-String MN_FRM_POPUPMENU
-{
-    Text [ de ] = "Rahmen" ;
-    Text [ en-US ] = "Frame" ;
-};
-
-Menu MN_FRM_POPUPMENU
-{
-    ItemList =
-    {
-        MN_ALIGN_FRAME
-        MN_MOUSE_FRAME_WITHOUT_CONTOUR
-        SEPARATOR ;
-        MN_FRM
-        MN_FRM_CAPTION_ITEM
-    };
-};
+#define MN_MOUSE_FRAME_WITH_CONTOUR MN_MOUSE_FRAME_BEGIN
 
 String MN_DRAW_POPUPMENU
 {
@@ -254,6 +237,30 @@ Menu MN_OLE_POPUPMENU
         MN_MOUSE_FRAME_WITH_CONTOUR
         SEPARATOR ;
         MN_OLE
+        MN_FRM_CAPTION_ITEM
+    };
+};
+
+#undef  MN_WRAP_CONTOUR_1
+#undef  MN_EDIT_CONTOUR_1
+#define  MN_WRAP_CONTOUR_1
+#define  MN_EDIT_CONTOUR_1
+#define MN_MOUSE_FRAME_WITHOUT_CONTOUR MN_MOUSE_FRAME_BEGIN
+
+String MN_FRM_POPUPMENU
+{
+    Text [ de ] = "Rahmen" ;
+    Text [ en-US ] = "Frame" ;
+};
+
+Menu MN_FRM_POPUPMENU
+{
+    ItemList =
+    {
+        MN_ALIGN_FRAME
+        MN_MOUSE_FRAME_WITHOUT_CONTOUR
+        SEPARATOR ;
+        MN_FRM
         MN_FRM_CAPTION_ITEM
     };
 };
