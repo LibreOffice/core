@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-29 14:52:48 $
+ *  last change: $Author: jp $ $Date: 2001-01-25 20:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,6 @@
 #ifndef _MySVXACORR_HXX //autogen
 #include <svx/svxacorr.hxx>
 #endif
-#ifndef _SVX_LANGITEM_HXX //autogen
-#include <svx/langitem.hxx>
-#endif
 #ifndef _SVX_FLDITEM_HXX
 #   ifndef ITEMID_FIELD
 #       ifndef _EEITEM_HXX //autogen
@@ -281,6 +278,9 @@
 #ifndef _ACMPLWRD_HXX
 #include <acmplwrd.hxx>
 #endif
+#ifndef _SWCALWRP_HXX
+#include <swcalwrp.hxx>
+#endif
 
 #ifndef _HELPID_H
 #include <helpid.h>
@@ -371,6 +371,7 @@ struct QuickHelpData
             if( 0 == nCurArrPos-- )
                 nCurArrPos = (bEndLess && !bIsAutoText ) ? aArr.Count()-1 : 0;
         }
+    void FillStrArr( SwWrtShell& rSh, const String& rWord );
 };
 
 
@@ -1754,68 +1755,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 pQuickHlpData->bIsAutoText = FALSE;
                 pQuickHlpData->bIsTip = !pACorr ||
                             pACorr->GetSwFlags().bAutoCmpltShowAsTip;
-                const International* pIntl = &Application::GetAppInternational();
-                {
-                    // besorge mal die akt. Sprache:
-                    SfxItemSet aSet( pObjSh->GetPool(), RES_CHRATR_LANGUAGE,
-                                                        RES_CHRATR_LANGUAGE );
-                    rSh.GetAttr( aSet );
 
-                    LanguageType eLang = ((const SvxLanguageItem&)aSet.Get(
-                                        RES_CHRATR_LANGUAGE )).GetLanguage();
-
-                    if( eLang != pIntl->GetLanguage() &&
-                        LANGUAGE_SYSTEM != eLang && LANGUAGE_DONTKNOW != eLang )
-                        pIntl = new International( eLang );
-                }
-
-                for( int n = MONDAY; n <= SUNDAY; ++n )
-                {
-                    const String& rDay = pIntl->GetDayText( (DayOfWeek)n );
-                    if( sWord.Len() + 1 < rDay.Len() &&
-                        pIntl->CompareEqual(sWord, rDay.Copy(0,sWord.Len()), INTN_COMPARE_IGNORECASE ) )
-                    {
-                        String* pNew = new String( rDay );
-                        if( !pQuickHlpData->aArr.Insert( pNew ) )
-                            delete pNew;
-                    }
-                }
-
-                for( n = 1; n <= 12; ++n )
-                {
-                    const String& rMon = pIntl->GetMonthText( n );
-                    if( sWord.Len() + 1 < rMon.Len() &&
-                        pIntl->CompareEqual(sWord, rMon.Copy(0,sWord.Len()), INTN_COMPARE_IGNORECASE ))
-                    {
-                        String* pNew = new String( rMon );
-                        if( !pQuickHlpData->aArr.Insert( pNew ) )
-                            delete pNew;
-                    }
-                }
-
-                // wurde die International - Klasse von uns angelegt?
-                if( pIntl != &Application::GetAppInternational() )
-                    delete (International*)pIntl;
-
-                USHORT nStt, nEnd;
-                const SwAutoCompleteWord& rACLst = rSh.GetAutoCompleteWords();
-                if( rACLst.GetRange( sWord, nStt, nEnd ) )
-                {
-                    while( nStt < nEnd )
-                    {
-                        const String& rS = rACLst[ nStt ];
-                        //JP 16.06.99: Bug 66927 - only if the count of chars
-                        //              from the suggest greater as the
-                        //              actual word
-                        if( rS.Len() > sWord.Len() )
-                        {
-                            String* pNew = new String( rS );
-                            if( !pQuickHlpData->aArr.Insert( pNew ) )
-                                delete pNew;
-                        }
-                        ++nStt;
-                    }
-                }
+                pQuickHlpData->FillStrArr( rSh, sWord );
             }
 
             if( pQuickHlpData->aArr.Count() )
@@ -3933,9 +3874,67 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
 }
 
 
+
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
+{
+    pCalendarWrapper->LoadDefaultCalendar( rSh.GetCurLang() );
+
+    using namespace ::com::sun::star;
+    {
+        uno::Sequence< i18n::CalendarItem > aNames(
+                                            pCalendarWrapper->getMonths() );
+        for( int n = 0; n < 2; ++n )
+        {
+            for( long nPos = 0, nEnd = aNames.getLength(); nPos < nEnd; ++nPos )
+            {
+                String sStr( aNames[ nPos ].FullName );
+                if( rWord.Len() + 1 < sStr.Len() &&
+
+//!!! UNICODE: fehlendes interface
+//                  pIntl->CompareEqual( rWord, sStr.Copy( 0, rWord.Len() ),
+//                              INTN_COMPARE_IGNORECASE ) )
+                    COMPARE_EQUAL == rWord.CompareIgnoreCaseToAscii(
+                                        sStr, rWord.Len() ))
+                {
+                    String* pNew = new String( sStr );
+                    if( !aArr.Insert( pNew ) )
+                        delete pNew;
+                }
+            }
+            if( !n )                    // get data for the second loop
+                aNames = pCalendarWrapper->getDays();
+        }
+    }
+
+    // and than add all words from the AutoCompleteWord-List
+    const SwAutoCompleteWord& rACLst = rSh.GetAutoCompleteWords();
+    USHORT nStt, nEnd;
+    if( rACLst.GetRange( rWord, nStt, nEnd ) )
+    {
+        while( nStt < nEnd )
+        {
+            const String& rS = rACLst[ nStt ];
+            //JP 16.06.99: Bug 66927 - only if the count of chars
+            //              from the suggest greater as the
+            //              actual word
+            if( rS.Len() > rWord.Len() )
+            {
+                String* pNew = new String( rS );
+                if( !aArr.Insert( pNew ) )
+                    delete pNew;
+            }
+            ++nStt;
+        }
+    }
+}
+
+
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.5  2000/11/29 14:52:48  jp
+        Bug #80898#: Start QuickHelp - set correct cursor flags
+
         Revision 1.4  2000/11/13 12:12:22  jp
         must/should changes in Command handler
 
