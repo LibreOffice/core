@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:07:23 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 05:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,12 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ portuguese ] = "Título";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ greek ] = "Ôßôëïò";
-    Text[ dutch ] = "Titel";
+    Text[ dutch ] = "Title";
     Text[ french ] = "Titre";
     Text[ spanish ] = "Título";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Titel";
-    Text[ swedish ] = "Titel";
+    Text[ danish ] = "Overskrift";
+    Text[ swedish ] = "Namn";
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
     Text[ japanese ] = "À²ÄÙ";
@@ -87,7 +87,7 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ chinese_traditional ] = "¼ĞÃD";
     Text[ turkish ] = "Title";
     Text[ arabic ] = "ÇáÚäæÇä";
-    Text[ finnish ] = "Titel";
+    Text[ finnish ] = "Otsikot";
     Text[ catalan ] = "Title";
 };
 
@@ -113,7 +113,7 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ chinese_traditional ] = "¤j¤p";
     Text[ turkish ] = "Size";
     Text[ arabic ] = "ÇáÍÌã";
-    Text[ finnish ] = "Größe";
+    Text[ finnish ] = "Koko";
     Text[ catalan ] = "Size";
 };
 
@@ -121,7 +121,7 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
 {
     Text = "Änderungsdatum";
     Text[English] = "Modified Date";
-    Text[ english_us ] = "Modified Date";
+    Text[ english_us ] = "Date modified";
     Text[ portuguese ] = "Modificado em";
     Text[ russian ] = "Äàòà èçìåíåíèÿ";
     Text[ greek ] = "Çìåñïìçíßá ôñïğïğïßçóçò";
@@ -133,13 +133,13 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ swedish ] = "Ändringsdatum";
     Text[ polish ] = "Data modyfikacji";
     Text[ portuguese_brazilian ] = "Modified Date";
-    Text[ japanese ] = "•ÏX“ú";
+    Text[ japanese ] = "•ÏX“ú";
     Text[ korean ] = "º¯°æÀÏÀÚ";
     Text[ chinese_simplified ] = "ĞŞ¸ÄÊ±¼ä";
-    Text[ chinese_traditional ] = "ÅÜ§óªº¤é´Á";
+    Text[ chinese_traditional ] = "­×§ï¤é´Á";
     Text[ turkish ] = "Modified Date";
     Text[ arabic ] = "ÊÇÑíÎ ÇáÊÚÏíá";
-    Text[ finnish ] = "Änderungsdatum";
+    Text[ finnish ] = "Muokkauspäivämäärä";
     Text[ catalan ] = "Modified Date";
 };
 
@@ -148,21 +148,21 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text = "Der Ordner %1 konnte nicht angelegt werden.";
     Text[ english_us ] = "Could not create the folder %1.";
     Text[ portuguese ] = "Could not create the folder %1.";
-    Text[ russian ] = "Could not create the folder %1.";
+    Text[ russian ] = "Ñîçäàòü ïàïêó %1 íåâîçìîæíî.";
     Text[ greek ] = "Could not create the folder %1.";
     Text[ dutch ] = "Could not create the folder %1.";
     Text[ french ] = "Could not create the folder %1.";
-    Text[ spanish ] = "Could not create the folder %1.";
+    Text[ spanish ] = "No se pudo crear la carpeta %1.";
     Text[ finnish ] = "Der Ordner %1 konnte nicht angelegt werden.";
     Text[ italian ] = "Could not create the folder %1.";
     Text[ danish ] = "Could not create the folder %1.";
     Text[ swedish ] = "Det gick inte att skapa mappen %1.";
     Text[ polish ] = "Utworzenie folderu %1 nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Could not create the folder %1.";
-    Text[ japanese ] = "Could not create the folder %1.";
+    Text[ japanese ] = "Ì«ÙÀŞ %1 ‚ÍŠi”[‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "Could not create the folder %1.";
     Text[ chinese_simplified ] = "ÎŞ·¨´´½¨ÎÄ¼ş¼Ğ %1 ¡£";
-    Text[ chinese_traditional ] = "Could not create the folder %1.";
+    Text[ chinese_traditional ] = "µLªk·s¼W¸ê®Æ§¨ %1 ¡C";
     Text[ turkish ] = "Could not create the folder %1.";
     Text[ arabic ] = "Could not create the folder %1.";
     Text[ catalan ] = "Could not create the folder %1.";
@@ -185,12 +185,12 @@ String STR_SVT_BYTES
     Text[ russian ] = "áàéò";
     Text[ polish ] = "bajty/-ów";
     Text[ japanese ] = "ÊŞ²Ä";
-    Text[ chinese_traditional ] = "Bytes";
+    Text[ chinese_traditional ] = "bytes";
     Text[ arabic ] = "ÈÇíÊ";
     Text[ greek ] = "Bytes";
     Text[ korean ] = "¹ÙÀÌÆ®";
     Text[ turkish ] = "Byte";
-    Text[ finnish ] = "Bytes";
+    Text[ finnish ] = "Tavuja";
     Text[ catalan ] = "Bytes";
 };
 
@@ -216,7 +216,7 @@ String STR_SVT_KB
     Text[ greek ] = "KB";
     Text[ korean ] = "KB";
     Text[ turkish ] = "KB";
-    Text[ finnish ] = "KB";
+    Text[ finnish ] = "kt";
     Text[ catalan ] = "KB";
 };
 
@@ -242,7 +242,7 @@ String STR_SVT_MB
     Text[ greek ] = "MB";
     Text[ korean ] = "MB";
     Text[ turkish ] = "MB";
-    Text[ finnish ] = "MB";
+    Text[ finnish ] = "Mt";
     Text[ catalan ] = "MB";
 };
 
@@ -269,7 +269,7 @@ String STR_SVT_GB
     Text[ greek ] = "GB";
     Text[ korean ] = "GB";
     Text[ turkish ] = "GB";
-    Text[ finnish ] = "GB";
+    Text[ finnish ] = "Gt";
     Text[ catalan ] = "GB";
 };
 
