@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoUrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:20:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ import java.util.Vector;
  *   UnoUrl url = UnoUrl.parseUnoUrl("socket,host=localhost,port=2002;urp;StarOffice.ServiceManager");
  * </code>
  *
- * @author Jörg Brunsmann
+ * @author Joerg Brunsmann
  */
 public class UnoUrl {
 
