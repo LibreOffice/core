@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:30:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ BOOL SvxIMapDlg::DoSave()
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
     const String    aNCSAFilter( DEFINE_CONST_UNICODE( IMAP_NCSA_FILTER ) );
     SdrModel*       pModel = pIMapWnd->GetSdrModel();
-    const BOOL      bChanged = pModel->IsChanged();
+    const sal_Bool bChanged = pModel->IsChanged();
     BOOL            bRet;
 
     aDlg.AddFilter( aCERNFilter, DEFINE_CONST_UNICODE( IMAP_CERN_TYPE ) );
