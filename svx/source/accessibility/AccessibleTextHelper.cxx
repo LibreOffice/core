@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:26:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,40 +100,40 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleText.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleText.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEDITABLETEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleEditableText.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEDITABLETEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
 
 #ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
@@ -154,7 +154,7 @@
 //
 //------------------------------------------------------------------------
 
-#ifndef _SVX_ACCESSIBLE_TEXT_EVENT_QUEUE_HXX
+#ifndef _SVX_TEXT_CHANGED_QUEUE_HXX
 #include "AccessibleTextEventQueue.hxx"
 #endif
 
@@ -185,7 +185,7 @@
 #include "editview.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility
 {
@@ -226,7 +226,7 @@ namespace accessibility
         void SAL_CALL removeEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) SAL_THROW((uno::RuntimeException));
 
         // XAccessibleComponent child related methods
-        uno::Reference< XAccessible > SAL_CALL getAccessibleAt( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException));
+        uno::Reference< XAccessible > SAL_CALL getAccessibleAtPoint( const awt::Point& aPoint ) SAL_THROW((uno::RuntimeException));
 
         SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException));
         void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
@@ -336,7 +336,7 @@ namespace accessibility
         sal_Int32 mnStartIndex;
 
         // the object handling our children (guarded by solar mutex)
-        accessibility::AccessibleParaManager maParaManager;
+        ::accessibility::AccessibleParaManager maParaManager;
 
         // number of not-yet-closed event frames (BEGIN/END sequences) (guarded by solar mutex)
         sal_Int32 maEventOpenFrames;
@@ -500,11 +500,11 @@ namespace accessibility
     }
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< accessibility::AccessibleEditableTextPara&, void >
+    class AccessibleTextHelper_OffsetChildIndex : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
     {
     public:
         AccessibleTextHelper_OffsetChildIndex( sal_Int32 nDifference ) : mnDifference(nDifference) {}
-        void operator()( accessibility::AccessibleEditableTextPara& rPara )
+        void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
         {
             rPara.SetIndexInParent( rPara.GetIndexInParent() + mnDifference );
         }
@@ -583,12 +583,12 @@ namespace accessibility
         {
             if( bHaveFocus )
             {
-                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+                GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
                 DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object received focus" );
             }
             else
             {
-                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::ACCESSIBLE_STATE_EVENT );
+                LostPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
                 DBG_TRACE("AccessibleTextHelper_Impl::SetShapeFocus(): Parent object lost focus" );
             }
         }
@@ -684,7 +684,7 @@ namespace accessibility
                             {
                                 maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
                                                          ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
-                                                         AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                                         AccessibleEventId::CARET_CHANGED,
                                                          uno::makeAny(static_cast<sal_Int32>(-1)),
                                                          uno::makeAny(static_cast<sal_Int32>(maLastSelection.nEndPos)) );
                             }
@@ -698,17 +698,24 @@ namespace accessibility
 
                     uno::Any aOldCursor;
 
-                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND )
+                    // #i13705# The old cursor can only contain valid
+                    // values if it's the same paragraph!
+                    if( maLastSelection.nStartPara != EE_PARA_NOT_FOUND &&
+                        maLastSelection.nEndPara == aSelection.nEndPara )
+                    {
                         aOldCursor <<= static_cast<sal_Int32>(maLastSelection.nEndPos);
+                    }
                     else
+                    {
                         aOldCursor <<= static_cast<sal_Int32>(-1);
+                    }
 
                     // #100530# no caret events if not focused.
                     if( mbGroupHasFocus )
                     {
                         maParaManager.FireEvent( aSelection.nEndPara,
                                                  aSelection.nEndPara+1,
-                                                 AccessibleEventId::ACCESSIBLE_CARET_EVENT,
+                                                 AccessibleEventId::CARET_CHANGED,
                                                  uno::makeAny(static_cast<sal_Int32>(aSelection.nEndPos)),
                                                  aOldCursor );
                     }
@@ -726,7 +733,7 @@ namespace accessibility
                             // selection was undefined, now is on
                             maParaManager.FireEvent( aSelection.nStartPara,
                                                      aSelection.nEndPara+1,
-                                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+                                                     AccessibleEventId::SELECTION_CHANGED );
                         }
                     }
                     else
@@ -745,7 +752,7 @@ namespace accessibility
                                                static_cast< xub_StrLen >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1) ) );
 
                             maParaManager.FireEvent( sortedSel.first, sortedSel.second,
-                                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+                                                     AccessibleEventId::SELECTION_CHANGED );
                         }
                         else if( (maLastSelection.nStartPos == maLastSelection.nEndPos &&
                                   maLastSelection.nStartPara == maLastSelection.nEndPara) &&
@@ -755,7 +762,7 @@ namespace accessibility
                             // selection was empty, now is on
                             maParaManager.FireEvent( aSelection.nStartPara,
                                                      aSelection.nEndPara+1,
-                                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+                                                     AccessibleEventId::SELECTION_CHANGED );
                         }
                         else
                         {
@@ -769,7 +776,7 @@ namespace accessibility
                                                             static_cast< USHORT >( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) ) + 1 ) ) );
 
                             maParaManager.FireEvent( sortedSel.first, sortedSel.second,
-                                                     AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
+                                                     AccessibleEventId::SELECTION_CHANGED );
                         }
                     }
 
@@ -799,7 +806,7 @@ namespace accessibility
 
         // lost all children
         if( mxFrontEnd.is() )
-            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
+            FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
 
         // quit listen on stale edit source
         if( maEditSource.IsValid() )
@@ -886,7 +893,7 @@ namespace accessibility
                 aTmpBB = rCacheTF.GetParaBounds( static_cast< USHORT >( nCurrPara ) );
 
                 // convert to screen coordinates
-                aParaBB = accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
+                aParaBB = ::accessibility::AccessibleEditableTextPara::LogicToPixel( aTmpBB, rCacheTF.GetMapMode(), rCacheVF );
 
                 if( aParaBB.IsOver( aViewArea ) )
                 {
@@ -900,7 +907,7 @@ namespace accessibility
                     mnLastVisibleChild = nCurrPara;
 
                     // child not yet created?
-                    accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
+                    ::accessibility::AccessibleParaManager::WeakChild aChild( maParaManager.GetChild(nCurrPara) );
                     if( aChild.second.Width == 0 &&
                         aChild.second.Height == 0 &&
                         mxFrontEnd.is() &&
@@ -908,7 +915,7 @@ namespace accessibility
                     {
                         GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
-                                          AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                                          AccessibleEventId::CHILD );
                     }
                 }
                 else
@@ -918,7 +925,7 @@ namespace accessibility
                     {
                         if( bBroadcastEvents )
                             LostPropertyEvent( uno::makeAny( maParaManager.GetChild( nCurrPara ).first.get().getRef() ),
-                                               AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                                               AccessibleEventId::CHILD );
 
                         // clear reference
                         maParaManager.Release( nCurrPara );
@@ -937,20 +944,20 @@ namespace accessibility
 
             // lost all children
             if( bBroadcastEvents )
-                FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
+                FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
         }
     }
 
     // functor for checking changes in paragraph bounding boxes (no stand-alone function, maybe not inlined)
-    class AccessibleTextHelper_UpdateChildBounds : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&,
-                                                      accessibility::AccessibleParaManager::WeakChild >
+    class AccessibleTextHelper_UpdateChildBounds : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&,
+        ::accessibility::AccessibleParaManager::WeakChild >
     {
     public:
         AccessibleTextHelper_UpdateChildBounds( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
-        accessibility::AccessibleParaManager::WeakChild operator()( const accessibility::AccessibleParaManager::WeakChild& rChild )
+        ::accessibility::AccessibleParaManager::WeakChild operator()( const ::accessibility::AccessibleParaManager::WeakChild& rChild )
         {
             // retrieve hard reference from weak one
-            accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rChild.first.get() );
+            ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rChild.first.get() );
 
             if( aHardRef.is() )
             {
@@ -963,10 +970,10 @@ namespace accessibility
                     aNewRect.Height != aOldRect.Height )
                 {
                     // visible data changed
-                    aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT );
+                    aHardRef->FireEvent( AccessibleEventId::BOUNDRECT_CHANGED );
 
                     // update internal bounds
-                    return accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
+                    return ::accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
                 }
             }
 
@@ -982,7 +989,7 @@ namespace accessibility
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
-        // send ACCESSIBLE_BOUNDRECT_EVENT to affected children
+        // send BOUNDRECT_CHANGED to affected children
         AccessibleTextHelper_UpdateChildBounds aFunctor( *this );
         ::std::transform( maParaManager.begin(), maParaManager.end(), maParaManager.begin(), aFunctor );
     }
@@ -999,17 +1006,17 @@ namespace accessibility
 #endif
 
     // functor for sending child events (no stand-alone function, they are maybe not inlined)
-    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const accessibility::AccessibleParaManager::WeakChild&, void >
+    class AccessibleTextHelper_LostChildEvent : public ::std::unary_function< const ::accessibility::AccessibleParaManager::WeakChild&, void >
     {
     public:
         AccessibleTextHelper_LostChildEvent( AccessibleTextHelper_Impl& rImpl ) : mrImpl(rImpl) {}
-        void operator()( const accessibility::AccessibleParaManager::WeakChild& rPara )
+        void operator()( const ::accessibility::AccessibleParaManager::WeakChild& rPara )
         {
             // retrieve hard reference from weak one
-            accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
+            ::accessibility::AccessibleParaManager::WeakPara::HardRefType aHardRef( rPara.first.get() );
 
             if( aHardRef.is() )
-                mrImpl.FireEvent(AccessibleEventId::ACCESSIBLE_CHILD_EVENT, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
+                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny( aHardRef.getRef() ) );
         }
 
     private:
@@ -1085,7 +1092,7 @@ namespace accessibility
 
             // TODO: maybe optimize here in the following way.  If the
             // number of removed children exceeds a certain threshold,
-            // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
+            // use INVALIDATE_CHILDREN
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
 
             ::std::for_each( begin, end, aFunctor );
@@ -1094,6 +1101,16 @@ namespace accessibility
             // should be no need for UpdateBoundRect, since all affected children are cleared.
         }
     }
+
+    // functor for sending child events (no stand-alone function, they are maybe not inlined)
+    class AccessibleTextHelper_ChildrenTextChanged : public ::std::unary_function< ::accessibility::AccessibleEditableTextPara&, void >
+    {
+    public:
+        void operator()( ::accessibility::AccessibleEditableTextPara& rPara )
+        {
+            rPara.TextChanged();
+        }
+    };
 
     /** functor processing queue events
 
@@ -1208,7 +1225,7 @@ namespace accessibility
                 // send insert event
                 AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild( aFunctor.GetParaIndex() ).first.get() );
                 GotPropertyEvent( uno::makeAny( aChild.getRef() ),
-                                  AccessibleEventId::ACCESSIBLE_CHILD_EVENT );
+                                  AccessibleEventId::CHILD );
             }
             else if( aFunctor.GetHintId() == TEXT_HINT_PARAREMOVED )
             {
@@ -1244,7 +1261,7 @@ namespace accessibility
             // number of paragraphs somehow changed - but we have no
             // chance determining how. Thus, throw away everything and
             // create from scratch.
-            FireEvent(AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT);
+            FireEvent(AccessibleEventId::INVALIDATE_ALL_CHILDREN);
 
             // release all paras
             maParaManager.Release(0, nCurrParas);
@@ -1319,11 +1336,23 @@ namespace accessibility
                             {
                                 // notify listeners
                                 sal_Int32 nPara( pTextHint->GetValue() );
+
+                                // #108900# Delegate change event to children
+                                AccessibleTextHelper_ChildrenTextChanged aFunctor;
+
                                 if( nPara == static_cast<sal_Int32>(EE_PARA_ALL) )
-                                    maParaManager.FireEvent( 0, GetTextForwarder().GetParagraphCount(), AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                                {
+                                    // #108900# Call every child
+                                    ::std::for_each( maParaManager.begin(), maParaManager.end(),
+                                                     AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aFunctor) );
+                                }
                                 else
                                     if( nPara < nParas )
-                                        maParaManager.FireEvent( nPara, AccessibleEventId::ACCESSIBLE_TEXT_EVENT );
+                                    {
+                                        // #108900# Call child at index nPara
+                                        ::std::for_each( maParaManager.begin()+nPara, maParaManager.begin()+nPara+1,
+                                                         AccessibleParaManager::WeakChildAdapter< AccessibleTextHelper_ChildrenTextChanged > (aFunctor) );
+                                    }
                                 break;
                             }
 
@@ -1656,7 +1685,7 @@ namespace accessibility
             ::comphelper::AccessibleEventNotifier::removeEventListener( getNotifierClientId(), xListener );
     }
 
-    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAt( const awt::Point& _aPoint ) SAL_THROW((uno::RuntimeException))
+    uno::Reference< XAccessible > SAL_CALL AccessibleTextHelper_Impl::getAccessibleAtPoint( const awt::Point& _aPoint ) SAL_THROW((uno::RuntimeException))
     {
         DBG_CHKTHIS( AccessibleTextHelper_Impl, NULL );
 
@@ -2026,13 +2055,13 @@ namespace accessibility
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
 
-        uno::Reference< XAccessible > xChild = mpImpl->getAccessibleAt( aPoint );
+        uno::Reference< XAccessible > xChild = mpImpl->getAccessibleAtPoint( aPoint );
 
         mpImpl->CheckInvariants();
 
         return xChild;
 #else
-        return mpImpl->getAccessibleAt( aPoint );
+        return mpImpl->getAccessibleAtPoint( aPoint );
 #endif
     }
 
