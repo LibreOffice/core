@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2001-10-17 13:57:12 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,9 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -251,8 +254,6 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::rtl;
-
-sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny );
 
 /******************************************************************************
  *
@@ -2564,7 +2565,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             break;
             case FIELD_PROP_SUBTYPE:
             {
-                m_pProps->nSubType = GetEnumAsInt32( aValue );
+                m_pProps->nSubType = SWUnoHelper::GetEnumAsInt32( aValue );
             }
             break;
             case FIELD_PROP_BYTE1 :
@@ -3410,15 +3411,4 @@ void SwXFieldEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 }
 
 
-sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny )
-{
-    sal_Int32 eVal = - 1;
-    try {
-        eVal = ::comphelper::getEnumAsINT32(rAny);
-    }
-    catch(Exception &)
-    {
-    }
-    return eVal;
-}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 16:58:33 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
-#endif
 #ifndef _STREAM_HXX
 #include <tools/stream.hxx>
 #endif
@@ -82,20 +79,11 @@
 #ifndef _SV_HELP_HXX
 #include <vcl/help.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
-#include <com/sun/star/ucb/XContentProvider.hpp>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
-#include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
-#include <ucbhelper/contentidentifier.hxx>
-#endif
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_TEMPFILE_HXX
+#include <unotools/tempfile.hxx>
 #endif
 
 #include <svtools/svstdarr.hxx>
@@ -116,10 +104,13 @@
 #ifndef _GLOSDOC_HXX
 #include <glosdoc.hxx>
 #endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
+
 #ifndef _GLOSBIB_HRC
 #include <glosbib.hrc>
 #endif
-
 #ifndef _MISC_HRC
 #include <misc.hrc>
 #endif
@@ -127,11 +118,6 @@
 #include <helpid.h>
 #endif
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace ::ucb;
-using namespace ::rtl;
 
 #define PATH_CASE_SENSITIVE 0x01
 #define PATH_READONLY       0x02
@@ -189,31 +175,8 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         aTempFile.EnableKillingFile();
         if(!aTempFile.IsValid())
             nCaseReadonly |= PATH_READONLY;
-        else
-        {
-            Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-            try
-            {
-                INetURLObject aTempObj(aTempFile.GetFileName());
-                aTempObj.SetBase(aTempObj.GetBase().ToLowerAscii());
-                Reference<XContentIdentifier> xRef1 = new
-                    ::ucb::ContentIdentifier( xMSF, aTempObj.GetMainURL() );
-
-                aTempObj.SetBase(aTempObj.GetBase().ToUpperAscii());
-                Reference<XContentIdentifier> xRef2 = new
-                    ::ucb::ContentIdentifier( xMSF, aTempObj.GetMainURL() );
-
-                ContentBroker& rBroker = *ContentBroker::get();
-
-                Reference<XContentProvider > xProv = rBroker.getContentProviderInterface();
-                sal_Int32 nCompare = xProv->compareContentIds( xRef1, xRef2 );
-                if( nCompare )
-                    nCaseReadonly |= PATH_CASE_SENSITIVE;
-            }
-            catch(...)
-            {
-            }
-        }
+        else if( SWUnoHelper::UCB_IsCaseSensitiveFileName( aTempFile.GetURL()))
+            nCaseReadonly |= PATH_CASE_SENSITIVE;
         aPathLB.SetEntryData(i, (void*)nCaseReadonly);
     }
     aPathLB.SelectEntryPos(0);
@@ -684,6 +647,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/10/17 16:58:33  jp
+      Bug #93393#: fix some assert bugs
+
       Revision 1.9  2001/09/05 10:25:33  jp
       Task #91873#: use SvtSysLocale and Transliterationrwapper for string compare
 

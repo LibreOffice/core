@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:26:15 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
 
-#ifndef _SHL_HXX
-#include <tools/shl.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _SV_DIALOG_HXX //autogen
 #include <vcl/dialog.hxx>
@@ -93,9 +93,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
 #endif
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
@@ -119,6 +116,9 @@
 #ifndef _GLOSLST_HXX
 #include <gloslst.hxx>
 #endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
 
 #ifndef _UTLUI_HRC
 #include <utlui.hrc>
@@ -127,35 +127,6 @@
 #include <gloslst.hrc>
 #endif
 
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
-#include <com/sun/star/util/DateTime.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
-#include <com/sun/star/sdbc/XResultSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
-#include <com/sun/star/sdbc/XRow.hpp>
-#endif
-
-#ifdef DEBUG
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#endif
-
-
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::ucb;
-using namespace ::rtl;
 
 #define STRING_DELIM (char)0x0A
 #define GLOS_TIMEOUT 30000   // alle 30 s updaten
@@ -405,13 +376,14 @@ void SwGlossaryList::Update()
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
     const SvStrings* pPathArr = pGlossaries->GetPathArray();
+    String sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
         USHORT nGroupCount = pGlossaries->GetGroupCnt();
         for(USHORT i = 0; i < nGroupCount; i++)
         {
             String sGrpName = pGlossaries->GetGroupName(i);
-            USHORT nPath = sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
+            USHORT nPath = (USHORT)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
             if(nPath < pPathArr->Count())
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
@@ -421,7 +393,7 @@ void SwGlossaryList::Update()
                 String sName = *(*pPathArr)[nPath];
                 sName += INET_PATH_TOKEN;
                 sName += pGroup->sName.GetToken(0, GLOS_DELIM);
-                sName += String::CreateFromAscii(pGlosExt);
+                sName += sExt;
 
                 FStatHelper::GetModifiedDateTimeOfFile( sName,
                                                 &pGroup->aDateModified,
@@ -436,96 +408,69 @@ void SwGlossaryList::Update()
     {
         for(USHORT nPath = 0; nPath < pPathArr->Count(); nPath++)
         {
-              try
+            SvStringsDtor aFoundGroupNames;
+            SvStrings aFiles( 16, 16 );
+            SvPtrarr aDateTimeArr( 16, 16 );
+
+            SWUnoHelper::UCB_GetFileListOfFolder( *(*pPathArr)[nPath], aFiles,
+                                                    &sExt, &aDateTimeArr );
+            for( USHORT nFiles = 0, nFEnd = aFiles.Count();
+                    nFiles < nFEnd; ++nFiles )
             {
-                ::ucb::Content aCnt(
-                        *(*pPathArr)[nPath], uno::Reference< XCommandEnvironment >());
-                   Reference< sdbc::XResultSet > xResultSet;
-                  Sequence< OUString > aProps(2);
-                OUString* pProps = aProps.getArray();
-                pProps[ 0 ] = OUString::createFromAscii( "Title" );
-                pProps[ 1 ] = OUString::createFromAscii( "DateModified" );
-                try
+                String* pTitle = aFiles[ nFiles ];
+                ::DateTime* pDT = (::DateTime*) aDateTimeArr[ nFiles ];
+
+                String sName( pTitle->Copy( 0, pTitle->Len() - sExt.Len() ));
+
+                aFoundGroupNames.Insert( new String(sName),
+                                            aFoundGroupNames.Count());
+                sName += GLOS_DELIM;
+                sName += String::CreateFromInt32( nPath );
+                AutoTextGroup* pFound = FindGroup( sName );
+                if( !pFound )
                 {
-                       xResultSet = aCnt.createCursor( aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                    pFound = new AutoTextGroup;
+                    pFound->sName = sName;
+                    FillGroup( pFound, pGlossaries );
+                    pFound->aDateModified = *pDT;
+
+                    aGroupArr.Insert(pFound, aGroupArr.Count());
                 }
-                catch ( Exception )
+                else if( pFound->aDateModified < *pDT )
                 {
-                    DBG_ERRORFILE( "create cursor failed!" );
+                    FillGroup(pFound, pGlossaries);
+                    pFound->aDateModified = *pDT;
                 }
 
-                if ( xResultSet.is() )
-                {
-                    SvStringsDtor aFoundGroupNames;
-                    Reference< sdbc::XRow > xRow( xResultSet, UNO_QUERY );
-                    try
-                    {
-                        if ( xResultSet->first() )
-                        {
-                            do
-                            {
-                                String sTitle = xRow->getString( 1 );
-                                xub_StrLen nFound = sTitle.SearchAscii( pGlosExt );
-                                if( sTitle.Len() - 4 == nFound )
-                                {
-                                    util::DateTime aStamp = xRow->getTimestamp(2);
-                                    ::DateTime aDateTime = ::DateTime(
-                                        ::Date(aStamp.Day, aStamp.Month, aStamp.Year ),
-                                        ::Time(aStamp.Hours, aStamp.Minutes, aStamp.Seconds, aStamp.HundredthSeconds )  );
-                                    String sName = sTitle.Erase(sTitle.Len() - 4, 4);
-                                    aFoundGroupNames.Insert(new String(sName), aFoundGroupNames.Count());
-                                    sName += GLOS_DELIM;
-                                    sName += String::CreateFromInt32( nPath );
-                                    AutoTextGroup* pFound = FindGroup(sName);
-                                    if(!pFound)
-                                    {
-                                        pFound = new AutoTextGroup;
-                                        pFound->sName = sName;
-                                        FillGroup(pFound, pGlossaries);
-                                        pFound->aDateModified = aDateTime;
+                // don't need any more these pointers
+                delete pTitle;
+                delete pDT;
+            }
 
-                                        aGroupArr.Insert(pFound, aGroupArr.Count());
-                                    }
-                                    else if(pFound->aDateModified < aDateTime)
-                                    {
-                                        FillGroup(pFound, pGlossaries);
-                                        pFound->aDateModified = aDateTime;
-                                    }
-                                }
-                            }
-                            while ( xResultSet->next() );
-                        }
-                    }
-                    catch ( ... )
+            USHORT nArrCount = aGroupArr.Count();
+            for( USHORT i = nArrCount; i; --i)
+            {
+                // evtl. geloeschte Gruppen entfernen
+                AutoTextGroup* pGroup = aGroupArr.GetObject(i - 1);
+                USHORT nGroupPath = (USHORT)pGroup->sName.GetToken( 1,
+                                                        GLOS_DELIM).ToInt32();
+                // nur die Gruppen werden geprueft, die fuer den
+                // aktuellen Teilpfad registriert sind
+                if(nGroupPath == nPath)
+                {
+                    BOOL bFound = FALSE;
+                    String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
+                    for( USHORT j = 0; j < aFoundGroupNames.Count() && !bFound; ++j)
                     {
-                        DBG_ERRORFILE( "Exception caught!" );
+                        bFound = sCompareGroup == *aFoundGroupNames[j];
                     }
-                    USHORT nArrCount = aGroupArr.Count();
-                    for( USHORT i = nArrCount; i; --i)
+                    if(!bFound)
                     {
-                        // evtl. geloeschte Gruppen entfernen
-                        AutoTextGroup* pGroup = aGroupArr.GetObject(i - 1);
-                        USHORT nGroupPath = pGroup->sName.GetToken(1, GLOS_DELIM).ToInt32();
-                        // nur die Gruppen werden geprueft, die fuer den
-                        // aktuellen Teilpfad registriert sind
-                        if(nGroupPath == nPath)
-                        {
-                            BOOL bFound = FALSE;
-                            String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
-                            for( USHORT j = 0; j < aFoundGroupNames.Count() && !bFound; ++j)
-                            {
-                                bFound = sCompareGroup == *aFoundGroupNames[j];
-                            }
-                            if(!bFound)
-                            {
-                                aGroupArr.Remove(i - 1);
-                                delete pGroup;
-                            }
-                        }
+                        aGroupArr.Remove(i - 1);
+                        delete pGroup;
                     }
                 }
             }
-            catch(...){}
         }
     }
 }
@@ -627,125 +572,5 @@ void    SwGlossaryList::ClearGroups()
     aGroupArr.Remove( 0, nCount );
     bFilled = FALSE;
 }
-
-/*************************************************************************
-
-    Source Code Control System - Header
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/ui/utlui/gloslst.cxx,v 1.7 2001-09-05 10:26:15 jp Exp $
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/06/01 11:25:06  fme
-    Fix #86988#: Redesign of dialogs
-
-    Revision 1.5  2001/04/27 17:50:25  jp
-    use Collator for international string compare
-
-    Revision 1.4  2000/11/06 09:04:23  jp
-    must changes: GlossaryPath -> AutoTextPath
-
-    Revision 1.3  2000/10/06 13:39:19  jp
-    should changes: don't use IniManager
-
-    Revision 1.2  2000/09/27 12:27:59  jp
-    use the new FileStatHelper class
-
-    Revision 1.1.1.1  2000/09/18 17:14:50  hr
-    initial import
-
-    Revision 1.29  2000/09/18 16:06:17  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.28  2000/06/13 09:57:49  os
-    using UCB
-
-    Revision 1.27  2000/06/08 09:45:45  os
-    ContentBroker not in SwModule
-
-    Revision 1.26  2000/06/07 13:29:51  os
-    using UCB
-
-    Revision 1.25  2000/05/23 19:54:24  jp
-    Bugfixes for Unicode
-
-    Revision 1.24  2000/04/18 15:14:08  os
-    UNICODE
-
-    Revision 1.23  2000/02/14 14:24:35  os
-    #70473# Unicode
-
-    Revision 1.22  2000/02/10 10:35:23  os
-    #70359# titles added to AutoText groups
-
-    Revision 1.21  1999/10/21 17:45:07  jp
-    have to change - SearchFile with SfxIniManager, dont use SwFinder for this
-
-    Revision 1.20  1999/09/20 09:59:08  os
-    local resources separated
-
-    Revision 1.19  1999/02/09 09:48:02  OS
-    #61205# AutoText-Gruppen koennen beliebige Namen erhalten
-
-
-      Rev 1.18   09 Feb 1999 10:48:02   OS
-   #61205# AutoText-Gruppen koennen beliebige Namen erhalten
-
-      Rev 1.17   18 Aug 1998 17:28:04   OS
-   GetShortName sollte auf bekannte Gruppe richtig reagieren #55219#
-
-      Rev 1.16   18 Mar 1998 17:47:40   OS
-   kein GPF, wenn alle Glossary-Pfade ungueltig sind
-
-      Rev 1.15   21 Nov 1997 12:10:14   MA
-   includes
-
-      Rev 1.14   03 Nov 1997 13:59:24   MA
-   precomp entfernt
-
-      Rev 1.13   01 Sep 1997 13:11:44   OS
-   DLL-Umstellung
-
-      Rev 1.12   30 Jul 1997 14:49:30   OM
-   #41989# Autotextbereiche korrekt anzeigen
-
-      Rev 1.11   09 Jul 1997 17:45:30   HJS
-   includes
-
-      Rev 1.10   17 Jun 1997 10:15:22   OS
-   Update fuer mehrere AutoText-Pfade angepasst
-
-      Rev 1.9   10 Jun 1997 14:26:12   OS
-   AutoText aus mehreren Verzeichnissen
-
-      Rev 1.8   30 Jan 1997 09:15:08   MA
-   unbenutztes entfernt
-
-      Rev 1.7   21 Jan 1997 15:00:30   OS
-   Autotext-Auswahl-Dialog verfeinert
-
-      Rev 1.6   21 Jan 1997 09:39:26   OS
-   Gruppenname zurueckgeben
-
-      Rev 1.5   20 Jan 1997 16:58:50   OS
-   Entscheidungsdialog fuer AutoComplete
-
-      Rev 1.4   01 Nov 1996 04:44:36   MH
-   add: includes
-
-      Rev 1.3   01 Oct 1996 09:00:16   JP
-   DTOR korrigiert
-
-      Rev 1.2   27 Sep 1996 16:33:22   HJS
-   include
-
-      Rev 1.1   27 Sep 1996 12:55:20   OS
-   nach Kuerzeln suchen
-
-      Rev 1.0   26 Sep 1996 16:55:54   OS
-   Initial revision.
-
-*************************************************************************/
 
 

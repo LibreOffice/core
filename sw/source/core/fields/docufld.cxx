@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 11:12:03 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,9 @@
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
@@ -431,9 +434,7 @@ BOOL SwPageNumberField::PutValue( const uno::Any& rAny, const String& rProperty 
     }
     else if( rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_SUB_TYPE) ))
     {
-// implementation in unofields.cxx
-extern sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rAny );
-        switch( GetEnumAsInt32( rAny ) )
+        switch( SWUnoHelper::GetEnumAsInt32( rAny ) )
         {
             case text::PageNumberType_CURRENT:
                 nSubType = PG_RANDOM;

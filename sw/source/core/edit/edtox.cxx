@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 16:07:22 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #ifndef _TXTCMP_HXX
 #include <svtools/txtcmp.hxx>
 #endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
+#ifndef SVTOOLS_FSTATHELPER_HXX
+#include <svtools/fstathelper.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
@@ -137,13 +137,9 @@
 #include <statstr.hrc>
 #endif
 
-using namespace com::sun::star;
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
-using namespace ::com::sun::star::ucb;
-using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 /*--------------------------------------------------------------------
      Beschreibung: Verzeichnismarkierung ins Dokument einfuegen/loeschen
@@ -457,23 +453,7 @@ void SwEditShell::ApplyAutoMark()
     //4. apply index entries
 
     String sAutoMarkURL(GetDoc()->GetTOIAutoMarkURL());
-    BOOL bIsDocument = FALSE;
-    if(sAutoMarkURL.Len())
-    {
-        try
-        {
-            ::ucb::Content aTestContent(
-                sAutoMarkURL,
-                uno::Reference< XCommandEnvironment >());
-            bIsDocument = aTestContent.isDocument();
-        }
-        catch(...)
-        {
-            DBG_ERROR("Exception caught")
-        }
-    }
-
-    if( bIsDocument )
+    if( sAutoMarkURL.Len() && FStatHelper::IsDocument( sAutoMarkURL ))
     {
         //1.
         const SwTOXType* pTOXType = GetTOXType(TOX_INDEX, 0);
@@ -521,9 +501,10 @@ void SwEditShell::ApplyAutoMark()
             nSrchFlags |= (SearchFlags::REG_NOT_BEGINOFLINE |
                             SearchFlags::REG_NOT_ENDOFLINE );
         //
+        rtl::OUString sEmpty;
         SearchOptions aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
-                            OUString(), OUString(),
+                            sEmpty, sEmpty,
                             CreateLocale( LANGUAGE_SYSTEM ),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
                             nTransliterationFlags );
