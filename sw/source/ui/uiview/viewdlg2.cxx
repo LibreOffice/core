@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:39:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,15 +186,18 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     // Existiert Pool-Vorlage gleichen Namens?
     SwWrtShell &rSh = GetWrtShell();
-    USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, GET_POOLID_TXTCOLL);
-    if( USHRT_MAX != nPoolId )
-        rSh.GetTxtCollFromPool(nPoolId);
-        // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
-    else if( !rSh.GetParaStyle(rName) )
+    if(rName.Len())
     {
-        // Sie existiert auch nicht am Dokument: erzeugen
-        SwTxtFmtColl* pDerivedFrom = rSh.GetTxtCollFromPool(RES_POOLCOLL_LABEL);
-        rSh.MakeTxtFmtColl(rName, pDerivedFrom);
+        USHORT nPoolId = SwStyleNameMapper::GetPoolIdFromUIName(rName, GET_POOLID_TXTCOLL);
+        if( USHRT_MAX != nPoolId )
+            rSh.GetTxtCollFromPool(nPoolId);
+            // Pool-Vorlage existiert nicht: Existiert sie am Dokument?
+        else if( !rSh.GetParaStyle(rName) )
+        {
+            // Sie existiert auch nicht am Dokument: erzeugen
+            SwTxtFmtColl* pDerivedFrom = rSh.GetTxtCollFromPool(RES_POOLCOLL_LABEL);
+            rSh.MakeTxtFmtColl(rName, pDerivedFrom);
+        }
     }
 
     USHORT eType = (SwWrtShell::SelectionType)rSh.GetSelectionType();
@@ -211,7 +214,7 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
     SwFldMgr aMgr(&rSh);
     SwSetExpFieldType* pFldType =
             (SwSetExpFieldType*)aMgr.GetFldType(RES_SETEXPFLD, rName);
-    if (!pFldType)
+    if (!pFldType && rName.Len() )
     {
         // Neuen Feldtypen erzeugen
         SwSetExpFieldType aSwSetExpFieldType(rSh.GetDoc(), rName, GSE_SEQ);
@@ -228,17 +231,20 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
         }
     }
 
-    USHORT       nID    = 0;
+    USHORT       nID    = USHRT_MAX;
     SwFieldType* pType  = 0;
     const USHORT nCount = aMgr.GetFldTypeCount();
-    for (USHORT i = 0; i < nCount; ++i)
+    if( rName.Len() )
     {
-        pType = aMgr.GetFldType(USHRT_MAX, i);
-        String aTmpName( pType->GetName() );
-        if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
+        for (USHORT i = 0; i < nCount; ++i)
         {
-            nID = i;
-            break;
+            pType = aMgr.GetFldType(USHRT_MAX, i);
+            String aTmpName( pType->GetName() );
+            if (aTmpName == rName && pType->Which() == RES_SETEXPFLD)
+            {
+                nID = i;
+                break;
+            }
         }
     }
     rSh.StartAllAction();
@@ -247,9 +253,11 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
                                 pOpt->GetCaption(),
                                 !pOpt->GetPos(),
                                 nID,
+                                pOpt->GetCharacterStyle(),
                                 pOpt->CopyAttributes() );
     // Nummernformat setzen
-    ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
+    if(pType)
+        ((SwSetExpFieldType*)pType)->SetSeqFormat(pOpt->GetNumType());
 
     rSh.UpdateExpFlds( TRUE );
 
