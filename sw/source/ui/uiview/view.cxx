@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 09:59:02 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,9 @@
 #endif
 #ifndef _GRFSH_HXX
 #include <grfsh.hxx>
+#endif
+#ifndef _MEDIASH_HXX
+#include <mediash.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -536,10 +539,17 @@ void SwView::SelectShell()
             pShell = new SwDrawShell( *this );
 
             rDispatcher.Push( *pShell );
+
             if ( nSelectionType & SwWrtShell::SEL_BEZ )
             {
                 eShellMode = SEL_BEZIER;
                 pShell = new SwBezierShell( *this );
+                rDispatcher.Push( *pShell );
+            }
+            else if( nSelectionType & SwWrtShell::SEL_MEDIA )
+            {
+                eShellMode = SEL_MEDIA;
+                pShell = new SwMediaShell( *this );
                 rDispatcher.Push( *pShell );
             }
         }
