@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:48:49 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ chinese_simplified ] = "η”¨ιΌ ζ ‡ε°†ε³ι΅µδΈ­η„ε­—ζ®µη§»ε°ζ‡ε®η„εΊεγ€‚";
         Text[ russian ] = "Ρ οξμξωόώ μϋψθ οεπεςÿνθςε οξλε ρ οπΰβξι ρςξπξνϋ β ζελΰεμσώ ξαλΰρςό.";
         Text[ polish ] = "Przesuρ pola z prawej strony za pomocΉ myszy do ΏΉdanego obszaru.";
-        Text[ japanese ] = "ε³ε΄γ«γ‚γ‚‹οΎο½¨ο½°οΎ™οΎ„οΎοΎοΎοΎ€οΎγ‚’δ»»ζ„γ®ι εγ«οΎ„οΎοΎ—ο½―ο½ΈοΎγ—γΎγ™γ€‚";
+        Text[ japanese ] = "ε³ε΄γ«γ‚γ‚‹οΎο½¨ο½°οΎ™οΎ„οΎοΎοΎοΎ€οΎγ‚’δ»»ζ„γ®η―„ε›²γ«οΎ„οΎοΎ—ο½―ο½ΈοΎγ—γΎγ™γ€‚";
         Text[ chinese_traditional ] = "θ«‹δ½Ώη”¨ζ»‘ιΌ ιµε°‡ζ¬„δ½ζ‹–ζ‹‰ε°ε³ι η„δ»»ζ„δΈ€ε€‹ε€εγ€‚";
         Text[ arabic ] = "ΗΣΝΘ ΗαΝήζα γδ ΗαΥέΝΙ Ηανγδμ ΘζΗΣΨΙ ΗαγΗζΣ Εαμ ΗαγδΗΨή ΗαΚν ΚΡΫΘ ένεΗ.";
         Text[ greek ] = "Σύρετε με το ποντίκι τα πεδία της δεξιάς σελίδας στις περιοχές που επιθυμείτε.";
@@ -817,6 +817,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ catalan ] = "Piloto de datos";
     Text[ finnish ] = "Tietojen ohjaus";
 };
+
 
 
 
