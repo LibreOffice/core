@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-15 20:35:19 $
+ *  last change: $Author: er $ $Date: 2001-03-14 12:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2011,29 +2011,27 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
             SvxAutoCorrect* pAuto = OFF_APP()->GetAutoCorrect();
             if ( pAuto )
             {
-                const International& rIntl = Application::GetAppInternational();
-
                 sal_Unicode cReplace = pAuto->GetStartDoubleQuote();
                 if( !cReplace )
-                    cReplace = rIntl.GetDoubleQuotationMarkStartChar();
+                    cReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart().GetChar(0);
                 if ( cReplace != '"' )
                     aString.SearchAndReplaceAll( cReplace, '"' );
 
                 cReplace = pAuto->GetEndDoubleQuote();
                 if( !cReplace )
-                    cReplace = rIntl.GetDoubleQuotationMarkEndChar();
+                    cReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd().GetChar(0);
                 if ( cReplace != '"' )
                     aString.SearchAndReplaceAll( cReplace, '"' );
 
                 cReplace = pAuto->GetStartSingleQuote();
                 if( !cReplace )
-                    cReplace = rIntl.GetQuotationMarkStartChar();
+                    cReplace = ScGlobal::pLocaleData->getQuotationMarkStart().GetChar(0);
                 if ( cReplace != '\'' )
                     aString.SearchAndReplaceAll( cReplace, '\'' );
 
                 cReplace = pAuto->GetEndSingleQuote();
                 if( !cReplace )
-                    cReplace = rIntl.GetQuotationMarkEndChar();
+                    cReplace = ScGlobal::pLocaleData->getQuotationMarkEnd().GetChar(0);
                 if ( cReplace != '\'' )
                     aString.SearchAndReplaceAll( cReplace, '\'' );
             }
