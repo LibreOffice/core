@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:42:44 $
+*  last change: $Author: kz $ $Date: 2004-11-26 20:44:03 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -282,7 +282,8 @@ public class UnoDialog implements EventNames {
         xPSet.setPropertyValue("Name", sName);
         Object objectButton = xDlgContainer.getControl(new String(sName));
         XButton xButton = (XButton) UnoRuntime.queryInterface(XButton.class, objectButton);
-        xButton.addActionListener(xActionListener);
+        if (xActionListener != null)
+            xButton.addActionListener(xActionListener);
         Integer ControlKey = new Integer(iControlKey);
         if (ControlList != null)
             ControlList.put(sName, ControlKey);
@@ -295,7 +296,8 @@ public class UnoDialog implements EventNames {
         xPSet.setPropertyValue("Name", sName);
         Object objectCheckBox = xDlgContainer.getControl(new String(sName));
         XCheckBox xCheckBox = (XCheckBox) UnoRuntime.queryInterface(XCheckBox.class, objectCheckBox);
-        xCheckBox.addItemListener(xItemListener);
+        if (xItemListener != null)
+            xCheckBox.addItemListener(xItemListener);
         Integer ControlKey = new Integer(iControlKey);
         if (ControlList != null)
             ControlList.put(sName, ControlKey);
@@ -307,7 +309,8 @@ public class UnoDialog implements EventNames {
         xPSet.setPropertyValue("Name", sName);
         Object objectNumericField = xDlgContainer.getControl(new String(sName));
         XTextComponent xNumericField = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, objectNumericField);
-        xNumericField.addTextListener(xTextListener);
+        if (xTextListener != null)
+            xNumericField.addTextListener(xTextListener);
         Integer ControlKey = new Integer(iControlKey);
         if (ControlList != null)
             ControlList.put(sName, ControlKey);
@@ -320,7 +323,8 @@ public class UnoDialog implements EventNames {
             xPSet.setPropertyValue("Name", sName);
             Object oScrollBar = xDlgContainer.getControl(new String(sName));
             XScrollBar xScrollBar = (XScrollBar) UnoRuntime.queryInterface(XScrollBar.class, oScrollBar);
-            xScrollBar.addAdjustmentListener(xAdjustmentListener);
+            if (xAdjustmentListener != null)
+                xScrollBar.addAdjustmentListener(xAdjustmentListener);
             Integer ControlKey = new Integer(iControlKey);
             if (ControlList != null)
                 ControlList.put(sName, ControlKey);
@@ -348,7 +352,8 @@ public class UnoDialog implements EventNames {
             xPSet.setPropertyValue("Name", sName);
             XControl xTextField = xDlgContainer.getControl(new String(sName));
             XTextComponent xTextBox = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, xTextField);
-            xTextBox.addTextListener(xTextListener);
+            if (xTextListener != null)
+                xTextBox.addTextListener(xTextListener);
             Integer ControlKey = new Integer(iControlKey);
             ControlList.put(sName, ControlKey);
             return xTextBox;
@@ -395,7 +400,8 @@ public class UnoDialog implements EventNames {
     public XRadioButton insertRadioButton(String sName, int iControlKey, XItemListener xItemListener, String[] sProperties, Object[] sValues) {
         try {
             XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
-            xRadioButton.addItemListener(xItemListener);
+            if (xItemListener != null)
+                xRadioButton.addItemListener(xItemListener);
             return xRadioButton;
         } catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.out);
@@ -407,7 +413,8 @@ public class UnoDialog implements EventNames {
         try {
             XRadioButton xRadioButton = insertRadioButton(sName, iControlKey, sProperties, sValues);
             XButton xButton = (com.sun.star.awt.XButton) UnoRuntime.queryInterface(XButton.class, xRadioButton);
-            xButton.addActionListener(xActionListener);
+            if (xActionListener != null)
+                xButton.addActionListener(xActionListener);
             return xButton;
         } catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.out);
