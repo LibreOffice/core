@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:34:23 $
+#   last change: $Author: vg $ $Date: 2003-04-17 17:50:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,12 +79,14 @@ CXXFILES = \
         hyp.cxx \
         olmenu.cxx \
         sdrspell.cxx \
+        hhcwrp.cxx \
         splwrp.cxx
 
 SLOFILES =  \
         $(SLO)$/hyp.obj \
         $(SLO)$/olmenu.obj \
         $(SLO)$/sdrspell.obj \
+        $(SLO)$/hhcwrp.obj \
         $(SLO)$/splwrp.obj
 
 SRCFILES =  \
