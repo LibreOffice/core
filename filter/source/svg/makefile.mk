@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2002-08-05 13:39:49 $
+#   last change: $Author: ka $ $Date: 2002-08-16 10:51:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,7 @@ UNOTYPES=\
     com.sun.star.container.XIndexAccess
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/uno.obj				\
+SLOFILES=	$(SLO)$/svguno.obj			\
             $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgimport.obj		\
             $(SLO)$/svgexport.obj		\
