@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 13:01:15 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,12 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             ,m_xConnection(_rxConnection)
 {
     DBG_CTOR(DlgOrderCrit,NULL);
+
+    AllSettings aSettings( GetSettings() );
+    StyleSettings aStyle( aSettings.GetStyleSettings() );
+    aStyle.SetAutoMnemonic( FALSE );
+    aSettings.SetStyleSettings( aStyle );
+    SetSettings( aSettings );
 
     arrLbFields[0] = &aLB_ORDERFIELD1;
     arrLbFields[1] = &aLB_ORDERFIELD2;
