@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:55:26 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:20:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=dbui
-
+LIBTARGET=no
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk
@@ -89,6 +89,14 @@ EXCEPTIONSFILES= \
         $(SLO)$/dbinsdlg.obj \
         $(SLO)$/dbmgr.obj \
         $(SLO)$/dbtree.obj
+        
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+        $(SLO)$/dbmgr.obj \
+        $(SLO)$/dbtree.obj \
+        $(SLO)$/dbui.obj \
+        $(SLO)$/swdbtoolsclient.obj
 
 # --- Tagets -------------------------------------------------------
 
