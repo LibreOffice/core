@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-02 10:24:49 $
+ *  last change: $Author: hr $ $Date: 2000-11-07 09:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
-#include <ucbhelper/Fileidentifierconverter.hxx>
+#include <ucbhelper/fileidentifierconverter.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
