@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 13:05:07 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 14:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,6 +311,12 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
     Rectangle aCellRect(GetBoundingBox());
     if (mpViewShell)
     {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        if ( mbHeader )
+            rData.GetHeaderPosition( aCellRect );
+        else
+            rData.GetFooterPosition( aCellRect );
+
         Window* pWindow = mpViewShell->GetWindow();
         if (pWindow)
         {
