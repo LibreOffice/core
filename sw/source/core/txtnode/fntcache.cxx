@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-29 14:34:39 $
+ *  last change: $Author: od $ $Date: 2002-08-30 12:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2252,17 +2252,17 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
                 /// OD 21.08.2002 #99657#
                 ///     There is a user defined setting for the background, if there
                 ///     is a background brush and its color is *not* "no fill"/"auto fill".
-                ///     Because [GetBackgroundBrush(...)] doesn't return a brush (pItem)
-                ///     with color "no fill"/"auto fill" respectively a color (pCol)
-                ///     that is "no fill"/"auto fill", it is not checked, but asserted.
                 if( GetFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect, FALSE ) )
                 {
                     if ( !pCol )
                     {
                         pCol = &pItem->GetColor();
                     }
-                    ASSERT ( pCol->GetColor() != COL_TRANSPARENT,
-                             "Get 'no fill'/'auto fill' color from SwFrm::GetBackgroundBrush(...)");
+
+                    /// OD 30.08.2002 #99657#
+                    /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
+                    if ( pCol->GetColor() == COL_TRANSPARENT)
+                        pCol = NULL;
                 }
                 else
                     pCol = NULL;
