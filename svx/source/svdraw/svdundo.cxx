@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: dl $ $Date: 2001-03-26 14:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,21 +79,21 @@
 
 TYPEINIT1(SdrUndoAction,SfxUndoAction);
 
-BOOL __EXPORT SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
+BOOL SdrUndoAction::CanRepeat(SfxRepeatTarget& rView) const
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
     if (pV!=NULL) return CanSdrRepeat(*pV);
     return FALSE;
 }
 
-void __EXPORT SdrUndoAction::Repeat(SfxRepeatTarget& rView)
+void SdrUndoAction::Repeat(SfxRepeatTarget& rView)
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
     if (pV!=NULL) SdrRepeat(*pV);
     DBG_ASSERT(pV!=NULL,"Repeat: Uebergebenes SfxRepeatTarget ist keine SdrView");
 }
 
-XubString __EXPORT SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
+XubString SdrUndoAction::GetRepeatComment(SfxRepeatTarget& rView) const
 {
     SdrView* pV=PTR_CAST(SdrView,&rView);
     if (pV!=NULL) return GetSdrRepeatComment(*pV);
@@ -134,7 +134,7 @@ SdrUndoGroup::~SdrUndoGroup()
     Clear();
 }
 
-void __EXPORT SdrUndoGroup::Clear()
+void SdrUndoGroup::Clear()
 {
     for (ULONG nu=0; nu<GetActionCount(); nu++) {
         SdrUndoAction* pAct=GetAction(nu);
@@ -148,7 +148,7 @@ void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
     aBuf.Insert(pAct,CONTAINER_APPEND);
 }
 
-void __EXPORT SdrUndoGroup::Undo()
+void SdrUndoGroup::Undo()
 {
     for (ULONG nu=GetActionCount(); nu>0;) {
         nu--;
@@ -157,7 +157,7 @@ void __EXPORT SdrUndoGroup::Undo()
     }
 }
 
-void __EXPORT SdrUndoGroup::Redo()
+void SdrUndoGroup::Redo()
 {
     for (ULONG nu=0; nu<GetActionCount(); nu++) {
         SdrUndoAction* pAct=GetAction(nu);
@@ -165,7 +165,7 @@ void __EXPORT SdrUndoGroup::Redo()
     }
 }
 
-XubString __EXPORT SdrUndoGroup::GetComment() const
+XubString SdrUndoGroup::GetComment() const
 {
     XubString aRet(aComment);
     sal_Char aSearchText[] = "%O";
@@ -329,7 +329,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, FASTBOOL bStyleSheet1, FASTBO
     }
 }
 
-__EXPORT SdrUndoAttrObj::~SdrUndoAttrObj()
+SdrUndoAttrObj::~SdrUndoAttrObj()
 {
     if(pUndoSet)
         delete pUndoSet;
@@ -353,7 +353,7 @@ void SdrUndoAttrObj::SetRepeatAttr(const SfxItemSet& rSet)
     pRepeatSet->Put(rSet);
 }
 
-void __EXPORT SdrUndoAttrObj::Undo()
+void SdrUndoAttrObj::Undo()
 {
     BOOL bIs3DScene(pObj && pObj->ISA(E3dScene));
 
@@ -390,7 +390,7 @@ void __EXPORT SdrUndoAttrObj::Undo()
     }
 }
 
-void __EXPORT SdrUndoAttrObj::Redo()
+void SdrUndoAttrObj::Redo()
 {
     BOOL bIs3DScene(pObj && pObj->ISA(E3dScene));
 
@@ -414,7 +414,7 @@ void __EXPORT SdrUndoAttrObj::Redo()
     }
 }
 
-XubString __EXPORT SdrUndoAttrObj::GetComment() const
+XubString SdrUndoAttrObj::GetComment() const
 {
     XubString aStr;
 
@@ -461,17 +461,17 @@ XubString SdrUndoAttrObj::GetSdrRepeatComment(SdrView& rView) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoMoveObj::Undo()
+void SdrUndoMoveObj::Undo()
 {
     pObj->Move(Size(-aDistance.Width(),-aDistance.Height()));
 }
 
-void __EXPORT SdrUndoMoveObj::Redo()
+void SdrUndoMoveObj::Redo()
 {
     pObj->Move(Size(aDistance.Width(),aDistance.Height()));
 }
 
-XubString __EXPORT SdrUndoMoveObj::GetComment() const
+XubString SdrUndoMoveObj::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditMove,aStr);
@@ -518,14 +518,14 @@ SdrUndoGeoObj::SdrUndoGeoObj(SdrObject& rNewObj):
     }
 }
 
-__EXPORT SdrUndoGeoObj::~SdrUndoGeoObj()
+SdrUndoGeoObj::~SdrUndoGeoObj()
 {
     if (pUndoGeo!=NULL) delete pUndoGeo;
     if (pRedoGeo!=NULL) delete pRedoGeo;
     if (pUndoGroup!=NULL) delete pUndoGroup;
 }
 
-void __EXPORT SdrUndoGeoObj::Undo()
+void SdrUndoGeoObj::Undo()
 {
     if (pUndoGroup!=NULL) {
         pUndoGroup->Undo();
@@ -536,7 +536,7 @@ void __EXPORT SdrUndoGeoObj::Undo()
     }
 }
 
-void __EXPORT SdrUndoGeoObj::Redo()
+void SdrUndoGeoObj::Redo()
 {
     if (pUndoGroup!=NULL) {
         pUndoGroup->Redo();
@@ -547,7 +547,7 @@ void __EXPORT SdrUndoGeoObj::Redo()
     }
 }
 
-XubString __EXPORT SdrUndoGeoObj::GetComment() const
+XubString SdrUndoGeoObj::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_DragMethObjOwn,aStr);
@@ -570,7 +570,7 @@ SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, FASTBOOL bOrdNumDirect):
     }
 }
 
-__EXPORT SdrUndoObjList::~SdrUndoObjList()
+SdrUndoObjList::~SdrUndoObjList()
 {
     if (pObj!=NULL && IsOwner())
     {
@@ -606,7 +606,7 @@ void SdrUndoObjList::SetOwner(BOOL bNew)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoRemoveObj::Undo()
+void SdrUndoRemoveObj::Undo()
 {
     DBG_ASSERT(!pObj->IsInserted(),"UndoRemoveObj: pObj ist bereits Inserted");
     if (!pObj->IsInserted()) {
@@ -621,7 +621,7 @@ void __EXPORT SdrUndoRemoveObj::Undo()
     }
 }
 
-void __EXPORT SdrUndoRemoveObj::Redo()
+void SdrUndoRemoveObj::Redo()
 {
     DBG_ASSERT(pObj->IsInserted(),"RedoRemoveObj: pObj ist nicht Inserted");
     if (pObj->IsInserted()) {
@@ -638,7 +638,7 @@ void __EXPORT SdrUndoRemoveObj::Redo()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoInsertObj::Undo()
+void SdrUndoInsertObj::Undo()
 {
     DBG_ASSERT(pObj->IsInserted(),"UndoInsertObj: pObj ist nicht Inserted");
     if (pObj->IsInserted()) {
@@ -653,7 +653,7 @@ void __EXPORT SdrUndoInsertObj::Undo()
     }
 }
 
-void __EXPORT SdrUndoInsertObj::Redo()
+void SdrUndoInsertObj::Redo()
 {
     DBG_ASSERT(!pObj->IsInserted(),"RedoInsertObj: pObj ist bereits Inserted");
     if (!pObj->IsInserted()) {
@@ -670,21 +670,21 @@ void __EXPORT SdrUndoInsertObj::Redo()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoDelObj::Undo()
+void SdrUndoDelObj::Undo()
 {
     SdrUndoRemoveObj::Undo();
     DBG_ASSERT(IsOwner(),"UndoDeleteObj: pObj gehoert nicht der UndoAction");
     SetOwner(FALSE);
 }
 
-void __EXPORT SdrUndoDelObj::Redo()
+void SdrUndoDelObj::Redo()
 {
     SdrUndoRemoveObj::Redo();
     DBG_ASSERT(!IsOwner(),"RedoDeleteObj: pObj gehoert bereits der UndoAction");
     SetOwner(TRUE);
 }
 
-XubString __EXPORT SdrUndoDelObj::GetComment() const
+XubString SdrUndoDelObj::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_EditDelete,aStr);
@@ -710,21 +710,21 @@ XubString SdrUndoDelObj::GetSdrRepeatComment(SdrView& rView) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoNewObj::Undo()
+void SdrUndoNewObj::Undo()
 {
     SdrUndoInsertObj::Undo();
     DBG_ASSERT(!IsOwner(),"RedoNewObj: pObj gehoert bereits der UndoAction");
     SetOwner(TRUE);
 }
 
-void __EXPORT SdrUndoNewObj::Redo()
+void SdrUndoNewObj::Redo()
 {
     SdrUndoInsertObj::Redo();
     DBG_ASSERT(IsOwner(),"RedoNewObj: pObj gehoert nicht der UndoAction");
     SetOwner(FALSE);
 }
 
-XubString __EXPORT SdrUndoNewObj::GetComment() const
+XubString SdrUndoNewObj::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoInsertObj,aStr);
@@ -747,7 +747,7 @@ SdrUndoReplaceObj::SdrUndoReplaceObj(SdrObject& rOldObj1, SdrObject& rNewObj1, F
     }
 }
 
-__EXPORT SdrUndoReplaceObj::~SdrUndoReplaceObj()
+SdrUndoReplaceObj::~SdrUndoReplaceObj()
 {
     if (pObj!=NULL && IsOldOwner())
     {
@@ -767,7 +767,7 @@ __EXPORT SdrUndoReplaceObj::~SdrUndoReplaceObj()
     }
 }
 
-void __EXPORT SdrUndoReplaceObj::Undo()
+void SdrUndoReplaceObj::Undo()
 {
     if (IsOldOwner() && !IsNewOwner()) {
         DBG_ASSERT(!pObj->IsInserted(),"SdrUndoReplaceObj::Undo(): Altes Objekt ist bereits inserted!");
@@ -780,7 +780,7 @@ void __EXPORT SdrUndoReplaceObj::Undo()
     }
 }
 
-void __EXPORT SdrUndoReplaceObj::Redo()
+void SdrUndoReplaceObj::Redo()
 {
     if (!IsOldOwner() && IsNewOwner()) {
         DBG_ASSERT(!pNewObj->IsInserted(),"SdrUndoReplaceObj::Redo(): Neues Objekt ist bereits inserted!");
@@ -837,7 +837,7 @@ void SdrUndoReplaceObj::SetOldOwner(BOOL bNew)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-XubString __EXPORT SdrUndoCopyObj::GetComment() const
+XubString SdrUndoCopyObj::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoCopyObj,aStr);
@@ -853,7 +853,7 @@ SdrUndoObjOrdNum::SdrUndoObjOrdNum(SdrObject& rNewObj, UINT32 nOldOrdNum1, UINT3
 {
 }
 
-void __EXPORT SdrUndoObjOrdNum::Undo()
+void SdrUndoObjOrdNum::Undo()
 {
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
@@ -863,7 +863,7 @@ void __EXPORT SdrUndoObjOrdNum::Undo()
     pOL->SetObjectOrdNum(nNewOrdNum,nOldOrdNum);
 }
 
-void __EXPORT SdrUndoObjOrdNum::Redo()
+void SdrUndoObjOrdNum::Redo()
 {
     SdrObjList* pOL=pObj->GetObjList();
     if (pOL==NULL) {
@@ -873,7 +873,7 @@ void __EXPORT SdrUndoObjOrdNum::Redo()
     pOL->SetObjectOrdNum(nOldOrdNum,nNewOrdNum);
 }
 
-XubString __EXPORT SdrUndoObjOrdNum::GetComment() const
+XubString SdrUndoObjOrdNum::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoObjOrdNum,aStr);
@@ -883,38 +883,50 @@ XubString __EXPORT SdrUndoObjOrdNum::GetComment() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj):
-    SdrUndoObj(rNewObj),pOldText(NULL),pNewText(NULL),bNewTextAvailable(FALSE)
+    SdrUndoObj(rNewObj),
+    pOldText(NULL),
+    pNewText(NULL),
+    bNewTextAvailable(FALSE),
+    bEmptyPresObj(FALSE)
 {
     pOldText=rNewObj.GetOutlinerParaObject();
-    if (pOldText!=NULL) pOldText=pOldText->Clone();
+    bEmptyPresObj = rNewObj.IsEmptyPresObj();
+    if (pOldText!=NULL)
+        pOldText=pOldText->Clone();
 }
 
-__EXPORT SdrUndoObjSetText::~SdrUndoObjSetText()
+SdrUndoObjSetText::~SdrUndoObjSetText()
 {
-    if (pOldText!=NULL) delete pOldText;
-    if (pNewText!=NULL) delete pNewText;
+    if ( pOldText )
+        delete pOldText;
+    if ( pNewText )
+        delete pNewText;
 }
 
 void SdrUndoObjSetText::AfterSetText()
 {
-    if (!bNewTextAvailable) {
+    if (!bNewTextAvailable)
+    {
         pNewText=pObj->GetOutlinerParaObject();
         if (pNewText!=NULL) pNewText=pNewText->Clone();
         bNewTextAvailable=TRUE;
     }
 }
 
-void __EXPORT SdrUndoObjSetText::Undo()
+void SdrUndoObjSetText::Undo()
 {
     // alten Text sichern fuer Redo
-    if (!bNewTextAvailable) AfterSetText();
+    if (!bNewTextAvailable)
+        AfterSetText();
     // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
     OutlinerParaObject* pText1=pOldText;
-    if (pText1!=NULL) pText1=pText1->Clone();
+    if (pText1!=NULL)
+        pText1=pText1->Clone();
     pObj->SetOutlinerParaObject(pText1);
+    pObj->SetEmptyPresObj( bEmptyPresObj );
 }
 
-void __EXPORT SdrUndoObjSetText::Redo()
+void SdrUndoObjSetText::Redo()
 {
     // Text fuer Undo kopieren, denn SetOutlinerParaObject() ist Eigentumsuebereignung
     OutlinerParaObject* pText1=pNewText;
@@ -922,7 +934,7 @@ void __EXPORT SdrUndoObjSetText::Redo()
     pObj->SetOutlinerParaObject(pText1);
 }
 
-XubString __EXPORT SdrUndoObjSetText::GetComment() const
+XubString SdrUndoObjSetText::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoObjSetText,aStr);
@@ -1132,7 +1144,7 @@ SdrUndoPageList::SdrUndoPageList(SdrPage& rNewPg):
     nPageNum=rNewPg.GetPageNum();
 }
 
-__EXPORT SdrUndoPageList::~SdrUndoPageList()
+SdrUndoPageList::~SdrUndoPageList()
 {
     if(bItsMine && pPage)
     {
@@ -1169,14 +1181,14 @@ SdrUndoDelPage::SdrUndoDelPage(SdrPage& rNewPg):
     }
 }
 
-__EXPORT SdrUndoDelPage::~SdrUndoDelPage()
+SdrUndoDelPage::~SdrUndoDelPage()
 {
     if (pUndoGroup!=NULL) {
         delete pUndoGroup;
     }
 }
 
-void __EXPORT SdrUndoDelPage::Undo()
+void SdrUndoDelPage::Undo()
 {
     ImpInsertPage(nPageNum);
     if (pUndoGroup!=NULL) { // MasterPage-Beziehungen wiederherstellen
@@ -1186,7 +1198,7 @@ void __EXPORT SdrUndoDelPage::Undo()
     bItsMine=FALSE;
 }
 
-void __EXPORT SdrUndoDelPage::Redo()
+void SdrUndoDelPage::Redo()
 {
     ImpRemovePage(nPageNum);
     // Die MasterPage-Beziehungen werden ggf. von selbst geloesst
@@ -1194,7 +1206,7 @@ void __EXPORT SdrUndoDelPage::Redo()
     bItsMine=TRUE;
 }
 
-XubString __EXPORT SdrUndoDelPage::GetComment() const
+XubString SdrUndoDelPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoDelPage,aStr,0,FALSE);
@@ -1219,21 +1231,21 @@ FASTBOOL SdrUndoDelPage::CanSdrRepeat(SdrView& rView) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoNewPage::Undo()
+void SdrUndoNewPage::Undo()
 {
     ImpRemovePage(nPageNum);
     DBG_ASSERT(!bItsMine,"UndoNewPage: pPage gehoert bereits der UndoAction");
     bItsMine=TRUE;
 }
 
-void __EXPORT SdrUndoNewPage::Redo()
+void SdrUndoNewPage::Redo()
 {
     ImpInsertPage(nPageNum);
     DBG_ASSERT(bItsMine,"RedoNewPage: pPage gehoert nicht der UndoAction");
     bItsMine=FALSE;
 }
 
-XubString __EXPORT SdrUndoNewPage::GetComment() const
+XubString SdrUndoNewPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoNewPage,aStr,0,FALSE);
@@ -1242,7 +1254,7 @@ XubString __EXPORT SdrUndoNewPage::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-XubString __EXPORT SdrUndoCopyPage::GetComment() const
+XubString SdrUndoCopyPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoCopPage,aStr,0,FALSE);
@@ -1268,17 +1280,17 @@ FASTBOOL SdrUndoCopyPage::CanSdrRepeat(SdrView& rView) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoSetPageNum::Undo()
+void SdrUndoSetPageNum::Undo()
 {
     ImpMovePage(nNewPageNum,nOldPageNum);
 }
 
-void __EXPORT SdrUndoSetPageNum::Redo()
+void SdrUndoSetPageNum::Redo()
 {
     ImpMovePage(nOldPageNum,nNewPageNum);
 }
 
-XubString __EXPORT SdrUndoSetPageNum::GetComment() const
+XubString SdrUndoSetPageNum::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoMovPage,aStr,0,FALSE);
@@ -1314,7 +1326,7 @@ SdrUndoPageMasterPage::SdrUndoPageMasterPage(SdrPage& rNewPg, USHORT nMasterDesc
     }
 }
 
-__EXPORT SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
+SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 {
     if (pMasterDescriptor!=NULL) delete pMasterDescriptor;
     if (pNewMasterDescriptor!=NULL) delete pNewMasterDescriptor;
@@ -1322,7 +1334,7 @@ __EXPORT SdrUndoPageMasterPage::~SdrUndoPageMasterPage()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoPageInsertMasterPage::Undo()
+void SdrUndoPageInsertMasterPage::Undo()
 {
 #ifdef DBGUTIL
     String aMsg("SdrUndoPageInsertMasterPage::Undo(): Descriptornummer "); aMsg+=nMasterNum;
@@ -1347,7 +1359,7 @@ void __EXPORT SdrUndoPageInsertMasterPage::Undo()
     pPage->RemoveMasterPage(nMasterNum);
 }
 
-void __EXPORT SdrUndoPageInsertMasterPage::Redo()
+void SdrUndoPageInsertMasterPage::Redo()
 {
     if (pMasterDescriptor!=NULL) {
         pPage->InsertMasterPage(*pMasterDescriptor,nMasterNum);
@@ -1360,7 +1372,7 @@ void __EXPORT SdrUndoPageInsertMasterPage::Redo()
     }
 }
 
-XubString __EXPORT SdrUndoPageInsertMasterPage::GetComment() const
+XubString SdrUndoPageInsertMasterPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoNewPageMasterDscr,aStr,0,FALSE);
@@ -1369,7 +1381,7 @@ XubString __EXPORT SdrUndoPageInsertMasterPage::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoPageRemoveMasterPage::Undo()
+void SdrUndoPageRemoveMasterPage::Undo()
 {
     if (pMasterDescriptor!=NULL) {
         pPage->InsertMasterPage(*pMasterDescriptor,nMasterNum);
@@ -1382,7 +1394,7 @@ void __EXPORT SdrUndoPageRemoveMasterPage::Undo()
     }
 }
 
-void __EXPORT SdrUndoPageRemoveMasterPage::Redo()
+void SdrUndoPageRemoveMasterPage::Redo()
 {
 #ifdef DBGUTIL
     String aMsg("SdrUndoPageRemoveMasterPage::Redo(): Descriptornummer "); aMsg+=nMasterNum;
@@ -1407,7 +1419,7 @@ void __EXPORT SdrUndoPageRemoveMasterPage::Redo()
     pPage->RemoveMasterPage(nMasterNum);
 }
 
-XubString __EXPORT SdrUndoPageRemoveMasterPage::GetComment() const
+XubString SdrUndoPageRemoveMasterPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoDelPageMasterDscr,aStr,0,FALSE);
@@ -1416,17 +1428,17 @@ XubString __EXPORT SdrUndoPageRemoveMasterPage::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoPageMoveMasterPage::Undo()
+void SdrUndoPageMoveMasterPage::Undo()
 {
     pPage->MoveMasterPage(nNewMasterNum,nMasterNum);
 }
 
-void __EXPORT SdrUndoPageMoveMasterPage::Redo()
+void SdrUndoPageMoveMasterPage::Redo()
 {
     pPage->MoveMasterPage(nMasterNum,nNewMasterNum);
 }
 
-XubString __EXPORT SdrUndoPageMoveMasterPage::GetComment() const
+XubString SdrUndoPageMoveMasterPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoMovPageMasterDscr,aStr,0,FALSE);
@@ -1435,7 +1447,7 @@ XubString __EXPORT SdrUndoPageMoveMasterPage::GetComment() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrUndoPageChangeMasterPage::Undo()
+void SdrUndoPageChangeMasterPage::Undo()
 {
     if (pNewMasterDescriptor==NULL) {
         SdrMasterPageDescriptor* pDscr=&pPage->GetMasterPageDescriptor(nMasterNum);
@@ -1454,14 +1466,14 @@ void __EXPORT SdrUndoPageChangeMasterPage::Undo()
     }
 }
 
-void __EXPORT SdrUndoPageChangeMasterPage::Redo()
+void SdrUndoPageChangeMasterPage::Redo()
 {
     if (pNewMasterDescriptor!=NULL) {
         pPage->SetMasterPageDescriptor(*pNewMasterDescriptor,nMasterNum);
     }
 }
 
-XubString __EXPORT SdrUndoPageChangeMasterPage::GetComment() const
+XubString SdrUndoPageChangeMasterPage::GetComment() const
 {
     XubString aStr;
     ImpTakeDescriptionStr(STR_UndoChgPageMasterDscr,aStr,0,FALSE);
