@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:45:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 14:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,32 +1571,6 @@ SfxSlotInfo FN_EXPAND_GLOSSARY
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
-    SlotName = "Horizontal spiegeln";
-    SlotName [ english ] =  "Horizontal spiegeln";
-    SlotName[ english_us ] = "Flip Horizontal";
-    SlotName[ portuguese ] = "Reflectir na horizontal";
-    SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
-    SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ french ] = "Refléter horizontalement";
-    SlotName[ spanish ] = "Reflejar horizontal";
-    SlotName[ italian ] = "Rispecchia orizzontalmente";
-    SlotName[ danish ] = "Spejlvend vandret";
-    SlotName[ swedish ] = "Spegelvänd horisontellt";
-    SlotName[ polish ] = "Przerzuæ w poziomie";
-    SlotName[ portuguese_brazilian ] = "GraphicFlipHorizontal";
-    SlotName[ japanese ] = "ã‰º”½“]";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
-    SlotName[ chinese_traditional ] = "¤ô¥­Â½Âà";
-    SlotName[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
-    SlotName[ dutch ] = "Horizontaal spiegelen";
-    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ greek ] = "Ïñéæüíôéá áíáóôñïöŞ";
-    SlotName[ korean ] = "¼öÆòÀ¸·Î ´ëÄª";
-    SlotName[ turkish ] = "Yatay yansıt";
-};
-SfxSlotInfo FN_FLIP_VERT_GRAFIC
-{
     SlotName = "Vertikal spiegeln";
     SlotName [ english ] =  "Vertikal spiegeln";
     SlotName[ english_us ] = "Flip Vertical";
@@ -1620,6 +1594,32 @@ SfxSlotInfo FN_FLIP_VERT_GRAFIC
     SlotName[ korean ] = "¼öÁ÷À¸·Î ´ëÄª";
     SlotName[ turkish ] = "Dikey yansıt";
     SlotName[ language_user1 ] = " ";
+};
+SfxSlotInfo FN_FLIP_VERT_GRAFIC
+{
+    SlotName = "Horizontal spiegeln";
+    SlotName [ english ] =  "Horizontal spiegeln";
+    SlotName[ english_us ] = "Flip Horizontal";
+    SlotName[ portuguese ] = "Reflectir na horizontal";
+    SlotName[ russian ] = "Îòğàçèòü ïî ãîğèçîíòàëè";
+    SlotName[ dutch ] = "Horizontaal spiegelen";
+    SlotName[ french ] = "Refléter horizontalement";
+    SlotName[ spanish ] = "Reflejar horizontal";
+    SlotName[ italian ] = "Rispecchia orizzontalmente";
+    SlotName[ danish ] = "Spejlvend vandret";
+    SlotName[ swedish ] = "Spegelvänd horisontellt";
+    SlotName[ polish ] = "Przerzuæ w poziomie";
+    SlotName[ portuguese_brazilian ] = "GraphicFlipHorizontal";
+    SlotName[ japanese ] = "ã‰º”½“]";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
+    SlotName[ chinese_traditional ] = "¤ô¥­Â½Âà";
+    SlotName[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
+    SlotName[ dutch ] = "Horizontaal spiegelen";
+    SlotName[ chinese_simplified ] = "Ë®Æ½·­×ª";
+    SlotName[ language_user1 ] = " ";
+    SlotName[ greek ] = "Ïñéæüíôéá áíáóôñïöŞ";
+    SlotName[ korean ] = "¼öÆòÀ¸·Î ´ëÄª";
+    SlotName[ turkish ] = "Yatay yansıt";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
