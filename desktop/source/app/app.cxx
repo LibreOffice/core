@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:37:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,6 +2097,21 @@ void Desktop::OpenClients()
              ( aRequest.aPrintToList.getLength() > 0 && aRequest.aPrinterName.getLength() > 0 ))
         {
             bLoaded = sal_True;
+
+            if ( pArgs->HasModuleParam() )
+            {
+                SvtModuleOptions    aOpt;
+
+                // Support command line parameters to start a module (as preselection)
+                if ( pArgs->IsWriter() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+                    aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_WRITER );
+                else if ( pArgs->IsCalc() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+                    aRequest.aModule = aOpt.GetFactoryName( SvtModuleOptions::E_CALC );
+                else if ( pArgs->IsImpress() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+                    aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_IMPRESS );
+                else if ( pArgs->IsDraw() && aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+                    aRequest.aModule= aOpt.GetFactoryName( SvtModuleOptions::E_DRAW );
+            }
 
             // Process request
             OfficeIPCThread::ExecuteCmdLineRequests( aRequest );
