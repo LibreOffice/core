@@ -28,4 +28,5 @@ go	goodies\source\filter.vcl\itga			nmake	-	all	g_itga NULL
 go	goodies\source\filter.vcl\ipsd			nmake	-	all	g_ipsd NULL
 go	goodies\source\filter.vcl\ieps			nmake	-	all	g_ieps NULL
 go	goodies\source\filter.vcl\icgm			nmake	-	all	g_icgm NULL
-go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_eras g_etiff g_expm g_graph g_ieps g_ipsd g_iras g_itga g_vfpbm g_vfeom g_vfiom g_vfept g_vfegf g_vfepn g_vfipc g_vfipx g_vfipt g_vfidx g_vfitf g_epbm g_epgm g_eppm g_eps g_icgm NULL
+go	goodies\source\unographic				nmake	-	all	g_unographic NULL
+go	goodies\util							nmake	-	all	g_util g_base2d g_base3d g_eras g_etiff g_expm g_graph g_ieps g_ipsd g_iras g_itga g_vfpbm g_vfeom g_vfiom g_vfept g_vfegf g_vfepn g_vfipc g_vfipx g_vfipt g_vfidx g_vfitf g_epbm g_epgm g_eppm g_eps g_icgm g_unographic NULL
