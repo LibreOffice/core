@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:20:09 $
+ *  last change: $Author: dvo $ $Date: 2001-06-12 16:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,14 +201,16 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
             sal_Int32 nFormat = (sal_Int32)
                 ((const SwTblBoxNumFormat *)pItem)->GetValue();
 
-            if (-1 != nFormat)
+            if ( (nFormat != -1) && (nFormat != NUMBERFORMAT_TEXT) )
             {
                 // if we have a format, register and then export
                 // (Careful: here we assume that data styles will be
                 // written after cell styles)
                 addDataStyle(nFormat);
-                AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
-                              getDataStyleName(nFormat) );
+                OUString sDataStyleName = getDataStyleName(nFormat);
+                if( sDataStyleName.getLength() > 0 )
+                    AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
+                                  sDataStyleName );
             }
         }
     }
