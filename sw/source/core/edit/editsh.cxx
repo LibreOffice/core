@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:23:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,28 @@ long SwEditShell::SplitNode( BOOL bAutoFormat, BOOL bCheckTableStart )
 
     EndAllAction();
     return(1L);
+}
+
+/*-- 11.05.2004 09:41:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwEditShell::AppendTxtNode()
+{
+    sal_Bool bRet = sal_False;
+    StartAllAction();
+    GetDoc()->StartUndo();
+
+    FOREACHPAM_START(this)
+        GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
+        bRet |= GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint());
+    FOREACHPAM_END()
+
+    GetDoc()->EndUndo();
+
+    ClearTblBoxCntnt();
+
+    EndAllAction();
+    return bRet;
 }
 
 /******************************************************************************
@@ -933,6 +955,21 @@ BOOL SwEditShell::RemoveInvisibleContent()
 {
     StartAllAction();
     BOOL bRet = GetDoc()->RemoveInvisibleContent();
+    EndAllAction();
+    return bRet;
+}
+BOOL SwEditShell::ConvertFieldsToText()
+{
+    StartAllAction();
+    BOOL bRet = GetDoc()->ConvertFieldsToText();
+    EndAllAction();
+    return bRet;
+}
+
+BOOL SwEditShell::EmbedAllLinks()
+{
+    StartAllAction();
+    BOOL bRet = GetDoc()->EmbedAllLinks();
     EndAllAction();
     return bRet;
 }
