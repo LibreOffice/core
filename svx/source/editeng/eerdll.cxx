@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-07 18:25:29 $
+ *  last change: $Author: hjs $ $Date: 2000-11-08 17:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@
 #include <wghtitem.hxx>
 #include <wrlmitem.hxx>
 #include <numitem.hxx>
-#include <svx/langitem.hxx>
+#include <langitem.hxx>
 
 
 GlobalEditData::GlobalEditData()
