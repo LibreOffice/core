@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-11 14:25:32 $
+ *  last change: $Author: svesik $ $Date: 2001-05-14 15:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
 // <-- encoding
 #ifdef UNX
-#if !defined MACOSX && !defined FREEBSD
+#if !defined MACOSX && !defined FREEBSD && !defined NETBSD
 #include <alloca.h>
 #endif
 #endif
