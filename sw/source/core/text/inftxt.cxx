@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:41:46 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,8 +1009,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nMaxHyph = 0;
     bTestFormat = rInf.bTestFormat;
     SetMulti( sal_True );
-    SetFirstMulti( rInf.IsMulti() ? rInf.IsFirstMulti() :
-                   nLineStart == rInf.GetLineStart() );
+    SetFirstMulti( rInf.IsFirstMulti() );
 }
 
 /*************************************************************************

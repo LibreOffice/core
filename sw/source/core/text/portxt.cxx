@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-28 08:40:31 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:56:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
                  aGuess.BreakPos() > rInf.GetIdx() ||
                     rInf.GetFly() ||
-                 rInf.GetLast()->IsFlyPortion() ||
+                 rInf.GetLast()->IsFlyPortion() || rInf.IsFirstMulti() ||
                   (rInf.GetLast()->InFldGrp() && !rInf.GetLast()->InNumberGrp()
                       && lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf) )
                  )
@@ -302,13 +302,15 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         sal_Bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
         if( aGuess.BreakPos() != STRING_LEN &&
             aGuess.BreakPos() != rInf.GetLineStart() &&
-            ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ) &&
+            ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
+              rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||  ((SwBlankPortion*)
               rInf.GetLast())->MayUnderFlow( rInf, rInf.GetIdx()-1, sal_True )))
         {       // case C1 (former BreakUnderflow())
             BreakUnderflow( rInf );
         }
-        else    // case C2, last exit
+        else
+             // case C2, last exit
             BreakCut( rInf, aGuess );
     }
 

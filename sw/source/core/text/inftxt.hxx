@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:39:22 $
+ *  last change: $Author: ama $ $Date: 2001-03-13 09:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,10 @@ protected:
     sal_Bool bArrowDone : 1;    // Pfeil nach links bei gescrollten Absaetzen
     sal_Bool bFtnInside : 1;    // the current line contains a footnote
     sal_Bool bMulti : 1;        // inside a multiportion
-    sal_Bool bFirstMulti : 1;   // the multiportion is the first lineportion
+    sal_Bool bFirstMulti : 1;   // this flag is used for two purposes:
+                                // - the multiportion is the first lineportion
+                                // - indicates, if we are currently in second
+                                //   line of multi portion
     sal_Bool bRuby : 1;         // during the formatting of a phonetic line
     sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
     sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
