@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XExtendedFilterDetection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 22:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,20 +78,22 @@
 
 //============================================================================
 
-/** extended filter detection
+/** extended filter detection.
  */
 
 interface XExtendedFilterDetection: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** control agreement of a type detection with given URL or arguments
+    /** controls agreement of a type detection with given URL or arguments.
 
         <p>
         Register services which support this interface for different mime types in configuration.
-        You will be created to make a deep content detection then. Please add collected informations
-         about detected document in given <type>MediaDescriptor</type>!
-        As return value we need a internal type name.
+        You will be created to make a deep content detection then. Add collected information
+         about detected documents in given <type>MediaDescriptor</type>.
+        You need an internal type name as a return value.
         </p>
+
+    <!-- Dennis: Please reword second sentence -->
      */
     string detect( [inout] sequence< com::sun::star::beans::PropertyValue > seqDescriptor );
 

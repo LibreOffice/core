@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilter.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:20 $
+ *  last change: $Author: arellano $ $Date: 2001-04-16 22:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,24 @@
 
 //=============================================================================
 
-/** interface to filter documents
+/** interface to filter documents.
  */
 interface XFilter: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** filter the document
+    /** filters the document.
 
         <p>
-        The given <type>MediaDescriptor</type> hold all neccessary informations
+        The given <type>MediaDescriptor</type> holds all neccessary information
         about the document.
 
         @attention  Don't hold hard references to these descriptor. You must copy needed informations!
                     Otherwise we couldn't destroy (for example) an existing input stream!
         </p>
+
+    <!-- Dennis: The HTML output of @attention does not appear correct -->
+
+
      */
     boolean filter( [in] sequence< com::sun::star::beans::PropertyValue > aDescriptor );
 
