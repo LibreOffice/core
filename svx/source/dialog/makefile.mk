@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: os $ $Date: 2001-01-10 16:00:52 $
+#   last change: $Author: rt $ $Date: 2001-02-01 13:38:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -366,6 +366,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/hyphen.obj		\
         $(SLO)$/thesdlg.obj		\
         $(SLO)$/spldlg.obj		\
+        $(SLO)$/numpages.obj	\
         $(SLO)$/splwrap.obj
 
 .IF "$(COM)" == "C50"
