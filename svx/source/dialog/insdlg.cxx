@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:14:10 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ short SvInsertOleDlg::Execute()
                     {
                         uno::Reference < embed::XInsertObjectDialog > xDialogCreator(
                             ::comphelper::getProcessServiceFactory()->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEDialogObjectCreator")) ),
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.MSOLEObjectSystemCreator")) ),
                             uno::UNO_QUERY );
 
                         if ( xDialogCreator.is() )
