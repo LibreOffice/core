@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navtoolbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:20:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,10 +358,12 @@ namespace frm
                     else if ( LID_RECORD_FILLER == pSupportedSlots->nId )
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_CENTER | WB_VCENTER );
+                        pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
                     }
                     else
                     {
                         pItemWindow = new FixedText( m_pToolbar, WB_VCENTER );
+                        pItemWindow->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
                     }
                     m_aChildWins.push_back( pItemWindow );
 
