@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:49:35 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_CAPTION
     Text [ italian ] = "Dicitura" ;
     Text [ portuguese_brazilian ] = "Captura" ;
     Text [ portuguese ] = "Legenda" ;
-    Text [ finnish ] = "Selite" ;
+    Text [ finnish ] = "Kuvaotsikko" ;
     Text [ danish ] = "Billedtekst" ;
     Text [ french ] = "Légende" ;
     Text [ swedish ] = "Bildtext" ;
@@ -116,7 +116,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Opzioni" ;
         Text [ portuguese_brazilian ] = "~Opções" ;
         Text [ portuguese ] = "~Opções" ;
-        Text [ finnish ] = "~Määritykset" ;
+        Text [ finnish ] = "~Asetukset" ;
         Text [ danish ] = "Indstillinger" ;
         Text [ french ] = "~Options" ;
         Text [ swedish ] = "~Alternativ" ;
@@ -151,7 +151,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Categoria" ;
         Text [ portuguese_brazilian ] = "~Categoria" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Ryhmä" ;
+        Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Kategori" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Kategori" ;
@@ -227,7 +227,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Dicitura" ;
         Text [ portuguese_brazilian ] = "~Legenda" ;
         Text [ portuguese ] = "~Texto para etiqueta" ;
-        Text [ finnish ] = "~Otsikko" ;
+        Text [ finnish ] = "Kuva~otsikko" ;
         Text [ danish ] = "Billedtekst" ;
         Text [ french ] = "~Texte de légende" ;
         Text [ swedish ] = "~Bildtext" ;
@@ -266,7 +266,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "~Posizione" ;
         Text [ portuguese_brazilian ] = "~Posição" ;
         Text [ portuguese ] = "~Posição" ;
-        Text [ finnish ] = "A~sema" ;
+        Text [ finnish ] = "~Sijainti" ;
         Text [ danish ] = "Placering" ;
         Text [ french ] = "~Position" ;
         Text [ swedish ] = "~Position" ;
@@ -321,6 +321,7 @@ ModalDialog DLG_CAPTION
         Text[ turkish ] = "~Kenarlýk ve gölgeyi kullan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Aceptar ~borde y sombra";
+        Text[ finnish ] = "~Lisää reuna ja varjostus";
     };
     FixedText FT_OBJECT_NAME
     {
@@ -348,6 +349,7 @@ ModalDialog DLG_CAPTION
         Text[ turkish ] = "N~esne adý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre del objeto";
+        Text[ finnish ] = "~Objektin nimi";
     };
     Edit ED_OBJECT_NAME
     {
@@ -394,7 +396,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "All'inizio" ;
         Text [ portuguese_brazilian ] = "No início" ;
         Text [ portuguese ] = "No início" ;
-        Text [ finnish ] = "Alussa" ;
+        Text [ finnish ] = "Ylhäällä" ;
         Text [ danish ] = "Ved begyndelsen" ;
         Text [ french ] = "Au début" ;
         Text [ swedish ] = "I början" ;
@@ -421,7 +423,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Alla fine" ;
         Text [ portuguese_brazilian ] = "Ao final" ;
         Text [ portuguese ] = "No fim" ;
-        Text [ finnish ] = "Lopussa" ;
+        Text [ finnish ] = "Alhaalla" ;
         Text [ danish ] = "Ved slutningen" ;
         Text [ french ] = "À la fin" ;
         Text [ swedish ] = "I slutet" ;
@@ -448,7 +450,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Al di sopra" ;
         Text [ portuguese_brazilian ] = "Acima" ;
         Text [ portuguese ] = "Acima" ;
-        Text [ finnish ] = "Yläpuolella" ;
+        Text [ finnish ] = "Ylhäällä" ;
         Text [ danish ] = "Over" ;
         Text [ french ] = "Supra" ;
         Text [ swedish ] = "Ovanför" ;
@@ -475,7 +477,7 @@ ModalDialog DLG_CAPTION
         Text [ italian ] = "Al di sotto" ;
         Text [ portuguese_brazilian ] = "Abaixo" ;
         Text [ portuguese ] = "Abaixo" ;
-        Text [ finnish ] = "Alapuolella" ;
+        Text [ finnish ] = "Alhaalla" ;
         Text [ danish ] = "Under" ;
         Text [ french ] = "Infra" ;
         Text [ swedish ] = "Nedanför" ;
@@ -560,6 +562,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ turkish ] = "Bölüme göre numaralama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Numeración de capítulos";
+        Text[ finnish ] = "Numerointi luvuittain";
     };
     FixedText FT_LEVEL
     {
@@ -587,6 +590,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ turkish ] = "D~üzey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nivel";
+        Text[ finnish ] = "~Taso";
     };
     ListBox LB_LEVEL
     {
@@ -683,6 +687,10 @@ ModalDialog DLG_SEQUENCE_OPTION
     {
              < "Ninguna" ; > ;
     };
+    StringList [ finnish ] =
+    {
+             < "Ei mitään" ; > ;
+    };
     };
     FixedText FT_SEPARATOR
     {
@@ -710,6 +718,7 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text[ turkish ] = "A~yýrma iþr.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Separador";
+        Text[ finnish ] = "~Erotin";
     };
     Edit ED_SEPARATOR
     {
@@ -739,5 +748,6 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ turkish ] = "Numara aralýðý seçenekleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Opciones de secuencias";
+    Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
