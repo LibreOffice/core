@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DateTime.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-14 13:18:49 $
+ *  last change: $Author: os $ $Date: 2001-03-13 09:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@ service DateTime
         @deprecated
     */
     [optional, property] short DateTimeFormat;
+    /** contains an offset to the date or time value in minutes.
+    */
+    [optional, property] long Adjust;
 };
 
 //=============================================================================
