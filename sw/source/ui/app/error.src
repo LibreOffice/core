@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:29:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ String STR_COMCORE_CANT_SHOW
     TEXT[ chinese_simplified ] = "Ξή·¨ΟΤΚΎΝΌΠΞ";
     TEXT[ russian ] = "Πθρσνξκ οπεδρςΰβθςό νεβξημξζνξ";
     TEXT[ polish ] = "Grafiki nie moΏna wywietliζ.";
-    TEXT[ japanese ] = "ΈήΧΜ¨―Έ‚π•\\¦‚Ε‚«‚ά‚Ή‚ρB";
+    TEXT[ japanese ] = "}‚π•\\¦‚Ε‚«‚ά‚Ή‚ρB";
     TEXT[ chinese_traditional ] = "µLªkΕγ¥άΉΟ§Ξ";
     TEXT[ arabic ] = "αΗ νγίδ ΪΡΦ ΗαΡΣζγΗΚ.";
     TEXT[ greek ] = "Δεν είναι δυνατή η παρουσίαση του γραφικού.";
@@ -1176,7 +1176,7 @@ Resource RID_SW_ERRHDL
         Text[ chinese_simplified ] = "Ò»Π© OLE ¶ΤΟσΞή·¨±»΄ζΕΜΞªΝΌΠΞ";
         Text[ russian ] = "Ηΰγπσηκΰ νεκξςξπϋυ ξαϊεκςξβ OLE βξημξζνΰ ςξλόκξ β κΰχερςβε πθρσνκξβ";
         Text[ polish ] = "Niektσre obiekty OLE mog³y zostaζ za³adowane tylko jako grafiki";
-        Text[ japanese ] = "‚Ά‚­‚Β‚©‚ΜOLEµΜήΌήªΈΔ‚ΝΈήΧΜ¨―Έ½‚Ζ‚µ‚Δ‚Μ‚έ•Ϋ‘¶‚·‚ι‚±‚Ζ‚ª‚Ε‚«‚ά‚·";
+        Text[ japanese ] = "OLE µΜήΌήªΈΔ‚Μ‚Ά‚­‚Β‚©‚ΝA}‚Ζ‚µ‚Δ‚µ‚©•Ϋ‘¶‚Ε‚«‚ά‚Ή‚ρ‚Ε‚µ‚½";
         Text[ chinese_traditional ] = "¤@¨Η OLE ª«¥σµLªkΐx¦s¬°ΉΟ§Ξ";
         Text[ arabic ] = "αγ νίδ γδ Ηαγγίδ ΚΨΘνή ΘΪΦ ίΗΖδΗΚ OLE ΕαΗ ίΡΣζγΗΚ";
         Text[ greek ] = "Μερικά αντικείμενα OLE μπόρεσαν να φορτωθούν μόνο ως γραφικά";
