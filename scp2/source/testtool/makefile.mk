@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:11:30 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:16:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,9 @@ SCP_PRODUCT_TYPE=osl
 PARFILES= \
         module_testtool.par     \
         file_testtool.par
+
+ULFFILES= \
+        module_testtool.ulf
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
