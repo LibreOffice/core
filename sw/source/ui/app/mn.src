@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-03 16:52:49 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ String MN_FRM_POPUPMENU
     Text[ polish ] = "ramka";
     Text[ japanese ] = "√∑Ωƒ ŒﬁØ∏Ω";
     Text[ chinese_traditional ] = "§Â•ª§Ë∂Ù";
-    Text[ arabic ] = "≈ÿ«—";
+    Text[ arabic ] = "ﬂ«œ—";
     Text[ greek ] = "–ÂÒﬂ„Ò·ÏÏ·";
     Text[ korean ] = "«¡∑π¿”";
     Text[ turkish ] = "«erÁeve";
