@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleHypertext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:11:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleHyperlink;
+ published interface XAccessibleHyperlink;
 
 
 /** Implement this interface to expose the hypertext structure of a document.
@@ -91,7 +91,7 @@ interface XAccessibleHyperlink;
 
     @since #107627#
 */
-interface XAccessibleHypertext
+published interface XAccessibleHypertext
     : ::com::sun::star::accessibility::XAccessibleText
 {
     /** Returns the number of links and link groups contained within this
