@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCFGMerge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 18:56:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ import com.sun.star.filter.config.tools.utils.*;
  *  together. Such fragments must exist as files on disk, will be moved into
  *  one file together on disk.
  *
- *  @author  Andreas Schlüns
+ *
  */
 public class FCFGMerge
 {
