@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: jbu $ $Date: 2001-09-26 16:42:06 $
+#   last change: $Author: kr $ $Date: 2001-10-05 08:00:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,14 +127,16 @@ $(BIN)$/$(APP2TARGET).exe : $(APP2TARGETN)
     cp $(APP2TARGETN) $@
 
 $(BIN)$/inirc:
-        echo "MYBOOTSTRAPTESTVALUE=auxaux" > $@
+        echo "MYBOOTSTRAPTESTVALUE=auxaux"   > $@
+        echo "INHERITED_OVERWRITTEN_VALUE=inherited_overwritten_value" >> $@
 
 .ELSE
 
 ALL:  $(BIN)$/ini.ini
 
 $(BIN)$/ini.ini:
-        echo MYBOOTSTRAPTESTVALUE=auxaux > $@
+        echo MYBOOTSTRAPTESTVALUE=auxaux     > $@
+        echo INHERITED_OVERWRITTEN_VALUE=inherited_overwritten_value   >> $@
 
 .ENDIF
 

@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: bootstrap.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2001-08-30 12:17:44 $
+#   last change: $Author: kr $ $Date: 2001-10-05 08:00:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,29 @@ if (!$rc) {
 $rc = system "./testbootstrap", "0", "-env:INIFILENAME=";
 if (!$rc) {
     $comment = $comment . "exe custom ini test not passed\n";
+    $state = 0;
+}
+
+
+if ($ENV{GUI} eq "WNT") {
+    $rc = system "./testbootstrap", "inherited_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_VALUE', "-env:iniName=ini.ini";
+}
+else {
+    $rc = system "./testbootstrap", "inherited_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_VALUE', "-env:iniName=inirc";
+}
+if (!$rc) {
+    $comment = $comment . "inherited value not passed\n";
+    $state = 0;
+}
+
+if ($ENV{GUI} eq "WNT") {
+    $rc = system "./testbootstrap", "inherited_overwritten_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=ini.ini";
+}
+else {
+    $rc = system "./testbootstrap", "inherited_overwritten_value", '-env:MYBOOTSTRAPTESTVALUE=$INHERITED_OVERWRITTEN_VALUE', "-env:iniName=inirc";
+}
+if (!$rc) {
+    $comment = $comment . "inherited overwritten value not passed\n";
     $state = 0;
 }
 

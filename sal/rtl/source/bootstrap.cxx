@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
+ *  last change: $Author: kr $ $Date: 2001-10-05 08:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,11 @@ static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rt
     }
 }
 
-static void getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
+static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
 {
     static const OUString sysUserConfig(RTL_CONSTASCII_USTRINGPARAM("SYSUSERCONFIG"));
     static const OUString sysUserHome(RTL_CONSTASCII_USTRINGPARAM("SYSUSERHOME"));
+    sal_Bool result = sal_True;
 
     // we have build ins:
     if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysUserConfig.pData->buffer, sysUserConfig.pData->length))
@@ -251,9 +252,12 @@ static void getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uSt
             if( ! *ppValue )
             {
                 getFromEnvironment( ppValue, pName );
-                if( ! *ppValue && pDefault )
+                if( ! *ppValue )
                 {
-                    rtl_uString_assign( ppValue , pDefault );
+                    result = sal_False;
+
+                    if(pDefault)
+                        rtl_uString_assign( ppValue , pDefault );
                 }
             }
         }
@@ -266,6 +270,8 @@ static void getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uSt
         sValue = OUStringToOString(OUString(*ppValue), RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE("bootstrap.cxx::getValue - name:%s value:%s\n", sName.getStr(), sValue.getStr());
 #endif
+
+    return result;
 }
 
 typedef struct Bootstrap_Impl {
@@ -359,14 +365,16 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
 {
     MutexGuard guard(Mutex::getGlobalMutex());
 
-    sal_Bool result = sal_False;
+    sal_Bool found = sal_False;
     if(ppValue && pName)
     {
         if(handle) {
-            rtl_uString_release(*ppValue);
-            *ppValue = 0;
+            if(*ppValue) {
+                rtl_uString_release(*ppValue);
+                *ppValue = 0;
+            }
 
-            getValue(&((Bootstrap_Impl *)handle)->_nameValueList, pName, ppValue, pDefault);
+            found = getValue(&((Bootstrap_Impl *)handle)->_nameValueList, pName, ppValue, pDefault);
 
 
             if(*ppValue)
@@ -376,18 +384,22 @@ sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_u
                 rtl_uString_assign(ppValue, result.pData );
             }
 
+            if(!found) {
+                // fall back to executable rc
+                  if(((Bootstrap_Impl *)handle)->_iniName != getIniFileNameImpl())
+                    found = rtl_bootstrap_get(pName, ppValue, pDefault);
+            }
+
             if(!*ppValue)
                 rtl_uString_new(ppValue);
 
-            else
-                result =  sal_True;
         }
         else
-            result = rtl_bootstrap_get(pName, ppValue, pDefault);
+            found = rtl_bootstrap_get(pName, ppValue, pDefault);
     }
 
 
-    return result;
+    return found;
 }
 
 void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName)
