@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Uniplex onGO (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Uniplex onGO</value>
+            <value>Uniplex onGO</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
