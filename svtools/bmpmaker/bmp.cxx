@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-25 13:49:36 $
+ *  last change: $Author: ka $ $Date: 2002-10-30 16:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ private:
     BYTE            cExitCode;
 
     BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
+    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
+
     void            SetExitCode( BYTE cExit )
                     {
                         if( ( EXIT_NOERROR == cExitCode ) || ( cExit != EXIT_NOERROR ) )
@@ -114,7 +116,7 @@ BmpApp::~BmpApp()
 
 // -----------------------------------------------------------------------
 
-BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rFollowingParam )
+BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rParam )
 {
     BOOL bRet = FALSE;
 
@@ -131,9 +133,9 @@ BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
                 bRet = TRUE;
 
                 if( i < ( nCount - 1 ) )
-                    rFollowingParam = rArgs[ i + 1 ];
+                    rParam = rArgs[ i + 1 ];
                 else
-                    rFollowingParam = String();
+                    rParam = String();
             }
 
             if( 0 == n )
@@ -142,6 +144,38 @@ BOOL BmpApp::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
     }
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL BmpApp::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
+{
+    BOOL bRet = FALSE;
+
+    for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
+    {
+        String  aTestStr( '-' );
+
+        for( int n = 0; ( n < 2 ) && !bRet; n++ )
+        {
+            aTestStr += rSwitch;
+
+            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
+            {
+                if( i < ( nCount - 1 ) )
+                    rParams.push_back( rArgs[ i + 1 ] );
+                else
+                    rParams.push_back( String() );
+
+                break;
+            }
+
+            if( 0 == n )
+                aTestStr = '/';
+        }
+    }
+
+    return( rParams.size() > 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -161,11 +195,12 @@ void BmpApp::Message( const String& rText, BYTE cExitCode )
 void BmpApp::ShowUsage()
 {
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Usage:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile bmp_dir output_dir lang_dir [-f err_file]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp srs_inputfile output_dir lang_dir -i input_dir [-i input_dir ][-f err_file]" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Options:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file output should be written to" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -i ...        name of directory to be searched for input files [multiple occurence is possible]" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "   -f            name of file, output should be written to" ) ), EXIT_NOERROR );
     Message( String( RTL_CONSTASCII_USTRINGPARAM( "Examples:" ) ), EXIT_NOERROR );
-    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/res /home/out /home/res/enus" ) ), EXIT_NOERROR );
+    Message( String( RTL_CONSTASCII_USTRINGPARAM( "    bmp /home/test.srs /home/out enus -i /home/res -f /home/out/bmp.err" ) ), EXIT_NOERROR );
 }
 
 // -----------------------------------------------------------------------------
@@ -176,23 +211,24 @@ int BmpApp::Start( const ::std::vector< String >& rArgs )
 
     cExitCode = EXIT_NOERROR;
 
-    if( rArgs.size() >= 4 )
+    if( rArgs.size() >= 5 )
     {
-        LangInfo            aLangInfo;
-        USHORT              nCurCmd = 0;
-        const String        aSrsName( rArgs[ nCurCmd++ ] );
-        const String        aInName( rArgs[ nCurCmd++ ] );
-        ByteString          aLangDir;
+        LangInfo                aLangInfo;
+        USHORT                  nCurCmd = 0;
+        const String            aSrsName( rArgs[ nCurCmd++ ] );
+        ::std::vector< String > aInDirVector;
+        ByteString              aLangDir;
 
         aOutName = rArgs[ nCurCmd++ ];
         aLangDir = ByteString( rArgs[ nCurCmd++ ], RTL_TEXTENCODING_ASCII_US );
 
         GetCommandOption( rArgs, 'f', aOutputFileName );
+        GetCommandOptions( rArgs, 'i', aInDirVector );
 
         memcpy( aLangInfo.maLangDir, aLangDir.GetBuffer(), aLangDir.Len() + 1 );
         aLangInfo.mnLangNum = (USHORT) DirEntry( aOutName ).GetName().ToInt32();
 
-        Create( aSrsName, aInName, aOutName, aLangInfo );
+        Create( aSrsName, aInDirVector, aOutName, aLangInfo );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mh $ $Date: 2002-06-28 09:26:43 $
+ *  last change: $Author: ka $ $Date: 2002-10-30 16:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #include <vector>
 #include <algorithm>
 
-#define FILETEST(FileEntry) ((FileEntry).Exists())
-
 // -------------------------
 // - ImplGetSystemFileName -
 // -------------------------
@@ -105,27 +103,28 @@ void BmpCreator::Message( const String& rText, BYTE cExitCode )
 
 // -----------------------------------------------------------------------
 
-void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry& rOut, const String& rName, const LangInfo& rLang )
+void BmpCreator::ImplCreate( SvStream& rStm,
+                             const ::std::vector< DirEntry >& rInDirs,
+                             const DirEntry& rOut,
+                             const String& rName,
+                             const LangInfo& rLang )
 {
        const char*         pCollectPath = getenv( "BMP_COLLECT_PATH" );
-    const char*         pResPath = getenv( "SOLARSRC" );
     const sal_uInt32    nOldPos = pSRS->Tell();
 
-    if( pResPath && *pResPath )
+    if( rInDirs.size() )
     {
-        ByteString              aLine;
-        String                  aFileName, aInfo, aPrefix, aName( rName );
-        String                  aString( String::CreateFromAscii( ByteString( pResPath ).GetBuffer() ) );
-        const String            aResPath( ( DirEntry( aString ) += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "res" ) ) ) ).GetFull() );
-        SvFileStream            aOutStream;
-        Bitmap                  aTotalBmp;
-        DirEntry                aOutFile( rOut );
-        DirEntry                aLocalPath( rIn + DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) ) );
-        DirEntry                aLocalCollectPath;
-        DirEntry                aGlobalPath( aResPath );
-        DirEntry                aGlobalLangPath( aResPath );
-        DirEntry                aGlobalCollectPath;
-        ::std::vector< String > aNameVector;
+        ByteString                  aLine;
+        String                      aInfo, aPrefix, aName( rName ), aString;
+        SvFileStream                aOutStream;
+        Bitmap                      aTotalBmp;
+        DirEntry                    aOutFile( rOut );
+        ::std::vector< DirEntry >   aInFiles( rInDirs );
+        ::std::vector< String >     aNameVector;
+        sal_uInt32                  i;
+
+        for( i = 0; i < aInFiles.size(); i++ )
+            aInFiles[ i ] += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
 
         // get prefix for files
 #if SUPD >= 642
@@ -146,15 +145,10 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
             aName = DirEntry( aName ).GetBase();
             aName += aNumStr;
             aName += String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) );
-            aGlobalLangPath += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
         }
 
         // create output file name
         aOutFile += DirEntry( aName );
-
-        // names are replaced later
-        aGlobalLangPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
-        aGlobalPath += DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "x.bmp" ) ) );
 
         // get number of bitmaps
         while( aLine.Search( '}' ) == STRING_NOTFOUND )
@@ -188,19 +182,14 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
             aInfo = String( RTL_CONSTASCII_USTRINGPARAM( "CREATING ImageList for language: " ) );
             aInfo += String( ::rtl::OUString::createFromAscii( rLang.maLangDir ) );
             aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " [ " ) );
-            aInfo += aLocalPath.GetPath().GetFull();
-            aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-            aInfo += aGlobalLangPath.GetPath().GetFull();
 
-            if( aGlobalPath != aGlobalLangPath )
-            {
-                aInfo += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-                aInfo += aGlobalPath.GetPath().GetFull();
-            }
+            for( i = 0; i < rInDirs.size(); i++ )
+                ( aInfo += rInDirs[ i ].GetFull() ) += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
 
             aInfo += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
             Message( aInfo );
 
+/*
             if( pCollectPath )
             {
                 String aLocalStr( aLocalPath.GetPath().GetFull() );
@@ -223,6 +212,7 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
                     Message( String( RTL_CONSTASCII_USTRINGPARAM( "ERROR: couldn't create collect path" ) ), 0 );
                 }
             }
+*/
 
             // create bit vector to hold flags for valid bitmaps
             ::std::bit_vector aValidBmpBitVector( aNameVector.size(), false );
@@ -231,62 +221,26 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
             {
                 Bitmap aBmp;
 
-                aLocalPath.SetName( aString = aNameVector[ n ] );
-
-                if( !FILETEST( aLocalPath ) )
+                for( i = 0; i < aInFiles.size() && aBmp.IsEmpty(); i++ )
                 {
-                    // Falls nicht deutsch, suchen wir zuerst im jeweiligen Sprach-Unterverz.
-                    if( rLang.mnLangNum != 49 )
-                    {
-                        aGlobalLangPath.SetName( aString );
+                    DirEntry aInFile( aInFiles[ i ] );
 
-                        if ( !FILETEST( aGlobalLangPath ) )
+                    aInFile.SetName( aString = aNameVector[ n ] );
+
+                    if( aInFile.Exists() )
+                    {
+                        const String    aFileName( aInFile.GetFull() );
+                        SvFileStream    aIStm( aFileName, STREAM_READ );
+                        aIStm >> aBmp;
+                        aIStm.Close();
+
+/*
+                        if( pCollectPath && !aBmp.IsEmpty() )
                         {
-                            aGlobalPath.SetName( aString );
-
-                            if( !FILETEST( aGlobalPath ) )
-                                aBmp = Bitmap();
-                            else
-                            {
-                                SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
-                                aIStm >> aBmp;
-                            }
+                            DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
+                            aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
                         }
-                        else
-                        {
-                            SvFileStream aIStm( aFileName = aGlobalLangPath.GetFull(), STREAM_READ );
-                            aIStm >> aBmp;
-                        }
-                    }
-                    else
-                    {
-                        aGlobalPath.SetName( aString );
-
-                        if( !FILETEST( aGlobalPath ) )
-                            aBmp = Bitmap();
-                        else
-                        {
-                            SvFileStream aIStm( aFileName = aGlobalPath.GetFull(), STREAM_READ );
-                            aIStm >> aBmp;
-                        }
-                    }
-
-                    if( pCollectPath && !aBmp.IsEmpty() )
-                    {
-                        DirEntry aSrcPath( aFileName ), aDstPath( aGlobalCollectPath );
-                        aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
-                    }
-                }
-                else
-                {
-                    SvFileStream aIStm( aFileName = aLocalPath.GetFull(), STREAM_READ );
-                    aIStm >> aBmp;
-                    aIStm.Close();
-
-                    if( pCollectPath && !aBmp.IsEmpty() )
-                    {
-                        DirEntry aSrcPath( aFileName ), aDstPath( aLocalCollectPath );
-                        aSrcPath.CopyTo( aDstPath += aSrcPath.GetName(), FSYS_ACTION_COPYFILE );
+*/
                     }
                 }
 
@@ -391,15 +345,36 @@ void BmpCreator::ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry
 
 // -----------------------------------------------------------------------------
 
-void BmpCreator::Create( const String& rSRSName, const String& rInName,
-                         const String& rOutName, const LangInfo& rLang )
+void BmpCreator::Create( const String& rSRSName,
+                         const ::std::vector< String >& rInDirs,
+                         const String& rOutName,
+                         const LangInfo& rLang )
 {
-    DirEntry    aFileName( ImplGetSystemFileName( rSRSName ) ), aInDir( ImplGetSystemFileName( rInName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
-    BOOL        bDone = FALSE;
+    DirEntry                    aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
+    ::std::vector< DirEntry >   aInDirs;
+    BOOL                        bDone = FALSE;
 
     aFileName.ToAbs();
-    aInDir.ToAbs();
     aOutDir.ToAbs();
+
+    // create vector of all valid input directories,
+    // including language subdirectories
+    for( sal_uInt32 i = 0; i < rInDirs.size(); i++ )
+    {
+        DirEntry aInDir( ImplGetSystemFileName( rInDirs[ i ] ) );
+
+        aInDir.ToAbs();
+
+        if( aInDir.Exists() )
+        {
+            DirEntry aLangInDir( aInDir );
+
+            if( ( aLangInDir += DirEntry( ::rtl::OUString::createFromAscii( rLang.maLangDir ) ) ).Exists() )
+                aInDirs.push_back( aLangInDir );
+
+            aInDirs.push_back( aInDir );
+        }
+    }
 
     pSRS = new SvFileStream ( aFileName.GetFull(), STREAM_STD_READ );
 
@@ -450,7 +425,7 @@ void BmpCreator::Create( const String& rSRSName, const String& rInName,
             if( aText.Len() )
             {
                 bDone = TRUE;
-                 ImplCreate( *pSRS, aInDir, aOutDir, aName, rLang );
+                 ImplCreate( *pSRS, aInDirs, aOutDir, aName, rLang );
             }
             else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {

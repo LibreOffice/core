@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-25 13:49:36 $
+ *  last change: $Author: ka $ $Date: 2002-10-30 16:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,8 @@ IMPL_LINK( BmpApp, Select, Menu*, pMenu )
 
         if ( aPathDlg.Execute() == RET_OK )
         {
+            ::std::vector< String > aInDirs;
+
             aCfg.WriteKey( "SRS", ByteString( aSrsPath = String( aPathDlg.GetSrsPath() ), RTL_TEXTENCODING_UTF8 ) );
             aCfg.WriteKey( "RES", ByteString( aResPath = String( aPathDlg.GetResPath() ), RTL_TEXTENCODING_UTF8 ) );
             aCfg.WriteKey( "OUT", ByteString( aOutPath = String( aPathDlg.GetOutPath() ), RTL_TEXTENCODING_UTF8 ) );
@@ -415,13 +417,18 @@ IMPL_LINK( BmpApp, Select, Menu*, pMenu )
 
             pBmpWin->ClearInfo();
 
+            aInDirs.push_back( aResPath );
+
+            if( getenv( "SOLARSRC" ) )
+                aInDirs.push_back( ::rtl::OUString::createFromAscii( getenv( "SOLARSRC" ) ) );
+
             if( !nLanguage )
             {
                 for ( USHORT i = 0, nCount = ( sizeof( aLangEntries ) / sizeof( aLangEntries[ 0 ] ) ); i < nCount; i++ )
-                    pBmpWin->Create( aSrsPath, aResPath, aOutPath, aLangEntries[ i ] );
+                    pBmpWin->Create( aSrsPath, aInDirs, aOutPath, aLangEntries[ i ] );
             }
             else
-                pBmpWin->Create( aSrsPath, aResPath, aOutPath, aLangEntries[ nLanguage - 1 ] );
+                pBmpWin->Create( aSrsPath, aInDirs, aOutPath, aLangEntries[ nLanguage - 1 ] );
         }
     }
     else if( pMenu->GetCurItemId() == 2 )

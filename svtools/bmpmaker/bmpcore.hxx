@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpcore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-22 16:19:45 $
+ *  last change: $Author: ka $ $Date: 2002-10-30 16:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <vcl/bitmap.hxx>
+#include <vector>
 
 // --------------
 // - Exit codes -
@@ -107,7 +108,11 @@ private:
     ULONG           nTotCount;
     USHORT          nPos;
 
-    void            ImplCreate( SvStream& rStm, const DirEntry& rIn, const DirEntry& rOut, const String& rName, const LangInfo& rLang );
+    void            ImplCreate( SvStream& rStm,
+                                const ::std::vector< DirEntry >& rInDirs,
+                                const DirEntry& rOut,
+                                const String& rName,
+                                const LangInfo& rLang );
 
 protected:
 
@@ -119,7 +124,7 @@ public:
     virtual         ~BmpCreator();
 
     void            Create( const String& rSRSName,
-                            const String& rInName,
+                            const ::std::vector< String >& rInDirs,
                             const String& rOutName,
                             const LangInfo& rLang );
 };
