@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragSourceDropEvent.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module datatransfer { module dnd {
     @see com::sun::star::datatransfer::dnd::XDragSourceListener
 */
 
-struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
+published struct DragSourceDropEvent: com::sun::star::datatransfer::dnd::DragSourceEvent
 {
     //-------------------------------------------------------------------------
     /** The action performed by the target on the subject of the drop.
