@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-09 07:09:29 $
+ *  last change: $Author: cl $ $Date: 2002-04-23 08:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,21 +168,20 @@ class SvxIMapDlg : public SfxFloatingWindow
     friend class IMapOwnData;
     friend class IMapWindow;
 
+    ToolBox             aTbxIMapDlg1;
+    FixedText           aFtURL;
+    SvtURLBox           maURLBox;
+    FixedText           aFtText;
+    Edit                aEdtText;
+    FixedText           maFtTarget;
+    ComboBox            maCbbTarget;
+    StatusBar           aStbStatus;
+
     Size                aLastSize;
     IMapWindow*         pIMapWnd;
     IMapOwnData*        pOwnData;
     void*               pCheckObj;
     SvxIMapDlgItem      aIMapItem;
-
-    ToolBox             aTbxIMapDlg1;
-    StatusBar           aStbStatus;
-    FixedText           aFtURL;
-    FixedText           aFtText;
-//  ComboBox            aCbbURL;
-    Edit                aEdtText;
-    SvtURLBox           maURLBox;
-    FixedText           maFtTarget;
-    ComboBox            maCbbTarget;
 
     virtual void        Resize();
     virtual BOOL        Close();
