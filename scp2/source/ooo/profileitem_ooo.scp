@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.15 $
+*  $Revision: 1.16 $
 *
-*  last change: $Author: rt $ $Date: 2004-12-03 14:39:44 $
+*  last change: $Author: rt $ $Date: 2005-01-07 10:18:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -298,20 +298,11 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultlayerurl
     Value  = "$BaseInstallation/share/registry";
 End
 
-ProfileItem gid_Profileitem_Configmgr_Localcfg_Spooldataurl
-    ProfileID = gid_Profile_Configmgr_Ini;
-    ModuleID = gid_Module_Root;
-    Section   = "Bootstrap";
-    Order = 15;
-    Key  = "CFG_SpoolDataUrl";
-    Value  = "$CFG_DefaultLayerUrl/spool";
-End
-
 ProfileItem gid_Profileitem_Configmgr_Localcfg_Modulelayerurl
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 16;
+    Order = 15;
     Key  = "CFG_ModuleLayerUrl";
     Value  = "$CFG_DefaultLayerUrl/modules";
 End
@@ -320,7 +311,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Unosharedpackages
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 17;
+    Order = 16;
     Key  = "CFG_UnoSharedPackages";
     Value = "${$UnoFile:UNO_SHARED_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
 End
@@ -329,7 +320,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Unouserpackages
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 18;
+    Order = 17;
     Key  = "CFG_UnoUserPackages";
     Value = "${$UnoFile:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
 End
@@ -338,7 +329,7 @@ End
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 19;
+    Order = 18;
     Key  = "CFG_BackendService";
     Value  = "com.sun.star.comp.configuration.backend.MultiStratumBackend";
 End
@@ -347,7 +338,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Schemasupplier
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 20;
+    Order = 19;
     Key  = "CFG_SchemaSupplier";
     Value  = "com.sun.star.comp.configuration.backend.LocalSchemaSupplier";
 End
@@ -356,9 +347,18 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Datasvc
     ProfileID = gid_Profile_Configmgr_Ini;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 21;
+    Order = 20;
     Key  = "CFG_LocalDataSvc";
     Value  = "com.sun.star.comp.configuration.backend.LocalStratum";
+End
+
+ProfileItem gid_Profileitem_Configmgr_Localcfg_Moduledatasvc
+    ProfileID = gid_Profile_Configmgr_Ini;
+    ModuleID = gid_Module_Root;
+    Section   = "Bootstrap";
+    Order = 21;
+    Key  = "CFG_LocalModuleDataSvc";
+    Value  = "com.sun.star.comp.configuration.backend.LocalMultiStratum";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Localcfg_Resdatasvc
@@ -377,14 +377,14 @@ ProfileItem gid_Profileitem_Configmgr_Strata
     Section   = "Bootstrap";
     Order = 23;
     Key  = "CFG_Strata";
-    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
+    Value  = "${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalModuleDataSvc}:$CFG_ModuleLayerUrl;${CFG_LocalResDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UnoUserPackages;${CFG_LocalDataSvc}:$CFG_UserLayerUrl;";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Ldapmappingurl
     ProfileID = gid_Profile_Configmgr_Ini ;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
-    Order = 21;
+    Order = 24;
     Key  = "CFG_LdapMappingUrl";
     Value  = "$BaseInstallation/share/registry/ldap";
 End 
