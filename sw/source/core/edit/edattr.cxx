@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-21 09:49:15 $
+ *  last change: $Author: jp $ $Date: 2001-09-24 15:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,9 +611,21 @@ USHORT SwEditShell::GetScriptType() const
 USHORT SwEditShell::GetCurLang() const
 {
     const SwPaM* pCrsr = GetCrsr();
-    const SwTxtNode* pTNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
-    return pTNd ? pTNd->GetLang( pCrsr->GetPoint()->nContent.GetIndex(), 0 )
-                : LANGUAGE_DONTKNOW;
+    const SwPosition& rPos = *pCrsr->GetPoint();
+    const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
+    USHORT nLang;
+    if( pTNd )
+    {
+        //JP 24.9.2001: if exist no selection, then get the language before
+        //              the current character!
+        xub_StrLen nPos = rPos.nContent.GetIndex();
+        if( nPos && !pCrsr->HasMark() )
+            --nPos;
+        nLang = pTNd->GetLang( nPos );
+    }
+    else
+        nLang = LANGUAGE_DONTKNOW;
+    return nLang;
 }
 
 USHORT SwEditShell::GetScalingOfSelectedText() const
