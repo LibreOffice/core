@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 13:55:22 $
+ *  last change: $Author: cl $ $Date: 2002-04-05 12:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,13 +568,75 @@ static void ImpScaleItemSet(SfxItemSet& rSet, const Fraction& rScale)
     }
 }
 
+void SdrAttrObj::ImplMigrateUniqueItems(SdrModel* pNewModel)
+{
+    if( mpObjectItemSet )
+    {
+        static sal_uInt16 ImplUniqueItemsWhichId[] =
+        {
+            XATTR_FILLBITMAP, XATTR_LINEDASH, XATTR_LINESTART,
+            XATTR_LINEEND, XATTR_FILLGRADIENT, XATTR_FILLFLOATTRANSPARENCE,
+            XATTR_FILLHATCH, 0
+        };
+
+        sal_uInt16* pWhich = ImplUniqueItemsWhichId;
+
+        const SfxPoolItem *pPoolItem;
+
+        while(*pWhich)
+        {
+            if(SFX_ITEM_SET == mpObjectItemSet->GetItemState(*pWhich, FALSE, &pPoolItem))
+            {
+                const SfxPoolItem* pItem = pPoolItem;
+
+                switch( *pWhich )
+                {
+                case XATTR_FILLBITMAP:
+                    pItem = ((XFillBitmapItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINEDASH:
+                    pItem = ((XLineDashItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINESTART:
+                    pItem = ((XLineStartItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_LINEEND:
+                    pItem = ((XLineEndItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLGRADIENT:
+                    pItem = ((XFillGradientItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLFLOATTRANSPARENCE:
+                    // #85953# allow all kinds of XFillFloatTransparenceItem to be set
+                    pItem = ((XFillFloatTransparenceItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                case XATTR_FILLHATCH:
+                    pItem = ((XFillHatchItem*)pItem)->checkForUniqueItem( pNewModel );
+                    break;
+                }
+
+                // set item
+                if( (NULL != pItem) && (pItem != pPoolItem) )
+                {
+                    mpObjectItemSet->Put(*pItem);
+                    delete (SfxPoolItem*)pItem;
+                }
+            }
+            pWhich++;
+        }
+    }
+}
+
 void SdrAttrObj::SetModel(SdrModel* pNewModel)
 {
     SdrModel* pOldModel = pModel;
 
     // test for correct pool in ItemSet; move to new pool if necessary
     if(pNewModel && mpObjectItemSet && mpObjectItemSet->GetPool() != &pNewModel->GetItemPool())
+    {
+        ImplMigrateUniqueItems( pNewModel );
         MigrateItemPool(mpObjectItemSet->GetPool(), &pNewModel->GetItemPool());
+    }
 
     // call parent
     SdrObject::SetModel(pNewModel);
@@ -840,11 +902,6 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
 {
     if(pNewItem)
     {
-#ifdef SVX_LIGHT
-        // set item
-        ((SdrAttrObj*)this)->ImpForceItemSet();
-        mpObjectItemSet->Put(*pNewItem);
-#else
         const SfxPoolItem* pItem = pNewItem;
 
         switch( nWhich )
@@ -883,7 +940,6 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
             if( pItem != pNewItem)
                 delete (SfxPoolItem*)pItem;
         }
-#endif
     }
     else
     {
