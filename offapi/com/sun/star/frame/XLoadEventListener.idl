@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLoadEventListener.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,14 @@
 
  module com {  module sun {  module star {  module frame {
 
-interface XFrameLoader;
+ published interface XFrameLoader;
 
 //=============================================================================
 /** is used to receive callbacks from an asynchronous frame loader.
 
     @see XFrameLoader
  */
-interface XLoadEventListener: com::sun::star::lang::XEventListener
+published interface XLoadEventListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** is called when a new component is loaded into a frame successfully.
