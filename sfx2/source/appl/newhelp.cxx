@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:02:58 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
 #endif
@@ -380,21 +386,6 @@ struct IndexEntry_Impl
 
 #define NEW_ENTRY( url, bool ) \
     (void*)(ULONG)( new IndexEntry_Impl( url, bool ) )
-
-// class OpenStatusListener_Impl -----------------------------------------
-
-void SAL_CALL OpenStatusListener_Impl::dispatchFinished( const DispatchResultEvent& aEvent ) throw(RuntimeException)
-{
-       m_bSuccess = ( aEvent.State == DispatchResultState::SUCCESS );
-       m_bFinished = sal_True;
-    m_aOpenLink.Call( this );
-}
-
-// -----------------------------------------------------------------------
-
-void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
-{
-}
 
 // struct ContentEntry_Impl ----------------------------------------------
 
@@ -1598,6 +1589,79 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
+sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
+                                                ::rtl::OUString& sFactory,
+                                                ::rtl::OUString& sContent,
+                                                ::rtl::OUString& sAnchor )
+{
+    Reference < XURLTransformer > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
+            DEFINE_CONST_UNICODE("com.sun.star.util.URLTransformer" )), UNO_QUERY_THROW );
+
+    URL aURL;
+    aURL.Complete = sHelpURL;
+    sal_Bool bResult = xParser->parseStrict(aURL);
+
+    sFactory = aURL.Server;
+    sContent = aURL.Path.copy(1); // strip "/"!
+    sAnchor  = aURL.Mark;
+
+    return bResult;
+}
+
+::rtl::OUString SfxHelpWindow_Impl::buildHelpURL(const ::rtl::OUString& sFactory        ,
+                                                 const ::rtl::OUString& sContent        ,
+                                                 const ::rtl::OUString& sAnchor         ,
+                                                       sal_Bool         bUseQuestionMark)
+{
+    ::rtl::OUStringBuffer sHelpURL(256);
+    sHelpURL.append(HELP_URL);
+    sHelpURL.append(sFactory);
+    sHelpURL.append(sContent);
+    String sURL = String(sHelpURL.makeStringAndClear());
+    AppendConfigToken_Impl(sURL, bUseQuestionMark);
+    if (sAnchor.getLength())
+        sURL += String(sAnchor);
+    return ::rtl::OUString(sURL);
+}
+
+void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bool bAddToHistory)
+{
+    Reference< XComponentLoader > xLoader(getTextFrame(), UNO_QUERY);
+    if (!xLoader.is())
+        return;
+
+    // save url to history
+    if (bAddToHistory)
+        pHelpInterceptor->addURL(sHelpURL);
+
+    if ( !IsWait() )
+        EnterWait();
+    sal_Bool bSuccess = sal_False;
+    while(sal_True)
+    {
+        try
+        {
+            Reference< XComponent > xContent = xLoader->loadComponentFromURL(sHelpURL, DEFINE_CONST_UNICODE("_self"), 0, Sequence< PropertyValue >());
+            if (xContent.is())
+            {
+                bSuccess = sal_True;
+                break;
+            }
+        }
+        catch(const RuntimeException&)
+            { throw; }
+        catch(const Exception&)
+            { break; }
+
+        /* TODO try next locale ...
+                no further locale available? => break loop and show error page
+        */
+    }
+    openDone(sHelpURL, bSuccess);
+    if ( IsWait() )
+        LeaveWait();
+}
+
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent ) :
 
     Window( _pParent, SfxResId( WIN_HELP_INDEX ) ),
@@ -2642,6 +2706,9 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                                 Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
                                 xPropSet->setPropertyValue( DEFINE_CONST_OUSTRING("HeaderIsOn"),
                                                             makeAny( sal_Bool( sal_False ) ) );
+
+                                Reference< XModifiable > xReset(xStyles, UNO_QUERY);
+                                xReset->setModified(sal_False);
 #ifdef DBG_UTIL
                                 bSetOff = sal_True;
 #endif
@@ -2900,31 +2967,11 @@ void SfxHelpWindow_Impl::SaveConfig()
 
 void SfxHelpWindow_Impl::ShowStartPage()
 {
-    String aStartURL;
-    aStartURL = HELP_URL;
-    aStartURL += pIndexWin->GetFactory();
-    aStartURL += DEFINE_CONST_UNICODE("/start");
-    AppendConfigToken_Impl( aStartURL, sal_True );
-
-    URL aURL;
-    aURL.Complete = aStartURL;
-    PARSE_URL( aURL );
-
-    String aTarget( DEFINE_CONST_UNICODE("_self") );
-    Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-    Reference < XDispatch > xDisp = xProv.is() ?
-        xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
-
-    if ( xDisp.is() )
-    {
-        Sequence < PropertyValue > aArgs( 1 );
-        aArgs[0].Name = DEFINE_CONST_UNICODE("ReadOnly");
-        BOOL bReadOnly = TRUE;
-        aArgs[0].Value <<= bReadOnly;
-        if ( !IsWait() )
-            EnterWait();
-        xDisp->dispatch( aURL, aArgs );
-    }
+    ::rtl::OUString sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
+                                                                DEFINE_CONST_UNICODE("/start"),
+                                                                ::rtl::OUString(),
+                                                                sal_True);
+    loadHelpContent(sHelpURL);
 }
 
 // -----------------------------------------------------------------------
@@ -2947,42 +2994,37 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
     pIndexWin->SelectExecutableEntry();
     String aEntry = pIndexWin->GetSelectEntry();
 
-    if ( aEntry.Len() > 0 )
+    if ( aEntry.Len() < 1 )
+        return 0;
+
+    ::rtl::OUString sHelpURL;
+
+    INetURLObject aObj(aEntry);
+    BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
+    if (bComplete)
+        sHelpURL = ::rtl::OUString(aEntry);
+    else
     {
-        INetURLObject aObj( aEntry );
-        if ( aObj.GetProtocol() != INET_PROT_VND_SUN_STAR_HELP )
+        String aId;
+        String aAnchor = String('#');
+        if ( aEntry.GetTokenCount( '#' ) == 2 )
         {
-            String aId, aAnchor('#');
-            if ( aEntry.GetTokenCount( '#' ) == 2 )
-            {
-                aId = aEntry.GetToken( 0, '#' );
-                aAnchor += aEntry.GetToken( 1, '#' );
-            }
-            else
-                aId = aEntry;
-
-            aEntry = HELP_URL;
-            aEntry += pIndexWin->GetFactory();
-            aEntry += '/';
-            aEntry += aId;
-            AppendConfigToken_Impl( aEntry, sal_True );
-            if ( aAnchor.Len() > 1 )
-                aEntry += aAnchor;
+            aId = aEntry.GetToken( 0, '#' );
+            aAnchor += aEntry.GetToken( 1, '#' );
         }
-        URL aURL;
-        aURL.Complete = aEntry;
-        PARSE_URL( aURL );
+        else
+            aId = aEntry;
 
-        Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
-        Reference < XDispatch > xDisp = xProv.is() ? xProv->queryDispatch( aURL, String(), 0 )
-                                                   : Reference < XDispatch >();
-        if ( xDisp.is() )
-        {
-            if ( !IsWait() )
-                EnterWait();
-            xDisp->dispatch( aURL, Sequence < PropertyValue >() );
-        }
+        aEntry  = '/';
+        aEntry += aId;
+
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(pIndexWin->GetFactory(),
+                                                    aEntry,
+                                                    aAnchor,
+                                                    sal_True);
     }
+
+    loadHelpContent(sHelpURL);
 
     return 0;
 }
@@ -3013,9 +3055,10 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
+void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
+                                        sal_Bool         bSuccess)
 {
-    INetURLObject aObj( pListener->GetURL() );
+    INetURLObject aObj( sURL );
     if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
         SetFactory( aObj.GetHost() );
     if ( IsWait() )
@@ -3027,7 +3070,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
     }
     else
         pIndexWin->GrabFocusBack();
-    if ( pListener->IsSuccessful() )
+    if ( bSuccess )
     {
         // set some view settings: "prevent help tips" and "helpid == 68245"
         try
@@ -3059,8 +3102,6 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener 
         // no page style header -> this prevents a print output of the URL
         pTextWin->SetPageStyleHeaderOff();
     }
-
-    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -3089,10 +3130,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     SetHelpId( HID_HELP_WINDOW );
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
-    OpenStatusListener_Impl* pOpenListener = new OpenStatusListener_Impl;
-    xOpenListener = Reference< XDispatchResultListener >( static_cast< ::cppu::OWeakObject* >(pOpenListener), UNO_QUERY );
-
-    pHelpInterceptor->InitWaiter( (OpenStatusListener_Impl*)xOpenListener.get(), this );
+    pHelpInterceptor->InitWaiter( this );
     pIndexWin = new SfxHelpIndexWindow_Impl( this );
     pIndexWin->SetDoubleClickHdl( LINK( this, SfxHelpWindow_Impl, OpenHdl ) );
     pIndexWin->SetSelectFactoryHdl( LINK( this, SfxHelpWindow_Impl, SelectFactoryHdl ) );
@@ -3105,7 +3143,6 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     pTextWin->Show();
     pHelpInterceptor->setInterception( pTextWin->getFrame() );
     pHelpListener->SetChangeHdl( LINK( this, SfxHelpWindow_Impl, ChangeHdl ) );
-    ( (OpenStatusListener_Impl*)xOpenListener.get() )->SetOpenHdl( LINK( this, SfxHelpWindow_Impl, OpenDoneHdl ) );
     LoadConfig();
 }
 
