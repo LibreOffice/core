@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:47:49 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:21:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,9 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
 CollatorImpl::~CollatorImpl()
 {
     // Clear lookuptable
-    for( cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-            cachedItem = (lookupTableItem*)lookupTable.Next() )
-        delete cachedItem;
-    lookupTable.Clear();
+    for (sal_Int32 l = 0; l < lookupTable.size(); l++)
+        delete lookupTable[l];
+    lookupTable.clear();
 }
 
 sal_Int32 SAL_CALL
@@ -190,10 +189,10 @@ sal_Bool SAL_CALL
 CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& serviceName, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
-    for (cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-            cachedItem = (lookupTableItem*)lookupTable.Next()) {
+    for (sal_Int32 l = 0; l < lookupTable.size(); l++) {
+        cachedItem = lookupTable[l];
         if (cachedItem->service.equals(serviceName)) {// cross locale sharing
-            lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
+            lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, cachedItem->xC));
             return sal_True;
         }
     }
@@ -205,7 +204,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
             Reference < XCollator > xC;
             xI->queryInterface( getCppuType((const Reference< XCollator>*)0) ) >>= xC;
             if (xC.is()) {
-                lookupTable.Insert(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
+                lookupTable.push_back(cachedItem = new lookupTableItem(rLocale, rSortAlgorithm, serviceName, xC));
                 return sal_True;
             }
         }
@@ -218,8 +217,8 @@ void SAL_CALL
 CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
     throw(RuntimeException)
 {
-    for (cachedItem = (lookupTableItem*)lookupTable.First(); cachedItem;
-            cachedItem = (lookupTableItem*)lookupTable.Next()) {
+    for (sal_Int32 i = 0; i < lookupTable.size(); i++) {
+        cachedItem = lookupTable[i];
         if (cachedItem->equals(rLocale, rSortAlgorithm)) {
             return;
         }
@@ -228,8 +227,6 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     static sal_Unicode under = (sal_Unicode) '_';
     static OUString tw(OUString::createFromAscii("TW"));
     static OUString unicode(OUString::createFromAscii("Unicode"));
-    static OUString icu(OUString::createFromAscii("ICU"));
-    static OUString simple(OUString::createFromAscii("Simple"));
 
     sal_Int32 l = rLocale.Language.getLength();
     sal_Int32 c = rLocale.Country.getLength();
@@ -259,10 +256,6 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
             // load service with name <algorithm>
             (a > 0 &&
              createCollator(rLocale, rSortAlgorithm, rSortAlgorithm)) ||
-            // load default service with name <base>_ICU
-            createCollator(rLocale, icu, rSortAlgorithm) ||
-            // load default service with name <base>_Simple
-            createCollator(rLocale, simple, rSortAlgorithm) ||
             // load default service with name <base>_Unicode
             createCollator(rLocale, unicode, rSortAlgorithm)) {
                 return;
