@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _ServiceManager.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:59 $
+ *  last change:$Date: 2003-02-04 12:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 package ifc.lang;
 
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import lib.MultiPropertyTest;
 
 public class _ServiceManager extends MultiPropertyTest {
@@ -70,8 +72,11 @@ public class _ServiceManager extends MultiPropertyTest {
         XComponentContext get = null;
         boolean res = false;
         try {
-            get = (XComponentContext) oObj.getPropertyValue("DefaultContext");
+            get = (XComponentContext)AnyConverter.toObject(new Type(XComponentContext.class), oObj.getPropertyValue("DefaultContext"));
             res = get != null;
+        } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println("Illegal Argument Exception");
+            res = false;
         } catch (com.sun.star.beans.UnknownPropertyException upe) {
             log.println("Property is optional and not supported");
             res = true;
