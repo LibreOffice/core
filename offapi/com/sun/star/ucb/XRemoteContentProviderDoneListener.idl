@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderDoneListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 module com { module sun { module star { module ucb {
 
-interface XRemoteContentProviderAcceptor;
+ published interface XRemoteContentProviderAcceptor;
 
 //============================================================================
 /** A notification mechanism that a
@@ -78,7 +78,7 @@ interface XRemoteContentProviderAcceptor;
     @version 1.0
     @author Stephan Bergmann
 */
-interface XRemoteContentProviderDoneListener: com::sun::star::uno::XInterface
+published interface XRemoteContentProviderDoneListener: com::sun::star::uno::XInterface
 {
     /** A notification that all remote content providers added to the given
         <type>XRemoteContentProviderAcceptor</type> should be removed,
