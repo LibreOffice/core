@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: er $ $Date: 2001-03-12 16:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 
 class ScViewData;
 class ScSortDlg;
+struct ScSortParam;
 
 //========================================================================
 // Kriterien

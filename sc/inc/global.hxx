@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:18:12 $
+ *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 
 class ImageList;
 class Bitmap;
-class International;
 class SfxItemSet;
 class Color;
 
@@ -131,7 +130,6 @@ struct LabelData;
 #define MAXZOOM     400
 
 #define MAXSUBTOTAL 3
-#define MAXSORT     3
 #define MAXQUERY    8
 #define PIVOT_MAXFIELD  8
 
@@ -499,6 +497,7 @@ class EditTextObject;
 class SfxObjectShell;
 class SvNumberFormatter;
 class ScUnitConverter;
+class International;
 class CharClass;
 class LocaleDataWrapper;
 class CalendarWrapper;
@@ -1319,46 +1318,6 @@ enum ScSubTotalFunc
 #define     PIVOT_FUNC_STD_VAR      0x0200
 #define     PIVOT_FUNC_STD_VARP     0x0400
 #define     PIVOT_FUNC_AUTO         0x1000
-
-// -----------------------------------------------------------------------
-
-struct ScSubTotalParam;
-struct ScQueryParam;
-
-// -----------------------------------------------------------------------
-
-struct ScSortParam
-{
-    USHORT      nCol1;
-    USHORT      nRow1;
-    USHORT      nCol2;
-    USHORT      nRow2;
-    BOOL        bHasHeader;
-    BOOL        bByRow;
-    BOOL        bCaseSens;
-    BOOL        bUserDef;
-    USHORT      nUserIndex;
-    BOOL        bIncludePattern;
-    BOOL        bInplace;
-    USHORT      nDestTab;
-    USHORT      nDestCol;
-    USHORT      nDestRow;
-    BOOL        bDoSort[MAXSORT];
-    USHORT      nField[MAXSORT];
-    BOOL        bAscending[MAXSORT];
-
-    ScSortParam();
-    ScSortParam( const ScSortParam& r );
-    // zum Sortieren von Zwischenergebnissen:
-    ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld );
-    ScSortParam( const ScQueryParam&, USHORT nCol );    // TopTen Sortierung
-
-    ScSortParam&    operator=   ( const ScSortParam& r );
-    BOOL            operator==  ( const ScSortParam& rOther ) const;
-    void            Clear       ();
-
-    void            MoveToDest();
-};
 
 // -----------------------------------------------------------------------
 

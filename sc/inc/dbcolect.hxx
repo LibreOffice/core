@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,11 @@
 #endif
 
 #ifndef SC_SCGLOB_HXX
-#include "global.hxx" // ->Konstanten (MAXSORT, MAXQUERY)
+#include "global.hxx"       // MAXQUERY
+#endif
+
+#ifndef SC_SORTPARAM_HXX
+#include "sortparam.hxx"    // MAXSORT
 #endif
 
 

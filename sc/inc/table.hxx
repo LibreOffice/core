@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:55:58 $
+ *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 
 #ifndef SC_COLUMN_HXX
 #include "column.hxx"
+#endif
+#ifndef SC_SORTPARAM_HXX
+#include "sortparam.hxx"
 #endif
 
 namespace utl {

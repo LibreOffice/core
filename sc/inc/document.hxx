@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-12 09:29:21 $
+ *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ class ScMatrix;
 class ScScriptTypeData;
 class ScPoolHelper;
 class ScImpExpLogMsg;
+struct ScSortParam;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
