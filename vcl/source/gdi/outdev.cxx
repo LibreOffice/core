@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-21 14:06:24 $
+ *  last change: $Author: thb $ $Date: 2002-10-29 10:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,7 +933,9 @@ void OutputDevice::ImplInitClipRegion()
             {
                 mbOutputClipped = FALSE;
 #ifndef REMOTE_APPSERVER
-                ImplSelectClipRegion( mpGraphics, maRegion, this );
+                ImplSelectClipRegion( mpGraphics,
+                                      // #102532# Respect output offset also for clip region
+                                      ImplPixelToDevicePixel( maRegion ), this );
 #else
                 mpGraphics->SetClipRegion( maRegion );
 #endif
