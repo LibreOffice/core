@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:51:57 $
+ *  last change: $Author: jp $ $Date: 2001-08-28 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ SwDoc::SwDoc() :
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pSectionFmtTbl( new SwSectionFmts() ),
     pFldTypes( new SwFldTypes() ),
-    pBookmarkTbl( new SwBookmarks() ),
+    pBookmarkTbl( new SwBookmarks( 0, 16 ) ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
     nLinkCt( 0 ),
