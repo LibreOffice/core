@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:39:48 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5138,6 +5138,33 @@ FloatingWindow RID_TOOLBOXWINDOW
     Size = MAP_APPFONT ( 0 , 0 ) ;
     Text = "Auswahl" ;
     Text [ ENGLISH ] = "Selection" ;
+    Text [ portuguese ] = "Selecção" ;
+    Text [ english_us ] = "Selection" ;
+    Text [ portuguese_brazilian ] = "Seleção" ;
+    Text [ swedish ] = "Urval" ;
+    Text [ danish ] = "Udvalg" ;
+    Text [ italian ] = "Selezione" ;
+    Text [ spanish ] = "Selección" ;
+    Text [ french ] = "Sélection" ;
+    Text [ dutch ] = "Selectie" ;
+    Text [ chinese_simplified ] = "é€‰æ‹©";
+    Text [ russian ] = "Âûáîğ";
+    Text [ polish ] = "Wybór";
+    Text [ japanese ] = "é¸æŠ";
+    Text [ chinese_traditional ] = "é¸å–";
+    Text [ arabic ] = "ÊÍÏíÏ";
+    Text [ language_user1 ] = " ";
+    Text [ greek ] = "ÅğéëïãŞ";
+    Text [ korean ] = "ì„ íƒ";
+    Text [ turkish ] = "Seçim";
+    Text [ catalan ] = "Selecció";
+    Text [ finnish ] = "Symbolivalikoima";
+    Text [ thai ] = "à¹€à¸¥à¸·à¸­à¸";
+    Text [ czech ] = "VÃ½bÄ›r";
+    Text [ hebrew ] = "â€®××‘×—×¨â€¬";
+    Text [ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
+    Text [ slovak ] = "VÃ½ber";
+
     ToolBox 1
     {
         // unary/binary operators
@@ -11455,28 +11482,6 @@ FloatingWindow RID_TOOLBOXWINDOW
 
     };
 
-    Text [ portuguese ] = "Selecção" ;
-    Text [ english_us ] = "Selection" ;
-    Text [ portuguese_brazilian ] = "Seleção" ;
-    Text [ swedish ] = "Urval" ;
-    Text [ danish ] = "Udvalg" ;
-    Text [ italian ] = "Selezione" ;
-    Text [ spanish ] = "Selección" ;
-    Text [ french ] = "Sélection" ;
-    Text [ dutch ] = "Selectie" ;
-    Text[ chinese_simplified ] = "é€‰æ‹©";
-    Text[ russian ] = "Âûáîğ";
-    Text[ polish ] = "Wybór";
-    Text[ japanese ] = "é¸æŠ";
-    Text[ chinese_traditional ] = "é¸å–";
-    Text[ arabic ] = "ÊÍÏíÏ";
-    Text[ language_user1 ] = " ";
-    Text[ greek ] = "ÅğéëïãŞ";
-    Text[ korean ] = "ì„ íƒ";
-    Text[ turkish ] = "Seçim";
-    Text[ catalan ] = "Selecció";
-    Text[ finnish ] = "Symbolivalikoima";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";
 
 #define UNOP_IDLIST         \
     IdList =                \
@@ -11849,10 +11854,6 @@ FloatingWindow RID_TOOLBOXWINDOW
         MaskColor = IMAGE_STDBTN_COLOR_HC ;
         IMG_IDLIST
     };
-    Text[ czech ] = "VÃ½bÄ›r";
-    Text[ hebrew ] = "â€®××‘×—×¨â€¬";
-    Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ slovak ] = "VÃ½ber";
 };
 
 #define CMDBOXWINDOW_TEXT           \
