@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ class SfxApplication;
 class SvStrings;
 class Config;
 class SfxBmkMenu;
-class SvVerbList;
 class SfxProgress;
 class SfxChildWinFactArr_Impl;
 class SfxToolBoxConfig;
@@ -147,7 +146,6 @@ public:
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers
-    SvVerbList*                         pVerbs;
     Config*                             pFilterIni;
     SfxItemPool*                        pPool;
     SfxEventConfiguration*              pEventConfig;
