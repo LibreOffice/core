@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:43:26 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:00:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
     Reference<XConnection> xConnection;
 
     // create a unique id and look for it in our map
-    Sequence< PropertyValue > aInfo;
+    Sequence< PropertyValue > aInfo(_rInfo);
     TConnectionMap::key_type nId;
     OConnectionWrapper::createUniqueId(_rURL,aInfo,nId.m_pBuffer);
     TConnectionMap::iterator aIter = m_aPool.find(nId);
