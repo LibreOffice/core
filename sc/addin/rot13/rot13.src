@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:53:38 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ korean ] = "ROT13 ¾Ë°í¸®Áò, ÅØ½ºÆ®ÀÇ °¢ ¾ËÆÄºª ¹®ÀÚ´Â ¾ËÆÄºª¿¡¼­ 13  ÀÚ¸®¾¿ ÀÌµ¿ÇÕ´Ï´Ù.";
         Text[ turkish ] = "ROT13 Algoritmi, metnin her alfabetik karakteri alfabe içinde 13 sýra döndürülür.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Algoritmo ROT13, cada carácter alfabético del texto rodará 13 espacios en el alfabeto.";
     };
 
     String ROT13_PAR1_NAME // Name of Parameter 1
@@ -115,6 +116,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ korean ] = "ÅØ½ºÆ®";
         Text[ turkish ] = "Metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Texto";
     };
 
     String ROT13_PAR1_DESC // Description of Parameter 1
@@ -142,6 +144,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ korean ] = "È¸ÀüµÉ ÅØ½ºÆ®";
         Text[ turkish ] = "Döndürülecek metin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "El texto que debe rodar";
     };
 };
 
