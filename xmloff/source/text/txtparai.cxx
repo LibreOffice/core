@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 09:59:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,8 +842,8 @@ void XMLIndexMarkImportContext_Impl::StartElement(
     const Reference<xml::sax::XAttributeList> & xAttrList)
 {
     // get Cursor position (needed for all cases)
-    Reference<XTextRange> xPos =
-        GetImport().GetTextImport()->GetCursor()->getStart();
+    Reference<XTextRange> xPos(
+        GetImport().GetTextImport()->GetCursor()->getStart());
     Reference<beans::XPropertySet> xMark;
 
     switch (eToken)
@@ -958,9 +958,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
             if ( (XML_NAMESPACE_TEXT == nNamespace) &&
                  IsXMLToken( sLocalName, XML_STRING_VALUE ) )
             {
-                Any aAny;
-                aAny <<= sValue;
-                rPropSet->setPropertyValue(sAlternativeText, aAny);
+                rPropSet->setPropertyValue(sAlternativeText, uno::makeAny(sValue));
             }
             // else: ignore!
             break;
@@ -1049,14 +1047,10 @@ sal_Bool XMLIndexMarkImportContext_Impl::CreateMark(
 
     if( xFactory.is() )
     {
-        Reference<XInterface> xIfc = xFactory->createInstance(rServiceName);
-        if( xIfc.is() )
-        {
-            Reference<beans::XPropertySet> xPropSet( xIfc, UNO_QUERY );
-            if (xPropSet.is())
-                rPropSet = xPropSet;
-            return sal_True;
-        }
+        Reference<beans::XPropertySet> xPropSet( xFactory->createInstance(rServiceName), UNO_QUERY );
+        if (xPropSet.is())
+            rPropSet = xPropSet;
+        return sal_True;
     }
 
     return sal_False;
@@ -1116,9 +1110,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
              && nTmp < GetImport().GetTextImport()->
                               GetChapterNumbering()->getCount() )
         {
-            Any aAny;
-            aAny <<= (sal_Int16)(nTmp - 1);
-            rPropSet->setPropertyValue(sLevel, aAny);
+            rPropSet->setPropertyValue(sLevel, uno::makeAny((sal_Int16)(nTmp - 1)));
         }
         // else: value out of range -> ignore
     }
@@ -1174,9 +1166,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     {
         if ( IsXMLToken( sLocalName, XML_INDEX_NAME ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sUserIndexName, aAny);
+            rPropSet->setPropertyValue(sUserIndexName, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_OUTLINE_LEVEL ) )
         {
@@ -1186,9 +1176,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 nTmp, sValue, 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
-                Any aAny;
-                aAny <<= (sal_Int16)nTmp;
-                rPropSet->setPropertyValue(sLevel, aAny);
+                rPropSet->setPropertyValue(sLevel, uno::makeAny((sal_Int16)nTmp));
             }
             // else: value out of range -> ignore
         }
@@ -1261,33 +1249,23 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     {
         if ( IsXMLToken( sLocalName, XML_KEY1 ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sPrimaryKey, aAny);
+            rPropSet->setPropertyValue(sPrimaryKey, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_KEY2 ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sSecondaryKey, aAny);
+            rPropSet->setPropertyValue(sSecondaryKey, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_KEY1_PHONETIC ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sPrimaryKeyReading, aAny);
+            rPropSet->setPropertyValue(sPrimaryKeyReading, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_KEY2_PHONETIC ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sSecondaryKeyReading, aAny);
+            rPropSet->setPropertyValue(sSecondaryKeyReading, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_STRING_VALUE_PHONETIC ) )
         {
-            Any aAny;
-            aAny <<= sValue;
-            rPropSet->setPropertyValue(sTextReading, aAny);
+            rPropSet->setPropertyValue(sTextReading, uno::makeAny(sValue));
         }
         else if ( IsXMLToken( sLocalName, XML_MAIN_ENTRY ) )
         {
@@ -1296,9 +1274,7 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
                 bMainEntry = bTmp;
 
-            Any aAny;
-            aAny.setValue(&bMainEntry, ::getBooleanCppuType());
-            rPropSet->setPropertyValue(sMainEntry, aAny);
+            rPropSet->setPropertyValue(sMainEntry, uno::makeAny(bMainEntry));
         }
         else
         {
@@ -1522,8 +1498,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
         break;
     case XML_TOK_DRAW_A:
         {
-            Reference < XTextRange > xAnchorPos =
-                rImport.GetTextImport()->GetCursor()->getStart();
+            Reference < XTextRange > xAnchorPos(rImport.GetTextImport()->GetCursor()->getStart());
             pContext =
                 new XMLTextFrameHyperlinkContext( rImport, nPrefix,
                                         rLocalName, xAttrList,
@@ -1725,16 +1700,16 @@ XMLParaContext::XMLParaContext(
 
 XMLParaContext::~XMLParaContext()
 {
-    UniReference < XMLTextImportHelper > xTxtImport =
-        GetImport().GetTextImport();
-    Reference < XTextRange > xEnd = xTxtImport->GetCursorAsRange()->getStart();
+    UniReference < XMLTextImportHelper > xTxtImport(
+        GetImport().GetTextImport());
+    Reference < XTextRange > xEnd(xTxtImport->GetCursorAsRange()->getStart());
 
     // insert a paragraph break
     xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
 
     // create a cursor that select the whole last paragraph
-    Reference < XTextCursor > xAttrCursor=
-        xTxtImport->GetText()->createTextCursorByRange( xStart );
+    Reference < XTextCursor > xAttrCursor(
+        xTxtImport->GetText()->createTextCursorByRange( xStart ));
     xAttrCursor->gotoRange( xEnd, sal_True );
 
     // #103445# for headings without style name, find the proper style
