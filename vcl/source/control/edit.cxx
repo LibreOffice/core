@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:54:45 $
+ *  last change: $Author: mt $ $Date: 2001-11-30 13:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,15 +743,23 @@ void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode 
 
 // -----------------------------------------------------------------------
 
+String Edit::ImplGetValidString( const String& rString ) const
+{
+    String aValidString( rString );
+    aValidString.EraseAllChars( _LF );
+    aValidString.EraseAllChars( _CR );
+    aValidString.SearchAndReplaceAll( '\t', ' ' );
+    return aValidString;
+}
+
+// -----------------------------------------------------------------------
+
 void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel )
 {
     Selection aSelection( maSelection );
     aSelection.Justify();
 
-    XubString aNewText( rStr );
-    aNewText.EraseAllChars( _LF );
-    aNewText.EraseAllChars( _CR );
-    aNewText.SearchAndReplaceAll( '\t', ' ' );
+    XubString aNewText( ImplGetValidString( rStr ) );
 
     if ( (maText.Len() + aNewText.Len() - aSelection.Len()) > mnMaxTextLen )
         return;
@@ -797,7 +805,7 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
         if ( mnXOffset || HasPaintEvent() )
         {
             mnXOffset = 0;
-            maText = rText;
+            maText = ImplGetValidString( rText );
 
             if ( pNewSelection )
                 ImplSetSelection( *pNewSelection, FALSE );
