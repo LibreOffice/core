@@ -2,9 +2,9 @@
  *
  *  $RCSfile: destr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:37:32 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:53:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ inline void _destructStruct(
             ppTypeRefs[nDescr], release );
     }
 }
+
 //--------------------------------------------------------------------------------------------------
 inline void _destructArray(
     void * pValue,
@@ -134,12 +135,14 @@ inline void _destructArray(
 
     typelib_typedescriptionreference_release(((typelib_IndirectTypeDescription *)pTypeDescr)->pType);
 }
-//==================================================================================================
+
+//==============================================================================
 void destructSequence(
-    uno_Sequence ** ppSequence,
-    typelib_TypeDescriptionReference * pElementType,
-    uno_ReleaseFunc release )
-    SAL_THROW( () );
+    uno_Sequence * pSequence,
+    typelib_TypeDescriptionReference * pType,
+    typelib_TypeDescription * pTypeDescr,
+    uno_ReleaseFunc release );
+
 //--------------------------------------------------------------------------------------------------
 inline void _destructAny(
     uno_Any * pAny,
@@ -205,13 +208,8 @@ inline void _destructAny(
     }
     case typelib_TypeClass_SEQUENCE:
     {
-        typelib_TypeDescription * pTypeDescr = 0;
-        TYPELIB_DANGER_GET( &pTypeDescr, pType );
         destructSequence(
-            (uno_Sequence **)&pAny->pReserved,
-            ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
-            release );
-        TYPELIB_DANGER_RELEASE( pTypeDescr );
+            *(uno_Sequence **) &pAny->pReserved, pType, 0, release );
         break;
     }
     case typelib_TypeClass_INTERFACE:
@@ -225,7 +223,7 @@ inline void _destructAny(
     ::typelib_typedescriptionreference_release( pType );
 }
 //--------------------------------------------------------------------------------------------------
-inline sal_Int32 _destructElements(
+inline sal_Int32 idestructElements(
     void * pElements, typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_ReleaseFunc release )
@@ -326,8 +324,8 @@ inline sal_Int32 _destructElements(
         for ( sal_Int32 nPos = nStartIndex; nPos < nStopIndex; ++nPos )
         {
             destructSequence(
-                &pDest[nPos],
-                ((typelib_IndirectTypeDescription *)pElementTypeDescr)->pType,
+                pDest[nPos],
+                pElementTypeDescr->pWeakRef, pElementTypeDescr,
                 release );
         }
         TYPELIB_DANGER_RELEASE( pElementTypeDescr );
@@ -365,36 +363,39 @@ inline sal_Int32 _destructElements(
     }
     return 0;
 }
-//--------------------------------------------------------------------------------------------------
-inline void _destructSequence(
-    uno_Sequence * pSequence,
+
+//------------------------------------------------------------------------------
+inline void idestructSequence(
+    uno_Sequence * pSeq,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    SAL_THROW( () )
 {
-    if (! ::osl_decrementInterlockedCount( &pSequence->nRefCount ))
+    if (::osl_decrementInterlockedCount( &pSeq->nRefCount ) == 0)
     {
-        if (pSequence->nElements)
+        if (pSeq->nElements > 0)
         {
             if (pTypeDescr)
             {
-                _destructElements(
-                    pSequence->elements, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
-                    0, pSequence->nElements, release );
+                idestructElements(
+                    pSeq->elements,
+                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                    pSeq->nElements, release );
             }
             else
             {
                 TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                _destructElements(
-                    pSequence->elements, ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
-                    0, pSequence->nElements, release );
+                idestructElements(
+                    pSeq->elements,
+                    ((typelib_IndirectTypeDescription *) pTypeDescr)->pType, 0,
+                    pSeq->nElements, release );
                 TYPELIB_DANGER_RELEASE( pTypeDescr );
             }
         }
-        ::rtl_freeMemory( pSequence );
+        ::rtl_freeMemory( pSeq );
     }
 }
+
 //--------------------------------------------------------------------------------------------------
 inline void _destructData(
     void * pValue,
@@ -449,15 +450,17 @@ inline void _destructData(
         }
         else
         {
-            typelib_TypeDescription * pTypeDescr = 0;
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
             _destructUnion( pValue, pTypeDescr, release );
             TYPELIB_DANGER_RELEASE( pTypeDescr );
         }
         break;
     case typelib_TypeClass_SEQUENCE:
-        _destructSequence( *(uno_Sequence **)pValue, pType, pTypeDescr, release );
+    {
+        idestructSequence(
+            *(uno_Sequence **)pValue, pType, pTypeDescr, release );
         break;
+    }
     case typelib_TypeClass_INTERFACE:
         _release( *(void **)pValue, release );
         break;
