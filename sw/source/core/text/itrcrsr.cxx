@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: ama $ $Date: 2002-02-15 14:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,14 +532,14 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             if( ((SwMultiPortion*)pPor)->HasRotation() )
                             {
                                 if( ((SwMultiPortion*)pPor)->IsRevers() )
-                                    pCMS->p2Lines->nMultiType = 1;
+                                    pCMS->p2Lines->nMultiType = MT_ROT_270;
                                 else
-                                    pCMS->p2Lines->nMultiType = 0;
+                                    pCMS->p2Lines->nMultiType = MT_ROT_90;
                             }
                             else if( ((SwMultiPortion*)pPor)->IsDouble() )
-                                pCMS->p2Lines->nMultiType = 2;
+                                pCMS->p2Lines->nMultiType = MT_TWOLINE;
                             else
-                                pCMS->p2Lines->nMultiType = 3;
+                                pCMS->p2Lines->nMultiType = MT_RUBY;
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )
                                 nTmpWidth += pPor->CalcSpacing(nSpaceAdd, aInf);
