@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-28 11:14:04 $
+ *  last change: $Author: mt $ $Date: 2001-12-07 13:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,6 +689,7 @@ public:
     BOOL            operator == ( const EditSelection& r ) const
                     { return ( ( aStartPaM == r.aStartPaM ) && ( aEndPaM == r.aEndPaM ) )
                             ? TRUE : FALSE; }
+    BOOL            operator != ( const EditSelection& r ) const { return !( r == *this ); }
 };
 
 // -------------------------------------------------------------------------
