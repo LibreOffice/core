@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:20 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,8 +1277,7 @@ Rectangle DecorationView::DrawButton( const Rectangle& rRect, USHORT nStyle )
     {
         const StyleSettings& rStyleSettings = mpOutDev->GetSettings().GetStyleSettings();
 
-        if ( (rStyleSettings.GetOptions() & STYLE_OPTION_MONO) ||
-             (mpOutDev->GetOutDevType() == OUTDEV_PRINTER) )
+        if ( rStyleSettings.GetOptions() & STYLE_OPTION_MONO )
             nStyle |= BUTTON_DRAW_MONO;
 
         if ( nStyle & BUTTON_DRAW_NODRAW )
