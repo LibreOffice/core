@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
             break;
         case PROPERTY_ID_VALUE:
             rConvertedValue = rValue;
+            getFastPropertyValue(rOldValue, PROPERTY_ID_VALUE);
             bModified = !::comphelper::compare(rConvertedValue, rOldValue);
             break;
         default:
