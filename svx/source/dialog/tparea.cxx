@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tparea.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: thb $ $Date: 2001-10-23 12:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,6 +1657,9 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
     // aTsbOriginal
     aTsbOriginal.SetState( eOriginal );
+
+    // #93372# Setting proper state after changing button
+    ModifyTileHdl_Impl( NULL );
 
     //aRbtRow
     //aRbtColumn
