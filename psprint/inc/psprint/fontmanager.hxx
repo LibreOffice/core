@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:25:57 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:03:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,12 @@ class PrintFontManager
     int getDirectoryAtom( const rtl::OString& rDirectory, bool bCreate = false );
 
     void getServerDirectories(); // get font server directories on e.g. redhat
+
+    // try to initialize from libfontconfig
+    // returns true if at least one font was added by libfontconfig,
+    // else returns false (e.g. no libfontconfig found
+    // called from initialize()
+    bool initFontconfig();
 
     PrintFontManager();
     ~PrintFontManager();
