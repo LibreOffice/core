@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:27:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2285,6 +2285,31 @@ namespace xmloff { namespace token {
         TOKEN( "segments" ),                        // XML_SEGMENTS
         TOKEN( "word-wrap" ),                       // XML_WORD_WRAP
         TOKEN( "auto-grow-size" ),                  // XML_AUTO_GROW_SIZE
+
+        TOKEN( "data-pilot-field-reference"),       // XML_DATA_PILOT_FIELD_REFERENCE
+        TOKEN( "member-difference"),                // XML_MEMBER_DIFFERENCE
+        TOKEN( "member-percentage"),                // XML_MEMBER_PERCENTAGE
+        TOKEN( "member-percentage-difference"),     // XML_MEMBER_PERCENTAGE_DIFFERENCE
+        TOKEN( "running-total"),                    // XML_RUNNING_TOTAL
+        TOKEN( "row-percentage"),                   // XML_ROW_PERCENTAGE
+        TOKEN( "column-percentage"),                // XML_COLUMN_PERCENTAGE
+        TOKEN( "total-percentage"),                 // XML_TOTAL_PERCENTAGE
+        TOKEN( "field-name"),                       // XML_FIELD_NAME
+        TOKEN( "member-type"),                      // XML_MEMBER_TYPE
+        TOKEN( "named"),                            // XML_NAMED
+        TOKEN( "member-name"),                      // XML_MEMBER_NAME
+        TOKEN( "display-member-mode"),              // XML_DISPLAY_MEMBER_MODE
+        TOKEN( "member-count"),                     // XML_MEMBER_COUNT
+        TOKEN( "data-field"),                       // XML_DATA_FIELD
+        TOKEN( "data-pilot-display-info"),          // XML_DATA_PILOT_DISPLAY_INFO
+        TOKEN( "sort-mode"),                        // XML_SORT_MODE
+        TOKEN( "data-pilot-sort-info"),             // XML_DATA_PILOT_SORT_INFO
+        TOKEN( "add-empty-line"),                   // XML_ADD_EMPTY_LINE
+        TOKEN( "tabular-layout"),                   // XML_TABULAR_LAYOUT
+        TOKEN( "outline-subtotals-top"),            // XML_OUTLINE_SUBTOTALS_TOP
+        TOKEN( "outline-subtotals-bottom"),         // XML_OUTLINE_SUBTOTALS_BOTTOM
+        TOKEN( "layout-mode"),                      // XML_LAYOUT_MODE
+        TOKEN( "data-pilot-layout-info"),           // XML_DATA_PILOT_LAYOUT_INFO
 
         { 0, NULL, NULL }                       // XML_TOKEN_END
     };
