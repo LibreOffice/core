@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
+ *  last change: $Author: jp $ $Date: 2001-09-28 16:05:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,24 @@ namespace com { namespace sun { namespace star { namespace uno {
 }}}};
 
 
+// Flags for GetScriptType - to define how handle weak - scripts (b.e.
+// symbol characters):
+// GETSCRIPT_WEAKTOAPPLANGSCRIPT:
+//      app language define the script type if only weak characters
+//      are selected and before the weak script no weak script if found
+//      (mostly the default for Get any attributes, etc)
+// GETSCRIPT_WEAKTOAPPLANGSCRIPT:
+//      app language defines the script type if only weak characters
+//      are selected and before the weak script no weak script is found
+//      (mostly the default for Get any attributes, etc)
+// GETSCRIPT_WEAKTOALL:
+//      all script flags are set.
+//      are selected and before the weak script no weak script if found
+//      (mostly the default for Get any attributes, etc)
+#define GETSCRIPT_WEAKTOAPPLANGSCRIPT   0
+#define GETSCRIPT_WEAKTOALL             1
+
+
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
@@ -290,7 +308,7 @@ public:
     void GCAttr();
 
     // returns the scripttpye of the selection
-    USHORT GetScriptType() const;
+    USHORT GetScriptType( USHORT nFlags = GETSCRIPT_WEAKTOAPPLANGSCRIPT ) const;
 
     // returns the language at current cursor position
     USHORT GetCurLang() const;
