@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-06 16:15:56 $
+ *  last change: $Author: mt $ $Date: 2002-07-17 10:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ OutlinerParaObject::~OutlinerParaObject()
     DBG_DTOR(OutlinerParaObject,0);
 
     delete pText;
-    delete pDepthArr;
+    delete[] pDepthArr;
 }
 
 void OutlinerParaObject::ClearPortionInfo()

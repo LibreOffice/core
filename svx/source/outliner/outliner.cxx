@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-09 10:17:20 $
+ *  last change: $Author: mt $ $Date: 2002-07-17 10:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,7 +1146,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     FontMetric aMetric( pOutDev->GetFontMetric() );
                     aTextPos.Y() -= aMetric.GetDescent();
                     DrawingText( aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf, aSvxFont, nPara, 0xFFFF );
-                    delete pBuf;
+                    delete[] pBuf;
                 }
                 pOutDev->SetFont( aOldFont );
             }
