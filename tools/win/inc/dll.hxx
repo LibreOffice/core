@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:11 $
+ *  last change: $Author: th $ $Date: 2001-07-06 13:56:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,10 +88,6 @@ void SetSVData( SVDATA* pSVData );
 // -------------------------------
 // - Sonstige Funktionen fuer SV -
 // -------------------------------
-
-// MultiThread-Sicherung aktivieren
-void EnterMultiThread( int bEnter );
-int  IsMultiThread();
 
 // Um Resourcen wieder freizugeben
 #ifdef WNT

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolsdll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:11 $
+ *  last change: $Author: th $ $Date: 2001-07-06 13:56:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,92 +75,6 @@
 
 // =======================================================================
 
-#ifdef WIN
-
-extern "C" int CALLBACK LibMain( HINSTANCE, WORD, WORD nHeap, LPSTR )
-{
-    if ( nHeap )
-        UnlockData( 0 );
-
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-// -----------------------------------------------------------------------
-
-ToolsData* ImpGetToolsData()
-{
-    ToolsData* pData = ImpGetAppData();
-
-    // Tools-Init
-    if ( !pData )
-    {
-        // Speicher anlegen
-        HANDLE hMem = GlobalAlloc( GMEM_MOVEABLE | GMEM_ZEROINIT,
-                                   (DWORD)sizeof( ToolsData ) );
-
-        if ( !hMem )
-            return NULL;
-
-        pData = (ToolsData*)GlobalLock( hMem );
-
-        if ( !pData )
-        {
-            GlobalFree( hMem );
-            return NULL;
-        }
-
-        // ToolsData setzen
-        ImpSetAppData( pData );
-    }
-
-    return pData;
-}
-
-// -----------------------------------------------------------------------
-
-void** GetAppData( USHORT nSharedLib )
-{
-    ToolsData* pData = ImpGetToolsData();
-    return &(pData->aAppData[nSharedLib]);
-}
-
-// -----------------------------------------------------------------------
-
-void SetSVData( SVDATA* pSVData )
-{
-    ToolsData* pData = ImpGetToolsData();
-    pData->pSVData = pSVData;
-}
-
-// -----------------------------------------------------------------------
-
-void EnterMultiThread( int bEnter )
-{
-    ToolsData* pData = ImpGetToolsData();
-    if ( bEnter )
-        pData->aMemD.nMultiThread++;
-    else if ( pData->aMemD.nMultiThread )
-        pData->aMemD.nMultiThread--;
-}
-
-// -----------------------------------------------------------------------
-
-int IsMultiThread()
-{
-    return (ImpGetToolsData()->aMemD.nMultiThread != 0);
-}
-
-#endif
-
-// =======================================================================
-
 #ifdef WNT
 
 static void* aAppData[SHL_COUNT];
@@ -171,9 +85,5 @@ void** GetAppData( USHORT nSharedLib )
 {
     return &(aAppData[nSharedLib]);
 }
-
-// -----------------------------------------------------------------------
-
-// EnterMultiThread()/IsMultiThread()/... in MEMWNT.CXX, damit inline
 
 #endif
