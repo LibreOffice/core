@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-07 13:36:07 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _SD_GLOB_HXX
 
 #ifndef _SOLAR_H
-#include <solar.h>
+#include <tools/solar.h>
 #endif
 
 //------------------------------------------------------------------
