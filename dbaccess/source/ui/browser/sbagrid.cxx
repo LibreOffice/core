@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:42:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 11:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,9 +159,11 @@
 #include <svx/svxids.hrc>
 #endif
 
-#ifndef _SV_DRAG_HXX //autogen
+#ifndef TF_SVDATA
+#ifndef _SV_DRAG_HXX
 #include <vcl/drag.hxx>
 #endif
+#endif // TF_SVDATA
 
 #ifndef _NUMUNO_HXX
 #include <svtools/numuno.hxx>
@@ -183,9 +185,9 @@
 #include <svtools/rngitem.hxx>
 #endif
 
-#ifndef _EXCHOBJ_HXX
-#include <sfx2/exchobj.hxx>
-#endif
+//#ifndef _EXCHOBJ_HXX
+//#include <sfx2/exchobj.hxx>
+//#endif
 
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
@@ -224,8 +226,10 @@
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
 #endif
+#ifndef TF_SVDATA
 #ifndef _SV_CLIP_HXX
 #include <vcl/clip.hxx>
+#endif
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
