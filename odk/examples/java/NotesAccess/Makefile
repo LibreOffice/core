@@ -32,9 +32,6 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS) : $(OUT)
-	$(MKDIR) $(subst /,$(PS),$@)
-
 $(OFFICE_CLASSES_DIR)/Notes.jar : 
 	@echo --------------------------------------------------------------------------------
 	@echo You need the "$(QM)Notes.jar$(QM)" from Notes/Domino for this example.
@@ -43,8 +40,9 @@ $(OFFICE_CLASSES_DIR)/Notes.jar :
 	@echo --------------------------------------------------------------------------------
 
 
-$(CLASSFILES) : $(OFFICE_CLASSES_DIR)/Notes.jar $(OUT_COMP_CLASS) $(JAVAFILES) 
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+$(CLASSFILES) : $(OFFICE_CLASSES_DIR)/Notes.jar $(JAVAFILES) 
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 JavaNotesAccessExample : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
