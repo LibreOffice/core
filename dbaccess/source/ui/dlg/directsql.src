@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:52:52 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ ModalDialog DLG_DIRECTSQL
         Text [ english_us ] = "SQL command";
         Text[ portuguese ] = "Comando SQL";
         Text[ russian ] = "Κξμΰνδΰ SQL";
-        Text[ greek ] = "SQL command";
+        Text[ greek ] = "Εντολή SQL";
         Text[ dutch ] = "SQL-commando";
         Text[ french ] = "Instruction SQL";
         Text[ spanish ] = "Orden SQL";
@@ -121,7 +121,7 @@ ModalDialog DLG_DIRECTSQL
         Text [ english_us ] = "Command to execute";
         Text[ portuguese ] = "Comando a executar";
         Text[ russian ] = "Βϋοξλνÿεμΰÿ κξμΰνδΰ";
-        Text[ greek ] = "Command to execute";
+        Text[ greek ] = "Εντολή προς εκτέλεση";
         Text[ dutch ] = "uit te voeren commando";
         Text[ french ] = "Instruction ΰ exιcuter";
         Text[ spanish ] = "Orden que ejecutar";
@@ -195,7 +195,7 @@ ModalDialog DLG_DIRECTSQL
         Text [ english_us ] = "Previous commands";
         Text[ portuguese ] = "Comandos anteriores";
         Text[ russian ] = "Οπεδϋδσωΰÿ κξμΰνδΰ";
-        Text[ greek ] = "Previous commands";
+        Text[ greek ] = "Προηγούμενες εντολές";
         Text[ dutch ] = "Vorige commando's";
         Text[ french ] = "Instructions prιcιdentes";
         Text[ spanish ] = "Σrdenes anteriores";
@@ -312,10 +312,10 @@ ModalDialog DLG_DIRECTSQL
     Text                = "SQL Statement ausfόhren" ;
     Text [ english ]    = "Excecute SQL statement" ;
     Text [ english_us ] = "Execute SQL Statement" ;
-    Text[ language_user1 ] = "zl: statement means SQL commandos which are directly executed.";
+    Text[ language_user1 ] = "; zl: statement means SQL commandos which are directly executed.";
     Text[ portuguese ] = "Executar instruηγo SQL";
     Text[ russian ] = "Βϋοξλνθςό θνρςπσκφθώ SQL";
-    Text[ greek ] = "Excecute SQL statement";
+    Text[ greek ] = "Εκτέλεση πρότασης SQL";
     Text[ dutch ] = "SQL-instructie uitvoeren";
     Text[ french ] = "Exιcuter l'instruction SQL";
     Text[ spanish ] = "Ejecutar orden SQL";
@@ -358,7 +358,7 @@ String STR_COMMAND_EXECUTED_SUCCESSFULLY
     Text[ japanese ] = "γ‚³γƒγƒ³γƒ‰γ―ζ­£εΈΈγ«ε®θ΅γ•γ‚γΎγ—γγ€‚";
     Text[ chinese_traditional ] = "ε·θ΅ζ‡δ»¤ε·²η¶“ζεγ€‚";
     Text[ arabic ] = "Κγ ΚδένΠ ΗαΓγΡ ΘδΜΗΝ.";
-    Text[ greek ] = "Η εντολή εκτελέστηκε επιτυχώς.";
+    Text[ greek ] = "Η εντολή εκτελέστηκε με επιτυχία.";
     Text[ korean ] = "λª…λ Ήμ„ μ„±κ³µμ μΌλ΅ μ‹¤ν–‰ν–μµλ‹λ‹¤.";
     Text[ finnish ] = "Kδskyn suoritus onnistui.";
     Text[ turkish ] = "Komut baώarύyla ηalύώtύrύldύ.";
@@ -377,7 +377,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text [ english_us ] = "The connection to the database has been lost. This dialog will be closed.";
     Text[ portuguese ] = "A ligaηγo ΰ base de dados foi eliminada. Esta caixa de diαlogo serα fechada.";
     Text[ russian ] = "Ρξεδθνενθε ρ αΰηξι δΰννϋυ οξςεπÿνξ. Δθΰλξγ ασδες ηΰκπϋς.";
-    Text[ greek ] = "The connection to the database has been lost. This dialog will be closed.";
+    Text[ greek ] = "Η σύνδεση με τη βάση δεδομένων έχει διακοπεί. Αυτό το παράθυρο διαλόγου θα κλείσει.";
     Text[ dutch ] = "Er bestaat geen verbinding met de database. Dit dialoogvenster wordt gesloten.";
     Text[ french ] = "La connexion ΰ la base de donnιes a ιtι annulιe. Fermeture de la boξte de dialogue.";
     Text[ spanish ] = "Se perdiσ la conexiσn a la base de datos. Este diαlogo se cerrarα.";
@@ -386,7 +386,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
     Text[ danish ] = "Forbindelsen til databasen blev slettet. Denne dialog lukkes.";
     Text[ swedish ] = "Fφrbindelsen till databasen har raderats. Den hδr dialogrutan kommer att stδngas.";
     Text[ polish ] = "Po³Ήczenie z bazΉ danych zosta³o przerwane. Okno dialogowe zostanie zamkniκte.";
-    Text[ portuguese_brazilian ] = "A conexγo para a base de dados foi perdida. Este diαlogo serα fechado.";
+    Text[ portuguese_brazilian ] = "A conexγo para o banco de dados foi perdida. Esta caixa de diαlogo serα fechada.";
     Text[ japanese ] = "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚ΉγΈγ®ζ¥η¶γ―ε‰ι™¤γ•γ‚γ¦γ„γΎγ™γ€‚γ“γ®γƒ€γ‚¤γ‚Άγƒ­γ‚°γ‚’ι–‰γγΎγ™γ€‚";
     Text[ korean ] = "λ°μ΄ν„°λ² μ΄μ¤μ™€μ μ—°κ²°μ΄ ν•΄μ λμ—μµλ‹λ‹¤. μ΄ λ€ν™” μƒμκ°€ λ‹«ν™λ‹λ‹¤.";
     Text[ chinese_simplified ] = "ε·²η»η»“ζε’ζ•°ζ®εΊ“η„θΏζ¥γ€‚η°ε¨ε…³ι—­θΏ™δΈªε―Ήθ―ζ΅†γ€‚";
@@ -404,6 +404,13 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18.8.1  2003/07/03 14:44:11  ihi
+ *  rc-2 merge all languages
+ *
+ *  Revision 1.18  2003/06/13 12:52:52  hr
+ *  INTEGRATION: CWS rcmerge (1.17.24); FILE MERGED
+ *  2003/06/12 10:57:51 gh 1.17.24.1: final Merge RC
+ *
  *  Revision 1.17.24.1  2003/06/12 10:57:51  gh
  *  final Merge RC
  *
@@ -486,6 +493,7 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
 
 
 
