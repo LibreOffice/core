@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-28 12:17:34 $
+ *  last change: $Author: ka $ $Date: 2001-01-23 11:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #include "svdview.hxx"
 #include "svdmodel.hxx"
 #include "svdograf.hxx"
+#include "svdundo.hxx"
 #include "grafctrl.hxx"
 
 // -----------
@@ -1102,7 +1103,14 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             if( !aSet.Count() )
                                 rView.SetMarkedObjRect( aNewRect );
                             else
+                            {
+                                rView.BegUndo( aUndoStr );
+                                rView.AddUndo( new SdrUndoGeoObj( *pObj ) );
                                 pObj->SetSnapRect( aNewRect );
+                                rView.SetAttributes( aSet );
+                                rView.EndUndo();
+                                aSet.ClearItem();
+                            }
                         }
                     }
                 }
