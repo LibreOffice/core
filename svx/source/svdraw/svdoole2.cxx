@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 10:12:44 $
+ *  last change: $Author: ka $ $Date: 2001-03-30 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,12 +591,19 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
         OutputDevice* pOutDev=rOut.GetOutDev();
         if( IsEmptyPresObj() )
         {
-            Size aSize( pOutDev->PixelToLogic( pGraphic->GetPrefSize() ) );
-            Point aPos(aRect.Center());
-            aPos.X()-=aSize.Width() /2;
-            aPos.Y()-=aSize.Height()/2;
+            const MapMode   aDstMapMode( pOutDev->GetMapMode().GetMapUnit() );
+            Point           aPos(aRect.Center());
+            Size            aDstSize;
+
+            if( pGraphic->GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
+                aDstSize = pOutDev->PixelToLogic( pGraphic->GetPrefSize(), aDstMapMode );
+            else
+                aDstSize = pOutDev->LogicToLogic( pGraphic->GetPrefSize(), pGraphic->GetPrefMapMode(), aDstMapMode );
+
+            aPos.X()-=aDstSize.Width() /2;
+            aPos.Y()-=aDstSize.Height()/2;
             if (aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top())
-                pGraphic->Draw(pOutDev,aPos);
+                pGraphic->Draw(pOutDev,aPos, aDstSize);
 
             pOutDev->SetFillColor();
             pOutDev->SetLineColor( Color( COL_GRAY ) );
