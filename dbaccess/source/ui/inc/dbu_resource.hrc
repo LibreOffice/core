@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:12:18 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,8 @@
 #define RID_STR_TABLE_DOESNT_EXIST          RID_STRING_START + 33
 #define RID_STR_FIELD_DOESNT_EXIST          RID_STRING_START + 34
 #define RID_STR_TOMUCHTABLES                RID_STRING_START + 35
+#define RID_STR_QUERIES_CONTAINER           RID_STRING_START + 36
+#define RID_STR_TABLES_CONTAINER            RID_STRING_START + 37
 
 //========================================================================
 // untyped resources
@@ -210,6 +212,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2000/12/08 21:12:18  fs
+ *  +MENU_BROWSERTREE_CONTEXT
+ *
  *  Revision 1.12  2000/12/03 10:27:34  fs
  *  #79820# have a range for dbaccess resource ids now
  *
