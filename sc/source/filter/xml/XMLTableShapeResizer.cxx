@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-11 12:09:00 $
+ *  last change: $Author: sab $ $Date: 2002-11-01 14:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,8 @@ void ScMyShapeResizer::ResizeShapes()
         rtl::OUString sCaptionShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape") );
         rtl::OUString sStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape"));
         rtl::OUString sEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape"));
+        rtl::OUString sStartPosition(RTL_CONSTASCII_USTRINGPARAM("StartPosition"));
+        rtl::OUString sEndPosition(RTL_CONSTASCII_USTRINGPARAM("EndPosition"));
         uno::Reference<table::XCellRange> xTableRow;
         uno::Reference<sheet::XSpreadsheet> xSheet;
         uno::Reference<table::XTableRows> xTableRows;
@@ -271,7 +273,30 @@ void ScMyShapeResizer::ResizeShapes()
                                                 }
                                                 else
                                                 {
-                                                    // only one point is connected, the other should be removed
+                                                    // only one point is connected, the other should be moved
+
+                                                    rtl::OUString sProperty;
+                                                    if (xStartShape.is())
+                                                    {
+                                                        awt::Point aEndPoint;
+                                                        uno::Any aAny = xShapeProps->getPropertyValue(sEndPosition);
+                                                        aAny >>= aEndPoint;
+                                                        aPoint.X = aRec.Left() + aEndPoint.X;
+                                                        aPoint.Y = aRec.Top() + aEndPoint.Y;
+                                                        sProperty = sEndPosition;
+                                                    }
+                                                    else
+                                                    {
+                                                        awt::Point aStartPoint;
+                                                        uno::Any aAny = xShapeProps->getPropertyValue(sStartPosition);
+                                                        aAny >>= aStartPoint;
+                                                        aPoint.X = aRec.Left() + aStartPoint.X;
+                                                        aPoint.Y = aRec.Top() + aStartPoint.Y;
+                                                        sProperty = sStartPosition;
+                                                    }
+                                                    uno::Any aAny;
+                                                    aAny <<= aPoint;
+                                                    xShapeProps->setPropertyValue(sProperty, aAny);
                                                 }
                                             }
                                         }
