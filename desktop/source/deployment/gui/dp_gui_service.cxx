@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:04:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,13 @@
  ************************************************************************/
 
 #include "dp_gui.h"
-#include "cppuhelper/implbase4.hxx"
-#include "cppuhelper/factory.hxx"
+#include "dp_servicefactory.h"
+#include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "unotools/configmgr.hxx"
 #include "tools/isolang.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/help.hxx"
-#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 
@@ -138,8 +137,7 @@ XubString MyApp::GetHelpText( ULONG nHelpId, Window const * pWindow )
 
 //==============================================================================
 class ServiceImpl :
-    public ::cppu::WeakImplHelper4< lang::XServiceInfo,
-                                    lang::XInitialization,
+    public ::cppu::WeakImplHelper3< lang::XServiceInfo,
                                     ui::dialogs::XExecutableDialog,
                                     task::XJobExecutor >
 {
@@ -149,14 +147,8 @@ class ServiceImpl :
     OUString m_initialTitle;
 
 public:
-    inline ServiceImpl(
-        Reference<XComponentContext> const & xComponentContext )
-        : m_xComponentContext( xComponentContext )
-        {}
-
-    // XInitialization
-    virtual void SAL_CALL initialize( Sequence<Any> const & args )
-        throw (Exception);
+    ServiceImpl( Sequence<Any> const & args,
+                 Reference<XComponentContext> const & xComponentContext );
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
@@ -175,13 +167,27 @@ public:
         throw (RuntimeException);
 };
 
+//______________________________________________________________________________
+ServiceImpl::ServiceImpl(
+    Sequence<Any> const & args,
+    Reference<XComponentContext> const & xComponentContext )
+    : m_xComponentContext( xComponentContext )
+{
+    if (args.getLength() > 0)
+    {
+        extract_throw( &m_xParent, args[ 0 ] );
+        if (args.getLength() > 1)
+            extract_throw( &m_view, args[ 1 ] );
+    }
+}
+
 //==============================================================================
 static Reference<XInterface> SAL_CALL create(
+    Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
-    SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
-        new ServiceImpl(xComponentContext) );
+        new ServiceImpl( args, xComponentContext ) );
 }
 
 //==============================================================================
@@ -217,15 +223,6 @@ Sequence<OUString> ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return ::dp_gui::getSupportedServiceNames();
-}
-
-// XInitialization
-//______________________________________________________________________________
-void ServiceImpl::initialize( Sequence<Any> const & args )
-    throw (Exception)
-{
-    extract_throw( &m_xParent, args[ 0 ] );
-    extract_throw( &m_view, args[ 1 ] );
 }
 
 // XExecutableDialog
@@ -296,10 +293,10 @@ void ServiceImpl::trigger( OUString const & event ) throw (RuntimeException)
 static const ::cppu::ImplementationEntry s_entries [] =
 {
     {
-        create,
+        (::cppu::ComponentFactoryFunc) create,
         getImplementationName,
         getSupportedServiceNames,
-        ::cppu::createSingleComponentFactory,
+        createFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
