@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-21 11:42:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,7 +367,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                 if ( aHelpText.Len() != 0 )
                 {
                     // Hilfe anzeigen
-                    Rectangle aItemRect = pObj->GetBoundRect();
+                    Rectangle aItemRect = pObj->GetCurrentBoundRect();
                     aItemRect = pWindow->LogicToPixel( aItemRect );
                     Point aPt = pWindow->OutputToScreenPixel( aItemRect.TopLeft() );
                     aItemRect.Left()   = aPt.X();
