@@ -85,6 +85,7 @@ hedabu: ..\inc\FilterConfigItem.hxx %_DEST%\inc%_EXT%\svtools\FilterConfigItem.h
 hedabu: ..\inc\fmtfield.hxx %_DEST%\inc%_EXT%\svtools\fmtfield.hxx
 hedabu: ..\inc\fontdlg.hxx %_DEST%\inc%_EXT%\svtools\fontdlg.hxx
 hedabu: ..\inc\hint.hxx %_DEST%\inc%_EXT%\svtools\hint.hxx
+hedabu: ..\inc\imgdef.hxx %_DEST%\inc%_EXT%\svtools\imgdef.hxx
 hedabu: ..\inc\inetdef.hxx %_DEST%\inc%_EXT%\svtools\inetdef.hxx
 hedabu: ..\inc\inethist.hxx %_DEST%\inc%_EXT%\svtools\inethist.hxx
 hedabu: ..\inc\inetmsg.hxx %_DEST%\inc%_EXT%\svtools\inetmsg.hxx
