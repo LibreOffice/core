@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtrange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ void SvxBoundArgs::Add()
                 aBoolArr.Remove( nBoolIdx, nNext );
                 if( nBoolIdx )
                     aBoolArr[ nBoolIdx - 1 ] = FALSE;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 else
                     ++nNext;
 #endif
