@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-18 10:02:12 $
+ *  last change: $Author: sb $ $Date: 2000-11-13 11:35:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,71 @@ getNormalizedPathFromFileURL(
             com::sun::star::ucb::XContentProviderManager > const &
         rManager,
     rtl::OUString const & rHostName,
+    rtl::OUString const & rURL);
+
+//============================================================================
+/** Using a specific content provider manager, convert a file path in system
+    dependent notation to a (file) URL.
+
+    @param rManager
+    A content provider manager.  Must not be null.
+
+    @param rBaseURL
+    See the corresponding parameter of
+    com::sun::star::ucb::XFileIdentifierConverter::getFileURLFromSystemPath().
+
+    @param rURL
+    See the corresponding parameter of
+    com::sun::star::ucb::XFileIdentifierConverter::getFileURLFromSystemPath().
+
+    @returns
+    a URL, if the content provider registered at the content provider manager
+    that is responsible for the base URL returns a URL when calling
+    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromSystemPath()
+    on it.  Otherwise, an empty string is returned.
+
+    @see
+    com::sun::star::ucb::XFileIdentiferConverter::getFileURLFromSystemPath().
+ */
+rtl::OUString
+getFileURLFromSystemPath(
+    com::sun::star::uno::Reference<
+            com::sun::star::ucb::XContentProviderManager > const &
+        rManager,
+    rtl::OUString const & rBaseURL,
+    rtl::OUString const & rSystemPath);
+
+//============================================================================
+/** Using a specific content provider manager, convert a (file) URL to a
+    file path in system dependent notation.
+
+    @param rManager
+    A content provider manager.  Must not be null.
+
+    @param rBaseURL
+    See the corresponding parameter of
+    com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
+
+    @param rURL
+    See the corresponding parameter of
+    com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
+
+    @returns
+    a system path, if the content provider registered at the content provider
+    manager that is responsible for the base URL returns a system path when
+    calling
+    com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL()
+    on it.  Otherwise, an empty string is returned.
+
+    @see
+    com::sun::star::ucb::XFileIdentiferConverter::getSystemPathFromFileURL().
+ */
+rtl::OUString
+getSystemPathFromFileURL(
+    com::sun::star::uno::Reference<
+            com::sun::star::ucb::XContentProviderManager > const &
+        rManager,
+    rtl::OUString const & rBaseURL,
     rtl::OUString const & rURL);
 
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileidentifierconverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2000-10-18 10:03:11 $
+ *  last change: $Author: sb $ $Date: 2000-11-13 11:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,50 @@ getNormalizedPathFromFileURL(
         }
     }
     return rtl::OUString();
+}
+
+//============================================================================
+//
+//  getFileURLFromSystemPath
+//
+//============================================================================
+
+rtl::OUString
+getFileURLFromSystemPath(
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    rtl::OUString const & rBaseURL,
+    rtl::OUString const & rSystemPath)
+{
+    VOS_ASSERT(rManager.is());
+
+    uno::Reference< star::ucb::XFileIdentifierConverter >
+        xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
+    if (xConverter.is())
+        return xConverter->getFileURLFromSystemPath(rBaseURL, rSystemPath);
+    else
+        return rtl::OUString();
+}
+
+//============================================================================
+//
+//  getSystemPathFromFileURL
+//
+//============================================================================
+
+rtl::OUString
+getSystemPathFromFileURL(
+    uno::Reference< star::ucb::XContentProviderManager > const & rManager,
+    rtl::OUString const & rBaseURL,
+    rtl::OUString const & rURL)
+{
+    VOS_ASSERT(rManager.is());
+
+    uno::Reference< star::ucb::XFileIdentifierConverter >
+        xConverter(rManager->queryContentProvider(rBaseURL), uno::UNO_QUERY);
+    if (xConverter.is())
+        return xConverter->getSystemPathFromFileURL(rBaseURL, rURL);
+    else
+        return rtl::OUString();
 }
 
 }
