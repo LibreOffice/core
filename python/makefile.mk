@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2003-06-12 14:51:27 $
+#   last change: $Author: obo $ $Date: 2003-06-17 16:22:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,26 @@ CONFIGURE_DIR=
 
 BUILD_DIR=
 
+.IF "$(GUI)"=="UNX"
+.IF "$(COMNAME)"=="sunpro5"
+.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+CC:=$(COMPATH)$/bin$/cc
+CXX:=$(COMPATH)$/bin$/CC
+.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
+.ENDIF          # "$(COMNAME)"=="sunpro5"
+.ELSE
+.ENDIF          # "$(GUI)"=="UNX"
+
+
+.IF "$(USE_SHELL)"!="4nt"
+CONVERT=convert.sh
+BUILD_ACTION_SEP=;
+.ELSE # "$(USE_SHELL)"!="4nt"
+CONVERT=convert.bat
+BUILD_ACTION_SEP=^
+.ENDIF # "$(USE_SHELL)"!="4nt"
+
+DSP_DIR=PCbuild
 .IF "$(GUI)" == "UNX"
 CONFIGURE_ACTION= ./configure --prefix=../python-inst
 BUILD_ACTION=make ; make install
@@ -84,15 +104,11 @@ PYTHONCORESHL=$(OUT)$/lib$/libpython.so.$(PYVERSION)
 PYTHONCORELINK1=$(OUT)$/lib$/libpython.so.$(PYMAJOR)
 PYTHONCORELINK2=$(OUT)$/lib$/libpython.so
 .ELSE
-BUILD_DIR=PCBuild
+BUILD_DIR=$(DSP_DIR)
+CONFIGURE_DIR=$(DSP_DIR)
+
 .IF "$(COMEX)"=="8"
-CONFIGURE_DIR=$(BUILD_DIR)
 CONFIGURE_ACTION=wdevenv pcbuild Release
-.IF "$(USE_SHELL)"!="4nt"
-BUILD_ACTION_SEP=;
-.ELSE # "$(USE_SHELL)"!="4nt"
-BUILD_ACTION_SEP=^
-.ENDIF # "$(USE_SHELL)"!="4nt"
 BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project winreg pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project unicodedata pcbuild.sln /useenv 	\
@@ -126,11 +142,23 @@ PYVERSIONFILE=$(MISC)$/pyversion.mk
 PYCONFIG=$(MISC)$/build$/pyconfig.h
 .ENDIF
 
-ALL : ALLTAR $(PYCONFIG) $(PYTHONCORESHL) $(PYVERSIONFILE) $(PYTHONCORELINK1) $(PYTHONCORELINK2)
-
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
+
+ALLTAR : $(PYCONFIG) $(PYTHONCORESHL) $(PYVERSIONFILE) $(PYTHONCORELINK1) $(PYTHONCORELINK2)
+
+$(MISC)$/convert_unx_flag :  $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+    +$(CONVERT) unx $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$(DSP_DIR)
+    +$(TOUCH) $(MISC)$/convert_unx_flag
+
+$(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(MISC)$/convert_unx_flag
+
+$(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    +$(CONVERT) dos $(PACKAGE_DIR)$/$(TARFILE_NAME)$/$(DSP_DIR)
+    +$(TOUCH) $(MISC)$/convert_dos_flag
+
+$(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
 
 #.IF "$(GUI)" !="UNX"
 $(MISC)$/build$/pyconfig.h :$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
@@ -139,18 +167,24 @@ $(MISC)$/build$/pyconfig.h :$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h $(PA
 #.ENDIF
 
 .IF "$(GUI)" == "UNX"
-$(PYTHONCORESHL) : $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+$(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+.IF "$(OS)" == "SOLARIS"
+    ld -G -o $@ -u Py_Main -u Py_FrozenMain -u PyFPE_dummy $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -h libpython.so.$(PYMAJOR) -lm -ldl -lc -lpthread
+.ELSE
+    echo "$(OS)"
     ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -ldl -lutil -lc -lpthread
+.ENDIF
 
-$(PYTHONCORELINK1) : makefile.mk
+$(PYTHONCORELINK1) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cd $(OUT)$/lib && ln -s libpython.so.$(PYVERSION) libpython.so.$(PYMAJOR)
 
-$(PYTHONCORELINK2) : makefile.mk
+$(PYTHONCORELINK2) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cd $(OUT)$/lib && ln -s libpython.so.$(PYVERSION) libpython.so
 .ENDIF
 
-$(PYVERSIONFILE) : pyversion.mk
+$(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
     cat $? > $@
+
