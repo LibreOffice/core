@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-22 15:37:04 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 09:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,11 +770,14 @@ ScAccessibleTextData* ScAccessibleCellTextData::Clone() const
 
 void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rText)
 {
-    ScCellTextData::GetCellText(rCellPos, rText);
-    if (mpViewShell)
+//  #104893#; don't use the input string
+//    ScCellTextData::GetCellText(rCellPos, rText);
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (pDoc)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if (pDoc)
+        //  #104893#; use the displayed string
+        pDoc->GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
+        if (mpViewShell)
         {
             const ScViewOptions& aOptions = mpViewShell->GetViewData()->GetOptions();
             CellType aCellType;
