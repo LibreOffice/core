@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleOutProducer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:47 $
+ *  last change:$Date: 2005-02-02 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,13 @@ public class SimpleOutProducer implements LogWriter {
         }
         System.out.println("");
         return true;
+    }
+
+    public Object getWatcher() {
+        return null;
+    }
+
+    public void setWatcher(Object watcher) {
     }
 
 }
