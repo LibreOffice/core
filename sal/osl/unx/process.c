@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obr $ $Date: 2002-01-09 12:15:41 $
+ *  last change: $Author: mhu $ $Date: 2002-07-28 15:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,7 +592,7 @@ oslProcessError SAL_CALL osl_getCommandArgs(sal_Char* pszBuffer, sal_uInt32 Max)
  *****************************************************************************/
 
 
-sal_Bool sendFdPipe(int PipeFD, int SocketFD)
+static sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 {
     sal_Bool bRet = sal_False;
 
@@ -608,7 +608,7 @@ sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 /*      OSL_TRACE("sending fd %i\n",SocketFD); */
 
     iov[0].iov_base = buf;
-    iov[0].iov_len  = 2;
+    iov[0].iov_len  = sizeof(buffer);
     msg.msg_iov     = iov;
     msg.msg_iovlen  = 1;
     msg.msg_name    = NULL;
@@ -627,7 +627,7 @@ sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 /*      OSL_TRACE("sending fd %i\n",SocketFD); */
 
     iov[0].iov_base = buf;
-    iov[0].iov_len = 2;
+    iov[0].iov_len = sizeof(buffer);
     msg.msg_iov = iov;
     msg.msg_iovlen = 1;
     msg.msg_name = NULL;
@@ -672,12 +672,12 @@ sal_Bool sendFdPipe(int PipeFD, int SocketFD)
 }
 
 
-oslSocket receiveFdPipe(int PipeFD)
+static oslSocket receiveFdPipe(int PipeFD)
 {
     oslSocket pSocket = 0;
     struct msghdr msghdr;
     struct iovec iov[1];
-    char buffer[PATH_MAX];
+    char buffer[2];
     sal_Int32 nRead;
     int newfd=-1;
     int nRetCode=0;
