@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-24 19:13:40 $
+ *  last change: $Author: khong $ $Date: 2002-10-10 19:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,8 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
                 sal_Int32 _count = count;
                 notZero |= AsciiToNative_numberMaker(srcStr->buffer, begin, end - begin, newStr->buffer, count,
                     end == len ? -1 : 0, offset, i - len + startPos, number, numberChar);
-                if (count > 0 && newStr->buffer[count-1] == numberChar[0])
+                if (count > 0 && number->multiplierExponent[number->exponentCount-1] == 1 &&
+                    newStr->buffer[count-1] == numberChar[0])
                 count--;
                 if (notZero && _count == count) {
                 if (end != len) {
