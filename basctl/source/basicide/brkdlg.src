@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-02 20:42:38 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ korean ] = "ªı∑Œ";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nuevo";
     };
     PushButton RID_PB_DEL
     {
@@ -143,6 +144,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ korean ] = "ªË¡¶";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar";
     };
     CheckBox RID_CHKB_ACTIVE
     {
@@ -170,6 +172,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ korean ] = "»∞º∫";
         Text[ turkish ] = "Etkin";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Activo";
     };
     FixedText RID_FT_PASS
     {
@@ -196,6 +199,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ korean ] = "πÆ¿Â»Â∏£±‚:";
         Text[ turkish ] = "Pass count:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AdaptaciÛn:";
     };
     FixedText RID_FT_BRKPOINTS
     {
@@ -222,6 +226,7 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         Text[ korean ] = "¡ﬂ¥‹¡°";
         Text[ turkish ] = "Kesme noktalar˝";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Puntos de ruptura";
     };
     NumericField RID_FLD_PASS
     {
@@ -249,4 +254,5 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     Text[ korean ] = "¡ﬂ¥‹¡°";
     Text[ turkish ] = "Kesme noktalar˝";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Puntos de ruptura";
 };
