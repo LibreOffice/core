@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:13:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ portuguese_brazilian ] = "~Formatar colunas..." ;
             Text [ portuguese ] = "~Formatar colunas..." ;
             Text [ finnish ] = "Sarake~muoto..." ;
-            Text [ danish ] = "Kolonne~formatering..." ;
+            Text [ danish ] = "Kolonne~format..." ;
             Text [ french ] = "Formatage de colonne..." ;
             Text [ swedish ] = "Kolumn~formatering..." ;
             Text [ dutch ] = "~Kolomopmaak..." ;
@@ -111,6 +111,8 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ hebrew ] = "Spalten~formatierung...";
             Text[ hindi ] = "~स्तंभ रचना...";
             Text[ slovak ] = "~Formát stĺpca...";
+            Text[ hungarian ] = "~Oszlopformátum...";
+            Text[ slovenian ] = "~Oblika stolpca...";
         };
         MenuItem
         {
@@ -148,6 +150,8 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ hebrew ] = "Spaltenb~eschreibung kopieren";
             Text[ hindi ] = "स्तं~भ विवरण का प्रतिलिपि";
             Text[ slovak ] = "Kopírovať ~popisy stĺpcov";
+            Text[ hungarian ] = "~Oszlopleírás másolása";
+            Text[ slovenian ] = "~Kopiraj opis stolpca";
         };
     };
 };
@@ -187,6 +191,8 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ hebrew ] = "Tabellenformatierung...";
             Text[ hindi ] = "सारणी रचना...";
             Text[ slovak ] = "Formát tabuľky...";
+            Text[ hungarian ] = "Táblaformátum...";
+            Text[ slovenian ] = "Oblika tabele...";
         };
         MenuItem
         {
@@ -220,6 +226,8 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ hebrew ] = "‮גובה שורה...‬";
             Text[ hindi ] = "पंक्ति ऊँचाई...";
             Text[ slovak ] = "Výška riadka...";
+            Text[ hungarian ] = "Sormagasság...";
+            Text[ slovenian ] = "Višina vrstice...";
         };
     };
 };
@@ -236,7 +244,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ french ] = "Annuler : saisie des donn�es";
     Text[ spanish ] = "Deshacer: Entrada de datos";
     Text[ italian ] = "Annulla: Immissione dati";
-    Text[ danish ] = "Fortryd: Dataindtastning";
+    Text[ danish ] = "Fortryd: Datainput";
     Text[ swedish ] = "�ngra: datainmatning";
     Text[ polish ] = "Cofnij: wpisywanie danych";
     Text[ portuguese_brazilian ] = "Desfazer: entrada de dados";
@@ -253,6 +261,8 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ hebrew ] = "Rückgängig: Dateneingabe";
     Text[ hindi ] = "अनावृत्ति: ड़ॉटा इनपुट";
     Text[ slovak ] = "Späť: dátový vstup";
+    Text[ hungarian ] = "Visszavonás: adatbevitel";
+    Text[ slovenian ] = "Razveljavi: Vnos podatkov";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
@@ -286,6 +296,8 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ hebrew ] = "aktuellen Datensatz speichern";
     Text[ hindi ] = "वर्तमान अभिलेख को संचित करो";
     Text[ slovak ] = "Uložiť aktívny záznam";
+    Text[ hungarian ] = "Aktuális rekord mentése";
+    Text[ slovenian ] = "Shrani trenutni zapis";
 };
 
 String STR_QRY_TITLE
@@ -320,6 +332,8 @@ String STR_QRY_TITLE
     Text[ hebrew ] = "Abfrage #";
     Text[ hindi ] = "जानकारी #";
     Text[ slovak ] = "Dotaz #";
+    Text[ hungarian ] = "# lekérdezés";
+    Text[ slovenian ] = "Poizvedba #";
 };
 String STR_TBL_TITLE
 {
@@ -353,6 +367,8 @@ String STR_TBL_TITLE
     Text[ hebrew ] = "Tabelle #";
     Text[ hindi ] = "सारणी #";
     Text[ slovak ] = "Tabuľka #";
+    Text[ hungarian ] = "# tábla";
+    Text[ slovenian ] = "Tabela #";
 };
 String STR_VIEW_TITLE
 {
@@ -383,6 +399,8 @@ String STR_VIEW_TITLE
     Text[ hebrew ] = "‮תצוגה #‬";
     Text[ hindi ] = "दृश्य #";
     Text[ slovak ] = "Zobraziť #";
+    Text[ hungarian ] = "# nézet";
+    Text[ slovenian ] = "Pogled #";
 };
 
 String STR_OBJECT_ALREADY_EXISTS
@@ -398,7 +416,7 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ spanish ] = "El nombre \"#\" ya existe.";
     Text[ finnish ] = "Nimi # on jo olemassa.";
     Text[ italian ] = "Il nome \"#\" esiste gi�.";
-    Text[ danish ] = "Navnet # findes allerede.";
+    Text[ danish ] = "Navnet \"#\" findes allerede.";
     Text[ swedish ] = "Namnet # finns redan.";
     Text[ polish ] = "Nazwa # ju� istnieje.";
     Text[ portuguese_brazilian ] = "O nome # j� existe.";
@@ -414,6 +432,8 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ thai ] = "The name \"#\" already exists.";
     Text[ hindi ] = "# नाम पहिले से ही अस्तित्व में है ।";
     Text[ slovak ] = "Názov # už existuje.";
+    Text[ hungarian ] = "A következő név már létezik: \"#\".";
+    Text[ slovenian ] = "Ime \"#\" že obstaja.";
 };
 
 
@@ -446,6 +466,8 @@ String STR_NO_COLUMNNAME_MATCHING
     Text[ thai ] = "No matching column names were found.";
     Text[ hindi ] = "स्तंभ नामों के समान नाम प्राप्त नहीं हुआ । ";
     Text[ slovak ] = "Neboli nájdené zhodné názvy stĺpcov.";
+    Text[ hungarian ] = "Nem található megfelelő oszlopnév.";
+    Text[ slovenian ] = "Ujemajočih imen stolpcev ni mogoče najti.";
 };
 
 String STR_ERROR_OCCURED_WHILE_COPYING
@@ -477,6 +499,8 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ thai ] = "An error occurred. Do you want to continue copying?";
     Text[ hindi ] = "गलती घटित हुआ । आप प्रतिलिपि बनाने का कार्य को जारी रखना चाहते है?";
     Text[ slovak ] = "Objavila sa chyba. Chcete pokračovať v kopírovaní?";
+    Text[ hungarian ] = "Hiba történt. Folytatja a másolást?";
+    Text[ slovenian ] = "Nastala je napaka. Ali želite nadaljevati kopiranje?";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_NAME
@@ -492,7 +516,7 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
     Text[ spanish ] = "Vista de tabla de la fuente de datos";
     Text[ finnish ] = "Datasource tableview";
     Text[ italian ] = "Vista tabella della sorgente dati";
-    Text[ danish ] = "Datasource tableview";
+    Text[ danish ] = "Tabeloversigt over datakilder";
     Text[ swedish ] = "Datak�llans tabellvisning";
     Text[ polish ] = "Datasource tableview";
     Text[ japanese ] = "データソースのテーブルビュー";
@@ -508,6 +532,8 @@ String STR_DATASOURCE_GRIDCONTROL_NAME
     Text[ thai ] = "Data source table view";
     Text[ hindi ] = "Data source table view";
     Text[ slovak ] = "Tabuľkový pohľad na zdroj dát";
+    Text[ hungarian ] = "Adatforrás táblanézete";
+    Text[ slovenian ] = "Pogled tabele vira podatkov";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
@@ -523,7 +549,7 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
     Text[ spanish ] = "Muestra la tabla o consulta seleccionada. ";
     Text[ finnish ] = "Shows the selected table/query.";
     Text[ italian ] = "Mostra le tabelle selezionate oppure la ricerca.";
-    Text[ danish ] = "Shows the selected table/query.";
+    Text[ danish ] = "Viser den markederede tabel eller foresp�rgsel.";
     Text[ swedish ] = "Visar den markerade tabellen eller s�kningen.";
     Text[ polish ] = "Shows the selected table/query.";
     Text[ japanese ] = "選択したテーブルまたはクエリーを表示する。";
@@ -539,7 +565,17 @@ String STR_DATASOURCE_GRIDCONTROL_DESC
     Text[ thai ] = "Shows the selected table or query.";
     Text[ hindi ] = "Shows the selected table or query.";
     Text[ slovak ] = "Ukáže vybranú tabuľku alebo dotaz.";
+    Text[ hungarian ] = "A kijelölt táblák vagy lekérdezések megjelenítése";
+    Text[ slovenian ] = "Prikaže izbrano tabelo ali poizvedbo";
 };
+
+
+
+
+
+
+
+
 
 
 
