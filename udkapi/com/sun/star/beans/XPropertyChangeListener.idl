@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyChangeListener.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module beans {
 /** is used to receive <type>PropertyChangeEvent</type>s
     whenever a bound property is changed.
  */
-interface XPropertyChangeListener: com::sun::star::lang::XEventListener
+published interface XPropertyChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
