@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:58:01 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:14:56 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -143,14 +143,14 @@ UCBExamples : $(APP1_JAR) $(APP2_JAR) $(APP3_JAR) $(APP4_JAR) $(APP5_JAR) $(APP6
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following commands to execute the examples!
 	@echo -
-	@echo make $(APP1_NAME).run
-	@echo make $(APP2_NAME).run
-	@echo make $(APP3_NAME).run
-	@echo make $(APP4_NAME).run
-	@echo make $(APP5_NAME).run
-	@echo make $(APP6_NAME).run
-	@echo make $(APP7_NAME).run
-	@echo make $(APP8_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
+	@echo $(MAKE) $(APP2_NAME).run
+	@echo $(MAKE) $(APP3_NAME).run
+	@echo $(MAKE) $(APP4_NAME).run
+	@echo $(MAKE) $(APP5_NAME).run
+	@echo $(MAKE) $(APP6_NAME).run
+	@echo $(MAKE) $(APP7_NAME).run
+	@echo $(MAKE) $(APP8_NAME).run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_APP_CLASS)/%.jar
