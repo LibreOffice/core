@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ci_text2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:32:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary_i/disdocum.hxx>
+#include <ary_i/d_token.hxx>
 
 
 namespace ary
@@ -102,23 +103,46 @@ DocuTex2::DisplayAt( DocumentationDisplay & o_rDisplay ) const
 bool
 DocuTex2::IsEmpty() const
 {
-    if ( aTokens.size() == 0 )
-        return true;
-
-    return false;
-
-/*
-    bool bIsWhite = true;
-    for ( TokenIterator it = rText.begin();
-          it != rText.end();
-          ++it )
+    for ( ary::info::DocuTex2::TokenList::const_iterator
+                iter = aTokens.begin();
+          iter != aTokens.end();
+          ++iter )
     {
-        if (bIsWhite)
-            bIsWhite = (*it)->IsWhite();
+        return false;
     }
-    if (bIsWhite)
-        return;
-*/
+    return true;
+}
+
+using csi::dsapi::DT_TextToken;
+
+const String &
+DocuTex2::TextOfFirstToken() const
+{
+    if (NOT aTokens.empty())
+    {
+        const DT_TextToken *
+            pTok = dynamic_cast< const DT_TextToken* >(*aTokens.begin());
+
+        if (pTok != 0)
+            return pTok->GetTextStr();
+    }
+    return String::Null_();
+}
+
+String &
+DocuTex2::Access_TextOfFirstToken()
+{
+    if (NOT aTokens.empty())
+    {
+        DT_TextToken *
+            pTok = dynamic_cast< DT_TextToken* >(*aTokens.begin());
+
+        if (pTok != 0)
+            return pTok->Access_Text();
+    }
+
+    static String sDummy_;
+    return sDummy_;
 }
 
 
