@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageUnitTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 09:18:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ public class StorageUnitTest  extends ComplexTestCase
 
     public String[] getTestMethodNames()
     {
-        return new String[] {   "ExecuteTest01",
+        return new String[] {
+                                "ExecuteTest01",
                                 "ExecuteTest02",
                                 "ExecuteTest03",
                                 "ExecuteTest04",
@@ -102,7 +103,10 @@ public class StorageUnitTest  extends ComplexTestCase
                                 "ExecuteTest06",
                                 "ExecuteTest07",
                                 "ExecuteTest08",
-                                "ExecuteTest09" };
+                                "ExecuteTest09",
+                                "ExecuteTest10",
+                                "ExecuteTest11",
+                                "ExecuteTest12" };
     }
 
     public String getTestObjectName()
@@ -189,6 +193,24 @@ public class StorageUnitTest  extends ComplexTestCase
     {
         StorageTest aTest = new Test09( m_xMSF, m_xStorageFactory, log );
         assure( "Test09 failed!", aTest.test() );
+    }
+
+    public void ExecuteTest10()
+    {
+        StorageTest aTest = new Test10( m_xMSF, m_xStorageFactory, log );
+        assure( "Test10 failed!", aTest.test() );
+    }
+
+    public void ExecuteTest11()
+    {
+        StorageTest aTest = new Test11( m_xMSF, m_xStorageFactory, log );
+        assure( "Test11 failed!", aTest.test() );
+    }
+
+    public void ExecuteTest12()
+    {
+        StorageTest aTest = new Test12( m_xMSF, m_xStorageFactory, log );
+        assure( "Test12 failed!", aTest.test() );
     }
 
 }
