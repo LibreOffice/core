@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:15:25 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,8 +789,8 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
         if (xSupplier.is())
         {
             m_xFormatter =  Reference<XNumberFormatter>(
-                                                    m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY
-                                );
+                m_xServiceFactory->createInstance(FRM_NUMBER_FORMATTER), UNO_QUERY
+            );
             if (m_xFormatter.is())
                 m_xFormatter->attachNumberFormatsSupplier(xSupplier);
 
