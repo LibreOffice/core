@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-10-17 15:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,7 +1250,7 @@ sal_Bool EditEngine::HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 const SfxPoolItem& EditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    return pImpEditEngine->GetParaAttrib( nPara, nWhich );
+return pImpEditEngine->GetParaAttrib( nPara, nWhich );
 }
 
 void EditEngine::GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const
@@ -2249,10 +2249,9 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
             pNumberFormat->SetPrefix( pOldBullet->GetPrevText() );
             pNumberFormat->SetSuffix( pOldBullet->GetFollowText() );
 
-            // Bullet
-            if( pOldBullet->GetStyle() == BS_BULLET )
+            //Font
+            if ( eNumType != SVX_NUM_BITMAP )
             {
-                pNumberFormat->SetBulletChar( pOldBullet->GetSymbol() );
                 Font aTmpFont = pOldBullet->GetFont();
                 pNumberFormat->SetBulletFont( &aTmpFont );
             }
@@ -2266,8 +2265,12 @@ void EditEngine::ImportBulletItem( SvxNumBulletItem& rNumBullet, sal_uInt16 nLev
             // Scale
             pNumberFormat->SetBulletRelSize( pOldBullet->GetScale() );
 
-            // Bitmap
-            if( pOldBullet->GetStyle() == BS_BMP )
+            // Bullet/Bitmap
+            if( eNumType == SVX_NUM_CHAR_SPECIAL )
+            {
+                pNumberFormat->SetBulletChar( pOldBullet->GetSymbol() );
+            }
+            else if( eNumType == SVX_NUM_BITMAP )
             {
                 SvxBrushItem aBItem( Graphic( pOldBullet->GetBitmap() ), GPOS_NONE );
                 pNumberFormat->SetGraphicBrush( &aBItem );
