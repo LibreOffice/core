@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
+ *  last change: $Author: mav $ $Date: 2003-03-27 15:17:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,16 +206,60 @@ STDMETHODIMP EmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR *pszU
 
 STDMETHODIMP EmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 {
-    return E_NOTIMPL;
+    if ( !psizel )
+        return E_FAIL;
+
+    if ( m_pDocHolder->GetDocument().is() )
+    {
+        uno::Sequence< beans::PropertyValue > aArgs = m_pDocHolder->GetDocument()->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                // should allways be there
+                uno::Sequence< sal_Int32 > aSize(2);
+                aSize[0] = psizel->cx;
+                aSize[1] = psizel->cy;
+
+                aArgs[nInd].Value <<= aSize;
+
+                break;
+            }
+
+        OSL_ENSURE( nInd < aArgs.getLength(), "WinExtent seems not to be implemented!\n" );
+
+        m_pDocHolder->GetDocument()->attachResource( m_pDocHolder->GetDocument()->getURL(), aArgs );
+    }
+
+    return S_OK;
 }
 
 STDMETHODIMP EmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 {
-    if ( psizel )
+    if ( !psizel )
+        return E_INVALIDARG;
+
+    if ( m_pDocHolder->GetDocument().is() )
     {
-        psizel->cx = 10000;
-        psizel->cy = 10000;
+        uno::Sequence< beans::PropertyValue > aArgs = m_pDocHolder->GetDocument()->getArgs();
+        for ( sal_Int32 nInd = 0; nInd < aArgs.getLength(); nInd++ )
+            if ( aArgs[nInd].Name.equalsAscii( "WinExtent" ) )
+            {
+                uno::Sequence< sal_Int32 > aSize;
+                if ( ( aArgs[nInd].Value >>= aSize ) && aSize.getLength() == 2 )
+                {
+                    psizel->cx = aSize[0];
+                    psizel->cy = aSize[1];
+
+                    return S_OK;
+                }
+
+                break;
+            }
     }
+
+    // return default values
+    psizel->cx = 500;
+    psizel->cy = 500;
 
     return S_OK;
 }
