@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercalls.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:46:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
+#include <com/sun/star/lang/EventObject.hpp>
 #endif
 
 namespace com { namespace sun { namespace star {
