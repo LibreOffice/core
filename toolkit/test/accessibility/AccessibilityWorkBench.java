@@ -44,7 +44,7 @@ public class AccessibilityWorkBench
         XPropertyChangeListener,
         XTerminateListener
 {
-    public static final String msVersion = "v1.1";
+    public static final String msVersion = "v1.3";
     public String msFileName;
     public String msOptionsFileName = ".AWBrc";
 
@@ -399,6 +399,8 @@ public class AccessibilityWorkBench
         }
         else if (e.getActionCommand().equals("quit"))
         {
+            AccessibilityTreeModel aModel = (AccessibilityTreeModel)maTree.getModel();
+            aModel.clear();
             System.exit (0);
         }
         else if (e.getActionCommand().equals("load"))

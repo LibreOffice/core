@@ -112,6 +112,19 @@ public class AccessibilityTreeModel
         }
     }
 
+    /** Clears the model.  That removes all nodes from the internal structures.
+    */
+    public void clear ()
+    {
+        System.out.println ("clearing the whole tree");
+        Object[] aNodes = maXAccessibleToNode.values().toArray();
+        for (int i=0; i<aNodes.length; i++)
+        {
+            System.out.println ("removing node " + i + ": " + aNodes[i]);
+            removeNode ((AccessibleTreeNode)maXAccessibleToNode.get (
+                            (AccessibleTreeNode)aNodes[i]));
+        }
+    }
 
     //
     // child management:
@@ -143,7 +156,7 @@ public class AccessibilityTreeModel
     /** Delegate the request to the parent and then register listeners at
         the child and add the child to the canvas.
     */
-    public synchronized AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
+    public AccessibleTreeNode getChild (AccessibleTreeNode aParent, int nIndex)
         throws com.sun.star.lang.IndexOutOfBoundsException
     {
         AccessibleTreeNode aChild = null;
@@ -151,14 +164,7 @@ public class AccessibilityTreeModel
             aChild = aParent.getChild(nIndex);
 
         // Keep translation table up-to-date.
-        if (aChild != null)
-            if (aChild instanceof AccTreeNode)
-                if (maXAccessibleToNode.get (((AccTreeNode)aChild).getAccessible()) == null)
-                {
-                    registerAccListener (aChild);
-                    maXAccessibleToNode.put (((AccTreeNode)aChild).getAccessible(), aChild);
-                    addToCanvas ((AccTreeNode)aChild);
-                }
+        addNode (aChild);
 
         if (aChild == null)
             System.out.println ("getChild: child not found");
@@ -208,7 +214,7 @@ public class AccessibilityTreeModel
 
     /** Remove a node (and all children) from the tree model.
     */
-    protected synchronized void removeNode (AccessibleTreeNode aNode)
+    protected void removeChild (AccessibleTreeNode aNode)
     {
         try
         {
@@ -217,53 +223,102 @@ public class AccessibilityTreeModel
                 System.out.println ("can't remove null node");
                 return;
             }
-            if (aNode instanceof AccTreeNode)
+            else
             {
+                System.out.println ("removing node " + aNode);
+
+                // depth-first removal of children
+                while (aNode.getChildCount() > 0)
+                    removeChild (aNode.getChild (0));
+
+                // Remove node from its parent.
+                AccessibleTreeNode aParent = aNode.getParent();
+                if (aParent != null)
+                {
+                    int nIndex = aParent.indexOf(aNode);
+                    aParent.removeChild (nIndex);
+                }
+
+                removeNode (aNode);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println ("caught exception while removing child " + aNode + " : " + e);
+        }
+    }
+
+    protected void removeNode (AccessibleTreeNode aNode)
+    {
+        try
+        {
+            if (aNode != null && aNode instanceof AccTreeNode)
+            {
+                System.out.println ("removing node " + aNode);
+
+                // Remove node itself from internal data structures.
                 removeAccListener ((AccTreeNode)aNode);
                 removeFromCanvas ((AccTreeNode)aNode);
                 maXAccessibleToNode.remove (((AccTreeNode)aNode).getAccessible());
             }
-            AccessibleTreeNode aParent = aNode.getParent();
-            if (aParent != null)
-            {
-                int nIndex = aParent.indexOf(aNode);
-                aParent.removeChild (nIndex);
-            }
-
-            // depth-first removal of children
-            while (aNode.getChildCount() > 0)
-                removeNode (aNode.getChild (0));
         }
-        catch (com.sun.star.lang.IndexOutOfBoundsException e)
+        catch (Exception e)
         {
             System.out.println ("caught exception while removing node " + aNode + " : " + e);
         }
     }
 
-
-    protected synchronized boolean addNode (AccTreeNode aParentNode, XAccessible xNewChild)
+    /** Add add a new child to a parent.
+        @return
+            Returns the new or existing representation of the specified
+            accessible object.
+    */
+    protected AccessibleTreeNode addChild (AccTreeNode aParentNode, XAccessible xNewChild)
     {
         boolean bRet = false;
 
+        // First make sure that the accessible object does not already have
+        // a representation.
         AccessibleTreeNode aChildNode = (AccessibleTreeNode)maXAccessibleToNode.get (xNewChild);
         if (aChildNode == null)
+            return aParentNode.addAccessibleChild (xNewChild);
+        else
         {
-            AccTreeNode aChild = (AccTreeNode)((AccTreeNode)aParentNode).addAccessibleChild (xNewChild);
-            TreePath aPath = new TreePath (createPath (aChild));
-            if (aChild != null)
+            System.out.println ("node already present");
+            return aChildNode;
+        }
+    }
+
+
+    /** Add the child node to the internal tree structure.
+        @param aNode
+            The node to insert into the internal tree structure.
+    */
+    protected boolean addNode (AccessibleTreeNode aNode)
+    {
+        boolean bRet = false;
+
+        if (aNode instanceof AccTreeNode)
+        {
+            AccTreeNode aChild = (AccTreeNode)aNode;
+            XAccessible xChild = aChild.getAccessible();
+            if (maXAccessibleToNode.get (xChild) == null)
             {
+                System.out.println ("adding new node " + aNode);
                 registerAccListener (aChild);
-                maXAccessibleToNode.put (aChild.getAccessible(), aChild);
+                maXAccessibleToNode.put (xChild, aChild);
                 addToCanvas (aChild);
             }
             bRet = true;
         }
-        else
-            System.out.println ("node already present");
 
         return bRet;
     }
 
+    protected AccessibleTreeNode getNode (XAccessible xAccessible)
+    {
+        return (AccessibleTreeNode)maXAccessibleToNode.get (xAccessible);
+    }
 
     /** create path to node, suitable for TreeModelEvent constructor
      * @see javax.swing.event.TreeModelEvent#TreeModelEvent
@@ -319,7 +374,7 @@ public class AccessibilityTreeModel
         }
     }
 
-    protected synchronized void fireTreeStructureChanged(final TreeModelEvent e)
+    protected void fireTreeStructureChanged(final TreeModelEvent e)
     {
         System.out.println("treeStructureChanged: " + e);
         for(int i = 0; i < maTMListeners.size(); i++)
@@ -563,7 +618,7 @@ public class AccessibilityTreeModel
         locked.  It should be locked during changes to its internal
         structure like expanding nodes.
     */
-    public synchronized void notifyEvent( AccessibleEventObject aEvent )
+    public void notifyEvent( AccessibleEventObject aEvent )
     {
 
         int nId = aEvent.EventId;
@@ -596,7 +651,7 @@ public class AccessibilityTreeModel
                     // Create event before removing the node to get the old
                     // index of the node.
                     TreeModelEvent aRemoveEvent = createEvent (xSource, xOld);
-                    removeNode ((AccessibleTreeNode)maXAccessibleToNode.get (xOld));
+                    removeChild ((AccessibleTreeNode)maXAccessibleToNode.get (xOld));
                     fireTreeNodesRemoved (aRemoveEvent);
                 }
                 // Insertion and removal of children should be mutually
@@ -607,10 +662,11 @@ public class AccessibilityTreeModel
                         XAccessible.class,aEvent.NewValue);
                     // Create event after inserting it so that its new index
                     // in the parent can be determined.
-                    AccessibleTreeNode aParentNode = (AccessibleTreeNode)maXAccessibleToNode.get (xSource);
+                    AccessibleTreeNode aParentNode = getNode (xSource);
                     if (aParentNode instanceof AccTreeNode)
                     {
-                        if (addNode ((AccTreeNode)aParentNode, xNew))
+                        AccessibleTreeNode aChild = addChild ((AccTreeNode)aParentNode, xNew);
+                        if (addNode (aChild))
                         {
                             ((AccTreeNode)aParentNode).update ();
                             updateOnCanvas ((AccTreeNode)aParentNode);
