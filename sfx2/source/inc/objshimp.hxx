@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-07 10:16:09 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,6 @@ struct SfxObjectShell_Impl
                         bPasswd:1,
                         bIsTmp:1,
                         bIsNamedVisible:1,
-                        bLoadLayout:1,
                         bDidWarnFormat:1,   // sal_True, falls schon wg. speichern in Fremformat gewarnt wurde
                         bSetStandardName:1, // sal_True, falls im FileSave Dialog xxxx.sdw im Standardverzeichnis vorgeschlagen werden soll.
                         bDidDangerousSave:1,         // sal_True, falls ein Save in ein Alienformat durchgefuehrt wurde
@@ -180,7 +179,6 @@ struct SfxObjectShell_Impl
         nVisualDocumentNumber( USHRT_MAX),
         bIsSaving( sal_False),
         bIsNamedVisible( sal_False),
-        bLoadLayout( sal_True),
         pCfgMgr( 0),
         bTemplateConfig( sal_False),
         bDidWarnFormat( sal_False),

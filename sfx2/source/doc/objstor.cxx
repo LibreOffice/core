@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 09:51:22 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2041,20 +2041,6 @@ sal_Bool SfxObjectShell::CanReload_Impl()
         !pImp->bForbidReload;
     // Fuer AutoLoad muss Reload immer enabled sein, also NICHT:
     // ( IsModified() || GetMedium()->IsRemote()
-}
-
-//-------------------------------------------------------------------------
-
-sal_Bool SfxObjectShell::LoadLayout() const
-{
-    return pImp->bLoadLayout;
-}
-
-//-------------------------------------------------------------------------
-
-void SfxObjectShell::SetLoadLayout_Impl( sal_Bool bLoadLayout )
-{
-    pImp->bLoadLayout = bLoadLayout;
 }
 
 //-------------------------------------------------------------------------
