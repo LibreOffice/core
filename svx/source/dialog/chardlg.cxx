@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-19 12:41:49 $
+ *  last change: $Author: os $ $Date: 2001-07-26 10:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,11 +1537,10 @@ IMPL_LINK( SvxCharEffectsPage, SelectHdl_Impl, ListBox*, pBox )
     }
     else if ( &m_aPositionLB != pBox )
     {
-        BOOL bEnable = ( ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) |
-                         ( m_aStrikeoutLB.GetSelectEntryPos() > 0 ) );
+        BOOL bEnable = ( m_aUnderlineLB.GetSelectEntryPos() > 0 ) ;
         m_aColorFT.Enable( bEnable );
         m_aColorLB.Enable( bEnable );
-        m_aIndividualWordsBtn.Enable( bEnable );
+        m_aIndividualWordsBtn.Enable( bEnable || m_aStrikeoutLB.GetSelectEntryPos() > 0);
 
     }
     UpdatePreview_Impl();
