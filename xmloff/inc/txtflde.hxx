@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ enum FieldIdEnum {
     FIELD_ID_REF_FOOTNOTE,          // get reference field (footnote)
     FIELD_ID_REF_ENDNOTE,           // get reference field (endnote)
     FIELD_ID_DDE,                   // DDE field
+
+    FIELD_ID_SHEET_NAME,            // name of current (spread-)sheet
 
     FIELD_ID_UNKNOWN        // invalid or unknown field type!
 };

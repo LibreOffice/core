@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMarkImportContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-25 17:21:36 $
+ *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define _XMLOFF_XMLTEXTMARKIMPORTCONTEXT_HXX
 
 #ifndef _XMLOFF_XMLICTXT_HXX
-#include <xmlictxt.hxx>
+#include "xmlictxt.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
+ *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,7 @@ const sal_Char sAPI_reference_page_get[]        = "ReferencePageGet";
 const sal_Char sAPI_macro[]                     = "Macro";
 const sal_Char sAPI_dde[]                       = "DDE";
 const sal_Char sAPI_get_reference[]             = "GetReference";
+const sal_Char sAPI_sheet_name[]                = "SheetName";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -620,16 +621,22 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_DOCUMENT_INFORMATION_1:   // compatibilty with older
         case XML_TOK_TEXT_DOCUMENT_INFORMATION_2:   // versions
         case XML_TOK_TEXT_DOCUMENT_INFORMATION_3:
-        case XML_TOK_TEXT_DOCUMENT_CREATION_AUTHOR:
         case XML_TOK_TEXT_DOCUMENT_DESCRIPTION:
-        case XML_TOK_TEXT_DOCUMENT_PRINT_AUTHOR:
         case XML_TOK_TEXT_DOCUMENT_TITLE:
         case XML_TOK_TEXT_DOCUMENT_SUBJECT:
         case XML_TOK_TEXT_DOCUMENT_KEYWORDS:
+            pContext = new XMLSimpleDocInfoImportContext( rImport, rHlp,
+                                                          nPrefix, rName,
+                                                          nToken, sal_True,
+                                                          sal_False );
+            break;
+        case XML_TOK_TEXT_DOCUMENT_CREATION_AUTHOR:
+        case XML_TOK_TEXT_DOCUMENT_PRINT_AUTHOR:
         case XML_TOK_TEXT_DOCUMENT_SAVE_AUTHOR:
             pContext = new XMLSimpleDocInfoImportContext( rImport, rHlp,
                                                           nPrefix, rName,
-                                                          nToken );
+                                                          nToken, sal_False,
+                                                          sal_True );
             break;
 
         case XML_TOK_TEXT_DOCUMENT_CREATION_DATE:
@@ -710,6 +717,11 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             pContext = new XMLReferenceFieldImportContext( rImport, rHlp,
                                                            nToken,
                                                            nPrefix, rName );
+            break;
+
+        case XML_TOK_TEXT_SHEET_NAME:
+            pContext = new XMLSheetNameImportContext( rImport, rHlp,
+                                                      nPrefix, rName );
             break;
 
         default:
@@ -1026,30 +1038,40 @@ void XMLPageNumberImportContext::PrepareField(
 {
     Any aAny;
 
+    // all properties are optional
+    Reference<XPropertySetInfo> xPropertySetInfo(
+        xPropertySet->getPropertySetInfo());
+
     aAny <<= sNumberFormatOK ?
         SvxXMLListStyleContext::GetNumType(sNumberFormat, sNumberSync) :
         style::NumberingType::PAGE_DESCRIPTOR;
     xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
 
-    // adjust offset
-    switch (eSelectPage)
+    if (xPropertySetInfo->hasPropertyByName(sPropertyOffset))
     {
-        case PageNumberType_PREV:
-            nPageAdjust--;
-            break;
-        case PageNumberType_CURRENT:
-            break;
-        case PageNumberType_NEXT:
-            nPageAdjust++;
-            break;
-        default:
-            DBG_WARNING("unknown page number type");
+        // adjust offset
+        switch (eSelectPage)
+        {
+            case PageNumberType_PREV:
+                nPageAdjust--;
+                break;
+            case PageNumberType_CURRENT:
+                break;
+            case PageNumberType_NEXT:
+                nPageAdjust++;
+                break;
+            default:
+                DBG_WARNING("unknown page number type");
+        }
+        aAny <<= nPageAdjust;
+        xPropertySet->setPropertyValue(sPropertyOffset, aAny);
     }
-    aAny <<= nPageAdjust;
-    xPropertySet->setPropertyValue(sPropertyOffset, aAny);
 
-    aAny <<= eSelectPage;
-    xPropertySet->setPropertyValue(sPropertySubType, aAny);
+    if (xPropertySetInfo->hasPropertyByName(sPropertySubType))
+    {
+        aAny <<= eSelectPage;
+        xPropertySet->setPropertyValue(sPropertySubType, aAny);
+    }
 }
 
 
@@ -1214,22 +1236,34 @@ void XMLTimeFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny.setValue( &bFixed, ::getBooleanCppuType() );
-    xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+    // all properties are optional (except IsDate)
+    Reference<XPropertySetInfo> xPropertySetInfo(
+        xPropertySet->getPropertySetInfo());
+
+    if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+    {
+        aAny.setValue( &bFixed, ::getBooleanCppuType() );
+        xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+    }
 
     aAny.setValue( &bIsDate, ::getBooleanCppuType() );
     xPropertySet->setPropertyValue(sPropertyIsDate, aAny);
 
-    aAny <<= nAdjust;
-    xPropertySet->setPropertyValue(sPropertyAdjust, aAny);
+    if (xPropertySetInfo->hasPropertyByName(sPropertyAdjust))
+    {
+        aAny <<= nAdjust;
+        xPropertySet->setPropertyValue(sPropertyAdjust, aAny);
+    }
 
-    if (bFixed && bTimeOK)
+    if (bFixed && bTimeOK &&
+        xPropertySetInfo->hasPropertyByName(sPropertyDateTimeValue))
     {
         aAny <<= fTimeValue;
         xPropertySet->setPropertyValue(sPropertyDateTimeValue, aAny);
     }
 
-    if (bFormatOK)
+    if (bFormatOK &&
+        xPropertySetInfo->hasPropertyByName(sPropertyNumberFormat))
     {
         aAny <<= nFormatKey;
         xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
@@ -1559,12 +1593,16 @@ TYPEINIT1( XMLSimpleDocInfoImportContext, XMLTextFieldImportContext );
 
 XMLSimpleDocInfoImportContext::XMLSimpleDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
-    sal_uInt16 nPrfx, const OUString& sLocalName, sal_uInt16 nToken) :
+    sal_uInt16 nPrfx, const OUString& sLocalName, sal_uInt16 nToken,
+    sal_Bool bContent, sal_Bool bAuthor) :
         XMLTextFieldImportContext(rImport, rHlp, MapTokenToServiceName(nToken),
                                   nPrfx, sLocalName),
         bFixed(sal_False),
+        bHasAuthor(bAuthor),
+        bHasContent(bContent),
         sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
+        sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author)),
         sPropertyCurrentPresentation(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation))
 {
@@ -1594,10 +1632,17 @@ void XMLSimpleDocInfoImportContext::PrepareField(
 
     // set Content (if not fixed) AND CurrentPresentation
     aAny <<= GetContent();
-    if (bFixed)
+
+    if (bFixed && bHasAuthor)
+    {
+        xPropertySet->setPropertyValue(sPropertyAuthor, aAny);
+    }
+
+    if (bFixed && bHasContent)
     {
         xPropertySet->setPropertyValue(sPropertyContent, aAny);
     }
+
     xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
 }
 
@@ -1689,8 +1734,8 @@ TYPEINIT1( XMLRevisionDocInfoImportContext, XMLSimpleDocInfoImportContext );
 XMLRevisionDocInfoImportContext::XMLRevisionDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& sLocalName, sal_uInt16 nToken) :
-        XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx,
-                                      sLocalName, nToken),
+        XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,
+                                      nToken, sal_False, sal_False),
         sPropertyRevision(RTL_CONSTASCII_USTRINGPARAM(sAPI_revision))
 {
     bValid = sal_True;
@@ -1726,8 +1771,8 @@ TYPEINIT1( XMLDateTimeDocInfoImportContext, XMLSimpleDocInfoImportContext );
 XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp, sal_uInt16 nPrfx,
     const OUString& sLocalName, sal_uInt16 nToken) :
-        XMLSimpleDocInfoImportContext(rImport, rHlp,
-                                      nPrfx, sLocalName, nToken),
+        XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx, sLocalName,
+                                      nToken, sal_False, sal_False),
         sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
         sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date)),
         nFormat(0),
@@ -1744,12 +1789,17 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
         case XML_TOK_TEXT_DOCUMENT_PRINT_DATE:
         case XML_TOK_TEXT_DOCUMENT_SAVE_DATE:
             bIsDate = sal_True;
+            bHasDateTime = sal_True;
             break;
-        case XML_TOK_TEXT_DOCUMENT_EDIT_DURATION:
         case XML_TOK_TEXT_DOCUMENT_CREATION_TIME:
         case XML_TOK_TEXT_DOCUMENT_PRINT_TIME:
         case XML_TOK_TEXT_DOCUMENT_SAVE_TIME:
             bIsDate = sal_False;
+            bHasDateTime = sal_True;
+            break;
+        case XML_TOK_TEXT_DOCUMENT_EDIT_DURATION:
+            bIsDate = sal_False;
+            bHasDateTime = sal_False;
             break;
         default:
             DBG_ERROR(
@@ -1792,8 +1842,12 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
     XMLSimpleDocInfoImportContext::PrepareField(xPropertySet);
 
     Any aAny;
-    aAny.setValue( &bIsDate, ::getBooleanCppuType());
-    xPropertySet->setPropertyValue(sPropertyIsDate, aAny);
+
+    if (bHasDateTime)
+    {
+        aAny.setValue( &bIsDate, ::getBooleanCppuType());
+        xPropertySet->setPropertyValue(sPropertyIsDate, aAny);
+    }
 
     if (bFormatOK)
     {
@@ -1815,7 +1869,8 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
     SvXMLImport& rImport, XMLTextImportHelper& rHlp,
     sal_uInt16 nPrfx, const OUString& sLocalName, sal_uInt16 nToken) :
         XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx,
-                                      sLocalName, nToken)
+                                      sLocalName, nToken,
+                                      sal_False, sal_False)
 {
 }
 
@@ -2084,14 +2139,27 @@ void XMLFileNameImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= bFixed;
-//  xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+    // properties are optional
+    Reference<XPropertySetInfo> xPropertySetInfo(
+        xPropertySet->getPropertySetInfo());
 
-    aAny <<= nFormat;
-    xPropertySet->setPropertyValue(sPropertyFileFormat, aAny);
+//  if (xPropertySetInfo->hasPropertyByName(sPropertyFixed))
+//  {
+//      aAny <<= bFixed;
+//      xPropertySet->setPropertyValue(sPropertyFixed, aAny);
+//  }
 
-    aAny <<= GetContent();
-    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+    if (xPropertySetInfo->hasPropertyByName(sPropertyFileFormat))
+    {
+        aAny <<= nFormat;
+        xPropertySet->setPropertyValue(sPropertyFileFormat, aAny);
+    }
+
+    if (xPropertySetInfo->hasPropertyByName(sPropertyCurrentPresentation))
+    {
+        aAny <<= GetContent();
+        xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
+    }
 }
 
 
@@ -2275,10 +2343,17 @@ void XMLCountFieldImportContext::PrepareField(
 {
     Any aAny;
 
-    aAny <<= bNumberFormatOK ?
-        SvxXMLListStyleContext::GetNumType(sNumberFormat, sLetterSync) :
-        style::NumberingType::PAGE_DESCRIPTOR;
-    xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    // properties optional
+    // (only page count, but do for all to save common implementation)
+
+    if (xPropertySet->getPropertySetInfo()->
+        hasPropertyByName(sPropertyNumberingType))
+    {
+        aAny <<= bNumberFormatOK ?
+            SvxXMLListStyleContext::GetNumType(sNumberFormat, sLetterSync) :
+            style::NumberingType::PAGE_DESCRIPTOR;
+        xPropertySet->setPropertyValue(sPropertyNumberingType, aAny);
+    }
 }
 
 const sal_Char* XMLCountFieldImportContext::MapTokenToServiceName(
@@ -2877,4 +2952,35 @@ void XMLDdeFieldImportContext::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
     // empty, since not needed.
+}
+
+
+//
+// sheet name fields
+//
+
+TYPEINIT1(XMLSheetNameImportContext, XMLTextFieldImportContext);
+
+XMLSheetNameImportContext::XMLSheetNameImportContext(
+    SvXMLImport& rImport,
+    XMLTextImportHelper& rHlp,
+    sal_uInt16 nPrfx,
+    const OUString& sLocalName) :
+        XMLTextFieldImportContext(rImport, rHlp, sAPI_sheet_name,
+                                  nPrfx, sLocalName)
+{
+    bValid = sal_True;  // always valid!
+}
+
+void XMLSheetNameImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const ::rtl::OUString& sAttrValue )
+{
+    // no attributes -> nothing to be done
+}
+
+void XMLSheetNameImportContext::PrepareField(
+    const Reference<XPropertySet> & xPropertySet)
+{
+    // no attributes -> nothing to be done
 }

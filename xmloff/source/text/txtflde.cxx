@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-19 10:25:01 $
+ *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCo
 static sal_Char __READONLY_DATA FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
 static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
 static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
+static sal_Char __READONLY_DATA FIELD_SERVICE_SHEET_NAME[] = "SheetName";
 static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
 static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
@@ -321,6 +322,9 @@ SvXMLEnumMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     { FIELD_SERVICE_MACRO,                  FIELD_ID_MACRO },
     { FIELD_SERVICE_GET_REFERENCE,          FIELD_ID_REF_REFERENCE },
     { FIELD_SERVICE_DDE,                    FIELD_ID_DDE },
+
+    // non-writer fields
+    { FIELD_SERVICE_SHEET_NAME,             FIELD_ID_SHEET_NAME },
 
     { 0,                                    0 }
 };
@@ -632,6 +636,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_TEMPLATE_NAME:
         case FIELD_ID_CHAPTER:
         case FIELD_ID_FILE_NAME:
+        case FIELD_ID_SHEET_NAME:
             ; // these field IDs are final
             break;
 
@@ -730,6 +735,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_SENDER:
     case FIELD_ID_AUTHOR:
     case FIELD_ID_PAGESTRING:
+    case FIELD_ID_SHEET_NAME:
         // always string:
         return sal_True;
 
@@ -846,6 +852,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_TEMPLATE_NAME:
     case FIELD_ID_CHAPTER:
     case FIELD_ID_FILE_NAME:
+    case FIELD_ID_SHEET_NAME:
         ; // no formats for these fields!
         break;
 
@@ -863,6 +870,10 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
 {
     // get property set
     Reference<XPropertySet> xPropSet(rTextField, UNO_QUERY);
+
+    // get property set info (because some attributes are not support
+    // in all implementations)
+    Reference<XPropertySetInfo> xPropSetInfo(xPropSet->getPropertySetInfo());
 
     // get Field ID
     enum FieldIdEnum nToken = GetFieldID(rTextField, xPropSet);
@@ -1025,49 +1036,90 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         break;
 
     case FIELD_ID_TIME:
-        ProcessDateTime(sXML_time_value,
-                        GetDoubleProperty(sPropertyDateTimeValue, xPropSet),
-                        sal_False, sal_False);
-        ProcessBoolean(sXML_fixed,
-                       GetBoolProperty(sPropertyIsFixed, xPropSet), sal_False);
-        ProcessValueAndType(sal_False,
-                            GetIntProperty(sPropertyNumberFormat, xPropSet),
-                            sEmpty, sEmpty, 0.0, // not used
-                            sal_False, sal_False, sal_True);
-        // adjust value given as integer in minutes
-        ProcessDateTime(sXML_time_adjust,
-                        GetIntProperty(sPropertyAdjust, xPropSet),
-                        sal_False, sal_True, sal_True);
+        // all properties (except IsDate) are optional!
+        if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
+        {
+            // no value -> current time
+            ProcessDateTime(sXML_time_value,
+                            GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
+                            sal_False, sal_False);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            ProcessBoolean(sXML_fixed,
+                           GetBoolProperty(sPropertyIsFixed, xPropSet),
+                           sal_False);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
+        {
+            ProcessValueAndType(sal_False,
+                                GetIntProperty(sPropertyNumberFormat,xPropSet),
+                                sEmpty, sEmpty, 0.0, // not used
+                                sal_False, sal_False, sal_True);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
+        {
+            // adjust value given as integer in minutes
+            ProcessDateTime(sXML_time_adjust,
+                            GetIntProperty(sPropertyAdjust, xPropSet),
+                            sal_False, sal_True, sal_True);
+        }
         ExportElement(sXML_time, sPresentation);
         break;
 
     case FIELD_ID_DATE:
-        ProcessDateTime(sXML_date_value,
-                        GetDoubleProperty(sPropertyDateTimeValue, xPropSet),
-                        sal_True, sal_False);
-        ProcessBoolean(sXML_fixed,
-                       GetBoolProperty(sPropertyIsFixed, xPropSet), sal_False);
-        ProcessValueAndType(sal_False,
-                            GetIntProperty(sPropertyNumberFormat, xPropSet),
-                            sEmpty, sEmpty, 0.0, // not used
-                            sal_False, sal_False, sal_True);
-        // adjust value given as number of days
-        ProcessDateTime(sXML_date_adjust,
-                        GetIntProperty(sPropertyAdjust, xPropSet),
-                        sal_True, sal_True, sal_True);
+        // all properties (except IsDate) are optional!
+        if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
+        {
+            // no value -> current date
+            ProcessDateTime(sXML_date_value,
+                            GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
+                            sal_True, sal_False);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            ProcessBoolean(sXML_fixed,
+                           GetBoolProperty(sPropertyIsFixed, xPropSet),
+                           sal_False);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberFormat))
+        {
+            ProcessValueAndType(sal_False,
+                                GetIntProperty(sPropertyNumberFormat,xPropSet),
+                                sEmpty, sEmpty, 0.0, // not used
+                                sal_False, sal_False, sal_True);
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyAdjust))
+        {
+            // adjust value given as number of days
+            ProcessDateTime(sXML_date_adjust,
+                            GetIntProperty(sPropertyAdjust, xPropSet),
+                            sal_True, sal_True, sal_True);
+        }
         ExportElement(sXML_date, sPresentation);
         break;
 
     case FIELD_ID_PAGENUMBER:
-    {
-        ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
-                                              xPropSet));
-        sal_Int32 nAdjust = GetIntProperty(sPropertyOffset, xPropSet);
-        ProcessString(sXML_select_page, MapPageNumberName(xPropSet, nAdjust));
-        ProcessInteger(sXML_page_adjust, nAdjust, 0);
+        // all properties are optional
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberingType))
+        {
+            ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
+                                                  xPropSet));
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyOffset))
+        {
+            sal_Int32 nAdjust = GetIntProperty(sPropertyOffset, xPropSet);
+
+            if (xPropSetInfo->hasPropertyByName(sPropertySubType))
+            {
+                // property SubType used in MapPageNumebrName
+                ProcessString(sXML_select_page,
+                              MapPageNumberName(xPropSet, nAdjust));
+            }
+            ProcessInteger(sXML_page_adjust, nAdjust, 0);
+        }
         ExportElement(sXML_page_number, sPresentation);
         break;
-    }
 
     case FIELD_ID_PAGESTRING:
     {
@@ -1204,8 +1256,13 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     case FIELD_ID_COUNT_TABLES:
     case FIELD_ID_COUNT_GRAPHICS:
     case FIELD_ID_COUNT_OBJECTS:
-        ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
-                                              xPropSet));
+        // all properties optional (applies to pages only, but I'll do
+        // it for all for sake of common implementation)
+        if (xPropSetInfo->hasPropertyByName(sPropertyNumberingType))
+        {
+            ProcessNumberingType(GetInt16Property(sPropertyNumberingType,
+                                                  xPropSet));
+        }
         ExportElement(MapCountFieldName(nToken), sPresentation);
         break;
 
@@ -1251,11 +1308,19 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         break;
 
     case FIELD_ID_FILE_NAME:
-        ProcessString(sXML_display,
-                      MapFilenameDisplayFormat(
-                          GetInt16Property(sPropertyFileFormat, xPropSet)));
-        ProcessBoolean(sXML_fixed,
-                       GetBoolProperty(sPropertyIsFixed, xPropSet), sal_False);
+        // all properties are optional
+        if (xPropSetInfo->hasPropertyByName(sPropertyFileFormat))
+        {
+            ProcessString(sXML_display,
+                          MapFilenameDisplayFormat(
+                             GetInt16Property(sPropertyFileFormat, xPropSet)));
+        }
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            ProcessBoolean(sXML_fixed,
+                           GetBoolProperty(sPropertyIsFixed, xPropSet),
+                           sal_False);
+        }
         ExportElement(sXML_file_name, sPresentation);
         break;
 
@@ -1330,11 +1395,16 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         break;
 
     case FIELD_ID_DDE:
-        // name from parent
+        // name from field master
          ProcessString(sXML_connection_name,
                        GetStringProperty(sPropertyName,
                                          GetMasterPropertySet(rTextField)));
         ExportElement(sXML_dde_connection, sPresentation);
+        break;
+
+    case FIELD_ID_SHEET_NAME:
+        // name of spreadsheet (Calc only)
+        ExportElement(sXML_sheet_name, sPresentation);
         break;
 
     case FIELD_ID_UNKNOWN:

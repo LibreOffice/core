@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-09-27 15:58:44 $
+ *  last change: $Author: dvo $ $Date: 2000-10-20 12:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,10 +639,13 @@ class XMLSimpleDocInfoImportContext : public XMLTextFieldImportContext
 {
     const ::rtl::OUString sPropertyFixed;
     const ::rtl::OUString sPropertyContent;
+    const ::rtl::OUString sPropertyAuthor;
     const ::rtl::OUString sPropertyCurrentPresentation;
 
 protected:
     sal_Bool bFixed;
+    sal_Bool bHasAuthor;
+    sal_Bool bHasContent;
 
 public:
 
@@ -652,7 +655,9 @@ public:
                                   XMLTextImportHelper& rHlp,
                                   sal_uInt16 nPrfx,
                                   const ::rtl::OUString& sLocalName,
-                                  sal_uInt16 nToken);
+                                  sal_uInt16 nToken,
+                                  sal_Bool bContent,
+                                  sal_Bool bAuthor);
 
 protected:
 
@@ -679,6 +684,7 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
     sal_Int32 nFormat;
     sal_Bool bFormatOK;
     sal_Bool bIsDate;
+    sal_Bool bHasDateTime;
 
 public:
 
@@ -1213,5 +1219,32 @@ protected:
         ::com::sun::star::beans::XPropertySet> & xPropertySet);
 
 };
+
+
+/** import sheet name fields (Calc) dde fields (<text:sheet-name>) */
+class XMLSheetNameImportContext : public XMLTextFieldImportContext
+{
+
+public:
+
+    TYPEINFO();
+
+    XMLSheetNameImportContext(SvXMLImport& rImport,
+                              XMLTextImportHelper& rHlp,
+                              sal_uInt16 nPrfx,
+                              const ::rtl::OUString& sLocalName);
+
+protected:
+
+    /// no attributes -> empty method
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// no atributes -> empty method
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
 
 #endif
