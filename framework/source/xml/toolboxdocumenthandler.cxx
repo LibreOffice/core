@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:57:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:48:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,12 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
-#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <com/sun/star/ui/ItemStyle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -345,7 +345,7 @@ throw(  SAXException, RuntimeException )
                 sal_Bool bAttributeURL  = sal_False;
 
                 m_bToolBarItemStartFound = sal_True;
-                sal_Int16       nItemType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+                sal_Int16       nItemType( ::com::sun::star::ui::ItemType::DEFAULT );
                 OUString        aLabel;
                 OUString        aCommandURL;
                 OUString        aHelpURL;
@@ -433,15 +433,15 @@ throw(  SAXException, RuntimeException )
                                     {
                                         sal_Int32 nHashCode = aToken.hashCode();
                                         if ( nHashCode == m_nHashCode_Style_Radio )
-                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::RADIO_CHECK;
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::RADIO_CHECK;
                                         else if ( nHashCode == m_nHashCode_Style_Left )
-                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::ALIGN_LEFT;
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::ALIGN_LEFT;
                                         else if ( nHashCode == m_nHashCode_Style_AutoSize )
-                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::AUTO_SIZE;
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::AUTO_SIZE;
                                         else if ( nHashCode == m_nHashCode_Style_DropDown )
-                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::DROP_DOWN;
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::DROP_DOWN;
                                         else if ( nHashCode == m_nHashCode_Style_Repeat )
-                                            nItemBits |= drafts::com::sun::star::ui::ItemStyle::REPEAT;
+                                            nItemBits |= ::com::sun::star::ui::ItemStyle::REPEAT;
                                     }
                                 }
                                 while ( nIndex >= 0 );
@@ -471,7 +471,7 @@ throw(  SAXException, RuntimeException )
                     aToolbarItemProp[0].Value = makeAny( aCommandURL );
                     aToolbarItemProp[1].Value = makeAny( aHelpURL );
                     aToolbarItemProp[2].Value = makeAny( aLabel );
-                    aToolbarItemProp[3].Value = makeAny( drafts::com::sun::star::ui::ItemType::DEFAULT );
+                    aToolbarItemProp[3].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
                     aToolbarItemProp[4].Value = makeAny( nItemBits );
                     aToolbarItemProp[5].Value = makeAny( bVisible );
 
@@ -499,7 +499,7 @@ throw(  SAXException, RuntimeException )
                 aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
-                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE;
+                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_SPACE;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -524,7 +524,7 @@ throw(  SAXException, RuntimeException )
                 aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
-                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK;
+                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -549,7 +549,7 @@ throw(  SAXException, RuntimeException )
                 aToolbarItemProp[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_TYPE ));
 
                 aToolbarItemProp[0].Value <<= rtl::OUString();
-                aToolbarItemProp[1].Value <<= drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE;
+                aToolbarItemProp[1].Value <<= ::com::sun::star::ui::ItemType::SEPARATOR_LINE;
 
                 m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
             }
@@ -759,17 +759,17 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument() throw
             OUString    aLabel;
             OUString    aHelpURL;
             sal_Bool    bVisible( sal_True );
-            sal_Int16   nType( drafts::com::sun::star::ui::ItemType::DEFAULT );
+            sal_Int16   nType( ::com::sun::star::ui::ItemType::DEFAULT );
             sal_Int16   nWidth( 0 );
 
             ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nWidth, bVisible, nType );
-            if ( nType == drafts::com::sun::star::ui::ItemType::DEFAULT )
+            if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
                 WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nWidth, bVisible );
-            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
+            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
-            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINE )
+            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINE )
                 WriteToolBoxSeparator();
-            else if ( nType == drafts::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
+            else if ( nType == ::com::sun::star::ui::ItemType::SEPARATOR_LINEBREAK )
                 WriteToolBoxBreak();
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:57:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@
 #ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMSTYLE_HPP_
-#include <drafts/com/sun/star/ui/ItemStyle.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMSTYLE_HPP_
+#include <com/sun/star/ui/ItemStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_ITEMTYPE_HPP_
-#include <drafts/com/sun/star/ui/ItemType.hpp>
+#ifndef _COM_SUN_STAR_UI_ITEMTYPE_HPP_
+#include <com/sun/star/ui/ItemType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -107,7 +107,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
-using namespace ::drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
 #define XMLNS_STATUSBAR             "http://openoffice.org/2001/statusbar"
@@ -469,7 +469,7 @@ throw(  SAXException, RuntimeException )
                     aStatusbarItemProp[2].Value = makeAny( nOffset );
                     aStatusbarItemProp[3].Value = makeAny( nItemBits );
                     aStatusbarItemProp[4].Value = makeAny( nWidth );
-                    aStatusbarItemProp[5].Value = makeAny( drafts::com::sun::star::ui::ItemType::DEFAULT );
+                    aStatusbarItemProp[5].Value = makeAny( ::com::sun::star::ui::ItemType::DEFAULT );
 
                     m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
                 }
