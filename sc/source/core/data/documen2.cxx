@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:33:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1836,7 +1836,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             if (bIsAbsRef)
             {
                 nRetVal += 1;
-                    // InfoBox AbsoluteRefs sind möglicherweise nicht mehr korrekt!!
+                    // InfoBox AbsoluteRefs sind moeglicherweise nicht mehr korrekt!!
             }
             if (bNamesLost)
             {
