@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_emit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2003-04-07 09:40:42 $
+ *  last change: $Author: dbo $ $Date: 2003-04-25 15:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,9 +635,54 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     S"get_Raises", property_method_attr,
                     __typeof (::System::Type * __gc []), no_params );
             code = method_builder->GetILGenerator();
-//             // xxx todo: complex get_Raises()
             code->Emit( Emit::OpCodes::Ldarg_0 );
             code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
+            code->Emit( Emit::OpCodes::Brtrue_S, (::System::Byte) 0x16 );
+            code->Emit( Emit::OpCodes::Ldc_I4_1 );
+            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
+            code->Emit( Emit::OpCodes::Stloc_1 );
+            code->Emit( Emit::OpCodes::Ldloc_1 );
+            code->Emit( Emit::OpCodes::Ldc_I4_0 );
+            code->Emit( Emit::OpCodes::Ldtoken, get_type_RuntimeException() );
+            code->Emit(
+                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc_1 );
+            code->Emit( Emit::OpCodes::Ret );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
+            code->Emit( Emit::OpCodes::Ldlen );
+            code->Emit( Emit::OpCodes::Conv_I4 );
+            code->Emit( Emit::OpCodes::Ldc_I4_1 );
+            code->Emit( Emit::OpCodes::Add );
+            code->Emit( Emit::OpCodes::Conv_Ovf_U4 );
+            code->Emit( Emit::OpCodes::Newarr, __typeof (::System::Type) );
+            code->Emit( Emit::OpCodes::Stloc_0 );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
+            code->Emit( Emit::OpCodes::Ldloc_0 );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
+            code->Emit( Emit::OpCodes::Ldlen );
+            code->Emit( Emit::OpCodes::Conv_I4 );
+
+            param_types = new ::System::Type * __gc [ 3 ];
+            param_types[ 0 ] = __typeof (::System::Array);
+            param_types[ 1 ] = __typeof (::System::Array);
+            param_types[ 2 ] = __typeof (::System::Int32);
+            code->Emit(
+                Emit::OpCodes::Call,
+                __typeof (::System::Array)->GetMethod( "Copy", param_types ) );
+            code->Emit( Emit::OpCodes::Ldloc_0 );
+            code->Emit( Emit::OpCodes::Ldarg_0 );
+            code->Emit( Emit::OpCodes::Ldfld, field_m_raises );
+            code->Emit( Emit::OpCodes::Ldlen );
+            code->Emit( Emit::OpCodes::Conv_I4 );
+            code->Emit( Emit::OpCodes::Ldtoken, get_type_RuntimeException() );
+            code->Emit(
+                Emit::OpCodes::Call, m_method_info_Type_GetTypeFromHandle );
+            code->Emit( Emit::OpCodes::Stelem_Ref );
+            code->Emit( Emit::OpCodes::Ldloc_0 );
             code->Emit( Emit::OpCodes::Ret );
             property_builder->SetGetMethod( method_builder );
             // setter
@@ -1361,22 +1406,6 @@ ConstructorInfo * TypeEmitter::get_ctor_uno_MethodAttribute()
                     Reference< reflection::XTypeDescription > const & xExc =
                         exceptions[ exc_pos ];
                     exception_types[ exc_pos ] = get_type( xExc );
-                    if (xExc->getName().equalsAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM(
-                                "com.sun.star.uno.Exception") ))
-                    {
-                        // specify only unoidl.com.sun.star.uno.Exception
-                        exception_types[ 0 ] = get_type_Exception();
-                        exc_length = 1;
-                        break;
-                    }
-                }
-                if (exc_length != seq_exceptions.getLength())
-                {
-                    ::System::Type * temp __gc [] =
-                          new ::System::Type * __gc [ exc_length ];
-                    ::System::Array::Copy( exception_types, temp, exc_length );
-                    exception_types = temp;
                 }
                 ::System::Object * args __gc [] =
                       new ::System::Object * __gc [ 3 ];
