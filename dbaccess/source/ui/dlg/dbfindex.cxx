@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 13:25:31 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 10:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
-
-
+#ifndef _DBAUI_FILENOTATION_HXX_
+#include "filenotation.hxx"
+#endif
 
 
 //.........................................................................
@@ -202,7 +203,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
             _rDisplay.RemoveEntry( _rName );
 
             // adjust selection if necessary
-            if (nPos == _rList.size())
+            if ((sal_uInt32)nPos == _rList.size())
                 _rDisplay.SelectEntryPos((sal_uInt16)nPos-1);
             else
                 _rDisplay.SelectEntryPos((sal_uInt16)nPos);
@@ -395,6 +396,8 @@ void ODbaseIndexDialog::Init()
     ::rtl::OUString aIndexExt = ::rtl::OUString::createFromAscii("ndx");
     ::rtl::OUString aTableExt = ::rtl::OUString::createFromAscii("dbf");
 
+    ::std::vector< String > aUsedIndexes;
+
     String aExt;
     const ::rtl::OUString *pBegin = aFolderContent.getConstArray();
     const ::rtl::OUString *pEnd   = pBegin + aFolderContent.getLength();
@@ -418,7 +421,8 @@ void ODbaseIndexDialog::Init()
 
             // open the INF file
             aURL.setExtension(String::CreateFromAscii("inf"));
-            Config aInfFile( aURL.getFSysPath(INetURLObject::FSYS_DETECT) );
+            OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
+            Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
             aInfFile.SetGroup( aGroupIdent );
 
             ///////////////////////////////////////////////////////////////////////////
@@ -441,12 +445,20 @@ void ODbaseIndexDialog::Init()
                     rTabInfo.aIndexList.push_back( OTableIndex( aEntry ) );
 
                     // and remove it from the free index list
-                    RemoveFreeIndex( aEntry, sal_False );
+                    aUsedIndexes.push_back(aEntry);
+                        // do this later below. We may not have encountered the index file, yet, thus we may not
+                        // know the index as beeing free, yet
                 }
 
             }
         }
     }
+
+    for (   ::std::vector< String >::const_iterator aUsedIndex = aUsedIndexes.begin();
+            aUsedIndex != aUsedIndexes.end();
+            ++aUsedIndex
+        )
+        RemoveFreeIndex( *aUsedIndex, sal_False );
 
     if (m_aTableInfoList.size())
     {
@@ -479,7 +491,7 @@ void ODbaseIndexDialog::SetCtrls()
 
         // ListBox der Tabellenindizes aufbauen
         for (   ConstTableIndexListIterator aIndex = rTabInfo.aIndexList.begin();
-                aIndex != rTabInfo.aIndexList.begin();
+                aIndex != rTabInfo.aIndexList.end();
                 ++aIndex
             )
             aLB_TableIndexes.InsertEntry( aIndex->GetIndexFileName() );
@@ -491,7 +503,7 @@ void ODbaseIndexDialog::SetCtrls()
 
     // ListBox freie Indizes
     for (   ConstTableIndexListIterator aFree = m_aFreeIndexList.begin();
-            aFree != m_aFreeIndexList.begin();
+            aFree != m_aFreeIndexList.end();
             ++aFree
         )
         aLB_FreeIndexes.InsertEntry( aFree->GetIndexFileName() );
@@ -518,10 +530,11 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         aDsn = aPathOptions.SubstituteVariable(aDsn);
     }
     aURL.SetSmartURL(aDsn);
-    aURL.setName(aTableName);
+    aURL.Append(aTableName);
     aURL.setExtension(String::CreateFromAscii("inf"));
 
-    Config aInfFile( aURL.GetURLNoPass() );
+    OFileNotation aTransformer(aURL.GetURLNoPass(), OFileNotation::N_URL);
+    Config aInfFile( aTransformer.get(OFileNotation::N_SYSTEM) );
     aInfFile.SetGroup( aGroupIdent );
 
     // Erst einmal alle Tabellenindizes loeschen
@@ -586,6 +599,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/14 13:25:31  fs
+ *  #86942# +checkButtons / OnListEntrySelected
+ *
  *  Revision 1.5  2001/04/04 10:38:43  oj
  *  reading uninitialized memory
  *
