@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-07-20 12:02:36 $
+ *  last change: $Author: aw $ $Date: 2001-10-09 16:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,11 +741,27 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
 #endif
             pTextEditOutliner->ClearModifyFlag();
 
-            // #71519#
+            // #71519#, #91453#
+            if(pWin)
             {
-                SdrFitToSizeType eFit = ((SdrTextObj*)pTextEditObj)->GetFitToSize();
-                if((eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES) && pWin)
+                sal_Bool bExtraInvalidate(sal_False);
+
+                // #91453#
+                if(!bExtraInvalidate && IsTextDraft())
+                    bExtraInvalidate = sal_True;
+
+                // #71519#
+                if(!bExtraInvalidate)
+                {
+                    SdrFitToSizeType eFit = ((SdrTextObj*)pTextEditObj)->GetFitToSize();
+                    if(eFit == SDRTEXTFIT_PROPORTIONAL || eFit == SDRTEXTFIT_ALLLINES)
+                        bExtraInvalidate = sal_True;
+                }
+
+                if(bExtraInvalidate)
+                {
                     pWin->Invalidate(aTextEditArea);
+                }
             }
 
             return TRUE; // Gut gelaufen, TextEdit laeuft nun
