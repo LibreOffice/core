@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:12:34 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,24 +148,21 @@ void OfficeClientMain::registerServices( )
     }
 
     OUString aSharedLibrary[4];
-    aSharedLibrary[0] = OUString::createFromAscii( "connectr" );
-    aSharedLibrary[1] = OUString::createFromAscii( "remotebridge" );
-    aSharedLibrary[2] = OUString::createFromAscii( "brdgfctr" );
-    aSharedLibrary[3] = OUString::createFromAscii( "uuresolver" );
+    aSharedLibrary[0] =
+        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
+    aSharedLibrary[1] =
+        OUString::createFromAscii( "remotebridge.uno" SAL_DLLEXTENSION );
+    aSharedLibrary[2] =
+        OUString::createFromAscii( "bridgefac.uno" SAL_DLLEXTENSION );
+    aSharedLibrary[3] =
+        OUString::createFromAscii( "uuresolver.uno" SAL_DLLEXTENSION );
 
     sal_Int32 i;
     for( i = 0 ; i < 4 ; i ++ )
     {
 
         // build the system specific library name
-#ifdef SAL_W32
         OUString aDllName = aSharedLibrary[i];
-        aDllName += OUString::createFromAscii(".dll");
-#else
-        OUString aDllName = OUString::createFromAscii("lib");
-        aDllName += aSharedLibrary[i];
-        aDllName += OUString::createFromAscii(".so");
-#endif
 
         try
         {
