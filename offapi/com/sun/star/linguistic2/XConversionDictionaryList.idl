@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConversionDictionaryList.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:58:12 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,8 @@ module com { module sun { module star { module linguistic2 {
     <type scope="com::sun::star::util">XFlushable</type> interface.
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
+
+     @since #107627#
 */
 interface XConversionDictionaryList : com::sun::star::uno::XInterface
 {
