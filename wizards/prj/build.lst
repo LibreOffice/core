@@ -1,4 +1,4 @@
-wz      wizards                                                 :                               rsc javaunohelper NULL
+wz      wizards                                                 :                               rsc javaunohelper jut NULL
 wz      wizards\util                                            nmake           -       all     wz_util NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
