@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.65 $
+#   $Revision: 1.66 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 13:14:32 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:44:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ COMPONENTLIST = \
     acceptor	\
     bridgefac	\
     connector	\
-    corereflection		\
+    reflection		\
     shlibloader		\
     nestedreg		\
     dynamicloader	\
