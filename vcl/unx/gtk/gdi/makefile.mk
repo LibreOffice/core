@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 11:51:58 $
+#   last change: $Author: hjs $ $Date: 2004-12-17 13:58:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,6 @@ dummy:
 
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
-
-CFLAGS+=$(PKGCONFIG_CFLAGS)
 
 SLOFILES=\
             $(SLO)$/salnativewidgets-gtk.obj

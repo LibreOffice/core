@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 11:52:13 $
+#   last change: $Author: hjs $ $Date: 2004-12-17 13:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,8 +86,6 @@ dummy:
 
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE : pkg_config.mk
-
-CFLAGS+=$(PKGCONFIG_CFLAGS)
 
 SLOFILES=\
             $(SLO)$/gtkframe.obj				\
