@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:27:51 $
+ *  last change: $Author: os $ $Date: 2002-10-07 13:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5818,7 +5818,7 @@ SfxSlotInfo FN_OPTIMIZE_TABLE
 };
 SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
 {
-    SlotName = "Gliederung zum Clipboard";
+    SlotName = "Gliederung zur Zwischenablage";
     SlotName [ english ] =  "Gliederung zum Clipboard";
     SlotName[ english_us ] = "Outline to Clipboard";
     SlotName[ portuguese ] = "Esquema em área de transferência";

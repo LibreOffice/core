@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 19:41:48 $
+ *  last change: $Author: os $ $Date: 2002-10-07 13:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,8 +194,7 @@ InfoBox MSG_ERR_INSERT_GLOS
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Gewünschtes Clipboardformat steht nicht zur Verfügung. : Gew³nschtes Clipboardformat steht nicht zur Verf³gung. */
-    MESSAGE = "Gewünschtes Clipboardformat steht nicht zur Verfügung." ;
+    MESSAGE = "Gewünschtes Zwischenablagen-Format steht nicht zur Verfügung." ;
     MESSAGE [ English ] = "Requested clipboard format is not available." ;
     MESSAGE [ norwegian ] = "Requested clipboard format is not available." ;
     MESSAGE [ italian ] = "Il formato appunti richiesto non è disponibile." ;
