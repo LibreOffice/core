@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:20:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,17 +655,8 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     // Set base URI
-    ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
-    if ( mrMedium.GetItemSet() )
-    {
-        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                mrMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
-        if ( pBaseURLItem )
-            aBaseURL = pBaseURLItem->GetValue();
-    }
-
     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+    xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL() ) );
 
     if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
     {
@@ -865,20 +856,8 @@ sal_Bool SdXMLFilter::Export()
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
-        ::rtl::OUString aBaseURL;
-        sal_Bool bBaseURLSet = sal_False;
-        if ( mrMedium.GetItemSet() )
-        {
-            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
-                    mrMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
-            if ( pBaseURLItem )
-            {
-                aBaseURL = pBaseURLItem->GetValue();
-                bBaseURLSet = sal_True;
-            }
-        }
         OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-        xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+        xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL( true ) ) );
 
         if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
         {
@@ -897,8 +876,6 @@ sal_Bool SdXMLFilter::Export()
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
-        else if ( !bBaseURLSet )
-            xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( INetURLObject::GetBaseURL() ) ) );
 
         // initialize descriptor
         uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
