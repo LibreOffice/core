@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sound.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:06:48 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SOUND_CXX
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -121,7 +119,6 @@ void SalSoundProc( void* pInst, SoundNotification eNotification, ULONG nError )
 
 Sound::Sound( Window* pWindow ) :
             mpWindow        ( pWindow ),
-            mpSoundData     ( NULL ),
             mnDataLen       ( 0UL ),
             mnSoundLen      ( 0UL ),
             mnStartTime     ( 0UL ),
@@ -141,9 +138,6 @@ Sound::Sound( Window* pWindow ) :
 
 Sound::~Sound()
 {
-    if( mpSoundData )
-        SvMemFree( mpSoundData );
-
     delete mpSound;
 }
 
@@ -229,36 +223,6 @@ BOOL Sound::SetSoundName( const XubString& rSoundName )
         ImplNotify( SOUND_NOTIFY_ERROR, SOUNDERR_GENERAL_ERROR );
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL Sound::SetSoundData( const BYTE* pSoundData, ULONG nDataLen )
-{
-#if 0
-    BOOL bRet;
-
-    if( mpSoundData )
-        SvMemFree( mpSoundData );
-
-    mpSoundData = (BYTE*) SvMemAlloc( mnDataLen = nDataLen );
-    HMEMCPY( mpSoundData, pSoundData, nDataLen );
-
-    if( mpSound->IsValid() )
-        bRet = mpSound->Init( mpSoundData, mnDataLen, mnSoundLen );
-    else
-        bRet = FALSE;
-
-    // if sound could not be initialized, but we've gotten _no_
-    // notification ==> create common error notification
-    if( !bRet && !mnErrorCode )
-        ImplNotify( SOUND_NOTIFY_ERROR, SOUNDERR_GENERAL_ERROR );
-
-    return bRet;
-#else
-    ImplNotify( SOUND_NOTIFY_ERROR, SOUNDERR_GENERAL_ERROR );
-    return FALSE;
-#endif
 }
 
 // -----------------------------------------------------------------------
