@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:34:06 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,6 +434,8 @@ public:
 
     void            BeforeXMLLoading();
     void            AfterXMLLoading(sal_Bool bRet);
+
+    virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
 };
 
 SO2_DECL_REF(ScDocShell)
