@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: nn $ $Date: 2001-07-19 19:53:57 $
+#   last change: $Author: ok $ $Date: 2001-09-14 09:04:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ IMGLST_SRS=$(SRS)$/misc.srs
 SRS1NAME=misc
 SRC1FILES=\
     config.src	\
-    demo.src	\
     pver.src	\
     iniman.src 	\
     ehdl.src \
@@ -120,7 +119,6 @@ LIB3OBJFILES=\
     $(SLO)$/helpagentwindow.obj		\
     $(SLO)$/imagemgr.obj              \
     $(SLO)$/agprop.obj		\
-    $(SLO)$/demo.obj		\
     $(SLO)$/ehdl.obj		\
     $(SLO)$/filearch.obj	\
     $(SLO)$/flbytes.obj		\

@@ -70,7 +70,6 @@ hedabu: ..\inc\itemdel.hxx %_DEST%\inc%_EXT%\svtools\itemdel.hxx
 hedabu: ..\inc\wallitem.hxx %_DEST%\inc%_EXT%\svtools\wallitem.hxx
 hedabu: ..\inc\sfontitm.hxx %_DEST%\inc%_EXT%\svtools\sfontitm.hxx
 hedabu: ..\inc\bintitem.hxx %_DEST%\inc%_EXT%\svtools\bintitem.hxx
-hedabu: ..\source\misc\demo.hxx %_DEST%\inc%_EXT%\svtools\demo.hxx
 hedabu: ..\inc\pver.hxx %_DEST%\inc%_EXT%\svtools\pver.hxx
 hedabu: ..\inc\eitem.hxx %_DEST%\inc%_EXT%\svtools\eitem.hxx
 hedabu: ..\inc\filedlg.hxx %_DEST%\inc%_EXT%\svtools\filedlg.hxx
@@ -183,7 +182,6 @@ hedabu: ..\source\misc\filearch.hxx %_DEST%\inc%_EXT%\svtools\filearch.hxx
 hedabu: ..\inc\loginerr.hxx %_DEST%\inc%_EXT%\svtools\loginerr.hxx
 hedabu: ..\inc\logindlg.hxx %_DEST%\inc%_EXT%\svtools\logindlg.hxx
 hedabu: ..\inc\httpcook.hxx %_DEST%\inc%_EXT%\svtools\httpcook.hxx
-hedabu: ..\source\misc\demo.hxx %_DEST%\inc%_EXT%\svtools\svtdemo.hxx
 hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
 hedabu: ..\source\uno\imgprod.hxx %_DEST%\inc%_EXT%\svtools\imgprod.hxx
 hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
