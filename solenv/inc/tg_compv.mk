@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:43:53 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:40:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,7 @@ COMNAME:=
 .IF "$(COM)"=="GCC"
 CFLAGSVERSION=-dumpversion
 CFLAGSVERSION_CMD=-dumpversion
-CFLAGSNUMVERSION_CMD=-dumpversion |& awk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD=-dumpversion |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="MSC"
@@ -83,8 +83,8 @@ CFLAGSNUMVERSION_CMD= |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 
 .IF "$(COM)"=="C54" || "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
 CFLAGSVERSION= -V
-CFLAGSVERSION_CMD= -V |& nawk -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION_CMD= -V |& nawk -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD= -V |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD= -V |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
 # that's the version known by the specific
