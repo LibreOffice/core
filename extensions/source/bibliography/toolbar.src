@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:23:39 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ ToolBox RID_BIB_TOOLBAR
             Checkable=TRUE;
             Text[ english_us ] = "Data Source";
             Text[ portuguese ] = "Fonte de dados";
-            Text[ russian ] = "»сходные данные";
+            Text[ russian ] = "»сточник данных";
             Text[ greek ] = "–спЁлехуз дедпмЁнщн";
             Text[ dutch ] = "Gegevensbron";
             Text[ french ] = "Source de donnйes";
