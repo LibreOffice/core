@@ -2,11 +2,12 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Autotext" script:language="StarBasic">Public UserfieldDataType(14) as String
 Public oDocument as Object
+Public oCursor as Object
 Public BulletList(7) as Integer
 
 Sub Main()
 	&apos; Initialization...
-        BasicLibraries.LoadLibrary(&quot;Tools&quot;)
+    BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 
 	UserfieldDatatype(0) = &quot;COMPANY&quot;
 	UserfieldDatatype(1) = &quot;FIRSTNAME&quot;
@@ -129,9 +130,6 @@ Dim MaxIndex as Integer
 	oPlaceholder = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.JumpEdit&quot;)
 	sFoundList() = ArrayoutofString(sFoundContent, &quot;:&quot; &amp; chr(34),MaxIndex)
 	&apos; Delete The Double-quotes
-	msgbox(DeleteStr(sFoundList(2),chr(34)))
-	msgbox(DeleteStr(sFoundList(1),chr(34)))
-	
 	oPlaceHolder.Hint = DeleteStr(sFoundList(2),chr(34))
 	oPlaceHolder.placeholder = 	DeleteStr(sFoundList(1),chr(34))
 	oCursor.Text.InsertTextContent(oCursor,oPlaceholder,True)
