@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-24 07:36:10 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 #endif
 
 #ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
