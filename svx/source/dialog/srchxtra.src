@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:55:01 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text = "Asiatisches Layout" ;
                 Text [ english_us ] = "Asian Layout" ;
                 Text[ portuguese ] = "Asian Layout";
-                Text[ russian ] = "Asian Layout";
+                Text[ russian ] = "Àçèàòñêàÿ ğàçìåòêà";
                 Text[ greek ] = "Asian Layout";
                 Text[ dutch ] = "Asian Layout";
                 Text[ french ] = "Asian Layout";
@@ -171,12 +171,12 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ italian ] = "Asian Layout";
                 Text[ danish ] = "Asian Layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Asian Layout";
+                Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
-                Text[ japanese ] = "Asian Layout";
-                Text[ korean ] = "Asian Layout";
-                Text[ chinese_simplified ] = "ÑÇÖŞ·ç¸ñ";
-                Text[ chinese_traditional ] = "Asian Layout";
+                Text[ japanese ] = "˜a•¶Ú²±³Ä";
+                Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö°æÊ½";
+                Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
             };
@@ -268,6 +268,24 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Identifier = RID_SVXPAGE_PARA_ASIAN;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ greek ] = "Asian typography";
+                Text[ dutch ] = "Asian typography";
+                Text[ french ] = "Asian typography";
+                Text[ spanish ] = "Asian typography";
+                Text[ italian ] = "Asian typography";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asian typography";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ korean ] = "¾Æ½Ã¾Æ ÀÎ¼âÃ¼";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
             };
             PageItem
             {
