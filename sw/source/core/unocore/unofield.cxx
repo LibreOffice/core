@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:12:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,10 +346,9 @@ static const ServiceIdResId aServiceToRes[] =
 //-----------------------------------------------------------------
 sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
 {
-    for( const ServiceIdResId* pMap = aServiceToRes;
-            USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId;
-            ++pMap )
-        ;
+    const ServiceIdResId* pMap = aServiceToRes;
+    while( USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId )
+            ++pMap;
 #ifdef DBG_UTIL
     if( USHRT_MAX == pMap->nServiceId )
         DBG_ERROR("service id not found");
@@ -2568,7 +2567,9 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames(void)
 
     SvStrings aFldNames;
     String* pString = new String();
-    for( sal_uInt16 i = 0; i < nCount; i++)
+    sal_uInt16 i;
+
+    for( i = 0; i < nCount; i++)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
 
