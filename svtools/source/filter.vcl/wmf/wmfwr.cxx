@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:13:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
-
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #include <vcl/metric.hxx>
 
@@ -1520,7 +1522,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     aSrcFont = pA->GetFont();
 
                     if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
-                        aSrcFont.SetCharSet( gsl_getSystemTextEncoding() );
+                        aSrcFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
                     if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_UNICODE )
                         aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
                     eSrcTextAlign = aSrcFont.GetAlign();
@@ -1829,7 +1831,7 @@ BOOL WMFWriter::WriteWMF(const GDIMetaFile& rMTF, SvStream& rTargetStream,
     bDstIsClipping = bSrcIsClipping = FALSE;
 
     Font aFont;
-    aFont.SetCharSet( gsl_getSystemTextEncoding() );
+    aFont.SetCharSet( GetExtendedTextEncoding( gsl_getSystemTextEncoding() ) );
     aFont.SetColor( Color( COL_WHITE ) );
     aFont.SetAlign( ALIGN_BASELINE );
     aDstFont = aSrcFont = aFont;
