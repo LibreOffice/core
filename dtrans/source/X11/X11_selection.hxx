@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-12 19:05:41 $
+ *  last change: $Author: pl $ $Date: 2002-02-20 12:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ namespace x11 {
         >,
         public SelectionAdaptor
     {
-        static ::std::hash_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >   m_aInstances;
+        static ::std::hash_map< ::rtl::OUString, SelectionManager*, ::rtl::OUStringHash >& getInstances();
 
         // for INCR type selection transfer
         // INCR protocol is used if the data cannot

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-29 13:30:32 $
+ *  last change: $Author: pl $ $Date: 2002-02-20 12:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@ using namespace rtl;
 
 using namespace x11;
 
-// static members of SelectionManager
-::std::hash_map< OUString, SelectionManager*, OUStringHash > SelectionManager::m_aInstances;
-
 static const int nXdndProtocolRevision = 4;
 
 // mapping between mime types (or what the office thinks of mime types)
@@ -218,6 +215,14 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
         fprintf( stderr, "getTextPlainEncoding( %s ) failed\n", OUStringToOString( rMimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
 #endif
     return aEncoding;
+}
+
+// ------------------------------------------------------------------------
+
+::std::hash_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
+{
+    ::std::hash_map< OUString, SelectionManager*, OUStringHash > aInstances;
+    return aInstances;
 }
 
 // ------------------------------------------------------------------------
@@ -470,10 +475,10 @@ SelectionManager::~SelectionManager()
         MutexGuard aGuard( *Mutex::getGlobalMutex() );
 
         ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it;
-        for( it = m_aInstances.begin(); it != m_aInstances.end(); ++it )
+        for( it = getInstances().begin(); it != getInstances().end(); ++it )
             if( it->second == this )
             {
-                m_aInstances.erase( it );
+                getInstances().erase( it );
                 break;
             }
     }
@@ -682,10 +687,10 @@ SelectionManager& SelectionManager::get( const OUString& rDisplayName )
         aDisplayName = OStringToOUString( getenv( "DISPLAY" ), RTL_TEXTENCODING_ISO_8859_1 );
     SelectionManager* pInstance = NULL;
 
-    ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it = m_aInstances.find( aDisplayName );
-    if( it != m_aInstances.end() )
+    ::std::hash_map< OUString, SelectionManager*, OUStringHash >::iterator it = getInstances().find( aDisplayName );
+    if( it != getInstances().end() )
         pInstance = it->second;
-    else pInstance = m_aInstances[ aDisplayName ] = new SelectionManager();
+    else pInstance = getInstances()[ aDisplayName ] = new SelectionManager();
 
     return *pInstance;
 }
