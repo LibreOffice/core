@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:14:03 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String STR_EVENTCONFIG
     Text[ korean ] = "ÀÌº¥Æ® ¹èÁ¤";
     Text[ turkish ] = "Olay ata";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Asignar acontecimientos";
 };
 String STR_FILTERNAME_CFG
 {
@@ -112,6 +113,7 @@ String STR_FILTERNAME_CFG
     Text[ korean ] = "±¸¼º";
     Text[ turkish ] = "Konfigürasyon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Configuración";
 };
 ModalDialog DLG_MACROQUERY
 {
@@ -169,6 +171,7 @@ ModalDialog DLG_MACROQUERY
         Text[ korean ] = "¸ÅÅ©·Î°¡ ±¸¼ºµÈ ÀÌº¥Æ®°¡ ½ÃÇàµÇ¾ú½À´Ï´Ù. ÀÌ ¸ÅÅ©·Î¸¦ ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
         Text[ turkish ] = "Baþlatýlan olay ile ilgili bir yapýlandýrýlmýþ bir makro mevcut. Bu makroyu çalýþtýrmak istiyor musunuz?";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?";
     };
     CheckBox CB_WARNING
     {
@@ -197,6 +200,7 @@ ModalDialog DLG_MACROQUERY
         Text[ korean ] = "ÀÌ ¹®¼­¿¡´ëÇØ¼­´Â ´õ ÀÌ»ó °æ°í ¾ÈÇÔ";
         Text[ turkish ] = "Bu belge için bir daha uyarý görüntüleme";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desactivar las advertencias para este documento";
     };
     OKButton BTN_OK
     {
@@ -225,6 +229,7 @@ ModalDialog DLG_MACROQUERY
         Text[ korean ] = "½ÇÇà";
         Text[ turkish ] = "Çalýþtýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ejecutar";
     };
     CancelButton BTN_CANCEL
     {
@@ -253,6 +258,7 @@ ModalDialog DLG_MACROQUERY
         Text[ korean ] = "½ÇÇà ¾ÈÇÔ";
         Text[ turkish ] = "Çalýþtýrma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No ejecutar";
     };
     TEXT[ dutch ] = "Macro uitvoeren";
     TEXT[ chinese_simplified ] = "Ö´ÐÐºê";
@@ -260,6 +266,7 @@ ModalDialog DLG_MACROQUERY
     TEXT[ korean ] = "¸ÅÅ©·Î ½ÇÇà";
     TEXT[ turkish ] = "Makroyu çalýþtýr";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ejecutar macro";
 };
 
 
