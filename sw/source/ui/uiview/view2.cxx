@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:01:45 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 11:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,7 +976,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetWrtShell();
     const SfxItemSet* pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
+    const SfxPoolItem* pItem=NULL;
     BOOL bUp = FALSE;
     USHORT nWhich = rReq.GetSlot();
     switch( nWhich )
