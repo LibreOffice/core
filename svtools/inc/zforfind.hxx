@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-08-05 16:32:49 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 10:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ private:
                                                 // default 18
                                                 // number <= nYear2000 => 20xx
                                                 // number >  nYear2000 => 19xx
+    USHORT  nTimezonePos;                       // Index of timezone separator (+1)
+    BYTE    nMayBeIso8601;                      // 0:=dontknowyet, 1:=yes, 2:=no
 
 #ifdef _ZFORFIND_CXX        // methods private to implementation
     void Reset();                               // Reset all variables before start of analysis
@@ -282,6 +284,10 @@ private:
     BOOL ScanEndString(                         // Analyze end of string
             const String& rString,
             const SvNumberformat* pFormat = NULL );
+
+    // Whether input may be a ISO 8601 date format, yyyy-mm-dd...
+    // checks if at least 3 numbers and first number>31
+    bool MayBeIso8601();
 
     // Compare rString to substring of array indexed by nString
     // nString == 0xFFFF => last substring
