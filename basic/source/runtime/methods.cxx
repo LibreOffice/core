@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-26 14:05:25 $
+ *  last change: $Author: ab $ $Date: 2001-11-02 11:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1529,19 +1529,16 @@ BOOL implDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, double& rdRet )
 // Function to convert date to ISO 8601 date format
 RTLFUNC(CDateToIso)
 {
-    static String aZeroStr = String::CreateFromAscii( "0" );
-
     if ( rPar.Count() == 2 )
     {
         double aDate = rPar.Get(1)->GetDate();
-        String aYearStr  = String::CreateFromInt32( implGetDateYear( aDate ) );
-        while( aYearStr.Len() < 4 )
-            aYearStr = aZeroStr + aYearStr;
-        String aMonthStr = String::CreateFromInt32( implGetDateMonth( aDate ) );
-        String aDayStr   = String::CreateFromInt32( implGetDateDay( aDate ) );
-        String aRetStr = aYearStr;
-        aRetStr += aMonthStr;
-        aRetStr += aDayStr;
+
+        char Buffer[9];
+        sprintf( Buffer, "%04ld%02ld%02ld",
+            implGetDateYear( aDate ),
+            implGetDateMonth( aDate ),
+            implGetDateDay( aDate ) );
+        String aRetStr = String::CreateFromAscii( Buffer );
         rPar.Get(0)->PutString( aRetStr );
     }
     else
@@ -1560,8 +1557,11 @@ RTLFUNC(CDateFromIso)
         String aDayStr   = aStr.Copy( iMonthStart+2, 2 );
 
         double dDate;
-        if( implDateSerial( aYearStr.ToInt32(), aMonthStr.ToInt32(), aDayStr.ToInt32(), dDate ) )
+        if( implDateSerial( (INT16)aYearStr.ToInt32(),
+            (INT16)aMonthStr.ToInt32(), (INT16)aDayStr.ToInt32(), dDate ) )
+        {
             rPar.Get(0)->PutDate( dDate );
+        }
     }
     else
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
