@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:53:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 09:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,8 +519,13 @@ void SwNoTxtFrm::Paint( const SwRect &rRect ) const
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( TRUE );
 
-    if ( (!pOut->GetConnectMetaFile() || ! pSh->GetWin() ) &&
-         FindFlyFrm()->GetContour( aPoly ) )
+    // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True> to
+    // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
+    // for paint in order to avoid load of the intrinsic graphic.
+    if ( ( !pOut->GetConnectMetaFile() ||
+           !pSh->GetWin() ) &&
+         FindFlyFrm()->GetContour( aPoly, sal_True )
+       )
     {
         pOut->SetClipRegion( aPoly );
         bClip = FALSE;
