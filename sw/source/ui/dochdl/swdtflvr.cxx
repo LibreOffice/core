@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
+#include <sot/stg.hxx>
 
 extern BOOL bFrmDrag;
 extern BOOL bDDINetAttr;
@@ -309,6 +310,24 @@ using namespace ::com::sun::star::datatransfer;
 #else
 #define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
 #endif
+
+//---------------------------------------------
+// this struct conforms to the Microsoft
+// OBJECTDESCRIPTOR -> see oleidl.h
+// (MS platform sdk)
+//---------------------------------------------
+
+struct OleObjectDescriptor
+{
+        sal_uInt32      cbSize;
+        ClsId           clsid;
+        sal_uInt32      dwDrawAspect;
+        Size            sizel;
+        Point           pointl;
+        sal_uInt32      dwStatus;
+        sal_uInt32      dwFullUserTypeName;
+        sal_uInt32      dwSrcOfCopy;
+};
 
 class SwTrnsfrDdeLink : public ::so3::SvBaseLink
 {
@@ -2870,6 +2889,14 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
                                             aDesc.maTypeName );
         if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK_SOURCE, nDest ))
             rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK_SOURCE );
+
+        SotFormatStringId nFormat;
+        if ( rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE) || rData.HasFormat(nFormat = SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE) )
+        {
+            String sName,sSource;
+            if ( SvPasteObjectDialog::GetEmbeddedName(rData,sName,sSource,nFormat) )
+                rToFill.AddClipbrdFormat( nFormat, sName );
+        }
     }
 
 #ifdef DDE_AVAILABLE
