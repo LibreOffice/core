@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,6 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
     virtual USHORT           GetVersion( USHORT nFFVer ) const;
-
 };
 
 inline SwRegisterItem::SwRegisterItem( const BOOL bRegister ) :
@@ -228,6 +227,33 @@ public:
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
 };
+class SwParaConnectBorderItem : public SfxBoolItem
+{
+public:
+    TYPEINFO();
+
+    inline SwParaConnectBorderItem( const BOOL bConnect = TRUE );
+    inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
+
+    // "pure virtual Methoden" vom SfxPoolItem
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
+    virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
+                                    SfxMapUnit eCoreMetric,
+                                    SfxMapUnit ePresMetric,
+                                    String &rText,
+                                    const IntlWrapper*    pIntl = 0 ) const;
+};
+
+inline SwParaConnectBorderItem::SwParaConnectBorderItem( const BOOL bConnect ) :
+    SfxBoolItem( RES_PARATR_CONNECT_BORDER, bConnect )
+{}
+
+inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
+    const SwParaConnectBorderItem& rConnect )
+{
+    SetValue( rConnect.GetValue() );
+    return *this;
+}
 
 
 
@@ -265,6 +291,8 @@ inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(BOOL bInP) const
     {   return (const SvxParaVertAlignItem&)Get( RES_PARATR_VERTALIGN, bInP ); }
 inline const SvxParaGridItem &SwAttrSet::GetParaGrid(BOOL bInP) const
     {   return (const SvxParaGridItem&)Get( RES_PARATR_SNAPTOGRID, bInP ); }
+inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(BOOL bInP) const
+    {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
@@ -300,5 +328,7 @@ inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(BOOL bInP) const
     {   return (const SvxParaVertAlignItem&)aSet.Get( RES_PARATR_VERTALIGN, bInP ); }
 inline const SvxParaGridItem &SwFmt::GetParaGrid(BOOL bInP) const
     {   return (const SvxParaGridItem&)aSet.Get( RES_PARATR_SNAPTOGRID, bInP ); }
+inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(BOOL bInP) const
+    {   return (const SwParaConnectBorderItem&)aSet.Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 #endif
