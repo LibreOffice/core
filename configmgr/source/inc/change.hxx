@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace configmgr
     public:
         typedef uno::Any Any;
         struct SetToDefault {};
-        enum Mode { wasDefault, changeValue, setToDefault, changeDefault, typeIsAny };
+        enum Mode { wasDefault, changeValue, setToDefault, changeDefault };
 
     private:
         uno::Any            m_aValue;
@@ -187,6 +187,10 @@ namespace configmgr
         ValueChange(SetToDefault, ValueNode const& aOldValue);
 
         virtual Change* clone() const;
+
+        bool isChange() const;
+
+        uno::Type   getValueType() const;
 
         uno::Any    getNewValue() const { return m_aValue; }
         uno::Any    getOldValue() const { return m_aOldValue; }

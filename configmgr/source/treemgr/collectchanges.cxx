@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ bool convertNodeChange(NodeChangeData& aData_, ValueChange const& aChange_)
     switch(aChange_.getMode())
     {
     case ValueChange::wasDefault:
-    case ValueChange::typeIsAny:
     case ValueChange::changeValue:
         aData_.type = NodeChangeData::eSetValue;
         break;

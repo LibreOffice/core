@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:19 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@ ValueChange::ValueChange(OUString const& _rName,
 static inline bool isDefaultMode(ValueChange::Mode _eMode)
 { return (_eMode == ValueChange::setToDefault) || (_eMode == ValueChange::changeDefault); }
 // -------------------------------------------------------------------------
+static inline bool isLayerChangeMode(ValueChange::Mode _eMode)
+{ return (_eMode == ValueChange::setToDefault) || (_eMode == ValueChange::wasDefault); }
+// -------------------------------------------------------------------------
 ValueChange::ValueChange(OUString const& _rName,
                          const node::Attributes& _rAttributes,
                          Mode _eMode,
@@ -130,6 +133,21 @@ ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
 Change* ValueChange::clone() const
 {
     return new ValueChange(*this);
+}
+
+// -----------------------------------------------------------------------------
+bool ValueChange::isChange() const // makes sense only if old value is set
+{
+    return isLayerChangeMode(m_eMode) || (m_aOldValue != m_aValue);
+}
+// -----------------------------------------------------------------------------
+uno::Type ValueChange::getValueType() const // works reliably only if old value is set and the value really changes
+{
+    OSL_ENSURE(m_aOldValue.hasValue() || m_aValue.hasValue(),"WARNING: Cannot determine value type of change");
+    OSL_ENSURE(!m_aOldValue.hasValue() || !m_aValue.hasValue() ||
+                m_aOldValue.getValueType() == m_aValue.getValueType() ,"ERROR: Type mismatch in value change");
+
+    return (m_aValue.hasValue() ? m_aValue : m_aOldValue).getValueType();
 }
 // -------------------------------------------------------------------------
 namespace tree_changes_internal {

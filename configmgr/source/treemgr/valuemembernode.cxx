@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,9 +327,6 @@ std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange()
 
     else if (! isOriginalNodeDefault(&m_rOriginal))
         eMode = ValueChange::changeValue;
-
-    else if ( getOriginalValueType(&m_rOriginal).getTypeClass() == uno::TypeClass_ANY)
-        eMode = ValueChange::typeIsAny;
 
     else
         eMode = ValueChange::wasDefault;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,6 @@ ValueChangeImpl* GroupNodeImpl::doAdjustToValueChange(Name const& aName, ValueCh
         {
         case ValueChange::wasDefault:
         case ValueChange::changeValue:
-        case ValueChange::typeIsAny:
             pChangeImpl = new ValueReplaceImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
             break;
 

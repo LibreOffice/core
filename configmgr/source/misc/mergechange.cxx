@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,13 +247,11 @@ namespace configmgr
             if (aNewValue.hasValue())
                 aRet.reset( new ValueNode(rChange.getNodeName(), aNewValue, rChange.getAttributes()) );
 
-            else  // NULL - try to find out the type
+            else  // NULL
             {
-                uno::Any aOldValue = rChange.getOldValue();
-                if (aOldValue.hasValue())
-                    aRet.reset( new ValueNode(rChange.getNodeName(), aOldValue.getValueType(), rChange.getAttributes()) );
-                else
-                    OSL_ENSURE(false, "Cannot recover type for change to NULL");
+                aRet.reset( new ValueNode(rChange.getNodeName(), rChange.getValueType(), rChange.getAttributes()) );
+
+                OSL_ENSURE(aRet->isValid(), "Cannot recover type for change to NULL");
             }
             return aRet;
         }
