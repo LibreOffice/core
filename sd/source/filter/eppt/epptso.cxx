@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-13 16:32:56 $
+ *  last change: $Author: sj $ $Date: 2001-08-15 12:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4940,6 +4940,24 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     if ( !pClientData )
                         pClientData = new SvMemoryStream( 0x200, 0x200 );
 
+                    // check if it is sensible to replace the object effect with text effect,
+                    // because in Impress there is the possibility to use a compound effect,
+                    // e.g. the object effect is an AnimationEffect_FADE_FROM_LEFT and the
+                    // text effect is a AnimationEffect_FADE_FROM_TOP, in PowerPoint there
+                    // can be used only one effect
+                    if ( mnTextSize && ( eTe != ::com::sun::star::presentation::AnimationEffect_NONE )
+                        && ( eAe != ::com::sun::star::presentation::AnimationEffect_NONE )
+                            && ( eTe != eAe ) )
+                    {
+                        sal_uInt32 nFillStyleFlags, nLineStyleFlags;
+                        if ( aPropOpt.GetOpt( ESCHER_Prop_fNoFillHitTest, nFillStyleFlags )
+                            && aPropOpt.GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineStyleFlags ) )
+                        {
+                            // there is no fillstyle and also no linestyle
+                            if ( ! ( ( nFillStyleFlags & 0x10 ) + ( nLineStyleFlags & 9 ) ) )
+                                eAe = eTe;
+                        }
+                    }
                     ImplWriteObjectEffect( *pClientData, eAe, eTe, ++nEffectCount );
                 }
 
