@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:25:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,6 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     pSheetDesc->aQueryParam.nCol2 = pSheetDesc->aSourceRange.aEnd.Col();
     pSheetDesc->aQueryParam.nRow2 = pSheetDesc->aSourceRange.aEnd.Row();;
     pSheetDesc->aQueryParam.bHasHeader = TRUE;
-    USHORT nCount = pSheetDesc->aQueryParam.GetEntryCount();
 
     InvalidateSource();     // new source must be created
 }
@@ -478,7 +477,7 @@ void ScDPObject::Output()
     aOutRange = pOutput->GetOutputRange();
 }
 
-BOOL lcl_HasButton( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab )
+BOOL lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasButton();
 }
@@ -490,12 +489,12 @@ void ScDPObject::RefreshAfterLoad()
 
     // simple test: block of button cells at the top, followed by an empty cell
 
-    USHORT nFirstCol = aOutRange.aStart.Col();
-    USHORT nFirstRow = aOutRange.aStart.Row();
-    USHORT nTab = aOutRange.aStart.Tab();
+    SCCOL nFirstCol = aOutRange.aStart.Col();
+    SCROW nFirstRow = aOutRange.aStart.Row();
+    SCTAB nTab = aOutRange.aStart.Tab();
 
-    USHORT nInitial = 0;
-    USHORT nOutRows = aOutRange.aEnd.Row() + 1 - aOutRange.aStart.Row();
+    SCROW nInitial = 0;
+    SCROW nOutRows = aOutRange.aEnd.Row() + 1 - aOutRange.aStart.Row();
     while ( nInitial + 1 < nOutRows && lcl_HasButton( pDoc, nFirstCol, nFirstRow + nInitial, nTab ) )
         ++nInitial;
 
@@ -505,8 +504,8 @@ void ScDPObject::RefreshAfterLoad()
     {
         BOOL bFilterButton = IsSheetData();         // when available, filter button setting must be checked here
 
-        USHORT nSkip = bFilterButton ? 1 : 0;
-        for (USHORT nPos=nSkip; nPos<nInitial; nPos++)
+        SCROW nSkip = bFilterButton ? 1 : 0;
+        for (SCROW nPos=nSkip; nPos<nInitial; nPos++)
             pDoc->ApplyAttr( nFirstCol + 1, nFirstRow + nPos, nTab, ScMergeFlagAttr(SC_MF_AUTO) );
 
         nHeaderRows = nInitial;
@@ -518,16 +517,16 @@ void ScDPObject::RefreshAfterLoad()
 }
 
 void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                     const ScRange& rRange, short nDx, short nDy, short nDz )
+                                     const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     // Output area
 
-    USHORT nCol1 = aOutRange.aStart.Col();
-    USHORT nRow1 = aOutRange.aStart.Row();
-    USHORT nTab1 = aOutRange.aStart.Tab();
-    USHORT nCol2 = aOutRange.aEnd.Col();
-    USHORT nRow2 = aOutRange.aEnd.Row();
-    USHORT nTab2 = aOutRange.aEnd.Tab();
+    SCCOL nCol1 = aOutRange.aStart.Col();
+    SCROW nRow1 = aOutRange.aStart.Row();
+    SCTAB nTab1 = aOutRange.aStart.Tab();
+    SCCOL nCol2 = aOutRange.aEnd.Col();
+    SCROW nRow2 = aOutRange.aEnd.Row();
+    SCTAB nTab2 = aOutRange.aEnd.Tab();
 
     ScRefUpdateRes eRes =
         ScRefUpdate::Update( pDoc, eUpdateRefMode,
@@ -557,16 +556,16 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
             ScSheetSourceDesc aNewDesc;
             aNewDesc.aSourceRange = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-            short nDiffX = nCol1 - (short) pSheetDesc->aSourceRange.aStart.Col();
-            short nDiffY = nRow1 - (short) pSheetDesc->aSourceRange.aStart.Row();
+            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->aSourceRange.aStart.Col();
+            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->aSourceRange.aStart.Row();
 
             aNewDesc.aQueryParam = pSheetDesc->aQueryParam;
             aNewDesc.aQueryParam.nCol1 += nDiffX;
             aNewDesc.aQueryParam.nCol2 += nDiffX;
             aNewDesc.aQueryParam.nRow1 += nDiffY;   //! used?
             aNewDesc.aQueryParam.nRow2 += nDiffY;   //! used?
-            USHORT nEC = aNewDesc.aQueryParam.GetEntryCount();
-            for (USHORT i=0; i<nEC; i++)
+            SCSIZE nEC = aNewDesc.aQueryParam.GetEntryCount();
+            for (SCSIZE i=0; i<nEC; i++)
                 if (aNewDesc.aQueryParam.GetEntry(i).bDoQuery)
                     aNewDesc.aQueryParam.GetEntry(i).nField += nDiffX;
 
@@ -941,14 +940,14 @@ USHORT lcl_CountBits( USHORT nBits )
     return nCount;
 }
 
-USHORT lcl_FillOldFields( PivotField* pFields,
+SCSIZE lcl_FillOldFields( PivotField* pFields,
                             const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-                            USHORT nOrient, USHORT nColAdd, BOOL bAddData )
+                            USHORT nOrient, SCCOL nColAdd, BOOL bAddData )
 {
-    USHORT nOutCount = 0;
+    SCSIZE nOutCount = 0;
     BOOL bDataFound = FALSE;
 
-    USHORT nCount = (nOrient == sheet::DataPilotFieldOrientation_PAGE) ? PIVOT_MAXPAGEFIELD : PIVOT_MAXFIELD;
+    SCSIZE nCount = (nOrient == sheet::DataPilotFieldOrientation_PAGE) ? PIVOT_MAXPAGEFIELD : PIVOT_MAXFIELD;
 
     //! merge multiple occurences (data field with different functions)
     //! force data field in one dimension
@@ -1010,13 +1009,13 @@ USHORT lcl_FillOldFields( PivotField* pFields,
             {
                 //  add function bit to previous entry
 
-                short nCompCol;
+                SCsCOL nCompCol;
                 if ( bDataLayout )
                     nCompCol = PIVOT_DATA_FIELD;
                 else
-                    nCompCol = (short)(nDupSource+nColAdd);     //! seek source column from name
+                    nCompCol = static_cast<SCsCOL>(nDupSource)+nColAdd;     //! seek source column from name
 
-                for (USHORT nOld=0; nOld<nOutCount && !bDupUsed; nOld++)
+                for (SCSIZE nOld=0; nOld<nOutCount && !bDupUsed; nOld++)
                     if ( pFields[nOld].nCol == nCompCol )
                     {
                         //  add to previous column only if new bits aren't already set there
@@ -1037,9 +1036,9 @@ USHORT lcl_FillOldFields( PivotField* pFields,
                     bDataFound = TRUE;
                 }
                 else if ( nDupSource >= 0 )     // if source was not found (different orientation)
-                    pFields[nOutCount].nCol = (short)(nDupSource+nColAdd);      //! seek from name
+                    pFields[nOutCount].nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
                 else
-                    pFields[nOutCount].nCol = (short)(nDim+nColAdd);    //! seek source column from name
+                    pFields[nOutCount].nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
 
                 pFields[nOutCount].nFuncMask = nMask;
                 pFields[nOutCount].nFuncCount = lcl_CountBits( nMask );
@@ -1052,9 +1051,9 @@ USHORT lcl_FillOldFields( PivotField* pFields,
 
     //  sort by getPosition() value
 
-    for (long i=0; i+1<nOutCount; i++)
+    for (SCSIZE i=0; i+1<nOutCount; i++)
     {
-        for (long j=0; j+i+1<nOutCount; j++)
+        for (SCSIZE j=0; j+i+1<nOutCount; j++)
             if ( aPos[j+1] < aPos[j] )
             {
                 std::swap( aPos[j], aPos[j+1] );
@@ -1077,13 +1076,15 @@ USHORT lcl_FillOldFields( PivotField* pFields,
 
 void lcl_SaveOldFieldArr( SvStream& rStream,
                             const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-                            USHORT nOrient, USHORT nColAdd, BOOL bAddData )
+                            USHORT nOrient, SCCOL nColAdd, BOOL bAddData )
 {
     // PIVOT_MAXFIELD = max. number in old files
     DBG_ASSERT( nOrient != sheet::DataPilotFieldOrientation_PAGE, "lcl_SaveOldFieldArr - do not try to save page fields" );
     PivotField aFields[PIVOT_MAXFIELD];
-    USHORT nOutCount = lcl_FillOldFields( aFields, xSource, nOrient, nColAdd, bAddData );
+    SCSIZE nOutCount = lcl_FillOldFields( aFields, xSource, nOrient, nColAdd, bAddData );
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << nOutCount;
     for (USHORT i=0; i<nOutCount; i++)
     {
@@ -1092,10 +1093,13 @@ void lcl_SaveOldFieldArr( SvStream& rStream,
                 << aFields[i].nFuncMask
                 << aFields[i].nFuncCount;
     }
+#endif
 }
 
 BOOL ScDPObject::StoreNew( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     //  save all data
 
     rHdr.StartEntry();
@@ -1141,10 +1145,15 @@ BOOL ScDPObject::StoreNew( SvStream& rStream, ScMultipleWriteHeader& rHdr ) cons
 
     rHdr.EndEntry();
     return TRUE;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 BOOL ScDPObject::LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rHdr.StartEntry();
 
     DELETEZ( pImpDesc );
@@ -1199,6 +1208,9 @@ BOOL ScDPObject::LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr )
 
     rHdr.EndEntry();
     return TRUE;
+#else
+    return FALSE;
+#endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
 BOOL ScDPObject::StoreOld( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
@@ -1220,6 +1232,8 @@ BOOL ScDPObject::StoreOld( SvStream& rStream, ScMultipleWriteHeader& rHdr ) cons
 
     rStream << (BOOL) TRUE;         // bHasHeader
 
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     rStream << aStoreRange.aStart.Col();
     rStream << aStoreRange.aStart.Row();
     rStream << aStoreRange.aEnd.Col();
@@ -1233,6 +1247,7 @@ BOOL ScDPObject::StoreOld( SvStream& rStream, ScMultipleWriteHeader& rHdr ) cons
     rStream << aOutRange.aEnd.Col();
     rStream << aOutRange.aEnd.Row();
     rStream << aOutRange.aStart.Tab();
+#endif
 
     BOOL bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
 
@@ -1288,7 +1303,7 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
     rParam.nTab = aOutRange.aStart.Tab();
     // ppLabelArr / nLabels is not changed
 
-    USHORT nColAdd = 0;
+    SCCOL nColAdd = 0;
     if ( bForFile )
     {
         // in old file format, columns are within document, not within source range
@@ -1362,7 +1377,7 @@ BOOL lcl_ShowEmptyFromDim( const uno::Reference<beans::XPropertySet>& xDimProp )
     return bRet;
 }
 
-BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nShowAllMax) const
+BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, SCSIZE nShowAllMax) const
 {
     ((ScDPObject*)this)->CreateObjects();
 
@@ -1374,7 +1389,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nSho
     if (!nDimCount)
         return FALSE;
 
-    USHORT nOutCount = 0;
+    SCSIZE nOutCount = 0;
     LabelData** aLabelArr = new LabelData*[nDimCount];
     for (long nDim=0; nDim < nDimCount; nDim++)
     {
@@ -1408,7 +1423,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nSho
             if ( aFieldName.Len() && !bData && !bDuplicated )
             {
                 BOOL bIsValue = TRUE;       //! check
-                USHORT nCol = nDim;         //! ???
+                SCCOL nCol = static_cast<SCCOL>(nDim);  //! ???
 
                 aLabelArr[nOutCount] = new LabelData( aFieldName, nCol, bIsValue );
                 if ( pShowAll && nOutCount < nShowAllMax )
@@ -1421,7 +1436,7 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam, BOOL* pShowAll, USHORT nSho
 
     rParam.SetLabelData( aLabelArr, nOutCount );
 
-    for (USHORT i=0; i<nOutCount; i++)
+    for (SCSIZE i=0; i<nOutCount; i++)
         delete aLabelArr[i];
     delete[] aLabelArr;
 
@@ -1462,12 +1477,12 @@ String lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource
 
 // static
 void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
-                            PivotField* pFields, USHORT nCount, USHORT nOrient,
-                            ScDocument* pDoc, USHORT nRow, USHORT nTab,
+                            PivotField* pFields, SCSIZE nCount, USHORT nOrient,
+                            ScDocument* pDoc, SCROW nRow, SCTAB nTab,
                             const uno::Reference<sheet::XDimensionsSupplier>& xSource,
                             BOOL bOldDefaults,
-                            PivotField* pRefColFields, USHORT nRefColCount,
-                            PivotField* pRefRowFields, USHORT nRefRowCount )
+                            PivotField* pRefColFields, SCSIZE nRefColCount,
+                            PivotField* pRefRowFields, SCSIZE nRefRowCount )
 {
     //  pDoc or xSource must be set
     DBG_ASSERT( pDoc || xSource.is(), "missing string source" );
@@ -1475,9 +1490,9 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     String aDocStr;
     ScDPSaveDimension* pDim;
 
-    for (USHORT i=0; i<nCount; i++)
+    for (SCSIZE i=0; i<nCount; i++)
     {
-        USHORT nCol = pFields[i].nCol;
+        SCCOL nCol = pFields[i].nCol;
         USHORT nFuncs = pFields[i].nFuncMask;
         if ( nCol == PIVOT_DATA_FIELD )
             pDim = rSaveData.GetDataLayoutDimension();
@@ -1504,17 +1519,17 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                 //  if a dimension is used for column or row and data,
                 //  use duplicated dimensions for all data occurrences
                 if (pRefColFields)
-                    for (USHORT nRefCol=0; nRefCol<nRefColCount; nRefCol++)
+                    for (SCSIZE nRefCol=0; nRefCol<nRefColCount; nRefCol++)
                         if (pRefColFields[nRefCol].nCol == nCol)
                             bFirst = FALSE;
                 if (pRefRowFields)
-                    for (USHORT nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
+                    for (SCSIZE nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
                         if (pRefRowFields[nRefRow].nCol == nCol)
                             bFirst = FALSE;
 
                 //  if set via api, a data column may occur several times
                 //  (if the function hasn't been changed yet) -> also look for duplicate data column
-                for (USHORT nPrevData=0; nPrevData<i; nPrevData++)
+                for (SCSIZE nPrevData=0; nPrevData<i; nPrevData++)
                     if (pFields[nPrevData].nCol == nCol)
                         bFirst = FALSE;
 
@@ -1825,7 +1840,7 @@ BOOL ScDPCollection::LoadNew( SvStream& rStream )
 }
 
 void ScDPCollection::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                         const ScRange& r, short nDx, short nDy, short nDz )
+                                         const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
     for (USHORT i=0; i<nCount; i++)
         ((ScDPObject*)At(i))->UpdateReference( eUpdateRefMode, r, nDx, nDy, nDz );
