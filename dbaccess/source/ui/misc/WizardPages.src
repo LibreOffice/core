@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:06:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 22:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,12 +1404,13 @@ String STR_ERR_DUPL_TABLENAME
     Text[ chinese_traditional ] = "ªí®æ¦WºÙ \'$name$\' ¤w¸g¦s¦b¡C\n±z¯à°÷¿é¤J¤@­Ó·s¦WºÙ\n©ÎªÌ±N¸ê®Æªş¥[¦b²{¦sªºªí®æ¤º¡C";
     Text[ arabic ] = "ÇÓã ÇáÌÏæá \'$name$\' ãæÌæÏ ãÓÈŞÇğ.\níãßäß ÅÏÎÇá ÇÓã ÌÏíÏ\nÃæ ÅáÍÇŞ ÇáÈíÇäÇÊ ÈÇáÌÏæá ÇáãæÌæÏ.";
     Text[ greek ] = "Ôï üíïìá ôïõ ğßíáêá \'$name$\' õğÜñ÷åé Şäç.\nÌğïñåßôå íá åéóÜãåôå İíá íİï üíïìá\nŞ íá ğñïóêïëëŞóåôå ôá äåäïìİíá óôïí Şäç õğÜñ÷ùí ğßíáêá.";
-    Text[ korean ] = "Å×ÀÌºí ÀÌ¸§ \'$name$\'´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù. \n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ°Å³ª\nµ¥ÀÌÅÍ¸¦ ±âÁ¸ Å×ÀÌºí¿¡ Ã·ºÎÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ korean ] = "Å×ÀÌºí ÀÌ¸§ \'$name$\'´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ°Å³ª\nµ¥ÀÌÅÍ¸¦ ±âÁ¸ Å×ÀÌºí¿¡ Ã·ºÎÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Tablo adı \'$name$\' mevcut durumda.\nBaşka bir ad girebilir ya da verileri mevcut tabloya ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El nombre de tabla \'$name$\' ya existe.\nPuede escribir otro nombre\no adjuntar los datos a la tabla existente.";
     Text[ finnish ] = "Der Tabellenname \'$name$\' existiert bereits.\nSie können einen neuen Namen angeben\noder die Daten an die existierende Tabelle anhängen.";
 };
+
 
 
 
