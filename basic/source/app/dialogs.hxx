@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 14:50:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #ifndef _SV_TABPAGE_HXX //autogen
 #include <vcl/tabpage.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
