@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:32:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 #ifndef DBAUI_DATAVIEW_HXX
 #include "dataview.hxx"
 #endif
-#ifndef _TOOLBOX_HXX //autogen
-#include <vcl/toolbox.hxx>
-#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -98,6 +95,7 @@ namespace dbaui
 {
 //.........................................................................
     using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
@@ -149,7 +147,6 @@ namespace dbaui
     ODataView::~ODataView()
     {
         DBG_DTOR(ODataView,NULL);
-        setToolBox(NULL);
 
         enableSeparator( sal_False );
         m_pController->release();
@@ -172,29 +169,6 @@ namespace dbaui
             ::std::auto_ptr<FixedLine> aTemp(m_pSeparator);
             m_pSeparator = NULL;
         }
-        Resize();
-    }
-    // -------------------------------------------------------------------------
-    void ODataView::setToolBox(ToolBox* pTB)
-    {
-        if (pTB == getToolBox())
-            return;
-
-        if (getToolBox())
-        {
-            notifySystemWindow(this,getToolBox(),::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
-            delete getToolBox();
-        }
-
-        OToolBoxHelper::setToolBox(pTB);
-        if ( getToolBox() )
-        {
-            getToolBox()->SetParent(this);
-            notifySystemWindow(this,getToolBox(),::comphelper::mem_fun(&TaskPaneList::AddWindow));
-            getToolBox()->Show();
-        }
-
-        // rearrange the grid and the TB
         Resize();
     }
     // -------------------------------------------------------------------------
@@ -229,19 +203,6 @@ namespace dbaui
             m_pSeparator->SetPosSizePixel( aPlayground.TopLeft(), aSeparatorSize );
 
             aPlayground.Top() += aSeparatorSize.Height() + 1;
-        }
-
-        // position the tool box
-        if ( getToolBox() )
-        {
-            ::Point aToolboxPos( aPlayground.TopLeft() );
-            aToolboxPos.Y() += 2;
-            getToolBox()->SetPosPixel( aToolboxPos );
-
-            ::Size aToolboxSize( aPlayground.GetSize().Width(), getToolBox()->GetSizePixel().Height() );
-            getToolBox()->SetSizePixel( aToolboxSize );
-
-            aPlayground.Top() += aToolboxSize.Height() + 4;
         }
 
         // position the controls of the document's view
@@ -288,7 +249,7 @@ namespace dbaui
                 {
                     URL aCommand;
                     aCommand.Complete = sCommand;
-                    m_pController->executeChecked( aCommand );
+                    m_pController->executeChecked( aCommand ,Sequence<PropertyValue>());
                 }
             }
             break;
@@ -303,15 +264,7 @@ namespace dbaui
         if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
             // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
             m_pController->notifyHiContrastChanged();
-        }
-        else if ( nType == STATE_CHANGE_TEXT )
-        {
-            // The physical toolbar changed its outlook and shows another logical toolbar!
-            // We have to set the correct high contrast mode on the new tbx manager.
-            //  checkImageList();
-            //  notifyHiContrastChanged(isHiContrast());
         }
     }
     // -----------------------------------------------------------------------------
@@ -324,22 +277,8 @@ namespace dbaui
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
             // Check if we need to get new images for normal/high contrast mode
-            checkImageList();
             m_pController->notifyHiContrastChanged();
         }
-    }
-    // -----------------------------------------------------------------------------
-    sal_Int16 ODataView::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
-    {
-        sal_Int16 nN = RID_DEFAULTIMAGELIST_SC;
-        sal_Int16 nH = RID_DEFAULTIMAGELIST_SCH;
-        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
-        {
-            nN = RID_DEFAULTIMAGELIST_LC;
-            nH = RID_DEFAULTIMAGELIST_LCH;
-        }
-
-        return _bHiContast ? nH : nN;
     }
 //.........................................................................
 }
