@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-14 14:16:23 $
+ *  last change: $Author: cp $ $Date: 2000-11-20 12:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #include <osl/module.h>
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
-#include <com/sun/star/text/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_XCHARACTERCLASSIFICATION_HPP_
@@ -92,7 +92,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
-#include <com/sun/star/util/XCollator.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
 #ifdef DBG_UTIL
@@ -235,29 +235,29 @@ Reference< XSingleServiceFactory > ImplLoadLibComponentFactory(
     return xRet;
 }
 
-uno::Reference < text::XBreakIterator > vcl::unohelper::CreateBreakIterator()
+uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
-    uno::Reference < text::XBreakIterator > xB;
+    uno::Reference < i18n::XBreakIterator > xB;
     uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< text::XBreakIterator >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
             x >>= xB;
         }
     }
     if( !xB.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.BreakIterator" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< text::XBreakIterator >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
             x >>= xB;
         }
     }
@@ -295,16 +295,16 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
 
 
 
-uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
+uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 {
-    uno::Reference < util::XCollator > xB;
+    uno::Reference < i18n::XCollator > xB;
     uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.Collator" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) );
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
             x >>= xB;
         }
     }
@@ -312,13 +312,13 @@ uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
             OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.GNUcollator" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.GNUcollator" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
             x >>= xB;
         }
     }
@@ -326,13 +326,13 @@ uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
             OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.SimpleCollator" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.SimpleCollator" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
         if ( xI.is() )
         {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );
             x >>= xB;
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-10-19 17:06:15 $
+ *  last change: $Author: cp $ $Date: 2000-11-20 12:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #include <unohelp.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCOLLATOR_HPP_
-#include <com/sun/star/util/XCollator.hpp>
+#include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
 #pragma hdrstop
@@ -191,9 +191,9 @@ void ImplEntryList::SelectEntry( USHORT nPos, BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
-uno::Reference< util::XCollator > ImplGetCollator()
+uno::Reference< i18n::XCollator > ImplGetCollator()
 {
-    static uno::Reference< util::XCollator > xCollator;
+    static uno::Reference< i18n::XCollator > xCollator;
     if ( !xCollator.is() )
         xCollator = vcl::unohelper::CreateCollator();
 
@@ -213,8 +213,8 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
     {
         // XXX the transliteration !IsValid(). This exploits that neither
         // the i18n nor the i18n_simple implementation uses it yet
-        uno::Reference< util::XCollator > xCollator = ImplGetCollator();
-        uno::Reference< util::XTransliteration > xTransliteration;
+        uno::Reference< i18n::XCollator > xCollator = ImplGetCollator();
+        uno::Reference< i18n::XTransliteration > xTransliteration;
         lang::Locale aLocale = Application::GetSettings().GetLocale();
 
         const XubString& rStr = pNewEntry->maStr;

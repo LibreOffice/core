@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2000-11-16 13:52:31 $
+ *  last change: $Author: cp $ $Date: 2000-11-20 12:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@
 #include <unohelp.hxx>
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
-#include <com/sun/star/text/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
@@ -3658,12 +3658,12 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
     if ( bWordLine )
     {
         ::rtl::OUString aText( pStr, nLen );
-        uno::Reference < text::XBreakIterator > xBI = vcl::unohelper::CreateBreakIterator();
+        uno::Reference < i18n::XBreakIterator > xBI = vcl::unohelper::CreateBreakIterator();
         uno::Reference< linguistic2::XHyphenator > xHyph;
-        text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
-        text::LineBreakUserOptions aUserOptions;
+        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
+        i18n::LineBreakUserOptions aUserOptions;
 
-        text::Boundary aBoundary = xBI->getWordBoundary( aText, 0, GetSettings().GetLocale(), text::WordType::ANYWORD_IGNOREWHITESPACES, TRUE );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( aText, 0, GetSettings().GetLocale(), text::WordType::ANYWORD_IGNOREWHITESPACES, TRUE );
         while ( ( aBoundary.startPos >= 0 ) && ( aBoundary.startPos < nLen ) )
         {
             xub_StrLen nWordEnd = Max( (xub_StrLen)aBoundary.endPos, nLen );
@@ -3982,10 +3982,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     if ( rStr.Len() && ( nWidth > 0 ) )
     {
         ::rtl::OUString aText( rStr );
-        uno::Reference < text::XBreakIterator > xBI;
+        uno::Reference < i18n::XBreakIterator > xBI;
         uno::Reference< linguistic2::XHyphenator > xHyph;
-        text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
-        text::LineBreakUserOptions aUserOptions;
+        i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
+        i18n::LineBreakUserOptions aUserOptions;
 
         USHORT nPos = 0;
         USHORT nLen = rStr.Len();
@@ -4003,7 +4003,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                 xub_StrLen nSoftBreak = GetTextBreak( rStr, nWidth, nPos, nBreakPos - nPos );
                 DBG_ASSERT( nSoftBreak < nBreakPos, "Break?!" );
-                text::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, GetSettings().GetLocale(), nPos, aHyphOptions, aUserOptions );
+                i18n::LineBreakResults aLBR = xBI->getLineBreak( aText, nSoftBreak, GetSettings().GetLocale(), nPos, aHyphOptions, aUserOptions );
                 nBreakPos = aLBR.breakIndex;
                 if ( nBreakPos <= nPos )
                     nBreakPos = nSoftBreak;
