@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:53:29 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,6 +692,8 @@ String Gallery::GetThemeName( ULONG nThemeId ) const
             case( GALLERY_THEME_HOMEPAGE ): aFallback = "Homepage"; break;
             case( GALLERY_THEME_HTMLBUTTONS ): aFallback = "private://gallery/hidden/HtmlExportButtons"; break;
             case( GALLERY_THEME_POWERPOINT ): aFallback = "private://gallery/hidden/imgppt"; break;
+            case( GALLERY_THEME_FONTWORK ): aFallback = "private://gallery/hidden/fontwork"; break;
+            case( GALLERY_THEME_FONTWORK_VERTICAL ): aFallback = "private://gallery/hidden/fontworkvertical"; break;
             case( GALLERY_THEME_RULERS ): aFallback = "Rulers"; break;
             case( GALLERY_THEME_SOUNDS ): aFallback = "Sounds"; break;
 
