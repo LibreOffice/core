@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 10:35:11 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 10:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4439,7 +4439,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 *mpExEmbed  << (sal_uInt32)( EPP_ExControlAtom << 16 )
                             << (sal_uInt32)4
                             << nPageId;
-                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, String(), mpExEmbed->Tell() );
+                String aEmptyString;
+                PPTExOleObjEntry* pEntry = new PPTExOleObjEntry( OCX_CONTROL, aEmptyString, mpExEmbed->Tell() );
                 pEntry->xControlModel = aXControlModel;
                 maExOleObj.Insert( pEntry );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 10:54:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,7 +405,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_AUTHOR, aPropItem );
                         }
                     }
@@ -414,7 +415,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_LASTAUTHOR, aPropItem );
                         }
                     }
@@ -423,7 +425,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_SUBJECT, aPropItem );
                         }
                     }
@@ -432,7 +435,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_TITLE, aPropItem );
                         }
                     }
@@ -441,7 +445,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_KEYWORDS, aPropItem );
                         }
                     }
@@ -450,7 +455,8 @@ sal_Bool PPTWriter::ImplCreateSummaryInformation()
                         if ( (*(::rtl::OUString*)mAny.getValue() ).getLength() )
                         {
                             aPropItem.Clear();
-                            aPropItem.Write( String( *(::rtl::OUString*)mAny.getValue() ) );
+                            String aTmpStr( *(::rtl::OUString*)mAny.getValue() );
+                            aPropItem.Write( aTmpStr );
                             aPropSet.AddProperty( PID_COMMENTS, aPropItem );
                         }
                     }
@@ -599,7 +605,8 @@ sal_Bool PPTWriter::ImplCreateDocumentSummaryInformation()
                     ::rtl::OUString aUValue( aXDocumentInfo->getUserFieldValue( i ) );
                     if ( aUValue.getLength() )
                     {
-                        aPropItem.Write( String( aUValue ) );
+                        String aTmpStr( aUValue );
+                        aPropItem.Write( aTmpStr );
                         aDict.AddProperty( nNextId, aXDocumentInfo->getUserFieldName( i ) );
                         aUserPropSet.AddProperty( nNextId++, aPropItem );
                     }
