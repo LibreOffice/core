@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:12:28 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,28 +225,6 @@ using namespace vos;
 #define VARIABLE_PITCH          0x02
 
 // ---------------------------------------------------------------------------------------------
-
-sal_Int16 EncodeAnyTosal_Int16( ::com::sun::star::uno::Any& rAny )
-{
-        sal_Int16 nVal = 0;
-#ifdef OSL_BIGENDIAN
-        switch( rAny.getValueType().getTypeClass() )
-        {
-            case ::com::sun::star::uno::TypeClass_SHORT :
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT : nVal = *((short*)rAny.getValue() ); break;
-            case ::com::sun::star::uno::TypeClass_LONG :
-            case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG : nVal = (sal_Int16)(*((long*)rAny.getValue() ) ); break;
-            case ::com::sun::star::uno::TypeClass_ENUM :
-            {
-                 nVal = (sal_Int16)(*( ::com::sun::star::drawing::TextAdjust*)rAny.getValue() ); break;
-            }
-            break;
-        }
-#else
-        nVal = *((sal_Int16*)rAny.getValue());
-#endif
-        return nVal;
-}
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
@@ -2869,10 +2847,10 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     }
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabStops" ) ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
-    ::com::sun::star::style::ParagraphAdjust eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
-        eTextAdjust = (::com::sun::star::style::ParagraphAdjust)EncodeAnyTosal_Int16( mAny );
-    switch ( eTextAdjust )
+    sal_Int16 eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
+    if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
+        aAny >>= eTextAdjust;
+    switch ( (::com::sun::star::style::ParagraphAdjust)eTextAdjust )
     {
         case ::com::sun::star::style::ParagraphAdjust_CENTER :
             mnTextAdjust = 1;
@@ -3410,6 +3388,8 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     ::com::sun::star::presentation::AnimationEffect eTe,
     sal_uInt16 nOrder )
 {
+    ppt::ExContainer aAnimationInfo( rSt, EPP_AnimationInfo );
+    ppt::ExAtom aAnimationInfoAtom( rSt, EPP_AnimationInfoAtom, 0, 1 );
     sal_uInt32  nDimColor = 0x7000000;  // color to use for dimming
     sal_uInt32  nFlags = 0x4400;        // set of flags that determine type of build
     sal_uInt32  nSoundRef = 0;          // 0 if storage is from clipboard. Otherwise index(ID) in SoundCollection list.
@@ -3911,9 +3891,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DimColor" ) ) ) )
         nDimColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) ) | 0xfe000000;
 
-    rSt << (sal_uInt32)( ( EPP_AnimationInfo << 16 ) | 0xf )  << (sal_uInt32)36
-        << (sal_uInt32)( ( EPP_AnimationInfoAtom << 16 ) | 1 )<< (sal_uInt32)28
-        << nDimColor << nFlags << nSoundRef << nDelayTime
+    rSt << nDimColor << nFlags << nSoundRef << nDelayTime
         << nOrder                                   // order of build ( 1.. )
         << nSlideCount << nBuildType << nFlyMethod << nFlyDirection
         << nAfterEffect << nSubEffect << nOleVerb
@@ -3922,7 +3900,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
 
 //  -----------------------------------------------------------------------
 
-void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa )
+void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentation::ClickAction eCa, sal_Bool bMediaClickAction )
 {
     sal_uInt32 nSoundRef = 0;   // a reference to a sound in the sound collection, or NULL.
     sal_uInt32 nHyperLinkID = 0;// a persistent unique identifier to an external hyperlink object (only valid when action == HyperlinkAction).
@@ -3957,7 +3935,9 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         EndShow         6
     */
 
-    switch( eCa )
+    if ( bMediaClickAction )
+        nAction = 6;
+    else switch( eCa )
     {
         case ::com::sun::star::presentation::ClickAction_STOPPRESENTATION :
             nJump += 2;
@@ -4226,6 +4206,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
         if ( ImplGetShapeByIndex( GetCurrentGroupIndex(), TRUE ) )
         {
             sal_Bool bIsSound;
+            sal_Bool bMediaClickAction = sal_False;
             ::com::sun::star::presentation::AnimationEffect eAe;
             ::com::sun::star::presentation::AnimationEffect eTe;
 
@@ -4243,7 +4224,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             sal_Bool bPolyPolygon  = mType == "drawing.PolyPolygon";
             sal_Bool bPolyLine = mType == "drawing.PolyLine";
 
-
             List        aAdjustmentList;
             Rectangle   aPolyBoundRect;
 
@@ -4259,7 +4239,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     aXIndexAccess( mXShape, ::com::sun::star::uno::UNO_QUERY );
                 if ( EnterGroup( aXIndexAccess ) )
                 {
-                    if ( bEffect )
+                    if ( bEffect && !mbUseNewAnimations )
                     {
                         pTmp = new SvMemoryStream( 0x200, 0x200 );
                         ImplWriteObjectEffect( *pTmp, eAe, eTe, ++nEffectCount );
@@ -4268,7 +4248,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     {
                         if ( !pTmp )
                             pTmp = new SvMemoryStream( 0x200, 0x200 );
-                        ImplWriteClickAction( *pTmp, eCa );
+                        ImplWriteClickAction( *pTmp, eCa, bMediaClickAction );
                     }
                     mpPptEscherEx->EnterGroup( &maRect, pTmp );
                     delete pTmp;
@@ -5082,6 +5062,65 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( aPropOpt.CreateGraphicProperties( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), sal_False ) )
                     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
             }
+            else if ( mType == "drawing.Media" )
+            {
+                mnAngle = 0;
+                mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
+                ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
+
+                ::com::sun::star::uno::Any aAny;
+                if ( PropValue::GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MediaURL" ) ), sal_True ) )
+                {
+                    rtl::OUString aMediaURL;
+                    if ( (aAny >>= aMediaURL ) &&  aMediaURL.getLength() )
+                    {
+                        // SJ: creating the Media RefObj
+                        sal_uInt32 nRefId = ++mnExEmbed;
+
+                        *mpExEmbed  << (sal_uInt16)0xf
+                                    << (sal_uInt16)EPP_ExMCIMovie       // PPT_PST_ExAviMovie
+                                    << (sal_uInt32)0;
+                        sal_uInt32 nSize, nStart = mpExEmbed->Tell();
+                        *mpExEmbed  << (sal_uInt16)0
+                                    << (sal_uInt16)EPP_ExObjRefAtom
+                                    << (sal_uInt32)4
+                                    << nRefId;
+                        *mpExEmbed  << (sal_uInt16)0xf
+                                    << (sal_uInt16)EPP_ExVideo
+                                    << (sal_uInt32)0;
+
+                        *mpExEmbed  << (sal_uInt16)0
+                                    << (sal_uInt16)EPP_ExMediaAtom
+                                    << (sal_uInt32)8
+                                    << nRefId
+                                    << (sal_uInt16)0
+                                    << (sal_uInt16)0x435;
+
+
+                        sal_uInt16 i, nStringLen = (sal_uInt16)aMediaURL.getLength();
+                        *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nStringLen * 2 );
+                        for ( i = 0; i < nStringLen; i++ )
+                        {
+                            sal_Unicode nChar = aMediaURL[ i ];
+                            *mpExEmbed << nChar;
+                        }
+                        nSize = mpExEmbed->Tell() - nStart;
+                        mpExEmbed->SeekRel( - ( (sal_Int32)nSize + 4 ) );
+                        *mpExEmbed << nSize;    // size of PPT_PST_ExMCIMovie
+                        mpExEmbed->SeekRel( 0x10 );
+                        nSize -= 20;
+                        *mpExEmbed << nSize;    // PPT_PST_ExMediaAtom
+                        mpExEmbed->SeekRel( nSize );
+
+                        if ( !pClientData )
+                            pClientData = new SvMemoryStream( 0x200, 0x200 );
+                        *pClientData << (sal_uInt16)0
+                                     << (sal_uInt16)EPP_ExObjRefAtom
+                                     << (sal_uInt32)4
+                                     << nRefId;
+                    }
+                }
+            }
             else if ( mType == "drawing.dontknow" )
             {
                 mnAngle = 0;
@@ -5170,14 +5209,15 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 eAe = eTe;
                         }
                     }
-                    ImplWriteObjectEffect( *pClientData, eAe, eTe, ++nEffectCount );
+                    if ( !mbUseNewAnimations  )
+                        ImplWriteObjectEffect( *pClientData, eAe, eTe, ++nEffectCount );
                 }
 
                 if ( eCa != ::com::sun::star::presentation::ClickAction_NONE )
                 {
                     if ( !pClientData )
                         pClientData = new SvMemoryStream( 0x200, 0x200 );
-                    ImplWriteClickAction( *pClientData, eCa );
+                    ImplWriteClickAction( *pClientData, eCa, bMediaClickAction );
                 }
             }
             if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
