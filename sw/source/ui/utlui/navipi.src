@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:25:14 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 22:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΟςΙΟÒΖ¶―";
                 Text[ russian ] = "Οεπεμερςθςό ββεπυ";
                 Text[ polish ] = "Przenie w gσrκ";
-                Text[ japanese ] = "γ•ϋ‚ΦΪ“®";
+                Text[ japanese ] = "γ‚Φ";
                 Text[ chinese_traditional ] = "¦V¤W²Ύ°Κ";
                 Text[ arabic ] = "ΕÒΗΝΙ Εαμ ΓΪαμ";
                 Text[ greek ] = "Μεταφορά προς τα πάνω";
@@ -857,7 +857,7 @@ Window DLG_NAVIGATION_PI
                 Text[ chinese_simplified ] = "ΟςΟΒÒΖ¶―";
                 Text[ russian ] = "Οεπεμερςθςό βνθη";
                 Text[ polish ] = "Przenie w dσ³";
-                Text[ japanese ] = "‰Ί•ϋ‚ΦΪ“®";
+                Text[ japanese ] = "‰Ί‚Φ";
                 Text[ chinese_traditional ] = "¦V¤U²Ύ°Κ";
                 Text[ arabic ] = "ΕÒΗΝΙ Εαμ ΓΣέα";
                 Text[ greek ] = "Μεταφορά προς τα κάτω";
@@ -1705,6 +1705,7 @@ ImageList IMG_NAVI_ENTRYBMP
     };
     IdCount = { 12 ; };
 };
+
 
 
 
