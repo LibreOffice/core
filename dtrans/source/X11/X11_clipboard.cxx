@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_clipboard.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:25:17 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,16 +181,23 @@ void X11Clipboard::fireChangedContentsEvent()
 
 void X11Clipboard::clearContents()
 {
-    MutexGuard aGuard(m_aMutex);
-
-    if ( m_aOwner.is() )
-    {
-        m_aOwner->lostOwnership(static_cast < XClipboard * > (this), m_aContents);
-        m_aOwner.clear();
-    }
-
-    // may be set even if no owner.
+    ClearableMutexGuard aGuard(m_aMutex);
+    // protect against deletion during outside call
+    Reference< XClipboard > xThis( static_cast<XClipboard*>(this));
+    // copy member references on stack so they can be called
+    // without having the mutex
+    Reference< XClipboardOwner > xOwner( m_aOwner );
+    Reference< XTransferable > xTrans( m_aContents );
+    // clear members
+    m_aOwner.clear();
     m_aContents.clear();
+
+    // release the mutex
+    aGuard.clear();
+
+    // inform previous owner of lost ownership
+    if ( xOwner.is() )
+        xOwner->lostOwnership(xThis, m_aContents);
 }
 
 // ------------------------------------------------------------------------
