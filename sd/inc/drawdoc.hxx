@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:57:15 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,12 +245,8 @@ public:
 
     SdDrawDocShell* GetDocSh() { return(pDocSh) ; }
 
-    LanguageType    GetLanguage() const { return eLanguage; }
-    void            SetLanguage( LanguageType eNewLang );
-    LanguageType    GetLanguageCJK() const { return eLanguageCJK; }
-    void            SetLanguageCJK( LanguageType eNewLang );
-    LanguageType    GetLanguageCTL() const { return eLanguageCTL; }
-    void            SetLanguageCTL( LanguageType eNewLang );
+    LanguageType    GetLanguage( const USHORT nId ) const;
+    void            SetLanguage( const LanguageType eLang, const USHORT nId );
 
     SvxNumType      GetPageNumType() const { return ePageNumType; }
     void            SetPageNumType(SvxNumType eType) { ePageNumType = eType; }

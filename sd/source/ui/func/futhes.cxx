@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 11:04:38 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
 #endif
 
 #define ITEMID_LANGUAGE         SID_ATTR_CHAR_LANGUAGE
@@ -169,11 +173,11 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                         pOutliner->SetHyphenator( xHyphenator );
                 }
 
-                pOutliner->SetDefaultLanguage( pDoc->GetLanguage() );
+                pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
             EESpellState eState = ( (OutlinerView*) pOutlView)
-                                  ->StartThesaurus( pDoc->GetLanguage() );
+                                  ->StartThesaurus( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
 
             DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
@@ -206,10 +210,10 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     pOutliner->SetHyphenator( xHyphenator );
             }
 
-            pOutliner->SetDefaultLanguage( pDoc->GetLanguage() );
+            pOutliner->SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
         }
 
-        EESpellState eState = pOutlView->StartThesaurus( pDoc->GetLanguage() );
+        EESpellState eState = pOutlView->StartThesaurus( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
 
         DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-28 07:24:00 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,10 +330,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
     rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
-
-    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-    rISet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
 
     rISet.Put(SvxContourItem(FALSE));
     rISet.Put(SvxShadowedItem(FALSE));

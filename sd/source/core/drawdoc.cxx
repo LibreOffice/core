@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-06 16:54:55 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,9 +311,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         eLanguage = System::GetLanguage();
     if (eLanguage == LANGUAGE_DONTKNOW)
         eLanguage = LANGUAGE_ENGLISH_US;
-    SetLanguage( eLanguage );
-    SetLanguageCJK( eLanguage );
-    SetLanguageCTL( eLanguage );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
@@ -757,7 +757,7 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
         rOut << aJobSetup;
     }
 
-    rOut << (ULONG) rDoc.GetLanguage();
+    rOut << (ULONG) rDoc.eLanguage;
 
     /**************************************************************************
     * FrameViews schreiben
@@ -965,7 +965,7 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
     {
         ULONG nTmp;
         rIn >> nTmp;
-        rDoc.SetLanguage( (LanguageType) nTmp );
+        rDoc.SetLanguage( (LanguageType) nTmp, EE_CHAR_LANGUAGE );
     }
 
     if (rDoc.nFileFormatVersion >= 4)

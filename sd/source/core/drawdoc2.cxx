@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-05 13:49:50 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,50 +1063,52 @@ ULONG SdDrawDocument::GetLinkCount()
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetLanguage( LanguageType eNewLang )
+void SdDrawDocument::SetLanguage( const LanguageType eLang, const USHORT nId )
 {
-    if( eLanguage != eNewLang )
+    BOOL bChanged = FALSE;
+
+    if( nId == EE_CHAR_LANGUAGE && eLanguage != eLang )
     {
-        eLanguage = eNewLang;
+        eLanguage = eLang;
+        bChanged = TRUE;
+    }
+    else if( nId == EE_CHAR_LANGUAGE_CJK && eLanguageCJK != eLang )
+    {
+        eLanguageCJK = eLang;
+        bChanged = TRUE;
+    }
+    else if( nId == EE_CHAR_LANGUAGE_CTL && eLanguageCTL != eLang )
+    {
+        eLanguageCTL = eLang;
+        bChanged = TRUE;
+    }
+
+    if( bChanged )
+    {
         GetDrawOutliner().SetDefaultLanguage( eLanguage );
         pHitTestOutliner->SetDefaultLanguage( eLanguage );
-        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-        SetChanged( TRUE );
+        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, nId ) );
+        SetChanged( bChanged );
     }
 }
 
 
 /*************************************************************************
 |*
-|* CJK Language setzen
+|* Return language
 |*
 \************************************************************************/
 
-void SdDrawDocument::SetLanguageCJK( LanguageType eNewLang )
+LanguageType SdDrawDocument::GetLanguage( const USHORT nId ) const
 {
-    if( eLanguageCJK != eNewLang )
-    {
-        eLanguageCJK = eNewLang;
-        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-        SetChanged( TRUE );
-    }
-}
+    LanguageType eLangType = eLanguage;
 
+    if( nId == EE_CHAR_LANGUAGE_CJK )
+        eLangType = eLanguageCJK;
+    else if( nId == EE_CHAR_LANGUAGE_CTL )
+        eLangType = eLanguageCTL;
 
-/*************************************************************************
-|*
-|* CTL Language setzen
-|*
-\************************************************************************/
-
-void SdDrawDocument::SetLanguageCTL( LanguageType eNewLang )
-{
-    if( eLanguageCTL != eNewLang )
-    {
-        eLanguageCTL = eNewLang;
-        pItemPool->SetPoolDefaultItem( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
-        SetChanged( TRUE );
-    }
+    return eLangType;
 }
 
 

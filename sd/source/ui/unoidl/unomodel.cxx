@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-01 17:12:24 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,7 +766,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             if(!(aValue >>= aLocale))
                 throw lang::IllegalArgumentException();
 
-            pDoc->SetLanguage(SvxLocaleToLanguage(aLocale));
+            pDoc->SetLanguage( SvxLocaleToLanguage(aLocale), EE_CHAR_LANGUAGE );
             break;
         }
         case WID_MODEL_TABSTOP:
@@ -801,7 +801,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
     {
     case WID_MODEL_LANGUAGE:
     {
-        LanguageType eLang = pDoc->GetLanguage();
+        LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
         lang::Locale aLocale;
         SvxLanguageToLocale( aLocale, eLang );
         aAny <<= aLocale;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-28 07:25:39 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
                 rSet.Put(aSvxFontItem);
                 rSet.Put(aSvxFontItemCJK);
                 rSet.Put(aSvxFontItemCTL);
-                LanguageType eLanguage = pDoc->GetLanguage();
-                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-                rSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
                 rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
                 rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
                 rSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
@@ -428,10 +424,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rTitleSet.Put(aSvxFontItem);
         rTitleSet.Put(aSvxFontItemCJK);
         rTitleSet.Put(aSvxFontItemCTL);
-        LanguageType eLanguage = pDoc->GetLanguage();
-        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-        rTitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
         rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
         rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
         rTitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
@@ -471,10 +463,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rSubtitleSet.Put(aSvxFontItem);
         rSubtitleSet.Put(aSvxFontItemCJK);
         rSubtitleSet.Put(aSvxFontItemCTL);
-        LanguageType eLanguage = pDoc->GetLanguage();
-        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-        rSubtitleSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
         rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
         rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
         rSubtitleSet.Put(SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
@@ -516,10 +504,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName)
         rNotesSet.Put(aSvxFontItem);
         rNotesSet.Put(aSvxFontItemCJK);
         rNotesSet.Put(aSvxFontItemCTL);
-        LanguageType eLanguage = pDoc->GetLanguage();
-        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE ) );
-        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CJK ) );
-        rNotesSet.Put( SvxLanguageItem( eLanguage, EE_CHAR_LANGUAGE_CTL ) );
         rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
         rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
         rNotesSet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-27 09:24:52 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,10 @@
 
 #ifndef _SFXFILEDLG_HXX //au
 #include <sfx2/iodlg.hxx>
+#endif
+
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_USEROPTIONS_HXX
@@ -241,11 +245,11 @@ void SdModule::Execute(SfxRequest& rReq)
                     SdDrawDocument* pDoc = pDocSh->GetDoc();
 
                     if( nSlotId == SID_ATTR_CHAR_CJK_LANGUAGE )
-                        pDoc->SetLanguageCJK( eLanguage );
+                        pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
                     else if( nSlotId == SID_ATTR_CHAR_CTL_LANGUAGE )
-                        pDoc->SetLanguageCTL( eLanguage );
+                        pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
                     else
-                        pDoc->SetLanguage( eLanguage );
+                        pDoc->SetLanguage( eLanguage, EE_CHAR_LANGUAGE );
 
                     if( pDoc->GetOnlineSpell() )
                     {
@@ -805,21 +809,21 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     {
         SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
-            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage() ) );
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) ) );
     }
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
     {
         SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
-            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguageCJK() ) );
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CJK ) ) );
     }
 
     if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
     {
         SdDrawDocShell* pDocSh = PTR_CAST(SdDrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
-            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguageCTL() ) );
+            rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CTL ) ) );
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 11:08:34 $
+ *  last change: $Author: dl $ $Date: 2000-12-08 13:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,7 +1209,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
         else
         {
-            LanguageType eLang = pDoc->GetLanguage();
+            LanguageType eLang = pDoc->GetLanguage( EE_CHAR_LANGUAGE );
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
             Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
