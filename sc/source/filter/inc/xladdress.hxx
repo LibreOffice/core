@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xladdress.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:46:20 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@ inline bool operator==( const XclAddress& rL, const XclAddress& rR )
     return (rL.mnCol == rR.mnCol) && (rL.mnRow == rR.mnRow);
 }
 
+inline bool operator<( const XclAddress& rL, const XclAddress& rR )
+{
+    return (rL.mnCol < rR.mnCol) || ((rL.mnCol == rR.mnCol) && (rL.mnRow < rR.mnRow));
+}
+
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclAddress& rXclPos )
 {
     rXclPos.Read( rStrm );
@@ -137,6 +142,11 @@ struct XclRange
 inline bool operator==( const XclRange& rL, const XclRange& rR )
 {
     return (rL.maFirst == rR.maFirst) && (rL.maLast == rR.maLast);
+}
+
+inline bool operator<( const XclRange& rL, const XclRange& rR )
+{
+    return (rL.maFirst < rR.maFirst) || ((rL.maFirst == rR.maFirst) && (rL.maLast < rR.maLast));
 }
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclRange& rXclRange )
