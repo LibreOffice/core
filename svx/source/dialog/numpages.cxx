@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-25 16:40:34 $
+ *  last change: $Author: os $ $Date: 2001-06-28 10:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,7 +1012,9 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     Font aOldFont = pDev->GetFont();
     Color aOldColor = pDev->GetLineColor();
     pDev->SetLineColor(aLineColor);
-    Font aFont(System::GetStandardFont(STDFONT_ROMAN));
+    Font aFont(OutputDevice::GetDefaultFont(
+                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+
     Size aSize = aFont.GetSize();
 
     Font aRuleFont( lcl_GetDefaultBulletFont() );
@@ -3110,7 +3112,8 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
         USHORT nYStart = 4;
         // fuer ein einziges Level darf nicht die gesamte Hoehe benutzt werden
         USHORT nYStep = (aSize.Height() - 6)/ (pActNum->GetLevelCount() > 1 ? pActNum->GetLevelCount() : 5);
-        aStdFont = System::GetStandardFont(STDFONT_SWISS);
+        aStdFont = OutputDevice::GetDefaultFont(
+                DEFAULTFONT_UI_SANS, ::GetSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE);
 
         //
         USHORT nFontHeight = nYStep * 6 / 10;
