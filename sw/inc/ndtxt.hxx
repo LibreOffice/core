@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 14:37:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,6 @@ public:
     const SwNodeNum* GetNum() const; // #i29363#
     const SwNodeNum* GetOutlineNum() const;
     BOOL MayBeNumbered() const; // #i23730#
-    BOOL IsOutlineNum() const;
     void NumRuleChgd();                 // Frames benachrichtigen
     XubString GetNumString() const;     // returnt Outline oder Num - String
     long GetLeftMarginWithNum( BOOL bTxtLeft = FALSE ) const;
@@ -381,8 +380,6 @@ public:
     // aus SwIndexReg
     virtual void Update( const SwIndex & aPos, USHORT xub_StrLen,
                          BOOL bNegativ = FALSE, BOOL bDelete = FALSE );
-
-    FASTBOOL IsInSymbolFont( USHORT xub_StrLen ) const;
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( utl::TransliterationWrapper& rTrans,
