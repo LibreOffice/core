@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: nn $ $Date: 2001-02-23 13:37:10 $
+#   last change: $Author: nn $ $Date: 2001-03-05 11:31:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ CXXFILES = \
         docuno.cxx \
         servuno.cxx \
         defltuno.cxx \
+        drdefuno.cxx \
         cellsuno.cxx \
         textuno.cxx \
         notesuno.cxx \
@@ -115,6 +116,7 @@ SLOFILES =  \
         $(SLO)$/docuno.obj \
         $(SLO)$/servuno.obj \
         $(SLO)$/defltuno.obj \
+        $(SLO)$/drdefuno.obj \
         $(SLO)$/cellsuno.obj \
         $(SLO)$/textuno.obj \
         $(SLO)$/notesuno.obj \

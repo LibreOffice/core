@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-23 13:37:10 $
+ *  last change: $Author: nn $ $Date: 2001-03-05 11:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include "styleuno.hxx"
 #include "afmtuno.hxx"
 #include "defltuno.hxx"
+#include "drdefuno.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 
@@ -219,9 +220,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             if (pDocShell)
                 xRet = (beans::XPropertySet*)new ScDocDefaultsObj( pDocShell );
             break;
-
         case SC_SERVICE_DRAWDEFLTS:
-            //! waiting for CL's implementation
+            if (pDocShell)
+                xRet = (beans::XPropertySet*)new ScDrawDefaultsObj( pDocShell );
             break;
 
         //  Drawing layer tables are not in SvxUnoDrawMSFactory,
