@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:32:42 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace connectivity::flat;
 using namespace connectivity::file;
@@ -126,84 +130,84 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQ
     ORows aRows;
     ORow aRow;
 
-    aRow.push_back(Any());
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("CHAR")));
-    aRow.push_back(makeAny(DataType::CHAR));
-    aRow.push_back(makeAny((sal_Int32)254));
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)ColumnValue::NULLABLE));
-    aRow.push_back(makeAny((sal_Int32)1));
-    aRow.push_back(makeAny((sal_Int32)ColumnSearch::CHAR));
-    aRow.push_back(makeAny((sal_Int32)1));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(Any());
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)10));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("CHAR")));
+    aRow.push_back(ORowSetValue(DataType::CHAR));
+    aRow.push_back(ORowSetValue((sal_Int32)254));
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)ColumnValue::NULLABLE));
+    aRow.push_back(ORowSetValue((sal_Int32)1));
+    aRow.push_back(ORowSetValue((sal_Int32)ColumnSearch::CHAR));
+    aRow.push_back(ORowSetValue((sal_Int32)1));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)10));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("VARCHAR"));
-    aRow[2] = makeAny(DataType::VARCHAR);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("VARCHAR"));
+    aRow[2] = ORowSetValue(DataType::VARCHAR);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("LONGVARCHAR"));
-    aRow[2] = makeAny(DataType::LONGVARCHAR);
-    aRow[3] = makeAny((sal_Int32)65535);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("LONGVARCHAR"));
+    aRow[2] = ORowSetValue(DataType::LONGVARCHAR);
+    aRow[3] = ORowSetValue((sal_Int32)65535);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DATE"));
-    aRow[2] = makeAny(DataType::DATE);
-    aRow[3] = makeAny((sal_Int32)10);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DATE"));
+    aRow[2] = ORowSetValue(DataType::DATE);
+    aRow[3] = ORowSetValue((sal_Int32)10);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("TIME"));
-    aRow[2] = makeAny(DataType::TIME);
-    aRow[3] = makeAny((sal_Int32)8);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("TIME"));
+    aRow[2] = ORowSetValue(DataType::TIME);
+    aRow[3] = ORowSetValue((sal_Int32)8);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("TIMESTAMP"));
-    aRow[2] = makeAny(DataType::TIMESTAMP);
-    aRow[3] = makeAny((sal_Int32)19);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("TIMESTAMP"));
+    aRow[2] = ORowSetValue(DataType::TIMESTAMP);
+    aRow[3] = ORowSetValue((sal_Int32)19);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("BOOL"));
-    aRow[2] = makeAny(DataType::BIT);
-    aRow[3] = makeAny((sal_Int32)1);
-    aRow[9] = makeAny((sal_Int32)ColumnSearch::BASIC);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
+    aRow[2] = ORowSetValue(DataType::BIT);
+    aRow[3] = ORowSetValue((sal_Int32)1);
+    aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DECIMAL"));
-    aRow[2] = makeAny(DataType::DECIMAL);
-    aRow[3] = makeAny((sal_Int32)20);
-    aRow[15] = makeAny((sal_Int32)15);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
+    aRow[2] = ORowSetValue(DataType::DECIMAL);
+    aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[15] = ORowSetValue((sal_Int32)15);
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DOUBLE"));
-    aRow[2] = makeAny(DataType::DOUBLE);
-    aRow[3] = makeAny((sal_Int32)20);
-    aRow[15] = makeAny((sal_Int32)0);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DOUBLE"));
+    aRow[2] = ORowSetValue(DataType::DOUBLE);
+    aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[15] = ORowSetValue((sal_Int32)0);
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("NUMERIC"));
-    aRow[2] = makeAny(DataType::NUMERIC);
-    aRow[3] = makeAny((sal_Int32)20);
-    aRow[15] = makeAny((sal_Int32)20);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("NUMERIC"));
+    aRow[2] = ORowSetValue(DataType::NUMERIC);
+    aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[15] = ORowSetValue((sal_Int32)20);
     aRows.push_back(aRow);
 
     pResult->setRows(aRows);
@@ -236,11 +240,11 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 
     Reference< XNameAccess> xNames = xTables->getTables();
     if(!xNames.is())
-                throw SQLException();
+        throw SQLException();
 
     ORows aRows;
     ORow aRow(19);
-    aRow[10] <<= (sal_Int32)10;
+    aRow[10] = (sal_Int32)10;
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
     const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
     const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
@@ -249,8 +253,8 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
         if(match(tableNamePattern,*pTabBegin,'\0'))
         {
             Reference< XColumnsSupplier> xTable;
-            xNames->getByName(*pTabBegin) >>= xTable;
-            aRow[3] <<= *pTabBegin;
+            ::cppu::extractInterface(xTable,xNames->getByName(*pTabBegin));
+            aRow[3] = *pTabBegin;
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
             if(!xColumns.is())
@@ -260,48 +264,48 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
 
             const ::rtl::OUString* pBegin = aColNames.getConstArray();
             const ::rtl::OUString* pEnd = pBegin + aColNames.getLength();
-            Reference< XFastPropertySet> xColumn;
+            Reference< XPropertySet> xColumn;
             for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
             {
                 if(match(columnNamePattern,*pBegin,'\0'))
                 {
-                    aRow[4] <<= *pBegin;
+                    aRow[4] = *pBegin;
 
-                    xColumns->getByName(*pBegin) >>= xColumn;
+                    ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
                     OSL_ENSHURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPE);
-                    aRow[6] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[7] = xColumn->getFastPropertyValue(PROPERTY_ID_PRECISION);
-                    //  aRow[8] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[9] = xColumn->getFastPropertyValue(PROPERTY_ID_SCALE);
-                    aRow[11] = xColumn->getFastPropertyValue(PROPERTY_ID_ISNULLABLE);
-                    //  aRow[12] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    aRow[13] = xColumn->getFastPropertyValue(PROPERTY_ID_DEFAULTVALUE);
-                    //  aRow[14] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    //  aRow[15] = xColumn->getFastPropertyValue(PROPERTY_ID_TYPENAME);
-                    switch(getINT32(aRow[5]))
+                    aRow[5] = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+                    aRow[6] = getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
+                    aRow[7] = getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));
+                    //  aRow[8] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[9] = getINT32(xColumn->getPropertyValue(PROPERTY_SCALE));
+                    aRow[11] = getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE));
+                    //  aRow[12] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    aRow[13] = getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
+                    //  aRow[14] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    //  aRow[15] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
+                    switch((sal_Int32)aRow[5])
                     {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
-                        aRow[16] <<= (sal_Int32)254;
+                        aRow[16] = (sal_Int32)254;
                         break;
                     case DataType::LONGVARCHAR:
-                        aRow[16] <<= (sal_Int32)65535;
+                        aRow[16] = (sal_Int32)65535;
                         break;
                     default:
-                        aRow[16] <<= (sal_Int32)0;
+                        aRow[16] = (sal_Int32)0;
                     }
-                    aRow[17] <<= i;
-                    switch(getINT32(aRow[11]))
+                    aRow[17] = i;
+                    switch(sal_Int32(aRow[11]))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18] <<= ::rtl::OUString::createFromAscii("NO");
+                        aRow[18] = ::rtl::OUString::createFromAscii("NO");
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18] <<= ::rtl::OUString::createFromAscii("YES");
+                        aRow[18] = ::rtl::OUString::createFromAscii("YES");
                         break;
                     default:
-                        aRow[18] <<= ::rtl::OUString();
+                        aRow[18] = ::rtl::OUString();
                     }
                     aRows.push_back(aRow);
                 }

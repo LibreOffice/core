@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:09:51 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 10:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,9 +492,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
     // Information for a single SQL type
 
     // Loop on the result set until we reach end of file
-
-    sal_Bool more = xRs->next ();
-    while (more)
+    while (xRs->next())
     {
         OTypeInfo aInfo;
         aInfo.aTypeName         = xRow->getString (1);
@@ -512,7 +510,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
 
         aInfo.bCurrency         = xRow->getBoolean (11);
         aInfo.bAutoIncrement    = xRow->getBoolean (12);
-        aInfo.bNullable         = xRow->getBoolean (7) == ColumnValue::NULLABLE;
+        aInfo.bNullable         = xRow->getInt (7) == ColumnValue::NULLABLE;
         aInfo.bCaseSensitive    = xRow->getBoolean (8);
         aInfo.bUnsigned         = xRow->getBoolean (10);
 
@@ -521,7 +519,6 @@ void OConnection::buildTypeInfo() throw( SQLException)
         // entry for this SQL type.
 
         m_aTypeInfo.push_back(aInfo);
-        more = xRs->next ();
     }
 
     // Close the result set/statement.
