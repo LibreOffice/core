@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 14:33:14 $
+ *  last change: $Author: pb $ $Date: 2001-09-18 07:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@ private:
     DECL_LINK(          UpdateHdl_Impl, Timer* );
 
     void                UpdateDocumentTemplates_Impl();
-
-protected:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
 
 public:
     SvtDocumentTemplateDialog( Window* pParent );
