@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:03:02 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,7 +854,6 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( m_aSubsets.size() == 0, "Fonts changing during PDF generation, document will be invalid" );
-
     ImplDevFontList* pFiltered = new ImplDevFontList();
 
     ImplDevFontListData* pData = pFontList->First();
