@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 17:37:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-11 22:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ String STR_FILEDLG_CANTCHDIR
     Text [ danish ] = "Kan ikke skifte til bibliotek" ;
     Text [ italian ] = "Impossibile passare alla cartella" ;
     Text [ spanish ] = "No es posible cambiar en directorio" ;
-    Text [ french ] = "Impossible de changer le r閜ertoire" ;
+    Text [ french ] = "Impossible de passer au r閜ertoire" ;
     Text [ dutch ] = "Kan niet in map komen" ;
     Text [ portuguese ] = "Imposs韛el mudar para direct髍io" ;
     Text[ chinese_simplified ] = "无法转到目录";
