@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cd $ $Date: 2002-11-18 16:47:27 $
+ *  last change: $Author: sb $ $Date: 2002-11-26 15:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,13 @@
 
 #include <osl/module.h>
 #include <osl/file.hxx>
+
+#include "osl/thread.h"
+#include "rtl/tencinfo.h"
+
+#if defined UNX
+#include "i18n_status.hxx"
+#endif // UNX
 
 using namespace ::com::sun::star::uno;
 
@@ -2270,9 +2277,34 @@ void Application::WaitForClientConnect()
 #endif
 }
 
+bool Application::CanToggleImeStatusWindow()
+{
+#if defined UNX
+    return vcl::I18NStatus::get().canToggleStatusWindow();
+#else // UNX
+    return false;
+#endif // UNX
+}
+
+void Application::ShowImeStatusWindow(bool bShow)
+{
+    ImplGetSVData()->maAppData.meShowImeStatusWindow = bShow
+        ? ImplSVAppData::ImeStatusWindowMode_SHOW
+        : ImplSVAppData::ImeStatusWindowMode_HIDE;
+#if defined UNX
+    vcl::I18NStatus::get().toggleStatusWindow();
+#endif
+}
+
+bool Application::GetShowImeStatusWindowDefault()
+{
+    rtl_TextEncodingInfo aInfo;
+    aInfo.StructSize = sizeof aInfo;
+    return rtl_getTextEncodingInfo(osl_getThreadTextEncoding(), &aInfo)
+        && aInfo.MaximumCharSize > 1;
+}
+
 BOOL Application::IsAccessibilityEnabled()
 {
     return FALSE;
 }
-
-

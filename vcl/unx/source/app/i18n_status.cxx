@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-18 11:58:02 $
+ *  last change: $Author: sb $ $Date: 2002-11-26 15:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,8 @@ public:
     virtual void setPosition( SalFrame* );
     virtual void setText( const String & ) = 0;
     virtual const String& getText() const = 0;
-    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason ) = 0;
+    virtual void toggle( bool bOn );
 };
 
 }
@@ -118,9 +119,8 @@ void StatusWindow::setPosition( SalFrame* pFrame )
 {
 }
 
-void StatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
+void StatusWindow::toggle( bool bOn )
 {
-    Show( bShow );
 }
 
 // --------------------------------------------------------------------------
@@ -351,15 +351,21 @@ class IIIMPStatusWindow : public StatusWindow
     MenuButton              m_aStatusBtn;
     PopupMenu               m_aMenu;
     SalFrame*               m_pResetFocus;
+    bool                    m_bShow;
+    bool                    m_bOn;
 
     DECL_LINK( SelectHdl, MenuButton* );
+
+    void show();
+
 public:
-    IIIMPStatusWindow( SalFrame* pParent  ); // for initial position
+    IIIMPStatusWindow( SalFrame* pParent, bool bOn ); // for initial position
     virtual ~IIIMPStatusWindow();
 
     virtual void setText( const String & );
     virtual const String& getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
+    virtual void toggle( bool bOn );
     void layout();
 
     // overload Window focus handler
@@ -370,10 +376,12 @@ public:
 
 }
 
-IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent ) :
+IIIMPStatusWindow::IIIMPStatusWindow( SalFrame* pParent, bool bOn ) :
         StatusWindow( WB_MOVEABLE ),
         m_aStatusBtn( this, WB_BORDER ),
-        m_pResetFocus( pParent )
+        m_pResetFocus( pParent ),
+        m_bShow( true ),
+        m_bOn( bOn )
 {
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "IME Status" ) ) );
 
@@ -450,9 +458,24 @@ void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
         )
         return;
 
-    if( bShow && ! IsVisible() )
+    m_bShow = bShow;
+    show();
+}
+
+void IIIMPStatusWindow::toggle( bool bOn )
+{
+    if (bOn != m_bOn)
+    {
+        m_bOn = bOn;
+        show();
+    }
+}
+
+void IIIMPStatusWindow::show()
+{
+    if (m_bOn && m_bShow && !IsVisible())
         m_pResetFocus = I18NStatus::get().getParent();
-    Show( bShow );
+    Show(m_bOn && m_bShow);
 }
 
 void IIIMPStatusWindow::GetFocus()
@@ -593,7 +616,8 @@ void I18NStatus::setParent( SalFrame* pParent )
     {
         bool bIIIMPmode = m_aChoices.begin() != m_aChoices.end();
         if( bIIIMPmode )
-            m_pStatusWindow = new IIIMPStatusWindow( pParent );
+            m_pStatusWindow = new IIIMPStatusWindow( pParent,
+                                                     getStatusWindowMode() );
         else
             m_pStatusWindow = new XIMStatusWindow();
         setStatusText( m_aCurrentIM );
@@ -693,4 +717,28 @@ SalFrame* I18NStatus::getStatusFrame() const
         pRet = (SalFrame*)pData->pSalFrame;
     }
     return pRet;
+}
+
+bool I18NStatus::canToggleStatusWindow() const
+{
+    return m_aChoices.begin() != m_aChoices.end(); // implies IIIMP
+}
+
+void I18NStatus::toggleStatusWindow()
+{
+    if (m_pStatusWindow != 0)
+        m_pStatusWindow->toggle(getStatusWindowMode());
+}
+
+bool I18NStatus::getStatusWindowMode()
+{
+    switch (ImplGetSVData()->maAppData.meShowImeStatusWindow)
+    {
+    default: // ImplSVAppData::ImeStatusWindowMode_UNKNOWN
+        return Application::GetShowImeStatusWindowDefault();
+    case ImplSVAppData::ImeStatusWindowMode_HIDE:
+        return false;
+    case ImplSVAppData::ImeStatusWindowMode_SHOW:
+        return true;
+    }
 }

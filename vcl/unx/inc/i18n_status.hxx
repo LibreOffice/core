@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 19:21:24 $
+ *  last change: $Author: sb $ $Date: 2002-11-26 15:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ private:
 
     static I18NStatus* pInstance;
 
+    static bool getStatusWindowMode();
+
 public:
     static I18NStatus& get();
     static void free();
@@ -139,6 +141,19 @@ public:
 
     // for SwitchIMCallback
     void changeIM( const String& );
+
+    // External Control:
+
+    /** Return true if the status window can be toggled on and off externally.
+     */
+    bool canToggleStatusWindow() const;
+
+    /** Toggle the status window on or off.
+
+        This only works if canToggleStatusWindow returns true (otherwise, any
+        calls of this method are ignored).
+     */
+    void toggleStatusWindow();
 };
 
 } // namespace
