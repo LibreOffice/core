@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:34:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,11 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
 #endif
-
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
 
-#ifndef _VOS_MUTEX_HXX_ //autogen
+#ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
 
@@ -75,38 +74,38 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-#ifndef _SV_LSTBOX_HXX  // class ListBox
+#ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SV_COMBOBOX_HXX //class ComboBox
+#ifndef _SV_COMBOBOX_HXX
 #include <vcl/combobox.hxx>
 #endif
 
-#ifndef _SFXDOCTEMPL_HXX // class SfxDocumentTemplate
+#ifndef _SFXDOCTEMPL_HXX
 #include <sfx2/doctempl.hxx>
 #endif
-#ifndef _SFXLSTNER_HXX // class SfxListener
+#ifndef _SFXLSTNER_HXX
 #include <svtools/lstner.hxx>
 #endif
 
-#ifndef _SFXDOCINF_HXX // SfxDocumentInfo
+#ifndef _SFXDOCINF_HXX
 #include <sfx2/docinf.hxx>
 #endif
 
-#ifndef _SFX_OBJSH_HXX // SfxObjectShell
+#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
 #endif
 
-#ifndef _EHDL_HXX // SfxErrorContext
+#ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif
 
-#ifndef _SFXECODE_HXX //ERRCTX_SFX_LOADTEMPLATE
+#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
 
-#ifndef _URLOBJ_HXX // INetURLObject
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
 
@@ -114,23 +113,23 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #endif
 
-#ifndef _SD_FADEDEF_H // enum FadeSpeed
+#ifndef _SD_FADEDEF_H
 #include <fadedef.h>
 #endif
 
-#ifndef _SFXSIDS_HRC //autogen
+#ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
 
-#ifndef _UNDO_HXX // class SfxUndoManager
+#ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
 #endif
 
-#ifndef _SD_DOCSHELL_HXX
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
 #endif
 
-#ifndef _SV_GDIMTF_HXX //autogen
+#ifndef _SV_GDIMTF_HXX
 #include <vcl/gdimtf.hxx>
 #endif
 
@@ -138,15 +137,15 @@
 #include "docprev.hxx"
 #endif
 
-#ifndef _SFXAPP_HXX //autogen
+#ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
 
-#ifndef _SFXDOCFILE_HXX //autogen
+#ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
 
-#ifndef _SFXDISPATCH_HXX //autogen
+#ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
 
@@ -188,14 +187,28 @@
 
 #include "sdpage.hxx"
 #include "helpids.h"
+#ifndef INC_ASSCLASS
 #include "assclass.hxx"
+#endif
 #include "dlgass.hrc"
+#ifndef INC_DLGASS
 #include "dlgass.hxx"
+#endif
+#ifndef SD_DLGCTRLS_HXX
 #include "dlgctrls.hxx"
+#endif
+#ifndef _SD_CFGID_HXX
 #include "strings.hrc"
+#endif
+#ifndef _DATETIMEITEM_HXX
 #include "dlgassim.hxx"
+#endif
+#ifndef _TEMPLATE_SCANNER_HXX
 #include "TemplateScanner.hxx"
+#endif
+#ifndef SD_OUTPUT_DEVICE_UPDATER_HXX
 #include "WindowUpdater.hxx"
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::sd;
@@ -848,6 +861,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     catch (uno::RuntimeException& e)
     {
         // Ignore all exceptions.
+        (void) e;
     }
 }
 
@@ -868,6 +882,7 @@ void AssistentDlgImpl::ProvideTemplates (void)
         catch (uno::RuntimeException& e)
         {
             // Ignore all exceptions.
+            (void) e;
         }
     }
 }
@@ -1012,7 +1027,7 @@ SfxObjectShellLock AssistentDlgImpl::GetDocument()
     UpdatePageList();
 
     SfxObjectShell* pShell = xDocShell;
-    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell,pShell);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     if(pDoc)
@@ -1363,7 +1378,7 @@ void AssistentDlgImpl::UpdateUserData()
     String aInfo  = m_pPage4AskInfoEDT->GetText();
 
     SfxObjectShell* pShell = xDocShell;
-    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+    DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
     SdPage* pPage = pDoc?pDoc->GetSdPage(0, PK_STANDARD):NULL;
 
@@ -1431,7 +1446,7 @@ void AssistentDlgImpl::UpdatePageList()
     m_aPageListFile = m_aDocFile;
 
     SfxObjectShell* pShell = xDocShell;
-    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+    DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
     SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
     m_pPage5PageListCT->Clear();
@@ -1472,8 +1487,8 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         {
             CloseDocShell();
 
-            SdDrawDocShell* pNewDocSh;
-            xDocShell = pNewDocSh = new SdDrawDocShell(SFX_CREATE_MODE_STANDARD, FALSE);
+            DrawDocShell* pNewDocSh;
+            xDocShell = pNewDocSh = new DrawDocShell(SFX_CREATE_MODE_STANDARD, FALSE);
             pNewDocSh->DoInitNew(NULL);
             SdDrawDocument* pDoc = pNewDocSh->GetDoc();
             pDoc->CreateFirstPages();
@@ -1491,7 +1506,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         if( aLayoutFile != m_aLayoutFile )
         {
             SfxObjectShell* pShell = xDocShell;
-            SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+            DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
             SfxUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
@@ -1575,11 +1590,11 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
 
         // die Implementierung ermitteln
         SfxObjectShell* pShell = xDocShell;
-        SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+        DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
         SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
 
         pShell = xLayoutDocShell;
-        pDocShell = PTR_CAST(SdDrawDocShell,pShell);
+        pDocShell = PTR_CAST(DrawDocShell,pShell);
         SdDrawDocument* pLayoutDoc = pDocShell?pDocShell->GetDoc():NULL;
 
         if( pDoc && pLayoutDoc )
