@@ -2,9 +2,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-25 13:49:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 13:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <stdio.h>
 #include <signal.h>
 #include <ctype.h>
+
+#include <sal/main.h>
+
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
@@ -252,3 +255,11 @@ void G2GApp::Main( )
 // ---------------
 
 G2GApp aApp;
+
+BOOL SVMain();
+
+SAL_IMPLEMENT_MAIN()
+{
+    SVMain();
+    return 0;
+}
