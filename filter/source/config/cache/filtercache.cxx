@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 13:44:13 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #include "filtercache.hxx"
 #include "lateinitlistener.hxx"
 #include "macros.hxx"
@@ -104,6 +105,10 @@
 
 #ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
 #include <comphelper/sequenceasvector.hxx>
+#endif
+
+#ifndef _COMPHELPER_LOCALE_HXX_
+#include <comphelper/locale.hxx>
 #endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
@@ -162,9 +167,6 @@ FilterCache::FilterCache()
 FilterCache::~FilterCache()
 {
     RTL_LOGFILE_TRACE("} (as96863) FilterCache lifetime");
-    // no assertions during creation/destruction of this filtercache
-    // Because its used inside a SingletonRef<> construct ...
-    // And assertions have the risk of reintrance problems ... :-(
 }
 
 /*-----------------------------------------------
@@ -1536,7 +1538,7 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     ::osl::ResettableMutexGuard aLock(m_aLock);
     ::rtl::OUString sFormatName    = m_sFormatName   ;
     ::rtl::OUString sFormatVersion = m_sFormatVersion;
-    ::rtl::OUString sLocale        = m_sActLocale    ;
+    ::rtl::OUString sActLocale     = m_sActLocale    ;
     aLock.clear();
     // <- SAFE ----------------------------------
 
@@ -1545,19 +1547,20 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
     if (!(aVal >>= xUIName) && !xUIName.is())
         return;
 
-    const css::uno::Sequence< ::rtl::OUString >           lLocales = xUIName->getElementNames();
-    const ::rtl::OUString*                                pLocales = lLocales.getConstArray();
-          sal_Int32                                       c        = lLocales.getLength();
-          css::uno::Sequence< css::beans::PropertyValue > lUINames (c);
-          css::beans::PropertyValue*                      pUINames = lUINames.getArray();
-          sal_Int32                                       nEnUsPos = -1;
+    const ::comphelper::SequenceAsVector< ::rtl::OUString >                 lLocales(xUIName->getElementNames());
+          ::comphelper::SequenceAsVector< ::rtl::OUString >::const_iterator pLocale ;
+          ::comphelper::SequenceAsHashMap                                   lUINames;
 
-    for (sal_Int32 i=0; i<c; ++i)
+    // patch %PRODUCTNAME and %FORMATNAME
+    for (  pLocale  = lLocales.begin();
+           pLocale != lLocales.end()  ;
+         ++pLocale                    )
     {
-        ::rtl::OUString sValue;
-        xUIName->getByName(pLocales[i]) >>= sValue;
+        const ::rtl::OUString& sLocale = *pLocale;
 
-        /*TODO must be disabled if format name isnt used any longer for type/filter uinames ...*/
+        ::rtl::OUString sValue;
+        xUIName->getByName(sLocale) >>= sValue;
+
         // replace %productname%
         sal_Int32 nIndex = sValue.indexOf(FORMATNAME_VAR);
         while(nIndex != -1)
@@ -1573,37 +1576,25 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
             nIndex = sValue.indexOf(FORMATVERSION_VAR, nIndex);
         }
 
-        pUINames[i].Name    = pLocales[i];
-        pUINames[i].Value <<= sValue;
-
-        // by the way ... set right UIName for the current locale
-        // as seperated property!
-        if (pLocales[i].equalsIgnoreAsciiCase(sLocale))
-            rItem[PROPNAME_UINAME] = pUINames[i].Value;
-
-        // And "hold a reference" to the en-US entry ...
-        // In case the current locale isnt supported by this item
-        // we must fallback to en-US .. or to any other locale!
-        if (pLocales[i].equalsAscii("en-US"))
-            nEnUsPos = i;
+        lUINames[sLocale] <<= sValue;
     }
 
-    // Check if the UIName property was set successfully.
-    // Otherwhise we have to use some fallback scnearios.
-    CacheItem::iterator pActualUIName = rItem.find(PROPNAME_UINAME);
-    if (pActualUIName == rItem.end())
-    {
-        if (nEnUsPos > -1)
-            // fallback to en-US
-            rItem[PROPNAME_UINAME] = pUINames[nEnUsPos].Value;
-        else
-        if (c > 0)
-            // fallback to any other language
-            rItem[PROPNAME_UINAME] = pUINames[0].Value;
-    }
-
-    aVal <<= lUINames;
+    aVal <<= lUINames.getAsConstPropertyValueList();
     rItem[PROPNAME_UINAMES] = aVal;
+
+    // find right UIName for current office locale
+    // Use fallbacks too!
+    pLocale = ::comphelper::Locale::getFallback(lLocales, sActLocale);
+    if (pLocale == lLocales.end())
+    {
+        OSL_ENSURE(sal_False, "Fallback scenario for localized value failed ...");
+        return;
+    }
+
+    const ::rtl::OUString& sLocale = *pLocale;
+    ::comphelper::SequenceAsHashMap::const_iterator pUIName = lUINames.find(sLocale);
+    if (pUIName != lUINames.end())
+        rItem[PROPNAME_UINAME] = pUIName->second;
 }
 
 /*-----------------------------------------------
