@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:10:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:59:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,9 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
-            bErrorShown( FALSE ),
-            bAddDown( FALSE )
+            nMouseClickPageId( TAB_PAGE_NOTFOUND ),
+            nSelPageIdByMouse( TAB_PAGE_NOTFOUND ),
+            bErrorShown( FALSE )
 {
     ScDocument* pDoc = pViewData->GetDocument();
 
@@ -118,7 +119,7 @@ ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     EnableEditMode();
 }
 
-__EXPORT ScTabControl::~ScTabControl()
+ScTabControl::~ScTabControl()
 {
 }
 
@@ -169,10 +170,8 @@ USHORT ScTabControl::GetPrivatDropPos(const Point& rPos )
     return nRealPos ;
 }
 
-void __EXPORT ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    bAddDown = FALSE;
-
     ScModule* pScMod = SC_MOD();
     if ( !pScMod->IsModalMode() && !pScMod->IsFormulaMode() && !IsInEditMode() )
     {
@@ -181,37 +180,45 @@ void __EXPORT ScTabControl::MouseButtonDown( const MouseEvent& rMEvt )
         pViewData->GetView()->ActiveGrabFocus();
     }
 
-    //  #47745# Klick neben Tabellen -> neue Tabelle einfuegen (wie im Draw)
-    //  eine saubere linke Maustaste ohne verwaessernde Modifier (damit koennte
-    /// ja das Kontextmenue gemeint sein)
-    if ( rMEvt.IsLeft() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift())
-    {
-        Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
-        if ( GetPageId(aPos) == 0 )
-            bAddDown = TRUE;                // erst im ButtonUp, weil ein Dialog kommt
-    }
+    /*  #47745# Click into free area -> insert new sheet (like in Draw).
+        Needing clean left click without modifiers (may be context menu).
+        #106948# Remember clicks to all pages, to be able to move mouse pointer later. */
+    if( rMEvt.IsLeft() && (rMEvt.GetModifier() == 0) )
+        nMouseClickPageId = GetPageId( rMEvt.GetPosPixel() );
+    else
+        nMouseClickPageId = TAB_PAGE_NOTFOUND;
 
     TabBar::MouseButtonDown( rMEvt );
 }
 
-void __EXPORT ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
+void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    if ( bAddDown )
+    Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
+
+    // mouse button down and up on same page?
+    if( nMouseClickPageId != GetPageId( aPos ) )
+        nMouseClickPageId = TAB_PAGE_NOTFOUND;
+
+    if( nMouseClickPageId == 0 )
     {
-        Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
-        if ( GetPageId(aPos) == 0 )
-        {
-            SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
-            pDispatcher->Execute( FID_INS_TABLE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
-        }
+        // free area clicked -> add new sheet
+        SfxDispatcher* pDispatcher = pViewData->GetViewShell()->GetViewFrame()->GetDispatcher();
+        pDispatcher->Execute( FID_INS_TABLE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+        // forget page ID, to be really sure that the dialog is not called twice
+        nMouseClickPageId = TAB_PAGE_NOTFOUND;
     }
 
-    bAddDown = FALSE;
     TabBar::MouseButtonUp( rMEvt );
 }
 
-void __EXPORT ScTabControl::Select()
+void ScTabControl::Select()
 {
+    /*  Remember last clicked page ID. */
+    nSelPageIdByMouse = nMouseClickPageId;
+    /*  Reset nMouseClickPageId, so that next Select() call may invalidate
+        nSelPageIdByMouse (i.e. if called from keyboard). */
+    nMouseClickPageId = TAB_PAGE_NOTFOUND;
+
     ScModule* pScMod = SC_MOD();
     ScDocument* pDoc = pViewData->GetDocument();
     ScMarkData& rMark = pViewData->GetMarkData();
@@ -372,7 +379,18 @@ void ScTabControl::ActivateView(BOOL bActivate)
     Invalidate();
 }
 
-void __EXPORT ScTabControl::Command( const CommandEvent& rCEvt )
+void ScTabControl::SetSheetLayoutRTL( BOOL bSheetRTL )
+{
+    /*  #106948# mirror the tabbar control, if sheet RTL mode differs from UI RTL mode
+        - In LTR Office the tabbar is mirrored for RTL sheets.
+        - In RTL Office the tabbar is mirrored anyway, mirror it again for LTR sheets. */
+    SetMirrored( bSheetRTL != GetSettings().GetLayoutRTL() );
+    // forget last selected sheet also if not mirrored (Mirror() is not called then)
+    nSelPageIdByMouse = TAB_PAGE_NOTFOUND;
+}
+
+
+void ScTabControl::Command( const CommandEvent& rCEvt )
 {
     ScModule*       pScMod   = SC_MOD();
     ScTabViewShell* pViewSh  = pViewData->GetViewShell();
@@ -582,6 +600,17 @@ void ScTabControl::EndRenaming()
         pViewData->GetView()->ActiveGrabFocus();
 }
 
+void ScTabControl::Mirror()
+{
+    TabBar::Mirror();
+    if( nSelPageIdByMouse != TAB_PAGE_NOTFOUND )
+    {
+        Rectangle aRect( GetPageRect( GetCurPageId() ) );
+        if( !aRect.IsEmpty() )
+            SetPointerPosPixel( aRect.Center() );
+        nSelPageIdByMouse = TAB_PAGE_NOTFOUND;  // only once after a Select()
+    }
+}
 
 
 
