@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscript.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:08:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,6 @@
 
 #ifndef _XMLOFF_XMLMETAI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLMETAE_HXX
-#include <xmloff/xmlscripte.hxx>
 #endif
 
 #ifndef _SVX_LANGITEM_HXX
