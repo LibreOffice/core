@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-11 16:42:30 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 14:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message [ ENGLISH ] = "Document was already open." ;
     Message [ norwegian ] = "Dokumentet er allerede åpent." ;
     Message [ italian ] = "Documento già aperto ed attivato." ;
-    Message [ portuguese_brazilian ] = "O documento já está aberto." ;
+    Message [ portuguese_brazilian ] = "O documento j? est? aberto." ;
     Message [ portuguese ] = "O documento já se encontra aberto e foi activado." ;
     Message [ finnish ] = "Asiakirja on jo avattu." ;
     Message [ danish ] = "Dokumentet var allerede indlæst og blev aktiveret." ;
@@ -101,7 +101,7 @@ ErrorBox RID_CANTLOADDOC_DLG
     Message [ ENGLISH ] = "Cannot open document." ;
     Message [ norwegian ] = "Kan ikke åpne dokument." ;
     Message [ italian ] = "Impossibile aprire il documento." ;
-    Message [ portuguese_brazilian ] = "Não consigo abrir o documento." ;
+    Message [ portuguese_brazilian ] = "N?o consigo abrir o documento." ;
     Message [ portuguese ] = "Impossível abrir o documento." ;
     Message [ finnish ] = "Asiakirjan avaaminen ei onnistu." ;
     Message [ danish ] = "Det er ikke muligt at indlæse dokumentet." ;
@@ -133,7 +133,7 @@ ErrorBox MSG_ERR_READ_CFG
     Message [ ENGLISH ] = "Error reading configuration file." ;
     Message [ norwegian ] = "Feil ved lesing av konfigurasjonsfil." ;
     Message [ italian ] = "Errore durante la lettura del file di configurazione." ;
-    Message [ portuguese_brazilian ] = "Erro ao ler o arquivo de configuração." ;
+    Message [ portuguese_brazilian ] = "Erro ao ler o arquivo de configura??o." ;
     Message [ portuguese ] = "Erro durante a leitura do ficheiro de configuração." ;
     Message [ finnish ] = "Kokoonpanotiedoston lukemisessa on ilmennyt virhe" ;
     Message [ danish ] = "Fejl under læsning af konfiguration." ;
@@ -165,7 +165,7 @@ ErrorBox MSG_ERR_WRITE_CFG
     Message [ ENGLISH ] = "Error writing configuration file." ;
     Message [ norwegian ] = "Feil ved skriving av konfigurasjonsfil." ;
     Message [ italian ] = "Errore durante la scrittura del file di configurazione." ;
-    Message [ portuguese_brazilian ] = "Erro ao gravar o arquivo de configuração." ;
+    Message [ portuguese_brazilian ] = "Erro ao gravar o arquivo de configura??o." ;
     Message [ portuguese ] = "Erro ao gravar o ficheiro de configuração." ;
     Message [ finnish ] = "Kokoonpanotiedostoon kirjoittamisessa on ilmennyt virhe" ;
     Message [ danish ] = "Fejl under skrivning af konfiguration." ;
@@ -197,7 +197,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message [ ENGLISH ] = "Error opening configuration file." ;
     Message [ norwegian ] = "Feil ved åpning av konfigurasjonsfil." ;
     Message [ italian ] = "Errore durante l'apertura del file di configurazione." ;
-    Message [ portuguese_brazilian ] = "Erro ao abrir o arquivo de configuração." ;
+    Message [ portuguese_brazilian ] = "Erro ao abrir o arquivo de configura??o." ;
     Message [ portuguese ] = "Erro ao abrir o ficheiro de configuração." ;
     Message [ finnish ] = "Kokoonpanotiedoston avaamisessa on ilmennyt virhe" ;
     Message [ danish ] = "Fejl ved åbning af konfiguration." ;
@@ -229,7 +229,7 @@ ErrorBox MSG_ERR_FILETYPE_CFG
     Message [ ENGLISH ] = "File is not a configuration file." ;
     Message [ norwegian ] = "Filen er ikke en konfigurasjonsfil." ;
     Message [ italian ] = "Il file non è un file di configurazione." ;
-    Message [ portuguese_brazilian ] = "O arquivo não é um arquivo de configuração." ;
+    Message [ portuguese_brazilian ] = "O arquivo n?o ? um arquivo de configura??o." ;
     Message [ portuguese ] = "Este ficheiro não é um ficheiro de configuração." ;
     Message [ finnish ] = "Tiedosto ei ole kokoonpanotiedosto." ;
     Message [ danish ] = "Filen er ikke en konfigurationsfil." ;
@@ -261,7 +261,7 @@ ErrorBox MSG_ERR_VERSION_CFG
     Message [ ENGLISH ] = "Configuration file has wrong version." ;
     Message [ norwegian ] = "Konfigurasjonsfilen har feil versjon." ;
     Message [ italian ] = "Il file di configurazione è di versione errata." ;
-    Message [ portuguese_brazilian ] = "Versão errada do arquivo de configuração." ;
+    Message [ portuguese_brazilian ] = "Vers?o errada do arquivo de configura??o." ;
     Message [ portuguese ] = "Versão errada do ficheiro de configuração." ;
     Message [ finnish ] = "Kokoonpanotiedostossa on väärä versio." ;
     Message [ danish ] = "Konfigurationsfilen indeholder forkert version." ;
@@ -331,17 +331,17 @@ ErrorBox MSG_SIGNAL
     Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de même essayer de \nsauvegarder tous les documents ouverts !\n\nSauvegarder votre travail avant de fermer l'application ?" ;
     Message [ english_us ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all nopen documents before the program is terminated?" ;
     Message [ portuguese ] = "Surgiu um erro de programa inesperado!\n\nPoderá agora, sob o seu próprio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplicação seja fechada?" ;
-    Message [ portuguese_brazilian ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
+    Message [ portuguese_brazilian ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie k?nen jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
     Message[ chinese_simplified ] = "·¢ÉúÁËÒ»¸öÒâÍâµÄ³ÌĞò´íÎó£¡\nÄúÏÖÔÚ¿ÉÒÔ³¢ÊÔ±£´æËùÓĞ±»´ò¿ªµÄÎÄ¼ş£¡\nÄúÒªÔÚ¹Ø±ÕÕâ¸öÓ¦ÓÃ³ÌĞòÖ®Ç°±£´æËùÓĞµÄÎÄ¼şÂğ£¿";
-    Message[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà ïğèëîæåíèÿ!\nÂû ìîæåòå ñåé÷àñ ïîïûòàòüñÿ\nñîõğàíèòü âñå îòêğûòûå äîêóìåíòû!\n\nÏîïûòàòüñÿ ñîõğàíèòü Âàøó ğàáîòó äî âûõîäà èç ïğèëîæåíèÿ?";
-    Message[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d w programie!\nNa w³asn¹ odpowiedzialnoœæ mo¿esz spróbowaæ \nzapisaæ wszystkie otwarte dokumenty!\n\nCzy spróbowaæ zapisaæ twojê pracê przed zamkniêciem aplikacji?";
+    Message[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà ïğèëîæåíèÿ!\nÂû ìîæåòå ñåé÷àñ ïîïûòàòüñÿ\nñîõğàíèòü âñå îòêğûòûå äîêóìåíòû!\n\nÏîïûòàòüñÿ ñîõğàíèòü Âàøó ğàáî?";
+    Message[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d w programie!\nNa w³asn¹ odpowiedzialno?æ mo¿esz spróbowaæ \nzapisaæ wszystkie otwarte dokumenty!\n\nCzy spróbowaæ zapisaæ twojê pracê przed zamkniêciem aplikacji?";
     Message[ japanese ] = "—\\Šú‚µ‚È‚¢ÌßÛ¸Ş×Ñ ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nØ½¸‚Í‚ ‚è‚Ü‚·‚ª\nŠJ‚©‚ê‚Ä‚¢‚éÄŞ·­ÒİÄ‚ğ‚·‚×‚Ä•Û‘¶‚µ‚Ü‚·B\n\n±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‘O‚ÉAì‹Æ’†‚ÌÄŞ·­ÒİÄ‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "µo¥Í¤F¤@­Ó·N¥~ªºµ{¦¡¿ù»~¡I\n±z²{¦b¥i¥H¹Á¸Õ«O¦s©Ò¦³³Q¶}±ÒªºÀÉ®×¡I\n±z­n¦bÃö³¬³o­ÓÀ³¥Îµ{¦¡¤§«eÀx¦s©Ò¦³ªºÀÉ®×¡H";
     Message[ arabic ] = "ÍÏË ÎØÃ ÊØÈíŞ ÛíÑ ãÊæŞÚ!\níãßäß ÇáÂä¡ Úáì ãÓÆæáíÊß ÇáÎÇÕÉ¡ ãÍÇæáÉ ÍİÙ \nßá ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ!\n\nåá ÊÑíÏ ãÍÇæáÉ ÍİÙ Úãáß¡ ŞÈá ÅäåÇÁ ÇáÊØÈíŞ¿";
     Message[ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen,\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de applicatie wordt beëindigd?";
     Message[ chinese_simplified ] = "·¢ÉúÁËÒ»¸öÒâÍâµÄ³ÌĞò´íÎó£¡\nÄúÏÖÔÚ¿ÉÒÔ³¢ÊÔ±£´æËùÓĞ±»´ò¿ªµÄÎÄ¼ş£¡\nÄúÒªÔÚ¹Ø±ÕÕâ¸öÓ¦ÓÃ³ÌĞòÖ®Ç°±£´æËùÓĞµÄÎÄ¼şÂğ£¿";
-    Message[ greek ] = "ĞáñïõóéÜóôçêå ìç áíáìåíüìåíï óöÜëìá åöáñìïãŞò!\n\nÈİëåôå íá ãßíåé åğé÷åßñçóç (ìå äéêŞ óáò åõèıíç) íá áğïèçêåõôïıí üëá ôá áíïé÷ôÜ İããñáöá ğñéí ôåñìáôéóôåß ç åöáñìïãŞ;";
-    Message[ korean ] = "¿¹±âÄ¡ ¾ÊÀº ÀÀ¿ëÇÁ·Î±×·¥ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\nÁö±İ »ç¿ëÀÚÀÇ¡¡Ã¥ÀÓÇÏ¿¡¡¡¿­¸° ¸ğµç¡¡¹®¼­ÀÇ ÀúÀåÀ» ½ÃµµÇØ º¼ ¼ö ÀÖ½À´Ï´Ù. ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÏ±â Àü¿¡ ÀÛ¾÷ÇÑ °ÍÀÇ ÀúÀåÀ» ½ÃµµÇØ º¸½Ã°Ú½À´Ï±î?";
+    Message[ greek ] = "ĞáñïõóéÜóôçêå ìç áíáìåíüìåíï óöÜëìá åöáñìïãŞò!\n\nÈİëåôå íá ãßíåé åğé÷åßñçóç (ìå äéêŞ óáò åõèıíç) íá áğïèçêåõôïıí üëá ôá áíïé÷ôÜ İããñáöá ğñé";
+    Message[ korean ] = "¿¹±âÄ¡ ¾ÊÀº ÀÀ¿ëÇÁ·Î±×·¥ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\nÁö±İ »ç¿ëÀÚÀÇ¡¡Ã¥ÀÓÇÏ¿¡¡¡¿­¸° ¸ğµç¡¡¹®¼­ÀÇ ÀúÀåÀ» ½ÃµµÇØ º¼ ¼ö ÀÖ½À´Ï´Ù. ÀÀ¿ëÇÁ·Î±×·¥À» Á¾·áÇÏ±â Àü¿¡ ÀÛ¾÷ÇÑ °ÍÀÇ ÀúÀåÀ» ½ÃµµÇØ ?";
     Message[ turkish ] = "Beklenmeyen bir program hatası oluştu!\nŞu an açık olan tüm belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapatılmadan önce belgeleriniz kaydedilmeye çalışılsın mı?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?";
@@ -425,7 +425,7 @@ WarningBox STR_RECOVER_PREPARED
     Message [ ENGLISH ] = "An unrecoverable error has occured.\n\nAll modified files are saved and can\nprobably be recovered on application restart." ;
     Message [ portuguese ] = "Surgiu um erro irrecuperável. Contudo, todos os ficheiros \nmodificados foram guardados e poderão provavelmente \nser recuperados ao reiniciar o programa." ;
     Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
-    Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
+    Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und k?nen voraussichtlich beim n?chsten\nProgrammstart wiederhergestellt werden." ;
     Message [ swedish ] = "Ett irreparabelt fel har uppstått.\n\nMen alla ändrade filer sparades\noch kan förmodligen återställas\nvid nästa programstart." ;
     Message [ danish ] = "Der opstod en irreparabel fejl.\n\nAlle ændrede filer er dog\nblevet gemt og kan sandsynligvis gendannes\nved næste programstart." ;
     Message [ italian ] = "Si è verificato un errore irrimediabile.\n\nTutti i file modificati sono stati \nsalvati e probabilmente verranno recuperati \nal prossimo avvio del programma." ;
@@ -440,7 +440,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
     Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
-    Message[ greek ] = "ĞáñïõóéÜóôçêå êÜğïéï áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí\nşóôå íá åßíáé äõíáôŞ (ğéèáíüôáôá) ç åğáíáöïñÜ ôïõò\nìå ôçí åğüìåíç åêêßíçóç ôïõ ğñïãñÜììáôïò.";
+    Message[ greek ] = "ĞáñïõóéÜóôçêå êÜğïéï áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí\nşóôå íá åßíáé äõíáôŞ (ğéèáíüôáôá) ç åğáíáöïñÜ ôïõò\n";
     Message[ korean ] = "Á¦°ÅÇÒ ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\n ÇÏÁö¸¸ º¯°æµÈ  ¸ğµç ÆÄÀÏÀº \nÀúÀåµÇ¾úÀ¸¹Ç·Î,  ´ÙÀ½ \nÇÁ·Î±×·¥ ½ÃÀÛ½Ã¿¡´Â º¹±¸µÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
     Message[ turkish ] = "Düzeltilemeyen bir hata oluştu.\n\nDeğiştirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden başlatıldığında\nkurtarılabilecek.";
     Message[ language_user1 ] = " ";
@@ -456,7 +456,7 @@ WarningBox RID_WARN_POST_MAILTO
     Message [ english ] = "A form is to be posted by email.\nThe receiver will get your email-address." ;
     Message [ portuguese ] = "O formulário será enviado por e-mail.\nO seu endereço electrónico será fornecido ao destinatário." ;
     Message [ english_us ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
-    Message [ portuguese_brazilian ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
+    Message [ portuguese_brazilian ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empf?nger Ihre E-Mail-Adresse bekannt." ;
     Message [ swedish ] = "Ett formulär skall skickas per e-post.\nDärigenom får mottagaren reda på Din e-postadress." ;
     Message [ danish ] = "Du vil sende en formular via e-mail.\nBemærk at modtageren herved får din e-mail-adresse." ;
     Message [ italian ] = "Un formulario deve essere inviato via eMail.\nIn tal modo il destinatario verrà a conoscenza dell'indirizzo eMail dell'utente." ;
@@ -722,7 +722,7 @@ String GID_OPTIONS
     Text [ ENGLISH ] = "Options" ;
     Text [ norwegian ] = "Options" ;
     Text [ italian ] = "Varie" ;
-    Text [ portuguese_brazilian ] = "Opções" ;
+    Text [ portuguese_brazilian ] = "Op??s" ;
     Text [ portuguese ] = "Ferramentas" ;
     Text [ finnish ] = "Asetukset" ;
     Text [ danish ] = "Funktioner" ;
@@ -752,7 +752,7 @@ String GID_MATH
     Text [ ENGLISH ] = "Formula" ;
     Text [ norwegian ] = "Formel" ;
     Text [ italian ] = "Math" ;
-    Text [ portuguese_brazilian ] = "Fórmula" ;
+    Text [ portuguese_brazilian ] = "F?mula" ;
     Text [ portuguese ] = "Math" ;
     Text [ finnish ] = "Math" ;
     Text [ danish ] = "Math" ;
@@ -817,7 +817,7 @@ String GID_INSERT
     Text [ swedish ] = "Infoga" ;
     Text [ danish ] = "Indsæt" ;
     Text [ portuguese ] = "Inserir" ;
-    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text [ portuguese_brazilian ] = "Einf?en" ;
     Text[ chinese_simplified ] = "²åÈë";
     Text[ russian ] = "Âñòàâèòü";
     Text[ polish ] = "Wstaw";
@@ -1217,7 +1217,7 @@ String GID_MODIFY
     Text [ english ] = "Modify" ;
     Text [ portuguese ] = "Alterar" ;
     Text [ english_us ] = "Modify" ;
-    Text [ portuguese_brazilian ] = "Ändern" ;
+    Text [ portuguese_brazilian ] = "?ndern" ;
     Text [ swedish ] = "Ändra" ;
     Text [ danish ] = "Modificer" ;
     Text [ italian ] = "Modifica" ;
@@ -1307,7 +1307,7 @@ TabDialog SID_OPTIONS
     Text [ English ] = "Options" ;
     Text [ norwegian ] = "Options" ;
     Text [ italian ] = "Opzioni" ;
-    Text [ portuguese_brazilian ] = "Opções" ;
+    Text [ portuguese_brazilian ] = "Op??s" ;
     Text [ portuguese ] = "Opções" ;
     Text [ finnish ] = "Asetukset" ;
     Text [ danish ] = "Indstillinger" ;
@@ -1406,7 +1406,7 @@ TabDialog SID_OPTIONS
                 PageResID = 258 ;
                 Text[ chinese_simplified ] = "Â·¾¶";
                 Text[ russian ] = "Ïóòè";
-                Text[ polish ] = "Œcie¿ki";
+                Text[ polish ] = "?cie¿ki";
                 Text[ japanese ] = "Êß½";
                 Text[ chinese_traditional ] = "¸ô®|";
                 Text[ arabic ] = "ãÓÇÑÇÊ";
@@ -1425,7 +1425,7 @@ TabDialog SID_OPTIONS
                 Text [ English ] = "Spellchecker" ;
                 Text [ norwegian ] = "Spellchecker" ;
                 Text [ italian ] = "Controllo ortografico" ;
-                Text [ portuguese_brazilian ] = "Corretor Ortográfico" ;
+                Text [ portuguese_brazilian ] = "Corretor Ortogr?fico" ;
                 Text [ portuguese ] = "Verificar ortografia" ;
                 Text [ finnish ] = "Oikeinkirjoituksen tarkistus" ;
                 Text [ danish ] = "Stavekontrol" ;
@@ -1472,7 +1472,7 @@ InfoBox MSG_CANT_QUIT
     Message [ English ] = "Can't quit the application at this moment.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
     Message [ norwegian ] = "Kan ikke avslutte applikasjonen for øyeblikket.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
     Message [ italian ] = "Impossibile uscire dall'applicazione in questo momento.\nAttendendete la concluisione della stampa e/o\n tutte le attivazioni OLE, quindi chiudete\ntutti i dialoghi." ;
-    Message [ portuguese_brazilian ] = "Não consigo sair do aplicativo neste momento.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
+    Message [ portuguese_brazilian ] = "N?o consigo sair do aplicativo neste momento.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
     Message [ portuguese ] = "De momento é impossível sair desta aplicação.\nAguarde a impressão de todos os documentos\n e/ou o fim das activações OLE e feche todos os diálogos." ;
     Message [ french ] = "Impossible de quitter l'application maintenant.\nVeuillez attendre la fin des activités d'impression et/ou des activations OLE\net fermez tous les dialogues." ;
     Message [ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen." ;
@@ -1489,7 +1489,7 @@ InfoBox MSG_CANT_QUIT
     Message[ arabic ] = "áÇ íãßä ÅäåÇÁ ÇáÊØÈíŞ ÍÇáíÇğ.\nÇáÑÌÇÁ ÇáÇäÊÙÇÑ ÍÊì ÇäÊåÇÁ ßá ãåÇã ÇáØÈÇÚÉ¡ æ/Ãæ\nÊäÔíØÇÊ OLE¡ Ëã Şã ÈÅÛáÇŞ ßá ãÑÈÚÇÊ ÇáÍæÇÑ.";
     Message[ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen.";
     Message[ chinese_simplified ] = "ÏÖÔÚÎŞ·¨½áÊøÕâ¸öÓ¦ÓÃ³ÌĞò¡£\nÇëÄúÉÔµÈÖ±µ½³ÌĞòÍê³ÉËùÓĞ´òÓ¡ÈÎÎñ»òOLE¼¤»î×´Ì¬½áÊø£¬\nÈ»ºóÔÙ¹Ø±ÕËùÓĞ¶Ô»°¿ò¡£";
-    Message[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá ôåñìáôéóôåß áõôŞ ç åöáñìïãŞ.\nĞáñáêáëş ğåñéìİíåôå ìİ÷ñé íá åêôåëåóôïıí üëåò ïé åñãáóßåò åêôığùóçò êáé/Ş\nïé åíİñãåéåò ôïõ OLE êáé êëåßóôå üëïõò ôïõò äéáëüãïõò.";
+    Message[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá ôåñìáôéóôåß áõôŞ ç åöáñìïãŞ.\nĞáñáêáëş ğåñéìİíåôå ìİ÷ñé íá åêôåëåóôïıí üëåò ïé åñãáóßåò åêôığùóçò êáé/Ş\nïé ";
     Message[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥À» ÇöÀç Á¾·áÇÒ ¼ö ¾ø½À´Ï´Ù.\nÀÎ¼â ÀÛ¾÷ÀÌ ¸ğµÎ ³¡³¯ ¶§±îÁö ±×¸®°í/¶Ç´Â \nOLE°¡ È°¼ºÈ­µÉ ¶§±îÁö ±â´Ù·È´Ù°¡ ¸ğµç ´ëÈ­»óÀÚ¸¦ ´İÀ¸½Ê½Ã¿À.";
     Message[ turkish ] = "Şu an uygulamadan çıkılamıyor.\nTüm yazdırma işlerinin ve/veya\nOLE işlemlerinin bitmesini bekleyip tüm pencereleri kapatın.";
     Message[ language_user1 ] = " ";
@@ -1504,7 +1504,7 @@ QueryBox MSG_IS_SERVER
     Message [ English ] = "This application is an active object- or printserver.\nTerminata nevertheless?" ;
     Message [ norwegian ] = "Denne applikasjonen er en aktiv server.\nAvslutt likevel?" ;
     Message [ italian ] = "Questa applicazione è un server attivo.\nTerminare in ogni caso?" ;
-    Message [ portuguese_brazilian ] = "Este aplicativo é um ativo no servidor.\nTerminar assim mesmo?" ;
+    Message [ portuguese_brazilian ] = "Este aplicativo ? um ativo no servidor.\nTerminar assim mesmo?" ;
     Message [ portuguese ] = "Esta aplicação está ainda activa como servidor de objecto ou da impressora.\nMesmo assim, finalizar?" ;
     Message [ finnish ] = "Tämä sovellus on aktiivinen objekti- tai tulostuspalvelin.\nHaluatko lopettaa sovelluksen?" ;
     Message [ danish ] = "Denne applikation er stadig aktiv som objekt- eller printserver.\nSkal der lukkes alligevel?" ;
@@ -1533,7 +1533,7 @@ String STR_NODOUBLE
     TEXT = "%PRODUCTNAME kann nicht mehrfach gestartet werden." ;
     TEXT [ English ] = "StarOffice cannot be started multiply." ;
     Text [ english_us ] = "%PRODUCTNAME cannot be started more than once." ;
-    Text [ portuguese_brazilian ] = "%PRODUCTNAME Applikationen können nicht mehrfach\ngestartet werden." ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Applikationen k?nen nicht mehrfach\ngestartet werden." ;
     Text [ swedish ] = "%PRODUCTNAME kan inte startas flera gånger samtidigt." ;
     Text [ danish ] = "Det er ikke muligt at starte %PRODUCTNAME flere gange." ;
     Text [ italian ] = "%PRODUCTNAME non può essere avviato più volte" ;
@@ -1568,7 +1568,7 @@ String STR_NOPRINTER
     Text [ spanish ] = "Algunas funciones de %PRODUCTNAME no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno." ;
     Text [ french ] = "Certaines fonctions %PRODUCTNAME ne peuvent pas travailler correctement sans pilote d'imprimante.\nVeuillez installer un pilote d'imprimante." ;
     Text [ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver." ;
-    Text [ portuguese_brazilian ] = "Einige %PRODUCTNAME-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    Text [ portuguese_brazilian ] = "Einige %PRODUCTNAME-Funktionen k?nen ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
     Text [ portuguese ] = "Algumas das funções do %PRODUCTNAME não podem funcionar correctamente sem um controlador de impressora.\nFaça a respectiva instalação." ;
     Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©%PRODUCTNAME¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
     Text[ russian ] = "Áåç äğàéâåğà ïå÷àòè íåêîòîğûå ôóíêöèè %PRODUCTNAME ìîãóò íåïğàâèëüíî ğàáîòàòü.\nÈíñòàëëèğóéòå, ïîæàëóéñòà, äğàéâåğ ïå÷àòè.";
@@ -1578,7 +1578,7 @@ String STR_NOPRINTER
     Text[ arabic ] = "áÇ íãßä ÊÔÛíá ÈÚÖ ãåÇã %PRODUCTNAME ÈÔßá ÕÍíÍ ÈÏæä ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.\náåĞÇ íÑÌì ÊËÈíÊ ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.";
     Text[ dutch ] = "Enkele %PRODUCTNAME-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
     Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©%PRODUCTNAME¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
-    Text[ greek ] = "Ïñéóìİíåò áğü ôéò ëåéôïõñãßåò ôïõ %PRODUCTNAME äåí èá ëåéôïõñãŞóïõí óùóôÜ ÷ùñßò ôï ğñüãñáììá ïäŞãçóçò ôïõ åêôõğùôŞ.\nĞáñáêáëş íá ãßíåé ç åãêáôÜóôáóç åíüò ğñïãñÜììáôïò ïäŞãçóçò åêôõğùôŞ.";
+    Text[ greek ] = "Ïñéóìİíåò áğü ôéò ëåéôïõñãßåò ôïõ %PRODUCTNAME äåí èá ëåéôïõñãŞóïõí óùóôÜ ÷ùñßò ôï ğñüãñáììá ïäŞãçóçò ôïõ åêôõğùôŞ.\nĞáñáêáëş íá ãßíåé ç åãêáôÜó?";
     Text[ korean ] = "ÀÏºÎ  %PRODUCTNAME ±â´ÉÀº ÇÁ¸°ÅÍ µå¶óÀÌ¹ö ¾øÀÌ´Â  Á¤È®ÇÏ°Ô ÀÛµ¿ÇÏÁö ¾Ê½À´Ï´Ù.\nÇÁ¸°ÅÍ µå¶óÀÌ¹ö¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Bazı %PRODUCTNAME işlevleri yazıcı sürücüsü olmadan doğru çalışamaz.\nBir yazıcı sürücüsü kurun.";
     Text[ language_user1 ] = " ";
@@ -1593,7 +1593,7 @@ String STR_ISMODIFIED
     TEXT [ English ] = "Should the changes to %1 be saved?" ;
     TEXT [ norwegian ] = "Lagre endringer som " ;
     TEXT [ italian ] = "Volete salvare le modifiche apportate a %1?" ;
-    TEXT [ portuguese_brazilian ] = "Gravar modificações como " ;
+    TEXT [ portuguese_brazilian ] = "Gravar modifica??s como " ;
     TEXT [ portuguese ] = "Guardar modificações em %1?" ;
     TEXT [ finnish ] = "Haluatko tallentaa muutokset objektiin %1?" ;
     TEXT [ danish ] = "Skal ændringer gemmes i %1?" ;
@@ -1622,7 +1622,7 @@ String STR_AUTOSAVE
     TEXT [ English ] = "Automatic save" ;
     TEXT [ norwegian ] = "Automatisk lagring" ;
     TEXT [ italian ] = "Salva automaticamente" ;
-    TEXT [ portuguese_brazilian ] = "Gravação Automática" ;
+    TEXT [ portuguese_brazilian ] = "Grava??o Autom?tica" ;
     TEXT [ portuguese ] = "Guardar automaticamente" ;
     TEXT [ finnish ] = "Automaattinen tallennus" ;
     TEXT [ danish ] = "Gem automatisk" ;
@@ -1652,7 +1652,7 @@ String STR_RESWARNING
     TEXT [ English ] = "Not enough resources. Please quit other applications or close some windows before continuing." ;
     TEXT [ norwegian ] = "Ikke nok ressurser. Avslutt andre applikasjoner eller lukk noen vinduer før du fortsetter." ;
     TEXT [ italian ] = "Risorse insufficienti. Uscire dalle altre applicazioni o chiudere alcune finestre prima di continuare." ;
-    TEXT [ portuguese_brazilian ] = "Não há recursos suficientes. Sai de outros aplicativos ou feche algumas janelas antes de continuar." ;
+    TEXT [ portuguese_brazilian ] = "N?o h? recursos suficientes. Sai de outros aplicativos ou feche algumas janelas antes de continuar." ;
     TEXT [ portuguese ] = "Recursos do sistema insuficientes. Por favor, saia dos outros programas ou feche algumas janelas antes de continuar." ;
     TEXT [ finnish ] = "Järjestelmäresurssit ovat rajoitetut. Sulje muita sovelluksia tai ikkunoita ennen kuin jatkat." ;
     TEXT [ danish ] = "Begrænsede systemressourcer. Afslut venligst andre applikationer eller luk nogle vinduer, før du fortsætter." ;
@@ -1681,7 +1681,7 @@ String STR_RESEXCEPTION
     TEXT [ ENGLISH ] = "There are files missing. Please check application setup." ;
     TEXT [ norwegian ] = "Filer mangler. Kontroller applikasjonsoppsett." ;
     TEXT [ italian ] = "Mancano alcuni file. Verificare la configurazione dell'applicazione." ;
-    TEXT [ portuguese_brazilian ] = "Faltam arquivos. Verifique a configuração do aplicativo." ;
+    TEXT [ portuguese_brazilian ] = "Faltam arquivos. Verifique a configura??o do aplicativo." ;
     TEXT [ portuguese ] = "Faltam alguns ficheiros importantes. Por favor, verifique a configuração do programa." ;
     TEXT [ finnish ] = "Tiedostoja puuttuu. Tarkista sovelluksen asennus." ;
     TEXT [ danish ] = "Vigtige programdele blev ikke fundet. Kontroller venligst din installation." ;
@@ -1692,7 +1692,7 @@ String STR_RESEXCEPTION
     TEXT [ english_us ] = "There are files missing. Please check application setup." ;
     TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
     TEXT[ russian ] = "Íå íàéäåíû âàæíûå ÷àñòè ïğîãğàììû. Ïğîâåğüòå, ïîæàëóéñòà, óñòàíîâêó ïğèëîæåíèÿ.";
-    TEXT[ polish ] = "Wa¿ne czêœci programu nie zosta³y znalezione.SprawdŸ instalacjê aplikacji.";
+    TEXT[ polish ] = "Wa¿ne czê?ci programu nie zosta³y znalezione.Sprawd? instalacjê aplikacji.";
     TEXT[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B";
     TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¥²­nªºµ{¦¡³¡¥ó¡C½ĞÀË¬d±zªº¦w¸Ë¡C";
     TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÃÌÒÇÁ åÇãÉ ãä ÇáÈÑäÇãÌ. ÇáÑÌÇÁ ÇáÊÍŞŞ ãä ÕÍÉ ÚãáíÉ ÇáÊËÈíÊ ÚäÏß.";
@@ -1710,7 +1710,7 @@ String STR_DOUBLEEXCEPTION
     Text = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert.";
     Text[English] = "Within the emergency save a second system error has occured.\The data may be saved incompletely.";
     TEXT[ italian ] = "Durante il backup di sicurezza si è verificato un altro errore di sistema.\nI dati salvati potrebbero essere incompleti.";
-    TEXT[ portuguese_brazilian ] = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert.";
+    TEXT[ portuguese_brazilian ] = "W?hrend der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollst?ndig gesichert.";
     TEXT[ portuguese ] = "Surgiu mais um erro no sistema enquanto se executava o backup de segurança.\nProvavelmente, foi impossível guardar os dados de forma completa.";
     TEXT[ danish ] = "Der opstod en yderligere systemfejl ved alarmdatasikringen.\nAlle data er muligvis ikke gemt fuldstændigt.";
     TEXT[ french ] = "Au cours de la sauvegarde, une nouvelle erreur système s'est produite.\nIl n'est par certain que toutes les données aient pas pu être enregistrées correctement.";
@@ -1799,7 +1799,7 @@ String MSG_IOERR_FILE_NOT_FOUND
     Text [ English ] = "The file $(FILE) doesn't exist." ;
     Text [ norwegian ] = "Filen $(FIL) finnes ikke." ;
     Text [ italian ] = "Il file $(FILE) non esiste." ;
-    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não existe." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) n?o existe." ;
     Text [ portuguese ] = "O ficheiro $(FILE) não existe." ;
     Text [ finnish ] = "Tiedostoa $(FILE) ei ole." ;
     Text [ danish ] = "Filen $(FILE) eksisterer ikke." ;
@@ -1829,7 +1829,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text [ English ] = "The path to file $(FILE) doesn't exist." ;
     Text [ norwegian ] = "Banen til filen $(FIL) finnes ikke." ;
     Text [ italian ] = "Il percorso per il file $(FILE) non esiste." ;
-    Text [ portuguese_brazilian ] = "O caminho do arquivo $(FILE) não existe." ;
+    Text [ portuguese_brazilian ] = "O caminho do arquivo $(FILE) n?o existe." ;
     Text [ portuguese ] = "O atalho para o ficheiro $(FILE) não existe." ;
     Text [ finnish ] = "Tiedoston $(FILE) hakemistoa ei ole." ;
     Text [ danish ] = "Stien til filen $(FILE) eksisterer ikke." ;
@@ -1840,7 +1840,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text [ english_us ] = "The path to file $(FILE) doesn't exist." ;
     Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼ş $(FILE) µÄÂ·¾¶²»´æÔÚ¡£";
     Text[ russian ] = "Ïóòü ê ôàéëó $(FILE) íå ñóùåñòâóåò.";
-    Text[ polish ] = "Œcie¿ka do pliku $(FILE) nie istnieje.";
+    Text[ polish ] = "?cie¿ka do pliku $(FILE) nie istnieje.";
     Text[ japanese ] = "Ì§²Ù$(FILE)‚Ö‚ÌÊß½‚Í‚ ‚è‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "«ü¦VÀÉ®× $(FILE) ªº¸ô®|¤£¦s¦b¡C";
     Text[ arabic ] = "ÇáãÓÇÑ Åáì Çáãáİ $(FILE) ÛíÑ ãæÌæÏ.";
@@ -1859,7 +1859,7 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text [ English ] = "The file $(FILE) could not be opened,\nbecause there are no more file handles available.\nPlease close some files and try again." ;
     Text [ norwegian ] = "Filen $(FILE) kan ikke åpnes,\ndet er ikke flere filhåndtak tilgjengelig.\nLukk noen filer og prøv igjen." ;
     Text [ italian ] = "Impossibile aprire il file $(FILE),\nin quando vi sono troppi file aperti.\nChiudete i file e riprovate." ;
-    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser aberto\npor que não existem mais alças de arquivo disponíveis.\nFeche alguns arquivos e tent" ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) n?o pode ser aberto\npor que n?o existem mais al?as de arquivo dispon?veis.\nFeche alguns arquivos e tent" ;
     Text [ portuguese ] = "Foi impossível abrir o ficheiro $(FILE), já que de\nmomento se encontram demasiados ficheiros abertos.\nFeche alguns destes ficheiros e tente novamente." ;
     Text [ finnish ] = "Tiedoston $(FILE) avaaminen ei onnistunut,\nkoska avoimia tiedostoja on liikaa.\nSulje tiedostoja ja yritä uudelleen." ;
     Text [ danish ] = "Det var ikke muligt at åbne filen $(FILE),\nda der for tiden er for mange åbne filer.\nLuk nogle filer og prøv igen." ;
@@ -1876,8 +1876,8 @@ String MSG_IOERR_TOO_MANY_OPEN_FILES
     Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ$(FILE) ¡\náÃä åäÇáß ãáİÇÊ ßËíÑÉ ÌÏÇğ ãİÊæÍÉ.\nŞã ÈÅÛáÇŞ ÈÚÖ ÇáãáİÇÊ¡ Ëã ÍÇæá ãÌÏÏÇğ.";
     Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend \nomdat er teveel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeert u het opnieuw.";
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş$(FILE) £¬\nÒòÎªÒÑ¾­´ò¿ªÁËÌ«¶àµÄÎÄ¼ş¡£\nÇë¹Ø±ÕÒ»Ğ©ÎÄ¼ş£¬È»ºóÔÚÖØĞÂ³¢ÊÔ¡£";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï $(FILE),\nåğåéäŞ İ÷ïõí áíïé÷ôåß ğÜñá ğïëëÜ áñ÷åßá ôáõôü÷ñïíá.\nĞáñáêáëş êëåßóôå ìåñéêÜ áğü áõôÜ ôá áñ÷åßá êáé îáíáğñïóğáèŞóôå.";
-    Text[ korean ] = "ÇöÀç ³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·Á ÀÖ±â ¶§¹®¿¡ \nÆÄÀÏ$(FILE)À» ¿­Áö ¸øÇß½À´Ï´Ù. \nÀÏºÎ ÆÄÀÏÀ» ´İ°í »õ·Î ½ÃµµÇÏ½Ê½Ã¿À.";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï $(FILE),\nåğåéäŞ İ÷ïõí áíïé÷ôåß ğÜñá ğïëëÜ áñ÷åßá ôáõôü÷ñïíá.\nĞáñáêáëş êëåßóôå ìåñéêÜ áğü áõôÜ ôá áñ÷å?";
+    Text[ korean ] = "ÇöÀç ³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·Á ÀÖ±â ¶§¹®¿¡ \nÆÄÀÏ$(FILE)À» ¿­Áö ¸øÇß½À´Ï´Ù. \nÀÏºÎ ÆÄÀÏÀ» ´İ°í ´Ù½Ã ½ÃµµÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "$(FILE) dosyası, şu an çok fazla dosya açık olduğu\niçin açılamıyor.\nBirkaç dosyayı kapatıp yeniden deneyin.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo abrir el archivo $(FILE)\nya que hay muchos archivos abiertos.\nCierre algunos archivos e inténtelo otra vez.";
@@ -1949,7 +1949,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text [ English ] = "The file $(FILE) could not be opened because of an invalid file handle." ;
     Text [ norwegian ] = "+++The file $(FILE) could not be opened because of an invalid file handle." ;
     Text [ italian ] = "Impossibile aprire il file $(FILE) in quando l'handle di file non è valido." ;
-    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser aberto devido a uma alça de arquivo inválida." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) n?o pode ser aberto devido a uma al?a de arquivo inv?lida." ;
     Text [ portuguese ] = "Foi impossível abrir o ficheiro $(FILE) devido a uma guia de ficheiro incorrecta." ;
     Text [ finnish ] = "Tiedoston $(FILE) avaaminen ei onnistunut, koska tiedoston tunniste on virheellinen." ;
     Text [ danish ] = "Det var ikke muligt at åbne filen $(FILE) pga. en ugyldig filhandle." ;
@@ -1960,7 +1960,7 @@ String MSG_IOERR_INVALID_HANDLE
     Text [ english_us ] = "The file $(FILE) could not be opened due to an invalid file handle." ;
     Text[ chinese_simplified ] = "ÒòÎŞĞ§µÄÎÄ¼ş±êÊ¶Öµ¶øÎŞ·¨´ò¿ªÎÄ¼ş $(FILE) ¡£";
     Text[ russian ] = "Èç-çà íåäîñòóïíîãî äåñêğèïòîğà ôàéëà, ôàéë $(FILE) îòêğûòü íåâîçìîæíî.";
-    Text[ polish ] = "Pliku $(FILE) nie mo¿na by³o otworzyæ z powodu nieprawid³owego dojœcia.";
+    Text[ polish ] = "Pliku $(FILE) nie mo¿na by³o otworzyæ z powodu nieprawid³owego doj?cia.";
     Text[ japanese ] = "Ì§²Ù$(FILE)‚Í–³Œø‚ÈÌ§²Ù‹LqŒê‚Ì‚½‚ß‚ÉŠJ‚©‚ê‚Ü‚¹‚ñB";
     Text[ chinese_traditional ] = "¦]µL®ÄªºÀÉ®×¼ĞÃÑ­È¦ÓµLªk¶}±ÒÀÉ®×$(FILE) ¡C";
     Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ $(FILE)¡ áÃä æÕİ Çáãáİ ÛíÑ ÕÇáÍ.";
@@ -1979,7 +1979,7 @@ String MSG_IOERR_CANNOT_MAKE
     Text [ English ] = "The file $(FILE) could not be created." ;
     Text [ norwegian ] = "+++The file $(FILE) could not be created." ;
     Text [ italian ] = "Impossibile creare il file $(FILE)." ;
-    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser criado." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) n?o pode ser criado." ;
     Text [ portuguese ] = "Foi impossível criar o  ficheiro $(FILE)." ;
     Text [ finnish ] = "Tiedoston $(FILE) luominen ei onnistunut." ;
     Text [ danish ] = "Det var ikke muligt at oprette filen $(FILE)." ;
@@ -2009,7 +2009,7 @@ String MSG_IOERR_SHARING
     Text [ English ] = "Sharing violation while accessing $(FILE)." ;
     Text [ norwegian ] = "+++Sharing violation while accessing $(FILE)." ;
     Text [ italian ] = "Violazione di condivisione durante l'accesso al $(FILE)." ;
-    Text [ portuguese_brazilian ] = "Violação de compartilhamento durante o acesso do $(FILE)." ;
+    Text [ portuguese_brazilian ] = "Viola??o de compartilhamento durante o acesso do $(FILE)." ;
     Text [ portuguese ] = "Erro durante o acesso compartilhado ao ficheiro $(FILE)." ;
     Text [ finnish ] = "On ilmennyt virhe tiedoston $(FILE) yhteiskäytössä." ;
     Text [ danish ] = "Fejl under fælles adgang til filen $(FILE)." ;
@@ -2188,7 +2188,7 @@ String STR_EVENT_NEWMESSAGE
     Text [ portuguese ] = "Mensagem recebida" ;
     Text[ chinese_simplified ] = "ĞÂµÄµç×ÓÓÊ¼ş";
     Text[ russian ] = "Ñîîáùåíèå ïîëó÷åíî";
-    Text[ polish ] = "Nadesz³a wiadomoœæ";
+    Text[ polish ] = "Nadesz³a wiadomo?æ";
     Text[ japanese ] = "Ò¯¾°¼Ş‚ÌóM";
     Text[ chinese_traditional ] = "·sªº¹q¤l¶l¥ó";
     Text[ arabic ] = "æÕáÊ ÑÓÇáÉ";
@@ -2208,7 +2208,7 @@ String STR_EVENT_STARTAPP
     Text [ ENGLISH ] = "Start Application" ;
     Text [ norwegian ] = "Start Applikasjon" ;
     Text [ italian ] = "Avvia applicazione" ;
-    Text [ portuguese_brazilian ] = "Início Aplicativo" ;
+    Text [ portuguese_brazilian ] = "In?cio Aplicativo" ;
     Text [ portuguese ] = "Iniciar programa" ;
     Text [ finnish ] = "Aloita sovellus" ;
     Text [ danish ] = "Programstart" ;
@@ -2237,7 +2237,7 @@ String STR_EVENT_ONERROR
     Text = "Javascript-Laufzeitfehler" ;
     Text [ ENGLISH ] = "Javascript runtime error" ;
     Text [ english_us ] = "JavaScript runtime error" ;
-    Text [ portuguese_brazilian ] = "Programm- / Ausführungsfehler" ;
+    Text [ portuguese_brazilian ] = "Programm- / Ausf?rungsfehler" ;
     Text [ swedish ] = "Javascript runtime error" ;
     Text [ danish ] = "JavaScript-runtimefejl" ;
     Text [ italian ] = "Errore di runtime JavaScript" ;
@@ -2654,7 +2654,7 @@ String STR_ERR_NOFILE
     Text [ french ] = "Impossible d'ouvrir le fichier $ ." ;
     Text [ swedish ] = "Filen $ kan inte öppnas." ;
     Text [ danish ] = "Det er ikke muligt at åbne filen $." ;
-    Text [ portuguese_brazilian ] = "Die Datei $ kann nicht geöffnet werden." ;
+    Text [ portuguese_brazilian ] = "Die Datei $ kann nicht ge?fnet werden." ;
     Text [ portuguese ] = "Foi impossível abrir o ficheiro $." ;
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş $ ¡£";
     Text[ russian ] = "Ôàéë $ îòêğûòü íå óäàåòñÿ.";
@@ -2713,7 +2713,7 @@ String STR_EXITANDRETURN
     Text [ french ] = "~Quitter & retourner à " ;
     Text [ swedish ] = "~Avsluta och tillbaka till " ;
     Text [ danish ] = "Afslut og gå tilbage til " ;
-    Text [ portuguese_brazilian ] = "~Beenden & zurück zu " ;
+    Text [ portuguese_brazilian ] = "~Beenden & zur?k zu " ;
     Text [ portuguese ] = "~Sair & Regressar a " ;
     Text[ chinese_simplified ] = "½áÊøºÍ·µ»Ø(~X)";
     Text[ russian ] = "Âûõîä & íàçàä ê  ";
@@ -2742,7 +2742,7 @@ String STR_EXTHELPSTATUS
     Text [ dutch ] = "Kies een optie of klik om een onderwerp te kiezen." ;
     Text [ swedish ] = "Välj ett kommando eller klicka för att välja ett tema." ;
     Text [ danish ] = "Vælg en kommando eller klik for udvælge et emne." ;
-    Text [ portuguese_brazilian ] = "Wählen Sie einen Befehl oder klicken Sie, um ein Thema auszuwählen." ;
+    Text [ portuguese_brazilian ] = "W?hlen Sie einen Befehl oder klicken Sie, um ein Thema auszuw?hlen." ;
     Text [ portuguese ] = "Seleccione um comando ou clique para escolher um tema." ;
     Text[ chinese_simplified ] = "ÇëÄúÑ¡Ôñ»òÕß°´»÷Ò»¸öÃüÁî£¬Ñ¡ÔñÒ»¸öÖ÷Ìâ¡£";
     Text[ russian ] = "Âûáåğèòå êîìàíäó èëè íàæìèòå äëÿ âûáîğà òåìû.";
@@ -2892,7 +2892,7 @@ String RID_STR_NOWELCOMESCREEN
     Text [ portuguese ] = "Não mostrar sugestões" ;
     Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾ÌáÊ¾";
     Text[ russian ] = "Ñîâåòû áîëüøå íå ïîêàçûâàòü";
-    Text[ polish ] = "Nie wyœwietlaj porad";
+    Text[ polish ] = "Nie wy?wietlaj porad";
     Text[ japanese ] = "ËİÄ‚ğ•\\¦‚µ‚È‚¢";
     Text[ chinese_traditional ] = "¤£­n¦AÅã¥Ü´£¥Ü";
     Text[ arabic ] = "ÚÏã ÅÙåÇÑ ÇáÊáãíÍÇÊ ãÑÉ ÃÎÑì";
@@ -3458,7 +3458,7 @@ String STR_CORRUPT_INSTALLATION
     Text [ English ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
     Text [ English_us ] = "Important program components could not be initialized correctly.\nPlease start the setup program with the option /Repair.";
     Text[ portuguese ] = "Foi impossível iniciar a importação dos componentes do programa correctamente.\nInicie o programa de instalação (Setup) com a opção /repair.";
-    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé óùóôŞ áíáãíşñéóç ïñéóìİíùí óçìáíôéêşí óôïé÷åßùí ôïõ ğñïãñÜììáôïò.\nĞáñáêáëş åêêéíŞóôå ôï ğñüãñáììá åãêáôÜóôáóçò ìå ôçí åğéëïãŞ /repair..";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé óùóôŞ áíáãíşñéóç ïñéóìİíùí óçìáíôéêşí óôïé÷åßùí ôïõ ğñïãñÜììáôïò.\nĞáñáêáëş åêêéíŞóôå ôï ğñüãñáììá åãêáôÜóôáóç?";
     Text[ dutch ] = "Belangrijke programmaonderdelen konden niet correct worden geïnitialiseerd.\nStart het setup programma met de optie /Repareren.";
     Text[ french ] = "Certains composants importants du programme n'ont pas pu être initialisés. Veuillez activer le programme d'installation (Setup) et y activer l'option de réparation (Repair).";
     Text[ spanish ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalación con la opción /repair.";
@@ -3466,10 +3466,10 @@ String STR_CORRUPT_INSTALLATION
     Text[ russian ] = "Íå óäàåòñÿ ïğàâèëüíî èíèöèàëèçèğîâàòü âàæíûå êîìïîíåíòû ïğîãğàììû.\nÍà÷íèòå, ïîæàëóéñòà, èíñòàëëÿöèîííóş ïğîãğàììó ñ ïàğàìåòğà /repair.";
     Text[ italian ] = "Impossibile inizializzare importanti componenti del programma.\nAvviate il setup con l'opzione /Riparazione.";
     Text[ danish ] = "Det var ikke muligt at initialisere vigtige programdele korrekt.\nStart venligst installationsprogrammet (Setup) med alternativet / reparation.";
-    Text[ polish ] = "Wa¿ne czêœci programu nie mog³y zostaæ prawid³owo zainstalowane.\nProszê uruchomiæ program instalacyjny u¿ywaj¹c opcji / repair";
+    Text[ polish ] = "Wa¿ne czê?ci programu nie mog³y zostaæ prawid³owo zainstalowane.\nProszê uruchomiæ program instalacyjny u¿ywaj¹c opcji / repair";
     Text[ portuguese_brazilian ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
     Text[ japanese ] = "ÌßÛ¸Ş×Ñ‚Ì‘åØ‚È•”•ª‚Í³í‚É‰Šú‰»‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯ÌßÌßÛ¸Ş×Ñ‚ğµÌß¼®İ‚ÌC•œ‚ÅŠJn‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "ÇÁ·Î±×·¥ÀÇ Áß¿ä ºÎºĞÀ» Á¦´ë·Î ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù. \n¿É¼Ç/¼ö¸®·Î SetupÀ» ½ÃÀÛÇÏ½Ê½Ã¿À.";
+    Text[ korean ] = "ÇÁ·Î±×·¥ÀÇ Áß¿ä ºÎºĞÀ» Á¤È®ÇÏ°Ô ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù. \n¿É¼Ç/¼ö¸®·Î SetupÀ» ½ÃÀÛÇÏ½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "ÎŞ·¨ÕıÈ·³õÊ¼»¯ÖØÒªµÄ³Ì²¿¼ş¡£\nÇëÄúÆô¶¯°²×°³ÌĞò£¬Ö´ĞĞÑ¡ÏîĞŞ²¹¡£";
     Text[ chinese_traditional ] = "µLªk¥¿ÚÌªì©l¤Æ­«­nªºµ{¦¡³¡¥ó¡C½Ğ±z±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
     Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÈÚÖ ÚäÇÕÑ ÇáÈÑäÇãÌ ÇáåÇãÉ ÈÔßá ÕÍíÍ.\nÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ ÈÇáÎíÇÑ /repair.";
@@ -3512,7 +3512,7 @@ String STR_KEY_CONFIG_DIR
     Text [ English ] = "Configuration" ;
     Text [ norwegian ] = "Konfigurasjoner" ;
     Text [ italian ] = "Configurazione" ;
-    Text [ portuguese_brazilian ] = "Configurações" ;
+    Text [ portuguese_brazilian ] = "Configura??s" ;
     Text [ portuguese ] = "Configuração" ;
     Text [ finnish ] = "Kokoonpano" ;
     Text [ danish ] = "Konfiguration" ;
@@ -3554,7 +3554,7 @@ String STR_KEY_WORK_PATH
     Text[ russian ] = "Ğàáî÷àÿ ïàïêà";
     Text[ polish ] = "Folder roboczy";
     Text[ japanese ] = "Ü°·İ¸ŞÃŞ¨Ú¸ÄØ";
-    Text[ chinese_traditional ] = "¤u§@¥Ø¿ı";
+    Text[ chinese_traditional ] = "§Úªº¤å¥ó§¨";
     Text[ arabic ] = "ãÓÊäÏÇÊí";
     Text[ dutch ] = "Werkmap";
     Text[ chinese_simplified ] = "¹¤×÷Ä¿Â¼";
@@ -3570,7 +3570,7 @@ String STR_KEY_GRAPHICS_PATH
     Text [ English ] = "Grafics" ;
     Text [ norwegian ] = "Grafikk" ;
     Text [ italian ] = "Immagini" ;
-    Text [ portuguese_brazilian ] = "Gráficos" ;
+    Text [ portuguese_brazilian ] = "Gr?ficos" ;
     Text [ portuguese ] = "Imagens" ;
     Text [ finnish ] = "Kuvat" ;
     Text [ danish ] = "Grafik" ;
@@ -3722,7 +3722,7 @@ String STR_KEY_MODULES_PATH
     Text [ English ] = "Modules" ;
     Text [ norwegian ] = "Moduler" ;
     Text [ italian ] = "Moduli" ;
-    Text [ portuguese_brazilian ] = "Módulos" ;
+    Text [ portuguese_brazilian ] = "M?ulos" ;
     Text [ portuguese ] = "Módulos" ;
     Text [ finnish ] = "Moduulit" ;
     Text [ danish ] = "Moduler" ;
@@ -3805,7 +3805,7 @@ String STR_KEY_DICTIONARY_PATH
     Text [ English ] = "Dictionaries" ;
     Text [ norwegian ] = "Ordlister" ;
     Text [ italian ] = "Dizionari" ;
-    Text [ portuguese_brazilian ] = "Dicionários" ;
+    Text [ portuguese_brazilian ] = "Dicion?rios" ;
     Text [ portuguese ] = "Dicionários" ;
     Text [ french ] = "Dictionnaires" ;
     Text [ dutch ] = "Woordenboeken" ;
@@ -3920,7 +3920,7 @@ String STR_KEY_TRASH_DIR
     Text [ English ] = "Trash" ;
     Text [ English_US ] = "Recycle Bin" ;
     Text [ portuguese ] = "Reciclagem" ;
-    Text [ portuguese_brazilian ] = "Mülleimer" ;
+    Text [ portuguese_brazilian ] = "M?leimer" ;
     Text [ swedish ] = "Papperskorg" ;
     Text [ danish ] = "Papirkurv" ;
     Text [ italian ] = "Cestino" ;
@@ -3959,7 +3959,7 @@ String STR_KEY_STORAGE_DIR
     Text [ dutch ] = "Geheugen voor berichten" ;
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
     Text[ russian ] = "Íàêîïèòåëü ñîîáùåíèé";
-    Text[ polish ] = "Pamiêæ wiadomoœci";
+    Text[ polish ] = "Pamiêæ wiadomo?ci";
     Text[ japanese ] = "Ò¯¾°¼Ş—pÒÓØ";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó/·s»DÀx¦sÅé";
     Text[ arabic ] = "ÍİÙ ÇáÃÎÈÇÑ";
@@ -4038,7 +4038,7 @@ String STR_KEY_FAVORITES_DIR
     Text = "Ordner-Bookmarks" ;
     Text [ English ] = "Folder Bookmarks" ;
     Text[ english_us ] = "Folder Bookmarks";
-    Text[ portuguese ] = "Marcadores de pastas";
+    Text[ portuguese ] = "Pastas correntes";
     Text[ greek ] = "Óåëéäïäåßêôåò êáôáëüãùí";
     Text[ dutch ] = "Bookmarks voor mappen";
     Text[ french ] = "Répertoires courants";
@@ -4217,16 +4217,76 @@ String STR_QUICKSTART_EXIT
 {
     Text = "%PRODUCTNAME QuickStart beenden" ;
     Text [ English ] = "Exit %PRODUCTNAME QuickStart" ;
+    Text[ english_us ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ portuguese ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ russian ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ greek ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ dutch ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ french ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ spanish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ finnish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ italian ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ danish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ swedish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ polish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ portuguese_brazilian ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ japanese ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ korean ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ chinese_simplified ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ chinese_traditional ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ turkish ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ arabic ] = "Exit %PRODUCTNAME QuickStart";
+    Text[ catalan ] = "Exit %PRODUCTNAME QuickStart";
 };
 String STR_QUICKSTART_TIP
 {
     Text = "%PRODUCTNAME QuickStart aktiv" ;
     Text [ English ] = "%PRODUCTNAME QuickStart active" ;
+    Text[ english_us ] = "%PRODUCTNAME QuickStart active";
+    Text[ portuguese ] = "%PRODUCTNAME QuickStart active";
+    Text[ russian ] = "%PRODUCTNAME QuickStart active";
+    Text[ greek ] = "%PRODUCTNAME QuickStart active";
+    Text[ dutch ] = "%PRODUCTNAME QuickStart active";
+    Text[ french ] = "%PRODUCTNAME QuickStart active";
+    Text[ spanish ] = "%PRODUCTNAME QuickStart active";
+    Text[ finnish ] = "%PRODUCTNAME QuickStart active";
+    Text[ italian ] = "%PRODUCTNAME QuickStart active";
+    Text[ danish ] = "%PRODUCTNAME QuickStart active";
+    Text[ swedish ] = "%PRODUCTNAME QuickStart active";
+    Text[ polish ] = "%PRODUCTNAME QuickStart active";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME QuickStart active";
+    Text[ japanese ] = "%PRODUCTNAME QuickStart active";
+    Text[ korean ] = "%PRODUCTNAME QuickStart active";
+    Text[ chinese_simplified ] = "%PRODUCTNAME QuickStart active";
+    Text[ chinese_traditional ] = "%PRODUCTNAME QuickStart active";
+    Text[ turkish ] = "%PRODUCTNAME QuickStart active";
+    Text[ arabic ] = "%PRODUCTNAME QuickStart active";
+    Text[ catalan ] = "%PRODUCTNAME QuickStart active";
 };
 String STR_QUICKSTART_FILEOPEN
 {
     Text = "Datei öffnen..." ;
     Text [ English ] = "File open..." ;
+    Text[ english_us ] = "File open...";
+    Text[ portuguese ] = "File open...";
+    Text[ russian ] = "File open...";
+    Text[ greek ] = "File open...";
+    Text[ dutch ] = "File open...";
+    Text[ french ] = "File open...";
+    Text[ spanish ] = "File open...";
+    Text[ finnish ] = "File open...";
+    Text[ italian ] = "File open...";
+    Text[ danish ] = "File open...";
+    Text[ swedish ] = "File open...";
+    Text[ polish ] = "File open...";
+    Text[ portuguese_brazilian ] = "File open...";
+    Text[ japanese ] = "File open...";
+    Text[ korean ] = "File open...";
+    Text[ chinese_simplified ] = "File open...";
+    Text[ chinese_traditional ] = "File open...";
+    Text[ turkish ] = "File open...";
+    Text[ arabic ] = "File open...";
+    Text[ catalan ] = "File open...";
 };
 
 
