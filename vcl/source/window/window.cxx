@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-14 10:11:17 $
+ *  last change: $Author: ssa $ $Date: 2002-08-14 10:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8083,9 +8083,8 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
     Color aSelectionFillCol( aSelectionBorderCol );
     Color aSelectionMaskCol( aSelectionBorderCol );
 
-    USHORT lum = GetSettings().GetStyleSettings().GetFaceColor().GetLuminance();
-    BOOL bDark = (lum <= 25);
-    BOOL bBright = (lum >= 225);
+    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+    BOOL bBright = GetSettings().GetStyleSettings().GetFaceColor().IsBright();
 
     Rectangle aRect( rRect );
     if( bDrawExtBorderOnly )
@@ -8118,6 +8117,12 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
         {
             if( bDark )
                 aSelectionFillCol = COL_GRAY;
+            else if ( bBright )
+            {
+                aSelectionFillCol = COL_BLACK;
+                SetLineColor( COL_BLACK );
+                nPercent = 0;
+            }
             else
                 nPercent = 55;          // selected, pressed or checked ( very dark )
         }
@@ -8125,6 +8130,12 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
         {
             if( bDark )
                 aSelectionFillCol = COL_LIGHTGRAY;
+            else if ( bBright )
+            {
+                aSelectionFillCol = COL_BLACK;
+                SetLineColor( COL_BLACK );
+                nPercent = 0;
+            }
             else
                 nPercent = 85;          // selected ( dark )
         }
