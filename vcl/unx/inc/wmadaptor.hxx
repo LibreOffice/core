@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:24:31 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,11 @@ public:
      *  handle WM messages (especially WM state changes)
      */
     virtual int handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEvent ) const;
+
+    /*
+     * called by SalFrame::Show: time to update state properties
+     */
+    virtual void frameIsMapping( X11SalFrame* ) const;
 
     /*
      *  gets a WM atom
