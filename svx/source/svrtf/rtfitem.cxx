@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:55:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,8 +609,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     // (100%) und dem Leerraum ueber der Zeile (20%).
                     SvxLineSpacingItem aLSpace(0, PARDID->nLinespacing);
 
-                    //It is stupid to have -1 as uninitialized, bah!
-                    nTokenValue = -1 == nTokenValue ? 0 : nTokenValue;
+                    nTokenValue = !bTokenHasValue ? 0 : nTokenValue;
                     if (1000 == nTokenValue )
                         nTokenValue = 240;
 
