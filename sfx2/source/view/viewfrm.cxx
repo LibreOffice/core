@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-20 16:17:04 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 13:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ using namespace ::com::sun::star::frame;
 #include "helper.hxx"
 #include "tbxconf.hxx"
 #include "mnumgr.hxx"
+#include "virtmenu.hxx"
 
 //-------------------------------------------------------------------------
 DBG_NAME(SfxViewFrame);
@@ -3431,47 +3432,58 @@ void SfxViewFrame::ToolboxExec_Impl( SfxRequest &rReq )
 {
     // Object-Bar-Id ermitteln
     sal_uInt16 nSID = rReq.GetSlot(), nTbxID;
-    switch ( nSID )
-    {
-        case SID_TOGGLEFUNCTIONBAR:     nTbxID = SFX_OBJECTBAR_APPLICATION; break;
-        case SID_TOGGLEOBJECTBAR:       nTbxID = SFX_OBJECTBAR_OBJECT; break;
-        case SID_TOGGLETOOLBAR:         nTbxID = SFX_OBJECTBAR_TOOLS; break;
-        case SID_TOGGLEMACROBAR:        nTbxID = SFX_OBJECTBAR_MACRO; break;
-        case SID_TOGGLEOPTIONBAR:       nTbxID = SFX_OBJECTBAR_OPTIONS; break;
-        case SID_TOGGLECOMMONTASKBAR:   nTbxID = SFX_OBJECTBAR_COMMONTASK; break;
-        case SID_TOGGLENAVBAR:          nTbxID = SFX_OBJECTBAR_NAVIGATION; break;
-        //case SID_TOGGLERECORDINGBAR:  nTbxID = SFX_OBJECTBAR_RECORDING; break;
-        //case SID_TOGGLEFULLSCREENBAR: nTbxID = SFX_OBJECTBAR_FULLSCREEN; break;
-        default:
-            DBG_ERROR( "invalid ObjectBar`s SID" );
-    }
+    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
 
-    // Parameter auswerten
+    if ( nSID == SID_TOGGLE_MENUBAR )
+    {
+        SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
+        SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
+        if ( pTop )
+        {
+            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : ( pTop->GetMenuBar_Impl() == 0 );
+            pTop->SetMenuBarOn_Impl( bShow );
+            GetDispatcher()->Update_Impl(sal_True);
+        }
+    }
+    else
+    {
+        switch ( nSID )
+        {
+            case SID_TOGGLEFUNCTIONBAR:     nTbxID = SFX_OBJECTBAR_APPLICATION; break;
+            case SID_TOGGLEOBJECTBAR:       nTbxID = SFX_OBJECTBAR_OBJECT; break;
+            case SID_TOGGLETOOLBAR:         nTbxID = SFX_OBJECTBAR_TOOLS; break;
+            case SID_TOGGLEMACROBAR:        nTbxID = SFX_OBJECTBAR_MACRO; break;
+            case SID_TOGGLEOPTIONBAR:       nTbxID = SFX_OBJECTBAR_OPTIONS; break;
+            case SID_TOGGLECOMMONTASKBAR:   nTbxID = SFX_OBJECTBAR_COMMONTASK; break;
+            case SID_TOGGLENAVBAR:          nTbxID = SFX_OBJECTBAR_NAVIGATION; break;
+            //case SID_TOGGLERECORDINGBAR:  nTbxID = SFX_OBJECTBAR_RECORDING; break;
+            //case SID_TOGGLEFULLSCREENBAR: nTbxID = SFX_OBJECTBAR_FULLSCREEN; break;
+            default:
+                DBG_ERROR( "invalid ObjectBar`s SID" );
+        }
+
+        // Parameter auswerten
 #if SUPD<635
-    SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
+        SfxToolBoxConfig *pTbxConfig = SfxToolBoxConfig::GetOrCreate();
 #else
-    SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
+        SfxToolBoxConfig *pTbxConfig = GetObjectShell()->GetToolBoxConfig_Impl();
 #endif
 
-    SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nSID, sal_False);
-    sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
+        // ausfuehren
+        sal_Bool bShow = pShowItem ? pShowItem->GetValue() : !pTbxConfig->IsToolBoxPositionVisible(nTbxID);
+        pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
+        GetBindings().Invalidate( nSID );
 
-    // ausfuehren
-    pTbxConfig->SetToolBoxPositionVisible(nTbxID, bShow);
-    GetBindings().Invalidate( nSID );
-
-    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
-    while ( pViewFrame )
-    {
-        // update all "final" dispatchers
-        if ( !pViewFrame->GetActiveChildFrame_Impl() )
-            pViewFrame->GetDispatcher()->Update_Impl(sal_True);
-        pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
+        SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
+        while ( pViewFrame )
+        {
+            // update all "final" dispatchers
+            if ( !pViewFrame->GetActiveChildFrame_Impl() )
+                pViewFrame->GetDispatcher()->Update_Impl(sal_True);
+            pViewFrame = SfxViewFrame::GetNext(*pViewFrame);
+        }
     }
 
-    // ggf. recorden
-    if ( !rReq.IsAPI() )
-        rReq.AppendItem( SfxBoolItem( nSID, bShow ) );
     rReq.Done();
 }
 
@@ -3490,6 +3502,17 @@ void SfxViewFrame::ToolboxState_Impl( SfxItemSet &rSet )
 #endif
         switch ( nSID )
         {
+            case SID_TOGGLE_MENUBAR:
+            {
+                SfxTopViewFrame* pTopView = PTR_CAST( SfxTopViewFrame, GetTopViewFrame() );
+                SfxTopFrame *pTop = pTopView ? pTopView->GetTopFrame_Impl() : NULL;
+                if ( pTop )
+                    rSet.Put( SfxBoolItem( nSID, pTop->IsMenuBarOn_Impl() ) );
+                else
+                    rSet.DisableItem( nSID );
+                break;
+            }
+
             case SID_TOGGLEFUNCTIONBAR:
                     rSet.Put( SfxBoolItem( nSID, pTbxConfig->
                         IsToolBoxPositionVisible(SFX_OBJECTBAR_APPLICATION)));

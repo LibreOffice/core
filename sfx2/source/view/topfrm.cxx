@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-14 11:31:49 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 13:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ public:
     Window*             pWindow;        // maybe external
     BOOL                bHidden;
     BOOL                bLockResize;
+    BOOL                bMenuBarOn;
 };
 
 class SfxTopWindow_Impl : public Window
@@ -342,6 +343,7 @@ SfxTopFrame::SfxTopFrame( Window* pExternal, sal_Bool bHidden )
     pImp = new SfxTopFrame_Impl;
     pImp->bHidden = bHidden;
     pImp->bLockResize = FALSE;
+    pImp->bMenuBarOn = TRUE;
     InsertTopFrame_Impl( this );
     if ( pExternal )
     {
@@ -397,12 +399,26 @@ void SfxTopFrame::LockResize_Impl( BOOL bLock )
 
 void SfxTopFrame::SetMenuBar_Impl( MenuBar *pMenu )
 {
+    if ( pMenu && !pImp->bMenuBarOn )
+        return;
+
     SystemWindow *pWin = GetTopWindow_Impl();
     if ( pWin && pWin->GetMenuBar() != pMenu )
     {
-//(mba/task): WindowMenu-Hdl fehlt, dito PickMenu-Handling
         pWin->SetMenuBar( pMenu );
     }
+}
+
+void SfxTopFrame::SetMenuBarOn_Impl( BOOL bOn )
+{
+    pImp->bMenuBarOn = bOn;
+    if ( !bOn )
+        SetMenuBar_Impl( 0 );
+}
+
+BOOL SfxTopFrame::IsMenuBarOn_Impl() const
+{
+    return pImp->bMenuBarOn;
 }
 
 MenuBar* SfxTopFrame::GetMenuBar_Impl() const
