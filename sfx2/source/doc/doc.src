@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 16:17:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message [ portuguese_brazilian ] = "Ao salvar em formatos estranhos poder� ocorrer \na perda de informa��es. Salvar mesmo assim?" ;
     Message [ portuguese ] = "Ao guardar em formatos estranhos poder� provocar \na perda de informa��es. Mesmo assim, guardar?" ;
     Message [ finnish ] = "Tallennus ulkoiseen muotoon on saattanut\naiheuttaa joidenkin tietojen katoamisen. Haluatko silti sulkea?" ;
-    Message [ danish ] = "Lagring i fremmedformater kan have for�rsaget\ninformationstab. Vil du lukke alligevel?" ;
+    Message [ danish ] = "Lagring i eksterne formater kan have for�rsaget\ninformationstab. Vil du lukke alligevel?" ;
     Message [ french ] = "L'enregistrement dans un format externe peut entra�ner\nune perte de certaines informations. Voulez-vous vraiment poursuivre ?" ;
     Message [ swedish ] = "Om du sparar i ett externt format kan\ninformation g� f�rlorad. St�nga �nd�?" ;
     Message [ dutch ] = "Bij het opslaan in een externe indeling kan\ninformatie verloren gegaan zijn. Toch sluiten?" ;
@@ -100,6 +100,8 @@ QueryBox MSG_CONFIRM_FILTER
     Message[ hebrew ] = "‮יתכן ששמירה בצורות קובץ זרות כבר גרם לאובדן מידע.\nהאם בכל זאת לסגור את המסמך?‬";
     Message[ hindi ] = "बाहरी रचना में संचित करने से\n सूचना नष्ट हुआ है । आप फिर भी बंद करना चाहते है ?";
     Message[ slovak ] = "Uloženie v externom formáte mohlo spôsobiť\nstratu informácii. Prajete si naozaj zavrieť okno?";
+    Message[ hungarian ] = "A külső formátumba történő mentés\nadatvesztéssel járhat. Mégis bezárja?";
+    Message[ slovenian ] = "Shranjevanje v izhodnih oblikah je morda povzročilo\n izgubo podatkov. Ali še vedno želite zapreti?";
 };
 QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
 {
@@ -112,7 +114,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message [ portuguese_brazilian ] = "O nome j� est� em uso.\nDeseja sobrescrever o modelo do documento?" ;
     Message [ portuguese ] = "J� existe um modelo com este nome.\nSobregravar o modelo do documento?" ;
     Message [ finnish ] = "Nimi on jo k�yt�ss�.\nHaluatko korvata asiakirjan mallin?" ;
-    Message [ danish ] = "Der eksisterer allerede et dokument med dette navn.\nSkal det erstattes?" ;
+    Message [ danish ] = "Der eksisterer allerede en dokumentskabelon med dette navn.\nSkal den overskrives?" ;
     Message [ french ] = "Un mod�le de ce nom existe d�j�.\nRemplacer le mod�le existant ?" ;
     Message [ swedish ] = "Det finns redan en mall med det h�r namnet.\nVill du skriva �ver den?" ;
     Message [ dutch ] = "Er bestaat reeds een sjabloon met deze naam.\nOverschrijven?" ;
@@ -136,6 +138,8 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message[ hebrew ] = "‮השם שצוין כבר בשימוש.\nהאם הכוונה להחליף את התבנית הקיימת בשם זה?‬";
     Message[ hindi ] = "नाम पहिले से ही उपयोग में है ।\nआप लेखपत्र नमूने को ओवररइट करना चाहते है ?";
     Message[ slovak ] = "Meno už bolo použité.\nPrejete si prepísať šablónu dokumentu?";
+    Message[ hungarian ] = "A név már használatban van. \nFelül kívánja írni a dokumentumsablont? ";
+    Message[ slovenian ] = "Ime je že uporabljeno.\nAli želite prepisati predlogo dokumenta?";
 };
 QueryBox MSG_QUERY_LOAD_TEMPLATE
 {
@@ -152,7 +156,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ french ] = "Les styles de format utilis�s dans ce document ne concordent pas avec les styles actifs.\nSouhaitez-vous appliquer les styles actifs dans ce document ?";
     MESSAGE[ spanish ] = "Los estilos de este documento no coinciden con sus estilos actuales.\n�Desea aplicar sus estilos actuales a este documento?";
     MESSAGE[ italian ] = "I modelli di formato del documento non corrispondono ai modelli attuali.\nVolete applicare i modelli attuali al documento?";
-    MESSAGE[ danish ] = "Formatskabelonerne i dette dokument svarer ikke til de aktuelle typografier. Skal de aktuelle skabeloner anvendes p� dette dokument?";
+    MESSAGE[ danish ] = "Typografierne i dette dokument svarer ikke til dine nuv�rende typografier. Skal dine typoegrafier anvendes p� dette dokument?";
     MESSAGE[ swedish ] = "Formatmallarna i det h�r dokumentet st�mmer inte �verens med dina aktuella mallar. Ska dina aktuella mallar anv�ndas i det h�r dokumentet?";
     MESSAGE[ polish ] = "Style u�yte w tym dokumencie nie s� zgodne z bie��cymi stylami.\nCzy zastosowa� w dokumencie bie��ce style?";
     MESSAGE[ portuguese_brazilian ] = "Os estilos de formato deste documento n�o coincidem com os estilos atuais. Deseja aplicar os seus estilos atuais a este documento?";
@@ -173,6 +177,8 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ hebrew ] = "‮הסגנונות במסמך זה אינן חופפים לסגנונות הנוכחיים. האם ליישם את הסגנונות הנוכחיים על מסמך זה?‬";
     MESSAGE[ hindi ] = "इस लेखपत्र में रहनेवाला शैलियाँ, आपका वर्तमान शैलियों से भिन्न है । आपका वर्तमान शैलियों को इस लेखपत्र केलिए लागू करना चाहते है ?";
     MESSAGE[ slovak ] = "Štýly v tomto dokumente nezodpovedajú vašim práve nastavených štýlom. Majú byť nastavené štýly použité pre tento dokument?";
+    MESSAGE[ hungarian ] = "Ennek a dokumentumnak a stílusai nem egyeznek a jelenlegi stílusokkal. Alkalmazza a dokumentumra a jelenlegi stílusokat?";
+    MESSAGE[ slovenian ] = "Slogi v tem dokumentu se ne ujemajo z vašimi trenutnimi slogi. Ali naj se za ta dokument uporabijo vaši trenutni slogi?";
 };
 String STR_DELETE_REGION
 {
@@ -206,6 +212,8 @@ String STR_DELETE_REGION
     Text[ hebrew ] = "‮האם באמת למחוק את איזור \"$1\"?‬";
     Text[ hindi ] = "आप सचमुच में \"$1\" प्रदेश को मिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete zmazať región \"$1\"?";
+    Text[ hungarian ] = "Biztosan törölni akarja a(z) \"$1\" területet?";
+    Text[ slovenian ] = "Ali ste prepričani, da želite izbrisati območje \"$1\"?";
 };
 String STR_DELETE_TEMPLATE
 {
@@ -239,6 +247,8 @@ String STR_DELETE_TEMPLATE
     Text[ hebrew ] = "‮האם אכן למחוק את הערך \"$1\"?‬";
     Text[ hindi ] = "आप सचमुच में \"$1\" प्रविष्टि को मिटाना चाहते है?";
     Text[ slovak ] = "Naozaj chcete zmazať položku \"$1\"?";
+    Text[ hungarian ] = "Biztosan törli a(z) \"$1\" bejegyzést?";
+    Text[ slovenian ] = "Ali ste prepričani, da želite izbrisati vnos \"$1\"?";
 };
 QueryBox MSG_REGION_NOTEMPTY
 {
@@ -251,7 +261,7 @@ QueryBox MSG_REGION_NOTEMPTY
     Message [ portuguese_brazilian ] = "A categoria n�o est� vazia.\nExcluir mesmo assim?" ;
     Message [ portuguese ] = "A categoria n�o est� vazia.\nMesmo assim, eliminar?" ;
     Message [ finnish ] = "Luokka ei ole tyhj�.\nPoistetaanko luokka?" ;
-    Message [ danish ] = "Omr�det er ikke tomt.\nVil du slette alligevel?" ;
+    Message [ danish ] = "Kategorien er ikke tomt.\nVil du slette alligevel?" ;
     Message [ french ] = "La cat�gorie n'est pas vide.\nSupprimer quand m�me ?" ;
     Message [ swedish ] = "Omr�det �r ej tomt.\nRadera �nd�?" ;
     Message [ dutch ] = "Het bereik is niet leeg.\nToch verwijderen?" ;
@@ -275,6 +285,8 @@ QueryBox MSG_REGION_NOTEMPTY
     Message[ hebrew ] = "‮הסיווג אינו ריק.\nלמחוק אותו בכל זאת?‬";
     Message[ hindi ] = "वर्ग खाली नहीं है ।\nकिसी तरह मिटाना चाहते है?";
     Message[ slovak ] = "Kategória nie je prázdna.\nNaozaj zmazať?";
+    Message[ hungarian ] = "A kategória nem üres. \nTörli mindenképpen?";
+    Message[ slovenian ] = "Ta kategorija ni prazna.\nVseeno želite izbrisati?";
 };
 String STR_QUERY_SAVE_DOCUMENT
 {
@@ -308,6 +320,8 @@ String STR_QUERY_SAVE_DOCUMENT
     Text[ hebrew ] = "‮המסמך\"$(DOC)\" השתנה. האם לשמור שינויים?‬";
     Text[ hindi ] = "$(DOC) लेखपत्र को सुधार किया है ।\nआप परिवर्तनों को संचित करना चाहते है?";
     Text[ slovak ] = "Dokument \"$(DOC)\" bol zmenený.\nChcete uložiť vami vykonané zmeny?";
+    Text[ hungarian ] = "A dokumentum ( \"$(DOC)\" ) tartalma megváltozott. \nMenti a módosításokat?";
+    Text[ slovenian ] = "Dokument \"$(DOC)\" je bil spremenjen.\nAli želite shraniti spremembe?";
 };
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
@@ -348,6 +362,8 @@ String STR_STYLES
     Text[ hebrew ] = "‮סגנונות‬";
     Text[ hindi ] = "शैलियाँ";
     Text[ slovak ] = "Štýly";
+    Text[ hungarian ] = "Stílusok";
+    Text[ slovenian ] = "Slogi";
 };
 String STR_MACROS
 {
@@ -382,6 +398,8 @@ String STR_MACROS
     Text[ hebrew ] = "‮מקרוא‬";
     Text[ hindi ] = "मॉक्रोस";
     Text[ slovak ] = "Makrá";
+    Text[ hungarian ] = "Makrók";
+    Text[ slovenian ] = "Makri";
 };
 String STR_CONFIG
 {
@@ -416,6 +434,8 @@ String STR_CONFIG
     Text[ hebrew ] = "‮תצורה‬";
     Text[ hindi ] = "रूपरेखा";
     Text[ slovak ] = "Konfigurácia";
+    Text[ hungarian ] = "Beállítások";
+    Text[ slovenian ] = "Konfiguracija";
 };
 String STR_PRINT_STYLES_HEADER
 {
@@ -426,7 +446,7 @@ String STR_PRINT_STYLES_HEADER
     Text [ portuguese_brazilian ] = "Estilos em " ;
     Text [ portuguese ] = "Estilos em " ;
     Text [ finnish ] = "Tyylit " ;
-    Text [ danish ] = "Formattypografi i " ;
+    Text [ danish ] = "Typografier i " ;
     Text [ french ] = "Styles dans " ;
     Text [ swedish ] = "Formatmallar i  " ;
     Text [ dutch ] = "Opmaakprofielen in" ;
@@ -450,6 +470,8 @@ String STR_PRINT_STYLES_HEADER
     Text[ hebrew ] = "‮סגנונות ב ‬";
     Text[ hindi ] = "में शैलियाँ ";
     Text[ slovak ] = "Štýly v ";
+    Text[ hungarian ] = "Stílusok itt:";
+    Text[ slovenian ] = "Slogi v";
 };
 String STR_PRINT_STYLES
 {
@@ -460,7 +482,7 @@ String STR_PRINT_STYLES
     Text [ portuguese_brazilian ] = "Estilos de impress�o" ;
     Text [ portuguese ] = "Estilos de impress�o" ;
     Text [ finnish ] = "Tulostustyylit" ;
-    Text [ danish ] = "Udskriver formattypografier" ;
+    Text [ danish ] = "Udskriftstypografier" ;
     Text [ french ] = "Impression des styles" ;
     Text [ swedish ] = "Skriver ut formatmallar" ;
     Text [ dutch ] = "Opmaakprofielen afdrukken" ;
@@ -484,6 +506,8 @@ String STR_PRINT_STYLES
     Text[ hebrew ] = "‮סגנונות הדפסה‬";
     Text[ hindi ] = "छपाई करने का शैलियाँ";
     Text[ slovak ] = "Štýly tlače";
+    Text[ hungarian ] = "Nyomtatási stílusok";
+    Text[ slovenian ] = "Slogi tiskanja";
 };
 Bitmap BMP_STYLES_FAMILY1 { File = "styfam1.bmp" ; };
 Bitmap BMP_STYLES_FAMILY2 { File = "styfam2.bmp" ; };
@@ -530,6 +554,8 @@ ErrorBox MSG_PRINT_ERROR
     Message[ hebrew ] = "‮לא ניתן להתחיל את משימת ההדפסה.‬";
     Message[ hindi ] = "छपाई कार्य प्रारंभ नहीं कर सकते है ।";
     Message[ slovak ] = "Nie je možné spustiť tlačovú úlohu.";
+    Message[ hungarian ] = "A nyomtatási feladatot nem sikerült elindítani.";
+    Message[ slovenian ] = "Ni mogoče začeti tiskalnega opravila.";
 };
 String STR_BACKUP_COPY
 {
@@ -540,7 +566,7 @@ String STR_BACKUP_COPY
     Text [ portuguese_brazilian ] = "C�pia" ;
     Text [ portuguese ] = "C�pia" ;
     Text [ finnish ] = "Kopioi" ;
-    Text [ danish ] = "Kopi" ;
+    Text [ danish ] = "Kopier" ;
     Text [ french ] = "Copie" ;
     Text [ swedish ] = "Kopia" ;
     Text [ dutch ] = "Kopie" ;
@@ -564,6 +590,8 @@ String STR_BACKUP_COPY
     Text[ hebrew ] = "‮העתקה‬";
     Text[ hindi ] = "प्रतिलिपि";
     Text[ slovak ] = "Kópia";
+    Text[ hungarian ] = "Másolás";
+    Text[ slovenian ] = "Kopija";
 };
 WarningBox MSG_WARNING_BACKUP
 {
@@ -577,7 +605,7 @@ WarningBox MSG_WARNING_BACKUP
     Message [ danish ] = "Det var ikke muligt at oprette sikkerhedskopi." ;
     Message [ french ] = "Cr�ation de la copie de sauvegarde impossible." ;
     Message [ swedish ] = "S�kerhetskopia kunde inte skapas." ;
-    Message [ dutch ] = "Reservekopie kan niet worden gemaakt." ;
+    Message [ dutch ] = "Reservekopie kan niet worden aangemaakt." ;
     Message [ spanish ] = "No se pudo crear la copia de seguridad." ;
     Message [ english_us ] = "Could not create backup copy." ;
     Buttons = WB_OK ;
@@ -588,7 +616,7 @@ WarningBox MSG_WARNING_BACKUP
     Message[ japanese ] = "バックアップ コピーは作成できませんでした。";
     Message[ chinese_traditional ] = "無法產生安全備份。";
     Message[ arabic ] = "���� ��� ���� ��������.";
-    Message[ dutch ] = "Reservekopie kan niet worden gemaakt.";
+    Message[ dutch ] = "Reservekopie kan niet worden aangemaakt.";
     Message[ chinese_simplified ] = "无法建立安全备件。";
     Message[ greek ] = "��� ���� ������� �� ������������ ��������� ���������.";
     Message[ korean ] = "백업 복사를 하지 못했습니다.";
@@ -600,6 +628,8 @@ WarningBox MSG_WARNING_BACKUP
     Message[ hebrew ] = "‮לא ניתן ליצור עותק גיבוי.‬";
     Message[ hindi ] = "बैकप प्रतिलिपि को उत्पन्न नहीं कर सकते है ।";
     Message[ slovak ] = "Nie je možné vytvoriť záložnú kópiu.";
+    Message[ hungarian ] = "Nem sikerült létrehozni a biztonsági mentést.";
+    Message[ slovenian ] = "Ni mogoče ustvariti varnostne kopije.";
 };
 InfoBox MSG_CANT_OPEN_TEMPLATE
 {
@@ -610,7 +640,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message [ portuguese_brazilian ] = "N�o foi poss�vel abrir o modelo do documento." ;
     Message [ portuguese ] = "N�o � poss�vel abrir o modelo do documento." ;
     Message [ finnish ] = "Mallia ei voitu avata." ;
-    Message [ danish ] = "Det er ikke muligt at �bne dokumentskabelonen." ;
+    Message [ danish ] = "Det er ikke muligt at �bne skabelonen." ;
     Message [ french ] = "Impossible d'ouvrir le mod�le de document." ;
     Message [ swedish ] = "Dokumentmallen kan inte �ppnas." ;
     Message [ dutch ] = "De documentsjabloon kan niet worden geopend." ;
@@ -634,6 +664,8 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message[ hebrew ] = "‮לא ניתן לפתוח את התבנית.‬";
     Message[ hindi ] = "नमूने को खोल नहीं सकते है ।";
     Message[ slovak ] = "Nie je možné otvoriť šablónu.";
+    Message[ hungarian ] = "A sablont nem sikerült megnyitni.";
+    Message[ slovenian ] = "Predloge ni mogoče odpreti.";
 };
 InfoBox MSG_VIEW_OPEN_CANT_SAVE
 {
@@ -670,6 +702,8 @@ InfoBox MSG_VIEW_OPEN_CANT_SAVE
     MESSAGE[ hebrew ] = "‮המסמך כבר פתוח לעריכה.‬";
     MESSAGE[ hindi ] = "संपादन करने केलिए लेखपत्र पहिले से ही खुला है ।";
     MESSAGE[ slovak ] = "Dokument je už otvorený pre úpravy.";
+    MESSAGE[ hungarian ] = "A dokumentum már szerkesztés alatt áll.";
+    MESSAGE[ slovenian ] = "Dokument je že odprt za urejanje.";
 };
 String STR_ERROR_SAVE
 {
@@ -680,7 +714,7 @@ String STR_ERROR_SAVE
     Text [ portuguese_brazilian ] = "Erro ao gravar o documento" ;
     Text [ portuguese ] = "Erro ao gravar o documento " ;
     Text [ finnish ] = "On ilmennyt virhe tallennettaessa asiakirjaa " ;
-    Text [ danish ] = "Fejl under skrivning af dokumentet " ;
+    Text [ danish ] = "Fejl ved skrivning af dokumentet " ;
     Text [ french ] = "Erreur lors de l'�criture du document " ;
     Text [ swedish ] = "Fel vid skrivning av dokument " ;
     Text [ dutch ] = "Fout bij schrijven van document" ;
@@ -704,6 +738,8 @@ String STR_ERROR_SAVE
     Text[ hebrew ] = "‮ארעה שגיאה בעת הקלטת המסמך ‬";
     Text[ hindi ] = "लेखपत्र रेकोर्डिन्ग करने का समय गलती";
     Text[ slovak ] = "Chyba pri zaznamenávaní dokumentu";
+    Text[ hungarian ] = "Hiba a dokumentum mentése közben";
+    Text[ slovenian ] = "Napaka pri zapisovanju dokumenta";
 };
 String STR_TEMPLATE_FILTER
 {
@@ -714,7 +750,7 @@ String STR_TEMPLATE_FILTER
     Text [ portuguese_brazilian ] = "Modelos" ;
     Text [ portuguese ] = "Modelos de documentos" ;
     Text [ finnish ] = "Mallit" ;
-    Text [ danish ] = "Dokumentskabeloner" ;
+    Text [ danish ] = "Skabeloner" ;
     Text [ french ] = "Mod�les de document" ;
     Text [ swedish ] = "Dokumentmallar" ;
     Text [ dutch ] = "Sjablonen" ;
@@ -738,6 +774,8 @@ String STR_TEMPLATE_FILTER
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
     Text[ slovak ] = "Šablóny";
+    Text[ hungarian ] = "Sablonok";
+    Text[ slovenian ] = "Predloge";
 };
 String STR_ERROR_COPY_TEMPLATE
 {
@@ -748,7 +786,7 @@ String STR_ERROR_COPY_TEMPLATE
     Text [ portuguese_brazilian ] = "Erro ao copiar o modelo \"$1\".\nTalvez j� exista um modelo com este nome." ;
     Text [ portuguese ] = "Erro ao copiar o modelo \"$1\".\n� poss�vel que j� exista." ;
     Text [ finnish ] = "On ilmennyt virhe siirrett�ess� mallia $1. \nT�m�n niminen malli saattaa olla jo olemassa." ;
-    Text [ danish ] = "Fejl ved kopiering af skabelonen \"$1\".\nMuligvis findes skabelonen allerede." ;
+    Text [ danish ] = "Fejl ved kopiering af skabelonen \"$1\".\nMuligvis findes en skabelon med dette navn allerede." ;
     Text [ french ] = "Erreur lors de la copie du mod�le \"$1\".\nIl se peut qu'il existe d�j�." ;
     Text [ swedish ] = "Fel vid kopiering av mallen \"$1\".\nEventuellt existerar mallen redan." ;
     Text [ dutch ] = "Fout bij kopi�ren van sjabloon \"$1\".\nMogelijk bestaat deze reeds." ;
@@ -772,6 +810,8 @@ String STR_ERROR_COPY_TEMPLATE
     Text[ hebrew ] = "‮ארעה שגיאה בעת העתקת תבנית \"$1\".\nתבנית בעלת שם זהה כבר קיימת.‬";
     Text[ hindi ] = "$1 नमूने कि प्रतिलिपि बनाने कि समय गलती । \nशायद इस नाम का नमूना पहिले से ही अस्तित्व में है ।";
     Text[ slovak ] = "Chyba pri kopírovaní šablóny \"$1\". \nŠablóna s týmto menom už pravdepodobne existuje.";
+    Text[ hungarian ] = "Hiba a(z) \"$1\" sablon másolása közben! \nA megadott sablonnév már létezik.";
+    Text[ slovenian ] = "Napaka pri kopiranju predloge \"$1\". \nPredloga s tem imenom morda že obstaja.";
 };
 String STR_ERROR_DELETE_TEMPLATE
 {
@@ -780,11 +820,11 @@ String STR_ERROR_DELETE_TEMPLATE
     Text [ english_us ] = "The template \"$1\" can not be deleted." ;
     Text [ portuguese_brazilian ] = "N�o foi poss�vel excluir o modelo \"$1\"." ;
     Text [ swedish ] = "Mallen \"$1\" kan inte raderas." ;
-    Text [ danish ] = "Det er ikke muligt at slette skabelonen \"$1\"." ;
+    Text [ danish ] = "Skabelonen \"$1\" kunne ikke slettes." ;
     Text [ italian ] = "Impossibile eliminare il modello $1." ;
     Text [ spanish ] = "No es posible borrar la plantilla \"$1\"." ;
     Text [ french ] = "Impossible de supprimer le mod�le \"$1\"." ;
-    Text [ dutch ] = "De sjabloon \"$1\" kan niet worden gewist." ;
+    Text [ dutch ] = "Het sjabloon \"$1\" kan niet worden gewist." ;
     Text [ portuguese ] = "Imposs�vel eliminar o modelo \"$1\"." ;
     Text[ chinese_simplified ] = "无法删除样式 $1。";
     Text[ russian ] = "���������� ������� ������ \"$1\".";
@@ -792,7 +832,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ japanese ] = "テンプレート\"$1\"は削除できません。";
     Text[ chinese_traditional ] = "無法刪除這個樣式 $1 。";
     Text[ arabic ] = "�� ���� ��� ������ \"$1\".";
-    Text[ dutch ] = "De sjabloon \"$1\" kan niet worden gewist.";
+    Text[ dutch ] = "Het sjabloon \"$1\" kan niet worden gewist.";
     Text[ chinese_simplified ] = "无法删除样式 $1。";
     Text[ greek ] = "�������� �� ��������� �� ������� \"$1\".";
     Text[ korean ] = "서식 파일 \"$1\"을(를) 삭제할 수 없습니다.";
@@ -805,6 +845,8 @@ String STR_ERROR_DELETE_TEMPLATE
     Text[ hebrew ] = "‮לא ניתן למחוק את התבנית \"$1\".‬";
     Text[ hindi ] = "नमूना \"$1\" को नहीं मिटा सकते है ।";
     Text[ slovak ] = "Nie je možné zmazať šablónu \"$1\".";
+    Text[ hungarian ] = "A(z) \"$1\" sablon nem törölhető.";
+    Text[ slovenian ] = "Predloge \"$1\" ni mogoče izbrisati.";
 };
 String STR_ERROR_MOVE_TEMPLATE
 {
@@ -839,6 +881,8 @@ String STR_ERROR_MOVE_TEMPLATE
     Text[ hebrew ] = "‮ארעה שגיאה בעת הזזת התבנית \"$1.‬";
     Text[ hindi ] = "$1 नमूना को स्थान परिवर्तन करने का समय गलती ।";
     Text[ slovak ] = "Chyba pri presune šablóny \"$1\".";
+    Text[ hungarian ] = "Hiba a(z) \"$1\" sablon áthelyezése közben.";
+    Text[ slovenian ] = "Napaka pri premikanju predloge \"$1\".";
 };
 ErrorBox MSG_ERROR_RESCAN
 {
@@ -875,6 +919,8 @@ ErrorBox MSG_ERROR_RESCAN
     Message[ hebrew ] = "‮לא ניתן לשמור את העידכון.‬";
     Message[ hindi ] = "अपडेटों को संचित नहीं कर सकते है ।";
     Message[ slovak ] = "Nie je možné uložiť aktualizácie";
+    Message[ hungarian ] = "Nem sikerült menteni a módosítást.";
+    Message[ slovenian ] = "Posodobitve ni mogoče shraniti.";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
@@ -885,7 +931,7 @@ String STR_ERROR_SAVE_TEMPLATE
     Text [ portuguese_brazilian ] = "Erro ao salvar o modelo " ;
     Text [ portuguese ] = "Erro ao gravar o modelo " ;
     Text [ finnish ] = "On ilmennyt virhe tallennettaessa mallia " ;
-    Text [ danish ] = "Fejl under skrivning af skabelonen " ;
+    Text [ danish ] = "Fejl under skrivning af skabelon " ;
     Text [ french ] = "Erreur lors de l'�criture du mod�le " ;
     Text [ swedish ] = "Fel vid skrivning av mall " ;
     Text [ dutch ] = "Fout bij schrijven van sjabloon" ;
@@ -909,6 +955,8 @@ String STR_ERROR_SAVE_TEMPLATE
     Text[ hebrew ] = "‮ארעה שגיאה בעת שמירת התבנית‬";
     Text[ hindi ] = "नमूना संचित करने का समय गलती   ";
     Text[ slovak ] = "Chyba pri ukladaní šablóny ";
+    Text[ hungarian ] = "Hiba a sablon mentése során";
+    Text[ slovenian ] = "Napaka pri shranjevanju predloge ";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE
 {
@@ -945,6 +993,8 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם התבנית.‬";
     Message[ hindi ] = "नमूने को पुनः नाम देने का समय गलती ।";
     Message[ slovak ] = "Chyba pri premenovaní šablóny.";
+    Message[ hungarian ] = "Hiba a sablon átnevezésekor.";
+    Message[ slovenian ] = "Napaka pri preimenovanju predloge.";
 };
 ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
 {
@@ -957,7 +1007,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message [ portuguese_brazilian ] = "Erro ao renomear a categoria do modelo." ;
     Message [ portuguese ] = "Erro ao renomear a regi�o do modelo." ;
     Message [ finnish ] = "On ilmennyt virhe nimett�ess� malliluokkaa uudelleen." ;
-    Message [ danish ] = "Fejl under omd�bning af omr�det." ;
+    Message [ danish ] = "Fejl under omd�bning af skabelonkategori." ;
     Message [ french ] = "Erreur du changement du nom de la cat�gorie." ;
     Message [ swedish ] = "Fel vid namn�ndring p� mallomr�de." ;
     Message [ dutch ] = "Fout bij naamswijziging van bereik." ;
@@ -981,6 +1031,8 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message[ hebrew ] = "‮ארעה שגיאה בעת שינוי שם הסיווג של התבנית.‬";
     Message[ hindi ] = "नमूना वर्ग को पुनः नाम देने का समय गलती ।";
     Message[ slovak ] = "Chyba pri premenovaní kategórie šablóny.";
+    Message[ hungarian ] = "Hiba a sablonkategória átnevezésekor.";
+    Message[ slovenian ] = "Napaka pri preimenovanju kategorije predloge.";
 };
 ErrorBox MSG_ERROR_EMPTY_NAME
 {
@@ -1017,6 +1069,8 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message[ hebrew ] = "‮נא לציין שם.‬";
     Message[ hindi ] = "कृपया एक नाम निर्दिष्ट कीजिए ।";
     Message[ slovak ] = "Uveďte meno.";
+    Message[ hungarian ] = "Adjon meg egy nevet.";
+    Message[ slovenian ] = "Prosimo, navedite ime.";
 };
 ErrorBox MSG_ERROR_UNIQ_NAME
 {
@@ -1029,7 +1083,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message [ portuguese_brazilian ] = "Por favor, especifique um �nico nome.\nN�o h� distin��o entre mai�sculas e min�sculas." ;
     Message [ portuguese ] = "� necess�rio especificar um nome un�voco.\nN�o h� distin��o entre mai�sculas e min�sculas." ;
     Message [ finnish ] = "M��rit� yksil�llinen nimi.\nMerkint�jen kirjainkokoa ei eritell�." ;
-    Message [ danish ] = "Du skal angive et entydigt navn.\nDer g�res ingen forskel mellem store og sm� bogstaver." ;
+    Message [ danish ] = "Du skal angive et unikt navn.\nDer skelnes ikke mellem store og sm� bogstaver." ;
     Message [ french ] = "Veuillez indiquer un nom univoque.\nIl ne sera fait aucune distinction de casse (majuscules / minuscules)." ;
     Message [ swedish ] = "Ett entydigt namn m�ste anges.\nDet g�rs ingen skillnad p� sm� och stora bokst�ver." ;
     Message [ dutch ] = "De naam moet uniek zijn.\nEr wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters." ;
@@ -1053,6 +1107,8 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message[ hebrew ] = "‮נא לציין שם יחודי.\nיש חשיבות לאותיות גדולות וקטנות.‬";
     Message[ hindi ] = "कृपया एक अनोखा नाम निर्दिष्ट कीजिए ।\nप्रविष्टियाँ केस सचेतन नहीं होना चाहिए ।";
     Message[ slovak ] = "Prosím zadajte jedinečné meno.\nV položkách nesmie záležať na veľkosti písmen.";
+    Message[ hungarian ] = "Egyedi nevet adjon meg.\nKisbetű/nagybetű nem számít.";
+    Message[ slovenian ] = "Prosimo, navedite še neuporabljeno ime.\nVnosi ne smejo razlikovati velikih in malih črk.";
 };
 String STR_QUERY_DEFAULT_TEMPLATE
 {
@@ -1063,10 +1119,10 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT [ portuguese_brazilian ] = "Deseja usar o modelo \"$(TEXTO)\" como modelo padr�o?" ;
     TEXT [ portuguese ] = "Deseja usar o modelo \"$(TEXTO)\" como modelo padr�o?" ;
     TEXT [ finnish ] = "Tehd��nk� mallista $(TEXT) oletusmalli?" ;
-    TEXT [ danish ] = "Vil du definere skabelonen \"$(TEKST)\" som standardskabelon?" ;
+    TEXT [ danish ] = "Vil du bruge skabelonen \"$(TEXT)\" som standardskabelon?" ;
     TEXT [ french ] = "Souhaitez-vous faire du mod�le \"$(TEXT)\" le mod�le par d�faut ?" ;
     TEXT [ swedish ] = "Skall mallen \"$(TEXT)\" g�ras till standardmall?" ;
-    TEXT [ dutch ] = "Moet de sjabloon \"$(TEKST)\" de standaardsjabloon worden?" ;
+    TEXT [ dutch ] = "Moet het sjabloon \"$(TEKST)\" de standaardsjabloon worden?" ;
     TEXT [ spanish ] = "�Desea convertir la plantilla \"$(TEXT)\" en una plantilla predeterminada?" ;
     TEXT [ english_us ] = "Should the template \"$(TEXT)\" become the default template?" ;
     TEXT[ chinese_simplified ] = "您要将样式 $(TEXT) 设定成标准样式吗？";
@@ -1075,7 +1131,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ japanese ] = "テンプレート\"$(TEXT)\"を標準スタイルにしますか?";
     TEXT[ chinese_traditional ] = "要將這個樣式$(TEXT)設定成標準樣式？";
     TEXT[ arabic ] = "�� ���� ��� ������ \"$(TEXT)\" ������ ���������";
-    TEXT[ dutch ] = "Moet de sjabloon \"$(TEKST)\" de standaardsjabloon worden?";
+    TEXT[ dutch ] = "Moet het sjabloon \"$(TEKST)\" de standaardsjabloon worden?";
     TEXT[ chinese_simplified ] = "您要将样式 $(TEXT) 设定成标准样式吗？";
     TEXT[ greek ] = "������ �� ������� �� ������� $(TEXT) �� ������� �����������;";
     TEXT[ korean ] = "서식 파일 \"$(TEXT)\"을(를) 기본 서식 파일로 지정하시겠습니까?";
@@ -1087,6 +1143,8 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT[ hebrew ] = "‮האם לקבוע את \"$(TEXT)\" כתבנית ברירת המחדל?‬";
     TEXT[ hindi ] = "$(TEXT) नमूने को अनुपस्थिति नमूना बनाना चाहते है?";
     TEXT[ slovak ] = "Má sa šablóna \"$(TEXT)\" stať východzou šablónou?";
+    TEXT[ hungarian ] = "Legyen a következő sablon az alapértelmezett: \"$(TEXT)\"?";
+    TEXT[ slovenian ] = "Ali naj predloga \"$(TEXT)\" postane privzeta predloga?";
 };
 QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
 {
@@ -1123,6 +1181,8 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message[ hebrew ] = "‮האם להחזור לקדמותו את תבנית ברירת החדל?‬";
     Message[ hindi ] = "अनुपस्थिति नमूने को रिसेट्ट करना चाहते है?";
     Message[ slovak ] = "Prajete si prestaviť východziu šablónu?";
+    Message[ hungarian ] = "Kívánja alapállapotba állítani az alapértelmezett sablont?";
+    Message[ slovenian ] = "Ali želite ponastaviti privzeto predlogo?";
 };
 InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
 {
@@ -1133,7 +1193,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message [ portuguese_brazilian ] = "O diret�rio de modelos\n$(DIR)\nn�o existe." ;
     Message [ portuguese ] = "O direct�rio dos modelos\n$(DIR)\nn�o existe." ;
     Message [ finnish ] = "Mallihakemistoa \n$(DIR)\nei ole." ;
-    Message [ danish ] = "Skabelonbiblioteket\n$(DIR)\neksisterer ikke." ;
+    Message [ danish ] = "Skabelonkataloget\n$(DIR)\nfindes ikke." ;
     Message [ french ] = "Ce r�pertoire de mod�les\n$(DIR)\nn'existe pas." ;
     Message [ swedish ] = "Mallkatalogen\n$(DIR)\nfinns inte." ;
     Message [ dutch ] = "De sjablonenmap\n$(DIR)\nbestaat niet." ;
@@ -1157,6 +1217,8 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message[ hebrew ] = "‮ספרית התבניות \n$(DIR)\nאינה קיימת.‬";
     Message[ hindi ] = "नमूना डैरक्टरी\n$(DIR)\nअस्तित्व में नहीं है ।";
     Message[ slovak ] = "Adresár so šablónami\n$(DIR)\nneexistuje.";
+    Message[ hungarian ] = "A(z) \n$(DIR)\nmintakönyvtár nem létezik.";
+    Message[ slovenian ] = "Imenik s predlogami\n$(DIR)\nne obstaja.";
 };
 InfoBox MSG_DOCINFO_CANTREAD
 {
@@ -1168,7 +1230,7 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message [ spanish ] = "No se pueden leer las informaciones sobre el documento." ;
     Message [ french ] = "Lecture des infos document impossible." ;
     Message [ swedish ] = "Dokumentegenskaperna kan inte l�sas." ;
-    Message [ danish ] = "Det er ikke muligt at l�se dokumentegenskaberne." ;
+    Message [ danish ] = "Dokumentinformationen kunne ikke l�ses." ;
     Message [ portuguese ] = "N�o � poss�vel ler as propriedades do documento." ;
     Message [ portuguese_brazilian ] = "N�o foi poss�vel ler as propriedades do documento." ;
     Message[ chinese_simplified ] = "无法读取文档属性。";
@@ -1190,6 +1252,8 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message[ hebrew ] = "‮לא ניתן לקרוא את פרטי המסמך.‬";
     Message[ hindi ] = "लेखपत्र सूचना को नहीं पढ़ सकते है ।";
     Message[ slovak ] = "Nie je možné prečítať informáciu o dokumente.";
+    Message[ hungarian ] = "A dokumentuminformáció nem olvasható.";
+    Message[ slovenian ] = "Podatkov o dokumentu ni mogoče prebrati.";
 };
 String STR_ERROR_NOSTORAGE
 {
@@ -1204,7 +1268,7 @@ String STR_ERROR_NOSTORAGE
     Text [ french ] = "Le fichier s�lectionn� a un format incorrect." ;
     Text [ dutch ] = "Het gekozen bestand heeft een foutieve indeling." ;
     Text [ spanish ] = "El archivo seleccionado tiene un formato incorrecto." ;
-    Text [ danish ] = "Den udvalgte fil har et forkert format." ;
+    Text [ danish ] = "Den valgte fil har et forkert format." ;
     Text [ swedish ] = "Den valda filen har ett felaktigt format." ;
     Text [ finnish ] = "Valitun tiedoston muoto ei ole kelvollinen." ;
     Text [ english_us ] = "The selected file has an incorrect format." ;
@@ -1226,6 +1290,8 @@ String STR_ERROR_NOSTORAGE
     Text[ hebrew ] = "‮צורת הקובץ הנבחר אינה חוקית.‬";
     Text[ hindi ] = "चुने हुए फाइल का रचना गलत है ।";
     Text[ slovak ] = "Vybraný súbor má neplatný formát.";
+    Text[ hungarian ] = "A kiválasztott fájl formátuma nem megfelelő.";
+    Text[ slovenian ] = "Izbrana datoteka ima nepravilno obliko zapisa.";
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
@@ -1259,6 +1325,8 @@ String STR_QUERY_SAVEOWNFORMAT
     Text[ hebrew ] = "‮יתכן שמסמך זה מכיל תכונות או מידע שלא ניתן לשמירה בצורת $(FORMAT).\nהאם לשמור את השינוים בצורת\n$(OWNFORMAT)\n?‬";
     Text[ hindi ] = "$(FORMAT)\nके नीचे संचित न किये जानेवाला ऐट्रिब्यूट्स और जानकारी शायद इस लेखपत्र में सम्मिलित है । $(OWNFORMAT) रचना\n को उपयोग करके आप परिवर्तनों को संचित करना चाहते है ?";
     Text[ slovak ] = "Tento dokument obsahuje nastavenia a informácie,\nktoré nemôžu byť uložené vo formáte $(FORMAT).\nPrajete si uložiť svoje zmeny s použitím formátu $(OWNFORMAT) ?";
+    Text[ hungarian ] = "Ez a dokumentum olyan tulajdonságokat tartalmazhat, amelyek\nnem menthetőek el $(FORMAT) formátumban.\nKívánja inkább $(OWNFORMAT) formátumban menteni a változtatásokat?";
+    Text[ slovenian ] = "Ta dokument morda vsebuje atribute in podatke, ki jih ni mogoče shraniti kot\n$(FORMAT). Ali želite shraniti spremembe v\n$(OWNFORMAT) obliki zapisa?";
 };
 String STR_QUERY_MUSTOWNFORMAT
 {
@@ -1291,6 +1359,8 @@ String STR_QUERY_MUSTOWNFORMAT
     Text[ hebrew ] = "Documents cannot be saved in $(FORMAT) format. Do you\nwant to save your changes using the $(OWNFORMAT) format?";
     Text[ hindi ] = "लेखपत्रों को $(FORMAT) रचना में संचित नहीं कर सकते है ।\nआप $(OWNFORMAT) रचना उपयोग करके परिवर्तनों को संचित करना चाहते है ?";
     Text[ slovak ] = "Dokumenty nemôžu byť uložené vo formáte $(FORMAT).\nPrajete si uložiť svoje zmeny s použitím formátu $(OWNFORMAT)?";
+    Text[ hungarian ] = "A dokumentum nem menthető el  $(FORMAT) formátumban.\nKívánja $(OWNFORMAT) formátumban menteni a változtatásokat?";
+    Text[ slovenian ] = "Dokumentov ni mogoče shraniti v $(FORMAT) obliki zapisa. Ali\nželite shraniti spremembe v $(OWNFORMAT) obliki zapisa?";
 };
 String STR_SAVEDOC
 {
@@ -1302,7 +1372,7 @@ String STR_SAVEDOC
     Text [ french ] = "~Enregistrer" ;
     Text [ dutch ] = "~Opslaan" ;
     Text [ swedish ] = "Spara" ;
-    Text [ danish ] = "Gem" ;
+    Text [ danish ] = "~Gem" ;
     Text [ portuguese_brazilian ] = "~Salvar" ;
     Text [ portuguese ] = "~Guardar" ;
     Text[ chinese_simplified ] = "存盘(~S)";
@@ -1324,6 +1394,8 @@ String STR_SAVEDOC
     Text[ hebrew ] = "‮שמירה‬!";
     Text[ hindi ] = "~सचित करो";
     Text[ slovak ] = "~Uložiť";
+    Text[ hungarian ] = "M~entés";
+    Text[ slovenian ] = "~Shrani";
 };
 String STR_UPDATEDOC
 {
@@ -1335,7 +1407,7 @@ String STR_UPDATEDOC
     Text [ french ] = "Actuali~se" ;
     Text [ dutch ] = "~Bijwerken" ;
     Text [ swedish ] = "~Uppdatera" ;
-    Text [ danish ] = "Opdater" ;
+    Text [ danish ] = "~Opdater" ;
     Text [ portuguese_brazilian ] = "A~tualizar" ;
     Text [ portuguese ] = "A ac~tualizar" ;
     Text[ chinese_simplified ] = "更新(~U)";
@@ -1357,12 +1429,14 @@ String STR_UPDATEDOC
     Text[ hebrew ] = "‮עידכון‬";
     Text[ hindi ] = "~अपडेट् करो";
     Text[ slovak ] = "Akt~ualizovať";
+    Text[ hungarian ] = "~Frissítés";
+    Text[ slovenian ] = "~Posodobi";
 };
 String STR_SAVEASDOC
 {
     Text = "Speichern ~unter..." ;
     Text [ ENGLISH ] = "Save ~as..." ;
-    Text [ dutch ] = "Opslaa~n als..." ;
+    Text [ dutch ] = "Opslaan ~als..." ;
     Text [ english_us ] = "Save ~As..." ;
     Text [ italian ] = "Salva ~con nome..." ;
     Text [ spanish ] = "G~uardar como..." ;
@@ -1377,7 +1451,7 @@ String STR_SAVEASDOC
     Text[ japanese ] = "名前を付けて保存(~A)...";
     Text[ chinese_traditional ] = "另存新檔(~A)...";
     Text[ arabic ] = "��� ����...";
-    Text[ dutch ] = "Opslaa~n als...";
+    Text[ dutch ] = "Opslaan ~als...";
     Text[ chinese_simplified ] = "另存为(~A)...";
     Text[ greek ] = "���������� ��...";
     Text[ korean ] = "다른 이름으로 저장(~A)...";
@@ -1390,6 +1464,8 @@ String STR_SAVEASDOC
     Text[ hebrew ] = "‮שמירה בשם...‬";
     Text[ hindi ] = "संचित करो ~जैसे...";
     Text[ slovak ] = "Uložiť ~ako...";
+    Text[ hungarian ] = "Men~tés másként...";
+    Text[ slovenian ] = "Shrani ~kot...";
 };
 String STR_SAVECOPYDOC
 {
@@ -1423,6 +1499,8 @@ String STR_SAVECOPYDOC
     Text[ hebrew ] = "‮שמירת עותק בשם...‬";
     Text[ hindi ] = "~प्रतिलिपि संचित करो जैसे...";
     Text[ slovak ] = "Uložiť kópiu ~ako...";
+    Text[ hungarian ] = "Másol~at mentése másként...";
+    Text[ slovenian ] = "Shrani kopijo ~kot...";
 };
 String STR_CLOSEDOC
 {
@@ -1434,7 +1512,7 @@ String STR_CLOSEDOC
     Text [ spanish ] = "~Cerrar" ;
     Text [ french ] = "Fermer" ;
     Text [ swedish ] = "St~�ng" ;
-    Text [ danish ] = "Luk" ;
+    Text [ danish ] = "~Luk" ;
     Text [ portuguese_brazilian ] = "~Fechar" ;
     Text [ portuguese ] = "~Fechar" ;
     Text[ chinese_simplified ] = "关闭(~C)";
@@ -1456,6 +1534,8 @@ String STR_CLOSEDOC
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "~बन्द करो";
     Text[ slovak ] = "~Zavrieť";
+    Text[ hungarian ] = "~Bezárás";
+    Text[ slovenian ] = "~Zapri";
 };
 String STR_CLOSEDOC_ANDRETURN
 {
@@ -1469,7 +1549,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text [ french ] = "~Fermer & retourner � " ;
     Text [ dutch ] = "S~luiten en terug naar" ;
     Text [ swedish ] = "St~�ng och tillbaka till  " ;
-    Text [ danish ] = "Luk og g� tilbage til " ;
+    Text [ danish ] = "~Luk og g� tilbage til " ;
     Text [ portuguese_brazilian ] = "~Fechar & Retornar a " ;
     Text [ portuguese ] = "~Fechar & Regressar a " ;
     Text[ chinese_simplified ] = "关闭和返回(~C)";
@@ -1491,6 +1571,8 @@ String STR_CLOSEDOC_ANDRETURN
     Text[ hebrew ] = "‮יציאה וחזרה אל ‬";
     Text[ hindi ] = "बन्द करो ~और केलिए वापस ";
     Text[ slovak ] = "~Zavrieť a návrat do ";
+    Text[ hungarian ] = "~Bezárás és visszatérés";
+    Text[ slovenian ] = "~Zapri & se vrni na";
 };
 String STR_WIZARD
 {
@@ -1500,9 +1582,9 @@ String STR_WIZARD
     Text [ italian ] = "wizard" ;
     Text [ spanish ] = "Piloto autom�tico" ;
     Text [ french ] = "AutoPilote" ;
-    Text [ dutch ] = "wizard" ;
+    Text [ dutch ] = "AutoPiloot" ;
     Text [ swedish ] = "wizard" ;
-    Text [ danish ] = "wizard" ;
+    Text [ danish ] = " AutoPilot" ;
     Text [ portuguese_brazilian ] = "Assistente" ;
     Text [ portuguese ] = "wizard" ;
     Text[ chinese_simplified ] = "向导";
@@ -1511,7 +1593,7 @@ String STR_WIZARD
     Text[ japanese ] = "オートパイロット";
     Text[ chinese_traditional ] = "嚮導";
     Text[ arabic ] = "������";
-    Text[ dutch ] = "wizard";
+    Text[ dutch ] = "AutoPiloot";
     Text[ chinese_simplified ] = "向导";
     Text[ greek ] = "��������� �������";
     Text[ korean ] = "자동 파일럿";
@@ -1524,6 +1606,8 @@ String STR_WIZARD
     Text[ hebrew ] = "‮ טייס אוטומטי‬";
     Text[ hindi ] = " ओटोपैलट्";
     Text[ slovak ] = " Sprievodca";
+    Text[ hungarian ] = "Tündér";
+    Text[ slovenian ] = "Avtopilot";
 };
 String RID_STR_FILTCONFIG
 {
@@ -1557,6 +1641,8 @@ String RID_STR_FILTCONFIG
     Text[ hebrew ] = "‮תצורות‬";
     Text[ hindi ] = "रूपरेखें";
     Text[ slovak ] = "Konfigurácia";
+    Text[ hungarian ] = "Beállítások";
+    Text[ slovenian ] = "Konfiguracije";
 };
 String RID_STR_FILTBASIC
 {
@@ -1590,6 +1676,8 @@ String RID_STR_FILTBASIC
     Text[ hebrew ] = "‮ספריות בייסיק %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME Basic लैब्ररियाँ";
     Text[ slovak ] = "Knižnice BASIC %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME Basic-programkönyvtárak";
+    Text[ slovenian ] = "Knjižnice programa %PRODUCTNAME Basic";
 };
 String RID_STR_WARNSTYLEOVERWRITE
 {
@@ -1623,6 +1711,8 @@ String RID_STR_WARNSTYLEOVERWRITE
     Text[ hebrew ] = "‮האם להחליף את הסגנון \"$(ARG1)\"?‬";
     Text[ hindi ] = "$(ARG1) शैली को प्रतिस्थापित करना है?";
     Text[ slovak ] = "Má byť štýl \"$(ARG1)\" nahradený?";
+    Text[ hungarian ] = "Kívánja felülírni a(z) \"$(ARG1)\" stílust?";
+    Text[ slovenian ] = "Ali želite zamenjati slog \"$(ARG1)\"?";
 };
 String STR_DOC_LOADING
 {
@@ -1656,6 +1746,8 @@ String STR_DOC_LOADING
     Text[ hebrew ] = "‮טעינת המסמך‬";
     Text[ hindi ] = "लेखपत्र को लोड़ कर रहा है";
     Text[ slovak ] = "Načíta sa súbor";
+    Text[ hungarian ] = "Dokumentum betöltése";
+    Text[ slovenian ] = "Nalaganje dokumenta";
 };
 Resource RID_DLSTATUS
 {
@@ -1691,6 +1783,8 @@ Resource RID_DLSTATUS
         Text[ hebrew ] = "‮מתחברת ל: $(HOST). המתנה לתשובה...‬";
         Text[ hindi ] = "$(HOST) केलिए कनेक्शन्। जवाब केलिए ठहरा हुआ है...";
         Text[ slovak ] = "Pripojenie k $(HOST): čaká sa na spojenie...";
+        Text[ hungarian ] = "Csatlakozás erre a helyre: $(HOST). Várakozás a válaszra...";
+        Text[ slovenian ] = "Vzpostavljanje povezave z: $(HOST). Čakanje na odgovor...";
     };
     String INET_CONNECT_START
     {
@@ -1702,7 +1796,7 @@ Resource RID_DLSTATUS
         Text [ spanish ] = "Abriendo: $(TARGET) en $(HOST)" ;
         Text [ french ] = "Ouvrir : $(TARGET) � $(HOST)" ;
         Text [ swedish ] = "$(TARGET) �ppnas p� $(HOST)" ;
-        Text [ danish ] = "�bner: $(TARGET) p� $(HOST)" ;
+        Text [ danish ] = "�bner $(TARGET) p� $(HOST)" ;
         Text [ portuguese_brazilian ] = "Abrindo: $(TARGET) em $(HOST)" ;
         Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
         Text[ chinese_simplified ] = "打开：$(HOST)上的$(TARGET)";
@@ -1724,6 +1818,8 @@ Resource RID_DLSTATUS
         Text[ hebrew ] = "‮$(TARGET) נפתח על: $(HOST)‬";
         Text[ hindi ] = "$(HOST) में $(TARGET) को खोल रहा है ";
         Text[ slovak ] = "Otvára sa $(TARGET) u $(HOST)";
+        Text[ hungarian ] = "$(TARGET) megnyitása a(z) $(HOST) helyről";
+        Text[ slovenian ] = "Odpiranje $(TARGET) na $(HOST)";
     };
     String INET_READ_STATUS
     {
@@ -1757,6 +1853,8 @@ Resource RID_DLSTATUS
         Text[ hebrew ] = "‮טעינת: $(TARGET) מתבצעת, מ: $(HOST). נטענו: $(BYTE) בתים‬";
         Text[ hindi ] = "$(HOST) से $(TARGET) को लोड़ कर रहा है ।  $(BYTE) को लोड़ किया ।";
         Text[ slovak ] = "Nahráva sa: $(TARGET) z $(HOST). Stiahnuté: $(BYTE)";
+        Text[ hungarian ] = "$(TARGET) betöltése innen: $(HOST). Betöltve: $(BYTE)";
+        Text[ slovenian ] = "Nalaganje: $(TARGET) z $(HOST). Naloženo: $(BYTE)";
     };
     String INET_CONNECTION_CLOSED
     {
@@ -1790,6 +1888,8 @@ Resource RID_DLSTATUS
         Text[ hebrew ] = "‮מנותק‬";
         Text[ hindi ] = "डिसकनेक्ट किया";
         Text[ slovak ] = "Spojenie prerušené";
+        Text[ hungarian ] = "Szétkapcsolva";
+        Text[ slovenian ] = "Povezava je prekinjena";
     };
 };
 QueryBox MSG_OPEN_READONLY
@@ -1803,7 +1903,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE [ portuguese_brazilian ] = "N�o foi poss�vel abrir o documento para edi��o.\n Deseja abr�-lo somente para leitura?" ;
     MESSAGE [ portuguese ] = "Imposs�vel abrir documento para editar.\n Abri-lo apenas para leitura?" ;
     MESSAGE [ finnish ] = "Asiakirjaa ei voi avata muokattavaksi.\nHaluatko tallentaa sen vain luku -muodossa?" ;
-    MESSAGE [ danish ] = "Det er ikke muligt at �bne dokumentet til redigering.\nVil du �bne det i skrivebeskyttet tilstand?" ;
+    MESSAGE [ danish ] = "Det er ikke muligt at �bne dokumentet til redigering.\nVil du �bne det som skrivebeskyttet?" ;
     MESSAGE [ french ] = "Impossible d'ouvrir le document pour modification.\nVoulez-vous l'ouvrir en lecture seule ?" ;
     MESSAGE [ swedish ] = "Dokumentet kan inte �ppnas f�r redigering. \nVill du �ppna det f�r l�sning?" ;
     MESSAGE [ dutch ] = "Dit document is schrijfbeveiligd.\nWilt u het alleen lezen?" ;
@@ -1827,6 +1927,8 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE[ hebrew ] = "‮לא ניתן לפתוח את המסמך לכתיבה.\nהאם לפתוח לקריאה בלבד?‬";
     MESSAGE[ hindi ] = "लेखपत्र को संपादन केलिए नहीं खोल सकते है।\nआप उसे केवल-पढ़ने केलिए खोलना चाहते है?";
     MESSAGE[ slovak ] = "Dokument nemôže byť otvorený pre editáciu.\nPrajete si ho otvoriť iba na čítanie?";
+    MESSAGE[ hungarian ] = "A dokumentum nem nyitható meg szerkesztésre.\nMegnyitja csak olvasható módban?";
+    MESSAGE[ slovenian ] = "Dokumenta ni mogoče odpreti za urejanje.\nAli ga želite odpreti samo za branje?";
 };
 String STR_EDIT
 {
@@ -1860,6 +1962,8 @@ String STR_EDIT
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "संपादन";
     Text[ slovak ] = "Upraviť";
+    Text[ hungarian ] = "Szerkesztés";
+    Text[ slovenian ] = "Uredi";
 };
 String RID_OFFICEFILTER
 {
@@ -1871,7 +1975,7 @@ String RID_OFFICEFILTER
     Text [ french ] = "Documents %PRODUCTNAME" ;
     Text [ dutch ] = "%PRODUCTNAME Documenten" ;
     Text [ swedish ] = "%PRODUCTNAME-dokument" ;
-    Text [ danish ] = "%PRODUCTNAME dokumenter" ;
+    Text [ danish ] = "%PRODUCTNAME-dokumenter" ;
     Text [ portuguese_brazilian ] = "Documentos %PRODUCTNAME" ;
     Text [ portuguese ] = "Documentos %PRODUCTNAME" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME 文档";
@@ -1893,6 +1997,8 @@ String RID_OFFICEFILTER
     Text[ hebrew ] = "‮מסמכי %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME लेखपत्रें";
     Text[ slovak ] = "Dokumenty %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-dokumentumok";
+    Text[ slovenian ] = "Dokumenti programa %PRODUCTNAME";
 };
 String RID_OFFICEFILTER_WILDCARD
 {
@@ -1912,7 +2018,7 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text [ ENGLISH ] = "~Properties ..." ;
     Text [ english_us ] = "Propert~ies ..." ;
     Text [ swedish ] = "~Egenskaper..." ;
-    Text [ danish ] = "Egenskaber ..." ;
+    Text [ danish ] = "~Egenskaber..." ;
     Text [ italian ] = "Propri~et�..." ;
     Text [ spanish ] = "Prop~iedades..." ;
     Text [ french ] = "~Propri�t�s ..." ;
@@ -1938,6 +2044,8 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text[ hebrew ] = "‮מאפינים...‬";
     Text[ hindi ] = "वि~शेषतायें ...";
     Text[ slovak ] = "Vlastnost~i...";
+    Text[ hungarian ] = "~Tulajdonságok...";
+    Text[ slovenian ] = "La~stnosti ...";
 };
 String STR_FSET_FILTERNAME0
 {
@@ -1946,7 +2054,7 @@ String STR_FSET_FILTERNAME0
     Text [ english_us ] = "HTML (FrameSet)" ;
     Text [ portuguese_brazilian ] = "HTML (FrameSet)" ;
     Text [ swedish ] = "HTML (FrameSet)" ;
-    Text [ danish ] = "HTML (FrameSet)" ;
+    Text [ danish ] = "HTML (rammes�t)" ;
     Text [ italian ] = "HTML (FrameSet)" ;
     Text [ spanish ] = "HTML (FrameSet)" ;
     Text [ french ] = "HTML (FrameSet)" ;
@@ -1971,6 +2079,8 @@ String STR_FSET_FILTERNAME0
     Text[ hebrew ] = "HTML (FrameSet)";
     Text[ hindi ] = "HTML (फ्रेमसेट्ट)";
     Text[ slovak ] = "HTML (sada rámcov)";
+    Text[ hungarian ] = "HTML (keretkészlet)";
+    Text[ slovenian ] = "HTML (Skupina okvirov)";
 };
 String STR_FSET_FILTERNAME1
 {
@@ -1980,7 +2090,7 @@ String STR_FSET_FILTERNAME1
     Text [ english_us ] = "%PRODUCTNAME Frame Document" ;
     Text [ portuguese_brazilian ] = "Documento de Moldura %PRODUCTNAME" ;
     Text [ swedish ] = "%PRODUCTNAME Frame-dokument" ;
-    Text [ danish ] = "%PRODUCTNAME Frame-dokument" ;
+    Text [ danish ] = "%PRODUCTNAME-rammedokument" ;
     Text [ italian ] = "Documento %PRODUCTNAME Frame" ;
     Text [ spanish ] = "%PRODUCTNAME Frame - Documento" ;
     Text [ french ] = "Document %PRODUCTNAME Frame" ;
@@ -2005,6 +2115,8 @@ String STR_FSET_FILTERNAME1
     Text[ hebrew ] = "‮מסמך  Frame %PRODUCTNAME‬";
     Text[ hindi ] = "%PRODUCTNAME फ्रेम् लेखपत्र";
     Text[ slovak ] = "Dokument s rámcami %PRODUCTNAME";
+    Text[ hungarian ] = "%PRODUCTNAME-keretdokumentum";
+    Text[ slovenian ] = "Okvirni dokument programa %PRODUCTNAME";
 };
 String STR_TEMPL_MOVED
 {
@@ -2017,7 +2129,7 @@ String STR_TEMPL_MOVED
     Text [ italian ] = "Il modello $(TEMPLATE) non � stato trovato al suo posto originario. Un modello con lo stesso nome esiste in $(FOUND). Volete usare in futuro questo modello per l'aggiornamento?" ;
     Text [ spanish ] = "La plantilla \"$(TEMPLATE)\" no se encontr� en su ubicaci�n original. Una plantilla con el mismo nombre se encontr� en \"$(FOUND)\". �Desea utilizar esta plantilla al sincronizar en el futuro?" ;
     Text [ french ] = "Le mod�le \"$(TEMPLATE)\" n'a pas �t� trouv� � son emplacement d'origine. Un mod�le du m�me nom a �t� d�tect� sur le chemin \"$(FOUND)\". Voulez-vous que ce mod�le soit utilis� � l'avenir en remplacement du mod�le introuvable ?" ;
-    Text [ dutch ] = "Sjabloon \"$(TEMPLATE)\" is niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?" ;
+    Text [ dutch ] = "Sjabloon \"$(TEMPLATE)\" is niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u dit sjabloon in de toekomst voor het synchroniseren gebruiken?" ;
     Text [ portuguese ] = "O modelo \"$(TEMPLATE)\" n�o foi encontrado no seu lugar original. J� existe um modelo com o mesmo nome em \"$(FOUND)\". Deseja usar este modelo para actualiza��es futuras?" ;
     Text[ chinese_simplified ] = "没有在原来位置找到样式 $(TEMPLATE) 。有一个同名的样式在 $(FOUND)。今后要使用这个样式进行调整吗？";
     Text[ russian ] = "������ \"$(TEMPLATE)\" �� ������ � �������� �����. ������ � ����� �� ������ ��������� � \"$(FOUND)\". ������������ ���� ������ � ������� ��� ���������?";
@@ -2025,7 +2137,7 @@ String STR_TEMPL_MOVED
     Text[ japanese ] = "テンプレート \"$(TEMPLATE)\" は元の場所に見つかりませんでした。同じ名前のテンプレートが \"$(FOUND)\" にあります。今後このテンプレートを同期化に使いますか。";
     Text[ chinese_traditional ] = "沒有在原來的位置找到這個樣式$(TEMPLATE)。有一個同名的樣式在 $(FOUND) 。今後您要比較這個樣式？";
     Text[ arabic ] = "���� ������ ��� ������ \"$(TEMPLATE)\" �� ����� ������. ���� ���� ���� ����� �� ������ \"$(FOUND)\". �� ���� ������� ��� ������ ������� �� ��������";
-    Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" is niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?";
+    Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" is niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u dit sjabloon in de toekomst voor het synchroniseren gebruiken?";
     Text[ chinese_simplified ] = "没有在原来位置找到样式 $(TEMPLATE) 。有一个同名的样式在 $(FOUND)。今后要使用这个样式进行调整吗？";
     Text[ greek ] = "�� ������� \"$(TEMPLATE)\" ��� ������� ���� ������ ����. ������� ������� �� �� ���� ����� ��� \"$(FOUND)\". ������ �� ��������������� ���� �� ������� ��� ������ ���� �� ��������;";
     Text[ korean ] = "서식 파일$(TEMPLATE)을 원래 위치에서 찾지 못했습니다. 이름이 같은 서식 파일이 $(FOUND)에 있습니다. 앞으로 이 파일을 동기화에 사용하시겠습니까?";
@@ -2038,6 +2150,8 @@ String STR_TEMPL_MOVED
     Text[ hebrew ] = "‮לא ניתן לאתר את התבנית \"$(TEMPLATE)\" במקומה המקורי אבל תבנית בעלת שם זהה נמצאת ב \"$(FOUND)\". האם להשתמש בעתיד בתבנית זו להשוואות?‬";
     Text[ hindi ] = "$(TEMPLATE) नमूना यथार्थ स्थान में नहीं है । समान नाम का नमूना \"$(FOUND)\" में अस्तित्व में है । भविष्य में तुलना करने केलिए इस नमूने को उपयोग करना चाहते है ?";
     Text[ slovak ] = "Šablóna \"$(TEMPLATE)\" nebola nájdená na pôvodnom mieste. Šablóna z rovnakým názvom sa nachádza v \"$(FOUND)\".Má byť táto šablóna v budúcnosti použitá na porovnanie?";
+    Text[ hungarian ] = "Az eredeti helyéről hiányzó sablon: \"$(TEMPLATE)\". Ugyanilyen nevű sablon található viszont: \"$(FOUND)\". A jövőben inkább ezzel a sablonnal hasonlít össze?";
+    Text[ slovenian ] = "Predloge \"$(TEMPLATE)\" ni mogoče najti na prvotnem mestu. Predloga z istim imenom obstaja v \"$(FOUND)\". Ali naj se v prihodnje uporablja ta predloga za primerjavo?";
 };
 String STR_TEMPL_RESET
 {
@@ -2050,7 +2164,7 @@ String STR_TEMPL_RESET
     Text [ italian ] = "Il modello $(TEMPLATE) non � stato trovato. Volete che venga cercato anche in futuro?" ;
     Text [ spanish ] = "No se encontr� la plantilla \"$(TEMPLATE)\". �Desea que se busque la pr�xima vez que abra el documento?" ;
     Text [ french ] = "Le mod�le $(TEMPLATE) est introuvable. Devra-t-il �tre recherch� � la prochaine ouverture du document ?" ;
-    Text [ dutch ] = "De sjabloon \"$(TEMPLATE)\" is niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?" ;
+    Text [ dutch ] = "Het sjabloon \"$(TEMPLATE)\" is niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?" ;
     Text [ portuguese ] = "O modelo \"$(TEMPLATE)\" n�o foi encontrado. Deseja continuar a procura quando abrir o documento novamente?" ;
     Text[ chinese_simplified ] = "没有找到样式\"$(TEMPLATE)\"。下一次还要搜寻它？";
     Text[ russian ] = "������ \"$(TEMPLATE)\" �� ������. ������ ��� � ��������� ��� ��� �������� ���������?";
@@ -2058,7 +2172,7 @@ String STR_TEMPL_RESET
     Text[ japanese ] = "テンプレート\"$(TEMPLATE)\"は見つかりませんでした。これからも続けて検索しますか?";
     Text[ chinese_traditional ] = "沒有找到這個樣式 $(TEMPLATE)。今後還要繼續搜尋它？";
     Text[ arabic ] = "���� ������ ��� ������ \"$(TEMPLATE)\". �� ���� ������ ����� ��� �� ��������";
-    Text[ dutch ] = "De sjabloon \"$(TEMPLATE)\" is niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?";
+    Text[ dutch ] = "Het sjabloon \"$(TEMPLATE)\" is niet gevonden. Wilt u dat er ook in de toekomst naar wordt gezocht?";
     Text[ chinese_simplified ] = "没有找到样式\"$(TEMPLATE)\"。下一次还要搜寻它？";
     Text[ greek ] = "�� ������� $(TEMPLATE) ��� �������. ������ �� ����� ��� ���������� ��������� ����� ��� ��������;";
     Text[ korean ] = "서식 파일 $(TEMPLATE)을 찾지 못했습니다. 이 파일을 계속 찾으시겠습니까?";
@@ -2071,6 +2185,8 @@ String STR_TEMPL_RESET
     Text[ hebrew ] = "‮לא ניתן לאתר את התבנית \"$(TEMPLATE)\". האם לחפש את התבנית בפתיחה הבאה של המסמך?‬";
     Text[ hindi ] = "$(TEMPLATE) नमूना प्राप्त नहीं हुआ । अगले बार लेखपत्र को खोलने के समय नमूने को खोजना चाहते है ?";
     Text[ slovak ] = "Šablóna \"$(TEMPLATE)\" nebola nájdená. Má sa vykonávať hľadanie šablóny i pri dalšom otvorení dokumentu?";
+    Text[ hungarian ] = "A(z) \"$(TEMPLATE)\" sablont nem sikerült megtalálni. Szeretné, hogy a program megkeresse a sablont a dokumentum legközelebbi megnyitásakor?";
+    Text[ slovenian ] = "Predloge \"$(TEMPLATE)\" ni mogoče najti. Ali naj se iskanje predloge nadaljuje, ko bo dokument naslednjič odprt?";
 };
 String STR_AUTOMATICVERSION
 {
@@ -2104,6 +2220,8 @@ String STR_AUTOMATICVERSION
     Text[ hebrew ] = "‮עותק שנשמר באופן אוטומטי‬";
     Text[ hindi ] = "स्वचालित प्रकार से संचित किया हुआ आवृत्ति";
     Text[ slovak ] = "Automaticky uložená verzia";
+    Text[ hungarian ] = "Automatikusan mentett változat";
+    Text[ slovenian ] = "Samodejno shranjena različica";
 };
 
 String STR_DOCTYPENAME_SW
@@ -2135,6 +2253,8 @@ String STR_DOCTYPENAME_SW
     Text[ hebrew ] = "‮מסמך טקסט‬";
     Text[ hindi ] = "टेक्स्ट् लेखपत्र";
     Text[ slovak ] = "Textový dokument";
+    Text[ hungarian ] = "Szöveges dokumentum";
+    Text[ slovenian ] = "Dokument z besedilom";
 };
 
 String STR_DOCTYPENAME_SWWEB
@@ -2166,6 +2286,8 @@ String STR_DOCTYPENAME_SWWEB
     Text[ hebrew ] = "‮מסמך LMTH‬";
     Text[ hindi ] = "HTML लेखपत्र";
     Text[ slovak ] = "HTML dokument";
+    Text[ hungarian ] = "HTML-dokumentum";
+    Text[ slovenian ] = "HTML dokument";
 };
 
 String STR_DOCTYPENAME_SWGLOB
@@ -2197,6 +2319,8 @@ String STR_DOCTYPENAME_SWGLOB
     Text[ hebrew ] = "‮מסמך אב‬";
     Text[ hindi ] = "मास्टर लेखपत्र";
     Text[ slovak ] = "Hlavný dokument";
+    Text[ hungarian ] = "Fődokumentum";
+    Text[ slovenian ] = "Glavni dokument";
 };
 
 String STR_DOCTYPENAME_SC
@@ -2228,6 +2352,8 @@ String STR_DOCTYPENAME_SC
     Text[ hebrew ] = "‮גליון אלקטרוני‬";
     Text[ hindi ] = "स्प्रेडशीट्";
     Text[ slovak ] = "Zošit";
+    Text[ hungarian ] = "Munkafüzet";
+    Text[ slovenian ] = "Preglednica";
 };
 
 String STR_DOCTYPENAME_SI
@@ -2259,6 +2385,8 @@ String STR_DOCTYPENAME_SI
     Text[ hebrew ] = "‮מצגת‬";
     Text[ hindi ] = "प्रस्तुति";
     Text[ slovak ] = "Prezentácia";
+    Text[ hungarian ] = "Bemutató";
+    Text[ slovenian ] = "Predstavitev";
 };
 
 String STR_DOCTYPENAME_SD
@@ -2290,6 +2418,8 @@ String STR_DOCTYPENAME_SD
     Text[ hebrew ] = "‮ציור‬";
     Text[ hindi ] = "रेखाचित्र";
     Text[ slovak ] = "Kresba";
+    Text[ hungarian ] = "Rajz";
+    Text[ slovenian ] = "Risba";
 };
 
 String STR_DOCTYPENAME_MESSAGE
@@ -2321,6 +2451,8 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ hebrew ] = "‮הודעה‬";
     Text[ hindi ] = "संदेश";
     Text[ slovak ] = "Správa";
+    Text[ hungarian ] = "Üzenet";
+    Text[ slovenian ] = "Sporočilo";
 };
 
 String STR_NOSAVEANDCLOSE
@@ -2334,7 +2466,7 @@ String STR_NOSAVEANDCLOSE
     Text[ french ] = "~Ignorer";
     Text[ spanish ] = "~Rechazar";
     Text[ italian ] = "Non salvare";
-    Text[ danish ] = "Forkast";
+    Text[ danish ] = "~Forkast";
     Text[ swedish ] = "I~gnorera";
     Text[ polish ] = "~Odrzu�";
     Text[ portuguese_brazilian ] = "~Descartar";
@@ -2355,6 +2487,8 @@ String STR_NOSAVEANDCLOSE
     Text[ hebrew ] = "‮התעלמות‬";
     Text[ hindi ] = "~उपेक्षा";
     Text[ slovak ] = "Zaho~diť";
+    Text[ hungarian ] = "El~vetés";
+    Text[ slovenian ] = "~Zavrzi";
 };
 
 String STR_PACKNGO_NOACCESS
@@ -2369,7 +2503,7 @@ String STR_PACKNGO_NOACCESS
     Text[ french ] = "Impossible d'acc�der au m�dia actuel !";
     Text[ spanish ] = "No se pudo acceder al medio actual.";
     Text[ italian ] = "Non � stato possibile accedere al supporto dati attuale.";
-    Text[ danish ] = "Det var ikke muligt at f� adgang til det aktuelle datamedie.";
+    Text[ danish ] = "Det var ikke muligt at f� adgang til det nuv�rende datamedie.";
     Text[ swedish ] = "Det gick inte att f� tillg�ng till det aktuella datamediet.";
     Text[ polish ] = "Bie��cy no�nik danych jest niedost�pny.";
     Text[ portuguese_brazilian ] = "N�o foi poss�vel o acesso a m�dia de dados atual.";
@@ -2386,6 +2520,8 @@ String STR_PACKNGO_NOACCESS
     Text[ hebrew ] = "‮אין גישה למדית הנתונים הנוכחית.‬";
     Text[ hindi ] = "वर्तमान ड़ॉटा मीडियम को प्रवेश करना संभव नहीं है ।";
     Text[ slovak ] = "Prístup k terajšiemu dátovému médiu nie je možný.";
+    Text[ hungarian ] = "Nem lehet hozzáférni az adathordozóhoz.";
+    Text[ slovenian ] = "Dostop do trenutnega podatkovnega medija ni mogoč.";
 };
 
 String STR_PACKNGO_NEWMEDIUM
@@ -2417,6 +2553,8 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ hebrew ] = "‮יש להכניס את המדיה הבאה וללחוץ OK.‬";
     Text[ hindi ] = "अगला ड़ॉटा कैरियर को जोड़ो और ठीक को क्लिक् करो ।";
     Text[ slovak ] = "Vložte prosím ďalší nosič dát a stisknite OK.";
+    Text[ hungarian ] = "Helyezze be a következő adathordozót, majd kattintson az OK gombra.";
+    Text[ slovenian ] = "Vstavite naslednji nosilec podatkov in kliknite OK.";
 };
 
 String STR_OBJECT
@@ -2451,6 +2589,8 @@ String STR_OBJECT
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
     Text[ slovak ] = "Objekt";
+    Text[ hungarian ] = "Objektum";
+    Text[ slovenian ] = "Predmet";
 };
 
 String STR_EDITOBJECT
@@ -2485,6 +2625,8 @@ String STR_EDITOBJECT
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "~संपादन";
     Text[ slovak ] = "~Upraviť";
+    Text[ hungarian ] = "S~zerkesztés";
+    Text[ slovenian ] = "~Uredi";
 };
 
 String STR_OPENOBJECT
@@ -2498,7 +2640,7 @@ String STR_OPENOBJECT
     Text[ french ] = "~Ouvrir";
     Text[ spanish ] = "~Abrir";
     Text[ italian ] = "~Apri";
-    Text[ danish ] = "~�bn";
+    Text[ danish ] = "�~bn";
     Text[ swedish ] = "~�ppna";
     Text[ polish ] = "~Otw�rz";
     Text[ portuguese_brazilian ] = "~Abrir";
@@ -2519,6 +2661,8 @@ String STR_OPENOBJECT
     Text[ hebrew ] = "‮פתיחה‬";
     Text[ hindi ] = "~खोलो";
     Text[ slovak ] = "~Otvoriť";
+    Text[ hungarian ] = "~Megnyitás";
+    Text[ slovenian ] = "~Odpri";
 };
 
 QueryBox DLG_MACROQUERY
@@ -2582,6 +2726,10 @@ QueryBox DLG_MACROQUERY
     Title[ hindi ] = "Run Macro";
     Message[ slovak ] = "Tento dokument obsahuje makrá. $(TEXT)";
     Title[ slovak ] = "Spustiť makro";
+    Message[ hungarian ] = "Ez a dokumentum makrókat tartalmaz. $(TEXT)";
+    Message[ slovenian ] = "Ta dokument vsebuje makre. $(TEXT)";
+    Title[ hungarian ] = "Makró futtatása";
+    Title[ slovenian ] = "Zaženi makro";
 };
 
 String BTN_OK
@@ -2616,6 +2764,8 @@ String BTN_OK
     Text[ hebrew ] = "‮הפעלה‬";
     Text[ hindi ] = "Run";
     Text[ slovak ] = "Spustiť";
+    Text[ hungarian ] = "Futtatás";
+    Text[ slovenian ] = "Zaženi";
 };
 String BTN_CANCEL
 {
@@ -2649,6 +2799,8 @@ String BTN_CANCEL
     Text[ hebrew ] = "‮אין להפעיל‬";
     Text[ hindi ] = "Do Not Run";
     Text[ slovak ] = "Nespúšťať";
+    Text[ hungarian ] = "Ne futtassa";
+    Text[ slovenian ] = "Ne zaženi";
 };
 String FT_CANCEL
 {
@@ -2665,7 +2817,7 @@ String FT_CANCEL
     Text[ greek ] = "������� �� ��� ��������� ���������, �� ������������ ����� ��� �������� ��� �� ������ �� �����������. ����� ������� ��� ������ �� ��� ����������;";
     Text[ dutch ] = "Volgens de beveiligingsopties mogen de macro's in dit document niet worden uitgevoerd. Wilt u de macro's toch uitvoeren?";
     Text[ finnish ] = "Suojausasetusten mukaan t�m�n asiakirjan makroja ei tulisi suorittaa. Suoritetaanko ne siit� huolimatta?";
-    Text[ danish ] = "If�lge sikkerhedsindstillingerne skal makroerne i dette dokument ikke udf�res. Vil du alligevel udf�re dem?";
+    Text[ danish ] = "If�lge sikkerhedsindstillingerne skal makroerne i dette dokument ikke udf�res. Vil du udf�re dem alligevel?";
     Text[ swedish ] = "Enligt s�kerhetsinst�llningarna ska makrona i det h�r dokumentet inte k�ras. Vill du k�ra dem i alla fall?";
     Text[ polish ] = "Zgodnie z ustawieniami zabezpiecze� nie nale�y uruchamia� makr z tego dokumentu. Czy mimo to chcesz je uruchomi�?";
     Text[ portuguese_brazilian ] = "De acordo com as configura��es de seguran�a, as macros contidas neste documento n�o deveriam ser executadas. Deseja executa-las mesmo assim? ";
@@ -2678,7 +2830,9 @@ String FT_CANCEL
     Text[ czech ] = "Podle nastavení zabezpečení by makra v tomto dokumentu neměla být spuštěna. Přejete si je přesto spustit?";
     Text[ hebrew ] = "‮לפי הגדרות האבטחה, אין להפעיל את המקרואים במסמך זה. האם להפעילם בכל זאת?‬";
     Text[ hindi ] = "According to the security settings, the macros in this document should not be run. Do you want to run them anyway?";
-    Text[ slovak ] = "Podľa nastavení zabezpečenia, maká v tomto dokumente by nemali byť spustené. Prajete si ich napriek tomu spustiť?";
+    Text[ slovak ] = "Podľa nastavení zabezpečenia, makrá v tomto dokumente by nemali byť spustené. Prajete si ich napriek tomu spustiť?";
+    Text[ hungarian ] = "A biztonsági beállítások alapján ezen dokumentum makróit nem szabad futtatni. Futtatja mégis?";
+    Text[ slovenian ] = "Glede na varnostne nastavitve, se makri v tem dokumentu ne bi smeli izvesti. Jih želite vseeno izvesti?";
 };
 String FT_OK
 {
@@ -2709,6 +2863,8 @@ String FT_OK
     Text[ hebrew ] = "‮האם לאפשר הפעלת המקרואים האלה?‬";
     Text[ hindi ] = "Do you want to allow these macros to be run?";
     Text[ slovak ] = "Naozaj chcete povoliť spustenie týchto makier?";
+    Text[ hungarian ] = "Engedélyezi e makrók futtatását?";
+    Text[ slovenian ] = "Želite dovoliti izvajanje makrov?";
 };
 
 String STR_EXPORTASPDF_TITLE
@@ -2725,10 +2881,10 @@ String STR_EXPORTASPDF_TITLE
     Text[ italian ] = "Esporta come file PDF";
     Text[ portuguese ] = "Export as PDF";
     Text[ russian ] = "Export as PDF";
-    Text[ greek ] = "Export as PDF";
-    Text[ dutch ] = "Export as PDF";
+    Text[ greek ] = "������� �� PDF";
+    Text[ dutch ] = "Exporteren als PDF";
     Text[ finnish ] = "Export as PDF";
-    Text[ danish ] = "Export as PDF";
+    Text[ danish ] = "Eksporter som PDF";
     Text[ polish ] = "Export as PDF";
     Text[ portuguese_brazilian ] = "Exportar como PDF";
     Text[ chinese_traditional ] = "匯出成 PDF";
@@ -2740,6 +2896,8 @@ String STR_EXPORTASPDF_TITLE
     Text[ hebrew ] = "‮יצוא כ FDP‬";
     Text[ hindi ] = "Export as PDF";
     Text[ slovak ] = "Export do PDF";
+    Text[ hungarian ] = "Exportálás PDF-be";
+    Text[ slovenian ] = "Izvozi v PDF";
 };
 
 String STR_EXPORTWITHCFGBUTTON
@@ -2756,10 +2914,10 @@ String STR_EXPORTWITHCFGBUTTON
     Text[ italian ] = "~Esporta...";
     Text[ portuguese ] = "Export...";
     Text[ russian ] = "Export...";
-    Text[ greek ] = "Export...";
-    Text[ dutch ] = "Export...";
+    Text[ greek ] = "�������...";
+    Text[ dutch ] = "Exporteren...";
     Text[ finnish ] = "Export...";
-    Text[ danish ] = "Export...";
+    Text[ danish ] = "Eksporter...";
     Text[ polish ] = "Export...";
     Text[ portuguese_brazilian ] = "Exportar...";
     Text[ chinese_traditional ] = "匯出...";
@@ -2771,6 +2929,8 @@ String STR_EXPORTWITHCFGBUTTON
     Text[ hebrew ] = "‮יצאו...‬";
     Text[ hindi ] = "Export...";
     Text[ slovak ] = "Export...";
+    Text[ hungarian ] = "Exportálás...";
+    Text[ slovenian ] = "Izvoz...";
 };
 
 String STR_EXPORTBUTTON
@@ -2802,6 +2962,8 @@ String STR_EXPORTBUTTON
     Text[ hebrew ] = "‮יצוא‬";
     Text[ hindi ] = "निर्यात करो";
     Text[ slovak ] = "Exportovať";
+    Text[ hungarian ] = "Exportálás";
+    Text[ slovenian ] = "Izvoz";
 };
 
 String RID_SVXSTR_SECURITY_ADDPATH
@@ -2811,13 +2973,13 @@ String RID_SVXSTR_SECURITY_ADDPATH
     Text[ english_us ] = "Add this directory to the list of secure paths: " ;
     Text[ portuguese ] = "Add this directory  to the list of secure paths: ";
     Text[ russian ] = "Add this directory  to the list of secure paths: ";
-    Text[ greek ] = "Add this directory  to the list of secure paths: ";
-    Text[ dutch ] = "Add this directory  to the list of secure paths: ";
+    Text[ greek ] = "�������� ����� ��� ��������� ��� ����� ������� ���������: ";
+    Text[ dutch ] = "Voeg deze directory toe aan de lijst van veilige paden: ";
     Text[ french ] = "Ajouter ce r�pertoire � la liste des chemins s�curis�s : ";
     Text[ spanish ] = "A�ada este directorio a la lista de rutas seguras: ";
     Text[ finnish ] = "Add this directory  to the list of secure paths: ";
     Text[ italian ] = "Aggiungi questa cartella all'elenco dei percorsi sicuri: ";
-    Text[ danish ] = "Add this directory  to the list of secure paths: ";
+    Text[ danish ] = "Tilf�j dette katalog til listen af sikre stier: ";
     Text[ swedish ] = "L�gg till den h�r katalogen i listan �ver s�kra s�kv�gar: ";
     Text[ polish ] = "Add this directory  to the list of secure paths: ";
     Text[ portuguese_brazilian ] = "Adicionar este diret�rio na lista de caminhos seguros: ";
@@ -2833,6 +2995,8 @@ String RID_SVXSTR_SECURITY_ADDPATH
     Text[ hebrew ] = "‮הוספת ספריה זו לרשימת המסלולים המובטחים: ‬";
     Text[ hindi ] = "Add this directory to the list of secure paths: ";
     Text[ slovak ] = "Pridať tento adresár do zoznamu bezpečných ciest: ";
+    Text[ hungarian ] = "Könyvtár hozzáadása a biztonságos útvonalak listájához:";
+    Text[ slovenian ] = "Ta imenik dodaj na seznam varnih poti: ";
 };
 
 String STR_LABEL_FILEFORMAT
@@ -2842,13 +3006,13 @@ String STR_LABEL_FILEFORMAT
     Text[ english_us ] = "File format:" ;
     Text[ portuguese ] = "File format:";
     Text[ russian ] = "File format:";
-    Text[ greek ] = "File format:";
-    Text[ dutch ] = "File format:";
+    Text[ greek ] = "����� �������:";
+    Text[ dutch ] = "Bestandsformaat:";
     Text[ french ] = "Format de fichier :";
     Text[ spanish ] = "Formato de archivo:";
     Text[ finnish ] = "File format:";
     Text[ italian ] = "Formato file:";
-    Text[ danish ] = "File format:";
+    Text[ danish ] = "Filformat:";
     Text[ swedish ] = "Filformat:";
     Text[ polish ] = "File format:";
     Text[ portuguese_brazilian ] = "Formato do arquivo";
@@ -2864,9 +3028,14 @@ String STR_LABEL_FILEFORMAT
     Text[ hebrew ] = "Dateiformat:";
     Text[ hindi ] = "File format:";
     Text[ slovak ] = "Formát súboru:";
+    Text[ hungarian ] = "Fájlformátum:";
+    Text[ slovenian ] = "Oblika zapisa datoteke:";
 };
 
 // ******************************************************************* EOF
+
+
+
 
 
 
