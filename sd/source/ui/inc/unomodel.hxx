@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:29:50 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
 private:
     ::sd::DrawDocShell* pDocShell;
     SdDrawDocument* pDoc;
+    bool mbDisposed;
 
     SdPage* InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate = sal_False ) throw();
 
@@ -182,6 +183,7 @@ private:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::presentation::XPresentation > mxPresentation;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess > mxStyleFamilies;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::i18n::XForbiddenCharacters > mxForbidenCharacters;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > mxLinks;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDashTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxGradientTable;
@@ -299,12 +301,12 @@ public:
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 
-class SdDrawPagesAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::container::XNameAccess, ::com::sun::star::lang::XServiceInfo >
+class SdDrawPagesAccess : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::container::XNameAccess, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
 {
 private:
-    SdXImpressDocument& rModel;
+    SdXImpressDocument* mpModel;
 
 public:
     SdDrawPagesAccess( SdXImpressDocument&  rMyModel ) throw();
@@ -331,18 +333,23 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
-class SdMasterPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
+class SdMasterPagesAccess : public ::cppu::WeakImplHelper3< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XComponent >
 {
 private:
-    SdXImpressDocument& rModel;
+    SdXImpressDocument* mpModel;
 
 public:
     SdMasterPagesAccess( SdXImpressDocument& rMyModel ) throw();
@@ -364,18 +371,22 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-#include <cppuhelper/implbase2.hxx>
 
-class SdDocLinkTargets : public ::cppu::WeakImplHelper2< ::com::sun::star::container::XNameAccess,
-                                                         ::com::sun::star::lang::XServiceInfo >
+class SdDocLinkTargets : public ::cppu::WeakImplHelper3< ::com::sun::star::container::XNameAccess,
+                                                         ::com::sun::star::lang::XServiceInfo , ::com::sun::star::lang::XComponent >
 {
 private:
-    SdXImpressDocument& rModel;
+    SdXImpressDocument* mpModel;
 
 public:
     SdDocLinkTargets( SdXImpressDocument&   rMyModel ) throw();
@@ -394,6 +405,11 @@ public:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
+
+    // XComponent
+    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // intern
     SdPage* FindPage( const ::rtl::OUString& rName ) const throw();
