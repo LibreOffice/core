@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "äæÚ ÇáÍŞá";
         Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ÇüÅÂ(~T)";
+        Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "~Alan tipi";
         Text[ language_user1 ] = " ";
     };
@@ -132,7 +132,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "¿ï¨ú(~E)";
         Text[ arabic ] = "ÇáÊÍÏíÏ";
         Text[ greek ] = "~ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ(~E)";
+        Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "S~eçim";
         Text[ language_user1 ] = " ";
     };
@@ -167,7 +167,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "®æ¦¡(~O)";
         Text[ arabic ] = "ÇáÊäÓíŞ";
         Text[ greek ] = "Ì~ïñöŞ";
-        Text[ korean ] = "¼­½Ä(~O)";
+        Text[ korean ] = "¼­½Ä";
         Text[ turkish ] = "F~ormat";
         Text[ language_user1 ] = " ";
     };
@@ -203,7 +203,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "¦WºÙ(~M)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§(~M)";
+        Text[ korean ] = "ÀÌ¸§";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
     };
@@ -241,7 +241,7 @@ TabPage TP_FLD_REF
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáŞíãÉ";
         Text[ greek ] = "ÔéìŞ";
-        Text[ korean ] = "°ª(~V)";
+        Text[ korean ] = "°ª";
         Text[ turkish ] = "~Değer";
         Text[ language_user1 ] = " ";
     };
@@ -260,7 +260,7 @@ TabPage TP_FLD_REF
         TEXT [ English ] = "Bookmarks" ;
         Text [ dutch ] = "Tekstmarkeringen" ;
         Text [ english_us ] = "Bookmarks" ;
-        Text [ italian ] = "Segnalibri di testo" ;
+        Text [ italian ] = "Segnalibri" ;
         Text [ spanish ] = "Marcas de texto" ;
         Text [ french ] = "Repères de texte" ;
         Text [ swedish ] = "Bokmärken" ;
@@ -341,7 +341,7 @@ TabPage TP_FLD_REF
     Text[ russian ] = "Ññûëêè";
     Text[ polish ] = "Odwo³ania";
     Text[ japanese ] = "QÆ";
-    Text[ chinese_traditional ] = "°Ñ·Ó¤å";
+    Text[ chinese_traditional ] = "°Ñ·Ó";
     Text[ arabic ] = "ÇáãÑÇÌÚ";
     Text[ greek ] = "Áíáöïñİò";
     Text[ korean ] = "ÂüÁ¶";
