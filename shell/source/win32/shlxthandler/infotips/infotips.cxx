@@ -2,9 +2,9 @@
  *
  *  $RCSfile: infotips.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:13:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,12 @@
 #include "internal/shlxthdl.hxx"
 #endif
 
-#ifndef METAINFO_HXX_INCLUDED
-#include "internal/metainfo.hxx"
+#ifndef METAINFOREADER_HXX_INCLUDED
+#include "internal/metainforeader.hxx"
+#endif
+
+#ifndef CONTENTREADER_HXX_INCLUDED
+#include "internal/contentreader.hxx"
 #endif
 
 #ifndef UTILITIES_HXX_INCLUDED
@@ -87,12 +91,17 @@
 #include "internal/fileextensions.hxx"
 #endif
 
+#ifndef ISO8601_CONVERTER_HXX_INCLUDED
+#include "internal/iso8601_converter.hxx"
+#endif
+
 #ifndef CONFIG_HXX_INCLUDED
 #include "internal/config.hxx"
 #endif
 
 #include "internal/resource.h"
 #include <stdio.h>
+#include <utility>
 #include <stdlib.h>
 #define MAX_STRING 80
 #define KB 1024.0
@@ -178,8 +187,8 @@ std::wstring getFileTypeInfo(const std::string& file_extension)
     char extKeyValue[MAX_STRING];
     char typeKeyValue[MAX_STRING];
     ::std::string sDot(".");
-    if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), extKeyValue, MAX_STRING))
-        if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, typeKeyValue, MAX_STRING))
+    if (QueryRegistryKey(HKEY_CLASSES_ROOT, (sDot.append(file_extension)).c_str(), "", extKeyValue, MAX_STRING))
+        if (QueryRegistryKey( HKEY_CLASSES_ROOT, extKeyValue, "",typeKeyValue, MAX_STRING))
             return StringToWString(typeKeyValue);
 
     return EMPTY_STRING;
@@ -253,7 +262,7 @@ std::wstring getFileSizeInfo(char* FileName)
 // IQueryInfo methods
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip)
+HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppwszTip)
 {
     std::wstring msg;
     const std::wstring CONST_SPACE(SPACE);
@@ -268,18 +277,20 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip
 
     try
     {
-        COpenOfficeMetaInformation meta_info_accessor(m_szFileName);
+        CMetaInfoReader meta_info_accessor(m_szFileName);
 
         //display document title;
         if ( meta_info_accessor.getTagData( META_INFO_TITLE ).length() > 0)
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE;
             msg += meta_info_accessor.getTagData( META_INFO_TITLE );
         }
         else
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString(IDS_TITLE_COLON) + CONST_SPACE;
             msg += m_FileNameOnly;
         }
@@ -287,7 +298,8 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip
         //display document author;
         if ( meta_info_accessor.getTagData( META_INFO_AUTHOR ).length() > 0)
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString( IDS_AUTHOR_COLON ) + CONST_SPACE;
             msg += meta_info_accessor.getTagData( META_INFO_AUTHOR );
         }
@@ -295,7 +307,8 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip
         //display document subject;
         if ( meta_info_accessor.getTagData( META_INFO_SUBJECT ).length() > 0)
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString(IDS_SUBJECT_COLON) + CONST_SPACE;
             msg += meta_info_accessor.getTagData( META_INFO_SUBJECT );
         }
@@ -303,73 +316,20 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip
         //display document description;
         if ( meta_info_accessor.getTagData( META_INFO_DESCRIPTION ).length() > 0)
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString( IDS_COMMENTS_COLON ) + CONST_SPACE;
             msg += meta_info_accessor.getTagData( META_INFO_DESCRIPTION );
         }
 
         //display midified time formated into locale representation.
-        ::std::wstring wsDateTime = meta_info_accessor.getTagData( META_INFO_MODIFIED );
-        if ( wsDateTime.length() == 19 )
+        if ( iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED )).length() > 0)
         {
-            msg += L"\n";
+            if ( msg != EMPTY_STRING )
+                msg += L"\n";
             msg += GetResString( IDS_MODIFIED_COLON ) + CONST_SPACE;
-
-            //fill in the SYSTEMTIME structure;
-            std::string asDateTime = WStringToString( wsDateTime );
-            SYSTEMTIME DateTime;
-            DateTime.wYear         = ( unsigned short )strtol( asDateTime.substr( 0, 4 ).c_str(), NULL, 10 );
-            DateTime.wMonth        = ( unsigned short )strtol( asDateTime.substr( 5, 2 ).c_str(), NULL, 10 );
-            DateTime.wDayOfWeek    =  0;
-            DateTime.wDay          = ( unsigned short )strtol( asDateTime.substr( 8, 2 ).c_str(), NULL, 10 );
-            DateTime.wHour         = ( unsigned short )strtol( asDateTime.substr( 11,2 ).c_str(), NULL, 10 );
-            DateTime.wMinute       = ( unsigned short )strtol( asDateTime.substr( 14,2 ).c_str(), NULL, 10 );
-            DateTime.wSecond       = ( unsigned short )strtol( asDateTime.substr( 17,2 ).c_str(), NULL, 10 );
-            DateTime.wMilliseconds =  0;
-
-            //get Date info from structure
-            WCHAR DateBuffer[ MAX_STRING ];
-            int DateSize = GetDateFormatW(
-                LOCALE_SYSTEM_DEFAULT,
-                0,
-                &DateTime,
-                NULL,
-                DateBuffer,
-                MAX_STRING );
-
-            if ( DateSize )
-                wsDateTime.assign(DateBuffer);
-            else
-                wsDateTime = StringToWString( asDateTime );
-
-            //get Time info from structure
-            WCHAR TimeBuffer[ MAX_STRING ];
-
-            int TimeSize =  GetTimeFormatW(
-                LOCALE_SYSTEM_DEFAULT,
-                0,
-                &DateTime,
-                NULL,
-                TimeBuffer,
-                MAX_STRING );
-
-            if ( TimeSize )
-            {
-                wsDateTime.append(SPACE);
-                wsDateTime.append(TimeBuffer);
-            }
-            else
-                wsDateTime = StringToWString( asDateTime );
-
-            msg += wsDateTime;
+            msg += iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED ));
         }
-        else if ( wsDateTime.length() > 0)
-        {
-            msg += L"\n";
-            msg += GetResString( IDS_MODIFIED_COLON ) + CONST_SPACE;
-            msg += wsDateTime;
-        }
-
     }
     catch (const std::exception&)
     {
@@ -412,7 +372,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD dwFlags, wchar_t** ppwszTip
 //
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD *pdwFlags)
+HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
 {
     return E_NOTIMPL;
 }
@@ -431,7 +391,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetClassID(CLSID* pClassID)
 // IPersistFile methods
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD dwMode)
+HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/)
 {
     std::wstring fname = pszFileName;
 
@@ -467,7 +427,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty(void)
 //
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR pszFileName, BOOL fRemember)
+HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
 {
     return E_NOTIMPL;
 }
@@ -476,7 +436,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR pszFileName, BOOL fRemember)
 //
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR pszFileName)
+HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     return E_NOTIMPL;
 }
@@ -485,7 +445,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR pszFileName)
 //
 //----------------------------
 
-HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR *ppszFileName)
+HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR * /*ppszFileName*/)
 {
     return E_NOTIMPL;
 }
