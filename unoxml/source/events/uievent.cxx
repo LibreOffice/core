@@ -69,7 +69,7 @@ namespace DOM { namespace events
     }
     void SAL_CALL CUIEvent::preventDefault() throw (RuntimeException)
     {
-        CEvent::preventDefault;
+        CEvent::preventDefault();
     }
 
     void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
