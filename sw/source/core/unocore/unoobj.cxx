@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 10:51:18 $
+ *  last change: $Author: os $ $Date: 2000-11-17 11:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1587,6 +1587,7 @@ uno::Reference< XTextRange >  CreateTextRangeFromPosition(SwDoc* pDoc,
     }
     if(!aRet.is())
         aRet = new SwXTextRange(*pNewCrsr, xParentText);
+    delete pNewCrsr;
     return aRet;
 }
 /******************************************************************
