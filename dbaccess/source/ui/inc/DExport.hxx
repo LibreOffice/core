@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,6 @@ namespace dbaui
                         const OTypeInfoMap* _pInfoMap = 0);
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
-        String  ShortenFieldName( const String& rName, xub_StrLen nNewLength, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& rDestList );
         virtual void release() = 0;
 
         void enableCheckOnly() { m_bCheckOnly = sal_True; }
