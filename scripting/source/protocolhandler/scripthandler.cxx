@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: npower $ $Date: 2003-02-12 12:49:42 $
+*  last change: $Author: npower $ $Date: 2003-03-06 11:58:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -106,55 +106,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
     validateXRef( m_xFactory,
         "ScriptProtocolHandler::initialize: No Service Manager available" );
     OSL_TRACE( "ScriptProtocolHandler::initialize\n " );
-    try
-    {
-        css::uno::Sequence < css::uno::Any > args( 1 );
-        Reference< XModel > xModel;
-        if ( m_xFrame.is() )
-        {
-            Reference< XController > xController = m_xFrame->getController();
-            if ( xController .is() )
-            {
-                xModel = xController->getModel();
-            }
-        }
-
-        args[ 0 ] <<= xModel;
-        Reference< XInterface > xXinterface =
-            m_xFactory->createInstanceWithArguments(
-                ::rtl::OUString::createFromAscii(
-                "drafts.com.sun.star.script.framework.provider.FunctionProvider" ),
-                args );
-        validateXRef( xXinterface,
-            "ScriptProtocolHandler::initialize: cannot get instance of FunctionProvider" );
-
-        m_xFunctionProvider = Reference< provider::XFunctionProvider >( xXinterface,
-            UNO_QUERY_THROW );
-        m_bInitialised = true;
-    }
-    catch ( RuntimeException & e )
-    {
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-    }
-    catch ( Exception & e )
-    {
-        OSL_TRACE( "ScriptProtocolHandler::initialise: Caught Exception %s",
-            ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer
-            );
-        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::initialize: " );
-        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
-    }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        OSL_TRACE( "ScriptProtocolHandler::initialize: Unknown exception caught" );
-        throw RuntimeException(
-            OUSTR( "ScriptProtocolHandler::initialize: UnknownException: " ),
-                    Reference< XInterface > () );
-    }
-#endif
-
+    m_bInitialised = true;
 }
 
 Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
@@ -202,8 +154,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     const Reference< XDispatchResultListener >& xListener )
     throw ( RuntimeException )
 {
+
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
+
+
 
     OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s and %d args\n",
     ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer, lArgs.getLength() );
@@ -211,6 +166,9 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
+            // Creates a FunctionProvider ( if one is not created allready )
+            createFunctionProvider( aURL.Complete );
+
             Reference< provider::XFunction > xFunc =
                 m_xFunctionProvider->getFunction( aURL.Complete );
             validateXRef( xFunc,
@@ -347,6 +305,84 @@ void SAL_CALL ScriptProtocolHandler::removeStatusListener(
 const Reference< XStatusListener >& xControl, const URL& aURL )
 throw ( RuntimeException )
 {}
+
+void
+ScriptProtocolHandler::createFunctionProvider( const ::rtl::OUString& url )
+throw ( RuntimeException )
+{
+    if ( m_xFunctionProvider.is() )
+    {
+        OSL_TRACE("ScriptProtocolHandler::createFunctionProvider(), function provider already created");
+        return;
+    }
+    try
+    {
+        css::uno::Sequence < css::uno::Any > args( 1 );
+        Reference< XModel > xModel;
+        if ( m_xFrame.is() )
+        {
+            Reference< XController > xController = m_xFrame->getController();
+            if ( xController .is() )
+            {
+                xModel = xController->getModel();
+            }
+        }
+
+        rtl::OUString documentString = rtl::OUString::createFromAscii( "location=document" );
+
+        // Detect if workaround is necessary.
+        // Problem, when FunctionProvier is created,
+        // and document contains scripts, storage mangager adds script
+        // storage to security manager ( this results in security dialogs
+        // getting raised. ) This is a problem as FunctionProvider is not
+        // at this time created by the document and dialogs are raised
+        // at unexpected times. This code should be removed when FProvider
+        // is created by document.
+        // Workaround: If uri of script to be invoked is NOT a document
+        // located script create FunctionProvider with extra paramater
+        // which indicates to storage not to use security
+        //
+        if ( ( url.indexOf( documentString ) == -1 ) )
+        {
+            // Not a document script - no need to use security
+            OSL_TRACE(" Will create special FunctionProvider eg. one that doesn't user security" );
+            args.realloc( 2 );
+            args[ 1 ] <<= sal_False;
+        }
+        args[ 0 ] <<= xModel;
+        Reference< XInterface > xXinterface =
+        m_xFactory->createInstanceWithArguments(
+            ::rtl::OUString::createFromAscii(
+            "drafts.com.sun.star.script.framework.provider.FunctionProvider" ),
+            args );
+        validateXRef( xXinterface,
+            "ScriptProtocolHandler::initialize: cannot get instance of FunctionProvider" );
+        m_xFunctionProvider = Reference< provider::XFunctionProvider >( xXinterface,
+            UNO_QUERY_THROW );
+    }
+    catch ( RuntimeException & e )
+    {
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createFunctionProvider(),  " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+    }
+    catch ( Exception & e )
+    {
+        OSL_TRACE( "ScriptProtocolHandler::createFunctionProvider: Caught Exception %s",
+        ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createFunctionProvider: " );
+        throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
+    }
+#ifdef _DEBUG
+    catch ( ... )
+    {
+        OSL_TRACE( "ScriptProtocolHandler::createFunctionProvier: Unknown exception caught" );
+        throw RuntimeException(
+        OUSTR( "ScriptProtocolHandler::createFunctionProvider: UnknownException: " ),
+            Reference< XInterface > () );
+    }
+#endif
+
+}
 
 ScriptProtocolHandler::ScriptProtocolHandler(
 Reference< css::lang::XMultiServiceFactory > const& rFact ) :

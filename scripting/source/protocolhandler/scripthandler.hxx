@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.hxx,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:23 $
+*  last change: $Author: npower $ $Date: 2003-03-06 11:58:18 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -128,7 +128,7 @@ private:
     css::uno::Reference < css::frame::XFrame > m_xFrame;
     css::uno::Reference < dcss::script::framework::provider::XFunctionProvider >
     m_xFunctionProvider;
-
+    void createFunctionProvider( const ::rtl::OUString& url ) throw( css::uno::RuntimeException );
 public:
     ScriptProtocolHandler( const css::uno::Reference <
         css::lang::XMultiServiceFactory >& xFactory );
