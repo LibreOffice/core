@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-26 14:01:35 $
+#   last change: $Author: rt $ $Date: 2004-09-08 14:28:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,17 +69,18 @@ TARGET=so_libxml2
 
 .INCLUDE :	settings.mk
 
+.IF "$(SYSTEM_LIBXML)" == "YES"
+all:
+    @echo "An already available installation of libxml should exist on your system."
+    @echo "Therefore the version provided here does not need to be built in addition."
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 LIBXML2VERSION=2.5.11
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
-
-ADDITIONAL_FILES= \
-    makefile.mk \
-    xml2.map \
-    config.h 
 
 # This is only for UNX environment now
 
