@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 15:46:22 $
+#   last change: $Author: rt $ $Date: 2001-07-12 09:57:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,7 @@ SHL1BASE=0x1c000000
 
 .IF "$(GUI)"=="WNT"
 
-$(MISC)$/$(SHL1TARGET).def: makefile.mk $(MISC)$/$(SHL1TARGET).flt
+$(MISC)$/$(SHL1TARGET).def: makefile.mk 
     @echo -------------------------------------------
     @echo DEF-File erstellen
     @echo LIBRARY     $(DLLNAME)                   >$@
