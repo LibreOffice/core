@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:50:16 $
+#   last change: $Author: nf $ $Date: 2001-04-18 09:50:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,37 +60,30 @@
 #
 #*************************************************************************
 
-PRJNAME=soltools
-TARGET=make_makedepend
 PRJ=..
+
+PRJNAME=soltools
+TARGET=javadep
 TARGETTYPE=CUI
-LIBTARGET=NO
+TARGETTHREAD=MT
 NO_DEFAULT_STL=TRUE
 
-.INCLUDE : settings.mk
+# --- Settings -----------------------------------------------------
 
-dot=.
+.INCLUDE :  svpre.mk
+.INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
+# --- Files --------------------------------------------------------
 
-CDEFS+=-DNO_X11 -DOBJSUFFIX=\".obj\" -DXP_PC -DHW_THREADS -DINCLUDEDIR=\".\"
+APP1TARGET	= 	javadep
+APP1OBJS	=	$(OBJ)$/javadep.obj
+.IF "$(GUI)"=="WNT"
+APP1STDLIBS	=	gnu_getopt.lib
+.ELSE # "$(GUI)"=="WNT"
+APP1STDLIBS	=	-lgnu_getopt 
+.ENDIF # "$(GUI)"=="WNT"
+DEPOBJFILES	=	$(APP1OBJS)
+# --- Targets ------------------------------------------------------
 
-OBJFILES=  \
-        $(OBJ)$/cppsetup.obj \
-        $(OBJ)$/ifparser.obj \
-        $(OBJ)$/include.obj \
-        $(OBJ)$/main.obj \
-        $(OBJ)$/parse.obj \
-        $(OBJ)$/pr.obj \
-        $(NULL)
-
-APP1TARGET=makedepend
-APP1OBJS=$(OBJFILES)
-APP1STDLIBS=$(LIBSTLPORTST)
-
-.IF "$(OS)"=="MACOSX"
-NOSHAREDSTATICLIB=TRUE
-.ENDIF
-
-.INCLUDE : target.mk
-
-
+.INCLUDE :  target.mk

@@ -1,3 +1,6 @@
 ..\%__SRC%\bin\ldump.exe %_DEST%\bin%_EXT%\ldump.exe
 ..\%__SRC%\bin\makedepend.exe %_DEST%\bin%_EXT%\makedepend.exe
 ..\%__SRC%\bin\makedepend %_DEST%\bin%_EXT%\makedepend
+..\%__SRC%\bin\javadep.exe %_DEST%\bin%_EXT%\javadep.exe
+..\%__SRC%\bin\javadep %_DEST%\bin%_EXT%\javadep
+..\%__SRC%\bin\checkdll %_DEST%\bin%_EXT%\checkdll
