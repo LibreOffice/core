@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pngwrite.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:39:42 $
+ *  last change: $Author: hr $ $Date: 2004-06-24 16:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "bmpacc.hxx"
 #include "svapp.hxx"
 #include "alpha.hxx"
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 // -----------
 // - Defines -
@@ -651,7 +655,7 @@ void PNGWriterImpl::ImplOpenChunk ( ULONG nChunkType )
     *mpOStm << (ULONG)0;            // writes chunk lenght
     *mpOStm << nChunkType;          // chunk type to stream
 
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     nChunkType = SWAPLONG( nChunkType );
 #endif
     mnCRC = rtl_crc32( 0, &nChunkType, 4 );
@@ -670,7 +674,7 @@ void PNGWriterImpl::ImplWriteChunk ( ULONG nSource )
 {
     mnChunkDatSize+=4;
     *mpOStm << nSource;
-#ifdef __LITTLEENDIAN
+#ifdef OSL_LITENDIAN
     nSource = SWAPLONG( nSource );
 #endif
     mnCRC = rtl_crc32( mnCRC, &nSource, 4 );
