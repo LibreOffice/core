@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:08:34 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 18:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,11 +238,11 @@ StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeE
 Any SAL_CALL OListBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControlModel::queryAggregation( _rType );
-    return  aReturn.hasValue()
-        ?   aReturn
-        :   aReturn = ( OListBoxModel_BASE::queryInterface( _rType ) ).hasValue()
-            ?   aReturn
-            :   OErrorBroadcaster::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OListBoxModel_BASE::queryInterface( _rType );
+    if ( !aReturn.hasValue() )
+        aReturn = OErrorBroadcaster::queryInterface( _rType );
+    return aReturn;
 }
 
 // OComponentHelper
