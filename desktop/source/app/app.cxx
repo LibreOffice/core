@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-13 09:01:53 $
+ *  last change: $Author: cd $ $Date: 2001-12-17 08:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,11 +1009,14 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
             aDiagnosticMessage.append( aErrorMsg );
             aDiagnosticMessage.appendAscii( "\n" );
 
-            OUString aAskSetupRepairStr( GetMsgString(
-                STR_ASK_START_SETUP_REPAIR,
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair installation?" )) ));
+            // Due to the fact the we haven't a backup applicat.rdb file anymore it is not possible to
+            // repair the installation with the setup executable besides the office executable. Now
+            // we have to ask the user to start the setup on CD/installation directory manually!!
+            OUString aStartSetupManually( GetMsgString(
+                STR_ASK_START_SETUP_MANUALLY,
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair the installation from CD, or the folder containing the installation packages." )) ));
 
-            aDiagnosticMessage.append( aAskSetupRepairStr );
+            aDiagnosticMessage.append( aStartSetupManually );
             aMessage = aDiagnosticMessage.makeStringAndClear();
 
             aInfo.getExecutableFile( aProductKey );
@@ -1025,15 +1028,9 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
             if ( aTemp.getLength() > 0 )
                 aProductKey = aTemp;
 
-            ErrorBox aBootstrapFailedBox( NULL, WB_YES_NO, aMessage );
+            ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
             aBootstrapFailedBox.SetText( aProductKey );
-            int nResult = aBootstrapFailedBox.Execute();
-
-            if ( nResult == RET_YES )
-            {
-                 OUString aParameters( RTL_CONSTASCII_USTRINGPARAM( "-repair" ));
-                StartSetup( aParameters );
-            }
+            aBootstrapFailedBox.Execute();
         }
     }
 

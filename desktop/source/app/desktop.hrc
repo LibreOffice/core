@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-09 12:11:28 $
+ *  last change: $Author: cd $ $Date: 2001-12-17 08:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 
 #define STR_ASK_START_SETUP_REPAIR          (RID_DESKTOP_STRING_START+150)
 #define STR_ASK_START_SETUP                 (RID_DESKTOP_STRING_START+151)
+#define STR_ASK_START_SETUP_MANUALLY        (RID_DESKTOP_STRING_START+152)
 
 #define STR_SETUP_ERR_CANNOT_START          (RID_DESKTOP_STRING_START+160)
 

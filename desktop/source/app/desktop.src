@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:42:48 $
+ *  last change: $Author: cd $ $Date: 2001-12-17 08:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,9 +486,8 @@ String STR_SETUP_ERR_CANNOT_START
     Text[ catalan ] = "Couldn't start setup application! Please start it manually.";
 };
 
-
-
-
-
-
-
+String STR_ASK_START_SETUP_MANUALLY
+{
+    Text = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden." ;
+    Text [ ENGLISH ] = "Start setup application to repair the installation from CD, or the folder containing the installation packages. " ;
+};
