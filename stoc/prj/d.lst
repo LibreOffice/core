@@ -6,7 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
 
-..\source\componentdescription.dtd %_DEST%\xml%_EXT%\componentdescription.dtd
+..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
 
 ..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\corefl.xml
 ..\source\defaultregistry\defreg.xml %_DEST%\xml%_EXT%\defreg.xml
