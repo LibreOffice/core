@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlProgressBarModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:09:49 $
+ *  last change:$Date: 2004-01-05 20:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,15 @@
  ************************************************************************/
 package mod._toolkit;
 
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.XInterface;
+
 import java.io.PrintWriter;
 
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
-
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 
 
 /**
@@ -112,8 +112,8 @@ public class UnoControlProgressBarModel extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
-                                     .createInstance("com.sun.star.awt.UnoControlProgressBarModel");
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.UnoControlProgressBarModel");
         } catch (Exception e) {
         }
 
