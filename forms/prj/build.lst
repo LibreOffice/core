@@ -1,0 +1,7 @@
+fm	forms	:	svx NULL
+fm	forms									usr1	-	all	fm_mkofrm NULL
+fm	forms\source\inc						get		-	all	fm_inc NULL
+fm	forms\source\component					nmake	-	all	fm_component NULL
+fm	forms\source\misc						nmake	-	all	fm_misc NULL
+fm	forms\source\resource					nmake	-	all	fm_resource NULL
+fm	forms\util								nmake	-	all	fm_util fm_component fm_misc fm_resource NULL

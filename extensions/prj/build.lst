@@ -1,0 +1,36 @@
+ex	extensions	:	offmgr rdbmaker svx NULL
+ex	extensions								usr1	-	all	ex_mkout NULL
+ex	extensions\inc							get		-	all	ex_inc NULL
+ex	extensions\inc\ucbhelper				get		-	all	ex_incucbh NULL
+ex	extensions\source\plugin\workben		get		-	all	ex_plwkb NULL
+ex	extensions\source\plugin\inc\plugin\win	get		-	all	ex_piwi NULL
+ex	extensions\source\plugin\inc\plugin\unx	get		-	all	ex_piux NULL
+ex	extensions\source\plugin\inc\plugin\os2	get		-	all	ex_pios2 NULL
+ex	extensions\source\ole					nmake	-	w	ex_ole NULL
+ex	extensions\source\resource				nmake	-	all	ex_resrc NULL
+ex	extensions\source\pgp\java\com\sun\star\pgp			nmake	-	u	ex_pgpjava NULL
+ex	extensions\source\pgpfactory			nmake	-	all	ex_pgpfac NULL
+ex	extensions\source\pgp\src				nmake	-	w	ex_pgpsrc NULL
+ex	extensions\source\pgp\win32				nmake	-	w	ex_pgpw32 NULL
+ex	extensions\source\pgp\win32_60			nmake	-	w	ex_pgpw60 NULL
+ex	extensions\source\pgp\win32_65			nmake	-	w	ex_pgpw65 NULL
+ex	extensions\source\pgp\util				nmake	-	w	ex_pgput ex_pgpfac ex_pgpsrc ex_pgpw32 ex_pgpw60 ex_pgpw65 NULL
+ex	extensions\source\installation			nmake	-	w	ex_inst NULL
+ex	extensions\source\installation\office\instchk		nmake	-	all	ex_ichk NULL
+ex	extensions\source\installation\system\inetset		nmake	-	all	ex_isys ex_inst.w NULL
+ex	extensions\source\installation\office\protchk		nmake	-	all	ex_pchk NULL
+ex	extensions\source\installuser			nmake	-	all	ex_instu NULL
+ex	extensions\source\plugin\base			nmake	-	all	ex_plbase NULL
+ex	extensions\source\plugin\win			nmake	-	w	ex_plwin ex_plbase NULL
+ex	extensions\source\plugin\unx			nmake	-	u	ex_plunx NULL
+ex	extensions\source\plugin\os2			nmake	-	p	ex_plos2 NULL
+ex	extensions\source\plugin\util			nmake	-	all	ex_plutil ex_plbase ex_plos2.p ex_plunx.u ex_plwin.w NULL
+ex	extensions\source\scanner				nmake	-	all	ex_scan NULL
+ex	extensions\source\svg					nmake	-	all	ex_svg NULL
+ex	extensions\source\packer				nmake	-	all	ex_pck NULL
+ex	extensions\source\bibliography			nmake	-	all	ex_bib NULL
+ex	extensions\source\inimanager			nmake	-	all	ex_inimgr NULL
+ex	extensions\source\xmlextract			nmake	-	all	ex_xmlextr NULL
+ex	extensions\source\propctrlr				nmake	-	all	ex_propctrlr NULL
+ex	extensions\source\dbimport				nmake	-	all	ex_dbimport NULL
+ex	extensions\source\dbpilots				nmake	-	all	ex_dbpilots NULL

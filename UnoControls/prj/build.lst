@@ -1,0 +1,6 @@
+us	UnoControls	:	cppuhelper offuh tools NULL
+us	UnoControls								usr1	-	all	us_mkout NULL
+us	UnoControls\source\unotypes				nmake	-	all	us_unotypes NULL
+us	UnoControls\source\base					nmake	-	all	us_base us_unotypes NULL
+us	UnoControls\source\controls				nmake	-	all	us_ctrls us_unotypes NULL
+us	UnoControls\util						nmake	-	all	us_util us_base us_ctrls NULL

@@ -1,0 +1,4 @@
+as	automation_simple	:	basic NULL
+as	automation_simple						usr1	-	all	as_mkout NULL
+as	automation_simple\source				nmake	-	all	as_source NULL
+as	automation_simple\util					nmake	-	all	as_util as_source NULL
