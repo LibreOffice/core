@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-09 11:57:37 $
+ *  last change: $Author: dv $ $Date: 2001-02-22 14:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,15 +131,6 @@
 #define UNO_QUERY               ::com::sun::star::uno::UNO_QUERY
 
 #define OUSTRING                ::rtl::OUString
-
-// -----------------------------------------------------------------------
-
-#define EVENT_TYPE          "EventType"
-#define SCRIPT              "Script"
-#define STAR_BASIC          "StarBasic"
-#define JAVA_SCRIPT         "JavaScript"
-#define MACRO_PRFIX         "macro://"
-#define MACRO_POSTFIX       "()"
 
 // -----------------------------------------------------------------------
 
@@ -807,7 +798,7 @@ void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
         // Erase old values first, because we don't know anything about the
         // changes here
 
-        SEQUENCE < PROPERTYVALUE > aProperties(2);
+        SEQUENCE < PROPERTYVALUE > aProperties;
         SEQUENCE < OUSTRING > aEventNames = xEvents->getElementNames();
         OUSTRING*   pNames  = aEventNames.getArray();
         ANY aEmpty;
@@ -861,45 +852,38 @@ void SfxEventConfiguration::PropagateEvents_Impl( SfxObjectShell *pDoc,
 ANY SfxEventConfiguration::CreateEventData_Impl( SvxMacro *pMacro )
 {
 /*
-    This function converts a SvxMacro into an Any containing two
+    This function converts a SvxMacro into an Any containing three
     properties. These properties are EventType and Script. Possible
     values for EventType ar StarBasic, JavaScript, ...
     The Script property should contain the URL to the macro and looks
     like "macro://./standard.module1.main()"
 */
-    SEQUENCE < PROPERTYVALUE > aProperties(2);
-    PROPERTYVALUE  *pValues = aProperties.getArray();
-
-    OUSTRING    aType;
-    OUSTRING    aMacro;
-
-    switch( pMacro->GetScriptType() )
-    {
-        case STARBASIC  : aType = OUSTRING::createFromAscii( STAR_BASIC ); break;
-        case JAVASCRIPT : aType = OUSTRING::createFromAscii( JAVA_SCRIPT ); break;
-        default         : break;
-    }
-
-    aMacro = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-
-    if ( ( pMacro->GetLibName() != SFX_APP()->GetName() )
-         && ! pMacro->GetLibName().EqualsAscii("StarDesktop") )
-    {
-        aMacro += OUSTRING('.');
-    }
-
-    aMacro += OUSTRING('/');
-    aMacro += pMacro->GetMacName();
-    aMacro += OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_POSTFIX ) );
-
-    pValues[ 0 ].Name = OUSTRING::createFromAscii( EVENT_TYPE );
-    pValues[ 0 ].Value <<= aType;
-
-    pValues[ 1 ].Name = OUSTRING::createFromAscii( SCRIPT );
-    pValues[ 1 ].Value <<= OUSTRING( aMacro );
-
     ANY aEventData;
-    aEventData <<= aProperties;
+
+    if ( pMacro->GetScriptType() == STARBASIC )
+    {
+        SEQUENCE < PROPERTYVALUE > aProperties(3);
+        PROPERTYVALUE  *pValues = aProperties.getArray();
+
+        OUSTRING    aType   = OUSTRING::createFromAscii( STAR_BASIC );;
+        OUSTRING    aLib    = pMacro->GetLibName();
+        OUSTRING    aMacro  = pMacro->GetMacName();
+
+        pValues[ 0 ].Name = OUSTRING::createFromAscii( PROP_EVENT_TYPE );
+        pValues[ 0 ].Value <<= aType;
+
+        pValues[ 1 ].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
+        pValues[ 1 ].Value <<= aLib;
+
+        pValues[ 2 ].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
+        pValues[ 2 ].Value <<= aMacro;
+
+        aEventData <<= aProperties;
+    }
+    else
+    {
+        DBG_ERRORFILE( "CreateEventData_Impl(): ScriptType not supported!");
+    }
 
     return aEventData;
 }
@@ -1004,7 +988,7 @@ OUSTRING SfxEventConfiguration::GetEventName_Impl( ULONG nID )
     if ( gp_Id_SortList )
     {
         sal_Bool    bFound;
-        ULONG       nPos = GetPos_Impl( nID, bFound );
+        ULONG       nPos = GetPos_Impl( (USHORT) nID, bFound );
 
         if ( bFound )
         {
