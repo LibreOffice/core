@@ -2,9 +2,9 @@
  *
  *  $RCSfile: specialobject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:50:09 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,11 +184,10 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
-
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;
     /*
+    OSL_ENSURE( m_pDocHolder->GetComponent().is(), "Running or Active object has no component!\n" );
     uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     if ( !xTransferable.is() )
         throw uno::RuntimeException();
