@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:35:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,10 +89,14 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::container;
 
 
 // Define activates old file implementation
@@ -134,11 +138,39 @@ class  SbiDdeControl;               // DDE-Steuerung
 class  SbiDllMgr;                   // Aufrufe in DLLs
 class  SvNumberFormatter;           // Zeit/Datumsfunktionen
 
+enum ForType
+{
+    FOR_TO,
+    FOR_EACH_ARRAY,
+    FOR_EACH_COLLECTION,
+    FOR_EACH_XENUMERATION
+};
+
 struct SbiForStack {                // for/next stack:
-    SbiForStack*   pNext;           // Chain
-    SbxVariableRef refVar;          // loop variable
-    SbxVariableRef refEnd;          // end expression
-    SbxVariableRef refInc;          // increment expression
+    SbiForStack*    pNext;          // Chain
+    SbxVariableRef  refVar;         // loop variable
+    SbxVariableRef  refEnd;         // end expression / for each: Array/BasicCollection object
+    SbxVariableRef  refInc;         // increment expression
+
+    // For each support
+    ForType         eForType;
+    INT32           nCurCollectionIndex;
+    INT32*          pArrayCurIndices;
+    INT32*          pArrayLowerBounds;
+    INT32*          pArrayUpperBounds;
+    Reference< XEnumeration > xEnumeration;
+
+    SbiForStack( void )
+        : pArrayCurIndices( NULL )
+        , pArrayLowerBounds( NULL )
+        , pArrayUpperBounds( NULL )
+    {}
+    ~SbiForStack()
+    {
+        delete[] pArrayCurIndices;
+        delete[] pArrayLowerBounds;
+        delete[] pArrayUpperBounds;
+    }
 };
 
 struct SbiGosubStack {              // GOSUB-Stack:
@@ -411,6 +443,7 @@ class SbiRuntime
     void ClearArgvStack();          // Argv-Stack freigeben
 
     void PushFor();                 // For-Element push
+    void PushForEach();             // For-Each-Element push
     void PopFor();                  // For-Element pop
     void ClearForStack();           // For-Stack freigeben
 
@@ -438,7 +471,7 @@ class SbiRuntime
     void StepARGV(),    StepINPUT(),    StepLINPUT(),   StepSTOP();
     void StepGET(),     StepSET(),      StepPUT(),      StepPUTC();
     void StepDIM(),     StepREDIM(),    StepREDIMP(),   StepERASE();
-    void StepINITFOR(), StepNEXT(),     StepERROR();
+    void StepINITFOR(), StepNEXT(),     StepERROR(),    StepINITFOREACH();
     void StepCASE(),    StepENDCASE(),  StepSTDERROR();
     void StepNOERROR(), StepCHANNEL(),  StepCHANNEL0(), StepPRINT();
     void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
