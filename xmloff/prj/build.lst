@@ -1,4 +1,4 @@
-xo	xmloff	:	goodies NULL
+xo	xmloff	:	goodies drafts NULL
 xo	xmloff									usr1	-	all	xo_mkout NULL
 xo	xmloff\prj								get		-	all	xo_prj NULL
 xo	xmloff\source\core						nmake	-	all	xo_core NULL
