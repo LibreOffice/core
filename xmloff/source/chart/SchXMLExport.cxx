@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-07 18:18:37 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 16:00:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,18 +555,18 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
                     case chart::ChartLegendPosition_BOTTOM:
                         msString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_bottom ));
                         break;
-                    case chart::ChartLegendPosition_NONE:
-                        {
-                            msString = rtl::OUString();
-                            uno::Reference< drawing::XShape > xShape( xProp, uno::UNO_QUERY );
-                            if( xShape.is())
-                                addPosition( xShape );
-                        }
-                        break;
                 }
+
+                // export anchor position
                 if( msString.getLength())
                     mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_legend_position, msString );
-                }
+
+                // export absolute position
+                msString = rtl::OUString();
+                uno::Reference< drawing::XShape > xShape( xProp, uno::UNO_QUERY );
+                if( xShape.is())
+                    addPosition( xShape );
+            }
 
             // write style name
             rtl::OUString aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
