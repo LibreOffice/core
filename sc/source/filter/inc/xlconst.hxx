@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:20:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,9 @@ const SCCOL EXC_MAXCOL8                     = EXC_MAXCOL5;
 const SCROW EXC_MAXROW8                     = 65535;
 const SCTAB EXC_MAXTAB8                     = EXC_MAXTAB5;
 
-const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel sheet index, for common use.
+const sal_uInt16 EXC_NOTAB                  = SAL_MAX_UINT16;   /// An invalid Excel sheet index, for common use.
+const SCTAB SCTAB_INVALID                   = SCTAB_MAX;        /// An invalid Calc sheet index, for common use.
+const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet index for the workbook globals.
 
 // Storage/stream names -------------------------------------------------------
 
@@ -144,6 +146,7 @@ const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (
 const sal_Unicode EXC_URLSTART_ENCODED      = '\x01';   /// Encoded URL.
 const sal_Unicode EXC_URLSTART_SELF         = '\x02';   /// Reference to own workbook.
 const sal_Unicode EXC_URLSTART_SELFENCODED  = '\x03';   /// Encoded self reference.
+const sal_Unicode EXC_URLSTART_OWNDOC       = '\x04';   /// Reference to own workbook (BIFF5/BIFF7).
 
 const sal_Unicode EXC_URL_DOSDRIVE          = '\x01';   /// DOS drive letter or UNC server name.
 const sal_Unicode EXC_URL_DRIVEROOT         = '\x02';   /// Root directory of current drive.
@@ -245,6 +248,23 @@ const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 // (0x008C) COUNTRY -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
+
+// (0x009B) FILTERMODE --------------------------------------------------------
+
+const sal_uInt16 EXC_ID_FILTERMODE          = 0x009B;
+
+// (0x009D) AUTOFILTERINFO ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_AUTOFILTERINFO      = 0x009D;
+
+// (0x009E) AUTOFILTER --------------------------------------------------------
+
+const sal_uInt16 EXC_ID_AUTOFILTER          = 0x009E;
+
+// (0x01AA,0x01AB) USERSVIEWBEGIN, USERSVIEWEND -------------------------------
+
+const sal_uInt16 EXC_ID_USERSVIEWBEGIN      = 0x01AA;
+const sal_uInt16 EXC_ID_USERSVIEWEND        = 0x01AB;
 
 // ============================================================================
 
