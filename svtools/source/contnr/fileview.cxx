@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-11 08:30:11 $
+ *  last change: $Author: pb $ $Date: 2001-05-14 10:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,7 @@ void SvtFileView::OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUSt
         else
         {
             INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-            aImage = SvImageManager::GetImage( aObj, FALSE );
+            aImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
             if ( bExecFilter )
             {
