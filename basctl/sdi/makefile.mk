@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tbe $ $Date: 2002-05-08 16:35:18 $
+#   last change: $Author: tbe $ $Date: 2002-05-13 13:38:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ SDIEXPORT=basctl
 # --- Files --------------------------------------------------------
 
 SVSDIDEPEND= \
+    $(SOLARINCXDIR)$/svxslots.ilb	\
     $(SOLARINCXDIR)$/basslots.ilb	\
     baside.sdi
 
