@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdef.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:35:48 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:48:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,9 @@ Reference< XTypeDescription > TypedefTypeDescriptionImpl::getReferencedType()
             Reference< XTypeDescription > xRefTD;
             if (_xTDMgr->getByHierarchicalName( _aRefName ) >>= xRefTD)
             {
-                MutexGuard aGuard( _aMutex );
+                MutexGuard aGuard( getMutex() );
                 if (! _xRefTD.is())
-                {
                     _xRefTD = xRefTD;
-                }
                 return _xRefTD;
             }
         }
