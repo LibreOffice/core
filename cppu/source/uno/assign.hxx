@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-02 13:54:44 $
+ *  last change: $Author: vg $ $Date: 2003-03-20 12:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,20 +82,8 @@ inline void _assignInterface(
     SAL_THROW( () )
 {
     void * pDest = *ppDest;
-    if (pSource)
-    {
-        if (acquire)
-            (*acquire)( pSource );
-        else
-            (*((uno_Interface *)pSource)->acquire)( (uno_Interface *)pSource );
-    }
-    if (pDest)
-    {
-        if (release)
-            (*release)( pDest );
-        else
-            (*((uno_Interface *)pDest)->release)( (uno_Interface *)pDest );
-    }
+    _acquire( pSource, acquire );
+    _release( *ppDest, release );
     *ppDest = pSource;
 }
 //--------------------------------------------------------------------------------------------------
@@ -105,54 +93,13 @@ inline sal_Bool _queryAndAssignInterface(
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
-    void * pDest = *ppDest;
     if (pSource)
     {
-        if (queryInterface)
-        {
-            pSource = (*queryInterface)( pSource, pDestType );
-        }
-        else
-        {
-            uno_Any aRet, aExc;
-            uno_Any * pExc = &aExc;
-
-            void * aArgs[1];
-            aArgs[0] = &pDestType;
-
-            typelib_TypeDescription * pMTqueryInterface = _getQueryInterfaceTypeDescr();
-            (*((uno_Interface *)pSource)->pDispatcher)(
-                (uno_Interface *)pSource, pMTqueryInterface, &aRet, aArgs, &pExc );
-
-            OSL_ENSURE( !pExc, "### Exception occured during queryInterface()!" );
-            if (pExc)
-            {
-                _destructAny( pExc, 0 );
-                pSource = 0;
-            }
-            else
-            {
-                if (typelib_TypeClass_INTERFACE == aRet.pType->eTypeClass)
-                {
-                    // tweaky... avoiding acquire/ release pair
-                    ::typelib_typedescriptionreference_release( aRet.pType );
-                    pSource = *(void **)aRet.pData; // serving acquired interface
-                }
-                else
-                {
-                    pSource = 0;
-                }
-            }
-            ::typelib_typedescription_release( pMTqueryInterface );
-        }
+        if (0 == queryInterface)
+            queryInterface = binuno_queryInterface;
+        pSource = (*queryInterface)( pSource, pDestType );
     }
-    if (pDest)
-    {
-        if (release)
-            (*release)( pDest );
-        else
-            (*((uno_Interface *)pDest)->release)( (uno_Interface *)pDest );
-    }
+    _release( *ppDest, release );
     *ppDest = pSource;
     return (pSource != 0);
 }
@@ -201,7 +148,8 @@ inline sal_Bool _assignArray(
     typelib_ArrayTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_AcquireFunc acquire, uno_ReleaseFunc release )
 {
-    typelib_TypeDescriptionReference * pElementTypeRef = ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
+    typelib_TypeDescriptionReference * pElementTypeRef =
+        ((typelib_IndirectTypeDescription *)pTypeDescr)->pType;
     typelib_TypeDescription * pElementTypeDescr = NULL;
     TYPELIB_DANGER_GET( &pElementTypeDescr, pElementTypeRef );
     sal_Int32 nTotalElements = pTypeDescr->nTotalElements;
@@ -241,10 +189,10 @@ inline sal_Bool _assignArray(
     case typelib_TypeClass_TYPE:
         for (i=0; i < nTotalElements; i++)
         {
-            ::typelib_typedescriptionreference_release( *((typelib_TypeDescriptionReference **)pDest + i) );
-            TYPE_ACQUIRE(
-                *((typelib_TypeDescriptionReference **)pDest + i) = *((typelib_TypeDescriptionReference **)pSource + i) );
-
+            typelib_TypeDescriptionReference ** pp = (typelib_TypeDescriptionReference **)pDest + i;
+            ::typelib_typedescriptionreference_release( *pp );
+            *pp = *((typelib_TypeDescriptionReference **)pSource + i);
+            TYPE_ACQUIRE( *pp );
         }
         bRet = sal_True;
         break;
@@ -264,11 +212,9 @@ inline sal_Bool _assignArray(
         }
         bRet = sal_True;
         break;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         break;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         for (i=0; i < nTotalElements; i++)
@@ -539,10 +485,13 @@ inline sal_Bool _assignData(
         switch (pSourceType->eTypeClass)
         {
         case typelib_TypeClass_TYPE:
-            ::typelib_typedescriptionreference_release( *(typelib_TypeDescriptionReference **)pDest );
-            TYPE_ACQUIRE(
-                *(typelib_TypeDescriptionReference **)pDest = *(typelib_TypeDescriptionReference **)pSource );
+        {
+            typelib_TypeDescriptionReference ** pp = (typelib_TypeDescriptionReference **)pDest;
+            ::typelib_typedescriptionreference_release( *pp );
+            *pp = *(typelib_TypeDescriptionReference **)pSource;
+            TYPE_ACQUIRE( *pp );
             return sal_True;
+        }
         }
         return sal_False;
     case typelib_TypeClass_ANY:
@@ -556,11 +505,9 @@ inline sal_Bool _assignData(
             return sal_True;
         }
         return sal_False;
-#ifdef CPPU_ASSERTIONS
     case typelib_TypeClass_TYPEDEF:
-        OSL_ENSURE( sal_False, "### unexpected typedef!" );
+        OSL_ENSURE( 0, "### unexpected typedef!" );
         return sal_False;
-#endif
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
         if (typelib_TypeClass_STRUCT == pSourceType->eTypeClass ||
@@ -572,7 +519,8 @@ inline sal_Bool _assignData(
                 typelib_CompoundTypeDescription * pTypeDescr =
                     (typelib_CompoundTypeDescription *)pSourceTypeDescr;
                 while (pTypeDescr &&
-                       !_type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                       !_type_equals(
+                           ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
                 {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
                 }
@@ -588,7 +536,8 @@ inline sal_Bool _assignData(
                 typelib_CompoundTypeDescription * pTypeDescr =
                     (typelib_CompoundTypeDescription *)pSourceTypeDescr;
                 while (pTypeDescr &&
-                       !_type_equals( ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
+                       !_type_equals(
+                           ((typelib_TypeDescription *)pTypeDescr)->pWeakRef, pDestType ))
                 {
                     pTypeDescr = pTypeDescr->pBaseTypeDescription;
                 }
@@ -608,7 +557,7 @@ inline sal_Bool _assignData(
             if (pSourceTypeDescr)
             {
                 typelib_ArrayTypeDescription * pTypeDescr =
-                        (typelib_ArrayTypeDescription *)pSourceTypeDescr;
+                    (typelib_ArrayTypeDescription *)pSourceTypeDescr;
                 bRet = _assignArray( pDest, pSource, pTypeDescr, queryInterface, acquire, release );
             }
             else
@@ -672,7 +621,10 @@ inline sal_Bool _assignData(
             {
                 typelib_TypeDescription * pTD = pSourceTypeDescr;
                 while (pTD && !_type_equals( pTD->pWeakRef, pDestType ))
-                    pTD = (typelib_TypeDescription *)((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
+                {
+                    pTD = (typelib_TypeDescription *)
+                        ((typelib_InterfaceTypeDescription *)pTD)->pBaseTypeDescription;
+                }
                 if (pTD) // is base of dest
                 {
                     _assignInterface( (void **)pDest, *(void **)pSource, acquire, release );
