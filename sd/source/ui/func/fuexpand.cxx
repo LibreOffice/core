@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuexpand.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:28:38 $
+ *  last change: $Author: dl $ $Date: 2001-10-23 13:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     pNotesPage->SetMasterPageVisibleLayers(aVisibleLayers, 0);
 
                     // Title-Textobjekt erstellen
-                    SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE, FALSE);
+                    SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
                     pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, 1));
                     pTextObj->SetEmptyPresObj(FALSE);
 
@@ -224,7 +224,7 @@ FuExpandPage::FuExpandPage(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     if (nChildCount > 0)
                     {
                         // Gliederungs-Textobjekt erstellen
-                        SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE, FALSE);
+                        SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
                         pTextObj->SetOutlinerParaObject(pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount) );
