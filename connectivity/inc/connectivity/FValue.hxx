@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:31:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ namespace connectivity
             return isNull() ? ::com::sun::star::uno::Sequence<sal_Int8>() : getSequence();
         }
 
-        sal_Bool    operator==(const ORowSetValue& _rRH) const;
+        bool operator==(const ORowSetValue& _rRH) const;
 
         sal_Bool    isNull() const
         {
