@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ganaya $ $Date: 2000-12-02 00:22:47 $
+ *  last change: $Author: pluby $ $Date: 2000-12-02 02:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ SalGraphics* SalFrame::GetGraphics()
 
     if ( !maFrameData.mpGraphics )
     {
-        VCLVIEW hView;
+        VCLVIEW hView = NULL;
         SalFrame *pFrame = this;
 
         // Search for the parent SalFrame that has a native window and
@@ -211,11 +211,11 @@ BOOL SalFrame::PostEvent( void *pData )
 
 void SalFrame::SetTitle( const XubString& rTitle )
 {
-
     ByteString aByteTitle( rTitle, gsl_getSystemTextEncoding() );
     char *pTitle = (char *)aByteTitle.GetBuffer();
-    VCLWindow_SetTitle( maFrameData.mhWnd, pTitle );
 
+    if ( maFrameData.mhWnd )
+        VCLWindow_SetTitle( maFrameData.mhWnd, pTitle );
 }
 
 // -----------------------------------------------------------------------
@@ -230,11 +230,13 @@ void SalFrame::Show( BOOL bVisible )
 {
     if ( bVisible )
     {
-        VCLWindow_Show( maFrameData.mhWnd );
+        if ( maFrameData.mhWnd )
+            VCLWindow_Show( maFrameData.mhWnd );
     } // if
     else
     {
-        VCLWindow_Close( maFrameData.mhWnd );
+        if ( maFrameData.mhWnd )
+            VCLWindow_Close( maFrameData.mhWnd );
     } // else
 
 #ifdef 0
@@ -383,22 +385,20 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 void SalFrame::SetClientSize( long nWidth, long nHeight )
 {
-    // VCLWindow_SetSize( maFrameData.mhWnd, nWidth, nHeight );
+    maFrameData.mnWidth = nWidth;
+    maFrameData.mnHeight = nHeight;
+
+    // If this is a native window, resize it
+    if ( maFrameData.mhWnd )
+        VCLWindow_SetSize( maFrameData.mhWnd, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
 
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
-
-    // Copied from Windows version: not sure if it is correct for Aqua
     rWidth  = maFrameData.mnWidth;
     rHeight = maFrameData.mnHeight;
-    printf ("DEBUG: In SalFrame::GetClientSize( %d, %d )\n", rWidth, rHeight);
-
-    // Stub code until we get real sizing working
-//  rWidth  = 500;
-//  rHeight = 400;
 }
 
 // -----------------------------------------------------------------------
@@ -436,7 +436,8 @@ void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 
 void SalFrame::ToTop( USHORT nFlags )
 {
-    VCLWindow_Show( maFrameData.mhWnd );
+    if ( maFrameData.mhWnd )
+        VCLWindow_Show( maFrameData.mhWnd );
 }
 
 // -----------------------------------------------------------------------
@@ -512,7 +513,7 @@ const SystemEnvData* SalFrame::GetSystemData() const
 
 void SalFrame::Beep( SoundType eSoundType )
 {
-    VCLWindow_Beep( maFrameData.mhWnd );
+    VCLWindow_Beep();
 }
 
 // -----------------------------------------------------------------------
