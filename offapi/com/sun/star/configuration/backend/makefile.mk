@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 14:19:39 $
+#   last change: $Author: rt $ $Date: 2004-03-30 14:50:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,18 @@ IDLFILES = \
     Schema.idl				\
     Layer.idl				\
     UpdatableLayer.idl      \
+    SingleLayerStratum.idl  \
+    LocalSingleStratum.idl  \
+    LdapSingleStratum.idl	\
+    MultiStratumBackend.idl \
+    MultiLayerStratum.idl   \
+    LdapMultiLayerStratum.idl \
+    SchemaSupplier.idl	    \
+    LocalSchemaSupplier.idl \
+    PolicyLayerBackend.idl  \
+    PlatformBackend.idl  \
+    SystemIntegration.idl \
+    LayerDescriber.idl    \
     XBackend.idl			\
     XBackendEntities.idl	\
     XSchemaSupplier.idl		\
@@ -112,6 +124,11 @@ IDLFILES = \
     BackendAccessException.idl	\
     ConnectionLostException.idl	\
     InsufficientAccessRightsException.idl	\
+    ComponentChangeEvent.idl    \
+    XBackendChangesNotifier.idl	\
+    XBackendChangesListener.idl	\
+    PropertyInfo.idl			\
+    XLayerContentDescriber.idl
 
 
 .INCLUDE: target.mk
