@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:17:34 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 14:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ void SwPageDesc::Mirror()
     aSet.Put( aMaster.GetBackground() );
     aSet.Put( aMaster.GetShadow() );
     aSet.Put( aMaster.GetCol() );
+    aSet.Put( aMaster.GetFrmDir() );    // #112217#
     aLeft.SetAttr( aSet );
 }
 
