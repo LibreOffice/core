@@ -2,8 +2,8 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.42 $
- *  last change: $Author: pb $ $Date: 2002-01-10 12:12:24 $
+ *  $Revision: 1.43 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text [ portuguese ] = "~Tipo de letra" ;
         Text [ finnish ] = "~Fontti" ;
         Text [ danish ] = "Skrifttype" ;
-        Text [ french ] = "~Police" ;
+        Text [ french ] = "Police" ;
         Text [ swedish ] = "Tecken~sn." ;
         Text [ dutch ] = "~Lettertype" ;
         Text [ spanish ] = "~Fuente" ;
