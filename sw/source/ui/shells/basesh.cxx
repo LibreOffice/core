@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 12:05:13 $
+ *  last change: $Author: tl $ $Date: 2001-03-30 14:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 
 
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
 #ifndef _SVXLINKMGR_HXX //autogen
 #include <svx/linkmgr.hxx>
 #endif
@@ -111,6 +114,9 @@
 #endif
 #ifndef _GALLERY_HXX_ //autogen
 #include <svx/gallery.hxx>
+#endif
+#ifndef _SVX_CLIPFMTITEM_HXX
+#include <svx/clipfmtitem.hxx>
 #endif
 #ifndef _CLIP_HXX //autogen
 #include <vcl/clip.hxx>
@@ -506,6 +512,34 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     return;
             }
             break;
+
+        case SID_CLIPBOARD_FORMAT_ITEMS:
+            {
+                const SfxItemSet* pArgs = rReq.GetArgs();
+                const SfxPoolItem* pFmt;
+                if( pArgs && SFX_ITEM_SET ==
+                    pArgs->GetItemState( nId, FALSE, &pFmt ))
+                {
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+                    if( aDataHelper.GetTransferable().is()
+                        /*&& SwTransferable::IsPaste( rSh, aDataHelper )*/ )
+                    {
+                        // temp. Variablen, da die Shell nach dem Paste schon
+                        // zerstoert sein kann
+                        SwView* pView = &rView;
+
+                        SwTransferable::PasteFormat( rSh, aDataHelper,
+                                        ((SfxUInt32Item*)pFmt)->GetValue() );
+
+                        if( rSh.IsFrmSelected() || rSh.IsObjSelected())
+                            rSh.EnterSelFrmMode();
+                        pView->AttrChangedNotify( &rSh );
+                    }
+                }
+            }
+            break;
+
         case FN_PASTESPECIAL:
             {
                 TransferableDataHelper aDataHelper(
@@ -569,6 +603,16 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                     if( !aDataHelper.GetTransferable().is() ||
                         !SwTransferable::IsPaste( rSh, aDataHelper ))
                         rSet.DisableItem( SID_PASTE );
+                }
+                break;
+            case SID_CLIPBOARD_FORMAT_ITEMS:
+                {
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+
+                    SvxClipboardFmtItem aFmtItem( nWhich );
+                    SwTransferable::FillClipFmtItem( rSh, aDataHelper, aFmtItem );
+                    rSet.Put( aFmtItem );
                 }
                 break;
             case FN_PASTESPECIAL:
