@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:37:26 $
+ *  last change: $Author: sab $ $Date: 2002-09-02 14:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@ public:
     const EditTextObject* GetEditTextObject() const { return mpEditObj; }
 
     virtual void SAL_CALL disposing();
+
+   ///=====  SfxListener  =====================================================
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ///=====  XAccessibleComponent  ============================================
 
