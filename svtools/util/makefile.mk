@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.47 $
+#*  $Revision: 1.48 $
 #*
-#*  last change: $Author: obo $ $Date: 2004-03-17 13:31:06 $
+#*  last change: $Author: rt $ $Date: 2004-05-21 11:41:06 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -152,6 +152,7 @@ LIB8FILES=	\
 # generation of resourcen-lib ----------------------------------------
 
 RESLIB1NAME=	$(RESTARGET)
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(SRS)$/filter.srs  \
         $(SRS)$/misc.srs        \
         $(SRS)$/sbx.srs         \
