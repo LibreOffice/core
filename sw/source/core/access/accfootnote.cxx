@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:10 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 14:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ using namespace ::rtl;
 
 const sal_Char sServiceNameFootnote[] = "drafts.com.sun.star.text.AccessibleFootnoteView";
 const sal_Char sServiceNameEndnote[] = "drafts.com.sun.star.text.AccessibleEndnoteView";
-const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnote";
-const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnote";
+const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnoteView";
+const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnoteView";
 
 SwAccessibleFootnote::SwAccessibleFootnote(
         SwAccessibleMap *pMap,

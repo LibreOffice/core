@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:15 $
+ *  last change: $Author: mib $ $Date: 2002-12-05 14:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,8 @@ using namespace ::rtl;
 
 const sal_Char sServiceNameHeader[] = "drafts.com.sun.star.text.AccessibleHeaderView";
 const sal_Char sServiceNameFooter[] = "drafts.com.sun.star.text.AccessibleFooterView";
-const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeader";
-const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooter";
+const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeaderView";
+const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooterView";
 
 SwAccessibleHeaderFooter::SwAccessibleHeaderFooter(
         SwAccessibleMap *pMap,
