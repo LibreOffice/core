@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-08-06 19:27:56 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 15:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,10 @@ Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException)
 double SAL_CALL
 Calendar_gregorian::getDateTime() throw(RuntimeException)
 {
+    if (fieldSet) {
+        setValue();
+        getValue();
+    }
     double r = body->getTime(status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
     return r / U_MILLIS_PER_DAY;
