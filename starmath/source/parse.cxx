@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 17:06:26 $
+ *  last change: $Author: tl $ $Date: 2001-05-15 11:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,7 +712,7 @@ void SmParser::NextToken()
                                 BufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
                                 aEmptyStr,
-                                KParseTokens::ANY_LETTER | KParseTokens::ASC_DOT,
+                                coContFlags,
                                 aEmptyStr );
 
                         xub_StrLen nTmpStart = rnEndPos +
