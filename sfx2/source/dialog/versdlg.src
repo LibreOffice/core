@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:56:29 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Nové verze";
         Text[ hebrew ] = "‮גרסאות חדשות‬";
         Text[ hindi ] = "नया आवर्तन";
+        Text[ slovak ] = "Nové verzie";
     };
     PushButton PB_SAVE
     {
@@ -133,6 +134,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Uložit novou verzi";
         Text[ hebrew ] = "‮שמירת גירסה חדשה‬";
         Text[ hindi ] = "~नया आवर्तन को संचित करो";
+        Text[ slovak ] = "Uložiť ~novú verziu";
     };
     CheckBox CB_SAVEONCLOSE
     {
@@ -166,6 +168,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Vždy uložit verzi při uzavření";
         Text[ hebrew ] = "‮שמירת גירסה בכל סגירת קובץ‬";
         Text[ hindi ] = "~हमेशा बन्द करने के समय आवर्तन को संचित करो";
+        Text[ slovak ] = "Vždy uložiť verziu pri uz~avretí";
     };
     FixedLine GB_OLDVERSIONS
     {
@@ -198,6 +201,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Existující verze";
         Text[ hebrew ] = "‮גרסאות קיימות‬";
         Text[ hindi ] = "अस्तित्व में रहनेवाला आवर्तन";
+        Text[ slovak ] = "Existujúce verzie";
     };
     FixedText FT_DATETIME
     {
@@ -230,6 +234,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Datum a čas";
         Text[ hebrew ] = "‮תאריך ושעה‬";
         Text[ hindi ] = "दिनांक और समय";
+        Text[ slovak ] = "Dátum a čas";
     };
     FixedText FT_SAVEDBY
     {
@@ -262,6 +267,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Uložil";
         Text[ hebrew ] = "‮נשמר על ידי‬";
         Text[ hindi ] = "से संचित किया";
+        Text[ slovak ] = "Uložil ";
     };
     FixedText FT_COMMENTS
     {
@@ -294,6 +300,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Komentáře";
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
+        Text[ slovak ] = "Poznámky";
     };
     Control TLB_VERSIONS
     {
@@ -334,6 +341,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "Close";
+        Text[ slovak ] = "Zavrieť";
     };
     PushButton PB_OPEN
     {
@@ -367,6 +375,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Otevřít";
         Text[ hebrew ] = "‮פתיחה‬";
         Text[ hindi ] = "खोलो";
+        Text[ slovak ] = "Otvoriť";
     };
     PushButton PB_VIEW
     {
@@ -401,6 +410,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Zobrazit...";
         Text[ hebrew ] = "‮הצגה...‬";
         Text[ hindi ] = "~दिखाओ...";
+        Text[ slovak ] = "~Zobraziť...";
     };
     PushButton PB_DELETE
     {
@@ -434,6 +444,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "~Zmazať";
     };
     PushButton PB_COMPARE
     {
@@ -467,6 +478,7 @@ ModalDialog DLG_VERSIONS
         Text[ czech ] = "Porovnat";
         Text[ hebrew ] = "‮השוואה‬";
         Text[ hindi ] = "तुलना करो";
+        Text[ slovak ] = "Porovnať";
     };
     HelpButton PB_HELP
     {
@@ -499,6 +511,7 @@ ModalDialog DLG_VERSIONS
     Text[ czech ] = "Verze";
     Text[ hebrew ] = "‮גרסאות של‬";
     Text[ hindi ] = "का आवर्तन";
+    Text[ slovak ] = "Verzie";
 };
 ModalDialog DLG_COMMENTS
 {
@@ -539,6 +552,7 @@ ModalDialog DLG_COMMENTS
         Text[ czech ] = "Datum a čas: ";
         Text[ hebrew ] = "‮תאריך ושעה: ‬";
         Text[ hindi ] = "दिनांक और समय : ";
+        Text[ slovak ] = "Dátum a čas: ";
     };
     FixedText FT_SAVEDBY
     {
@@ -571,6 +585,7 @@ ModalDialog DLG_COMMENTS
         Text[ czech ] = "Uložil ";
         Text[ hebrew ] = "‮נשמר על ידי ‬";
         Text[ hindi ] = "से संचित किया ";
+        Text[ slovak ] = "Uložil ";
     };
     MultiLineEdit ME_VERSIONS
     {
@@ -624,6 +639,7 @@ ModalDialog DLG_COMMENTS
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     HelpButton PB_HELP
     {
@@ -656,6 +672,7 @@ ModalDialog DLG_COMMENTS
     Text[ czech ] = "Vložit komentář k verzi";
     Text[ hebrew ] = "‮הכנסת הערת גרסה‬";
     Text[ hindi ] = "आवर्तन अपवाद जोड़ो";
+    Text[ slovak ] = "Vložiť poznámky k verzii";
 };
 String DLG_COMMENTS
 {
@@ -686,7 +703,10 @@ String DLG_COMMENTS
     Text[ czech ] = "Komentář k verzi";
     Text[ hebrew ] = "‮הערת גרסה‬";
     Text[ hindi ] = "आवर्तन अपवाद";
+    Text[ slovak ] = "Poznámka k verzii";
 };
+
+
 
 
 
