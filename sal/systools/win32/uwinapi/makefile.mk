@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 14:11:13 $
+#   last change: $Author: obo $ $Date: 2005-01-25 13:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,7 +125,18 @@ SLOFILES=\
         $(SLO)$/GetVolumePathNameA.obj\
         $(SLO)$/GetVolumePathNameW.obj\
         $(SLO)$/SetVolumeMountPointA.obj\
-        $(SLO)$/SetVolumeMountPointW.obj
+        $(SLO)$/SetVolumeMountPointW.obj\
+        $(SLO)$/PathAddBackslashW.obj\
+        $(SLO)$/PathCompactPathExW.obj\
+        $(SLO)$/PathFileExistsW.obj\
+        $(SLO)$/PathFindExtensionW.obj\
+        $(SLO)$/PathFindFileNameW.obj\
+        $(SLO)$/PathIsFileSpecW.obj\
+        $(SLO)$/PathIsUNCW.obj\
+        $(SLO)$/PathRemoveExtensionW.obj\
+        $(SLO)$/PathRemoveFileSpecW.obj\
+        $(SLO)$/PathSetDlgItemPathW.obj\
+        $(SLO)$/PathStripToRootW.obj
 
 SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
@@ -150,7 +161,8 @@ SHL1STDLIBS=\
         user32.lib\
         advapi32.lib\
         version.lib\
-        msvcrt.lib
+        msvcrt.lib\
+        shlwapi.lib
 
         
 .ENDIF
