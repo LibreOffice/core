@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.67 2001-07-31 11:00:01 sab Exp $
+	$Id: drawing.mod,v 1.68 2001-08-13 11:04:09 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -113,7 +113,7 @@
 <!ATTLIST draw:polyline %draw-position; >
 <!ATTLIST draw:polyline %draw-size; >
 <!ATTLIST draw:polyline %draw-viewbox; >
-<!ATTLIST draw:polyline svg:points %points; #REQUIRED>
+<!ATTLIST draw:polyline draw:points %points; #REQUIRED>
 <!ATTLIST draw:polyline %draw-style-name; >
 <!ATTLIST draw:polyline %draw-transform; >
 <!ATTLIST draw:polyline %zindex;>
@@ -129,7 +129,7 @@
 <!ATTLIST draw:polygon %table-background; >
 <!ATTLIST draw:polygon %draw-size; >
 <!ATTLIST draw:polygon %draw-viewbox; >
-<!ATTLIST draw:polygon svg:points %points; #REQUIRED >
+<!ATTLIST draw:polygon draw:points %points; #REQUIRED >
 <!ATTLIST draw:polygon %draw-style-name; >
 <!ATTLIST draw:polygon %draw-transform; >
 <!ATTLIST draw:polygon %zindex;>
@@ -152,9 +152,8 @@
 <!ATTLIST draw:path draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:circle ( office:events?, %draw-text; )>
-<!ATTLIST draw:circle svg:cx %length; #REQUIRED >
-<!ATTLIST draw:circle svg:cy %length; #REQUIRED >
-<!ATTLIST draw:circle svg:r %nonNegativeLength; #REQUIRED >
+<!ATTLIST draw:circle %draw-position; >
+<!ATTLIST draw:circle %draw-size; >
 <!ATTLIST draw:circle %draw-style-name; >
 <!ATTLIST draw:circle %draw-transform; >
 <!ATTLIST draw:circle %zindex;>
@@ -168,10 +167,8 @@
 <!ATTLIST draw:circle draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:ellipse ( office:events?, %draw-text; )>
-<!ATTLIST draw:ellipse svg:cx %length; #REQUIRED >
-<!ATTLIST draw:ellipse svg:cy %length; #REQUIRED >
-<!ATTLIST draw:ellipse svg:rx %length; #REQUIRED >
-<!ATTLIST draw:ellipse svg:ry %length; #REQUIRED >
+<!ATTLIST draw:ellipse %draw-position; >
+<!ATTLIST draw:ellipse %draw-size; >
 <!ATTLIST draw:ellipse %draw-style-name; >
 <!ATTLIST draw:ellipse %draw-transform; >
 <!ATTLIST draw:ellipse %zindex;>
