@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 09:57:36 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 09:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
         }
         WaitForMessage();
     }
+    return NULL;
 }
 
 MediatorMessage* Mediator::TransactMessage( ULONG nBytes, char* pBytes )
