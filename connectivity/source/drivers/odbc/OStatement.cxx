@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 12:42:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,8 @@ Reference< XResultSet > OStatement_Base::getResultSet (sal_Bool checkCount) thro
     if (numCols > 0)
     {
         OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-        pRs = new OResultSet(m_aStatementHandle,this);
+        pRs = createResulSet();
+        pRs->construct();
 
         // Save a copy of our last result set
         // Changed to save copy at getResultSet.
@@ -1119,6 +1120,11 @@ void SAL_CALL OStatement::acquire() throw(RuntimeException)
 void SAL_CALL OStatement::release() throw(RuntimeException)
 {
     OStatement_BASE2::release();
+}
+// -----------------------------------------------------------------------------
+OResultSet* OStatement_Base::createResulSet()
+{
+    return new OResultSet(m_aStatementHandle,this);
 }
 // -----------------------------------------------------------------------------
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException)

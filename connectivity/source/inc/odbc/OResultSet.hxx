@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:17:59 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ namespace connectivity
 
 
             void fillRow(sal_Int32 _nToColumn);
-            void allocBuffer(sal_Bool _bAllocRow);
+            void allocBuffer();
             void releaseBuffer();
 
 
@@ -210,8 +210,9 @@ namespace connectivity
             DECLARE_SERVICE_INFO();
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
-            //  OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt,rtl_TextEncoding _nTextEncoding);
-            ~OResultSet();
+            virtual ~OResultSet();
+
+            void construct();
 
             inline void* getOdbcFunction(sal_Int32 _nIndex)  const
             {

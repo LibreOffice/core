@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,34 @@ const ::rtl::OUString& OAdabasCatalog::getDot()
 {
     static const ::rtl::OUString sDot = ::rtl::OUString::createFromAscii(".");
     return sDot;
+}
+// -----------------------------------------------------------------------------
+void OAdabasCatalog::correctColumnProperties(sal_Int32 _nPrec, sal_Int32& _rnType,::rtl::OUString& _rsTypeName)
+{
+    switch(_rnType)
+    {
+    case DataType::DECIMAL:
+        {
+            static const ::rtl::OUString sDecimal = ::rtl::OUString::createFromAscii("DECIMAL");
+            if(_rnType == DataType::DECIMAL && _rsTypeName == sDecimal)
+                _rnType = DataType::NUMERIC;
+        }
+        break;
+    case DataType::FLOAT:
+        //  if(_nPrec >= 16)
+        {
+            static const ::rtl::OUString sDouble = ::rtl::OUString::createFromAscii("DOUBLE PRECISION");
+            _rsTypeName = sDouble;
+            _rnType = DataType::DOUBLE;
+        }
+//      else if(_nPrec > 15)
+//      {
+//          static const ::rtl::OUString sReal = ::rtl::OUString::createFromAscii("REAL");
+//          _rsTypeName = sReal;
+//          _rnType = DataType::REAL;
+//      }
+        break;
+    }
 }
 // -----------------------------------------------------------------------------
 

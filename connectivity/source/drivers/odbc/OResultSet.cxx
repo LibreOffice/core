@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 11:53:17 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,34 +161,21 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     SQLINTEGER nCurType = 0;
     N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,&nCurType,SQL_IS_UINTEGER,0);
 
-    allocBuffer((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
+    m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
+
     osl_decrementInterlockedCount( &m_refCount );
 }
-// -------------------------------------------------------------------------
-//OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,rtl_TextEncoding _nTextEncoding) :    OResultSet_BASE(m_aMutex)
-//                      ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-//                      ,m_aStatement(NULL)
-//                      ,m_aStatementHandle(_pStatementHandle)
-//                      ,m_aConnectionHandle(NULL)
-//                      ,m_nRowPos(0)
-//                      ,m_bLastRecord(sal_False)
-//                      ,m_bEOF(sal_False)
-//                      ,m_bFreeHandle(sal_False)
-//                      ,m_xMetaData(NULL)
-//                      ,m_bInserting(sal_False)
-//                      ,m_nLastColumnPos(0)
-//                      ,m_nTextEncoding(_nTextEncoding)
-//{
-//  osl_incrementInterlockedCount( &m_refCount );
-//  m_pRowStatusArray = new SQLUSMALLINT[1]; // the default value
-//  osl_decrementInterlockedCount( &m_refCount );
-//  //  allocBuffer();
-//}
-
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
     delete m_pRowStatusArray;
+}
+// -----------------------------------------------------------------------------
+void OResultSet::construct()
+{
+    osl_incrementInterlockedCount( &m_refCount );
+    allocBuffer();
+    osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------
 void OResultSet::disposing(void)
@@ -223,12 +210,14 @@ sal_Int32 OResultSet::mapColumn (sal_Int32  column)
     return map;
 }
 // -------------------------------------------------------------------------
-void OResultSet::allocBuffer(sal_Bool _bAllocRow)
+void OResultSet::allocBuffer()
 {
-    m_bFetchData = !_bAllocRow;
-    m_aBindVector.push_back(NULL); // the first is reserved for the bookmark
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
+
+    m_aBindVector.reserve(nLen+1);
+    m_aBindVector.push_back(NULL); // the first is reserved for the bookmark
+
     for(sal_Int32 i = 1;i<=nLen;++i)
     {
         switch (xMeta->getColumnType(i))
@@ -242,6 +231,7 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
             case DataType::BIGINT:
                 m_aBindVector.push_back((sal_Int64)new ::rtl::OString());
                 break;
+            case DataType::REAL:
             case DataType::DOUBLE:
                 m_aBindVector.push_back((sal_Int64)new double(0.0));
                 break;
@@ -271,7 +261,6 @@ void OResultSet::allocBuffer(sal_Bool _bAllocRow)
                 m_aBindVector.push_back((sal_Int64)new sal_Int32(0));
                 break;
             case DataType::FLOAT:
-            case DataType::REAL:
                 m_aBindVector.push_back((sal_Int64)new float(0));
                 break;
             case DataType::BINARY:
@@ -307,6 +296,7 @@ void OResultSet::releaseBuffer()
             case DataType::BIGINT:
                 delete static_cast< ::rtl::OString* >((void*)*pValue);
                 break;
+            case DataType::REAL:
             case DataType::DOUBLE:
                 delete static_cast< double* >((void*)*pValue);
                 break;
@@ -336,7 +326,6 @@ void OResultSet::releaseBuffer()
                 delete static_cast< sal_Int32* >((void*)*pValue);
                 break;
             case DataType::FLOAT:
-            case DataType::REAL:
                 delete static_cast< float* >((void*)*pValue);
                 break;
             case DataType::BINARY:
@@ -485,7 +474,7 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    SWORD nType = getMetaData()->getColumnType(columnIndex);
+    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
     switch(nType)
     {
         case DataType::VARCHAR:
@@ -1690,6 +1679,7 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
             case DataType::BIGINT:
                 *pColumn = getString(nColumn);
                 break;
+            case DataType::REAL:
             case DataType::DOUBLE:
                 *pColumn = getDouble(nColumn);
                 break;
@@ -1721,7 +1711,6 @@ void OResultSet::fillRow(sal_Int32 _nToColumn)
                 *pColumn = getInt(nColumn);
                 break;
             case DataType::FLOAT:
-            case DataType::REAL:
                 *pColumn = getFloat(nColumn);
                 break;
             case DataType::BINARY:

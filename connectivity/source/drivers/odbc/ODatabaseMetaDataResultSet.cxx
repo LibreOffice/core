@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:10:53 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseMetaDataResultSet::getBytes( sal_Int32 co
     columnIndex = mapColumn(columnIndex);
     if(columnIndex <= m_nDriverColumnCount)
     {
-        SWORD nType = getMetaData()->getColumnType(columnIndex);
+        sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
         switch(nType)
         {
             case DataType::VARCHAR:

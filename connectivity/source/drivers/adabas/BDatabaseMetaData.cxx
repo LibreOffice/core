@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,13 @@ Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(
                     switch((sal_Int32)aRow[2])
                     {
                         case DataType::FLOAT:
+//                          aRow[3] = sal_Int32(15);
+//                          break;
                         case DataType::REAL:
+//                          aRow[3] = sal_Int32(16);
+//                          break;
                         case DataType::DOUBLE:
+                            aRow[2] = DataType::DOUBLE;
                             aRow[3] = sal_Int32(18);
                             break;
                         case DataType::TIMESTAMP:

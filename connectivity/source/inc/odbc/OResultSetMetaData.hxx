@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace connectivity
 
         class OResultSetMetaData :  public  OResultSetMetaData_BASE
         {
+        protected:
             ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
 
             SQLHANDLE       m_aStatementHandle;
@@ -102,7 +103,7 @@ namespace connectivity
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ) : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_nColCount(-1){}
             OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
                     : m_pConnection(_pConnection),m_aStatementHandle( _pStmt ),m_vMapping(_vMapping),m_nColCount(_vMapping.size()-1){}
-            ~OResultSetMetaData();
+            virtual ~OResultSetMetaData();
 
 
             inline void* getOdbcFunction(sal_Int32 _nIndex)  const

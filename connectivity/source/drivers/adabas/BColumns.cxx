@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 06:20:31 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,15 +125,14 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
             {
                 sal_Int32 nType             = xRow->getInt(5);
                 ::rtl::OUString sTypeName   = xRow->getString(6);
-                static const ::rtl::OUString sDecimal = ::rtl::OUString::createFromAscii("DECIMAL");
-                if(nType == DataType::DECIMAL && sTypeName == sDecimal)
-                    nType = DataType::NUMERIC;
+                sal_Int32 nPrec             = xRow->getInt(7);
+                OAdabasCatalog::correctColumnProperties(nPrec,nType,sTypeName);
 
                 OColumn* pRet = new OColumn(_rName,
                                             sTypeName,
                                             xRow->getString(13),
                                             xRow->getInt(11),
-                                            xRow->getInt(7),
+                                            nPrec,
                                             xRow->getInt(9),
                                             nType,
                                             sal_False,sal_False,sal_False,sal_True);

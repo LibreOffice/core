@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AKeyColumns.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@ staruno::Reference< starcontainer::XNamed > OKeyColumns::createObject(const ::rt
     if(xResult.is())
     {
         staruno::Reference< starsdbc::XRow > xRow(xResult,staruno::UNO_QUERY);
-        ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
         while(xResult->next())
         {
             if(xRow->getString(8) == _rName)

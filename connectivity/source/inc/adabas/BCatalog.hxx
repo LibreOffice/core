@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 06:21:30 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ namespace connectivity
             sdbcx::OCollection*     getPrivateViews()   const { return m_pViews; }
 
             static const ::rtl::OUString& getDot();
+            // correct the the column properties of float/real/double values
+            // all & parameters are IN and OUT
+            static void correctColumnProperties(sal_Int32 _nPrec, sal_Int32& _rnType,::rtl::OUString& _rsTypeName);
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:05:55 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XMultipleResults> OStatement_BASE;
 
+        class OResultSet;
         //**************************************************************
         //************ Class: java.sql.Statement
         //**************************************************************
@@ -170,7 +171,18 @@ namespace connectivity
             void setWarning (const  ::com::sun::star::sdbc::SQLWarning &ex) throw( ::com::sun::star::sdbc::SQLException);
             sal_Bool lockIfNecessary (const ::rtl::OUString& sql) throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getColumnCount () throw( ::com::sun::star::sdbc::SQLException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+
+            //--------------------------------------------------------------------
+            // getResultSet
+            // getResultSet returns the current result as a ResultSet.  It
+            // returns NULL if the current result is not a ResultSet.
+            //--------------------------------------------------------------------
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+            /**
+                creates the driver specific resultset (factory)
+            */
+            virtual OResultSet* createResulSet();
+
             sal_Int32 getRowCount () throw( ::com::sun::star::sdbc::SQLException);
             sal_Int32 getStmtOption (short fOption) const throw( ::com::sun::star::sdbc::SQLException);
 
@@ -259,7 +271,7 @@ namespace connectivity
                             public ::com::sun::star::lang::XServiceInfo
         {
         protected:
-            ~OStatement(){}
+            virtual ~OStatement(){}
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OStatement( OConnection* _pConnection) : OStatement_BASE2( _pConnection){}

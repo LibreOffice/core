@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 07:16:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@ OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
     m_aTable = WpADOTable(_pTable);
     fillPropertyValues();
 
-    refreshColumns();
-    refreshKeys();
-    refreshIndexes();
 }
 // -----------------------------------------------------------------------------
 OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog)
@@ -140,9 +137,6 @@ OAdoTable::OAdoTable(sal_Bool _bCase,OCatalog* _pCatalog)
     construct();
     m_aTable.Create();
 
-    refreshColumns();
-    refreshKeys();
-    refreshIndexes();
 }
 // -------------------------------------------------------------------------
 void OAdoTable::refreshColumns()

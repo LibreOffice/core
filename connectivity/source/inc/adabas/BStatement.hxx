@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BStatement.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 07:23:56 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace connectivity
         class OAdabasStatement :    public  ::connectivity::odbc::OStatement
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (sal_Bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+            virtual odbc::OResultSet* createResulSet();
         public:
             OAdabasStatement( OAdabasConnection* _pConnection)
                 : ::connectivity::odbc::OStatement( _pConnection){}

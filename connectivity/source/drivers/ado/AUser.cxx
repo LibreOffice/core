@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:33:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-02 10:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase, ADOUser* _pUser)
         m_aUser = WpADOUser(_pUser);
     else
         m_aUser.Create();
-    refreshGroups();
 }
 // -------------------------------------------------------------------------
 OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const ::rtl::OUString& _Name)
@@ -114,7 +113,6 @@ OAdoUser::OAdoUser(OCatalog* _pParent,sal_Bool _bCase,   const ::rtl::OUString& 
     construct();
     m_aUser.Create();
     m_aUser.put_Name(_Name);
-    refreshGroups();
 }
 // -------------------------------------------------------------------------
 void OAdoUser::refreshGroups()
