@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:59:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void ImportExcel::Formula( SCCOL nCol, SCROW nRow, SCTAB nTab,
         else
             pLastFormCell = NULL;
 
-        GetXFIndexBuffer().SetXF( static_cast<sal_uInt16>(nCol), static_cast<sal_uInt16>(nRow), nXF );
+        GetXFRangeBuffer().SetXF( nCol, nRow, nXF );
     }
     else
         bTabTruncated = TRUE;
