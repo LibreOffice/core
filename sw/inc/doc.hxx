@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:50:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,8 @@ class SwDoc
     sal_Bool    bInsOnlyTxtGlssry : 1;  // True: insert 'only text' glossary into doc
     sal_Bool    bContains_MSVBasic : 1; // True: MS-VBasic exist is in our storage
     sal_Bool    bPurgeOLE : 1;          // TRUE: Purge OLE-Objects
-    sal_Bool    bKernAsianPunctuation;  // TRUE: kerning also for ASIAN punctuation
+    sal_Bool    bKernAsianPunctuation : 1;  // TRUE: kerning also for ASIAN punctuation
+    sal_Bool    bReadlineChecked    : 1;  // TRUE: if the query was already shown
 #ifndef PRODUCT
     sal_Bool    bXMLExport : 1;         // TRUE: during XML export
 #endif
@@ -475,6 +476,7 @@ class SwDoc
 
 
     //---------------- private Methoden ------------------------------
+    void checkRedlining(SwRedlineMode& _rReadlineMode);
 
     void AppendUndo(SwUndo*);   // interne Verkuerzung fuer Insert am Ende
     void ClearRedo();           // loescht alle UndoObjecte von nUndoPos
