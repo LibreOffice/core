@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:44 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,8 @@ namespace connectivity
 
              ::rtl::OUString GetName() const ;
              DataTypeEnum GetADOType() const ;
+             void put_Type(const DataTypeEnum& _eType);
+             sal_Bool put_Size(const sal_Int32& _nSize);
              sal_Int32 GetAttributes() const ;
              sal_Int32 GetPrecision() const ;
              sal_Int32 GetNumericScale() const ;
@@ -436,6 +438,7 @@ namespace connectivity
              void GetValue(OLEVariant& aValVar) const ;
              OLEVariant GetValue() const;
              sal_Bool PutValue(const OLEVariant& aVariant);
+             sal_Bool AppendChunk(const OLEVariant& aVariant);
         };
 
         class OTools
