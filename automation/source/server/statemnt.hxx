@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:54:29 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,11 @@ protected:
     USHORT nAnzahl;
     SfxPoolItem **pItemArr;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aArgs;
-    USHORT nFunctionId;
+    USHORT nFunctionId;     // can get removed when the old (numeric) slothandling is removed
+    String aUnoUrl;
+
+    StatementSlot();
+    void AddReferer();
 public:
     StatementSlot( SCmdStream *pIn );
     StatementSlot( ULONG nSlot, SfxPoolItem* pItem = NULL );
@@ -339,13 +343,10 @@ public:
     virtual BOOL Execute();
 };
 
-class StatementUnoSlot : public StatementList   //Uno Slots aufrufen
+class StatementUnoSlot : public StatementSlot   //Uno Slots aufrufen
 {
-protected:
-    String aUnoUrl;
 public:
     StatementUnoSlot(SCmdStream *pIn);
-    virtual BOOL Execute();
 };
 
 class StatementCommand : public StatementList   // Befehl ausführen (wintree, resetaplication ...)
