@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:55:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,12 +201,13 @@ sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
  *                      GetFrmAtOfst(), GetFrmAtPos()
  *************************************************************************/
 
-SwTxtFrm *SwTxtFrm::GetFrmAtOfst( const xub_StrLen nWhere )
+// OD 07.10.2003 #110978#
+SwTxtFrm& SwTxtFrm::GetFrmAtOfst( const xub_StrLen nWhere )
 {
-    SwTxtFrm *pRet = this;
+    SwTxtFrm* pRet = this;
     while( pRet->HasFollow() && nWhere >= pRet->GetFollow()->GetOfst() )
         pRet = pRet->GetFollow();
-    return pRet;
+    return *pRet;
 }
 
 SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
@@ -435,7 +436,7 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         return sal_False;
 
     xub_StrLen nOffset = rPos.nContent.GetIndex();
-    SwTxtFrm *pFrm = ((SwTxtFrm*)this)->GetFrmAtOfst( nOffset );
+    SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
 
     pFrm->GetFormatted();
     const SwFrm* pTmpFrm = (SwFrm*)pFrm->GetUpper();
@@ -502,9 +503,9 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );
 
-            return TRUE;
+            return sal_True;
         }
-        return FALSE;
+        return sal_False;
     }
 }
 
