@@ -1,10 +1,9 @@
 /*
  * _XSingleLayerStratum.java
  *
- * Created on 23. März 2004, 16:37
+ * Created on 23. March 2004, 16:37
  */
 package ifc.configuration.backend;
-
 import com.sun.star.configuration.backend.XLayer;
 import com.sun.star.configuration.backend.XSingleLayerStratum;
 import com.sun.star.configuration.backend.XUpdatableLayer;
