@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:34:54 $
+ *  last change: $Author: rt $ $Date: 2002-03-01 12:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 #include "scitems.hxx"
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
 #include <svx/unofored.hxx>
 
 #include "editsrc.hxx"
