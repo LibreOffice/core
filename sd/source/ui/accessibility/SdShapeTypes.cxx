@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdShapeTypes.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-19 17:21:36 $
+ *  last change: $Author: af $ $Date: 2002-04-15 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@ AccessibleShape*
         AccessibleShapeTreeInfo& rShapeTreeInfo,
         ShapeTypeId nId)
 {
-    OSL_TRACE ("creating new presentation shape for type id %d", nId);
     switch (nId)
     {
         case PRESENTATION_TITLE:
