@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-22 10:53:12 $
+ *  last change: $Author: sj $ $Date: 2001-06-29 12:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,6 @@ void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
 
     if ( aStrScheme != aEmptyStr )
     {
-        String aStrURL ( aURL.GetMainURL() );
         String aStrMark;
 
         xub_StrLen nPos = aStrURL.SearchAscii( sHash );
