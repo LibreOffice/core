@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:33:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,10 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 #endif
     oslModule pRenderLib=osl_loadModule(xrenderLibraryName.pData, SAL_LOADMODULE_DEFAULT);
     if( !pRenderLib ) {
+#ifdef DEBUG
         fprintf( stderr, "Display can do XRender, but no %s installed.\n"
             "Please install for improved display performance\n", xrenderLibraryName.getStr() );
+#endif
         return;
     }
 
@@ -432,8 +434,8 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
                     *pTemp = lsb2msb[ *pTemp ];
 
                  aPixmap = XCreatePixmapFromBitmapData( mpDisplay,
-                 DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
-                 nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
+                     DefaultRootWindow( mpDisplay ), (char*)maRawBitmap.mpBits,
+                     nPixmapWidth, maRawBitmap.mnHeight, 1, 0, 1 );
                  mnBytesUsed += nBytes;
             }
         }
