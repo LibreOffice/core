@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:20:33 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ String STR_TOP
     TEXT[ korean ] = "À§(~T)";
     TEXT[ turkish ] = "~Üst";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "~Arriba";
 };
 String STR_BOTTOM
 {
@@ -114,6 +115,7 @@ String STR_BOTTOM
     TEXT[ korean ] = "¾Æ·¡(~B)";
     TEXT[ turkish ] = "A~ltta";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "A~bajo";
 };
 String STR_CENTER_HORI
 {
@@ -140,6 +142,7 @@ String STR_CENTER_HORI
     TEXT[ korean ] = "°¡¿îµ¥(~C)";
     TEXT[ turkish ] = "~Ortala";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "~Centrado";
 };
 String STR_FROMTOP
 {
@@ -166,6 +169,7 @@ String STR_FROMTOP
     TEXT[ korean ] = "À§ºÎÅÍ";
     TEXT[ turkish ] = "Üstten";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Desde arriba";
 };
 String STR_FROMBOTTOM
 {
@@ -190,6 +194,7 @@ String STR_FROMBOTTOM
     Text[ korean ] = "¾Æ·¡ºÎÅÍ";
     Text[ turkish ] = "Alttan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desde abajo";
 };
 String STR_BELOW
 {
@@ -214,6 +219,7 @@ String STR_BELOW
     Text[ korean ] = "¾Æ·¡";
     Text[ turkish ] = "Altta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Debajo";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Align
@@ -243,6 +249,7 @@ String STR_LEFT
     TEXT[ korean ] = "¿ÞÂÊ";
     TEXT[ turkish ] = "Sol";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Izquierda";
 };
 String STR_MIR_LEFT
 {
@@ -267,6 +274,7 @@ String STR_MIR_LEFT
     Text[ korean ] = "³»ºÎ";
     Text[ turkish ] = "Ýç";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Interior";
 };
 String STR_RIGHT
 {
@@ -293,6 +301,7 @@ String STR_RIGHT
     TEXT[ korean ] = "¿À¸¥ÂÊ";
     TEXT[ turkish ] = "Sað";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Derecha";
 };
 String STR_MIR_RIGHT
 {
@@ -319,6 +328,7 @@ String STR_MIR_RIGHT
     TEXT[ korean ] = "¿ÜºÎ";
     TEXT[ turkish ] = "Dýþ";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Exterior";
 };
 String STR_CENTER_VERT
 {
@@ -343,6 +353,7 @@ String STR_CENTER_VERT
     Text[ korean ] = "°¡¿îµ¥(~E)";
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Centro";
 };
 String STR_FROMLEFT
 {
@@ -369,6 +380,7 @@ String STR_FROMLEFT
     TEXT[ korean ] = "¿ÞÂÊ¿¡¼­ ºÎÅÍ";
     TEXT[ turkish ] = "Soldan";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "De izquierda";
 };
 String STR_MIR_FROMLEFT
 {
@@ -393,6 +405,7 @@ String STR_MIR_FROMLEFT
     Text[ korean ] = "¾È¿¡¼­ ºÎÅÍ";
     Text[ turkish ] = "Ýçerden";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desde el interior";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel
@@ -420,6 +433,7 @@ String STR_REL_BORDER
     Text[ korean ] = "¿©¹é";
     Text[ turkish ] = "Kenar";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen";
 };
 String STR_REL_PRTAREA
 {
@@ -444,6 +458,7 @@ String STR_REL_PRTAREA
     Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª";
     Text[ turkish ] = "Metin alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Área de texto ";
 };
 String STR_TOPPRT
 {
@@ -470,6 +485,7 @@ String STR_TOPPRT
     TEXT[ korean ] = "À§ÂÊ ¿©¹é";
     TEXT[ turkish ] = "Üst kenar";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Margen superior";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Rel
@@ -497,6 +513,7 @@ String STR_FLY_REL_PG_LEFT
     Text[ korean ] = "¿ÞÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Sol çerçeve kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde izquierdo del marco";
 };
 String STR_FLY_MIR_REL_PG_LEFT
 {
@@ -521,6 +538,7 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text[ korean ] = "³»ºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Ýç çerçeve kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde interior del marco";
 };
 String STR_FLY_REL_PG_RIGHT
 {
@@ -545,6 +563,7 @@ String STR_FLY_REL_PG_RIGHT
     Text[ korean ] = "¿À¸¥ÂÊ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Sað çerçeve kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde derecho del marco";
 };
 String STR_FLY_MIR_REL_PG_RIGHT
 {
@@ -569,6 +588,7 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text[ korean ] = "¿ÜºÎ ÇÁ·¹ÀÓ ¿Ü°û¼±";
     Text[ turkish ] = "Dýþ çerçeve kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde exterior del marco";
 };
 String STR_FLY_REL_PG_FRAME
 {
@@ -593,6 +613,7 @@ String STR_FLY_REL_PG_FRAME
     Text[ korean ] = "ÀüÃ¼ ÇÁ·¹ÀÓ";
     Text[ turkish ] = "Çerçevenin tümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco entero";
 };
 String STR_FLY_REL_PG_PRTAREA
 {
@@ -617,6 +638,7 @@ String STR_FLY_REL_PG_PRTAREA
     Text[ korean ] = "ÇÁ·¹ÀÓ ÅØ½ºÆ® ¿µ¿ª";
     Text[ turkish ] = "Çerçeve metin alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Área de texto del marco";
 };
 String STR_FRAME
 {
@@ -641,6 +663,7 @@ String STR_FRAME
     Text[ korean ] = "´Ü¶ô ¿µ¿ª";
     Text[ turkish ] = "Paragraf bölümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Área de párrafo";
 };
 String STR_PRTAREA
 {
@@ -665,6 +688,7 @@ String STR_PRTAREA
     Text[ korean ] = "´Ü¶ô ÅØ½ºÆ® ¿µ¿ª";
     Text[ turkish ] = "Paragraf metin alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Área de texto del párrafo";
 };
 String STR_REL_PG_LEFT
 {
@@ -689,6 +713,7 @@ String STR_REL_PG_LEFT
     Text[ korean ] = "ÂÊ¿©¹é£¬¿ÞÂÊ";
     Text[ turkish ] = "Sol sayfa kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen izquierdo de la página";
 };
 String STR_MIR_REL_PG_LEFT
 {
@@ -713,6 +738,7 @@ String STR_MIR_REL_PG_LEFT
     Text[ korean ] = "ÂÊ¿©¹é£¬¾ÈÂÊ";
     Text[ turkish ] = "Sayfa kenarý (iç)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen interior de la página";
 };
 String STR_REL_PG_RIGHT
 {
@@ -737,6 +763,7 @@ String STR_REL_PG_RIGHT
     Text[ korean ] = "ÂÊ¿©¹é£¬¿À¸¥ÂÊ";
     Text[ turkish ] = "Sað sayfa kenarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen derecho de la página";
 };
 String STR_MIR_REL_PG_RIGHT
 {
@@ -761,6 +788,7 @@ String STR_MIR_REL_PG_RIGHT
     Text[ korean ] = "ÂÊ¿©¹é£¬¹Ù±ùÂÊ";
     Text[ turkish ] = "Sayfa kenarý (dýþ)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen exterior de la página";
 };
 String STR_REL_FRM_LEFT
 {
@@ -785,6 +813,7 @@ String STR_REL_FRM_LEFT
     Text[ korean ] = "´Ü¶ô¿©¹é£¬¿ÞÂÊ";
     Text[ turkish ] = "Paragraf kenarý (sol)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen izquierdo del párrafo";
 };
 String STR_MIR_REL_FRM_LEFT
 {
@@ -809,6 +838,7 @@ String STR_MIR_REL_FRM_LEFT
     Text[ korean ] = "´Ü¶ô¿©¹é£¬¾ÈÂÊ";
     Text[ turkish ] = "Paragraf kenarý (iç)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen interior del párrafo";
 };
 String STR_REL_FRM_RIGHT
 {
@@ -833,6 +863,7 @@ String STR_REL_FRM_RIGHT
     Text[ korean ] = "´Ü¶ô¿©¹é£¬¿À¸¥ÂÊ";
     Text[ turkish ] = "Paragraf kenarý (sað)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen derecho del párrafo";
 };
 String STR_MIR_REL_FRM_RIGHT
 {
@@ -857,6 +888,7 @@ String STR_MIR_REL_FRM_RIGHT
     Text[ korean ] = "´Ü¶ô¿©¹é£¬¹Ù±ùÂÊ";
     Text[ turkish ] = "Paragraf kenarý (dýþ)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Margen exterior del párrafo";
 };
 String STR_REL_PG_FRAME
 {
@@ -881,6 +913,7 @@ String STR_REL_PG_FRAME
     Text[ korean ] = "ÀüÃ¼ ÂÊ";
     Text[ turkish ] = "Sayfanýn tümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página entera";
 };
 String STR_REL_PG_PRTAREA
 {
@@ -905,6 +938,7 @@ String STR_REL_PG_PRTAREA
     Text[ korean ] = "ÂÊ ÅØ½ºÆ® ¿µ¿ª";
     Text[ turkish ] = "Sayfa metin alaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Área de texto de la página";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel Zeichenausrichtungen
@@ -932,6 +966,7 @@ String STR_REL_BASE
     Text[ korean ] = "±âÁØ¼±";
     Text[ turkish ] = "Taban çizgisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea de base";
 };
 String STR_REL_CHAR
 {
@@ -956,6 +991,7 @@ String STR_REL_CHAR
     Text[ korean ] = "¹®ÀÚ";
     Text[ turkish ] = "Karakter";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Caracteres";
 };
 String STR_REL_ROW
 {
@@ -980,6 +1016,7 @@ String STR_REL_ROW
     Text[ korean ] = "Çà";
     Text[ turkish ] = "Satýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fila";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
@@ -1007,6 +1044,7 @@ String STR_TOP_BASE
     Text[ korean ] = "±âÁØ¼± À§(~T)";
     Text[ turkish ] = "Taban çizgisi ~üstü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea de base ~encima";
 };
 String STR_BOTTOM_BASE
 {
@@ -1031,6 +1069,7 @@ String STR_BOTTOM_BASE
     Text[ korean ] = "±âÁØ¼± ¾Æ·¡(~B)";
     Text[ turkish ] = "Alt ~taban çizgisi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Base a~bajo";
 };
 String STR_CENTER_BASE
 {
@@ -1055,6 +1094,7 @@ String STR_CENTER_BASE
     Text[ korean ] = "±âÁØ¼± °¡¿îµ¥(~C)";
     Text[ turkish ] = "Taban çizgisini ~ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Base ~centro";
 };
 String STR_LINE_TOP
 {
@@ -1079,6 +1119,7 @@ String STR_LINE_TOP
     Text[ korean ] = "ÁÙ À§";
     Text[ turkish ] = "Satýr üstü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea superior";
 };
 String STR_LINE_BOTTOM
 {
@@ -1103,6 +1144,7 @@ String STR_LINE_BOTTOM
     Text[ korean ] = "ÁÙ ¾Æ·¡";
     Text[ turkish ] = "Satýr altý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea inferior";
 };
 String STR_LINE_CENTER
 {
@@ -1127,6 +1169,7 @@ String STR_LINE_CENTER
     Text[ korean ] = "ÁÙ °¡¿îµ¥";
     Text[ turkish ] = "Satýrý ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Línea centrada";
 };
 String STR_CHAR_TOP
 {
@@ -1151,6 +1194,7 @@ String STR_CHAR_TOP
     Text[ korean ] = "¹®ÀÚ À§¿¡";
     Text[ turkish ] = "Karakter üstü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carácter arriba";
 };
 String STR_CHAR_BOTTOM
 {
@@ -1175,6 +1219,7 @@ String STR_CHAR_BOTTOM
     Text[ korean ] = "¹®ÀÚ ¾Æ·¡";
     Text[ turkish ] = "Karakter altý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carácter abajo";
 };
 String STR_CHAR_CENTER
 {
@@ -1199,6 +1244,7 @@ String STR_CHAR_CENTER
     Text[ korean ] = "¹®ÀÚ °¡¿îµ¥";
     Text[ turkish ] = "Karakteri ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Carácter centrado";
 };
 String STR_OLE_INSERT
 {
@@ -1226,6 +1272,7 @@ String STR_OLE_INSERT
     TEXT[ korean ] = "°³Ã¼ »ðÀÔ";
     TEXT[ turkish ] = "Nesne ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Insertar objeto";
 };
 String STR_OLE_EDIT
 {
@@ -1252,6 +1299,7 @@ String STR_OLE_EDIT
     TEXT[ korean ] = "°³Ã¼ ÆíÁý";
     TEXT[ turkish ] = "Nesneyi düzenle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Editar objeto";
 };
 String STR_COLL_HEADER
 {
@@ -1278,6 +1326,7 @@ String STR_COLL_HEADER
     TEXT[ korean ] = " ( ¼­½ÄÆÄÀÏ: ";
     TEXT[ turkish ] = "(Þablon: ";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "(Plantilla:  ";
 };
 String STR_FRMUI_BORDER
 {
@@ -1304,6 +1353,7 @@ String STR_FRMUI_BORDER
     Text[ korean ] = "Å×µÎ¸®";
     Text[ turkish ] = "Kenarlýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde";
 };
 String STR_FRMUI_PATTERN
 {
@@ -1330,6 +1380,7 @@ String STR_FRMUI_PATTERN
     Text[ korean ] = "¹è°æ";
     Text[ turkish ] = "Artalan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fondo";
 };
 String STR_FRMUI_WRAP
 {
@@ -1356,6 +1407,7 @@ String STR_FRMUI_WRAP
     Text[ korean ] = "¹®ÀÚ¿­¡¡¹èÄ¡";
     Text[ turkish ] = "Metin daðýlýmý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ajuste";
 };
 InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
 {
@@ -1385,4 +1437,5 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE[ korean ] = "¿­ °£°ÝÀÌ ¿­ ³Êºñ¿¡ ºñÇØ ³Ê¹« ³Ð½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Sütun aralýðý, sütun geniþliði için çok büyük.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "La distancia entre columnas es demasiado grande para el ancho de las columnas.";
 };
