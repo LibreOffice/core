@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filstr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:52:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ XStream_impl::queryInterface(
                                           SAL_STATIC_CAST( io::XOutputStream*,this ),
                                           SAL_STATIC_CAST( io::XSeekable*,this ),
                                           SAL_STATIC_CAST( io::XTruncate*,this ),
-                                          SAL_STATIC_CAST( task::XJob*,this ) ); //HACK see #i38298#
+                                          SAL_STATIC_CAST( io::XAsyncOutputMonitor*,this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -172,7 +172,7 @@ XTYPEPROVIDER_IMPL_8( XStream_impl,
                       io::XInputStream,
                       io::XOutputStream,
                       io::XTruncate,
-                      task::XJob ) //HACK see #i38298#
+                      io::XAsyncOutputMonitor )
 
 
 
@@ -460,11 +460,12 @@ XStream_impl::flush()
            uno::RuntimeException )
 {}
 
-//HACK see #i38298#
-uno::Any XStream_impl::execute(uno::Sequence< beans::NamedValue > const &)
-    throw (
-        lang::IllegalArgumentException, uno::Exception, uno::RuntimeException)
+void XStream_impl::waitForCompletion()
+    throw (io::IOException, uno::RuntimeException)
 {
+    // At least on UNIX, to reliably learn about any errors encountered by
+    // asynchronous NFS write operations, without closing the file directly
+    // afterwards, there appears to be no cheaper way than to call fsync:
     if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
         throw io::IOException(
             rtl::OUString(
@@ -472,5 +473,4 @@ uno::Any XStream_impl::execute(uno::Sequence< beans::NamedValue > const &)
                     "could not synchronize file to disc")),
             static_cast< OWeakObject * >(this));
     }
-    return uno::Any();
 }
