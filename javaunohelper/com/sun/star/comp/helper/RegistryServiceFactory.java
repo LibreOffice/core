@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryServiceFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-14 12:16:24 $
+ *  last change: $Author: kr $ $Date: 2001-03-14 12:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ public class RegistryServiceFactory {
     private static native Object createRegistryServiceFactory(
             String writeRegistryFile,
             String readRegistryFile,
-            boolean readOnly );
+            boolean readOnly);
 
     /**
       * This bootstraps an initial service factory working on a registry. If the first or both
@@ -92,8 +92,7 @@ public class RegistryServiceFactory {
       *
       * @author Markus Herzog
       */
-    public static XMultiServiceFactory create(
-            String writeRegistryFile, String readRegistryFile )
+    public static XMultiServiceFactory create(String writeRegistryFile, String readRegistryFile)
         throws com.sun.star.uno.Exception
     {
         return create(writeRegistryFile, readRegistryFile, false);
@@ -116,8 +115,7 @@ public class RegistryServiceFactory {
      *
       * @author Markus Herzog
       */
-    public static XMultiServiceFactory create(
-            String writeRegistryFile, String readRegistryFile, boolean readOnly )
+    public static XMultiServiceFactory create(String writeRegistryFile, String readRegistryFile, boolean readOnly)
         throws com.sun.star.uno.Exception
     {
         // Ensure that we are on a native threads vm
@@ -163,7 +161,7 @@ public class RegistryServiceFactory {
      *
      * @author Markus Herzog
      */
-    public static XMultiServiceFactory create( String registryFile )
+    public static XMultiServiceFactory create(String registryFile)
         throws com.sun.star.uno.Exception
     {
         return create(registryFile, null, false);
@@ -180,7 +178,7 @@ public class RegistryServiceFactory {
      *
      * @author Markus Herzog
      */
-    public static XMultiServiceFactory create( String registryFile, boolean readOnly )
+    public static XMultiServiceFactory create(String registryFile, boolean readOnly)
         throws com.sun.star.uno.Exception
     {
         return create(registryFile, null, readOnly);
@@ -191,9 +189,7 @@ public class RegistryServiceFactory {
      *<BR>
      * @author Markus Herzog
      */
-    public static XMultiServiceFactory create()
-        throws com.sun.star.uno.Exception
-    {
+    public static XMultiServiceFactory create() throws com.sun.star.uno.Exception {
         return create( null, null, false );
     }
 }
