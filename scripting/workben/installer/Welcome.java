@@ -52,29 +52,11 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         setUpWelcomePanel(message);
         return;
     }
-
+    
     int programPosition = userDir.lastIndexOf("program");
     String offInstallPth = null;
     offInstallPth = userDir.substring( 0, programPosition );
     
-    try {
-        System.out.println("All diagnostic output is being redirected to SFrameworkInstall.log");
-        System.out.println("Location: "+ offInstallPth + "program" + File.separator + "SFrameworkInstall.log");
-        
-        LogStream log = new LogStream( "SFrameworkInstall.log" );
-                System.setErr(log);
-        
-                System.setOut(log);
-    }
-    catch( FileNotFoundException fnfe ) {
-        String stackTrace = ExceptionTraceHelper.getTrace( fnfe );
-        nextButtonEnable = false;
-        message = "Error creating log file, please ensure you have write access to update office installation.\n";
-        message += "Error Detail:\n" + stackTrace;
-        setUpWelcomePanel(message);
-        return;
-        //fnfe.printStackTrace();   
-    }
         wizard.storeLocation(offInstallPth);
     setUpWelcomePanel(message);
         

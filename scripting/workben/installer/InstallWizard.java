@@ -63,6 +63,25 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     /** Creates new form InstallWizard */
     public InstallWizard() {
         super("Office Scripting Framework Installer - Early Developer Release");
+    
+    
+    try {
+        System.out.print("All diagnostic output is being redirected to SFrameworkInstall.log\n");
+        System.out.print("Location: "+  System.getProperty( "user.dir" ) + 
+            File.separator + "SFrameworkInstall.log\n");
+
+        LogStream log = new LogStream( "SFrameworkInstall.log" );
+                System.setErr(log);
+        
+                System.setOut(log);
+    }
+    catch( FileNotFoundException fnfe ) {
+        System.err.println("Office Scripting Framework Installer - Error: ");
+        System.err.println("Unable to create log file for installation.");
+        exitForm(null);
+    }
+    
+    
     //setBackground(Color.WHITE);
     setBackground(new Color(0,0,0));
     locations = new ArrayList();
