@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:38:16 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
 #include <svtools/accessibilityoptions.hxx>
 #endif
@@ -697,7 +696,17 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
             RefreshAllIAOManagers();
 
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
-            pTextEditOutliner->InsertView(pTextEditOutlinerView,0);
+
+            // check if this view is already inserted
+            ULONG i,nCount = pTextEditOutliner->GetViewCount();
+            for( i = 0; i < nCount; i++ )
+            {
+                if( pTextEditOutliner->GetView(i) == pTextEditOutlinerView )
+                    break;
+            }
+
+            if( i == nCount )
+                pTextEditOutliner->InsertView(pTextEditOutlinerView,0);
 
             aHdl.SetMoveOutside(FALSE);
             aHdl.SetMoveOutside(TRUE);
