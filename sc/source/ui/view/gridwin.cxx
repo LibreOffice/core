@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 15:58:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2676,6 +2676,14 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         Point aPosPixel = rCEvt.GetMousePosPixel();
         Point aMenuPos = aPosPixel;
         BOOL bMouse = rCEvt.IsMouseEvent();
+
+        if ( bMouse )
+        {
+            //  #i18735# First select the item under the mouse pointer.
+            //  This can change the selection, and the view state (edit mode, etc).
+            SelectForContextMenu( aPosPixel );
+        }
+
         BOOL bDone = FALSE;
         BOOL bEdit = pViewData->HasEditView(eWhich);
         if ( !bEdit )
@@ -2763,6 +2771,158 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         if (!bDone)
         {
             SfxDispatcher::ExecutePopup( 0, this, &aMenuPos );
+        }
+    }
+}
+
+void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
+{
+    //  #i18735# if the click was outside of the current selection,
+    //  the cursor is moved or an object at the click position selected.
+    //  (see SwEditWin::SelectMenuPosition in Writer)
+
+    short nCellX, nCellY;
+    pViewData->GetPosFromPixel( rPosPixel.X(), rPosPixel.Y(), eWhich, nCellX, nCellY );
+    ScTabView* pView = pViewData->GetView();
+    SdrView* pDrawView = pView->GetSdrView();
+
+    //  check cell edit mode
+
+    if ( pViewData->HasEditView(eWhich) )
+    {
+        ScModule* pScMod = SC_MOD();
+        USHORT nEditStartCol = pViewData->GetEditViewCol(); //! change to GetEditStartCol after calcrtl is integrated
+        USHORT nEditStartRow = pViewData->GetEditViewRow();
+        USHORT nEditEndCol = pViewData->GetEditEndCol();
+        USHORT nEditEndRow = pViewData->GetEditEndRow();
+
+        if ( nCellX >= (short) nEditStartCol && nCellX <= (short) nEditEndCol &&
+             nCellY >= (short) nEditStartRow && nCellY <= (short) nEditEndRow )
+        {
+            //  handle selection within the EditView
+
+            EditView* pEditView = pViewData->GetEditView( eWhich );     // not NULL (HasEditView)
+            EditEngine* pEditEngine = pEditView->GetEditEngine();
+            Rectangle aOutputArea = pEditView->GetOutputArea();
+            Rectangle aVisArea = pEditView->GetVisArea();
+
+            Point aTextPos = PixelToLogic( rPosPixel );
+            if ( pEditEngine->IsVertical() )            // have to manually transform position
+            {
+                aTextPos -= aOutputArea.TopRight();
+                long nTemp = -aTextPos.X();
+                aTextPos.X() = aTextPos.Y();
+                aTextPos.Y() = nTemp;
+            }
+            else
+                aTextPos -= aOutputArea.TopLeft();
+            aTextPos += aVisArea.TopLeft();             // position in the edit document
+
+            EPosition aDocPosition = pEditEngine->FindDocPosition(aTextPos);
+            ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+            ESelection aSelection = pEditView->GetSelection();
+            aSelection.Adjust();    // needed for IsLess/IsGreater
+            if ( aCompare.IsLess(aSelection) || aCompare.IsGreater(aSelection) )
+            {
+                // clicked outside the selected text - deselect and move text cursor
+                MouseEvent aEvent( rPosPixel );
+                pEditView->MouseButtonDown( aEvent );
+                pEditView->MouseButtonUp( aEvent );
+                pScMod->InputSelection( pEditView );
+            }
+
+            return;     // clicked within the edit view - keep edit mode
+        }
+        else
+        {
+            // outside of the edit view - end edit mode, regardless of cell selection, then continue
+            pScMod->InputEnterHandler();
+        }
+    }
+
+    //  check draw text edit mode
+
+    Point aLogicPos = PixelToLogic( rPosPixel );        // after cell edit mode is ended
+    if ( pDrawView && pDrawView->GetTextEditObject() && pDrawView->GetTextEditOutlinerView() )
+    {
+        OutlinerView* pOlView = pDrawView->GetTextEditOutlinerView();
+        Rectangle aOutputArea = pOlView->GetOutputArea();
+        if ( aOutputArea.IsInside( aLogicPos ) )
+        {
+            //  handle selection within the OutlinerView
+
+            Outliner* pOutliner = pOlView->GetOutliner();
+            const EditEngine& rEditEngine = pOutliner->GetEditEngine();
+            Rectangle aVisArea = pOlView->GetVisArea();
+
+            Point aTextPos = aLogicPos;
+            if ( pOutliner->IsVertical() )              // have to manually transform position
+            {
+                aTextPos -= aOutputArea.TopRight();
+                long nTemp = -aTextPos.X();
+                aTextPos.X() = aTextPos.Y();
+                aTextPos.Y() = nTemp;
+            }
+            else
+                aTextPos -= aOutputArea.TopLeft();
+            aTextPos += aVisArea.TopLeft();             // position in the edit document
+
+            EPosition aDocPosition = rEditEngine.FindDocPosition(aTextPos);
+            ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+            ESelection aSelection = pOlView->GetSelection();
+            aSelection.Adjust();    // needed for IsLess/IsGreater
+            if ( aCompare.IsLess(aSelection) || aCompare.IsGreater(aSelection) )
+            {
+                // clicked outside the selected text - deselect and move text cursor
+                // use DrawView to allow extra handling there (none currently)
+                MouseEvent aEvent( rPosPixel );
+                pDrawView->MouseButtonDown( aEvent, this );
+                pDrawView->MouseButtonUp( aEvent, this );
+            }
+
+            return;     // clicked within the edit area - keep edit mode
+        }
+        else
+        {
+            // Outside of the edit area - end text edit mode, then continue.
+            // DrawDeselectAll also ends text edit mode and updates the shells.
+            // If the click was on the edited object, it will be selected again below.
+            pView->DrawDeselectAll();
+        }
+    }
+
+    //  look for existing selection
+
+    BOOL bHitSelected = FALSE;
+    if ( pDrawView && pDrawView->IsMarkedObjHit( aLogicPos ) )
+    {
+        //  clicked on selected object -> don't change anything
+        bHitSelected = TRUE;
+    }
+    else if ( pViewData->GetMarkData().IsCellMarked( (USHORT) nCellX, (USHORT) nCellY ) )
+    {
+        //  clicked on selected cell -> don't change anything
+        bHitSelected = TRUE;
+    }
+
+    //  select drawing object or move cell cursor
+
+    if ( !bHitSelected )
+    {
+        BOOL bWasDraw = ( pDrawView && pDrawView->HasMarked() );
+        BOOL bHitDraw = FALSE;
+        if ( pDrawView )
+        {
+            pDrawView->UnmarkAllObj();
+            bHitDraw = pDrawView->MarkObj( aLogicPos );
+            // draw shell is activated in MarkListHasChanged
+        }
+        if ( !bHitDraw )
+        {
+            pView->Unmark();
+            pView->SetCursor( (USHORT) nCellX, (USHORT) nCellY );
+            if ( bWasDraw )
+                pViewData->GetViewShell()->SetDrawShell( FALSE );   // switch shells
         }
     }
 }
