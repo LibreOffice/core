@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-23 11:35:47 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 12:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ class XMLNumberFormatAttributesExportHelper
 public :
     XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
     ~XMLNumberFormatAttributesExportHelper();
-    SetExport(SvXMLExport* pExport) { this->pExport = pExport; }
+    void SetExport(SvXMLExport* pExport) { this->pExport = pExport; }
 
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,
