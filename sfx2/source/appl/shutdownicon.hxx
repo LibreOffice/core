@@ -77,6 +77,7 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         SFX_DECL_XSERVICEINFO
 
         static ShutdownIcon* getInstance();
+
         static void terminateDesktop();
         static void addTerminateListener();
 
