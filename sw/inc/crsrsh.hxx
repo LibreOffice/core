@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:21:59 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ class SwTableBox;
 class SwCellFrms;
 class SwTOXMark;
 class SwRedline;
+class SwCntntNode; //  #i23726#
 struct SwPosition;
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -164,7 +165,8 @@ struct SwContentAtPos
         SW_REDLINE      = 0x0020,
         SW_OUTLINE      = 0x0040,
         SW_TOXMARK      = 0x0080,
-        SW_REFMARK      = 0x0100
+        SW_REFMARK      = 0x0100,
+        SW_NUMLABEL     = 0x0200 // #i23726#
 #ifndef PRODUCT
         ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
         ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
@@ -175,7 +177,10 @@ struct SwContentAtPos
         const SwField* pFld;
         const SfxPoolItem* pAttr;
         const SwRedline* pRedl;
+        SwCntntNode * pNode; // #i23726#
     } aFnd;
+
+    int nDist; // #i23726#
 
     String sStr;
     const SwTxtAttr* pFndTxtAttr;
@@ -185,6 +190,7 @@ struct SwContentAtPos
     {
         aFnd.pFld = 0;
         pFndTxtAttr = 0;
+        nDist = 0; // #i23726#
     }
 
     // befindet sich der Node in einem geschuetzten Bereich?
@@ -435,6 +441,9 @@ public:
     //  CRSR_POSCHG: wenn der ob der SPoint vom Layout korrigiert wurde.
     //  CRSR_POSOLD: wenn der Crsr nicht veraendert wurde
     int SetCrsr( const Point &rPt, BOOL bOnlyText = FALSE );
+
+    // #i23726#
+    SwPosition GetDocPos(const Point &rPt);
 
     /*
      * Benachrichtung, dass der sichtbare Bereich sich geaendert
