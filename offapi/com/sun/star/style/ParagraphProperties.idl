@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-18 13:43:28 $
+ *  last change: $Author: nn $ $Date: 2001-05-23 17:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ service ParagraphProperties
     // DocMerge from xml: property com::sun::star::style::ParagraphProperties::ParaLineSpacing
     /** contains the type of the line spacing of a paragraph.
      */
-    [property] com::sun::star::style::LineSpacing ParaLineSpacing;
+    [optional, property] com::sun::star::style::LineSpacing ParaLineSpacing;
 
     //-------------------------------------------------------------------------
 
@@ -279,7 +279,7 @@ service ParagraphProperties
     /** specifies the positions and kinds of thei tab stops within this
                 paragraph.
      */
-    [property] sequence<com::sun::star::style::TabStop> ParaTabStops;
+    [optional, property] sequence<com::sun::star::style::TabStop> ParaTabStops;
 
     //-------------------------------------------------------------------------
 
