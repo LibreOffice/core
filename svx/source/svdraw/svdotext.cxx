@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-22 17:20:25 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 15:51:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,10 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if (pOutlinerParaObject!=NULL || (pEdtOutl!=NULL && HasEditText()))
         {
             SdrOutliner& rOutliner=ImpGetDrawOutliner();
+
+            if( GetPage() )
+                rOutliner.SetBackgroundColor( GetPage()->GetBackgroundColor() );
+
             FASTBOOL bContourFrame=IsContourTextFrame();
             if (IsFontwork() && !bContourFrame)
             { // FontWork

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-16 12:57:43 $
+ *  last change: $Author: cl $ $Date: 2002-02-25 15:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,6 +677,9 @@ BOOL SdrObjEditView::BegTextEdit(SdrObject* pObj, SdrPageView* pPV, Window* pWin
         pTextEditOutliner=pGivenOutliner;
         if (pTextEditOutliner==NULL)
             pTextEditOutliner = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pTextEditObj->GetModel() );
+
+        if( pObj && pObj->GetPage() )
+            pTextEditOutliner->SetBackgroundColor( pObj->GetPage()->GetBackgroundColor() );
 
         BOOL bEmpty=pTextEditObj->GetOutlinerParaObject()==NULL;
 
