@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-04-10 12:00:18 $
+ *  last change: $Author: bustamam $ $Date: 2002-04-24 17:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -45,7 +45,7 @@
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
- *  See the License for the specific provisions governing your rights and
+eak *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -104,6 +104,7 @@
 #include <breakiteratorImpl.hxx>
 #include <breakiterator_cjk.hxx>
 #include <breakiterator_th.hxx>
+#include <breakiterator_hi.hxx>
 #include <breakiterator_unicode.hxx>
 
 #define INDEXENTRYSUPPLIER_ALL
@@ -127,6 +128,7 @@
 
 #include <inputsequencechecker.hxx>
 #include <inputsequencechecker_th.hxx>
+#include <inputsequencechecker_hi.hxx>
 
 
 #define IMPL_CREATEINSTANCE( ImplName ) \
@@ -193,6 +195,7 @@ IMPL_CREATEINSTANCE( BreakIterator_Unicode )
 IMPL_CREATEINSTANCE( BreakIterator_ja )
 IMPL_CREATEINSTANCE( BreakIterator_zh )
 IMPL_CREATEINSTANCE( BreakIterator_th )
+IMPL_CREATEINSTANCE( BreakIterator_hi )
 IMPL_CREATEINSTANCE_MSF( ChapterCollator )
 IMPL_CREATEINSTANCE_MSF( CollatorImpl )
 IMPL_CREATEINSTANCE( Collator_ICU )
@@ -217,6 +220,7 @@ IMPL_CREATEINSTANCE( ScriptTypeDetector )
 
 IMPL_CREATEINSTANCE_MSF( InputSequenceCheckerImpl )
 IMPL_CREATEINSTANCE( InputSequenceChecker_th )
+IMPL_CREATEINSTANCE( InputSequenceChecker_hi )
 
 IMPL_CREATEINSTANCE( Transliteration_u2l )
 IMPL_CREATEINSTANCE( Transliteration_l2u )
@@ -405,7 +409,10 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.BreakIterator_th",
         "com.sun.star.i18n.BreakIterator_th",
         &BreakIterator_th_CreateInstance },
-        {       "com.sun.star.i18n.Collator",
+     {  "com.sun.star.i18n.BreakIterator_hi",
+        "com.sun.star.i18n.BreakIterator_hi",
+        &BreakIterator_hi_CreateInstance },
+       {       "com.sun.star.i18n.Collator",
                 "com.sun.star.i18n.Collator",
                 &CollatorImpl_CreateInstance },
         {       "com.sun.star.i18n.ChapterCollator",
@@ -468,7 +475,10 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.InputSequenceChecker_th",
         "com.sun.star.i18n.InputSequenceChecker_th",
         &InputSequenceChecker_th_CreateInstance },
-    {   TRLT_SERVICELNAME,
+  { "com.sun.star.i18n.InputSequenceChecker_hi",
+        "com.sun.star.i18n.InputSequenceChecker_hi",
+        &InputSequenceChecker_hi_CreateInstance },
+  { TRLT_SERVICELNAME,
         TRLT_IMPLNAME ,
         &TransliterationImpl_CreateInstance },
     {       TRLT_SERVICELNAME_L10N,
