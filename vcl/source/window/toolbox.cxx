@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:19:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4745,7 +4745,7 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
         {
             ImplHideFocus();
             mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
-            pItem->mpWindow->ImplControlFocus( 0 );
+            pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
             mbDummy3_ChangingHighlight = FALSE;
         }
         else
@@ -5018,13 +5018,30 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
         break;
         default:
-        {
-            // do nothing to avoid key presses going into the document
-            // while the toolbox has the focus
-            // just forward function and special keys and combinations with Alt-key
+            {
             USHORT aKeyGroup = aKeyCode.GetGroup();
-            if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2() )
-                bForwardKey = TRUE;
+            ImplToolItem *pItem = NULL;
+            if( mnHighItemId )
+                pItem = ImplGetItem( mnHighItemId );
+            // #i13931# forward alphanum keyinput into embedded control
+            if( (aKeyGroup == KEYGROUP_NUM || aKeyGroup == KEYGROUP_ALPHA ) && pItem && pItem->mpWindow && pItem->mbEnabled )
+            {
+                Window *pFocusWindow = Application::GetFocusWindow();
+                ImplHideFocus();
+                mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
+                pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
+                mbDummy3_ChangingHighlight = FALSE;
+                if( pFocusWindow != Application::GetFocusWindow() )
+                    Application::GetFocusWindow()->KeyInput( rKEvt );
+            }
+            else
+            {
+                // do nothing to avoid key presses going into the document
+                // while the toolbox has the focus
+                // just forward function and special keys and combinations with Alt-key
+                if( aKeyGroup == KEYGROUP_FKEYS || aKeyGroup == KEYGROUP_MISC || aKeyCode.IsMod2() )
+                    bForwardKey = TRUE;
+            }
         }
     }
 
