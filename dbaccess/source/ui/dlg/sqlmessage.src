@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:39:52 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,19 +209,19 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Group = TRUE;
         Text[ portuguese ] = "~Lista de erros:";
         Text[ russian ] = "Ñïèñîê îøèáîê:";
-        Text[ greek ] = "Ëßóôá óöáëìÜôùí:";
-        Text[ dutch ] = "Lijst met ~fouten:";
-        Text[ french ] = "~Liste d'erreurs :";
+        Text[ greek ] = "Ëßóôá ó~öáëìÜôùí:";
+        Text[ dutch ] = "Lijst met ~fouten: ";
+        Text[ french ] = "~Liste des erreurs :";
         Text[ spanish ] = "Lista de ~errores:";
         Text[ italian ] = "Lista errori:";
         Text[ danish ] = "~Fejlliste:";
         Text[ swedish ] = "~Fellista:";
         Text[ polish ] = "~Lista b³êdów:";
         Text[ portuguese_brazilian ] = "error ~list:";
-        Text[ japanese ] = "´×°Ø½Ä:";
+        Text[ japanese ] = "´×°‚ÌØ½Ä(~L):";
         Text[ korean ] = "¿À·ù ¸ñ·Ï(~L)";
-        Text[ chinese_simplified ] = "´íÎóÁĞµ¥£º";
-        Text[ chinese_traditional ] = "¿ù»~²M³æ¡G";
+        Text[ chinese_simplified ] = "´íÎóÁĞµ¥(~L)£º";
+        Text[ chinese_traditional ] = "¿ù»~²M³æ(~L)¡G";
         Text[ arabic ] = "ŞÇÆãÉ ÇáÃÎØÇÁ:";
         Text[ turkish ] = "Hata listesi:";
     };
@@ -243,8 +243,8 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ portuguese ] = "~Descrição:";
         Text[ russian ] = "Îïèñàíèå:";
         Text[ greek ] = "ĞåñéãñáöŞ:";
-        Text[ dutch ] = "~beschrijving:";
-        Text[ french ] = "~description :";
+        Text[ dutch ] = "~Beschrijving: ";
+        Text[ french ] = "~Description :";
         Text[ spanish ] = "~Descripción:";
         Text[ italian ] = "Descrizione:";
         Text[ danish ] = "~Beskrivelse:";
@@ -253,7 +253,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ portuguese_brazilian ] = "~description:";
         Text[ japanese ] = "à–¾:";
         Text[ korean ] = "¼³¸í:(~D)";
-        Text[ chinese_simplified ] = "ËµÃ÷£º";
+        Text[ chinese_simplified ] = "ËµÃ÷(~D)£º";
         Text[ chinese_traditional ] = "´y­z¡G";
         Text[ arabic ] = "ÇáæÕİ:";
         Text[ turkish ] = "Açıklama:";
@@ -279,36 +279,138 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text = "Fehler";
         Text [ english ] = "Error";
         Text [ english_us ] = "Error";
+        Text[ portuguese ] = "Erro";
+        Text[ russian ] = "Îøèáêà";
+        Text[ greek ] = "ÓöÜëìá";
+        Text[ dutch ] = "Fout";
+        Text[ french ] = "Erreur";
+        Text[ spanish ] = "Error";
+        Text[ italian ] = "Errore";
+        Text[ danish ] = "Fejl";
+        Text[ swedish ] = "Fel";
+        Text[ polish ] = "B³¹d";
+        Text[ portuguese_brazilian ] = "Error";
+        Text[ japanese ] = "´×°";
+        Text[ korean ] = "Error";
+        Text[ chinese_simplified ] = "´íÎó";
+        Text[ chinese_traditional ] = "¿ù»~";
+        Text[ turkish ] = "Error";
+        Text[ arabic ] = "ÎØÃ";
     };
     String STR_EXCEPTION_WARNING
     {
         Text = "Warnung";
         Text [ english ] = "Warning";
         Text [ english_us ] = "Warning";
+        Text[ portuguese ] = "Advertência";
+        Text[ russian ] = "Ïğåäóïğåæäåíèå";
+        Text[ greek ] = "Ğñïåéäïğïßçóç";
+        Text[ dutch ] = "Waarschuwing";
+        Text[ french ] = "Avertissement";
+        Text[ spanish ] = "Advertencia";
+        Text[ italian ] = "Avvertenza";
+        Text[ danish ] = "Advarsel";
+        Text[ swedish ] = "Varning";
+        Text[ polish ] = "Ostrze¿enie";
+        Text[ portuguese_brazilian ] = "Warning";
+        Text[ japanese ] = "Œx";
+        Text[ korean ] = "Warning";
+        Text[ chinese_simplified ] = "¾¯¸æ";
+        Text[ chinese_traditional ] = "Äµ§i";
+        Text[ turkish ] = "Warning";
+        Text[ arabic ] = "ÊÍĞíÑ";
     };
     String STR_EXCEPTION_INFO
     {
         Text = "Information";
         Text [ english ] = "Information";
         Text [ english_us ] = "Information";
+        Text[ portuguese ] = "Informação";
+        Text[ russian ] = "Èíôîğìàöèÿ";
+        Text[ greek ] = "Ğëçñïöïñßåò";
+        Text[ dutch ] = "Informatie";
+        Text[ french ] = "Information";
+        Text[ spanish ] = "Información";
+        Text[ italian ] = "Informazione";
+        Text[ danish ] = "Information";
+        Text[ swedish ] = "Information";
+        Text[ polish ] = "Informacja";
+        Text[ portuguese_brazilian ] = "Information";
+        Text[ japanese ] = "î•ñ";
+        Text[ korean ] = "Information";
+        Text[ chinese_simplified ] = "ĞÅÏ¢";
+        Text[ chinese_traditional ] = "¸ê°T";
+        Text[ turkish ] = "Information";
+        Text[ arabic ] = "ãÚáæãÇÊ";
     };
     String STR_EXCEPTION_DETAILS
     {
         Text = "Details";
         Text [ english ] = "Details";
         Text [ english_us ] = "Details";
+        Text[ portuguese ] = "Detalhes";
+        Text[ russian ] = "Äåòàëè";
+        Text[ greek ] = "Ëåğôïìİñåéåò";
+        Text[ dutch ] = "Details";
+        Text[ french ] = "Détails";
+        Text[ spanish ] = "Detalles";
+        Text[ italian ] = "Dettagli";
+        Text[ danish ] = "Detaljer";
+        Text[ swedish ] = "Detaljer";
+        Text[ polish ] = "Szczegó³y";
+        Text[ portuguese_brazilian ] = "Details";
+        Text[ japanese ] = "Ú×";
+        Text[ korean ] = "Details";
+        Text[ chinese_simplified ] = "Ï¸½Ú";
+        Text[ chinese_traditional ] = "²Ó¸`";
+        Text[ turkish ] = "Details";
+        Text[ arabic ] = "ÊİÇÕíá";
     };
     String STR_EXCEPTION_STATUS
     {
         Text = "SQL-Status";
         Text [ english ] = "SQL State";
-        Text [ english_us ] = "SQL State";
+        Text [ english_us ] = "SQL Status";
+        Text[ portuguese ] = "Estado SQL";
+        Text[ russian ] = "Ñîñòîÿíèå SQL";
+        Text[ greek ] = "ÊáôÜóôáóç SQL";
+        Text[ dutch ] = "SQL status";
+        Text[ french ] = "Statut SQL";
+        Text[ spanish ] = "Estado SQL";
+        Text[ italian ] = "Stato SQL";
+        Text[ danish ] = "SQL-status";
+        Text[ swedish ] = "SQL-status";
+        Text[ polish ] = "Stan SQL";
+        Text[ portuguese_brazilian ] = "SQL State";
+        Text[ japanese ] = "SQL ½Ã°À½";
+        Text[ korean ] = "SQL State";
+        Text[ chinese_simplified ] = "SQL ×´Ì¬";
+        Text[ chinese_traditional ] = "SQL ª¬ºA";
+        Text[ turkish ] = "SQL State";
+        Text[ arabic ] = "ÍÇáÉSQL";
     };
     String STR_EXCEPTION_ERRORCODE
     {
         Text = "Fehler-Code";
         Text [ english ] = "Error code";
         Text [ english_us ] = "Error code";
+        Text[ portuguese ] = "Código de erro";
+        Text[ russian ] = "Êîä îøèáêè";
+        Text[ greek ] = "Êùäéêüò óöÜëìáôïò";
+        Text[ dutch ] = "Errorcode";
+        Text[ french ] = "Code d'erreur";
+        Text[ spanish ] = "Código de error";
+        Text[ italian ] = "Codice di errore";
+        Text[ danish ] = "Fejlkode";
+        Text[ swedish ] = "Felkod";
+        Text[ polish ] = "Kod b³êdu";
+        Text[ portuguese_brazilian ] = "Error code";
+        Text[ japanese ] = "´×°º°ÄŞ";
+        Text[ korean ] = "Error code";
+        Text[ chinese_simplified ] = "´íÎóÂë";
+        Text[ chinese_traditional ] = "¿ù»~½X";
+        Text[ turkish ] = "Error code";
+        Text[ arabic ] = "ÑãÒ ÇáÎØÃ";
     };
 };
 
@@ -316,6 +418,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:39:52  fs
+ *  some (a lot of) new imlpementations - still under development
+ *
  *  Revision 1.1  2000/10/05 10:07:13  fs
  *  initial checkin
  *
