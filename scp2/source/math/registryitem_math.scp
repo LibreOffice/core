@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_math.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:23:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 12:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "macros.inc"
 
 // MSOLE embedded object in SO7 file format
@@ -576,13 +575,13 @@ RegistryItem gid_Regitem_Odf_Contenttype
     ModuleID = gid_Module_Prg_Math_Bin;
     Subkey = ".odf";
     Name = "Content Type";
-    Value = "application/vnd.oasis.opendocument.math";
+    Value = "application/vnd.oasis.opendocument.formula";
 End
 
 RegistryItem gid_Regitem_Odf_Mime_Database
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Math_Bin;
-    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.math";
+    Subkey = "MIME\Database\Content Type\application/vnd.oasis.opendocument.formula";
     Name = "Extension";
     Value = ".odf";
 End
