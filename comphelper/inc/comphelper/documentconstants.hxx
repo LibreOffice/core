@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentconstants.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:50:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,21 @@
 #define MIMETYPE_VND_SUN_XML_CHART                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CHART_ASCII ) )
 #define MIMETYPE_VND_SUN_XML_MATH                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_MATH_ASCII ) )
 
+// template formats of SO6/7
+#define MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE_ASCII               "application/vnd.sun.xml.writer.template"
+#define MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE_ASCII                 "application/vnd.sun.xml.draw.template"
+#define MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE_ASCII              "application/vnd.sun.xml.impress.template"
+#define MIMETYPE_VND_SUN_XML_CALC_TEMPLATE_ASCII                 "application/vnd.sun.xml.calc.template"
+
+#define MIMETYPE_VND_SUN_XML_WRITER_TEMPLATE                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_WRITER_ASCII ) )
+#define MIMETYPE_VND_SUN_XML_DRAW_TEMPLATE                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_DRAW_ASCII ) )
+#define MIMETYPE_VND_SUN_XML_IMPRESS_TEMPLATE                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_IMPRESS_ASCII ) )
+#define MIMETYPE_VND_SUN_XML_CALC_TEMPLATE                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( MIMETYPE_VND_SUN_XML_CALC_ASCII ) )
+
 // formats of SO8
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII          "application/vnd.oasis.opendocument.text"
 #define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII      "application/vnd.oasis.opendocument.text-web"
-#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII   "application/vnd.oasis.opendocument.text-global"
+#define MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII   "application/vnd.oasis.opendocument.text-master"
 #define MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII       "application/vnd.oasis.opendocument.graphics"
 #define MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII  "application/vnd.oasis.opendocument.presentation"
 #define MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII   "application/vnd.oasis.opendocument.spreadsheet"
