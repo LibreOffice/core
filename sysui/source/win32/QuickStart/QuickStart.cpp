@@ -43,8 +43,18 @@ bool launchSoffice( )
 {
     if ( !SofficeRuns() )
     {
-      UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );
-//        UINT ret = WinExec( "swriter.exe -bean", SW_SHOW );    // looks in the same directory
+        // UINT ret = WinExec( "h:\\office60.630b\\program\\swriter.exe -bean", SW_SHOW );
+        char filename[_MAX_PATH + 1];
+        GetModuleFileName( NULL, filename, _MAX_PATH ); // soffice resides in the same dir
+        char *p = strrchr( filename, '\\' );
+        if ( !p )
+            return false;
+        strcpy( p+1, "swriter.exe" );
+
+        char imagename[_MAX_PATH + 1];
+        wsprintf(imagename, "\"%s\" -bean", filename );
+
+        UINT ret = WinExec( imagename, SW_SHOW );
         if ( ret < 32 )
             return false;
 
@@ -166,7 +176,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, (LPCTSTR)IDI_QUICKSTART);
     wcex.hCursor        = LoadCursor(NULL, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = (LPCSTR)IDC_QUICKSTART;
+    wcex.lpszMenuName   = NULL;
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_SMALL);
 
