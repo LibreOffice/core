@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.7 $
+#*  $Revision: 1.8 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2002-06-01 01:42:02 $
+#*  last change: $Author: er $ $Date: 2002-06-03 13:33:52 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -279,17 +279,20 @@ SHL4OBJS= \
     $(SLO)$/localedata_ar_SA.obj \
     $(SLO)$/localedata_ar_TN.obj \
     $(SLO)$/localedata_he_IL.obj \
+    $(SLO)$/localedata_hi_IN.obj \
     $(SLO)$/localedata_hu_HU.obj \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_kn_IN.obj \
     $(SLO)$/localedata_ko_KR.obj \
+    $(SLO)$/localedata_ta_IN.obj \
+    $(SLO)$/localedata_te_IN.obj \
     $(SLO)$/localedata_th_TH.obj \
     $(SLO)$/localedata_zh_CN.obj \
     $(SLO)$/localedata_zh_HK.obj \
     $(SLO)$/localedata_zh_MO.obj \
     $(SLO)$/localedata_zh_SG.obj \
-    $(SLO)$/localedata_zh_TW.obj \
-    $(SLO)$/localedata_hi_IN.obj
+    $(SLO)$/localedata_zh_TW.obj
 
 LIB4TARGET=	$(SLB)$/$(SHL4TARGET).lib
 LIB4OBJFILES=$(SHL4OBJS)
