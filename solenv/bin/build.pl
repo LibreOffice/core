@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.132 $
+#   $Revision: 1.133 $
 #
-#   last change: $Author: vg $ $Date: 2005-01-13 16:48:17 $
+#   last change: $Author: vg $ $Date: 2005-01-17 11:38:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.132 $ ';
+    $id_str = ' $Revision: 1.133 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -474,7 +474,6 @@ sub get_parents_array {
     my $build_list_ref = $build_lists_hash{$module};
 
     if (ref($build_list_ref) eq 'XMLBuildListParser') {
-        my @test = $build_list_ref->getModuleDependencies(\@modes_array);
         return $build_list_ref->getModuleDependencies(\@modes_array);
     };
     foreach (@$build_list_ref) {
@@ -1067,7 +1066,7 @@ sub get_options {
         push (@dmake_args, $arg);
     };
     &print_error('Switches --with_branches and --all collision') if ($build_from && $build_from_opt);
-
+    &print_error('Please prepare the workspace on one of UNIX platforms') if ($prepare && ($ENV{GUI} ne 'UNX'));
     &print_error('Switches --with_branches and --since collision') if ($build_from && $build_since);
     $cmd_file = '' if ($show);
     $incompatible = scalar keys %incompatibles;
@@ -1453,7 +1452,9 @@ sub checkout_module {
         $cvs_module->checkout($path, '', '');
         if (!-d &CorrectPath($path.'/'.$prj_name)) {
             $dead_parents{$prj_name}++;
-            print STDERR ("Cannot checkout $prj_name. Check if you have to login to server or all build dependencies are consistent\n");
+            my $warning_string = "Cannot checkout $prj_name. Check if you have to login to server or all build dependencies are consistent";
+            push(@warnings, $warning_string);
+            print STDERR ($warning_string);
             return;
         };
     };
@@ -1806,7 +1807,7 @@ sub retrieve_build_list {
 # in incompatible build
 #
 sub prepare_incompatible_build {
-    my ($prj, $deps_hash);
+    my ($prj, $deps_hash, @missing_modules);
     $deps_hash = shift;
     foreach (keys %incompatibles) {
         my $incomp_prj = $_;
@@ -1835,15 +1836,14 @@ sub prepare_incompatible_build {
         } else {
             next if ($show);
             if ($modules_types{$prj} ne 'mod') {
-                push(@warnings, $prj);
+                push(@missing_modules, $prj);
             } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
                 $old_output_tree++;
             };
         };
     };
-    if (scalar @warnings) {
-        my $warning_string = "\nAttention: Following modules are inconsistent/missing: " . "@warnings" . ". If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
-        @warnings = ();
+    if (scalar @missing_modules) {
+        my $warning_string = 'Following modules are inconsistent/missing: ' . "@missing_modules" . '. If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!';
         push(@warnings, $warning_string);
     };
     if ($build_from_opt) {
@@ -1851,14 +1851,19 @@ sub prepare_incompatible_build {
         $build_from_opt = '';
     };
     if ($old_output_tree) {
-        my $warning_string = "\nAttention: Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
+        my $warning_string = 'Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!';
         push(@warnings, $warning_string);
     };
     if (scalar @warnings) {
-        print STDERR $_ foreach (@warnings);
+        print "\n\nWARNINGS:\n";
+        print STDERR "$_\n" foreach (@warnings);
         sleep(10);
     };
-    print "\nPreparation finished\n\n" and    do_exit(0) if ($prepare);
+    print "\nPreparation finished";
+    if (scalar @warnings) {
+        print " with WARNINGS!!\n\n";
+    } else {print " successfully\n\n";}
+    do_exit(0) if ($prepare);
 };
 
 #
