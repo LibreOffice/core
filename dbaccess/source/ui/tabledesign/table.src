@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-19 17:53:02 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1089,7 +1089,7 @@ String STR_DEFAULT_VALUE
     Text [ danish ] = "StandardvÊrdi" ;
     Text [ italian ] = "~Valore predefinito" ;
     Text [ spanish ] = "Valor pre~determinado" ;
-    Text [ french ] = "Valeur par ~dÈfaut" ;
+    Text [ french ] = "Valeur par dÈfaut" ;
     Text [ dutch ] = "~Standaardwaarde" ;
     Text [ portuguese ] = "~Valor padr„o" ;
     Text[ chinese_simplified ] = "ÈªòËÆ§ÂÄº(~D)";
@@ -1173,7 +1173,7 @@ String STR_NUMERIC_TYPE
     Text [ danish ] = "Type" ;
     Text [ italian ] = "~Tipo" ;
     Text [ spanish ] = "Tip~o" ;
-    Text [ french ] = "~Type" ;
+    Text [ french ] = "Type" ;
     Text [ dutch ] = "~Type" ;
     Text [ portuguese ] = "~Tipo" ;
     Text[ chinese_simplified ] = "Á±ªÂûã(~T)";
@@ -1229,7 +1229,7 @@ String STR_SCALE
     Text [ danish ] = "Antal decimaler" ;
     Text [ italian ] = "Posizio~ni decimali" ;
     Text [ spanish ] = "~Decimales" ;
-    Text [ french ] = "~DÈcimales" ;
+    Text [ french ] = "DÈcimales" ;
     Text [ dutch ] = "~Cijfers achter de komma" ;
     Text [ portuguese ] = "Casas ~decimais" ;
     Text[ chinese_simplified ] = "Â∞èÊï∞ÁÇπ‰ΩçÊï∞(~P)";
