@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:04:35 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ TabPage RID_TP_GENERAL
         Text[ korean ] = "¡∂¡˜(~Z)";
         Text[ chinese_simplified ] = "◊È÷Ø(~Z)";
         Text[ chinese_traditional ] = "≤’¬¥(~Z)";
-        Text[ arabic ] = "„‰Ÿ„…";
+        Text[ arabic ] = "«·„‰Ÿ„…";
         Text[ turkish ] = "Organizasyon";
         Text[ language_user1 ] = " ";
     };
@@ -594,7 +594,7 @@ TabPage RID_TP_GENERAL
         Text[ korean ] = "ø˘(~M)";
         Text[ chinese_simplified ] = "‘¬(~M)";
         Text[ chinese_traditional ] = "§Î(~M)";
-        Text[ arabic ] = "‘Â—";
+        Text[ arabic ] = "«·‘Â—";
         Text[ turkish ] = "Ay";
         Text[ language_user1 ] = " ";
     };
@@ -620,7 +620,7 @@ TabPage RID_TP_GENERAL
         Text[ korean ] = "¿‚¡ˆ(~J)";
         Text[ chinese_simplified ] = "‘”÷æ(~J)";
         Text[ chinese_traditional ] = "¬¯ªx(~J)";
-        Text[ arabic ] = "„Ã·…";
+        Text[ arabic ] = "«·„Ã·…";
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
     };
@@ -648,7 +648,7 @@ TabPage RID_TP_GENERAL
         Text[ chinese_simplified ] = "±‡∫≈(~E)";
         Text[ chinese_traditional ] = "∏π(~E)";
         Text[ arabic ] = "—ﬁ„";
-        Text[ language_user1 ] = "\"Say? burada istisna (dergi i?n)";
+        Text[ language_user1 ] = "\"Say˝\" burada istisna (dergi iÁin)";
         Text[ turkish ] = "Say˝";
     };
     FixedText FT_SERIES
@@ -1096,7 +1096,7 @@ TabPage RID_TP_GENERAL
         Text[ korean ] = "¿‚¡ˆ";
         Text[ chinese_simplified ] = "‘”÷æ";
         Text[ chinese_traditional ] = "¬¯ªx";
-        Text[ arabic ] = "„Ã·…";
+        Text[ arabic ] = "«·„Ã·…";
         Text[ turkish ] = "Dergi";
         Text[ language_user1 ] = " ";
     };
