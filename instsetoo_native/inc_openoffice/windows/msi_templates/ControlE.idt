@@ -22,8 +22,7 @@ CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
 CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
 CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
 CustomerInformation	Next	EndDialog	Exit	(SERIALNUMVALRETRYLIMIT) And (SERIALNUMVALRETRYLIMIT<0) And (SERIALNUMVALRETURN<>SERIALNUMVALSUCCESSRETVAL)	3
-CustomerInformation	Next	NewDialog	LanguageSelection	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL)) And isMulti=1	4
-CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL)) And isMulti=0	4
+CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL))	4
 CustomSetup	Back	NewDialog	MaintenanceType	Installed	0
 CustomSetup	Back	NewDialog	SetupType	NOT Installed	0
 CustomSetup	Cancel	SpawnDialog	CancelSetup	1	0
@@ -61,9 +60,6 @@ InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 InstallWelcome	Next	NewDialog	LicenseAgreement	1	0
-LanguageSelection	Back	NewDialog	CustomerInformation	1	1
-LanguageSelection	Cancel	SpawnDialog	CancelSetup	1	1
-LanguageSelection	Next	NewDialog	SetupType	1	1
 LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
 LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
 LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0
@@ -133,8 +129,7 @@ SetupProgress	Cancel	SpawnDialog	CancelSetup	1	0
 SetupResume	Cancel	SpawnDialog	CancelSetup	1	0
 SetupResume	Next	EndDialog	Return	OutOfNoRbDiskSpace <> 1	0
 SetupResume	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
-SetupType	Back	NewDialog	CustomerInformation	isMulti=0	0
-SetupType	Back	NewDialog	LanguageSelection	isMulti=1	0
+SetupType	Back	NewDialog	CustomerInformation	1	0
 SetupType	Cancel	SpawnDialog	CancelSetup	1	0
 SetupType	Next	AddLocal	ALL	_IsSetupTypeMin = "Typical"	0
 SetupType	Next	NewDialog	CustomSetup	_IsSetupTypeMin = "Custom"	0
