@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:35:12 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 12:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
     if (execute (sql))
     {
         xRS = getResultSet (sal_False);
+        m_xResultSet = xRS;
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-05 16:09:46 $
+ *  last change: $Author: oj $ $Date: 2001-06-22 12:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,15 +195,14 @@ void OResultSet::disposing(void)
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
+    if(m_aBindVector.size())
+        releaseBuffer();
     if(m_bFreeHandle)
     {
         N3SQLFreeStmt(m_aStatementHandle,SQL_CLOSE);
         N3SQLFreeHandle(SQL_HANDLE_STMT,m_aStatementHandle);
         m_aStatementHandle = NULL;
     }
-
-    if(m_aBindVector.size())
-        releaseBuffer();
 
     m_aStatement    = NULL;
     m_xMetaData     = NULL;
