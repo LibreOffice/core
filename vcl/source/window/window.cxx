@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:32:53 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_BRIDGE_XACCESSIBLETOPWINDOWMAP_HPP_
-#include <drafts/com/sun/star/accessibility/bridge/XAccessibleTopWindowMap.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -4307,8 +4304,6 @@ Window::~Window()
     {
         try
         {
-            ImplRevokeAccessibleNativeFrame();
-
             // deregister drop target listener
             if( mpFrameData->mxDropTargetListener.is() )
             {
@@ -6144,13 +6139,6 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
 #endif
 
         ImplShowAllOverlaps();
-
-#ifndef REMOTE_APPSERVER
-
-        // filter system windows that are accessible over the Accessibility API anyway
-        if( ImplIsAccessibleNativeFrame() )
-            bNativeFrameRegistered = ImplRegisterAccessibleNativeFrame();
-#endif
     }
 
     // Hintergrund-Sicherung zuruecksetzen
@@ -6219,62 +6207,6 @@ void Window::GetBorder( long& rLeftBorder, long& rTopBorder,
     rBottomBorder   = mnBottomBorder;
 }
 
-
-// -----------------------------------------------------------------------
-
-BOOL Window::ImplRegisterAccessibleNativeFrame()
-{
-    BOOL bNativeFrameRegistered = FALSE;
-#ifndef REMOTE_APPSERVER
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // register proxy accessible for the new native frame window
-    if( pSVData->mxAccessBridge.is() )
-    {
-        const SystemEnvData * pEnvData = GetSystemData();
-
-        if( pEnvData )
-        {
-            Reference< XTopWindow > xTopWindow( ImplGetWindow()->GetComponentInterface(), UNO_QUERY );
-            if( xTopWindow.is() )
-            {
-#ifdef WNT
-                pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_Int32) pEnvData->hWnd), GetAccessible(), xTopWindow);
-#else
-                pSVData->mxAccessBridge->registerAccessibleNativeFrame( makeAny((sal_Int32) pEnvData->aWindow), GetAccessible(), xTopWindow);
-#endif
-                bNativeFrameRegistered = TRUE;
-                mbSuppressAccessibilityEvents = FALSE;  // allow accessibility events
-            }
-        }
-    }
-#endif
-
-    return bNativeFrameRegistered;
-}
-
-void Window::ImplRevokeAccessibleNativeFrame()
-{
-#ifndef REMOTE_APPSERVER
-    const SystemEnvData * pEnvData = GetSystemData();
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // revoke native frame from access bridge
-    if(pEnvData && pSVData)
-    {
-        mbSuppressAccessibilityEvents = TRUE;   // avoid further accessibility events
-
-        if( pSVData->mxAccessBridge.is() )
-        {
-#ifdef WNT
-            pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_Int32) pEnvData->hWnd));
-#else
-            pSVData->mxAccessBridge->revokeAccessibleNativeFrame(makeAny((sal_Int32) pEnvData->aWindow));
-#endif
-        }
-    }
-#endif
-}
 
 // -----------------------------------------------------------------------
 
