@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstrategy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-19 13:20:52 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ namespace configmgr
             memory::Segment const * getDataSegment() const;
             memory::Segment  * getDataSegmentForUpdate();
 
-            data::NodeAddress   ::DataType * getDataForUpdate(data::NodeAccess    const & _aNode);
+            data::NodeAddress   ::DataType * getDataForUpdate(data::NodeAccessRef const & _aNode);
             data::SetNodeAddress::DataType * getDataForUpdate(data::SetNodeAccess const & _aNode);
             data::GroupNodeAddress::DataType * getDataForUpdate(data::GroupNodeAccess const & _aNode);
             data::ValueNodeAddress::DataType * getDataForUpdate(data::ValueNodeAccess const & _aNode);
@@ -231,7 +231,7 @@ namespace configmgr
         // access to node innards
         protected:
             /// provide access to the data of the underlying node
-            data::NodeAccess getNodeAccess(Node const& _aNode) const;
+            data::NodeAccessRef getNodeAccessRef(Node const& _aNode) const;
 
             /// provide access to the address of the underlying node
             data::NodeAddress getNodeAddress(Node const& _aNode) const;
@@ -269,7 +269,7 @@ namespace configmgr
         // virtual interface - these functions all have default implementations without support for pending changes
         protected:
             // special support for direct changes to underlying data - default is no support
-            virtual data::NodeAddress::DataType * implAccessForUpdate(data::NodeAccess const & _aDataAccess);
+            virtual data::NodeAddress::DataType * implAccessForUpdate(data::NodeAccessRef const & _aDataAccess);
             virtual memory::Segment const * doGetDataSegment() const = 0;
             virtual memory::Segment       * doGetDataSegmentForUpdate();
 
