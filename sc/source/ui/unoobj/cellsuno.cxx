@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-17 16:14:11 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5258,10 +5258,13 @@ void SAL_CALL ScCellRangeObj::doImport( const uno::Sequence<beans::PropertyValue
         aParam.nCol2 = aRange.aEnd.Col();
         aParam.nRow2 = aRange.aEnd.Row();
 
+        //! TODO: could we get passed a valid result set by any means?
+        uno::Reference< sdbc::XResultSet > xResultSet;
+
         pDocSh->GetDBData( aRange, SC_DB_MAKE, TRUE );      // ggf. Bereich anlegen
 
         ScDBDocFunc aFunc(*pDocSh);                         // Bereich muss angelegt sein
-        aFunc.DoImport( nTab, aParam, NULL, TRUE, FALSE );  //! Api-Flag als Parameter
+        aFunc.DoImport( nTab, aParam, xResultSet, NULL, TRUE, FALSE );  //! Api-Flag als Parameter
     }
 }
 

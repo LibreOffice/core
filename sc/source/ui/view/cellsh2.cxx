@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-19 12:20:27 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include "cellsh.hxx"
 #include "tabvwsh.hxx"
@@ -347,9 +348,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     aImParam.aDBName = rDBNameItem.GetValue();
                     aImParam.aStatement = rStatementItem.GetValue();
 
-                    ScDBDocFunc( *pViewData->GetDocShell() ).
-                        DoImport( pViewData->GetTabNo(), aImParam,
-                                        rSelectionItem.GetSelectionList(), TRUE, TRUE );
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet > xResultSet;
+
+                    ScDBDocFunc( *pViewData->GetDocShell() ).DoImport(
+                            pViewData->GetTabNo(), aImParam, xResultSet,
+                            rSelectionItem.GetSelectionList(), TRUE, TRUE );
+
                     rReq.Done();
                 }
                 else

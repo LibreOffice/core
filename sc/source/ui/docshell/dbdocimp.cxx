@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 15:59:08 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 // INCLUDE ---------------------------------------------------------
 
 #include <comphelper/processfactory.hxx>
+#include <comphelper/types.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/debug.hxx>
 #include <offmgr/sbaitems.hxx>  // SbaSelectionList
@@ -83,6 +84,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+
 
 #include "dbdocfun.hxx"
 #include "docsh.hxx"
@@ -213,7 +215,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     BOOL bAddrInsert = FALSE;       //!???
     if ( bAddrInsert )
     {
-        bDone = DoImport( rPos.Tab(), aImParam, &aList, TRUE, bAddrInsert );
+        bDone = DoImport( rPos.Tab(), aImParam, xResSet, &aList, TRUE, bAddrInsert );
     }
     else
     {
@@ -232,10 +234,8 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         else
             aTableName = aImParam.aStatement;
 
-        UpdateImport( sTarget, aImParam.aDBName,
-                        aTableName, aStatement,
-                        aImParam.bNative, aImParam.nType,
-                        &aList );
+        UpdateImport( sTarget, aImParam.aDBName, aTableName, aStatement,
+                aImParam.bNative, aImParam.nType, xResSet, &aList );
         bDone = TRUE;
     }
 
@@ -245,8 +245,8 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 // -----------------------------------------------------------------
 
 BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
-                                    const SbaSelectionList* pSelection,
-                                    BOOL bRecord, BOOL bAddrInsert )
+        const uno::Reference< sdbc::XResultSet >& xResultSet,
+        const SbaSelectionList* pSelection, BOOL bRecord, BOOL bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -311,47 +311,56 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0 );
         USHORT nInserted = 0;
 
-        uno::Reference<sdbc::XRowSet> xRowSet(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
-                uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
-        DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
-        if ( xRowProp.is() )
+        uno::Reference<sdbc::XRowSet> xRowSet = uno::Reference<sdbc::XRowSet>(
+                xResultSet, uno::UNO_QUERY );
+        sal_Bool bDispose = sal_False;
+        if ( !xRowSet.is() )
         {
-            //
-            //  set source parameters
-            //
-
-            sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
-                        ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
-                                                        sdb::CommandType::TABLE );
-            uno::Any aAny;
-
-            aAny <<= rtl::OUString( rParam.aDBName );
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
-
-            aAny <<= rtl::OUString( rParam.aStatement );
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
-
-            aAny <<= nType;
-            xRowProp->setPropertyValue(
-                        rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
-
-            uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
-            if ( xExecute.is() )
+            bDispose = sal_True;
+            xRowSet = uno::Reference<sdbc::XRowSet>(
+                    comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+                    uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
+            DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
+            if ( xRowProp.is() )
             {
-                uno::Reference<task::XInteractionHandler> xHandler(
-                        comphelper::getProcessServiceFactory()->createInstance(
-                            rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
-                        uno::UNO_QUERY);
-                xExecute->executeWithCompletion( xHandler );
-            }
-            else
-                xRowSet->execute();
+                //
+                //  set source parameters
+                //
 
+                sal_Int32 nType = rParam.bSql ? sdb::CommandType::COMMAND :
+                            ( (rParam.nType == ScDbQuery) ? sdb::CommandType::QUERY :
+                                                            sdb::CommandType::TABLE );
+                uno::Any aAny;
+
+                aAny <<= rtl::OUString( rParam.aDBName );
+                xRowProp->setPropertyValue(
+                            rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
+
+                aAny <<= rtl::OUString( rParam.aStatement );
+                xRowProp->setPropertyValue(
+                            rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+
+                aAny <<= nType;
+                xRowProp->setPropertyValue(
+                            rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+
+                uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
+                if ( xExecute.is() )
+                {
+                    uno::Reference<task::XInteractionHandler> xHandler(
+                            comphelper::getProcessServiceFactory()->createInstance(
+                                rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                            uno::UNO_QUERY);
+                    xExecute->executeWithCompletion( xHandler );
+                }
+                else
+                    xRowSet->execute();
+            }
+        }
+        if ( xRowSet.is() )
+        {
             //
             //  get column descriptions
             //
@@ -398,6 +407,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                 }
 
                 BOOL bEnd = FALSE;
+                xRowSet->beforeFirst();
                 while ( !bEnd && xRowSet->next() )
                 {
                     //  skip rows that are not selected
@@ -468,9 +478,8 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
                 bSuccess = TRUE;
             }
 
-            uno::Reference<lang::XComponent> xComponent( xRowSet, uno::UNO_QUERY );
-            if (xComponent.is())
-                xComponent->dispose();
+            if ( bDispose )
+                ::comphelper::disposeComponent( xRowSet );
         }
     }
     catch ( sdbc::SQLException& rError )

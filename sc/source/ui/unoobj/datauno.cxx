@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-15 20:34:11 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,7 +1701,8 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
         {
             USHORT nTab, nDummy;
             pData->GetArea( nTab, nDummy,nDummy,nDummy,nDummy );
-            bContinue = aFunc.DoImport( nTab, aImportParam, NULL, TRUE, FALSE );    //! Api-Flag als Parameter
+            uno::Reference< sdbc::XResultSet > xResultSet;
+            bContinue = aFunc.DoImport( nTab, aImportParam, xResultSet, NULL, TRUE, FALSE );    //! Api-Flag als Parameter
         }
 
         // interne Operationen (sort, query, subtotal) nur, wenn kein Fehler

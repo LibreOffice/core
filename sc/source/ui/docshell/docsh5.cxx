@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:10:37 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@
 #include <sfx2/bindings.hxx>
 #include <svtools/smplhint.hxx>
 
+#include <com/sun/star/sdbc/XResultSet.hpp>
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -966,7 +967,8 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScDBData*, pDBData )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, TRUE, FALSE ); //! Api-Flag as parameter
+        ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XResultSet> xResultSet;
+        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, xResultSet, NULL, TRUE, FALSE ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:34:07 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
+
+#include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include "dbfunc.hxx"
 #include "docsh.hxx"
@@ -443,7 +445,8 @@ BOOL ScDBFunc::ImportData( const ScImportParam& rParam, BOOL bRecord )
     }
 
     ScDBDocFunc aDBDocFunc( *GetViewData()->GetDocShell() );
-    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, NULL, bRecord );
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
+    return aDBDocFunc.DoImport( GetViewData()->GetTabNo(), rParam, xResultSet, NULL, bRecord );
 }
 
 

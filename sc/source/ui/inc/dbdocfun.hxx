@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-13 19:23:21 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,14 @@ class ScAddress;
 class ScRange;
 class ScDPObject;
 
-namespace com { namespace sun { namespace star { namespace beans {
-    struct PropertyValue;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace beans {
+        struct PropertyValue;
+    }
+    namespace sdbc {
+        class XResultSet;
+    }
+} } }
 
 // ---------------------------------------------------------------------------
 
@@ -103,12 +108,17 @@ public:
                     ~ScDBDocFunc() {}
 
     void            UpdateImport( const String& rTarget, const String& rDBName,
-                                    const String& rTableName, const String& rStatement,
-                                    BOOL bNative, BYTE nType,
-                                    const SbaSelectionList* pSelection );
+                        const String& rTableName, const String& rStatement,
+                        BOOL bNative, BYTE nType,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
+                        const SbaSelectionList* pSelection );
+
     BOOL            DoImport( USHORT nTab, const ScImportParam& rParam,
-                                        const SbaSelectionList* pSelection,
-                                        BOOL bRecord, BOOL bAddrInsert = FALSE );
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet >& xResultSet,
+                        const SbaSelectionList* pSelection, BOOL bRecord,
+                        BOOL bAddrInsert = FALSE );
 
     BOOL            DoImportUno( const ScAddress& rPos,
                                 const com::sun::star::uno::Sequence<

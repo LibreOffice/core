@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-08 14:28:19 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
+
+#include <com/sun/star/sdbc/XResultSet.hpp>
 
 #include "dbdocfun.hxx"
 #include "sc.hrc"
@@ -1363,9 +1365,10 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 //      Datenbank-Import...
 
 void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
-                                    const String& rTableName, const String& rStatement,
-                                    BOOL bNative, BYTE nType,
-                                    const SbaSelectionList* pSelection )
+        const String& rTableName, const String& rStatement, BOOL bNative,
+        BYTE nType, const ::com::sun::star::uno::Reference<
+        ::com::sun::star::sdbc::XResultSet >& xResultSet,
+        const SbaSelectionList* pSelection )
 {
     //  Target ist jetzt einfach der Bereichsname
 
@@ -1402,7 +1405,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     aImportParam.bNative    = bNative;
     aImportParam.nType      = nType;
     aImportParam.bImport    = TRUE;
-    BOOL bContinue = DoImport( nTab, aImportParam, pSelection, TRUE );
+    BOOL bContinue = DoImport( nTab, aImportParam, xResultSet, pSelection, TRUE );
 
     //  DB-Operationen wiederholen
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-24 09:18:05 $
+ *  last change: $Author: er $ $Date: 2002-08-08 13:02:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,9 +334,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if (bDo)
                 {
-                    ScDBDocFunc(*this).
-                        UpdateImport( sTarget, sDBName, sDBTable, sDBSql,
-                                        TRUE, nType, pSelectionList );
+                    ::com::sun::star::uno::Reference<
+                        ::com::sun::star::sdbc::XResultSet > xResultSet;
+                    ScDBDocFunc(*this).UpdateImport( sTarget, sDBName,
+                            sDBTable, sDBSql, TRUE, nType, xResultSet,
+                            pSelectionList );
                     rReq.Done();
 
                     //  UpdateImport aktualisiert auch die internen Operationen
