@@ -1,33 +1,7 @@
-ri	ridljar	:	udkapi codemaker NULL
-ri	ridljar									usr1	-	all	ri_mkout NULL
-ri	ridljar									nmake	-	all	ri_genall NULL
-ri	ridljar\com\sun\star\lib\uno\typedesc	nmake	-	all	ri_typedesc ri_typeinfo ri_uno NULL
-ri	ridljar\com\sun\star\lib\uno\typeinfo	nmake	-	all	ri_typeinfo ri_genall NULL
-ri  ridljar\com\sun\star\lib\util           nmake   -   all ri_lib_util NULL
-ri  ridljar\com\sun\star\uno                nmake   -   all ri_uno ri_lib_util ri_typeinfo NULL
-ri	ridljar\com\sun\star\util				nmake	-	all	ri_package_util ri_typeinfo ri_uno ri_container NULL
-ri	ridljar\com\sun\star\util\logging		nmake	-	all	ri_log ri_typeinfo ri_beans ri_uno NULL
-ri	ridljar\com\sun\star\lang				nmake	-	all	ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\security			nmake	-	all	ri_sec ri_uno NULL
-ri	ridljar\com\sun\star\reflection			nmake	-	all	ri_reflection ri_lang ri_container ri_uno NULL
-ri	ridljar\com\sun\star\beans				nmake	-	all	ri_beans ri_container ri_reflection ri_uno NULL
-ri	ridljar\com\sun\star\bridge				nmake	-	all	ri_bridge ri_connection ri_container ri_uno NULL
-ri	ridljar\com\sun\star\bridge\oleautomation nmake	-	all	ri_auto ri_bridge ri_uno NULL
-ri	ridljar\com\sun\star\connection			nmake	-	all	ri_connection ri_io ri_uno NULL
-ri	ridljar\com\sun\star\container			nmake	-	all	ri_container ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\container_dep		nmake	-	all	ri_container_dep ri_lang ri_beans ri_uno NULL
-ri	ridljar\com\sun\star\corba				nmake	-	all	ri_corba ri_uno NULL
-ri	ridljar\com\sun\star\corba\iop			nmake	-	all	ri_corba_iop ri_corba ri_uno NULL
-ri	ridljar\com\sun\star\corba\giop			nmake	-	all	ri_corba_giop ri_corba_iop ri_uno NULL
-ri	ridljar\com\sun\star\corba\iiop			nmake	-	all	ri_corba_iiop ri_corba_iop ri_uno NULL
-ri	ridljar\com\sun\star\io					nmake	-	all	ri_io ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\java				nmake	-	all	ri_java ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\loader				nmake	-	all	ri_loader ri_lang ri_registry ri_uno NULL
-ri	ridljar\com\sun\star\registry			nmake	-	all	ri_registry ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\script				nmake	-	all	ri_script ri_beans ri_io ri_uno NULL
-ri	ridljar\com\sun\star\test				nmake	-	all	ri_test ri_lang ri_uno NULL
-ri	ridljar\com\sun\star\test\performance	nmake	-	all	ri_test_perf ri_test ri_uno NULL
-ri	ridljar\com\sun\star\test\bridge		nmake	-	all	ri_test_bridge ri_test ri_uno NULL
-ri	ridljar\com\sun\star\task		nmake	-	all	ri_task ri_uno NULL
-ri  ridljar\com\sun\star\uri                nmake   -   all ri_uri ri_uno NULL
-ri  ridljar\util                            nmake   -   all ri_util ri_sec ri_bridge ri_auto ri_corba_giop ri_corba_iiop ri_java ri_loader ri_script ri_test ri_typedesc ri_test_perf ri_test_bridge ri_log ri_task ri_package_util ri_container_dep ri_uri ri_lib_util ri_uno NULL
+ri ridljar : codemaker solenv udkapi NULL
+ri ridljar\com\sun\star\lib\uno\typedesc nmake - all csslu_typedesc csslu_typeinfo css_uno javamaker NULL
+ri ridljar\com\sun\star\lib\uno\typeinfo nmake - all csslu_typeinfo css_uno NULL
+ri ridljar\com\sun\star\lib\util nmake - all cssl_util NULL
+ri ridljar\com\sun\star\uno nmake - all css_uno cssl_util javamaker NULL
+ri ridljar\javamaker nmake - all javamaker NULL
+ri ridljar\util nmake - all util csslu_typedesc csslu_typeinfo cssl_util css_uno javamaker NULL
