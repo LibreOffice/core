@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdbtoolsclient.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:32:40 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
 #endif
 
 //........................................................................
@@ -150,7 +153,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
         const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-            SAL_MODULENAME( "dbtools2" )
+            SVLIBRARY( "dbtools" )
         );
 
         // load the dbtools library
