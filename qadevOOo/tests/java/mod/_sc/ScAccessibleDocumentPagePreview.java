@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleDocumentPagePreview.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ public class ScAccessibleDocumentPagePreview extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent oComp = (XComponent)
             UnoRuntime.queryInterface (XComponent.class, xSpreadsheetDoc) ;
-        oComp.dispose();
+        util.DesktopTools.closeDoc(oComp);
     }
 
     /**
