@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSelectionBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:54:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 12:54:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,10 @@ namespace accessibility
 
     //--------------------------------------------------------------------
 
-    void SAL_CALL AccessibleSelectionBase::selectAllAccessible(  ) throw (uno::RuntimeException)
+    void SAL_CALL AccessibleSelectionBase::selectAllAccessibleChildren(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( implGetMutex() );
-        OCommonAccessibleSelection::selectAllAccessible();
+        OCommonAccessibleSelection::selectAllAccessibleChildren();
     }
 
     //--------------------------------------------------------------------
