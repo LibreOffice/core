@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 13:08:39 $
+#   last change: $Author: obo $ $Date: 2004-11-24 11:17:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ TARGET=so_python
 TARFILE_NAME=Python-$(PYVERSION)
 PATCH_FILE_NAME=Python-$(PYVERSION).patch
 
-
 PYPROJECTS= \
     datetime 	\
     mmap		\
@@ -91,7 +90,7 @@ PYPROJECTS= \
     _csv		\
     _sre	 	\
     _symtable	\
-    _testcapi	
+    _testcapi
 
 PYADDITIONAL_PROJECTS = \
     zlib 			\
@@ -109,7 +108,6 @@ PYADDITIONAL_PROJECTS = \
 ADDITIONAL_FILES_TMP=$(PYPROJECTS) $(PYADDITIONAL_PROJECTS)
 ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES_TMP) PCbuild/$(i).mak PCbuild/$(i).dep)
 
-
 CONFIGURE_DIR=
 
 .IF "$(GUI)"=="UNX"
@@ -118,7 +116,7 @@ MYCWD=$(shell pwd)/$(INPATH)/misc/build
 CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
-.ENDIF                                                                          
+.ENDIF
 .IF "$(COMNAME)"=="sunpro5"
 .IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 CC:=$(COMPATH)$/bin$/cc
@@ -137,7 +135,7 @@ BUILD_ACTION=$(ENV_BUILD) make ; make install
 # ----------------------------------
 BUILD_DIR=PCbuild
 BUILD_ACTION= \
-    $(foreach,i,$(PYPROJECTS) nmake -F $(i).mak CFG="$(i) - Win32 Release" && ) \
+    $(foreach,i,$(PYPROJECTS) nmake -F $(i).mak CFG="$(i) - Win32 Release" OS="Windows_NT" && ) \
     echo build done
 .ENDIF
 
