@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 16:39:21 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,28 +358,28 @@ String STR_VIEW_TITLE
 
 String STR_OBJECT_ALREADY_EXISTS
 {
-    Text = "Der Name # existiert bereits." ;
-    Text [ ENGLISH ] = "The name # already exists." ;
-    Text[ english_us ] = "The name # already exists.";
-    Text[ portuguese ] = "O nome # já existe.";
-    Text[ russian ] = "Èìÿ # óæå ñóùåñòâóåò.";
-    Text[ greek ] = "The name # already exists.";
-    Text[ dutch ] = "De naam # bestaat reeds.";
-    Text[ french ] = "Le nom # existe déjà.";
-    Text[ spanish ] = "Ya existe el nombre #.";
-    Text[ finnish ] = "The name # already exists.";
-    Text[ italian ] = "Il nome # esiste già.";
-    Text[ danish ] = "The name # already exists.";
-    Text[ swedish ] = "Namnet # finns redan.";
-    Text[ polish ] = "Nazwa # ju¿ istnieje.";
-    Text[ portuguese_brazilian ] = "The name # already exists.";
-    Text[ japanese ] = "åå‰ # ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ì´ë¦„ #ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åç§° # å·²ç»å­˜åœ¨ã€‚";
-    Text[ chinese_traditional ] = "åç¨± # å·²ç¶“å­˜åœ¨ã€‚";
-    Text[ turkish ] = "The name # already exists.";
-    Text[ arabic ] = "The name # already exists.";
-    Text[ catalan ] = "The name # already exists.";
+    Text = "Der Name \"#\" existiert bereits." ;
+    Text [ ENGLISH ] = "The name \"#\" already exists." ;
+    Text[ english_us ] = "The name \"#\" already exists.";
+    Text[ portuguese ] = "O nome \"#\" já existe.";
+    Text[ russian ] = "Èìÿ \"#\" óæå ñóùåñòâóåò.";
+    Text[ greek ] = "The name \"#\" already exists.";
+    Text[ dutch ] = "De naam \"#\" bestaat reeds.";
+    Text[ french ] = "Le nom \"#\" existe déjà.";
+    Text[ spanish ] = "Ya existe el nombre \"#\".";
+    Text[ finnish ] = "The name \"#\" already exists.";
+    Text[ italian ] = "Il nome \"#\" esiste già.";
+    Text[ danish ] = "The name \"#\" already exists.";
+    Text[ swedish ] = "Namnet \"#\" finns redan.";
+    Text[ polish ] = "Nazwa \"#\" ju¿ istnieje.";
+    Text[ portuguese_brazilian ] = "The name \"#\" already exists.";
+    Text[ japanese ] = "åå‰ \"#\" ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ korean ] = "ì´ë¦„ \"#\"ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "åç§° \"#\" å·²ç»å­˜åœ¨ã€‚";
+    Text[ chinese_traditional ] = "åç¨± \"#\" å·²ç¶“å­˜åœ¨ã€‚";
+    Text[ turkish ] = "The name \"#\" already exists.";
+    Text[ arabic ] = "The name \"#\" already exists.";
+    Text[ catalan ] = "The name \"#\" already exists.";
 };
 
 
