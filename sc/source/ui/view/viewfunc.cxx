@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:59:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -919,11 +919,14 @@ BYTE ScViewFunc::GetSelectionScriptType()
 
 const ScPatternAttr* ScViewFunc::GetSelectionPattern()
 {
+    // Don't use UnmarkFiltered in slot state functions, for performance reasons.
+    // The displayed state is always that of the whole selection including filtered rows.
+
     const ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = GetViewData()->GetDocument();
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
-        //  MarkToMulti ist fuer pDoc->GetSelectionPattern nicht mehr noetig
+        //  MarkToMulti is no longer necessary for pDoc->GetSelectionPattern
         const ScPatternAttr* pAttr = pDoc->GetSelectionPattern( rMark );
         return pAttr;
     }
@@ -933,7 +936,7 @@ const ScPatternAttr* ScViewFunc::GetSelectionPattern()
         SCROW  nRow = GetViewData()->GetCurY();
         SCTAB  nTab = GetViewData()->GetTabNo();
 
-        ScMarkData aTempMark( rMark );      // Tabellen kopieren
+        ScMarkData aTempMark( rMark );      // copy sheet selection
         aTempMark.SetMarkArea( ScRange( nCol, nRow, nTab ) );
         const ScPatternAttr* pAttr = pDoc->GetSelectionPattern( aTempMark );
         return pAttr;
@@ -1137,13 +1140,39 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
 
     if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab))
     {
+        bool bChangeSelection = false;
+        ScRange aMarkRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
+        if ( ScViewUtil::HasFiltered( aMarkRange, pDoc ) )
+        {
+            ScMarkData aVisibleMark( rMark );
+            ScViewUtil::UnmarkFiltered( aVisibleMark, pDoc );
+            ScRangeList aRangeList;
+            aVisibleMark.FillRangeListWithMarks( &aRangeList, FALSE );
+            if ( aRangeList.Count() > 0 )
+            {
+                // use the first range of visible cells
+                // (might also show an error message instead, or, later, allow multiple ranges)
+
+                aMarkRange = *aRangeList.GetObject(0);
+            }
+            else    // all hidden -> cursor position
+            {
+                aMarkRange.aStart.SetCol(GetViewData()->GetCurX());
+                aMarkRange.aStart.SetRow(GetViewData()->GetCurY());
+                aMarkRange.aStart.SetTab(GetViewData()->GetTabNo());
+                aMarkRange.aEnd = aMarkRange.aStart;
+            }
+            aMarkRange.GetVars( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
+            bChangeSelection = true;    // change the selection to only the affected cells
+        }
+
         rMark.MarkToSimple();   // not done by GetSimpleArea anymore
 
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
 
         ScDocShellModificator aModificator( *pDocSh );
 
-        if (!rMark.IsMarked())
+        if (!rMark.IsMarked() || bChangeSelection)
         {
             DoneBlockMode();
             InitOwnBlockMode();
@@ -1204,7 +1233,9 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    ScMarkData& rMark       = pViewData->GetMarkData();
+    ScMarkData aFuncMark( pViewData->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
@@ -1225,22 +1256,22 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    BOOL bMulti = rMark.IsMultiMarked();
-    rMark.MarkToMulti();
-    BOOL bOnlyTab = (!rMark.IsMultiMarked() && !bCursorOnly && rMark.GetSelectCount() > 1);
+    BOOL bMulti = aFuncMark.IsMultiMarked();
+    aFuncMark.MarkToMulti();
+    BOOL bOnlyTab = (!aFuncMark.IsMultiMarked() && !bCursorOnly && aFuncMark.GetSelectCount() > 1);
     if (bOnlyTab)
     {
         SCCOL nCol = pViewData->GetCurX();
         SCROW nRow = pViewData->GetCurY();
         SCTAB nTab = pViewData->GetTabNo();
-        rMark.SetMarkArea(ScRange(nCol,nRow,nTab));
-        rMark.MarkToMulti();
+        aFuncMark.SetMarkArea(ScRange(nCol,nRow,nTab));
+        aFuncMark.MarkToMulti();
     }
 
-    if (rMark.IsMultiMarked() && !bCursorOnly)
+    if (aFuncMark.IsMultiMarked() && !bCursorOnly)
     {
         ScRange aMarkRange;
-        rMark.GetMultiMarkArea( aMarkRange );
+        aFuncMark.GetMultiMarkArea( aMarkRange );
         SCCOL nStartCol = aMarkRange.aStart.Col();
         SCROW nStartRow = aMarkRange.aStart.Row();
         SCTAB nStartTab = aMarkRange.aStart.Tab();
@@ -1258,26 +1289,21 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
             for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nStartTab && rMark.GetTableSelect(i))
+                if (i != nStartTab && aFuncMark.GetTableSelect(i))
                     pUndoDoc->AddUndoTab( i, i );
-            pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &rMark );
+            pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pUndoDoc, &aFuncMark );
 
-            rMark.MarkToMulti();
+            aFuncMark.MarkToMulti();
 
             pDocSh->GetUndoManager()->AddUndoAction(
                 new ScUndoSelectionAttr(
-                            pDocSh, rMark,
+                            pDocSh, aFuncMark,
                             nStartCol, nStartRow, nStartTab,
                             nEndCol, nEndRow, nEndTab,
                             pUndoDoc, bMulti, &rAttr ) );
         }
 
-        pDoc->ApplySelectionPattern( rAttr, rMark );
-
-        if (bOnlyTab)
-            rMark.ResetMark();
-        else
-            rMark.MarkToSimple();
+        pDoc->ApplySelectionPattern( rAttr, aFuncMark );
 
         pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
                            nEndCol,   nEndRow,   nEndTab,
@@ -1337,13 +1363,16 @@ void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
 
 const SfxStyleSheet* ScViewFunc::GetStyleSheetFromMarked()
 {
+    // Don't use UnmarkFiltered in slot state functions, for performance reasons.
+    // The displayed state is always that of the whole selection including filtered rows.
+
     const ScStyleSheet* pSheet      = NULL;
     ScViewData*         pViewData   = GetViewData();
     ScDocument*         pDoc        = pViewData->GetDocument();
     ScMarkData&         rMark       = pViewData->GetMarkData();
 
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
-        pSheet = pDoc->GetSelectionStyle( rMark );                  // MarkToMulti nicht noetig !!
+        pSheet = pDoc->GetSelectionStyle( rMark );                  // MarkToMulti isn't necessary
     else
         pSheet = pDoc->GetStyle( pViewData->GetCurX(),
                                  pViewData->GetCurY(),
@@ -1368,18 +1397,19 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    ScMarkData& rMark       = pViewData->GetMarkData();
+    ScMarkData aFuncMark( pViewData->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
     SCTAB nTabCount     = pDoc->GetTableCount();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    if ( rMark.IsMarked() || rMark.IsMultiMarked() )
+    if ( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() )
     {
         ScRange aMarkRange;
-        rMark.MarkToMulti();
-        rMark.GetMultiMarkArea( aMarkRange );
+        aFuncMark.MarkToMulti();
+        aFuncMark.GetMultiMarkArea( aMarkRange );
 
         if ( bRecord )
         {
@@ -1387,26 +1417,26 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab );
             for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nTab && rMark.GetTableSelect(i))
+                if (i != nTab && aFuncMark.GetTableSelect(i))
                     pUndoDoc->AddUndoTab( i, i );
 
             ScRange aCopyRange = aMarkRange;
             aCopyRange.aStart.SetTab(0);
             aCopyRange.aEnd.SetTab(nTabCount-1);
-            pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, TRUE, pUndoDoc, &rMark );
-            rMark.MarkToMulti();
+            pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, TRUE, pUndoDoc, &aFuncMark );
+            aFuncMark.MarkToMulti();
 
             String aName = pStyleSheet->GetName();
             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoSelectionStyle( pDocSh, rMark, aMarkRange, aName, pUndoDoc ) );
+                new ScUndoSelectionStyle( pDocSh, aFuncMark, aMarkRange, aName, pUndoDoc ) );
         }
 
-        pDoc->ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, rMark );
+        pDoc->ApplySelectionStyle( (ScStyleSheet&)*pStyleSheet, aFuncMark );
 
         if (!AdjustBlockHeight())
             pViewData->GetDocShell()->PostPaint( aMarkRange, PAINT_GRID );
 
-        rMark.MarkToSimple();
+        aFuncMark.MarkToSimple();
     }
     else
     {
@@ -1419,14 +1449,14 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( pDoc, nTab, nTab );
             for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nTab && rMark.GetTableSelect(i))
+                if (i != nTab && aFuncMark.GetTableSelect(i))
                     pUndoDoc->AddUndoTab( i, i );
 
             ScRange aCopyRange( nCol, nRow, 0, nCol, nRow, nTabCount-1 );
             pDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, FALSE, pUndoDoc );
 
             ScRange aMarkRange ( nCol, nRow, nTab );
-            ScMarkData aUndoMark = rMark;
+            ScMarkData aUndoMark = aFuncMark;
             aUndoMark.SetMultiMarkArea( aMarkRange );
 
             String aName = pStyleSheet->GetName();
@@ -1435,7 +1465,7 @@ void ScViewFunc::SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet, BOOL bRecord
         }
 
         for (SCTAB i=0; i<nTabCount; i++)
-            if (rMark.GetTableSelect(i))
+            if (aFuncMark.GetTableSelect(i))
                 pDoc->ApplyStyle( nCol, nRow, i, (ScStyleSheet&)*pStyleSheet );
 
         if (!AdjustBlockHeight())
@@ -1531,7 +1561,8 @@ BOOL ScViewFunc::InsertCells( InsCellCmd eCmd, BOOL bRecord, BOOL bPartOfPaste )
 void ScViewFunc::DeleteCells( DelCellCmd eCmd, BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea(aRange))
+    if ( GetViewData()->GetSimpleArea( aRange ) &&
+         !ScViewUtil::HasFiltered( aRange, GetViewData()->GetDocument() ) )
     {
         ScDocShell* pDocSh = GetViewData()->GetDocShell();
         pDocSh->GetDocFunc().DeleteCells( aRange, eCmd, bRecord, FALSE );
@@ -1566,13 +1597,15 @@ void ScViewFunc::DeleteMulti( BOOL bRows, BOOL bRecord )
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
     SCTAB nTab = GetViewData()->GetTabNo();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = pDocSh->GetDocument();
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
     SCCOLROW* pRanges = new SCCOLROW[MAXCOLROWCOUNT];
-    SCCOLROW nRangeCnt = bRows ? rMark.GetMarkRowRanges( pRanges ) :
-                                rMark.GetMarkColumnRanges( pRanges );
+    SCCOLROW nRangeCnt = bRows ? aFuncMark.GetMarkRowRanges( pRanges ) :
+                                aFuncMark.GetMarkColumnRanges( pRanges );
     if (nRangeCnt == 0)
     {
         pRanges[0] = pRanges[1] = bRows ? static_cast<SCCOLROW>(GetViewData()->GetCurY()) : static_cast<SCCOLROW>(GetViewData()->GetCurX());
@@ -1689,13 +1722,15 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
 
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScMarkData aFuncMark( GetViewData()->GetMarkData() );       // local copy for UnmarkFiltered
+    ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = FALSE;
 
     ScDocShellModificator aModificator( *pDocSh );
 
-    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+    if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
     {
         aMarkRange.aStart.SetCol(GetViewData()->GetCurX());
         aMarkRange.aStart.SetRow(GetViewData()->GetCurY());
@@ -1703,24 +1738,24 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         aMarkRange.aEnd = aMarkRange.aStart;
         if ( pDoc->HasAttrib( aMarkRange, HASATTR_MERGED ) )
         {
-            InitOwnBlockMode();
-            rMark.SetMarkArea( aMarkRange );
+//          InitOwnBlockMode();
+            aFuncMark.SetMarkArea( aMarkRange );
         }
         else
             bSimple = TRUE;
     }
 
-    rMark.SetMarking(FALSE);        // for MarkToMulti
-    rMark.MarkToSimple();           // before bMulti test below
+    aFuncMark.SetMarking(FALSE);        // for MarkToMulti
+    aFuncMark.MarkToSimple();           // before bMulti test below
 
-    DBG_ASSERT( rMark.IsMarked() || rMark.IsMultiMarked() || bSimple, "was denn loeschen ???" )
+    DBG_ASSERT( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() || bSimple, "delete what?" )
 
     ScDocument* pUndoDoc = NULL;
-    BOOL bMulti = !bSimple && rMark.IsMultiMarked();
+    BOOL bMulti = !bSimple && aFuncMark.IsMultiMarked();
     if (!bSimple)
     {
-        rMark.MarkToMulti();
-        rMark.GetMultiMarkArea( aMarkRange );
+        aFuncMark.MarkToMulti();
+        aFuncMark.GetMultiMarkArea( aMarkRange );
     }
     ScRange aExtendedRange(aMarkRange);
     if (!bSimple)
@@ -1736,7 +1771,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         bObjects = TRUE;
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if (rMark.GetTableSelect(nTab) && pDoc->IsTabProtected(nTab))
+            if (aFuncMark.GetTableSelect(nTab) && pDoc->IsTabProtected(nTab))
                 bObjects = FALSE;
     }
 
@@ -1757,11 +1792,11 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
             pDoc->BeginDrawUndo();
 
         if (bMulti)
-            pDoc->DeleteObjectsInSelection( rMark );
+            pDoc->DeleteObjectsInSelection( aFuncMark );
         else
             pDoc->DeleteObjectsInArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
 /*!*/                                  aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                                       rMark );
+                                       aFuncMark );
     }
 
     if ( bRecord )
@@ -1771,7 +1806,7 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
         pUndoDoc->InitUndo( pDoc, nTab, nTab );
         SCTAB nTabCount = pDoc->GetTableCount();
         for (SCTAB i=0; i<nTabCount; i++)
-            if (i != nTab && rMark.GetTableSelect(i))
+            if (i != nTab && aFuncMark.GetTableSelect(i))
                 pUndoDoc->AddUndoTab( i, i );
         ScRange aCopyRange = aExtendedRange;
         aCopyRange.aStart.SetTab(0);
@@ -1786,24 +1821,24 @@ void ScViewFunc::DeleteContents( USHORT nFlags, BOOL bRecord )
             nUndoDocFlags |= IDF_STRING;    // -> Zellen werden geaendert
         if (nFlags & IDF_NOTE)
             nUndoDocFlags |= IDF_CONTENTS;  // #68795# copy all cells with their notes
-        pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &rMark );
+        pDoc->CopyToDocument( aCopyRange, nUndoDocFlags, bMulti, pUndoDoc, &aFuncMark );
     }
 
     HideAllCursors();   // falls Zusammenfassung aufgehoben wird
     if (bSimple)
         pDoc->DeleteArea( aMarkRange.aStart.Col(), aMarkRange.aStart.Row(),
                           aMarkRange.aEnd.Col(),   aMarkRange.aEnd.Row(),
-                          rMark, nFlags );
+                          aFuncMark, nFlags );
     else
     {
-        pDoc->DeleteSelection( nFlags, rMark );
-        rMark.MarkToSimple();
+        pDoc->DeleteSelection( nFlags, aFuncMark );
+        aFuncMark.MarkToSimple();
     }
 
     if ( bRecord )
     {
         pDocSh->GetUndoManager()->AddUndoAction(
-            new ScUndoDeleteContents( pDocSh, rMark, aExtendedRange,
+            new ScUndoDeleteContents( pDocSh, aFuncMark, aExtendedRange,
                                       pUndoDoc, bMulti, nFlags, bObjects ) );
     }
 
@@ -2560,6 +2595,7 @@ void ScViewFunc::ChangeIndent( BOOL bIncrement )
     ScMarkData& rMark   = pViewData->GetMarkData();
 
     ScMarkData aWorkMark = rMark;
+    ScViewUtil::UnmarkFiltered( aWorkMark, pDocSh->GetDocument() );
     aWorkMark.MarkToMulti();
     if (!aWorkMark.IsMultiMarked())
     {
