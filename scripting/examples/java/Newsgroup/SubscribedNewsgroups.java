@@ -172,7 +172,7 @@ public class SubscribedNewsgroups {
         else
         {
             // Unix/Linux format "newsrc-staroffice-news.germany.sun.com"
-            int hostNameStart = filename.indexOf("-") + 1;
+            int hostNameStart = filename.lastIndexOf("newsrc-") + 7;
             hostname = filename.substring( hostNameStart, filename.length() );
         }
 
@@ -219,13 +219,16 @@ public class SubscribedNewsgroups {
             //System.out.println( "Finding mailrc for: " + newsDirs[i] );
             if( newsDirs[i] != null )
             {
-            File mailrcFiles[] = newsDirs[i].listFiles( new VersionFilter() );
-            //System.out.println( "Number found: " + mailrcFiles.length );
-            for( int j=0; j < mailrcFiles.length; j++ )
-            {
-                //System.out.println( "This mailrc was found: " + mailrcFiles[j] );
-                allFiles.addElement( mailrcFiles[j] );
-            }
+                File mailrcFiles[] = newsDirs[i].listFiles( new VersionFilter() );
+                if( mailrcFiles != null )
+                {
+                    //System.out.println( "Number found: " + mailrcFiles.length );
+                    for( int j=0; j < mailrcFiles.length; j++ )
+                    {
+                        //System.out.println( "This mailrc was found: " + mailrcFiles[j] );
+                        allFiles.addElement( mailrcFiles[j] );
+                    }
+                }
             }
         }
         File allMailrcFiles[] = new File[ allFiles.size() ];
@@ -298,7 +301,34 @@ public class SubscribedNewsgroups {
                 }
                 else
         {
+            // end recursion
+            // Check for a News directory inside the News directory (fix for bug)
+            // Original solution had only "mailrcFile = files[0];"
+
+            boolean noChildNews = true;
+            File checkChildNewsDirs[] = files[0].listFiles(new VersionFilter());
+            if( checkChildNewsDirs != null )
+            {
+                for( int i=0; i < checkChildNewsDirs.length; i++ )
+                {
+                    if( checkChildNewsDirs[i].getName().equals( "News" ) )
+                    {
+                        noChildNews = false;
+                        break;
+                    }
+                }
+            }
+
+            if( noChildNews )
+            {
                        mailrcFile = files[0];
+            }
+            else
+            {
+                String childNewsPathName = files[0].getAbsolutePath() + System.getProperty( "file.separator" ) + "News";
+                mailrcFile = new File( childNewsPathName );
+            }
+
         }
 
         // return a File representing the News dir in a profile
