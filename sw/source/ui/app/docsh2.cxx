@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
+ *  last change: $Author: mib $ $Date: 2001-02-09 13:17:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1304,7 +1304,7 @@ void SwDocShell::FillRegInfo( SvEmbeddedRegistryInfo*  pInfo )
 {
     SfxInPlaceObject::FillRegInfo( pInfo );
     pInfo->aObjName.AssignAscii( "StarWriterDocument" );
-    pInfo->nMajorVers = 5;
+    pInfo->nMajorVers = 6;
     pInfo->nMinorVers = 0;
     pInfo->aHumanShortTypeName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
     pInfo->nIconResId = REG_ICON_RESID_WRITER;
@@ -1366,7 +1366,7 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
     }
     else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
-        *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
+        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
@@ -1698,6 +1698,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/02/06 15:41:26  mib
+    real 6.0 file format
+
     Revision 1.12  2001/02/05 18:44:42  jp
     Bug #83467#: LoadStylesFrom - initialise the reader variable
 
