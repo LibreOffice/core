@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:49:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ Menu MN_SPELL_POPUP
             Text [ swedish ] = "~Rättstavning..." ;
             Text [ danish ] = "~Stavekontrol…" ;
             Text [ portuguese ] = "Or~tografia" ;
-            Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
+            Text [ portuguese_brazilian ] = "Verificação ~Ortográfica..." ;
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè...";
             Text[ polish ] = "~Pisownia...";
@@ -93,10 +93,13 @@ Menu MN_SPELL_POPUP
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥(~S)...";
             Text[ greek ] = "Ïñèïã~ñáößá";
             Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬...";
-            Text[ turkish ] = "~Yazım kılavuzu";
+            Text[ turkish ] = "İ~mla denetimi...";
             Text[ catalan ] = "Ortogra~fia";
             Text[ finnish ] = "~Oikeinkirjoituksen tarkistus...";
             Text[ thai ] = "~à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”";
+            Text[ czech ] = "Kontrola pravopisu...";
+            Text[ hebrew ] = "â€®×‘×“×™×§×ª ××™×•×ª...â€¬";
+            Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤° à¤•à¥€ à¤œà¤¾à¤à¤š...";
         };
         MenuItem
         {
@@ -115,10 +118,10 @@ Menu MN_SPELL_POPUP
             Text [ swedish ] = "~Lägg till" ;
             Text [ danish ] = "Tilføj" ;
             Text [ portuguese ] = "~Adicionar" ;
-            Text [ portuguese_brazilian ] = "~Aufnehmen" ;
+            Text [ portuguese_brazilian ] = "~Adicionar" ;
             Text[ chinese_simplified ] = "åŠ å…¥(~A)";
             Text[ russian ] = "Äîáàâèòü";
-            Text[ polish ] = "Dodaj";
+            Text[ polish ] = "~Dodaj";
             Text[ japanese ] = "è¿½åŠ (~A)";
             Text[ chinese_traditional ] = "åŠ å…¥(~A)";
             Text[ arabic ] = "ÅÖÇİÉ";
@@ -126,11 +129,14 @@ Menu MN_SPELL_POPUP
             Text[ chinese_simplified ] = "åŠ å…¥(~A)";
             Text[ greek ] = "Ğñ~ïóèŞêç";
             Text[ korean ] = "ì¶”ê°€(~A)";
-            Text[ turkish ] = "Ekle";
+            Text[ turkish ] = "~Ekle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Afegeix";
             Text[ finnish ] = "Lis~ää";
             Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
+            Text[ czech ] = "PÅ™idat";
+            Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
+            Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
         };
         MenuItem
         {
@@ -142,18 +148,18 @@ Menu MN_SPELL_POPUP
             Text [ ENGLISH ] = "I~gnore all" ;
             Text [ norwegian ] = "I~gnorer alle" ;
             Text [ italian ] = "~Ignora tutto" ;
-            Text [ portuguese_brazilian ] = "I~gnorar tudo" ;
+            Text [ portuguese_brazilian ] = "Ignorar Tudo" ;
             Text [ portuguese ] = "~Ignorar tudo" ;
             Text [ finnish ] = "Ohita kaikki" ;
             Text [ danish ] = "Ignorer alle" ;
-            Text [ french ] = "~Ignorer tout" ;
+            Text [ french ] = "Tout ~ignorer" ;
             Text [ swedish ] = "~Ignorera alla" ;
             Text [ dutch ] = "Alle ~negeren" ;
             Text [ spanish ] = "~Ignorar todo" ;
             Text [ english_us ] = "Ignore All" ;
             Text[ chinese_simplified ] = "å…¨éƒ¨å¿½ç•¥";
             Text[ russian ] = "Ïğîïóñêàòü âñå";
-            Text[ polish ] = "Zignoruj wszystkie";
+            Text[ polish ] = "Ignoruj wszystko";
             Text[ japanese ] = "ã™ã¹ã¦ç„¡è¦–ã™ã‚‹";
             Text[ language_user1 ] = " ";
             Text[ chinese_traditional ] = "å…¨éƒ¨å¿½ç•¥";
@@ -165,6 +171,9 @@ Menu MN_SPELL_POPUP
             Text[ turkish ] = "Tümünü yok say";
             Text[ catalan ] = "Ignora'ls tots";
             Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+            Text[ czech ] = "Ignorovat vÅ¡e";
+            Text[ hebrew ] = "Alle i~gnorieren";
+            Text[ hindi ] = "à¤¸à¤¬ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
         };
         MenuItem
         {
@@ -176,7 +185,7 @@ Menu MN_SPELL_POPUP
             {
             };
             Text [ english_us ] = "AutoCorrect" ;
-            Text [ portuguese_brazilian ] = "Auto~Korrektur" ;
+            Text [ portuguese_brazilian ] = "AutoCorreção" ;
             Text [ swedish ] = "Auto~Korrigering" ;
             Text [ danish ] = "AutoKorrektur" ;
             Text [ italian ] = "Correzione automatica" ;
@@ -199,6 +208,9 @@ Menu MN_SPELL_POPUP
             Text[ catalan ] = "Auto~correcció";
             Text[ finnish ] = "Automaattinen korjaus";
             Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¹‰à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+            Text[ czech ] = "AutomatickÃ© opravy";
+            Text[ hebrew ] = "â€®×ª×™×§×•×Ÿ ××•×˜×•××˜×™â€¬";
+            Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤ à¥€à¤• à¤•à¤°à¥‹";
         };
     };
 };
@@ -208,7 +220,7 @@ String STR_WORD
     Text [ ENGLISH ] = "word in" ;
     Text [ portuguese ] = "Palavra em " ;
     Text [ english_us ] = "Word is " ;
-    Text [ portuguese_brazilian ] = "Wort ist " ;
+    Text [ portuguese_brazilian ] = "A palavra é" ;
     Text [ swedish ] = "Ordet är  " ;
     Text [ danish ] = "Ordet er " ;
     Text [ italian ] = "Il termine è " ;
@@ -217,7 +229,7 @@ String STR_WORD
     Text [ dutch ] = "Woord is" ;
     Text[ chinese_simplified ] = "å•è¯æ˜¯ ";
     Text[ russian ] = "ßçûê ñëîâà: ";
-    Text[ polish ] = "S³owo jest   ";
+    Text[ polish ] = "Wyraz jest ";
     Text[ japanese ] = "å˜èªã¯ ";
     Text[ chinese_traditional ] = "å­—æ˜¯ ";
     Text[ language_user1 ] = " ";
@@ -230,6 +242,9 @@ String STR_WORD
     Text[ catalan ] = "La paraula és ";
     Text[ finnish ] = "sana on ";
     Text[ thai ] = "à¸„à¸³à¹ƒà¸™ ";
+    Text[ czech ] = "slovo je ";
+    Text[ hebrew ] = "Wort ist";
+    Text[ hindi ] = "à¤¶à¤¬à¥à¤¦ ";
 };
 String STR_PARAGRAPH
 {
@@ -237,7 +252,7 @@ String STR_PARAGRAPH
     Text [ ENGLISH ] = "Paragraph in" ;
     Text [ portuguese ] = "Parágrafo em " ;
     Text [ english_us ] = "Paragraph is " ;
-    Text [ portuguese_brazilian ] = "Absatz ist " ;
+    Text [ portuguese_brazilian ] = "O parágrafo é" ;
     Text [ swedish ] = "Stycket är  " ;
     Text [ danish ] = "Afsnittet er " ;
     Text [ italian ] = "Il paragrafo è " ;
@@ -246,7 +261,7 @@ String STR_PARAGRAPH
     Text [ dutch ] = "Alinea is" ;
     Text[ chinese_simplified ] = "æ®µè½æ˜¯ ";
     Text[ russian ] = "ßçûê àáçàöà: ";
-    Text[ polish ] = "Akapit jest   ";
+    Text[ polish ] = "Akapit jest ";
     Text[ japanese ] = "æ®µè½ã¯ ";
     Text[ chinese_traditional ] = "æ®µè½æ˜¯ ";
     Text[ arabic ] = "áÛÉ ÇáİŞÑÉ: ";
@@ -259,6 +274,9 @@ String STR_PARAGRAPH
     Text[ catalan ] = "El paràgraf és  ";
     Text[ finnish ] = "Kappale on ";
     Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹ƒà¸™ ";
+    Text[ czech ] = "Odstavec je ";
+    Text[ hebrew ] = "Absatz ist";
+    Text[ hindi ] = "à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ ";
 };
 String STR_SPELL_OK
 {
@@ -267,7 +285,7 @@ String STR_SPELL_OK
     Text [ ENGLISH ] = "Spell checking has finished." ;
     Text [ portuguese ] = "A verificação ortográfica está concluída!" ;
     Text [ english_us ] = "The spellcheck is complete." ;
-    Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "A verificação ortográfica está concluída." ;
     Text [ swedish ] = "Rättstavningskontrollen är avslutad!" ;
     Text [ danish ] = "Stavekontrollen er afsluttet!" ;
     Text [ italian ] = "Controllo ortografico terminato!" ;
@@ -276,7 +294,7 @@ String STR_SPELL_OK
     Text [ dutch ] = "De spellingcontrole is beëindigd!" ;
     Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥å·²ç»ç»“æŸï¼";
     Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè çàâåğøåíà.";
-    Text[ polish ] = "Sprawdzanie pisowni zosta³o zakoñczone!";
+    Text[ polish ] = "Sprawdzanie pisowni zosta³o zakoñczone.";
     Text[ japanese ] = "ã‚¹ãƒšãƒ«ãƒã‚§ãƒƒã‚¯ã¯çµ‚äº†ã—ã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥å·²ç¶“çµæŸï¹—";
     Text[ arabic ] = ".Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí";
@@ -284,11 +302,14 @@ String STR_SPELL_OK
     Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥å·²ç»ç»“æŸï¼";
     Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò ïëïêëçñşèçêå!";
     Text[ korean ] = "ë§ì¶¤ë²• ê²€ì‚¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Yazım denetimi tamamlandı!";
+    Text[ turkish ] = "Yazım kontrolu tamamlandı!";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ha finalitzat la revisió ortogràfica!";
     Text[ finnish ] = "Oikeinkirjoituksen tarkistus on valmis.";
     Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸à¸²à¸£à¸ªà¸°à¸à¸”à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
+    Text[ czech ] = "Kontrola pravopisu je ukonÄena.";
+    Text[ hebrew ] = "Die RechtschreibprÃ¼fung ist abgeschlossen";
+    Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤•à¥€ à¤œà¤¾à¤à¤š à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤† à¥¤";
 };
 String STR_HYP_OK
 {
@@ -296,7 +317,7 @@ String STR_HYP_OK
     Text [ ENGLISH ] = "Hyphenating has finished." ;
     Text [ portuguese ] = "Separação silábica está completa!" ;
     Text [ english_us ] = "Hyphenation completed" ;
-    Text [ portuguese_brazilian ] = "Die Silbentrennung ist abgeschlossen!" ;
+    Text [ portuguese_brazilian ] = "A divisão silábica está concluída" ;
     Text [ swedish ] = "Avstavningen är avslutad!" ;
     Text [ danish ] = "Orddelingen er afsluttet!" ;
     Text [ italian ] = "La sillabazione è conclusa!" ;
@@ -305,20 +326,32 @@ String STR_HYP_OK
     Text [ dutch ] = "De verdeling in lettergrepen is beëindigd!" ;
     Text[ chinese_simplified ] = "è¿å­—ç¬¦æ£€æŸ¥å·²ç»å®Œæˆï¼";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ çàâåğøåíà";
-    Text[ polish ] = "Dzielenie wyrazów zosta³o zakoñczone.";
+    Text[ polish ] = "Dzielenie wyrazów zosta³o zakoñczone";
     Text[ japanese ] = "ãƒã‚¤ãƒ•ãƒãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ã¾ã—ãŸã€‚";
     Text[ chinese_traditional ] = "é€£å­—ç¬¦æª¢æŸ¥å·²ç¶“å®Œæˆï¼";
     Text[ arabic ] = "ÊãøóÊ ÚãáíÉ İÕá ÇáãŞÇØÚ!";
     Text[ dutch ] = "De verdeling in lettergrepen is beëindigd!";
     Text[ chinese_simplified ] = "è¿å­—ç¬¦æ£€æŸ¥å·²ç»å®Œæˆï¼";
     Text[ greek ] = "Ï óõëëáâéóìüò İ÷åé ïëïêëçñùèåß!";
-    Text[ korean ] = "í•˜ì´í”ˆì´ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "í•˜ì´í”ˆ ë„£ê¸°ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Heceleme tamamlandı.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ha finalitzat la separació en síl.labes!";
     Text[ finnish ] = "Tavutus valmis";
     Text[ thai ] = "à¹ƒà¸Šà¹‰à¸¢à¸±à¸•à¸´à¸ à¸±à¸‡à¸„à¹Œà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
+    Text[ czech ] = "DÄ›lenÃ­ slov je ukonÄeno";
+    Text[ hebrew ] = "Die Silbentrennung ist abgeschlossen";
+    Text[ hindi ] = "à¤¹à¤¾à¤‡à¤«à¤¨à¥‡à¤¶à¤¨ à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤†";
 };
+
+
+
+
+
+
+
+
+
 
 
 
