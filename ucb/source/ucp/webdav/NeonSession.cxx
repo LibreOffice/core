@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "NeonUri.hxx"
 #include <dav_basic.h>
 #include <http_basic.h>
+#include <http_redirect.h>
 
 using namespace rtl;
 using namespace com::sun::star::uno;
@@ -77,18 +78,18 @@ sal_Bool    NeonSession::sSockInited        = sal_False;
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
-NeonSession::NeonSession( const OUString & inUri )
+NeonSession::NeonSession( const OUString & inUri, const ProxyConfig& rProxyCfg )
 {
     Init();
     NeonUri theUri( inUri );
 
-    mHostName = *new OString( OUStringToOString( theUri.GetHost(),
-                                   RTL_TEXTENCODING_UTF8 ) );
+    mHostName = theUri.GetHost();
     mPort = theUri.GetPort();
 
-
     mHttpSession = CreateSession( mHostName,
-                                  theUri.GetPort() );
+                                  theUri.GetPort(),
+                                  rProxyCfg.aName,
+                                  rProxyCfg.nPort );
     if ( mHttpSession == NULL )
         throw DAVException( DAVException::DAV_SESSION_CREATE );
 
@@ -127,9 +128,7 @@ sal_Bool NeonSession::CanUse( const OUString & inUri )
 {
     sal_Bool IsConnected = sal_False;
     NeonUri theUri( inUri );
-    if ( theUri.GetPort() == mPort &&
-            OUStringToOString( theUri.GetHost(), RTL_TEXTENCODING_UTF8 ) ==
-                mHostName )
+    if ( theUri.GetPort() == mPort && theUri.GetHost() == mHostName )
          IsConnected = sal_True;
     return IsConnected;
 }
@@ -147,6 +146,38 @@ void NeonSession::setProxyAuthListener(DAVAuthListener * inDAVAuthListener)
 {
     // Note: Content is currently not using proxy auth
 }
+
+// -------------------------------------------------------------------
+// OPTIONS
+// -------------------------------------------------------------------
+void NeonSession::OPTIONS( const OUString &                 inUri,
+                           DAVCapabilities & outCapabilities,
+                           const com::sun::star::uno::Reference<
+                               com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                                 throw( DAVException )
+{
+    osl::Guard< osl::Mutex > theGuard( mMutex );
+
+    mEnv = inEnv;
+
+    NeonUri theUri( inUri );
+
+    HttpServerCapabilities servercaps;
+    memset( &servercaps, 0, sizeof( servercaps ) );
+
+    int theRetVal = http_options( mHttpSession,
+                                   OUStringToOString( theUri.GetPath(),
+                                                       RTL_TEXTENCODING_UTF8 ),
+                                   &servercaps );
+
+    if ( theRetVal != HTTP_OK )
+        throw DAVException( DAVException::DAV_HTTP_ERROR );
+
+    outCapabilities.class1 = !!servercaps.dav_class1;
+    outCapabilities.class2 = !!servercaps.dav_class2;
+    outCapabilities.executable = !!servercaps.dav_executable;
+}
+
 // -------------------------------------------------------------------
 // PROPFIND
 // -------------------------------------------------------------------
@@ -393,17 +424,31 @@ void NeonSession::Init( void )
 // CreateSession
 // Creates a new neon session.
 // -------------------------------------------------------------------
-HttpSession * NeonSession::CreateSession( const char *  inHost,
-                                          int           inPort )
+HttpSession * NeonSession::CreateSession( const OUString& inHostName,
+                                             int inPort,
+                                              const OUString& inProxyName,
+                                             int inProxyPort )
 {
-    if ( inHost == NULL || inPort <= 0 )
+    if ( inHostName.getLength() == 0 || inPort <= 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
     HttpSession * theHttpSession;
     if ( ( theHttpSession = http_session_create() ) == NULL )
         throw DAVException( DAVException::DAV_SESSION_CREATE );
 
-    if ( http_session_server( theHttpSession, inHost, inPort ) != HTTP_OK )
+    if ( inProxyName.getLength() )
+    {
+        OString aProxy = OUStringToOString( inProxyName, RTL_TEXTENCODING_UTF8 );
+        if ( http_session_proxy( theHttpSession, aProxy.getStr(), inProxyPort )
+                != HTTP_OK )
+        {
+            http_session_destroy( theHttpSession );
+            throw DAVException( DAVException::DAV_HTTP_LOOKUP );
+        }
+    }
+
+    OString aHost = OUStringToOString( inHostName, RTL_TEXTENCODING_UTF8 );
+    if ( http_session_server( theHttpSession, aHost.getStr(), inPort ) != HTTP_OK )
     {
         http_session_destroy( theHttpSession );
         throw DAVException( DAVException::DAV_HTTP_LOOKUP );
@@ -530,14 +575,16 @@ int NeonSession::NeonAuth( void *       inUserData,
                             theSession->mEnv );
 
     OUString theUserName = theUserNameBuffer.makeStringAndClear();
-    OString *theStr = new OString( OUStringToOString( theUserName,
-                                                      RTL_TEXTENCODING_UTF8 ) );
-    inUserName[0] = const_cast< char *> ( theStr->getStr() );
+    OString theStr( theUserName.getStr(),
+                    theUserName.getLength(),
+                    RTL_TEXTENCODING_UTF8 );
+    inUserName[0] = strdup( theStr.getStr() );
 
     OUString thePassWord = thePassWordBuffer.makeStringAndClear();
-    theStr = new OString( OUStringToOString( thePassWord,
-                                             RTL_TEXTENCODING_UTF8 ) );
-    inPassWord[0] = const_cast< char *> ( theStr->getStr() );
+    theStr = OString( thePassWord.getStr(),
+                      thePassWord.getLength(),
+                      RTL_TEXTENCODING_UTF8 );
+    inPassWord[0] = strdup( theStr.getStr() );
 
     return theRetVal;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-08 13:54:55 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class Content : public ::ucb::ContentImplHelper,
   ::rtl::OUString _path;
   sal_Bool _transient;
   sal_Bool _upToDate;
+  sal_Bool _davResource;
 
 private:
 
@@ -163,15 +164,12 @@ private:
                            ::com::sun::star::beans::Property >& rProperties,
                      const ::com::sun::star::uno::Reference<
                           com::sun::star::ucb::XCommandEnvironment >& Environment);
-  void initpath()
-    throw ( ContentCreationException );
-
+  sal_Bool initpath();
 
   virtual const ::ucb::PropertyInfoTableEntry& getPropertyInfoTable();
   virtual const ::ucb::CommandInfoTableEntry&  getCommandInfoTable();
   virtual ::rtl::OUString getParentURL();
 
-  sal_Bool isFolder() const { return ( m_aProps.bIsFolder ); }
   sal_Bool isFolder( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 

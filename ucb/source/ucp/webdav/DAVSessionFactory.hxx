@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,22 @@
 #include <rtl/ustring.hxx>
 #include <vos/ref.hxx>
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+} } } }
+
 namespace webdav_ucp
 {
 
+struct ProxyConfig
+{
+    ::rtl::OUString aName;
+    sal_Int32       nPort;
+};
 
 class DAVSession;
 class DAVSessionFactory
@@ -76,8 +89,11 @@ class DAVSessionFactory
         static std::vector< DAVSession * >  sActiveSessions;
 
     public:
-        static ::vos::ORef< DAVSession > createDAVSession(
-                                            const ::rtl::OUString & inUri );
+        static ::vos::ORef< DAVSession >
+        createDAVSession( const ::rtl::OUString & inUri,
+                          const ::com::sun::star::uno::Reference<
+                               ::com::sun::star::lang::XMultiServiceFactory >&
+                                rxSMgr );
 
         static void ReleaseDAVSession( DAVSession * inSession );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ class NeonSession : public DAVSession
     private:
         osl::Mutex              mMutex;
         HttpSession *           mHttpSession;
-        rtl::OString            mHostName;
+        rtl::OUString           mHostName;
         sal_Int32               mPort;
 
         // Authentication stuff
@@ -93,7 +93,7 @@ class NeonSession : public DAVSession
         static sal_Bool         sSockInited;
 
     public:
-        NeonSession( const rtl::OUString & inUri );
+        NeonSession( const rtl::OUString & inUri, const ProxyConfig& rProxyCfg );
         virtual ~NeonSession( );
 
 
@@ -102,6 +102,12 @@ class NeonSession : public DAVSession
 
         virtual void setServerAuthListener(DAVAuthListener * inDAVAuthListener);
         virtual void setProxyAuthListener(DAVAuthListener * inDAVAuthListener);
+
+        virtual void OPTIONS( const ::rtl::OUString &  inUri,
+                              DAVCapabilities & outCapabilities,
+                              const com::sun::star::uno::Reference<
+                                com::sun::star::ucb::XCommandEnvironment >& inEnv )
+                                 throw( DAVException );
 
         virtual void PROPFIND( const ::rtl::OUString &              inUri,
                                   const Depth                           inDepth,
@@ -174,7 +180,10 @@ class NeonSession : public DAVSession
         void            Init( void );
 
         // Create a Neon session for server at supplied host & port
-        HttpSession *   CreateSession( const char * inHostName, int inPort );
+        HttpSession *   CreateSession( const ::rtl::OUString& inHostName,
+                                       int inPort,
+                                        const ::rtl::OUString& inProxyName,
+                                       int inProxyPort );
 
         // A simple Neon http_block_reader for use with a http GET method
         // in conjunction with an XInputStream
@@ -196,6 +205,7 @@ class NeonSession : public DAVSession
                                   const char *  inHostName,
                                   char **       inUserName,
                                   char **       inPassWord );
+
 };
 
 }; // namespace_ucp

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,18 +73,19 @@
 #define std
 #endif
 
+#include <http_basic.h>
 #include <http_request.h>
 #include <dav_props.h>
 #include <uri.h>
 
-typedef http_session            HttpSession;
-typedef http_req                HttpRequest;
-typedef http_status             HttpStatus;
+typedef http_session                HttpSession;
+typedef http_req                    HttpRequest;
+typedef http_status                 HttpStatus;
+typedef http_server_capabilities    HttpServerCapabilities;
 
 typedef dav_propfind_handler    NeonPropFindHandler;
 typedef dav_propname            NeonPropName;
 typedef struct hip_xml_elm      NeonPropFindXmlElem;
 typedef hip_xml_elmid           NeonPropFindXmlId;
 
-// Note: Uncomment the following if locking support is required
 #endif _NEONTYPES_HXX_

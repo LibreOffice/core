@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,116 @@
 #include "DAVSessionFactory.hxx"
 #include "NeonSession.hxx"
 
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
 using namespace std;
 using namespace rtl;
 using namespace vos;
 using namespace webdav_ucp;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::container;
 
 std::vector< DAVSession * > DAVSessionFactory::sActiveSessions;
 
-ORef< DAVSession > DAVSessionFactory::createDAVSession( const OUString & inUri )
+ORef< DAVSession > DAVSessionFactory::createDAVSession(
+                    const ::rtl::OUString & inUri,
+                    const Reference< XMultiServiceFactory > & rxSMgr )
 {
     DAVSession * theSession = GetExistingSession( inUri );
     if ( theSession == NULL )
     {
-        theSession = new NeonSession( inUri );
+        ProxyConfig aProxyConfig;
+
+        try
+        {
+            // Read proxy config from config db.
+
+            Reference< XMultiServiceFactory > xConfigProv(
+                        rxSMgr->createInstance(
+                            OUString::createFromAscii(
+                                "com.sun.star.configuration.ConfigurationProvider" ) ),
+                        UNO_QUERY );
+
+            OUString aRootKey
+                = OUString::createFromAscii( "org.openoffice.Inet/Proxy/HTTP" );
+
+            Sequence< Any > aArguments( 1 );
+            aArguments[ 0 ] <<= aRootKey;
+
+            Reference< XInterface > xInterface(
+                        xConfigProv->createInstanceWithArguments(
+                            OUString::createFromAscii(
+                                "com.sun.star.configuration.ConfigurationAccess" ),
+                        aArguments ) );
+
+            VOS_ENSURE( xInterface.is(), "Content::Content - No config access!" );
+
+            if ( xInterface.is() )
+            {
+                Reference< XNameAccess > xNameAccess( xInterface, UNO_QUERY );
+
+                VOS_ENSURE( xNameAccess.is(), "Content::Content - No name access!" );
+
+                if ( xNameAccess.is() )
+                {
+                    try
+                    {
+                        if ( !( xNameAccess->getByName(
+                                OUString::createFromAscii( "Name" ) )
+                                    >>= aProxyConfig.aName ) )
+                        {
+                            VOS_ENSURE( sal_False,
+                                        "Content::Content - "
+                                        "Error getting config item value!" );
+                        }
+                    }
+                    catch ( NoSuchElementException& )
+                    {
+                        // getByName
+                    }
+                    catch ( WrappedTargetException& )
+                    {
+                        // getByName
+                    }
+
+                    try
+                    {
+                        if ( !( xNameAccess->getByName(
+                                OUString::createFromAscii( "Port" ) )
+                                      >>= aProxyConfig.nPort ) )
+                        {
+                            VOS_ENSURE( sal_False,
+                                        "Content::Content - "
+                                        "Error getting config item value!" );
+                        }
+                    }
+                    catch ( NoSuchElementException& )
+                    {
+                        // getByName
+                    }
+                    catch ( WrappedTargetException& )
+                    {
+                        // getByName
+                    }
+                }
+            }
+        }
+        catch ( RuntimeException& )
+        {
+            throw;
+        }
+        catch ( Exception& )
+        {
+            // createInstance, createInstanceWithArguments
+        }
+
+        theSession = new NeonSession( inUri, aProxyConfig );
         sActiveSessions.push_back( theSession );
     }
 

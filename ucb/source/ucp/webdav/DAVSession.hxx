@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSession.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@ public:
 
     // DAV methods
     //
+
+    virtual void OPTIONS( const ::rtl::OUString &  inUri,
+                          DAVCapabilities & outCapabilities,
+                          const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& inEnv ) = 0;
 
     virtual void PROPFIND( const ::rtl::OUString &          inUri,
                     const Depth                             inDepth,

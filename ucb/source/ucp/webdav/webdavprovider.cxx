@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,30 +163,54 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
 {
     vos::OGuard aGuard( m_aMutex );
 
-
-
     // Check URL scheme...
+
+#ifdef HTTP_SUPPORTED
+
+    const OUString aScheme = Identifier->getContentProviderScheme();
+    if ( !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                        WEBDAV_URL_SCHEME ) ) &&
+         !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                        HTTP_URL_SCHEME ) ) &&
+         !aScheme.equalsIgnoreCase( OUString::createFromAscii(
+                                        HTTPS_URL_SCHEME ) ) )
+        throw IllegalIdentifierException();
+
+#else
 
     OUString aScheme( OUString::createFromAscii( WEBDAV_URL_SCHEME ) );
     if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
         throw IllegalIdentifierException();
 
-    // @@@ Further id checks may go here...
-#if 0
-    if ( id-check-failes )
+#endif
+
+    // Normalize URL and create new Id, if nessacary.
+    OUString aURL = Identifier->getContentIdentifier();
+    sal_Int32 nPos = aURL.lastIndexOf( '/' );
+
+    if ( nPos == -1 )
         throw IllegalIdentifierException();
-#endif
 
-    // @@@ Id normalization may go here...
-#if 0
-    // Normalize URL and create new Id.
-    OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
-    Reference< XContentIdentifier > xCanonicId =
-                new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
-#else
-    Reference< XContentIdentifier > xCanonicId = Identifier;
-#endif
+    Reference< XContentIdentifier > xCanonicId;
 
+    if ( nPos != aURL.getLength() - 1 )
+    {
+        // Find second slash in URL.
+        nPos = aURL.indexOf( '/', aURL.indexOf( '/' ) + 1 );
+        if ( nPos == -1 )
+            throw IllegalIdentifierException();
+
+        nPos = aURL.indexOf( '/', nPos + 1 );
+        if ( nPos == -1 )
+        {
+            aURL += OUString::createFromAscii( "/" );
+            xCanonicId = new ::ucb::ContentIdentifier( m_xSMgr, aURL );
+        }
+        else
+            xCanonicId = Identifier;
+    }
+    else
+        xCanonicId = Identifier;
 
     // Check, if a content with given id already exists...
     Reference< XContent > xContent
@@ -200,11 +224,12 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     // Create a new content. Note that the content will insert itself
     // into providers content list by calling addContent(...) from it's ctor.
 
-//  fprintf ( stderr, OUStringToOString( Identifier->getContentIdentifier(), RTL_TEXTENCODING_ASCII_US ) );
-    try {
+    try
+    {
       xContent = new ::webdav_ucp::Content( m_xSMgr, this, xCanonicId );
     }
-    catch (ContentCreationException e) {
+    catch (ContentCreationException e)
+    {
       throw IllegalIdentifierException();
     }
 

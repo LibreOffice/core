@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2000-11-13 15:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <ucbhelper/providerhelper.hxx>
 #endif
 
+#define HTTP_SUPPORTED
+
 namespace webdav_ucp {
 
 //=========================================================================
@@ -76,18 +78,32 @@ namespace webdav_ucp {
                 "com.sun.star.ucb.WebDAVContentProvider"
 #define WEBDAV_CONTENT_PROVIDER_SERVICE_NAME_LENGTH 38
 
-// @@@ URL scheme. This is the scheme the provider will be able to create
+// URL scheme. This is the scheme the provider will be able to create
 // contents for. The UCB will select the provider ( i.e. in order to create
 // contents ) according to this scheme.
 #define WEBDAV_URL_SCHEME \
                 "vnd.sun.star.webdav"
 #define WEBDAV_URL_SCHEME_LENGTH    19
 
-// @@@ UCB Content Type(s).
+#define HTTP_URL_SCHEME         "http"
+#define HTTP_URL_SCHEME_LENGTH  4
+
+#define HTTPS_URL_SCHEME        "https"
+#define HTTPS_URL_SCHEME_LENGTH 5
+
+#define HTTP_CONTENT_TYPE \
+                "application/" HTTP_URL_SCHEME "-content"
+
+#ifdef HTTP_SUPPORTED
+#define WEBDAV_CONTENT_TYPE     HTTP_CONTENT_TYPE
+#else
 #define WEBDAV_CONTENT_TYPE \
                 "application/" WEBDAV_URL_SCHEME "-content"
+#endif
+
 #define WEBDAV_COLLECTION_TYPE \
                 "application/" WEBDAV_URL_SCHEME "-collection"
+
 //=========================================================================
 
 class ContentProvider : public ::ucb::ContentProviderImplHelper
