@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.139 $
+#   $Revision: 1.140 $
 #
-#   last change: $Author: rt $ $Date: 2003-06-13 10:44:06 $
+#   last change: $Author: hjs $ $Date: 2003-07-03 15:27:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2925,7 +2925,7 @@ $(MISC)$/$(PRJNAME).hid : \
         $(RESLIB5SRSFILES)  $(RESLIB6SRSFILES) \
         $(RESLIB7SRSFILES)  $(RESLIB8SRSFILES) \
         $(RESLIB9SRSFILES) \
-        $(PRJHIDOTHERTARGET)
+        $(PRJHIDOTHERTARGET) $(HIDSRSPARTICLE)
     @echo Making $@ :
     @echo ---------------
     @+if exist $@ del $@
