@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-17 10:35:11 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,45 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 {
     BOOL bRet     = FALSE;
     const SwPageFrm *pPage = this;
+#ifdef VERTICAL_LAYOUT
+    Point aStPoint( rPoint );
+    Point aPoint;
+    while ( !bRet && pPage )
+    {
+        aPoint = aStPoint;
+        SwTwips nTmp = pPage->Frm().Top();
+        if ( pPage->GetPrev() )
+        {
+            const SwTwips nPreTmp = pPage->GetPrev()->Frm().Bottom();
+            if ( (aPoint.Y() > nPreTmp) &&
+                 (aPoint.Y() < nTmp)    &&
+                 ((aPoint.Y() - nPreTmp) >= (nTmp - aPoint.Y())) )
+                aPoint.Y() = nTmp;
+        }
+        else if ( aPoint.Y() < nTmp )
+            aPoint.Y() = nTmp;
+
+        nTmp = pPage->Frm().Bottom();
+        if ( pPage->GetNext() )
+        {
+            const SwTwips nNxtTmp = pPage->GetNext()->Frm().Top();
+            if ( (aPoint.Y() > nTmp) &&
+                 (aPoint.Y() < nNxtTmp) &&
+                 ((nNxtTmp - aPoint.Y()) >= (aPoint.Y() - nTmp)) )
+                aPoint.Y() = nTmp;
+        }
+        else if ( aPoint.Y() > nTmp )
+            aPoint.Y() = nTmp;
+
+        //Wenn der Punkt in der Fix-Richtung neben der Seite liegt wird er
+        //hineingezogen.
+        const SwTwips nVarA = pPage->Frm().Pos().X();
+        const SwTwips nVarB = pPage->Frm().Right();
+        if ( nVarA > aPoint.X() )
+            aPoint.X() = nVarA;
+        else if ( nVarB < aPoint.X() )
+            aPoint.X() = nVarB;
+#else
     const PtPtr pFix = pFIXPOS;
     const PtPtr pVar = pVARPOS;
     Point aStPoint( rPoint );
@@ -286,6 +325,7 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
             aPoint.*pFix = nVarA;
         else if ( nVarB < aPoint.*pFix )
             aPoint.*pFix = nVarB;
+#endif
 
         //Weitere versuche mit der aktuellen Seite nur dann, wenn sich der
         //Point innerhalb der Seite befindet.
