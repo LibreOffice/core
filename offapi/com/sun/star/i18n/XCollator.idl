@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCollator.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *  last change: $Author: bustamam $ $Date: 2001-02-02 10:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,18 +95,12 @@ interface XCollator: com::sun::star::uno::XInterface
         @param len2
             length (from offset) of the second substring
 
-        @param rLocale
-            the locale to use for this comparison
-
-        @param trans
-            the transliteration object to use for this comparison
-
         @returns
             1 if the first string is more than second string
             0 if the first string is equals to second string
             -1 if the first string is less than second string
     */
-    long compareSubstring([in] string s1, [in] long off1, [in] long len1, [in] string s2, [in] long off2, [in] long len2, [in] com::sun::star::lang::Locale rLocale, [in] com::sun::star::i18n::XTransliteration trans);
+    long compareSubstring([in] string s1, [in] long off1, [in] long len1, [in] string s2, [in] long off2, [in] long len2);
 
     /** compares 2 strings
 
@@ -116,48 +110,84 @@ interface XCollator: com::sun::star::uno::XInterface
         @param s2
             second String
 
-        @param rLocale
-            the locale to use for this comparison
-
-        @param trans
-            the transliteration object to use for this comparison
-
         @returns
             1 if the first string is more than second string
             0 if the first string is equals to second string
             -1 if the first string is less than second string
     */
-    long compareString([in] string s1, [in] string s2, [in] com::sun::star::lang::Locale rLocale, [in] com::sun::star::i18n::XTransliteration trans);
+    long compareString([in] string s1, [in] string s2);
 
     /** loads the Default Collator Implementation
 
         @param rLocale
             the locale for this Collator
 
+                @param collatorOptions
+                        collator options
+
         @returns
             TODO
     */
-    long loadDefaultCollator([in] ::com::sun::star::lang::Locale rLocale);
+    long loadDefaultCollator([in] ::com::sun::star::lang::Locale rLocale,
+                                 [in] long collatorOptions);
 
-    /** loads a particular Collator Implementation
+    /** loads a particular Collator Algorithm
 
         @param impl
             the implementation name to load
 
+                @param rLocale
+                        the locale for this Collator
+
+                @param collatorOptions
+                        collator options
+
         @returns
             TODO
     */
-    long loadCollatorImplementation([in] string impl);
+    long loadCollatorAlgorithm([in] string impl,
+                                   [in] ::com::sun::star::lang::Locale rLocale,
+                                   [in] long collatorOptions);
 
-    /** list all collator Implementations
+    /** list all collator Algorithms
 
         @param rLocale
             the locale for this Collator
 
         @returns
-            an array of implementations (string)
+            an array of algorithms (string)
     */
-    sequence <string> listCollatorImplementations([in] ::com::sun::star::lang::Locale rLocale);
+    sequence <string> listCollatorAlgorithms([in] ::com::sun::star::lang::Locale rLocale);
+
+
+        /** loads Collator Algorithm with options chosen by end users
+
+                @param impl
+                        the implementation name to load
+
+                @param rLocale
+                        the locale for this Collator
+
+                @param collatorOptions
+                        an array of collator options (long)
+
+                @returns
+                        VOID
+        */
+        void loadCollatorAlgorithmWithEndUserOption([in] string impl,
+                                                    [in] ::com::sun::star::lang::Locale rLocale,
+                                                    [in] sequence<long> collatorOptions);
+
+        /** list all collator options
+
+                @param collatorAlgorithmName
+                        the algorithm name for this Collator
+
+                @returns
+                        an array of options (long)
+
+        */
+        sequence <long> listCollatorOptions([in] string collatorAlgorithmName);
 };
 
 //=============================================================================
