@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:12:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,9 +330,19 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             aDlg.SetName(pUser ? pUser->GetValue() : String());
             aDlg.ClearPassword();  // this will give the password field the focus
 
+            String sName = pName ? pName->GetValue() : String();
             String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
-            sLoginRequest.SearchAndReplaceAscii("$name$", pName ? pName->GetValue() : String()),
+            ::rtl::OUString sTemp = sName;
+            sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
+            if ( sName.Len() )
+                   sLoginRequest.SearchAndReplaceAscii("$name$", sName);
+            else
+            {
+                sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
+                sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
+            }
             aDlg.SetLoginRequestText(sLoginRequest);
+
             aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
             aDlg.SetSavePassword(sal_True);
 
@@ -449,8 +459,8 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
 {
     if ( !m_xDatasource.is() )
     {
-        m_xDatasource.set(m_aDataSourceName,UNO_QUERY);;
-        if ( !m_xDatasource.is() )
+        Reference<XInterface> xIn(m_aDataSourceName,UNO_QUERY);
+        if ( !xIn.is() )
         {
             ::rtl::OUString sCurrentDatasource;
             m_aDataSourceName >>= sCurrentDatasource;
@@ -459,12 +469,22 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
             {
                 if ( m_xDatabaseContext.is() )
                     m_xDatasource.set(m_xDatabaseContext->getByName(sCurrentDatasource),UNO_QUERY);
+                xIn = m_xDatasource;
             }
             catch(const Exception&)
             {
             }
         }
+        m_xModel.set(getDataSourceOrModel(xIn),UNO_QUERY);
+        if ( m_xModel.is() )
+            m_xDatasource.set(xIn,UNO_QUERY);
+        else
+        {
+            m_xDatasource.set(getDataSourceOrModel(xIn),UNO_QUERY);
+            m_xModel.set(xIn,UNO_QUERY);
+        }
     }
+
 
     DBG_ASSERT(m_xDatasource.is(), "ODbDataSourceAdministrationHelper::getCurrentDataSource: no data source!");
     return m_xDatasource;
@@ -557,15 +577,22 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_ORACLE_PORTNUMBER, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pDatabaseName, SfxStringItem, DSID_DATABASENAME, sal_True);
-                sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@"));
-                sNewUrl += lcl_createHostWithPort(pHostName,pPortNumber);
-                String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
-                if ( !sDatabaseName.Len() && pUrlItem )
-                    sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
-                if ( sDatabaseName.Len() )
+                if ( pHostName && pHostName->GetValue().Len() )
                 {
-                    sNewUrl += String::CreateFromAscii(":");
-                    sNewUrl += sDatabaseName;
+                    sNewUrl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("@"));
+                    sNewUrl += lcl_createHostWithPort(pHostName,pPortNumber);
+                    String sDatabaseName = pDatabaseName ? pDatabaseName->GetValue() : String();
+                    if ( !sDatabaseName.Len() && pUrlItem )
+                        sDatabaseName = pCollection->cutPrefix( pUrlItem->GetValue() );
+                    if ( sDatabaseName.Len() )
+                    {
+                        sNewUrl += String::CreateFromAscii(":");
+                        sNewUrl += sDatabaseName;
+                    }
+                }
+                else
+                { // here someone entered a JDBC url which looks like oracle, so we have to use the url property
+
                 }
             }
             break;
@@ -679,7 +706,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
     try
     {
         _rDest.Put(OPropertySetItem(DSID_DATASOURCE_UNO, _rxSource));
-        Reference<XStorable> xStore(_rxSource,UNO_QUERY);
+        Reference<XStorable> xStore(getDataSourceOrModel(_rxSource),UNO_QUERY);
         _rDest.Put(SfxBoolItem(DSID_READONLY, !xStore.is() || xStore->isReadonly() ));
     }
     catch(Exception&)
