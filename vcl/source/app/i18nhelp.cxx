@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18nhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:31:49 $
+ *  last change: $Author: mt $ $Date: 2001-08-23 12:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,34 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
     return *mpTransliterationWrapper;
 }
 
+LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
+{
+    if ( !mpLocaleDataWrapper )
+    {
+        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( mxMSF, maLocale );
+    }
+    return *mpLocaleDataWrapper;
+}
+
 const ::com::sun::star::lang::Locale& vcl::I18nHelper::getLocale() const
 {
     return maLocale;
+}
+
+sal_Int32 vcl::I18nHelper::CompareString( const String& rStr1, const String& rStr2 ) const
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
+
+    if ( mbTransliterateIgnoreCase )
+    {
+        // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
+        // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
+        ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = FALSE;
+        delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
+    }
+
+    return ImplGetTransliterationWrapper().compareString( rStr1, rStr2 );
 }
 
 sal_Bool vcl::I18nHelper::MatchString( const String& rStr1, const String& rStr2 ) const
@@ -166,17 +191,20 @@ sal_Bool vcl::I18nHelper::MatchMnemonic( const String& rString, sal_Unicode cMne
     if ( n != STRING_NOTFOUND )
     {
         String aMatchStr( rString, n+1, STRING_LEN );   // not only one char, because of transliteration...
-        sal_Int32 nMatch1, nMatch2;
         bEqual = MatchString( cMnemonicChar, aMatchStr );
     }
     return bEqual;
 }
 
 
-String vcl::I18nHelper::GetDate( const Date& rDate, sal_Bool bLongFormat ) const
+String vcl::I18nHelper::GetDate( const Date& rDate ) const
 {
     ::osl::Guard< ::osl::Mutex > aGuard( ((vcl::I18nHelper*)this)->maMutex );
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    return String();
+    return ImplGetLocaleDataWrapper().getDate( rDate );
+}
+
+String vcl::I18nHelper::GetNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep, BOOL bTrailingZeros ) const
+{
+    return ImplGetLocaleDataWrapper().getNum( nNumber, nDecimals, bUseThousandSep, bTrailingZeros );
 }
