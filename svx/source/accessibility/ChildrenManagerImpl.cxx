@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:56:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,8 +368,21 @@ void ChildrenManagerImpl::RemoveNonVisibleChildren (
     {
         if (::std::find(raNewChildList.begin(), raNewChildList.end(), *I) == raNewChildList.end())
         {
-            UnregisterAsDisposeListener (I->mxShape);
-            I->disposeAccessibleObject (mrContext);
+            // The child is disposed when there is a UNO shape from which
+            // the accessible shape can be created when the shape becomes
+            // visible again.  When there is no such UNO shape then simply
+            // reset the descriptor but keep the accessibility object.
+            if (I->mxShape.is())
+            {
+                UnregisterAsDisposeListener (I->mxShape);
+                I->disposeAccessibleObject (mrContext);
+            }
+            else
+            {
+                AccessibleShape* pAccessibleShape = I->GetAccessibleShape();
+                pAccessibleShape->ResetState (AccessibleStateType::VISIBLE);
+                I->mxAccessibleShape = NULL;
+            }
         }
     }
 }
@@ -993,7 +1006,10 @@ ChildDescriptor::ChildDescriptor (const Reference<XAccessible>& rxAccessibleShap
       mxAccessibleShape (rxAccessibleShape),
       mbCreateEventPending (true)
 {
-    // Empty.
+    // Make sure that the accessible object has the <const>VISIBLE</const>
+    // state set.
+    AccessibleShape* pAccessibleShape = GetAccessibleShape();
+    pAccessibleShape->SetState (AccessibleStateType::VISIBLE);
 }
 
 
