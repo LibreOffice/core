@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:50:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
+#include <algorithm>
 
 using namespace ::rtl;
 
@@ -209,20 +210,29 @@ jobject Bridge::call_uno(
     jobjectArray jo_args /* may be 0 */ ) const
 {
     // return mem
-    sal_Int32 return_size = sizeof (largest);
-    if (typelib_TypeClass_STRUCT == return_type->eTypeClass ||
-        typelib_TypeClass_EXCEPTION == return_type->eTypeClass)
-    {
-        TypeDescr return_td( return_type );
-        if (return_td.get()->nSize > sizeof (largest))
-            return_size = return_td.get()->nSize;
+    sal_Int32 return_size;
+    switch (return_type->eTypeClass) {
+    case typelib_TypeClass_VOID:
+        return_size = 0;
+        break;
+
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+        return_size = std::max(
+            TypeDescr(return_type).get()->nSize,
+            static_cast< sal_Int32 >(sizeof (largest)));
+        break;
+
+    default:
+        return_size = sizeof (largest);
+        break;
     }
 
     char * mem = (char *) alloca(
         (nParams * sizeof (void *)) +
         return_size + (nParams * sizeof (largest)) );
     void ** uno_args = (void **) mem;
-    void * uno_ret = (mem + (nParams * sizeof (void *)));
+    void * uno_ret = return_size == 0 ? 0 : (mem + (nParams * sizeof (void *)));
     largest * uno_args_mem = (largest *)
         (mem + (nParams * sizeof (void *)) + return_size);
 
@@ -478,33 +488,10 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
             }
         }
 
-        // determine exact interface td
-        typelib_TypeDescription * orig_td =
-            reinterpret_cast< typelib_TypeDescription * >(
+        typelib_InterfaceTypeDescription * td =
+            reinterpret_cast< typelib_InterfaceTypeDescription * >(
                 jni->GetLongField(
                     jo_proxy, jni_info->m_field_JNI_proxy_m_td_handle ) );
-        typelib_InterfaceTypeDescription * td =
-            reinterpret_cast< typelib_InterfaceTypeDescription * >( orig_td );
-        OUString iface_name( jstring_to_oustring( jni, jo_decl_class ) );
-        while ((0 != td) &&
-               !OUString::unacquired(
-                   &((typelib_TypeDescription *) td)->pTypeName ).equals(
-                       iface_name ))
-        {
-            td = td->pBaseTypeDescription;
-        }
-        if (0 == td)
-        {
-            OUStringBuffer buf( 64 );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "proxy (type=") );
-            buf.append( OUString::unacquired( &orig_td->pTypeName ) );
-            buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                                 ") does not fit with called interface: ") );
-            buf.append( iface_name );
-            buf.append( jni.get_stack_trace() );
-            throw BridgeRuntimeError( buf.makeStringAndClear() );
-        }
-
         uno_Interface * pUnoI =
             reinterpret_cast< uno_Interface * >(
                 jni->GetLongField(
@@ -520,19 +507,21 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                 ppAllMembers[ nPos ];
 
             // check method_name against fully qualified type_name
-            // of member_type
+            // of member_type; type_name is of the form
+            //  <name> "::" <method_name> *(":@" <idx> "," <idx> ":" <name>)
             OUString const & type_name =
                 OUString::unacquired( &member_type->pTypeName );
+            sal_Int32 offset = type_name.indexOf( ':' ) + 2;
+            OSL_ASSERT(
+                offset >= 2 && offset < type_name.getLength()
+                && type_name[offset - 1] == ':' );
+            sal_Int32 remainder = type_name.getLength() - offset;
             if (typelib_TypeClass_INTERFACE_METHOD == member_type->eTypeClass)
             {
-                if ((method_name.getLength() < type_name.getLength()) &&
-                    (':' == type_name[ type_name.getLength() -
-                                       method_name.getLength() -1 ]) &&
-                    (0 == rtl_ustr_compare(
-                        method_name.getStr(),
-                        type_name.getStr() + type_name.getLength() -
-                        method_name.getLength() )
-                     /* ends with method_name */))
+                if ((method_name.getLength() == remainder
+                     || (method_name.getLength() < remainder
+                         && type_name[offset + method_name.getLength()] == ':'))
+                    && type_name.match(method_name, offset))
                 {
                     TypeDescr member_td( member_type );
                     typelib_InterfaceMethodTypeDescription * method_td =
@@ -552,16 +541,17 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                     typelib_TypeClass_INTERFACE_ATTRIBUTE ==
                       member_type->eTypeClass );
 
-                if ((method_name.getLength() > 3) &&
-                    (method_name.getLength() < (type_name.getLength() +3)) &&
-                    (':' == type_name[ type_name.getLength() -
-                                       method_name.getLength() -1 +3 ]) &&
-                    ('e' == method_name[ 1 ]) && ('t' == method_name[ 2 ]) &&
-                    (0 == rtl_ustr_compare(
-                        method_name.getStr() +3,
-                        type_name.getStr() + type_name.getLength() -
-                        method_name.getLength() +3 )
-                     /* ends with method_name.copy(3) */))
+                if (method_name.getLength() >= 3
+                    && (method_name.getLength() - 3 == remainder
+                        || (method_name.getLength() - 3 < remainder
+                            && type_name[
+                                offset + (method_name.getLength() - 3)] == ':'))
+                    && method_name[1] == 'e' && method_name[2] == 't'
+                    && rtl_ustr_compare_WithLength(
+                        type_name.getStr() + offset,
+                        method_name.getLength() - 3,
+                        method_name.getStr() + 3,
+                        method_name.getLength() - 3) == 0)
                 {
                     if ('g' == method_name[ 0 ])
                     {
