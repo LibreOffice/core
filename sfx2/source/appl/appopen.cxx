@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 10:41:29 $
+ *  last change: $Author: pb $ $Date: 2000-10-17 13:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         if ( !xDoc.Is() )
             xDoc = ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())->GetFactory().CreateObject();
 
-        SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE, TRUE, pFilter, pSet );
+        SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE, pFilter, pSet );
         if(!xDoc->DoLoad(pMedium))
         {
             ErrCode nErr = xDoc->GetErrorCode();
@@ -556,7 +556,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
             DBG_ASSERT( pURLList->Count() == 1, "invalid URLList count" );
             String aURL = *(pURLList->GetObject(0));
             pMedium = new SfxMedium(
-                    aURL, SFX_STREAM_READONLY, FALSE, TRUE,
+                    aURL, SFX_STREAM_READONLY, FALSE,
                     GetFilterMatcher().GetFilter( aFilter ), pSet );
 
             LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
