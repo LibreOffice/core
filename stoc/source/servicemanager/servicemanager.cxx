@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-13 15:10:21 $
+ *  last change: $Author: dbo $ $Date: 2002-04-29 11:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -863,11 +863,9 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
     OUString const & rServiceSpecifier, Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
-    Reference< XInterface > xRet;
-
     Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
     Reference< XInterface > const * p = factories.getConstArray();
-    for ( sal_Int32 nPos = factories.getLength(); nPos--; )
+    for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
     {
         try
         {
@@ -877,7 +875,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                 Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
                 if (xFac.is())
                 {
-                    xRet = xFac->createInstanceWithContext( xContext );
+                    return xFac->createInstanceWithContext( xContext );
                 }
                 else
                 {
@@ -888,7 +886,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                        xRet = xFac->createInstance();
+                        return xFac->createInstance();
                     }
                 }
             }
@@ -902,7 +900,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         }
     }
 
-    return xRet;
+    return Reference< XInterface >();
 }
 // XMultiComponentFactory
 Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
@@ -911,11 +909,9 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
     Reference< XComponentContext > const & xContext )
     throw (Exception, RuntimeException)
 {
-    Reference< XInterface > xRet;
-
     Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
     Reference< XInterface > const * p = factories.getConstArray();
-    for ( sal_Int32 nPos = factories.getLength(); nPos--; )
+    for ( sal_Int32 nPos = 0; nPos < factories.getLength(); ++nPos )
     {
         try
         {
@@ -926,7 +922,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                 if (xFac.is())
 
                 {
-                    xRet = xFac->createInstanceWithArgumentsAndContext( rArguments, xContext );
+                    return xFac->createInstanceWithArgumentsAndContext( rArguments, xContext );
                 }
                 else
                 {
@@ -937,7 +933,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                         OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
                         OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                        xRet = xFac->createInstanceWithArguments( rArguments );
+                        return xFac->createInstanceWithArguments( rArguments );
                     }
                 }
             }
@@ -951,7 +947,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         }
     }
 
-    return xRet;
+    return Reference< XInterface >();
 }
 
 // XMultiServiceFactory, XMultiComponentFactory, XContentEnumeration
