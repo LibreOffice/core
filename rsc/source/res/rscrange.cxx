@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:53:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,12 @@
 // Solar Definitionen
 #include <tools/solar.h>
 
-// Programmabh„ngige Includes.
+// Programmabhï¿½ngige Includes.
 #ifndef _RSCRANGE_HXX
 #include <rscrange.hxx>
 #endif
 
 /****************** D E F I N E S ****************************************/
-#define USHORTBITS  (sizeof( USHORT ) * 8)
 /****************** C O D E **********************************************/
 /****************** R s c R a n g e **************************************/
 /*************************************************************************
@@ -86,7 +85,7 @@
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-RscRange::RscRange( HASHID nId, USHORT nTypeId )
+RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
 {
     nMin = nMax = 0;
@@ -168,7 +167,7 @@ ERRTYPE RscRange::SetNumber( const RSCINST & rInst, INT32 nValue )
 {
     if( nMax < nValue || nMin > nValue )
         return( ERR_RSCRANGE_OUTDEFSET );
-    ((RscRangeInst *)rInst.pData)->nValue = (USHORT)( nValue - nMin );
+    ((RscRangeInst *)rInst.pData)->nValue = (sal_uInt16)( nValue - nMin );
     ((RscRangeInst *)rInst.pData)->bDflt = FALSE;
     return( ERR_OK );
 }
@@ -206,7 +205,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     {
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA)
-                      RscMem::Malloc( sizeof( RscRangeInst ) );
+                      rtl_allocateMemory( sizeof( RscRangeInst ) );
     }
     else
         aInst = *pInst;
@@ -218,7 +217,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     else
     {
         if( 0L >= nMin && 0L <= nMax )
-            ((RscRangeInst *)aInst.pData)->nValue = (USHORT)(0L - nMin);
+            ((RscRangeInst *)aInst.pData)->nValue = (sal_uInt16)(0L - nMin);
         else
             ((RscRangeInst *)aInst.pData)->nValue = 0;
         ((RscRangeInst *)aInst.pData)->bDflt = TRUE;
@@ -237,7 +236,7 @@ RSCINST RscRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 *************************************************************************/
 void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                         RscTypCont *, USHORT, const char * )
+                         RscTypCont *, sal_uInt32, const char * )
 {
     fprintf( fOutput, "%ld", ((RscRangeInst *)rInst.pData)->nValue + nMin );
 }
@@ -252,18 +251,18 @@ void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                           RscTypCont *, USHORT, BOOL )
+                           RscTypCont *, sal_uInt32, BOOL )
 {
     if( nMin >= 0 )
     {
-        USHORT n;
-        n = (USHORT)(((RscRangeInst *)rInst.pData)->nValue + nMin);
+        sal_uInt16 n;
+        n = (sal_uInt16)(((RscRangeInst *)rInst.pData)->nValue + nMin);
         aMem.Put( n );
     }
     else
     {
-        short n;
-        n = (short)(((RscRangeInst *)rInst.pData)->nValue + nMin);
+        sal_Int16 n;
+        n = (sal_Int16)(((RscRangeInst *)rInst.pData)->nValue + nMin);
         aMem.Put( n );
     }
 
@@ -280,10 +279,10 @@ void RscRange::WriteRcAccess
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
     if( nMin >= 0 )
-        fprintf( fOutput, "*(USHORT *)(pResData+nOffset) );\n", pName );
+        fprintf( fOutput, "*(sal_uInt32 *)(pResData+nOffset) );\n", pName );
     else
-        fprintf( fOutput, "*(short *)(pResData+nOffset) );\n", pName );
-    fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
+        fprintf( fOutput, "*(sal_Int32 *)(pResData+nOffset) );\n", pName );
+    fprintf( fOutput, "\t\tnOffset += sizeof( sal_uInt32 );\n" );
 }
 
 /****************** R s c L o n g R a n g e ******************************/
@@ -296,7 +295,7 @@ void RscRange::WriteRcAccess
 |*    Letzte Aenderung  MM 18.07.94
 |*
 *************************************************************************/
-RscLongRange::RscLongRange( HASHID nId, USHORT nTypeId )
+RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
                         : RscTop( nId, nTypeId )
 {
     nMin = nMax = 0;
@@ -414,7 +413,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
     {
         aInst.pClass = this;
         aInst.pData = (CLASS_DATA)
-                      RscMem::Malloc( sizeof( RscLongRangeInst ) );
+                      rtl_allocateMemory( sizeof( RscLongRangeInst ) );
     }
     else
         aInst = *pInst;
@@ -448,7 +447,7 @@ RSCINST RscLongRange::Create( RSCINST * pInst, const RSCINST & rDflt,
 |*
 *************************************************************************/
 void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                         RscTypCont *, USHORT, const char * )
+                         RscTypCont *, sal_uInt32, const char * )
 {
     INT32 lVal;
     GetNumber( rInst, &lVal );
@@ -465,7 +464,7 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                               RscTypCont *, USHORT, BOOL )
+                               RscTypCont *, sal_uInt32, BOOL )
 {
     INT32 lVal;
 
@@ -494,7 +493,7 @@ void RscLongRange::WriteRcAccess
 |*
 |*    Beschreibung
 *************************************************************************/
-RscLongEnumRange::RscLongEnumRange( HASHID nId, USHORT nTypeId )
+RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
                         : RscLongRange( nId, nTypeId )
 {
 }
@@ -504,7 +503,7 @@ RscLongEnumRange::RscLongEnumRange( HASHID nId, USHORT nTypeId )
 |*
 |*    Beschreibung
 *************************************************************************/
-ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, HASHID nConst,
+ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom nConst,
                                     INT32 nValue )
 {
     return SetNumber( rInst, nValue );
@@ -520,12 +519,11 @@ ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, HASHID nConst,
 |*    Letzte Aenderung  MM 03.04.91
 |*
 *************************************************************************/
-RscIdRange::RscIdRange( HASHID nId, USHORT nTypeId, BOOL bRcL )
+RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
             : RscTop( nId, nTypeId )
 {
     nSize = ALIGNED_SIZE( sizeof( RscId ) );
     nMin = nMax = 0;
-    bRcLong = bRcL;
 }
 
 /*************************************************************************
@@ -557,7 +555,7 @@ RSCINST RscIdRange::Create( RSCINST * pInst, const RSCINST & rDflt, BOOL bOwnCla
 
     if( !pInst ){
         aInst.pClass = this;
-        aInst.pData = (CLASS_DATA)RscMem::Malloc( sizeof( RscId ) );
+        aInst.pData = (CLASS_DATA)rtl_allocateMemory( sizeof( RscId ) );
     }
     else
         aInst = *pInst;
@@ -704,7 +702,7 @@ ERRTYPE RscIdRange::GetRef( const RSCINST & rInst, RscId * pRscId ){
 |*
 *************************************************************************/
 void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                           RscTypCont *, USHORT, const char * )
+                           RscTypCont *, sal_uInt32, const char * )
 {
     fprintf( fOutput, "%s", ((RscId *)rInst.pData)->GetName().GetBuffer() );
 }
@@ -719,15 +717,11 @@ void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*
 *************************************************************************/
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont *, USHORT, BOOL )
+                             RscTypCont *, sal_uInt32, BOOL )
 {
     INT32 lVal = ((RscId*)rInst.pData)->GetNumber();
 
-    if( bRcLong )
-        //wenn long geschrieben werden soll
-        aMem.Put( (INT32)lVal );
-    else
-        aMem.Put( (USHORT)lVal );
+    aMem.Put( (INT32)lVal );
 
     return( ERR_OK );
 }
@@ -741,16 +735,8 @@ void RscIdRange::WriteRcAccess
 )
 {
     fprintf( fOutput, "\t\tSet%s( ", pName );
-    if( bRcLong )
-    {
-        fprintf( fOutput, "GetLong( pResData+nOffset ) );\n", pName );
-        fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
-    }
-    else
-    {
-        fprintf( fOutput, "*(USHORT *)(pResData+nOffset) );\n", pName );
-        fprintf( fOutput, "\t\tnOffset += sizeof( short );\n" );
-    }
+    fprintf( fOutput, "GetLong( pResData+nOffset ) );\n", pName );
+    fprintf( fOutput, "\t\tnOffset += sizeof( INT32 );\n" );
 }
 
 /*************************************************************************
@@ -785,7 +771,7 @@ BOOL RscIdRange::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 |*    Letzte Aenderung  MM 29.04.91
 |*
 *************************************************************************/
-RscBool::RscBool( HASHID nId, USHORT nTypeId )
+RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
         : RscRange( nId, nTypeId )
 {
     RscRange::SetRange( 0, 1 );
@@ -815,7 +801,7 @@ RSCCLASS_TYPE  RscBool::GetClassType() const
 |*
 *************************************************************************/
 void RscBool::WriteSrc( const RSCINST & rInst, FILE * fOutput,
-                        RscTypCont *, USHORT, const char * )
+                        RscTypCont *, sal_uInt32, const char * )
 {
     INT32 l;
 
@@ -849,7 +835,7 @@ void RscBool::WriteRcAccess
 |*    Letzte Aenderung  MM 24.06.91
 |*
 *************************************************************************/
-RscBreakRange :: RscBreakRange( HASHID nId, USHORT nTypeId )
+RscBreakRange :: RscBreakRange( Atom nId, sal_uInt32 nTypeId )
                         : RscRange( nId, nTypeId )
 {
     nOutRange = 0xFFFFFFFF;
