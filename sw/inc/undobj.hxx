@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:30:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:38:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
 #endif
+#include <svx/svdundo.hxx> // #111827#
 
 class SwUndoIter;
 class SwHistory;
@@ -1170,8 +1171,15 @@ public:
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
 {
+    // -> #i30295#
+    mutable const SdrObject * pSdrObjLast;
+    mutable SdrObject * pSdrObjCopy;
+    mutable SdrUndoNewObj * pSdrUndo;
+    // <- #i30295#
+
 public:
     SwUndoInsLayFmt( SwFrmFmt* pFormat );
+    ~SwUndoInsLayFmt();
 
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
