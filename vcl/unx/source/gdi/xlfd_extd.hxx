@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,7 @@ class ExtendedXlfd {
                                        rtl_TextEncoding nEncoding  ) const;
 
         virtual void        ToImplFontData( ImplFontData *pFontData ) const ;
-        virtual FontType    GetFontType() const
-                                    { return TYPE_DONTKNOW; }
+        virtual FontType    GetFontType() const { return TYPE_DONTKNOW; }
         FontFamily          GetFamily() const;
         FontWeight          GetWeight() const;
         FontItalic          GetItalic() const;
@@ -124,6 +123,8 @@ class ExtendedXlfd {
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
         rtl_TextEncoding    GetEncoding() const;
         rtl_TextEncoding    GetEncoding( int i ) const;
+
+        int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
         #ifdef DEBUG
         void                Dump() const;
