@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: armin $ $Date: 2001-06-07 09:54:40 $
+#   last change: $Author: armin $ $Date: 2001-06-07 09:57:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -284,8 +284,10 @@ E2P=
 CAP=
 cap=
 
+# avoid confusion with CUE PROFILE variable...
+PROFILE=
+
 # can be set on the command line. we shouldn't delete them!
-#PROFILE=
 #profile=
 #REMOTE=
 #remote=
@@ -358,10 +360,6 @@ GROUP*=$(group)
 
 .IF "$(NODEBUG)"!=""
 nodebug=$(NODEBUG)
-.ENDIF
-
-.IF "$(PROFILE)"!=""
-profile=$(PROFILE)
 .ENDIF
 
 .IF "$(hbtoolkit)"!=""
