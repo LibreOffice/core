@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleRelationAdapter.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:32 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:12:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 package org.openoffice.java.accessibility;
 
 import javax.accessibility.Accessible;
-import drafts.com.sun.star.accessibility.AccessibleRelation;
-import drafts.com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.AccessibleRelation;
+import com.sun.star.accessibility.XAccessible;
 
 /**
  */
@@ -72,15 +72,15 @@ public abstract class AccessibleRelationTypeMap {
     final static String[] data = {
         null,
         javax.accessibility.AccessibleRelation.CONTROLLED_BY,
-        javax.accessibility.AccessibleRelation.CONTROLLED_BY_PROPERTY,
+        javax.accessibility.AccessibleRelation.CONTROLLED_BY,
         javax.accessibility.AccessibleRelation.CONTROLLER_FOR,
-        javax.accessibility.AccessibleRelation.CONTROLLER_FOR_PROPERTY,
+        javax.accessibility.AccessibleRelation.CONTROLLER_FOR,
         javax.accessibility.AccessibleRelation.LABEL_FOR,
-        javax.accessibility.AccessibleRelation.LABEL_FOR_PROPERTY,
+        javax.accessibility.AccessibleRelation.LABEL_FOR,
         javax.accessibility.AccessibleRelation.LABELED_BY,
-        javax.accessibility.AccessibleRelation.LABELED_BY_PROPERTY,
+        javax.accessibility.AccessibleRelation.LABELED_BY,
         javax.accessibility.AccessibleRelation.MEMBER_OF,
-        javax.accessibility.AccessibleRelation.MEMBER_OF_PROPERTY
+        javax.accessibility.AccessibleRelation.MEMBER_OF
     };
 
     public static void fillAccessibleRelationSet(javax.accessibility.AccessibleRelationSet s, AccessibleRelation[] relations) {
