@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:42:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2416,8 +2416,9 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     {
         // do we have a connection in the hierarchy than take that connection
         // this overwrites all the other connnections
-        Reference< XConnection> xConnection = ::dbtools::getActiveConnectionFromParent(Parent);
-        if ( m_bInContext = xConnection.is() )
+        Reference< XConnection> xConnection;
+        m_bInContext = ::dbtools::isEmbeddedInDatabase( Parent, xConnection );
+        if ( m_bInContext )
         {
             Reference<XChild> xChild(xConnection,UNO_QUERY);
             if ( xChild.is() )
