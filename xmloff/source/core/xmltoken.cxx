@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.81 $
+*  $Revision: 1.82 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-26 19:30:53 $
+*  last change: $Author: hr $ $Date: 2004-11-26 21:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,35 +117,35 @@ namespace xmloff { namespace token {
 
         // namespace prefixes and names
         TOKEN( "office",                XML_NP_OFFICE ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:office:1.0",      XML_N_OFFICE ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:office:1.0",      XML_N_OFFICE ),
         TOKEN( "http://sun.com/xmlns/staroffice/office",      XML_N_OFFICE_OLD ),
         TOKEN( "meta",                  XML_NP_META ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:meta:1.0",      XML_N_META ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:meta:1.0",      XML_N_META ),
         TOKEN( "http://sun.com/xmlns/staroffice/meta",      XML_N_META_OLD ),
         TOKEN( "style",                 XML_NP_STYLE ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:style:1.0",      XML_N_STYLE ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:style:1.0",      XML_N_STYLE ),
         TOKEN( "http://sun.com/xmlns/staroffice/style",      XML_N_STYLE_OLD ),
         TOKEN( "number",                XML_NP_NUMBER ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:datastyle:1.0",      XML_N_NUMBER ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0",      XML_N_NUMBER ),
         TOKEN( "http://sun.com/xmlns/staroffice/number",      XML_N_NUMBER_OLD ),
         TOKEN( "text",                  XML_NP_TEXT ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:text:1.0",      XML_N_TEXT ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:text:1.0",      XML_N_TEXT ),
         TOKEN( "http://sun.com/xmlns/staroffice/text",      XML_N_TEXT_OLD ),
         TOKEN( "table",                 XML_NP_TABLE ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:table:1.0",      XML_N_TABLE ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:table:1.0",      XML_N_TABLE ),
         TOKEN( "http://sun.com/xmlns/staroffice/table",      XML_N_TABLE_OLD ),
         TOKEN( "draw",                  XML_NP_DRAW ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:drawing:1.0",      XML_N_DRAW ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",      XML_N_DRAW ),
         TOKEN( "dr3d",                  XML_NP_DR3D ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:dr3d:1.0",      XML_N_DR3D ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0",      XML_N_DR3D ),
         TOKEN( "http://sun.com/xmlns/staroffice/draw",      XML_N_DRAW_OLD ),
         TOKEN( "presentation",             XML_NP_PRESENTATION ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:presentation:1.0",      XML_N_PRESENTATION ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0",      XML_N_PRESENTATION ),
         TOKEN( "http://sun.com/xmlns/staroffice/presentation",      XML_N_PRESENTATION_OLD ),
         TOKEN( "chart",                     XML_NP_CHART ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:chart:1.0",      XML_N_CHART ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:chart:1.0",      XML_N_CHART ),
         TOKEN( "config",                    XML_NP_CONFIG ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:config:1.0",      XML_N_CONFIG ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:config:1.0",      XML_N_CONFIG ),
         TOKEN( "http://sun.com/xmlns/staroffice/chart",      XML_N_CHART_OLD ),
         TOKEN( "fo",                        XML_NP_FO ),
         TOKEN( "http://www.w3.org/1999/XSL/Format/",      XML_N_FO_OLD ),
@@ -158,9 +158,9 @@ namespace xmloff { namespace token {
         TOKEN( "svg",                       XML_NP_SVG ),
         TOKEN( "http://www.w3.org/2000/svg",      XML_N_SVG ),
         TOKEN( "form",                      XML_NP_FORM ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:form:1.0",      XML_N_FORM ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:form:1.0",      XML_N_FORM ),
         TOKEN( "script",                    XML_NP_SCRIPT ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:script:1.0",      XML_N_SCRIPT ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:script:1.0",      XML_N_SCRIPT ),
         TOKEN( "xforms",                                    XML_NP_XFORMS_1_0 ),
         TOKEN( "http://www.w3.org/2002/xforms",             XML_N_XFORMS_1_0 ),
         TOKEN( "xsd",                                       XML_NP_XSD ),
@@ -2511,7 +2511,7 @@ namespace xmloff { namespace token {
         TOKEN( "interpolation",                XML_INTERPOLATION ),
         TOKEN( "cubic-spline",                 XML_CUBIC_SPLINE ),
         TOKEN( "b-spline",                     XML_B_SPLINE ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:database:1.0",     XML_N_DB_OASIS ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:database:1.0",     XML_N_DB_OASIS ),
 
         TOKEN( "show-filter-button",                   XML_SHOW_FILTER_BUTTON ),
         TOKEN( "drill-down-on-double-click",           XML_DRILL_DOWN_ON_DOUBLE_CLICK ),
@@ -2646,7 +2646,7 @@ namespace xmloff { namespace token {
         TOKEN( "http://www.w3.org/2001/SMIL20", XML_N_SMIL ),
 
         TOKEN( "anim",                      XML_NP_ANIMATION ),
-        TOKEN( "urn:oasis:names:tc:openoffice:xmlns:animation:1.0",  XML_N_ANIMATION ),
+        TOKEN( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0",  XML_N_ANIMATION ),
 
         TOKEN( "par",                           XML_PAR ),
         TOKEN( "seq",                           XML_SEQ ),
@@ -2858,6 +2858,10 @@ namespace xmloff { namespace token {
         TOKEN( "stop-audio",            XML_STOP_AUDIO ),
 
         TOKEN( "audio-level",           XML_AUDIO_LEVEL ),
+
+        TOKEN( "urn:oasis:names:tc",    XML_URN_OASIS_NAMES_TC ),
+        TOKEN( "opendocument",          XML_OPENDOCUMENT),
+        TOKEN( "1.0", XML_1_0 ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
