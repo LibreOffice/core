@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:09:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 17:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
  *************************************************************************/
 
 #include <stdio.h>
-
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
@@ -393,7 +395,34 @@ void ContentProvider::init()
                                  setupextension );
     rtl::OUString vendorshort = vendorname;
 
+
+    bool found = false;
+    xHierAccess = getHierAccess( sProvider,
+                                 "org.openoffice.Office.Common" );
+    rtl::OUString imageZip(getKey(xHierAccess,"Path/Current/UserConfig"));
+    subst(imageZip);
+    if(imageZip.getLength()) {
+        // test existence
+        if(1+imageZip.lastIndexOf('/') == imageZip.getLength())
+            imageZip += rtl::OUString::createFromAscii("images.zip");
+        else
+            imageZip += rtl::OUString::createFromAscii("/images.zip");
+        osl::DirectoryItem aDirItem;
+        if(osl::DirectoryItem::get(imageZip,aDirItem) == osl::FileBase::E_None)
+            found = true;
+    }
+
+    if(!found) {
+        imageZip = getKey(xHierAccess,"Path/Current/Config");
+        subst(imageZip);
+        if(1+imageZip.lastIndexOf('/') == imageZip.getLength())
+            imageZip += rtl::OUString::createFromAscii("images.zip");
+        else
+            imageZip += rtl::OUString::createFromAscii("/images.zip");
+    }
+
     m_pDatabases = new Databases( instPath,
+                                  imageZip,
                                   productname,
                                   productversion,
                                   vendorname,
