@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:14:02 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,6 +290,56 @@ void SwNumFmt::NotifyGraphicArrived()
     if( GetCharFmt() )
         UpdateNumNodes( (SwDoc*)GetCharFmt()->GetDoc() );
 }
+
+// #i22362#
+BOOL SwNumFmt::IsEnumeration() const
+{
+    BOOL bResult;
+
+    switch(GetNumberingType())
+    {
+    case SVX_NUM_CHARS_UPPER_LETTER:
+    case SVX_NUM_CHARS_LOWER_LETTER:
+    case SVX_NUM_ROMAN_UPPER:
+    case SVX_NUM_ROMAN_LOWER:
+    case SVX_NUM_ARABIC:
+    case SVX_NUM_PAGEDESC:
+    case SVX_NUM_CHARS_UPPER_LETTER_N:
+    case SVX_NUM_CHARS_LOWER_LETTER_N:
+        bResult = TRUE;
+
+        break;
+
+    default:
+        bResult = FALSE;
+    }
+
+    return bResult;
+
+}
+
+// #i29560#
+BOOL SwNumFmt::IsItemize() const
+{
+    BOOL bResult;
+
+    switch(GetNumberingType())
+    {
+    case SVX_NUM_CHAR_SPECIAL:
+    case SVX_NUM_BITMAP:
+        bResult = TRUE;
+
+        break;
+
+    default:
+        bResult = FALSE;
+    }
+
+    return bResult;
+
+}
+
+
 /* -----------------------------23.02.01 09:28--------------------------------
 
  ---------------------------------------------------------------------------*/
