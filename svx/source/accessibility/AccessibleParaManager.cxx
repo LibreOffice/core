@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleParaManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 17:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ namespace accessibility
                                            const uno::Any& rOldValue ) const
     {
         DBG_ASSERT( maChildren.size() > nStartPara &&
-                    maChildren.size() > nEndPara , "AccessibleParaManager::FireEvent: invalid index" );
+                    maChildren.size() >= nEndPara , "AccessibleParaManager::FireEvent: invalid index" );
 
         VectorOfChildren::const_iterator front = maChildren.begin();
         VectorOfChildren::const_iterator back = front;
@@ -283,7 +283,7 @@ namespace accessibility
     void AccessibleParaManager::Release( sal_uInt32 nStartPara, sal_uInt32 nEndPara )
     {
         DBG_ASSERT( maChildren.size() > nStartPara &&
-                    maChildren.size() > nEndPara, "AccessibleParaManager::Release: invalid index" );
+                    maChildren.size() >= nEndPara, "AccessibleParaManager::Release: invalid index" );
 
         VectorOfChildren::iterator front = maChildren.begin();
         VectorOfChildren::iterator back = front;

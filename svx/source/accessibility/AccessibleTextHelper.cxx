@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2002-05-29 16:09:56 $
+ *  last change: $Author: thb $ $Date: 2002-05-29 17:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,9 @@ namespace accessibility
         void ShutdownEditSource() throw (uno::RuntimeException);
 
         void SetChildrenState( const sal_Int16 nStateId );
+        void SetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId );
         void UnSetChildrenState( const sal_Int16 nStateId );
+        void UnSetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId );
 
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -502,20 +504,26 @@ namespace accessibility
             // notify all affected paragraphs (TODO: may be suboptimal,
             // since some paragraphs might stay selected)
 
+            UnSetChildrenState( maLastSelection.nStartPara,
+                                maLastSelection.nEndPara,
+                                AccessibleStateType::SELECTED);
             maParaManager.FireEvent( maLastSelection.nStartPara,
                                      maLastSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 
             maParaManager.FireEvent( maLastSelection.nEndPara,
-                                     maLastSelection.nEndPara,
+                                     maLastSelection.nEndPara+1,
                                      AccessibleEventId::ACCESSIBLE_CARET_EVENT );
 
+            SetChildrenState( rSelection.nStartPara,
+                              rSelection.nEndPara,
+                              AccessibleStateType::SELECTED);
             maParaManager.FireEvent( rSelection.nStartPara,
                                      rSelection.nEndPara,
                                      AccessibleEventId::ACCESSIBLE_SELECTION_EVENT );
 
             maParaManager.FireEvent( rSelection.nEndPara,
-                                     rSelection.nEndPara,
+                                     rSelection.nEndPara+1,
                                      AccessibleEventId::ACCESSIBLE_CARET_EVENT );
 
             maLastSelection = rSelection;
@@ -730,10 +738,36 @@ namespace accessibility
     }
 #endif
 
+    void AccessibleTextHelper_Impl::SetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId )
+    {
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+
+        ::std::advance( begin, nStartPara );
+        ::std::advance( end, nEndPara );
+
+        ::std::for_each( begin, end,
+                         AccessibleParaManager::MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::SetState,
+                                                                                  nStateId ) );
+    }
+
     void AccessibleTextHelper_Impl::SetChildrenState( const sal_Int16 nStateId )
     {
         ::std::for_each( maParaManager.begin(), maParaManager.end(),
                          AccessibleParaManager::MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::SetState,
+                                                                                  nStateId ) );
+    }
+
+    void AccessibleTextHelper_Impl::UnSetChildrenState( sal_Int32 nStartPara, sal_Int32 nEndPara, const sal_Int16 nStateId )
+    {
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
+        ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
+
+        ::std::advance( begin, nStartPara );
+        ::std::advance( end, nEndPara );
+
+        ::std::for_each( begin, end,
+                         AccessibleParaManager::MemFunAdapter< const sal_Int16 >( &AccessibleEditableTextPara::UnSetState,
                                                                                   nStateId ) );
     }
 
@@ -994,13 +1028,7 @@ namespace accessibility
                         // find the one selected
                         ESelection aSelection;
                         if( GetEditViewForwarder().GetSelection( aSelection ) )
-                        {
-                            AccessibleParaManager::WeakPara::HardRefType aChild( maParaManager.GetChild(aSelection.nEndPara).first.get() );
-                            if( maParaManager.IsReferencable(aSelection.nEndPara) )
-                            {
-                                aChild->SetState( AccessibleStateType::SELECTED );
-                            }
-                        }
+                            UpdateSelection( aSelection );
                         break;
                     }
 
@@ -1009,6 +1037,7 @@ namespace accessibility
                         UnSetChildrenState( AccessibleStateType::EDITABLE );
                         UnSetChildrenState( AccessibleStateType::ACTIVE );
                         UnSetChildrenState( AccessibleStateType::SELECTED );
+                        maLastSelection = ESelection();
                         break;
                 }
             }
