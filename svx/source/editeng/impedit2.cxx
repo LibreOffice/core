@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 13:03:53 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3299,7 +3299,7 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
         while ( nTmpPortion <= pLine->GetEndPortion() )
         {
             TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( pNextTextPortion->GetRightToLeft() )
+            if ( pNextTextPortion->GetRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
                 nX += pNextTextPortion->GetSize().Width();
             else
                 break;
@@ -3311,7 +3311,7 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
         {
             --nTmpPortion;
             TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( pPrevTextPortion->GetRightToLeft() )
+            if ( pPrevTextPortion->GetRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
                 nX -= pPrevTextPortion->GetSize().Width();
             else
                 break;
@@ -3324,7 +3324,7 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
         while ( nTmpPortion <= pLine->GetEndPortion() )
         {
             TextPortion* pNextTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( !pNextTextPortion->IsRightToLeft() )
+            if ( !pNextTextPortion->IsRightToLeft() && ( pNextTextPortion->GetKind() != PORTIONKIND_TAB ) )
                 nX += pNextTextPortion->GetSize().Width();
             else
                 break;
@@ -3336,7 +3336,7 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
         {
             --nTmpPortion;
             TextPortion* pPrevTextPortion = pParaPortion->GetTextPortions().GetObject( nTmpPortion );
-            if ( !pPrevTextPortion->IsRightToLeft() )
+            if ( !pPrevTextPortion->IsRightToLeft() && ( pPrevTextPortion->GetKind() != PORTIONKIND_TAB ) )
                 nX -= pPrevTextPortion->GetSize().Width();
             else
                 break;

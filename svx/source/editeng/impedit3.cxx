@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-19 09:21:16 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 13:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,16 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         aCurrentTab.aTabStop = pNode->GetContentAttribs().FindTabStop( nCurPos - rLRItem.GetTxtLeft(), aEditDoc.GetDefTab() );
                         aCurrentTab.nTabPos = GetXValue( (long) ( aCurrentTab.aTabStop.GetTabPos() + rLRItem.GetTxtLeft() ) );
                         aCurrentTab.bValid = FALSE;
+
+                        // Switch direction in R2L para...
+                        if ( bRightToLeftPara )
+                        {
+                            if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
+                                aCurrentTab.aTabStop.GetAdjustment() = SVX_TAB_ADJUST_LEFT;
+                            else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_LEFT )
+                                aCurrentTab.aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
+                        }
+
                         if ( ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT ) ||
                              ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_CENTER ) ||
                              ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL ) )
@@ -1066,9 +1076,13 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 }
                 long nW;    // Length before tab position
                 if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_RIGHT )
+                {
                     nW = nWidthAfterTab;
+                }
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_CENTER )
+                {
                     nW = nWidthAfterTab/2;
+                }
                 else if ( aCurrentTab.aTabStop.GetAdjustment() == SVX_TAB_ADJUST_DECIMAL )
                 {
                     nW = nWidthAfterTab;
@@ -1081,6 +1095,10 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         nW += aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, nDecPos, NULL ).Width();
                         aCurrentTab.bValid = FALSE;
                     }
+                }
+                else
+                {
+                    DBG_ERROR( "CreateLines: Tab not handled!" );
                 }
                 long nMaxW = aCurrentTab.nTabPos - aCurrentTab.nStartPosX - nStartX;
                 if ( nW >= nMaxW )
