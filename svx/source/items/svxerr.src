@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:09:44 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
         Text[ chinese_simplified ] = "ÄúËùÉè¶¨µÄÓïÑÔÃ»ÓĞÏàÓ¦µÄ´Êµä¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒª£¬ÇëÄú°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
         Text[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß, åêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
-        Text[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ µ¿ÀÇ¾î »çÀüÀ» ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ÇÑ °ÍÀ» °ËÅäÇÏ°í ÇÊ¿äÇÏ¸é ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+        Text[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ ´ëÇÑ µ¿ÀÇ¾î »çÀüÀ» ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ÇÑ °ÍÀ» °Ë»çÇÑ ´ÙÀ½ ÇÊ¿ä½Ã ¿ä±¸µÇ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Ayarlanan dile ilişkin eşanlamlılar mevcut değil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
         Text[ language_user1 ] = " ";
     };
@@ -371,7 +371,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden gelezen.";
         Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öË½ÈË´Êµä $(ARG1)¡£";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áíÜãíùóç ôïõ ğñïóùğéêïı ëåîéêïı $(ARG1).";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À» ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À»(¸¦) ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Özel sözlük $(ARG1) okunamıyor.";
         Text[ language_user1 ] = " ";
     };
@@ -399,7 +399,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden aangelegd.";
         Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Ë½ÈË´Êµä $(ARG1)¡£";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãçèåß ôï ğñïóùğéêü ëåîéêü $(ARG1).";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À» ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
+        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À»(¸¦) ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Özel sözlük $(ARG1) oluşturulamıyor.";
         Text[ language_user1 ] = " ";
     };
@@ -425,7 +425,7 @@ Resource RID_SVXERRCODE
         Text[ dutch ] = "Afbeelding $(ARG1) niet gevonden.";
         Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Í¼ĞÎ $(ARG1)¡£";
         Text[ greek ] = "Äåí âñİèçêå ôï ãñáöéêü $(ARG1).";
-        Text[ korean ] = "±×·¡ÇÈ$(ARG1)À» Ã£Áö ¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "±×·¡ÇÈ$(ARG1)À»(¸¦) Ã£Áö ¸øÇß½À´Ï´Ù.";
         Text[ turkish ] = "Grafik $(ARG1) bulunamadı.";
         Text[ language_user1 ] = " ";
     };
@@ -446,7 +446,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Nie mo¿na by³o za³adowaæ po³¹czonej grafiki";
         TEXT[ portuguese_brazilian ] = "An embedded graphic could not be read";
         TEXT[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢}‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ";
-        TEXT[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈÀº ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
+        TEXT[ korean ] = "¸µÅ©µÇÁö ¾ÊÀº ±×·¡ÇÈÀº ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
         TEXT[ chinese_simplified ] = "ÎŞ·¨×°ÈëÒ»¸öÉĞÎ´Á´½ÓµÄÍ¼ĞÎ";
         TEXT[ chinese_traditional ] = "µLªk¸ü¤J¤@­Ó©|¥¼³sµ²ªº¹Ï§Î";
         TEXT[ arabic ] = "ÊÚĞÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
@@ -469,7 +469,7 @@ Resource RID_SVXERRCODE
         TEXT[ polish ] = "Nie ustawiono jêzyka przy wybranym haœle.";
         TEXT[ portuguese_brazilian ] = "There's no language at the selected object.";
         TEXT[ japanese ] = "‘I‘ğ‚µ‚½‚à‚Ì‚ÉŠY“–‚·‚éŒ¾Œê‚ª‚ ‚è‚Ü‚¹‚ñB";
-        TEXT[ korean ] = "¼±ÅÃµÈ ¿ë¾î¿¡´Â ¾Æ¹« ¾ğ¾îµµ ¼³Á¤µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.";
+        TEXT[ korean ] = "¼±ÅÃµÈ ¿ë¾î¿¡´Â ¾î¶² ¾ğ¾îµµ ¼³Á¤µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.";
         TEXT[ chinese_simplified ] = "Ã»ÓĞÉè¶¨ÓïÑÔ¡£";
         TEXT[ chinese_traditional ] = "¨S¦³¿ï¾Ü¤@­Ó»y¨¥¡C";
         TEXT[ arabic ] = "áÇ ÊæÌÏ áÛÉ Úáì ÇáßÇÆä ÇáãõÍÏÏ.";
@@ -493,7 +493,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Warstwa formularza nie zosta³a za³adowana, poniewa¿ nie mo¿na by³o utworzyæ wymaganych serwisów IO (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "The form layer wasn't loaded as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
         Text[ japanese ] = "IO»°ËŞ½(stardiv.uno.io.*)‚ª²İ½Ä°Ù‚Å‚«‚È‚©‚Á‚½‚½‚ßAÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ¿¹½ÃÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ÀÎ½ºÅÏ½º»ı¼ºÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜ×°Èë±íµ¥·Ö²ãĞÅÏ¢";
         Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
@@ -516,7 +516,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Warstwa formularza nie zosta³a zapisana, poniewa¿ nie mo¿na by³o utworzyæ wymaganych serwisów IO (stardiv.uno.io.*)";
         Text[ portuguese_brazilian ] = "The form layer wasn't written as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
         Text[ japanese ] = "IO»°ËŞ½(stardiv.uno.io.*)‚ª²İ½Ä°Ù‚Å‚«‚È‚©‚Á‚½‚½‚ßAÌ«°Ñ‘w‚Í‘‚«‚±‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ¿¹½ÃÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ±â·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ÀÎ½ºÅÏ½º»ı¼ºÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ±â·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜĞ´Èë±íµ¥·Ö²ãĞÅÏ¢";
         Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¼g¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "áã íÊã ßÊÇÈÉ ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
@@ -585,7 +585,7 @@ Resource RID_SVXERRCODE
         Text[ polish ] = "Wyst¹pi³ b³¹d przy odczycie wypunktowania. Nie mo¿na by³o za³adowaæ wszystkich wypunktowañ.";
         Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
         Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ korean ] = "±Û¸Ó¸®Ç¥¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®Ç¥¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
+        Text[ korean ] = "±Û¸Ó¸®±âÈ£¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®±âÈ£¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÈëÈ«²¿Í¼±ê·ûºÅ¡£";
         Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸ü¤J©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
