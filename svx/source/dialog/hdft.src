@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:35:52 $
+ *  last change: $Author: os $ $Date: 2001-03-08 10:23:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ TabPage RID_SVXPAGE_HEADER
     Text [ dutch ] = "Koptekst" ;
     Text [ spanish ] = "Encabezamiento" ;
     Text [ english_us ] = "Header" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
@@ -342,7 +342,7 @@ TabPage RID_SVXPAGE_HEADER
     GroupBox GB_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 143 ) ;
+        Size = MAP_APPFONT ( 157 , 146 ) ;
         Text = "Kopfzeile" ;
         Text [ ENGLISH ] = "Header" ;
         Text [ norwegian ] = "Header" ;
@@ -375,7 +375,7 @@ TabPage RID_SVXPAGE_HEADER
     GroupBox GB_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 143 ) ;
+        Size = MAP_APPFONT ( 83 , 146 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
@@ -457,13 +457,11 @@ TabPage RID_SVXPAGE_FOOTER
     Text [ dutch ] = "Voettekst" ;
     Text [ spanish ] = "Pie de p·gina" ;
     Text [ english_us ] = "Footer" ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 145 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fuﬂzeile einschalten : ~Fuòzeile einschalten */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fuﬂzeile einschalten : ~Fuòzeile einschalten */
         Text = "~Fuﬂzeile einschalten" ;
         Text [ ENGLISH ] = "~Turn on Footer" ;
         Text [ norwegian ] = "~Footer, with distance" ;
@@ -722,7 +720,7 @@ TabPage RID_SVXPAGE_FOOTER
     GroupBox GB_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 157 , 143 ) ;
+        Size = MAP_APPFONT ( 157 , 146 ) ;
         Text = "Fuﬂzeile" ;
         Text [ ENGLISH ] = "Footer" ;
         Text [ norwegian ] = "Footer" ;
@@ -755,7 +753,7 @@ TabPage RID_SVXPAGE_FOOTER
     GroupBox GB_BSP
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
-        Size = MAP_APPFONT ( 83 , 143 ) ;
+        Size = MAP_APPFONT ( 83 , 146 ) ;
         Text = "Vorschau" ;
         Text [ ENGLISH ] = "Example" ;
         Text [ norwegian ] = "Eksempel" ;
