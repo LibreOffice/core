@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:46:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:23:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,14 +466,14 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
         Text [ spanish ] = "El área contiene los títulos de las ~columnas" ;
         Text [ english_us ] = "Range contains column la~bels" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡é¢˜(~H)";
+        Text[ chinese_simplified ] = "åŒºåŸŸå«æœ‰åˆ—æ ‡é¢˜(~B)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
         Text[ polish ] = "~Zakres zawiera nag³ówki kolumn";
-        Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~H)";
-        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰æ¬„æ¨™ç±¤(~H)";
+        Text[ japanese ] = "ç¯„å›²ã«åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~B)";
+        Text[ chinese_traditional ] = "ç¯„åœå«æœ‰æ¬„æ¨™ç±¤(~B)";
         Text[ arabic ] = "ÊÊÖãä ÇáãäØŞÉ ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ç ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~H)";
+        Text[ korean ] = "ì—´ ë ˆì´ë¸” í¬í•¨(~B)";
         Text[ turkish ] = "Kenarlar sütun etiketlerinden oluşuyor";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L'àrea conté ca~pçaleres de columnes";
@@ -1004,6 +1004,7 @@ TabDialog RID_SCDLG_SORT
     Text[ hindi ] = "à¤¸à¥‹à¤°à¥à¤Ÿ";
     Text[ slovak ] = "ZoradiÅ¥";
 };
+
 
 
 
