@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:00:46 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1189,6 +1189,18 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
             }
             if(xStatement.is() && sdb::CommandType::COMMAND == aDBData.nCommandType)
                 xResultSet = xStatement->executeQuery(aDBData.sCommand);
+            else
+            {
+                OUString aQuoteChar = xConnection->getMetaData()->getIdentifierQuoteString();
+                OUString sStatement(C2U("SELECT * FROM "));
+                sStatement = C2U("SELECT * FROM ");
+                sStatement += aQuoteChar;
+                sStatement += aDBData.sCommand;
+                sStatement += aQuoteChar;
+                xResultSet = xStatement->executeQuery( sStatement );
+
+            }
+
             xRow = Reference< sdbc::XRow >(xResultSet, UNO_QUERY);
         }
         catch(Exception& aExcept)
