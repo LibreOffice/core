@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:52:37 $
+ *  last change: $Author: hr $ $Date: 2002-05-28 13:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ DispatchProvider::DispatchProvider( const css::uno::Reference< css::lang::XMulti
 {
 }
 
-css::uno::WeakReference< css::mozilla::XPluginInstance > DispatchProvider::m_xPluginInterceptor=NULL;
+css::uno::WeakReference< css::mozilla::XPluginInstance > DispatchProvider::m_xPluginInterceptor=css::uno::WeakReference< css::mozilla::XPluginInstance >();
 
 //_________________________________________________________________________________________________________________
 
