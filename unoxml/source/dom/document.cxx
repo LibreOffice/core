@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: lo $ $Date: 2004-03-02 12:41:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 
 namespace DOM
 {
-    
+
 
     void CDocument::addnode(xmlNodePtr aNode)
     {
@@ -92,7 +92,7 @@ namespace DOM
     }
 
     CDocument::~CDocument()
-    {                
+    {
         Reference< XNode >* pRef;
         nodereflist_t::const_iterator r = m_aNodeRefList.begin();
         while (r!=m_aNodeRefList.end())
@@ -125,7 +125,7 @@ namespace DOM
     }
 
     CDocument::CDocument(xmlDocPtr aDocPtr)
-    {   
+    {
         m_aDocPtr = aDocPtr;
         m_aNodeType = NodeType_DOCUMENT_NODE;
         // init node base
@@ -175,7 +175,7 @@ namespace DOM
         // create the carrier node
         xmlNodePtr pNode = xmlNewDocNode(m_aDocPtr, NULL, (xmlChar*)"__private", NULL);
         xmlNsPtr pNs = xmlNewNs(pNode, xUri, xPrefix);
-        xmlAttrPtr pAttr = xmlNewNsProp(pNode, pNs, xName, NULL);        
+        xmlAttrPtr pAttr = xmlNewNsProp(pNode, pNs, xName, NULL);
         return Reference< XAttr >(static_cast< CAttr* >(CNode::get((xmlNodePtr)pAttr)));
     };
 
@@ -220,7 +220,7 @@ namespace DOM
     Reference< XElement > SAL_CALL CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
         throw (DOMException)
-    {        
+    {
         sal_Int32 i = qname.indexOf(':');
         if (ns.getLength() == 0) throw RuntimeException();
         xmlChar *xPrefix;
@@ -258,7 +258,7 @@ namespace DOM
         return Reference< XEntityReference >(static_cast< CEntityReference* >(CNode::get(aNodePtr)));
     }
 
-    // Creates a ProcessingInstruction node given the specified name and 
+    // Creates a ProcessingInstruction node given the specified name and
     // data strings.
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
@@ -316,7 +316,7 @@ namespace DOM
 
     static xmlNodePtr _search_element_by_id(const xmlNodePtr cur, const xmlChar* id)
     {
-        
+
         if (cur == NULL)
             return NULL;
         // look in current node
@@ -366,7 +366,7 @@ namespace DOM
     Reference< XNodeList > SAL_CALL CDocument::getElementsByTagNameNS(
             const OUString& namespaceURI, const OUString& localName)
         throw (RuntimeException)
-    {        
+    {
         return Reference< XNodeList >(
             new CElementList(static_cast< CElement* >(
             this->getDocumentElement().get()), namespaceURI, localName));
@@ -405,12 +405,13 @@ namespace DOM
         // only use uno interfaces to access is!!!
 
         // allready in doc?
-        if ( importedNode->getOwnerDocument() == 
+        if ( importedNode->getOwnerDocument() ==
             Reference< XDocument>(static_cast< CDocument* >(CNode::get((xmlNodePtr)m_aDocPtr))))
             return importedNode;
 
         Reference< XNode > aNode;
-        switch (importedNode->getNodeType())
+        NodeType aNodeType = importedNode->getNodeType();
+        switch (aNodeType)
         {
         case NodeType_ATTRIBUTE_NODE:
         {
@@ -444,7 +445,20 @@ namespace DOM
         case NodeType_ELEMENT_NODE:
         {
             Reference< XElement > element(importedNode, UNO_QUERY);
-            Reference< XElement > newElement(createElement(element->getTagName()));
+            OUString aNsUri = importedNode->getNamespaceURI();
+            OUString aNsPrefix = importedNode->getPrefix();
+            OUString aQName = element->getTagName();
+            Reference< XElement > newElement;
+            if (aNsUri.getLength() > 0)
+            {
+
+                if (aNsPrefix.getLength() > 0)
+                    aQName = aNsPrefix + OUString::createFromAscii(":") + aQName;
+                newElement = createElementNS(aNsUri, aQName);
+            }
+            else
+                newElement = createElement(aQName);
+
             // get attributes
             if (element->hasAttributes())
             {
@@ -453,7 +467,17 @@ namespace DOM
                 for (sal_Int32 i = 0; i < attribs->getLength(); i++)
                 {
                     curAttr = Reference< XAttr >(attribs->item(i), UNO_QUERY);
-                    newElement->setAttributeNS(curAttr->getNamespaceURI(), curAttr->getNodeName(), curAttr->getValue());
+                    OUString aAttrUri = curAttr->getNamespaceURI();
+                    OUString aAttrPrefix = curAttr->getPrefix();
+                    OUString aAttrName = curAttr->getName();
+                    if (aAttrUri.getLength() > 0)
+                    {
+                        if (aAttrPrefix.getLength() > 0)
+                            aAttrName = aAttrPrefix + OUString::createFromAscii(":") + aAttrName;
+                        newElement->setAttributeNS(aAttrUri, aAttrName, curAttr->getValue());
+                    }
+                    else
+                        newElement->setAttribute(aAttrName, curAttr->getValue());
                 }
             }
             aNode.set(newElement, UNO_QUERY);
@@ -495,19 +519,18 @@ namespace DOM
         {
             // get children and import them
             Reference< XNode > child = importedNode->getFirstChild();
-            if (child.is()) 
+            if (child.is())
             {
-                Reference< XNode > ic = _import_siblings(child, aNode, this);                
-                aNode->appendChild(ic);
+                _import_siblings(child, aNode, this);
             }
-        }        
+        }
 
         /* DOMNodeInsertedIntoDocument
-         * Fired when a node is being inserted into a document, 
-         * either through direct insertion of the Node or insertion of a 
-         * subtree in which it is contained. This event is dispatched after 
-         * the insertion has taken place. The target of this event is the node 
-         * being inserted. If the Node is being directly inserted the DOMNodeInserted 
+         * Fired when a node is being inserted into a document,
+         * either through direct insertion of the Node or insertion of a
+         * subtree in which it is contained. This event is dispatched after
+         * the insertion has taken place. The target of this event is the node
+         * being inserted. If the Node is being directly inserted the DOMNodeInserted
          * event will fire before the DOMNodeInsertedIntoDocument event.
          *   Bubbles: No
          *   Cancelable: No
@@ -515,12 +538,12 @@ namespace DOM
          */
         if (aNode.is())
         {
-            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY); 
+            Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
                 OUString::createFromAscii("DOMNodeInsertedIntoDocument")), UNO_QUERY);
             event->initMutationEvent(OUString::createFromAscii("DOMNodeInsertedIntoDocument")
                 , sal_True, sal_False, Reference< XNode >(),
-                OUString(), OUString(), OUString(), (AttrChangeType)0 );            
+                OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
         }
 
@@ -535,7 +558,7 @@ namespace DOM
         return OUString();
     }
 
-    Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)        
+    Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)
     {
         events::CEvent *pEvent = 0;
         if (
@@ -570,6 +593,6 @@ namespace DOM
             pEvent = new events::CEvent;
         }
         return Reference< XEvent >(pEvent);
-    } 
+    }
 
 }
