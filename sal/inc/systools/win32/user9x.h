@@ -2,9 +2,9 @@
  *
  *  $RCSfile: user9x.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-15 14:50:49 $
+ *  last change: $Author: tra $ $Date: 2001-08-06 08:37:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@ extern "C"{
 #undef InsertMenuItemW
 #endif
 
+#ifndef DrawTextW
+#undef DrawTextW
+#endif
+
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
@@ -179,6 +183,14 @@ USER9X_API BOOL ( WINAPI * lpfnInsertMenuItemW ) (
     LPCMENUITEMINFOW lpmii  // menu item information
 );
 
+USER9X_API int ( WINAPI * lpfnDrawTextW ) (
+  HDC hDC,          // handle to DC
+  LPCWSTR lpString, // text to draw
+  int nCount,       // text length
+  LPRECT lpRect,    // formatting dimensions
+  UINT uFormat      // text-drawing options
+);
+
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
 // all occurrences of this macros with our function pointer
@@ -193,6 +205,7 @@ USER9X_API BOOL ( WINAPI * lpfnInsertMenuItemW ) (
 #define SetWindowTextW              lpfnSetWindowTextW
 #define GetWindowTextW              lpfnGetWindowTextW
 #define InsertMenuItemW             lpfnInsertMenuItemW
+#define DrawTextW                   lpfnDrawTextW
 
 #ifdef __cplusplus
 }
