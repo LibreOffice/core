@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABNSInit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 10:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 
 #include <sal/types.h>
 
-sal_Bool MAB_NS_Init( void );
+sal_Bool MAB_NS_Init(sal_Bool& aProfileExists);
 
 sal_Bool MAB_NS_Term();
 
