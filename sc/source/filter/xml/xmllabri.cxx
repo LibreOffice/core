@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,6 @@
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
-
-//#include "document.hxx"
-//#include "docuno.hxx"
-//#include "attrib.hxx"
-//
-//#include <xmloff/xmltkmap.hxx>
-//#include <xmloff/xmlkywd.hxx>
-//#ifndef _XMLOFF_XMLUCONV_HXX
-//#include <xmloff/xmluconv.hxx>
-//#endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

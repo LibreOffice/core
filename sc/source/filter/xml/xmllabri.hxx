@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-24 12:25:49 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 13:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,18 +64,7 @@
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include <xmloff/xmlictxt.hxx>
 #endif
-//#ifndef _XMLOFF_XMLIMP_HXX
-//#include <xmloff/xmlimp.hxx>
-//#endif
-//
-//#ifndef _TOOLS_COLOR_HXX
-//#include <tools/color.hxx>
-//#endif
-//
-//#ifndef SC_RANGELST_HXX
-//#include "rangelst.hxx"
-//#endif
-//
+
 class ScXMLImport;
 
 
