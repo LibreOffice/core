@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,6 +1634,7 @@ SvXMLImportContext *XMLImpSpanContext_Impl::CreateChildContext(
     case XML_TOK_TEXT_OBJECT_OLE:
         bInsertTextFrame = sal_True;
         nTextFrameType = XML_TEXT_FRAME_OBJECT_OLE;
+        break;
     case XML_TOK_TEXT_OBJECT:
         bInsertTextFrame = sal_True;
         nTextFrameType = XML_TEXT_FRAME_OBJECT;

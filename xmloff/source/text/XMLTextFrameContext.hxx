@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-17 14:27:40 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef _XMLTEXTFRAMECONTEXT_HXX
 #define _XMLTEXTFRAMECONTEXT_HXX
 
+#ifndef __SGI_STL_MAP
+#include <map>
+#endif
+
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
@@ -84,6 +88,7 @@
 namespace com { namespace sun { namespace star {
     namespace text { class XTextCursor; class XTextContent; }
     namespace beans { class XPropertySet; }
+    namespace io { class XOutputStream; }
 } } }
 
 #define XML_TEXT_FRAME_TEXTBOX 1
@@ -106,6 +111,8 @@ class XMLTextFrameContext : public SvXMLImportContext
         ::com::sun::star::text::XTextCursor > xOldTextCursor;
     ::com::sun::star::uno::Reference <
         ::com::sun::star::beans::XPropertySet > xPropSet;
+    ::com::sun::star::uno::Reference <
+        ::com::sun::star::io::XOutputStream > xOLEStream;
 
     const ::rtl::OUString sWidth;
     const ::rtl::OUString sRelativeWidth;
@@ -140,6 +147,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     ::rtl::OUString sAppletName;
     ::rtl::OUString sDesc;
     ::rtl::OUString sFilterService;
+    ::rtl::OUString sBase64CharsLeft;
 
     ParamMap aParamMap;
 
@@ -160,6 +168,7 @@ class XMLTextFrameContext : public SvXMLImportContext
     sal_Bool    bMinHeight : 1;
     sal_Bool    bSyncWidth : 1;
     sal_Bool    bSyncHeight : 1;
+    sal_Bool    bCreateOLEStreamFailed : 1;
 
     void Create( sal_Bool bLinked );
 
@@ -177,6 +186,8 @@ public:
     virtual ~XMLTextFrameContext();
 
     virtual void EndElement();
+
+    virtual void Characters( const ::rtl::OUString& rChars );
 
     SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                 const ::rtl::OUString& rLocalName,

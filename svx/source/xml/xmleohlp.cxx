@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
  *  last change: $Author: mib $
  *
@@ -499,8 +499,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
             {
                 SvInfoObject* pTst = mpDocPersist->GetObjectList()->GetObject(i);
                 // TODO: unicode: is this correct?
-                if( rObjName.equalsIgnoreCase( pTst->GetObjName() ) ||
-                    rObjName.equalsIgnoreCase( pTst->GetStorageName() ) )
+                if( rObjName.equalsIgnoreAsciiCase( pTst->GetObjName() ) ||
+                    rObjName.equalsIgnoreAsciiCase( pTst->GetStorageName() ) )
                 {
                     rObjName = ImplGetUniqueName( xDocStor, "Obj" );
                     break;

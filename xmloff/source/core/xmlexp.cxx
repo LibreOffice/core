@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 14:07:36 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,12 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
 #endif
 
 #ifndef _XMLOFF_ATTRLIST_HXX
@@ -171,6 +177,9 @@
 #ifndef _XMLOFF_XMLIMAGEMAPEXPORT_HXX_
 #include "XMLImageMapExport.hxx"
 #endif
+#ifndef _XMLOFF_XMLBASE64EXPORT_HXX_
+#include "XMLBase64Export.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
@@ -192,6 +201,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
+using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
 sal_Char __READONLY_DATA sXML_1_0[] = "1.0";
@@ -1226,6 +1236,30 @@ OUString SvXMLExport::AddEmbeddedObject( const OUString& rEmbeddedObjectURL )
     }
 
     return sRet;
+}
+
+sal_Bool SvXMLExport::AddEmbeddedObjectAsBase64( const OUString& rEmbeddedObjectURL )
+{
+    sal_Bool bRet = sal_False;
+    if( 0 == rEmbeddedObjectURL.compareTo( sEmbeddedObjectProtocol,
+                sEmbeddedObjectProtocol.getLength() ) &&
+        xEmbeddedResolver.is() )
+    {
+        Reference < XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY );
+        if( xNA.is() )
+        {
+            Any aAny = xNA->getByName( rEmbeddedObjectURL );
+            Reference < XInputStream > xIn;
+            aAny >>= xIn;
+            if( xIn.is() )
+            {
+                XMLBase64Export aBase64Exp( *this );
+                bRet = aBase64Exp.exportXML( xIn );
+            }
+        }
+    }
+
+    return bRet;
 }
 
 ProgressBarHelper*  SvXMLExport::GetProgressBarHelper()

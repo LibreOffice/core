@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-17 14:27:40 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1504,8 +1504,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                                : TextContentAnchorType_AT_PAGE;
             pContext = new XMLTextFrameContext( rImport, nPrefix,
                                     rLocalName, xAttrList, eAnchorType,
-                                    bObjectOLE ? XML_TEXT_FRAME_OBJECT
-                                               : XML_TEXT_FRAME_OBJECT_OLE );
+                                    bObjectOLE ? XML_TEXT_FRAME_OBJECT_OLE
+                                               : XML_TEXT_FRAME_OBJECT );
             bContent = sal_False;
         }
         break;

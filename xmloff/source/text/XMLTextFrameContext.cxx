@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:17:14 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
 #endif
 #ifndef _XMLOFF_XMLIMP_HXX
 #include "xmlimp.hxx"
@@ -652,6 +655,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     bMinHeight = sal_False;
     bSyncWidth = sal_False;
     bSyncHeight = sal_False;
+    bCreateOLEStreamFailed = sal_False;
 
     UniReference < XMLTextImportHelper > xTxtImport =
         GetImport().GetTextImport();
@@ -843,7 +847,7 @@ XMLTextFrameContext::XMLTextFrameContext(
 
     if( (XML_TEXT_FRAME_APPLET  == nType || XML_TEXT_FRAME_PLUGIN == nType ||
          XML_TEXT_FRAME_GRAPHIC == nType || XML_TEXT_FRAME_OBJECT == nType ||
-         XML_TEXT_FRAME_OBJECT_OLE    == nType)
+         XML_TEXT_FRAME_OBJECT_OLE == nType)
         && !sHRef.getLength() )
         return; // no URL: no image or OLE object
 
@@ -856,6 +860,13 @@ XMLTextFrameContext::~XMLTextFrameContext()
 
 void XMLTextFrameContext::EndElement()
 {
+    if( XML_TEXT_FRAME_OBJECT_OLE == nType && !xPropSet.is() &&
+        xOLEStream.is() )
+    {
+        xOLEStream->closeOutput();
+        Create( sal_True );
+    }
+
     // alternative text
     if( sDesc.getLength() )
     {
@@ -981,6 +992,43 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     return pContext;
 }
 
+void XMLTextFrameContext::Characters( const OUString& rChars )
+{
+    if( XML_TEXT_FRAME_OBJECT_OLE == nType && !xPropSet.is() )
+    {
+        OUString sTrimmedChars( rChars. trim() );
+        if( sTrimmedChars.getLength() )
+        {
+            if( !xOLEStream.is() && !bCreateOLEStreamFailed )
+            {
+                sHRef = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Obj12345678" ) );
+                xOLEStream =
+                    GetImport().ResolveEmbeddedObjectURLFromBase64( sHRef );
+            }
+            if( xOLEStream.is() )
+            {
+                OUString sChars;
+                if( sBase64CharsLeft )
+                {
+                    sChars = sBase64CharsLeft;
+                    sChars += sTrimmedChars;
+                    sBase64CharsLeft = OUString();
+                }
+                else
+                {
+                    sChars = sTrimmedChars;
+                }
+                Sequence< sal_Int8 > aBuffer( (sChars.getLength() / 4) * 3 );
+                sal_Int32 nCharsDecoded =
+                    GetImport().GetMM100UnitConverter().
+                        decodeBase64SomeChars( aBuffer, sChars );
+                xOLEStream->writeBytes( aBuffer );
+                if( nCharsDecoded != sChars.getLength() )
+                    sBase64CharsLeft = sChars.copy( nCharsDecoded );
+            }
+        }
+    }
+}
 
 void XMLTextFrameContext::SetHyperlink( const OUString& rHRef,
                        const OUString& rName,

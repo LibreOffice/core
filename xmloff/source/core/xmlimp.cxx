@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-17 14:07:36 $
+ *  last change: $Author: mib $ $Date: 2001-05-18 13:46:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
@@ -132,6 +135,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::container;
 
 sal_Char __READONLY_DATA sXML_np__office[] = "_office";
 sal_Char __READONLY_DATA sXML_np__style[] = "_style";
@@ -842,6 +847,25 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     }
 
     return sRet;
+}
+
+Reference < XOutputStream > SvXMLImport::ResolveEmbeddedObjectURLFromBase64(
+                                    const ::rtl::OUString& rURL )
+{
+    Reference < XOutputStream > xOLEStream;
+
+    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) &&
+         xEmbeddedResolver.is() )
+    {
+        Reference< XNameAccess > xNA( xEmbeddedResolver, UNO_QUERY );
+        if( xNA.is() )
+        {
+            Any aAny = xNA->getByName( rURL );
+            aAny >>= xOLEStream;
+        }
+    }
+
+    return xOLEStream;
 }
 
 void SvXMLImport::SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps)
