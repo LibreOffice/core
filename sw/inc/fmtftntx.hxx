@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ class SwFmtFtnEndAtTxtEnd : public SfxEnumItem
 {
     String      sPrefix;
     String      sSuffix;
-    SwNumType   aFmt;
+    SvxNumberType aFmt;
     USHORT      nOffset;
 
 protected:
@@ -129,10 +129,10 @@ public:
 
     SwFmtFtnEndAtTxtEnd & operator=( const SwFmtFtnEndAtTxtEnd & rAttr );
 
-    SvxExtNumType GetNumType() const        { return aFmt.eType; }
-    void SetNumType( SvxExtNumType eType )  { aFmt.eType = eType; }
+    sal_Int16 GetNumType() const        { return aFmt.GetNumberingType(); }
+    void SetNumType( sal_Int16 eType )  { aFmt.SetNumberingType(eType); }
 
-    const SwNumType& GetSwNumType() const   { return aFmt; }
+    const SvxNumberType& GetSwNumType() const   { return aFmt; }
 
     USHORT GetOffset() const                { return nOffset; }
     void SetOffset( USHORT nOff )           { nOffset = nOff; }

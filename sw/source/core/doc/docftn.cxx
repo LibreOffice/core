@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ BOOL SwEndNoteInfo::operator==( const SwEndNoteInfo& rInfo ) const
             aAnchorCharFmtDep.GetRegisteredIn() ==
                                 rInfo.aAnchorCharFmtDep.GetRegisteredIn() &&
             GetFtnTxtColl() == rInfo.GetFtnTxtColl() &&
-            aFmt.eType == rInfo.aFmt.eType &&
+            aFmt.GetNumberingType() == rInfo.aFmt.GetNumberingType() &&
             nFtnOffset == rInfo.nFtnOffset &&
             bEndNote == rInfo.bEndNote &&
             sPrefix == rInfo.sPrefix &&
@@ -194,7 +194,7 @@ SwEndNoteInfo::SwEndNoteInfo(SwTxtFmtColl *pFmt) :
     nFtnOffset( 0 ),
     bEndNote( TRUE )
 {
-    aFmt.eType = SVX_NUM_ROMAN_LOWER;
+    aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);
 }
 
 SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
@@ -316,7 +316,7 @@ SwFtnInfo::SwFtnInfo(SwTxtFmtColl *pFmt) :
     eNum( FTNNUM_DOC ),
     ePos( FTNPOS_PAGE )
 {
-    aFmt.eType = SVX_NUM_ARABIC;
+    aFmt.SetNumberingType(SVX_NUM_ARABIC);
     bEndNote = FALSE;
 }
 
@@ -342,7 +342,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                             rInfo.GetPageDesc( *this ) != rOld.GetPageDesc( *this );
         FASTBOOL bExtra   = rInfo.aQuoVadis != rOld.aQuoVadis ||
                             rInfo.aErgoSum != rOld.aErgoSum ||
-                            rInfo.aFmt.eType != rOld.aFmt.eType ||
+                            rInfo.aFmt.GetNumberingType() != rOld.aFmt.GetNumberingType() ||
                             rInfo.GetPrefix() != rOld.GetPrefix() ||
                             rInfo.GetSuffix() != rOld.GetSuffix();
         SwCharFmt *pOldChrFmt = rOld.GetCharFmt( *this ),
@@ -402,7 +402,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
 
         FASTBOOL bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
         FASTBOOL bExtra   = !bNumChg &&
-                            rInfo.aFmt.eType != GetEndNoteInfo().aFmt.eType||
+                            rInfo.aFmt.GetNumberingType() != GetEndNoteInfo().aFmt.GetNumberingType()||
                             rInfo.GetPrefix() != GetEndNoteInfo().GetPrefix() ||
                             rInfo.GetSuffix() != GetEndNoteInfo().GetSuffix();
         FASTBOOL bFtnDesc = rInfo.GetPageDesc( *this ) !=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 
         // Numerierung
         // Art
-    aNumViewBox.SelectEntryPos( GetNumPos( pInf->aFmt.eType ));
+    aNumViewBox.SelectEntryPos( GetNumPos( pInf->aFmt.GetNumberingType() ));
     aOffsetFld.SetValue(pInf->nFtnOffset + 1);
     aPrefixED.SetText(pInf->GetPrefix());
     aSuffixED.SetText(pInf->GetSuffix());
@@ -493,7 +493,7 @@ BOOL SwEndNoteOptionPage::FillItemSet( SfxItemSet &rSet )
     SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
 
     pInf->nFtnOffset = aOffsetFld.GetValue() -1;
-    pInf->aFmt.eType = GetNumType( aNumViewBox.GetSelectEntryPos() );
+    pInf->aFmt.SetNumberingType(GetNumType( aNumViewBox.GetSelectEntryPos() ));
     pInf->SetPrefix(aPrefixED.GetText());
     pInf->SetSuffix(aSuffixED.GetText());
 
@@ -554,6 +554,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/09 08:01:42  os
+    TabPage size changed
+
     Revision 1.1.1.1  2000/09/18 17:14:44  hr
     initial import
 

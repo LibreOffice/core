@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
 BOOL SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
 {
     return  GetRegisteredIn() == rInf.GetRegisteredIn() &&
-            aType.eType == rInf.GetNumType().eType &&
+            aType.GetNumberingType() == rInf.GetNumType().GetNumberingType() &&
             aDivider == rInf.GetDivider() &&
             nPosFromLeft == rInf.GetPosFromLeft() &&
             nCountBy == rInf.GetCountBy() &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:15:07 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,7 +340,7 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
                        ((SwPageDesc&)rChged).GetLeft() );
 
     //NumType uebernehmen.
-    if( rChged.GetNumType().eType != pDesc->GetNumType().eType )
+    if( rChged.GetNumType().GetNumberingType() != pDesc->GetNumType().GetNumberingType() )
     {
         pDesc->SetNumType( rChged.GetNumType() );
         // JP 30.03.99: Bug 64121 - den Seitennummernfeldern bescheid sagen,

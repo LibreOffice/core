@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:23 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ using namespace ::rtl;
 
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( RES_PAGENUMBERFLD ),
-    eNumFormat( SVX_NUM_ARABIC ),
+    nNumberingType( SVX_NUM_ARABIC ),
     nNum( 0 ),
     nMax( USHRT_MAX ),
     bVirtuell( sal_False )
@@ -248,7 +248,7 @@ SwPageNumberFieldType::SwPageNumberFieldType()
 String& SwPageNumberFieldType::Expand( sal_uInt32 nFmt, short nOff,
                                 const String& rUserStr, String& rRet ) const
 {
-    sal_uInt32 nTmpFmt = (SVX_NUM_PAGEDESC == nFmt) ? (sal_uInt32)eNumFormat : nFmt;
+    sal_uInt32 nTmpFmt = (SVX_NUM_PAGEDESC == nFmt) ? (sal_uInt32)nNumberingType : nFmt;
     long nTmp = nNum + nOff;
 
     if( 0 >= nTmp || SVX_NUM_NUMBER_NONE == nTmpFmt || (!bVirtuell && nTmp > nMax) )
@@ -266,7 +266,7 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 
     pTmp->nNum       = nNum;
     pTmp->nMax       = nMax;
-    pTmp->eNumFormat = eNumFormat;
+    pTmp->nNumberingType = nNumberingType;
     pTmp->bVirtuell  = bVirtuell;
 
     return pTmp;
@@ -278,12 +278,12 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 
 void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc, sal_uInt16 nPage,
                                             sal_uInt16 nNumPages, sal_Bool bVirt,
-                                            const SvxExtNumType* pNumFmt )
+                                            const sal_Int16* pNumFmt )
 {
     nNum = nPage;
     nMax = nNumPages;
     if( pNumFmt )
-        eNumFormat = *pNumFmt;
+        nNumberingType = *pNumFmt;
 
     bVirtuell = sal_False;
     if( bVirt )
@@ -871,7 +871,7 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, const String& rProperty )
  --------------------------------------------------------------------*/
 
 SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
-    : SwFieldType( RES_DOCSTATFLD ), eNumFormat( SVX_NUM_ARABIC )
+    : SwFieldType( RES_DOCSTATFLD ), nNumberingType( SVX_NUM_ARABIC )
 {
     pDoc = pDocument;
 }
@@ -893,7 +893,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
                 ((SwDocStat &)rDStat).nPage = pDoc->GetRootFrm()->GetPageNum();
             nVal = rDStat.nPage;
             if( SVX_NUM_PAGEDESC == nFmt )
-                nFmt = (sal_uInt32)eNumFormat;
+                nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
             ASSERT( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
@@ -950,7 +950,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
 {
     if( DS_PAGE == nSubType && SVX_NUM_PAGEDESC == GetFormat() )
         ((SwDocStatFieldType*)GetTyp())->SetNumFormat(
-                pFrm->FindPageFrm()->GetPageDesc()->GetNumType().eType );
+                pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
 /*-----------------05.03.98 11:38-------------------
@@ -2107,7 +2107,7 @@ BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, const String& rProperty 
  --------------------------------------------------------------------*/
 
 SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
-    : SwFieldType( RES_REFPAGEGETFLD ), eNumFormat( SVX_NUM_ARABIC ), pDoc( pDc )
+    : SwFieldType( RES_REFPAGEGETFLD ), nNumberingType( SVX_NUM_ARABIC ), pDoc( pDc )
 {
 }
 /* ---------------------------------------------------------------------------
@@ -2116,7 +2116,7 @@ SwRefPageGetFieldType::SwRefPageGetFieldType( SwDoc* pDc )
 SwFieldType* SwRefPageGetFieldType::Copy() const
 {
     SwRefPageGetFieldType* pNew = new SwRefPageGetFieldType( pDoc );
-    pNew->eNumFormat = eNumFormat;
+    pNew->nNumberingType = nNumberingType;
     return pNew;
 }
 /* ---------------------------------------------------------------------------
@@ -2233,7 +2233,7 @@ void SwRefPageGetFieldType::UpdateField( SwTxtFld* pTxtFld,
                 sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
                         ? ( !pPgFrm
                                 ? SVX_NUM_ARABIC
-                                : pPgFrm->GetPageDesc()->GetNumType().eType )
+                                : pPgFrm->GetPageDesc()->GetNumType().GetNumberingType() )
                         : pGetFld->GetFormat();
                 short nPageNum = Max(0, pSetFld->GetOffset() + (short)nDiff);
                 pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
@@ -2326,7 +2326,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
         SwRefPageGetField* pGetFld = (SwRefPageGetField*)pFld->GetFld().GetFld();
         sal_uInt32 nTmpFmt = SVX_NUM_PAGEDESC == pGetFld->GetFormat()
-                            ? pPgFrm->GetPageDesc()->GetNumType().eType
+                            ? pPgFrm->GetPageDesc()->GetNumType().GetNumberingType()
                             : pGetFld->GetFormat();
         short nPageNum = Max(0, pSetFld->GetOffset() + (short)nDiff );
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,14 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
             for(USHORT i = 0; i < aRule.GetLevelCount(); i++)
             {
                 SvxNumberFormat aFmt(aRule.GetLevel(i));
-                if(SVX_NUM_BITMAP == aFmt.GetNumType())
+                if(SVX_NUM_BITMAP == aFmt.GetNumberingType())
                 {
                     const SvxBrushItem* pBrush = aFmt.GetBrush();
                     const String* pLinkStr;
                     if(pBrush &&
                         0 != (pLinkStr = pBrush->GetGraphicLink()) &&
                             pLinkStr->Len())
-                        aFmt.SetNumType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
+                        aFmt.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
                     aRule.SetLevel(i, aFmt, aRule.Get(i) != 0);
                 }
             }
@@ -295,6 +295,9 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.45  2000/09/18 16:06:07  willem.vandorp
     OpenOffice header added.
 

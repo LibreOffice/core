@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-21 12:55:21 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,14 +960,14 @@ void WW8_WrPlcSepx::WriteFtnEndTxt( SwWW8Writer& rWrt, ULONG nCpStt )
     case FTNNUM_CHAPTER:    rDop.rncFtn  = 1; break;
     default: rDop.rncFtn  = 0; break;
     }                                   // rncFtn
-    rDop.nfcFtnRef = SwWW8Writer::GetNumId( rInfo.aFmt.eType );
+    rDop.nfcFtnRef = SwWW8Writer::GetNumId( rInfo.aFmt.GetNumberingType() );
     rDop.nFtn = rInfo.nFtnOffset + 1;
     rDop.fpc = rWrt.bFtnAtTxtEnd ? 2 : 1;
 
     // Endnote Info
     rDop.rncEdn = 0;                        // rncEdn: Don't Restart
     const SwEndNoteInfo& rEndInfo = rWrt.pDoc->GetEndNoteInfo();
-    rDop.nfcEdnRef = SwWW8Writer::GetNumId( rEndInfo.aFmt.eType );
+    rDop.nfcEdnRef = SwWW8Writer::GetNumId( rEndInfo.aFmt.GetNumberingType() );
     rDop.nEdn = rEndInfo.nFtnOffset + 1;
     rDop.epc = rWrt.bEndAtTxtEnd ? 3 : 0;
 }
@@ -1309,7 +1309,7 @@ void WW8_WrPlcSepx::WriteKFTxt( SwWW8Writer& rWrt )
             // dann noch die restlichen Einstellungen aus dem PageDesc
 
             // sprmSNfcPgn
-            BYTE nb = SwWW8Writer::GetNumId( pPd->GetNumType().eType );
+            BYTE nb = SwWW8Writer::GetNumId( pPd->GetNumType().GetNumberingType() );
             if( rWrt.bWrtWW8 )
                 SwWW8Writer::InsUInt16( *pO, 0x300E );
             else
@@ -1881,11 +1881,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.3 2000-11-21 12:55:21 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.4 2001-02-23 12:45:26 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/21 12:55:21  jp
+      Bug #80385#: Set1StyleDefaults - write also all dynamic attributes
+
       Revision 1.2  2000/10/10 16:54:06  cmc
       MSOffice 97/2000 Controls {Im|Ex}port
 

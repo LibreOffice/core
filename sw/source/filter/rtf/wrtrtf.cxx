@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:45:23 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ void SwRTFWriter::MakeHeader()
         }
         Strm() << pOut;
 
-        switch( rFtnInfo.aFmt.eType )
+        switch( rFtnInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = sRTF_FTNNALC;    break;
@@ -600,7 +600,7 @@ void SwRTFWriter::MakeHeader()
                << sRTF_AFTNSTART;
         OutLong( rEndNoteInfo.nFtnOffset + 1 );
 
-        switch( rEndNoteInfo.aFmt.eType )
+        switch( rEndNoteInfo.aFmt.GetNumberingType() )
         {
         case SVX_NUM_CHARS_LOWER_LETTER:
         case SVX_NUM_CHARS_LOWER_LETTER_N:  pOut = sRTF_AFTNNALC;   break;

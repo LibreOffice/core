@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 08:01:42 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,15 +154,45 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_NUMBERINGTYPE_HPP_
+#include <com/sun/star/style/NumberingType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XDEFAULTNUMBERINGPROVIDER_HPP_
+#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
+#include <com/sun/star/text/XNumberingTypeInfo.hpp>
+#endif
 
+using namespace com::sun::star::uno;
+using namespace com::sun::star::text;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::style;
+using namespace rtl;
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
-DBG_NAME(outlinehdl);
+/* -----------------------------31.01.01 10:23--------------------------------
 
-// ReplaceTabStr implementiert in doc/docedt.cxx
-//extern void ReplaceTabsStr( String& rStr, const String& rSrch,
-//                              const String& rRepl );
+ ---------------------------------------------------------------------------*/
+Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
+{
+    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    Reference < XInterface > xI = xMSF->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+    Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
+    DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"")
+
+    return xRet;
+}
+
+DBG_NAME(outlinehdl);
 
 USHORT lcl_AdjustToPos(SvxAdjust eAdjust)
 {
@@ -174,28 +204,6 @@ USHORT lcl_AdjustToPos(SvxAdjust eAdjust)
     }
     return nRet;
 }
-
-// Numerierungsformat Umsetzung:
-// ListBox  - Format            - Enum-Wert
-// 0        - A, B, C, ...      - 0
-// 1        - a, b, c, ...      - 1
-// 2        - I, II, III, ...   - 2
-// 3        - i, ii, iii, ...   - 3
-// 4        - 1, 2, 3, ...      - 4
-// 5        - A, .., AA, ..,    - 9
-// 6        - a, .., aa, ..,    - 10
-// 7        - Ohne              - 5
-
-inline USHORT GetNumPos( USHORT n )
-{
-    return SVX_NUM_NUMBER_NONE == n ? 7 : SVX_NUM_ARABIC < n ? n - 4 : n;
-}
-
-inline SvxExtNumType GetNumType( USHORT n )
-{
-    return (SvxExtNumType)(7 == n ? SVX_NUM_NUMBER_NONE : SVX_NUM_ARABIC < n ? n + 4 : n);
-}
-
 /*---------------------------------------------------------------------
 
 ---------------------------------------------------------------------*/
@@ -567,6 +575,38 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aSuffixED.SetModifyHdl(LINK(this,   SwOutlineSettingsTabPage, DelimModify));
     aStartEdit.SetModifyHdl(LINK(this,  SwOutlineSettingsTabPage, StartModified));
     aCharFmtLB.SetSelectHdl(LINK(this,  SwOutlineSettingsTabPage, CharFmtHdl));
+
+    Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
+    Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
+    if(xInfo.is())
+    {
+        Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
+        const sal_Int16* pTypes = aTypes.getConstArray();
+        for(sal_Int32 nType = 0; nType < aTypes.getLength(); nType++)
+        {
+            sal_Int16 nCurrent = pTypes[nType];
+            if(nCurrent > NumberingType::CHARS_LOWER_LETTER_N)
+            {
+                sal_Bool bInsert = sal_True;
+                for(USHORT nEntry = 0; nEntry < aNumberBox.GetEntryCount(); nEntry++)
+                {
+                    USHORT nEntryData = (USHORT)(ULONG)aNumberBox.GetEntryData(nEntry);
+                    if(nEntryData == (USHORT) nCurrent)
+                    {
+                        bInsert = sal_False;
+                        break;
+                    }
+                }
+                if(bInsert)
+                {
+                    OUString aIdent = xInfo->getNumberingIdentifier( nCurrent );
+                    USHORT nPos = aNumberBox.InsertEntry(aIdent);
+                    aNumberBox.SetEntryData(nPos,(void*)(ULONG)nCurrent);
+                }
+            }
+        }
+    }
+
 }
 /* -----------------07.07.98 14:19-------------------
  *
@@ -596,22 +636,26 @@ void    SwOutlineSettingsTabPage::Update()
                 pFirstFmt = aNumFmtArr[i]->GetCharFmt();
             else
             {
-                bSameType   &= aNumFmtArr[i]->eType == aNumFmtArr[0]->eType;
-                bSameStart  &= aNumFmtArr[i]->GetStartValue() == aNumFmtArr[0]->GetStartValue();
+                bSameType   &= aNumFmtArr[i]->GetNumberingType() == aNumFmtArr[0]->GetNumberingType();
+                bSameStart  &= aNumFmtArr[i]->GetStart() == aNumFmtArr[0]->GetStart();
                 bSamePrefix &= aNumFmtArr[i]->GetPrefix() == aNumFmtArr[0]->GetPrefix();
-                bSameSuffix &= aNumFmtArr[i]->GetPostfix() == aNumFmtArr[0]->GetPostfix();
-                bSameComplete &= aNumFmtArr[i]->GetUpperLevel() == aNumFmtArr[0]->GetUpperLevel();
+                bSameSuffix &= aNumFmtArr[i]->GetSuffix() == aNumFmtArr[0]->GetSuffix();
+                bSameComplete &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[0]->GetIncludeUpperLevels();
                 const SwCharFmt* pFmt = aNumFmtArr[i]->GetCharFmt();
                 bSameCharFmt &=     !pFirstFmt && !pFmt
                                     || pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName();
             }
         }
         if(bSameType)
-            aNumberBox.SelectEntryPos( GetNumPos( aNumFmtArr[0]->eType ));
+        {
+            long nData = aNumFmtArr[0]->GetNumberingType();
+            USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+            aNumberBox.SelectEntryPos( nPos );
+        }
         else
             aNumberBox.SetNoSelection();
         if(bSameStart)
-            aStartEdit.SetValue(aNumFmtArr[0]->GetStartValue());
+            aStartEdit.SetValue(aNumFmtArr[0]->GetStart());
         else
             aStartEdit.SetText(aEmptyStr);
         if(bSamePrefix)
@@ -619,7 +663,7 @@ void    SwOutlineSettingsTabPage::Update()
         else
             aPrefixED.SetText(aEmptyStr);
         if(bSameSuffix)
-            aSuffixED.SetText(aNumFmtArr[0]->GetPostfix());
+            aSuffixED.SetText(aNumFmtArr[0]->GetSuffix());
         else
             aSuffixED.SetText(aEmptyStr);
 
@@ -638,7 +682,7 @@ void    SwOutlineSettingsTabPage::Update()
         aAllLevelNF.SetMax(MAXLEVEL);
         if(bSameComplete)
         {
-            aAllLevelNF.SetValue(aNumFmtArr[0]->GetUpperLevel());
+            aAllLevelNF.SetValue(aNumFmtArr[0]->GetIncludeUpperLevels());
         }
         else
         {
@@ -654,9 +698,12 @@ void    SwOutlineSettingsTabPage::Update()
         else
             aCollBox.SelectEntry(aNoFmtName);
         const SwNumFmt &rFmt = pNumRule->Get(nTmpLevel);
-        aNumberBox.SelectEntryPos( GetNumPos( rFmt.eType ));
+
+        ULONG nData = rFmt.GetNumberingType();
+        USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+        aNumberBox.SelectEntryPos( nPos );
         aPrefixED.SetText(rFmt.GetPrefix());
-        aSuffixED.SetText(rFmt.GetPostfix());
+        aSuffixED.SetText(rFmt.GetSuffix());
         const SwCharFmt* pFmt = rFmt.GetCharFmt();
         if(pFmt)
             aCharFmtLB.SelectEntry(pFmt->GetName());
@@ -668,7 +715,7 @@ void    SwOutlineSettingsTabPage::Update()
             aAllLevelFT.Enable(TRUE);
             aAllLevelNF.Enable(TRUE);
             aAllLevelNF.SetMax(nTmpLevel + 1);
-            aAllLevelNF.SetValue(rFmt.GetUpperLevel());
+            aAllLevelNF.SetValue(rFmt.GetIncludeUpperLevels());
         }
         else
         {
@@ -677,7 +724,7 @@ void    SwOutlineSettingsTabPage::Update()
             aAllLevelFT.Enable(FALSE);
         }
 
-        aStartEdit.SetValue( rFmt.GetStartValue() );
+        aStartEdit.SetValue( rFmt.GetStart() );
     }
     SetModified();
 }
@@ -718,7 +765,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, ToggleComplete, NumericField *, pFld )
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetUpperLevel((BYTE) std::min(pFld->GetValue(), (long)(i + 1)) );
+            aNumFmt.SetIncludeUpperLevels((BYTE) std::min(pFld->GetValue(), (long)(i + 1)) );
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -788,12 +835,13 @@ IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, ListBox *, pBox )
     USHORT nStart = 0;
     USHORT nEnd = MAXLEVEL;
     USHORT nMask = 1;
+    sal_Int16 nNumberType = (sal_Int16)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.eType = GetNumType( pBox->GetSelectEntryPos() );
+            aNumFmt.SetNumberingType(nNumberType);
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -815,7 +863,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, DelimModify, Edit *, pEdt )
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
             aNumFmt.SetPrefix( aPrefixED.GetText() );
-            aNumFmt.SetPostfix( aSuffixED.GetText() );
+            aNumFmt.SetSuffix( aSuffixED.GetText() );
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -836,7 +884,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
         if(nActLevel & nMask)
         {
             SwNumFmt aNumFmt(pNumRule->Get(i));
-            aNumFmt.SetStartValue( (USHORT)pFld->GetValue() );
+            aNumFmt.SetStart( (USHORT)pFld->GetValue() );
             pNumRule->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -917,7 +965,7 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     // Startwert setzen - nActLevel muss hier 1 sein
     USHORT nTmpLevel = lcl_BitToLevel(nActLevel);
     const SwNumFmt& rNumFmt = pNumRule->Get( nTmpLevel );
-    aStartEdit.SetValue( rNumFmt.GetStartValue() );
+    aStartEdit.SetValue( rNumFmt.GetStart() );
 
     // Poolformate fuer Ueberschriften anlegen
     String sStr;
@@ -945,7 +993,9 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
         }
     }
 
-    aNumberBox.SelectEntryPos( GetNumPos( rNumFmt.eType ));
+    long nData = rNumFmt.GetNumberingType();
+    USHORT nPos = aNumberBox.GetEntryPos((void*)nData);
+    aNumberBox.SelectEntryPos( nPos );
     USHORT nOutlinePos = pSh->GetOutlinePos(MAXLEVEL);
     USHORT nTmp = 0;
     if(nOutlinePos != USHRT_MAX)
@@ -1032,14 +1082,14 @@ USHORT lcl_DrawBullet(VirtualDevice* pVDev,
 USHORT lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, USHORT nXStart,
                         USHORT nYStart, USHORT nDivision)
 {
-    const SvxBrushItem* pBrushItem = rFmt.GetGrfBrush();
+    const SvxBrushItem* pBrushItem = rFmt.GetBrush();
     USHORT nRet = 0;
     if(pBrushItem)
     {
         const Graphic* pGrf = pBrushItem->GetGraphic();
         if(pGrf)
         {
-            Size aGSize( rFmt.GetGrfSize() );
+            Size aGSize( rFmt.GetGraphicSize());
             aGSize.Width() /= nDivision;
             nRet = (USHORT)aGSize.Width();
             aGSize.Height() /= nDivision;
@@ -1096,7 +1146,7 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
         aStdFont.SetSize(Size( 0, nFontHeight ));
 
         SwNodeNum aNum( (BYTE)0 );
-        USHORT nPreNum = pActNum->Get(0).GetStartValue();
+        USHORT nPreNum = pActNum->Get(0).GetStart();
 
         if(bPosition)
         {
@@ -1112,9 +1162,9 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
             for( BYTE nLevel = nStart; nLevel < nEnd; ++nLevel )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStartValue();
+                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
                 USHORT nXStart = rFmt.GetAbsLSpace() / nWidthRelation;
-                USHORT nTextOffset = rFmt.GetCharTextOffset() / nWidthRelation;
+                USHORT nTextOffset = rFmt.GetCharTextDistance() / nWidthRelation;
                 USHORT nNumberXPos = nXStart;
                 USHORT nFirstLineOffset = (-rFmt.GetFirstLineOffset()) / nWidthRelation;
 
@@ -1124,13 +1174,13 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                     nNumberXPos = 0;
 
                 USHORT nBulletWidth = 0;
-                if( SVX_NUM_BITMAP == rFmt.eType )
+                if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
                     nBulletWidth = lcl_DrawGraphic(pVDev, rFmt,
                                         nNumberXPos,
                                             nYStart, nWidthRelation);
                 }
-                else if( SVX_NUM_CHAR_SPECIAL == rFmt.eType )
+                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
                     nBulletWidth =  lcl_DrawBullet(pVDev, rFmt, nNumberXPos, nYStart, aStdFont.GetSize());
                 }
@@ -1164,15 +1214,15 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                             ++nLevel, nYStart += nYStep )
             {
                 const SwNumFmt &rFmt = pActNum->Get(nLevel);
-                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStartValue();
+                aNum.GetLevelVal()[ nLevel ] = rFmt.GetStart();
                 USHORT nXStart = (rFmt.GetAbsLSpace() / nWidthRelation) / 2 + 2;
                 USHORT nTextOffset = 2 * nXStep;
-                if( SVX_NUM_BITMAP == rFmt.eType )
+                if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
                     lcl_DrawGraphic(pVDev, rFmt, nXStart, nYStart, nWidthRelation);
                     nTextOffset = nLineHeight + nXStep;
                 }
-                else if( SVX_NUM_CHAR_SPECIAL == rFmt.eType )
+                else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
 //                  aNum.GetLevelVal()[ nLevel ] = 0;
                     nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
@@ -1226,6 +1276,9 @@ NumberingPreview::~NumberingPreview()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/09 08:01:42  os
+    TabPage size changed
+
     Revision 1.4  2000/12/07 18:35:30  csaba
     79541 Branding/Configuration Change
 

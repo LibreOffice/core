@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 08:05:36 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ class SwPageDesc : public SwModify
     SwPageDesc& operator=( const SwPageDesc& );
 
     String      aDescName;
-    SwNumType   aNumType;
+    SvxNumberType   aNumType;
     SwFrmFmt    aMaster;
     SwFrmFmt    aLeft;
     SwDepend    aDepend;    // wg. Registerhaltigkeit
@@ -206,8 +206,8 @@ public:
     BOOL GetLandscape() const { return bLandscape; }
     void SetLandscape( BOOL bNew ) { bLandscape = bNew; }
 
-    const SwNumType &GetNumType() const { return aNumType; }
-          void       SetNumType( const SwNumType& rNew ) { aNumType = rNew; }
+    const SvxNumberType &GetNumType() const { return aNumType; }
+          void          SetNumType( const SvxNumberType& rNew ) { aNumType = rNew; }
 
     const SwPageFtnInfo &GetFtnInfo() const { return aFtnInfo; }
           SwPageFtnInfo &GetFtnInfo()       { return aFtnInfo; }

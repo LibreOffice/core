@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:27:20 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,7 +1933,7 @@ int SwFmtFtnEndAtTxtEnd::operator==( const SfxPoolItem& rItem ) const
 {
     const SwFmtFtnEndAtTxtEnd& rAttr = (SwFmtFtnEndAtTxtEnd&)rItem;
     return SfxEnumItem::operator==( rAttr ) &&
-            aFmt.eType == rAttr.aFmt.eType &&
+            aFmt.GetNumberingType() == rAttr.aFmt.GetNumberingType() &&
             nOffset == rAttr.nOffset &&
             sPrefix == rAttr.sPrefix &&
             sSuffix == rAttr.sSuffix;
@@ -1962,7 +1962,7 @@ BOOL SwFmtFtnEndAtTxtEnd::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal.setValue(&bVal, ::getBooleanCppuType());
         }
         break;
-        case MID_NUM_TYPE    : rVal <<= (sal_Int16) aFmt.eType; break;
+        case MID_NUM_TYPE    : rVal <<= aFmt.GetNumberingType(); break;
         case MID_PREFIX      : rVal <<= OUString(sPrefix); break;
         case MID_SUFFIX      : rVal <<= OUString(sSuffix); break;
         default: return FALSE;
@@ -2020,7 +2020,7 @@ BOOL SwFmtFtnEndAtTxtEnd::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 (nVal <= SVX_NUM_ARABIC ||
                     SVX_NUM_CHARS_UPPER_LETTER_N == nVal ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nVal ))
-                aFmt.eType = (SvxExtNumType)nVal;
+                aFmt.SetNumberingType(nVal);
             else
                 bRet = FALSE;
         }

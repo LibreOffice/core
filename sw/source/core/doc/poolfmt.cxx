@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:14:31 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1761,11 +1761,11 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_NUM1:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_ARABIC;
+            aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
-            aFmt.SetPostfix( aDotStr );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
+            aFmt.SetSuffix( aDotStr );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -1819,15 +1819,15 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             const USHORT* pArr = aAbsSpace;
 #endif
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_ARABIC;
+            aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             USHORT nSpace = 0;
             for( n = 0; n < MAXLEVEL; ++n )
             {
                 aFmt.SetAbsLSpace( nSpace += pArr[ n ] );
                 aFmt.SetFirstLineOffset( - pArr[ n ] );
-                aFmt.SetStartValue( n+1 );
+                aFmt.SetStart( n+1 );
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -1835,16 +1835,16 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_NUM3:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_ARABIC;
+            aFmt.SetNumberingType(SVX_NUM_ARABIC);
             aFmt.SetCharFmt( pNumCFmt );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             USHORT nOffs = GetMetricVal( CM_1 ) * 3;
             aFmt.SetFirstLineOffset( - nOffs );
 
             for( n = 0; n < MAXLEVEL; ++n )
             {
                 aFmt.SetAbsLSpace( (n+1) * nOffs );
-                aFmt.SetStartValue( n+1 );
+                aFmt.SetStart( n+1 );
                 pNewRule->Set( n, aFmt );
             }
         }
@@ -1852,10 +1852,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_NUM4:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_ROMAN_UPPER;
+            aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             aFmt.SetCharFmt( pNumCFmt );
-            aFmt.SetUpperLevel( 1 );
-            aFmt.SetPostfix( aDotStr );
+            aFmt.SetIncludeUpperLevels( 1 );
+            aFmt.SetSuffix( aDotStr );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -1878,7 +1878,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             aFmt.SetFirstLineOffset( - (*pArr) );
             for( n = 0; n < MAXLEVEL; ++n, ++pArr )
             {
-                aFmt.SetStartValue( n + 1 );
+                aFmt.SetStart( n + 1 );
                 aFmt.SetAbsLSpace( *pArr );
                 pNewRule->Set( n, aFmt );
             }
@@ -1909,32 +1909,32 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
             const USHORT* pArr0to2 = aAbsSpace0to2;
 #endif
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_ARABIC;
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
-            aFmt.SetPostfix( aDotStr );
+            aFmt.SetNumberingType(SVX_NUM_ARABIC);
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
+            aFmt.SetSuffix( aDotStr );
             aFmt.SetFirstLineOffset( -pArr0to2[0] );    // == 0.40 cm
             aFmt.SetAbsLSpace( pArr0to2[1] );           // == 0.40 cm
 
             aFmt.SetCharFmt( pNumCFmt );
             pNewRule->Set( 0, aFmt );
 
-            aFmt.SetUpperLevel( 2 );
-            aFmt.SetStartValue( 2 );
+            aFmt.SetIncludeUpperLevels( 2 );
+            aFmt.SetStart( 2 );
             aFmt.SetFirstLineOffset( -pArr0to2[2] );    // == 0.65 cm
             aFmt.SetAbsLSpace( pArr0to2[3] );           // == 1.10 cm
             pNewRule->Set( 1, aFmt );
 
-            aFmt.eType = SVX_NUM_CHARS_LOWER_LETTER;
-            aFmt.SetPostfix( ')');
-            aFmt.SetUpperLevel( 1 );
-            aFmt.SetStartValue( 3 );
+            aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER);
+            aFmt.SetSuffix( ')');
+            aFmt.SetIncludeUpperLevels( 1 );
+            aFmt.SetStart( 3 );
             aFmt.SetFirstLineOffset( - pArr0to2[4] );   // == 0.45cm
             aFmt.SetAbsLSpace( pArr0to2[5] );           // == 1.55 cm
             pNewRule->Set( 2, aFmt );
 
 
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
             aFmt.SetBulletChar( cBulletChar );
@@ -1942,10 +1942,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
 
             aFmt.SetFirstLineOffset( - nOffs );
-            aFmt.SetPostfix( aEmptyStr );
+            aFmt.SetSuffix( aEmptyStr );
             for( n = 3; n < MAXLEVEL; ++n )
             {
-                aFmt.SetStartValue( n+1 );
+                aFmt.SetStart( n+1 );
                 aFmt.SetAbsLSpace( nOffs2 + ((n-3) * nOffs) );
                 pNewRule->Set( n, aFmt );
             }
@@ -1955,10 +1955,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_BUL1:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
             aFmt.SetBulletChar( cBulletChar );
 
@@ -1991,10 +1991,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_BUL2:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
             aFmt.SetBulletChar( 0xF000 + 150 );
 
@@ -2027,10 +2027,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_BUL3:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
             USHORT nOffs = GetMetricVal( CM_01 ) * 4;
             aFmt.SetFirstLineOffset( - nOffs );
@@ -2046,10 +2046,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_BUL4:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
@@ -2087,10 +2087,10 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId, String* pDesc,
     case RES_POOLNUMRULE_BUL5:
         {
             SwNumFmt aFmt;
-            aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            aFmt.SetStartValue( 1 );
-            aFmt.SetUpperLevel( 1 );
+            aFmt.SetStart( 1 );
+            aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletChar( 0xF000 + 79 );
             aFmt.SetBulletFont(  &SwNumRule::GetDefBulletFont() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:30:40 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,7 +927,7 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
                     {
 //  String      sPrefix;
 //  String      sSuffix;
-//  SwNumType   aFmt;
+//  SvxNumberType   aFmt;
 //  USHORT      nOffset;
 //                      rText +=
                     }
@@ -1257,6 +1257,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/16 21:30:40  jp
+      SwFmt2Lines moved to SVX and renamed
+
       Revision 1.2  2000/10/23 11:58:25  jp
       new attributes Ruby and 2Lines
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:19:23 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,7 @@ String SwTOXPara::GetURL() const
                     for( int n = 0; n <= pNum->GetLevel(); ++n )
                     {
                         int nNum = pNum->GetLevelVal()[ n ];
-                        nNum -= ( rRule.Get( n ).GetStartValue() - 1 );
+                        nNum -= ( rRule.Get( n ).GetStart() - 1 );
                         ( aTxt += String::CreateFromInt32( nNum )) += '.';
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-20 10:34:57 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,7 +1057,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
             aInfo.SetCountBlankLines(  TRUE );
             aInfo.SetCountInFlys(      FALSE );
             aInfo.SetPos( LINENUMBER_POS_LEFT );
-            SwNumType aNumType; // this sets SVX_NUM_ARABIC per default
+            SvxNumberType aNumType; // this sets SVX_NUM_ARABIC per default
             aInfo.SetNumType( aNumType );
 
 
@@ -1401,7 +1401,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
             SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
             SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N };
 
-        SwNumType aType; aType.eType = aNumTyp[ nNfcPgn ];
+        SvxNumberType aType; aType.SetNumberingType(aNumTyp[ nNfcPgn ]);
         pPageDesc->SetNumType( aType );
     }
 
@@ -4929,12 +4929,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.13 2001-02-20 10:34:57 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.14 2001-02-23 12:45:26 os Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/02/20 10:34:57  cmc
+      #83546# Don't create a tab stop description without any tab stops
+
       Revision 1.12  2001/02/15 20:08:10  jp
       im-/export the Rotate-/ScaleWidth-Character attribut
 

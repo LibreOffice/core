@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8num.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,10 +176,10 @@ void SwWW8Writer::OutListTab()
             BYTE aNumLvlPos[ nWW8MaxListLevel ] = { 0,0,0,0,0,0,0,0,0 };
 
             const SwNumFmt& rFmt = rRule.Get( nLvl );
-            SwWW8Writer::WriteLong( *pTableStrm, rFmt.GetStartValue() );
-            *pTableStrm << SwWW8Writer::GetNumId( rFmt.eType );
+            SwWW8Writer::WriteLong( *pTableStrm, rFmt.GetStart() );
+            *pTableStrm << SwWW8Writer::GetNumId( rFmt.GetNumberingType() );
 
-            switch( rFmt.GetAdjust() )
+            switch( rFmt.GetNumAdjust() )
             {
             case SVX_ADJUST_CENTER: nFlags = 1; break;
             case SVX_ADJUST_RIGHT:  nFlags = 2; break;
@@ -191,8 +191,8 @@ void SwWW8Writer::OutListTab()
             String sNumStr;
             BOOL bWriteBullet = FALSE;
             rtl_TextEncoding eChrSet = RTL_TEXTENCODING_SYMBOL;
-            if( SVX_NUM_CHAR_SPECIAL == rFmt.eType ||
-                SVX_NUM_BITMAP == rFmt.eType )
+            if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
+                SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
                 sNumStr = rFmt.GetBulletChar();
                 bWriteBullet = TRUE;
@@ -203,7 +203,7 @@ void SwWW8Writer::OutListTab()
 
                 eChrSet = pFont->GetCharSet();
             }
-            else if( SVX_NUM_NUMBER_NONE != rFmt.eType )
+            else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
             {
                 BYTE* pLvlPos = aNumLvlPos;
                 aNdNum.SetLevel( nLvl );
@@ -224,8 +224,7 @@ void SwWW8Writer::OutListTab()
 
                 if( rFmt.GetPrefix().Len() )
                     sNumStr.Insert( rFmt.GetPrefix(), 0 );
-                if( rFmt.GetPostfix().Len() )
-                    sNumStr += rFmt.GetPostfix();
+                sNumStr += rFmt.GetSuffix();
             }
 
             // write the rgbxchNums[9]
@@ -397,7 +396,7 @@ void SwWW8Writer::BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     BYTE nb = 0;                                // Zahlentyp
     ByteToSVBT8( 11, rAnlv.nfc );
 
-    switch( rFmt.GetAdjust() )
+    switch( rFmt.GetNumAdjust() )
     {
     case SVX_ADJUST_RIGHT:      nb = 2; break;
     case SVX_ADJUST_CENTER:     nb = 1; break;
@@ -423,7 +422,7 @@ void SwWW8Writer::BuildAnlvBulletBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
         ByteToSVBT8( 1, rAnlv.cbTextBefore );
     }
     ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
-    ShortToSVBT16( rFmt.GetCharTextOffset(), rAnlv.dxaSpace );
+    ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
 }
 
 static void SwWw8_InsertAnlText( const String& rStr, BYTE*& rpCh,
@@ -448,10 +447,10 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
                                 USHORT& rCharLen, const SwNumRule& rRul,
                                 const SwNumFmt& rFmt, BYTE nSwLevel )
 {
-    ByteToSVBT8( SwWW8Writer::GetNumId( rFmt.eType ), rAnlv.nfc );
+    ByteToSVBT8( SwWW8Writer::GetNumId( rFmt.GetNumberingType() ), rAnlv.nfc );
 
     BYTE nb = 0;
-    switch( rFmt.GetAdjust() )
+    switch( rFmt.GetNumAdjust() )
     {
     case SVX_ADJUST_RIGHT: nb = 2; break;
     case SVX_ADJUST_CENTER: nb = 1; break;
@@ -459,7 +458,7 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     case SVX_ADJUST_BLOCKLINE: nb = 3; break;
     }
 
-    BOOL bInclUpper = rFmt.IsInclUpperLevel();
+    BOOL bInclUpper = rFmt.GetIncludeUpperLevels() > 0;
     if( bInclUpper )
         nb |= 0x4;          // include previous levels
 
@@ -471,12 +470,12 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     {
         if( (nSwLevel >= 1 )
             && (nSwLevel<= nWW8MaxListLevel )
-            && (rFmt.eType != SVX_NUM_NUMBER_NONE ) )   // UEberhaupt Nummerierung ?
+            && (rFmt.GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // UEberhaupt Nummerierung ?
         {                                               // -> suche, ob noch Zahlen davor
-            BYTE nUpper = rFmt.GetUpperLevel();
+            BYTE nUpper = rFmt.GetIncludeUpperLevels();
             if( (nUpper >= 0 )
                 && (nUpper <= nWW8MaxListLevel )
-                && (rRul.Get(nUpper).eType != SVX_NUM_NUMBER_NONE ) )   // Nummerierung drueber ?
+                && (rRul.Get(nUpper).GetNumberingType() != SVX_NUM_NUMBER_NONE ) )  // Nummerierung drueber ?
             {
                                                     // dann Punkt einfuegen
                 SwWw8_InsertAnlText( aDotStr, rpCh, rCharLen,
@@ -489,13 +488,13 @@ void SwWW8Writer::BuildAnlvBase( WW8_ANLV& rAnlv, BYTE*& rpCh,
     {
         SwWw8_InsertAnlText( rFmt.GetPrefix(), rpCh, rCharLen,
                              rAnlv.cbTextBefore );
-        SwWw8_InsertAnlText( rFmt.GetPostfix(), rpCh, rCharLen,
+        SwWw8_InsertAnlText( rFmt.GetSuffix(), rpCh, rCharLen,
                              rAnlv.cbTextAfter );
     }
 
-    ShortToSVBT16( rFmt.GetStartValue(), rAnlv.iStartAt );
+    ShortToSVBT16( rFmt.GetStart(), rAnlv.iStartAt );
     ShortToSVBT16( -rFmt.GetFirstLineOffset(), rAnlv.dxaIndent );
-    ShortToSVBT16( rFmt.GetCharTextOffset(), rAnlv.dxaSpace );
+    ShortToSVBT16( rFmt.GetCharTextDistance(), rAnlv.dxaSpace );
 }
 
 void SwWW8Writer::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
@@ -553,12 +552,12 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
 #endif
 
 #ifdef DEBUG
-    BYTE nIncl = pRul->Get(1).GetUpperLevel();
+    BYTE nIncl = pRul->Get(1).GetIncludeUpperLevels();
 #endif
 
-    if( pFmt->eType == SVX_NUM_NUMBER_NONE
-        || pFmt->eType == SVX_NUM_CHAR_SPECIAL
-        || pFmt->eType == SVX_NUM_BITMAP )
+    if( pFmt->GetNumberingType() == SVX_NUM_NUMBER_NONE
+        || pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL
+        || pFmt->GetNumberingType() == SVX_NUM_BITMAP )
     {
                             // Aufzaehlung
         Out_WwNumLvl( (bNoNum) ? 12 : 11 );
@@ -566,7 +565,7 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
         bRet = FALSE;
     }
     else if( pRul->IsContinusNum()
-              || ( pRul->Get(1).GetUpperLevel() <= 1 ) )
+              || ( pRul->Get(1).GetIncludeUpperLevels() <= 1 ) )
     {
                             // Nummerierung
         Out_WwNumLvl( (bNoNum) ? 12 : 10 );
@@ -587,11 +586,14 @@ BOOL SwWW8Writer::Out_SwNum( const SwTxtNode* pNd )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8num.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8num.cxx,v 1.2 2001-02-23 12:45:26 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.9  2000/09/18 16:04:58  willem.vandorp
       OpenOffice header added.
 

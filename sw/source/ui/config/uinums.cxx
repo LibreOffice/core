@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:45:20 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         BOOL bFlag;
         String sStr;
 
-        rStream >> nUS;             aFmt.eType = SvxExtNumType( nUS );
+        rStream >> nUS;             aFmt.SetNumberingType((sal_Int16)nUS );
         if( VERSION_53A > nVersion )
         {
             rStream >> cChar;       aFmt.SetBulletChar( cChar );
@@ -500,35 +500,34 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
             rStream >> nUS;         aFmt.SetBulletChar( nUS );
         }
 
-        rStream >> bFlag;           aFmt.SetInclUpperLevel( bFlag );
+        rStream >> bFlag;           aFmt.SetIncludeUpperLevels( bFlag );
 
         if( VERSION_30B == nVersion )
         {
             long nL;
-            rStream >> cChar;       aFmt.SetStartValue( (USHORT)cChar );
+            rStream >> cChar;       aFmt.SetStart( (USHORT)cChar );
 
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
-            aFmt.SetPostfix( sStr );
-            rStream >> nUS;         aFmt.SetAdjust( SvxAdjust( nUS ) );
+            aFmt.SetSuffix( sStr );
+            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nL;          aFmt.SetLSpace( lNumIndent );
             rStream >> nL;          aFmt.SetFirstLineOffset( (short)nL );
-            aFmt.SetRelLSpace( TRUE );
         }
         else                // alter StartWert war ein Byte
         {
-            rStream >> nUS;         aFmt.SetStartValue( nUS );
+            rStream >> nUS;         aFmt.SetStart( nUS );
             rStream.ReadByteString(sStr, eEncoding);
             aFmt.SetPrefix( sStr );
             rStream.ReadByteString(sStr, eEncoding);
-            aFmt.SetPostfix( sStr );
-            rStream >> nUS;         aFmt.SetAdjust( SvxAdjust( nUS ) );
+            aFmt.SetSuffix( sStr );
+            rStream >> nUS;         aFmt.SetNumAdjust( SvxAdjust( nUS ) );
             rStream >> nUS;         aFmt.SetAbsLSpace( nUS );
             rStream >> nShort;      aFmt.SetFirstLineOffset( nShort );
-            rStream >> nUS;         aFmt.SetCharTextOffset( nUS );
+            rStream >> nUS;         aFmt.SetCharTextDistance( nUS );
             rStream >> nShort;      aFmt.SetLSpace( nShort );
-            rStream >> bFlag;       aFmt.SetRelLSpace( bFlag );
+            rStream >> bFlag;
         }
 
         USHORT  nFamily;
@@ -574,7 +573,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
         }
     }
 
-    if( VERSION_40A == nVersion && SVX_NUM_BITMAP == aFmt.eType )
+    if( VERSION_40A == nVersion && SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
         BYTE cF;
         Size aSz;
@@ -601,7 +600,10 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
                 pVOrient = (SwFmtVertOrient*)GetDfltAttr( RES_VERT_ORIENT )
                                         ->Create( rStream, nVer );
             }
-            aFmt.SetGrfBrush( pBrush, &aSz, pVOrient );
+            SvxFrameVertOrient eOrient = SVX_VERT_NONE;
+            if(pVOrient)
+                eOrient = (SvxFrameVertOrient)pVOrient->GetVertOrient();
+            aFmt.SetGraphicBrush( pBrush, &aSz, pVOrient ? &eOrient : 0 );
         }
     }
 }
@@ -638,18 +640,18 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
             nPitch = (USHORT)pFnt->GetPitch();
         }
 
-        rStream << USHORT(aFmt.eType)
+        rStream << USHORT(aFmt.GetNumberingType())
                 << aFmt.GetBulletChar()
-                << aFmt.IsInclUpperLevel()
-                << aFmt.GetStartValue();
+                << (aFmt.GetIncludeUpperLevels() > 0)
+                << aFmt.GetStart();
         rStream.WriteByteString( aFmt.GetPrefix(), eEncoding );
-        rStream.WriteByteString( aFmt.GetPostfix(), eEncoding );
-        rStream << USHORT( aFmt.GetAdjust() )
+        rStream.WriteByteString( aFmt.GetSuffix(), eEncoding );
+        rStream << USHORT( aFmt.GetNumAdjust() )
                 << aFmt.GetAbsLSpace()
                 << aFmt.GetFirstLineOffset()
-                << aFmt.GetCharTextOffset()
+                << aFmt.GetCharTextDistance()
                 << aFmt.GetLSpace()
-                << aFmt.IsRelLSpace();
+                << FALSE;//aFmt.IsRelLSpace();
         rStream.WriteByteString( aName, eEncoding );
         rStream << nFamily
                 << nCharSet
@@ -674,25 +676,25 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
     // Erweiterungen fuer Version 40A
 
-    if( SVX_NUM_BITMAP == aFmt.eType )
+    if( SVX_NUM_BITMAP == aFmt.GetNumberingType() )
     {
-        rStream << (INT32)aFmt.GetGrfSize().Width()
-                << (INT32)aFmt.GetGrfSize().Height();
-        BYTE cFlg = ( 0 != aFmt.GetGrfBrush() ? 1 : 0 ) +
-                    ( 0 != aFmt.GetGrfOrient() ? 2 : 0 );
+        rStream << (INT32)aFmt.GetGraphicSize().Width()
+                << (INT32)aFmt.GetGraphicSize().Height();
+        BYTE cFlg = ( 0 != aFmt.GetBrush() ? 1 : 0 ) +
+                    ( 0 != aFmt.GetGraphicOrientation() ? 2 : 0 );
         rStream << cFlg;
 
-        if( aFmt.GetGrfBrush() )
+        if( aFmt.GetBrush() )
         {
-            USHORT nVersion = aFmt.GetGrfBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
+            USHORT nVersion = aFmt.GetBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
-            aFmt.GetGrfBrush()->Store( rStream, nVersion );
+            aFmt.GetBrush()->Store( rStream, nVersion );
         }
-        if( aFmt.GetGrfOrient() )
+        if( aFmt.GetGraphicOrientation() )
         {
-            USHORT nVersion = aFmt.GetGrfOrient()->GetVersion( SOFFICE_FILEFORMAT_50 );
+            USHORT nVersion = aFmt.GetGraphicOrientation()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
-            aFmt.GetGrfOrient()->Store( rStream, nVersion );
+            aFmt.GetGraphicOrientation()->Store( rStream, nVersion );
         }
     }
 }

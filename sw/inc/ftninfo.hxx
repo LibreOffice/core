@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftninfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ class SwEndNoteInfo : public SwClient
 protected:
     BOOL      bEndNote;
 public:
-    SwNumType aFmt;
+    SvxNumberType aFmt;
     USHORT    nFtnOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );

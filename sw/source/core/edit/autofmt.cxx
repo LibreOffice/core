@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:13:34 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,8 +1598,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                         SwNumFmt aFmt( aRule.Get( n ) );
                         aFmt.SetBulletFont( pBullFnt );
                         aFmt.SetBulletChar( cBullChar );
-                        aFmt.eType = SVX_NUM_CHAR_SPECIAL;
-                        aFmt.SetRelLSpace( FALSE );
+                        aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                         aFmt.SetFirstLineOffset( lBullFirstLineOffset );
                         aFmt.SetAbsLSpace( nAbsPos );
                         aRule.Set( n, aFmt );
@@ -1653,17 +1652,17 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                 if( !nDigitLevel )
                 {
                     SwNumFmt aFmt( aRule.Get( nLvl ) );
-                    aFmt.SetStartValue( aPreFix.GetToken( 1,
+                    aFmt.SetStart( aPreFix.GetToken( 1,
                                             (sal_Unicode)1 ).ToInt32());
                     aFmt.SetPrefix( aPreFix.GetToken( 0, (sal_Unicode)1 ));
-                    aFmt.SetPostfix( aPostFix.GetToken( 0, (sal_Unicode)1 ));
-                    aFmt.SetInclUpperLevel( FALSE );
+                    aFmt.SetSuffix( aPostFix.GetToken( 0, (sal_Unicode)1 ));
+                    aFmt.SetIncludeUpperLevels( 0 );
 
                     if( !aFmt.GetCharFmt() )
                         aFmt.SetCharFmt( pCFmt );
 
                     if( aNumTypes.Len() )
-                        aFmt.eType = (SvxExtNumType)(aNumTypes.GetChar( 0 ) - '0');
+                        aFmt.SetNumberingType(aNumTypes.GetChar( 0 ) - '0');
 
                     aRule.Set( nLvl, aFmt );
                 }
@@ -1674,16 +1673,15 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
 
-                        aFmt.SetStartValue( aPreFix.GetToken( n+1,
+                        aFmt.SetStart( aPreFix.GetToken( n+1,
                                                     (sal_Unicode)1 ).ToInt32() );
                         if( !n )
                             aFmt.SetPrefix( aPreFix.GetToken( n, (sal_Unicode)1 ));
-                        aFmt.SetPostfix( aPostFix.GetToken( n, (sal_Unicode)1 ));
-                        aFmt.SetInclUpperLevel( TRUE );
+                        aFmt.SetSuffix( aPostFix.GetToken( n, (sal_Unicode)1 ));
+                        aFmt.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.Len() )
-                            aFmt.eType = (SvxExtNumType)(aNumTypes.GetChar( n ) - '0');
+                            aFmt.SetNumberingType((aNumTypes.GetChar( n ) - '0'));
 
-                        aFmt.SetRelLSpace( FALSE );
                         aFmt.SetAbsLSpace( USHORT( nSpaceSteps * n )
                                             + lNumIndent );
 
@@ -1698,8 +1696,7 @@ void SwAutoFormat::BuildEnum( USHORT nLvl, USHORT nDigitLevel )
                     for( ; n < MAXLEVEL; ++n )
                     {
                         SwNumFmt aFmt( aRule.Get( n ) );
-                        aFmt.SetInclUpperLevel( TRUE );
-                        aFmt.SetRelLSpace( FALSE );
+                        aFmt.SetIncludeUpperLevels( MAXLEVEL );
                         if( bDefStep )
                             aFmt.SetAbsLSpace( USHORT( (nLeftTxtPos +
                                         SwNumRule::GetNumIndent( n - nLvl ))));

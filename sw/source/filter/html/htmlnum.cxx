@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         sal_uInt16 nChrFmtPoolId = 0;
         if( HTML_ORDERLIST_ON == nToken )
         {
-            aNumFmt.eType = SVX_NUM_ARABIC;
+            aNumFmt.SetNumberingType(SVX_NUM_ARABIC);
             nChrFmtPoolId = RES_POOLCHR_NUM_LEVEL;
         }
         else
@@ -202,7 +202,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             // eingestellt, was in Netscape nicht der Fall ist. Bisher hat
             // das noch niemanden gestoert.
             aNumFmt.SetBulletFont( &rInfo.GetNumRule()->GetDefBulletFont() );
-            aNumFmt.eType = SVX_NUM_CHAR_SPECIAL;
+            aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aNumFmt.SetBulletChar( cBulletChar );       // das Bulletzeichen !!
             nChrFmtPoolId = RES_POOLCHR_BUL_LEVEL;
         }
@@ -225,7 +225,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(nChrFmtPoolId) );
         bChangeNumFmt = sal_True;
     }
-    else if( 1 != aNumFmt.GetStartValue() )
+    else if( 1 != aNumFmt.GetStart() )
     {
         // Wenn die Ebene schon mal benutzt wurde, muss der Start-Wert
         // ggf. hart am Absatz gesetzt werden.
@@ -234,7 +234,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // und es ggf. durch die Optionen veraendern
     String aId, aStyle, aClass, aBulletSrc;
-    SwVertOrient eVertOri = VERT_NONE;
+    SvxFrameVertOrient eVertOri = SVX_VERT_NONE;
     sal_uInt16 nWidth=USHRT_MAX, nHeight=USHRT_MAX;
     const HTMLOptions *pOptions = GetOptions();
     for( sal_uInt16 i = pOptions->Count(); i; )
@@ -254,10 +254,10 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     bChangeNumFmt = sal_True;
                     switch( pOption->GetString().GetChar(0) )
                     {
-                    case 'A':   aNumFmt.eType = SVX_NUM_CHARS_UPPER_LETTER; break;
-                    case 'a':   aNumFmt.eType = SVX_NUM_CHARS_LOWER_LETTER; break;
-                    case 'I':   aNumFmt.eType = SVX_NUM_ROMAN_UPPER;        break;
-                    case 'i':   aNumFmt.eType = SVX_NUM_ROMAN_LOWER;        break;
+                    case 'A':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER); break;
+                    case 'a':   aNumFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER); break;
+                    case 'I':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER);        break;
+                    case 'i':   aNumFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER);        break;
                     default:    bChangeNumFmt = sal_False;
                     }
                     break;
@@ -275,7 +275,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                 sal_uInt16 nStart = (sal_uInt16)pOption->GetNumber();
                 if( bNewNumFmt )
                 {
-                    aNumFmt.SetStartValue( nStart );
+                    aNumFmt.SetStart( nStart );
                     bChangeNumFmt = sal_True;
                 }
                 else
@@ -306,7 +306,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             break;
         case HTML_O_ALIGN:
             eVertOri =
-                (SwVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
+                (SvxFrameVertOrient)pOption->GetEnum( aHTMLImgVAlignTable,
                                                 eVertOri );
             break;
         }
@@ -315,7 +315,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     if( aBulletSrc.Len() )
     {
         // Eine Bullet-Liste mit Grafiken
-        aNumFmt.eType = SVX_NUM_BITMAP;
+        aNumFmt.SetNumberingType(SVX_NUM_BITMAP);
 
         // Die Grafik als Brush anlegen
         SvxBrushItem aBrushItem;
@@ -334,10 +334,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
         // Die Ausrichtung auch nur beachten, wenn eine Ausrichtung
         // angegeben wurde
-        SwFmtVertOrient aVertOri( 0, eVertOri );
-        SwFmtVertOrient *pVertOri = VERT_NONE!=eVertOri ? &aVertOri : 0;
-
-        aNumFmt.SetGrfBrush( &aBrushItem, pTwipSz, pVertOri );
+        aNumFmt.SetGraphicBrush( &aBrushItem, pTwipSz,
+                            SVX_VERT_NONE!=eVertOri ? &eVertOri : 0);
 
         // Und noch die Grafik merken, um sie in den Absaetzen nicht
         // einzufuegen
@@ -468,9 +466,9 @@ void SwHTMLParser::EndNumBulList( int nToken )
                 else if( pRefNumFmt )
                 {
                     SwNumFmt aNumFmt( rInfo.GetNumRule()->Get(i) );
-                    aNumFmt.eType = pRefNumFmt->eType != SVX_NUM_BITMAP
-                                        ? pRefNumFmt->eType : SVX_NUM_CHAR_SPECIAL;
-                    if( SVX_NUM_CHAR_SPECIAL == aNumFmt.eType )
+                    aNumFmt.SetNumberingType(pRefNumFmt->GetNumberingType() != SVX_NUM_BITMAP
+                                        ? pRefNumFmt->GetNumberingType() : SVX_NUM_CHAR_SPECIAL);
+                    if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
                     {
                         aNumFmt.SetBulletFont(
                                 &rInfo.GetNumRule()->GetDefBulletFont() );
@@ -576,7 +574,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         SwNumRule aNumRule( aNumRuleName );
         SwNumFmt aNumFmt( aNumRule.Get( 0 ) );
         aNumFmt.SetBulletFont( &SwNumRule::GetDefBulletFont() );
-        aNumFmt.eType = SVX_NUM_CHAR_SPECIAL;
+        aNumFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aNumFmt.SetBulletChar( cBulletChar );   // das Bulletzeichen !!
         aNumFmt.SetCharFmt( pCSS1Parser->GetCharFmtFromPool(RES_POOLCHR_BUL_LEVEL) );
         aNumFmt.SetLSpace( (sal_uInt16)(-HTML_NUMBUL_INDENT) );
@@ -799,8 +797,8 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         if( rWrt.aNumRuleNames.Seek_Entry( &aName ) )
         {
             // The rule has been applied before
-            SvxExtNumType eType = rInfo.GetNumRule()
-                ->Get( rInfo.GetDepth()-1 ).eType;
+            sal_Int16 eType = rInfo.GetNumRule()
+                ->Get( rInfo.GetDepth()-1 ).GetNumberingType();
             if( SVX_NUM_CHAR_SPECIAL != eType && SVX_NUM_BITMAP != eType )
             {
                 // If its a numbering rule, the current number should be
@@ -869,7 +867,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         rWrt.aBulletGrfs[i].Erase();
         ByteString sOut( '<' );
         const SwNumFmt& rNumFmt = rInfo.GetNumRule()->Get( i );
-        SvxExtNumType eType = rNumFmt.eType;
+        sal_Int16 eType = rNumFmt.GetNumberingType();
         if( SVX_NUM_CHAR_SPECIAL == eType )
         {
             // Aufzaehlungs-Liste: <OL>
@@ -902,10 +900,10 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
             OutHTML_BulletImage( rWrt,
                                     0,
-                                    rNumFmt.GetGrfBrush(),
+                                    rNumFmt.GetBrush(),
                                     rWrt.aBulletGrfs[i],
-                                    rNumFmt.GetGrfSize(),
-                                    rNumFmt.GetGrfOrient() );
+                                    rNumFmt.GetGraphicSize(),
+                                    rNumFmt.GetGraphicOrientation() );
         }
         else
         {
@@ -924,7 +922,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( cType )
                 (((sOut += ' ') += sHTML_O_type) += '=') += cType;
 
-            sal_uInt16 nStartVal = rNumFmt.GetStartValue();
+            sal_uInt16 nStartVal = rNumFmt.GetStart();
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
                 nStartVal = rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum()
                                               ->GetLevelVal()[i];
@@ -976,7 +974,7 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
             rWrt.OutNewLine(); // </OL>/</UL> in eine neue Zeile
 
         // es wird also eine Liste angefangen oder beendet:
-        SvxExtNumType eType = rInfo.GetNumRule()->Get( i-1 ).eType;
+        sal_Int16 eType = rInfo.GetNumRule()->Get( i-1 ).GetNumberingType();
         const sal_Char *pStr;
         if( SVX_NUM_CHAR_SPECIAL == eType || SVX_NUM_BITMAP == eType)
             pStr = sHTML_unorderlist;

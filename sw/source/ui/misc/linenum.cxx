@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet& rSet )
 
     // Format
     SwFldMgr aMgr( pSh );
-    USHORT nSelFmt = rInf.GetNumType().eType;
+    USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
     USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
 
     for( USHORT i = 0; i < nCnt; i++)
@@ -355,9 +355,9 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
         aInf.SetCharFmt(pCharFmt);
 
     // Format
-    SwNumType aType;
-    aType.eType = (SvxExtNumType)(USHORT)(ULONG)aFormatLB.GetEntryData(
-                                    aFormatLB.GetSelectEntryPos() );
+    SvxNumberType aType;
+    aType.SetNumberingType((sal_Int16)(ULONG)aFormatLB.GetEntryData(
+                                    aFormatLB.GetSelectEntryPos() ));
     aInf.SetNumType(aType);
 
     // Position
@@ -390,6 +390,9 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:45  hr
+    initial import
+
     Revision 1.11  2000/09/18 16:05:57  willem.vandorp
     OpenOffice header added.
 

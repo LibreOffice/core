@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,28 +302,28 @@ static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV )
 //          eigentlich folgende 2, aber Writer-UI bietet es nicht an
 //      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
 
-    pNum->eType = ( SVBT8ToByte( pAV->nfc ) < 8 ) ?
-                    eNumA[SVBT8ToByte( pAV->nfc ) ] : SVX_NUM_NUMBER_NONE;
+    pNum->SetNumberingType(( SVBT8ToByte( pAV->nfc ) < 8 ) ?
+                    eNumA[SVBT8ToByte( pAV->nfc ) ] : SVX_NUM_NUMBER_NONE);
 //  pNum->bInclUpperLevel = pAV->fPrev;
-    pNum->SetInclUpperLevel( ( SVBT8ToByte( pAV->aBits1 ) & 0x4 ) >> 2 );
-    pNum->SetStartValue( (USHORT)SVBT16ToShort( pAV->iStartAt ) );
+    pNum->SetIncludeUpperLevels( ( SVBT8ToByte( pAV->aBits1 ) & 0x4 ) >> 2 );
+    pNum->SetStart( (USHORT)SVBT16ToShort( pAV->iStartAt ) );
 //  pNum->eNumAdjust = eAdjA[pAV->jc];
-    pNum->SetAdjust( eAdjA[SVBT8ToByte( pAV->aBits1 ) & 0x3] );
+    pNum->SetNumAdjust( eAdjA[SVBT8ToByte( pAV->aBits1 ) & 0x3] );
 
-    pNum->SetCharTextOffset( (USHORT)SVBT16ToShort( pAV->dxaSpace ) );
+    pNum->SetCharTextDistance( (USHORT)SVBT16ToShort( pAV->dxaSpace ) );
     INT16 nIndent = Abs((INT16)SVBT16ToShort( pAV->dxaIndent ));
     if( SVBT8ToByte( pAV->aBits1 ) & 0x08 ){    // fHang
         pNum->SetFirstLineOffset( -nIndent );
         pNum->SetLSpace( nIndent );
         pNum->SetAbsLSpace( nIndent );
     }else{
-        pNum->SetCharTextOffset( nIndent );     // Breite der Nummer fehlt
+        pNum->SetCharTextDistance( nIndent );       // Breite der Nummer fehlt
     }
     if( SVBT8ToByte( pAV->nfc ) == 5 || SVBT8ToByte( pAV->nfc ) == 7 )
     {
-        String sP( pNum->GetPostfix() );
+        String sP( pNum->GetSuffix() );
         sP.Insert( '.', 0 );
-        pNum->SetPostfix( sP ); // Ordinalzahlen
+        pNum->SetSuffix( sP );  // Ordinalzahlen
     }
 }
 
@@ -341,8 +341,8 @@ void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE* pTxt,
 
     if( bOutline )
     {                             // Gliederung
-        if( !pNum->IsInclUpperLevel()           // es sind  <= 1 Nummern anzuzeigen
-            || pNum->eType == SVX_NUM_NUMBER_NONE ){    // oder dieser Level hat keine
+        if( !pNum->GetIncludeUpperLevels()          // es sind  <= 1 Nummern anzuzeigen
+            || pNum->GetNumberingType() == SVX_NUM_NUMBER_NONE ){   // oder dieser Level hat keine
                                                 // eigenen Ziffern
             bInsert = TRUE;                     // -> dann uebernehme Zeichen
 
@@ -376,7 +376,7 @@ void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE* pTxt,
                 aFont.SetFamily( eFamily );
 //              aFont.SetPitch( ePitch );       // darf nach JP nicht
                 aFont.SetCharSet( eCharSet );
-                pNum->eType = SVX_NUM_CHAR_SPECIAL;
+                pNum->SetNumberingType(SVX_NUM_CHAR_SPECIAL);
 //              if( pAV->ico )      // geht in UI und SWG-Writer/Reader nicht
 //                  aFont.SetColor( Color( GetCol( pAV->ico ) ) );
                 pNum->SetBulletFont( &aFont );
@@ -398,10 +398,10 @@ void SwWW8ImplReader::SetAnlvStrings( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE* pTxt,
         }
         if( SVBT8ToByte( pAV->cbTextAfter ) )
         {
-            String sP( pNum->GetPostfix() );
+            String sP( pNum->GetSuffix() );
             sP.Insert( sTxt.Copy( SVBT8ToByte( pAV->cbTextBefore ),
                                   SVBT8ToByte( pAV->cbTextAfter  ) ) );
-            pNum->SetPostfix( sP );
+            pNum->SetSuffix( sP );
         }
 // Die Zeichen vor und hinter mehreren Ziffern koennen leider nicht uebernommen
 // werden, da sie der Writer ganz anders behandelt und das Ergebnis i.A.
@@ -3003,11 +3003,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.3 2000-12-01 11:22:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.4 2001-02-23 12:45:26 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.2  2000/10/25 14:10:36  khz
       Now supporting negative horizontal indentation of paragrahps and tables
 

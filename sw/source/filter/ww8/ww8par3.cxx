@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-06 11:10:53 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,9 +855,9 @@ sal_Bool WW8ListManager::ReadLVL( sal_uInt8 nLevel,
     // 6. entsprechendes NumFmt konfigurieren
     //
     if( bSetStartNo )
-        rNumFmt.SetStartValue( nStartNo );
-    rNumFmt.eType = eType;
-    rNumFmt.SetAdjust( eAdj );
+        rNumFmt.SetStart( nStartNo );
+    rNumFmt.SetNumberingType(eType);
+    rNumFmt.SetNumAdjust( eAdj );
 
     if( SVX_NUM_CHAR_SPECIAL == eType )
     {
@@ -872,8 +872,8 @@ sal_Bool WW8ListManager::ReadLVL( sal_uInt8 nLevel,
         // erinnern: Garnix ist default Prefix
             rNumFmt.SetPrefix( aPrefix );
         // erinnern: Punkt ist default  Postfix
-        rNumFmt.SetPostfix( aPostfix );
-        rNumFmt.SetUpperLevel( nUpperLevel );
+        rNumFmt.SetSuffix( aPostfix );
+        rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
 
     rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
@@ -969,7 +969,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8       nLevel,
     //
     // ggfs. Bullet Font an das NumFormat haengen
     //
-    if( SVX_NUM_CHAR_SPECIAL == aNumFmt.eType )
+    if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
     {
         SwCharFmt* pFmt = aNumFmt.GetCharFmt();
         Font aFont;
@@ -1323,7 +1323,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                         }
                         else
                         if( aLFOLVL.bStartAt )
-                            aNumFmt.SetStartValue( (sal_uInt16)aLFOLVL.nStartAt );
+                            aNumFmt.SetStart( (sal_uInt16)aLFOLVL.nStartAt );
                         //
                         // 2.2.2.3 das NumFmt in die NumRule aufnehmen
                         //
@@ -2136,12 +2136,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.5 2001-02-06 11:10:53 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.6 2001-02-23 12:45:26 os Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/02/06 11:10:53  cmc
+      ##173##, #80858#, #82192# deeply flawed upgrade to String from pointer to character array fixed
+
       Revision 1.4  2001/01/30 09:27:25  cmc
       #80205# Keeping comments closely linked to bugids
 

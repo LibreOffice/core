@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 15:42:30 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,30 +1183,30 @@ void SwRTFParser::ReadDocControls( int nToken )
             break;
 
         case RTF_FTNNAR:
-            aFtnInfo.aFmt.eType = SVX_NUM_ARABIC; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNALC:
-            aFtnInfo.aFmt.eType = SVX_NUM_CHARS_LOWER_LETTER_N; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNAUC:
-            aFtnInfo.aFmt.eType = SVX_NUM_CHARS_UPPER_LETTER_N; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNRLC:
-            aFtnInfo.aFmt.eType = SVX_NUM_ROMAN_LOWER; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNRUC:
-            aFtnInfo.aFmt.eType = SVX_NUM_ROMAN_UPPER; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bFtnInfoChgd = TRUE; break;
         case RTF_FTNNCHI:
-            aFtnInfo.aFmt.eType = SVX_NUM_CHAR_SPECIAL; bFtnInfoChgd = TRUE; break;
+            aFtnInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bFtnInfoChgd = TRUE; break;
 
         case RTF_AFTNNAR:
-            aEndInfo.aFmt.eType = SVX_NUM_ARABIC; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ARABIC); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNALC:
-            aEndInfo.aFmt.eType = SVX_NUM_CHARS_LOWER_LETTER_N; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNAUC:
-            aEndInfo.aFmt.eType = SVX_NUM_CHARS_UPPER_LETTER_N; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNRLC:
-            aEndInfo.aFmt.eType = SVX_NUM_ROMAN_LOWER; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_LOWER); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNRUC:
-            aEndInfo.aFmt.eType = SVX_NUM_ROMAN_UPPER; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_ROMAN_UPPER); bEndInfoChgd = TRUE; break;
         case RTF_AFTNNCHI:
-            aEndInfo.aFmt.eType = SVX_NUM_CHAR_SPECIAL; bEndInfoChgd = TRUE; break;
+            aEndInfo.aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL); bEndInfoChgd = TRUE; break;
 
 
         case '{':
@@ -1374,7 +1374,7 @@ BOOL lcl_CompareRTFPageDesc( const SwPageDesc& rOld, const SwPageDesc& rAkt )
 {
     BOOL bRet = /*rAkt.ReadUseOn() == rOld.ReadUseOn() && Bug 63599 */
                 rAkt.GetLandscape() == rOld.GetLandscape() &&
-                rAkt.GetNumType().eType == rOld.GetNumType().eType;
+                rAkt.GetNumType().GetNumberingType() == rOld.GetNumType().GetNumberingType();
 
     if( bRet )
     {
@@ -1570,7 +1570,7 @@ void SwRTFParser::ReadSectControls( int nToken )
     SvUShorts aColumns;
 
     USHORT nPgStart = USHRT_MAX;
-    SwNumType aNumType;
+    SvxNumberType aNumType;
 
     do {
         BOOL bIsSectToken = FALSE;
@@ -1605,7 +1605,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                 nPgStart = USHRT_MAX;
                 nCols = USHRT_MAX;
                 nColSpace = USHRT_MAX;
-                aNumType.eType = SVX_NUM_ARABIC;
+                aNumType.SetNumberingType(SVX_NUM_ARABIC);
                 bHeaderUL = bHeaderLR = bFooterUL = bFooterLR = TRUE;
                 eBreak = SVX_BREAK_PAGE_BEFORE;
                 nNewNumSectDef = USHRT_MAX;
@@ -1700,23 +1700,23 @@ void SwRTFParser::ReadSectControls( int nToken )
             break;
 
         case RTF_PGNDEC:
-            aNumType.eType = SVX_NUM_ARABIC;
+            aNumType.SetNumberingType(SVX_NUM_ARABIC);
             bPgDescChgd = TRUE;
             break;
         case RTF_PGNUCRM:
-            aNumType.eType = SVX_NUM_ROMAN_UPPER;
+            aNumType.SetNumberingType(SVX_NUM_ROMAN_UPPER);
             bPgDescChgd = TRUE;
             break;
         case RTF_PGNLCRM:
-            aNumType.eType = SVX_NUM_ROMAN_LOWER;
+            aNumType.SetNumberingType(SVX_NUM_ROMAN_LOWER);
             bPgDescChgd = TRUE;
             break;
         case RTF_PGNUCLTR:
-            aNumType.eType = SVX_NUM_CHARS_UPPER_LETTER_N;
+            aNumType.SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N);
             bPgDescChgd = TRUE;
             break;
         case RTF_PGNLCLTR:
-            aNumType.eType = SVX_NUM_CHARS_LOWER_LETTER_N;
+            aNumType.SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N);
             bPgDescChgd = TRUE;
             break;
 
@@ -3750,69 +3750,4 @@ static void DumpEnde()
 
 #endif
 
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/swparrtf.cxx,v 1.3 2001-01-26 15:42:30 jp Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.2  2000/11/06 09:30:33  jp
-      must changes: tempfile
-
-      Revision 1.1.1.1  2000/09/18 17:14:56  hr
-      initial import
-
-      Revision 1.159  2000/09/18 16:04:51  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.158  2000/08/07 15:13:02  jp
-      Bug #77342#: use String::CreateFromInt32
-
-      Revision 1.157  2000/08/04 10:48:19  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; use rtfout functions
-
-      Revision 1.156  2000/07/20 13:16:26  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.155  2000/06/13 09:42:01  os
-      using UCB
-
-      Revision 1.154  2000/05/26 07:22:44  os
-      old SW Basic API Slots removed
-
-      Revision 1.153  2000/05/09 17:23:01  jp
-      Changes for Unicode
-
-      Revision 1.152  2000/03/21 16:30:56  jp
-      Bug #74351# ReadSectControls: reset column from the first pagedesc too
-
-      Revision 1.151  2000/03/14 17:25:21  jp
-      Bug #73968#: read and set outline/num-levels
-
-      Revision 1.150  2000/03/14 09:22:29  jp
-      Bug #73941#: remove unused numrules, share override rules
-
-      Revision 1.149  2000/02/24 18:31:42  jp
-      Bug #73480#: ReadSectControls - dont set columns at PageDesc and Region
-
-      Revision 1.148  2000/02/11 17:36:06  jp
-      Bug #72146#: read UniCode character
-
-      Revision 1.147  2000/02/11 14:38:06  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.146  2000/01/25 20:13:27  jp
-      Bug #72146#: read UniCode character
-
-      Revision 1.145  2000/01/07 12:26:54  jp
-      Task #71411#: read/write NoBalancedColumns
-
-      Revision 1.144  1999/12/13 13:15:42  jp
-      Bug #70916#: ROW - skip to the end of the current line and then move the cursor one node forward
-
-*************************************************************************/
 

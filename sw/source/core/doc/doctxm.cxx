@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 10:40:40 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2026,7 +2026,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     USHORT nOld = rNums[0],
            nBeg = nOld,
            nCount  = 0;
-    String aNumStr( SwNumType( ((SwPageDesc*)rDescs[0])->GetNumType() ).
+    String aNumStr( SvxNumberType( ((SwPageDesc*)rDescs[0])->GetNumType() ).
                     GetNumStr( nBeg ) );
     if( pCharStyleIdx && lcl_HasMainEntry( pMainEntryNums, nBeg ))
     {
@@ -2055,7 +2055,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
     for(USHORT i = 1; i < rNums.Count(); ++i)
     {
-        SwNumType aType( ((SwPageDesc*)rDescs[i])->GetNumType() );
+        SvxNumberType aType( ((SwPageDesc*)rDescs[i])->GetNumType() );
         if( TOX_INDEX == SwTOXBase::GetType() )
         {   // Zusammenfassen f. ff.
             // Alle folgenden aufaddieren
@@ -2129,7 +2129,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 aNumStr.AppendAscii( sPageDeli );
 //#58127# Wenn nCount == 0, dann steht die einzige Seitenzahl schon im aNumStr!
             if(nCount)
-                aNumStr += SwNumType( ((SwPageDesc*)rDescs[i-1])->
+                aNumStr += SvxNumberType( ((SwPageDesc*)rDescs[i-1])->
                                 GetNumType() ).GetNumStr( nBeg+nCount );
         }
     }

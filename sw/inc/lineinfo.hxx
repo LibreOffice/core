@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineinfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ enum LineNumberPosition
 class SwLineNumberInfo : public SwClient //purpose of derivation from SwClient:
                                          //character style for displaying the numbers.
 {
-    SwNumType           aType;              //e.g. roman linenumbers
+    SvxNumberType       aType;              //e.g. roman linenumbers
     String              aDivider;           //String for aditional interval (vert. lines user defined)
     USHORT              nPosFromLeft;       //Position for paint
     USHORT              nCountBy;           //Paint only for every n line
@@ -106,8 +106,8 @@ public:
     SwCharFmt *GetCharFmt(SwDoc &rDoc) const;
     void SetCharFmt( SwCharFmt* );
 
-    const SwNumType &GetNumType() const             { return aType; }
-    void             SetNumType( SwNumType aNew )   { aType = aNew; }
+    const SvxNumberType &GetNumType() const             { return aType; }
+    void                SetNumType( SvxNumberType aNew ){ aType = aNew; }
 
     const String &GetDivider() const    { return aDivider; }
     void SetDivider( const String &r )  { aDivider = r; }

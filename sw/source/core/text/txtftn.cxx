@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 09:51:44 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1004,7 +1004,7 @@ XubString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     ASSERT( pPage, "GetPageNumber: Homeless TxtFrm" );
     MSHORT nVirtNum = pPage->GetVirtPageNum();
-    const SwNumType& rNum = pPage->GetPageDesc()->GetNumType();
+    const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-17 09:25:09 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -897,7 +897,7 @@ void ViewShell::SizeChgNotify(const Size &rSize)
             if ( pCnt && 0 != (pPage = pCnt->FindPageFrm()) )
             {
                 USHORT nVirtNum = pPage->GetVirtPageNum();
-                 const SwNumType& rNum = pPage->GetPageDesc()->GetNumType();
+                 const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
                 String sDisplay = rNum.GetNumStr( nVirtNum );
                 PageNumNotify( this, pCnt->GetPhyPageNum(), nVirtNum, sDisplay );
             }
@@ -2098,6 +2098,9 @@ BOOL ViewShell::IsNewLayout() const
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/17 09:25:09  os
+      #79537# CareChildWin/GetCareWin need current shell as parameter
+
       Revision 1.1.1.1  2000/09/19 00:08:29  hr
       initial import
 

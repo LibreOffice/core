@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 12:41:20 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,7 +495,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                         (nTmp <= SVX_NUM_ARABIC ||
                             nTmp == SVX_NUM_CHARS_UPPER_LETTER_N||
                                 nTmp == SVX_NUM_CHARS_LOWER_LETTER_N))
-                        aFtnInfo.aFmt.eType = (SvxExtNumType)nTmp;
+                        aFtnInfo.aFmt.SetNumberingType(nTmp);
                     else
                         throw lang::IllegalArgumentException();
                 }
@@ -611,7 +611,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    aRet <<= (sal_Int16)rFtnInfo.aFmt.eType;
+                    aRet <<= rFtnInfo.aFmt.GetNumberingType();
                 }
                 break;
                 case  WID_START_AT:
@@ -827,7 +827,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 {
                     INT16 nTmp;
                     aValue >>= nTmp;
-                    aEndInfo.aFmt.eType = (SvxExtNumType)nTmp;
+                    aEndInfo.aFmt.SetNumberingType(nTmp);
                 }
                 break;
                 case  WID_START_AT:
@@ -893,7 +893,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= OUString(rEndInfo.GetSuffix());
                 break;
                 case  WID_NUMBERING_TYPE :
-                    aRet <<= (sal_Int16)rEndInfo.aFmt.eType;
+                    aRet <<= rEndInfo.aFmt.GetNumberingType();
                 break;
                 case  WID_START_AT:
                     aRet <<= (sal_Int16)rEndInfo.nFtnOffset;
@@ -1070,10 +1070,10 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_NUMBERING_TYPE  :
                 {
-                    SwNumType aNumType(aInfo.GetNumType());
+                    SvxNumberType aNumType(aInfo.GetNumType());
                     INT16 nTmp;
                     aValue >>= nTmp;
-                    aNumType.eType = (SvxExtNumType)nTmp;
+                    aNumType.SetNumberingType(nTmp);
                     aInfo.SetNumType(aNumType);
                 }
                 break;
@@ -1181,7 +1181,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                                                       SFX_STYLE_FAMILY_CHAR ));
                 break;
                 case WID_NUMBERING_TYPE  :
-                    aRet <<= (sal_Int16)rInfo.GetNumType().eType;
+                    aRet <<= rInfo.GetNumType().GetNumberingType();
                 break;
                 case WID_NUMBER_POSITION :
                 {
@@ -1555,13 +1555,13 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
     //fill all properties into the array
 
     //adjust
-    SvxAdjust eAdj = rFmt.GetAdjust();
+    SvxAdjust eAdj = rFmt.GetNumAdjust();
     sal_Int16 nINT16 = aSvxToUnoAdjust[(sal_uInt16)eAdj];
     PropValData* pData = new PropValData((void*)&nINT16, "Adjust", ::getCppuType((const sal_Int16*)0) );
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //parentnumbering
-    nINT16 = rFmt.GetUpperLevel();
+    nINT16 = rFmt.GetIncludeUpperLevels();
     pData = new PropValData((void*)&nINT16, "ParentNumbering", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1571,7 +1571,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //suffix
-    aUString = rFmt.GetPostfix();
+    aUString = rFmt.GetSuffix();
     pData = new PropValData((void*)&aUString, "Suffix", ::getCppuType((const OUString*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1591,7 +1591,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //startvalue
-    nINT16 = rFmt.GetStartValue();
+    nINT16 = rFmt.GetStart();
     pData = new PropValData((void*)&nINT16, "StartWith", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1601,7 +1601,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     //chartextoffset
-    nINT32 = TWIP_TO_MM100(rFmt.GetCharTextOffset());
+    nINT32 = TWIP_TO_MM100(rFmt.GetCharTextDistance());
     pData = new PropValData((void*)&nINT32, UNO_NAME_SYMBOL_TEXT_DISTANCE, ::getCppuType((const sal_Int32*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
@@ -1610,15 +1610,14 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
     pData = new PropValData((void*)&nINT32, UNO_NAME_FIRST_LINE_OFFSET, ::getCppuType((const sal_Int32*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-    //TODO: Enum fuer NumberingType erweitern
     //
-    nINT16 = rFmt.eType;
+    nINT16 = rFmt.GetNumberingType();
     pData = new PropValData((void*)&nINT16, "NumberingType", ::getCppuType((const sal_Int16*)0));
     aPropertyValues.Insert(pData, aPropertyValues.Count());
 
     if(!bChapterNum)
     {
-        if(SVX_NUM_CHAR_SPECIAL == rFmt.eType)
+        if(SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType())
         {
             //BulletId
             nINT16 = rFmt.GetBulletChar();
@@ -1649,10 +1648,10 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
         }
-        if(SVX_NUM_BITMAP == rFmt.eType)
+        if(SVX_NUM_BITMAP == rFmt.GetNumberingType())
         {
             //GraphicURL
-            const SvxBrushItem* pBrush = rFmt.GetGrfBrush();
+            const SvxBrushItem* pBrush = rFmt.GetBrush();
             if(pBrush)
             {
                 Any aAny;
@@ -1675,13 +1674,13 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::getNumberingRuleByIndex(
                                 ::getCppuType((const uno::Reference<awt::XBitmap>*)0));
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
-             Size aSize = rFmt.GetGrfSize();
+             Size aSize = rFmt.GetGraphicSize();
             aSize.Width() = TWIP_TO_MM100( aSize.Width() );
             aSize.Height() = TWIP_TO_MM100( aSize.Height() );
             pData = new PropValData((void*)&aSize, UNO_NAME_GRAPHIC_SIZE, ::getCppuType((const awt::Size*)0));
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
-            const SwFmtVertOrient* pOrient = rFmt.GetGrfOrient();
+            const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
             if(pOrient)
             {
                 pData = new PropValData((void*)0, UNO_NAME_VERT_ORIENT, ::getCppuType((const sal_Int16*)0));
@@ -1822,7 +1821,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                         nValue <= HoriOrientation::LEFT &&
                             USHRT_MAX != aUnoToSvxAdjust[nValue])
                     {
-                        aFmt.SetAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
+                        aFmt.SetNumAdjust((SvxAdjust)aUnoToSvxAdjust[nValue]);
                     }
                     else
                         bWrongArg = sal_True;
@@ -1833,7 +1832,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     sal_Int16 nSet;
                     pData->aVal >>= nSet;
                     if(nSet >= 0 && MAXLEVEL >= nSet)
-                        aFmt.SetUpperLevel(nSet);
+                        aFmt.SetIncludeUpperLevels(nSet);
                 }
                 break;
                 case 2: //"Prefix",
@@ -1847,7 +1846,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     OUString uTmp;
                     pData->aVal >>= uTmp;
-                    aFmt.SetPostfix(uTmp);
+                    aFmt.SetSuffix(uTmp);
                 }
                 break;
                 case 4: //"CharStyleName",
@@ -1903,7 +1902,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     INT16 nVal;
                     pData->aVal >>= nVal;
-                    aFmt.SetStartValue(nVal);
+                    aFmt.SetStart(nVal);
                 }
                 break;
                 case 6: //UNO_NAME_LEFT_MARGIN,
@@ -1921,7 +1920,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     sal_Int32 nValue;
                     pData->aVal >>= nValue;
                     if(nValue >= 0)
-                        aFmt.SetCharTextOffset((sal_uInt16) MM100_TO_TWIP(nValue));
+                        aFmt.SetCharTextDistance((sal_uInt16) MM100_TO_TWIP(nValue));
                     else
                         bWrongArg = sal_True;
                 }
@@ -1946,7 +1945,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     sal_Int16 nSet;
                     pData->aVal >>= nSet;
                     if(nSet <= (sal_Int16)SVX_NUM_CHARS_LOWER_LETTER_N)
-                        aFmt.eType = (SvxExtNumType)nSet;
+                        aFmt.SetNumberingType(nSet);
                     else
                         bWrongArg = sal_True;
                 }
@@ -2000,7 +1999,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     pData->aVal >>= sBrushURL;
                     if(!pSetBrush)
                     {
-                        const SvxBrushItem* pOrigBrush = aFmt.GetGrfBrush();
+                        const SvxBrushItem* pOrigBrush = aFmt.GetBrush();
                         if(pOrigBrush)
                         {
                             pSetBrush = new SvxBrushItem(*pOrigBrush);
@@ -2018,7 +2017,7 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                     {
                         if(!pSetBrush)
                         {
-                            const SvxBrushItem* pOrigBrush = aFmt.GetGrfBrush();
+                            const SvxBrushItem* pOrigBrush = aFmt.GetBrush();
                             if(pOrigBrush)
                             {
                                 pSetBrush = new SvxBrushItem(*pOrigBrush);
@@ -2055,8 +2054,8 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                 {
                     if(!pSetVOrient)
                     {
-                        if(aFmt.GetGrfOrient())
-                            pSetVOrient = (SwFmtVertOrient*)aFmt.GetGrfOrient()->Clone();
+                        if(aFmt.GetGraphicOrientation())
+                            pSetVOrient = (SwFmtVertOrient*)aFmt.GetGraphicOrientation()->Clone();
                         else
                             pSetVOrient = new SwFmtVertOrient;
                     }
@@ -2089,24 +2088,26 @@ void SwXNumberingRules::setNumberingRuleByIndex(
         }
         if(!bExcept && !bWrongArg && (pSetBrush || pSetSize || pSetVOrient))
         {
-            if(!pSetBrush && aFmt.GetGrfBrush())
-                pSetBrush = new SvxBrushItem(*aFmt.GetGrfBrush());
+            if(!pSetBrush && aFmt.GetBrush())
+                pSetBrush = new SvxBrushItem(*aFmt.GetBrush());
 
             if(pSetBrush)
             {
-                if(!pSetVOrient && aFmt.GetGrfOrient())
-                    pSetVOrient = new SwFmtVertOrient(*aFmt.GetGrfOrient());
+                if(!pSetVOrient && aFmt.GetGraphicOrientation())
+                    pSetVOrient = new SwFmtVertOrient(*aFmt.GetGraphicOrientation());
 
                 if(!pSetSize)
                 {
-                    pSetSize = new Size(aFmt.GetGrfSize());
+                    pSetSize = new Size(aFmt.GetGraphicSize());
                     if(!pSetSize->Width() || !pSetSize->Height())
                     {
                         const Graphic* pGraphic = pSetBrush->GetGraphic();
                         *pSetSize = ::GetGraphicSizeTwip(*pGraphic, 0);
                     }
                 }
-                aFmt.SetGrfBrush( pSetBrush, pSetSize, pSetVOrient );
+                SvxFrameVertOrient eOrient = pSetVOrient ?
+                    (SvxFrameVertOrient)pSetVOrient->GetVertOrient() : SVX_VERT_NONE;
+                aFmt.SetGraphicBrush( pSetBrush, pSetSize, SVX_VERT_NONE == eOrient ? 0 : &eOrient );
             }
         }
         delete pSetBrush;

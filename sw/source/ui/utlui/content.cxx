@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-01-29 12:43:43 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,7 +1527,7 @@ sal_Bool SwContentTree::FillDragServer(sal_uInt16& nDragMode)
                 {
                     sal_uInt16 nVal = pNum->GetLevelVal()[nLevel];
                     nVal ++;
-                    nVal -= pOutlRule->Get(nLevel).GetStartValue();
+                    nVal -= pOutlRule->Get(nLevel).GetStart();
                     sEntry += String::CreateFromInt32( nVal );
                     sEntry += '.';
                 }
@@ -3194,6 +3194,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/29 12:43:43  os
+    #339# fixed: update/rename of indexes
+
     Revision 1.3  2000/11/03 11:32:31  os
     allow editing of indexes independent from the cursor position
 

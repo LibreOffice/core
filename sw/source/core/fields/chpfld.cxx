@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chpfld.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:19 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
                     else if( SVX_NUM_NUMBER_NONE != pDoc->GetOutlineNumRule()
-                            ->Get( nLevel ).eType )
+                            ->Get( nLevel ).GetNumberingType() )
                     {
                         pTxtNd = pONd;
                         break;
@@ -205,7 +205,7 @@ void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
         if( NO_NUM > rNum.GetLevel() && !( NO_NUMLEVEL & rNum.GetLevel() ) )
         {
             const SwNumFmt& rNFmt = pDoc->GetOutlineNumRule()->Get( rNum.GetLevel() );
-            sPost = rNFmt.GetPostfix();
+            sPost = rNFmt.GetSuffix();
             sPre = rNFmt.GetPrefix();
         }
         else

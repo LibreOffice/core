@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:41:15 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,7 +1068,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         OutHTML_BulletImage( rWrt, sHTML_image, 0,
                              rHWrt.aBulletGrfs[nBulletGrfLvl],
-                             rNumFmt.GetGrfSize(), rNumFmt.GetGrfOrient() );
+                             rNumFmt.GetGraphicSize(), rNumFmt.GetGraphicOrientation() );
     }
 
     rHWrt.GetNumInfo() = aNumInfo;
@@ -3096,11 +3096,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.5 2000-11-20 09:41:15 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.6 2001-02-23 12:45:24 os Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 09:41:15  jp
+      new para attributes - expand para range
+
       Revision 1.4  2000/11/13 20:32:39  jp
       remove unused headerfile
 

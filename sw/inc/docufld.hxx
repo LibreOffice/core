@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:05:08 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ enum SwJumpEditFormat
 
 class SwPageNumberFieldType : public SwFieldType
 {
-    SvxExtNumType   eNumFormat;
+    sal_Int16   nNumberingType;
     USHORT          nNum, nMax;
     BOOL            bVirtuell;
 
@@ -185,8 +185,8 @@ public:
 
     String& Expand( ULONG nFmt, short nOff, const String&, String& rRet ) const;
     void ChangeExpansion( SwDoc* pDoc, USHORT nNum, USHORT nMax,
-                            BOOL bVirtPageNum, const SvxExtNumType* pNumFmt = 0 );
-    inline SvxExtNumType GetNumFormat() const { return eNumFormat; }
+                            BOOL bVirtPageNum, const sal_Int16* pNumFmt = 0 );
+    inline sal_Int16 GetNumFormat() const { return nNumberingType; }
     virtual SwFieldType* Copy() const;
 };
 
@@ -325,15 +325,15 @@ public:
 class SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
-    SvxExtNumType   eNumFormat;
+    sal_Int16       nNumberingType;//com::sun::star::style::NumberingType
 
 public:
     SwDocStatFieldType(SwDoc*);
     String                  Expand(USHORT nSubType, ULONG nFmt) const;
     virtual SwFieldType*    Copy() const;
 
-    inline SvxExtNumType    GetNumFormat() const        { return eNumFormat; }
-    inline void             SetNumFormat( SvxExtNumType eFmt )  { eNumFormat = eFmt; }
+    inline sal_Int16        GetNumFormat() const        { return nNumberingType; }
+    inline void             SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
 };
 
 /*--------------------------------------------------------------------
@@ -686,7 +686,7 @@ public:
 class SwRefPageGetFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
-    SvxExtNumType   eNumFormat;
+    sal_Int16       nNumberingType;
 
     void UpdateField( SwTxtFld* pTxtFld, _SetGetExpFlds& rSetList );
 
@@ -698,8 +698,8 @@ public:
     virtual void Modify( SfxPoolItem *, SfxPoolItem * );
     USHORT MakeSetList( _SetGetExpFlds& rTmpLst );
 
-    SvxExtNumType   GetNumFormat() const            { return eNumFormat; }
-    void            SetNumFormat( SvxExtNumType eFmt )  { eNumFormat = eFmt; }
+    sal_Int16       GetNumFormat() const            { return nNumberingType; }
+    void            SetNumFormat( sal_Int16 eFmt )  { nNumberingType = eFmt; }
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 

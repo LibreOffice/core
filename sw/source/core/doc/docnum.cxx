@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,9 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
                     rOld.GetFirstLineOffset() != rNew.GetFirstLineOffset() )
                     nChkLevel |= nMask;
             }
-            else if( SVX_NUM_NUMBER_NONE > rNew.eType && 1 < rNew.GetUpperLevel() &&
+            else if( SVX_NUM_NUMBER_NONE > rNew.GetNumberingType() && 1 < rNew.GetIncludeUpperLevels() &&
                     0 != (nChgFmtLevel & GetUpperLvlChg( n,
-                                            rNew.GetUpperLevel(), nMask )) )
+                                            rNew.GetIncludeUpperLevels(), nMask )) )
                 nChgFmtLevel |= nMask;
         }
         (*pOutlineRule) = rRule;
@@ -682,8 +682,8 @@ void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule, SwHistory* pHist,
                 rOldFmt.GetFirstLineOffset() != rNewFmt.GetFirstLineOffset() )
                 nChkLevel |= nMask;
         }
-        else if( SVX_NUM_NUMBER_NONE > rNewFmt.eType && 1 < rNewFmt.GetUpperLevel() &&
-                0 != (nChgFmtLevel & GetUpperLvlChg( n, rNewFmt.GetUpperLevel(),nMask )) )
+        else if( SVX_NUM_NUMBER_NONE > rNewFmt.GetNumberingType() && 1 < rNewFmt.GetIncludeUpperLevels() &&
+                0 != (nChgFmtLevel & GetUpperLvlChg( n, rNewFmt.GetIncludeUpperLevels(),nMask )) )
             nChgFmtLevel |= nMask;
     }
 
@@ -1748,7 +1748,7 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel, BOOL bOutline )
                     ((SwNumRuleItem*)pItem)->GetValue() )) )) &&
         (bDel ? 0 != ( pNum->GetLevel() & NO_NUMLEVEL )
              : 0 == ( pNum->GetLevel() & NO_NUMLEVEL ) ) &&
-        SVX_NUM_NUMBER_NONE != pRule->Get( GetRealLevel(pNum->GetLevel()) ).eType )
+        SVX_NUM_NUMBER_NONE != pRule->Get( GetRealLevel(pNum->GetLevel()) ).GetNumberingType() )
     {
         if( DoesUndo() )
         {
@@ -1971,7 +1971,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
         SwNodeNum aNum( 0 );
 
         if( pRule->IsContinusNum() )
-            nNumVal = pRule->Get( 0 ).GetStartValue();
+            nNumVal = pRule->Get( 0 ).GetStart();
 
         SwTxtNode* pStt = aUpd.GetList().GetObject( nUpdPos );
         SwTxtNode* pPrev = nUpdPos ? aUpd.GetList().GetObject( nUpdPos-1 ) : 0;
@@ -2048,7 +2048,7 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                             (MAXLEVEL) * sizeof( aNum.GetLevelVal()[0]) );
                     if( pRule->IsContinusNum() )
                     {
-                        nNumVal = pRule->Get( 0 ).GetStartValue();
+                        nNumVal = pRule->Get( 0 ).GetStart();
                         nInitLevels |= 1;
                     }
                     else
@@ -2078,15 +2078,15 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
             {
                 // beim Format mit Bitmap die Graphicen schon mal anfordern
                 const SwNumFmt* pNumFmt = pRule->GetNumFmt( GetRealLevel( nLevel ));
-                if( pNumFmt && SVX_NUM_BITMAP == pNumFmt->eType )
+                if( pNumFmt && SVX_NUM_BITMAP == pNumFmt->GetNumberingType() )
                     pNumFmt->GetGraphic();
 
                 if( pRule->IsContinusNum() )
                 {
                     if( !(nInitLevels & 1) &&
-                        !( pNumFmt && (SVX_NUM_CHAR_SPECIAL == pNumFmt->eType ||
-                                       SVX_NUM_BITMAP == pNumFmt->eType ||
-                                       SVX_NUM_NUMBER_NONE == pNumFmt->eType )))
+                        !( pNumFmt && (SVX_NUM_CHAR_SPECIAL == pNumFmt->GetNumberingType() ||
+                                       SVX_NUM_BITMAP == pNumFmt->GetNumberingType() ||
+                                       SVX_NUM_NUMBER_NONE == pNumFmt->GetNumberingType() )))
                         ++nNumVal;
                     aNum.GetLevelVal()[ nLevel ] = nNumVal;
                 }
@@ -2105,18 +2105,18 @@ void SwDoc::UpdateNumRule( const String& rName, ULONG nUpdPos )
                         {
                             nInitLevels &= ~( 1 << ii );
                             aNum.GetLevelVal()[ ii ] =
-                                        pRule->Get( ii ).GetStartValue();
+                                        pRule->Get( ii ).GetStart();
                         }
                         aNum.GetLevelVal()[ nLevel ] =
                             USHRT_MAX == aNum.GetSetValue()
-                                ? pRule->Get( nLevel ).GetStartValue()
+                                ? pRule->Get( nLevel ).GetStart()
                                 : aNum.GetSetValue();
                     }
                     else if( USHRT_MAX != aNum.GetSetValue() )
                         aNum.GetLevelVal()[ nLevel ] = aNum.GetSetValue();
                     else if( nInitLevels & ( 1 << nLevel ))
                         aNum.GetLevelVal()[ nLevel ] =
-                                        pRule->Get( nLevel ).GetStartValue();
+                                        pRule->Get( nLevel ).GetStart();
                     else
                         aNum.GetLevelVal()[ nLevel ]++;
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,8 +403,8 @@ static sal_uInt16 nBCTitleNo = 0;
                                         rItem.lUpper + rItem.nRows * rItem.lVDist));
 
             // Numerierungsart
-            SwNumType aType;
-            aType.eType = SVX_NUM_NUMBER_NONE;
+            SvxNumberType aType;
+            aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
             aDesc.SetNumType( aType );
 
             // Folgevorlage

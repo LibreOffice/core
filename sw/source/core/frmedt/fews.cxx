@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:02:28 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,7 @@ BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USH
     {
         rPhyNum  = ((const SwPageFrm*)pPage)->GetPhyPageNum();
         rVirtNum = ((const SwPageFrm*)pPage)->GetVirtPageNum();
-        const SwNumType& rNum = ((const SwPageFrm*)pPage)->GetPageDesc()->GetNumType();
+        const SvxNumberType& rNum = ((const SwPageFrm*)pPage)->GetPageDesc()->GetNumType();
         rDisplay = rNum.GetNumStr( rVirtNum );
     }
 

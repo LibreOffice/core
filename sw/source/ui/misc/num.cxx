@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void SwNumPositionTabPage::InitControls()
             if(USHRT_MAX == nLvl)
             {
                 nLvl = i;
-                pFirstOrient = aNumFmtArr[nLvl]->GetGrfOrient();
+                pFirstOrient = aNumFmtArr[nLvl]->GetGraphicOrientation();
 //              nFirstLSpace = nLvl > 0 ?
 //                  aNumFmtArr[nLvl]->GetAbsLSpace() - aNumFmtArr[nLvl - 1]->GetAbsLSpace():
 //                      aNumFmtArr[nLvl]->GetAbsLSpace();
@@ -327,9 +327,9 @@ void SwNumPositionTabPage::InitControls()
 //                  bSameDistBorder &= aNumFmtArr[i]->GetAbsLSpace() == aNumFmtArr[nLvl]->GetAbsLSpace();
                 }
 
-                bSameDist       &= aNumFmtArr[i]->GetCharTextOffset() == aNumFmtArr[nLvl]->GetCharTextOffset();
+                bSameDist       &= aNumFmtArr[i]->GetCharTextDistance() == aNumFmtArr[nLvl]->GetCharTextDistance();
                 bSameIndent     &= aNumFmtArr[i]->GetFirstLineOffset() == aNumFmtArr[nLvl]->GetFirstLineOffset();
-                bSameAdjust     &= aNumFmtArr[i]->GetAdjust() == aNumFmtArr[nLvl]->GetAdjust();
+                bSameAdjust     &= aNumFmtArr[i]->GetNumAdjust() == aNumFmtArr[nLvl]->GetNumAdjust();
 
             }
         }
@@ -362,7 +362,7 @@ void SwNumPositionTabPage::InitControls()
         bSetDistEmpty = TRUE;
 
     if(bSameDist)
-        aDistNumMF   .SetValue(aDistNumMF.Normalize(aNumFmtArr[nLvl]->GetCharTextOffset()), FUNIT_TWIP);
+        aDistNumMF   .SetValue(aDistNumMF.Normalize(aNumFmtArr[nLvl]->GetCharTextDistance()), FUNIT_TWIP);
     else
         aDistNumMF.SetText(aEmptyStr);
     if(bSameIndent)
@@ -373,9 +373,9 @@ void SwNumPositionTabPage::InitControls()
     if(bSameAdjust)
     {
         USHORT nPos = 1; // zentriert
-        if(aNumFmtArr[nLvl]->GetAdjust() == SVX_ADJUST_LEFT)
+        if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_LEFT)
             nPos = 0;
-        else if(aNumFmtArr[nLvl]->GetAdjust() == SVX_ADJUST_RIGHT)
+        else if(aNumFmtArr[nLvl]->GetNumAdjust() == SVX_ADJUST_RIGHT)
             nPos = 2;
         aAlignLB.SelectEntryPos(nPos);
     }
@@ -603,7 +603,7 @@ IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, pEdit )
                 eAdjust = SVX_ADJUST_LEFT;
             else if(nPos == 2)
                 eAdjust = SVX_ADJUST_RIGHT;
-            aNumFmt.SetAdjust( eAdjust );
+            aNumFmt.SetNumAdjust( eAdjust );
             pActNum->Set(i, aNumFmt);
         }
         nMask <<= 1;
@@ -697,7 +697,7 @@ IMPL_LINK( SwNumPositionTabPage, DistanceHdl, MetricField *, pFld )
             }
             else if(pFld == &aDistNumMF)
             {
-                aNumFmt.SetCharTextOffset( (short)nValue );
+                aNumFmt.SetCharTextDistance( (short)nValue );
             }
             else if(pFld == &aIndentMF)
             {
@@ -779,7 +779,7 @@ IMPL_LINK( SwNumPositionTabPage, StandardHdl, PushButton *, EMPTYARG )
                 );
             SwNumFmt aTempFmt(aTmpNumRule.Get( i ));
             aNumFmt.SetAbsLSpace( aTempFmt.GetAbsLSpace());
-            aNumFmt.SetCharTextOffset( aTempFmt.GetCharTextOffset() );
+            aNumFmt.SetCharTextDistance( aTempFmt.GetCharTextDistance() );
             aNumFmt.SetFirstLineOffset( aTempFmt.GetFirstLineOffset() );
 
             pActNum->Set( i, aNumFmt );
@@ -906,6 +906,9 @@ IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:45  hr
+      initial import
+
       Revision 1.198  2000/09/18 16:05:58  willem.vandorp
       OpenOffice header added.
 

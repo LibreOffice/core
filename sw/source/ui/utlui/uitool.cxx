@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:58:47 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,8 +302,8 @@ void ItemSetToPageDesc(const SfxItemSet& rSet, SwPageDesc& rPageDesc,
         if(nUse)
             rPageDesc.SetUseOn( (UseOnPage) nUse );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
-        SwNumType aNumType;
-        aNumType.eType = (SvxExtNumType)rPageItem.GetNumType();
+        SvxNumberType aNumType;
+        aNumType.SetNumberingType(rPageItem.GetNumType());
         rPageDesc.SetNumType(aNumType);
     }
     // Groesse
@@ -438,7 +438,7 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
     aPageItem.SetDescName(rPageDesc.GetName());
     aPageItem.SetPageUsage((SvxPageUsage)rPageDesc.GetUseOn());
     aPageItem.SetLandscape(rPageDesc.GetLandscape());
-    aPageItem.SetNumType((SvxNumType)rPageDesc.GetNumType().eType);
+    aPageItem.SetNumType((SvxNumType)rPageDesc.GetNumType().GetNumberingType());
     rSet.Put(aPageItem);
 
     // Groesse
@@ -892,6 +892,9 @@ String GetAppLangDateTimeString( const DateTime& rDT )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/02/14 09:58:47  jp
+    changes: international -> localdatawrapper
+
     Revision 1.2  2000/09/28 15:25:03  os
     use of configuration service in view options
 

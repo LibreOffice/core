@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,8 @@ static USHORT nTitleNo = 0;
                                             nPageW + lLeft, nPageH + lUpper));
 
         // Einstellen der Numerierungsart der Seite
-        SwNumType aType;
-        aType.eType = SVX_NUM_NUMBER_NONE;
+        SvxNumberType aType;
+        aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
         pDesc->SetNumType(aType);
 
         // Folgevorlage

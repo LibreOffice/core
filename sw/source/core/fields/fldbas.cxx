@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:47:24 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,11 +660,11 @@ SwField* SwFieldList::GetLastField() const
 
 String FormatNumber(USHORT nNum, ULONG nFormat)
 {
-    SwNumType aNumber;
+    SvxNumberType aNumber;
 
     ASSERT(nFormat != SVX_NUM_NUMBER_NONE, "Falsches Nummern-Format" );
 
-    aNumber.eType = (SvxExtNumType)nFormat;
+    aNumber.SetNumberingType((sal_Int16)nFormat);
     return aNumber.GetNumStr(nNum);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-18 14:07:46 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,12 +200,12 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
 
                 MSHORT nVirtNum = pFrame->GetVirtPageNum(),
                        nNumPages = pDoc->GetRootFrm()->GetPageNum();
-                const SvxExtNumType* pNumFmt = SVX_NUM_PAGEDESC == pFld->GetFormat()
-                    ? &pFrame->FindPageFrm()->GetPageDesc()->GetNumType().eType
-                    : 0;
+                sal_Int16 nNumFmt = -1;
+                if(SVX_NUM_PAGEDESC == pFld->GetFormat())
+                    nNumFmt = pFrame->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType();
 
                 pPageNr->ChangeExpansion( pDoc, nVirtNum, nNumPages,
-                                            bVirt, pNumFmt );
+                                            bVirt, nNumFmt > -1 ? &nNumFmt : 0);
             }
             pRet = new SwFldPortion( pFld->GetCntnt( bName ) );
             break;
@@ -396,14 +396,14 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     if( pNumRule && pNum && MAXLEVEL > pNum->GetLevel() )
     {
         CONST SwNumFmt &rNumFmt = pNumRule->Get( pNum->GetLevel() );
-        const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetAdjust();
-        const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetAdjust();
-        const KSHORT nMinDist = rNumFmt.GetCharTextOffset();
+        const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
+        const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
+        const KSHORT nMinDist = rNumFmt.GetCharTextDistance();
 
-        if( SVX_NUM_BITMAP == rNumFmt.eType )
+        if( SVX_NUM_BITMAP == rNumFmt.GetNumberingType() )
         {
-            pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),rNumFmt.GetGrfBrush(),
-                rNumFmt.GetGrfOrient(), rNumFmt.GetGrfSize(),
+            pRet = new SwGrfNumPortion( (SwFrm*)GetTxtFrm(),rNumFmt.GetBrush(),
+                rNumFmt.GetGraphicOrientation(), rNumFmt.GetGraphicSize(),
                 bLeft, bCenter, nMinDist );
             long nTmpA = rInf.GetLast()->GetAscent();
             long nTmpD = rInf.GetLast()->Height() - nTmpA;
@@ -418,7 +418,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             SwFont *pNumFnt = 0;
             const SwAttrSet* pFmt = rNumFmt.GetCharFmt() ?
                 &rNumFmt.GetCharFmt()->GetAttrSet() : NULL;
-            if( SVX_NUM_CHAR_SPECIAL == rNumFmt.eType )
+            if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
                 pNumFnt = new SwFont( &rInf.GetCharAttr() );

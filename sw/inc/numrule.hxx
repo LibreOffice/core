@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:32:32 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 #ifndef _SWERROR_H
 #include <error.h>          // Fuer die inline-ASSERTs
 #endif
-
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
+#endif
 
 class Font;
 class SvxBrushItem;
-class SvxNumberFormat;
 class SvxNumRule;
 class SwCharFmt;
 class SwDoc;
@@ -101,128 +102,43 @@ class SwTxtNode;
 
 extern char __FAR_DATA sOutlineStr[];   // SWG-Filter
 
-const sal_Unicode cBulletChar   = 0xF000 + 149; // Charakter fuer Aufzaehlungen
-
 inline BYTE GetRealLevel( const BYTE nLvl )
 {
     return nLvl & (NO_NUMLEVEL - 1);
 }
+const sal_Unicode cBulletChar   = 0xF000 + 149; // Charakter fuer Aufzaehlungen
 
-class SwNumType
+class SwNumFmt : public SvxNumberFormat, public SwClient
 {
-    void GetRomanStr( ULONG nNo, String& rStr ) const;
-    void GetCharStr( ULONG nNo, String& rStr ) const;
-    void GetCharStrN( ULONG nNo, String& rStr ) const;
-public:
-        /* Reihenfolge der Elemente des enums ist fuer die
-         * UI-Seite interesssant -- bitte nicht ohne trifftigen
-         * Grund und Nachricht an die UI-Seite aendern.
-         */
-    SvxExtNumType     eType;
-
-    SwNumType() { eType = SVX_NUM_ARABIC; }
-    SwNumType( const SwNumType& rType ) : eType( rType.eType ) {}
-
-    String GetNumStr( ULONG nNo ) const;
-};
-
-
-class SwNumFmt : public SwClient, public SwNumType
-{
-    String      aPrefix;                // vorangestellter Text
-    String      aPostfix;               // nachfolgender Text
-
-    // bei eType == USER_BITMAP ist folgendes ganz interessant
-    Size        aGrfSize;
-    SvxBrushItem* pGrfBrush;
     SwFmtVertOrient* pVertOrient;
-    // bei eType == CHAR_SPECIAL ist folgendes ganz interessant
-    Font*       pBulletFont;            // Pointer auf den BulletFont
-
-    SvxAdjust   eNumAdjust;             // Ausrichtung (Links/rechts/zent.)
-    short       nFirstLineOffset;       // Abstand zwischen Linken Rand und Text
-    short       nLSpace;                // relativer linker Rand
-    USHORT      nAbsLSpace;             // absoluter linker Rand
-    USHORT      nCharTextOffset;        // Abstand zwischen Zeichen und Text
-    USHORT      nStart;                 // Startwert fuer die Nummer
-
-    BYTE        nInclUpperLevel;        // wieviele Levels
-    sal_Unicode cBullet;                // das Bullet Char
-    BOOL        bRelLSpace : 1;         // LSpace als relative Angabe (UI)
 
     void UpdateNumNodes( SwDoc* pDoc );
-    DECL_STATIC_LINK( SwNumFmt, GraphicArrived, void * );
-
 public:
     SwNumFmt();
     SwNumFmt( const SwNumFmt& );
     SwNumFmt( const SvxNumberFormat&, SwDoc* pDoc);
-    SvxNumberFormat MakeSvxFormat() const;
+
     virtual ~SwNumFmt();
 
     SwNumFmt& operator=( const SwNumFmt& );
     BOOL operator==( const SwNumFmt& ) const;
     BOOL operator!=( const SwNumFmt& r ) const { return !(*this == r); }
 
+    const Graphic* GetGraphic() const;
+
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
     void SetCharFmt( SwCharFmt* );
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
-    // ist der Font* == 0, wird der Font nicht gewechselt
-    void SetBulletFont(const Font*);
-    const Font* GetBulletFont() const           { return pBulletFont; }
+    virtual void            SetCharFmtName(const String& rSet);
+    virtual const String&   GetCharFmtName()const;
 
-    sal_Unicode GetBulletChar() const           { return cBullet; }
-    void SetBulletChar( sal_Unicode c )         { cBullet = c; }
+    virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = 0, const SvxFrameVertOrient* pOrient = 0);
 
-//------
-// ALT
-    BOOL IsInclUpperLevel() const               { return 1 < nInclUpperLevel; }
-    void SetInclUpperLevel( BOOL b )            { nInclUpperLevel = b ? MAXLEVEL : 1; }
-// ALT
-//------
-    BYTE GetUpperLevel() const                  { return nInclUpperLevel; }
-    void SetUpperLevel( BYTE nValue )           { nInclUpperLevel = nValue; }
-
-    BOOL IsRelLSpace() const                    { return bRelLSpace; }
-    void SetRelLSpace( BOOL b )                 { bRelLSpace = b; }
-
-    SvxAdjust GetAdjust() const                 { return eNumAdjust; }
-    void SetAdjust( SvxAdjust eAdj )            { eNumAdjust = eAdj; }
-
-    short GetLSpace() const                     { return nLSpace; }
-    void SetLSpace( short n )                   { nLSpace = n; }
-
-    USHORT GetAbsLSpace() const                 { return nAbsLSpace; }
-    void SetAbsLSpace( USHORT n )               { nAbsLSpace = n; }
-
-    short GetFirstLineOffset() const            { return nFirstLineOffset; }
-    void SetFirstLineOffset( short n )          { nFirstLineOffset = n; }
-
-    USHORT GetCharTextOffset() const            { return nCharTextOffset; }
-    void SetCharTextOffset( USHORT n )          { nCharTextOffset = n; }
-
-    USHORT GetStartValue() const                { return nStart; }
-    void SetStartValue( USHORT n )              { nStart = n; }
-
-    const String& GetPrefix() const             { return aPrefix; }
-    void SetPrefix( const String& rS )          { aPrefix = rS; }
-
-    const String& GetPostfix() const            { return aPostfix; }
-    void SetPostfix( const String& rS )         { aPostfix = rS; }
-
-    const SvxBrushItem* GetGrfBrush() const     { return pGrfBrush; }
-    const SwFmtVertOrient* GetGrfOrient() const { return pVertOrient; }
-    const Size& GetGrfSize() const              { return aGrfSize; }
-    void SetGrfBrush( const SvxBrushItem* pGrfBr, const Size* pSz,
-                        const SwFmtVertOrient* pVOrient );
-    void SetGraphic( const String& rName );
-    // Graphic ggfs. reinswappen
-    const Graphic* GetGraphic() const;
-    // kann fuer das Format ein Text erzeugt werden?
-    inline BOOL IsTxtFmt() const;
+    virtual void                SetVertOrient(SvxFrameVertOrient eSet);
+    virtual SvxFrameVertOrient  GetVertOrient() const;
+    const SwFmtVertOrient*      GetGraphicOrientation() const { return pVertOrient; }
 };
-
 
 enum SwNumRuleType { OUTLINE_RULE = 0, NUM_RULE = 1, RULE_END = 2 };
 class SwNumRule
@@ -236,6 +152,7 @@ class SwNumRule
     static char* pDefOutlineName;
 
     SwNumFmt* aFmts[ MAXLEVEL ];
+
     String sName;
     SwNumRuleType eRuleType;
     USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte NumRules
@@ -263,7 +180,6 @@ public:
     inline const SwNumFmt& Get( USHORT i ) const;
     void Set( USHORT i, const SwNumFmt* );
     void Set( USHORT i, const SwNumFmt& );
-
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
 
@@ -353,13 +269,6 @@ public:
 
 // ------------ inline Methoden ----------------------------
 
-inline BOOL SwNumFmt::IsTxtFmt() const
-{
-    return SVX_NUM_NUMBER_NONE != eType &&
-           SVX_NUM_CHAR_SPECIAL != eType &&
-           SVX_NUM_BITMAP != eType;
-}
-
 inline const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
@@ -372,7 +281,6 @@ inline const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
     ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
     return aFmts[ i ];
 }
-
 inline const Font& SwNumRule::GetDefBulletFont()
 {
     if( !pDefBulletFont )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-14 18:28:14 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,7 +1186,7 @@ void SwWrtShell::BulletOn()
         SwNumFmt aFmt( aRule.Get( n ) );
         aFmt.SetBulletFont( pFnt );
         aFmt.SetBulletChar( cBulletChar );
-        aFmt.eType = SVX_NUM_CHAR_SPECIAL;
+        aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         aFmt.SetCharFmt( pChrFmt );
         if(bHtml && n)
         {
@@ -1574,6 +1574,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.6  2000/11/14 18:28:14  jp
+   use moduleoptions
+
    Revision 1.5  2000/10/27 14:29:47  os
    sba includes removed
 

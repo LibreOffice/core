@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
 
         case RTF_LEVELNFC:
             {
-                SvxExtNumType eType = SVX_NUM_ARABIC;
+                sal_Int16 eType = SVX_NUM_ARABIC;
                 switch( nTokenValue )
                 {
                 case 1:     eType = SVX_NUM_ROMAN_UPPER;            break;
@@ -270,7 +270,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 case 23:    eType = SVX_NUM_CHAR_SPECIAL;           break;
                 }
                 if( pCurNumFmt )
-                    pCurNumFmt->eType = eType;
+                    pCurNumFmt->SetNumberingType(eType);
             }
             break;
 
@@ -283,13 +283,13 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 case 2:     eAdj = SVX_ADJUST_RIGHT;    break;
                 }
                 if( pCurNumFmt )
-                    pCurNumFmt->SetAdjust( eAdj );
+                    pCurNumFmt->SetNumAdjust( eAdj );
             }
             break;
 
         case RTF_LEVELSTARTAT:
             if( pCurNumFmt && -1 != nTokenValue )
-                pCurNumFmt->SetStartValue( USHORT( nTokenValue ));
+                pCurNumFmt->SetStart( USHORT( nTokenValue ));
             break;
 
         case RTF_LEVELTEXT:
@@ -342,7 +342,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 ReadAttr( nToken, &GetNumChrFmt( *pDoc, rRule, nNumLvl ) );
 
                 // dann aus der Vorlage den Font holen
-                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->eType )
+                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
                     pCurNumFmt->SetBulletFont( FindFontOfItem(
                                 pCurNumFmt->GetCharFmt()->GetFont() ) );
             }
@@ -354,7 +354,7 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
     {
         // dann erzeuge mal die Pre/Postfix-Strings
         if( sLvlText.Len() &&
-            SVX_NUM_CHAR_SPECIAL == pCurNumFmt->eType )
+            SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
         {
             pCurNumFmt->SetBulletChar( sLvlText.GetChar( 0 ) );
             // dann aus der Vorlage den Font holen
@@ -368,15 +368,15 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             // der Ebenen in sLvlText
             pCurNumFmt->SetPrefix(
                 sLvlText.Copy( 0, USHORT( sLvlNumber.GetChar( 0 ))-1 ));
-            pCurNumFmt->SetPostfix( sLvlText.Copy(
+            pCurNumFmt->SetSuffix( sLvlText.Copy(
                     USHORT( sLvlNumber.GetChar( sLvlNumber.Len()-1 )) ));
             // wieviele Levels stehen im String?
-            pCurNumFmt->SetUpperLevel( (BYTE)sLvlNumber.Len() );
+            pCurNumFmt->SetIncludeUpperLevels( (BYTE)sLvlNumber.Len() );
         }
         else if( !sLvlText.Len() )
         {
-            pCurNumFmt->eType = SVX_NUM_NUMBER_NONE;
-            pCurNumFmt->SetPostfix( aEmptyStr );
+            pCurNumFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
+            pCurNumFmt->SetSuffix( aEmptyStr );
         }
     }
 
@@ -853,10 +853,10 @@ void SwRTFParser::ReadNumSecLevel( int nToken )
         pCurRule->Set( nLevel, pCurRule->Get( nLevel ));
     SwNumFmt* pCurNumFmt = (SwNumFmt*)pCurRule->GetNumFmt( nLevel );
     if( RTF_PNLVLBLT == nToken )
-        pCurNumFmt->eType = SVX_NUM_CHAR_SPECIAL;
-    pCurNumFmt->SetPostfix( aEmptyStr );
+        pCurNumFmt->SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+    pCurNumFmt->SetSuffix( aEmptyStr );
     pCurNumFmt->SetPrefix( aEmptyStr );
-    pCurNumFmt->eType = SVX_NUM_NUMBER_NONE;
+    pCurNumFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
 
     if( bStyleTabValid && RTF_PNSECLVL != nToken )
     {
@@ -908,11 +908,11 @@ void SwRTFParser::ReadNumSecLevel( int nToken )
         case RTF_PNCARD:
         case RTF_PNORD:
         case RTF_PNORDT:
-        case RTF_PNDEC:     pCurNumFmt->eType = SVX_NUM_ARABIC;                 break;
-        case RTF_PNUCLTR:   pCurNumFmt->eType = SVX_NUM_CHARS_UPPER_LETTER_N;   break;
-        case RTF_PNUCRM:    pCurNumFmt->eType = SVX_NUM_ROMAN_UPPER;            break;
-        case RTF_PNLCLTR:   pCurNumFmt->eType = SVX_NUM_CHARS_LOWER_LETTER_N;   break;
-        case RTF_PNLCRM:    pCurNumFmt->eType = SVX_NUM_ROMAN_LOWER;            break;
+        case RTF_PNDEC:     pCurNumFmt->SetNumberingType(SVX_NUM_ARABIC);               break;
+        case RTF_PNUCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_UPPER_LETTER_N); break;
+        case RTF_PNUCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_UPPER);          break;
+        case RTF_PNLCLTR:   pCurNumFmt->SetNumberingType(SVX_NUM_CHARS_LOWER_LETTER_N); break;
+        case RTF_PNLCRM:    pCurNumFmt->SetNumberingType(SVX_NUM_ROMAN_LOWER);          break;
 
         case RTF_PNF:
             {
@@ -921,7 +921,7 @@ void SwRTFParser::ReadNumSecLevel( int nToken )
                             SvxFontItem( rSVFont.GetFamily(),
                                 rSVFont.GetName(), rSVFont.GetStyleName(),
                                 rSVFont.GetPitch(), rSVFont.GetCharSet() ));
-                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->eType )
+                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
                     pCurNumFmt->SetBulletFont( &rSVFont );
             }
             break;
@@ -1007,25 +1007,25 @@ NUMATTR_SETUNDERLINE:
             pCurNumFmt->SetAbsLSpace( (nLevel + 1 ) * USHORT( nTokenValue ));
             break;
         case RTF_PNSP:
-            pCurNumFmt->SetCharTextOffset( USHORT( nTokenValue ));
+            pCurNumFmt->SetCharTextDistance( USHORT( nTokenValue ));
             break;
 
         case RTF_PNPREV:
             if( nLevel )
             {
                 BYTE nPrev = 2, nLast = nLevel;
-                while( nLast && 1 < pCurRule->Get( --nLast ).GetUpperLevel() )
+                while( nLast && 1 < pCurRule->Get( --nLast ).GetIncludeUpperLevels() )
                     ++nPrev;
-                pCurNumFmt->SetUpperLevel( nPrev );
+                pCurNumFmt->SetIncludeUpperLevels( nPrev );
             }
             break;
 
-        case RTF_PNQC:  pCurNumFmt->SetAdjust( SVX_ADJUST_CENTER );     break;
-        case RTF_PNQL:  pCurNumFmt->SetAdjust( SVX_ADJUST_LEFT );       break;
-        case RTF_PNQR:  pCurNumFmt->SetAdjust( SVX_ADJUST_RIGHT );      break;
+        case RTF_PNQC:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_CENTER );  break;
+        case RTF_PNQL:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_LEFT );        break;
+        case RTF_PNQR:  pCurNumFmt->SetNumAdjust( SVX_ADJUST_RIGHT );       break;
 
         case RTF_PNSTART:
-            pCurNumFmt->SetStartValue( USHORT( nTokenValue ));
+            pCurNumFmt->SetStart( USHORT( nTokenValue ));
             break;
 
         case RTF_PNNUMONCE:
@@ -1037,7 +1037,7 @@ NUMATTR_SETUNDERLINE:
             {
                 String sTmp;
                 GetTextToEndGroup( sTmp );
-                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->eType )
+                if( SVX_NUM_CHAR_SPECIAL == pCurNumFmt->GetNumberingType() )
                 {
                     pCurNumFmt->SetBulletChar( sTmp.GetChar( 0 ) );
                     if( pCurNumFmt->GetCharFmt() )
@@ -1045,7 +1045,7 @@ NUMATTR_SETUNDERLINE:
                                     pCurNumFmt->GetCharFmt()->GetFont() ) );
                     sTmp.Erase();
                 }
-                pCurNumFmt->SetPostfix( sTmp );
+                pCurNumFmt->SetSuffix( sTmp );
             }
             break;
 
@@ -1061,19 +1061,19 @@ NUMATTR_SETUNDERLINE:
     // falls vollstaendige Numerierung an ist und das Zeichen davor ein
     // Punkt ist, dann will RTF den Punkt als Trenner zwischen den Ebenen
     // haben - das haben wir aber schon als default
-    if( 1 < pCurNumFmt->GetUpperLevel() &&
+    if( 1 < pCurNumFmt->GetIncludeUpperLevels() &&
         1 == pCurNumFmt->GetPrefix().Len() &&
         '.' == pCurNumFmt->GetPrefix().GetChar( 0 ) &&
-        SVX_NUM_CHAR_SPECIAL != pCurNumFmt->eType )
+        SVX_NUM_CHAR_SPECIAL != pCurNumFmt->GetNumberingType() )
         pCurNumFmt->SetPrefix( aEmptyStr );
 
     // falls das ein nicht numerierter Absatz mit ein Prefix-Text mit
     // einem Zeichen ist, dann setze den als Bulletzeichen
-    if( pCurNumFmt->GetCharFmt() && SVX_NUM_NUMBER_NONE == pCurNumFmt->eType &&
+    if( pCurNumFmt->GetCharFmt() && SVX_NUM_NUMBER_NONE == pCurNumFmt->GetNumberingType() &&
         3 == nListNo && 1 == pCurNumFmt->GetPrefix().Len() )
     {
         SwCharFmt* pChFmt = pCurNumFmt->GetCharFmt();
-        pCurNumFmt->eType = SVX_NUM_CHAR_SPECIAL;
+        pCurNumFmt->SetNumberingType(SVX_NUM_CHAR_SPECIAL);
         pCurNumFmt->SetBulletFont( FindFontOfItem( pChFmt->GetFont() ) );
 
         pCurNumFmt->SetBulletChar( pCurNumFmt->GetPrefix().GetChar( 0 ) );
@@ -1131,7 +1131,7 @@ void SwRTFWriter::OutRTFListTab()
         ++nEnd;
 
         for( BYTE nLvl = 0; nLvl < nEnd; ++nLvl )
-            if( SVX_NUM_NUMBER_NONE != pRule->Get( nLvl ).eType )
+            if( SVX_NUM_NUMBER_NONE != pRule->Get( nLvl ).GetNumberingType() )
                 break;
 
         if( nLvl == nEnd )      // alle Level no number -> dont write it
@@ -1158,7 +1158,7 @@ void SwRTFWriter::OutRTFListTab()
             Strm() << '{' << sRTF_LISTLEVEL << sRTF_LEVELNFC;
 
             USHORT nVal = 0;
-            switch( rFmt.eType )
+            switch( rFmt.GetNumberingType() )
             {
             case SVX_NUM_ROMAN_UPPER:           nVal = 1;   break;
             case SVX_NUM_ROMAN_LOWER:           nVal = 2;   break;
@@ -1172,25 +1172,25 @@ void SwRTFWriter::OutRTFListTab()
             }
             OutLong( nVal ) << sRTF_LEVELJC;
 
-            switch( rFmt.GetAdjust() )
+            switch( rFmt.GetNumAdjust() )
             {
             case SVX_ADJUST_CENTER:     nVal = 1;   break;
             case SVX_ADJUST_RIGHT:      nVal = 2;   break;
             default:                    nVal = 0;   break;
             }
             OutLong( nVal ) << sRTF_LEVELSTARTAT;
-            OutLong( rFmt.GetStartValue() )
+            OutLong( rFmt.GetStart() )
                 << sRTF_LEVELFOLLOW << "2{" << sRTF_LEVELTEXT << ' ';
 
             BOOL bWriteBulletFont = FALSE;
             memset( aNumLvlPos, 0, MAXLEVEL );
-            if( SVX_NUM_CHAR_SPECIAL == rFmt.eType ||
-                SVX_NUM_BITMAP == rFmt.eType )
+            if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
+                SVX_NUM_BITMAP == rFmt.GetNumberingType() )
             {
                 Strm() << "\\'01\\'"; OutHex( rFmt.GetBulletChar() );
                 bWriteBulletFont = TRUE;
             }
-            else if( SVX_NUM_NUMBER_NONE != rFmt.eType )
+            else if( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() )
             {
                 memset( aNumLvlPos, 0, MAXLEVEL );
                 BYTE* pLvlPos = aNumLvlPos;
@@ -1212,7 +1212,7 @@ void SwRTFWriter::OutRTFListTab()
 
                 Strm() << "\\'";
                 OutHex( sNumStr.Len() + rFmt.GetPrefix().Len() +
-                                        rFmt.GetPostfix().Len() );
+                                        rFmt.GetSuffix().Len() );
 
                 if( rFmt.GetPrefix().Len() )
                     RTFOutFuncs::Out_String( Strm(), rFmt.GetPrefix(),
@@ -1228,8 +1228,8 @@ void SwRTFWriter::OutRTFListTab()
                     else
                         Strm() << (sal_Char)sNumStr.GetChar( x );
 
-                if( rFmt.GetPostfix().Len() )
-                    RTFOutFuncs::Out_String( Strm(), rFmt.GetPostfix(),
+                if( rFmt.GetSuffix().Len() )
+                    RTFOutFuncs::Out_String( Strm(), rFmt.GetSuffix(),
                                             DEF_ENCODING, bWriteHelpFmt );
             }
 
@@ -1337,7 +1337,7 @@ void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
         if( bValidNum )
         {
             String sTxt;
-            if( SVX_NUM_CHAR_SPECIAL == pFmt->eType || SVX_NUM_BITMAP == pFmt->eType )
+            if( SVX_NUM_CHAR_SPECIAL == pFmt->GetNumberingType() || SVX_NUM_BITMAP == pFmt->GetNumberingType() )
                 sTxt = pFmt->GetBulletChar();
             else
                 sTxt = pRule->MakeNumString( *pNdNum );
@@ -1370,99 +1370,4 @@ void SwRTFWriter::OutListNum( const SwTxtNode& rNd )
     }
 }
 
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfnum.cxx,v 1.1.1.1 2000-09-18 17:14:56 hr Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.27  2000/09/18 16:04:51  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.26  2000/08/04 10:48:09  jp
-      Soft-/HardHyphens & HardBlanks changed from attribute to unicode character; use rtfout functions
-
-      Revision 1.25  2000/05/26 07:22:44  os
-      old SW Basic API Slots removed
-
-      Revision 1.24  2000/05/24 07:57:04  jp
-      Bugfixes for Unicode
-
-      Revision 1.23  2000/05/09 17:22:53  jp
-      Changes for Unicode
-
-      Revision 1.22  2000/03/14 17:25:25  jp
-      Bug #73968#: read and set outline/num-levels
-
-      Revision 1.21  2000/03/14 09:22:24  jp
-      Bug #73941#: remove unused numrules, share override rules
-
-      Revision 1.20  2000/03/10 17:54:09  jp
-      Bug #73965#: ReadListLevel - set no number
-
-      Revision 1.19  2000/03/10 15:56:52  jp
-      Bug #74100#: read W2000 rtf-format
-
-      Revision 1.18  2000/02/24 18:33:17  jp
-      Bug #73098#: read & write list entries without number
-
-      Revision 1.17  2000/02/17 13:46:55  jp
-      Bug #73098#: Import / Export problems
-
-      Revision 1.16  2000/02/11 14:38:01  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.15  2000/01/25 20:13:02  jp
-      Bug #72146#: read UniCode character
-
-      Revision 1.14  1999/08/03 17:47:38  JP
-      Bug #67975#: changes for import of Bulltets from interleave/WP7/Aplixware
-
-
-      Rev 1.13   03 Aug 1999 19:47:38   JP
-   Bug #67975#: changes for import of Bulltets from interleave/WP7/Aplixware
-
-      Rev 1.12   12 Jul 1999 17:35:24   JP
-   read and write outlinelevel/-numrules
-
-      Rev 1.11   30 Mar 1999 14:41:48   JP
-   Task #63049#: Numerierung mit rel. Einzuegen
-
-      Rev 1.10   29 Mar 1999 10:00:32   JP
-   Bug #63990#: NumRules immer mit negativen Erstzeileneinzug
-
-      Rev 1.9   18 Mar 1999 09:51:44   JP
-   Task #63049#: Numerierung mit rel. Einzuegen
-
-      Rev 1.8   16 Mar 1999 23:19:34   JP
-   Task #63049#: Einzuege bei NumRules relativ
-
-      Rev 1.7   05 Mar 1999 14:27:56   JP
-   Bug #57749#: spaltige Bereiche einlesen - jeder Bereich hat eigene NumRules
-
-      Rev 1.6   03 Mar 1999 15:17:22   JP
-   Bug #57749#: spaltige Bereiche einlesen
-
-      Rev 1.5   17 Nov 1998 10:45:30   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.4   21 Sep 1998 17:15:12   JP
-   RTF_LEVELNFC: 255 ist auch ein Bullet
-
-      Rev 1.3   06 Aug 1998 21:43:30   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.2   04 Jun 1998 19:28:06   JP
-   Bug #50887#: Font bei Grafik-NumFormaten ist 0, also default Font schreiben
-
-      Rev 1.1   27 May 1998 22:26:14   JP
-   Bug #50585#: ListOverrideTabelle korrekt einlesen
-
-      Rev 1.0   20 Apr 1998 17:44:00   JP
-   neu: Numerierung lesen/schreiben
-
-*************************************************************************/
 

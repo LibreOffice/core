@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,11 +254,11 @@ BOOL _OutlinePara::UpdateOutline( SwTxtNode& rTxtNd )
                 memset( aNum.GetLevelVal() + (aNum.GetLevel()+1), 0,
                         (MAXLEVEL - ( aNum.GetLevel()+1 )) *
                             sizeof( aNum.GetLevelVal()[0]));
-            nSetValue = pOutlRule->Get( nLevel ).GetStartValue();
+            nSetValue = pOutlRule->Get( nLevel ).GetStart();
         }
         else if( bInitNum )
         {
-            nSetValue= pOutlRule->Get( nLevel ).GetStartValue();
+            nSetValue= pOutlRule->Get( nLevel ).GetStart();
             bInitNum = FALSE;
         }
         else

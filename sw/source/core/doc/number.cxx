@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,197 +144,118 @@ extern const sal_Char __FAR_DATA sBulletFntName[] = "starbats";
 extern const sal_Char __FAR_DATA sBulletFntName[] = "StarBats";
 #endif
 
-
-// Methoden fuer die Klassen aus NUMRULE.HXX
-
-SwNumFmt::SwNumFmt()
-    : SwClient( 0 ),
-    pBulletFont( 0 ),
-    cBullet( cBulletChar ),
-    eNumAdjust( SVX_ADJUST_LEFT ),
-    nLSpace( 0 ),
-    nAbsLSpace( 0 ),
-    nFirstLineOffset( 0 ),
-    nCharTextOffset( 0 ),
-    nStart( 0 ),
-    pGrfBrush( 0 ), pVertOrient( 0 )
+inline void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
 {
-    nInclUpperLevel = MAXLEVEL;
-    bRelLSpace = FALSE;
+    if( rNd.GetNum() &&
+        (~NO_NUMLEVEL & rNd.GetNum()->GetLevel() ) == nLevel )
+        rNd.NumRuleChgd();
 }
+/* -----------------------------22.02.01 13:41--------------------------------
 
-
-SwNumFmt::SwNumFmt( const SwNumFmt& rNumFmt )
-    : SwClient( rNumFmt.pRegisteredIn ), SwNumType( rNumFmt ),
-    cBullet( rNumFmt.cBullet ),
-    pBulletFont( 0 ),
-    eNumAdjust( rNumFmt.eNumAdjust ),
-    nLSpace( rNumFmt.nLSpace ),
-    nAbsLSpace( rNumFmt.nAbsLSpace ),
-    nFirstLineOffset( rNumFmt.nFirstLineOffset ),
-    nCharTextOffset( rNumFmt.nCharTextOffset ),
-    nStart( rNumFmt.nStart ),
-    aPrefix( rNumFmt.aPrefix ),
-    aPostfix( rNumFmt.aPostfix ),
-    pGrfBrush( 0 ), pVertOrient( 0 )
+ ---------------------------------------------------------------------------*/
+SwNumFmt::SwNumFmt() :
+    SwClient( 0 ),
+    SvxNumberFormat(SVX_NUM_ARABIC),
+    pVertOrient(0)
 {
-    SetBulletFont(rNumFmt.GetBulletFont());
-    nInclUpperLevel = rNumFmt.nInclUpperLevel;
-    bRelLSpace = rNumFmt.bRelLSpace;
-
-    SetGrfBrush( rNumFmt.GetGrfBrush(), &rNumFmt.GetGrfSize(),
-                rNumFmt.GetGrfOrient() );
 }
+/* -----------------------------22.02.01 13:42--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwNumFmt::SwNumFmt( const SwNumFmt& rFmt) :
+    SwClient( rFmt.pRegisteredIn ),
+    SvxNumberFormat(rFmt),
+    pVertOrient(0)
+{
+    SvxFrameVertOrient eOrient = rFmt.GetVertOrient();
+    SetGraphicBrush( rFmt.GetBrush(), &rFmt.GetGraphicSize(),
+                SVX_VERT_NONE == eOrient ? 0 : &eOrient);
+}
+/* -----------------------------22.02.01 13:58--------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
+    SvxNumberFormat(rNumFmt),
+    pVertOrient(0)
+{
+    const String& rCharStyleName = rNumFmt.SvxNumberFormat::GetCharFmtName();
+    if( rCharStyleName.Len() )
+    {
+        SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rCharStyleName );
+        if( !pCFmt )
+        {
+            USHORT nId = pDoc->GetPoolId( rCharStyleName,
+                                            GET_POOLID_CHRFMT );
+            pCFmt = nId != USHRT_MAX
+                        ? pDoc->GetCharFmtFromPool( nId )
+                        : pDoc->MakeCharFmt( rCharStyleName, 0 );
+        }
+        pCFmt->Add( this );
+    }
+    else if( GetRegisteredIn() )
+        pRegisteredIn->Remove( this );
+
+}
+/* -----------------------------22.02.01 13:42--------------------------------
+
+ ---------------------------------------------------------------------------*/
 SwNumFmt::~SwNumFmt()
 {
-    delete pBulletFont;
-    delete pGrfBrush;
     delete pVertOrient;
 }
+/* -----------------------------23.02.01 09:28--------------------------------
 
-
-void SwNumFmt::SetBulletFont(const Font* pFont)
+ ---------------------------------------------------------------------------*/
+SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
 {
-    if( pBulletFont )
-    {
-        if( pFont )
-            *pBulletFont = *pFont;
-        else
-            delete pBulletFont, pBulletFont = 0;
-    }
-    else if( pFont )
-        pBulletFont = new Font( *pFont );
-}
-
-
-void SwNumFmt::SetGrfBrush( const SvxBrushItem* pGrfBr, const Size* pSz,
-                            const SwFmtVertOrient* pVOrient )
-{
-    if( pGrfBr )
-    {
-        if( pGrfBrush )
-        {
-            if( !( *pGrfBrush == *pGrfBr ) )
-            {
-                delete pGrfBrush;
-                pGrfBrush = (SvxBrushItem*)pGrfBr->Clone();
-            }
-        }
-        else
-            pGrfBrush = (SvxBrushItem*)pGrfBr->Clone();
-
-        if( pVertOrient != pVOrient )
-        {
-            if(pVertOrient)
-                delete pVertOrient;
-
-            pVertOrient = pVOrient ? (SwFmtVertOrient*)pVOrient->Clone() : 0;
-        }
-        if( pSz )
-            aGrfSize = *pSz;
-        else
-            aGrfSize.Width() = aGrfSize.Height() = 0;
-
-        pGrfBrush->SetDoneLink( STATIC_LINK( this, SwNumFmt, GraphicArrived) );
-    }
-    else
-    {
-        delete pGrfBrush, pGrfBrush = 0;
-        delete pVertOrient, pVertOrient = 0;
-        aGrfSize.Width() = aGrfSize.Height() = 0;
-    }
-}
-
-
-SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt )
-{
-    cBullet = rNumFmt.cBullet;
-    eType = rNumFmt.eType;
-    nInclUpperLevel = rNumFmt.nInclUpperLevel;
-    bRelLSpace = rNumFmt.bRelLSpace;
-
-    eNumAdjust = rNumFmt.eNumAdjust;
-    nLSpace = rNumFmt.nLSpace;
-    nAbsLSpace = rNumFmt.nAbsLSpace;
-    nFirstLineOffset = rNumFmt.nFirstLineOffset;
-    nCharTextOffset = rNumFmt.nCharTextOffset;
-    nStart = rNumFmt.nStart;
-    aPrefix = rNumFmt.aPrefix;
-    aPostfix = rNumFmt.aPostfix;
-
-    SetBulletFont(rNumFmt.GetBulletFont());
+    SvxNumberFormat::operator=(rNumFmt);
     if( rNumFmt.GetRegisteredIn() )
         rNumFmt.pRegisteredIn->Add( this );
     else if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );
-
-    SetGrfBrush( rNumFmt.GetGrfBrush(), &rNumFmt.GetGrfSize(),
-                rNumFmt.GetGrfOrient() );
-
     return *this;
 }
+/* -----------------------------23.02.01 09:28--------------------------------
 
-
-BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt ) const
+ ---------------------------------------------------------------------------*/
+BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
-    BOOL bRet = (
-        eType == rNumFmt.eType &&
-        nInclUpperLevel == rNumFmt.nInclUpperLevel &&
-        bRelLSpace == rNumFmt.bRelLSpace &&
-        eNumAdjust == rNumFmt.eNumAdjust &&
-        nLSpace == rNumFmt.nLSpace &&
-        nAbsLSpace == rNumFmt.nAbsLSpace &&
-        nFirstLineOffset == rNumFmt.nFirstLineOffset &&
-        nCharTextOffset == rNumFmt.nCharTextOffset &&
-        nStart == rNumFmt.nStart &&
-        aPrefix == rNumFmt.aPrefix &&
-        aPostfix == rNumFmt.aPostfix &&
-        pRegisteredIn == rNumFmt.pRegisteredIn);
-
-        if( bRet )
-        {
-            switch( eType )
-            {
-            case SVX_NUM_CHAR_SPECIAL:
-
-                if( cBullet != rNumFmt.cBullet ||
-                    ( pBulletFont
-                        ? ( !rNumFmt.GetBulletFont() ||
-                            *pBulletFont != *rNumFmt.GetBulletFont() )
-                        : 0 != rNumFmt.GetBulletFont() ) )
-                    bRet = FALSE;
-                break;
-
-            case SVX_NUM_BITMAP:
-
-                if( aGrfSize != rNumFmt.aGrfSize ||
-                    ( pGrfBrush
-                        ? ( !rNumFmt.pGrfBrush ||
-                                *pGrfBrush != *rNumFmt.pGrfBrush )
-                        : 0 != rNumFmt.pGrfBrush ) ||
-                    ( pVertOrient
+    BOOL bRet = SvxNumberFormat::operator==(rNumFmt) &&
+        pRegisteredIn == rNumFmt.pRegisteredIn;
+    if(bRet && GetNumberingType() == SVX_NUM_BITMAP)
+    {
+        if(pVertOrient
                         ? ( !rNumFmt.pVertOrient ||
                                 *pVertOrient != *rNumFmt.pVertOrient )
-                        : 0 != rNumFmt.pVertOrient ) )
-                    bRet = FALSE;
-                break;
-            }
-        }
+                        : 0 != rNumFmt.pVertOrient );
+            bRet = FALSE;
+    }
     return bRet;
 }
 
+/* -----------------------------22.02.01 13:42--------------------------------
 
-void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt )
+ ---------------------------------------------------------------------------*/
+const Graphic* SwNumFmt::GetGraphic() const
+{
+    const Graphic* pGrf = 0;
+    if( GetBrush() && GetCharFmt() )
+        pGrf = GetBrush()->GetGraphic( GetCharFmt()->GetDoc()->GetDocShell() );
+    return pGrf;
+}
+/* -----------------------------22.02.01 13:44--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNumFmt::SetCharFmt( SwCharFmt* pChFmt)
 {
     if( pChFmt )
         pChFmt->Add( this );
     else if( GetRegisteredIn() )
         pRegisteredIn->Remove( this );
 }
+/* -----------------------------22.02.01 13:45--------------------------------
 
-
+ ---------------------------------------------------------------------------*/
 void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     // dann suche mal in dem Doc nach dem NumRules-Object, in dem dieses
@@ -353,47 +274,55 @@ void SwNumFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     else
         SwClient::Modify( pOld, pNew );
 }
+/* -----------------------------23.02.01 11:08--------------------------------
 
-
-void SwNumFmt::SetGraphic( const String& rName )
+ ---------------------------------------------------------------------------*/
+void SwNumFmt::SetCharFmtName(const String& rSet)
 {
-    if( pGrfBrush && *pGrfBrush->GetGraphicLink() == rName )
-        return ;
-
-    delete pGrfBrush;
-
-    pGrfBrush = new SvxBrushItem( rName, aEmptyStr, GPOS_AREA );
-    pGrfBrush->SetDoneLink( STATIC_LINK( this, SwNumFmt, GraphicArrived) );
-    if( !pVertOrient )
-        pVertOrient = new SwFmtVertOrient( 0, VERT_TOP );
-
-    aGrfSize.Width() = aGrfSize.Height() = 0;
+    SvxNumberFormat::SetCharFmtName(rSet);
 }
+/* -----------------------------22.02.01 13:47--------------------------------
 
-
-IMPL_STATIC_LINK( SwNumFmt, GraphicArrived, void *, EMPTYARG )
+ ---------------------------------------------------------------------------*/
+const String&   SwNumFmt::GetCharFmtName() const
 {
-    // ggfs. die GrfSize setzen:
-    if( !pThis->aGrfSize.Width() || !pThis->aGrfSize.Height() )
-    {
-        const Graphic* pGrf = pThis->pGrfBrush->GetGraphic();
-        if( pGrf )
-            pThis->aGrfSize = ::GetGraphicSizeTwip( *pGrf, 0 );
-    }
-
-    if( pThis->GetCharFmt() )
-        pThis->UpdateNumNodes( (SwDoc*)pThis->GetCharFmt()->GetDoc() );
-
-    return 0;
+    if((SwCharFmt*)pRegisteredIn)
+        return ((SwCharFmt*)pRegisteredIn)->GetName();
+    else
+        return aEmptyStr;
 }
+/* -----------------------------22.02.01 16:05--------------------------------
 
-inline void lcl_SetRuleChgd( SwTxtNode& rNd, BYTE nLevel )
+ ---------------------------------------------------------------------------*/
+void    SwNumFmt::SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize,
+    const SvxFrameVertOrient* pOrient)
 {
-    if( rNd.GetNum() &&
-        (~NO_NUMLEVEL & rNd.GetNum()->GetLevel() ) == nLevel )
-        rNd.NumRuleChgd();
+    DELETEZ(pVertOrient);
+    if(pOrient)
+        pVertOrient = new SwFmtVertOrient( 0, (SwVertOrient) *pOrient);
+    SvxNumberFormat::SetGraphicBrush( pBrushItem, pSize, pOrient);
 }
+/* -----------------------------22.02.01 16:05--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void    SwNumFmt::SetVertOrient(SvxFrameVertOrient eSet)
+{
+    SvxNumberFormat::SetVertOrient(eSet);
+    DELETEZ(pVertOrient);
+    if(VERT_NONE != eSet)
+        pVertOrient = new SwFmtVertOrient( 0, (SwVertOrient) eSet);
+
+}
+/* -----------------------------22.02.01 16:05--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SvxFrameVertOrient  SwNumFmt::GetVertOrient() const
+{
+    return pVertOrient ? (SvxFrameVertOrient)pVertOrient->GetVertOrient() : SVX_VERT_NONE;
+}
+/* -----------------------------22.02.01 13:54--------------------------------
+
+ ---------------------------------------------------------------------------*/
 void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
 {
     BOOL bDocIsModified = pDoc->IsModified();
@@ -470,137 +399,6 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
         pDoc->ResetModified();
 }
 
-// Graphic ggfs. reinswappen
-const Graphic* SwNumFmt::GetGraphic() const
-{
-    const Graphic* pGrf = 0;
-    if( pGrfBrush && GetCharFmt() )
-        pGrf = pGrfBrush->GetGraphic( GetCharFmt()->GetDoc()->GetDocShell() );
-    return pGrf;
-}
-
-
-/*  */
-
-void SwNumType::GetRomanStr( ULONG nNo, String& rStr ) const
-{
-    nNo %= 4000;            // mehr kann nicht dargestellt werden
-//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//                          (Dummy),1000,500,100,50,10,5,1
-    const sal_Char *cRomanArr = SVX_NUM_ROMAN_UPPER == eType
-                        ? "MDCLXVI--"   // +2 Dummy-Eintraege !!
-                        : "mdclxvi--";  // +2 Dummy-Eintraege !!
-
-    USHORT nMask = 1000;
-    while( nMask )
-    {
-        BYTE nZahl = BYTE(nNo / nMask);
-        BYTE nDiff = 1;
-        nNo %= nMask;
-
-        if( 5 < nZahl )
-        {
-            if( nZahl < 9 )
-                rStr += *(cRomanArr-1);
-            ++nDiff;
-            nZahl -= 5;
-        }
-        switch( nZahl )
-        {
-        case 3:     { rStr += *cRomanArr; }
-        case 2:     { rStr += *cRomanArr; }
-        case 1:     { rStr += *cRomanArr; }
-                    break;
-
-        case 4:     {
-                        rStr += *cRomanArr;
-                        rStr += *(cRomanArr-nDiff);
-                    }
-                    break;
-        case 5:     { rStr += *(cRomanArr-nDiff); }
-                    break;
-        }
-
-        nMask /= 10;            // zur naechsten Dekade
-        cRomanArr += 2;
-    }
-}
-
-
-void SwNumType::GetCharStr( ULONG nNo, String& rStr ) const
-{
-    ASSERT( nNo, "0 ist eine ungueltige Nummer !!" );
-
-    const ULONG coDiff = 'Z' - 'A' +1;
-    char cAdd = (SVX_NUM_CHARS_UPPER_LETTER == eType ? 'A' : 'a') - 1;
-    ULONG nCalc;
-
-    do {
-        nCalc = nNo % coDiff;
-        if( !nCalc )
-            nCalc = coDiff;
-        rStr.Insert( (sal_Unicode)(cAdd + nCalc ), 0 );
-        nNo -= nCalc;
-        if( nNo )
-            nNo /= coDiff;
-    } while( nNo );
-}
-
-void SwNumType::GetCharStrN( ULONG nNo, String& rStr ) const
-{
-    ASSERT( nNo, "0 ist eine ungueltige Nummer !!" );
-
-    const ULONG coDiff = 'Z' - 'A' +1;
-    sal_Unicode cChar = --nNo % coDiff;
-    if( SVX_NUM_CHARS_UPPER_LETTER_N == eType )
-        cChar += 'A';
-    else
-        cChar += 'a';
-
-    rStr.Fill( (nNo / coDiff) + 1, cChar );
-}
-
-
-String SwNumType::GetNumStr( ULONG nNo ) const
-{
-    String aTmpStr;
-    if( nNo )
-    {
-        switch( eType )
-        {
-        case SVX_NUM_CHARS_UPPER_LETTER:
-        case SVX_NUM_CHARS_LOWER_LETTER:
-            GetCharStr( nNo, aTmpStr );
-            break;
-
-        case SVX_NUM_CHARS_UPPER_LETTER_N:
-        case SVX_NUM_CHARS_LOWER_LETTER_N:
-            GetCharStrN( nNo, aTmpStr );
-            break;
-
-        case SVX_NUM_ROMAN_UPPER:
-        case SVX_NUM_ROMAN_LOWER:
-            GetRomanStr( nNo, aTmpStr );
-            break;
-
-        case SVX_NUM_CHAR_SPECIAL:      //JP 06.12.99: this types dont have
-        case SVX_NUM_BITMAP:            // any number, so return emptystr
-        case SVX_NUM_NUMBER_NONE:       //  Bug: 70527
-            break;
-
-//      case ARABIC:    ist jetzt default
-        default:
-            aTmpStr = String::CreateFromInt32( nNo );
-            break;
-        }
-    }
-    else
-        aTmpStr = '0';
-    return aTmpStr;
-}
-
-/*  */
-
 BOOL SwNodeNum::operator==( const SwNodeNum& rNum ) const
 {
     return nMyLevel == rNum.nMyLevel &&
@@ -629,14 +427,12 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
         for( int n = 0; n < MAXLEVEL; ++n )
         {
             pFmt = new SwNumFmt;
-            pFmt->SetUpperLevel( 1 );
-//          pFmt->SetRelLSpace( TRUE );
-            pFmt->SetRelLSpace( FALSE );
-            pFmt->SetStartValue( 1 );
+            pFmt->SetIncludeUpperLevels( 1 );
+            pFmt->SetStart( 1 );
             pFmt->SetLSpace( lNumIndent );
             pFmt->SetAbsLSpace( SwNumRule::GetNumIndent( n ) );
             pFmt->SetFirstLineOffset( lNumFirstLineOffset );
-            pFmt->SetPostfix( aDotStr );
+            pFmt->SetSuffix( aDotStr );
             SwNumRule::aBaseFmts[ NUM_RULE ][ n ] = pFmt;
         }
 
@@ -646,9 +442,9 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
             pFmt = new SwNumFmt;
 //JP 18.01.96: heute soll es mal wieder vollstaendig numeriert werden
 //JP 10.03.96: und nun mal wieder nicht
-            pFmt->eType = SVX_NUM_NUMBER_NONE;
+            pFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
 //            pFmt->eType = ARABIC;
-            pFmt->SetStartValue( 1 );
+            pFmt->SetStart( 1 );
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
         }
     }
@@ -815,14 +611,14 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
     if( NO_NUM > rNum.GetLevel() && !( NO_NUMLEVEL & rNum.GetLevel() ) )
     {
         const SwNumFmt& rMyNFmt = Get( rNum.GetLevel() );
-        if( SVX_NUM_NUMBER_NONE != rMyNFmt.eType )
+        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
         {
             BYTE i = rNum.GetLevel();
 
             if( !IsContinusNum() &&
-                rMyNFmt.IsInclUpperLevel() )        // nur der eigene Level ?
+                rMyNFmt.GetIncludeUpperLevels() )       // nur der eigene Level ?
             {
-                BYTE n = rMyNFmt.GetUpperLevel();
+                BYTE n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
                 {
                     if( i+1 >= n )
@@ -835,7 +631,7 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
             for( ; i <= rNum.GetLevel(); ++i )
             {
                 const SwNumFmt& rNFmt = Get( i );
-                if( SVX_NUM_NUMBER_NONE == rNFmt.eType )
+                if( SVX_NUM_NUMBER_NONE == rNFmt.GetNumberingType() )
                 {
     // Soll aus 1.1.1 --> 2. NoNum --> 1..1 oder 1.1 ??
     //                 if( i != rNum.nMyLevel )
@@ -860,11 +656,11 @@ String SwNumRule::MakeNumString( const SwNodeNum& rNum, BOOL bInclStrings,
         //JP 14.12.99: the type dont have any number, so dont append
         //              the Post-/Prefix String
         if( bInclStrings && !bOnlyArabic &&
-            SVX_NUM_CHAR_SPECIAL != rMyNFmt.eType &&
-            SVX_NUM_BITMAP != rMyNFmt.eType )
+            SVX_NUM_CHAR_SPECIAL != rMyNFmt.GetNumberingType() &&
+            SVX_NUM_BITMAP != rMyNFmt.GetNumberingType() )
         {
             aStr.Insert( rMyNFmt.GetPrefix(), 0 );
-            aStr += rMyNFmt.GetPostfix();
+            aStr += rMyNFmt.GetSuffix();
         }
     }
     return aStr;
@@ -898,80 +694,6 @@ SwNumRule& SwNumRule::CopyNumRule( SwDoc* pDoc, const SwNumRule& rNumRule )
     bInvalidRuleFlag = TRUE;
     return *this;
 }
-/* -----------------30.10.98 08:40-------------------
- *
- * --------------------------------------------------*/
-SwNumFmt::SwNumFmt(const SvxNumberFormat& rNumFmt, SwDoc* pDoc) :
-    pBulletFont( 0 ),
-    pGrfBrush( 0 ),
-    pVertOrient( 0 )
-{
-    cBullet = rNumFmt.GetBulletChar();
-    eType = rNumFmt.GetNumType();
-    nInclUpperLevel = rNumFmt.GetIncludeUpperLevels();
-    bRelLSpace = FALSE;
-
-    eNumAdjust = rNumFmt.GetNumAdjust();
-    nLSpace = rNumFmt.GetLSpace();
-    nAbsLSpace = rNumFmt.GetAbsLSpace();
-    nFirstLineOffset = rNumFmt.GetFirstLineOffset();
-    nCharTextOffset = rNumFmt.GetCharTextDistance();
-    nStart = rNumFmt.GetStart();
-    aPrefix = rNumFmt.GetPrefix();
-    aPostfix = rNumFmt.GetSuffix();
-
-    SetBulletFont(rNumFmt.GetBulletFont());
-    if( rNumFmt.GetCharFmt().Len() )
-    {
-        SwCharFmt* pCFmt = pDoc->FindCharFmtByName( rNumFmt.GetCharFmt() );
-        if( !pCFmt )
-        {
-            USHORT nId = pDoc->GetPoolId( rNumFmt.GetCharFmt(),
-                                            GET_POOLID_CHRFMT );
-            pCFmt = nId != USHRT_MAX
-                        ? pDoc->GetCharFmtFromPool( nId )
-                        : pDoc->MakeCharFmt( rNumFmt.GetCharFmt(), 0 );
-        }
-        pCFmt->Add( this );
-    }
-    else if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
-
-    SwVertOrient eOrient = (SwVertOrient)(USHORT) rNumFmt.GetVertOrient();
-    SwFmtVertOrient aOrient(0, eOrient);
-    Size aTmpSize(rNumFmt.GetGraphicSize());
-    SetGrfBrush( rNumFmt.GetBrush(), &aTmpSize,
-                &aOrient );
-
-}
-/* -----------------30.10.98 12:36-------------------
- *
- * --------------------------------------------------*/
-SvxNumberFormat SwNumFmt::MakeSvxFormat() const
-{
-    SvxNumberFormat aRet(eType);
-    aRet.SetNumAdjust(eNumAdjust);
-    aRet.SetIncludeUpperLevels(nInclUpperLevel);
-    aRet.SetStart(nStart);
-    aRet.SetBulletChar(cBullet);
-    aRet.SetFirstLineOffset(nFirstLineOffset);
-    aRet.SetAbsLSpace(nAbsLSpace);
-    aRet.SetLSpace(nLSpace);
-    aRet.SetPrefix(aPrefix);
-    aRet.SetSuffix(aPostfix);
-    if( GetCharFmt() )
-        aRet.SetCharFmt( GetCharFmt()->GetName() );
-    aRet.SetCharTextDistance(nCharTextOffset);
-
-    SvxFrameVertOrient eOrient = SVX_VERT_NONE;
-    if(pVertOrient)
-        eOrient = (SvxFrameVertOrient)(USHORT)pVertOrient->GetVertOrient();
-    aRet.SetGraphicBrush( pGrfBrush, &aGrfSize, &eOrient);
-
-    aRet.SetBulletFont(pBulletFont);
-    return aRet;
-}
-
 /* -----------------30.10.98 08:33-------------------
  *
  * --------------------------------------------------*/
@@ -1008,8 +730,8 @@ SvxNumRule SwNumRule::MakeSvxNumRule() const
     for( USHORT n = 0; n < MAXLEVEL; ++n )
     {
         const SwNumFmt rNumFmt = Get(n);
-        SvxNumberFormat aSvxFormat = rNumFmt.MakeSvxFormat();
-        aRule.SetLevel(n, aSvxFormat, aFmts[n] != 0);
+//      SvxNumberFormat aSvxFormat = rNumFmt.MakeSvxFormat();
+        aRule.SetLevel(n, rNumFmt, aFmts[n] != 0);
     }
     return aRule;
 }
