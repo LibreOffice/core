@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:02:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,12 @@ protected:
 };
 
 //========================================================================
+namespace svx
+{
+    class FmTextControlShell;
+}
+
+//========================================================================
 typedef FmXFormShell_Base_Disambiguation    FmXFormShell_BASE;
 typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
@@ -293,6 +299,7 @@ class FmXFormShell  :public FmXFormShell_BASE
 {
     friend class FmFormShell;
     friend class FmFormView;
+    friend class FmXFormView;
     friend class WizardUsageConfigItem;
 
     class SuspendPropertyTracking;
@@ -337,7 +344,8 @@ class FmXFormShell  :public FmXFormShell_BASE
     ::std::queue< FmLoadAction >
                     m_aLoadingPages;
 
-    FmFormShell*    m_pShell;
+    FmFormShell*                m_pShell;
+    ::svx::FmTextControlShell*  m_pTextShell;
 
     ::svx::ControllerFeatures   m_aActiveControllerFeatures;
     ::svx::ControllerFeatures   m_aNavControllerFeatures;
@@ -525,6 +533,12 @@ public:
         // iteriertes IsConversionPossible
     sal_Bool ExecuteControlConversionSlot(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& xContext, sal_uInt16 nSlotId);
         // verkapptes ConvertControlTo
+
+    void    ExecuteTextAttribute( SfxRequest& _rReq );
+    void    GetTextAttributeState( SfxItemSet& _rSet );
+    bool    IsActiveControl( bool _bCountRichTextOnly = false ) const;
+    void    ForgetActiveControl();
+    void    SetControlActivationHandler( const Link& _rHdl );
 
 private:
     DECL_LINK(OnFoundData, FmFoundRecordInformation*);
