@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 15:01:13 $
+ *  last change: $Author: tra $ $Date: 2002-02-22 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,6 @@
 //
 //------------------------------------------------
 
-const sal_uInt32 MAX_WAIT_SHUTDOWN  = 5000; // msec
-
-//------------------------------------------------
-//
-//------------------------------------------------
-
 using namespace osl;
 using namespace com::sun::star::uno;
 using ::com::sun::star::uno::Reference;
@@ -105,7 +99,7 @@ using ::cppu::OBroadcastHelper;
 //------------------------------------------------
 
 CAsyncEventNotifier::CAsyncEventNotifier(cppu::OBroadcastHelper& rBroadcastHelper) :
-    m_hEventNotifierThread(0),
+    m_hThread(0),
     m_bRun(false),
     m_ThreadId(0),
     m_rBroadcastHelper(rBroadcastHelper)
@@ -125,16 +119,18 @@ bool SAL_CALL CAsyncEventNotifier::start()
     // terminate so m_hEventNotifierThread is
     // yet a valid thread handle that should
     // not be overwritten
-    if ( !m_bRun && 0==m_hEventNotifierThread )
+    if ( !m_bRun && 0==m_hThread )
     {
-        m_hEventNotifierThread = (HANDLE)_beginthreadex(
+        m_hThread = (HANDLE)_beginthreadex(
             NULL, 0, CAsyncEventNotifier::ThreadProc, this, 0, &m_ThreadId);
 
-        OSL_ASSERT(0 != m_hEventNotifierThread);
+        OSL_ASSERT(0 != m_hThread);
 
-        if (m_hEventNotifierThread)
+        if (m_hThread)
             m_bRun = true;
     }
+
+    OSL_POSTCOND(m_bRun,"Could not start event notifier!");
 
     return m_bRun;
 }
@@ -145,9 +141,11 @@ bool SAL_CALL CAsyncEventNotifier::start()
 
 void SAL_CALL CAsyncEventNotifier::stop()
 {
-    OSL_ENSURE(GetCurrentThreadId() != m_ThreadId, "Method must not be called from EventNotifierThread context");
+    OSL_PRECOND(GetCurrentThreadId() != m_ThreadId, "Method called in wrong thread context!");
 
     ClearableMutexGuard aGuard(m_Mutex);
+
+    OSL_PRECOND(m_bRun,"Event notifier does not run!");
 
     m_bRun = false;
     m_EventList.clear();
@@ -157,21 +155,19 @@ void SAL_CALL CAsyncEventNotifier::stop()
     // notifier thread may need it to finish
     aGuard.clear();
 
-    sal_uInt32 dwResult = WaitForSingleObject(
-        m_hEventNotifierThread, MAX_WAIT_SHUTDOWN );
+    // we are waiting infinite, so error will
+    // be better detected in form of deadlocks
+    sal_uInt32 dwResult = WaitForSingleObject(m_hThread, INFINITE);
 
-    // lock mutex again to reset m_hEventNotifierThread
+    OSL_ENSURE(WAIT_FAILED != dwResult, "Waiting for thread termination failed!");
+
+    // lock mutex again to reset m_hThread
     // and prevent a race with start()
+
     MutexGuard anotherGuard(m_Mutex);
 
-    OSL_ENSURE(WAIT_TIMEOUT != dwResult, "Thread could not end!");
-
-    if (WAIT_TIMEOUT == dwResult)
-        TerminateThread(m_hEventNotifierThread, 0);
-
-    CloseHandle(m_hEventNotifierThread);
-
-    m_hEventNotifierThread = 0;
+    CloseHandle(m_hThread);
+    m_hThread = 0;
 }
 
 //------------------------------------------------
@@ -182,7 +178,9 @@ void SAL_CALL CAsyncEventNotifier::notifyEvent(EventListenerMethod_t aListenerMe
 {
     MutexGuard aGuard(m_Mutex);
 
-    if ( m_bRun )
+    OSL_ENSURE(m_bRun,"Event notifier is not running!");
+
+    if (m_bRun)
     {
         m_EventList.push_back(std::make_pair(aListenerMethod, aEvent));
         m_NotifyEvent.set();
@@ -250,20 +248,20 @@ void SAL_CALL CAsyncEventNotifier::run()
                 ::cppu::OInterfaceContainerHelper* pICHelper =
                     m_rBroadcastHelper.getContainer(getCppuType((Reference<XFilePickerListener>*)0));
 
-                if ( pICHelper )
+                if (pICHelper)
                 {
                     ::cppu::OInterfaceIteratorHelper iter(*pICHelper);
 
-                    while( iter.hasMoreElements() )
+                    while(iter.hasMoreElements())
                     {
-                        Reference< XFilePickerListener > xFPListener(iter.next( ), UNO_QUERY);
+                        Reference<XFilePickerListener> xFPListener(iter.next(), UNO_QUERY);
 
                         try
                         {
-                            if ( xFPListener.is() )
+                            if (xFPListener.is())
                                 (xFPListener.get()->*aEventRecord.first)(aEventRecord.second);
                         }
-                        catch( RuntimeException& )
+                        catch(RuntimeException&)
                         {
                             OSL_ENSURE(sal_False, "RuntimeException during event dispatching");
                         }

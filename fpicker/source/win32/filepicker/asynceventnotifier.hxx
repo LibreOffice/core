@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asynceventnotifier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2002-02-21 14:45:39 $
+ *  last change: $Author: tra $ $Date: 2002-02-22 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ private:
 
 private:
     std::list<EventRecord_t>    m_EventList;
-    HANDLE                      m_hEventNotifierThread;
+    HANDLE                      m_hThread;
     bool                        m_bRun;
     unsigned                    m_ThreadId;
     ::cppu::OBroadcastHelper&   m_rBroadcastHelper;
