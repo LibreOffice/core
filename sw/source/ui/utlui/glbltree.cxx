@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:49:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,12 +1416,14 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
             }
             if(bCopy || bHard)
             {
+                USHORT i;
+
                 pSwGlblDocContents->DeleteAndDestroy(0, pSwGlblDocContents->Count());
-                for(USHORT i = 0; i < pTempContents->Count(); i++)
+                for( i = 0; i < pTempContents->Count(); i++)
                 {
                     pSwGlblDocContents->Insert(pTempContents->GetObject(i));
                 }
-                for(i = pTempContents->Count(); i; i--)
+                for( i = pTempContents->Count(); i; i--)
                     pTempContents->Remove(i - 1);
 
             }
