@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-08 09:20:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,11 @@ class SfxFilterListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util
 {
     // member
     private:
-        ::osl::Mutex                                                            m_aMutex    ;
-        ::rtl::OUString                                                         m_sFactory  ;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable >  m_xCache    ;
-        SfxFilterContainer*                                                     m_pContainer;
+        ::osl::Mutex                                                            m_aMutex      ;
+        ::rtl::OUString                                                         m_sFactory    ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable >  m_xTypeCache  ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XFlushable >  m_xFilterCache;
+        SfxFilterContainer*                                                     m_pContainer  ;
 
     // c++ interface
     public:
