@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 09:23:07 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,17 +685,21 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
             }
         }
 
+        sal_Bool bFirstTry = sal_False;
         if (!m_xConnection.is())
         {   // whoever instantiated us did not give us a connection to share. Okay, create an own one
             createNewConnection(sal_False);
+            bFirstTry = sal_True;
         }
         if(!m_xConnection.is()) // so what should otherwise
         {
+            if(!bFirstTry)
             {
                 String aMessage(ModuleRes(RID_STR_CONNECTION_LOST));
                 ODataView* pWindow = getView();
                 InfoBox(pWindow, aMessage).Execute();
             }
+            throw Exception();
         }
 
         assignTable();
