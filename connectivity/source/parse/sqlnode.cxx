@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 06:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,9 +524,9 @@ void OSQLParseNode::likeNodeToStr(::rtl::OUString& rString, const SQLParseNodePa
     pParaNode = m_aChilds[nCurentPos];
     pEscNode = m_aChilds[nCurentPos+1];
 
-    if (pParaNode->isToken() && rParam.bInternational)
+    if (pParaNode->isToken())
     {
-        ::rtl::OUString aStr = ConvertLikeToken(pParaNode, pEscNode, sal_True);
+        ::rtl::OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
         rString += ::rtl::OUString::createFromAscii(" ");
         rString += SetQuotation(aStr,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'"));
     }
