@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-29 16:56:49 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,35 +98,30 @@
 
 #include <limits.h>
 
-#ifdef REMOTE_APPSERVER
-// TODO: cleanup
-#define SalGraphics ImplServerGraphics
-#endif
-
 // =======================================================================
 
 ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
-    int nFirstCharIndex, int nEndCharIndex )
+    int nMinCharPos, int nEndCharPos )
 :   mpStr( pStr ),
     mnLength( nLength ),
-    mnFirstCharIndex( nFirstCharIndex ),
-    mnEndCharIndex( nEndCharIndex ),
+    mnMinCharPos( nMinCharPos ),
+    mnEndCharPos( nEndCharPos ),
     mnFlags( 0 ),
     mnLayoutWidth( 0 ),
     mpDXArray( NULL ),
-    maDrawPosition( 0, 0 ),
     mnOrientation( 0 )
 {}
 
 // =======================================================================
 
 SalLayout::SalLayout( const ImplLayoutArgs& rArgs )
-:   mnRefCount( 1 ),
-    mnFirstCharIndex( rArgs.mnFirstCharIndex ),
-    mnEndCharIndex( rArgs.mnEndCharIndex ),
-    maDrawPosition( rArgs.maDrawPosition ),
+:   mnMinCharPos( rArgs.mnMinCharPos ),
+    mnEndCharPos( rArgs.mnEndCharPos ),
+    mnOrientation( rArgs.mnOrientation ),
+    mnLayoutFlags( rArgs.mnFlags ),
+    maDrawOffset( 0, 0 ),
     mnUnitsPerPixel( 1 ),
-    mnOrientation( rArgs.mnOrientation )
+    mnRefCount( 1 )
 {}
 
 // -----------------------------------------------------------------------
@@ -138,6 +133,7 @@ SalLayout::~SalLayout()
 
 void SalLayout::Reference() const
 {
+    // TODO: protect when multiple threads can access this
     ++mnRefCount;
 }
 
@@ -145,6 +141,7 @@ void SalLayout::Reference() const
 
 void SalLayout::Release() const
 {
+    // TODO: protect when multiple threads can access this
     if( --mnRefCount <= 0 )
     {
         // const_cast because some compilers violate ANSI C++ spec
@@ -156,10 +153,11 @@ void SalLayout::Release() const
 
 Point SalLayout::GetDrawPosition( const Point& rRelative ) const
 {
-    Point aPos = maDrawPosition;
+    Point aPos = maDrawBase;
+    Point aOfs = rRelative + maDrawOffset;
 
     if( mnOrientation == 0 )
-        aPos += rRelative;
+        aPos += aOfs;
     else
     {
         // cache trigonometric results
@@ -173,24 +171,14 @@ Point SalLayout::GetDrawPosition( const Point& rRelative ) const
             fSin = sin( fRad );
         }
 
-        long nX0 = rRelative.X();
-        long nY0 = rRelative.Y();
-        long nX = static_cast<long>( +fCos * nX0 + fSin * nY0 );
-        long nY = static_cast<long>( +fCos * nY0 - fSin * nX0 );
+        double fX = aOfs.X();
+        double fY = aOfs.Y();
+        long nX = static_cast<long>( +fCos * fX + fSin * fY );
+        long nY = static_cast<long>( +fCos * fY - fSin * fX );
         aPos += Point( nX, nY );
     }
 
     return aPos;
-}
-
-// -----------------------------------------------------------------------
-
-// TODO: make abstract virtual when all children have it implemented
-void SalLayout::GetCursorPositions( long* pCursorXArray ) const
-{
-    // TODO: the implementation below is still a dummy implementation => FIXME
-    long nWidth = FillDXArray( pCursorXArray );
-    pCursorXArray[ mnEndCharIndex - mnFirstCharIndex ] = nWidth;
 }
 
 // -----------------------------------------------------------------------
@@ -219,7 +207,7 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
     {
         case ':': case ';': case '!':
             if( !bVertical )
-                nResult = bLeft ? -1 : +1;   // 25% left and right
+                nResult = bLeft ? -1 : +1;  // 25% left and right
             break;
         case 0x30FB:
             nResult = bLeft ? -1 : +1;      // 25% left/right/top/bottom
@@ -235,27 +223,29 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 
 bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
 {
-    bool bHasGlyphs = HasGlyphs();
     bool bRet = true;
+
+    Point aPos;
+    PolyPolygon aGlyphOutline;
     for( int nStart = 0;;)
     {
-        Point aPos;
         long nLGlyph;
-        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
+        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
         // get outline of individual glyph, ignoring "empty" glyphs
-        PolyPolygon aGlyphOutline;
-        bool bSuccess
-            = rSalGraphics.GetGlyphOutline(nLGlyph, bHasGlyphs, aGlyphOutline, NULL);
-        if (bSuccess && aGlyphOutline.Count() > 0)
+        bool bIsGlyph = (nLGlyph & GF_ISCHAR) != 0;
+        bool bSuccess = rSalGraphics.GetGlyphOutline( nLGlyph, bIsGlyph, aGlyphOutline, NULL );
+        bRet &= bSuccess;
+        // only add non-empty outlines
+        if( bSuccess && (aGlyphOutline.Count() > 0) )
         {
             // insert outline at correct position
             aGlyphOutline.Move( aPos.X(), aPos.Y() );
             rVector.push_back( aGlyphOutline );
         }
-        bRet = bRet && bSuccess;
     }
+
     return bRet;
 }
 
@@ -266,22 +256,24 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle )
     bool bRet = false;
     rRectangle.SetEmpty();
 
-    bool bHasGlyphs = HasGlyphs();
+    Rectangle aRectangle;
     for( int nStart = 0;;)
     {
         Point aPos;
         long nLGlyph;
-        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart, NULL, NULL ) )
+        if( !GetNextGlyphs( 1, &nLGlyph, aPos, nStart ) )
             break;
 
         // get bounding rectangle of individual glyph
-        Rectangle aRectangle;
-        if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bHasGlyphs, aRectangle, NULL ) )
-            bRet = true;
+        bool bIsGlyph = (nLGlyph & GF_ISCHAR) != 0;
+        if( rSalGraphics.GetGlyphBoundRect( nLGlyph, bIsGlyph, aRectangle, NULL ) )
+        {
+            // merge rectangle
+            aRectangle += aPos;
+            rRectangle.Union( aRectangle );
 
-        // merge rectangle
-        aRectangle += aPos;
-        rRectangle.Union( aRectangle );
+            bRet = true;
+        }
     }
 
     return bRet;
@@ -292,7 +284,7 @@ bool SalLayout::GetBoundRect( SalGraphics& rSalGraphics, Rectangle& rRectangle )
 bool SalLayout::IsNotdefGlyph( long nGlyph ) const
 {
     bool bRet = false;
-    if( HasGlyphs() && nGlyph )
+    if( (nGlyph & GF_ISCHAR) || !(nGlyph & GF_IDXMASK) )
         bRet = true;
     return bRet;
 }
@@ -302,15 +294,16 @@ bool SalLayout::IsNotdefGlyph( long nGlyph ) const
 bool SalLayout::IsSpacingGlyph( long nGlyph ) const
 {
     bool bRet = false;
-    if( HasGlyphs() )
-        bRet = (nGlyph==3);
-    else
+    if( nGlyph & GF_ISCHAR )
     {
-        bRet = (nGlyph <= 0x0020)
-            //|| (nGlyph == 0x00A0)     // non breaking space
-            || (nGlyph >= 0x2000 && nGlyph <= 0x200F)
-            || (nGlyph == 0x3000);
+        long nChar = nGlyph & GF_IDXMASK;
+        bRet = (nChar <= 0x0020)                    // blank
+            //|| (nChar == 0x00A0)                  // non breaking space
+            || (nChar >= 0x2000 && nChar <= 0x200F) // whitespace
+            || (nChar == 0x3000);                   // ideographic space
     }
+    else
+        bRet = ((nGlyph & GF_IDXMASK) == 3);
     return bRet;
 }
 
@@ -338,7 +331,7 @@ void GenericSalLayout::SetGlyphItems( GlyphItem* pGlyphItems, int nGlyphCount )
 
 // -----------------------------------------------------------------------
 
-Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
+Point GenericSalLayout::GetCharPosition( int nCharPos, bool bRTL ) const
 {
     int nStartIndex = mnGlyphCount;
     int nGlyphIndex = mnGlyphCount;
@@ -348,15 +341,15 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
     const GlyphItem* pG = mpGlyphItems;
     for( int i = 0; i < mnGlyphCount; ++i, ++pG )
     {
-        int n = pG->mnCharIndex;
-        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
+        int n = pG->mnCharPos;
+        if( n < mnMinCharPos || n >= mnEndCharPos )
             continue;
 
         if( nStartIndex > i )
             nStartIndex = i;
         nMaxIndex = i;
 
-        if( (n <= nCharIndex) && (nGlyphIndex > i) )
+        if( (n <= nCharPos) && (nGlyphIndex > i) )
             nGlyphIndex = i;
     }
 
@@ -393,7 +386,7 @@ Point GenericSalLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
 bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 {
     // initialize character extents buffer
-    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    int nCharCapacity = mnEndCharPos - mnMinCharPos;
     long* pMinPos  = (long*)alloca( 2*nCharCapacity * sizeof(long) );
     long* pMaxPos  = pMinPos + nCharCapacity;
 
@@ -413,10 +406,10 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
         if( !pG->IsClusterStart() )
             continue;
 
-        int n = pG->mnCharIndex;
-        if( n >= mnEndCharIndex )
+        int n = pG->mnCharPos;
+        if( n >= mnEndCharPos )
             continue;
-        n -= mnFirstCharIndex;
+        n -= mnMinCharPos;
         if( n < 0 )
             continue;
 
@@ -463,17 +456,17 @@ bool GenericSalLayout::GetCharWidths( long* pCharWidths ) const
 
 long GenericSalLayout::FillDXArray( long* pDXArray ) const
 {
-    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    int nCharCapacity = mnEndCharPos - mnMinCharPos;
     long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
     if( !GetCharWidths( pCharWidths ) )
         return 0;
 
     long nWidth = 0;
-    for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
+    for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
-        nWidth += pCharWidths[ i - mnFirstCharIndex ];
+        nWidth += pCharWidths[ i - mnMinCharPos ];
         if( pDXArray )
-            pDXArray[ i - mnFirstCharIndex ] = nWidth;
+            pDXArray[ i - mnMinCharPos ] = nWidth;
     }
 
     return nWidth;
@@ -492,8 +485,8 @@ long GenericSalLayout::GetTextWidth() const
     for( int i = 1; i < mnGlyphCount; ++i )
     {
         ++pG;
-        int n = pG->mnCharIndex;
-        if( (n<mnFirstCharIndex) || (n>=mnEndCharIndex) )
+        int n = pG->mnCharPos;
+        if( (n<mnMinCharPos) || (n>=mnEndCharPos) )
             continue;
         long nXPos = pG->maLinearPos.X();
         if( nMinPos > nXPos )
@@ -512,7 +505,7 @@ long GenericSalLayout::GetTextWidth() const
 void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 {
     // determine cluster boundaries and x base offset
-    int nChars = mnEndCharIndex - mnFirstCharIndex;
+    int nChars = mnEndCharPos - mnMinCharPos;
     int* pLogCluster = (int*)alloca( nChars * sizeof(int) );
     int i, n;
     for( i = 0; i < nChars; ++i )
@@ -522,10 +515,10 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     GlyphItem* pG = mpGlyphItems;
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
-        int n = pG->mnCharIndex;
-        if( n < mnEndCharIndex )
+        int n = pG->mnCharPos;
+        if( n < mnEndCharPos )
         {
-            if( (n -= mnFirstCharIndex) >= 0 )
+            if( (n -= mnMinCharPos) >= 0 )
             {
                 pLogCluster[ n ] = i;
                 if( nBasePointX < 0 )
@@ -542,30 +535,31 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
     for( i = 0; i < nChars; ++i )
         if( (n = pLogCluster[i]) >= 0 )
             break;
-    pNewClusterWidths[ n ] = pDXArray[i];
-    long nCurrPos = pDXArray[i];
+    long nOldPos = pDXArray[i] * mnUnitsPerPixel;
+    pNewClusterWidths[ n ] = nOldPos;
     while( ++i < nChars )
     {
         if( pLogCluster[i] >= 0 )
             n = pLogCluster[ i ];
-        pNewClusterWidths[ n ] += pDXArray[i] - nCurrPos;
-        nCurrPos = pDXArray[i];
+        long nNewPos = pDXArray[i] * mnUnitsPerPixel;
+        pNewClusterWidths[ n ] += nNewPos - nOldPos;
+        nOldPos = nNewPos;
     }
 
     // move cluster positions using the adjusted widths
     long nDelta = 0;
-    nCurrPos = 0;
+    long nNewPos = 0;
     pG = mpGlyphItems;
     for( i = 0; i < mnGlyphCount; ++i, ++pG )
     {
         if( pG->IsClusterStart() )
         {
-            long nNewDelta = nCurrPos;
+            long nNewDelta = nNewPos;
             nNewDelta += nBasePointX - pG->maLinearPos.X();
             nDelta = nNewDelta;
         }
 
-        nCurrPos += pNewClusterWidths[ i ];
+        nNewPos += pNewClusterWidths[ i ];
         pG->maLinearPos.X() += nDelta;
     }
 
@@ -579,11 +573,12 @@ void GenericSalLayout::ApplyDXArray( const long* pDXArray )
 
 void GenericSalLayout::Justify( long nNewWidth )
 {
-    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    int nCharCapacity = mnEndCharPos - mnMinCharPos;
     long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
     if( !GetCharWidths( pCharWidths ) )
         return;
 
+    nNewWidth *= mnUnitsPerPixel;
     int nOldWidth = FillDXArray( NULL );
     if( !nOldWidth || nNewWidth==nOldWidth )
         return;
@@ -592,8 +587,8 @@ void GenericSalLayout::Justify( long nNewWidth )
     GlyphItem* pG = mpGlyphItems;
     for( pG += mnGlyphCount; --pG > mpGlyphItems; )
     {
-        int n = pG->mnCharIndex;
-        if( (n >= mnFirstCharIndex) || (n < mnEndCharIndex) )
+        int n = pG->mnCharPos;
+        if( (n >= mnMinCharPos) || (n < mnEndCharPos) )
             break;
     }
     GlyphItem* pGRight = pG;
@@ -610,8 +605,8 @@ void GenericSalLayout::Justify( long nNewWidth )
     double fFactor = (double)nNewWidth / nOldWidth;
     for( pG = mpGlyphItems; pG < pGRight; ++pG )
     {
-        int n = pG->mnCharIndex;
-        if( (n >= mnFirstCharIndex) || (n < mnEndCharIndex) )
+        int n = pG->mnCharPos;
+        if( (n >= mnMinCharPos) || (n < mnEndCharPos) )
         {
             long nOldPos = pG->maLinearPos.X();
             long nNewPos = nBasePos + (long)(fFactor * (nOldPos - nBasePos) + 0.5);
@@ -627,46 +622,52 @@ void GenericSalLayout::Justify( long nNewWidth )
 
 // -----------------------------------------------------------------------
 
-void GenericSalLayout::GetCursorPositions( long* pCursorXArray ) const
+void GenericSalLayout::GetCaretPositions( long* pCaretXArray ) const
 {
-    const int nMaxIdx = 2 * (mnEndCharIndex - mnFirstCharIndex);
+    // initialize result array
+    const int nMaxIdx = 2 * (mnEndCharPos - mnMinCharPos);
+    long nXPos = -1;
     int i;
     for( i = 0; i < nMaxIdx; ++i )
-        pCursorXArray[ i ] = -1;
+        pCaretXArray[ i ] = nXPos;
 
-    long nXPos = 0;
-    int nLeftIdx = 0;
+    // calculate caret positions using glyph array
     const GlyphItem* pG = mpGlyphItems;
-    for( i = mnGlyphCount; --i >= 0; )
+    for( i = mnGlyphCount; --i >= 0; ++pG )
     {
         nXPos = pG->maLinearPos.X();
-        long nXRight = nXPos + pG->mnNewWidth;
-        int n = pG->mnCharIndex;
-        if( (n >= mnFirstCharIndex) && (n < mnEndCharIndex) )
+        long nXRight = nXPos + pG->mnOrigWidth;
+        int n = pG->mnCharPos;
+        if( (n >= mnMinCharPos) && (n < mnEndCharPos) )
         {
-            int nCurrIdx = 2 * (n - mnFirstCharIndex);
-            if( nLeftIdx <= nCurrIdx )
+            int nCurrIdx = 2 * (n - mnMinCharPos);
+            if( !(pG->mnFlags & GlyphItem::IS_RTL_GLYPH) )
             {
                 // normal positions for LTR case
-                pCursorXArray[ nCurrIdx ]   = nXPos;
-                pCursorXArray[ nCurrIdx+1 ] = nXRight;
+                pCaretXArray[ nCurrIdx ]   = nXPos;
+                pCaretXArray[ nCurrIdx+1 ] = nXRight;
             }
             else
             {
                 // reverse positions for RTL case
-                pCursorXArray[ nCurrIdx ]   = nXRight;
-                pCursorXArray[ nCurrIdx+1 ] = nXPos;
+                pCaretXArray[ nCurrIdx ]   = nXRight;
+                pCaretXArray[ nCurrIdx+1 ] = nXPos;
             }
         }
-        nLeftIdx = n;
     }
+
+    // fixup unknown caret positions
+    for( i = 0; i < nMaxIdx; ++i )
+        if( pCaretXArray[ i ] >= 0 )
+            break;
+    nXPos = pCaretXArray[ i ];
 
     for( i = 0; i < nMaxIdx; ++i )
     {
-        if( pCursorXArray[ i ] >= 0 )
-            nXPos = pCursorXArray[ i ];
+        if( pCaretXArray[ i ] >= 0 )
+            nXPos = pCaretXArray[ i ];
         else
-            pCursorXArray[ i ] = nXPos;
+            pCaretXArray[ i ] = nXPos;
     }
 }
 
@@ -674,15 +675,15 @@ void GenericSalLayout::GetCursorPositions( long* pCursorXArray ) const
 
 int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor ) const
 {
-    int nCharCapacity = mnEndCharIndex - mnFirstCharIndex;
+    int nCharCapacity = mnEndCharPos - mnMinCharPos;
     long* pCharWidths = (long*)alloca( nCharCapacity * sizeof(long) );
     if( !GetCharWidths( pCharWidths ) )
         return STRING_LEN;
 
     long nWidth = 0;
-    for( int i = mnFirstCharIndex; i < mnEndCharIndex; ++i )
+    for( int i = mnMinCharPos; i < mnEndCharPos; ++i )
     {
-        nWidth += pCharWidths[ i - mnFirstCharIndex ] * nFactor;
+        nWidth += pCharWidths[ i - mnMinCharPos ] * nFactor;
         if( nWidth >= nMaxWidth )
             return i;
         nWidth += nCharExtra;
@@ -694,7 +695,7 @@ int GenericSalLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor
 // -----------------------------------------------------------------------
 
 int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
-    int& nStart, long* pGlyphAdvances, int* pCharIndexes ) const
+    int& nStart, long* pGlyphAdvAry, int* pCharPosAry ) const
 {
     const GlyphItem* pG = mpGlyphItems + nStart;
 
@@ -702,8 +703,8 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     bool bFirst = (nStart == 0);
     for(; nStart < mnGlyphCount; ++nStart, ++pG )
     {
-        int n = pG->mnCharIndex;
-        if( n < mnFirstCharIndex || n >= mnEndCharIndex )
+        int n = pG->mnCharPos;
+        if( n < mnMinCharPos || n >= mnEndCharPos )
             continue;
         if( bFirst )   // set base point if not yet initialized
             maBasePoint = Point( pG->maLinearPos.X(), 0 );
@@ -724,17 +725,17 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     while( nCount < nLen )
     {
         *(pGlyphs++) = pG->mnGlyphIndex;
-        if( pGlyphAdvances )
-            *(pGlyphAdvances++) = pG->mnNewWidth;
-        if( pCharIndexes )
-            *(pCharIndexes++) = pG->mnCharIndex;
+        if( pGlyphAdvAry )
+            *(pGlyphAdvAry++) = pG->mnNewWidth;
+        if( pCharPosAry )
+            *(pCharPosAry++) = pG->mnCharPos;
         ++nCount;
 
         if( ++nStart >= mnGlyphCount )
             break;
 
         // stop when x-position is unexpected
-        if( !pGlyphAdvances && (pG->mnOrigWidth != pG->mnNewWidth) )
+        if( !pGlyphAdvAry && (pG->mnOrigWidth != pG->mnNewWidth) )
             break;
 
         ++pG;
@@ -744,12 +745,12 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
             break;
 
         // stop when no longer in string
-        int n = pG->mnCharIndex;
-        if( (n < mnFirstCharIndex) || (n >= mnEndCharIndex) )
+        int n = pG->mnCharPos;
+        if( (n < mnMinCharPos) || (n >= mnEndCharPos) )
             break;
 
         // stop when glyph flags change
-        if( GetGlyphFlags( nOldFlags ^ pG->mnGlyphIndex ) )
+        if( (nOldFlags ^ pG->mnGlyphIndex) & GF_FLAGMASK )
             break;
         nOldFlags = pG->mnGlyphIndex;
     }
@@ -775,8 +776,8 @@ GenericSalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags 
         if( ((pSrc->mnFlags ^ nXorFlags) & nAndFlags) != 0 )
             continue;
         ++nUsableSize;
-        if( (pSrc->mnCharIndex >= mnFirstCharIndex)
-        &&  (pSrc->mnCharIndex < mnEndCharIndex) )
+        if( (pSrc->mnCharPos >= mnMinCharPos)
+        &&  (pSrc->mnCharPos < mnEndCharPos) )
             ++nNewSize;
     }
 
@@ -802,8 +803,8 @@ GenericSalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags 
             bool bFirst = true;
             for( i = mnSize; --i >= 0; ++pSrc )
             {
-                if( (pSrc->mnCharIndex >= mnFirstCharIndex)
-                &&  (pSrc->mnCharIndex < mnEndCharIndex)
+                if( (pSrc->mnCharPos >= mnMinCharPos)
+                &&  (pSrc->mnCharPos < mnEndCharPos)
                 &&  !((pSrc->mnFlags ^ nXorFlags) & nAndFlags) )
                 {
                     *(pDst++) = *pSrc;
@@ -815,8 +816,8 @@ GenericSalLayout* GenericSalLayout::ExtractLayout( int nXorFlags, int nAndFlags 
 
         pDstLayout->maAdvance       = maAdvance;
         pDstLayout->maBasePoint     = maBasePoint;
-        pDstLayout->mnFirstCharIndex= mnFirstCharIndex;
-        pDstLayout->mnEndCharIndex  = mnEndCharIndex;
+        pDstLayout->mnMinCharPos= mnMinCharPos;
+        pDstLayout->mnEndCharPos  = mnEndCharPos;
         pDstLayout->mnOrientation   = mnOrientation;
         pDstLayout->mbWantFallback  = bWantFallback;
     }
@@ -837,13 +838,13 @@ void GenericSalLayout::MergeLayout( int nFlags, const GenericSalLayout& rSalLayo
         // use only when we need glyph fallback
         if( pG->mnGlyphIndex != 0 )
             continue;
-        int nCharIndex = pG->mnCharIndex;
+        int nCharPos = pG->mnCharPos;
         const GlyphItem* pSrc = rSalLayout.mpGlyphItems;
         for( int j = rSalLayout.mnGlyphCount; --j >= 0; ++pSrc )
         {
             if( !pSrc->mnGlyphIndex )
                 continue;
-            if( nCharIndex != pSrc->mnCharIndex )
+            if( nCharPos != pSrc->mnCharPos )
                 continue;
             pG->mnGlyphIndex = pSrc->mnGlyphIndex;
             pG->mnFlags      = nFlags;
