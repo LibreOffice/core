@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-11 12:27:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ inline static void SwapLongUInt( unsigned int& r )
 #ifdef UNX
 inline static void SwapFloat( float& r )
     {
-    DBG_ASSERT( FALSE, "SwapFloat noch nicht implementiert!\n" );
+        *((sal_uInt32*)(void*)&r) = SWAPLONG( *((sal_uInt32*)(void*)&r) );
     }
 inline static void SwapDouble( double& r )
     {
@@ -150,7 +150,7 @@ inline static void SwapDouble( double& r )
 
 inline static void SwapFloat( float& r )
     {
-    DBG_ASSERT( FALSE, "SwapFloat noch nicht implementiert!\n" );
+        *((sal_uInt32*)(void*)&r) = SWAPLONG( *((sal_uInt32*)(void*)&r) );
     }
 
 inline static void SwapDouble( double& r )
@@ -1318,7 +1318,7 @@ SvStream& SvStream::operator>>( float& r )
 {
     // Read( (char*)&r, sizeof(float) );
     READNUMBER_WITHOUT_SWAP(float,r)
-#ifdef UNX
+#if defined( UNX ) || defined ( MAC )
     if( bSwap )
       SwapFloat(r);
 #endif
