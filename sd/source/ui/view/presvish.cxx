@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 16:14:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,6 @@
 #define PresentationViewShell
 using namespace sd;
 #include "sdslots.hxx"
-
-#include <memory>
 
 
 namespace sd {
@@ -224,19 +222,22 @@ void PresentationViewShell::FinishInitialization (
     SfxUInt16Item aId (SID_CONFIGITEMID, SID_NAVIGATOR);
     GetViewFrame()->GetDispatcher()->Execute(
         SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
-    GetViewFrame()->Show();
 
-    std::auto_ptr<Slideshow> pSlideShow(
-        new sd::Slideshow( this, GetView(), GetDoc() ) );
-    pSlideShow->setRehearseTimings(
+    mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc() );
+    mpSlideShow->setRehearseTimings(
         rRequest.GetSlot() == SID_REHEARSE_TIMINGS );
     GetActiveWindow()->GrabFocus();
 
     // Start the show.
-    if (pSlideShow->startShow(0)) {
-        mpSlideShow = pSlideShow.release();
+    if (mpSlideShow->startShow(0))
         mbShowStarted = sal_True;
+    else
+    {
+        delete mpSlideShow;
+        mpSlideShow = 0;
     }
+
+    GetViewFrame()->Show();
 
     Activate(TRUE);
 }
@@ -347,7 +348,7 @@ void PresentationViewShell::CreateFullScreenShow (
             if (pCurrentPage != NULL)
                 nStartPage = (pCurrentPage->GetPageNum() - 1) / 2;
 
-            pBase->GetViewFrame()->Show();
+//            pBase->GetViewFrame()->Show();
             // The following GrabFocus() is responsible for activating the
             // new view shell.  Without it the screen remains blank (under
             // Windows and some Linux variants.)
