@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:30:31 $
+ *  last change: $Author: nn $ $Date: 2000-12-19 09:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ inline void ScUnoConversion::FillScAddress(
         ScAddress& rScAddress,
         const ::com::sun::star::table::CellAddress& rApiAddress )
 {
-    rScAddress.Set( rApiAddress.Column, rApiAddress.Row, rApiAddress.Sheet );
+    rScAddress.Set( (USHORT)rApiAddress.Column, (USHORT)rApiAddress.Row, (USHORT)rApiAddress.Sheet );
 }
 
 inline void ScUnoConversion::FillApiAddress(
@@ -138,8 +138,8 @@ inline void ScUnoConversion::FillScRange(
         ScRange& rScRange,
         const ::com::sun::star::table::CellRangeAddress& rApiRange )
 {
-    rScRange.aStart.Set( rApiRange.StartColumn, rApiRange.StartRow, rApiRange.Sheet );
-    rScRange.aEnd.Set( rApiRange.EndColumn, rApiRange.EndRow, rApiRange.Sheet );
+    rScRange.aStart.Set( (USHORT)rApiRange.StartColumn, (USHORT)rApiRange.StartRow, (USHORT)rApiRange.Sheet );
+    rScRange.aEnd.Set( (USHORT)rApiRange.EndColumn, (USHORT)rApiRange.EndRow, (USHORT)rApiRange.Sheet );
 }
 
 inline void ScUnoConversion::FillApiRange(
