@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertySet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:22:35 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
         properties. If the property is not bound, the behavior is
         not specified.  </p>
 
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
         @see removePropertyChangeListener
      */
     void addPropertyChangeListener( [in] string aPropertyName,
@@ -198,6 +201,9 @@ interface XPropertySet: com::sun::star::uno::XInterface
         the listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>
+
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
 
         @see addPropertyChangeListener
      */

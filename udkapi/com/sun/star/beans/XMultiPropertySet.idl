@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMultiPropertySet.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:22:22 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,9 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
         <p>The implementation can ignore the names of the properties
         and fire the event on all properties. </p>
 
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
         @param aPropertyNames
             specifies the names of the properties.
 
@@ -177,6 +180,9 @@ interface XMultiPropertySet: com::sun::star::uno::XInterface
     /** removes an <type>XPropertiesChangeListener</type> from the listener list.
 
         <p>It is a "noop" if the listener is not registered.  </p>
+
+        <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
 
         @param
             contains the listener to be removed.
