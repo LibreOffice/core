@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nidd $ $Date: 2002-05-09 17:36:02 $
+ *  last change: $Author: svesik $ $Date: 2002-07-29 17:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 #endif
 #include <osl/file.hxx>
 
+#include "dictmgr.hxx"
+#include "csutil.hxx"
 
 #include <stdio.h>
 #include <iostream>
@@ -147,6 +149,7 @@ Hyphenator::Hyphenator() :
 {
     bDisposing = FALSE;
     pPropHelper = NULL;
+        numdict = 0;
 
 }
 
@@ -155,6 +158,11 @@ Hyphenator::~Hyphenator()
 {
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
+        if (numdict) {
+            delete[] aDicts;
+        aDicts = NULL;
+            numdict = 0;
+        }
 }
 
 
@@ -181,21 +189,132 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
     MutexGuard  aGuard( GetLinguMutex() );
     SvtPathOptions  aPathOpt;
 
-
-    if (!aSuppLocales.getLength())
+    if (!numdict)
     {
 
-        aSuppLocales.realloc( 4 );
-        Locale *pLocale = aSuppLocales.getArray();
-        pLocale[0] = Locale( A2OU("en"), A2OU("US"), OUString() );
-        pLocale[1] = Locale( A2OU("ru"), A2OU("RU"), OUString() );
-        pLocale[2] = Locale( A2OU("de"), A2OU("DE"), OUString() );
-        pLocale[3] = Locale( A2OU("da"), A2OU("DK"), OUString() );
+            // this routine should return the locales supported by the installed
+            // hyph dictionaries.  So here we need to parse both the user edited
+            // dictionary list and the shared dictionary list
+            // to see what dictionaries the admin/user has installed
 
-    }
+            int numusr;          // number of user dictionary entries
+            int numshr;          // number of shared dictionary entries
+            dictentry * spdict;  // shared dict entry pointer
+            dictentry * updict;  // user dict entry pointer
+
+            // invoke a dictionary manager to get the user dictionary list
+            OUString usrlst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
+            OUString ulst;
+        osl::FileBase::getSystemPathFromFileURL(usrlst,ulst);
+            OString uTmp(OU2ENC(ulst,osl_getThreadTextEncoding()));
+        DictMgr* udMgr = new DictMgr(uTmp.getStr(),"HYPH");
+            numusr = 0;
+            if (udMgr)
+                 numusr = udMgr->get_list(&updict);
+
+            // invoke a second  dictionary manager to get the shared dictionary list
+            OUString shrlst = aPathOpt.GetLinguisticPath() + A2OU("/ooo/dictionary.lst");
+            OUString slst;
+        osl::FileBase::getSystemPathFromFileURL(shrlst,slst);
+            OString sTmp(OU2ENC(slst,osl_getThreadTextEncoding()));
+        DictMgr* sdMgr = new DictMgr(sTmp.getStr(),"HYPH");
+            numshr = 0;
+            if (sdMgr)
+                 numshr = sdMgr->get_list(&spdict);
+
+
+            // we really should merge these and remove duplicates but since
+            // users can name their dictionaries anything they want it would
+            // be impossible to know if a real duplication exists unless we
+            // add some unique key to each hyphenation dictionary
+            // we can worry about that when and if issuezilla's flood in
+            numdict = numusr + numshr;
+
+            if (numdict) {
+          aDicts = new HDInfo[numdict];
+              aSuppLocales.realloc(numdict);
+              Locale * pLocale = aSuppLocales.getArray();
+              int numlocs = 0;
+              int newloc;
+              int i,j;
+              int k = 0;
+
+              // first add the user dictionaries
+              // keeping track of unique locales only
+              for (i = 0; i < numusr; i++) {
+             Locale nLoc( A2OU(updict->lang), A2OU(updict->region), OUString() );
+
+                 newloc = 1;
+             for (j = 0; j < numlocs; j++) {
+                     if (nLoc == pLocale[j]) newloc = 0;
+                 }
+                 if (newloc) {
+                     pLocale[numlocs] = nLoc;
+                     numlocs++;
+                 }
+                 aDicts[k].aPtr = NULL;
+                 aDicts[k].aLoc = nLoc;
+                 aDicts[k].aEnc = 0;
+                 aDicts[k].aName = A2OU(updict->filename);
+                 k++;
+                 updict++;
+              }
+
+              // now add the shared dictionaries
+              // keeping track of unique locales only
+              for (i = 0; i < numshr; i++) {
+             Locale nLoc( A2OU(spdict->lang), A2OU(spdict->region), OUString() );
+
+                 newloc = 1;
+             for (j = 0; j < numlocs; j++) {
+                     if (nLoc == pLocale[j]) newloc = 0;
+                 }
+                 if (newloc) {
+                     pLocale[numlocs] = nLoc;
+                     numlocs++;
+                 }
+                 aDicts[k].aPtr = NULL;
+                 aDicts[k].aLoc = nLoc;
+                 aDicts[k].aEnc = 0;
+                 aDicts[k].aName = A2OU(spdict->filename);
+                 k++;
+                 spdict++;
+              }
+
+              // reallocate the size to just cover the unique locales
+              aSuppLocales.realloc(numlocs);
+
+            } else {
+             // no dictionary.lst files found, just default to hyph_en.dic
+                 numdict = 1;
+                 aSuppLocales.realloc(1);
+                 Locale *pLocale = aSuppLocales.getArray();
+                 Locale nLoc( A2OU("en"), A2OU("US"), OUString() );
+                 pLocale[0] = nLoc;
+                 aDicts = new HDInfo[1];
+                 aDicts[0].aPtr = NULL;
+                 aDicts[0].aLoc = nLoc;
+                 aDicts[0].aEnc = 0;
+                 aDicts[0].aName = A2OU("hyph_en");
+            }
+
+            /* de-allocation of memory is handled inside the DictMgr */
+            updict = NULL;
+            if (udMgr) {
+                  delete udMgr;
+                  udMgr = NULL;
+            }
+            spdict = NULL;
+            if (sdMgr) {
+                  delete sdMgr;
+                  sdMgr = NULL;
+            }
+
+        }
 
     return aSuppLocales;
 }
+
 
 
 sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
@@ -220,15 +339,6 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
     return bRes;
 }
 
-rtl_TextEncoding L2TE( LanguageType nLang )
-{
-  switch( nLang )
-    {
-    case 0x419  : return RTL_TEXTENCODING_KOI8_R; break;         // RUSSIAN
-
-    }
-  return RTL_TEXTENCODING_MS_1252;
-}
 
 Reference< XHyphenatedWord > SAL_CALL
 Hyphenator::hyphenate( const ::rtl::OUString& aWord,
@@ -239,77 +349,103 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
                com::sun::star::lang::IllegalArgumentException)
 {
     SvtPathOptions aPathOpt;
-    CharClass chclass( rSMgr, aLocale );
 
     int nHyphenationPos = -1;
     int wordlen;
     char *hyphens;
+        char *lcword;
+        int k = 0;
 
-    HyphenDict *dict;
-    OString encWord;
-    OUString tohyphenate;
+
+    HyphenDict *dict = NULL;
+        rtl_TextEncoding aEnc = 0;
+
     Reference< XHyphenatedWord > xRes;
 
-    if ( ( dict = aOpenedDicts.Get ( LocaleToLanguage ( aLocale ) ) ) == NULL )
-      {
-        OUString DictFN = A2OU("hyph_") + aLocale.Language + A2OU(".dic");
-        OUString userdictpath;
-        OUString dictpath;
-        osl::FileBase::getSystemPathFromFileURL(
+        k = -1;
+        for (int j = 0; j < numdict; j++)
+          if (aLocale == aDicts[j].aLoc) k = j;
+
+
+        // if we have a hyphenation dictionary matching this locale
+        if (k != -1) {
+
+        // if this dictinary has not been loaded yet do that
+        if (!aDicts[k].aPtr) {
+
+           OUString DictFN = aDicts[k].aName + A2OU(".dic");
+           OUString userdictpath;
+           OUString dictpath;
+
+           osl::FileBase::getSystemPathFromFileURL(
                             aPathOpt.GetUserDictionaryPath() + A2OU("/"),
                             userdictpath);
 
-        osl::FileBase::getSystemPathFromFileURL(
-                            aPathOpt.GetDictionaryPath() + A2OU("/"),
+           osl::FileBase::getSystemPathFromFileURL(
+                            aPathOpt.GetLinguisticPath() + A2OU("/ooo/"),
                             dictpath);
 
-        if ( ( dict = hnj_hyphen_load ( OU2A(userdictpath + DictFN) ) ) == NULL )
-          if ( ( dict = hnj_hyphen_load ( OU2A(dictpath + DictFN) ) ) == NULL )
-        {
-          fprintf(stderr, "Couldn't find file %s and %s\n", OU2A(userdictpath + DictFN),  OU2A(userdictpath + DictFN ));
-          return NULL;
-        }
-        aOpenedDicts.Insert( LocaleToLanguage ( aLocale ), dict );
-      }
+               OString uTmp(OU2ENC(userdictpath + DictFN,osl_getThreadTextEncoding()));
+               OString sTmp(OU2ENC(dictpath + DictFN,osl_getThreadTextEncoding()));
 
     rtl_TextEncoding DictionaryEnc = L2TE( LocaleToLanguage( aLocale ) );
 
-//  chclass.toLower(aWord);
-    encWord = OUStringToOString (aWord, DictionaryEnc);
-
-    wordlen = encWord.getLength();
-
-    hyphens = new char[wordlen+5];
-
-    if (hnj_hyphen_hyphenate(dict, encWord.getStr(), wordlen, hyphens))
-      {
-        delete hyphens;
-        return NULL;
-      }
-
-    OUStringBuffer  hyphenatedWord;
-    INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
-
-    for (INT32 i = 0; i < encWord.getLength(); i++)
-      {
-        hyphenatedWord.append(aWord[i]);
-        if ((hyphens[i]&1)  && (i < Leading))
+           if ( ( dict = hnj_hyphen_load ( uTmp.getStr() ) ) == NULL )
+              if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
           {
-        nHyphenationPos = i;
-        hyphenatedWord.append(sal_Unicode('='));
+             fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding()),  OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding() ));
+             return NULL;
           }
-      }
+           aDicts[k].aPtr = dict;
+               aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
+        }
 
-    if (nHyphenationPos  == -1)
-      xRes = NULL;
-    else
-      {
-        xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
+            // other wise hyphenate the word with that dictionary
+            dict = aDicts[k].aPtr;
+            aEnc = aDicts[k].aEnc;
+
+            OString encWord(OU2ENC(aWord,aEnc));
+
+        wordlen = encWord.getLength();
+            lcword = new char[wordlen+1];
+        hyphens = new char[wordlen+5];
+            enmkallsmall(lcword,encWord.getStr(),dict->cset);
+
+        if (hnj_hyphen_hyphenate(dict, lcword, wordlen, hyphens))
+        {
+          //whoops something did not work
+            delete[] hyphens;
+                delete[] lcword;
+            return NULL;
+        }
+
+        OUStringBuffer  hyphenatedWord;
+        INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
+
+        for (INT32 i = 0; i < encWord.getLength(); i++)
+        {
+            hyphenatedWord.append(aWord[i]);
+            if ((hyphens[i]&1)  && (i < Leading))
+            {
+            nHyphenationPos = i;
+            hyphenatedWord.append(sal_Unicode('='));
+            }
+         }
+
+         if (nHyphenationPos  == -1)
+             xRes = NULL;
+         else
+         {
+             xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
                        aWord, nHyphenationPos );
-      }
+         }
 
-    delete hyphens;
-    return xRes;
+         delete[] hyphens;
+             delete[] lcword;
+         return xRes;
+
+    }
+        return NULL;
 }
 
 Reference < XHyphenatedWord > SAL_CALL
@@ -334,83 +470,111 @@ Reference< XPossibleHyphens > SAL_CALL
 {
 
   SvtPathOptions aPathOpt;
-  CharClass chclass( rSMgr, aLocale );
+  //  CharClass chclass( rSMgr, aLocale );
 
   int nHyphenationPos = -1;
   int wordlen;
   char *hyphens;
+  char *lcword;
+  int k;
+
 
   HyphenDict *dict;
-  OString encWord;
-  OUString tohyphenate;
+  rtl_TextEncoding aEnc;
+
   Reference< XPossibleHyphens > xRes;
 
-  if ( ( dict = aOpenedDicts.Get ( LocaleToLanguage ( aLocale ) ) ) == NULL )
-    {
-      OUString DictFN = A2OU("hyph_") + aLocale.Language + A2OU(".dic");
-      OUString userdictpath;
-      OUString dictpath;
-      osl::FileBase::getSystemPathFromFileURL(
+  k = -1;
+  for (int j = 0; j < numdict; j++)
+     if (aLocale == aDicts[j].aLoc) k = j;
+
+  dict = NULL;
+  aEnc = 0;
+
+  // if we have a hyphenationd citionary matching this locale
+  if (k != -1) {
+
+      // if this dictioanry has not been loaded yet do that
+      if (!aDicts[k].aPtr) {
+
+         OUString DictFN = aDicts[k].aName + A2OU(".dic");
+         OUString userdictpath;
+         OUString dictpath;
+         osl::FileBase::getSystemPathFromFileURL(
                           aPathOpt.GetUserDictionaryPath() + A2OU("/"),
                           userdictpath);
 
-      osl::FileBase::getSystemPathFromFileURL(
-                          aPathOpt.GetDictionaryPath() + A2OU("/"),
+     osl::FileBase::getSystemPathFromFileURL(
+                          aPathOpt.GetLinguisticPath() + A2OU("/ooo/"),
                           dictpath);
+         OString uTmp(OU2ENC(userdictpath + DictFN,osl_getThreadTextEncoding()));
+         OString sTmp(OU2ENC(dictpath + DictFN,osl_getThreadTextEncoding()));
 
-      if ( ( dict = hnj_hyphen_load ( OU2A(userdictpath + DictFN) ) ) == NULL )
-    if ( ( dict = hnj_hyphen_load ( OU2A(dictpath + DictFN) ) ) == NULL )
-      {
-        fprintf(stderr, "Couldn't find file %s and %s\n", OU2A(userdictpath + DictFN),  OU2A(userdictpath + DictFN ));
-        return NULL;
+
+     if ( ( dict = hnj_hyphen_load ( uTmp.getStr() ) ) == NULL )
+        if ( ( dict = hnj_hyphen_load ( sTmp.getStr()) ) == NULL )
+        {
+           fprintf(stderr, "Couldn't find file %s and %s\n", OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding()),  OU2ENC(userdictpath + DictFN, osl_getThreadTextEncoding() ));
+           return NULL;
+        }
+     aDicts[k].aPtr = dict;
+         aDicts[k].aEnc = rtl_getTextEncodingFromUnixCharset(dict->cset);
       }
-      aOpenedDicts.Insert( LocaleToLanguage ( aLocale ), dict );
-    }
 
-  rtl_TextEncoding DictionaryEnc = L2TE( LocaleToLanguage( aLocale ) );
+      // other wise hyphenate the word with that dictionary
+      dict = aDicts[k].aPtr;
+      aEnc = aDicts[k].aEnc;
 
 
-  //    chclass.toLower(aWord);
-  encWord = OUStringToOString (aWord, DictionaryEnc);
-  wordlen = encWord.getLength();
-  hyphens = new char[wordlen+5];
+      OString encWord(OU2ENC(aWord, aEnc));
 
-  if (hnj_hyphen_hyphenate(dict, encWord.getStr(), wordlen, hyphens))
-    {
-      delete hyphens;
-      return NULL;
-    }
+      wordlen = encWord.getLength();
+      lcword = new char[wordlen+1];
+      hyphens = new char[wordlen+5];
+      enmkallsmall(lcword,encWord.getStr(),dict->cset);
 
-  INT16 nHyphCount = 0;
+      if (hnj_hyphen_hyphenate(dict, lcword, wordlen, hyphens))
+      {
+          delete[] hyphens;
+          delete[] lcword;
+          return NULL;
+      }
 
-  for (INT16 i = 0; i < encWord.getLength(); i++)
-    if (hyphens[i]&1)
-      nHyphCount++;
+      INT16 nHyphCount = 0;
 
-  Sequence< INT16 > aHyphPos(nHyphCount);
-  INT16 *pPos = aHyphPos.getArray();
-  OUStringBuffer hyphenatedWordBuffer;
-  OUString hyphenatedWord;
-  nHyphCount = 0;
+      for (INT16 i = 0; i < encWord.getLength(); i++)
+        if (hyphens[i]&1)
+          nHyphCount++;
 
-  for (i = 0; i < encWord.getLength(); i++)
-    {
-      hyphenatedWordBuffer.append(aWord[i]);
-      if (hyphens[i]&1)
-    {
-      pPos[nHyphCount] = i;
-      hyphenatedWordBuffer.append(sal_Unicode('='));
-      nHyphCount++;
-    }
-    }
+      Sequence< INT16 > aHyphPos(nHyphCount);
+      INT16 *pPos = aHyphPos.getArray();
+      OUStringBuffer hyphenatedWordBuffer;
+      OUString hyphenatedWord;
+      nHyphCount = 0;
 
-  hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+      for (i = 0; i < encWord.getLength(); i++)
+      {
+          hyphenatedWordBuffer.append(aWord[i]);
+          if (hyphens[i]&1)
+      {
+          pPos[nHyphCount] = i;
+          hyphenatedWordBuffer.append(sal_Unicode('='));
+          nHyphCount++;
+      }
+      }
 
-  xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
+      hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
+
+      xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                 hyphenatedWord, aHyphPos );
 
-  delete hyphens;
-  return xRes;
+      delete[] hyphens;
+      delete[] lcword;
+      return xRes;
+  }
+
+  return NULL;
+
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sspellimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khendricks $ $Date: 2002-01-07 15:46:15 $
+ *  last change: $Author: svesik $ $Date: 2002-07-29 17:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,24 +171,45 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-        /* this routine should return the locales supported by the installed */
-        /* dictionaries.  So here we need to parse the user edited dictionary list */
-        /* to see what dictionaries the user has installed */
+        // this routine should return the locales supported by the installed
+        // dictionaries.  So here we need to parse both the user edited
+        // dictionary list and the shared dictionary list
+        // to see what dictionaries the admin/user has installed
 
+        int numusr;          // number of user dictionary entries
+        int numshr;          // number of shared dictionary entries
+        dictentry * spdict;  // shared dict entry pointer
+        dictentry * updict;  // user dict entry pointer
+        SvtPathOptions aPathOpt;
 
     if (!numdict) {
 
-            SvtPathOptions aPathOpt;
-            OUString diclst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
-            OUString dlst;
-        osl::FileBase::getSystemPathFromFileURL(diclst,dlst);
+            // invoke a dictionary manager to get the user dictionary list
+            OUString usrlst = aPathOpt.GetUserDictionaryPath() + A2OU("/dictionary.lst");
+            OUString ulst;
+        osl::FileBase::getSystemPathFromFileURL(usrlst,ulst);
+            OString uTmp(OU2ENC(ulst, osl_getThreadTextEncoding()));
+        DictMgr* udMgr = new DictMgr(uTmp.getStr(),"DICT");
+            numusr = 0;
+            if (udMgr)
+                 numusr = udMgr->get_list(&updict);
 
-            /* invoke the dictionary manager to parse and return the dictionary list */
-            OString aTmp(OU2A(dlst));
-        DictMgr* dMgr = new DictMgr(aTmp.getStr());
-            dictentry * pdict;
-            if (dMgr)
-                 numdict = dMgr->get_list(&pdict);
+
+            // invoke a second  dictionary manager to get the shared dictionary list
+            OUString shrlst = aPathOpt.GetLinguisticPath() + A2OU("/ooo/dictionary.lst");
+            OUString slst;
+        osl::FileBase::getSystemPathFromFileURL(shrlst,slst);
+            OString sTmp(OU2ENC(slst, osl_getThreadTextEncoding()));
+        DictMgr* sdMgr = new DictMgr(sTmp.getStr(),"DICT");
+            numshr = 0;
+            if (sdMgr)
+                 numshr = sdMgr->get_list(&spdict);
+
+            // we really should merge these and remove duplicates but since
+            // users can name their dictionaries anything they want it would
+            // be impossible to know if a real duplication exists unless we
+            // add some unique key to each myspell dictionary
+            numdict = numshr + numusr;
 
             if (numdict) {
             aDicts = new MySpell* [numdict];
@@ -199,26 +220,51 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
                 Locale * pLocale = aSuppLocales.getArray();
                 int numlocs = 0;
                 int newloc;
-                for (int i = 0; i < numdict; i++) {
-                Locale nLoc( A2OU(pdict->lang), A2OU(pdict->region), OUString() );
+                int i,j;
+                int k = 0;
+
+                //first add the user dictionaries
+                for (i = 0; i < numusr; i++) {
+                Locale nLoc( A2OU(updict->lang), A2OU(updict->region), OUString() );
                     newloc = 1;
-                for (int j = 0; j < numlocs; j++) {
+                for (j = 0; j < numlocs; j++) {
                         if (nLoc == pLocale[j]) newloc = 0;
                     }
                     if (newloc) {
                         pLocale[numlocs] = nLoc;
                         numlocs++;
                     }
-                    aDLocs[i] = nLoc;
-                    aDicts[i] = NULL;
-                    aDEncs[i] = 0;
-                    aDNames[i] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(pdict->filename);
-                    pdict++;
+                    aDLocs[k] = nLoc;
+                    aDicts[k] = NULL;
+                    aDEncs[k] = 0;
+                    aDNames[k] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU(updict->filename);
+                    k++;
+                    updict++;
                 }
+
+                // now add the shared dictionaries
+                for (i = 0; i < numshr; i++) {
+                Locale nLoc( A2OU(spdict->lang), A2OU(spdict->region), OUString() );
+                    newloc = 1;
+                for (j = 0; j < numlocs; j++) {
+                        if (nLoc == pLocale[j]) newloc = 0;
+                    }
+                    if (newloc) {
+                        pLocale[numlocs] = nLoc;
+                        numlocs++;
+                    }
+                    aDLocs[k] = nLoc;
+                    aDicts[k] = NULL;
+                    aDEncs[k] = 0;
+                    aDNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(spdict->filename);
+                    k++;
+                    spdict++;
+                }
+
                 aSuppLocales.realloc(numlocs);
 
             } else {
-            /* no dictionary.lst so just use default en_US dictionary  */
+            /* no dictionary.lst so just use default en_US dictionary at shared location  */
             numdict = 1;
             aDicts = new MySpell*[1];
                 aDEncs  = new rtl_TextEncoding[1];
@@ -230,14 +276,19 @@ Sequence< Locale > SAL_CALL SpellChecker::getLocales()
         pLocale[0] = nLoc;
                 aDLocs[0] = nLoc;
                 aDicts[0] = NULL;
-                aDNames[0] = aPathOpt.GetUserDictionaryPath() + A2OU("/") + A2OU("en_US");
+                aDNames[0] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU("en_US");
             }
 
             /* de-allocation of memory is handled inside the DictMgr */
-            pdict = NULL;
-            if (dMgr) {
-                  delete dMgr;
-                  dMgr = NULL;
+            updict = NULL;
+            if (udMgr) {
+                  delete udMgr;
+                  udMgr = NULL;
+            }
+            spdict = NULL;
+            if (sdMgr) {
+                  delete sdMgr;
+                  sdMgr = NULL;
             }
 
         }
@@ -298,8 +349,8 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                       OUString aff;
                   osl::FileBase::getSystemPathFromFileURL(dicpath,dict);
                    osl::FileBase::getSystemPathFromFileURL(affpath,aff);
-                      OString aTmpaff(OU2A(aff));
-                      OString aTmpdict(OU2A(dict));
+                      OString aTmpaff(OU2ENC(aff,osl_getThreadTextEncoding()));
+                      OString aTmpdict(OU2ENC(dict,osl_getThreadTextEncoding()));
                       aDicts[i] = new MySpell(aTmpaff.getStr(),aTmpdict.getStr());
                       aDEncs[i] = 0;
                       if (aDicts[i]) {

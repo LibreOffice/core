@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: khendricks $ $Date: 2001-09-11 12:56:28 $
+#   last change: $Author: svesik $ $Date: 2002-07-29 17:28:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,19 @@ MYSPELLLIB=-lmyspell
 MYSPELLLIB=libmyspell.lib
 .ENDIF # wnt
 .ENDIF
+
+.IF "$(ULINGULIB)"==""
+.IF "$(GUI)"=="UNX"
+ULINGULIB=-lulingu$(UPD)$(DLLPOSTFIX)
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+ULINGULIB=$(LIBPRE) ulingu.lib
+.ENDIF # wnt
+.ENDIF
+
+
+
+
 #----- Settings ---------------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -112,9 +125,9 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-CXXFLAGS += -I../myspell
-CFLAGSCXX += -I../myspell
-CFLAGSCC += -I../myspell
+CXXFLAGS += -I..$/myspell -I..$/..$/utility
+CFLAGSCXX += -I..$/myspell -I..$/..$/utility
+CFLAGSCC += -I..$/myspell -I..$/..$/utility
 
 .IF "$(header)" == ""
 
@@ -144,7 +157,8 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-                $(MYSPELLLIB) 
+                $(MYSPELLLIB) \
+                $(ULINGULIB) 
 
 
 # build DLL

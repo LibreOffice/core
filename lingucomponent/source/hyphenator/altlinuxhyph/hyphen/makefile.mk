@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: nidd $ $Date: 2002-05-09 17:36:02 $
+#   last change: $Author: svesik $ $Date: 2002-07-29 17:28:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,10 +68,21 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="UNX"
-HNJLIB="-lhnj"
+HNJLIB=-lhnj
 .ELSE
-HNJLIB="libhnj.lib"
+HNJLIB=libhnj.lib
 .ENDIF
+
+.IF "$(ULINGULIB)"==""
+.IF "$(GUI)"=="UNX"
+ULINGULIB=-lulingu$(UPD)$(DLLPOSTFIX)
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+ULINGULIB=$(LIBPRE) ulingu.lib
+.ENDIF # wnt
+.ENDIF
+
+
 
 #----- Settings ---------------------------------------------------------
 
@@ -109,9 +120,9 @@ UNOTYPES=\
     com.sun.star.linguistic2.XSupportedLocales\
     com.sun.star.linguistic2.XThesaurus
 
-CXXFLAGS += -I../libhnj 
-CFLAGSCXX += -I../libhnj
-CFLAGSCC += -I../libhnj
+CXXFLAGS += -I..$/libhnj -I..$/..$/..$/utility
+CFLAGSCXX += -I..$/libhnj -I..$/..$/..$/utility
+CFLAGSCC += -I..$/libhnj -I..$/..$/..$/utility
 
 .IF "$(header)" == ""
 
@@ -141,7 +152,9 @@ SHL1STDLIBS= \
         $(UCBHELPERLIB)	\
         $(UNOTOOLSLIB)	\
         $(LNGLIB) \
-        $(HNJLIB)
+        $(HNJLIB) \
+                $(ULINGULIB) 
+
 
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nidd $ $Date: 2001-12-25 08:24:12 $
+ *  last change: $Author: svesik $ $Date: 2002-07-29 17:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,10 +105,19 @@ using namespace ::com::sun::star::linguistic2;
 
 #define OU2ISO_1(rtlOUString)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), RTL_TEXTENCODING_ISO_8859_1).getStr()
 
+#define OU2ENC(rtlOUString, rtlEncoding)     ::rtl::OString((rtlOUString).getStr(), (rtlOUString).getLength(), rtlEncoding).getStr()
+
 ///////////////////////////////////////////////////////////////////////////
 
 
-DECLARE_TABLE(HyphDictList,  HyphenDict * );
+struct HDInfo {
+  HyphenDict *     aPtr;
+  OUString         aName;
+  Locale           aLoc;
+  rtl_TextEncoding aEnc;
+};
+
+
 
 class Hyphenator :
     public cppu::WeakImplHelper6
@@ -122,7 +131,8 @@ class Hyphenator :
     >
 {
     Sequence< Locale >                      aSuppLocales;
-        HyphDictList aOpenedDicts;
+        HDInfo * aDicts;
+        sal_Int32 numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
