@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:15:29 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ hebrew ] = "~Tabellenname";
         Text[ hindi ] = "~सारणी नाम";
         Text[ slovak ] = "Názov ~tabuľky";
+        Text[ hungarian ] = "~Tábla neve";
+        Text[ slovenian ] = "Ime ~tabele";
     };
     Control LB_TABLE
     {
@@ -143,7 +145,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text = "Hinzu~f�gen" ;
         Text [ ENGLISH ] = "Add" ;
         Text [ NORWEGIAN ] = "Add" ;
-        Text [ DANISH ] = "Til~f�j" ;
+        Text [ DANISH ] = "~Tilf�j" ;
         Text [ ENGLISH_US ] = "~Add" ;
         Text [ SPANISH ] = "~A�adir" ;
         Text [ FINNISH ] = "~Lis��" ;
@@ -173,6 +175,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     CancelButton PB_CLOSE
     {
@@ -187,7 +191,7 @@ ModelessDialog DLG_JOIN_TABADD
         Text [ portuguese_brazilian ] = "~Fechar" ;
         Text [ portuguese ] = "~Fechar" ;
         Text [ finnish ] = "~Sulje" ;
-        Text [ danish ] = "L~uk" ;
+        Text [ danish ] = "~Luk" ;
         Text [ french ] = "Fermer" ;
         Text [ swedish ] = "St�~ng" ;
         Text [ dutch ] = "~Sluiten" ;
@@ -212,6 +216,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     HelpButton PB_HELP
     {
@@ -254,6 +260,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
         Text[ slovak ] = "Tabuľka";
+        Text[ hungarian ] = "Tábla";
+        Text[ slovenian ] = "Tabela";
     };
     String STR_DEFAULT
     {
@@ -288,6 +296,8 @@ ModelessDialog DLG_JOIN_TABADD
         Text[ hebrew ] = "<Standard>";
         Text[ hindi ] = "<अनुपस्थिति>";
         Text[ slovak ] = "<východzie>";
+        Text[ hungarian ] = "<alapértelmezett>";
+        Text[ slovenian ] = "<privzeto>";
     };
     Text[ chinese_simplified ] = "新增表格";
     Text[ russian ] = "�������� �������";
@@ -307,7 +317,10 @@ ModelessDialog DLG_JOIN_TABADD
     Text[ hebrew ] = "Tabellen hinzufügen";
     Text[ hindi ] = "सारणियों को जोड़ो";
     Text[ slovak ] = "Pridať tabuľky";
+    Text[ hungarian ] = "Táblák hozzáadása";
+    Text[ slovenian ] = "Dodaj tabele";
 };
+
 
 
 
