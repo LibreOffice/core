@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configvaluecontainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-23 15:15:18 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _UNO_DATA_H_
 #include <uno/data.h>
 #endif
+#include <algorithm>
 
 //.........................................................................
 namespace utl
@@ -488,6 +489,9 @@ namespace utl
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/23 15:15:18  avy
+ *  compiler error was checked
+ *
  *  Revision 1.1  2001/08/21 12:53:30  fs
  *  initial checkin - helper class for accesing config data in fixed memmory locations (aka class members)
  *
