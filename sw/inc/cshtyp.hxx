@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cshtyp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:29:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,13 +147,13 @@ enum SwDocPositions
     DOCPOS_OTHEREND
 };
 
-SW_DLLPUBLIC SwWhichPara SwuiGetfnParaCurr(); //CHINA001
-SW_DLLPUBLIC SwPosPara SwuiGetfnParaStart(); //CHINA001
-SW_DLLPUBLIC SwPosPara SwuiGetfnParaEnd(); //CHINA001
+SW_DLLPUBLIC SwWhichPara GetfnParaCurr(); //CHINA001
+SW_DLLPUBLIC SwPosPara GetfnParaStart(); //CHINA001
+SW_DLLPUBLIC SwPosPara GetfnParaEnd(); //CHINA001
 
-SW_DLLPUBLIC SwWhichTable SwuiGetfnTablePrev(); //CHINA001
-SW_DLLPUBLIC SwWhichTable SwuiGetfnTableCurr(); //CHINA001
-SW_DLLPUBLIC SwPosTable SwuiGetfnTableStart(); //CHINA001
-SW_DLLPUBLIC SwPosTable SwuiGetfnTableEnd(); //CHINA001
+SW_DLLPUBLIC SwWhichTable GetfnTablePrev(); //CHINA001
+SW_DLLPUBLIC SwWhichTable GetfnTableCurr(); //CHINA001
+SW_DLLPUBLIC SwPosTable GetfnTableStart(); //CHINA001
+SW_DLLPUBLIC SwPosTable GetfnTableEnd(); //CHINA001
 
 #endif  // _CSHTYP_HXX
