@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-24 13:03:47 $
+#   last change: $Author: fs $ $Date: 2000-10-25 13:02:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,7 +139,8 @@ LIB2FILES=\
         $(SLB)$/uimisc.lib	\
         $(SLB)$/uidlg.lib	\
         $(SLB)$/shared.lib	\
-        $(SLB)$/uicontrols.lib
+        $(SLB)$/uicontrols.lib	\
+        $(SLB)$/uiuno.lib	\
 
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
 SHL2VERSIONMAP= $(TARGET2).map
@@ -181,6 +182,7 @@ ALL: \
 
 # --- .res file ----------------------------------------------------------
 RES2FILELIST=\
+    $(SRS)$/uiuno.srs	\
     $(SRS)$/uidlg.srs	\
     $(SRS)$/uicontrols.srs	\
     $(SRS)$/uimisc.srs
