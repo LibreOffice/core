@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-16 14:23:35 $
+#   last change: $Author: dbo $ $Date: 2000-12-14 14:41:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,8 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
+
+CFLAGS += -DBRIDGE_NAME=$(TARGET)
 
 #CPPUMAKERFLAGS += -C
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
