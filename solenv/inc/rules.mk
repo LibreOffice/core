@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-31 17:28:11 $
+#   last change: $Author: hjs $ $Date: 2001-10-10 13:32:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -554,7 +554,7 @@ $(MISC)$/%.dprc :
 .ENDIF			# "$(LAZY_DEPS)"==""	
 
 .IF "$(MAKEFILERC)"==""
-$(MISC)$/%.dpc : $(CFILES) $(CXXFILES) $(RCFILES) $(UNOIDLTARGETS) $(SLOFILES) $(OBJFILES)
+$(MISC)$/%.dpc : $(CFILES) $(CXXFILES) $(RCFILES) $(UNOIDLTARGETS) $(SLOFILES) $(OBJFILES) $(DEPOBJFILES)
     @echo ------------------------------
     @echo Making: $@
     dmake subdmake=true $(MFLAGS) $(CALLMACROS) depend=t ALLDPC
