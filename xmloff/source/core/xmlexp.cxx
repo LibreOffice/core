@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-21 20:30:19 $
+ *  last change: $Author: sab $ $Date: 2001-02-23 15:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,11 +561,16 @@ void SvXMLExport::ImplExportContent()
 
     {
         // <office:body ...>
+        SetBodyAttributes();
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, sXML_body,
                                   sal_True, sal_True );
 
         _ExportContent();
     }
+}
+
+void SvXMLExport::SetBodyAttributes()
+{
 }
 
 sal_uInt32 SvXMLExport::exportDoc( const sal_Char *pClass )
