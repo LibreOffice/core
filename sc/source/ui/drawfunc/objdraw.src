@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,7 +450,7 @@
         Text[ spanish ] = "~Nombrar objeto...";\
         Text[ finnish ] = "~Name Object...";\
         Text[ italian ] = "~Nome oggetto...";\
-        Text[ danish ] = "~Name Object...";\
+        Text[ danish ] = "Navngiv ob~jekt...";\
         Text[ swedish ] = "Namnge ob~jekt...";\
         Text[ polish ] = "~Name Object...";\
         Text[ portuguese_brazilian ] = "~Name Object...";\
@@ -460,7 +460,7 @@
         Text[ chinese_traditional ] = "命名物件...";\
         Text[ turkish ] = "~Name Object...";\
         Text[ arabic ] = "~Name Object...";\
-        Text[ catalan ] = "~Name Object...";\
+        Text[ catalan ] = "~Nom de l'objecte...";\
         Text[ thai ] = "~Name Object...";\
     };
 
@@ -749,7 +749,7 @@
                     Text[ korean ] = "셀에서(~C)";\
                     Text[ turkish ] = "H�cre~de";\
                     Text[ language_user1 ] = " ";\
-                    Text[ catalan ] = "A la ~cel�la";\
+                    Text[ catalan ] = "A la ~cel.la";\
                     Text[ finnish ] = "So~luun";\
                     Text[ thai ] = "ไปยังเ~ซลล์";\
                 };\
@@ -1225,7 +1225,7 @@ String RID_GRAPHIC_OBJECTBAR
     Text[ french ] = "Barre d'objets graphiques";
     Text[ spanish ] = "Barra de objetos gr�ficos";
     Text[ italian ] = "Barra degli oggetti grafici";
-    Text[ danish ] = "Toolbar for graphic objects";
+    Text[ danish ] = "Grafikobjektlinje";
     Text[ swedish ] = "Grafikobjektlist";
     Text[ polish ] = "Pasek obiekt�w graficznych";
     Text[ portuguese_brazilian ] = "Toolbar for graphic objects";
