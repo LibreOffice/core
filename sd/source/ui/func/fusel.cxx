@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-16 13:33:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-11 13:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,7 +1337,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                                   (NAMESPACE_VOS(OProcess)::TOption_SearchPath |
                                   NAMESPACE_VOS(OProcess)::TOption_Detached),
                                   aParameters );
-
+                       bAnimated = TRUE;
                 }
                 break;
 
