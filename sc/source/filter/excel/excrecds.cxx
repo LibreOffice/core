@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: er $ $Date: 2002-11-06 13:08:59 $
+ *  last change: $Author: dr $ $Date: 2002-11-08 12:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3139,19 +3139,27 @@ ExcPalette2::ExcPalette2( ColorBuffer& rCB ) :
         nLastInd( 0 ),
         nMaxSerial( 0 ),
         pColorIndex( NULL ),
-        pColors( NULL )
+        pColors( NULL ),
+        pExportColors( new Color[ rCB.GetAnz() ] ),
+        pbExportUsed( new bool[ rCB.GetAnz() ] )
 {
     InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
+
+    for( UINT16 nEntry = 0; nEntry < rColBuff.GetAnz(); ++nEntry )
+    {
+        pExportColors[ nEntry ] = rColBuff.GetColor( nEntry + ColorBuffer::GetIndCorrect() )->GetValue();
+        pbExportUsed[ nEntry ] = false;
+    }
 }
 
 ExcPalette2::~ExcPalette2()
 {
     for( ExcPal2Entry* pEntry = _First(); pEntry; pEntry = _Next() )
         delete pEntry;
-    if( pColorIndex )
-        delete[] pColorIndex;
-    if( pColors )
-        delete[] pColors;
+    delete[] pColorIndex;
+    delete[] pColors;
+    delete[] pExportColors;
+    delete[] pbExportUsed;
 }
 
 void ExcPalette2::SearchEntry( const Color& rCol, UINT32& rIndex, BOOL& rbIsEqual ) const
@@ -3281,36 +3289,6 @@ UINT32 ExcPalette2::GetRemoveColor() const
     return nFound;
 }
 
-INT32 ExcPalette2::GetNearColors( const Color& rCol, UINT32& rFirst, UINT32& rSecond ) const
-{
-    rFirst = rSecond = 0;
-    INT32 nMinD1 = 0x7FFFFFFF;
-    INT32 nMinD2 = 0x7FFFFFFF;
-
-    for( UINT32 nInd = 0; nInd < List::Count(); nInd++ )
-    {
-        ExcPal2Entry* pEntry = _Get( nInd );
-        if( pEntry )
-        {
-            Color aEntryColor( pEntry->GetColor() );
-            INT32 nDist = lcl_GetColorDistance( aEntryColor, rCol );
-            if( nDist < nMinD1 )
-            {
-                rSecond = rFirst;
-                nMinD2 = nMinD1;
-                rFirst = nInd;
-                nMinD1 = nDist;
-            }
-            else if( nDist < nMinD2 )
-            {
-                rSecond = nInd;
-                nMinD2 = nDist;
-            }
-        }
-    }
-    return nMinD1;
-}
-
 UINT32 ExcPalette2::GetNearestColor( const Color& rCol, UINT32 nIgnore ) const
 {
     UINT32  nFound  = 0;
@@ -3344,6 +3322,51 @@ UINT32 ExcPalette2::GetNearestColor( UINT32 nIndex ) const
     return GetNearestColor( aCol, nIndex );
 }
 
+INT32 ExcPalette2::GetNearExportColors( UINT32& rnFirst, UINT32& rnSecond, const Color& rCol ) const
+{
+    rnFirst = rnSecond = 0;
+    INT32 nDist1 = 0x7FFFFFFF;
+    INT32 nDist2 = 0x7FFFFFFF;
+
+    for( UINT32 nInd = 0; nInd < rColBuff.GetAnz(); ++nInd )
+    {
+        INT32 nCurrDist = lcl_GetColorDistance( rCol, pExportColors[ nInd ] );
+        if( nCurrDist < nDist1 )
+        {
+            rnSecond = rnFirst;
+            nDist2 = nDist1;
+            rnFirst = nInd;
+            nDist1 = nCurrDist;
+        }
+        else if( nCurrDist < nDist2 )
+        {
+            rnSecond = nInd;
+            nDist2 = nCurrDist;
+        }
+    }
+    return nDist1;
+}
+
+INT32 ExcPalette2::GetNearestExportColor( UINT32& rnIndex, const Color& rCol, bool bIgnoreUsed ) const
+{
+    rnIndex = 0;
+    INT32 nDist = 0x7FFFFFFF;
+
+    for( UINT32 nInd = 0; nInd < rColBuff.GetAnz(); ++nInd )
+    {
+        if( !bIgnoreUsed || !pbExportUsed[ nInd ] )
+        {
+            INT32 nCurrDist = lcl_GetColorDistance( rCol, pExportColors[ nInd ] );
+            if( nCurrDist < nDist )
+            {
+                rnIndex = nInd;
+                nDist = nCurrDist;
+            }
+        }
+    }
+    return nDist;
+}
+
 void ExcPalette2::ReduceColors()
 {
     nMaxSerial = List::Count();
@@ -3369,11 +3392,50 @@ void ExcPalette2::ReduceColors()
         UINT32 nNearest = GetNearestColor( nRemove );
         MergeColors( nNearest, nRemove );
     }
+
+    // #104865# use default palette and replace colors with current colors
+    UINT32 nCount = List::Count();
+    UINT32* pnIndexMap = new UINT32[ nCount ];  // current list pos -> export index
+    UINT32* pnNearest = new UINT32[ nCount ];   // list color -> nearest export color
+    INT32* pnDist = new INT32[ nCount ];        // diff to nearest color
+    bool* pbProcessed = new bool[ nCount ];     // list entry already processed?
+    memset( pbProcessed, 0, sizeof( bool ) * nCount );
+
+    for( UINT32 nRun = 0; nRun < nCount; ++nRun )
+    {
+        UINT32 nIndex;
+        // find nearest unused default color for each unprocessed list color
+        for( nIndex = 0; nIndex < nCount; ++nIndex )
+            pnDist[ nIndex ] = pbProcessed[ nIndex ] ? 0x7FFFFFFF :
+                GetNearestExportColor( pnNearest[ nIndex ], Color( _Get( nIndex )->GetColor() ), true );
+        // find the list color which is nearest to a default color
+        UINT32 nFound = 0;
+        for( nIndex = 1; nIndex < nCount; ++nIndex )
+            if( pnDist[ nIndex ] < pnDist[ nFound ] )
+                nFound = nIndex;
+        // replace default color with list color
+        UINT32 nNearest = pnNearest[ nFound ];
+        DBG_ASSERT( _Get( nFound ), "ExcPalette2::ReduceColors - missing a color" );
+        DBG_ASSERT( nNearest < rColBuff.GetAnz(), "ExcPalette2::ReduceColors - algorithm error" );
+        pExportColors[ nNearest ].SetColor( _Get( nFound )->GetColor() );
+        pbExportUsed[ nNearest ] = true;
+        pnIndexMap[ nFound ] = nNearest;
+        pbProcessed[ nFound ] = true;
+    }
+
+    for( UINT32 nSer = 0; nSer < nMaxSerial; ++nSer )   // adjust pColorIndex map
+        pColorIndex[ nSer ] = pnIndexMap[ pColorIndex[ nSer ] ];
+
+    delete[] pnIndexMap;
+    delete[] pnNearest;
+    delete[] pnDist;
+    delete[] pbProcessed;
 }
 
 UINT16 ExcPalette2::GetColorIndex( const Color& rCol ) const
 {
-    UINT32 nIndex = GetNearestColor( rCol, EXC_PAL2_IGNORE );
+    UINT32 nIndex;
+    GetNearestExportColor( nIndex, rCol, false );
     return (UINT16)(nIndex + ColorBuffer::GetIndCorrect());
 }
 
@@ -3407,16 +3469,13 @@ void ExcPalette2::GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
         return;
 
     UINT32  nIndex1, nIndex2;
-    Color   aColorArr[ 5 ];
-    INT32   nFirstDist = GetNearColors( pColors[ nForeSer ], nIndex1, nIndex2 );
-
-    ExcPal2Entry*   pEntry1 = _Get( nIndex1 );
-    ExcPal2Entry*   pEntry2 = _Get( nIndex2 );
-    if( !pEntry1 || !pEntry2 )
+    INT32   nFirstDist = GetNearExportColors( nIndex1, nIndex2, pColors[ nForeSer ] );
+    if( (nIndex1 >= rColBuff.GetAnz()) || (nIndex2 >= rColBuff.GetAnz()) )
         return;
 
-    aColorArr[ 0 ].SetColor( pEntry1->GetColor() );
-    aColorArr[ 4 ].SetColor( pEntry2->GetColor() );
+    Color aColorArr[ 5 ];
+    aColorArr[ 0 ] = pExportColors[ nIndex1 ];
+    aColorArr[ 4 ] = pExportColors[ nIndex2 ];
     lcl_SetMixedColor( aColorArr[ 2 ], aColorArr[ 0 ], aColorArr[ 4 ] );
     lcl_SetMixedColor( aColorArr[ 1 ], aColorArr[ 0 ], aColorArr[ 2 ] );
     lcl_SetMixedColor( aColorArr[ 3 ], aColorArr[ 2 ], aColorArr[ 4 ] );
@@ -3445,26 +3504,19 @@ void ExcPalette2::GetMixedColors( UINT32 nForeSer, UINT32 nBackSer,
 
 ColorData ExcPalette2::GetRGBValue( UINT16 nIndex ) const
 {
-    if( nIndex >= ColorBuffer::GetIndCorrect() )
-    {
-        ExcPal2Entry* pEntry = _Get( nIndex - ColorBuffer::GetIndCorrect() );
-        if( pEntry )
-            return pEntry->GetColor();
-    }
+    if( (nIndex >= ColorBuffer::GetIndCorrect()) &&
+        (nIndex - ColorBuffer::GetIndCorrect() < rColBuff.GetAnz()) )
+        return pExportColors[ nIndex - ColorBuffer::GetIndCorrect() ].GetColor();
     return 0;
 }
 
 void ExcPalette2::SaveCont( XclExpStream& rStrm )
 {
     rStrm << rColBuff.GetAnz();
-
-    for( ExcPal2Entry* pEntry = _First(); pEntry; pEntry = _Next() )
-        pEntry->Save( rStrm );
-
-    for( UINT16 nInd = (UINT16) List::Count(); nInd < rColBuff.GetAnz(); nInd++ )
-        rStrm   << rColBuff.GetRed( nInd )
-                << rColBuff.GetGreen( nInd )
-                << rColBuff.GetBlue( nInd )
+    for( UINT16 nInd = 0; nInd < rColBuff.GetAnz(); nInd++ )
+        rStrm   << pExportColors[ nInd ].GetRed()
+                << pExportColors[ nInd ].GetGreen()
+                << pExportColors[ nInd ].GetBlue()
                 << (UINT8)0x00;
 }
 

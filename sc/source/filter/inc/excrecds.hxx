@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2002-10-29 18:26:51 $
+ *  last change: $Author: dr $ $Date: 2002-11-08 12:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1452,6 +1452,8 @@ private:
     UINT32                  nMaxSerial;
     UINT32*                 pColorIndex;
     Color*                  pColors;
+    Color*                  pExportColors;
+    bool*                   pbExportUsed;
 
     inline ExcPal2Entry*    _First()    { return (ExcPal2Entry*) List::First(); }
     inline ExcPal2Entry*    _Next()     { return (ExcPal2Entry*) List::Next(); }
@@ -1462,9 +1464,11 @@ private:
     void                    RecalcColorIndex( UINT32 nKeep, UINT32 nRemove );
     void                    MergeColors( UINT32 nKeep, UINT32 nRemove );
     UINT32                  GetRemoveColor() const;
-    INT32                   GetNearColors( const Color& rCol, UINT32& rFirst, UINT32& rSecond ) const;
     UINT32                  GetNearestColor( const Color& rCol, UINT32 nIgnore ) const;
     UINT32                  GetNearestColor( UINT32 nIndex ) const;
+
+    INT32                   GetNearExportColors( UINT32& rnFirst, UINT32& rnSecond, const Color& rCol ) const;
+    INT32                   GetNearestExportColor( UINT32& rnIndex, const Color& rCol, bool bIgnoreUsed ) const;
 
     virtual void            SaveCont( XclExpStream& rStrm );
 
