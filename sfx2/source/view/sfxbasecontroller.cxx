@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-21 11:59:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,13 +117,15 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMEACTION_HPP_
 #include <com/sun/star/frame/FrameAction.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_COMMANDGROUP_HPP_
+#include <com/sun/star/frame/CommandGroup.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XBORDERRESIZELISTENER_HPP_
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_EVENTOBJECT_HPP_
 #include <com/sun/star/lang/EventObject.hpp>
 #endif
@@ -185,6 +187,8 @@
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/sequence.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
 
 #include "event.hxx"
@@ -207,6 +211,94 @@
 #define XMOUSECLICKHANDLER                      ::com::sun::star::awt::XMouseClickHandler
 
 #define TIMEOUT_START_RESCHEDULE    10L /* 10th s */
+
+struct GroupIDToCommandGroup
+{
+    sal_Int16   nGroupID;
+    sal_Int16   nCommandGroup;
+};
+
+// Please update when a new command group is added
+const sal_Int16 MAX_COMMANDGROUP = com::sun::star::frame::CommandGroup::CONTROLS;
+
+static sal_Bool                 bGroupIDMapInitialized = sal_False;
+static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
+{
+    { GID_INTERN        ,   com::sun::star::frame::CommandGroup::INTERNAL       },
+    { GID_APPLICATION   ,   com::sun::star::frame::CommandGroup::APPLICATION    },
+    { GID_DOCUMENT      ,   com::sun::star::frame::CommandGroup::DOCUMENT       },
+    { GID_VIEW          ,   com::sun::star::frame::CommandGroup::VIEW           },
+    { GID_EDIT          ,   com::sun::star::frame::CommandGroup::EDIT           },
+    { GID_MACRO         ,   com::sun::star::frame::CommandGroup::MACRO          },
+    { GID_OPTIONS       ,   com::sun::star::frame::CommandGroup::OPTIONS        },
+    { GID_MATH          ,   com::sun::star::frame::CommandGroup::MATH           },
+    { GID_NAVIGATOR     ,   com::sun::star::frame::CommandGroup::NAVIGATOR      },
+    { GID_INSERT        ,   com::sun::star::frame::CommandGroup::INSERT         },
+    { GID_FORMAT        ,   com::sun::star::frame::CommandGroup::FORMAT         },
+    { GID_TEMPLATE      ,   com::sun::star::frame::CommandGroup::TEMPLATE       },
+    { GID_TEXT          ,   com::sun::star::frame::CommandGroup::TEXT           },
+    { GID_FRAME         ,   com::sun::star::frame::CommandGroup::FRAME          },
+    { GID_GRAPHIC       ,   com::sun::star::frame::CommandGroup::GRAPHIC        },
+    { GID_TABLE         ,   com::sun::star::frame::CommandGroup::TABLE          },
+    { GID_ENUMERATION   ,   com::sun::star::frame::CommandGroup::ENUMERATION    },
+    { GID_DATA          ,   com::sun::star::frame::CommandGroup::DATA           },
+    { GID_SPECIAL       ,   com::sun::star::frame::CommandGroup::SPECIAL        },
+    { GID_IMAGE         ,   com::sun::star::frame::CommandGroup::IMAGE          },
+    { GID_CHART         ,   com::sun::star::frame::CommandGroup::CHART          },
+    { GID_EXPLORER      ,   com::sun::star::frame::CommandGroup::EXPLORER       },
+    { GID_CONNECTOR     ,   com::sun::star::frame::CommandGroup::CONNECTOR      },
+    { GID_MODIFY        ,   com::sun::star::frame::CommandGroup::MODIFY         },
+    { GID_DRAWING       ,   com::sun::star::frame::CommandGroup::DRAWING        },
+    { GID_CONTROLS      ,   com::sun::star::frame::CommandGroup::CONTROLS       },
+    { 0                 ,   0                                                   }
+};
+
+typedef std::hash_map< sal_Int16, sal_Int16 > GroupHashMap;
+
+
+sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )
+{
+    static GroupHashMap mHashMap;
+
+    if ( !bGroupIDMapInitialized )
+    {
+        sal_Int32 i = 0;
+        while ( GroupIDCommandGroupMap[i].nGroupID != 0 )
+        {
+            mHashMap.insert( GroupHashMap::value_type(
+                GroupIDCommandGroupMap[i].nGroupID,
+                GroupIDCommandGroupMap[i].nCommandGroup ));
+            ++i;
+        }
+    }
+
+    GroupHashMap::const_iterator pIter = mHashMap.find( nGroupID );
+    if ( pIter != mHashMap.end() )
+        return pIter->second;
+    else
+        return com::sun::star::frame::CommandGroup::INTERNAL;
+}
+
+sal_Int16 MapCommandGroupToGroupID( sal_Int16 nCommandGroup )
+{
+    sal_Int32 i = 0;
+    while ( GroupIDCommandGroupMap[i].nGroupID != 0 )
+    {
+        if ( GroupIDCommandGroupMap[i].nCommandGroup == nCommandGroup )
+            return GroupIDCommandGroupMap[i].nGroupID;
+        ++i;
+    }
+
+    return -1;
+}
+
+sal_Bool SupportsCommandGroup( sal_Int16 nCommandGroup )
+{
+    if (( nCommandGroup >= 0 ) && ( nCommandGroup <= MAX_COMMANDGROUP ))
+        return sal_True;
+    else
+        return sal_False;
+}
 
 using namespace ::com::sun::star;
 
@@ -563,7 +655,8 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XUSERINPUTINTERCEPTION*     > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
                                             static_cast< XCONTEXTMENUINTERCEPTION* > ( this ) ,
-                                               static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
+                                               static_cast< XDISPATCHPROVIDER*  > ( this ),
+                                            static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ) ) ;
 
     // If searched interface supported by this class ...
     if ( aReturn.hasValue() == sal_True )
@@ -630,7 +723,8 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XCONTEXTMENUINTERCEPTION   >*)NULL ) ,
-                                                    ::getCppuType(( const REFERENCE< XUSERINPUTINTERCEPTION   >*)NULL ) );
+                                                    ::getCppuType(( const REFERENCE< XUSERINPUTINTERCEPTION   >*)NULL ) ,
+                                                    ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER >*)NULL ) );
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
         }
@@ -869,7 +963,6 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
             {
                 SfxShell *pShell=0;
-                USHORT nIdx;
 
                 rtl::OUString aMasterCommand = SfxOfficeDispatch::GetMasterUnoCommand( aURL );
                 sal_Bool      bMasterCommand( aMasterCommand.getLength() > 0 );
@@ -1306,6 +1399,90 @@ void SAL_CALL SfxBaseController::removeMouseClickHandler( const ::com::sun::star
         if (pIterator.hasMoreElements())
             m_pData->m_bHasMouseClickListeners = sal_True;
     }
+}
+
+::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL SfxBaseController::getSupportedCommandGroups()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    std::list< sal_Int16 > aGroupList;
+    SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
+    SfxSlotPool*  pPool( &SFX_APP()->GetSlotPool( pViewFrame ));
+
+    SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
+    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+
+    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+    {
+        String aName = pSlotPool->SeekGroup( i );
+        const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
+        while ( pSfxSlot )
+        {
+            if ( pSfxSlot->GetMode() & nMode )
+            {
+                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
+                aGroupList.push_back( nCommandGroup );
+                break;
+            }
+            pSfxSlot = pSlotPool->NextSlot();
+        }
+    }
+
+    ::com::sun::star::uno::Sequence< sal_Int16 > aSeq =
+        comphelper::containerToSequence< std::list< sal_Int16 >, sal_Int16 >( aGroupList );
+
+    return aSeq;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL SfxBaseController::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( m_pData->m_pViewShell )
+    {
+        const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+
+        SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
+        SfxSlotPool*  pPool( &SFX_APP()->GetSlotPool( pViewFrame ));
+        rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+
+        SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
+        for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+        {
+            String aName = pSlotPool->SeekGroup( i );
+            const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
+            if ( pSfxSlot )
+            {
+                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
+                if ( nCommandGroup == nCmdGroup )
+                {
+                    while ( pSfxSlot )
+                    {
+                        USHORT nId = pSfxSlot->GetSlotId();
+                        if ( pSfxSlot->GetMode() & nMode )
+                        {
+                            ::com::sun::star::frame::DispatchInformation aCmdInfo;
+                            ::rtl::OUStringBuffer aBuf( aCmdPrefix );
+                            aBuf.appendAscii( pSfxSlot->GetUnoName() );
+                            aCmdInfo.Command = aBuf.makeStringAndClear();
+                            aCmdInfo.GroupId = nCommandGroup;
+                            aCmdList.push_back( aCmdInfo );
+                        }
+                        pSfxSlot = pSlotPool->NextSlot();
+                    }
+                }
+            }
+        }
+    }
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
+        comphelper::containerToSequence< std::list< ::com::sun::star::frame::DispatchInformation >, ::com::sun::star::frame::DispatchInformation >( aCmdList );
+
+    return aSeq;
 }
 
 void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
