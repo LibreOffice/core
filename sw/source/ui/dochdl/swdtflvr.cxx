@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-13 12:35:20 $
+ *  last change: $Author: jp $ $Date: 2001-07-24 20:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,6 +786,13 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
 
     case SWTRANSFER_OBJECTTYPE_STRING:
         GetASCWriter( aEmptyStr, xWrt );
+        if( xWrt.Is() )
+        {
+            SwAsciiOptions aAOpt;
+            aAOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
+            xWrt->SetAsciiOptions( aAOpt );
+            xWrt->bUCS2_WithStartChar = FALSE;
+        }
         break;
     }
 
