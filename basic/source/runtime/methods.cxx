@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ab $ $Date: 2001-06-28 13:02:07 $
+ *  last change: $Author: ab $ $Date: 2001-07-04 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,9 +1338,12 @@ RTLFUNC(Str)
         rPar.Get( 1 )->Format( aStr );
         // Numbers start with a space
         if( rPar.Get( 1 )->IsNumericRTL() )
+        {
             aStr.Insert( ' ', 0 );
-        // Kommas durch Punkte ersetzen, damits symmetrisch zu Val ist!
-        aStr.SearchAndReplace( ',', '.' );
+
+            // Kommas durch Punkte ersetzen, damit es symmetrisch zu Val ist!
+            aStr.SearchAndReplace( ',', '.' );
+        }
         rPar.Get(0)->PutString( aStr );
     }
 }
