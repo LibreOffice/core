@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:35:30 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@
         </node>
             <node oor:name="PROPERTIES" oor:op="replace">
             <prop oor:name="VerbUIName">
-                <value xml:lang="de">~Eigenschaften ...</value>
-                <value xml:lang="en-US">Propert~ies ...</value>
+                <value xml:lang="de">~Eigenschaften...</value>
+                <value xml:lang="en-US">Propert~ies...</value>
                 <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
             </prop>
             <prop oor:name="VerbID"><value>-7</value></prop>
