@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ganaya $ $Date: 2000-10-13 18:00:29 $
+#   last change: $Author: jbu $ $Date: 2000-10-16 12:22:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,13 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
 # --- Files --------------------------------------------------------
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCROUT=$(OUT)$/inc$/stm
+INCPRE+= $(UNOUCROUT)
+
+UNOTYPES=$($(TARGET)_XML2CMPTYPES)
+
 SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/factreg.obj\
         $(SLO)$/omark.obj\
