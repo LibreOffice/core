@@ -2,9 +2,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:48:50 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
 
     // TextPosition berechnen
-    long nTxtPosY;
+    long nTxtPosY = 0;
     if ( pItem->maOutText.Len() || (nArrowWidth && aTxtSize.Height()) )
     {
         if ( nBits & HIB_TOP )
@@ -570,7 +570,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
 
     // Wenn Image vorhanden, Position berechnen und ausgeben
-    long nImagePosY;
+    long nImagePosY = 0;
     if ( aImageSize.Width() && aImageSize.Height() )
     {
         long nImagePos = nTxtPos;
