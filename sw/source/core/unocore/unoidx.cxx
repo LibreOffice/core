@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:01:28 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:15:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,8 @@ OUString SwXDocumentIndex::getServiceName(void) throw( RuntimeException )
 void SwXDocumentIndex::update(void) throw( RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    SwTOXBase* pTOXBase = (SwTOXBaseSection*)GetFmt()->GetSection();
+    SwSectionFmt *pFmt = GetFmt();
+    SwTOXBase* pTOXBase = pFmt ? (SwTOXBaseSection*)pFmt->GetSection() : 0;
     if(!pTOXBase)
         throw RuntimeException();
     ((SwTOXBaseSection*)pTOXBase)->Update();
