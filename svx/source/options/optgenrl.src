@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 22:56:40 $
+ *  last change: $Author: vg $ $Date: 2002-05-21 09:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ chinese_traditional ] = "è¡—é“(~S)";
         Text[ arabic ] = "ÇáÔÇÑÚ";
         Text[ greek ] = "Ïäüò";
-        Text[ korean ] = "ê±°ë¦¬ ë²ˆì§€ìˆ˜(~S)";
+        Text[ korean ] = "ì£¼ì†Œ(~S)";
         Text[ turkish ] = "Cadde";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Calle";
@@ -351,7 +351,7 @@ TabPage RID_SFXPAGE_GENERAL
         LeftLabel = TRUE ;
         Text = "~Land/Region" ;
         Text [ ENGLISH ] = "~Country/Region" ;
-        Text[ english_us ] = "Country";
+        Text[ english_us ] = "Country/Region";
         Text[ portuguese ] = "~País";
         Text[ russian ] = "Ñòğàíà";
         Text[ dutch ] = "~Land";
