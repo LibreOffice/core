@@ -1,0 +1,209 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optaccessibility.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: iha $ $Date: 2002-04-15 19:26:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <optaccessibility.hrc>
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include "dialogs.hrc"
+
+TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
+{
+    HelpId = HID_OPTIONS_ACCESSIBILITYCONFIG ;
+    Size = MAP_APPFONT ( 260 , WHOLE_HEIGHT ) ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    FixedLine GB_HIGHCONTRAST
+    {
+        Pos = MAP_APPFONT ( COL0, ROWA_0 ) ;
+        Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Einstelungen für Kontrastdarstellung" ;
+        Text [ English ] = "Settings for high contrast appearance" ;
+        Text[ english_us ] = "Settings for high contrast appearance";
+    };
+    CheckBox CB_DRAWINGS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_1 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Für ~Zeichnungen und Präsentationen" ;
+        Text [ ENGLISH ] = "For ~drawings and presentations" ;
+        Text[ english_us ] = "For ~drawings and presentations";
+    };
+    CheckBox CB_PAGE_PREVIEWS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWA_2 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "In Seiten~ansicht/Seitendruck" ;
+        Text [ ENGLISH ] = "For page ~previews" ;
+        Text[ english_us ] = "For page ~previews";
+    };
+    FixedLine GB_MISC
+    {
+        Pos = MAP_APPFONT ( COL0, ROWB_0 ) ;
+        Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+        Text = "Sonstige Optionen" ;
+        Text [ English ] = "Miscellaneous options" ;
+        Text[ english_us ] = "Miscellaneous options";
+    };
+    CheckBox CB_TIPHELP
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROWB_1 ) );
+        Size = MAP_APPFONT( DIFF(COL2,COL3), RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Tipp-~Hilfe verschwindet nach " ;
+        Text [ ENGLISH ] = "~Help tips disappear after " ;
+        Text[ english_us ] = "~Help tips disappear after ";
+    };
+    NumericField NF_TIPHELP
+    {
+        TabStop = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT( COL3, ROWB_1 );
+        Size = MAP_APPFONT( EDIT_WIDTH, RSC_CD_TEXTBOX_HEIGHT );
+        Minimum = 1;
+        Maximum = 99;
+        First = 1 ;
+        Last = 99 ;
+        Spin = TRUE ;
+        Repeat = TRUE ;
+    };
+    FixedText FT_TIPHELP
+    {
+        Pos = MAP_APPFONT( COL4, OFFS_TEXTBOX_FIXEDTEXT( ROWB_1 ) );
+        Size = MAP_APPFONT( UNIT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
+        Text = "Sekunden" ;
+        Text [ ENGLISH ] = "seconds" ;
+        Text[ english_us ] = "seconds";
+    };
+    CheckBox CB_ANIMATED_GRAPHICS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_2 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Animierte ~Grafiken zulassen" ;
+        Text [ ENGLISH ] = "Allow animated ~graphics" ;
+        Text[ english_us ] = "Allow animated ~graphics";
+    };
+    CheckBox CB_ANIMATED_TEXTS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_3 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Animierter ~Text zulassen" ;
+        Text [ ENGLISH ] = "Allow animated ~text" ;
+        Text[ english_us ] = "Allow animated ~text";
+    };
+    CheckBox CB_AUTOMATIC_FONT_COLOR
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_4 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "Automatische Schrift~farbe für Bildschirmdarstellung" ;
+        Text [ ENGLISH ] = "Always use automatic font ~color for screen display" ;
+        Text[ english_us ] = "Always use automatic font ~color for screen display";
+    };
+    CheckBox CB_SYSTEM_FONT
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_5 );
+        Size = MAP_APPFONT( CB_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
+        Text = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
+        Text [ ENGLISH ] = "Use system ~font for user interface" ;
+        Text[ english_us ] = "Use system ~font for user interface";
+    };
+    CheckBox CB_ACCESSIBILITY_TOOL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( COL1, ROWB_6 );
+        Size = MAP_APPFONT( CB_WIDTH, SUM(RSC_CD_CHECKBOX_HEIGHT,RSC_CD_FIXEDLINE_HEIGHT) );
+        WordBreak = TRUE;
+        Text = "Unterstützung ~behindertengerechter Zugangsprogramme (Programmneustart erforderlich)" ;
+        Text [ ENGLISH ] = "Support ~assistive technology tools (program restart required)" ;
+        Text[ english_us ] = "Support ~assistive technology tools (program restart required)";
+    };
+    FixedText FT_NOTE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( COL2 , ROWB_7 ) ;
+        Size = MAP_APPFONT ( CB_WIDTH , LASTTEXT_HEIGHT ) ;
+        WordBreak = TRUE;
+        Text = "Hinweis: Für die Kommunikation mit Programmen, die einen behindertengerechten Zugriff auf den Computer ermöglichen, wird Sun Microsystems JAVA benutzt. Beim ersten Programmstart muss daher die JAVA Laufzeitumgebung geladen werden. Dies kann zu einer verlängerten Startzeit führen." ;
+        Text [ ENGLISH ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well." ;
+        Text[ english_us ] = "Please note that accessibility support relies on Sun Microsystems JAVA for communication with assistive technology tools. This means that the first program startup may take a few seconds longer, because the JAVA runtime environment has to be started as well.";
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
