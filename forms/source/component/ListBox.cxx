@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,7 @@ void OListBoxModel::loadData()
                     return;
                 }
 
-                ::com::sun::star::util::Date aNullDate(DBTypeConversion::STANDARD_DB_DATE);
+                ::com::sun::star::util::Date aNullDate(DBTypeConversion::getStandardDate());
                 sal_Int32 nFormatKey = 0;
                 sal_Int32 nFieldType = DataType::OTHER;
                 sal_Int16 nKeyType   = NumberFormat::UNDEFINED;

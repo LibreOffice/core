@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,8 +358,8 @@ OEditModel::OEditModel(const Reference<XMultiServiceFactory>& _rxFactory)
              :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_EDIT, FRM_CONTROL_EDIT )
                                     // use the old control name for compytibility reasons
              ,m_nMaxLen(0)
-             ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
              ,m_nKeyType(NumberFormat::UNDEFINED)
+             ,m_aNullDate(DBTypeConversion::getStandardDate())
              ,m_nFormatKey(0)
              ,m_nFieldType(DataType::OTHER)
              ,m_bWritingFormattedFake(sal_False)
@@ -578,7 +578,7 @@ void OEditModel::_unloaded()
         m_nFieldType = DataType::OTHER;
         m_nFormatKey = 0;
         m_nKeyType   = NumberFormat::UNDEFINED;
-        m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
+        m_aNullDate  = DBTypeConversion::getStandardDate();
     }
 }
 

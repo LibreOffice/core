@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,8 +456,8 @@ OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFacto
             ,m_bOriginalNumeric(sal_False)
             ,m_bNumeric(sal_False)
             ,m_xOriginalFormatter(NULL)
-            ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
             ,m_nKeyType(NumberFormat::UNDEFINED)
+            ,m_aNullDate(DBTypeConversion::getStandardDate())
 {
     m_nClassId = FormComponentType::TEXTFIELD;
 
@@ -858,7 +858,7 @@ void OFormattedModel::_unloaded()
     }
 
     m_nKeyType   = NumberFormat::UNDEFINED;
-    m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
+    m_aNullDate  = DBTypeConversion::getStandardDate();
 }
 
 //------------------------------------------------------------------------------

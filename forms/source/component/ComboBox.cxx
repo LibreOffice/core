@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ OComboBoxModel::OComboBoxModel(const Reference<XMultiServiceFactory>& _rxFactory
                                     // use the old control name for compytibility reasons
                  ,m_eListSourceType(ListSourceType_TABLE)
                  ,m_bEmptyIsNull(sal_True)
-                 ,m_aNullDate(DBTypeConversion::STANDARD_DB_DATE)
+                 ,m_aNullDate(DBTypeConversion::getStandardDate())
                  ,m_nKeyType(NumberFormat::UNDEFINED)
                  ,m_nFormatKey(0)
                  ,m_nFieldType(DataType::OTHER)
@@ -754,7 +754,7 @@ void OComboBoxModel::_unloaded()
         m_nFieldType = DataType::OTHER;
         m_nFormatKey = 0;
         m_nKeyType   = NumberFormat::UNDEFINED;
-        m_aNullDate  = DBTypeConversion::STANDARD_DB_DATE;
+        m_aNullDate  = DBTypeConversion::getStandardDate();
     }
 
     // Zuruecksetzen der Inhalte (s.o)
