@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: mh $ $Date: 2000-12-07 10:09:39 $
+#   last change: $Author: ka $ $Date: 2001-02-13 13:35:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -143,7 +143,7 @@ SHL1OBJS=   $(SLO)$/scdll.obj
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
-SHL1STDLIBS+= $(SIMLIB) $(SCHLIB)
+SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
