@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: kz $ $Date: 2001-04-03 14:35:57 $
+#*    last change       $Author: hjs $ $Date: 2001-05-10 14:48:35 $
 #*
-#*    $Revision: 1.14 $
+#*    $Revision: 1.15 $
 #*
 #*    $Logfile:$
 #*
@@ -31,18 +31,6 @@ JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASS
 
 UNIXTEXT= \
     $(MISC)$/helpserver.sh
-
-ALL:	            \
-    $(UNIXTEXT)	\
-    ALLTAR
-
-
-
-$(BIN)$/helpserver.sh: helpserver.sh
-    +$(COPY) helpserver.sh $(BIN)
-
-%.java:
-    javamaker -BUCR -O$(OUT)$/misc$/java $(subst,$/,. $(subst,$(OUT)$/misc$/java$/,-T  $*)) $(RDB)
 
 # --- Files --------------------------------------------------------
 
@@ -81,6 +69,6 @@ CUSTOMMANIFESTFILE = manifest
 
 .INCLUDE :  target.mk
 
-
-
+%.java:
+    javamaker -BUCR -O$(OUT)$/misc$/java $(subst,$/,. $(subst,$(OUT)$/misc$/java$/,-T  $*)) $(RDB)
 
