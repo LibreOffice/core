@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:43:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 #pragma hdrstop
-
-#ifndef _SVX_FMPROP_HXX
-#include "fmprop.hxx"
-#endif
 
 #ifndef _TOOLS_RESMGR_HXX
 #include <tools/resmgr.hxx>
