@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:58:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1754,6 +1754,7 @@ TabPage TP_ENDNOTEOPTION
         MaxTextLength = 30 ;
     };
 };
+
 
 
 
