@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:36:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,111 +271,27 @@ Menu RID_LAYERTAB_POPUP
             Identifier = SID_INSERTLAYER ;
             HelpID = SID_INSERTLAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? ~Ebene einfügen... : ~Ebene einf³gen... */
-            Text = "~Ebene einfügen..." ;
-            Text [ ENGLISH ] = "~Insert layer..." ;
-            Text [ norwegian ] = "~Insert layer..." ;
-            Text [ italian ] = "Inserisci livello..." ;
-            Text [ portuguese_brazilian ] = "~Inserir camada..." ;
-            Text [ portuguese ] = "~Inserir nível..." ;
-            Text [ french ] = "Insérer une couche..." ;
-            Text [ dutch ] = "~Niveau invoegen..." ;
-            Text [ spanish ] = "~Insertar capa..." ;
-            Text [ danish ] = "~Indsæt lag..." ;
-            Text [ swedish ] = "~Infoga nivå..." ;
-            Text [ finnish ] = "~Lisää kerros..." ;
-            Text [ english_us ] = "~Insert Layer..." ;
-            Text[ chinese_simplified ] = "æ’å…¥åˆ†å±‚(~I)...";
-                    Text[ russian ] = "Âñòàâèòü ñëîé...";
-                    Text[ polish ] = "W~staw warstwê...";
-                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æŒ¿å…¥(~I)...";
-                    Text[ chinese_traditional ] = "æ’å…¥åˆ†å±¤(~I)...";
-            Text[ arabic ] = "...ÅÏÑÇÌ ØÈŞÉ";
-            Text[ greek ] = "~EéóáãùãŞ åğéğİäïõ...";
-            Text[ korean ] = "ê³„ì¸µ ì‚½ì…(~I)...";
-            Text[ turkish ] = "~Düzey ekle...";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Insereix una ~capa...";
-            Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸°~à¸”à¸±à¸š...";
-            Text[ czech ] = "VloÅ¾it vrstvu...";
-            Text[ hebrew ] = "~Ebene einfÃ¼gen...";
-            Text[ hindi ] = "~à¤ªà¤°à¤¤ à¤œà¥‹à¤¡à¤¼à¥‹...";
-            Text[ slovak ] = "VloÅ¾~iÅ¥ vrstvu...";
-            Text[ hungarian ] = "~RÃ©teg beszÃºrÃ¡sa...";
-            Text[ slovenian ] = "~Vstavi plast...";
+            Text [ de ] = "~Ebene einfügen..." ;
+            Text [ en-US ] = "~Insert Layer..." ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_MODIFYLAYER ;
             HelpID = SID_MODIFYLAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? E~bene ändern... : E~bene õndern... */
-            Text = "E~bene ändern..." ;
-            Text [ ENGLISH ] = "~Modify layer..." ;
-            Text [ norwegian ] = "~Modify layer..." ;
-            Text [ italian ] = "Modifica livello..." ;
-            Text [ portuguese_brazilian ] = "~Modificar Camada..." ;
-            Text [ portuguese ] = "~Modificar nível..." ;
-            Text [ french ] = "Modifier la couche..." ;
-            Text [ dutch ] = "Niveau wij~zigen..." ;
-            Text [ spanish ] = "~Modificar capa..." ;
-            Text [ danish ] = "~Modificer lag..." ;
-            Text [ swedish ] = "~Ändra nivå..." ;
-            Text [ finnish ] = "~Muuta kerroksen asetuksia..." ;
-            Text [ english_us ] = "Modify La~yer..." ;
-            Text[ chinese_simplified ] = "ä¿®æ”¹åˆ†å±‚(~Y)...";
-                    Text[ russian ] = "Èçìåíèòü ñëîé...";
-                    Text[ polish ] = "~Modyfikuj warstwê...";
-                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¤‰æ›´(~Y)...";
-                    Text[ chinese_traditional ] = "è®Šæ›´åˆ†å±¤(~Y)...";
-            Text[ arabic ] = "...ÊÚÏíá ØÈŞÉ";
-            Text[ greek ] = "Ôñïğïğïßçóç å~ğéğİäïõ...";
-            Text[ korean ] = "ê³„ì¸µ ìˆ˜ì •(~Y)...";
-            Text[ turkish ] = "Düze~yi değiştir...";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Modifica la ~capa...";
-            Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸£à¸°~à¸”à¸±à¸š...";
-            Text[ czech ] = "Upravit vrstvu...";
-            Text[ hebrew ] = "E~bene Ã¤ndern...";
-            Text[ hindi ] = "~à¤ªà¤°à¤¤ à¤¸à¥à¤§à¤¾à¤°à¥‹...";
-            Text[ slovak ] = "UpraviÅ¥ v~rstvu...";
-            Text[ hungarian ] = "~RÃ©teg mÃ³dosÃ­tÃ¡sa...";
-            Text[ slovenian ] = "Spremeni ~plast...";
+            Text [ de ] = "E~bene ändern..." ;
+            Text [ en-US ] = "Modify La~yer..." ;
+            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DELETE_LAYER ;
             HelpID = SID_DELETE_LAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? Ebe~ne löschen... : Ebe~ne l÷schen... */
-            Text = "Ebe~ne löschen..." ;
-            Text [ ENGLISH ] = "~Delete layer..." ;
-            Text [ norwegian ] = "~Delete layer..." ;
-            Text [ italian ] = "Elimina livello..." ;
-            Text [ portuguese_brazilian ] = "E~xcluir Camada..." ;
-            Text [ portuguese ] = "Elimi~nar nível..." ;
-            Text [ french ] = "Supprimer la couche..." ;
-            Text [ dutch ] = "Niveau ~wissen..." ;
-            Text [ spanish ] = "~Borrar capa..." ;
-            Text [ danish ] = "~Slet lag..." ;
-            Text [ swedish ] = "Radera ~nivå..." ;
-            Text [ finnish ] = "~Poista kerros..." ;
-            Text [ english_us ] = "Delete ~Layer..." ;
-            Text[ chinese_simplified ] = "åˆ é™¤åˆ†å±‚(~L)...";
-                    Text[ russian ] = "Óäàëèòü ñëîé...";
-                    Text[ polish ] = "~Usuñ warstwê...";
-                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‰Šé™¤(~L)...";
-                    Text[ chinese_traditional ] = "åˆªé™¤åˆ†å±¤(~L)...";
-            Text[ arabic ] = "...ÍĞİ ØÈŞÉ";
-            Text[ greek ] = "ÄéáãñáöŞ åğéğİ~äïõ...";
-            Text[ korean ] = "ê³„ì¸µ ì‚­ì œ(~L)...";
-            Text[ turkish ] = "Düzeyi ~sil...";
-            Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Suprimeix la ~capa...";
-            Text[ thai ] = "à¸¥à¸š~à¸£à¸°à¸”à¸±à¸š...";
-            Text[ czech ] = "Smazat vrstvu...";
-            Text[ hebrew ] = "Ebe~ne lÃ¶schen...";
-            Text[ hindi ] = "~à¤ªà¤°à¤¤ à¤®à¤¿à¤Ÿà¤¾à¤“...";
-            Text[ slovak ] = "ZmazaÅ¥ ~vrstvu...";
-            Text[ hungarian ] = "RÃ©teg ~tÃ¶rlÃ©se...";
-            Text[ slovenian ] = "IzbriÅ¡i p~last...";
+            Text [ de ] = "Ebe~ne löschen..." ;
+            Text [ en-US ] = "Delete ~Layer..." ;
+            Text [ x-comment ] = " ";
         };
         MN_RENAME_LAYER
     };
