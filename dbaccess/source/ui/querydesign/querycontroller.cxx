@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:16:32 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #endif
 #ifndef _DBU_QRY_HRC_
 #include "dbu_qry.hrc"
-#endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
@@ -329,12 +326,34 @@ using namespace ::comphelper;
 
 namespace
 {
-    void switchDesignModeImpl(OQueryContainerWindow* _pWindow,sal_Bool& _rbDesign)
+    void switchDesignModeImpl(OQueryController* _pController,OQueryContainerWindow* _pWindow,sal_Bool& _rbDesign)
     {
         if ( !_pWindow->switchView() )
         {
             _rbDesign = !_rbDesign;
             _pWindow->switchView();
+        }
+        else
+        {
+            Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = _pController->getLayoutManager(_pController->getFrame());
+
+            if ( xLayoutManager.is() )
+            {
+                xLayoutManager->lock();
+                static ::rtl::OUString s_sDesignToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/designobjectbar"));
+                static ::rtl::OUString s_sSqlToolbar(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sqlobjectbar"));
+                if ( _rbDesign )
+                {
+                    xLayoutManager->destroyElement( s_sSqlToolbar );
+                    xLayoutManager->createElement( s_sDesignToolbar );
+                }
+                else
+                {
+                    xLayoutManager->destroyElement( s_sDesignToolbar );
+                    xLayoutManager->createElement( s_sSqlToolbar );
+                }
+                xLayoutManager->unlock();
+            }
         }
     }
 }
@@ -456,7 +475,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.aState = ::cppu::bool2any(!m_bEsacpeProcessing);
             aReturn.bEnabled = !m_bIndependent && ( m_pSqlIterator != NULL ) && !m_bDesign;
             break;
-        case ID_RELATION_ADD_RELATION:
+        case SID_RELATION_ADD_RELATION:
             aReturn.bEnabled = isEditable() && m_bDesign && m_vTableData.size() > 1;
             break;
         case ID_BROWSER_SAVEASDOC:
@@ -480,21 +499,25 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;
             aReturn.aState = ::cppu::bool2any(m_bDesign);
             break;
-        case ID_BROWSER_CLEAR_QUERY:
+        case SID_BROWSER_CLEAR_QUERY:
             aReturn.bEnabled = isEditable() && (m_sStatement.getLength() || !m_vTableData.empty());
             break;
-        case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
-        case ID_BROWSER_QUERY_VIEW_TABLES:
-        case ID_BROWSER_QUERY_VIEW_ALIASES:
+        case SID_QUERY_VIEW_FUNCTIONS:
+        case SID_QUERY_VIEW_TABLES:
+        case SID_QUERY_VIEW_ALIASES:
             aReturn.aState = ::cppu::bool2any(getContainer() && getContainer()->isSlotEnabled(_nId));
             aReturn.bEnabled = m_bDesign;
             break;
-        case ID_BROWSER_QUERY_DISTINCT_VALUES:
+        case SID_QUERY_DISTINCT_VALUES:
             aReturn.bEnabled = m_bDesign && isEditable();
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             aReturn.bEnabled = sal_True;
+            break;
+        case SID_DB_QUERY_PREVIEW:
+            aReturn.bEnabled = sal_True;
+            aReturn.aState <<= ::cppu::bool2any(getContainer() && getContainer()->getPreviewFrame().is());
             break;
 #if OSL_DEBUG_LEVEL > 1
         case ID_EDIT_QUERY_SQL:
@@ -516,7 +539,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void OQueryController::Execute(sal_uInt16 _nId)
+void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& aArgs)
 {
     switch(_nId)
     {
@@ -532,7 +555,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             if(m_bCreateView && !isModified())
                 closeTask();
             break;
-        case ID_RELATION_ADD_RELATION:
+        case SID_RELATION_ADD_RELATION:
             {
                 OJoinDesignView* pView = getJoinView();
                 if( pView )
@@ -563,7 +586,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(NULL);
                         m_bDesign = !m_bDesign;
-                        switchDesignModeImpl(getContainer(),m_bDesign);
+                        switchDesignModeImpl(this,getContainer(),m_bDesign);
                     }
                     else
                     {
@@ -595,7 +618,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                     pNode->parseNodeToStr( sNewStatement, getMetaData() );
                                     setStatement_fireEvent( sNewStatement );
                                     getContainer()->SaveUIConfig();
-                                    switchDesignModeImpl(getContainer(),m_bDesign);
+                                    switchDesignModeImpl(this,getContainer(),m_bDesign);
                                 }
                             }
                         }
@@ -619,11 +642,11 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 if(m_bDesign)
                 {
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
-                    InvalidateFeature(ID_RELATION_ADD_RELATION);
+                    InvalidateFeature(SID_RELATION_ADD_RELATION);
                 }
             }
             break;
-        case ID_BROWSER_CLEAR_QUERY:
+        case SID_BROWSER_CLEAR_QUERY:
             {
                 getUndoMgr()->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
                 getContainer()->clear();
@@ -635,19 +658,34 @@ void OQueryController::Execute(sal_uInt16 _nId)
             }
             //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
-        case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
-        case ID_BROWSER_QUERY_VIEW_TABLES:
-        case ID_BROWSER_QUERY_VIEW_ALIASES:
+        case SID_QUERY_VIEW_FUNCTIONS:
+        case SID_QUERY_VIEW_TABLES:
+        case SID_QUERY_VIEW_ALIASES:
             getContainer()->setSlotEnabled(_nId,!getContainer()->isSlotEnabled(_nId));
             setModified(sal_True);
             break;
-        case ID_BROWSER_QUERY_DISTINCT_VALUES:
+        case SID_QUERY_DISTINCT_VALUES:
             m_bDistinct = !m_bDistinct;
             setModified(sal_True);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
             if ( getContainer()->checkStatement() )
                 executeQuery();
+            break;
+        case SID_DB_QUERY_PREVIEW:
+            try
+            {
+                Reference<XFrame> xXFrame( getContainer()->getPreviewFrame());
+                if ( xXFrame.is() )
+                {
+                    ::comphelper::disposeComponent( xXFrame );
+                }
+                else
+                    Execute(ID_BROWSER_QUERY_EXECUTE,Sequence< PropertyValue >());
+            }
+            catch(Exception&)
+            {
+            }
             break;
         case ID_QUERY_ZOOM_IN:
             {
@@ -673,9 +711,9 @@ void OQueryController::Execute(sal_uInt16 _nId)
                 {
                     Window* pView = getView();
                     ModalDialog* pWindow = new ModalDialog(pView);
-                    pWindow->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
+                    pWindow->SetPosSizePixel(::Point(0,0),pView->GetSizePixel());
                     SvTreeListBox* pTreeBox = new SvTreeListBox(pWindow);
-                    pTreeBox->SetPosSizePixel(Point(0,0),pView->GetSizePixel());
+                    pTreeBox->SetPosSizePixel(::Point(0,0),pView->GetSizePixel());
 
                     if ( _nId == ID_EDIT_QUERY_DESIGN )
                     {
@@ -710,7 +748,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             }
 #endif
         default:
-            OJoinController::Execute(_nId);
+            OJoinController::Execute(_nId,aArgs);
             return; // else we would invalidate twice
     }
     InvalidateFeature(_nId);
@@ -824,7 +862,7 @@ void OQueryController::impl_initialize( const Sequence< Any >& aArguments )
         }
         getContainer()->initialize();
         resetImpl();
-        switchDesignModeImpl(getContainer(),m_bDesign);
+        switchDesignModeImpl(this,getContainer(),m_bDesign);
         getUndoMgr()->Clear();
 
         if  (  ( m_bDesign )
@@ -916,34 +954,27 @@ OJoinDesignView* OQueryController::getJoinView()
 void OQueryController::AddSupportedFeatures()
 {
     OJoinController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]                = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]                 = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]               = ID_BROWSER_PASTE;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SaveAs")]              = SID_SAVEASDOC;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/EsacpeProcessing")] = ID_BROWSER_ESACPEPROCESSING;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewFunctions")]    = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewTables")]       = ID_BROWSER_QUERY_VIEW_TABLES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ViewAliases")]      = ID_BROWSER_QUERY_VIEW_ALIASES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/DistinctValues")]   = ID_BROWSER_QUERY_DISTINCT_VALUES;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ChangeDesignMode")] = ID_BROWSER_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ClearQuery")]       = ID_BROWSER_CLEAR_QUERY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ExecuteQuery")]     = ID_BROWSER_QUERY_EXECUTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/AddRelation")]      = ID_RELATION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SbaNativeSql")]        = ID_BROWSER_ESACPEPROCESSING;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewFunctions")]     = SID_QUERY_VIEW_FUNCTIONS;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewTableNames")]    = SID_QUERY_VIEW_TABLES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBViewAliases")]       = SID_QUERY_VIEW_ALIASES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBDistinctValues")]    = SID_QUERY_DISTINCT_VALUES;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBChangeDesignMode")]  = ID_BROWSER_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBClearQuery")]        = SID_BROWSER_CLEAR_QUERY;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:SbaExecuteSql")]       = ID_BROWSER_QUERY_EXECUTE;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBAddRelation")]       = SID_RELATION_ADD_RELATION;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBQueryPreview")]      = SID_DB_QUERY_PREVIEW;
 #if OSL_DEBUG_LEVEL > 1
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/ShowParseTree")]    = ID_EDIT_QUERY_SQL;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/MakeDisjunct")]     = ID_EDIT_QUERY_DESIGN;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBShowParseTree")] = ID_EDIT_QUERY_SQL;
+    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DBMakeDisjunct")]      = ID_EDIT_QUERY_DESIGN;
 #endif
-}
-// -----------------------------------------------------------------------------
-ToolBox* OQueryController::CreateToolBox(Window* _pParent)
-{
-    return new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
 }
 // -----------------------------------------------------------------------------
 void OQueryController::setModified(sal_Bool _bModified)
 {
     OJoinController::setModified(_bModified);
-    InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
+    InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
@@ -990,7 +1021,7 @@ void OQueryController::reconnect(sal_Bool _bUI)
         {
             m_bDesign = sal_False;
             // don't call Execute(SQL) because this changes the sql statement
-            getContainer()->switchView();
+            switchDesignModeImpl(this,getContainer(),m_bDesign);
         }
         InvalidateAll();
     }
@@ -1140,6 +1171,7 @@ void OQueryController::executeQuery()
         try
         {
             getContainer()->showPreview(m_xCurrentFrame);
+            InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
 //          Reference< XFrame > xBeamer = getContainer()->getPreviewFrame();
 //          Reference< XLoadEventListener> xLoadEvtL = new OQueryControllerLoadListener(this);
@@ -1645,10 +1677,15 @@ void OQueryController::setStatement_fireEvent( const ::rtl::OUString& _rNewState
 // -----------------------------------------------------------------------------
 IMPL_LINK( OQueryController, OnExecuteAddTable, void*, pNotInterestedIn )
 {
-    Execute( ID_BROWSER_ADDTABLE );
+    Execute( ID_BROWSER_ADDTABLE,Sequence<PropertyValue>() );
     return 0L;
 }
-
+// -----------------------------------------------------------------------------
+void OQueryController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+{
+    OGenericUnoController::loadSubToolbar(_xLayoutManager);
+    switchDesignModeImpl(this,getContainer(),m_bDesign);
+}
 // -----------------------------------------------------------------------------
 } // namespace dbaui
 // -----------------------------------------------------------------------------
