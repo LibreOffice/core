@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCsvRuler.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $
+ *  last change: $Author: obo $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,9 @@ public class ScAccessibleCsvRuler extends TestCase {
 
 
         //util.dbg.printInterfaces(oObj);
-        //at.printAccessibleTree(log, xRoot);
+        AccessibilityTools.printAccessibleTree(log, xRoot);
         oObj = AccessibilityTools.getAccessibleObjectForRole(xRoot, AccessibleRole.TEXT,
-                                             "Ruler");
+                                             "Ruler", true);
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
