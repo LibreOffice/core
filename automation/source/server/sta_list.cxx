@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:13:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 15:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,9 @@ BOOL StatementList::bDoTypeKeysDelay = FALSE;
 Window* StatementList::pFirstDocFrame = NULL;
 
 BOOL StatementList::bCatchGPF = TRUE;
+
+
+IMPL_GEN_RES_STR;
 
 
 static TTSettings* pTTSettings = NULL;
@@ -1015,6 +1018,8 @@ String StatementList::ClientTree(Window *pBase, int Indent)
     WRITE(sIndent);
     WRITEc("UId : ");
     WRITE(UIdString(pBase->GetSmartUniqueOrHelpId()));
+    WRITEc(":0x");
+    WRITE(String::CreateFromInt64( sal_Int64(pBase), 16 ));
     WRITEc(":");
     WRITE(pBase->GetQuickHelpText());
     WRITEc(":");
@@ -1116,6 +1121,9 @@ void StatementList::DirectLog( ULONG nType, String aMessage )
 
 void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
 {
+//    Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, pWin, &aKEvnt );
+//    Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, pWin, &aKEvnt );
+
     if ( !Application::CallAccel( aKEvnt.GetKeyCode() ) )
     {
         CALL_EVENT_WITH_NOTIFY( EVENT_KEYINPUT, aKEvnt, pWin, KeyInput )
