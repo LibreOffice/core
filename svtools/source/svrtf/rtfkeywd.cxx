@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,8 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {sRTF_DFRMTXTX,      RTF_DFRMTXTX},
 {sRTF_DFRMTXTY,      RTF_DFRMTXTY},
 {sRTF_DROPCAPLI,     RTF_DROPCAPLI},
-{sRTF_DROPCAPLT,     RTF_DROPCAPLT},
+{sRTF_DROPCAPT,      RTF_DROPCAPT},
+{sRTF_ABSNOOVRLP,    RTF_ABSNOOVRLP},
 {sRTF_POSNEGX,       RTF_POSNEGX},
 {sRTF_POSNEGY,       RTF_POSNEGY},
 {sRTF_DELETED,       RTF_DELETED},
