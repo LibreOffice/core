@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dl $ $Date: 2001-12-07 09:55:23 $
+ *  last change: $Author: cl $ $Date: 2001-12-18 15:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1604,7 +1604,14 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         }
     }
 
-#ifndef SVX_LIGHT
+    UpdateAllLinks();
+
+    SetChanged( FALSE );
+}
+
+/** updates all links, only links in this document should by resolved */
+void SdDrawDocument::UpdateAllLinks()
+{
     if ( !pDocLockedInsertingLinks && pLinkManager && pLinkManager->GetLinks().Count() )
     {
         pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
@@ -1614,12 +1621,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         if( pDocLockedInsertingLinks == this )
             pDocLockedInsertingLinks = NULL;  // unlock inserting links
     }
-
-#endif // !SVX_LIGHT
-
-    SetChanged( FALSE );
 }
-
 
 
 /*************************************************************************

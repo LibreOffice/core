@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 15:23:46 $
+ *  last change: $Author: cl $ $Date: 2001-12-18 15:02:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,13 +383,12 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
             }
             else if( bXML )
             {
-                pDoc->NewOrLoadCompleted( NEW_DOC );
-
                 // #80365# use the medium from the DrawDocShell, do not construct an own one
                 pFilter = new SdXMLFilter( *GetMedium(), *this, sal_True );
             }
 
             bRet = pFilter ? pFilter->Import() : FALSE;
+
 
             if(pFilter)
                 delete pFilter;

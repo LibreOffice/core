@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-19 15:50:05 $
+ *  last change: $Author: cl $ $Date: 2001-12-18 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,40 +417,13 @@ sal_Bool SdXMLFilter::Import()
     if( !xServiceFactory.is() )
         return sal_False;
 
-/*
+    // -------------------------------------
 
-    do
-    {
+    SdDrawDocument* pDoc = mrDocShell.GetDoc();
+    pDoc->NewOrLoadCompleted( NEW_DOC );
+    pDoc->CreateFirstPages();
+    pDoc->StopWorkStartupDelay();
 
-        SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
-        SvXMLGraphicHelper*         pGraphicHelper = NULL;
-        UINT16                      nStyleFamilyMask = 0;
-        sal_Bool                    bLoadDoc = TRUE;
-
-        sal_Bool bEncrypted = sal_False;
-
-        try
-        {
-            uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
-            uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
-
-            pObjectHelper = NULL;
-            pGraphicHelper = NULL;
-
-            if( pStorage )
-            {
-                SvPersist *pPersist = pDoc->GetPersist();
-                if( pPersist )
-                {
-                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );
-                    xObjectResolver = pObjectHelper;
-                }
-
-                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
-                xGrfResolver = pGraphicHelper;
-            }
-
-*/
     // -------------------------------------
 
     mxModel->lockControllers();
@@ -471,12 +444,6 @@ sal_Bool SdXMLFilter::Import()
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
     xInfoSet->setPropertyValue( OUString::createFromAscii( "Preview" ), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
-
-    // -------------------------------------
-
-    SdDrawDocument* pDoc = mrDocShell.GetDoc();
-    pDoc->CreateFirstPages();
-    pDoc->StopWorkStartupDelay();
 
     // -------------------------------------
 
@@ -687,6 +654,9 @@ sal_Bool SdXMLFilter::Import()
     if( mxModel.is() )
         mxModel->unlockControllers();
 
+    if( nRet == 0 )
+        pDoc->UpdateAllLinks();
+
     switch( nRet )
     {
     case 0: break;
@@ -699,6 +669,7 @@ sal_Bool SdXMLFilter::Import()
                 nRet = 0;
         }
     }
+
     return nRet == 0;
 }
 

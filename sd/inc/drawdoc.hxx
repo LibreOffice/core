@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-23 14:04:20 $
+ *  last change: $Author: cl $ $Date: 2001-12-18 15:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,8 @@ public:
     void        RestoreLayerNames();
 #endif
     void        MakeUniqueLayerNames();
+
+    void    UpdateAllLinks();
 };
 
 
