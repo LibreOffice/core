@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:52:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 #include "docfac.hxx"
 #include "statcach.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
@@ -171,6 +172,27 @@ using namespace ::com::sun::star::beans;
 #include "sfxslots.hxx"
 
 DBG_NAME(SfxTopViewFrame);
+
+#include <comphelper/sequenceashashmap.hxx>
+static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
+{
+    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
+    ::rtl::OUString sVar;
+    if ( !xMM.is() )
+        return sVar;
+
+    try
+    {
+        ::comphelper::SequenceAsHashMap aAnalyzer( xMM->getByName(sDocService) );
+        sVar = aAnalyzer.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"), ::rtl::OUString() );
+    }
+    catch( uno::Exception& )
+    {
+        sVar = ::rtl::OUString();
+    }
+
+    return sVar;
+}
 
 class SfxTopFrame_Impl
 {
@@ -523,14 +545,17 @@ SfxTopFrame* SfxTopFrame::Create( SfxObjectShell* pDoc, USHORT nViewId, BOOL bHi
     Window* pWindow = pFrame->GetTopWindow_Impl();
     if ( pWindow && pDoc )
     {
+        ::rtl::OUString aDocServiceName( pDoc->GetFactory().GetDocumentServiceName() );
         String aTitle = pDoc->GetTitle( SFX_TITLE_DETECT );
         aTitle += String::CreateFromAscii( " - " );
         aTitle += Application::GetDisplayName();
+        aTitle += ' ';
+        aTitle += String( GetModuleName_Impl( aDocServiceName ) );
         pWindow->SetText( aTitle );
         if( pWindow->GetType() == WINDOW_WORKWINDOW )
         {
             SvtModuleOptions::EFactory eFactory;
-            if( SvtModuleOptions::ClassifyFactoryByName( pDoc->GetFactory().GetDocumentServiceName(), eFactory ) )
+            if( SvtModuleOptions::ClassifyFactoryByName( aDocServiceName, eFactory ) )
             {
                 WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
                 pWorkWindow->SetIcon( (sal_uInt16) SvtModuleOptions().GetFactoryIcon( eFactory ) );
@@ -1051,6 +1076,9 @@ String SfxTopViewFrame::UpdateTitle()
 
     aTitle += String::CreateFromAscii( " - " );
     aTitle += Application::GetDisplayName();
+    aTitle += ' ';
+    ::rtl::OUString aDocServiceName( GetObjectShell()->GetFactory().GetDocumentServiceName() );
+    aTitle += String( GetModuleName_Impl( aDocServiceName ) );
 
     GetBindings().Invalidate( SID_NEWDOCDIRECT );
 
