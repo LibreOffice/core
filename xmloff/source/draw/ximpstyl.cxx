@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-05 15:37:44 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,6 +560,20 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         mnTypeId = 11; // AUTOLAYOUT_OBJ
                     }
+                    else if(pObj1->GetName().equals(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                    {
+                        if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_title"))))
+                        {
+                            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+                            mnTypeId = 28;
+                        }
+                        else
+                        {
+                            // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
+                            mnTypeId = 29;
+                        }
+                    }
                     else
                     {
                         mnTypeId = 21; // AUTOLAYOUT_NOTES
@@ -609,7 +623,21 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     else if(pObj1->GetName().equals(
                         OUString(RTL_CONSTASCII_USTRINGPARAM("graphic"))))
                     {
-                        mnTypeId = 9; // AUTOLAYOUT_CLIPTEXT
+                        if(pObj2->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                        {
+                            // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
+                            mnTypeId = 30;
+                        }
+                        else
+                        {
+                            mnTypeId = 9; // AUTOLAYOUT_CLIPTEXT
+                        }
+                    }
+                    else if(pObj1->GetName().equals(
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("vertical_outline"))))
+                    {
+                        // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
+                        mnTypeId = 27;
                     }
                     else
                     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ DECLARE_LIST(ImpXMLEXPPageMasterList, ImpXMLEXPPageMasterInfo*);
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define IMP_AUTOLAYOUT_INFO_MAX         (27L)
+#define IMP_AUTOLAYOUT_INFO_MAX         (31L)
 
 class ImpXMLAutoLayoutInfo
 {
@@ -425,6 +425,30 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         aTitlePos = aPos;
         aTitleSize = aSize;
     }
+    else if(mnType == 27 || mnType == 28)
+    {
+        // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART or
+        // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+        Point aClassicTPos(
+            aTitlePos.X() + long( aTitleSize.Width() * 0.0735 ),
+            aTitlePos.Y() + long( aTitleSize.Height() * 0.083 ));
+        Size aClassicTSize(
+            long( aTitleSize.Width() * 0.854 ),
+            long( aTitleSize.Height() * 0.167 ));
+        Point aLPos(aPagePos);
+        Size aLSize(aPageInnerSize);
+        Point aClassicLPos(
+            aLPos.X() + long( aLSize.Width() * 0.0735 ),
+            aLPos.Y() + long( aLSize.Height() * 0.472 ));
+        Size aClassicLSize(
+            long( aLSize.Width() * 0.854 ),
+            long( aLSize.Height() * 0.444 ));
+
+        aTitlePos.X() = (aClassicTPos.X() + aClassicTSize.Width()) - aClassicTSize.Height();
+        aTitlePos.Y() = aClassicTPos.Y();
+        aTitleSize.Width() = aClassicTSize.Height();
+        aTitleSize.Height() = (aClassicLPos.Y() + aClassicLSize.Height()) - aClassicTPos.Y();
+    }
     else
     {
         aTitlePos.X() += long( aTitleSize.Width() * 0.0735 );
@@ -465,6 +489,29 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
 
         if(mnGapY < aPageInnerSize.Height() / 10)
             mnGapY = aPageInnerSize.Height() / 10;
+    }
+    else if(mnType == 27 || mnType == 28)
+    {
+        // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART or
+        // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+        Point aClassicTPos(
+            aTitlePos.X() + long( aTitleSize.Width() * 0.0735 ),
+            aTitlePos.Y() + long( aTitleSize.Height() * 0.083 ));
+        Size aClassicTSize(
+            long( aTitleSize.Width() * 0.854 ),
+            long( aTitleSize.Height() * 0.167 ));
+        Point aClassicLPos(
+            aLayoutPos.X() + long( aLayoutSize.Width() * 0.0735 ),
+            aLayoutPos.Y() + long( aLayoutSize.Height() * 0.472 ));
+        Size aClassicLSize(
+            long( aLayoutSize.Width() * 0.854 ),
+            long( aLayoutSize.Height() * 0.444 ));
+
+        aLayoutPos.X() = aClassicLPos.X();
+        aLayoutPos.Y() = aClassicTPos.Y();
+        aLayoutSize.Width() = (aClassicLPos.X() + aClassicLSize.Width())
+            - (aClassicTSize.Height() + (aClassicLPos.Y() - (aClassicTPos.Y() + aClassicTSize.Height())));
+        aLayoutSize.Height() = (aClassicLPos.Y() + aClassicLSize.Height()) - aClassicTPos.Y();
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
+ *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,9 @@ enum XmlPlaceholder
     XmlPlaceholderTable,
     XmlPlaceholderPage,
     XmlPlaceholderNotes,
-    XmlPlaceholderHandout
+    XmlPlaceholderHandout,
+    XmlPlaceholderVerticalTitle,
+    XmlPlaceholderVerticalOutline
 };
 
 //////////////////////////////////////////////////////////////////////////////
