@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-02 11:00:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,20 +63,20 @@
 #include <vos/thread.hxx>
 #include <tools/list.hxx>
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
 BitmapTransporter::BitmapTransporter()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "BitmapTransporter\n" );
 #endif
 }
 
 BitmapTransporter::~BitmapTransporter()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "~BitmapTransporter\n" );
 #endif
 }
@@ -178,14 +178,14 @@ ScannerThread::ScannerThread(
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ScannerThread\n" );
 #endif
 }
 
 ScannerThread::~ScannerThread()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "~ScannerThread\n" );
 #endif
 }
@@ -274,7 +274,7 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
 {
     vos::OGuard aGuard( aSaneProtector );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ScannerManager::configureScanner\n" );
 #endif
 
@@ -295,7 +295,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 {
     vos::OGuard aGuard( aSaneProtector );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ScannerManager::startScan\n" );
 #endif
 
