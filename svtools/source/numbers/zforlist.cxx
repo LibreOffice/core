@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2000-10-22 17:51:09 $
+ *  last change: $Author: er $ $Date: 2000-10-23 13:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,6 +1644,11 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
     ImpInsertFormat( aFormatSeq[nIdx],
         CLOffset + SetIndexTable( NF_DATE_SYSTEM_SHORT, ZF_STANDARD_DATE ));
+
+    // NN DD.MMM YY
+    nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_DEF_NNDDMMMYY );
+    ImpInsertFormat( aFormatSeq[nIdx],
+        CLOffset + SetIndexTable( NF_DATE_DEF_NNDDMMMYY, ZF_STANDARD_DATE+1 ));
 
     // DD.MM.YY   def/System
     nIdx = lcl_SvNumberFormatter_GetFormatCodeIndex( aFormatSeq, NF_DATE_SYS_MMYY );
