@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-07 14:31:30 $
+ *  last change: $Author: gh $ $Date: 2001-11-30 15:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,16 @@ ByteString &InformationParser::ReadLine()
                 }
             }
         }
+        else {
+            if ( nLevel ) {
+                sLine = "}";
+                fprintf( stdout, "Reached EOF parsing %s. Suplying extra '}'\n",ByteString( sStreamName, gsl_getSystemTextEncoding()).GetBuffer() );
+    //          nErrorCode = IP_UNEXPECTED_EOF;
+    //          nErrorLine = nActLine;
+            }
+            else
+                sLine = "";
+        }
 
         sOldLine = sLine;
         nActLine++;
@@ -215,8 +225,11 @@ GenericInformation *InformationParser::ReadKey(
     }
     else {
         Recover();
-        pInfo = new GenericInformation( sKey, sValue, pExistingList );
-        pInfo->SetComment( sComment );
+        if ( !sKey.Equals( "}" ) && !sKey.Equals( "{" ) )
+        {
+            pInfo = new GenericInformation( sKey, sValue, pExistingList );
+            pInfo->SetComment( sComment );
+        }
     }
 
     return pInfo;
