@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IconsDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:12:11 $
+ *  last change: $Author: kz $  $Date: 2005-03-18 16:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,18 +168,20 @@ public class IconsDialog extends ImageListDialog implements ImageList.ImageRende
     }
 
     /* (non-Javadoc)
-     * @see com.sun.star.wizards.ui.ImageList.ImageRenderer#getImageUrl(java.lang.Object)
+     * @see com.sun.star.wizards.ui.ImageList.ImageRenderer#getImageUrls(java.lang.Object)
      */
-    public String getImageUrl(Object listItem) {
+    public Object[] getImageUrls(Object listItem) {
         int i = ((Number)listItem).intValue();
         int iset = getIconsetNum(i);
         int icon = getIconNum(i);
-        String s =  htmlexpDirectory + "/htmlexpo/" +
+        String[] sRetUrls = new String[2];
+        sRetUrls[0] =  htmlexpDirectory + "/htmlexpo/" +
           getIconsetPref(iset) +
           icons[icon] +
           getIconsetPostfix(iset);
+        sRetUrls[1] = sRetUrls[0];
         //System.out.println(s);
-        return s;
+        return sRetUrls;
     }
         /* (non-Javadoc)
      * @see com.sun.star.wizards.common.Renderer#render(java.lang.Object)
