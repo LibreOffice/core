@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 11:46:43 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 12:04:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1250,10 +1250,6 @@ CDEFS+= -DSWEEPER
 
 .IF "$(T_FORCE)"!=""
 CDEFS+= -D$(T_FORCE)
-.ENDIF
-
-.IF "$(ACTIVEX)"!=""
-CDEFS+= -DACTIVEX
 .ENDIF
 
 .IF "$(profile)"!=""
