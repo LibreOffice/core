@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:50:30 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String RID_KEEP_PASSWORD
     Text[ greek ] = "���~���������� ������� ��� �� ����� ��� ���������";
     Text[ italian ] = "An~nota password fino alla fine dell'applicazione";
     Text[ japanese ] = "ﾊﾟｽﾜｰﾄﾞはｱﾌﾟﾘｹｰｼｮﾝ終了時まで記憶しておく(~R)";
-    Text[ korean ] = "응용프로그램을 종료할 때까지 패스워드 기억(~R)";
+    Text[ korean ] = "응용 프로그램을 종료할 때까지 패스워드 기억(~R)";
     Text[ polish ] = "Zapami�taj has�o do ko�ca aplikacji";
     Text[ portuguese ] = "~Lembrar senha at� terminar a aplica��o";
     Text[ portuguese_brazilian ] = "Passwort ~merken";
@@ -141,7 +141,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Operacja wykonywana na $(ARG1) zosta�a przerwana";
         Text[ portuguese_brazilian ] = "The operation executed on $(ARG1) was aborted";
         Text[ japanese ] = "$(ARG1) で実行したｱｸｼｮﾝは中止されました。";
-        Text[ korean ] = "$(ARG1)에 실행 중이던 작업이 중단되었습니다.";
+        Text[ korean ] = "$(ARG1)에서  실행 중이던 작업이 중단되었습니다.";
         Text[ chinese_simplified ] = "已经取消执行 $(ARG1) 的操作。";
         Text[ chinese_traditional ] = "已經取消執行動作 $(ARG1) 。";
         Text[ turkish ] = "The operation executed on $(ARG1) was aborted";
@@ -193,7 +193,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) ju� istnieje";
         Text[ portuguese_brazilian ] = "$(ARG1) does already exist";
         Text[ japanese ] = "$(ARG1) はすでにあります。";
-        Text[ korean ] = "$(ARG1)이미 존재합니다.";
+        Text[ korean ] = "$(ARG1)이(가) 이미 존재합니다.";
         Text[ chinese_simplified ] = "$(ARG1) 已经存在。";
         Text[ chinese_traditional ] = "$(ARG1) 已經存在。";
         Text[ turkish ] = "$(ARG1) does already exist";
@@ -1025,7 +1025,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) ma nieprawid�owy format";
         Text[ portuguese_brazilian ] = "$(ARG1) has an incorrect format";
         Text[ japanese ] = "$(ARG1) の書式が正しくありません。";
-        Text[ korean ] = "$(ARG1)의 포맷이 올바르지 않습니다.";
+        Text[ korean ] = "$(ARG1)의 형식이 올바르지 않습니다.";
         Text[ chinese_simplified ] = "$(ARG1) 格式有误。";
         Text[ chinese_traditional ] = "$(ARG1) 的格式錯誤。";
         Text[ turkish ] = "$(ARG1) has an incorrect format";
@@ -1077,7 +1077,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nap�d $(ARG1) nie istnieje";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) does not exist";
         Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) はありません。";
-        Text[ korean ] = "$(ARG1) 권이 존재하지 않습니다.";
+        Text[ korean ] = "$(ARG1) 드라이브가 존재하지 않습니다.";
         Text[ chinese_simplified ] = "驱动盘 $(ARG1) 不存在。";
         Text[ chinese_traditional ] = "硬蝶 $(ARG1) 不存在。";
         Text[ turkish ] = "Volume $(ARG1) does not exist";
@@ -1129,7 +1129,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zainstalowana wersja Javy nie jest obs�ugiwana";
         Text[ portuguese_brazilian ] = "The installed Java version is not supported";
         Text[ japanese ] = "既存する Java ﾊﾞｰｼﾞｮﾝは支援されません。";
-        Text[ korean ] = "The installed Java version is not supported";
+        Text[ korean ] = "설치된 Java 버전은 지원되지 않습니다.";
         Text[ chinese_simplified ] = "不支持现有的 Java 版本。";
         Text[ chinese_traditional ] = "不支援現存的 Java 版本 。";
         Text[ turkish ] = "The installed Java version is not supported";
@@ -1155,7 +1155,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zainstalowana wersja Javy $(ARG1) nie jest obs�ugiwana";
         Text[ portuguese_brazilian ] = "The installed Java version $(ARG1) is not supported";
         Text[ japanese ] = "既存する Java ﾊﾞｰｼﾞｮﾝ $(ARG1) は支援されません。";
-        Text[ korean ] = "The installed Java version $(ARG1) is not supported";
+        Text[ korean ] = "설치된 Java 버전 $(ARG1)가 지원되지 않습니다.";
         Text[ chinese_simplified ] = "不支持现有的 Java 版本 $(ARG1)";
         Text[ chinese_traditional ] = "不支援現存的 Java 版本 $(ARG1) 。";
         Text[ turkish ] = "The installed Java version $(ARG1) is not supported";
@@ -1180,7 +1180,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zainstalowana wersja Javy nie jest obs�ugiwana, wymagana jest co najmniej wersja $(ARG1)";
         Text[ portuguese_brazilian ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
         Text[ japanese ] = "既存する Java ﾊﾞｰｼﾞｮﾝは支援されません。ﾊﾞｰｼﾞｮﾝ $(ARG1) 以上のものが必要です。";
-        Text[ korean ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
+        Text[ korean ] = "설치된 Java 버전이 지원되지 않으며 최소한 버전 $(ARG1)가 필요합니다.";
         Text[ chinese_simplified ] = "不支持现有的 Java 版本，起码需要版本 $(ARG1)。";
         Text[ chinese_traditional ] = "不支援現存的 Java 版本，但是至少需要一個 Java 版本 $(ARG1) 。";
         Text[ turkish ] = "The installed Java version is not supported, at least versin $(ARG1) is required";
@@ -1206,7 +1206,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zainstalowana wersja Javy $(ARG1) nie jest obs�ugiwana, wymagana jest co najmniej wersja $(ARG2)";
         Text[ portuguese_brazilian ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
         Text[ japanese ] = "既存する Java ﾊﾞｰｼﾞｮﾝ $(ARG1) は支援されません。ﾊﾞｰｼﾞｮﾝ $(ARG2) 以上は必要です。";
-        Text[ korean ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
+        Text[ korean ] = "설치된 Java 버전 $(ARG1)가 지원되지 않으며 최소한 버전 $(ARG2)가 필요합니다.";
         Text[ chinese_simplified ] = "不支持现有的 Java 版本 $(ARG1)，起码需要版本 $(ARG2)。";
         Text[ chinese_traditional ] = "不支援現存的 Java 版本 $(ARG1) ，但是至少需要一個 Java 版本 $(ARG2) 。";
         Text[ turkish ] = "The installed Java version $(ARG1) is not supported, at least versin $(ARG2) is required";
@@ -1232,7 +1232,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zapisane dane dotycz�ce relacji s� uszkodzone";
         Text[ portuguese_brazilian ] = "The data associated with the partnership are corrupted";
         Text[ japanese ] = "ﾊﾟｰﾄﾅｼｯﾌﾟに保存されたﾃﾞｰﾀが破損しています。";
-        Text[ korean ] = "The data associated with the partnership are corrupted";
+        Text[ korean ] = "협력 관계로 저장된 데이터가 손상되었습니다.";
         Text[ chinese_simplified ] = "与这个伙伴相关的数据已经损坏。";
         Text[ chinese_traditional ] = "與這個夥伴相關的資料已經損壞。";
         Text[ turkish ] = "The data associated with the partnership are corrupted";
@@ -1258,7 +1258,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Zapisane dane dotycz�ce relacji $(ARG1) s� uszkodzone";
         Text[ portuguese_brazilian ] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ japanese ] = "ﾊﾟｰﾄﾅｰｼｯﾌﾟ $(ARG1) に保存されたﾃﾞｰﾀが破損しています。";
-        Text[ korean ] = "The data associated with the partnership $(ARG1) are corrupted";
+        Text[ korean ] = "협력 관계 $(ARG1)와 관련된 데이터가 손상되었습니다.";
         Text[ chinese_simplified ] = "与伙伴 $(ARG1) 相关的数据已经损坏。";
         Text[ chinese_traditional ] = "與這個夥伴 $(ARG1) 相關的資料已經損壞。";
         Text[ turkish ] = "The data associated with the partnership $(ARG1) are corrupted";
@@ -1284,7 +1284,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nap�d $(ARG1) nie jest gotowy";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready";
         Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) の準備ができていません。";
-        Text[ korean ] = "Volume $(ARG1) is not ready";
+        Text[ korean ] = "$(ARG1) 드라이브가 준비되지 않았습니다.";
         Text[ chinese_simplified ] = "驱动盘 $(ARG1) 尚未准备就绪";
         Text[ chinese_traditional ] = "驅動盤 $(ARG1) 尚未就緒。";
         Text[ turkish ] = "Volume $(ARG1) is not ready";
@@ -1310,7 +1310,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "$(ARG1) nie jest gotowy; nale�y wsun�� no�nik danych";
         Text[ portuguese_brazilian ] = "$(ARG1) is not ready; please insert a storage medium";
         Text[ japanese ] = "$(ARG1) の準備ができていません。記憶媒体を入れてください。";
-        Text[ korean ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[ korean ] = "$(ARG1)가 준비되지 않았습니다. 저장 매체를 넣어주십시오.";
         Text[ chinese_simplified ] = "$(ARG1) 尚未准备就绪；请放入磁盘或光盘。";
         Text[ chinese_traditional ] = "$(ARG1) 尚未就緒。請插入軟盤。";
         Text[ turkish ] = "$(ARG1) is not ready; please insert a storage medium";
@@ -1336,7 +1336,7 @@ Resource RID_UUI_ERRHDL
         Text[ polish ] = "Nap�d $(ARG1) nie jest gotowy; nale�y wsun�� no�nik danych";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready; please insert a storage medium";
         Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) の準備ができていません。記憶媒体を入れてください。";
-        Text[ korean ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[ korean ] = "볼륨 $(ARG1)가 준비되지 않았습니다. 저장 매체를 넣어주십시오.";
         Text[ chinese_simplified ] = "驱动盘 $(ARG1) 尚未准备就绪。请放入磁盘。";
         Text[ chinese_traditional ] = "驅動盤 $(ARG1) 尚未就緒。請插入軟盤。";
         Text[ turkish ] = "Volume $(ARG1) is not ready; please insert a storage medium";
@@ -1396,6 +1396,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
 
 
 
