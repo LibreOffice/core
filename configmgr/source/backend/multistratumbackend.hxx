@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:55:16 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,9 @@
 #include <com/sun/star/configuration/backend/XBackendChangesListener.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
-#endif // _CPPUHELPER_COMPBASE6_HXX_
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
+#endif // _CPPUHELPER_COMPBASE7_HXX_
 
 #ifndef INCLUDED_MAP
 #include <map>
@@ -122,10 +122,11 @@ namespace uno = css::uno ;
 namespace lang = css::lang ;
 namespace backenduno = css::configuration::backend ;
 
-typedef cppu::WeakComponentImplHelper6< backenduno::XBackend,
+typedef cppu::WeakComponentImplHelper7< backenduno::XBackend,
                                         backenduno::XBackendEntities,
                                         backenduno::XSchemaSupplier,
                                         backenduno::XBackendChangesNotifier,
+                                        backenduno::XBackendChangesListener,
                                         lang::XInitialization,
                                         lang::XServiceInfo> BackendBase ;
 
@@ -224,7 +225,14 @@ class MultiStratumBackend : public BackendBase {
 
         virtual void SAL_CALL removeChangesListener( const uno::Reference<backenduno::XBackendChangesListener>& xListner,
                                                      const rtl::OUString& aComponent)
-    throw (::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException);
+
+       // XBackendChangesListener
+        virtual void SAL_CALL componentDataChanged(const backenduno::ComponentChangeEvent& aEvent)
+            throw (::com::sun::star::uno::RuntimeException);
+
+        virtual void SAL_CALL disposing( lang::EventObject const & rSource )
+           throw (uno::RuntimeException);
 
         void notifyListeners(const backenduno::ComponentChangeEvent& aEvent) const;
   protected:
