@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-05 15:15:19 $
+#   last change: $Author: hjs $ $Date: 2001-09-24 14:08:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -662,7 +662,7 @@ ZIPALL=ZIPALLTARGET
 .IF "$(GUI)"=="UNX"
 ziplangdirs:=$(shell +find . -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-ziplangdirs:=$(subst,CVS, $(shell +dir /ba:d ))
+ziplangdirs:=$(subst,CVS, $(shell +-dir /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
 zipalllangext=$(foreach,i,$(alllangext) $(eq,{$(subst,$(longlang_$i), $(ziplangdirs))},{$(ziplangdirs)} $(null) $i ))
 
