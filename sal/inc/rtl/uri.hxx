@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-29 11:55:09 $
+ *  last change: $Author: sb $ $Date: 2002-09-24 10:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -62,17 +62,20 @@
 #ifndef _RTL_URI_HXX_
 #define _RTL_URI_HXX_
 
+#ifndef INCLUDED_RTL_MALFORMEDURIEXCEPTION_HXX
+#include "rtl/malformeduriexception.hxx"
+#endif
 #ifndef _RTL_URI_H_
-#include <rtl/uri.h>
+#include "rtl/uri.h"
 #endif
 #ifndef _RTL_TEXTENC_H
-#include <rtl/textenc.h>
+#include "rtl/textenc.h"
 #endif
 #ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#include "rtl/ustring.hxx"
 #endif
 #ifndef _SAL_TYPES_H_
-#include <sal/types.h>
+#include "sal/types.h"
 #endif
 
 namespace rtl {
@@ -106,6 +109,15 @@ public:
                                        rtl_UriDecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset)
         SAL_THROW(());
+
+    /** A wrapper around rtl_uriConvertRelToAbs() from <rtl/uri.h> (see there).
+
+        @exception MalformedUriException
+        Thrown in case rtl_uriConvertRelToAbs() signals an exception due to a
+        malformed base URI.
+     */
+    static inline rtl::OUString convertRelToAbs(
+        rtl::OUString const & rBaseUriRef, rtl::OUString const & rRelUriRef);
 
 private:
     /** not implemented
@@ -165,6 +177,19 @@ inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                   eMechanism,
                   eCharset,
                   &aResult.pData);
+    return aResult;
+}
+
+inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
+                                          rtl::OUString const & rRelUriRef)
+{
+    rtl::OUString aResult;
+    rtl::OUString aException;
+    if (!rtl_uriConvertRelToAbs(
+            const_cast< rtl::OUString & >(rBaseUriRef).pData,
+            const_cast< rtl::OUString & >(rRelUriRef).pData, &aResult.pData,
+            &aException.pData))
+        throw MalformedUriException(aException);
     return aResult;
 }
 
