@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 14:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,8 @@ uno::Any SAL_CALL ScDPDimensions::getByName( const rtl::OUString& aName )
             aRet <<= xNamed;
             return aRet;
         }
+
+    throw container::NoSuchElementException();
     return uno::Any();
 }
 
@@ -1225,6 +1227,8 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
             aRet <<= xNamed;
             return aRet;
         }
+
+    throw container::NoSuchElementException();
     return uno::Any();
 }
 
@@ -1404,6 +1408,8 @@ uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
             aRet <<= xNamed;
             return aRet;
         }
+
+    throw container::NoSuchElementException();
     return uno::Any();
 }
 
@@ -1692,10 +1698,10 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
                             double fLastVal = rStrings[nFirstString-1]->GetValue();
 
                             long nFirstYear = pSource->GetData()->GetDatePart(
-                                        SolarMath::ApproxFloor( fFirstVal ),
+                                        (long)SolarMath::ApproxFloor( fFirstVal ),
                                         nHier, nLev );
                             long nLastYear = pSource->GetData()->GetDatePart(
-                                        SolarMath::ApproxFloor( fLastVal ),
+                                        (long)SolarMath::ApproxFloor( fLastVal ),
                                         nHier, nLev );
 
                             nMbrCount = nLastYear + 1 - nFirstYear;
@@ -1755,6 +1761,8 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
             aRet <<= xNamed;
             return aRet;
         }
+
+    throw container::NoSuchElementException();
     return uno::Any();
 }
 
@@ -1829,7 +1837,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                     const TypedStrCollection& rStrings = pSource->GetData()->GetColumnEntries(nSrcDim);
                     double fFirstVal = rStrings[0]->GetValue();
                     long nFirstYear = pSource->GetData()->GetDatePart(
-                                        SolarMath::ApproxFloor( fFirstVal ),
+                                        (long)SolarMath::ApproxFloor( fFirstVal ),
                                         nHier, nLev );
 
                     nVal = nFirstYear + nIndex;
@@ -1843,11 +1851,11 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 {
                     nVal = nIndex + 1;          // Quarter, Month, Day, Week are 1-based
                     if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
-                        aName = ScGlobal::pScInternational->GetMonthText(nVal);
+                        aName = ScGlobal::pScInternational->GetMonthText((USHORT)nVal);
                 }
 
                 if ( !aName.Len() )
-                    aName = nVal;
+                    aName = String::CreateFromInt32(nVal);
 
                 pNew = new ScDPMember( pSource, nDim, nHier, nLev, aName, nVal, TRUE );
             }
@@ -1896,7 +1904,7 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
     if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.bHasValue )
     {
         long nComp = pSource->GetData()->GetDatePart(
-                                        SolarMath::ApproxFloor( r.fValue ),
+                                        (long)SolarMath::ApproxFloor( r.fValue ),
                                         nHier, nLev );
 
         //  fValue is converted from integer, so simple comparison works
