@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:30:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,12 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
 #ifndef _SVARRAY_HXX
@@ -109,11 +112,12 @@ public:
 typedef BibStatusDispatch* BibStatusDispatchPtr;
 SV_DECL_PTRARR_DEL( BibStatusDispatchArr, BibStatusDispatchPtr, 4, 4 );
 
-class BibFrameController_Impl : public cppu::WeakImplHelper4 <
+class BibFrameController_Impl : public cppu::WeakImplHelper5 <
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::frame::XController,
     ::com::sun::star::frame::XDispatch,
-    ::com::sun::star::frame::XDispatchProvider
+    ::com::sun::star::frame::XDispatchProvider,
+    ::com::sun::star::frame::XDispatchInformationProvider
 >
 {
 friend class BibFrameCtrl_Impl;
@@ -172,7 +176,10 @@ public:
     virtual void                SAL_CALL addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
     virtual void                SAL_CALL removeStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw (::com::sun::star::uno::RuntimeException);
 
-};
+                                // ::com::sun::star::frame::XDispatchInformationProvider
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int16 > SAL_CALL getSupportedCommandGroups(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) throw (::com::sun::star::uno::RuntimeException);
+ };
 
 #endif
 
