@@ -264,10 +264,10 @@ sub create_epm_header
     # Determining the release version
     # This release version has to be listed in the line %version : %version versionnumber releasenumber
 
-    my $releasenumber = 1;  # default
-    if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
+    if ( $variableshashref->{'PACKAGEVERSION'} ) { $installer::globals::packageversion = $variableshashref->{'PACKAGEVERSION'}; }
+    if ( $variableshashref->{'PACKAGEREVISION'} ) { $installer::globals::packagerevision = $variableshashref->{'PACKAGEREVISION'}; }
 
-    $line = "%version" . " " . $variableshashref->{'PRODUCTVERSION'} . " " . $releasenumber . "\n";
+    $line = "%version" . " " . $installer::globals::packageversion . " " . $installer::globals::packagerevision . "\n";
     push(@epmheader, $line);
 
     # Description, Copyright and Vendor are multilingual and are defined in
@@ -500,14 +500,31 @@ sub find_epm_on_system
 
     installer::logger::include_header_into_logfile("Check epm on system");
 
-    # searching for epm. It has to be found in the solver or it has to be in the path (saved in $installer::globals::epm_in_path)
-
     my $epmname = "epm";
-    my $epmfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$epmname, $includepatharrayref, 0);
 
-    if (($$epmfileref eq "") && (!($installer::globals::epm_in_path))) { installer::exiter::exit_program("ERROR: Could not find program $epmname!", "find_epm_on_system"); }
-    if (($$epmfileref eq "") && ($installer::globals::epm_in_path)) { $epmname = $installer::globals::epm_path; }
-    if (!($$epmfileref eq "")) { $epmname = $$epmfileref; }
+    # epm should be defined through the configure script but we need to
+    # check for it to be defined because of the Sun environment.
+    # Check the environment variable first and if it is not defined,
+    # or if it is but the location is not executable, search further.
+    # It has to be found in the solver or it has to be in the path
+    # (saved in $installer::globals::epm_in_path) or we get the specified
+    # one through the environment (i.e. when --with-epm=... is specified)
+
+    if ($ENV{'EPM'})
+    {
+        if (($ENV{'EPM'} ne "") && (-x "$ENV{'EPM'}"))
+        {
+            $epmname = $ENV{'EPM'};
+        }
+    }
+    else
+    {
+        my $epmfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$epmname, $includepatharrayref, 0);
+
+        if (($$epmfileref eq "") && (!($installer::globals::epm_in_path))) { installer::exiter::exit_program("ERROR: Could not find program $epmname!", "find_epm_on_system"); }
+        if (($$epmfileref eq "") && ($installer::globals::epm_in_path)) { $epmname = $installer::globals::epm_path; }
+        if (!($$epmfileref eq "")) { $epmname = $$epmfileref; }
+    }
 
     my $infoline = "Using epmfile: $epmname\n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -645,6 +662,44 @@ sub add_one_line_into_file
 }
 
 #####################################################################
+# Setting the revision VERSION=1.9,REV=66  .
+# Also adding the new line: "AutoReqProv: no"
+#####################################################################
+
+sub set_revision_in_pkginfo
+{
+    my ($file, $filename, $newepmdir) = @_;
+
+    my $revisionstring = "\,REV\=" . $installer::globals::packagerevision;
+
+    # Adding also a time string to the revision. Syntax: VERSION=8.0.0,REV=66.2005.01.24
+
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+
+    $mday = $mday;
+    $mon = $mon + 1;
+    $year = $year + 1900;
+
+    if ( $mday < 10 ) { $mday = "0" . $mday; }
+    if ( $mon < 10 ) { $mon = "0" . $mon; }
+    $datestring = $year . "." . $mon . "." . $mday;
+    $revisionstring = $revisionstring . "." . $datestring;
+
+    for ( my $i = 0; $i <= $#{$file}; $i++ )
+    {
+        if ( ${$file}[$i] =~ /^\s*(VERSION\=.*?)\s*$/ )
+        {
+            my $oldstring = $1;
+            my $newstring = $oldstring . $revisionstring;   # also adding the date string
+            ${$file}[$i] =~ s/$oldstring/$newstring/;
+            my $infoline = "Info: Changed in $filename file: \"$oldstring\" to \"$newstring\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            last;
+        }
+    }
+}
+
+#####################################################################
 # Adding a new line for topdir into specfile, removing old
 # topdir if set.
 # Also adding the new line: "AutoReqProv: no"
@@ -712,8 +767,8 @@ sub set_releaseversion_in_specfile
 {
     my ($changefile, $variableshashref) = @_;
 
-    my $releasenumber = 1;  # default value
-    if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
+    my $releasenumber = $installer::globals::packagerevision;
+#   if ( $variableshashref->{'RELEASENUMBER'} ) { $releasenumber = $variableshashref->{'RELEASENUMBER'}; }
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
@@ -728,6 +783,30 @@ sub set_releaseversion_in_specfile
                 push( @installer::globals::logfileinfo, $infoline);
                 last;
             }
+        }
+    }
+}
+
+#####################################################################
+# Setting the packager in the spec file
+# Syntax: Packager: abc@def
+#####################################################################
+
+sub set_packager_in_specfile
+{
+    my ($changefile) = @_;
+
+    my $packager = $installer::globals::longmanufacturer;
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*Packager\s*:\s*(.+?)\s*$/ )
+        {
+            my $oldstring = $1;
+            ${$changefile}[$i] =~ s/\Q$oldstring\E/$packager/;
+            my $infoline = "Info: Changed Packager in spec file from $oldstring to $packager!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            last;
         }
     }
 }
@@ -869,6 +948,7 @@ sub prepare_packages
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_releaseversion_in_specfile($changefile, $variableshashref);
+        set_packager_in_specfile($changefile);
         installer::files::save_file($completefilename, $changefile);
     }
 
@@ -876,6 +956,9 @@ sub prepare_packages
 
     if ( $installer::globals::issolarispkgbuild )
     {
+        set_revision_in_pkginfo($changefile, $filename);
+        installer::files::save_file($completefilename, $changefile);
+
         my $prototypefilename = $packagename . ".prototype";
         $prototypefilename = $newepmdir . $prototypefilename;
         if (! -f $prototypefilename) { installer::exiter::exit_program("ERROR: Did not find prototype file: $prototypefilename", "prepare_packages"); }
@@ -1425,9 +1508,9 @@ sub put_systemintegration_into_installset
         }
         else
         {
-            my $productname = lc($variables->{'PRODUCTNAME'});
+            my $productname = $variables->{'UNIXPRODUCTNAME'};
             push(@systemfiles, "SUNW$productname-desktop-integratn.tar.gz");
-            push(@systemfiles, "SUNW$productname-cde-beta.tar.gz");
+            push(@systemfiles, "SUNW$productname-cde.tar.gz");
         }
     }
 
@@ -1442,9 +1525,9 @@ sub put_systemintegration_into_installset
         }
         else
         {
-            my $productname = lc($variables->{'PRODUCTNAME'});
-            push(@systemfiles, "$productname-redhat-menus-beta-$productversion-1.noarch.rpm");
-            push(@systemfiles, "$productname-suse-menus-beta-$productversion-1.noarch.rpm");
+            my $productname = $variables->{'UNIXPRODUCTNAME'};
+            push(@systemfiles, "$productname-redhat-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
+            push(@systemfiles, "$productname-suse-menus-$installer::globals::packageversion-$installer::globals::packagerevision.noarch.rpm");
         }
     }
 
