@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:24:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,70 +570,75 @@ DWORD WINAPI SystrayThread( LPVOID lpParam )
 
 void ShutdownIcon::initSystray()
 {
+    if ( IsQuickstarterInstalled() )
+    {
+        WNDCLASSEXA listenerClass;
+        listenerClass.cbSize        = sizeof(WNDCLASSEX);
+        listenerClass.style         = 0;
+        listenerClass.lpfnWndProc   = listenerWndProc;
+        listenerClass.cbClsExtra    = 0;
+        listenerClass.cbWndExtra    = 0;
+        listenerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
+        listenerClass.hIcon         = NULL;
+        listenerClass.hCursor       = NULL;
+        listenerClass.hbrBackground = NULL;
+        listenerClass.lpszMenuName  = NULL;
+        listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
+        listenerClass.hIconSm       = NULL;
 
-    WNDCLASSEXA listenerClass;
-    listenerClass.cbSize        = sizeof(WNDCLASSEX);
-    listenerClass.style         = 0;
-    listenerClass.lpfnWndProc   = listenerWndProc;
-    listenerClass.cbClsExtra    = 0;
-    listenerClass.cbWndExtra    = 0;
-    listenerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-    listenerClass.hIcon         = NULL;
-    listenerClass.hCursor       = NULL;
-    listenerClass.hbrBackground = NULL;
-    listenerClass.lpszMenuName  = NULL;
-    listenerClass.lpszClassName = QUICKSTART_CLASSNAME;
-    listenerClass.hIconSm       = NULL;
+        RegisterClassExA(&listenerClass);
 
-    RegisterClassExA(&listenerClass);
+        WNDCLASSEXA executerClass;
+        executerClass.cbSize        = sizeof(WNDCLASSEX);
+        executerClass.style         = 0;
+        executerClass.lpfnWndProc   = executerWndProc;
+        executerClass.cbClsExtra    = 0;
+        executerClass.cbWndExtra    = 0;
+        executerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
+        executerClass.hIcon         = NULL;
+        executerClass.hCursor       = NULL;
+        executerClass.hbrBackground = NULL;
+        executerClass.lpszMenuName  = NULL;
+        executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
+        executerClass.hIconSm       = NULL;
 
-    WNDCLASSEXA executerClass;
-    executerClass.cbSize        = sizeof(WNDCLASSEX);
-    executerClass.style         = 0;
-    executerClass.lpfnWndProc   = executerWndProc;
-    executerClass.cbClsExtra    = 0;
-    executerClass.cbWndExtra    = 0;
-    executerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
-    executerClass.hIcon         = NULL;
-    executerClass.hCursor       = NULL;
-    executerClass.hbrBackground = NULL;
-    executerClass.lpszMenuName  = NULL;
-    executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
-    executerClass.hIconSm       = NULL;
+        RegisterClassExA( &executerClass );
 
-    RegisterClassExA( &executerClass );
+        aExecuterWindow = CreateWindowExA(0,
+            EXECUTER_WINDOWCLASS,       // registered class name
+            EXECUTER_WINDOWNAME,        // window name
+            0,                          // window style
+            CW_USEDEFAULT,              // horizontal position of window
+            CW_USEDEFAULT,              // vertical position of window
+            CW_USEDEFAULT,              // window width
+            CW_USEDEFAULT,              // window height
+            (HWND) NULL,                // handle to parent or owner window
+            NULL,                       // menu handle or child identifier
+            (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
+            NULL                        // window-creation data
+            );
 
-    aExecuterWindow = CreateWindowExA(0,
-        EXECUTER_WINDOWCLASS,       // registered class name
-        EXECUTER_WINDOWNAME,        // window name
-        0,                          // window style
-        CW_USEDEFAULT,              // horizontal position of window
-        CW_USEDEFAULT,              // vertical position of window
-        CW_USEDEFAULT,              // window width
-        CW_USEDEFAULT,              // window height
-        (HWND) NULL,                // handle to parent or owner window
-        NULL,                       // menu handle or child identifier
-        (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
-        NULL                        // window-creation data
-        );
-
-    DWORD   dwThreadId;
-    HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, this, 0, &dwThreadId );
+        DWORD   dwThreadId;
+        HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, this, 0, &dwThreadId );
+    }
 }
 
 // -------------------------------
 
 void ShutdownIcon::deInitSystray()
 {
-    if( IsWindow( aListenerWindow ) )
+    if ( IsQuickstarterInstalled() )
     {
-        DestroyWindow( aListenerWindow );
-        aListenerWindow = NULL;
-        DestroyWindow( aExecuterWindow );
-        aExecuterWindow = NULL;
+        if( IsWindow( aListenerWindow ) )
+        {
+            DestroyWindow( aListenerWindow );
+            aListenerWindow = NULL;
+            DestroyWindow( aExecuterWindow );
+            aExecuterWindow = NULL;
+        }
+        UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( NULL ) );
+        UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
     }
-    UnregisterClassA( QUICKSTART_CLASSNAME, GetModuleHandle( NULL ) );
-    UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
 }
 
 
@@ -857,13 +862,44 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 // ------------------
 // install/uninstall
 
+bool ShutdownIcon::IsQuickstarterInstalled()
+{
+    bool    bQuickstarterInstalled = false;
+    HKEY    hKey;
+
+    if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_CURRENT_USER, TEXT("Software\\OpenOffice.org"), 0, KEY_READ, &hKey ) )
+    {
+        if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("QuickStarterInstalled"),  NULL, NULL, NULL, NULL ) )
+        {
+            bQuickstarterInstalled = true;
+        }
+
+        RegCloseKey( hKey );
+    }
+
+    if ( !bQuickstarterInstalled )
+    {
+        if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE, TEXT("Software\\OpenOffice.org"), 0, KEY_READ, &hKey ) )
+        {
+            if ( ERROR_SUCCESS == RegQueryValueEx( hKey, TEXT("QuickStarterInstalled"),  NULL, NULL, NULL, NULL ) )
+            {
+                bQuickstarterInstalled = true;
+            }
+
+            RegCloseKey( hKey );
+        }
+    }
+
+    return bQuickstarterInstalled;
+}
+
 void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
 {
     OUString aShortcut(SHGetAutostartFolderName());
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
 
-    if( bActivate )
+    if( bActivate && IsQuickstarterInstalled() )
     {
         wchar_t aPath[_MAX_PATH];
         if( isNT() )
@@ -918,7 +954,6 @@ bool ShutdownIcon::GetAutostartW32( const OUString& aShortcutName )
     }
     else
         return false;
-
 }
 #endif // WNT
 
