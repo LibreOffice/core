@@ -174,37 +174,12 @@ public class List extends DescendantManager implements javax.accessibility.Acces
         return new AccessibleListListener();
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            try {
-                unoAccessibleContext = unoAccessible.getAccessibleContext();
-                unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(
-                    XAccessibleSelection.class, unoAccessibleContext);
-                if (unoAccessibleSelection != null) {
-                    accessibleContext = new AccessibleList();
-                } else if (Build.DEBUG) {
-                    System.err.println("List does not support accessible selection");
-                    accessibleContext = new AccessibleList();
-                }
-            } catch (java.lang.NullPointerException e) {
-            } catch (com.sun.star.uno.RuntimeException e) {
-                if (Build.DEBUG) {
-                    System.err.println("RuntimeException caught: " + e.getMessage());
-                }
-            }
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleList();
     }
 
     protected class AccessibleList extends AccessibleDescendantManager {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
-        protected AccessibleList() {
-            super();
-        }
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
@@ -294,7 +269,11 @@ public class List extends DescendantManager implements javax.accessibility.Acces
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                        accessibleContext = new AccessibleListItem(xAccessibleContext);
+                                            javax.accessibility.AccessibleContext ac = new AccessibleListItem(xAccessibleContext);
+                                            if (ac != null) {
+                                                ac.setAccessibleParent(List.this);
+                                                accessibleContext = ac;
+                                            }
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
