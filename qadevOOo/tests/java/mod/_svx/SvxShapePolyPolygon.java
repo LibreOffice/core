@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapePolyPolygon.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:37:54 $
+ *  last change:$Date: 2003-09-08 12:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,8 @@
 
 package mod._svx;
 
-import com.sun.star.awt.Point;
-import com.sun.star.awt.Size;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.drawing.XShape;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.style.XStyle;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -81,8 +73,17 @@ import util.InstCreator;
 import util.SOfficeFactory;
 import util.utils;
 
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.drawing.XShape;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.style.XStyle;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
