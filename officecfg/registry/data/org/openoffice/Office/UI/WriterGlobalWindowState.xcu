@@ -339,12 +339,6 @@
      <value xml:lang="de">Seitenansicht</value>
     </prop>
    </node>
-   <node oor:name="private:resource/toolbar/drawtextobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Text Object</value>
-     <value xml:lang="de">Text-Objekt</value>
-    </prop>
-   </node>
    <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Standard (viewing mode)</value>

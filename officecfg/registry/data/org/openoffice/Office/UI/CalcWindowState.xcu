@@ -210,12 +210,6 @@
      <value xml:lang="de">Objekt formatieren</value>
     </prop>
    </node>
-   <node oor:name="private:resource/toolbar/formsobjectbar" oor:op="replace">
-    <prop oor:name="UIName" oor:type="xs:string">
-     <value xml:lang="en-US">Form Object</value>
-     <value xml:lang="de">Formular Objekt</value>
-    </prop>
-   </node>
    <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Insert</value>
