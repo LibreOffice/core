@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:34:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #define RID_XMLSECTP_SECLEVEL           1007
 #define RID_XMLSECTP_TRUSTSOURCES       1008
 #define RID_XMLSECTP_MACROWARN          1009
+#define RID_XMLSECTP_READONLY_CONFIG_TIP 1010
+#define RID_XMLSECTP_LOCK                1011
+#define RID_XMLSECTP_LOCK_HC             1012
+
 
 #define FL_BOTTOM_SEP                   50
 #define BTN_OK                          51
@@ -300,6 +304,7 @@
 #define RB_HIGH                         3
 #define RB_MEDIUM                       4
 #define RB_LOW                          5
+#define FI_SEC_READONLY                 6
 
 #define RSC_BIG_RADIOBUTTON             40
 #define SL_RB_DIST_Y                    (RSC_SP_FLGR_SPACE_Y+RSC_BIG_RADIOBUTTON)
@@ -325,6 +330,8 @@
 #define LB_TRUSTFILELOC                 8
 #define FL_ADD_TRUSTFILELOC             9
 #define FL_REMOVE_TRUSTFILELOC          10
+#define FI_TRUSTCERT_RO                 11
+#define FI_TRUSTFILE_RO                 12
 
 #define TS_COL_0                        RSC_SP_TBPG_INNERBORDER_LEFT
 #define TS_COL_1                        (TS_COL_0+RSC_SP_FLGR_SPACE_X)
