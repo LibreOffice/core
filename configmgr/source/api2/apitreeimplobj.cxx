@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 17:37:58 $
+ *  last change: $Author: dg $ $Date: 2000-11-30 20:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@ bool ApiTreeImpl::disposeTree(bool bForce)
         if (m_pParentTree != 0)
             return false;
     }
+    else if (m_pParentTree)
+        setParentTree(NULL);
+
     implDisposeTree();
     return true;
 }
