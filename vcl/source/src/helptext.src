@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:07:39 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,8 @@ String SV_HELPTEXT_ALWAYSVISIBLE
     TEXT[ russian ] = "Ïîêàçûâàòü âñåãäà";
     TEXT[ polish ] = "Zawsze widoczny";
     TEXT[ japanese ] = "í‚É•\\¦";
-    TEXT[ chinese_simplified ] = "×ÜÊÇÏÔÊ¾";
-    TEXT[ chinese_traditional ] = "Á`¬OÅã¥Ü";
+    TEXT[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾";
+    TEXT[ chinese_traditional ] = "¦Û°ÊÅã¥Ü";
     TEXT[ greek ] = "ĞÜíôá ïñáôÜ";
     TEXT[ korean ] = "Ç×»ó º¸ÀÓ";
     TEXT[ arabic ] = "ãÑÆí ÏÇÆãÇğ";
@@ -388,6 +388,7 @@ String SV_HELPTEXT_SPLITFIXED
     TEXT[ catalan ] = "Fijar";
     TEXT[ finnish ] = "Stick";
 };
+
 
 
 
