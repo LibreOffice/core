@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2002-10-09 09:56:00 $
+ *  last change: $Author: os $ $Date: 2002-10-11 11:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1032,7 +1032,10 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             // now move the selected draw objects
             // if the object's position is not protected
             if(0 == (nProtect&FLYPROTECT_POS))
+            {
                 pSdrView->MoveAllMarked(Size(nX, nY));
+                rSh.SetModified();
+            }
         }
         else
         {
@@ -1069,6 +1072,7 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
 
                         pSdrView->MovAction(aEndPoint);
                         pSdrView->EndDragObj();
+                        rSh.SetModified();
 
                         // restore snap
                         if(!bWasNoSnap)
