@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 08:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ namespace xmloff
             epCheckState,
             epTextAlign,
             epBorderType,
-            epFontWidth,
 
             KNOWN_ENUM_PROPERTIES
         };
@@ -110,6 +109,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.2  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formenums.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 15:14:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-19 08:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ namespace xmloff
 
     const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
     {
-        NULL,
         NULL,
         NULL,
         NULL,
@@ -265,25 +264,6 @@ namespace xmloff
                     rReturn = aBorderTypeMap;
                 };
                 break;
-                case epFontWidth:
-                {
-                    static SvXMLEnumMapEntry aFontWidthMap[] =
-                    {
-                        { "dontknow",       FontWidth::DONTKNOW },
-                        { "ultra-condensed",FontWidth::ULTRACONDENSED },
-                        { "extra-condensed",FontWidth::EXTRACONDENSED },
-                        { "condensed",      FontWidth::CONDENSED },
-                        { "semi-condensed", FontWidth::SEMICONDENSED },
-                        { "normal",         FontWidth::NORMAL },
-                        { "semi-expanded",  FontWidth::SEMIEXPANDED },
-                        { "expanded",       FontWidth::EXPANDED },
-                        { "extra-expanded", FontWidth::EXTRAEXPANDED },
-                        { "ultra-expanded", FontWidth::ULTRAEXPANDED },
-                        { NULL, 0 }
-                    };
-                    rReturn = aFontWidthMap;
-                };
-                break;
             }
         }
 
@@ -297,6 +277,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/18 15:14:35  fs
+ *  some changes ... now exporting/importing styles
+ *
  *  Revision 1.2  2000/12/06 17:28:05  fs
  *  changes for the formlayer import - still under construction
  *
