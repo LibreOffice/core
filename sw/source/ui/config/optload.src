@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:13:49 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,8 +561,8 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Kompatibilität (dokumentspezifische Einstellungen)" ;
-        Text[ english_us ] = "Compatibility (document-specific settings)";
+        Text = "Kompatibilität" ;
+        Text[ english_us ] = "Compatibility";
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "Ñîâìåñòèìîñòü";
         Text[ dutch ] = "Compatibiliteit";
@@ -607,9 +607,9 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 146) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "Im aktuellen ~Dokument alle Absatz- und Tabellenabstände addieren";
+        Text = "Alle Absatz- und Tabellenabstände addieren (aktuelles ~Dokument)";
         Text [ English ] = "Add ~distances between paragraphs and tables" ;
-        Text[ english_us ] = "Add spacing between paragraphs and tables in the current document";
+        Text[ english_us ] = "Add ~spacing between paragraphs and tables (in current document)";
         Text[ portuguese ] = "Somar ~espaçamento entre parágrafos e tabelas no documento activo";
         Text[ russian ] = "Äîáàâèòü â òåêóùèé äîêóìåíò èíòåğâàëû àáçàöåâ è òàáëèö";
         Text[ dutch ] = "~In het huidige document alle afstanden tussen alinea's en tabellen optellen";
@@ -639,9 +639,9 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 159) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren";
+        Text = "A~bsatz- und Tabellenabstände an Seitenanfängen addieren (aktuelles Dokument)";
         Text [ English ] = "Add distances at the beginning of pages" ;
-        Text[ english_us ] = "Add paragraph and table spacing at tops of pages";
+        Text[ english_us ] = "Add ~paragraph and table spacing at tops of pages (in current document)";
         Text[ portuguese ] = "A~dicionar espaços de parágrafos e tabelas no início das páginas";
         Text[ russian ] = "Äîáàâèòü èíòåğâàëû àáçàöåâ è òàáëèö â íà÷àëå ñòğàíèöû";
         Text[ greek ] = "¢èñïéóìá ôùí áğïóôÜóåùí ôùí ğáñáãñÜöùí êáé ôùí ğéíÜêùí óôçí áñ÷Ş ôçò óåëßäáò";
@@ -671,9 +671,9 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 172) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text = "~Tabulatorposition ausrichten";
+        Text = "~Tabulatorposition ausrichten (aktuelles Dokument)";
         Text [ English ] = "Align tab stop position" ;
-        Text[ english_us ] = "Align tab stop position";
+        Text[ english_us ] = "Align ta~b stop position (in current document)";
         Text[ portuguese ] = "Alinhar posição de tabulação";
         Text[ russian ] = "Âûğîâíÿòü ïîçèöèş òàáóëÿöèè";
         Text[ greek ] = "Ó~ôïß÷éóç èİóçò óôçëïèİôç";
