@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-02 18:20:57 $
+ *  last change: $Author: nn $ $Date: 2001-08-08 14:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include "uiitems.hxx"
 #include "sc.hrc"
 #include "viewutil.hxx"
+#include "editutil.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
 #include "validat.hxx"
@@ -1588,7 +1589,7 @@ void ScTabView::UpdateEditView()
         {
             EditView* pEditView = aViewData.GetEditView( (ScSplitPos) i );
             aViewData.SetEditEngine( (ScSplitPos) i,
-                (ScEditEngineDefaulter*) pEditView->GetEditEngine(),
+                static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
                 pGridWin[i], GetViewData()->GetCurX(), GetViewData()->GetCurY() );
             if ( (ScSplitPos)i == eActive )
                 pEditView->ShowCursor( FALSE );
