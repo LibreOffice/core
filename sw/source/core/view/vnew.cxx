@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:11:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,10 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     bPaintWorks = bEnableSmooth = TRUE;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
+    // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
+    // if it's already been modified.
+    const bool bIsDocModified( pDoc->IsModified() );
+    // <--
     pDoc->AddLink();
     pOutput = pOut;
     Init( pNewOpt );    //verstellt ggf. das Outdev (InitPrt())
@@ -267,8 +271,12 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
         SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     //In Init wird ein Standard-FrmFmt angelegt.
-    if( !pDoc->IsUndoNoResetModified() )
+    // --> OD 2005-02-11 #i38810#
+    if ( !pDoc->IsUndoNoResetModified() && !bIsDocModified )
+    // <--
+    {
         pDoc->ResetModified();
+    }
 
     //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
