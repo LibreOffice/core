@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-22 10:39:51 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ void REGISTER_PROVIDER(
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "SBA::component_writeInfo : could not create a registry key !");
 
-    for (sal_uInt32 i=0; i<Services.getLength(); ++i)
+    for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
 
