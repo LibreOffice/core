@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:41:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,8 +1414,20 @@ SwSbxValue SwCalc::Prim()
                                 GetToken();
                                 nErg = Prim();
                                 if( SbxSTRING == nErg.GetType() )
-                                    nErg.PutBool( 0 != nErg.GetString().Len() );
-                                nErg.Compute( SbxNOT, nErg );
+                                    nErg.PutBool( 0 == nErg.GetString().Len() );
+                                else if(SbxBOOL == nErg.GetType() )
+                                    nErg.PutBool(!nErg.GetBool());
+                                // evaluate arguments manually so that the binary NOT below
+                                // does not get called.
+                                // We want a BOOLEAN NOT.
+                                else if (nErg.IsNumeric())
+                                    nErg.PutLong( nErg.GetDouble() == 0.0 ? 1 : 0 );
+                                else
+                                {
+                                    DBG_ERROR( "unexpected case. computing binary NOT" );
+                                    //!! computes a binary NOT
+                                    nErg.Compute( SbxNOT, nErg );
+                                }
                             }
                             break;
 
