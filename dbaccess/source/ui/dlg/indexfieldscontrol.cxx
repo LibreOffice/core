@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 14:20:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-02 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ namespace dbaui
         // insert rows for the the fields
         RowInserted(GetRowCount(), m_aFields.size(), sal_False);
         // insert an additional row for a new field for that index
-        if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
+//      if(!m_nMaxColumnsInIndex || GetRowCount() < m_nMaxColumnsInIndex )
             RowInserted(GetRowCount(), 1, sal_False);
         SetUpdateMode(sal_True);
 
@@ -470,7 +470,7 @@ namespace dbaui
 
                 OSL_ENSURE(((sal_Int32)(m_aFields.size() + 1)) == nRowCount, "IndexFieldsControl::OnListEntrySelected: inconsistence!");
 
-                if (sSelectedEntry.Len() && (nCurrentRow == nRowCount - 1) && (!m_nMaxColumnsInIndex || nRowCount < m_nMaxColumnsInIndex ) )
+                if (sSelectedEntry.Len() && (nCurrentRow == nRowCount - 1) /*&& (!m_nMaxColumnsInIndex || nRowCount < m_nMaxColumnsInIndex )*/ )
                 {   // in the last row, an non-empty string has been selected
                     // -> insert a new row
                     m_aFields.push_back(OIndexField());
@@ -519,6 +519,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/04/27 14:20:33  fs
+ *  #86464# no SaveModified if not IfModified
+ *
  *  Revision 1.3  2001/03/30 14:10:22  oj
  *  #85298##85297# correct index impl
  *
