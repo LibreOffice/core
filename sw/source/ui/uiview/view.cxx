@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,15 +847,15 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
 
-    _CreateScrollbar( TRUE );
-    _CreateScrollbar( FALSE );
-
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
     bSetTabColFromDoc = bAttrChgNotified = bAttrChgNotifiedWithRegistrations =
     bVerbsActive = bIsApi = bDrawRotate = bInOuterResizePixel = bInInnerResizePixel =
     bPasteState = bPasteSpecialState = sal_False;
 
     bShowAtResize = bDrawSelMode = bDocSzUpdated = sal_True;
+
+    _CreateScrollbar( TRUE );
+    _CreateScrollbar( FALSE );
 
     pViewImpl = new SwView_Impl(this);
     SetName(C2S("View"));
