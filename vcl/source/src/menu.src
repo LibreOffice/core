@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:08:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text[ arabic ] = "<áÇ íãßä ÇáÊÍÏíÏ>";
     Text[ turkish ] = "<Seçim yapýlamaz>";
     Text[ catalan ] = "<Ninguna selección posible>";
+    Text[ finnish ] = "<Valinta ei mahdollinen >";
 };
 
 Menu SV_RESID_MENU_EDIT
@@ -117,6 +118,7 @@ Menu SV_RESID_MENU_EDIT
             Text[ turkish ] = "Geri al";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Deshacer";
+            Text[ finnish ] = "~Peruuta";
         };
         MenuItem { Separator = TRUE ; };
         MenuItem
@@ -184,7 +186,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "~Colar" ;
             Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "L~iitä" ;
+            Text [ finnish ] = "~Liitä" ;
             Text [ danish ] = "~Indsæt" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "K~listra in" ;
@@ -241,7 +243,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "Seleziona tutto" ;
             Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
             Text [ portuguese ] = "Seleccionar ~tudo" ;
-            Text [ finnish ] = "Valitse ~kaikki" ;
+            Text [ finnish ] = "~Valitse kaikki" ;
             Text [ danish ] = "~Marker alt" ;
             Text [ french ] = "Sélectio~nner tout" ;
             Text [ swedish ] = "Markera ~allt" ;
@@ -287,6 +289,7 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ turkish ] = "Özel karakter ekle...";
             TEXT[ language_user1 ] = " ";
             TEXT[ catalan ] = "Insertar ~símbolo...";
+            TEXT[ finnish ] = "~Erikoismerkki";
         };
     };
 };
