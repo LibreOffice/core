@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 13:08:23 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,11 @@ public:
                             ::rtl::OUString& rString,
                             const ScSubTotalFunc eFunction,
                             sal_Bool bAppendStr = sal_False );
+
+// IMPORT: Formulas
+    static void         ParseFormula(
+                            ::rtl::OUString& sFormula,
+                            const sal_Bool bIsFormula = sal_True);
 };
 
 

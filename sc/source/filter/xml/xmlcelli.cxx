@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 14:46:49 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 // core implementation
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
+#endif
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
 #endif
 
 #include <xmloff/xmltkmap.hxx>
@@ -771,40 +774,6 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
     }
 }
 
-void ScXMLTableRowCellContext::ParseFormula(OUString& sFormula, sal_Bool bIsFormula)
-{
-    OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Int16 nCountQuotationMarks = 0;
-    sal_Int16 nCountBraces = 0;
-    sal_Unicode chPrevious = '=';
-    for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
-    {
-        if (sFormula[i] == '"')
-            if (nCountQuotationMarks == 0)
-                nCountQuotationMarks++;
-            else
-                nCountQuotationMarks--;
-        if (sFormula[i] != '[' && sFormula[i] != ']')
-        {
-            if (sFormula[i] != '.' || (nCountBraces == 0 && bIsFormula) ||
-                !(chPrevious == '[' || chPrevious == ':' || chPrevious == ' ' || chPrevious == '='))
-            {
-                sBuffer.append(sFormula[i]);
-            }
-        }
-        else
-            if (nCountQuotationMarks == 0)
-                if (sFormula[i] == '[')
-                    nCountBraces++;
-                else
-                    nCountBraces--;
-            else
-                sBuffer.append(sFormula[i]);
-        chPrevious = sFormula[i];
-    }
-    sFormula = sBuffer.makeStringAndClear();
-}
-
 void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet)
 {
     if (sContentValidationName.getLength())
@@ -1138,7 +1107,7 @@ void ScXMLTableRowCellContext::EndElement()
                 {
                     uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row);
                     SetCellProperties(xCell);
-                    ParseFormula(sOUFormula);
+                    ScXMLConverter::ParseFormula(sOUFormula);
                     if (!bIsMatrix)
                     {
                         xCell->setFormula(sOUFormula);

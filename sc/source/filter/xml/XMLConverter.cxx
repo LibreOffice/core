@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 13:08:23 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ void ScXMLConverter::GetStringFromRange(
     aStartAddress.Format( sStartAddress, SCA_VALID | SCA_TAB_3D, pDocument );
     aEndAddress.Format( sEndAddress, SCA_VALID | SCA_TAB_3D, pDocument );
     OUString sOUStartAddress( sStartAddress );
-    sOUStartAddress += OUString( RTL_CONSTASCII_USTRINGPARAM( sXML__range_sep ) );
+    sOUStartAddress += OUString( RTL_CONSTASCII_USTRINGPARAM( sXML__colon ) );
     sOUStartAddress += OUString( sEndAddress );
     AssignString( rString, sOUStartAddress, bAppendStr );
 }
@@ -461,3 +461,39 @@ void ScXMLConverter::GetStringFromFunction(
     GetStringFromFunction( rString, eFunc, bAppendStr );
 }
 
+
+//___________________________________________________________________
+
+void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
+{
+    OUStringBuffer sBuffer(sFormula.getLength());
+    sal_Int16 nCountQuotationMarks = 0;
+    sal_Int16 nCountBraces = 0;
+    sal_Unicode chPrevious = '=';
+    for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
+    {
+        if (sFormula[i] == '"')
+            if (nCountQuotationMarks == 0)
+                nCountQuotationMarks++;
+            else
+                nCountQuotationMarks--;
+        if (sFormula[i] != '[' && sFormula[i] != ']')
+        {
+            if (sFormula[i] != '.' || (nCountBraces == 0 && bIsFormula) ||
+                !(chPrevious == '[' || chPrevious == ':' || chPrevious == ' ' || chPrevious == '='))
+            {
+                sBuffer.append(sFormula[i]);
+            }
+        }
+        else
+            if (nCountQuotationMarks == 0)
+                if (sFormula[i] == '[')
+                    nCountBraces++;
+                else
+                    nCountBraces--;
+            else
+                sBuffer.append(sFormula[i]);
+        chPrevious = sFormula[i];
+    }
+    sFormula = sBuffer.makeStringAndClear();
+}

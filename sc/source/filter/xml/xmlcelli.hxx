@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:25:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ public:
 
     void SetString(const rtl::OUString& sOUTempText) { sOUText = sOUTempText; }
 
-    static void ParseFormula(rtl::OUString& sFormula, sal_Bool bIsFormula = sal_True);
     void SetAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
 
     void SetCellRangeSource( sal_Int16 nSheet, sal_Int32 nColumnPos, sal_Int32 nRowPos );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 13:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include "docuno.hxx"
 #include "global.hxx"
 //#include "document.hxx"
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -203,7 +206,7 @@ void ScXMLNamedExpressionsContext::EndElement()
                     aCellAddress.Row = aBaseCellAddress.Row();
                     aCellAddress.Sheet = aBaseCellAddress.Tab();
                     sTempContent = (*i)->sContent;
-                    ScXMLTableRowCellContext::ParseFormula(sTempContent, (*i)->bIsExpression);
+                    ScXMLConverter::ParseFormula(sTempContent, (*i)->bIsExpression);
                     xNamedRanges->addNewByName((*i)->sName, sTempContent, aCellAddress, GetRangeType((*i)->sRangeType));
                     delete *i;
                     i++;
