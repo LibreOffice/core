@@ -585,3 +585,9 @@ hedabu: ..\inc\xmleohlp.hxx %_DEST%\inc%_EXT%\svx\xmleohlp.hxx
 ..\xml\SvxUnoTextField.xml %_DEST%\xml%_EXT%\SvxUnoTextField.xml
 ..\xml\SvxUnoTextRange.xml %_DEST%\xml%_EXT%\SvxUnoTextRange.xml
 ..\xml\SvxUnoTextRangeEnumeration.xml %_DEST%\xml%_EXT%\SvxUnoTextRangeEnumeration.xml
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"

@@ -11,4 +11,9 @@ hedabu: ..\inc\spelldta.hxx %_DEST%\inc%_EXT%\linguistic\spelldta.hxx
 hedabu: ..\inc\hyphdta.hxx %_DEST%\inc%_EXT%\linguistic\hyphdta.hxx
 hedabu: ..\inc\iprcache.hxx %_DEST%\inc%_EXT%\linguistic\iprcache.hxx
 
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
