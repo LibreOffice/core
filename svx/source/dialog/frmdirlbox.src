@@ -2,8 +2,8 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.5 $
- *  last change: $Author: hr $ $Date: 2003-06-13 12:12:39 $
+ *  $Revision: 1.6 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ String RID_SVXSTR_FRAMEDIR_RTL
     Text[ danish ] = "Right-to-left";
     Text[ swedish ] = "H�ger-till-v�nster";
     Text[ polish ] = "Right-to-left";
-    Text[ portuguese_brazilian ] = "Right-to-left";
+    Text[ portuguese_brazilian ] = "Da direita para a esquerda";
     Text[ japanese ] = "右から左へ";
     Text[ korean ] = "오른쪽에서 왼쪽으로";
     Text[ chinese_simplified ] = "从右向左";
@@ -140,7 +140,7 @@ String RID_SVXSTR_FRAMEDIR_SUPER
     Text[ danish ] = "Use superordinate object settings";
     Text[ swedish ] = "Anv�nd det �verordnade objektets inst�llningar";
     Text[ polish ] = "Use superordinate object settings";
-    Text[ portuguese_brazilian ] = "Use superordinate object settings";
+    Text[ portuguese_brazilian ] = "Usar configura��es do objeto superior";
     Text[ japanese ] = "周りのテキストの文字方向に合わせる";
     Text[ korean ] = "문자 방향의 상위 설정을 사용";
     Text[ chinese_simplified ] = "沿用现有的文字方向的设定";
@@ -173,7 +173,7 @@ String RID_SVXSTR_PAGEDIR_LTR_HORI
     Text[ danish ] = "Fra venstre mod h�jre (vandret)";
     Text[ swedish ] = "V�nster-till-h�ger (horisontellt)";
     Text[ polish ] = "Od lewej do prawej (poziomo)";
-    Text[ portuguese_brazilian ] = "Left-to-right (horizontal)";
+    Text[ portuguese_brazilian ] = "Da esquerda para a direita (horizontal)";
     Text[ japanese ] = "左から右へ(横書き)";
     Text[ korean ] = "왼쪽에서 오른쪽으로 (가로)";
     Text[ chinese_simplified ] = "从左向右(横写)";
@@ -204,7 +204,7 @@ String RID_SVXSTR_PAGEDIR_RTL_HORI
     Text[ danish ] = "Fra h�jre mod venstre (vandret)";
     Text[ swedish ] = "H�ger-till-v�nster (horisontellt)";
     Text[ polish ] = "Od prawej do lewej (poziomo)";
-    Text[ portuguese_brazilian ] = "Right-to-left (horizontal)";
+    Text[ portuguese_brazilian ] = "Da direita para a esquerda (horizontal)";
     Text[ japanese ] = "右から左へ(横書き)";
     Text[ korean ] = "오른쪽에서 왼쪽으로 (가로)";
     Text[ chinese_simplified ] = "从右向左(横写)";
@@ -235,7 +235,7 @@ String RID_SVXSTR_PAGEDIR_RTL_VERT
     Text[ danish ] = "Fra h�jre mod venstre (lodret)";
     Text[ swedish ] = "H�ger-till-v�nster (vertikalt)";
     Text[ polish ] = "Od prawej do lewej (pionowo)";
-    Text[ portuguese_brazilian ] = "Right-to-left (vertical)";
+    Text[ portuguese_brazilian ] = "Da direita para a esquerda (vertical)";
     Text[ japanese ] = "右から左へ(縦書き)";
     Text[ korean ] = "오른쪽에서 왼쪽으로 (세로)";
     Text[ chinese_simplified ] = "从右向左(竖写)";
@@ -266,7 +266,7 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
     Text[ danish ] = "Fra venstre mod h�jre (lodret)";
     Text[ swedish ] = "V�nster-till-h�ger (vertikalt)";
     Text[ polish ] = "Od lewej do prawej (pionowo)";
-    Text[ portuguese_brazilian ] = "Left-to-right (vertical)";
+    Text[ portuguese_brazilian ] = "Da esquerda para a direita (vertical)";
     Text[ japanese ] = "左から右へ(縦書き)";
     Text[ korean ] = "왼쪽에서 오른쪽으로 (세로)";
     Text[ chinese_simplified ] = "从左向右(竖写)";
@@ -282,6 +282,7 @@ String RID_SVXSTR_PAGEDIR_LTR_VERT
 };
 
 // ----------------------------------------------------------------------------
+
 
 
 
