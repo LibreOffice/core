@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_OneToOne.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <transliteration_OneToOne.hxx>
 
+using namespace drafts::com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
@@ -71,103 +72,67 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 sal_Int16 SAL_CALL transliteration_OneToOne::getType() throw(RuntimeException)
 {
-    // This type is also defined in com/sun/star/util/TransliterationType.hdl
-    return TransliterationType::ONE_TO_ONE;
+        // This type is also defined in com/sun/star/util/TransliterationType.hdl
+        return TransliterationType::ONE_TO_ONE;
 }
 
 OUString SAL_CALL
 transliteration_OneToOne::folding( const OUString& inStr, sal_Int32 startPos,
-    sal_Int32 nCount, Sequence< sal_Int32 >& offset) throw(RuntimeException)
+        sal_Int32 nCount, Sequence< sal_Int32 >& offset) throw(RuntimeException)
 {
-    throw RuntimeException();
+        throw RuntimeException();
 }
 
 sal_Bool SAL_CALL
 transliteration_OneToOne::equals( const OUString& str1, sal_Int32 pos1, sal_Int32 nCount1,
-    sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
-    throw(RuntimeException)
+        sal_Int32& nMatch1, const OUString& str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32& nMatch2 )
+        throw(RuntimeException)
 {
     throw RuntimeException();
 }
 
 Sequence< OUString > SAL_CALL
 transliteration_OneToOne::transliterateRange( const OUString& str1, const OUString& str2 )
-    throw(RuntimeException)
+        throw(RuntimeException)
 {
     throw RuntimeException();
 }
 
-
 OUString SAL_CALL
-transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, oneToOneMapping& table )
-  throw(RuntimeException)
+transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos,
+    sal_Int32 nCount, Sequence< sal_Int32 >& offset)
+    throw(RuntimeException)
 {
-  // Create a string buffer which can hold nCount + 1 characters.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
-  sal_Unicode * dst = newStr->buffer;
-  const sal_Unicode * src = inStr.getStr() + startPos;
+    // Create a string buffer which can hold nCount + 1 characters.
+    // The reference count is 0 now.
+    rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
+    sal_Unicode * dst = newStr->buffer;
+    const sal_Unicode * src = inStr.getStr() + startPos;
 
-  // Translation
-  while (nCount -- > 0) {
+    // Allocate nCount length to offset argument.
+    sal_Int32 *p, position;
+    if (useOffset) {
+        offset.realloc( nCount );
+        p = offset.getArray();
+        position = startPos;
+    }
+
+    // Translation
+    while (nCount -- > 0) {
     sal_Unicode c = *src++;
-    *dst ++ = table[ c ];
-  }
-  *dst = (sal_Unicode) 0;
+    *dst ++ = func ? func( c) : (*table)[ c ];
+    if (useOffset)
+        *p ++ = position ++;
+    }
+    *dst = (sal_Unicode) 0;
 
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
 }
 
-OUString SAL_CALL
-transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, oneToOneMapping& table )
-  throw(RuntimeException)
+sal_Unicode SAL_CALL
+transliteration_OneToOne::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
 {
-  // Create a string buffer which can hold nCount + 1 characters.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
-  sal_Unicode * dst = newStr->buffer;
-  const sal_Unicode * src = inStr.getStr() + startPos;
-
-  // Allocate nCount length to offset argument.
-  offset.realloc( nCount );
-  sal_Int32 *p = offset.getArray();
-  sal_Int32 position = startPos;
-
-  // Translation
-  while (nCount -- > 0) {
-    sal_Unicode c = *src++;
-    *dst ++ = table[ c ];
-    *p ++ = position ++;
-  }
-  *dst = (sal_Unicode) 0;
-
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
-}
-
-OUString SAL_CALL
-transliteration_OneToOne::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, TransFunc func )
-  throw(RuntimeException)
-{
-  // Create a string buffer which can hold nCount + 1 characters.
-  // The reference count is 0 now.
-  rtl_uString * newStr = x_rtl_uString_new_WithLength( nCount ); // defined in x_rtl_ustring.h
-  sal_Unicode * dst = newStr->buffer;
-  const sal_Unicode * src = inStr.getStr() + startPos;
-
-  // Allocate nCount length to offset argument.
-  offset.realloc( nCount );
-  sal_Int32 *p = offset.getArray();
-  sal_Int32 position = startPos;
-
-  // Translation
-  while (nCount -- > 0) {
-    sal_Unicode c = *src++;
-    *dst ++ = func( c );
-    *p ++ = position ++;
-  }
-  *dst = (sal_Unicode) 0;
-
-  return OUString( newStr ); // defined in rtl/usrting. The reference count is increased from 0 to 1.
+    return func ? func( inChar) : (*table)[ inChar ];
 }
 
 } } } }

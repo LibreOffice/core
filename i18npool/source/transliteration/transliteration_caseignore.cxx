@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_caseignore.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include "oneToOneMapping.hxx"
 #include "transliteration_caseignore.hxx"
+#include "casefolding.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -71,12 +72,9 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-oneToOneMapping& gethalf2fullTable(void);
-sal_Unicode getCompositionChar(sal_Unicode c1, sal_Unicode c2);
-
 Transliteration_caseignore::Transliteration_caseignore()
 {
-    aMappingType = MappingTypeFullFolding;
+    nMappingType = MappingTypeFullFolding;
     moduleLoaded = (TransliterationModules)0;
     transliterationName = "case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
@@ -84,7 +82,7 @@ Transliteration_caseignore::Transliteration_caseignore()
 
 Transliteration_simplecaseignore::Transliteration_simplecaseignore()
 {
-    aMappingType = MappingTypeSimpleFolding;
+    nMappingType = MappingTypeSimpleFolding;
     moduleLoaded = (TransliterationModules)0;
     transliterationName = "simple case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_simplecaseignore";
@@ -118,12 +116,10 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     u2l.loadModule((TransliterationModules)0, aLocale);
     l2u.loadModule((TransliterationModules)0, aLocale);
 
-    Sequence< sal_Int32 > offset;
-
-    OUString l1 = u2l.transliterate(str1, 0, str1.getLength(), offset);
-    OUString u1 = l2u.transliterate(str1, 0, str1.getLength(), offset);
-    OUString l2 = u2l.transliterate(str2, 0, str2.getLength(), offset);
-    OUString u2 = l2u.transliterate(str2, 0, str2.getLength(), offset);
+    OUString l1 = u2l.transliterateString2String(str1, 0, str1.getLength());
+    OUString u1 = l2u.transliterateString2String(str1, 0, str1.getLength());
+    OUString l2 = u2l.transliterateString2String(str2, 0, str2.getLength());
+    OUString u2 = l2u.transliterateString2String(str2, 0, str2.getLength());
 
     if ((l1 == u1) && (l2 == u2)) {
         Sequence< OUString > &r = *new Sequence< OUString > (2);
@@ -170,48 +166,6 @@ Transliteration_caseignore::compareString(
     return compare(str1, 0, str1.getLength(), nMatch1, str2, 0, str2.getLength(), nMatch2);
 }
 
-inline sal_Bool SAL_CALL
-is_ja_voice_sound_mark(sal_Unicode& current, sal_Unicode next)
-{
-    sal_Unicode c = 0;
-
-    if ((next == 0x3099 || next == 0x309a) && (c = getCompositionChar(current, next)))
-        current = c;
-    return c != 0;
-}
-
-
-sal_Unicode SAL_CALL
-Transliteration_caseignore::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal_Int32 len, MappingElement& e)
-    throw(RuntimeException)
-{
-    sal_Unicode c;
-    if (moduleLoaded & TransliterationModules_IGNORE_CASE) {
-        if (e.current >= e.element.nmap && idx < len ) {
-        e.element = getValue(str, idx++, len);
-        e.current = 0;
-        }
-        c = e.element.map[e.current++];
-    } else {
-        c = *(str + idx++);
-    }
-    if (moduleLoaded & TransliterationModules_IGNORE_KANA) {
-        if (0x3040 <= c && c <= 0x3094 || 0x309d <= c && c <= 0x309f)
-        c += 0x60;
-    }
-
-    // composition: KA + voice-mark --> GA. see halfwidthToFullwidth.cxx for detail
-    if (moduleLoaded & TransliterationModules_IGNORE_WIDTH) {
-        static oneToOneMapping& half2fullTable = gethalf2fullTable();
-        c = half2fullTable[c];
-        if (0x3040 <= c && c <= 0x30ff && idx < len &&
-            is_ja_voice_sound_mark(c, half2fullTable[*(str + idx)]))
-        idx++;
-    }
-    return c;
-}
-
-
 sal_Int32 SAL_CALL
 Transliteration_caseignore::compare(
     const ::rtl::OUString& str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32& nMatch1,
@@ -228,8 +182,8 @@ Transliteration_caseignore::compare(
 #define NOT_END_OF_STR2 (nMatch2 < nCount2 || e2.current < e2.element.nmap)
 
     while (NOT_END_OF_STR1 && NOT_END_OF_STR2) {
-        c1 = getNextChar(unistr1, nMatch1, nCount1, e1);
-        c2 = getNextChar(unistr2, nMatch2, nCount2, e2);
+        c1 = casefolding::getNextChar(unistr1, nMatch1, nCount1, e1, aLocale, nMappingType, moduleLoaded);
+        c2 = casefolding::getNextChar(unistr2, nMatch2, nCount2, e2, aLocale, nMappingType, moduleLoaded);
         if (c1 != c2) {
         nMatch1--; nMatch2--;
         return c1 > c2 ? 1 : -1;
