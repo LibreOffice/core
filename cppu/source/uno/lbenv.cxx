@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-01 10:13:12 $
+ *  last change: $Author: jbu $ $Date: 2001-10-18 12:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,7 @@ inline void EnvironmentsData::getEnvironment(
         *ppEnv = 0;
     }
 
-    OUString aKey( OUString::valueOf( (sal_Int32)pContext ) );
+    OUString aKey( OUString::valueOf( (sal_Int64)pContext ) );
     aKey += rEnvTypeName;
 
     // try to find registered mapping
