@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 13:02:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,7 @@ namespace dbaui
         DlgOrderCrit(   Window * pParent,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer>& _rxQueryComposer,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn);
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols);
 
                         ~DlgOrderCrit();
         void            BuildOrderPart();
