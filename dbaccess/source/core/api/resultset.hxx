@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >        m_xAggregateAsRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >  m_xAggregateAsRowUpdate;
 
-        OColumns                    m_aColumns;
+        OColumns*                   m_pColumns;
         sal_Int32                   m_nResultSetType;
         sal_Int32                   m_nResultSetConcurrency;
         sal_Bool                    m_bIsBookmarkable : 1;

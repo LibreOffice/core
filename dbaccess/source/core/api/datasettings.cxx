@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-03 14:12:34 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,8 @@ float ConvertFontWidth( ::FontWidth eWidth )
     ::com::sun::star::awt::FontDescriptor aFD;
     aFD.Name            = rFont.GetName();
     aFD.StyleName       = rFont.GetStyleName();
-    aFD.Height          = rFont.GetSize().Height();
-    aFD.Width           = rFont.GetSize().Width();
+    aFD.Height          = (sal_Int16)rFont.GetSize().Height();
+    aFD.Width           = (sal_Int16)rFont.GetSize().Width();
     aFD.Family          = rFont.GetFamily();
     aFD.CharSet         = rFont.GetCharSet();
     aFD.Pitch           = rFont.GetPitch();

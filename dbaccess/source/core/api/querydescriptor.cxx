@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ namespace dbaccess
 //--------------------------------------------------------------------------
 void OQueryDescriptor::registerProperties()
 {
+    m_pColumns = new OColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
+
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
     // a OPropertyContainer)
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND,
@@ -140,7 +142,6 @@ void OQueryDescriptor::registerProperties()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 }
@@ -148,7 +149,6 @@ OQueryDescriptor::OQueryDescriptor()
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 
@@ -173,7 +173,6 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     :ODataSettings(_rSource, m_aBHelper)
-    ,m_aColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this)
 {
     registerProperties();
 
@@ -186,9 +185,9 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
 
     // immediately read the UI of the columns : we may live much longer than _rSource and it's column's config node,
     // so we can't just remember this node and read when needed, we have to do it here and now
-//  OConfigurationNode aColumnUINode = _rSource.m_aColumns.getUILocation();
+//  OConfigurationNode aColumnUINode = _rSource.m_pColumns.getUILocation();
 //  if (aColumnUINode.isValid())
-//      m_aColumns.loadSettings(aColumnUINode, this);
+//      m_pColumns.loadSettings(aColumnUINode, this);
     // TODO: cloning of the column information. Since a column container does not know anything about it's columns
     // config location anymore, we probably need to clone the columns explicitly (instead of re-reading them)
 }
@@ -196,6 +195,7 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
 //--------------------------------------------------------------------------
 OQueryDescriptor::~OQueryDescriptor()
 {
+    delete m_pColumns;
 }
 
 //--------------------------------------------------------------------------
@@ -252,7 +252,7 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor::getColumns( ) throw (Runtime
 {
     MutexGuard aGuard(m_aMutex);
     // TODO : if we have any kind of late initialisation for the columns : do it here
-    return Reference< XNameAccess >(&m_aColumns);
+    return m_pColumns;
 }
 
 //--------------------------------------------------------------------------
@@ -300,7 +300,7 @@ Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) 
 void SAL_CALL OQueryDescriptor::dispose()
 {
     MutexGuard aGuard(m_aMutex);
-    m_aColumns.disposing();
+    m_pColumns->disposing();
 }
 
 //--------------------------------------------------------------------------
@@ -332,7 +332,7 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
     OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
     if (aColumnsNode.isValid())
     {
-        m_aColumns.storeSettings(aColumnsNode);
+        m_pColumns->storeSettings(aColumnsNode);
         _rConfigLocation.commit();
     }
     else
@@ -380,9 +380,9 @@ void OQueryDescriptor::readColumnSettings(const OConfigurationNode& _rConfigLoca
     // --------------------------
     // the columns UI information
     OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
-    m_aColumns.clearColumns();
+    m_pColumns->clearColumns();
     if (aColumnsNode.isValid())
-        m_aColumns.loadSettings(aColumnsNode);
+        m_pColumns->loadSettings(aColumnsNode);
 }
 // -----------------------------------------------------------------------------
 //==========================================================================

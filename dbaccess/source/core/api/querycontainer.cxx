@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,7 +366,7 @@ sal_Int32 OQueryContainer::getCount(void) throw( RuntimeException )
 //------------------------------------------------------------------------------
 Any OQueryContainer::getByIndex(sal_Int32 _nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
-    if ((_nIndex < 0) || (_nIndex > m_aQueriesIndexed.size()))
+    if ((_nIndex < 0) || (_nIndex > (sal_Int32)m_aQueriesIndexed.size()))
         throw IndexOutOfBoundsException();
 
     Reference< XPropertySet > xReturn = m_aQueriesIndexed[_nIndex]->second;

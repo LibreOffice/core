@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,9 @@ DBG_NAME(OPreparedStatement);
 OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
                                       const Reference< XInterface > & _xStatement)
                    :OStatementBase(_xConn, _xStatement)
-                   ,m_aColumns(*this, m_aMutex, _xConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL)
 {
     DBG_CTOR(OPreparedStatement, NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, _xConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(),::std::vector< ::rtl::OUString>(), NULL,NULL);
     m_xAggregateAsParameters = Reference< XParameters > (m_xAggregateAsSet, UNO_QUERY);
 }
 
@@ -117,6 +117,7 @@ OPreparedStatement::OPreparedStatement(const Reference< XConnection > & _xConn,
 OPreparedStatement::~OPreparedStatement()
 {
     DBG_DTOR(OPreparedStatement, NULL);
+    delete m_pColumns;
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -207,7 +208,7 @@ void OPreparedStatement::disposing()
 {
     {
         MutexGuard aGuard(m_aMutex);
-        m_aColumns.disposing();
+        m_pColumns->disposing();
         m_xAggregateAsParameters = NULL;
     }
     OStatementBase::disposing();
@@ -222,7 +223,7 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
         throw DisposedException();
 
     // do we have to populate the columns
-    if (!m_aColumns.isInitialized())
+    if (!m_pColumns->isInitialized())
     {
         // get the metadata
         Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsSet, UNO_QUERY)->getMetaData();
@@ -234,15 +235,15 @@ Reference< ::com::sun::star::container::XNameAccess > OPreparedStatement::getCol
                 // retrieve the name of the column
                 rtl::OUString aName = xMetaData->getColumnName(i + 1);
                 OResultColumn* pColumn = new OResultColumn(xMetaData, i + 1);
-                m_aColumns.append(aName, pColumn);
+                m_pColumns->append(aName, pColumn);
             }
         }
         catch (SQLException)
         {
         }
-        m_aColumns.setInitialized();
+        m_pColumns->setInitialized();
     }
-    return &m_aColumns;
+    return m_pColumns;
 }
 
 // XResultSetMetaDataSupplier
@@ -270,7 +271,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException,
     Reference< XResultSet > xDrvResultSet = Reference< XPreparedStatement >(m_xAggregateAsSet, UNO_QUERY)->executeQuery();
     if (xDrvResultSet.is())
     {
-        xResultSet = new OResultSet(xDrvResultSet, *this, m_aColumns.isCaseSensitive());
+        xResultSet = new OResultSet(xDrvResultSet, *this, m_pColumns->isCaseSensitive());
 
         // keep the resultset weak
         m_aResultSet = xResultSet;

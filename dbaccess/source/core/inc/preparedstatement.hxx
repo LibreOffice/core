@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preparedstatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:41:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace dbaccess
                                public ::com::sun::star::lang::XServiceInfo
     {
     protected:
-        OColumns        m_aColumns;
+        OColumns*       m_pColumns;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > m_xAggregateAsParameters;
 
     public:

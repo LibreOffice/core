@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ class OQueryDescriptor
         ,public ::connectivity::sdbcx::IRefreshableColumns
 {
 protected:
-    OColumns        m_aColumns;             // our column descriptions
+    OColumns*       m_pColumns;             // our column descriptions
 
 protected:
     ~OQueryDescriptor();

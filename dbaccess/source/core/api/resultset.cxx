@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,12 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
                        sal_Bool _bCaseSensitive)
            :OResultSetBase(m_aMutex)
            ,OPropertySetHelper(OResultSetBase::rBHelper)
-           ,m_aColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL,NULL)
            ,m_xAggregateAsResultSet(_xResultSet)
            ,m_bIsBookmarkable(sal_False)
 {
     DBG_CTOR(OResultSet, NULL);
+
+    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< ::rtl::OUString>(), NULL,NULL);
 
     m_aStatement = _xStatement;
     m_xAggregateAsRow = Reference< ::com::sun::star::sdbc::XRow >(m_xAggregateAsResultSet, UNO_QUERY);
@@ -145,6 +146,7 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
 OResultSet::~OResultSet()
 {
     DBG_DTOR(OResultSet, NULL);
+    delete m_pColumns;
 }
 
 // com::sun::star::lang::XTypeProvider
@@ -208,7 +210,7 @@ void OResultSet::disposing()
     MutexGuard aGuard(m_aMutex);
 
     // free the columns
-    m_aColumns.disposing();
+    m_pColumns->disposing();
 
     // close the pending result set
     Reference< XCloseable > (m_xAggregateAsResultSet, UNO_QUERY)->close();
@@ -384,7 +386,7 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
         throw DisposedException();
 
     // do we have to populate the columns
-    if (!m_aColumns.isInitialized())
+    if (!m_pColumns->isInitialized())
     {
         // get the metadata
         Reference< XResultSetMetaData > xMetaData = Reference< XResultSetMetaDataSupplier >(m_xAggregateAsResultSet, UNO_QUERY)->getMetaData();
@@ -396,15 +398,15 @@ Reference< ::com::sun::star::container::XNameAccess > OResultSet::getColumns(voi
                 // retrieve the name of the column
                 rtl::OUString aName = xMetaData->getColumnName(i + 1);
                 ODataColumn* pColumn = new ODataColumn(xMetaData, m_xAggregateAsRow, m_xAggregateAsRowUpdate, i + 1);
-                m_aColumns.append(aName, pColumn);
+                m_pColumns->append(aName, pColumn);
             }
         }
         catch (SQLException)
         {
         }
-        m_aColumns.setInitialized();
+        m_pColumns->setInitialized();
     }
-    return &m_aColumns;
+    return m_pColumns;
 }
 
 // ::com::sun::star::sdbc::XRow

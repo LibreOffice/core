@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 13:39:31 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
     MutexGuard aGuard(m_aMutex);
     if (m_bColumnsOutOfDate)
     {
-        m_aColumns.clearColumns();
+        m_pColumns->clearColumns();
 
         // fill the columns with columns from teh statement
         Reference< XStatement > xStmt = m_xConnection->createStatement();
@@ -199,7 +199,7 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
                         Reference<XPropertySet> xSource;
                         xColumns->getByName(*pBegin) >>= xSource;
                         OTableColumn* pColumn = new OTableColumn(xSource);
-                        m_aColumns.append(*pBegin,pColumn);
+                        m_pColumns->append(*pBegin,pColumn);
                     }
                 }
                 ::comphelper::disposeComponent(xRs);
@@ -208,9 +208,9 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeExce
         }
 
         m_bColumnsOutOfDate = sal_False;
-        m_aColumns.setInitialized();
+        m_pColumns->setInitialized();
     }
-    return &m_aColumns;
+    return m_pColumns;
 }
 
 // XServiceInfo
@@ -381,7 +381,7 @@ void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation
 //      }
 //
 //      m_bColumnsOutOfDate = sal_False;
-//      m_aColumns.setInitialized();
+//      m_pColumns->setInitialized();
 //  }
 //  catch(SQLException&)
 //  {
