@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 15:53:17 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ using namespace ::com::sun::star::drawing;
         aAny <<= Reference< xint >(this)
 
 DECLARE_LIST( SvxDrawPageList, SvxDrawPage * );
-SvxDrawPageList* SvxDrawPage::m_pGlobalDrawPageList = NULL;
 
 extern SfxItemPropertyMap* ImplGetSvxOle2PropertyMap();
 
@@ -132,14 +131,6 @@ SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw() :
     pView = new SdrView( pModel );
     if( pView )
         pView->SetDesignMode(sal_True);
-
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if(m_pGlobalDrawPageList == NULL)
-        m_pGlobalDrawPageList = new SvxDrawPageList();
-
-    if(m_pGlobalDrawPageList->GetPos(this) == LIST_ENTRY_NOTFOUND)
-        m_pGlobalDrawPageList->Insert(this);
 }
 
 //----------------------------------------------------------------------
@@ -150,13 +141,6 @@ SvxDrawPage::SvxDrawPage() throw() :
         pModel  ( NULL ),
         pView   ( NULL )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if(m_pGlobalDrawPageList == NULL)
-        m_pGlobalDrawPageList = new SvxDrawPageList();
-
-    if(m_pGlobalDrawPageList->GetPos(this) == LIST_ENTRY_NOTFOUND)
-        m_pGlobalDrawPageList->Insert(this);
 }
 
 //----------------------------------------------------------------------
@@ -167,36 +151,11 @@ SvxDrawPage::~SvxDrawPage() throw()
         EndListening( *pModel );
 
     delete pView;
-
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( m_pGlobalDrawPageList != NULL )
-    {
-        m_pGlobalDrawPageList->Remove(this);
-        if( m_pGlobalDrawPageList->Count() == 0 )
-        {
-            delete m_pGlobalDrawPageList;
-            m_pGlobalDrawPageList = NULL;
-        }
-    }
 }
 
 SvxDrawPage* SvxDrawPage::GetPageForSdrPage( SdrPage* pPage ) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( m_pGlobalDrawPageList != NULL )
-    {
-        for( SvxDrawPage* pUnoPage = m_pGlobalDrawPageList->First();
-             pUnoPage;
-             pUnoPage = m_pGlobalDrawPageList->Next() )
-        {
-            if( pUnoPage->pPage == pPage )
-                return pUnoPage;
-        }
-    }
-
-    return NULL;
+    return getImplementation( pPage->getUnoPage() );
 }
 
 // SfxListener
@@ -329,8 +288,10 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
     if( pObj == NULL )
         throw uno::RuntimeException();
 
-    Reference< drawing::XShape >  xRet = _CreateShape( pObj );
-    return uno::Any( &xRet, INTERFACE_TYPE( drawing::XShape ) );
+    Reference< drawing::XShape >  xRet( pObj->getUnoShape(), uno::UNO_QUERY );
+    uno::Any aAny;
+    aAny <<= xRet;
+    return aAny;
 }
 
 
@@ -424,11 +385,7 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
         if( pObj )
-        {
-            Reference< ::com::sun::star::drawing::XShape >  xShape = _CreateShape( pObj );
-            uno::Any aAny( xShape->queryInterface( ::getCppuType((const Reference< drawing::XShapeGroup >*)0) ));
-            aAny >>= xShapeGroup;
-        }
+             xShapeGroup = Reference< drawing::XShapeGroup >::query( pObj->getUnoShape() );
     }
 
     pView->HidePage(pPageView);
@@ -713,12 +670,10 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 //----------------------------------------------------------------------
 Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
-    Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pObj ) );
-    if( !xShape.is() )
-        xShape = CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
+    Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),
                                               pObj,
-                                              (SvxDrawPage*)this);
+                                              (SvxDrawPage*)this));
     return xShape;
 }
 

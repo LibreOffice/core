@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-23 19:06:49 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,6 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance(
 
 DECLARE_LIST( SvxShapeList, SvxShape * );
 
-SvxShapeList* SvxShape::m_pGlobalShapeList = NULL;
-
 #define GET_TEXT_INTERFACE( xint, xval ) \
     Reference< xint > xval; \
     if(!xTextAgg.is() ) { Reference< ::com::sun::star::text::XText > xText( (OWeakObject*)this, UNO_QUERY ); } \
@@ -253,16 +251,6 @@ SvxShape::~SvxShape() throw()
 
 
     OGuard aGuard( Application::GetSolarMutex() );
-
-    if( m_pGlobalShapeList != NULL )
-    {
-        m_pGlobalShapeList->Remove(this);
-        if( m_pGlobalShapeList->Count() == 0 )
-        {
-            delete m_pGlobalShapeList;
-            m_pGlobalShapeList = NULL;
-        }
-    }
 }
 
 //----------------------------------------------------------------------
@@ -321,20 +309,7 @@ sal_Int64 SAL_CALL SvxShape::getSomething( const ::com::sun::star::uno::Sequence
 //----------------------------------------------------------------------
 SvxShape* SvxShape::GetShapeForSdrObj( SdrObject* pObj ) throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    if( m_pGlobalShapeList != NULL )
-    {
-        for( SvxShape* pShape = m_pGlobalShapeList->First();
-                       pShape;
-                       pShape = m_pGlobalShapeList->Next() )
-        {
-            if( pShape->pObj == pObj )
-                return pShape;
-        }
-    }
-
-    return NULL;
+    return getImplementation( pObj->getUnoShape() );
 }
 
 //----------------------------------------------------------------------
@@ -342,16 +317,6 @@ void SvxShape::Init() throw()
 {
     if(pObj == NULL)    // ab hier nur nocht mit Objekt
         return;
-
-    {
-        OGuard aGuard( Application::GetSolarMutex() );
-
-        if(m_pGlobalShapeList == NULL)
-            m_pGlobalShapeList = new SvxShapeList();
-
-        if(m_pGlobalShapeList->GetPos(this) == LIST_ENTRY_NOTFOUND)
-            m_pGlobalShapeList->Insert(this);
-    }
 
     if(!pObj->GetModel())
         return;
@@ -709,10 +674,6 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
             if( pObj == pSdrHint->GetObject() )
             {
                 pObj = NULL;
-
-                OGuard aGuard( Application::GetSolarMutex() );
-                if(m_pGlobalShapeList != NULL)
-                    m_pGlobalShapeList->Remove(this);
             }
         }
         else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
@@ -722,11 +683,6 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         else if( pSdrHint->GetKind() == HINT_OBJLISTCLEARED && pSdrHint->GetObjList() == pObj->GetObjList() )
         {
             pObj = NULL;
-
-            OGuard aGuard( Application::GetSolarMutex() );
-            if(m_pGlobalShapeList != NULL)
-                m_pGlobalShapeList->Remove(this);
-
         }
     }
 
@@ -1923,7 +1879,7 @@ uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames(void) throw( un
 /** returns a StarOffice API wrapper for the given SdrObject */
 uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ()
 {
-    uno::Reference< drawing::XShape > xShape( SvxShape::GetShapeForSdrObj( pObj ) );
+    uno::Reference< drawing::XShape > xShape( pObj->getUnoShape(), uno::UNO_QUERY );
     return xShape;
 }
 
@@ -1933,5 +1889,3 @@ SdrObject* GetSdrObjectFromXShape( uno::Reference< drawing::XShape > xShape ) th
     SvxShape* pShape = SvxShape::getImplementation( xShape );
     return pShape ? pShape->GetSdrObject() : NULL;
 }
-
-

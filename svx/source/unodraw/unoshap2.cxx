@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 20:46:57 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 14:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,15 +357,15 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
     if( pObj->GetSubList()->GetObjCount() <= (sal_uInt32)Index )
         throw lang::IndexOutOfBoundsException();
 
-    Reference< drawing::XShape >  xShape;
     SdrObject* pDestObj = pObj->GetSubList()->GetObj( Index );
 
-    if(pDestObj)
-        xShape = pPage->_CreateShape(pDestObj);
-    else
+    if(pDestObj == NULL)
         throw lang::IndexOutOfBoundsException();
 
-    return Any( &xShape, ::getCppuType((const Reference< drawing::XShape >*)0) );
+    Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
+    uno::Any aAny;
+    aAny <<= xShape;
+    return aAny;
 }
 
 // ::com::sun::star::container::XElementAccess
