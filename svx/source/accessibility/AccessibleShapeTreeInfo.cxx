@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeTreeInfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:54:05 $
+ *  last change: $Author: af $ $Date: 2002-05-06 13:13:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@ namespace accessibility {
 
 AccessibleShapeTreeInfo::AccessibleShapeTreeInfo (
     const Reference<XAccessibleComponent>& rxDocumentWindow,
-    const Reference<document::XEventBroadcaster>& rxControllerBroadcaster)
+    const Reference<document::XEventBroadcaster>& rxModelBroadcaster)
     : mxDocumentWindow (rxDocumentWindow),
-      mxControllerBroadcaster (rxControllerBroadcaster),
+      mxModelBroadcaster (rxModelBroadcaster),
       mpView (NULL),
       mpWindow (NULL)
 {
@@ -120,7 +120,7 @@ uno::Reference<XAccessibleComponent>
 void AccessibleShapeTreeInfo::SetControllerBroadcaster (
     const uno::Reference<document::XEventBroadcaster>& rxControllerBroadcaster)
 {
-    mxControllerBroadcaster = rxControllerBroadcaster;
+    mxModelBroadcaster = rxControllerBroadcaster;
 }
 
 
@@ -129,7 +129,25 @@ void AccessibleShapeTreeInfo::SetControllerBroadcaster (
 uno::Reference<document::XEventBroadcaster>
     AccessibleShapeTreeInfo::GetControllerBroadcaster (void) const
 {
-    return mxControllerBroadcaster;
+    return mxModelBroadcaster;
+}
+
+
+
+
+void AccessibleShapeTreeInfo::SetModelBroadcaster (
+    const Reference<document::XEventBroadcaster>& rxModelBroadcaster)
+{
+    mxModelBroadcaster = rxModelBroadcaster;
+}
+
+
+
+
+Reference<document::XEventBroadcaster>
+        AccessibleShapeTreeInfo::GetModelBroadcaster (void) const
+{
+    return mxModelBroadcaster;
 }
 
 
