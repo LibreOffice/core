@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-13 15:16:45 $
+ *  last change: $Author: tbe $ $Date: 2002-08-19 16:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXFONT_HXX_
+#include <toolkit/awt/vclxfont.hxx>
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
@@ -782,8 +785,21 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    if ( GetWindow() )
-       nColor = GetWindow()->GetControlForeground().GetColor();
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        if ( pWindow->IsControlForeground() )
+            nColor = pWindow->GetControlForeground().GetColor();
+        else
+        {
+            Font aFont;
+            if ( pWindow->IsControlFont() )
+                aFont = pWindow->GetControlFont();
+            else
+                aFont = pWindow->GetFont();
+            nColor = aFont.GetColor().GetColor();
+        }
+    }
 
     return nColor;
 }
@@ -793,15 +809,41 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getBackground(  ) throw (uno::Runtim
     OExternalLockGuard aGuard( this );
 
     sal_Int32 nColor = 0;
-    if ( GetWindow() )
-       nColor = GetWindow()->GetControlBackground().GetColor();
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        if ( pWindow->IsControlBackground() )
+            nColor = pWindow->GetControlBackground().GetColor();
+        else
+            nColor = pWindow->GetBackground().GetColor().GetColor();
+    }
 
     return nColor;
 }
 
 uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw (uno::RuntimeException)
 {
-    return uno::Reference< awt::XFont >();
+    OExternalLockGuard aGuard( this );
+
+    uno::Reference< awt::XFont > xFont;
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );
+        if ( xDev.is() )
+        {
+            Font aFont;
+            if ( pWindow->IsControlFont() )
+                aFont = pWindow->GetControlFont();
+            else
+                aFont = pWindow->GetFont();
+            VCLXFont* pVCLXFont = new VCLXFont;
+            pVCLXFont->Init( *xDev.get(), aFont );
+            xFont = pVCLXFont;
+        }
+    }
+
+    return xFont;
 }
 
 awt::FontDescriptor SAL_CALL VCLXAccessibleComponent::getFontMetrics( const uno::Reference< awt::XFont >& xFont ) throw (uno::RuntimeException)
