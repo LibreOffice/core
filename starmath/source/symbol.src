@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-04 18:39:00 $
+ *  last change: $Author: rt $ $Date: 2001-12-14 17:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ Resource RID_LOCALIZED_NAMES
     };
     ItemList [ japanese ] =
     {
-             < "ｷﾞﾘｼｬ文字" ; > ;
+             < "ギリシャ文字" ; > ;
         < "数学特殊記号" ; > ;
     };
     ItemList [ korean ] =
@@ -1512,7 +1512,7 @@ Resource RID_LOCALIZED_NAMES
         < "右向矢印" ; > ;
         < "無限大" ; > ;
         < "角" ; > ;
-        < "ﾊﾟｰﾐﾙ" ; > ;
+        < "パーミル" ; > ;
         < "かつ" ; > ;
         < "または" ; > ;
     };
@@ -1535,15 +1535,15 @@ Resource RID_LOCALIZED_NAMES
         < "쎄타" ; > ;
         < "THETA" ; > ;
         < "호타" ; > ;
-        < "JOTA" ; > ;
+        < "IOTA" ; > ;
         < "카파" ; > ;
         < "KAPPA" ; > ;
         < "람다" ; > ;
         < "LAMBDA" ; > ;
-        < "my" ; > ;
+        < "mu" ; > ;
         < "MY" ; > ;
         < "ny" ; > ;
-        < "NY" ; > ;
+        < "NU" ; > ;
         < "xi" ; > ;
         < "XI" ; > ;
         < "omikron" ; > ;
@@ -1557,7 +1557,7 @@ Resource RID_LOCALIZED_NAMES
         < "tau" ; > ;
         < "TAU" ; > ;
         < "입실론" ; > ;
-        < "YPSILON" ; > ;
+        < "UPSILON" ; > ;
         < "파이" ; > ;
         < "PHI" ; > ;
         < "chi" ; > ;
@@ -2001,6 +2001,7 @@ Resource RID_LOCALIZED_NAMES
     };
     };
 };
+
 
 
 
