@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-09 16:51:45 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,9 +430,6 @@ SwModule::SwModule( SvFactory* pFact,
     }
     StartListening( *pOffApp );
 
-    xLngSvcEvtListener = Reference< XLinguServiceEventListener > (
-            (XLinguServiceEventListener *) new SwLinguServiceEventListener, UNO_QUERY );
-
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( xMgr.is() )
     {
@@ -456,6 +453,14 @@ SwModule::~SwModule()
     delete pAttrPool;
     delete pErrorHdl;
     EndListening( *OFF_APP() );
+}
+
+//************************************************************************
+
+void SwModule::CreateLngSvcEvtListener()
+{
+    if (!xLngSvcEvtListener.is())
+        xLngSvcEvtListener = new SwLinguServiceEventListener;
 }
 
 //************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-20 11:54:36 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,21 @@
 
 #include <ctype.h>
 
+#ifndef _UNO_LINGU_HXX
+#include <svx/unolingu.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>    // needed for SW_MOD() macro
+#endif
+
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>   // ASSERTs
 #endif
-#ifndef _UNO_LINGU_HXX
-#include <svx/unolingu.hxx>
+#ifndef _DLELSTNR_HXX_
+#include <dlelstnr.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
 #endif
 #ifndef _TXTCFG_HXX
 #include <txtcfg.hxx>
@@ -359,10 +369,17 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
                              rInf.GetFont()->GetLanguage();
         const ForbiddenCharacters aForbidden(
                 *rInf.GetTxtFrm()->GetNode()->GetDoc()->
-                            GetForbiddenCharacters( aLang, TRUE ));
+                    GetForbiddenCharacters( aLang, TRUE ));
         LineBreakUserOptions aUserOpt(
                 aForbidden.beginLine, aForbidden.endLine,
                 rInf.HasForbiddenChars(), bAllowHanging, sal_False );
+
+        //! register listener to LinguServiceEvents now in order to get
+        //! notified about relevant changes in the future
+        SwModule *pModule = SW_MOD();
+        if (!pModule->GetLngSvcEvtListener().is())
+            pModule->CreateLngSvcEvtListener();
+
         // determines first possible line break from nRightPos to
         // start index of current line
         LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 08:56:19 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,15 @@
 #include <unotools/transliterationwrapper.hxx>
 #endif
 
+#ifndef _DLELSTNR_HXX_
+#include <dlelstnr.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
+#ifndef _SHL_HXX
+#include <tools/shl.hxx>    // needed for SW_MOD() macro
+#endif
 #ifndef _SPLARGS_HXX
 #include <splargs.hxx>
 #endif
@@ -834,13 +843,19 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
         nInsertPos = 0;
     }
 
-    Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
-
     BOOL bFresh = nBegin < nEnd;
     BOOL bACWDirty = FALSE;
 
     if( nBegin < nEnd )
     {
+        //! register listener to LinguServiceEvents now in order to get
+        //! notified about relevant changes in the future
+        SwModule *pModule = SW_MOD();
+        if (!pModule->GetLngSvcEvtListener().is())
+            pModule->CreateLngSvcEvtListener();
+
+        Reference< XSpellChecker1 > xSpell( ::GetSpellChecker() );
+
         LanguageType eActLang = pNode->GetLang( nBegin );
 
         SwScanner aScanner( pNode, NULL, nBegin, nEnd, FALSE, TRUE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,7 @@ public:
             GetLngSvcEvtListener();
     inline void SetLngSvcEvtListener( ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener > & xLstnr);
+    void    CreateLngSvcEvtListener();
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::scanner::XScannerManager >

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-20 16:16:00 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _CTRLTOOL_HXX //autogen
 #include <svtools/ctrltool.hxx>
 #endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 #ifndef _SFXDOCINF_HXX //autogen
 #include <sfx2/docinf.hxx>
 #endif
@@ -119,9 +122,6 @@
 #endif
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -855,23 +855,19 @@ void SwDocShell::SubInitNew()
         nRange[7] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
-    uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
 
-    sal_Int16 nVal, eCJK, eCTL;
-    if (xProp.is())
-    {
-        xProp->getPropertyValue( C2U(UPN_DEFAULT_LANGUAGE)) >>= nVal;
-        Locale aCJK, aCTL;
-        xProp->getPropertyValue( C2U(UPN_DEFAULT_LOCALE_CJK)) >>= aCJK;
-        eCJK = SvxLocaleToLanguage(aCJK);
-        xProp->getPropertyValue( C2U(UPN_DEFAULT_LOCALE_CTL)) >>= aCTL;
-        eCTL = SvxLocaleToLanguage(aCTL);
-    }
-    else
-    {   // guess DefaultLanguage to be used from other sources
-        nVal = GetAppLanguage();
-        eCJK = eCTL = nVal;
-    }
+    //! get lingu options without loading lingu DLL
+    SvtLinguOptions aLinguOpt;
+    SvtLinguConfig().GetOptions( aLinguOpt );
+
+    sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
+                eCJK = aLinguOpt.nDefaultLanguage_CJK,
+                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    DBG_ASSERT( LANGUAGE_NONE != nVal, "default language (western) missing" );
+    if (LANGUAGE_NONE == eCJK)
+        eCJK = nVal;
+    if (LANGUAGE_NONE == eCTL)
+        eCTL = nVal;
 
     aDfltSet.Put( SvxLanguageItem( nVal, RES_CHRATR_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCJK, RES_CHRATR_CJK_LANGUAGE ) );
@@ -880,19 +876,8 @@ void SwDocShell::SubInitNew()
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
                                                         RES_PARATR_HYPHENZONE) );
-        if( xProp.is() )
-            xProp->getPropertyValue(
-                OUString::createFromAscii(UPN_HYPH_MIN_LEADING) ) >>= nVal;
-        else
-            nVal = 2;
-        aHyp.GetMinLead()   = sal_Int8(nVal);
-
-        if(xProp.is())
-            xProp->getPropertyValue(
-                OUString::createFromAscii(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
-        else
-            nVal = 2;
-        aHyp.GetMinTrail()  = sal_Int8(nVal);
+        aHyp.GetMinLead()   = aLinguOpt.nHyphMinLeading;
+        aHyp.GetMinTrail()  = aLinguOpt.nHyphMinTrailing;
 
         aDfltSet.Put( aHyp );
 
