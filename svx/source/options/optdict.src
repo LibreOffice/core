@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text [ ENGLISH ] = "New dictionary" ;
     Text [ norwegian ] = "Ny katalog" ;
     Text [ italian ] = "Nuovo dizionario" ;
-    Text [ portuguese_brazilian ] = "New dictionary" ;
+    Text [ portuguese_brazilian ] = "Novo Dicion�rio" ;
     Text [ portuguese ] = "Novo dicion�rio" ;
     Text [ finnish ] = "Uusi sanasto" ;
     Text [ danish ] = "Opret brugerordbog" ;
@@ -90,7 +90,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text [ english_us ] = "New Dictionary" ;
     Text[ chinese_simplified ] = "建立使用者词典";
     Text[ russian ] = "����� �������";
-    Text[ polish ] = "Utw�rz w�asny s�ownik";
+    Text[ polish ] = "Nowy s�ownik";
     Text[ japanese ] = "ユーザー辞書の作成";
     Text[ chinese_traditional ] = "自訂字典";
     Text[ arabic ] = "����� ����� ��������";
@@ -118,7 +118,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         LeftLabel = TRUE ;
         Text[ chinese_simplified ] = "名称(~N)";
         Text[ russian ] = "���";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "名前(~N)";
         Text[ chinese_traditional ] = "名稱(~N)";
         Text[ arabic ] = "�����";
@@ -128,6 +128,9 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nom";
         Text[ thai ] = "~ชื่อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "‮שם‬";
+        Text[ hindi ] = "~नाम";
     };
     Edit ED_DICTNAME
     {
@@ -156,7 +159,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         LeftLabel = TRUE ;
         Text[ chinese_simplified ] = "语言(~L)";
         Text[ russian ] = "����";
-        Text[ polish ] = "J�zyk";
+        Text[ polish ] = "~J�zyk";
         Text[ japanese ] = "言語(~L)";
         Text[ chinese_traditional ] = "語言(~L)";
         Text[ arabic ] = "�����";
@@ -166,6 +169,9 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Idioma";
         Text[ thai ] = "~ภาษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "~भाषा";
     };
     ListBox LB_DICTLANG
     {
@@ -182,7 +188,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ ENGLISH ] = "~Exception (-)" ;
         Text [ norwegian ] = "~Unntak (-)" ;
         Text [ italian ] = "~Eccezione (-)" ;
-        Text [ portuguese_brazilian ] = "~Exce??o (-)" ;
+        Text [ portuguese_brazilian ] = "~Exce��o (-)" ;
         Text [ portuguese ] = "~Excep��o (-)" ;
         Text [ finnish ] = "~Poikkeus (-)" ;
         Text [ danish ] = "Undtagelse (-)" ;
@@ -193,7 +199,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ english_us ] = "~Exception (-)" ;
         Text[ chinese_simplified ] = "例外(-)(~E)";
         Text[ russian ] = "���������� (-)";
-        Text[ polish ] = "Wyj�tek (-)";
+        Text[ polish ] = "~Wyj�tek (-)";
         Text[ japanese ] = "例外(-) (~E)";
         Text[ chinese_traditional ] = "例外(-)(~E)";
         Text[ arabic ] = "������� (-)";
@@ -203,6 +209,9 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Excepci� (-)";
         Text[ thai ] = "~ข้อยกเว้น (-)";
+        Text[ czech ] = "Výjimka (-)";
+        Text[ hebrew ] = "‮חריג (-)‬";
+        Text[ hindi ] = "~अक्षेप (-)";
     };
     FixedLine GB_NEWDICT
     {
@@ -214,7 +223,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ ENGLISH ] = "Dictionary" ;
         Text [ norwegian ] = "Ordliste" ;
         Text [ italian ] = "Dizionario" ;
-        Text [ portuguese_brazilian ] = "Dicion?rio" ;
+        Text [ portuguese_brazilian ] = "Dicion�rio" ;
         Text [ portuguese ] = "Dicion�rio" ;
         Text [ finnish ] = "Sanasto" ;
         Text [ danish ] = "Ordbog" ;
@@ -235,6 +244,9 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Diccionari";
         Text[ thai ] = "พจนานุกรม";
+        Text[ czech ] = "Slovník";
+        Text[ hebrew ] = "‮מילון‬";
+        Text[ hindi ] = "शब्दकोश";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -255,6 +267,9 @@ ModalDialog RID_SFXDLG_NEWDICT
     };
     Text[ catalan ] = "Diccionari nou";
     Text[ thai ] = "พจนานุกรมใหม่";
+    Text[ czech ] = "Nový slovník";
+    Text[ hebrew ] = "‮מילון חדש‬";
+    Text[ hindi ] = "नया शब्दकोश";
 };
 
  // RID_SFXDLG_EDITDICT ---------------------------------------------------
@@ -271,7 +286,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text [ ENGLISH ] = "Edit dictionary" ;
     Text [ norwegian ] = "Rediger ordliste" ;
     Text [ italian ] = "Modifica dizionario" ;
-    Text [ portuguese_brazilian ] = "Edit dictionary" ;
+    Text [ portuguese_brazilian ] = "Editar Dicion�rio Personalizado" ;
     Text [ portuguese ] = "Editar dicion�rio do utilizador" ;
     Text [ finnish ] = "Muokkaa mukautettua sanastoa" ;
     Text [ danish ] = "Rediger brugerordbog" ;
@@ -297,10 +312,10 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ swedish ] = "~Bok" ;
         Text [ danish ] = "Bog" ;
         Text [ portuguese ] = "~Livro" ;
-        Text [ portuguese_brazilian ] = "~Buch" ;
+        Text [ portuguese_brazilian ] = "~Livro" ;
         Text[ chinese_simplified ] = "书籍(~B)";
         Text[ russian ] = "~�����";
-        Text[ polish ] = "Ksi��ka";
+        Text[ polish ] = "~Ksi��ka";
         Text[ japanese ] = "本(~B)";
         Text[ chinese_traditional ] = "書(~B)";
         Text[ arabic ] = "������";
@@ -311,6 +326,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Llibre";
         Text[ finnish ] = "~Kirja";
         Text[ thai ] = "~หนังสือ";
+        Text[ czech ] = "Kniha";
+        Text[ hebrew ] = "‮ספר‬";
+        Text[ hindi ] = "~पुस्तक";
     };
     ListBox LB_ALLDICTS
     {
@@ -332,11 +350,11 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ french ] = "Langue" ;
         Text [ swedish ] = "S~pr�k" ;
         Text [ danish ] = "Sprog" ;
-        Text [ portuguese_brazilian ] = "S~prache" ;
+        Text [ portuguese_brazilian ] = "I~dioma" ;
         Text [ portuguese ] = "~L�ngua" ;
         Text[ chinese_simplified ] = "语言(~L)";
         Text[ russian ] = "����";
-        Text[ polish ] = "J�zyk";
+        Text[ polish ] = "~J�zyk";
         Text[ japanese ] = "言語(~L)";
         Text[ chinese_traditional ] = "語言(~L)";
         Text[ arabic ] = "�����";
@@ -347,6 +365,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Idioma";
         Text[ finnish ] = "~Kieli";
         Text[ thai ] = "~ภาษา";
+        Text[ czech ] = "Jazyk";
+        Text[ hebrew ] = "‮שפה‬";
+        Text[ hindi ] = "~भाषा";
     };
     ListBox LB_DICTLANG
     {
@@ -378,8 +399,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ italian ] = "Parola";
         Text[ danish ] = "Ord";
         Text[ swedish ] = "~Ord";
-        Text[ polish ] = "S�owo";
-        Text[ portuguese_brazilian ] = "Word";
+        Text[ polish ] = "~Wyraz";
+        Text[ portuguese_brazilian ] = "~Palavra";
         Text[ japanese ] = "単語(~W)";
         Text[ chinese_simplified ] = "字(~W)";
         Text[ chinese_traditional ] = "字(~W)";
@@ -391,6 +412,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Paraula";
         Text[ finnish ] = "~Sana";
         Text[ thai ] = "~คำ";
+        Text[ czech ] = "Slovo";
+        Text[ hebrew ] = "‮מילה‬";
+        Text[ hindi ] = "~शब्द";
     };
     Edit ED_WORD
     {
@@ -414,8 +438,8 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ italian ] = "Proposta";
         Text[ danish ] = "Forslag";
         Text[ swedish ] = "~F�rslag";
-        Text[ polish ] = "Propozycja";
-        Text[ portuguese_brazilian ] = "Replace ~By:";
+        Text[ polish ] = "Zamie� ~na:";
+        Text[ portuguese_brazilian ] = "Substituir ~Por:";
         Text[ japanese ] = "提案(~B):";
         Text[ chinese_simplified ] = "建议(~B)";
         Text[ chinese_traditional ] = "建議(~B)";
@@ -427,6 +451,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Suger�ncia";
         Text[ finnish ] = "~Korvaus:";
         Text[ thai ] = "แทนที่~ด้วย:";
+        Text[ czech ] = "Nahradit čím:";
+        Text[ hebrew ] = "‮החלפה בידי:‬";
+        Text[ hindi ] = "~से प्रतिस्थापित करो:";
     };
 
     Edit ED_REPLACE
@@ -451,11 +478,11 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ dutch ] = "~Nieuw" ;
         Text [ swedish ] = "~Nytt" ;
         Text [ danish ] = "Ny" ;
-        Text [ portuguese_brazilian ] = "~Neu" ;
+        Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo" ;
         Text[ chinese_simplified ] = "新字词(~N)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Nowy";
+        Text[ polish ] = "~Nowy";
         Text[ japanese ] = "新規作成(~N)";
         Text[ chinese_traditional ] = "新字詞(~N)";
         Text[ arabic ] = "����";
@@ -466,6 +493,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Nou";
         Text[ finnish ] = "~Uusi";
         Text[ thai ] = "ใ~หม่";
+        Text[ czech ] = "Nový";
+        Text[ hebrew ] = "‮חדש‬";
+        Text[ hindi ] = "~नया";
     };
     PushButton PB_DELETE_REPLACE
     {
@@ -481,11 +511,11 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
-        Text [ portuguese_brazilian ] = "~L?chen" ;
+        Text [ portuguese_brazilian ] = "E~xcluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "删除(~D)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Usu�";
+        Text[ polish ] = "~Usu�";
         Text[ japanese ] = "削除(~D)";
         Text[ chinese_traditional ] = "刪除(~D)";
         Text[ arabic ] = "���";
@@ -496,6 +526,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "~ลบ";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "‮מחיקה‬";
+        Text[ hindi ] = "मि~टाओ";
     };
     Control TLB_REPLACE
     {
@@ -522,7 +555,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ english_us ] = "~Replace" ;
         Text[ chinese_simplified ] = "替换(~R)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Zamie�";
+        Text[ polish ] = "~Zamie�";
         Text[ japanese ] = "置換(~R)";
         Text[ chinese_traditional ] = "替代(~R)";
         Text[ arabic ] = "�������";
@@ -532,6 +565,9 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reempla�a";
         Text[ thai ] = "แ~ทนที่";
+        Text[ czech ] = "Nahradit";
+        Text[ hebrew ] = "‮החלפה‬";
+        Text[ hindi ] = "प्रतिस्थापित ~करो";
     };
 
 
@@ -564,7 +600,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ english_us ] = "~Close" ;
         Text[ chinese_simplified ] = "关闭(~C)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Zamknij";
+        Text[ polish ] = "~Zamknij";
         Text[ japanese ] = "閉じる(~C)";
         Text[ chinese_traditional ] = "關閉(~C)";
         Text[ arabic ] = "�����";
@@ -574,9 +610,12 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tanca";
         Text[ thai ] = "~ปิด";
+        Text[ czech ] = "Zavřít";
+        Text[ hebrew ] = "‮סגירה‬";
+        Text[ hindi ] = "~बन्द करो";
     };
     Text[ russian ] = "������ ������� ������������";
-    Text[ polish ] = "Edytuj s�ownik u�ytkownika";
+    Text[ polish ] = "Edytuj s�ownik niestandardowy";
     Text[ japanese ] = "ユーザー辞書の編集";
     Text[ chinese_traditional ] = "編輯自訂字典";
     Text[ arabic ] = "����� ����� ��������";
@@ -586,6 +625,9 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Edita el diccionari personalitzat";
     Text[ thai ] = "แก้ไขพจนานุกรมแบบกำหนดเอง";
+    Text[ czech ] = "Upravit vlastní slovník";
+    Text[ hebrew ] = "‮עריכת מילון מוגדר משתמש‬";
+    Text[ hindi ] = "कस्टम् शब्दकोश का संपादन";
 };
 
  // Strings ---------------------------------------------------------------
@@ -601,10 +643,10 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text [ swedish ] = "Det angivna namnet finns redan.\nMata in ett nytt namn." ;
     Text [ danish ] = "Det angivne navn findes allerede.\nIndtast venligst et nyt navn." ;
     Text [ portuguese ] = "O nome fornecido j� existe.\nPor favor introduza outro nome." ;
-    Text [ portuguese_brazilian ] = "Der angegebene Name ist schon vorhanden.\nBitte geben Sie einen neuen Namen ein." ;
+    Text [ portuguese_brazilian ] = "O nome especificado j� existe.\nDigite outro nome." ;
     Text[ chinese_simplified ] = "这个给定的名称已经存在。\n请您输入一个新名称。";
     Text[ russian ] = "�������� ��� ��� ����������.\n������� ����� ���.";
-    Text[ polish ] = "Podana nazwa ju� istnieje.\nProsz� wpisa� now� nazw�.";
+    Text[ polish ] = "Podana nazwa ju� istnieje.\nWpisz now� nazw�.";
     Text[ japanese ] = "入力した名前はすでにあります。\n新しい名前を入力してください。";
     Text[ chinese_traditional ] = "這個輸入的名稱已經存在。\n請您輸入一個新名稱。";
     Text[ arabic ] = "����� ���� ������ ����� ������.\n������ ����� ��� ����.";
@@ -615,6 +657,9 @@ String RID_SVXSTR_OPT_DOUBLE_DICTS
     Text[ catalan ] = "Aquest nom ja existeix.\nEscribiu un altre nom.";
     Text[ finnish ] = "M��ritetty nimi on jo k�yt�ss�.\nM��rit� uusi nimi.";
     Text[ thai ] = "ชื่อที่ระบุมีอยู่แล้ว\nกรุณาใส่ชื่อใหม่";
+    Text[ czech ] = "Dané jméno již existuje.\nProsím zadejte nové.";
+    Text[ hebrew ] = "‮השם שצויין כבר קיים.\nנא להקליד שם אחר.‬";
+    Text[ hindi ] = "निर्दिष्ट किया हुआ नाम पहिले से ही अस्तित्व में है ।\nकृपया एक नया नाम को प्रविष्ट कीजिए ।";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -635,7 +680,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message [ swedish ] = "Vill du �ndra spr�ket i ordlistan '%1'?" ;
     Message [ danish ] = "Vil du �ndre sproget i ordbogen '%1'?" ;
     Message [ portuguese ] = "Deseja mudar a l�ngua do dicion�rio '%1'?" ;
-    Message [ portuguese_brazilian ] = "M?hten Sie die Sprache des W?terbuches '%1' ?ndern?" ;
+    Message [ portuguese_brazilian ] = "Deseja alterar o idioma do dicion�rio '%1'?" ;
     Message[ chinese_simplified ] = "您要更改词典 '%1' 的语言吗？";
     Message[ russian ] = "�������� ���� ������� '%1'?";
     Message[ polish ] = "Czy chcesz zmieni� j�zyk s�ownika '%1'?";
@@ -649,8 +694,20 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ catalan ] = "Voleu canviar l'idioma del diccionari '%1' ?";
     Message[ finnish ] = "Haluatko vaihtaa sanaston '%1' kielt�?";
     Message[ thai ] = "คุณต้องการเปลี่ยน '%1' ภาษาพจนานุกรมหรือไม่?";
+    Message[ czech ] = "Přejete si změnit slovník jazyka '%1'?";
+    Message[ hebrew ] = "‮האם לשנות את שפת המילון ה '%1'?‬";
+    Message[ hindi ] = "आप '%1' शब्दकोश भाषा को बदलना चाहते है?";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
