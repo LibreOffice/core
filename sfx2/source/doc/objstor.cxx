@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:23:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,16 +1215,24 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 DoHandsOff();
         }
 
+        if ( bOk && pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
+        {
+            // before we overwrite the original file, we will make a backup if there is a demand for that
+            const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
+            if ( bDoBackup )
+            {
+                pMedium->DoBackup_Impl();
+                bOk = ( pMedium->GetError() == ERRCODE_NONE );
+                if ( !bOk )
+                {
+                    SetError( pMedium->GetErrorCode() );
+                    pMedium->ResetError();
+                }
+            }
+        }
+
         if ( bOk )
         {
-            if ( pMedium && ( rMedium.GetName() == pMedium->GetName() ) )
-            {
-                // before we overwrite the original file, we will make a backup if there is a demand for that
-                const sal_Bool bDoBackup = SvtSaveOptions().IsBackup();
-                if ( bDoBackup )
-                    pMedium->DoBackup_Impl();
-            }
-
             // transfer data to its destinated location
             EnableSetModified( sal_False );
             RegisterTransfer( rMedium );
