@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:30:57 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3743,15 +3743,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                 // it is at the top border of a table frame, which is a follow.
                 // Thus, use border attributes of cell frame in first row of complete table.
                 // First, determine first table frame of complete table.
-#ifdef FRANK_TEST
                 SwTabFrm* pMasterTabFrm = pParentTabFrm->FindMaster( true );
-#else
-                SwTabFrm* pMasterTabFrm = const_cast<SwTabFrm*>(pParentTabFrm->FindMaster());
-                while ( pMasterTabFrm->IsFollow() )
-                {
-                    pMasterTabFrm = pMasterTabFrm->FindMaster();
-                }
-#endif
                 // determine first row of complete table.
                 const SwFrm* pFirstRow = pMasterTabFrm->GetLower();
                 // return first cell in first row
@@ -3890,7 +3882,8 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         if ( ( bLine || bFoundCellForTopOrBorderAttrs ) &&
              !bDrawOnlyShadowForTransparentFrame )
         {
-            SWRECTFN( this )
+            const SwFrm* pDirRefFrm = IsCellFrm() ? FindTabFrm() : this;
+            SWRECTFN( pDirRefFrm )
             // OD 19.05.2003 #109667# - use new method <lcl_PaintLeftRightLine(..)>
             //::lcl_PaintLeftLine  ( this, pPage, aRect, rRect, rAttrs, fnRect );
             //::lcl_PaintRightLine ( this, pPage, aRect, rRect, rAttrs, fnRect );
