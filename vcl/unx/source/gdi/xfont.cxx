@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:13:37 $
+ *  last change: $Author: cp $ $Date: 2001-04-09 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
     {
         // fixed width font
         for ( int nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
-            *pWidthArray = mnDefaultWidth;
+            *pWidthArray = pXFontStruct->max_bounds.width;
     }
     else
     {
@@ -426,7 +426,7 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
     {
         // really a fixed width font
         for ( sal_Int32 nIdx = nFrom; nIdx <= nTo; nIdx++, pWidthArray++ )
-            *pWidthArray = mnDefaultWidth;
+            *pWidthArray = pXFontStruct->max_bounds.width;
     }
     else
     {
@@ -512,7 +512,7 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
                 || (pFont->per_char == NULL) )
             {
                 // fixed width font
-                *pWidthArray = pFont->min_bounds.width;
+                *pWidthArray = pFont->max_bounds.width;
             }
             else
             {
