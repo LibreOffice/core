@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 09:40:51 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,6 @@
 #include <string.h> // for memcpy
 
 class ZipPackage;
-class OutputThread;
 
 class ZipPackageBuffer : public com::sun::star::io::XInputStream,
                          public com::sun::star::io::XOutputStream,

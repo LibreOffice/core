@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMemoryStream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:24 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 12:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #endif
 
 class ZipPackage;
-class OutputThread;
 
 class XMemoryStream: public ZipPackageBuffer
 {
