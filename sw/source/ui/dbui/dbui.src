@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-08 18:15:15 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ chinese_traditional ] = "±Hµoµ¹";
         TEXT[ arabic ] = "íÊã ÅÑÓÇáå Åáì";
         TEXT[ greek ] = "áğïóôİëëåôáé ğñïò";
-        TEXT[ korean ] = "Àü¼Û ´ë»ó";
+        TEXT[ korean ] = "£®£®¿¡¡¡Àü¼Û";
         TEXT[ turkish ] = "Alıcı";
         TEXT[ language_user1 ] = " ";
     };
@@ -316,7 +316,7 @@ String STR_DB_EMAIL
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
     Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
     Text[ greek ] = "E-mail";
-    Text[ korean ] = "e-mail";
+    Text[ korean ] = "£Å-£Íail";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
 };
