@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:40:27 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
+#endif
+#ifndef SC_ERRORCODES_HXX
+#include "errorcodes.hxx"
 #endif
 #ifndef __GLOBSTR_HRC_
 #include "globstr.hrc"
@@ -223,6 +226,48 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
 }
 
 
+sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
+{
+    using namespace ScErrorCodes;
+    switch( nScError )
+    {
+        case errIllegalArgument:        return EXC_ERR_VALUE;
+        case errIllegalFPOperation:     return EXC_ERR_DIV0;    // maybe DIV/0 or NUM...
+        case errIllegalParameter:       return EXC_ERR_VALUE;
+        case errPairExpected:           return EXC_ERR_VALUE;
+        case errOperatorExpected:       return EXC_ERR_VALUE;
+        case errVariableExpected:       return EXC_ERR_VALUE;
+        case errParameterExpected:      return EXC_ERR_VALUE;
+        case errNoValue:                return EXC_ERR_VALUE;
+        case errCircularReference:      return EXC_ERR_VALUE;
+        case errNoCode:                 return EXC_ERR_NULL;
+        case errNoRef:                  return EXC_ERR_REF;
+        case errNoName:                 return EXC_ERR_NAME;
+        case errNoAddin:                return EXC_ERR_NAME;
+        case errNoMacro:                return EXC_ERR_NAME;
+        case NOVALUE:                   return EXC_ERR_NA;
+    }
+    return EXC_ERR_NA;
+}
+
+USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
+{
+    using namespace ScErrorCodes;
+    switch( nXclError )
+    {
+        case EXC_ERR_NULL:  return errNoCode;
+        case EXC_ERR_DIV0:  return errIllegalFPOperation;
+        case EXC_ERR_VALUE: return errNoValue;
+        case EXC_ERR_REF:   return errNoRef;
+        case EXC_ERR_NAME:  return errNoName;
+        case EXC_ERR_NUM:   return errIllegalFPOperation;
+        case EXC_ERR_NA:    return NOVALUE;
+        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
+    }
+    return NOVALUE;
+}
+
+
 sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot )
 {
     if( nXclRot > 180 )
@@ -253,14 +298,14 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
         // error value
         switch( nValue )
         {
-            case 0x00:  eType = xlErrNull;      break;
-            case 0x07:  eType = xlErrDiv0;      break;
-            case 0x0F:  eType = xlErrValue;     break;
-            case 0x17:  eType = xlErrRef;       break;
-            case 0x1D:  eType = xlErrName;      break;
-            case 0x24:  eType = xlErrNum;       break;
-            case 0x2A:  eType = xlErrNA;        break;
-            default:    eType = xlErrUnknown;
+            case EXC_ERR_NULL:  eType = xlErrNull;      break;
+            case EXC_ERR_DIV0:  eType = xlErrDiv0;      break;
+            case EXC_ERR_VALUE: eType = xlErrValue;     break;
+            case EXC_ERR_REF:   eType = xlErrRef;       break;
+            case EXC_ERR_NAME:  eType = xlErrName;      break;
+            case EXC_ERR_NUM:   eType = xlErrNum;       break;
+            case EXC_ERR_NA:    eType = xlErrNA;        break;
+            default:            eType = xlErrUnknown;
         }
         rfDblValue = 0.0;
     }
