@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 16:08:14 $
+ *  last change: $Author: nn $ $Date: 2001-07-25 18:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1576,28 +1576,28 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
 
         case SID_TABOP:
+            if (pReqArgs)
             {
-                const SfxItemSet*  pOutSet = rReq.GetArgs();
                 const ScTabOpItem& rItem =
                         (const ScTabOpItem&)
-                            pOutSet->Get( SID_TABOP );
+                            pReqArgs->Get( SID_TABOP );
 
                 pTabViewShell->TabOp( rItem.GetData() );
 
-                rReq.Done( *pOutSet );
+                rReq.Done( *pReqArgs );
             }
             break;
 
         case SID_SOLVE:
+            if (pReqArgs)
             {
-                const SfxItemSet*  pOutSet = rReq.GetArgs();
                 const ScSolveItem& rItem =
                         (const ScSolveItem&)
-                            pOutSet->Get( SCITEM_SOLVEDATA );
+                            pReqArgs->Get( SCITEM_SOLVEDATA );
 
                 pTabViewShell->Solve( rItem.GetData() );
 
-                rReq.Done( *pOutSet );
+                rReq.Done( *pReqArgs );
             }
             break;
 
