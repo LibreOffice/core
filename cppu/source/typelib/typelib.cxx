@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:23:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include <hash_map>
 #include <list>
+#include <set>
+#include <vector>
 
 #include <stdarg.h>
 #include <stdlib.h>
@@ -541,6 +543,108 @@ static inline void typelib_typedescription_initTables(
     }
 }
 
+namespace {
+
+// In some situations (notably typelib_typedescription_newInterfaceMethod and
+// typelib_typedescription_newInterfaceAttribute), only the members nMembers,
+// ppMembers, nAllMembers, and ppAllMembers of an incomplete interface type
+// description are necessary, but not the additional
+// pMapMemberIndexToFunctionIndex, nMapFunctionIndexToMemberIndex, and
+// pMapFunctionIndexToMemberIndex (which are computed by
+// typelib_typedescription_initTables).  Furthermore, in those situations, it
+// might be illegal to compute those tables, as the creation of the interface
+// member type descriptions would recursively require a complete interface type
+// description.  The parameter initTables controls whether or not to call
+// typelib_typedescription_initTables in those situations.
+bool complete(typelib_TypeDescription ** ppTypeDescr, bool initTables) {
+    if (! (*ppTypeDescr)->bComplete)
+    {
+        OSL_ASSERT( (typelib_TypeClass_STRUCT == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_UNION == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_ENUM == (*ppTypeDescr)->eTypeClass ||
+                     typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
+                    !reallyWeak( (*ppTypeDescr)->eTypeClass ) );
+
+        if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
+            ((typelib_InterfaceTypeDescription *)*ppTypeDescr)->ppAllMembers)
+        {
+            if (initTables) {
+                typelib_typedescription_initTables( *ppTypeDescr );
+            }
+            return true;
+        }
+
+        typelib_TypeDescription * pTD = 0;
+        // on demand access of complete td
+        aInit.callChain( &pTD, (*ppTypeDescr)->pTypeName );
+        if (pTD)
+        {
+            if (typelib_TypeClass_TYPEDEF == pTD->eTypeClass)
+            {
+                typelib_typedescriptionreference_getDescription(
+                    &pTD, ((typelib_IndirectTypeDescription *)pTD)->pType );
+                OSL_ASSERT( pTD );
+                if (! pTD)
+                    return false;
+            }
+
+            OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
+            // typedescription found
+            // set to on demand
+            pTD->bOnDemand = sal_True;
+
+            if (pTD->eTypeClass == typelib_TypeClass_INTERFACE
+                && !pTD->bComplete && initTables)
+            {
+                // mandatory info from callback chain
+                OSL_ASSERT( ((typelib_InterfaceTypeDescription *)pTD)->ppAllMembers );
+                // complete except of tables init
+                typelib_typedescription_initTables( pTD );
+                pTD->bComplete = sal_True;
+            }
+
+            // The type description is hold by the reference until
+            // on demand is activated.
+            ::typelib_typedescription_register( &pTD ); // replaces incomplete one
+            OSL_ASSERT( pTD == *ppTypeDescr ); // has to merge into existing one
+
+            // insert into the chache
+            MutexGuard aGuard( aInit.getMutex() );
+            if( !aInit.pCache )
+                aInit.pCache = new TypeDescriptionList_Impl;
+            if( (sal_Int32)aInit.pCache->size() >= nCacheSize )
+            {
+                typelib_typedescription_release( aInit.pCache->front() );
+                aInit.pCache->pop_front();
+            }
+            // descriptions in the cache must be acquired!
+            typelib_typedescription_acquire( pTD );
+            aInit.pCache->push_back( pTD );
+
+            OSL_ASSERT(
+                pTD->bComplete
+                || (pTD->eTypeClass == typelib_TypeClass_INTERFACE
+                    && !initTables));
+
+            ::typelib_typedescription_release( *ppTypeDescr );
+            *ppTypeDescr = pTD;
+        }
+        else
+        {
+#if OSL_DEBUG_LEVEL > 1
+            OString aStr(
+                OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( "\n### type cannot be completed: %s", aStr.getStr() );
+#endif
+            return false;
+        }
+    }
+    return true;
+}
+
+}
+
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL typelib_typedescription_newEmpty(
     typelib_TypeDescription ** ppRet,
@@ -647,6 +751,8 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp->nMapFunctionIndexToMemberIndex = 0;
             pTmp->pMapFunctionIndexToMemberIndex = 0;
             pTmp->pMapMemberIndexToFunctionIndex= 0;
+            pTmp->nBaseTypes = 0;
+            pTmp->ppBaseTypes = 0;
         }
         break;
 
@@ -663,6 +769,9 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
             pTmp->pParams = 0;
             pTmp->nExceptions = 0;
             pTmp->ppExceptions = 0;
+            pTmp->pInterface = 0;
+            pTmp->pBaseRef = 0;
+            pTmp->nIndex = 0;
         }
         break;
 
@@ -675,6 +784,9 @@ extern "C" void SAL_CALL typelib_typedescription_newEmpty(
 #endif
             pTmp->aBase.pMemberName = 0;
             pTmp->pAttributeTypeRef = 0;
+            pTmp->pInterface = 0;
+            pTmp->pBaseRef = 0;
+            pTmp->nIndex = 0;
         }
         break;
 
@@ -912,16 +1024,108 @@ extern "C" void SAL_CALL typelib_typedescription_newInterface(
     typelib_TypeDescriptionReference ** ppMembers )
     SAL_THROW_EXTERN_C()
 {
+    typelib_typedescription_newMIInterface(
+        ppRet, pTypeName, nUik1, nUik2, nUik3, nUik4, nUik5,
+        pBaseInterface == 0 ? 0 : 1, &pBaseInterface, nMembers, ppMembers);
+}
+
+//------------------------------------------------------------------------
+
+namespace {
+
+class BaseList {
+public:
+    struct Entry {
+        sal_Int32 memberOffset;
+        sal_Int32 directBaseIndex;
+        sal_Int32 directBaseMemberOffset;
+        typelib_InterfaceTypeDescription const * base;
+    };
+
+    typedef std::vector< Entry > List;
+
+    BaseList(typelib_InterfaceTypeDescription const * desc);
+
+    List const & getList() const { return list; }
+
+    sal_Int32 getBaseMembers() const { return members; }
+
+private:
+    typedef std::set< rtl::OUString > Set;
+
+    void calculate(
+        sal_Int32 directBaseIndex, Set & directBaseSet,
+        sal_Int32 * directBaseMembers,
+        typelib_InterfaceTypeDescription const * desc);
+
+    Set set;
+    List list;
+    sal_Int32 members;
+};
+
+BaseList::BaseList(typelib_InterfaceTypeDescription const * desc) {
+    members = 0;
+    for (sal_Int32 i = 0; i < desc->nBaseTypes; ++i) {
+        Set directBaseSet;
+        sal_Int32 directBaseMembers = 0;
+        calculate(i, directBaseSet, &directBaseMembers, desc->ppBaseTypes[i]);
+    }
+}
+
+void BaseList::calculate(
+    sal_Int32 directBaseIndex, Set & directBaseSet,
+    sal_Int32 * directBaseMembers,
+    typelib_InterfaceTypeDescription const * desc)
+{
+    for (sal_Int32 i = 0; i < desc->nBaseTypes; ++i) {
+        calculate(
+            directBaseIndex, directBaseSet, directBaseMembers,
+            desc->ppBaseTypes[i]);
+    }
+    if (set.insert(desc->aBase.pTypeName).second) {
+        Entry e;
+        e.memberOffset = members;
+        e.directBaseIndex = directBaseIndex;
+        e.directBaseMemberOffset = *directBaseMembers;
+        e.base = desc;
+        list.push_back(e);
+        OSL_ASSERT(desc->ppAllMembers != 0);
+        members += desc->nMembers;
+    }
+    if (directBaseSet.insert(desc->aBase.pTypeName).second) {
+        OSL_ASSERT(desc->ppAllMembers != 0);
+        *directBaseMembers += desc->nMembers;
+    }
+}
+
+}
+
+extern "C" void SAL_CALL typelib_typedescription_newMIInterface(
+    typelib_InterfaceTypeDescription ** ppRet,
+    rtl_uString * pTypeName,
+    sal_uInt32 nUik1, sal_uInt16 nUik2, sal_uInt16 nUik3, sal_uInt32 nUik4, sal_uInt32 nUik5,
+    sal_Int32 nBaseInterfaces,
+    typelib_TypeDescriptionReference ** ppBaseInterfaces,
+    sal_Int32 nMembers,
+    typelib_TypeDescriptionReference ** ppMembers )
+    SAL_THROW_EXTERN_C()
+{
     typelib_InterfaceTypeDescription * pITD = 0;
     typelib_typedescription_newEmpty(
         (typelib_TypeDescription **)&pITD, typelib_TypeClass_INTERFACE, pTypeName );
 
-    if( pBaseInterface )
-    {
-        // set the base interface, may be 0
-        ::typelib_typedescriptionreference_getDescription(
-            (typelib_TypeDescription **)&pITD->pBaseTypeDescription, pBaseInterface );
-        OSL_ASSERT( pITD->pBaseTypeDescription );
+    pITD->nBaseTypes = nBaseInterfaces;
+    pITD->ppBaseTypes = new typelib_InterfaceTypeDescription *[nBaseInterfaces];
+    for (sal_Int32 i = 0; i < nBaseInterfaces; ++i) {
+        pITD->ppBaseTypes[i] = 0;
+        typelib_typedescriptionreference_getDescription(
+            reinterpret_cast< typelib_TypeDescription ** >(
+                &pITD->ppBaseTypes[i]),
+            ppBaseInterfaces[i]);
+        OSL_ASSERT(pITD->ppBaseTypes[i] != 0);
+    }
+    if (nBaseInterfaces > 0) {
+        pITD->pBaseTypeDescription = pITD->ppBaseTypes[0];
     }
     // set the
     pITD->aUik.m_Data1 = nUik1;
@@ -930,34 +1134,54 @@ extern "C" void SAL_CALL typelib_typedescription_newInterface(
     pITD->aUik.m_Data4 = nUik4;
     pITD->aUik.m_Data5 = nUik5;
 
-    sal_Int32 nSuperMembers = pITD->pBaseTypeDescription ? pITD->pBaseTypeDescription->nAllMembers : 0;
-    pITD->nAllMembers = nMembers + nSuperMembers;
+    BaseList aBaseList(pITD);
+    pITD->nAllMembers = nMembers + aBaseList.getBaseMembers();
     pITD->nMembers = nMembers;
 
     if( pITD->nAllMembers )
     {
         // at minimum one member exist, allocate the memory
         pITD->ppAllMembers = new typelib_TypeDescriptionReference *[ pITD->nAllMembers ];
-        // the superclass references must not acquired
-        if( nSuperMembers )
+        sal_Int32 n = 0;
+
+        BaseList::List const & rList = aBaseList.getList();
+        {for (BaseList::List::const_iterator i(rList.begin()); i != rList.end();
+              ++i)
         {
-            rtl_moveMemory( pITD->ppAllMembers, pITD->pBaseTypeDescription->ppAllMembers,
-                            nSuperMembers * sizeof( void * ) );
-        }
+            typelib_InterfaceTypeDescription const * pBase = i->base;
+            typelib_InterfaceTypeDescription const * pDirectBase
+                = pITD->ppBaseTypes[i->directBaseIndex];
+            OSL_ASSERT(pBase->ppAllMembers != 0);
+            for (sal_Int32 j = 0; j < pBase->nMembers; ++j) {
+                typelib_TypeDescriptionReference const * pDirectBaseMember
+                    = pDirectBase->ppAllMembers[i->directBaseMemberOffset + j];
+                rtl::OUStringBuffer aBuf(pDirectBaseMember->pTypeName);
+                aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(":@"));
+                aBuf.append(i->directBaseIndex);
+                aBuf.append(static_cast< sal_Unicode >(','));
+                aBuf.append(i->memberOffset + j);
+                aBuf.append(static_cast< sal_Unicode >(':'));
+                aBuf.append(pITD->aBase.pTypeName);
+                rtl::OUString aName(aBuf.makeStringAndClear());
+                typelib_TypeDescriptionReference * pDerivedMember = 0;
+                typelib_typedescriptionreference_new(
+                    &pDerivedMember, pDirectBaseMember->eTypeClass,
+                    aName.pData);
+                pITD->ppAllMembers[n++] = pDerivedMember;
+            }
+        }}
 
         if( nMembers )
         {
-            pITD->ppMembers = pITD->ppAllMembers + nSuperMembers;
+            pITD->ppMembers = pITD->ppAllMembers + aBaseList.getBaseMembers();
         }
 
-        sal_Int32 n = 0;
         // add own members
-        for( sal_Int32 i = nSuperMembers; i < pITD->nAllMembers; i++ )
+        {for( sal_Int32 i = 0; i < nMembers; i++ )
         {
-            typelib_typedescriptionreference_acquire( ppMembers[n] );
-            pITD->ppAllMembers[i] = ppMembers[n];
-            ++n;
-        }
+            typelib_typedescriptionreference_acquire( ppMembers[i] );
+            pITD->ppAllMembers[n++] = ppMembers[i];
+        }}
     }
 
     typelib_TypeDescription * pTmp = (typelib_TypeDescription *)pITD;
@@ -986,25 +1210,37 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
     rtl_uString ** ppExceptionNames )
     SAL_THROW_EXTERN_C()
 {
+    if (*ppRet != 0) {
+        typelib_typedescription_release(&(*ppRet)->aBase.aBase);
+        *ppRet = 0;
+    }
+    sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
+        pTypeName->buffer, pTypeName->length, ':');
+    if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
+        OSL_ENSURE(false, "Bad interface method type name");
+        return;
+    }
+    rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
+    typelib_InterfaceTypeDescription * pInterface = 0;
+    typelib_typedescription_getByName(
+        reinterpret_cast< typelib_TypeDescription ** >(&pInterface),
+        aInterfaceTypeName.pData);
+    if (pInterface == 0
+        || pInterface->aBase.eTypeClass != typelib_TypeClass_INTERFACE
+        || !complete(
+            reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
+    {
+        OSL_ENSURE(false, "No interface corresponding to interface method");
+        return;
+    }
+
     typelib_typedescription_newEmpty(
         (typelib_TypeDescription **)ppRet, typelib_TypeClass_INTERFACE_METHOD, pTypeName );
     typelib_TypeDescription * pTmp = (typelib_TypeDescription *)*ppRet;
 
-    sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
-        pTypeName->buffer, pTypeName->length, ':' );
-
-    if( nOffset == -1 )
-    {
-        // not found
-        rtl_uString_acquire( (*ppRet)->aBase.pMemberName = pTypeName );
-    }
-    else
-    {
-        rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
-                                           pTypeName->buffer + nOffset +1,
-                                           pTypeName->length - nOffset -1 );
-    }
-
+    rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
+                                       pTypeName->buffer + nOffset +1,
+                                       pTypeName->length - nOffset -1 );
     (*ppRet)->aBase.nPosition = nAbsolutePosition;
     (*ppRet)->bOneWay = bOneWay;
     typelib_typedescriptionreference_new( &(*ppRet)->pReturnTypeRef, eReturnTypeClass, pReturnTypeName );
@@ -1038,6 +1274,13 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceMethod(
                 (*ppRet)->ppExceptions + i, typelib_TypeClass_EXCEPTION, ppExceptionNames[i] );
         }
     }
+    (*ppRet)->pInterface = pInterface;
+    (*ppRet)->pBaseRef = 0;
+    OSL_ASSERT(
+        (nAbsolutePosition >= pInterface->nAllMembers - pInterface->nMembers)
+        && nAbsolutePosition < pInterface->nAllMembers);
+    (*ppRet)->nIndex = nAbsolutePosition
+        - (pInterface->nAllMembers - pInterface->nMembers);
     if( !reallyWeak( typelib_TypeClass_INTERFACE_METHOD ) )
         pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
 }
@@ -1053,29 +1296,47 @@ extern "C" void SAL_CALL typelib_typedescription_newInterfaceAttribute(
     sal_Bool bReadOnly )
     SAL_THROW_EXTERN_C()
 {
+    if (*ppRet != 0) {
+        typelib_typedescription_release(&(*ppRet)->aBase.aBase);
+        *ppRet = 0;
+    }
+    sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
+        pTypeName->buffer, pTypeName->length, ':');
+    if (nOffset <= 0 || pTypeName->buffer[nOffset - 1] != ':') {
+        OSL_ENSURE(false, "Bad interface attribute type name");
+        return;
+    }
+    rtl::OUString aInterfaceTypeName(pTypeName->buffer, nOffset - 1);
+    typelib_InterfaceTypeDescription * pInterface = 0;
+    typelib_typedescription_getByName(
+        reinterpret_cast< typelib_TypeDescription ** >(&pInterface),
+        aInterfaceTypeName.pData);
+    if (pInterface == 0
+        || pInterface->aBase.eTypeClass != typelib_TypeClass_INTERFACE
+        || !complete(
+            reinterpret_cast< typelib_TypeDescription ** >(&pInterface), false))
+    {
+        OSL_ENSURE(false, "No interface corresponding to interface attribute");
+        return;
+    }
+
     typelib_typedescription_newEmpty(
         (typelib_TypeDescription **)ppRet, typelib_TypeClass_INTERFACE_ATTRIBUTE, pTypeName );
     typelib_TypeDescription * pTmp = (typelib_TypeDescription *)*ppRet;
 
-    sal_Int32 nOffset = rtl_ustr_lastIndexOfChar_WithLength(
-        pTypeName->buffer, pTypeName->length, ':' );
-
-    if( nOffset == -1 )
-    {
-        // not found
-        rtl_uString_acquire( (*ppRet)->aBase.pMemberName = pTypeName );
-    }
-    else
-    {
-        rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
-                                           pTypeName->buffer + nOffset +1,
-                                           pTypeName->length - nOffset -1 );
-    }
-
+    rtl_uString_newFromStr_WithLength( &(*ppRet)->aBase.pMemberName,
+                                       pTypeName->buffer + nOffset +1,
+                                       pTypeName->length - nOffset -1 );
     (*ppRet)->aBase.nPosition = nAbsolutePosition;
     typelib_typedescriptionreference_new( &(*ppRet)->pAttributeTypeRef, eAttributeTypeClass, pAttributeTypeName );
     (*ppRet)->bReadOnly = bReadOnly;
-
+    (*ppRet)->pInterface = pInterface;
+    (*ppRet)->pBaseRef = 0;
+    OSL_ASSERT(
+        (nAbsolutePosition >= pInterface->nAllMembers - pInterface->nMembers)
+        && nAbsolutePosition < pInterface->nAllMembers);
+    (*ppRet)->nIndex = nAbsolutePosition
+        - (pInterface->nAllMembers - pInterface->nMembers);
     if( !reallyWeak( typelib_TypeClass_INTERFACE_ATTRIBUTE ) )
         pTmp->pWeakRef = (typelib_TypeDescriptionReference *)pTmp;
 }
@@ -1156,18 +1417,19 @@ static inline void typelib_typedescription_destructExtendedMembers(
     case typelib_TypeClass_INTERFACE:
     {
         typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription*)pTD;
-        // The members in this array are not allocated
-        sal_Int32 nSuperMembers = pITD->pBaseTypeDescription ? pITD->pBaseTypeDescription->nAllMembers : 0;
-        // release only the descriptions of this class and not the one of the superclass
-        for( sal_Int32 i = nSuperMembers; i < pITD->nAllMembers; i++ )
+        {for( sal_Int32 i = 0; i < pITD->nAllMembers; i++ )
         {
             typelib_typedescriptionreference_release( pITD->ppAllMembers[i] );
-        }
+        }}
         delete [] pITD->ppAllMembers;
         delete [] pITD->pMapMemberIndexToFunctionIndex;
         delete [] pITD->pMapFunctionIndexToMemberIndex;
-        if (pITD->pBaseTypeDescription)
-            typelib_typedescription_release( (typelib_TypeDescription *)pITD->pBaseTypeDescription );
+        {for (sal_Int32 i = 0; i < pITD->nBaseTypes; ++i) {
+            typelib_typedescription_release(
+                reinterpret_cast< typelib_TypeDescription * >(
+                    pITD->ppBaseTypes[i]));
+        }}
+        delete[] pITD->ppBaseTypes;
         break;
     }
     case typelib_TypeClass_INTERFACE_METHOD:
@@ -1188,6 +1450,10 @@ static inline void typelib_typedescription_destructExtendedMembers(
         }
         delete [] pIMTD->ppExceptions;
         rtl_uString_release( pIMTD->aBase.pMemberName );
+        typelib_typedescription_release(&pIMTD->pInterface->aBase);
+        if (pIMTD->pBaseRef != 0) {
+            typelib_typedescriptionreference_release(pIMTD->pBaseRef);
+        }
     }
     break;
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
@@ -1197,6 +1463,10 @@ static inline void typelib_typedescription_destructExtendedMembers(
             typelib_typedescriptionreference_release( pIATD->pAttributeTypeRef );
         if( pIATD->aBase.pMemberName )
             rtl_uString_release( pIATD->aBase.pMemberName );
+        typelib_typedescription_release(&pIATD->pInterface->aBase);
+        if (pIATD->pBaseRef != 0) {
+            typelib_typedescriptionreference_release(pIATD->pBaseRef);
+        }
     }
     break;
     case typelib_TypeClass_ENUM:
@@ -1590,6 +1860,96 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
 }
 
 //------------------------------------------------------------------------
+
+namespace {
+
+bool createDerivedInterfaceMemberDescription(
+    typelib_TypeDescription ** result, rtl::OUString const & name,
+    typelib_TypeDescriptionReference * baseRef,
+    typelib_TypeDescription const * base, typelib_TypeDescription * interface,
+    sal_Int32 index, sal_Int32 position)
+{
+    if (baseRef != 0 && base != 0 && interface != 0) {
+        switch (base->eTypeClass) {
+        case typelib_TypeClass_INTERFACE_METHOD:
+            {
+                typelib_typedescription_newEmpty(
+                    result, typelib_TypeClass_INTERFACE_METHOD, name.pData);
+                typelib_InterfaceMethodTypeDescription const * baseMethod
+                    = reinterpret_cast<
+                    typelib_InterfaceMethodTypeDescription const * >(base);
+                typelib_InterfaceMethodTypeDescription * newMethod
+                    = reinterpret_cast<
+                    typelib_InterfaceMethodTypeDescription * >(*result);
+                newMethod->aBase.nPosition = position;
+                rtl_uString_acquire(
+                    newMethod->aBase.pMemberName
+                    = baseMethod->aBase.pMemberName);
+                typelib_typedescriptionreference_acquire(
+                    newMethod->pReturnTypeRef = baseMethod->pReturnTypeRef);
+                newMethod->nParams = baseMethod->nParams;
+                newMethod->pParams = new typelib_MethodParameter[
+                    newMethod->nParams];
+                {for (sal_Int32 i = 0; i < newMethod->nParams; ++i) {
+                    rtl_uString_acquire(
+                        newMethod->pParams[i].pName
+                        = baseMethod->pParams[i].pName);
+                    typelib_typedescriptionreference_acquire(
+                        newMethod->pParams[i].pTypeRef
+                        = baseMethod->pParams[i].pTypeRef);
+                    newMethod->pParams[i].bIn = baseMethod->pParams[i].bIn;
+                    newMethod->pParams[i].bOut = baseMethod->pParams[i].bOut;
+                }}
+                newMethod->nExceptions = baseMethod->nExceptions;
+                newMethod->ppExceptions
+                    = new typelib_TypeDescriptionReference *[
+                        newMethod->nExceptions];
+                {for (sal_Int32 i = 0; i < newMethod->nExceptions; ++i) {
+                    typelib_typedescriptionreference_acquire(
+                        newMethod->ppExceptions[i]
+                        = baseMethod->ppExceptions[i]);
+                }}
+                newMethod->bOneWay = baseMethod->bOneWay;
+                newMethod->pInterface
+                    = reinterpret_cast< typelib_InterfaceTypeDescription * >(
+                        interface);
+                newMethod->pBaseRef = baseRef;
+                newMethod->nIndex = index;
+                return true;
+            }
+
+        case typelib_TypeClass_INTERFACE_ATTRIBUTE:
+            {
+                typelib_typedescription_newEmpty(
+                    result, typelib_TypeClass_INTERFACE_ATTRIBUTE, name.pData);
+                typelib_InterfaceAttributeTypeDescription const * baseAttribute
+                    = reinterpret_cast<
+                    typelib_InterfaceAttributeTypeDescription const * >(base);
+                typelib_InterfaceAttributeTypeDescription * newAttribute
+                    = reinterpret_cast<
+                    typelib_InterfaceAttributeTypeDescription * >(*result);
+                newAttribute->aBase.nPosition = position;
+                rtl_uString_acquire(
+                    newAttribute->aBase.pMemberName
+                    = baseAttribute->aBase.pMemberName);
+                newAttribute->bReadOnly = baseAttribute->bReadOnly;
+                typelib_typedescriptionreference_acquire(
+                    newAttribute->pAttributeTypeRef
+                    = baseAttribute->pAttributeTypeRef);
+                newAttribute->pInterface
+                    = reinterpret_cast< typelib_InterfaceTypeDescription * >(
+                        interface);
+                newAttribute->pBaseRef = baseRef;
+                newAttribute->nIndex = index;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+}
+
 extern "C" void SAL_CALL typelib_typedescription_getByName(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
     SAL_THROW_EXTERN_C()
@@ -1695,6 +2055,48 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
                     ppRet, typelib_TypeClass_SEQUENCE, pName, element_td->pWeakRef, 0, 0 );
                 // register?
                 typelib_typedescription_release( element_td );
+            }
+        }
+        if (0 == *ppRet)
+        {
+            // Check for derived interface member type:
+            sal_Int32 i1 = name.lastIndexOf(
+                rtl::OUString::createFromAscii(":@"));
+            if (i1 >= 0) {
+                sal_Int32 i2 = i1 + RTL_CONSTASCII_LENGTH(":@");
+                sal_Int32 i3 = name.indexOf(',', i2);
+                if (i3 >= 0) {
+                    sal_Int32 i4 = name.indexOf(':', i3);
+                    if (i4 >= 0) {
+                        typelib_TypeDescriptionReference * pBaseRef = 0;
+                        typelib_TypeDescription * pBase = 0;
+                        typelib_TypeDescription * pInterface = 0;
+                        typelib_typedescriptionreference_getByName(
+                            &pBaseRef, name.copy(0, i1).pData);
+                        if (pBaseRef != 0) {
+                            typelib_typedescriptionreference_getDescription(
+                                &pBase, pBaseRef);
+                        }
+                        typelib_typedescription_getByName(
+                            &pInterface, name.copy(i4 + 1).pData);
+                        if (!createDerivedInterfaceMemberDescription(
+                                ppRet, name, pBaseRef, pBase, pInterface,
+                                name.copy(i2, i3 - i2).toInt32(),
+                                name.copy(i3 + 1, i4 - i3 - 1).toInt32()))
+                        {
+                            if (pInterface != 0) {
+                                typelib_typedescription_release(pInterface);
+                            }
+                            if (pBase != 0) {
+                                typelib_typedescription_release(pBase);
+                            }
+                            if (pBaseRef != 0) {
+                                typelib_typedescriptionreference_release(
+                                    pBaseRef);
+                            }
+                        }
+                    }
+                }
             }
         }
         if (0 == *ppRet)
@@ -2079,14 +2481,19 @@ extern "C" sal_Bool SAL_CALL typelib_typedescriptionreference_isAssignableFrom(
                 {
                     typelib_TypeDescription * pFromDescr = 0;
                     TYPELIB_DANGER_GET( &pFromDescr, pFrom );
-                    if ( !((typelib_InterfaceTypeDescription *)pFromDescr)->pBaseTypeDescription )
-                    {
-                        TYPELIB_DANGER_RELEASE( pFromDescr );
-                        return sal_False;
+                    typelib_InterfaceTypeDescription * pFromIfc
+                        = reinterpret_cast<
+                            typelib_InterfaceTypeDescription * >(pFromDescr);
+                    bool bRet = false;
+                    for (sal_Int32 i = 0; i < pFromIfc->nBaseTypes; ++i) {
+                        if (typelib_typedescriptionreference_isAssignableFrom(
+                                pAssignable,
+                                pFromIfc->ppBaseTypes[i]->aBase.pWeakRef))
+                        {
+                            bRet = true;
+                            break;
+                        }
                     }
-                    sal_Bool bRet = typelib_typedescriptionreference_isAssignableFrom(
-                        pAssignable,
-                        ((typelib_TypeDescription *)((typelib_InterfaceTypeDescription *)pFromDescr)->pBaseTypeDescription)->pWeakRef );
                     TYPELIB_DANGER_RELEASE( pFromDescr );
                     return bRet;
                 }
@@ -2115,102 +2522,5 @@ extern "C" sal_Bool SAL_CALL typelib_typedescription_complete(
     typelib_TypeDescription ** ppTypeDescr )
     SAL_THROW_EXTERN_C()
 {
-    if (! (*ppTypeDescr)->bComplete)
-    {
-        OSL_ASSERT( (typelib_TypeClass_STRUCT == (*ppTypeDescr)->eTypeClass ||
-                     typelib_TypeClass_EXCEPTION == (*ppTypeDescr)->eTypeClass ||
-                     typelib_TypeClass_UNION == (*ppTypeDescr)->eTypeClass ||
-                     typelib_TypeClass_ENUM == (*ppTypeDescr)->eTypeClass ||
-                     typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass) &&
-                    !reallyWeak( (*ppTypeDescr)->eTypeClass ) );
-
-        if (typelib_TypeClass_INTERFACE == (*ppTypeDescr)->eTypeClass &&
-            ((typelib_InterfaceTypeDescription *)*ppTypeDescr)->ppAllMembers)
-        {
-            typelib_typedescription_initTables( *ppTypeDescr );
-            return sal_True;
-        }
-        // obsolete
-//          else
-//          {
-//              MutexGuard aGuard( aInit.getMutex() );
-//              typelib_TypeDescriptionReference * pRef = 0;
-//              ::typelib_typedescriptionreference_getByName( &pRef, (*ppTypeDescr)->pTypeName );
-//              if (pRef)
-//              {
-//                  if (pRef->pType && pRef->pType->pWeakRef && pRef->pType->bComplete)
-//                  {
-//                      // found registered and complete td
-//                      ::typelib_typedescription_release( *ppTypeDescr );
-//                      *ppTypeDescr = pRef->pType;
-//                      return sal_True;
-//                  }
-//                  ::typelib_typedescriptionreference_release( pRef );
-//              }
-//          }
-
-        typelib_TypeDescription * pTD = 0;
-        // on demand access of complete td
-        aInit.callChain( &pTD, (*ppTypeDescr)->pTypeName );
-        if (pTD)
-        {
-            if (typelib_TypeClass_TYPEDEF == pTD->eTypeClass)
-            {
-                typelib_typedescriptionreference_getDescription(
-                    &pTD, ((typelib_IndirectTypeDescription *)pTD)->pType );
-                OSL_ASSERT( pTD );
-                if (! pTD)
-                    return sal_False;
-            }
-
-            OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
-            // typedescription found
-            // set to on demand
-            pTD->bOnDemand = sal_True;
-
-            if (typelib_TypeClass_INTERFACE == pTD->eTypeClass && !pTD->bComplete)
-            {
-                // mandatory info from callback chain
-                OSL_ASSERT( ((typelib_InterfaceTypeDescription *)pTD)->ppAllMembers );
-                // complete except of tables init
-                typelib_typedescription_initTables( pTD );
-                pTD->bComplete = sal_True;
-            }
-
-            // The type description is hold by the reference until
-            // on demand is activated.
-            ::typelib_typedescription_register( &pTD ); // replaces incomplete one
-            OSL_ASSERT( pTD == *ppTypeDescr ); // has to merge into existing one
-
-            // insert into the chache
-            MutexGuard aGuard( aInit.getMutex() );
-            if( !aInit.pCache )
-                aInit.pCache = new TypeDescriptionList_Impl;
-            if( (sal_Int32)aInit.pCache->size() >= nCacheSize )
-            {
-                typelib_typedescription_release( aInit.pCache->front() );
-                aInit.pCache->pop_front();
-            }
-            // descriptions in the cache must be acquired!
-            typelib_typedescription_acquire( pTD );
-            aInit.pCache->push_back( pTD );
-
-            OSL_ASSERT( pTD->bComplete );
-
-            ::typelib_typedescription_release( *ppTypeDescr );
-            *ppTypeDescr = pTD;
-        }
-        else
-        {
-#if OSL_DEBUG_LEVEL > 1
-            OString aStr(
-                OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "\n### type cannot be completed: %s", aStr.getStr() );
-#endif
-            return sal_False;
-        }
-    }
-    return sal_True;
+    return complete(ppTypeDescr, true);
 }
-
-
