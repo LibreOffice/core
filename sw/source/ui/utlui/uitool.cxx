@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:23 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -760,7 +760,7 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
 {
     Window* pDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( &rParent );
-    SfxMedium* pMed = SFX_APP()->InsertDocumentDialog( 0, SwDocShell::Factory() );
+    SfxMedium* pMed = SFX_APP()->InsertDocumentDialog( 0, String::CreateFromAscii("swriter") );
     if( pMed )
     {
         if( pFilterName )
