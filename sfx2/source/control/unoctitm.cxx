@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:33:43 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pDispatch && aURL == aDispatchURL )
     {
-        if ( !GetId() && pBindings )
+        if ( !IsBound() && pBindings )
         {
             pBindings->ENTERREGISTRATIONS();
             Bind( nSlot, pBindings );
@@ -642,7 +642,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     if ( !pDispatch )
         return;
 
-    if ( !GetId() && pBindings )
+    if ( !IsBound() && pBindings )
     {
         pBindings->ENTERREGISTRATIONS();
         Bind( nSlot, pBindings );
@@ -696,7 +696,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( bNotify && pContnr )
     {
         ::com::sun::star::uno::Any aState;
-        if ( pState && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !pState->ISA(SfxVoidItem) )
             pState->QueryValue( aState );
 
         ::com::sun::star::frame::FeatureStateEvent aEvent;
