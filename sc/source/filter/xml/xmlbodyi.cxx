@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 13:56:48 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -280,13 +279,6 @@ void ScXMLBodyContext::EndElement()
         if (pChangeTrackingImportHelper)
             pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 
-        if (bProtected)
-        {
-            uno::Sequence<sal_Int8> aPass;
-            if (sPassword.getLength())
-                SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-            pDoc->SetDocProtection(bProtected, aPass);
-        }
         std::vector<rtl::OUString> aTableStyleNames(GetScImport().GetTableStyle());
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( GetScImport().GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() && !aTableStyleNames.empty())
@@ -317,6 +309,15 @@ void ScXMLBodyContext::EndElement()
                     }
                 }
             }
+        }
+
+        // #i37959# handle document protection after the sheet settings
+        if (bProtected)
+        {
+            uno::Sequence<sal_Int8> aPass;
+            if (sPassword.getLength())
+                SvXMLUnitConverter::decodeBase64(aPass, sPassword);
+            pDoc->SetDocProtection(bProtected, aPass);
         }
     }
     GetScImport().UnlockSolarMutex();
