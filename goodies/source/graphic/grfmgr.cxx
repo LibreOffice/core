@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-17 12:35:23 $
+ *  last change: $Author: ka $ $Date: 2000-11-07 12:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 
 #include <tools/vcompat.hxx>
+#include <unotools/ucblockbytes.hxx>
+#include <unotools/tempfile.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metaact.hxx>
@@ -268,8 +270,19 @@ void GraphicObject::ImplAutoSwapIn( BOOL bIgnoreSwapState )
                 {
                     if( HasLink() )
                     {
-                        SvFileStream aIStm( GetLink(), STREAM_READ );
-                        mbAutoSwapped = !maGraphic.SwapIn( &aIStm );
+                        String aURLStr;
+
+                        if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( GetLink(), aURLStr ) )
+                        {
+                            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
+
+                            if( pIStm )
+                            {
+                                (*pIStm) >> maGraphic;
+                                mbAutoSwapped = ( maGraphic.GetType() != GRAPHIC_NONE );
+                                delete pIStm;
+                            }
+                        }
                     }
                 }
                 else if( GRFMGR_AUTOSWAPSTREAM_TEMP == pStream )
