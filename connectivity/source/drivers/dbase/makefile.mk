@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ganaya $ $Date: 2001-01-30 16:46:56 $
+#   last change: $Author: svesik $ $Date: 2001-02-02 16:33:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,10 +112,8 @@ SLOFILES=\
     $(SLO)$/Dservices.obj			\
     $(SLO)$/DDriver.obj
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
 SLOFILES+=$(SLO)$/staticmbdbase.obj
 SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
