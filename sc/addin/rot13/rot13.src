@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rot13.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:55:49 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ dutch ] = "ROT13 Algorithme, ieder alfabetisch teken van de tekst roteert met het 13e in het alfabet.";
         Text[ chinese_simplified ] = "ROT13 ·¨Τς£¬ΞΔ±ΎΔΪΓΏΈφΧΦΔΈ½«ΡΨΧΦΔΈ±νµΔµΪ13ΈφΧΦΔΈΡ­»·ΠύΧª΅£";
         Text[ greek ] = "Αλγόριθμος ROT13, κάθε αλφαβητικός χαρακτήρας του κειμένου περιστρέφεται κατά 13 θέσεις στο αλφάβητο";
-        Text[ korean ] = "ROT13 ΎΛ°νΈ®Ας, ΕΨ½ΊΖ®ΐΗ °Ά ΎΛΖΔΊª Ή®ΐΪ΄Β ΎΛΖΔΊªΏ΅Ό­ 13ΎΏ  ΐΪΈ® ΐΜµΏΗΥ΄Ο΄Ω.";
+        Text[ korean ] = "ROT13 ΎΛ°νΈ®Ας, ΕΨ½ΊΖ®ΐΗ °Ά ΎΛΖΔΊª Ή®ΐΪ΄Β ΎΛΖΔΊªΏ΅Ό­ 13  ΐΪΈ®ΎΏ ΐΜµΏΗΥ΄Ο΄Ω.";
         Text[ turkish ] = "ROT13 Algoritmi, metnin her alfabetik karakteri alfabe iηinde 13 sύra dφndόrόlόr.";
         Text[ language_user1 ] = " ";
     };
@@ -139,7 +139,7 @@ Resource RID_SC_ADDIN_ROT13
         Text[ dutch ] = "de tekst die roteert";
         Text[ chinese_simplified ] = "ÒªΠύΧªµΔΞΔ±Ύ";
         Text[ greek ] = "Το κείμενο που πρόκειται να περιστραφεί";
-        Text[ korean ] = "ΘΈΐό µΗΎξΑψ ΕΨ½ΊΖ®";
+        Text[ korean ] = "ΘΈΐόµΙ ΕΨ½ΊΖ®";
         Text[ turkish ] = "Dφndόrόlecek metin";
         Text[ language_user1 ] = " ";
     };
