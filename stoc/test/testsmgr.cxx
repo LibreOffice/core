@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:14:57 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ void setStarUserRegistry()
 
 
 
-void SAL_CALL main()
+int SAL_CALL main()
 {
     printf( "ServiceManagerTest : \r");
     setStarUserRegistry();
@@ -149,4 +149,5 @@ void SAL_CALL main()
     test_ServiceManager();
 
     printf( "ServiceManagerTest : OK\n" );
+    return 0;
 }
