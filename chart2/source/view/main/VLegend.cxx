@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-15 15:07:55 $
+ *  last change: $Author: bm $ $Date: 2003-10-16 11:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,6 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
-#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASOURCE_HPP_
 #include <drafts/com/sun/star/chart2/XDataSource.hpp>
@@ -181,7 +178,8 @@ typedef ::std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyVa
 void lcl_getProperties(
     const uno::Reference< beans::XPropertySet > & xLegendProp,
     tPropertyValues & rOutLineFillProperties,
-    tPropertyValues & rOutTextProperties )
+    tPropertyValues & rOutTextProperties,
+    sal_Int32 nMaxLabelWidth )
 {
     // Get Line- and FillProperties from model legend
     if( xLegendProp.is())
@@ -204,11 +202,10 @@ void lcl_getProperties(
         ::chart::PropertyMapper::getValueMap( aTextValueMap, aCharNameMap, xLegendProp );
 
         drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-        drawing::TextVerticalAdjust eVertAdjust( drawing::TextVerticalAdjust_TOP );
         aTextValueMap[ C2U("TextAutoGrowHeight") ] = uno::makeAny( sal_True );
         aTextValueMap[ C2U("TextAutoGrowWidth") ] = uno::makeAny( sal_True );
         aTextValueMap[ C2U("TextHorizontalAdjust") ] = uno::makeAny( eHorizAdjust );
-        aTextValueMap[ C2U("TextVerticalAdjust") ] = uno::makeAny( eVertAdjust );
+        aTextValueMap[ C2U("TextMaximumFrameWidth") ] = uno::makeAny( nMaxLabelWidth );
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
             rOutTextProperties.first, rOutTextProperties.second, aTextValueMap );
@@ -276,6 +273,8 @@ uno::Reference< drawing::XShape >
     return xResult;
 }
 
+/** Note: rOutMinExtentSoFar is the smallest non-zero size
+ */
 void lcl_getLegendEntries(
     const uno::Reference< chart2::XDataSeriesTreeParent > & xParent,
     tEntryGroup & rOutEntryContainer,
@@ -283,6 +282,7 @@ void lcl_getLegendEntries(
     const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const uno::Reference< chart2::XChartType > & xChartType,
     const tPropertyValues & rProperties,
+    awt::Size & rOutMinExtentSoFar,
     awt::Size & rOutMaxExtentSoFar )
 {
     uno::Sequence< uno::Reference< chart2::XDataSeriesTreeNode > > aChildren(
@@ -295,7 +295,7 @@ void lcl_getLegendEntries(
         {
             // recurse !
             lcl_getLegendEntries( xNewParent, rOutEntryContainer, xTarget, xShapeFactory,
-                                  xChartType, rProperties, rOutMaxExtentSoFar );
+                                  xChartType, rProperties, rOutMinExtentSoFar, rOutMaxExtentSoFar );
         }
         else
         {
@@ -325,10 +325,23 @@ void lcl_getLegendEntries(
                 ::chart::PropertyMapper::setMultiProperties(
                     rProperties.first, rProperties.second, xEntry );
 
-                // adapt max-extent
+                // adapt min-/max-extent
                 awt::Size aEntrySize( xEntry->getSize() );
-                rOutMaxExtentSoFar.Width = ::std::max(  rOutMaxExtentSoFar.Width,  aEntrySize.Width );
+                rOutMaxExtentSoFar.Width =  ::std::max( rOutMaxExtentSoFar.Width,  aEntrySize.Width );
                 rOutMaxExtentSoFar.Height = ::std::max( rOutMaxExtentSoFar.Height, aEntrySize.Height );
+                if( aEntrySize.Height > 0 )
+                {
+                    // setting initial value (otherwise (0,0) is always the minimum)
+                    if( rOutMinExtentSoFar.Height == 0 )
+                    {
+                        rOutMinExtentSoFar = aEntrySize;
+                    }
+                    else
+                    {
+                        rOutMinExtentSoFar.Width =  ::std::min( rOutMinExtentSoFar.Width,  aEntrySize.Width );
+                        rOutMinExtentSoFar.Height = ::std::min( rOutMinExtentSoFar.Height, aEntrySize.Height );
+                    }
+                }
 
                 // add entry to list
                 uno::Reference< beans::XPropertySet > xSeriesProp( xSeriesSource, uno::UNO_QUERY );
@@ -349,6 +362,7 @@ void lcl_createLegend(
     const uno::Reference< drawing::XShapes > & xTarget,
     const uno::Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const awt::Size & rAvailableSpace,
+    awt::Size aMinEntryExtent,
     awt::Size aMaxEntryExtent,
     awt::Size & rOutSize
     )
@@ -358,7 +372,8 @@ void lcl_createLegend(
     const sal_Int32 nXOffset = 100;
     const sal_Int32 nYOffset = 100;
 
-    awt::Size aMaxSymbolExtent( aMaxEntryExtent.Height * 3/2, aMaxEntryExtent.Height );
+//     awt::Size aMaxSymbolExtent( aMaxEntryExtent.Height * 3/2, aMaxEntryExtent.Height );
+    awt::Size aMaxSymbolExtent( aMinEntryExtent.Height * 3/2, aMinEntryExtent.Height );
     sal_Int32 nCurrentXPos = nXPadding;
     sal_Int32 nCurrentYPos = nYPadding;
     sal_Int32 nMaxEntryWidth = 2 * nXOffset + aMaxSymbolExtent.Width + aMaxEntryExtent.Width;
@@ -404,13 +419,34 @@ void lcl_createLegend(
 
     OSL_TRACE( "Number of Rows: %ud, Number of Columns: %ud", nNumberOfRows, nNumberOfColumns );
 
+    // calculate maximum height for current row
+    std::vector< sal_Int32 > nMaxHeights( nNumberOfRows );
+    sal_Int32 nRow = 0;
+    sal_Int32 nColumn = 0;
+    for( ; nRow < nNumberOfRows; ++nRow )
+    {
+        sal_Int32 nMaxHeight = 0;
+        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+        {
+            sal_Int32 nEntry = ( eExpansion == chart2::LegendExpansion_WIDE )
+                ? (nColumn + nRow * nNumberOfColumns)
+                // HIGH or BALANCED
+                : (nRow + nColumn * nNumberOfRows);
+            if( nEntry < nNumberOfEntries )
+                nMaxHeight = ::std::max(
+                    nMaxHeight, nYOffset + rEntries[ nEntry ].xShape->getSize().Height );
+        }
+        nMaxHeights[ nRow ] = nMaxHeight;
+    }
+
     // place entries ordered in optimal-width columns
-    for( sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+    sal_Int32 nMaxYPos = 0;
+    for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
     {
         sal_Int32 nMaxWidth = 0;
         nCurrentYPos = nYPadding;
 
-        for( sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow )
+        for( nRow = 0; nRow < nNumberOfRows; ++nRow )
         {
             sal_Int32 nEntry = ( eExpansion == chart2::LegendExpansion_WIDE )
                 ? (nColumn + nRow * nNumberOfColumns)
@@ -445,20 +481,21 @@ void lcl_createLegend(
             }
 
             // position text shape
+            awt::Size aTextSize( rEntry.xShape->getSize());
+            nMaxWidth = ::std::max(
+                nMaxWidth, 2 * nXOffset + aMaxSymbolExtent.Width + aTextSize.Width );
             rEntry.xShape->setPosition(
                 awt::Point( nCurrentXPos + aMaxSymbolExtent.Width, nCurrentYPos ));
 
-            nMaxWidth = ::std::max(
-                nMaxWidth, 3 * nXOffset + aMaxSymbolExtent.Width +
-                rEntry.xShape->getSize().Width );
-
-            nCurrentYPos += nMaxEntryHeight;
+            nCurrentYPos += nMaxHeights[ nRow ];
+            nMaxYPos = ::std::max( nMaxYPos, nCurrentYPos );
         }
         nCurrentXPos += nMaxWidth;
     }
 
     rOutSize.Width  = nCurrentXPos + nXPadding;
-    rOutSize.Height = 2*nYPadding + (nMaxEntryHeight * nNumberOfRows ) - nYOffset;
+    rOutSize.Height = nMaxYPos + nYPadding;
+    // 2*nYPadding + (nMaxEntryHeight * nNumberOfRows ) - nYOffset;
 }
 
 } // anonymous namespace
@@ -529,12 +566,16 @@ void VLegend::createShapes(
 
             uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY );
             chart2::LegendExpansion eExpansion = chart2::LegendExpansion_HIGH;
+            float fMaxFontHeight = 6.0;
             if( xLegendProp.is())
             {
-                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties );
+                // limit the width of texts to 20% of the total available width
+                sal_Int32 nMaxLabelWidth = rAvailableSpace.Width / 5;
+                lcl_getProperties( xLegendProp, aLineFillProperties, aTextProperties, nMaxLabelWidth );
 
                 // get Expansion property
                 xLegendProp->getPropertyValue( C2U( "Expansion" )) >>= eExpansion;
+                xLegendProp->getPropertyValue( C2U( "CharHeight" )) >>= fMaxFontHeight;
             }
 
             if( xBorder.is())
@@ -549,6 +590,7 @@ void VLegend::createShapes(
             // create entries
             uno::Sequence< uno::Reference< chart2::XLegendEntry > > aEntries( m_xLegend->getEntries());
             tEntryGroup aEntryGroup;
+            awt::Size aMinEntryExtent;
             awt::Size aMaxEntryExtent;
 
             for( sal_Int32 nI = 0; nI < aEntries.getLength(); ++nI )
@@ -563,7 +605,8 @@ void VLegend::createShapes(
 
                     lcl_getLegendEntries( xGroup, aEntryGroup, xLegendContainer,
                                           m_xShapeFactory, xChartType,
-                                          aTextProperties, aMaxEntryExtent );
+                                          aTextProperties,
+                                          aMinEntryExtent, aMaxEntryExtent );
                 }
             }
 
@@ -571,7 +614,8 @@ void VLegend::createShapes(
             awt::Size aLegendSize;
             lcl_createLegend( aEntryGroup, eExpansion,
                               xLegendContainer, m_xShapeFactory,
-                              rAvailableSpace, aMaxEntryExtent, aLegendSize );
+                              rAvailableSpace, aMinEntryExtent, aMaxEntryExtent,
+                              aLegendSize );
 
             if( xBorder.is())
                 xBorder->setSize( aLegendSize );
