@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 14:55:30 $
+ *  last change: $Author: kz $ $Date: 2001-06-01 19:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,8 @@ String S_LONGNAME_UNKNOWN
     Text[ english_us ] = "Long name unknown: ($Arg1)";
     Text[ portuguese ] = "Nome desconhecido: ($Arg1)";
     Text[ russian ] = "Long name unknown: ($Arg1)";
-    Text[ greek ] = "Short name unknown during copying: ($Arg1)";
-    Text[ dutch ] = "Afkorting onbekend bij kopiëren: ($Arg1)";
+    Text[ greek ] = "¢ãíùóôï üíïìá ìåãÜëïõ ìŞêïõò: ($Arg1)";
+    Text[ dutch ] = "Naam onbekend: ($Arg1)";
     Text[ french ] = "Nom inconnu : ($Arg1)";
     Text[ spanish ] = "Nombre largo desconocido: ($Arg1)";
     Text[ italian ] = "Short name unknown during copying: ($Arg1)";
@@ -236,7 +236,7 @@ String S_LONGNAME_UNKNOWN
     Text[ korean ] = "º¹»ç½Ã¿¡ ¾Ë¼ö ¾ø´Â ÂªÀº ÀÌ¸§: ($Arg1)";
     Text[ chinese_simplified ] = "³¤Ãû³Æ²»Ã÷£º($Arg1)";
     Text[ chinese_traditional ] = "ªøÀÉ®×¦WºÙ¤£©ú¡G($Arg1)";
-    Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
+    Text[ arabic ] = "ÇÓã Øæíá ÛíÑ ãÚÑæİ: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
     Text[ finnish ] = "Kopioitaessa havaittu tuntematon lyhyt nimi: ($Arg1)";
@@ -278,7 +278,7 @@ String S_TIMOUT_WAITING
     Text[ italian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ danish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
-    Text[ polish ] = "Server Timeout podczas czekania na odpowied?. Numer sekwencji: ($Arg1)";
+    Text[ polish ] = "Server Timeout podczas czekania na odpowiedŸ. Numer sekwencji: ($Arg1)";
     Text[ portuguese_brazilian ] = "Server Timeout beim Warten auf Antwort. Sequenz Nr: ($Arg1)";
     Text[ japanese ] = "‰“š‘Ò‚¿‚ÌÛ‚Ì»°ÊŞ°‚ÌÀ²Ñ±³ÄB¼°¹İ½No.: ($Arg1)";
     Text[ korean ] = "ÀÀ´äÀ» ±â´Ù¸®´Â µ¿¾È ¼­¹ö Å¸ÀÓ¾Æ¿ô. ÀÏ·Ã ¹øÈ£: ($Arg1)";
@@ -614,7 +614,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ italian ] = "Return value received but different Id expected";
     Text[ danish ] = "Return value received but different Id expected";
     Text[ swedish ] = "Return value received but different Id expected";
-    Text[ polish ] = "Odebrano warto?æ return, ale oczekiwane jest inne ID";
+    Text[ polish ] = "Odebrano wartoœæ return, ale oczekiwane jest inne ID";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber andere Id erwartet";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªA•Ê‚ÌId‚ª•K—v‚Å‚·B";
     Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ,  ÇÏÁö¸¸ ´Ù¸¥ Id¸¦ ±â´ëÇÔ";
@@ -638,7 +638,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ italian ] = "Return value received but receiver not defined";
     Text[ danish ] = "Return value received but receiver not defined";
     Text[ swedish ] = "Return value received but receiver not defined";
-    Text[ polish ] = "Odebrano warto?æ return, ale brak zdefiniowanego odbiorcy";
+    Text[ polish ] = "Odebrano wartoœæ return, ale brak zdefiniowanego odbiorcy";
     Text[ portuguese_brazilian ] = "Returnwert Empfangen aber kein Empf?nger definiert";
     Text[ japanese ] = "ØÀ°İ’l‚ğó‚¯æ‚è‚Ü‚µ‚½‚ªAóMÒ‚ªŒˆ’è‚Å‚«‚Ü‚¹‚ñB";
     Text[ korean ] = "¹İÈ¯°ª ¼ö½ÅÇÔ, ÇÏÁö¸¸ ¼ö½ÅÀÚ°¡  Á¤ÀÇµÇÁö ¾Ê¾ÒÀ½";
