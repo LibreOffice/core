@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-16 10:25:08 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 14:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,8 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
             case SVX_NUM_CHARS_LOWER_LETTER:
             case SVX_NUM_ARABIC:
             case SVX_NUM_NUMBER_NONE:
+            case SVX_NUM_CHARS_UPPER_LETTER_N:
+            case SVX_NUM_CHARS_LOWER_LETTER_N:
                 aFmt.SetNumberingType((SvxExtNumType)nSet);
                 continue;
             }
