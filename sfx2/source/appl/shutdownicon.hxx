@@ -61,6 +61,7 @@ class ShutdownIcon :    public ShutdownIconServiceBase
 #ifdef WNT
         void initSystray();
         void deInitSystray();
+        static bool IsQuickstarterInstalled();
         static void SetAutostartW32( const ::rtl::OUString& aShortcutName, bool bActivate );
         static bool GetAutostartW32( const ::rtl::OUString& aShortcutName );
         static void EnterModalMode();
