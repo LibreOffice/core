@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 09:32:33 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ hidspecial HID_GLBLTREE_UPD_SEL       { HelpId = HID_GLBLTREE_UPD_SEL       ;};
 hidspecial HID_GLBLTREE_UPD_IDX       { HelpId = HID_GLBLTREE_UPD_IDX       ;};
 hidspecial HID_GLBLTREE_UPD_LINK      { HelpId = HID_GLBLTREE_UPD_LINK      ;};
 hidspecial HID_GLBLTREEUPD_ALL          { HelpId = HID_GLBLTREEUPD_ALL          ;};
+hidspecial HID_GLBLTREE_EDIT_LINK    { HelpId = HID_GLBLTREE_EDIT_LINK      ;};
 
 // Ruler einfuegen
 hidspecial  HID_VS_RULER            { HelpId = HID_VS_RULER;};

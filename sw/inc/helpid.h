@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 09:32:32 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@
 #define HID_REDLINE_AUTOFMT_ACCEPT  (HID_BASE + 304)
 #define HID_MULTI_TOX_DLG           (HID_BASE + 305)
 #define HID_ASCII_FILTER            (HID_BASE + 306)
+#define HID_GLBLTREE_EDIT_LINK      (HID_BASE + 307)
 
 // TabPage Help-IDs *********************************************************
 

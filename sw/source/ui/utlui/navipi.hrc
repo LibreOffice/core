@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,6 @@
 #define ST_EDIT_CONTENT                 (ST_GLOBAL_CONTEXT_FIRST + 1)
 #define ST_INSERT                       (ST_GLOBAL_CONTEXT_FIRST + 2)
 #define ST_INDEX                        (ST_GLOBAL_CONTEXT_FIRST + 3)
-//#define ST_CNTIDX                       (ST_GLOBAL_CONTEXT_FIRST + 4)
-//#define ST_USRIDX                       (ST_GLOBAL_CONTEXT_FIRST + 5)
 #define ST_FILE                         (ST_GLOBAL_CONTEXT_FIRST + 4)
 #define ST_NEW_FILE                     (ST_GLOBAL_CONTEXT_FIRST + 5)
 #define ST_TEXT                         (ST_GLOBAL_CONTEXT_FIRST + 6)
@@ -118,6 +116,7 @@
 #define ST_UPDATE_LINK                  (ST_GLOBAL_CONTEXT_FIRST +10)
 #define ST_UPDATE_ALL                   (ST_GLOBAL_CONTEXT_FIRST +11)
 #define ST_BROKEN_LINK                  (ST_GLOBAL_CONTEXT_FIRST +12)
+#define ST_EDIT_LINK                    (ST_GLOBAL_CONTEXT_FIRST +13)
 
 #define ST_REMOVE_INDEX                 (ST_GLOBAL_CONTEXT_FIRST +30)
 #define ST_REMOVE_TBL_PROTECTION        (ST_GLOBAL_CONTEXT_FIRST +31)

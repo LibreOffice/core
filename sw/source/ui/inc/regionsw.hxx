@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 09:02:51 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,8 @@ class SwEditRegionDlg : public SfxModalDialog
 public:
     SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh );
     virtual ~SwEditRegionDlg();
+
+    void    SelectSection(const String& rSectionName);
 
 };
 /*************************************************************************

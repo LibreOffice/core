@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:36:30 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@
 #define CTX_INSERT          2
 #define CTX_EDIT            3
 #define CTX_DELETE          4
+#define CTX_EDIT_LINK       5
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
@@ -196,6 +197,7 @@
 #define ENABLE_DELETE       0x0010
 #define ENABLE_UPDATE       0x0020
 #define ENABLE_UPDATE_SEL   0x0040
+#define ENABLE_EDIT_LINK    0x0080
 
 // TabPos nach links schieben
 #define  GLBL_TABPOS_SUB 5
@@ -208,7 +210,7 @@ static const USHORT __FAR_DATA aHelpForMenu[] =
     HID_GLBLTREE_INSERT,        //CTX_INSERT
     HID_GLBLTREE_EDIT,          //CTX_EDIT
     HID_GLBLTREE_DEL,           //CTX_DELETE
-    0,                        //
+    HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
     0,                        //
     0,                        //
     0,                        //
@@ -478,6 +480,11 @@ void     SwGlobalTree::Command( const CommandEvent& rCEvt )
                 aPop.SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
                 aPop.InsertItem(CTX_EDIT, aContextStrings[ST_EDIT_CONTENT - ST_GLOBAL_CONTEXT_FIRST]);
                 aPop.SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
+                if(nEnableFlags&ENABLE_EDIT_LINK)
+                {
+                    aPop.InsertItem(CTX_EDIT_LINK, aContextStrings[ST_EDIT_LINK - ST_GLOBAL_CONTEXT_FIRST]);
+                    aPop.SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
+                }
                 aPop.InsertItem(CTX_INSERT, aContextStrings[ST_INSERT - ST_GLOBAL_CONTEXT_FIRST]);
                 aPop.SetHelpId(CTX_INSERT, aHelpForMenu[CTX_INSERT]);
                 aPop.InsertSeparator() ;
@@ -573,6 +580,8 @@ USHORT  SwGlobalTree::GetEnableFlags() const
         if( ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
                     (!pPrevEntry || ((SwGlblDocContent*)pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
             nRet |= ENABLE_INSERT_TEXT;
+        if( GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType() )
+            nRet |= ENABLE_EDIT_LINK;
     }
     else if(!nEntryCount)
     {
@@ -1058,6 +1067,13 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
         {
             DBG_ASSERT(pCont, "Edit ohne Entry ? " )
             EditContent(pCont);
+        }
+        break;
+        case CTX_EDIT_LINK:
+        {
+            DBG_ASSERT(pCont, "Edit ohne Entry ? " )
+            SfxStringItem aName(FN_EDIT_REGION, pCont->GetSection()->GetName());
+            rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
         }
         break;
         case CTX_DELETE:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:42 $
+ *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class SwContentType;
 
 // Strings fuer Kontextmenue
 #define CONTEXT_COUNT   12
-#define GLOBAL_CONTEXT_COUNT 13
+#define GLOBAL_CONTEXT_COUNT 14
 
 // Modi fuer Drag 'n Drop
 #define REGION_MODE_NONE        0
