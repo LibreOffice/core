@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:48 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ class ScConditionEntry
     BOOL                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
-    void    Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish );
+    void    Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish, BOOL bCompileXML );
     void    Interpret( const ScAddress& rPos );
 
     BOOL    IsValid( double nArg ) const;
@@ -146,7 +146,7 @@ public:
             ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish );
+                                BOOL bCompileEnglish, BOOL bCompileXML );
             ScConditionEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos );
@@ -164,8 +164,8 @@ public:
     void            SetIgnoreBlank(BOOL bSet);
     ScAddress       GetSrcPos() const           { return aSrcPos; }
 
-    String          GetExpression( const ScAddress& rCursor, USHORT nPos,
-                                    ULONG nNumFmt = 0, BOOL bEnglish = FALSE ) const;
+    String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
+                                    BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE ) const;
 
     ScTokenArray*   CreateTokenArry( USHORT nPos ) const;
 
@@ -196,7 +196,8 @@ public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                const String& rStyle, BOOL bCompileEnglish = FALSE );
+                                const String& rStyle,
+                                BOOL bCompileEnglish = FALSE, BOOL bCompileXML = FALSE );
             ScCondFormatEntry( ScConditionMode eOper,
                                 const ScTokenArray* pArr1, const ScTokenArray* pArr2,
                                 ScDocument* pDocument, const ScAddress& rPos,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish = FALSE );
+                                BOOL bCompileEnglish = FALSE, BOOL bCompileXML = FALSE );
             ScValidationData( const ScValidationData& r );
             ScValidationData( ScDocument* pDocument, const ScValidationData& r );
             ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
                                 ScDocument* pDocument, const ScAddress& rPos,
-                                BOOL bCompileEnglish ) :
+                                BOOL bCompileEnglish, BOOL bCompileXML ) :
     eOp(eOper),
     nOptions(0),    // spaeter...
     nVal1(0.0),
@@ -185,7 +185,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     aSrcPos(rPos),
     bFirstRun(TRUE)
 {
-    Compile( rExpr1, rExpr2, bCompileEnglish );
+    Compile( rExpr1, rExpr2, bCompileEnglish, bCompileXML );
 
     //  Formelzellen werden erst bei IsValid angelegt
 }
@@ -383,12 +383,14 @@ void ScConditionEntry::StoreCondition(SvStream& rStream, ScMultipleWriteHeader& 
     rHdr.EndEntry();
 }
 
-void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2, BOOL bEnglish )
+void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
+                                BOOL bEnglish, BOOL bCompileXML )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
         ScCompiler aComp( pDoc, aSrcPos );
         aComp.SetCompileEnglish( bEnglish );
+        aComp.SetCompileXML( bCompileXML );
 
         if ( rExpr1.Len() )
         {
@@ -842,7 +844,7 @@ BOOL ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 }
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
-                                        ULONG nNumFmt, BOOL bEnglish ) const
+                                        ULONG nNumFmt, BOOL bEnglish, BOOL bCompileXML ) const
 {
     String aRet;
 
@@ -855,6 +857,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
         {
             ScCompiler aComp(pDoc, rCursor, *pFormula1);
             aComp.SetCompileEnglish( bEnglish );
+            aComp.SetCompileXML( bCompileXML );
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr1)
@@ -872,6 +875,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
         {
             ScCompiler aComp(pDoc, rCursor, *pFormula2);
             aComp.SetCompileEnglish( bEnglish );
+            aComp.SetCompileXML( bCompileXML );
             aComp.CreateStringFromTokenArray( aRet );
         }
         else if (bIsStr2)
@@ -1016,8 +1020,9 @@ void ScConditionEntry::DataChanged( const ScRange* pModified ) const
 ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const String& rExpr1, const String& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
-                                        const String& rStyle, BOOL bCompileEnglish ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish ),
+                                        const String& rStyle,
+                                        BOOL bCompileEnglish, BOOL bCompileXML ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
     aStyleName( rStyle ),
     pParent( NULL )
 {

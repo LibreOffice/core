@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nn $ $Date: 2000-11-01 17:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,8 @@ SV_IMPL_OP_PTRARR_SORT( ScValidationEntries_Impl, ScValidationDataPtr );
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                             const String& rExpr1, const String& rExpr2,
                             ScDocument* pDocument, const ScAddress& rPos,
-                            BOOL bCompileEnglish ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish ),
+                            BOOL bCompileEnglish, BOOL bCompileXML ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
     nKey( 0 ),
     eDataMode( eMode )
 {
