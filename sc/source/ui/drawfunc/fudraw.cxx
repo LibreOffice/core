@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-13 16:00:50 $
+ *  last change: $Author: nn $ $Date: 2002-04-19 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 //------------------------------------------------------------------------
 
 #include <svx/svdobj.hxx>
+#include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -286,6 +287,29 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             pView->DeleteMarked();
             bReturn = TRUE;
             break;
+
+        case KEY_RETURN:
+        {
+            if( rKEvt.GetKeyCode().GetModifier() == 0 )
+            {
+                // #98256# activate OLE object on RETURN for selected object
+                const SdrMarkList& rMarkList = pView->GetMarkList();
+                if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
+                {
+                    BOOL bOle = pViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
+                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
+                    if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
+                    {
+                        pView->HideMarkHdl(NULL);
+                        pViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
+
+                        // consumed
+                        bReturn = TRUE;
+                    }
+                }
+            }
+        }
+        break;
 
         // #97016#
         case KEY_TAB:
