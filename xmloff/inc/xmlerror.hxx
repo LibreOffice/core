@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-28 08:39:06 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,8 @@
 // I/O errors:
 
 // format errors:
-#define XMLERROR_SAX            ( XMLERROR_CLASS_FORMAT | 0x00000001 )
+#define XMLERROR_SAX                ( XMLERROR_CLASS_FORMAT | 0x00000001 )
+#define XMLERROR_STYLE_ATTR_VALUE   ( XMLERROR_CLASS_FORMAT | 0x00000002 )
 
 // API errors:
 #define XMLERROR_STYLE_PROP_VALUE   ( XMLERROR_CLASS_API    | 0x00000001 )
@@ -126,6 +127,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { template<class X> class Sequence; }
     namespace uno { template<class X> class Reference; }
     namespace xml { namespace sax { class XLocator; } }
+    namespace xml { namespace sax { class SAXParseException; } }
 } } }
 class ErrorRecord;
 
@@ -177,6 +179,13 @@ public:
         const ::com::sun::star::uno::Sequence<
                   ::rtl::OUString> & rParams); /// parameters for error message
 
+
+    /**
+     * throw a SAXParseException that describes the first error that matches
+     * the given mask
+     */
+    void ThrowErrorAsSAXException( sal_Int32 nIdMask )
+        throw( ::com::sun::star::xml::sax::SAXParseException );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:29:18 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,11 @@ void SAL_CALL SvXMLImport::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException)
 {
     RTL_LOGFILE_TRACE_AUTHOR( "xmloff", LOGFILE_AUTHOR, "} SvXMLImport::startDocument" );
+
+    if ( pXMLErrors != NULL )
+    {
+        pXMLErrors->ThrowErrorAsSAXException( XMLERROR_FLAG_SEVERE );
+    }
 }
 
 void SAL_CALL SvXMLImport::startElement( const OUString& rName,
@@ -1312,12 +1317,14 @@ void SvXMLImport::SetError(
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 
-    // create error lsit on demand
+    // create error list on demand
     if ( pXMLErrors == NULL )
         pXMLErrors = new XMLErrors();
 
     // save error information
-    pXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage, rLocator );
+    // use document locator (if none supplied)
+    pXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage,
+                           rLocator.is() ? rLocator : xLocator );
 }
 
 void SvXMLImport::SetError(

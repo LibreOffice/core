@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlerror.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 14:05:34 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,14 @@
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
+#include <com/sun/star/xml/sax/SAXParseException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -85,12 +93,12 @@
 
 
 
-
-
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XLocator;
+using ::com::sun::star::xml::sax::SAXParseException;
 
 
 //
@@ -203,3 +211,23 @@ void XMLErrors::AddRecord(
     AddRecord( nId, rParams, sEmpty, -1, -1, sEmpty, sEmpty );
 }
 
+void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
+    throw( SAXParseException )
+{
+    // search first error/warning that matches the nIdMask
+    for( ErrorList::iterator aIter = aErrors.begin();
+         aIter != aErrors.end();
+         aIter++ )
+    {
+        if ( (aIter->nId & nIdMask) != 0 )
+        {
+            // we throw the error
+            ErrorRecord& rErr = aErrors[0];
+            Any aAny;
+            aAny <<= rErr.aParams;
+            throw SAXParseException(
+                rErr.sExceptionMessage, NULL, aAny,
+                rErr.sPublicId, rErr.sSystemId, rErr.nRow, rErr.nColumn );
+        }
+    }
+}

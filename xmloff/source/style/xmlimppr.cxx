@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-21 16:27:53 $
+ *  last change: $Author: dvo $ $Date: 2001-09-28 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,20 @@ void SvXMLImportPropertyMapper::importXML(
                             rProperties.push_back( aNewProperty );
                         else
                             rProperties[nReference] = aNewProperty;
+                    }
+                    else
+                    {
+                        // warn about unknown value (unless it's a
+                        // multi property; then we get another chance)
+                        if( (nFlags & MID_FLAG_MULTI_PROPERTY) == 0 )
+                        {
+                            Sequence<OUString> aSeq(2);
+                            aSeq[0] = rAttrName;
+                            aSeq[1] = rValue;
+                            rImport.SetError( XMLERROR_FLAG_WARNING |
+                                              XMLERROR_STYLE_ATTR_VALUE,
+                                              aSeq );
+                        }
                     }
                 }
             }
