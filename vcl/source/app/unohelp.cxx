@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-08 13:39:04 $
+ *  last change: $Author: pluby $ $Date: 2001-03-13 05:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,11 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
                 aComponentPathString += aSUPDString;
                 aComponentPathString += aDLLSuffix;
             }
+#ifdef MACOSX
+            aComponentPathString += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib.framework" ));
+#else
             aComponentPathString += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
+#endif
 #endif
 
             if (aComponentPathString.getLength() )
