@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:29 $
+#   last change: $Author: csaba $ $Date: 2000-10-16 15:12:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -663,8 +663,10 @@ $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"!="WNTI" || "$(product)"!="full"
     @echo nix
 .ELSE
+.IF "$(BUILD_SOSL)"==""
     @+echo NO HIDS!!!
     +-mhids hidother.src ..\$(INPATH)$/srs $(INCLUDE) svx hidother
+.ENDIF
 .ENDIF
 
 
