@@ -14,9 +14,20 @@
 #include <vcl/status.hxx>
 #endif
 
-// #110897#
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
 #endif
 
 namespace framework
@@ -42,15 +53,23 @@ SV_DECL_PTRARR_DEL( StatusBarDescriptor, StatusBarItemDescriptorPtr, 10, 2)
 class StatusBarConfiguration
 {
     public:
-        // #110897#
         static sal_Bool LoadStatusBar(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rInStream, StatusBarDescriptor& aItems );
 
-        // #110897#
         static sal_Bool StoreStatusBar(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             SvStream& rOutStream, const StatusBarDescriptor& aItems );
+
+        static sal_Bool LoadStatusBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rStatusbarConfiguration );
+
+        static sal_Bool StoreStatusBar(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutputStream,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rStatusbarConfiguration );
 };
 
 } // namespace framework
