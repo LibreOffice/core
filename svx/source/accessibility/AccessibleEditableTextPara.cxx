@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:53:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1957,7 +1957,7 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         // #105185# Using correct service now
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.accessibility.AccessibleParagraphView"));
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.AccessibleParagraphView"));
     }
 
 }  // end of namespace accessibility
