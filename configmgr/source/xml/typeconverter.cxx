@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: lla $ $Date: 2001-08-20 11:31:47 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,13 @@
  ************************************************************************/
 #include "typeconverter.hxx"
 
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
+#ifndef CONFIGMGR_SIMPLETYPEHELPER_HXX
+#include "simpletypehelper.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
@@ -82,13 +89,9 @@
 #include <rtl/ustring.hxx>
 #endif
 
-//#include <stdio.h>
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-
-#include "simpletypehelper.hxx"
 
 namespace uno = ::com::sun::star::uno;
 namespace script = ::com::sun::star::script;
@@ -98,64 +101,97 @@ namespace configmgr
 {
 
 //--------------------------------------------------------------------------------------------------
-    rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue) throw( script::CannotConvertException )
+    rtl::OUString toString(const uno::Reference< script::XTypeConverter >& xTypeConverter, const uno::Any& rValue)
+        CFG_UNO_THROW1( script::CannotConvertException )
     {
         rtl::OUString aRes;
-        ::uno::TypeClass aDestinationClass = rValue.getValueType().getTypeClass();
+        uno::TypeClass aDestinationClass = rValue.getValueType().getTypeClass();
 
         switch (aDestinationClass)
         {
-        case ::uno::TypeClass_BOOLEAN:
-        case ::uno::TypeClass_CHAR:
-        case ::uno::TypeClass_BYTE:
-        case ::uno::TypeClass_SHORT:
-        case ::uno::TypeClass_LONG:
-        case ::uno::TypeClass_HYPER:
-        case ::uno::TypeClass_FLOAT:
-        case ::uno::TypeClass_DOUBLE:
+        case uno::TypeClass_BOOLEAN:
+        case uno::TypeClass_CHAR:
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+        case uno::TypeClass_HYPER:
+        case uno::TypeClass_FLOAT:
+        case uno::TypeClass_DOUBLE:
             if (!xTypeConverter.is())
             {
-                throw( script::CannotConvertException( ::rtl::OUString::createFromAscii("stardiv.script.Converter!"), ::uno::Reference< ::uno::XInterface > (),
-                                                           aDestinationClass, script::FailReason::UNKNOWN, 0 ) );
+                throw script::CannotConvertException(
+                                ::rtl::OUString::createFromAscii("Missing Converter Service!"),
+                                uno::Reference< uno::XInterface > (),
+                                aDestinationClass,
+                                script::FailReason::UNKNOWN, 0
+                            );
             }
-            xTypeConverter->convertToSimpleType(rValue, ::uno::TypeClass_STRING) >>= aRes;
+            xTypeConverter->convertToSimpleType(rValue, uno::TypeClass_STRING) >>= aRes;
             break;
+
         case ::uno::TypeClass_STRING:
             rValue >>= aRes;
             break;
+
         default:
-            throw( script::CannotConvertException( ::rtl::OUString::createFromAscii("TYPE is not supported!"), uno::Reference< ::uno::XInterface > (),
-                                                       aDestinationClass, script::FailReason::TYPE_NOT_SUPPORTED, 0 ) );
+            throw script::CannotConvertException(
+                                ::rtl::OUString::createFromAscii("Unsupported type: ") + rValue.getValueType().getTypeName(),
+                                uno::Reference< uno::XInterface > (),
+                                aDestinationClass,
+                                script::FailReason::TYPE_NOT_SUPPORTED, 0
+                            );
 
         }
         return aRes;
     }
 
-    uno::Any toAny(const uno::Reference< script::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const uno::TypeClass& _rTypeClass) throw( script::CannotConvertException )
+    uno::Any toAny(const uno::Reference< script::XTypeConverter >& xTypeConverter, const ::rtl::OUString& _rValue,const uno::TypeClass& _rTypeClass)
+        CFG_UNO_THROW1( script::CannotConvertException )
     {
         uno::Any aRes;
+
+        if (!xTypeConverter.is())
+        {
+            throw script::CannotConvertException(
+                            ::rtl::OUString::createFromAscii("Missing Converter Service!"),
+                            uno::Reference< uno::XInterface > (),
+                            _rTypeClass,
+                            script::FailReason::UNKNOWN, 0
+                        );
+        }
+
         try
         {
             aRes = xTypeConverter->convertToSimpleType(uno::makeAny(_rValue), _rTypeClass);
         }
-        catch (script::CannotConvertException&)
+        catch (script::CannotConvertException& )
         {
             // ok, next try with trim()
-            if (_rValue.getLength() != 0)
+            ::rtl::OUString const sTrimmed = _rValue.trim();
+            if (sTrimmed.getLength() != 0)
             {
                 try
                 {
-                    aRes = xTypeConverter->convertToSimpleType(uno::makeAny(_rValue.trim()), _rTypeClass);
+                    aRes = xTypeConverter->convertToSimpleType(uno::makeAny(sTrimmed), _rTypeClass);
+
+                    OSL_ENSURE(aRes.hasValue(),"Converted non-empty string to NULL");
                 }
                 catch (script::CannotConvertException&)
                 {
-                    OSL_ENSURE(sal_False, "toAny : could not convert !");
+                    OSL_ASSERT(!aRes.hasValue());
                 }
+                if (!aRes.hasValue()) throw;
             }
         }
-        catch (lang::IllegalArgumentException&)
+        catch (lang::IllegalArgumentException& iae)
         {
-            OSL_ENSURE(sal_False, "toAny : could not convert !");
+            OSL_ENSURE(sal_False, "Illegal argument for typeconverter. Maybe invalid typeclass ?");
+            throw script::CannotConvertException(
+                            ::rtl::OUString::createFromAscii("Invalid Converter Argument:") + iae.Message,
+                            uno::Reference< uno::XInterface > (),
+                            _rTypeClass,
+                            script::FailReason::UNKNOWN, 0
+                        );
         }
         return aRes;
     }
@@ -208,60 +244,6 @@ namespace configmgr
     }
 
 // *************************************************************************
-// *************************************************************************
-/*
-  ::rtl::OUString findXMLTypeName(const uno::Type& _rType)
-  {
-  ::rtl::OUString aRet;
-  switch(_rType.getTypeClass())
-  {
-  case uno::TypeClass_BOOLEAN:
-  OSL_ASSERT( _rType == getBooleanType() );
-  aRet = ::rtl::OUString::createFromAscii("boolean");
-  break;
-
-  case uno::TypeClass_SHORT:
-  OSL_ASSERT( _rType == getShortType() );
-  aRet = ::rtl::OUString::createFromAscii("short");
-  break;
-
-  case uno::TypeClass_LONG:
-  OSL_ASSERT( _rType == getIntType() );
-  aRet = ::rtl::OUString::createFromAscii("int");
-  break;
-
-  case uno::TypeClass_HYPER:
-  OSL_ASSERT( _rType == getLongType() );
-  Ret = ::rtl::OUString::createFromAscii("long");
-  break;
-
-  case uno::TypeClass_DOUBLE:
-  OSL_ASSERT( _rType == getDoubleType() );
-  aRet = ::rtl::OUString::createFromAscii("double");
-  break;
-
-  case uno::TypeClass_STRING:
-  OSL_ASSERT( _rType == getStringType() );
-  aRet = ::rtl::OUString::createFromAscii("string");
-  break;
-
-  case uno::TypeClass_SEQUENCE:
-  if ( _rType == getStringType() );
-  aRet = ::rtl::OUString::createFromAscii("sequence");
-  break;
-
-  default:
-  {
-  ::rtl::OString aStr("Wrong typeclass! ");
-  aStr += ::rtl::OString::valueOf((sal_Int32)_rTypeClass);
-  OSL_ENSURE(0,aStr.getStr());
-  }
-  }
-  return aRet;
-  }
- */
-// *************************************************************************
-
     uno::Type toType(const ::rtl::OUString& _rType)
     {
         uno::Type aRet;
