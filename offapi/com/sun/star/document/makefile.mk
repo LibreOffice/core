@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2001-01-11 13:33:58 $
+#   last change: $Author: cl $ $Date: 2001-01-12 16:11:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/document
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    XEmbeddedObjectResolver.idl\
+    XGraphicObjectResolver.idl\
     DocumentEvent.idl\
     DocumentEventType.idl\
     DocumentInfo.idl\
