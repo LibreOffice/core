@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-18 11:41:38 $
+ *  last change: $Author: af $ $Date: 2002-09-12 09:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,15 @@ private:
     static ::com::sun::star::uno::Sequence< sal_Int8 > getUniqueId( void );
 protected:
 
-    /// Return the object's current bounding box relative to the desktop.
+    /** Return the object's current bounding box relative to the desktop,
+        i.e in absolute pixel coordinates.
+        @return
+            The returned rectangle is a bounding box of the object given in
+            absolute screen coordinates.
+        @raise DisposedException
+            When the object is already disposed then a
+            <type>DisposedException</type> is thrown.
+    */
      virtual Rectangle GetBoundingBoxOnScreen(void) throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
