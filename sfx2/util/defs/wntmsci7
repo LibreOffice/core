@@ -6782,3 +6782,12 @@ __CTA3?AVDisposedException@lang@star@sun@com@@
 ??_3uno@star@sun@com@@YAXAAVAny@0123@ABV?$Sequence@UPropertyValue@beans@star@sun@com@@@0123@@Z
 ?clear@?$ClearableGuard@VMutex@osl@@@osl@@QAEXXZ
 ?compareToAscii@OUString@rtl@@QBEJPBD@Z
+??1?$Reference@VXSystemShellExecute@system@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??_R0?AVSystemShellExecuteException@system@star@sun@com@@@8
+?__query@?$Reference@VXSystemShellExecute@system@star@sun@com@@@uno@star@sun@com@@CAPAVXSystemShellExecute@system@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_system_XSystemShellExecute@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSystemShellExecute@system@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??1?$Reference@VXSimpleMailClient@system@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXSimpleMailClientSupplier@system@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXSimpleMailMessage@system@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXSimpleMailClientSupplier@system@star@sun@com@@@uno@star@sun@com@@CAPAVXSimpleMailClientSupplier@system@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_system_XSimpleMailClientSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXSimpleMailClientSupplier@system@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
