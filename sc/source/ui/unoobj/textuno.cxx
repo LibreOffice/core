@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-09-13 09:35:38 $
+ *  last change: $Author: obo $ $Date: 2001-09-13 12:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,7 +904,7 @@ ScEditEngineTextObj::ScEditEngineTextObj() :
 {
 }
 
-ScEditEngineTextObj::~ScEditEngineTextObj()
+ScEditEngineTextObj::~ScEditEngineTextObj() throw()
 {
 }
 
