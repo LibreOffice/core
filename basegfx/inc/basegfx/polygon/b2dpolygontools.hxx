@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:59:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,18 @@ namespace basegfx
             Radius of the ellipse in Y direction
          */
         B2DPolygon createPolygonFromEllipse( const B2DPoint& rCenter, double nRadiusX, double nRadiusY );
+
+        /** Predicate whether a given polygon is a rectangle.
+
+            @param rPoly
+            Polygon to check
+
+            @return true, if the polygon describes a rectangle
+            (contains exactly four points, is closed, and the points
+            are either cw or ccw enumerations of a rectangle's
+            vertices).
+         */
+        bool isRectangle( const B2DPolygon& rPoly );
 
     } // end of namespace tools
 } // end of namespace basegfx
