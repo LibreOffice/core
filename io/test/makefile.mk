@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2001-03-15 17:55:24 $
+#   last change: $Author: jbu $ $Date: 2001-06-05 11:29:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,7 +91,9 @@ UNOTYPES =	com.sun.star.connection.XConnector \
         com.sun.star.lang.XComponent \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.lang.XMultiServiceFactory \
-        com.sun.star.test.XSimpleTest 
+        com.sun.star.test.XSimpleTest            \
+        com.sun.star.lang.XSingleComponentFactory \
+        com.sun.star.lang.XMultiComponentFactory
 
 
 #
