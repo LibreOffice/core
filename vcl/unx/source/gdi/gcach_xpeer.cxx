@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: hdu $ $Date: 2001-10-10 12:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     // we don't know if we are running on a system with xrender library
     // we don't want to install system libraries ourselves
     // => load them dynamically when they are there
-    void* pRenderLib = dlopen( "libXrender.so", RTLD_GLOBAL | RTLD_LAZY );
+    void* pRenderLib = dlopen( "libXrender.so.1", RTLD_GLOBAL | RTLD_LAZY );
     if( !pRenderLib ) {
         fprintf( stderr, "Display can do XRender, but no libXrender.so installed.\n"
             "Please install for improved display performance\n" );
@@ -166,16 +166,19 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     int nMajor, nMinor;
     (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
-    // TODO: enabling/disabling things depending on version
+    // TODO: enable/disable things depending on version
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
     mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay, 0, &aPictFormat, 1 );
 
-    // and support for the visual
-    XRenderPictFormat*  pVisualFormat =  (*pXRenderFindVisualFormat)( mpDisplay, _pVisual );
-    if( pVisualFormat != NULL )
-        mbUsingXRender = true;
+    if( mpGlyphFormat != NULL )
+    {
+        // and the visual must be supported too
+        XRenderPictFormat* pVisualFormat = (*pXRenderFindVisualFormat)( mpDisplay, _pVisual );
+        if( pVisualFormat != NULL )
+            mbUsingXRender = true;
+    }
 
     if( (nEnvAntiAlias & 2) == 0 )
         mbUsingXRender = false;
