@@ -252,6 +252,7 @@ $(RPMFLAGFILE) : $(RPMDEPN)
     @cat $(@:b)-menus.spec | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/" -e "s/%ICONPREFIX/$(ICONPREFIX)/" -e "s/Version: .*/Version: $(PKGVERSION)/" -e "s/Release: .*/Release: $(PKGREV)/" > $(@:db)-menus.spec
     @echo "%define _rpmdir $(RPMDIR)" >> $(@:db)-menus.spec
     @$(RPM) -bb $(@:db)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
+    +-chmod g+w $(BIN)$/noarch
     @touch $@
 
 .ENDIF
