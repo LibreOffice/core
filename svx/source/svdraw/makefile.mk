@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 14:10:37 $
+#   last change: $Author: rt $ $Date: 2004-07-12 14:42:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,6 +124,7 @@ SLOFILES=\
          $(SLO)$/svdmrkv1.obj        \
          $(SLO)$/impgrfll.obj        \
          $(SLO)$/svdpage.obj         \
+         $(SLO)$/sdrmasterpagedescriptor.obj         \
          $(SLO)$/svdpagv.obj         \
          $(SLO)$/svdpntv.obj         \
          $(SLO)$/svdpoev.obj         \
