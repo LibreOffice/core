@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:51:14 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,11 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XPOPUPMENUCONTROLLER_HPP_
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -114,8 +114,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -177,7 +177,7 @@ namespace framework
 
         private:
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
-            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > getLayoutManagerToolbars( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& rLayoutManager );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > getLayoutManagerToolbars( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& rLayoutManager );
             rtl::OUString getUINameFromCommand( const rtl::OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const rtl::OUString& rCommandURL );
             void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId );
@@ -185,8 +185,8 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >                 m_xURLTransformer;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xUICommandDescription;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager >   m_xDocCfgMgr;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xModuleCfgMgr;
+            ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xDocCfgMgr;
             rtl::OUString                                                                               m_aModuleIdentifier;
             rtl::OUString                                                                               m_aPropUIName;
             rtl::OUString                                                                               m_aPropResourceURL;
