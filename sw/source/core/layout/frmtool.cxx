@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:37:16 $
+ *  last change: $Author: ama $ $Date: 2001-06-08 11:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,14 +1341,12 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             else
                 bOldLock = TRUE;
 
-#ifndef PRODUCT
-#ifdef DEBUG
             // Wenn pFrm sich nicht bewegen kann, koennen wir auch niemanden
             // auf die naechste Seite schieben. Innerhalb eines Rahmens auch
             // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
             // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
-            static BOOL bTest = FALSE;
-            if ( bTest && !pFrm->IsInFly() && pFrm->IsMoveable() &&
+            BOOL bMoveNext = nEndIdx - rSttIdx.GetIndex() > 40;
+            if ( bMoveNext && !pFrm->IsInFly() && pFrm->IsMoveable() &&
                  (!pFrm->IsInTab() || pFrm->IsTabFrm() ) )
             {
                 SwFrm *pMove = pFrm;
@@ -1454,8 +1452,6 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                               pFrm->IsInDocBody(), nEndIdx, pPrev );
             }
             else
-#endif
-#endif
             {
                 BOOL bSplit;
                 SwFrm* pPrv = bApres ? pFrm : pFrm->GetPrev();
