@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 10:53:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 17:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1522,7 +1522,7 @@ String RID_OFFICEFILTER
     Text [ English ] = "StarOffice Documents" ;
     Text [ english_us ] = "%PRODUCTNAME Documents" ;
     Text [ italian ] = "Documenti  %PRODUCTNAME" ;
-    Text [ spanish ] = "Documentos %PRODUCTNAME" ;
+    Text [ spanish ] = "%PRODUCTNAME Documentos" ;
     Text [ french ] = "Documents %PRODUCTNAME" ;
     Text [ dutch ] = "%PRODUCTNAME-documenten" ;
     Text [ swedish ] = "%PRODUCTNAME-dokument" ;
@@ -1616,7 +1616,7 @@ String STR_FSET_FILTERNAME1
     Text [ swedish ] = "%PRODUCTNAME Frame-dokument" ;
     Text [ danish ] = "%PRODUCTNAME Frame-dokument" ;
     Text [ italian ] = "Documento %PRODUCTNAME Frame" ;
-    Text [ spanish ] = "Documento %PRODUCTNAME Frame" ;
+    Text [ spanish ] = "%PRODUCTNAME Frame Documento" ;
     Text [ french ] = "Document %PRODUCTNAME Frame" ;
     Text [ dutch ] = "%PRODUCTNAME Frame-document" ;
     Text [ portuguese ] = "Documento %PRODUCTNAME Frame" ;
