@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,6 +486,8 @@ void SwRTFWriter::MakeHeader()
                     pDoc->GetAttrPool().GetDefaultItem( RES_PARATR_TABSTOP );
         Strm() << sRTF_DEFTAB;
         OutLong( rTabs[0].GetTabPos() );
+        if (!pDoc->IsUseVirtualDevice())
+            Strm() << sRTF_LYTPRTMET;
     }
 
     // PageDescriptor ausgeben (??nur wenn das gesamte Dokument??)
