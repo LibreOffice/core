@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:24:53 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,18 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 class ScXMLExport;
 class ScXMLImport;
 
-class ScXMLExportPropertyMapper : public SvXMLExportPropertyMapper
+class ScXMLCellExportPropertyMapper : public SvXMLExportPropertyMapper
 {
+protected:
+    /** Application-specific filter. By default do nothing. */
+    virtual void ContextFilter(
+            ::std::vector< XMLPropertyState >& rProperties,
+            ::com::sun::star::uno::Reference<
+                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
 public:
-    ScXMLExportPropertyMapper(
+    ScXMLCellExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper );
-    virtual ~ScXMLExportPropertyMapper();
+    virtual ~ScXMLCellExportPropertyMapper();
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
@@ -205,21 +211,6 @@ public:
     XMLScPropHdlFactory();
     virtual ~XMLScPropHdlFactory();
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const;
-};
-
-class XMLCellStylesPropertySetMapper : public XMLPropertySetMapper
-{
-protected:
-    /** Application-specific filter. By default do nothing. */
-    virtual void ContextFilter(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                        ::com::sun::star::beans::XPropertySet > rPropSet ) const;
-public:
-
-    XMLCellStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory);
-    virtual ~XMLCellStylesPropertySetMapper();
 };
 
 class XMLColumnStylesPropertySetMapper : public XMLPropertySetMapper

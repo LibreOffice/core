@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:37 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,17 +214,167 @@ const XMLPropertyMapEntry aXMLScTableStylesProperties[] =
     { 0L }
 };
 
-ScXMLExportPropertyMapper::ScXMLExportPropertyMapper(
+ScXMLCellExportPropertyMapper::ScXMLCellExportPropertyMapper(
             const UniReference< XMLPropertySetMapper >& rMapper )
             : SvXMLExportPropertyMapper(rMapper)
 {
 }
-ScXMLExportPropertyMapper::~ScXMLExportPropertyMapper()
+
+ScXMLCellExportPropertyMapper::~ScXMLCellExportPropertyMapper()
 {
 }
 
+void ScXMLCellExportPropertyMapper::ContextFilter(
+    ::std::vector< XMLPropertyState >& rProperties,
+    uno::Reference< beans::XPropertySet > rPropSet ) const
+{
+    XMLPropertyState* pPadding = NULL;
+    XMLPropertyState* pPadding_Bottom = NULL;
+    XMLPropertyState* pPadding_Left = NULL;
+    XMLPropertyState* pPadding_Right = NULL;
+    XMLPropertyState* pPadding_Top = NULL;
+
+    XMLPropertyState* pBorder = NULL;
+    XMLPropertyState* pBorder_Bottom = NULL;
+    XMLPropertyState* pBorder_Left = NULL;
+    XMLPropertyState* pBorder_Right = NULL;
+    XMLPropertyState* pBorder_Top = NULL;
+
+    XMLPropertyState* pAllBorderWidthState = NULL;
+    XMLPropertyState* pLeftBorderWidthState = NULL;
+    XMLPropertyState* pRightBorderWidthState = NULL;
+    XMLPropertyState* pTopBorderWidthState = NULL;
+    XMLPropertyState* pBottomBorderWidthState = NULL;
+
+    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
+         propertie != rProperties.end();
+         propertie++ )
+    {
+        switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
+        {
+            case CTF_ALLPADDING:        pPadding = propertie; break;
+            case CTF_BOTTOMPADDING:     pPadding_Bottom = propertie; break;
+            case CTF_LEFTPADDING:       pPadding_Left = propertie; break;
+            case CTF_RIGHTPADDING:      pPadding_Right = propertie; break;
+            case CTF_TOPPADDING:        pPadding_Top = propertie; break;
+            case CTF_ALLBORDER:         pBorder = propertie; break;
+            case CTF_LEFTBORDER:        pBorder_Left = propertie; break;
+            case CTF_RIGHTBORDER:       pBorder_Right = propertie; break;
+            case CTF_BOTTOMBORDER:      pBorder_Bottom = propertie; break;
+            case CTF_TOPBORDER:         pBorder_Top = propertie; break;
+            case CTF_ALLBORDERWIDTH:    pAllBorderWidthState = propertie; break;
+            case CTF_LEFTBORDERWIDTH:   pLeftBorderWidthState = propertie; break;
+            case CTF_RIGHTBORDERWIDTH:  pRightBorderWidthState = propertie; break;
+            case CTF_TOPBORDERWIDTH:    pTopBorderWidthState = propertie; break;
+            case CTF_BOTTOMBORDERWIDTH: pBottomBorderWidthState = propertie; break;
+        }
+    }
+
+    if (pPadding && pPadding_Bottom && pPadding_Left && pPadding_Right && pPadding_Top)
+    {
+        sal_Int32 nBottom, nTop, nLeft, nRight;
+        if ((pPadding_Bottom->maValue >>= nBottom) &&
+            (pPadding_Left->maValue >>= nLeft) &&
+            (pPadding_Right->maValue >>= nRight) &&
+            (pPadding_Top->maValue >>= nTop))
+        {
+            if ((nBottom == nTop) && (nLeft == nRight) && (nTop == nLeft))
+            {
+                pPadding_Bottom->mnIndex = -1;
+                pPadding_Bottom->maValue.clear();
+                pPadding_Left->mnIndex = -1;
+                pPadding_Left->maValue.clear();
+                pPadding_Right->mnIndex = -1;
+                pPadding_Right->maValue.clear();
+                pPadding_Top->mnIndex = -1;
+                pPadding_Top->maValue.clear();
+            }
+            else
+            {
+                pPadding->mnIndex = -1;
+                pPadding->maValue.clear();
+            }
+        }
+    }
+    if( pBorder )
+    {
+        if( pBorder_Left && pBorder_Right && pBorder_Top && pBorder_Bottom )
+        {
+            table::BorderLine aLeft, aRight, aTop, aBottom;
+
+            pBorder_Left->maValue >>= aLeft;
+            pBorder_Right->maValue >>= aRight;
+            pBorder_Top->maValue >>= aTop;
+            pBorder_Bottom->maValue >>= aBottom;
+            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
+                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
+                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
+                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
+            {
+                pBorder_Left->mnIndex = -1;
+                pBorder_Left->maValue.clear();
+                pBorder_Right->mnIndex = -1;
+                pBorder_Right->maValue.clear();
+                pBorder_Top->mnIndex = -1;
+                pBorder_Top->maValue.clear();
+                pBorder_Bottom->mnIndex = -1;
+                pBorder_Bottom->maValue.clear();
+            }
+            else
+            {
+                pBorder->mnIndex = -1;
+                pBorder->maValue.clear();
+            }
+        }
+        else
+        {
+            pBorder->mnIndex = -1;
+            pBorder->maValue.clear();
+        }
+    }
+    if( pAllBorderWidthState )
+    {
+        if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
+        {
+            table::BorderLine aLeft, aRight, aTop, aBottom;
+
+            pLeftBorderWidthState->maValue >>= aLeft;
+            pRightBorderWidthState->maValue >>= aRight;
+            pTopBorderWidthState->maValue >>= aTop;
+            pBottomBorderWidthState->maValue >>= aBottom;
+            if( aLeft.InnerLineWidth == aRight.InnerLineWidth && aLeft.OuterLineWidth == aRight.OuterLineWidth &&
+                aLeft.LineDistance == aRight.LineDistance && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
+                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
+                aLeft.InnerLineWidth == aBottom.InnerLineWidth && aLeft.OuterLineWidth == aBottom.OuterLineWidth &&
+                aLeft.LineDistance == aBottom.LineDistance )
+            {
+                pLeftBorderWidthState->mnIndex = -1;
+                pLeftBorderWidthState->maValue.clear();
+                pRightBorderWidthState->mnIndex = -1;
+                pRightBorderWidthState->maValue.clear();
+                pTopBorderWidthState->mnIndex = -1;
+                pTopBorderWidthState->maValue.clear();
+                pBottomBorderWidthState->mnIndex = -1;
+                pBottomBorderWidthState->maValue.clear();
+            }
+            else
+            {
+                pAllBorderWidthState->mnIndex = -1;
+                pAllBorderWidthState->maValue.clear();
+            }
+        }
+        else
+        {
+            pAllBorderWidthState->mnIndex = -1;
+            pAllBorderWidthState->maValue.clear();
+        }
+    }
+}
+
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
-void ScXMLExportPropertyMapper::handleSpecialItem(
+void ScXMLCellExportPropertyMapper::handleSpecialItem(
             SvXMLAttributeList& rAttrList,
             const XMLPropertyState& rProperty,
             const SvXMLUnitConverter& rUnitConverter,
@@ -250,7 +400,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
         ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
         for (i; (i != rProperties.end()); i++)
         {
-            UniReference< XMLCellStylesPropertySetMapper > aPropMapper =
+            UniReference< XMLPropertySetMapper > aPropMapper =
                 rScXMLExport.GetCellStylesPropertySetMapper();
             sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);
             switch (nContextID)
@@ -538,213 +688,6 @@ const XMLPropertyHandler* XMLScPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
     }
 
     return pHdl;
-}
-
-void XMLCellStylesPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-    XMLPropertyState* pPadding = NULL;
-    XMLPropertyState* pPadding_Bottom = NULL;
-    XMLPropertyState* pPadding_Left = NULL;
-    XMLPropertyState* pPadding_Right = NULL;
-    XMLPropertyState* pPadding_Top = NULL;
-
-    XMLPropertyState* pBorder = NULL;
-    XMLPropertyState* pBorder_Bottom = NULL;
-    XMLPropertyState* pBorder_Left = NULL;
-    XMLPropertyState* pBorder_Right = NULL;
-    XMLPropertyState* pBorder_Top = NULL;
-
-    XMLPropertyState* pAllBorderWidthState = NULL;
-    XMLPropertyState* pLeftBorderWidthState = NULL;
-    XMLPropertyState* pRightBorderWidthState = NULL;
-    XMLPropertyState* pTopBorderWidthState = NULL;
-    XMLPropertyState* pBottomBorderWidthState = NULL;
-
-    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
-         propertie != rProperties.end();
-         propertie++ )
-    {
-        switch( GetEntryContextId( propertie->mnIndex ) )
-        {
-            case CTF_ALLPADDING:        pPadding = propertie; break;
-            case CTF_BOTTOMPADDING:     pPadding_Bottom = propertie; break;
-            case CTF_LEFTPADDING:       pPadding_Left = propertie; break;
-            case CTF_RIGHTPADDING:      pPadding_Right = propertie; break;
-            case CTF_TOPPADDING:        pPadding_Top = propertie; break;
-            case CTF_ALLBORDER:         pBorder = propertie; break;
-            case CTF_LEFTBORDER:        pBorder_Left = propertie; break;
-            case CTF_RIGHTBORDER:       pBorder_Right = propertie; break;
-            case CTF_BOTTOMBORDER:      pBorder_Bottom = propertie; break;
-            case CTF_TOPBORDER:         pBorder_Top = propertie; break;
-            case CTF_ALLBORDERWIDTH:    pAllBorderWidthState = propertie; break;
-            case CTF_LEFTBORDERWIDTH:   pLeftBorderWidthState = propertie; break;
-            case CTF_RIGHTBORDERWIDTH:  pRightBorderWidthState = propertie; break;
-            case CTF_TOPBORDERWIDTH:    pTopBorderWidthState = propertie; break;
-            case CTF_BOTTOMBORDERWIDTH: pBottomBorderWidthState = propertie; break;
-        }
-    }
-
-    if (pPadding && pPadding_Bottom && pPadding_Left && pPadding_Right && pPadding_Top)
-    {
-        sal_Int32 nBottom, nTop, nLeft, nRight;
-        if ((pPadding_Bottom->maValue >>= nBottom) &&
-            (pPadding_Left->maValue >>= nLeft) &&
-            (pPadding_Right->maValue >>= nRight) &&
-            (pPadding_Top->maValue >>= nTop))
-        {
-            if ((nBottom == nTop) && (nLeft == nRight) && (nTop == nLeft))
-            {
-                pPadding_Bottom->mnIndex = -1;
-                pPadding_Bottom->maValue.clear();
-                pPadding_Left->mnIndex = -1;
-                pPadding_Left->maValue.clear();
-                pPadding_Right->mnIndex = -1;
-                pPadding_Right->maValue.clear();
-                pPadding_Top->mnIndex = -1;
-                pPadding_Top->maValue.clear();
-            }
-            else
-            {
-                pPadding->mnIndex = -1;
-                pPadding->maValue.clear();
-            }
-        }
-    }
-    if( pBorder )
-    {
-        if( pBorder_Left && pBorder_Right && pBorder_Top && pBorder_Bottom )
-        {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
-
-            pBorder_Left->maValue >>= aLeft;
-            pBorder_Right->maValue >>= aRight;
-            pBorder_Top->maValue >>= aTop;
-            pBorder_Bottom->maValue >>= aBottom;
-            if( aLeft.Color == aRight.Color && aLeft.InnerLineWidth == aRight.InnerLineWidth &&
-                aLeft.OuterLineWidth == aRight.OuterLineWidth && aLeft.LineDistance == aRight.LineDistance &&
-                aLeft.Color == aTop.Color && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.Color == aBottom.Color && aLeft.InnerLineWidth == aBottom.InnerLineWidth &&
-                aLeft.OuterLineWidth == aBottom.OuterLineWidth && aLeft.LineDistance == aBottom.LineDistance )
-            {
-                pBorder_Left->mnIndex = -1;
-                pBorder_Left->maValue.clear();
-                pBorder_Right->mnIndex = -1;
-                pBorder_Right->maValue.clear();
-                pBorder_Top->mnIndex = -1;
-                pBorder_Top->maValue.clear();
-                pBorder_Bottom->mnIndex = -1;
-                pBorder_Bottom->maValue.clear();
-            }
-            else
-            {
-                pBorder->mnIndex = -1;
-                pBorder->maValue.clear();
-            }
-        }
-        else
-        {
-            pBorder->mnIndex = -1;
-            pBorder->maValue.clear();
-        }
-    }
-    if( pAllBorderWidthState )
-    {
-        if( pLeftBorderWidthState && pRightBorderWidthState && pTopBorderWidthState && pBottomBorderWidthState )
-        {
-            table::BorderLine aLeft, aRight, aTop, aBottom;
-
-            pLeftBorderWidthState->maValue >>= aLeft;
-            pRightBorderWidthState->maValue >>= aRight;
-            pTopBorderWidthState->maValue >>= aTop;
-            pBottomBorderWidthState->maValue >>= aBottom;
-            if( aLeft.InnerLineWidth == aRight.InnerLineWidth && aLeft.OuterLineWidth == aRight.OuterLineWidth &&
-                aLeft.LineDistance == aRight.LineDistance && aLeft.InnerLineWidth == aTop.InnerLineWidth &&
-                aLeft.OuterLineWidth == aTop.OuterLineWidth && aLeft.LineDistance == aTop.LineDistance &&
-                aLeft.InnerLineWidth == aBottom.InnerLineWidth && aLeft.OuterLineWidth == aBottom.OuterLineWidth &&
-                aLeft.LineDistance == aBottom.LineDistance )
-            {
-                pLeftBorderWidthState->mnIndex = -1;
-                pLeftBorderWidthState->maValue.clear();
-                pRightBorderWidthState->mnIndex = -1;
-                pRightBorderWidthState->maValue.clear();
-                pTopBorderWidthState->mnIndex = -1;
-                pTopBorderWidthState->maValue.clear();
-                pBottomBorderWidthState->mnIndex = -1;
-                pBottomBorderWidthState->maValue.clear();
-            }
-            else
-            {
-                pAllBorderWidthState->mnIndex = -1;
-                pAllBorderWidthState->maValue.clear();
-            }
-        }
-        else
-        {
-            pAllBorderWidthState->mnIndex = -1;
-            pAllBorderWidthState->maValue.clear();
-        }
-    }
-}
-
-XMLCellStylesPropertySetMapper::XMLCellStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLCellStylesPropertySetMapper::~XMLCellStylesPropertySetMapper()
-{
-}
-
-void XMLColumnStylesPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-}
-
-XMLColumnStylesPropertySetMapper::XMLColumnStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLColumnStylesPropertySetMapper::~XMLColumnStylesPropertySetMapper()
-{
-}
-
-void XMLRowStylesPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-}
-
-XMLRowStylesPropertySetMapper::XMLRowStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLRowStylesPropertySetMapper::~XMLRowStylesPropertySetMapper()
-{
-}
-
-void XMLTableStylesPropertySetMapper::ContextFilter(
-    ::std::vector< XMLPropertyState >& rProperties,
-    uno::Reference< beans::XPropertySet > rPropSet ) const
-{
-}
-
-XMLTableStylesPropertySetMapper::XMLTableStylesPropertySetMapper(const XMLPropertyMapEntry* pEntries,
-            const UniReference< XMLPropertyHandlerFactory >& rFactory) :
-    XMLPropertySetMapper( pEntries, rFactory )
-{
-}
-
-XMLTableStylesPropertySetMapper::~XMLTableStylesPropertySetMapper()
-{
 }
 
 XmlScPropHdl_CellProtection::~XmlScPropHdl_CellProtection()

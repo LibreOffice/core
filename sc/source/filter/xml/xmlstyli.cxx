@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 13:22:39 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,44 +693,32 @@ UniReference < SvXMLImportPropertyMapper >
             case XML_STYLE_FAMILY_TABLE_CELL:
             {
                 if( !xCellImpPropMapper.is() )
-                {
-                    XMLCellStylesPropertySetMapper *pPropMapper = GetScImport().GetCellStylesPropertySetMapper();
                     ((XMLTableStylesContext *)this)->xCellImpPropMapper =
-                        new ScXMLImportPropertyMapper( pPropMapper );
-                }
+                        new ScXMLImportPropertyMapper( GetScImport().GetCellStylesPropertySetMapper() );
                 xMapper = xCellImpPropMapper;
             }
             break;
             case XML_STYLE_FAMILY_TABLE_COLUMN:
             {
                 if( !xColumnImpPropMapper.is() )
-                {
-                    XMLColumnStylesPropertySetMapper *pPropMapper = GetScImport().GetColumnStylesPropertySetMapper();
                     ((XMLTableStylesContext *)this)->xColumnImpPropMapper =
-                        new ScXMLImportPropertyMapper( pPropMapper );
-                }
+                        new ScXMLImportPropertyMapper( GetScImport().GetColumnStylesPropertySetMapper() );
                 xMapper = xColumnImpPropMapper;
             }
              break;
             case XML_STYLE_FAMILY_TABLE_ROW:
             {
                 if( !xRowImpPropMapper.is() )
-                {
-                    XMLRowStylesPropertySetMapper *pPropMapper = GetScImport().GetRowStylesPropertySetMapper();
                     ((XMLTableStylesContext *)this)->xRowImpPropMapper =
-                        new ScXMLImportPropertyMapper( pPropMapper );
-                }
+                        new ScXMLImportPropertyMapper( GetScImport().GetRowStylesPropertySetMapper() );
                 xMapper = xRowImpPropMapper;
             }
              break;
             case XML_STYLE_FAMILY_TABLE_TABLE:
             {
                 if( !xTableImpPropMapper.is() )
-                {
-                    XMLTableStylesPropertySetMapper *pPropMapper = GetScImport().GetTableStylesPropertySetMapper();
                     ((XMLTableStylesContext *)this)->xTableImpPropMapper =
-                        new ScXMLImportPropertyMapper( pPropMapper );
-                }
+                        new ScXMLImportPropertyMapper( GetScImport().GetTableStylesPropertySetMapper() );
                 xMapper = xTableImpPropMapper;
             }
              break;

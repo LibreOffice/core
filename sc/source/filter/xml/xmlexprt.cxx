@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-03 16:34:36 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,11 +1817,6 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
                xModel(xTempModel),
     pDoc(NULL),
     mbShowProgress( bShowProgr ),
-    pScPropHdlFactory(0L),
-    pCellStylesPropertySetMapper(0L),
-    pColumnStylesPropertySetMapper(0L),
-    pRowStylesPropertySetMapper(0L),
-    pTableStylesPropertySetMapper(0L),
     nLastColumns(SC_DEFAULT_TABLE_COUNT, 0),
     nLastRows(SC_DEFAULT_TABLE_COUNT, 0),
     aColumnStyles(),
@@ -1859,88 +1854,29 @@ SvXMLExport( rFileName, rHandler, xTempModel, GetFieldUnit() ),
         }
     }
 
-    pScPropHdlFactory = new XMLScPropHdlFactory;
-    if(pScPropHdlFactory)
-    {
-        // set lock to avoid deletion
-        pScPropHdlFactory->acquire();
+    xScPropHdlFactory = new XMLScPropHdlFactory;
+    xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);
+    xColumnStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, xScPropHdlFactory);
+    xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, xScPropHdlFactory);
+    xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
+    xCellStylesExportPropertySetMapper = new ScXMLCellExportPropertyMapper(xCellStylesPropertySetMapper);
+    xColumnStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xColumnStylesPropertySetMapper);
+    xRowStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xRowStylesPropertySetMapper);
+    xTableStylesExportPropertySetMapper = new SvXMLExportPropertyMapper(xTableStylesPropertySetMapper);
 
-        // build one ref
-        const UniReference< XMLPropertyHandlerFactory > aFactoryRef = pScPropHdlFactory;
-
-        // construct PropertySetMapper
-        pCellStylesPropertySetMapper = new XMLCellStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, aFactoryRef);
-        if(pCellStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pCellStylesPropertySetMapper->acquire();
-        }
-        pColumnStylesPropertySetMapper = new XMLColumnStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, aFactoryRef);
-        if(pColumnStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pColumnStylesPropertySetMapper->acquire();
-        }
-        pRowStylesPropertySetMapper = new XMLRowStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, aFactoryRef);
-        if(pRowStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pRowStylesPropertySetMapper->acquire();
-        }
-        pTableStylesPropertySetMapper = new XMLTableStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, aFactoryRef);
-        if(pTableStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pTableStylesPropertySetMapper->acquire();
-        }
-    }
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_CELL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)),
-        pCellStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
+        xCellStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_COLUMN, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME)),
-        pColumnStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
+        xColumnStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_ROW, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME)),
-        pRowStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
+        xRowStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX)));
     GetAutoStylePool()->AddFamily(XML_STYLE_FAMILY_TABLE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME)),
-        pTableStylesPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
+        xTableStylesExportPropertySetMapper, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX)));
 }
 
 
 ScXMLExport::~ScXMLExport()
 {
-//  delete pAutoStylePool;
-
-//  if( bShowProgress )
-//      ::EndProgress( pDoc->GetDocShell() );
-
-//  _FinitItemExport();
-//  _FinitNumRuleExport();
-    if (pScPropHdlFactory)
-    {
-        pScPropHdlFactory->release();
-        pScPropHdlFactory = 0L;
-    }
-    if (pCellStylesPropertySetMapper)
-    {
-        pCellStylesPropertySetMapper->release();
-        pCellStylesPropertySetMapper = 0L;
-    }
-    if (pColumnStylesPropertySetMapper)
-    {
-        pColumnStylesPropertySetMapper->release();
-        pColumnStylesPropertySetMapper = 0L;
-    }
-    if (pRowStylesPropertySetMapper)
-    {
-        pRowStylesPropertySetMapper->release();
-        pRowStylesPropertySetMapper = 0L;
-    }
-    if (pTableStylesPropertySetMapper)
-    {
-        pTableStylesPropertySetMapper->release();
-        pTableStylesPropertySetMapper = 0L;
-    }
-//  if (pScAutoStylePool)
-//      delete pScAutoStylePool;
 }
 
 table::CellRangeAddress ScXMLExport::GetEndAddress(uno::Reference<sheet::XSpreadsheet>& xTable,const sal_Int16 nTable)
@@ -2724,11 +2660,9 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     }
     exportDataStyles();
 
-    const UniReference< XMLPropertySetMapper > aCellStylesMapperRef = pCellStylesPropertySetMapper;
-    ScXMLExportPropertyMapper* aCellStylesExpPropMapper = new ScXMLExportPropertyMapper(aCellStylesMapperRef);
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles")),
-        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, aCellStylesExpPropMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
+        XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME, xCellStylesExportPropertySetMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
 }
 
 void ScXMLExport::_ExportAutoStyles()
@@ -2758,7 +2692,7 @@ void ScXMLExport::_ExportAutoStyles()
                     uno::Reference<beans::XPropertySet> xTableProperties(xTable, uno::UNO_QUERY);
                     if (xTableProperties.is())
                     {
-                        std::vector<XMLPropertyState> xPropStates = pTableStylesPropertySetMapper->Filter(xTableProperties);
+                        std::vector<XMLPropertyState> xPropStates = xTableStylesExportPropertySetMapper->Filter(xTableProperties);
                         if(xPropStates.size())
                         {
                             rtl::OUString sParent;
@@ -2842,7 +2776,7 @@ void ScXMLExport::_ExportAutoStyles()
                                             rtl::OUString sStyleName;
                                             if (aStyle >>= sStyleName)
                                             {
-                                                std::vector< XMLPropertyState > xPropStates = pCellStylesPropertySetMapper->Filter( xProperties );
+                                                std::vector< XMLPropertyState > xPropStates = xCellStylesExportPropertySetMapper->Filter( xProperties );
                                                 if (xPropStates.size())
                                                 {
                                                     sal_Int32 nIndex;
@@ -2941,7 +2875,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumn, uno::UNO_QUERY);
                                         if (xColumnProperties.is())
                                         {
-                                            std::vector<XMLPropertyState> xPropStates = pColumnStylesPropertySetMapper->Filter(xColumnProperties);
+                                            std::vector<XMLPropertyState> xPropStates = xColumnStylesExportPropertySetMapper->Filter(xColumnProperties);
                                             if(xPropStates.size())
                                             {
                                                 sal_Int32 nIndex;
@@ -2991,7 +2925,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
                                         if(xRowProperties.is())
                                         {
-                                            std::vector<XMLPropertyState> xPropStates = pRowStylesPropertySetMapper->Filter(xRowProperties);
+                                            std::vector<XMLPropertyState> xPropStates = xRowStylesExportPropertySetMapper->Filter(xRowProperties);
                                             if(xPropStates.size())
                                             {
                                                 sal_Int32 nIndex;
@@ -3054,31 +2988,14 @@ void ScXMLExport::_ExportAutoStyles()
             }
             GetPageExport()->collectAutoStyles(sal_True);
 
-            const UniReference< XMLPropertySetMapper > aColumnStylesMapperRef = pColumnStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* pColumnStylesExpPropMapper = new ScXMLExportPropertyMapper(aColumnStylesMapperRef);
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_COLUMN,
-                *pColumnStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
-                GetNamespaceMap());
-            delete pColumnStylesExpPropMapper;
-            const UniReference< XMLPropertySetMapper > aRowStylesMapperRef = pRowStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* pRowStylesExpPropMapper = new ScXMLExportPropertyMapper(aRowStylesMapperRef);
+                GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_ROW,
-                *pRowStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
-                GetNamespaceMap());
-            delete pRowStylesExpPropMapper;
-            const UniReference< XMLPropertySetMapper > aTableStylesMapperRef = pTableStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* pTableStylesExpPropMapper = new ScXMLExportPropertyMapper(aTableStylesMapperRef);
+                GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_TABLE,
-                *pTableStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
-                GetNamespaceMap());
-            delete pTableStylesExpPropMapper;
-            exportAutoDataStyles();
-            const UniReference< XMLPropertySetMapper > aCellStylesMapperRef = pCellStylesPropertySetMapper;
-            ScXMLExportPropertyMapper* pCellStylesExpPropMapper = new ScXMLExportPropertyMapper(aCellStylesMapperRef);
+                GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
-                *pCellStylesExpPropMapper, GetDocHandler(), GetMM100UnitConverter(),
-                GetNamespaceMap());
-            delete pCellStylesExpPropMapper;
+                GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
             GetTextParagraphExport()->exportTextAutoStyles();
             GetShapeExport()->exportAutoStyles();
             GetChartExport()->exportAutoStyles();

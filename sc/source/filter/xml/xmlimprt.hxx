@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:50:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,11 +617,11 @@ class ScXMLImport: public SvXMLImport
     ScDocument*             pDoc;
 
 //  SvXMLAutoStylePoolP     *pScAutoStylePool;
-    XMLScPropHdlFactory     *pScPropHdlFactory;
-    XMLCellStylesPropertySetMapper      *pCellStylesPropertySetMapper;
-    XMLColumnStylesPropertySetMapper    *pColumnStylesPropertySetMapper;
-    XMLRowStylesPropertySetMapper       *pRowStylesPropertySetMapper;
-    XMLTableStylesPropertySetMapper     *pTableStylesPropertySetMapper;
+    UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
+    UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
     SvXMLImportContextRef       xStyles;
     SvXMLImportContextRef       xAutoStyles;
 
@@ -747,10 +747,10 @@ public:
 //                                  ::com::sun::star::xml::sax::XAttributeList& xAttrList,
 //                                SfxItemSet& rItemSet );
 
-    XMLCellStylesPropertySetMapper* GetCellStylesPropertySetMapper() const { return pCellStylesPropertySetMapper; }
-    XMLColumnStylesPropertySetMapper* GetColumnStylesPropertySetMapper() const { return pColumnStylesPropertySetMapper; }
-    XMLRowStylesPropertySetMapper* GetRowStylesPropertySetMapper() const { return pRowStylesPropertySetMapper; }
-    XMLTableStylesPropertySetMapper* GetTableStylesPropertySetMapper() const { return pTableStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() const { return xCellStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetColumnStylesPropertySetMapper() const { return xColumnStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetRowStylesPropertySetMapper() const { return xRowStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() const { return xTableStylesPropertySetMapper; }
     SvXMLImportContextRef           GetAutoStyles() const { return xAutoStyles; }
     SvXMLImportContextRef           GetStyles() const { return xStyles; }
 

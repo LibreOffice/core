@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:50:27 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,11 +1243,6 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     aMyNamedExpressions(),
     aValidations(),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
-    pScPropHdlFactory(0L),
-    pCellStylesPropertySetMapper(0L),
-    pColumnStylesPropertySetMapper(0L),
-    pRowStylesPropertySetMapper(0L),
-    pTableStylesPropertySetMapper(0L),
     sSC_float(RTL_CONSTASCII_USTRINGPARAM(sXML_float)),
     sSC_time(RTL_CONSTASCII_USTRINGPARAM(sXML_time)),
     sSC_date(RTL_CONSTASCII_USTRINGPARAM(sXML_date)),
@@ -1265,41 +1260,11 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
 
     pDoc = ScXMLConverter::GetScDocument( xTempModel );
     DBG_ASSERT( pDoc, "ScXMLImport::ScXMLImport - no ScDocument!" );
-    pScPropHdlFactory = new XMLScPropHdlFactory;
-    if(pScPropHdlFactory)
-    {
-        // set lock to avoid deletion
-        pScPropHdlFactory->acquire();
-
-        // build one ref
-        const UniReference< XMLPropertyHandlerFactory > aFactoryRef = pScPropHdlFactory;
-
-        // construct PropertySetMapper
-        pCellStylesPropertySetMapper = new XMLCellStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, aFactoryRef);
-        if(pCellStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pCellStylesPropertySetMapper->acquire();
-        }
-        pColumnStylesPropertySetMapper = new XMLColumnStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, aFactoryRef);
-        if(pColumnStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pColumnStylesPropertySetMapper->acquire();
-        }
-        pRowStylesPropertySetMapper = new XMLRowStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, aFactoryRef);
-        if(pRowStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pRowStylesPropertySetMapper->acquire();
-        }
-        pTableStylesPropertySetMapper = new XMLTableStylesPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, aFactoryRef);
-        if(pTableStylesPropertySetMapper)
-        {
-            // set lock to avoid deletion
-            pTableStylesPropertySetMapper->acquire();
-        }
-    }
+    xScPropHdlFactory = new XMLScPropHdlFactory;
+    xCellStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScCellStylesProperties, xScPropHdlFactory);
+    xColumnStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScColumnStylesProperties, xScPropHdlFactory);
+    xRowStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScRowStylesProperties, xScPropHdlFactory);
+    xTableStylesPropertySetMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLScTableStylesProperties, xScPropHdlFactory);
     uno::Reference<document::XActionLockable> xActionLockable(xTempModel, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
@@ -1373,31 +1338,6 @@ ScXMLImport::~ScXMLImport()
     delete pDataPilotMemberAttrTokenMap;
     delete pConsolidationAttrTokenMap;
 
-    if (pScPropHdlFactory)
-    {
-        pScPropHdlFactory->release();
-        pScPropHdlFactory = 0L;
-    }
-    if (pCellStylesPropertySetMapper)
-    {
-        pCellStylesPropertySetMapper->release();
-        pCellStylesPropertySetMapper = 0L;
-    }
-    if (pColumnStylesPropertySetMapper)
-    {
-        pColumnStylesPropertySetMapper->release();
-        pColumnStylesPropertySetMapper = 0L;
-    }
-    if (pRowStylesPropertySetMapper)
-    {
-        pRowStylesPropertySetMapper->release();
-        pRowStylesPropertySetMapper = 0L;
-    }
-    if (pTableStylesPropertySetMapper)
-    {
-        pTableStylesPropertySetMapper->release();
-        pTableStylesPropertySetMapper = 0L;
-    }
 //  if (pScAutoStylePool)
 //      delete pScAutoStylePool;
     uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);

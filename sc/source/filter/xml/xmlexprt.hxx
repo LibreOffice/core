@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:48:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-07 16:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,11 +434,15 @@ class ScXMLExport : public SvXMLExport
 //  SvXMLExportItemMapper       *pTableItemMapper;
 
 //  SvXMLAutoStylePoolP         *pScAutoStylePool;
-    XMLScPropHdlFactory         *pScPropHdlFactory;
-    XMLCellStylesPropertySetMapper      *pCellStylesPropertySetMapper;
-    XMLColumnStylesPropertySetMapper    *pColumnStylesPropertySetMapper;
-    XMLRowStylesPropertySetMapper       *pRowStylesPropertySetMapper;
-    XMLTableStylesPropertySetMapper     *pTableStylesPropertySetMapper;
+    UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
+    UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xColumnStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xRowStylesPropertySetMapper;
+    UniReference < XMLPropertySetMapper >       xTableStylesPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper >  xCellStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper >  xColumnStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper >  xRowStylesExportPropertySetMapper;
+    UniReference < SvXMLExportPropertyMapper >  xTableStylesExportPropertySetMapper;
     ScColumnRowStyles                   aColumnStyles;
     ScColumnRowStyles                   aRowStyles;
     ScFormatRangeStyles                 aCellStyles;
@@ -559,7 +563,7 @@ public:
         const sal_Int32 nCol, const sal_Int32 nRow,
         com::sun::star::table::CellRangeAddress& aCellAddress, sal_Bool& bIsFirst) const;
 
-    XMLCellStylesPropertySetMapper* GetCellStylesPropertySetMapper() { return pCellStylesPropertySetMapper; }
+    UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
 
     ScMyValidations* GetValidations() { return pValidations; }
 
