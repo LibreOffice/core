@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:57 $
+ *  last change: $Author: mib $ $Date: 2000-12-13 09:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,13 +743,16 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                              nBottomBorder < pEndRow->nBottomBorder )
                         pEndRow->nBottomBorder = nBottomBorder;
                 }
-                else
-                {
-                    aCols[nOldCol]->bLeftBorder = FALSE;
-                    aCols[nCol]->bRightBorder = FALSE;
-                    pRow->bTopBorder = FALSE;
-                    pEndRow->bBottomBorder = FALSE;
-                }
+//              MIB: 13.12.2000: Why should a cell that contains a subtable
+//              not have borders? Moreover, switching them, off switches off
+//              the fill border lines between the columns and rows. (#74222#)
+//              else
+//              {
+//                  aCols[nOldCol]->bLeftBorder = FALSE;
+//                  aCols[nCol]->bRightBorder = FALSE;
+//                  pRow->bTopBorder = FALSE;
+//                  pEndRow->bBottomBorder = FALSE;
+//              }
             }
             else
             {
@@ -940,11 +943,14 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/wrtswtbl.cxx,v 1.1.1.1 2000-09-18 17:14:57 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/wrtswtbl.cxx,v 1.2 2000-12-13 09:31:49 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:57  hr
+      initial import
+
       Revision 1.3  2000/09/18 16:04:55  willem.vandorp
       OpenOffice header added.
 
