@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:59:56 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3719,25 +3719,25 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         TabStop = TRUE ;
         Text = "~Alle einfügen" ;
         Text [ ENGLISH ] = "List" ;
-        Text [ english_us ] = "Paste ~List" ;
+        Text [ english_us ] = "Insert ~All" ;
         Text [ italian ] = "~Lista" ;
-        Text [ spanish ] = "~Lista" ;
+        Text [ spanish ] = "~Insertar todo" ;
         Text [ french ] = "~Liste" ;
         Text [ dutch ] = "~Lijst" ;
-        Text [ swedish ] = "~Lista" ;
+        Text [ swedish ] = "Infoga ~alla" ;
         Text [ danish ] = "Liste" ;
         Text [ portuguese_brazilian ] = "~Liste" ;
         Text [ portuguese ] = "~Lista" ;
-        Text[ chinese_simplified ] = "åˆ—å•(~L)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨æ’å…¥(~A)";
         Text[ russian ] = "Ñïèñîê";
         Text[ polish ] = "Lista";
-        Text[ japanese ] = "ãƒªã‚¹ãƒˆ(~L)";
-        Text[ chinese_traditional ] = "æ¸…å–®(~L)";
+        Text[ japanese ] = "ã™ã¹ã¦ã‚’æŒ¿å…¥";
+        Text[ chinese_traditional ] = "å…¨éƒ¨æ’å…¥(~A)";
         Text[ arabic ] = "ÇáŞÇÆãÉ";
         Text[ greek ] = "Ëßóôá";
         Text[ korean ] = "ëª©ë¡(~L)";
         Text[ turkish ] = "~Liste";
-        Text[ language_user1 ] = " ";
+        Text[ language_user1 ] = "EM Sept 2002: Has nothing to do with the Clipboard.";
         Text[ catalan ] = "Enganxa la ~llista";
         Text[ finnish ] = "Liitä ~luettelo";
         Text[ thai ] = "à¸§à¸²à¸‡~à¸£à¸²à¸¢à¸à¸²à¸£";
