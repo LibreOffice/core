@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-12 16:19:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-27 21:33:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,6 +1016,25 @@ ATTR_SETEMPHASIS:
                 }
                 break;
 
+            case RTF_CHBGFDIAG:
+            case RTF_CHBGDKVERT:
+            case RTF_CHBGDKHORIZ:
+            case RTF_CHBGVERT:
+            case RTF_CHBGHORIZ:
+            case RTF_CHBGDKFDIAG:
+            case RTF_CHBGDCROSS:
+            case RTF_CHBGCROSS:
+            case RTF_CHBGBDIAG:
+            case RTF_CHBGDKDCROSS:
+            case RTF_CHBGDKCROSS:
+            case RTF_CHBGDKBDIAG:
+            case RTF_CHCBPAT:
+            case RTF_CHCFPAT:
+            case RTF_CHSHDNG:
+                if( PLAINID->nBgColor )
+                    ReadBackgroundAttr( nToken, *pSet );
+                break;
+
 
 /*  */
 
@@ -1579,58 +1598,78 @@ inline ULONG CalcShading( ULONG nColor, ULONG nFillColor, BYTE nShading )
     return nColor + nFillColor;
 }
 
-void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableDef )
+void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
+                                        int bTableDef )
 {
     // dann lese doch mal das BoderAttribut ein
     int bWeiter = TRUE;
     USHORT nColor = USHRT_MAX, nFillColor = USHRT_MAX;
     BYTE nFillValue = 0;
 
+    USHORT nWh = ( nToken & ~0xff ) == RTF_CHRFMT
+                    ? PLAINID->nBgColor
+                    : PARDID->nBrush;
+
     do {
         switch( nToken )
         {
         case RTF_CLCBPAT:
+        case RTF_CHCBPAT:
         case RTF_CBPAT:
             nFillColor = USHORT( nTokenValue );
             break;
 
         case RTF_CLCFPAT:
+        case RTF_CHCFPAT:
         case RTF_CFPAT:
             nColor = USHORT( nTokenValue );
             break;
 
         case RTF_CLSHDNG:
+        case RTF_CHSHDNG:
         case RTF_SHADING:
             nFillValue = (BYTE)( nTokenValue / 100 );
             break;
 
         case RTF_CLBGDKHOR:
+        case RTF_CHBGDKHORIZ:
         case RTF_BGDKHORIZ:
         case RTF_CLBGDKVERT:
+        case RTF_CHBGDKVERT:
         case RTF_BGDKVERT:
         case RTF_CLBGDKBDIAG:
+        case RTF_CHBGDKBDIAG:
         case RTF_BGDKBDIAG:
         case RTF_CLBGDKFDIAG:
+        case RTF_CHBGDKFDIAG:
         case RTF_BGDKFDIAG:
         case RTF_CLBGDKCROSS:
+        case RTF_CHBGDKCROSS:
         case RTF_BGDKCROSS:
         case RTF_CLBGDKDCROSS:
+        case RTF_CHBGDKDCROSS:
         case RTF_BGDKDCROSS:
             // dark -> 60%
             nFillValue = 60;
             break;
 
         case RTF_CLBGHORIZ:
+        case RTF_CHBGHORIZ:
         case RTF_BGHORIZ:
         case RTF_CLBGVERT:
+        case RTF_CHBGVERT:
         case RTF_BGVERT:
         case RTF_CLBGBDIAG:
+        case RTF_CHBGBDIAG:
         case RTF_BGBDIAG:
         case RTF_CLBGFDIAG:
+        case RTF_CHBGFDIAG:
         case RTF_BGFDIAG:
         case RTF_CLBGCROSS:
+        case RTF_CHBGCROSS:
         case RTF_BGCROSS:
         case RTF_CLBGDCROSS:
+        case RTF_CHBGDCROSS:
         case RTF_BGDCROSS:
             // light -> 20%
             nFillValue = 20;
@@ -1680,8 +1719,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet, int bTableD
             (BYTE)CalcShading( aCol.GetGreen(), aFCol.GetGreen(), nFillValue ),
             (BYTE)CalcShading( aCol.GetBlue(), aFCol.GetBlue(), nFillValue ) );
 
-    rSet.Put( SvxBrushItem( aColor, PARDID->nBrush ) );
-
+    rSet.Put( SvxBrushItem( aColor, nWh ) );
     SkipToken( -1 );
 }
 
