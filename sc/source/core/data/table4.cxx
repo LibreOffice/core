@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-03 18:18:15 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,17 +1534,33 @@ void ScTable::AutoFormatArea(USHORT nStartCol, USHORT nStartRow, USHORT nEndCol,
                 SvxFontItem aFont;
                 pData->GetFont(nIndex, aFont);
                 aPattern.GetItemSet().Put(aFont);
+                pData->GetCJKFont(nIndex, aFont);
+                aPattern.GetItemSet().Put(aFont);
+                pData->GetCTLFont(nIndex, aFont);
+                aPattern.GetItemSet().Put(aFont);
 
                 SvxFontHeightItem aFontHeight;
                 pData->GetFontHeight(nIndex, aFontHeight);
+                aPattern.GetItemSet().Put(aFontHeight);
+                pData->GetCJKFontHeight(nIndex, aFontHeight);
+                aPattern.GetItemSet().Put(aFontHeight);
+                pData->GetCTLFontHeight(nIndex, aFontHeight);
                 aPattern.GetItemSet().Put(aFontHeight);
 
                 SvxWeightItem aFontWeight;
                 pData->GetFontWeight(nIndex, aFontWeight);
                 aPattern.GetItemSet().Put(aFontWeight);
+                pData->GetCJKFontWeight(nIndex, aFontWeight);
+                aPattern.GetItemSet().Put(aFontWeight);
+                pData->GetCTLFontWeight(nIndex, aFontWeight);
+                aPattern.GetItemSet().Put(aFontWeight);
 
                 SvxPostureItem aFontPosture;
                 pData->GetFontPosture(nIndex, aFontPosture);
+                aPattern.GetItemSet().Put(aFontPosture);
+                pData->GetCJKFontPosture(nIndex, aFontPosture);
+                aPattern.GetItemSet().Put(aFontPosture);
+                pData->GetCTLFontPosture(nIndex, aFontPosture);
                 aPattern.GetItemSet().Put(aFontPosture);
 
                 SvxUnderlineItem aFontUnderline;
@@ -1756,6 +1772,14 @@ void ScTable::GetAutoFormatAttr(USHORT nCol, USHORT nRow, USHORT nIndex, ScAutoF
     rData.SetFontHeight     (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_FONT_HEIGHT));
     rData.SetFontWeight     (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_FONT_WEIGHT));
     rData.SetFontPosture    (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_FONT_POSTURE));
+    rData.SetCJKFont        (nIndex, *(SvxFontItem*)GetAttr(       nCol, nRow, ATTR_CJK_FONT));
+    rData.SetCJKFontHeight  (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_CJK_FONT_HEIGHT));
+    rData.SetCJKFontWeight  (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_CJK_FONT_WEIGHT));
+    rData.SetCJKFontPosture (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_CJK_FONT_POSTURE));
+    rData.SetCTLFont        (nIndex, *(SvxFontItem*)GetAttr(       nCol, nRow, ATTR_CTL_FONT));
+    rData.SetCTLFontHeight  (nIndex, *(SvxFontHeightItem*)GetAttr( nCol, nRow, ATTR_CTL_FONT_HEIGHT));
+    rData.SetCTLFontWeight  (nIndex, *(SvxWeightItem*)GetAttr(     nCol, nRow, ATTR_CTL_FONT_WEIGHT));
+    rData.SetCTLFontPosture (nIndex, *(SvxPostureItem*)GetAttr(    nCol, nRow, ATTR_CTL_FONT_POSTURE));
     rData.SetFontUnderline  (nIndex, *(SvxUnderlineItem*)GetAttr(  nCol, nRow, ATTR_FONT_UNDERLINE));
     rData.SetFontCrossedOut (nIndex, *(SvxCrossedOutItem*)GetAttr( nCol, nRow, ATTR_FONT_CROSSEDOUT));
     rData.SetFontContour    (nIndex, *(SvxContourItem*)GetAttr(    nCol, nRow, ATTR_FONT_CONTOUR));

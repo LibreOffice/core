@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 10:37:05 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,28 +191,48 @@ const SfxItemPropertyMap* lcl_GetAutoFieldMap()
 {
     static SfxItemPropertyMap aAutoFieldMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &::getCppuType((const sal_Int32*)0),        0, MID_BACK_COLOR },
-        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,    &::getCppuType((const sal_Int32*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,  &::getBooleanCppuType(),                    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,&::getBooleanCppuType(),                   0, MID_CROSSED_OUT },
-        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,          &::getCppuType((const sal_Int16*)0),        0, MID_FONT_FAMILY },
-        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,          &::getCppuType((const ::rtl::OUString*)0),  0, MID_FONT_FAMILY_NAME },
-        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,   &::getCppuType((const float*)0),        0, MID_FONTHEIGHT | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,  &::getCppuType((const awt::FontSlant*)0),   0, MID_POSTURE },
-        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED, &::getBooleanCppuType(),                    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,&::getCppuType((const sal_Int16*)0),        0, MID_UNDERLINE },
-        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,   &::getCppuType((const float*)0),            0, MID_WEIGHT },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,   &::getCppuType((const table::CellHoriJustify*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,    &::getBooleanCppuType(),                    0, MID_GRAPHIC_TRANSPARENT },
-        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &::getBooleanCppuType(),                    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &::getCppuType((const table::CellOrientation*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,  &::getCppuType((const sal_Int32*)0),        0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,   &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,        &::getCppuType((const sal_Int32*)0),        0, MID_BACK_COLOR },
+        {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,        &::getCppuType((const sal_Int32*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_COUTL),    ATTR_FONT_CONTOUR,      &::getBooleanCppuType(),                    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CCROSS),   ATTR_FONT_CROSSEDOUT,   &::getBooleanCppuType(),                    0, MID_CROSSED_OUT },
+        {MAP_CHAR_LEN(SC_UNONAME_CFONT),    ATTR_FONT,              &::getCppuType((const sal_Int16*)0),        0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,              &::getCppuType((sal_Int16*)0),              0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFCHARS),  ATTR_CTL_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_CHAR_SET },
+        {MAP_CHAR_LEN(SC_UNONAME_CFFAMIL),  ATTR_FONT,              &::getCppuType((sal_Int16*)0),              0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFFAMIL),  ATTR_CJK_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFFAMIL),  ATTR_CTL_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_FAMILY },
+        {MAP_CHAR_LEN(SC_UNONAME_CFNAME),   ATTR_FONT,              &::getCppuType((rtl::OUString*)0),          0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFNAME),   ATTR_CJK_FONT,          &::getCppuType((rtl::OUString*)0),          0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFNAME),   ATTR_CTL_FONT,          &::getCppuType((rtl::OUString*)0),          0, MID_FONT_FAMILY_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CFPITCH),  ATTR_FONT,              &::getCppuType((sal_Int16*)0),              0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFPITCH),  ATTR_CJK_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFPITCH),  ATTR_CTL_FONT,          &::getCppuType((sal_Int16*)0),              0, MID_FONT_PITCH },
+        {MAP_CHAR_LEN(SC_UNONAME_CFSTYLE),  ATTR_FONT,              &::getCppuType((rtl::OUString*)0),          0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CFSTYLE),  ATTR_CJK_FONT,          &::getCppuType((rtl::OUString*)0),          0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CFSTYLE),  ATTR_CTL_FONT,          &::getCppuType((rtl::OUString*)0),          0, MID_FONT_STYLE_NAME },
+        {MAP_CHAR_LEN(SC_UNONAME_CHEIGHT),  ATTR_FONT_HEIGHT,       &::getCppuType((float*)0),                  0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CHEIGHT),  ATTR_CJK_FONT_HEIGHT,   &::getCppuType((float*)0),                  0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CHEIGHT),  ATTR_CTL_FONT_HEIGHT,   &::getCppuType((float*)0),                  0, MID_FONTHEIGHT | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_CPOST),    ATTR_FONT_POSTURE,      &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CPOST),    ATTR_CJK_FONT_POSTURE,  &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CPOST),    ATTR_CTL_FONT_POSTURE,  &::getCppuType((awt::FontSlant*)0),         0, MID_POSTURE },
+        {MAP_CHAR_LEN(SC_UNONAME_CSHADD),   ATTR_FONT_SHADOWED,     &::getBooleanCppuType(),                    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CUNDER),   ATTR_FONT_UNDERLINE,    &::getCppuType((const sal_Int16*)0),        0, MID_UNDERLINE },
+        {MAP_CHAR_LEN(SC_UNONAME_CWEIGHT),  ATTR_FONT_WEIGHT,       &::getCppuType((float*)0),                  0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CJK_CWEIGHT),  ATTR_CJK_FONT_WEIGHT,   &::getCppuType((float*)0),                  0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNO_CTL_CWEIGHT),  ATTR_CTL_FONT_WEIGHT,   &::getCppuType((float*)0),                  0, MID_WEIGHT },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLHJUS), ATTR_HOR_JUSTIFY,       &::getCppuType((const table::CellHoriJustify*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND,        &::getBooleanCppuType(),                    0, MID_GRAPHIC_TRANSPARENT },
+        {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,         &::getBooleanCppuType(),                    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,       &::getCppuType((const table::CellOrientation*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PLMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_L_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PRMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_R_MARGIN  | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_PTMARGIN), ATTR_MARGIN,            &::getCppuType((const sal_Int32*)0),        0, MID_MARGIN_UP_MARGIN | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,      &::getCppuType((const sal_Int32*)0),        0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,       &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,       &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
         {0,0,0,0}
     };
     return aAutoFieldMap_Impl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:47 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@ JP 20.07.95:
     Sollte sich doch mal eine Aenderung nicht vermeiden lassen, dann auf
     jedenfall in beiden Applikationen aendern.
 
+    The structure of table auto formatting should not changed. It is used
+    by different code of Writer and Calc. If a change is necessary, the
+    source code of both applications must be changed!
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 **************************************************************************/
 
@@ -116,21 +120,33 @@ class ScAutoFormatData : public DataObject
 private:
     String                  aName;
     USHORT                  nStrResId;
-    // gemeinsame Flags von StarCalc und StarWriter
+    // common flags of Calc and Writer
     BOOL                    bIncludeFont : 1;
     BOOL                    bIncludeJustify : 1;
     BOOL                    bIncludeFrame : 1;
     BOOL                    bIncludeBackground : 1;
 
-    // StarCalc spezifisches
+    // Calc specific flags
     BOOL                    bIncludeValueFormat : 1;
     BOOL                    bIncludeWidthHeight : 1;
 
-    // gemeinsame Attribute von StarCalc und StarWriter
+    // common attributes of Calc and Writer
+    // --- from 641 on: CJK and CTL font settings
     SvxFontItem*            pFont[16];
     SvxFontHeightItem*      pFontHeight[16];
     SvxWeightItem*          pFontWeight[16];
     SvxPostureItem*         pFontPosture[16];
+
+    SvxFontItem*            pCJKFont[16];
+    SvxFontHeightItem*      pCJKFontHeight[16];
+    SvxWeightItem*          pCJKFontWeight[16];
+    SvxPostureItem*         pCJKFontPosture[16];
+
+    SvxFontItem*            pCTLFont[16];
+    SvxFontHeightItem*      pCTLFontHeight[16];
+    SvxWeightItem*          pCTLFontWeight[16];
+    SvxPostureItem*         pCTLFontPosture[16];
+
     SvxUnderlineItem*       pFontUnderline[16];
     SvxCrossedOutItem*      pFontCrossedOut[16];
     SvxContourItem*         pFontContour[16];
@@ -139,20 +155,20 @@ private:
     SvxBoxItem*             pBox[16];
     SvxBrushItem*           pBackground[16];
 
-    // StarWriter spezifisches
+    // Writer specific
     SvxAdjustItem*          pAdjust[16];
 
-    // StarCalc spezifisches
+    // Calc specific
     SvxHorJustifyItem*      pHorJustify[16];
     SvxVerJustifyItem*      pVerJustify[16];
     SvxOrientationItem*     pOrientation[16];
     SvxMarginItem*          pMargin[16];
     SfxBoolItem*            pLinebreak[16];
-    // ab SO5, 504k, gedrehter Text
+    // from SO5, 504k on, rotated text
     SfxInt32Item*           pRotateAngle[16];
     SvxRotateModeItem*      pRotateMode[16];
 
-    // Zahlenformat
+    // number format
     ScNumFormatAbbrev*      pNumFormat[16];
 
 public:
@@ -197,6 +213,32 @@ public:
 
     void    GetFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const;
     void    SetFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture);
+
+    // --- from 641 on: CJK and CTL font settings
+    void    GetCJKFont(USHORT nIndex, SvxFontItem& rFont) const;
+    void    SetCJKFont(USHORT nIndex, const SvxFontItem& rFont);
+
+    void    GetCJKFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const;
+    void    SetCJKFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight);
+
+    void    GetCJKFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const;
+    void    SetCJKFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight);
+
+    void    GetCJKFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const;
+    void    SetCJKFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture);
+
+    void    GetCTLFont(USHORT nIndex, SvxFontItem& rFont) const;
+    void    SetCTLFont(USHORT nIndex, const SvxFontItem& rFont);
+
+    void    GetCTLFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const;
+    void    SetCTLFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight);
+
+    void    GetCTLFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const;
+    void    SetCTLFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight);
+
+    void    GetCTLFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const;
+    void    SetCTLFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture);
+    //---
 
     void    GetFontUnderline(USHORT nIndex, SvxUnderlineItem& rFontUnderline) const;
     void    SetFontUnderline(USHORT nIndex, const SvxUnderlineItem& rFontUnderline);

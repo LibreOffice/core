@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-08 10:19:34 $
+ *  last change: $Author: dr $ $Date: 2001-11-14 15:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,13 @@ const USHORT AUTOFORMAT_DATA_ID_504 = 9802;
 const USHORT AUTOFORMAT_ID_552      = 9901;
 const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
 
+// --- from 641 on: CJK and CTL font settings
+const USHORT AUTOFORMAT_ID_641      = 10001;
+const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
+
 // aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_552;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_552;
+const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_641;
+const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_641;
 
 
 #ifdef READ_OLDVERS
@@ -267,6 +271,17 @@ ScAutoFormatData::ScAutoFormatData()
         pFontHeight[i]      = new SvxFontHeightItem;
         pFontWeight[i]      = new SvxWeightItem;
         pFontPosture[i]     = new SvxPostureItem;
+
+        pCJKFont[i]         = new SvxFontItem( ATTR_CJK_FONT );
+        pCJKFontHeight[i]   = new SvxFontHeightItem( 240, 100, ATTR_CJK_FONT_HEIGHT );
+        pCJKFontWeight[i]   = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CJK_FONT_WEIGHT );
+        pCJKFontPosture[i]  = new SvxPostureItem( ITALIC_NONE, ATTR_CJK_FONT_POSTURE );
+
+        pCTLFont[i]         = new SvxFontItem( ATTR_CTL_FONT );
+        pCTLFontHeight[i]   = new SvxFontHeightItem( 240, 100, ATTR_CTL_FONT_HEIGHT );
+        pCTLFontWeight[i]   = new SvxWeightItem( WEIGHT_NORMAL, ATTR_CTL_FONT_WEIGHT );
+        pCTLFontPosture[i]  = new SvxPostureItem( ITALIC_NONE, ATTR_CTL_FONT_POSTURE );
+
         pFontUnderline[i]   = new SvxUnderlineItem;
         pFontCrossedOut[i]  = new SvxCrossedOutItem;
         pFontContour[i]     = new SvxContourItem;
@@ -305,6 +320,17 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         pFontHeight[i]      = new SvxFontHeightItem(*rData.pFontHeight[i]);
         pFontWeight[i]      = new SvxWeightItem(*rData.pFontWeight[i]);
         pFontPosture[i]     = new SvxPostureItem(*rData.pFontPosture[i]);
+
+        pCJKFont[i]         = new SvxFontItem(*rData.pCJKFont[i]);
+        pCJKFontHeight[i]   = new SvxFontHeightItem(*rData.pCJKFontHeight[i]);
+        pCJKFontWeight[i]   = new SvxWeightItem(*rData.pCJKFontWeight[i]);
+        pCJKFontPosture[i]  = new SvxPostureItem(*rData.pCJKFontPosture[i]);
+
+        pCTLFont[i]         = new SvxFontItem(*rData.pCTLFont[i]);
+        pCTLFontHeight[i]   = new SvxFontHeightItem(*rData.pCTLFontHeight[i]);
+        pCTLFontWeight[i]   = new SvxWeightItem(*rData.pCTLFontWeight[i]);
+        pCTLFontPosture[i]  = new SvxPostureItem(*rData.pCTLFontPosture[i]);
+
         pFontUnderline[i]   = new SvxUnderlineItem(*rData.pFontUnderline[i]);
         pFontCrossedOut[i]  = new SvxCrossedOutItem(*rData.pFontCrossedOut[i]);
         pFontContour[i]     = new SvxContourItem(*rData.pFontContour[i]);
@@ -335,6 +361,17 @@ ScAutoFormatData::~ScAutoFormatData()
         delete pFontHeight[i];
         delete pFontWeight[i];
         delete pFontPosture[i];
+
+        delete pCJKFont[i];
+        delete pCJKFontHeight[i];
+        delete pCJKFontWeight[i];
+        delete pCJKFontPosture[i];
+
+        delete pCTLFont[i];
+        delete pCTLFontHeight[i];
+        delete pCTLFontWeight[i];
+        delete pCTLFontPosture[i];
+
         delete pFontUnderline[i];
         delete pFontCrossedOut[i];
         delete pFontContour[i];
@@ -405,6 +442,8 @@ void ScAutoFormatData::SetFontWeight(USHORT nIndex, const SvxWeightItem& rFontWe
     *pFontWeight[nIndex] = rFontWeight;
 }
 
+//---------------------------------------------------------------------------------------
+
 void ScAutoFormatData::GetFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
 {
     rFontPosture = *pFontPosture[nIndex];
@@ -413,6 +452,110 @@ void ScAutoFormatData::GetFontPosture(USHORT nIndex, SvxPostureItem& rFontPostur
 void ScAutoFormatData::SetFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
 {
     *pFontPosture[nIndex] = rFontPosture;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCJKFont(USHORT nIndex, SvxFontItem& rFont) const
+{
+    rFont = *pCJKFont[nIndex];
+    rFont.SetWhich( pCJKFont[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCJKFont(USHORT nIndex, const SvxFontItem& rFont)
+{
+    *pCJKFont[nIndex] = rFont;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCJKFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const
+{
+    rFontHeight = *pCJKFontHeight[nIndex];
+    rFontHeight.SetWhich( pCJKFontHeight[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCJKFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight)
+{
+    *pCJKFontHeight[nIndex] = rFontHeight;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCJKFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const
+{
+    rFontWeight = *pCJKFontWeight[nIndex];
+    rFontWeight.SetWhich( pCJKFontWeight[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCJKFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight)
+{
+    *pCJKFontWeight[nIndex] = rFontWeight;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCJKFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
+{
+    rFontPosture = *pCJKFontPosture[nIndex];
+    rFontPosture.SetWhich( pCJKFontPosture[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCJKFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
+{
+    *pCJKFontPosture[nIndex] = rFontPosture;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCTLFont(USHORT nIndex, SvxFontItem& rFont) const
+{
+    rFont = *pCTLFont[nIndex];
+    rFont.SetWhich( pCTLFont[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCTLFont(USHORT nIndex, const SvxFontItem& rFont)
+{
+    *pCTLFont[nIndex] = rFont;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCTLFontHeight(USHORT nIndex, SvxFontHeightItem& rFontHeight) const
+{
+    rFontHeight = *pCTLFontHeight[nIndex];
+    rFontHeight.SetWhich( pCTLFontHeight[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCTLFontHeight(USHORT nIndex, const SvxFontHeightItem& rFontHeight)
+{
+    *pCTLFontHeight[nIndex] = rFontHeight;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCTLFontWeight(USHORT nIndex, SvxWeightItem& rFontWeight) const
+{
+    rFontWeight = *pCTLFontWeight[nIndex];
+    rFontWeight.SetWhich( pCTLFontWeight[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCTLFontWeight(USHORT nIndex, const SvxWeightItem& rFontWeight)
+{
+    *pCTLFontWeight[nIndex] = rFontWeight;
+}
+
+//---------------------------------------------------------------------------------------
+
+void ScAutoFormatData::GetCTLFontPosture(USHORT nIndex, SvxPostureItem& rFontPosture) const
+{
+    rFontPosture = *pCTLFontPosture[nIndex];
+    rFontPosture.SetWhich( pCTLFontPosture[nIndex]->Which() );
+}
+
+void ScAutoFormatData::SetCTLFontPosture(USHORT nIndex, const SvxPostureItem& rFontPosture)
+{
+    *pCTLFontPosture[nIndex] = rFontPosture;
 }
 
 //---------------------------------------------------------------------------------------
@@ -593,6 +736,14 @@ const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) con
         case ATTR_FONT_HEIGHT:      return pFontHeight[nIndex];
         case ATTR_FONT_WEIGHT:      return pFontWeight[nIndex];
         case ATTR_FONT_POSTURE:     return pFontPosture[nIndex];
+        case ATTR_CJK_FONT:         return pCJKFont[nIndex];
+        case ATTR_CJK_FONT_HEIGHT:  return pCJKFontHeight[nIndex];
+        case ATTR_CJK_FONT_WEIGHT:  return pCJKFontWeight[nIndex];
+        case ATTR_CJK_FONT_POSTURE: return pCJKFontPosture[nIndex];
+        case ATTR_CTL_FONT:         return pCTLFont[nIndex];
+        case ATTR_CTL_FONT_HEIGHT:  return pCTLFontHeight[nIndex];
+        case ATTR_CTL_FONT_WEIGHT:  return pCTLFontWeight[nIndex];
+        case ATTR_CTL_FONT_POSTURE: return pCTLFontPosture[nIndex];
         case ATTR_FONT_UNDERLINE:   return pFontUnderline[nIndex];
         case ATTR_FONT_CROSSEDOUT:  return pFontCrossedOut[nIndex];
         case ATTR_FONT_CONTOUR:     return pFontContour[nIndex];
@@ -626,6 +777,30 @@ void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
             break;
         case ATTR_FONT_POSTURE:
             *pFontPosture[nIndex] = (const SvxPostureItem&)rItem;
+            break;
+        case ATTR_CJK_FONT:
+            *pCJKFont[nIndex] = (const SvxFontItem&)rItem;
+            break;
+        case ATTR_CJK_FONT_HEIGHT:
+            *pCJKFontHeight[nIndex] = (const SvxFontHeightItem&)rItem;
+            break;
+        case ATTR_CJK_FONT_WEIGHT:
+            *pCJKFontWeight[nIndex] = (const SvxWeightItem&)rItem;
+            break;
+        case ATTR_CJK_FONT_POSTURE:
+            *pCJKFontPosture[nIndex] = (const SvxPostureItem&)rItem;
+            break;
+        case ATTR_CTL_FONT:
+            *pCTLFont[nIndex] = (const SvxFontItem&)rItem;
+            break;
+        case ATTR_CTL_FONT_HEIGHT:
+            *pCTLFontHeight[nIndex] = (const SvxFontHeightItem&)rItem;
+            break;
+        case ATTR_CTL_FONT_WEIGHT:
+            *pCTLFontWeight[nIndex] = (const SvxWeightItem&)rItem;
+            break;
+        case ATTR_CTL_FONT_POSTURE:
+            *pCTLFontPosture[nIndex] = (const SvxPostureItem&)rItem;
             break;
         case ATTR_FONT_UNDERLINE:
             *pFontUnderline[nIndex] = (const SvxUnderlineItem&)rItem;
@@ -687,6 +862,14 @@ BOOL ScAutoFormatData::IsEqualData(USHORT nIndex1, USHORT nIndex2)
         bEqual = (bEqual && (*pFontHeight[nIndex1] == *pFontHeight[nIndex2]));
         bEqual = (bEqual && (*pFontWeight[nIndex1] == *pFontWeight[nIndex2]));
         bEqual = (bEqual && (*pFontPosture[nIndex1] == *pFontPosture[nIndex2]));
+        bEqual = (bEqual && (*pCJKFont[nIndex1] == *pCJKFont[nIndex2]));
+        bEqual = (bEqual && (*pCJKFontHeight[nIndex1] == *pCJKFontHeight[nIndex2]));
+        bEqual = (bEqual && (*pCJKFontWeight[nIndex1] == *pCJKFontWeight[nIndex2]));
+        bEqual = (bEqual && (*pCJKFontPosture[nIndex1] == *pCJKFontPosture[nIndex2]));
+        bEqual = (bEqual && (*pCTLFont[nIndex1] == *pCTLFont[nIndex2]));
+        bEqual = (bEqual && (*pCTLFontHeight[nIndex1] == *pCTLFontHeight[nIndex2]));
+        bEqual = (bEqual && (*pCTLFontWeight[nIndex1] == *pCTLFontWeight[nIndex2]));
+        bEqual = (bEqual && (*pCTLFontPosture[nIndex1] == *pCTLFontPosture[nIndex2]));
         bEqual = (bEqual && (*pFontUnderline[nIndex1] == *pFontUnderline[nIndex2]));
         bEqual = (bEqual && (*pFontCrossedOut[nIndex1] == *pFontCrossedOut[nIndex2]));
         bEqual = (bEqual && (*pFontContour[nIndex1] == *pFontContour[nIndex2]));
@@ -757,6 +940,18 @@ BOOL ScAutoFormatData::Load(SvStream& rStream, const ScAfVersions& rVersions)
             READ( i, pFontHeight,       SvxFontHeightItem   , rVersions.nFontHeightVersion)
             READ( i, pFontWeight,       SvxWeightItem       , rVersions.nWeightVersion)
             READ( i, pFontPosture,      SvxPostureItem      , rVersions.nPostureVersion)
+            // --- from 641 on: CJK and CTL font settings
+            if( AUTOFORMAT_DATA_ID_641 <= nVal )
+            {
+                READ( i, pCJKFont,          SvxFontItem         , rVersions.nFontVersion)
+                READ( i, pCJKFontHeight,    SvxFontHeightItem   , rVersions.nFontHeightVersion)
+                READ( i, pCJKFontWeight,    SvxWeightItem       , rVersions.nWeightVersion)
+                READ( i, pCJKFontPosture,   SvxPostureItem      , rVersions.nPostureVersion)
+                READ( i, pCTLFont,          SvxFontItem         , rVersions.nFontVersion)
+                READ( i, pCTLFontHeight,    SvxFontHeightItem   , rVersions.nFontHeightVersion)
+                READ( i, pCTLFontWeight,    SvxWeightItem       , rVersions.nWeightVersion)
+                READ( i, pCTLFontPosture,   SvxPostureItem      , rVersions.nPostureVersion)
+            }
             READ( i, pFontUnderline,    SvxUnderlineItem    , rVersions.nUnderlineVersion)
             READ( i, pFontCrossedOut,   SvxCrossedOutItem   , rVersions.nCrossedOutVersion)
             READ( i, pFontContour,      SvxContourItem      , rVersions.nContourVersion)
@@ -905,6 +1100,17 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
         pFontHeight[i]->Store(rStream, pFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
         pFontWeight[i]->Store(rStream, pFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
         pFontPosture[i]->Store(rStream, pFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        // --- from 641 on: CJK and CTL font settings
+        pCJKFont[i]->Store(rStream, pCJKFont[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCJKFontHeight[i]->Store(rStream, pCJKFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCJKFontWeight[i]->Store(rStream, pCJKFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCJKFontPosture[i]->Store(rStream, pCJKFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCTLFont[i]->Store(rStream, pCTLFont[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCTLFontHeight[i]->Store(rStream, pCTLFontHeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCTLFontWeight[i]->Store(rStream, pCTLFontWeight[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        pCTLFontPosture[i]->Store(rStream, pCTLFontPosture[i]->GetVersion(SOFFICE_FILEFORMAT_40));
+        // ---
+
         pFontUnderline[i]->Store(rStream, pFontUnderline[i]->GetVersion(SOFFICE_FILEFORMAT_40));
         pFontCrossedOut[i]->Store(rStream, pFontCrossedOut[i]->GetVersion(SOFFICE_FILEFORMAT_40));
         pFontContour[i]->Store(rStream, pFontContour[i]->GetVersion(SOFFICE_FILEFORMAT_40));
@@ -943,10 +1149,24 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     pData->SetName(aName);
 
     //  Default-Font und Groesse
-    Font aStdFont = OutputDevice::GetDefaultFont( DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US,
-                                                    DEFAULTFONT_FLAGS_ONLYONE );
-    SvxFontItem aFontItem( aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
-                            aStdFont.GetPitch(), aStdFont.GetCharSet() );
+    Font aStdFont = OutputDevice::GetDefaultFont(
+        DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+    SvxFontItem aFontItem(
+        aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
+        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+
+    aStdFont = OutputDevice::GetDefaultFont(
+        DEFAULTFONT_CJK_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+    SvxFontItem aCJKFontItem(
+        aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
+        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+
+    aStdFont = OutputDevice::GetDefaultFont(
+        DEFAULTFONT_CTL_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
+    SvxFontItem aCTLFontItem(
+        aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
+        aStdFont.GetPitch(), aStdFont.GetCharSet() );
+
     SvxFontHeightItem aHeight( 200 );       // 10 pt;
 
     //  schwarze duenne Umrandung
@@ -971,7 +1191,11 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     {
         pData->SetBox( i, aBox );
         pData->SetFont( i, aFontItem );
+        pData->SetCJKFont( i, aCJKFontItem );
+        pData->SetCTLFont( i, aCTLFontItem );
         pData->SetFontHeight( i, aHeight );
+        pData->SetCJKFontHeight( i, aHeight );
+        pData->SetCTLFontHeight( i, aHeight );
         if (i<4)                                    // oben: weiss auf blau
         {
             pData->SetFontColor( i, aWhiteText );
