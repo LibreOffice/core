@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test.cpp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-04 16:01:30 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,3 +277,4 @@ HRESULT doTest()
     return hr;
 }
 // VARIANT CComVariant VT_UNKNOWN VT_DISPATCH V_UI1 CComDispatchDriver WINAPI
+
