@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:19:02 $
+ *  last change: $Author: rt $ $Date: 2000-12-04 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1751,7 +1751,7 @@ TabPage TP_GRF_EXT
         Text[ russian ] = "[áåç]";
         Text[ polish ] = "[brak]";
         Text[ japanese ] = "[‚È‚µ]";
-        Text[ language_user1 ] = "ûD";
+        Text[ language_user1 ] = "?";
         Text[ chinese_traditional ] = "[µL]";
         Text[ arabic ] = "[ÈÏæä]";
         Text[ greek ] = "[Êáíİíá]";
@@ -1782,7 +1782,7 @@ TabPage TP_GRF_EXT
         Text[ chinese_traditional ] = "~....";
         Text[ arabic ] = "...~";
         Text[ greek ] = "~...";
-        Text[ korean ] = "~...";
+        Text[ korean ] = "...";
         Text[ turkish ] = "~...";
     };
     CheckBox CB_VERT
@@ -1834,7 +1834,7 @@ TabPage TP_GRF_EXT
         Text[ polish ] = "p~oziomo";
         Text[ portuguese_brazilian ] = "verti~calmente";
         Text[ japanese ] = "¶‰E(~H)";
-        Text[ korean ] = "¼öÆò(~Z)";
+        Text[ korean ] = "¼öÆò";
         Text[ chinese_simplified ] = "Ë®Æ½·½Ïò(~Z)";
         Text[ chinese_traditional ] = "¤ô¥­¤è¦V";
         Text[ turkish ] = "yata~y";
@@ -2160,7 +2160,7 @@ TabPage TP_FRM_URL
         Text[ chinese_traditional ] = "~URL";
         Text[ arabic ] = "U~RL";
         Text[ greek ] = "URL";
-        Text[ korean ] = "~URL";
+        Text[ korean ] = "URL";
         Text[ turkish ] = "U~RL";
     };
     Edit ED_URL
@@ -2649,7 +2649,7 @@ TabPage TP_FRM_ADD
         Text[ chinese_traditional ] = "¥i½s¿è°ßÅª¤å¥ó(~E)";
         Text[ arabic ] = "ŞÇÈá ááÊÍÑíÑ İí ãÓÊäÏ ááŞÑÇÁÉ İŞØ";
         Text[ greek ] = "Äõíáôüôçôá ~åğåîåñãáóßáò óå İããñáöï ôığïõ \"Ìüíï ãéá áíÜãíùóç\"";
-        Text[ korean ] = "ÀĞ±âÀü¿ë ¹®¼­¿¡¼­ ÆíÁı°¡´É(~E)";
+        Text[ korean ] = "ÀĞ±âÀü¿ë ¹®¼­¿¡¼­ ÆíÁı°¡´É";
         Text[ turkish ] = "Salt okunur belge içinde düzenlenebilir";
     };
     CheckBox CB_PRINT_FRAME
