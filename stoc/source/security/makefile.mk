@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2002-06-14 13:26:30 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:12:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=sec
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+TARGET = security.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = sec
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ SHL1STDLIBS= \
         $(SALHELPERLIB)		\
         $(CPPULIB)		\
         $(SALLIB)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = sec.map
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
@@ -98,11 +98,6 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 .IF "$(debug)" != ""
-
-# msvc++: no inlining for debugging
-.IF "$(COM)" == "MSC"
-CFLAGS += -Ob0
-.ENDIF
 
 # some diagnose
 .IF "$(diag)" == "full"
