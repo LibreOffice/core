@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:32:50 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 11:32:50 $
+ * @version     $Revision: 1.3 $ $ $Date: 2000-10-19 15:44:57 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -401,8 +401,6 @@ public class JobQueue {
 
         MutableInt disposeId_count = addDisposeId(disposeId);
 
-        ++ _add_count; // how many times have entered enter?
-
         Object result = null;
 
         Thread hold_worker_thread = _worker_thread;
@@ -441,7 +439,6 @@ public class JobQueue {
 
                 synchronized(this) {
                     if(job != null || (quit && _head == null)) {
-                        -- _add_count;
                         _worker_thread = hold_worker_thread;
 
                         _createThread_now = true;

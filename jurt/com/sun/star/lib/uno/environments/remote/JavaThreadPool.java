@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPool.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 15:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This class implements a java thread pool.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-19 15:44:57 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
@@ -162,6 +162,8 @@ public class JavaThreadPool implements IThreadPool {
                 }
             }
         }
+        else
+            ++ jobQueue._add_count;
     }
 
     /**
@@ -204,6 +206,7 @@ public class JavaThreadPool implements IThreadPool {
         if(DEBUG) System.err.println("##### ThreadPool.removeThread:" + threadId);
 
         JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
+
         if(jobQueue != null && jobQueue._add_count <= 0) {
             synchronized(_jobQueues) {
                 if(jobQueue._add_count <= 0) {
@@ -211,6 +214,8 @@ public class JavaThreadPool implements IThreadPool {
                     _disposeIds.remove(threadId);
                     _jobQueues.notifyAll();
                 }
+                else
+                    -- jobQueue._add_count;
             }
         }
     }
