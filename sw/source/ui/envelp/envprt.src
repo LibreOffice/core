@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-19 15:07:47 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:04:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~T)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
+        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â";
         Text[ turkish ] = "Üstten yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -168,7 +168,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
+        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â";
         Text[ turkish ] = "Alttan yazdır";
         Text[ language_user1 ] = " ";
     };
