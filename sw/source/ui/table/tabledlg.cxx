@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2001-06-19 11:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2042,7 +2042,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
 {
     if ( aPgBrkCB.IsChecked() )
     {
-        if ( pBtn == &aPgBrkBeforeRB )
+        if ( pBtn == &aPgBrkBeforeRB && aPgBrkRB.IsChecked() )
         {
             aPageCollCB.Enable();
 
