@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:50:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ portuguese_brazilian ] = "Zeichenobjekt";
     Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔ";
     Text[ chinese_simplified ] = "»ζΝΌ¶ΤΟσ";
-    Text[ chinese_traditional ] = "ΉΟ§Ξª«¥σ";
+    Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ";
         Text[ arabic ] = "ίΗΖδ ΡΣζγν";
         Text[ greek ] = "Αντικείμενο σχεδίασης";
         Text[ korean ] = "±ΧΈ®±β °³ΓΌ";
@@ -891,7 +891,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ russian ] = "έλεμενς σκΰηΰςελÿ";
         Text[ polish ] = "Wpis do indeksu";
         Text[ japanese ] = "υψ€–Ϊ";
-        Text[ chinese_traditional ] = "¥ΨΏύ¶µ¥Ψ";
+        Text[ chinese_traditional ] = "¥ΨΏύ±ψ¥Ψ";
         Text[ arabic ] = "ΕΟΞΗα έεΡΣν";
         Text[ greek ] = "Καταχώριση ευρετηρίου";
         Text[ korean ] = "»φΐΞ ΗΧΈρ";
@@ -1047,7 +1047,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ russian ] = "Ρλεδσώωΰÿ ςεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Nastκpna ramka tekstowa";
     Text[ japanese ] = "‚ΜΓ·½Δg";
-    Text[ chinese_traditional ] = "¤U¤@­Σ¤ε¦r¤θ®Ψ";
+    Text[ chinese_traditional ] = "¤U¤@­Σ¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΚΗαν";
     Text[ greek ] = "Επόμενο πλαίσιο κειμένου";
     Text[ korean ] = "΄Ωΐ½ ΕΨ½ΊΖ® ΗΑ·ΉΐΣ";
@@ -1093,11 +1093,11 @@ String STR_IMGBTN_DRW_DOWN
     Text [ french ] = "Objet de dessin suivant" ;
     Text [ dutch ] = "Volgend tekenobject" ;
     Text [ portuguese ] = "Objecto de desenho seguinte" ;
-    Text[ chinese_simplified ] = "ΟΒÒ»ΈφΧΦ·ϋ¶ΤΟσ";
+    Text[ chinese_simplified ] = "ΟΒÒ»Έφ»ζΝΌ¶ΤΟσ";
     Text[ russian ] = "Ρλεδσώωθι γπΰτθχερκθι ξαϊεκς";
     Text[ polish ] = "Nastκpny obiekt rysunkowy";
     Text[ japanese ] = "‚Μ•¶µΜήΌήªΈΔ";
-    Text[ chinese_traditional ] = "¤U¤@­Σ¦r¤Έª«¥σ";
+    Text[ chinese_traditional ] = "¤U¤@­ΣΓΈΉΟª«¥σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΚΗαν";
     Text[ greek ] = "Επόμενο αντικείμενο σχεδίασης";
     Text[ korean ] = "΄Ωΐ½ ±ΧΈ®±β °³ΓΌ";
@@ -1396,7 +1396,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ russian ] = "Ρλεδσώωθι ύλεμενς σκΰηΰςελÿ";
     Text[ polish ] = "Nastκpny wpis do indeksu";
     Text[ japanese ] = "‚Μυψ€–Ϊ";
-    Text[ chinese_traditional ] = "¤U¤@­Σ¥ΨΏύ¶µ¥Ψ";
+    Text[ chinese_traditional ] = "¤U¤@­Σ¥ΨΏύ±ψ¥Ψ";
     Text[ arabic ] = "ΗαΕΟΞΗα ΗαέεΡΣν ΗαΚΗαν";
     Text[ greek ] = "Επόμενη καταχώριση ευρετηρίου";
     Text[ korean ] = "΄Ωΐ½ »φΐΞ ΗΧΈρ";
@@ -1452,7 +1452,7 @@ String STR_IMGBTN_FRM_UP
     Text[ russian ] = "Οπεδϋδσωΰÿ ςεκρςξβΰÿ πΰμκΰ";
     Text[ polish ] = "Poprzednia ramka tekstowa";
     Text[ japanese ] = "‘O‚ΜΓ·½Δg";
-    Text[ chinese_traditional ] = "¤W¤@­Σ¤ε¦r¤θ®Ψ";
+    Text[ chinese_traditional ] = "¤W¤@­Σ¤ε¦r¤θ¶τ";
     Text[ arabic ] = "ίΗΟΡ ΗαδΥ ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο πλαίσιο κειμένου";
     Text[ korean ] = "ΐΜΐό ΕΨ½ΊΖ® ΗΑ·ΉΐΣ";
@@ -1496,11 +1496,11 @@ String STR_IMGBTN_DRW_UP
     Text [ french ] = "Objet de dessin prιcιdent" ;
     Text [ dutch ] = "Vorig tekenobject" ;
     Text [ portuguese ] = "Objecto de desenho anterior" ;
-    Text[ chinese_simplified ] = "ΙΟÒ»ΈφΧΦ·ϋ¶ΤΟσ";
+    Text[ chinese_simplified ] = "ΙΟÒ»Έφ»ζΝΌ¶ΤΟσ";
     Text[ russian ] = "Οπεδϋδσωθι γπΰτθχερκθι ξαϊεκς";
     Text[ polish ] = "Poprzedni obiekt rysunkowy";
     Text[ japanese ] = "‘O‚Μ•¶µΜήΌήªΈΔ";
-    Text[ chinese_traditional ] = "¤W¤@­Σ¦r¤Έª«¥σ";
+    Text[ chinese_traditional ] = "¤W¤@­ΣΓΈΉΟª«¥σ";
     Text[ arabic ] = "ΗαίΗΖδ ΗαΡΣζγν ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενο αντικείμενο σχεδίασης";
     Text[ korean ] = "ΐΜΐό ±ΧΈ®±β °³ΓΌ";
@@ -1766,7 +1766,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ chinese_simplified ] = "ΌΜΠψΟςΊσΛΡΡ°";
     Text[ russian ] = "Ξαπΰςνϋι οξθρκ";
     Text[ polish ] = "Szukaj dalej wstecz";
-    Text[ japanese ] = "•¶“ª•ϋό‚Ιυ‘±s";
+    Text[ japanese ] = "‹t•ϋό‚Ιυ‘±s";
     Text[ chinese_traditional ] = "Δ~Δς¦V«α·j΄M";
     Text[ arabic ] = "γΚΗΘΪΙ ΗαΘΝΛ ααΞαέ";
     Text[ greek ] = "Συνέχιση αναζήτησης πίσω";
@@ -1791,7 +1791,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ russian ] = "Οπεδϋδσωθι ύλεμενς σκΰηΰςελÿ";
     Text[ polish ] = "Poprzedni wpis do indeksu";
     Text[ japanese ] = "‘O‚Μυψ€–Ϊ";
-    Text[ chinese_traditional ] = "¤W¤@­Σ¥ΨΏύ¶µ¥Ψ";
+    Text[ chinese_traditional ] = "¤W¤@­Σ¥ΨΏύ±ψ¥Ψ";
     Text[ arabic ] = "ΗαΕΟΞΗα ΗαέεΡΣν ΗαΣΗΘή";
     Text[ greek ] = "Προηγούμενη καταχώριση ευρετηρίου";
     Text[ korean ] = "ΐΜΐό »φΐΞ ΗΧΈρ";
