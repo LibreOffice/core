@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:06:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,11 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX
+#include <sfx2/objsh.hxx>
 #endif
 
 // ------------------
@@ -87,6 +87,7 @@ class DrawDocShell;
 class View;
 }
 
+class SfxObjectShellRef;
 class SdTransferable : public TransferableHelper
 {
 public:
@@ -94,8 +95,8 @@ public:
                                     SdTransferable( SdDrawDocument* pSrcDoc, ::sd::View* pWorkView, BOOL bInitOnGetData );
                                     ~SdTransferable();
 
-    void                            SetDocShell( const SvEmbeddedObjectRef& rRef ) { aDocShellRef = rRef; }
-    const SvEmbeddedObjectRef&      GetDocShell() const { return aDocShellRef; }
+    void                            SetDocShell( const SfxObjectShellRef& rRef ) { aDocShellRef = rRef; }
+    const SfxObjectShellRef&        GetDocShell() const { return aDocShellRef; }
 
     void                            SetWorkDocument( const SdDrawDocument* pWorkDoc ) { pSdDrawDocument = pSdDrawDocumentIntern = (SdDrawDocument*) pWorkDoc; }
     const SdDrawDocument*           GetWorkDocument() const { return pSdDrawDocument; }
@@ -135,7 +136,7 @@ protected:
 
 private:
 
-    SvEmbeddedObjectRef             aDocShellRef;
+    SfxObjectShellRef             aDocShellRef;
     ::sd::DrawDocShell*                 pPageDocShell;
     List                            aPageBookmarks;
     TransferableDataHelper*         pOLEDataHelper;
