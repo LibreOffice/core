@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:16:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,36 +62,8 @@
 #include "table.hrc"
 InfoBox MSG_ERR_TABLE_MERGE
 {
-    MESSAGE = "Selektierte Zellen der Tabelle sind zu komplex zum Verbinden." ;
-    MESSAGE [ English ] = "Selected table cells are too complex to merge." ;
-    MESSAGE [ norwegian ] = "Valgte tabellceller er for komplekse til å flette" ;
-    MESSAGE [ italian ] = "Le celle della tabella selezionata sono troppo complesse per l'unione" ;
-    MESSAGE [ portuguese_brazilian ] = "As células selecionadas da tabela são muito complexas para mesclar." ;
-    MESSAGE [ portuguese ] = "As células seleccionadas da tabela são muito complexas para a intercalação." ;
-    MESSAGE [ finnish ] = "Valitut taulukon solut ovat liian monimutkaisia yhdistettäväksi." ;
-    MESSAGE [ danish ] = "De markerede tabelceller er for komplekse til fletning." ;
-    MESSAGE [ french ] = "Cellules du tableau sélectionnées trop complexes pour être fusionnées." ;
-    MESSAGE [ swedish ] = "Markerade tabellceller är för komplexa för sammanfogning." ;
-    MESSAGE [ dutch ] = "De geselecteerde tabelcellen zijn te complex voor samenvoeging." ;
-    MESSAGE [ spanish ] = "Las celdas seleccionadas de la tabla son demasiado complejas para enlazarlas." ;
-    MESSAGE [ english_us ] = "Selected table cells are too complex to merge." ;
-    MESSAGE[ chinese_simplified ] = "æ‰€é€‰æ‹©çš„è¡¨æ ¼å•å…ƒæ ¼å¤ªç»¼åˆè€Œæ— æ³•åˆå¹¶ã€‚";
-    MESSAGE[ russian ] = "Âûäåëåííûå ÿ÷åéêè òàáëèöû ñëèøêîì ñëîæíû äëÿ îáúåäèíåíèÿ.";
-    MESSAGE[ polish ] = "Zaznaczone komórki tabeli s¹ zbyt skomplikowane, aby je scaliæ.";
-    MESSAGE[ japanese ] = "é¸æŠã•ã‚ŒãŸè¡¨ã®ã‚»ãƒ«ã¯ã€çµåˆã™ã‚‹ã«ã¯è¤‡é›‘éãã¾ã™ã€‚";
-    MESSAGE[ chinese_traditional ] = "æ‰€é¸æ“‡çš„è¡¨æ ¼å„²å­˜æ ¼å¤ªç¶œåˆè€Œç„¡æ³•åˆä½µã€‚";
-    MESSAGE[ arabic ] = "ÎáÇíÇ ÇáÌÏæá ÇáãÍÏÏÉ ãÚŞÏÉ áÏÑÌÉ íÓÊÍíá ãÚåÇ ÇáÑÈØ.";
-    MESSAGE[ greek ] = "Ôá åğéëåãìİíá êåëéÜ ôïõ ğßíáêá åßíáé  õğåñâïëéêÜ ğåñßğëïêá ãéá íá ãßíåé ç óõã÷şíåõóç.";
-    MESSAGE[ korean ] = "í‘œì˜ ì„ íƒëœ ì…€ì€ ë³‘í•©í•˜ê¸°ì— ë„ˆë¬´ ë³µì¡í•©ë‹ˆë‹¤.";
-    MESSAGE[ turkish ] = "Seçilen tablo hücreleri birleştirilmek için fazla karmaşık.";
-    MESSAGE[ catalan ] = "Les cel.les seleccionades de la taula són massa complexes per poder-les enllaçar.";
-    MESSAGE[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸•à¸²à¸£à¸²à¸‡à¹€à¸‹à¸¥à¸¥à¹Œà¸‹à¸±à¸šà¸‹à¹‰à¸­à¸™à¹€à¸à¸´à¸™à¹„à¸›à¹ƒà¸™à¸à¸²à¸£à¸œà¸ªà¸²à¸™";
-    MESSAGE[ czech ] = "ZvolenÃ© buÅˆky tabulky jsou pÅ™Ã­liÅ¡ komplexnÃ­ ke slouÄenÃ­.";
-    MESSAGE[ hebrew ] = "Selektierte Zellen der Tabelle sind zu komplex zum Verbinden.";
-    MESSAGE[ hindi ] = "à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹à¤·à¥à¤ à¥‹à¤‚ à¤•à¥‹ à¤®à¤¿à¤²à¤¾à¤¨à¤¾ à¤…à¤¸à¤‚à¤­à¤µ à¤¹à¥ˆ à¥¤";
-    MESSAGE[ slovak ] = "VybranÃ© bunky tabuÄ¾ky sÃº prÃ­liÅ¡ komplexnÃ© na zlÃºÄenie.";
-    MESSAGE[ hungarian ] = "A kijelÃ¶lt cellÃ¡k tÃºl Ã¶sszetettek az egyesÃ­tÃ©s vÃ©grehajtÃ¡sÃ¡hoz.";
-    MESSAGE[ slovenian ] = "Izbrane celice so preveÄ zapletene za spajanje.";
+    Message [ de ] = "Selektierte Zellen der Tabelle sind zu komplex zum Verbinden." ;
+    Message [ en-US ] = "Selected table cells are too complex to merge." ;
 };
 
 
