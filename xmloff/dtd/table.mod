@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.0 NT (http://www.xmlspy.com) by Jumper (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.7 2000-10-24 08:36:39 dr Exp $
+	$Id: table.mod,v 1.8 2000-10-24 09:54:22 dr Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -218,7 +218,6 @@
 	office:display %boolean; "true"
 >
 <!ELEMENT table:sub-table (%table-column-groups; | %table-row-groups;)>
-<!ELEMENT
 <!ELEMENT table:named-expressions (table:named-range | table:named-expression)*>
 <!ELEMENT table:named-range EMPTY>
 <!ATTLIST table:named-range
