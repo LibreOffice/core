@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:47:49 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1701,7 +1701,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
         if( nBufSize )
         {
             BYTE*           pBuf = new BYTE[ nBufSize ];
-            GraphicReader*  pOldContext = rGraphic.GetContext();
+            //GraphicReader*    pOldContext = rGraphic.GetContext();
 
             rIStream.Seek( nStmBegin );
             rIStream.Read( pBuf, nBufSize );
