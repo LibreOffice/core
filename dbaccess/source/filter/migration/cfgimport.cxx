@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:17:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
     ::rtl::OUString sFileName;
     try
     {
-        m_xCurrentDS.set(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseDocument"))),UNO_QUERY);
+        m_xCurrentDS.set(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"))),UNO_QUERY);
         Reference< XModel > xModel(m_xCurrentDS,UNO_QUERY);
         if ( !xModel.is() )
             return;
