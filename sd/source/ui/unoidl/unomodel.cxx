@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:03 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:40:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1625,6 +1625,23 @@ void SdXImpressDocument::initializeDocument()
     {
         pDoc->CreateFirstPages();
         pDoc->StopWorkStartupDelay();
+    }
+}
+
+// -----------------------------------------------------------------------------
+void SAL_CALL SdXImpressDocument::setPrinter( const uno::Sequence< beans::PropertyValue >& rPrinter)
+        throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    SfxViewShell* pViewSh = NULL;
+    SfxPrinter* pPrinter = NULL;
+    sal_uInt16 nChangeFlags = 0;
+    impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
+    SdViewShell* pSdViewSh = PTR_CAST( SdViewShell,pViewSh);
+    // set new printer
+    if ( pSdViewSh && pPrinter )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        pSdViewSh->SetPrinterOptDlg( pPrinter, nChangeFlags,FALSE ); //do not show the dialog here
     }
 }
 
