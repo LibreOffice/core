@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommandLineTools.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-03-12 18:26:28 $
+ *  last change: $Author: toconnor $ $Date: 2003-03-14 11:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import java.util.StringTokenizer;
 
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.xml.ParcelDescriptor;
+import org.openoffice.idesupport.filter.AllFilesFilter;
 import org.openoffice.idesupport.*;
 
 public class CommandLineTools {
@@ -302,7 +303,7 @@ public class CommandLineTools {
             }
 
             contents = new File(contents.getAbsolutePath());
-            String name = ParcelZipper.getParcelZipper().zipParcel(contents);
+            String name = ParcelZipper.getParcelZipper().zipParcel(contents, AllFilesFilter.getInstance());
             System.out.println(name + " generated");
         }
 
