@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:32:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-28 16:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,8 +442,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
     if (eEditMode != eEMode
         || mbIsLayerModeActive != bIsLayerModeActive)
     {
-        ViewShellManager::UpdateLocker aLock (
-            GetViewShellBase().GetViewShellManager());
+        ViewShellManager::UpdateLock aLock (GetViewShellBase().GetViewShellManager());
 
         USHORT nActualPageNum = 0;
 
