@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:41:19 $
+ *  last change: $Author: jb $ $Date: 2002-09-18 15:30:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -715,6 +715,67 @@ String STR_SSO_REQUEST
     Text[ catalan ] = "Please enter your user name and password for accessing your personal settings. ";
     Text[ thai ] = "Please enter your user name and password for accessing your personal settings. ";
 };
+
+String STR_SSO_RELOGIN
+{
+    Text = "Bitte wiederholen Sie Ihre Anmeldung. " ;
+    Text[ ENGLISH ] = "Please log in again. " ;
+};
+
+String STR_CONFIG_WARN_LOCAL_FALLBACK
+{
+    Text = "StarOffice wird Ihre lokal-gespeicherten persönlichen Einstellungen verwenden, um mit dem Programmstart fortzufahren. " ;
+    Text[ ENGLISH ] = "StarOffice will continue the startup using your locally stored personal settings. " ;
+};
+
+String STR_CONFIG_WARN_OFFLINE
+{
+    Text = "Ihre geänderten persönlichen Einstellungen werden von StarOffice zunächst lokal gespeichert und beim nächsten Programmstart synchronisiert. " ;
+    Text[ ENGLISH ] = "The changes you have made to your personal settings will be stored locally and synchronized the next time you start StarOffice. " ;
+};
+
+String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
+{
+    Text = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
+    Text[ ENGLISH ] = "The startup settings for accessing the central configuration are incomplete. " ;
+};
+
+String STR_CONFIG_ERR_CANNOT_CONNECT
+{
+    Text = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
+    Text[ ENGLISH ] = "A connection to the central configuration could not be established. " ;
+};
+
+String STR_CONFIG_ERR_RIGHTS_MISSING
+{
+    Text = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
+    Text[ ENGLISH ] = "You cannot access the central configuration because of missing access rights. " ;
+};
+
+String STR_CONFIG_ERR_LOGIN_FAILED
+{
+    Text = "Die Anmeldung zur zentralen Konfiguration ist fehlgeschlagen. Der Benutzername oder das Kennwort ist falsch. " ;
+    Text[ ENGLISH ] = "Your login to the central configuration was not successful. Either the user name or password is invalid. " ;
+};
+
+String STR_CONFIG_ERR_MECHANISM_INVALID
+{
+    Text = "Die gewählte Authentifizierungsmethode für den Zugriff auf die zentrale Konfiguration wird nicht unterstützt. " ;
+    Text[ ENGLISH ] = "The specified authentication method to access the central configuration is not supported. " ;
+};
+
+String STR_CONFIG_ERR_ACCESS_GENERAL
+{
+    Text = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
+    Text[ ENGLISH ] = "A general access error occurred while accessing your central configuration. " ;
+};
+
+String STR_CONFIG_ERR_NO_WRITE_ACCESS
+{
+    Text = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
+    Text[ ENGLISH ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. " ;
+};
+
 
 String STR_WARNING_FAULTYJAVACFG
 {
