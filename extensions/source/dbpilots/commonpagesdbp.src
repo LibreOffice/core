@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:27:07 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ polish ] = "ród³o danych:";
         Text[ portuguese_brazilian ] = "~Data source:";
         Text[ japanese ] = "ÃŞ°À¿°½(~D):";
-        Text[ korean ] = "µ¥ÀÌÅÍ¼Ò½º:";
+        Text[ korean ] = "µ¥ÀÌÅÍ¼Ò½º(~D):";
         Text[ chinese_simplified ] = "Êı¾İÔ´(~D)£º";
         Text[ chinese_traditional ] = "¸ê®Æ·½(~D)¡G";
         Text[ turkish ] = "~Data source:";
@@ -188,7 +188,7 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ polish ] = "Tabela:";
         Text[ portuguese_brazilian ] = "~Table:";
         Text[ japanese ] = "Ã°ÌŞÙ(~T):";
-        Text[ korean ] = "Å×ÀÌºí:";
+        Text[ korean ] = "Å×ÀÌºí(~T):";
         Text[ chinese_simplified ] = "±í¸ñ(~T)£º";
         Text[ chinese_traditional ] = "ªí®æ(~T)";
         Text[ turkish ] = "~Table:";
@@ -319,7 +319,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ dutch ] = "Ja, en wel in het volgende databaseveld :";
         Text [ chinese_simplified ] = "ÊÇ£¬ÔÚÒÔÏÂµÄÊı¾İ¿â×Ö¶Î(~Y)£º";
         Text [ greek ] = "Íáé, óôï áêüëïõèï ğåäßï âÜóçò äåäïìİíùí:";
-        Text [ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À:";
+        Text [ korean ] = "¿¹, ´ÙÀ½ µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¿¡ ÀúÀåÇÏ½Ê½Ã¿À(~Y):";
         Text [ turkish ] = "Evet, aşağıdaki veritabanı alanında kaydedebilirsiniz :";
         Text[ catalan ] = "Sí, en el siguiente campo :";
         Text[ finnish ] = "~Ja, und zwar in folgendem Datenbankfeld :";
@@ -359,7 +359,7 @@ TabPage RID_PAGE_OPTION_DBFIELD
         Text [ dutch ] = "Nee, ik wil de waarde alleen opslaan in het formulier.";
         Text [ chinese_simplified ] = "·ñ£¬ÎÒÖ»Ïë½«Õâ¸öÊıÖµ´æÈë±íµ¥(~N)¡£";
         Text [ greek ] = "¼÷é, èİëù ~íá ãßíåé ç áğïèŞêåõóç ôçò ôéìŞò ìüíï óôç öüñìá.";
-        Text [ korean ] = "¾Æ´Ï¿À, °ªÀ» ¼ö½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù(N).";
+        Text [ korean ] = "¾Æ´Ï¿À, °ªÀ» ¼ö½Ä¿¡¸¸ ÀúÀåÇÏ°Ú½À´Ï´Ù(~N).";
         Text [ turkish ] = "Hayır, değeri yalnızca form içinde kaydetmek istiyorum.";
         Text[ catalan ] = "No, deseo guardar el valor sólo en el formulario.";
         Text[ finnish ] = "~Nein, ich möchte den Wert nur im Formular speichern.";
@@ -578,6 +578,9 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/07/04 14:27:07  kz
+ *  Merge SRC633: 04.07.01 - 16:27:03
+ *
  *  Revision 1.16  2001/07/03 22:22:29  kz
  *  Merge SRC633: 04.07.01 - 00:21:22
  *
@@ -629,6 +632,7 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
 
 
 
