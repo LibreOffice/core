@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_contentcaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:04:33 $
+ *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,8 @@
 #include "myucp_content.hxx"
 #endif
 
-using namespace com::sun::star::beans;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::ucb;
-using namespace rtl;
+using namespace com::sun;
+using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
 using namespace myucp;
@@ -116,8 +114,8 @@ using namespace myucp;
 //=========================================================================
 
 // virtual
-Sequence< Property > Content::getProperties(
-                            const Reference< XCommandEnvironment > & xEnv )
+uno::Sequence< beans::Property > Content::getProperties(
+             const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
 {
     // @@@ Add additional properties...
 
@@ -139,34 +137,34 @@ Sequence< Property > Content::getProperties(
 
     #define PROPERTY_COUNT 4
 
-    static Property aPropertyInfoTable[] =
+    static beans::Property aPropertyInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required properties
         ///////////////////////////////////////////////////////////////
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY
         ),
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY
         ),
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY
         ),
-        Property(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+        beans::Property(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
             -1,
-            getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND
+            getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+            beans::PropertyAttribute::BOUND
         )
         ///////////////////////////////////////////////////////////////
         // Optional standard properties
@@ -175,13 +173,14 @@ Sequence< Property > Content::getProperties(
         // New properties
         ///////////////////////////////////////////////////////////////
     };
-    return Sequence< Property >( aPropertyInfoTable, PROPERTY_COUNT );
+    return uno::Sequence<
+            beans::Property >( aPropertyInfoTable, PROPERTY_COUNT );
 }
 
 //=========================================================================
 // virtual
-Sequence< CommandInfo > Content::getCommands(
-                            const Reference< XCommandEnvironment > & xEnv )
+uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
+            const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
 {
     // @@@ Add additional commands...
 
@@ -195,49 +194,52 @@ Sequence< CommandInfo > Content::getCommands(
 
     #define COMMAND_COUNT 4
 
-    static CommandInfo aCommandInfoTable[] =
+    static star::ucb::CommandInfo aCommandInfoTable[] =
     {
         ///////////////////////////////////////////////////////////////
         // Required commands
         ///////////////////////////////////////////////////////////////
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getCommandInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertySetInfo" ) ),
             -1,
             getCppuVoidType()
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "getPropertyValues" ) ),
             -1,
-            getCppuType( static_cast< Sequence< Property > * >( 0 ) )
+            getCppuType(
+                static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
-            getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
+            getCppuType(
+                static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
         )
         ///////////////////////////////////////////////////////////////
         // Optional standard commands
         ///////////////////////////////////////////////////////////////
 /*
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
             -1,
             getCppuBooleanType()
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
             -1,
-            getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
+            getCppuType(
+                static_cast< star::ucb::InsertCommandArgument * >( 0 ) )
         ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
+        star::ucb::CommandInfo(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
-            getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
+            getCppuType( static_cast< star::ucb::OpenCommandArgument2 * >( 0 ) )
         )
 */
         ///////////////////////////////////////////////////////////////
@@ -245,6 +247,7 @@ Sequence< CommandInfo > Content::getCommands(
         ///////////////////////////////////////////////////////////////
     };
 
-    return Sequence< CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
+    return uno::Sequence<
+            star::ucb::CommandInfo >( aCommandInfoTable, COMMAND_COUNT );
 }
 

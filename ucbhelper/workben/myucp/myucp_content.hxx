@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:04:33 $
+ *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,10 @@
 #ifndef _MYUCP_CONTENT_HXX
 #define _MYUCP_CONTENT_HXX
 
-#ifndef __LIST__
 #include <list>
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef _UCBHELPER_CONTENTHELPER_HXX
@@ -127,22 +126,30 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                             ::com::sun::star::beans::Property >& rProperties );
+                            ::com::sun::star::beans::Property >& rProperties,
+                       const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
     void setPropertyValues(
-            const ::com::sun::star::uno::Sequence<
-                     ::com::sun::star::beans::PropertyValue >& rValues );
+                    const ::com::sun::star::uno::Sequence<
+                        ::com::sun::star::beans::PropertyValue >& rValues,
+                    const ::com::sun::star::uno::Reference<
+                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
-//  typedef vos::ORef< Content > ContentRef;
-//  typedef std::list< ContentRef > ContentRefList;
-//  void queryChildren( ContentRefList& rChildren );
+//    typedef rtl::Reference< Content > ContentRef;
+//    typedef std::list< ContentRef > ContentRefList;
+//    void queryChildren( ContentRefList& rChildren );
 
 //  // Command "insert"
-//  void insert()
-//      throw( ::com::sun::star::ucb::CommandAbortedException );
+//    void insert( const ::com::sun::star::uno::Reference<
+//                    ::com::sun::star::io::XInputStream > & xInputStream,
+//                 sal_Bool bReplaceExisting,
+//                 const com::sun::star::uno::Reference<
+//                    com::sun::star::ucb::XCommandEnvironment >& Environment )
+//        throw( ::com::sun::star::uno::Exception );
 
 //  // Command "delete"
 //  void destroy( sal_Bool bDeletePhysical )
-//      throw( ::com::sun::star::ucb::CommandAbortedException );
+//      throw( ::com::sun::star::uno::Exception );
 
 public:
     Content( const ::com::sun::star::uno::Reference<
@@ -201,8 +208,8 @@ public:
                        const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::beans::Property >& rProperties,
                        const ContentProperties& rData,
-                       const ::vos::ORef< ::ucb::ContentProviderImplHelper >&
-                               rProvider,
+                       const rtl::Reference<
+                           ::ucb::ContentProviderImplHelper >&  rProvider,
                        const ::rtl::OUString& rContentId );
 };
 

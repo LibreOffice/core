@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_provider.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:38 $
+ *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,8 @@
 #include "myucp_content.hxx"
 #endif
 
-using namespace com::sun::star::lang;
-using namespace com::sun::star::ucb;
-using namespace com::sun::star::uno;
-using namespace rtl;
+using namespace com::sun;
+using namespace com::sun::star;
 
 // @@@ Adjust namespace name.
 using namespace myucp;
@@ -98,7 +96,7 @@ using namespace myucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-                            const Reference< XMultiServiceFactory >& rSMgr )
+                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
 : ::ucb::ContentProviderImplHelper( rSMgr )
 {
 }
@@ -117,9 +115,9 @@ ContentProvider::~ContentProvider()
 
 // @@@ Add own interfaces.
 XINTERFACE_IMPL_3( ContentProvider,
-                   XTypeProvider,
-                   XServiceInfo,
-                   XContentProvider );
+                   lang::XTypeProvider,
+                   lang::XServiceInfo,
+                   star::ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -129,9 +127,9 @@ XINTERFACE_IMPL_3( ContentProvider,
 
 // @@@ Add own interfaces.
 XTYPEPROVIDER_IMPL_3( ContentProvider,
-                         XTypeProvider,
-                         XServiceInfo,
-                         XContentProvider );
+                      lang::XTypeProvider,
+                      lang::XServiceInfo,
+                      star::ucb::XContentProvider );
 
 //=========================================================================
 //
@@ -139,11 +137,12 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-// @@@ Adjust implementation name and service name.
+// @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
+// @@@ Adjust service name.
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     OUString::createFromAscii(
-                             "myucp_ContentProvider" ),
-                     OUString::createFromAscii(
+                     rtl::OUString::createFromAscii(
+                            "com.sun.star.comp.myucp.ContentProvider" ),
+                     rtl::OUString::createFromAscii(
                              MYUCP_CONTENT_PROVIDER_SERVICE_NAME ) );
 
 //=========================================================================
@@ -161,36 +160,36 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 //=========================================================================
 
 // virtual
-Reference< XContent > SAL_CALL ContentProvider::queryContent(
-                        const Reference< XContentIdentifier >& Identifier )
-    throw( IllegalIdentifierException, RuntimeException )
+uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
+        const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
+    throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
     vos::OGuard aGuard( m_aMutex );
 
     // Check URL scheme...
 
-    OUString aScheme( OUString::createFromAscii( MYUCP_URL_SCHEME ) );
-    if ( !Identifier->getContentProviderScheme().equalsIgnoreCase( aScheme ) )
-        throw IllegalIdentifierException();
+    rtl::OUString aScheme( rtl::OUString::createFromAscii( MYUCP_URL_SCHEME ) );
+    if ( !Identifier->getContentProviderScheme().equalsIgnoreAsciiCase( aScheme ) )
+        throw star::ucb::IllegalIdentifierException();
 
     // @@@ Further id checks may go here...
 #if 0
     if ( id-check-failes )
-        throw IllegalIdentifierException();
+        throw star::ucb::IllegalIdentifierException();
 #endif
 
     // @@@ Id normalization may go here...
 #if 0
     // Normalize URL and create new Id.
-    OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
-    Reference< XContentIdentifier > xCanonicId =
-                new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
+    rtl::OUString aCanonicURL = xxxxx( Identifier->getContentIdentifier() );
+    uno::Reference< star::ucb::XContentIdentifier > xCanonicId
+        = new ::ucb::ContentIdentifier( m_xSMgr, aCanonicURL );
 #else
-    Reference< XContentIdentifier > xCanonicId = Identifier;
+    uno::Reference< star::ucb::XContentIdentifier > xCanonicId = Identifier;
 #endif
 
     // Check, if a content with given id already exists...
-    Reference< XContent > xContent
+    uno::Reference< star::ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).getBodyPtr();
     if ( xContent.is() )
         return xContent;
@@ -204,7 +203,7 @@ Reference< XContent > SAL_CALL ContentProvider::queryContent(
     xContent = new Content( m_xSMgr, this, xCanonicId );
 
     if ( !xContent->getIdentifier().is() )
-        throw IllegalIdentifierException();
+        throw star::ucb::IllegalIdentifierException();
 
     return xContent;
 }
