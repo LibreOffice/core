@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:30:03 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 16:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <so3/soerr.hxx>
 #include <svtools/rectitem.hxx>
 #include <svtools/whiter.hxx>
-#include <sim2/simdll.hxx>
 #include <sch/schdll.hxx>
 #include <sch/memchrt.hxx>
 #include <sch/schdll0.hxx>
@@ -244,6 +243,8 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
     {
         ActivateObject( pOle2Obj, nVerb );
     }
+#if 0
+    //! remove this along with pGrafEdit member of ScClient
     else if ( pGrafObj && SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE) )
     {
         /**********************************************************
@@ -295,6 +296,7 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
             pClient->SetGrafEdit( pTempSdrGrafObj );
         }
     }
+#endif
     else
         DBG_ERROR("kein Objekt fuer Verb gefunden");
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:39:19 $
+ *  last change: $Author: nn $ $Date: 2000-10-05 16:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdograf.hxx>
-#include <sim2/simdll.hxx>
 
 
 /*
@@ -536,6 +535,8 @@ void __EXPORT ScClient::MakeVisible()
     }
 }
 
+#if 0
+
 //  Mit Optimierung gibt es Abstuerze beim Deaktivieren von Grafik-Image-Objekten
 
 #ifdef WNT
@@ -579,11 +580,16 @@ void lcl_ReplaceObject( SdrOle2Obj* pGrafOle, SdrGrafObj* pGrafObj,
 #pragma optimize ( "", on )
 #endif
 
+#endif
+
 void __EXPORT ScClient::UIActivate( BOOL bActivate )
 {
     SvInPlaceClientRef aIPClient( this );   // nicht aus versehen zwischendrin loeschen
 
     SfxInPlaceClient::UIActivate(bActivate);
+
+#if 0
+    //! remove this along with the pGrafEdit member!
 
     if ( !bActivate && pGrafEdit )          // wurde eine Grafik bearbeitet?
     {
@@ -593,6 +599,7 @@ void __EXPORT ScClient::UIActivate( BOOL bActivate )
 
         lcl_ReplaceObject( pGrafOle, pGrafObj, GetViewShell() );
     }
+#endif
 
     if ( !bActivate )       //  Chart-Daten-Hervorhebung aufheben
     {
