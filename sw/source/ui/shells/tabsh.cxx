@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:52:17 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 10:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ const USHORT __FAR_DATA aUITableAttrRange[] =
     FN_TABLE_SET_VERT_ALIGN,        FN_TABLE_SET_VERT_ALIGN,
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
+    FN_TABLE_BOX_TEXTDIRECTION,     FN_TABLE_BOX_TEXTDIRECTION,
     0
 };
 
@@ -351,6 +352,12 @@ SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
         rSet.InvalidateItem(SID_ATTR_BRUSH_ROW);
     rSh.GetTabBackground(aBrush);
     rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
+
+    // text direction in boxes
+    SvxFrameDirectionItem aBoxDirection;
+    if(rSh.GetBoxDirection( aBoxDirection ))
+        rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTDIRECTION);
+
     FASTBOOL bTableSel = rSh.IsTableMode();
     if(!bTableSel)
     {
@@ -472,7 +479,9 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
     bBackground |= SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_BRUSH_TABLE, FALSE, &pTableItem );
     const SfxPoolItem* pSplit = 0;
     BOOL bRowSplit = SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pSplit );
-    if( bBackground || bBorder || bRowSplit)
+    const SfxPoolItem* pBoxDirection = 0;
+    BOOL bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTDIRECTION, FALSE, &pBoxDirection );
+    if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
         /*
          Die Umrandung wird auf die vorliegende Selektion angewendet
@@ -499,6 +508,13 @@ void lcl_ItemSetToTableParam( const SfxItemSet& rSet,
                 aBrush.SetWhich(RES_BACKGROUND);
                 rSh.SetTabBackground( aBrush );
             }
+        }
+
+        if(bBoxDirection)
+        {
+            SvxFrameDirectionItem aDirection;
+            aDirection.SetValue(static_cast< const SvxFrameDirectionItem* >(pBoxDirection)->GetValue());
+            rSh.SetBoxDirection(aDirection);
         }
 
         if(bBorder || bRowSplit)
@@ -671,7 +687,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SvxBoxItem     aBox;
             SfxItemSet aCoreSet( GetPool(),
                             RES_BOX, RES_BOX,
-                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0);
+                            SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
+                            0);
             SvxBoxInfoItem aCoreInfo;
             aCoreSet.Put(aCoreInfo);
             rSh.GetTabBorders( aCoreSet );
