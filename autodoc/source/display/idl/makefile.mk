@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-11-01 17:15:01 $
+#   last change: $Author: rt $ $Date: 2004-07-12 15:32:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ OBJFILES= \
     $(OBJ)$/hfi_doc.obj         \
     $(OBJ)$/hfi_enum.obj        \
     $(OBJ)$/hfi_globalindex.obj \
+    $(OBJ)$/hfi_hierarchy.obj   \
     $(OBJ)$/hfi_interface.obj   \
     $(OBJ)$/hfi_method.obj      \
     $(OBJ)$/hfi_module.obj      \
@@ -89,6 +90,7 @@ OBJFILES= \
     $(OBJ)$/hfi_property.obj    \
     $(OBJ)$/hfi_service.obj     \
     $(OBJ)$/hfi_singleton.obj   \
+    $(OBJ)$/hfi_siservice.obj   \
     $(OBJ)$/hfi_struct.obj      \
     $(OBJ)$/hfi_tag.obj         \
     $(OBJ)$/hfi_typedef.obj     \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:56 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@ namespace ary
     {
         class Module;
     }
+    namespace info
+    {
+        class CodeInformation;
+    }
 }
 
 
@@ -111,12 +115,20 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
                             :   HtmlFactory<Environment>(io_rEnv, o_pOut)
                             { }
 
+    /** The default version only calls ->produce_InternalLink().
+        This may be overwritten by derived classes.
+    */
+    virtual void        produce_SummaryDeclaration(
+                            Xml::Element &      o_row,
+                            const client &      i_ce ) const;
     void                produce_InternalLink(
                             Xml::Element &      o_row,
                             const client &      i_ce ) const;
     void                produce_ShortDoc(
                             Xml::Element &      o_row,
                             const client &      i_ce ) const;
+
+    // KORR MI: Does not belong here (implementation inheritance)!
     void                produce_Bases(
                                 Xml::Element &   o_screen,
                                 const client &   i_ce,

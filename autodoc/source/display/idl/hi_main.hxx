@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_main.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:32:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@ class MainDisplay_Idl : public ary::idl::CeHost
     virtual void        do_Service(
                             const ary::idl::CodeEntity &
                                                 i_rData );
+    virtual void        do_SglIfcService(
+                            const ary::idl::CodeEntity &
+                                                i_rData );
     virtual void        do_Interface(
                             const ary::idl::CodeEntity &
                                                 i_rData );
@@ -116,8 +119,14 @@ class MainDisplay_Idl : public ary::idl::CeHost
     virtual void        do_Singleton(
                             const ary::idl::CodeEntity &
                                                 i_rData );
+    virtual void        do_SglIfcSingleton(
+                            const ary::idl::CodeEntity &
+                                                i_rData );
     // Locals
     void                do_ServiceDescr(
+                            const ary::idl::CodeEntity &
+                                                i_rData );
+    void                do_SglIfcServiceDescr(
                             const ary::idl::CodeEntity &
                                                 i_rData );
     void                do_InterfaceDescr(
