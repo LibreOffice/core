@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 14:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,12 @@ class SwPageDesc;
 class ViewShell;
 struct SwPosition;
 
+#ifdef MACOSX
+#define INLINE /* GrP revisit with gcc3 */
+#else
+#define INLINE inline
+#endif
+
 // --------------------
 // class SwNode
 // --------------------
@@ -174,21 +180,21 @@ public:
     inline       SwEndNode   *GetEndNode();
     inline const SwEndNode   *GetEndNode() const;
 #ifndef  ICC
-    inline
+  INLINE
 #endif
     SwTxtNode   *GetTxtNode();
 
 #ifndef  ICC
-    inline
+  INLINE
 #endif
     const SwTxtNode   *GetTxtNode() const;
 #ifndef COMPACT
-    inline       SwOLENode   *GetOLENode();
-    inline const SwOLENode   *GetOLENode() const;
-    inline       SwNoTxtNode *GetNoTxtNode();
-    inline const SwNoTxtNode *GetNoTxtNode() const;
-    inline       SwGrfNode   *GetGrfNode();
-    inline const SwGrfNode   *GetGrfNode() const;
+    INLINE        SwOLENode   *GetOLENode();
+    INLINE  const SwOLENode   *GetOLENode() const;
+    INLINE        SwNoTxtNode *GetNoTxtNode();
+    INLINE  const SwNoTxtNode *GetNoTxtNode() const;
+    INLINE        SwGrfNode   *GetGrfNode();
+    INLINE  const SwGrfNode   *GetGrfNode() const;
 #endif
     inline       SwTableNode *GetTableNode();
     inline const SwTableNode *GetTableNode() const;
@@ -725,6 +731,6 @@ inline const SfxPoolItem& SwCntntNode::GetAttr( USHORT nWhich,
 }
 
 
-
+#undef INLINE
 
 #endif
