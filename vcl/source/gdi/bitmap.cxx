@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:22:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SV_IMPBMP_HXX
 #include <impbmp.hxx>
+#endif
+#ifndef _SV_SALBMP_HXX
+#include <salbmp.hxx>
 #endif
 #ifndef _SV_RC_H
 #include <tools/rc.h>
@@ -1944,4 +1947,19 @@ BOOL Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 BOOL Bitmap::MakeMono( BYTE cThreshold )
 {
     return ImplMakeMono( cThreshold );
+}
+
+// ------------------------------------------------------------------
+
+bool Bitmap::GetSystemData( BitmapSystemData& rData ) const
+{
+    bool bRet = false;
+    if( mpImpBmp )
+    {
+        SalBitmap* pSalBitmap = mpImpBmp->ImplGetSalBitmap();
+        if( pSalBitmap )
+            bRet = pSalBitmap->GetSystemData( rData );
+    }
+
+    return bRet;
 }
