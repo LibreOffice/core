@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.43 2001-11-07 14:52:25 dvo Exp $
+	$Id: style.mod,v 1.44 2001-11-29 15:54:42 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -102,7 +102,7 @@
 <!-- frame properties -->
 <!ATTLIST style:properties fo:width %positiveLength; #IMPLIED>
 <!ATTLIST style:properties fo:height %positiveLength; #IMPLIED>
-<!ATTLIST style:properties style:vertical-pos (top|middle|bottom|from-top) #IMPLIED>
+<!ATTLIST style:properties style:vertical-pos (top|middle|bottom|from-top|below) #IMPLIED>
 <!ATTLIST style:properties style:vertical-rel (page|page-content|
 											   frame|frame-content|
 											   paragraph|paragraph-content|char|
