@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-11 16:28:39 $
+ *  last change: $Author: cmc $ $Date: 2000-12-12 12:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1108,7 +1108,7 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
                         }
                         int nOldCurSize=nCurSize;
                         HandleSize(nLSize,nDSize,nSetSize);
-                        nRet = HandleRecords(nLevel+1,nSelector,nVariation);
+                        nRet = HandleRecords(nLevel+1);
                         while (nSetSize)
                         {
                             APPEND(rRet,"} ");
@@ -2074,10 +2074,10 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
 
     if (pTemp = pNode->GetSubNode(0))
     {
-        *pS << BYTE(0x0A);
-        *pS << BYTE(LINE); //line
+//      *pS << BYTE(0x0A);
+//      *pS << BYTE(LINE);
         HandleNodes(pTemp,nLevel+1);
-        *pS << BYTE(END);
+//      *pS << BYTE(END);
     }
 
     if (nVariation2 != 0xff)
