@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 01:27:05 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 15:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,7 +1280,7 @@ String SCSTR_COLUMN
     Text[ chinese_traditional ] = "æ¬„";
     Text[ arabic ] = "ÇáÚãæÏ";
     Text[ greek ] = "ÓôÞëç";
-    Text[ korean ] = "ì—´";
+    Text[ korean ] = "ë‹¨";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Columna";
