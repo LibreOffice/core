@@ -8,13 +8,6 @@ ex	extensions\source\plugin\inc\plugin\unx		get	-	all	ex_piux NULL
 ex	extensions\source\plugin\inc\plugin\os2		get	-	all	ex_pios2 NULL
 ex	extensions\source\ole				nmake	-	w	ex_ole NULL
 ex	extensions\source\resource			nmake	-	all	ex_resrc NULL
-ex	extensions\source\pgp\java\com\sun\star\pgp	nmake	-	u	ex_pgpjava NULL
-ex	extensions\source\pgpfactory			nmake	-	all	ex_pgpfac NULL
-ex	extensions\source\pgp\src			nmake	-	w	ex_pgpsrc NULL
-ex	extensions\source\pgp\win32			nmake	-	w	ex_pgpw32 NULL
-ex	extensions\source\pgp\win32_60			nmake	-	w	ex_pgpw60 NULL
-ex	extensions\source\pgp\win32_65			nmake	-	w	ex_pgpw65 NULL
-ex	extensions\source\pgp\util			nmake	-	w	ex_pgput ex_pgpfac ex_pgpsrc ex_pgpw32 ex_pgpw60 ex_pgpw65 NULL
 ex	extensions\source\installation			nmake	-	w	ex_inst NULL
 ex	extensions\source\installation\office\instchk		nmake	-	all	ex_ichk NULL
 ex	extensions\source\installation\office\protchk		nmake	-	w	ex_pchk NULL
