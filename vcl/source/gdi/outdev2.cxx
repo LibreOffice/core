@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-11 16:49:27 $
+ *  last change: $Author: thb $ $Date: 2002-10-29 11:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,9 @@ void OutputDevice::ImplDrawOutDevDirect( const OutputDevice* pSrcDev, void* pVoi
             }
         }
 
-        Rectangle   aSrcOutRect( Point( pSrcDev->mnOutOffX, pSrcDev->mnOutOffY ),
+        // #102532# Offset only has to be pseudo window offset
+        Rectangle   aSrcOutRect( Point( pSrcDev->mnOutOffX - pSrcDev->mnOutOffOrigX,
+                                        pSrcDev->mnOutOffY - pSrcDev->mnOutOffOrigY ),
                                  Size( pSrcDev->mnOutWidth, pSrcDev->mnOutHeight ) );
         Rectangle   aSrcRect( Point( pPosAry->mnSrcX, pPosAry->mnSrcY ),
                               Size( pPosAry->mnSrcWidth, pPosAry->mnSrcHeight ) );
