@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:05:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ enum ErrorCode
     EIDL_REST_PARAMETER_NOT_ANY,
     EIDL_METHOD_HAS_REST_PARAMETER,
     EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS,
+    EIDL_UNSIGNED_TYPE_ARGUMENT,
     EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS,
     EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF,
     EIDL_IDENTICAL_TYPE_PARAMETERS,
