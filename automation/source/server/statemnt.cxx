@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:54:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,18 +539,22 @@ StatementSlot::StatementSlot( SCmdStream *pCmdIn )
                 break;
             case BinString: // new Method
                 {
-                    nAnzahl++;
                     aArgs.realloc(nAnzahl);
                     PropertyValue* pArg = aArgs.getArray();
-                    for (USHORT i = 0 ; i+1 < nAnzahl ; i++)
+                    for (USHORT i = 0 ; i < nAnzahl ; i++)
                         pCmdIn->Read( pArg[i] );
-                    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("Referer");
-                    pArg[nAnzahl-1].Value <<= ::rtl::OUString::createFromAscii("private:user");
                 }
                 break;
         }
     }
 }
+
+// Constructor for UnoSlot
+StatementSlot::StatementSlot()
+: pItemArr(NULL)
+, nAnzahl( 0 )
+, nFunctionId( 0 )
+{}
 
 StatementSlot::StatementSlot( ULONG nSlot, SfxPoolItem* pItem )
 : pItemArr(NULL)
@@ -586,6 +590,22 @@ StatementSlot::~StatementSlot()
 
         aArgs.realloc( 0 );
     }
+}
+
+void StatementSlot::AddReferer()
+{
+    HACK( "only to test!" );
+// because slot 6102 /*SID_VERB_START*/ crashes when called with Property Referer
+// We return to the previous behavior (which was a bug realy) of not adding this Property to calls which have no properties at all
+// according to MBA most likely this Property can be removed at all and is maybe only needed for Slots with URLs
+    if ( !nAnzahl )
+        return;
+
+    nAnzahl++;
+    aArgs.realloc(nAnzahl);
+    PropertyValue* pArg = aArgs.getArray();
+    pArg[nAnzahl-1].Name = rtl::OUString::createFromAscii("Referer");
+    pArg[nAnzahl-1].Value <<= ::rtl::OUString::createFromAscii("private:user");
 }
 
 class SlotStatusListener : public cppu::WeakImplHelper1< XStatusListener >
@@ -662,8 +682,11 @@ BOOL StatementSlot::Execute()
     {
         if ( ( nAnzahl == 0 && !getenv("OLDSLOTHANDLING") ) || aArgs.hasElements() )
         {   // trying to call slots via uno
+            AddReferer();
+            if ( !aUnoUrl.Len() )
+                aUnoUrl = CUniString("slot:").Append( String::CreateFromInt32( nFunctionId ) );
             URL aTargetURL;
-            aTargetURL.Complete = CUniString("slot:").Append( String::CreateFromInt32( nFunctionId ) );
+            aTargetURL.Complete = aUnoUrl;
             Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.frame.Desktop") ), UNO_QUERY );
             Reference < XFrame > xFrame;
 
@@ -739,6 +762,7 @@ BOOL StatementSlot::Execute()
         }
         else
         {
+            DirectLog( S_QAError, GEN_RES_STR0( S_DEPRECATED ) );
             if ( !pTTProperties )
                 pTTProperties = new TTProperties();
 
@@ -778,95 +802,12 @@ StatementUnoSlot::StatementUnoSlot(SCmdStream *pIn)
 
     pIn->Read( aUnoUrl );
 
-/*    if ( !pTTProperties )
-        pTTProperties = new TTProperties();
-    if ( !pTTProperties->GetSlots() )
-    {
-        ReportError( GEN_RES_STR0( S_UNO_PROPERTY_NITIALIZE_FAILED ) );
-    }
-    nFunctionId = pTTProperties->nSidOpenUrl;
-
-    nAnzahl = 3;
-    pItemArr = new SfxPoolItem*[nAnzahl];
-
-    pItemArr[0] = new SfxStringItem( pTTProperties->nSidFileName, aUnoUrl );
-    pItemArr[1] = new SfxStringItem( pTTProperties->nSidReferer, CUniString("private:testtool/") );
-    pItemArr[2] = NULL;
-
-  */
 #if OSL_DEBUG_LEVEL > 1
     StatementList::m_pDbgWin->AddText( "UnoUrl:" );
     StatementList::m_pDbgWin->AddText( aUnoUrl );
     StatementList::m_pDbgWin->AddText( "\n" );
 #endif
 
-}
-
-BOOL StatementUnoSlot::Execute()
-{
-    if ( IsError )
-    {
-        #if OSL_DEBUG_LEVEL > 1
-        m_pDbgWin->AddText( "Skipping UnoSlot: " );
-        m_pDbgWin->AddText( aUnoUrl );
-        m_pDbgWin->AddText( "\n" );
-        #endif
-
-        Advance();
-        delete this;
-        return TRUE;
-    }
-
-    InitProfile();
-#if OSL_DEBUG_LEVEL > 1
-    m_pDbgWin->AddText( "Executing UnoSlot: " );
-    m_pDbgWin->AddText( aUnoUrl );
-    m_pDbgWin->AddText( "\n" );
-#endif
-
-    Advance();
-
-    if ( !IsError )
-    {
-        Reference < XFramesSupplier > xDesktop = Reference < XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.frame.Desktop") ), UNO_QUERY );
-        Reference < XFrame > xFrame( xDesktop->getActiveFrame() );
-        if ( !xFrame.is() )
-        {
-            ReportError( GEN_RES_STR1( S_UNO_URL_EXECUTE_FAILED_NO_FRAME, aUnoUrl ) );
-            DBG_ERROR("Where's my task?!");
-        }
-        else
-        {
-
-            URL aTargetURL;
-            aTargetURL.Complete = aUnoUrl;
-            Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( CUniString("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseStrict( aTargetURL );
-
-            Reference < XDispatchProvider > xProv( xFrame, UNO_QUERY );
-            Reference < XDispatch > xDisp;
-        /*
-        addStatusListener ( XStatusListener, URL );
-        callback und dann testen ob disabled
-        */
-            if ( xProv.is() )
-                    xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
-            if ( xDisp.is() )
-            {
-                Sequence<PropertyValue> aArgs(1);
-                PropertyValue* pArg = aArgs.getArray();
-                pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-                pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-                xDisp->dispatch( aTargetURL, aArgs );
-            }
-            else
-                ReportError( GEN_RES_STR1( S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER, aUnoUrl ) );
-        }
-    }
-
-    SendProfile( aUnoUrl );
-    delete this;
-    return TRUE;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -3198,7 +3139,7 @@ BOOL StatementCommand::Execute()
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
                     // the Count of 2 results from the "." and ".." directory
-                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | FSYS_KIND_BLOCK ).Count() > 2 )
+                    if ( Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count() > 2 )
                         DirectLog( S_QAError, GEN_RES_STR1( S_DIRECTORY_NOT_EMPTY, aDestPath.GetFull() ) );
 
                     SotStorageRef xStorage = new SotStorage( aFileName, STREAM_STD_READ );
@@ -3552,7 +3493,7 @@ void StatementControl::AnimateMouse( Window *pControl, Point aWohin )
     Point aAkt = pControl->GetPointerPosPixel();
     Point aZiel = aWohin;
 
-    USHORT nSteps;
+    long nSteps;
     Point aDiff = aAkt - aZiel;
 
     if ( Abs(aDiff.X()) < Abs(aDiff.Y()) )
