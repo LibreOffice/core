@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filrow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: abi $ $Date: 2001-12-10 09:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ sal_Bool convert( shell* pShell,
                   uno::Any& rValue,
                   _type_& aReturn  )
 {
+    // Try first without converting
     sal_Bool no_success = ! ( rValue >>= aReturn );
 
     if ( no_success )
@@ -97,11 +98,17 @@ sal_Bool convert( shell* pShell,
                         "PropertyValueSet::getTypeConverter() - "
                         "Service 'com.sun.star.script.Converter' n/a!" );*/
         }
+
         try
         {
-            uno::Any aConvertedValue
-                = xConverter->convertTo( rValue,getCppuType( static_cast< const _type_* >(0) ) );
-            no_success = ! ( aConvertedValue >>= aReturn );
+            if( rValue.hasValue() )
+            {
+                uno::Any aConvertedValue
+                    = xConverter->convertTo( rValue,getCppuType( static_cast< const _type_* >(0) ) );
+                no_success = ! ( aConvertedValue >>= aReturn );
+            }
+            else
+                no_success = sal_True;
         }
         catch ( lang::IllegalArgumentException )
         {
