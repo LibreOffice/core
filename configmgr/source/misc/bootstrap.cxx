@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-06 15:43:06 $
+ *  last change: $Author: jb $ $Date: 2002-04-25 15:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,8 +970,7 @@ namespace configmgr
 // ---------------------------------------------------------------------------------------
     void ConnectionSettings::setAnyLocale(Settings::Origin _eOrigin)
     {
-        rtl::OUString sAnyLocale;
-        localehelper::getAnyLocale( sAnyLocale );
+        rtl::OUString sAnyLocale = localehelper::getAnyLocale();
 
         this->putSetting( NAME(SETTING_LOCALE), Settings::Setting(sAnyLocale, _eOrigin));
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:30:12 $
+ *  last change: $Author: jb $ $Date: 2002-04-25 15:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ namespace configmgr
 
     void RequestOptions::setAllLocales()
     {
-        localehelper::getAnyLocale(m_sLocale);
+        m_sLocale = localehelper::getAnyLocale();
     }
 // ---------------------------------------------------------------------------
 
