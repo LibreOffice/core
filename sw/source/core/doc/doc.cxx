@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:43:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #ifndef _HINTIDS_HXX
@@ -1325,12 +1324,20 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
     if (DoesUndo())
     {
+        DelAllUndoObj();
+
         SwUndo * pUndo = new SwUndoTOXChange(&rTOX, rNew);
 
         AppendUndo(pUndo);
     }
 
     rTOX = rNew;
+
+    if (rTOX.ISA(SwTOXBaseSection))
+    {
+        static_cast<SwTOXBaseSection &>(rTOX).Update();
+        static_cast<SwTOXBaseSection &>(rTOX).UpdatePageNum();
+    }
 }
 
 // #111827#
