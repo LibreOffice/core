@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versionhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:17:18 $
+ *  last change: $Author: rt $ $Date: 2003-07-29 13:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,51 +106,27 @@ bool VersionHelper::isOk() const
 
 rtl::OString VersionHelper::getTime() const
 {
-#if SUPD < 669
     return m_pInfo->pTime;
-#else
-    return m_pInfo->aTime;
-#endif
 }
 rtl::OString VersionHelper::getDate() const
 {
-#if SUPD < 669
     return m_pInfo->pDate;
-#else
-    return m_pInfo->aDate;
-#endif
 }
 rtl::OString VersionHelper::getUpd() const
 {
-#if SUPD < 669
     return m_pInfo->pUpd;
-#else
-    return m_pInfo->aUpd;
-#endif
 }
 rtl::OString VersionHelper::getMinor() const
 {
-#if SUPD < 669
     return m_pInfo->pMinor;
-#else
-    return m_pInfo->aMinor;
-#endif
 }
 rtl::OString VersionHelper::getBuild() const
 {
-#if SUPD < 669
     return m_pInfo->pBuild;
-#else
-    return m_pInfo->aBuild;
-#endif
 }
 rtl::OString VersionHelper::getInpath() const
 {
-#if SUPD < 669
     return m_pInfo->pInpath;
-#else
-    return m_pInfo->aInpath;
-#endif
 }
 
 
