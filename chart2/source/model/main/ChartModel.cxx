@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:24 $
+ *  last change: $Author: bm $ $Date: 2004-01-28 10:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1133,6 +1133,24 @@ void SAL_CALL ChartModel::initNew()
            uno::Exception,
            uno::RuntimeException)
 {
+#if 0
+    // test for creating default data without file data-source
+    createInternalDataProvider( sal_False );
+
+    try
+    {
+        Reference< embed::XComponentSupplier > xCompSupp( m_xInternalData, uno::UNO_QUERY_THROW );
+        Reference< sheet::XSpreadsheetDocument > xCalcDoc( xCompSupp->getComponent(), uno::UNO_QUERY_THROW );
+        m_pImplChartModel->CreateDefaultData( xCalcDoc );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return;
+#endif
+
     uno::Reference< ::com::sun::star::chart2::XDataProvider > xDataProvider(
         m_xContext->getServiceManager()->createInstanceWithContext(
             C2U( "com.sun.star.comp.chart.FileDataProvider" ),

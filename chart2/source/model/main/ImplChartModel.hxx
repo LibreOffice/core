@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:32 $
+ *  last change: $Author: bm $ $Date: 2004-01-28 10:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,10 @@ public:
 
     void CloneData( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::sheet::XSpreadsheetDocument > & xCalcDoc );
+
+
+    void CreateDefaultData( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::sheet::XSpreadsheetDocument > & xCalcDoc );
 
 private:
     void ReadData( const ::rtl::OUString & rRangeRepresentation );

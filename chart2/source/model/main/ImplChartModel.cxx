@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:31 $
+ *  last change: $Author: bm $ $Date: 2004-01-28 10:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,67 @@ void ImplChartModel::CloneData(
     }
 }
 
+void ImplChartModel::CreateDefaultData(
+    const uno::Reference< sheet::XSpreadsheetDocument > & xCalcDoc )
+{
+    if( ! xCalcDoc.is())
+        return;
+
+    const sal_Int32 nNumRows = 4;
+    const sal_Int32 nNumColumns = 3;
+
+    const double fDefaultData[ nNumColumns ][ nNumRows ] =
+        {
+            { 9.10,  2.40,  3.10,  4.30 },
+            { 3.20,  8.80,  1.50,  9.02 },
+            { 4.54,  9.65,  3.70,  6.20 }
+        };
+
+    try
+    {
+        // insert new sheet
+        Reference< sheet::XSpreadsheets > xSheets( xCalcDoc->getSheets() );
+        xSheets->insertNewByName( C2U( "Chart Data" ), 0 );
+        Reference< sheet::XSpreadsheet > xDataSheet( xSheets->getByName( C2U( "Chart Data" ) ), uno::UNO_QUERY );
+        OSL_ASSERT( xDataSheet.is());
+
+        // delete all except one of the existing sheets
+        Reference< container::XNameAccess > xNameAccess( xSheets, uno::UNO_QUERY_THROW );
+        OSL_ASSERT( xNameAccess.is());
+        Reference< container::XNameContainer > xNameContainer( xNameAccess, uno::UNO_QUERY_THROW );
+        OSL_ASSERT( xNameContainer.is());
+        Sequence< ::rtl::OUString > aNames( xNameAccess->getElementNames());
+        for( sal_Int32 nNameIdx = 1; nNameIdx < aNames.getLength(); ++nNameIdx )
+        {
+            OSL_TRACE( "Removing %s", U2C( aNames[nNameIdx] ));
+            xNameContainer->removeByName( aNames[nNameIdx] );
+        }
+
+        // fill data sheet
+        for( sal_Int32 nCol = 0; nCol < nNumColumns; ++nCol )
+        {
+            for( sal_Int32 nRow = 0; nRow < nNumRows; ++nRow )
+            {
+                Reference< table::XCell > xCell( xDataSheet->getCellByPosition( nCol, nRow ));
+                OSL_ASSERT( xCell.is());
+                xCell->setValue( fDefaultData[ nCol ][ nRow ]  );
+            }
+        }
+
+        Reference< lang::XMultiServiceFactory > xCalcFact( xCalcDoc, uno::UNO_QUERY_THROW );
+        Reference< sheet::XSheetCellRangeContainer > xRangeCnt(
+            xCalcFact->createInstance( C2U( "com.sun.star.sheet.SheetCellRanges" )), uno::UNO_QUERY_THROW );
+        xRangeCnt->addRangeAddress(
+            table::CellRangeAddress( 0, 0, 0, nNumColumns, nNumColumns ), sal_Bool( sal_False ) );
+        ::rtl::OUString aRangeStr( xRangeCnt->getRangeAddressesAsString());
+
+        SetRangeRepresentation( aRangeStr );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
 
 }  // namespace impl
 }  // namespace chart
