@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:12:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
 
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
-                    #ifdef DEBUG
+                    #if OSL_DEBUG_LEVEL > 1
                     // Sometimes it's better to see what's going on :-)
                     OUString sPropName   = lInNames[nSourceCounter];
                     OUString sLocaleName = lPropertyNames[nPropertyCounter];
