@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ using vos::ORef;
 
 Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #include <cppuhelper/typeprovider.hxx>
 static ::cppu::OImplementationId * pId = 0;
 #endif
@@ -138,7 +138,7 @@ ZipPackageFolder::ZipPackageFolder ()
     aEntry.nOffset      = -1;
     if ( !aImplementationId.getLength() )
         {
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
                 if (! pId)
                 {
                         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -174,7 +174,7 @@ void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
     rDest.nExtraLen         = rSource.nExtraLen;
 }
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 Any SAL_CALL ZipPackageFolder::queryInterface( const Type& rType )
     throw(RuntimeException)
 {
