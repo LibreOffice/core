@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshcol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:32:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #include <cppuhelper/implbase3.hxx>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class XShapeList;
 
 class SvxShapeCollectionMutex
@@ -87,12 +91,12 @@ public:
     ::osl::Mutex maMutex;
 };
 
-com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvxShapeCollection_NewInstance() throw();
+SVX_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SvxShapeCollection_NewInstance() throw();
 
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapeCollection :  public ::cppu::WeakAggImplHelper3<
+class SVX_DLLPUBLIC SvxShapeCollection :    public ::cppu::WeakAggImplHelper3<
                                             ::com::sun::star::drawing::XShapes,
                                             ::com::sun::star::lang::XServiceInfo,
                                             ::com::sun::star::lang::XComponent
@@ -104,7 +108,7 @@ private:
 
     cppu::OBroadcastHelper mrBHelper;
 
-    virtual void disposing() throw();
+    SVX_DLLPRIVATE virtual void disposing() throw();
 
 public:
     SvxShapeCollection() throw();
