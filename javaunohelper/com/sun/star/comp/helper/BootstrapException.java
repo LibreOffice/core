@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BootstrapException.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 07:36:26 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@ package com.sun.star.comp.helper;
 /**
  * BootstrapException is a checked exception that wraps an exception
  * thrown by the original target.
+ *
+ * @since UDK 3.1.0
  */
 public class BootstrapException extends java.lang.Exception {
 
