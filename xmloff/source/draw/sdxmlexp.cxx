@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-24 17:57:53 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGETARGET_HPP_
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_CONNECTORTYPE_HPP_
+#include <com/sun/star/drawing/ConnectorType.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
@@ -638,7 +642,12 @@ SdXMLExport::SdXMLExport(
     mnShapeStyleInfoIndex(0L),
     mbIsDraw(bIsDraw),
     mbFamilyGraphicUsed(FALSE),
-    mbFamilyPresentationUsed(FALSE)
+    mbFamilyPresentationUsed(FALSE),
+    msZIndex( RTL_CONSTASCII_USTRINGPARAM(sXML_zindex) ),
+    msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
+    msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
+    msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
+    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
 {
     // prepare factory parts
     mpSdPropHdlFactory = new XMLSdPropHdlFactory;
@@ -1471,7 +1480,7 @@ void SdXMLExport::ImpPrepDrawPageInfos()
     if(mnDocDrawPageCount)
     {
         // prepare name creation
-        for(sal_uInt32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
+        for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
         {
             uno::Any aAny(mxDocDrawPages->getByIndex(nCnt));
             uno::Reference<drawing::XDrawPage> xDrawPage;
@@ -1508,7 +1517,7 @@ void SdXMLExport::ImpWriteDrawPageInfos()
     if(mnDocDrawPageCount && mpDrawPageInfoList->Count())
     {
         // prepare write
-        for(sal_uInt32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
+        for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
         {
             uno::Any aAny(mxDocDrawPages->getByIndex(nCnt));
             uno::Reference<drawing::XDrawPage> xDrawPage;
@@ -1571,7 +1580,7 @@ void SdXMLExport::ImpWritePresentationStyles()
 {
     if(IsImpress())
     {
-        for(sal_uInt32 nCnt = 0L; nCnt < mnDocMasterPageCount; nCnt++)
+        for(sal_Int32 nCnt = 0L; nCnt < mnDocMasterPageCount; nCnt++)
         {
             uno::Any aAny(mxDocMasterPages->getByIndex(nCnt));
             uno::Reference<container::XNamed> xNamed;
@@ -1692,7 +1701,7 @@ void SdXMLExport::_ExportContent()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportTextBoxShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
@@ -1837,7 +1846,7 @@ void SdXMLExport::ImpExportTextBoxShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportRectangleShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportRectangleShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /*= SEF_DEFAULT */,    com::sun::star::awt::Point* pRefPoint /* = NULL */ )
 {
@@ -1926,7 +1935,7 @@ void SdXMLExport::ImpExportRectangleShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportLineShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportLineShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
@@ -2021,7 +2030,7 @@ void SdXMLExport::ImpExportLineShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportEllipseShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2112,7 +2121,7 @@ void SdXMLExport::ImpExportEllipseShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportPolygonShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2295,7 +2304,7 @@ void SdXMLExport::ImpExportPolygonShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportGraphicObjectShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2397,7 +2406,7 @@ void SdXMLExport::ImpExportGraphicObjectShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportChartShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2485,7 +2494,7 @@ void SdXMLExport::ImpExportChartShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportSpreadsheetShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportSpreadsheetShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2521,7 +2530,7 @@ void SdXMLExport::ImpExportSpreadsheetShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportControlShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportControlShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2532,27 +2541,192 @@ void SdXMLExport::ImpExportControlShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportConnectorShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportConnectorShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
+    uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+
+    // export connection kind
+    drawing::ConnectorType eType = drawing::ConnectorType_STANDARD;
+    uno::Any aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeKind")));
+    aAny >>= eType;
+
+    if( eType != drawing::ConnectorType_STANDARD )
+    {
+        SvXMLUnitConverter::convertEnum( sStringBuffer, (sal_uInt16)eType, aXML_ConnectionKind_EnumMap );
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_type, aStr);
+    }
+
+    // export line skew
+    sal_Int32 nDelta1 = 0, nDelta2 = 0, nDelta3 = 0;
+
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine1Delta")));
+    aAny >>= nDelta1;
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine2Delta")));
+    aAny >>= nDelta2;
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EdgeLine3Delta")));
+    aAny >>= nDelta3;
+
+    if( nDelta1 != 0 || nDelta2 != 0 || nDelta3 != 0 )
+    {
+        rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta1);
+        if( nDelta2 != 0 || nDelta3 != 0 )
+        {
+            const char aSpace = ' ';
+            sStringBuffer.appendAscii( &aSpace, 1 );
+            rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta2);
+            if( nDelta3 != 0 )
+            {
+                sStringBuffer.appendAscii( &aSpace, 1 );
+                rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, nDelta3);
+            }
+        }
+
+        aStr = sStringBuffer.makeStringAndClear();
+        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_line_skew, aStr);
+    }
+
+    // export start and end point
+    awt::Point aStart(0,0);
+    awt::Point aEnd(1,1);
+
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")));
+    aAny >>= aStart;
+
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")));
+    aAny >>= aEnd;
+
+    if( pRefPoint )
+    {
+        aStart.X -= pRefPoint->X;
+        aStart.Y -= pRefPoint->Y;
+        aEnd.X -= pRefPoint->X;
+        aEnd.Y -= pRefPoint->Y;
+    }
+
+    // svg: x1
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.X);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x1, aStr);
+
+    // svg: y1
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.Y);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y1, aStr);
+
+    // svg: x2
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.X);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x2, aStr);
+
+    // svg: y2
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.Y);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y2, aStr);
+
+    uno::Reference< drawing::XShape > xTempShape;
+
+    // export start connection
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartShape") ) );
+    if( aAny >>= xTempShape )
+    {
+        sal_Int32 nShapeId = rExp.GetShapeExport()->getShapeId( xTempShape );
+        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_start_shape, OUString::valueOf( nShapeId ));
+
+        aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartGluePointIndex")) );
+        sal_Int32 nGluePointId;
+        if( aAny >>= nGluePointId )
+        {
+            if( nGluePointId != -1 )
+            {
+                rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_start_glue_point, OUString::valueOf( nGluePointId ));
+            }
+        }
+    }
+
+    // export end connection
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndShape")) );
+    if( aAny >>= xTempShape )
+    {
+        sal_Int32 nShapeId = rExp.GetShapeExport()->getShapeId( xTempShape );
+        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_shape, OUString::valueOf( nShapeId ));
+
+        aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndGluePointIndex")) );
+        sal_Int32 nGluePointId;
+        if( aAny >>= nGluePointId )
+        {
+            if( nGluePointId != -1 )
+            {
+                rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_glue_point, OUString::valueOf( nGluePointId ));
+            }
+        }
+    }
+
     // write connector shape. Add Export later.
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_connector, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportMeasureShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportMeasureShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
+    uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+
+    OUString aStr;
+    OUStringBuffer sStringBuffer;
+
+    // export start and end point
+    awt::Point aStart(0,0);
+    awt::Point aEnd(1,1);
+
+    uno::Any aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("StartPosition")));
+    aAny >>= aStart;
+
+    aAny = xProps->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("EndPosition")));
+    aAny >>= aEnd;
+
+    if( pRefPoint )
+    {
+        aStart.X -= pRefPoint->X;
+        aStart.Y -= pRefPoint->Y;
+        aEnd.X -= pRefPoint->X;
+        aEnd.Y -= pRefPoint->Y;
+    }
+
+    // svg: x1
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.X);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x1, aStr);
+
+    // svg: y1
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aStart.Y);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y1, aStr);
+
+    // svg: x2
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.X);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_x2, aStr);
+
+    // svg: y2
+    rExp.GetMM100UnitConverter().convertMeasure(sStringBuffer, aEnd.Y);
+    aStr = sStringBuffer.makeStringAndClear();
+    rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_y2, aStr);
+
     // write measure shape. Add Export later.
     SvXMLElementExport aOBJ(rExp, XML_NAMESPACE_DRAW, sXML_measure, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportOLE2Shape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportOLE2Shape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2588,7 +2762,7 @@ void SdXMLExport::ImpExportOLE2Shape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportPageShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportPageShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2609,7 +2783,7 @@ void SdXMLExport::ImpExportPageShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExportCaptionShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExportCaptionShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2619,7 +2793,7 @@ void SdXMLExport::ImpExportCaptionShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExport3DShape(SdXMLExport& rExp,
+void SdXMLExport::ImpExport3DShape(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
 {
@@ -2761,7 +2935,7 @@ void SdXMLExport::ImpExport3DShape(SdXMLExport& rExp,
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpExport3DScene(SdXMLExport& rExp,
+void SdXMLExport::ImpExport3DScene(SvXMLExport& rExp,
     const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
@@ -2987,7 +3161,7 @@ void SdXMLExport::ImpExport3DScene(SdXMLExport& rExp,
             }
 
             // write members
-            rExp.ImpWriteSingleShapeStyleInfos(xShapes);
+//          rExp.ImpWriteSingleShapeStyleInfos(xShapes, nFeatures, pRefPoint );
         }
     }
 }
@@ -3129,6 +3303,14 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
         const OUString aName( xNamed->getName() );
         if( aName.getLength() )
             rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_name, aName );
+    }
+
+    // export shape id if needed
+    sal_Int32 nShapeId = rExp.GetShapeExport()->getShapeId( xShape );
+    if( nShapeId != -1 )
+    {
+        const OUString sId( OUString::valueOf( nShapeId ) );
+        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
     }
 
     switch(eShapeType)
@@ -3393,9 +3575,9 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
 
             sal_Bool bIsEmptyPresObj = sal_False;
 
-            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject"))))
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(msEmptyPres))
             {
-                uno::Any aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject")));
+                uno::Any aAny = xPropSet->getPropertyValue(msEmptyPres);
                 aAny >>= bIsEmptyPresObj;
             }
 
@@ -3407,15 +3589,31 @@ void SdXMLExport::ImpPrepSingleShapeStyleInfo(uno::Reference< drawing::XShape >&
 
         // check for calc ole
         const OUString aShapeType( xShape->getShapeType() );
-        if( (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" ))) ||
-            (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" ))) )
+        if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.OLE2Shape" )) ||
+            aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.CalcShape" )) )
         {
             uno::Reference< chart::XChartDocument > xChartDoc;
-            uno::Any aAny( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Model") ) ) );
+            uno::Any aAny( xPropSet->getPropertyValue( msModel ) );
             aAny >>= xChartDoc;
             if( xChartDoc.is() )
             {
                 GetChartExport()->collectAutoStyles( xChartDoc );
+            }
+        }
+
+        // check for connector
+        if( aShapeType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ConnectorShape" ) ) )
+        {
+            uno::Reference< drawing::XShape > xConnection;
+
+            // create shape ids for export later
+            if( xPropSet->getPropertyValue( msStartShape ) >>= xConnection )
+            {
+                GetShapeExport()->createShapeId( xConnection );
+            }
+            if( xPropSet->getPropertyValue( msEndShape ) >>= xConnection )
+            {
+                GetShapeExport()->createShapeId( xConnection );
             }
         }
     }
