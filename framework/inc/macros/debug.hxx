@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2001-05-30 10:58:19 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@
     #undef  ENABLE_TARGETINGDEBUG
     #undef  ENABLE_PLUGINDEBUG
     #undef  ENABLE_TIMEMEASURE
+    #undef  ENABLE_MEMORYMEASURE
 
 #endif
 
