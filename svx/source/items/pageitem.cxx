@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pageitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,8 @@ SfxItemPresentation SvxPageItem::GetPresentation
 //------------------------------------------------------------------------
 sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case MID_PAGE_NUMTYPE:

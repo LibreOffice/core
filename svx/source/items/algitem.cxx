@@ -2,9 +2,9 @@
  *
  *  $RCSfile: algitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 17:24:48 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
 
 sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_HORJUST_HORJUST:
@@ -212,6 +214,8 @@ sal_Bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case MID_HORJUST_HORJUST:
@@ -635,8 +639,9 @@ SvStream& SvxMarginItem::Store( SvStream &rStream, USHORT nItemVersion) const
 
 sal_Bool SvxMarginItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    sal_Bool bConvert = ( ( nMemberId & CONVERT_TWIPS ) != 0 );
-    switch ( nMemberId & ~CONVERT_TWIPS )
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
         //  jetzt alles signed
         case MID_MARGIN_L_MARGIN:

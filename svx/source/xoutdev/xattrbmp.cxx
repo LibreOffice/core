@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:30:56 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,8 @@ SfxItemPresentation XFillBitmapItem::GetPresentation
 
 sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -780,6 +782,8 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
 
 sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         ::rtl::OUString aName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-08 13:52:31 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -975,6 +975,8 @@ FASTBOOL XLineDashItem::ScaleMetrics(long nMul, long nDiv)
 
 sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -1002,6 +1004,8 @@ sal_Bool XLineDashItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemb
 
 sal_Bool XLineDashItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aName;
@@ -1499,6 +1503,8 @@ SfxItemPresentation XLineStartItem::GetPresentation
 
 sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -1517,6 +1523,8 @@ sal_Bool XLineStartItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 
 sal_Bool XLineStartItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -2194,6 +2202,8 @@ SfxItemPresentation XLineEndItem::GetPresentation
 sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
 #ifndef SVX_LIGHT
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -2212,6 +2222,8 @@ sal_Bool XLineEndItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMembe
 
 sal_Bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         return sal_False;
@@ -3271,6 +3283,8 @@ SfxItemPresentation XFillGradientItem::GetPresentation
 // -----------------------------------------------------------------------
 sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -3302,6 +3316,8 @@ sal_Bool XFillGradientItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE n
 // -----------------------------------------------------------------------
 sal_Bool XFillGradientItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     ::com::sun::star::awt::Gradient aGradient;
     if(!(rVal >>= aGradient))
         return sal_False;
@@ -3806,6 +3822,8 @@ FASTBOOL XFillHatchItem::ScaleMetrics(long nMul, long nDiv)
 // -----------------------------------------------------------------------
 sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     if( nMemberId == MID_NAME )
     {
         rtl::OUString aApiName;
@@ -3829,6 +3847,8 @@ sal_Bool XFillHatchItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMem
 // -----------------------------------------------------------------------
 sal_Bool XFillHatchItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     ::com::sun::star::drawing::Hatch aUnoHatch;
     if(!(rVal >>= aUnoHatch))
         return sal_False;

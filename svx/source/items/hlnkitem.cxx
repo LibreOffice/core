@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlnkitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:53:32 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,8 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
 
 BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
         case MID_HLINK_NAME   :
@@ -420,6 +422,8 @@ BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
 
 BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     ::rtl::OUString aStr;
     sal_Int32 nVal;
     switch(nMemberId)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-06 14:18:14 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,25 +338,33 @@ SvxSizeItem::SvxSizeItem( const sal_uInt16 nId, const Size& rSize ) :
 // -----------------------------------------------------------------------
 sal_Bool SvxSizeItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
     awt::Size aTmp(aSize.Width(), aSize.Height());
-    if(nMemberId&CONVERT_TWIPS)
+    if( bConvert )
     {
         aTmp.Height = TWIP_TO_MM100(aTmp.Height);
         aTmp.Width = TWIP_TO_MM100(aTmp.Width);
     }
-    switch(nMemberId&(~CONVERT_TWIPS))
+
+    switch( nMemberId )
     {
         case MID_SIZE_SIZE:  rVal <<= aTmp; break;
         case MID_SIZE_WIDTH: rVal <<= aTmp.Width; break;
         case MID_SIZE_HEIGHT: rVal <<= aTmp.Height;  break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
+
     return sal_True;
 }
 // -----------------------------------------------------------------------
 sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-    switch(nMemberId&(~CONVERT_TWIPS))
+    nMemberId &= ~CONVERT_TWIPS;
+
+    switch( nMemberId )
     {
         case MID_SIZE_SIZE:
         {
@@ -394,7 +402,7 @@ sal_Bool SvxSizeItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             aSize.Height() = bConvert ? MM100_TO_TWIP(nVal) : nVal;
         }
         break;
-        default:
+        default: DBG_ERROR("Wrong MemberId!");
             return sal_False;
     }
     return sal_True;
@@ -1245,6 +1253,8 @@ int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 --------------------------------------------------*/
 sal_Bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bValue;
     switch(nMemberId)
     {
@@ -1264,6 +1274,8 @@ sal_Bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 --------------------------------------------------*/
 sal_Bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bVal( Any2Bool(rVal) );
     switch(nMemberId)
     {
@@ -1370,6 +1382,9 @@ SvxShadowItem::SvxShadowItem( const USHORT nId,
 // -----------------------------------------------------------------------
 sal_Bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
     table::ShadowFormat aShadow;
     table::ShadowLocation eSet = table::ShadowLocation_NONE;
     switch( eLocation )
@@ -1380,18 +1395,42 @@ sal_Bool SvxShadowItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case SVX_SHADOW_BOTTOMRIGHT: eSet = table::ShadowLocation_BOTTOM_RIGHT; break;
     }
     aShadow.Location = eSet;
-    aShadow.ShadowWidth =   nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(nWidth) : nWidth;
+    aShadow.ShadowWidth =   bConvert ? TWIP_TO_MM100(nWidth) : nWidth;
     aShadow.IsTransparent = aShadowColor.GetTransparency() > 0;
     aShadow.Color = aShadowColor.GetRGBColor();
-    rVal <<= aShadow;
+
+    switch ( nMemberId )
+    {
+        case MID_LOCATION: rVal <<= aShadow.Location; break;
+        case MID_WIDTH: rVal <<= aShadow.ShadowWidth; break;
+        case MID_TRANSPARENT: rVal <<= aShadow.IsTransparent; break;
+        case MID_BG_COLOR: rVal <<= aShadow.Color; break;
+        case 0: rVal <<= aShadow; break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
     return sal_True;
 }
 // -----------------------------------------------------------------------
 sal_Bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    table::ShadowFormat aShadow;
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
 
-    if(rVal >>= aShadow)
+    table::ShadowFormat aShadow;
+    uno::Any aAny;
+    sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aShadow );
+    switch ( nMemberId )
+    {
+        case MID_LOCATION: rVal >>= aShadow.Location; break;
+        case MID_WIDTH: rVal >>= aShadow.ShadowWidth; break;
+        case MID_TRANSPARENT: rVal >>= aShadow.IsTransparent; break;
+        case MID_BG_COLOR: rVal >>= aShadow.Color; break;
+        case 0: rVal >>= aShadow; break;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
+    }
+
+    if ( bRet )
     {
         SvxShadowLocation eSet = SVX_SHADOW_NONE;
         switch( aShadow.Location )
@@ -1401,13 +1440,14 @@ sal_Bool SvxShadowItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             case table::ShadowLocation_BOTTOM_LEFT : eLocation = SVX_SHADOW_BOTTOMLEFT ; break;
             case table::ShadowLocation_BOTTOM_RIGHT: eLocation = SVX_SHADOW_BOTTOMRIGHT; break;
         }
-        nWidth = nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP(aShadow.ShadowWidth) : aShadow.ShadowWidth;
+
+        nWidth = bConvert ? MM100_TO_TWIP(aShadow.ShadowWidth) : aShadow.ShadowWidth;
         Color aSet(aShadow.Color);
         aSet.SetTransparency(aShadow.IsTransparent ? 0xff : 0);
         aShadowColor = aSet;
-        return sal_True;
     }
-    return sal_False;
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -2865,6 +2905,57 @@ SfxPoolItem* SvxLineItem::Clone( SfxItemPool* ) const
     return new SvxLineItem( *this );
 }
 
+sal_Bool SvxLineItem::QueryValue( uno::Any& rVal, BYTE nMemId ) const
+{
+    sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
+    nMemId &= ~CONVERT_TWIPS;
+    sal_Int32 nVal = 0;
+    if( pLine )
+    {
+        switch ( nMemId )
+        {
+            case MID_FG_COLOR:      nVal = pLine->GetColor().GetColor(); break;
+            case MID_OUTER_WIDTH:   nVal = pLine->GetOutWidth();    break;
+            case MID_INNER_WIDTH:   nVal = pLine->GetInWidth( );    break;
+            case MID_DISTANCE:      nVal = pLine->GetDistance();    break;
+            default:
+                DBG_ERROR( "Wrong MemberId" );
+                return sal_False;
+        }
+    }
+
+    rVal <<= nVal;
+    return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvxLineItem::PutValue( const uno::Any& rVal, BYTE nMemId )
+{
+    sal_Bool bConvert = 0!=(nMemId&CONVERT_TWIPS);
+    nMemId &= ~CONVERT_TWIPS;
+    sal_Int32 nVal;
+    if ( rVal >>= nVal )
+    {
+        if ( !pLine )
+            pLine = new SvxBorderLine;
+        switch ( nMemId )
+        {
+            case MID_FG_COLOR:      pLine->SetColor( Color(nVal) ); break;
+            case MID_OUTER_WIDTH:   pLine->SetOutWidth(nVal);   break;
+            case MID_INNER_WIDTH:   pLine->SetInWidth( nVal);   break;
+            case MID_DISTANCE:      pLine->SetDistance(nVal);   break;
+            default:
+                DBG_ERROR( "Wrong MemberId" );
+                return sal_False;
+        }
+
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
 //------------------------------------------------------------------------
 
 SfxItemPresentation SvxLineItem::GetPresentation
@@ -3270,6 +3361,8 @@ sal_uInt16 SvxBrushItem::GetVersion( sal_uInt16 nFileVersion ) const
 
 sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
         case MID_BACK_COLOR:
@@ -3277,7 +3370,7 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
 
         case MID_GRAPHIC_POSITION:
-            rVal <<= (style::GraphicLocation)(sal_uInt16)eGraphicPos;
+            rVal <<= (style::GraphicLocation)(sal_Int16)eGraphicPos;
         break;
 
         case MID_GRAPHIC:
@@ -3322,6 +3415,8 @@ sal_Bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
         case MID_BACK_COLOR:

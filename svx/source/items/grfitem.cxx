@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,15 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, USHORT nVersion ) const
 
 BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aRet;
     aRet.Left   = nLeft;
     aRet.Right  = nRight;
     aRet.Top    = nTop;
     aRet.Bottom = nBottom;
 
-    if(nMemberId&CONVERT_TWIPS)
+    if( bConvert )
     {
        aRet.Right   = TWIP_TO_MM100(aRet.Right );
        aRet.Top     = TWIP_TO_MM100(aRet.Top );
@@ -182,11 +184,13 @@ BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     text::GraphicCrop aVal;
 
     if(!(rVal >>= aVal))
         return sal_False;
-    if(nMemberId&CONVERT_TWIPS)
+    if( bConvert )
     {
        aVal.Right   = MM100_TO_TWIP(aVal.Right );
        aVal.Top     = MM100_TO_TWIP(aVal.Top );

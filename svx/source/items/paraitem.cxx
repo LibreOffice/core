@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-16 16:09:59 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 12:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,9 @@ int SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 --------------------------------------------------*/
 sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+
     style::LineSpacing aLSp;
     switch( eLineSpace )
     {
@@ -244,10 +247,17 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case SVX_LINE_SPACE_FIX :
         case SVX_LINE_SPACE_MIN :
             aLSp.Mode = eLineSpace == SVX_LINE_SPACE_FIX ? style::LineSpacingMode::FIX : style::LineSpacingMode::MINIMUM;
-            aLSp.Height = ( ( nMemberId & CONVERT_TWIPS ) == CONVERT_TWIPS ) ? (short)TWIP_TO_MM100(nLineHeight) : nLineHeight;
+            aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100(nLineHeight) : nLineHeight );
         break;
     }
-    rVal <<= aLSp;
+
+    switch ( nMemberId )
+    {
+        case 0 :                rVal <<= aLSp; break;
+        case MID_LINESPACE :    rVal <<= aLSp.Mode; break;
+        case MID_HEIGHT :       rVal <<= aLSp.Height; break;
+        default: DBG_ERROR("Wrong MemberId!"); break;
+    }
 
     return sal_True;
 }
@@ -256,41 +266,59 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 --------------------------------------------------*/
 sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    style::LineSpacing aLSp;
-    if(!(rVal >>= aLSp))
-        return sal_False;
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
 
-    switch( aLSp.Mode )
+    // fill with current data
+    style::LineSpacing aLSp;
+    uno::Any aAny;
+    sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aLSp );
+
+    // get new data
+    switch ( nMemberId )
     {
-        case style::LineSpacingMode::LEADING:
-        {
-            eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
-            eLineSpace = SVX_LINE_SPACE_AUTO;
-            nInterLineSpace = aLSp.Height;
-        }
-        break;
-        case style::LineSpacingMode::PROP:
-        {
-            eLineSpace = SVX_LINE_SPACE_AUTO;
-            nPropLineSpace = (sal_Int8)std::min(aLSp.Height, (short)0xFF);
-            if(100 == aLSp.Height)
-                eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
-            else
-                eInterLineSpace = SVX_INTER_LINE_SPACE_PROP;
-        }
-        break;
-        case style::LineSpacingMode::FIX:
-        case style::LineSpacingMode::MINIMUM:
-        {
-            eInterLineSpace =  SVX_INTER_LINE_SPACE_OFF;
-            eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
-            nLineHeight = aLSp.Height;
-            if(nMemberId&CONVERT_TWIPS)
-                nLineHeight = (USHORT)MM100_TO_TWIP(nLineHeight);
-        }
-        break;
+        case 0 :                bRet = (rVal >>= aLSp); break;
+        case MID_LINESPACE :    bRet = (rVal >>= aLSp.Mode); break;
+        case MID_HEIGHT :       bRet = (rVal >>= aLSp.Height); break;
+        default: DBG_ERROR("Wrong MemberId!"); break;
     }
-    return sal_True;
+
+    if( bRet )
+    {
+        nLineHeight = aLSp.Height;
+        switch( aLSp.Mode )
+        {
+            case style::LineSpacingMode::LEADING:
+            {
+                eInterLineSpace = SVX_INTER_LINE_SPACE_FIX;
+                eLineSpace = SVX_LINE_SPACE_AUTO;
+                nInterLineSpace = aLSp.Height;
+            }
+            break;
+            case style::LineSpacingMode::PROP:
+            {
+                eLineSpace = SVX_LINE_SPACE_AUTO;
+                nPropLineSpace = (sal_Int8)std::min(aLSp.Height, (short)0xFF);
+                if(100 == aLSp.Height)
+                    eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
+                else
+                    eInterLineSpace = SVX_INTER_LINE_SPACE_PROP;
+            }
+            break;
+            case style::LineSpacingMode::FIX:
+            case style::LineSpacingMode::MINIMUM:
+            {
+                eInterLineSpace =  SVX_INTER_LINE_SPACE_OFF;
+                eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
+                nLineHeight = aLSp.Height;
+                if(nMemberId&CONVERT_TWIPS)
+                    nLineHeight = (USHORT)MM100_TO_TWIP(nLineHeight);
+            }
+            break;
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -430,6 +458,8 @@ int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 --------------------------------------------------*/
 sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case MID_PARA_ADJUST      : rVal <<= (sal_Int16)GetAdjust(); break;
@@ -449,6 +479,8 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
         case MID_PARA_ADJUST              :
@@ -721,6 +753,8 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId
 // -----------------------------------------------------------------------
 sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
         case  MID_IS_HYPHEN:
@@ -741,6 +775,8 @@ sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) cons
 // -----------------------------------------------------------------------
 sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
     sal_Int16 nNewVal = 0;
 
     if( nMemberId != MID_IS_HYPHEN )
@@ -1017,7 +1053,9 @@ typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
 sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    switch (nMemberId & ~CONVERT_TWIPS)
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
         case MID_TABSTOPS:
         {
@@ -1027,7 +1065,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             for(sal_uInt16 i = 0; i < nCount; i++)
             {
                 const SvxTabStop& rTab = *(GetStart() + i);
-                pArr[i].Position        = nMemberId&CONVERT_TWIPS ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+                pArr[i].Position        = bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
                 switch(rTab.GetAdjustment())
                 {
                 case  SVX_TAB_ADJUST_LEFT   : pArr[i].Alignment = style::TabAlign_LEFT; break;
@@ -1047,7 +1085,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_STD_TAB:
         {
             const SvxTabStop &rTab = *(GetStart());
-            rVal <<= nMemberId & CONVERT_TWIPS ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
+            rVal <<= bConvert ? TWIP_TO_MM100(rTab.GetTabPos()) : rTab.GetTabPos();
             break;
         }
     }
@@ -1059,7 +1097,9 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    switch ( nMemberId & ~CONVERT_TWIPS)
+    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
+    nMemberId &= ~CONVERT_TWIPS;
+    switch ( nMemberId )
     {
         case MID_TABSTOPS:
         {
@@ -1082,8 +1122,7 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
                 sal_Unicode cDecimal = pArr[i].DecimalChar;
-;
-                SvxTabStop aTab( nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP(pArr[i].Position) : pArr[i].Position,
+                SvxTabStop aTab( bConvert ? MM100_TO_TWIP(pArr[i].Position) : pArr[i].Position,
                                     eAdjust,
                                     cDecimal,
                                     cFill );
@@ -1097,7 +1136,7 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if (!(rVal >>= nNewPos) )
                 return sal_False;
             const SvxTabStop& rTab = *(GetStart());
-            SvxTabStop aNewTab ( nMemberId&CONVERT_TWIPS ? MM100_TO_TWIP ( nNewPos ) : nNewPos,
+            SvxTabStop aNewTab ( bConvert ? MM100_TO_TWIP ( nNewPos ) : nNewPos,
                                  rTab.GetAdjustment(), rTab.GetDecimal(), rTab.GetFill() );
             Remove ( 0 );
             Insert( aNewTab );
