@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:35:28 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:10:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ String STR_SVT_STYLE_NORMAL
     Text [ portuguese_brazilian ] = "Normal" ;
     Text [ portuguese ] = "Padr„o" ;
     Text[ russian ] = "—Ú‡Ì‰‡Ú";
-    Text[ polish ] = "Standard";
+    Text[ polish ] = "Domyúlnie";
     Text[ japanese ] = "ïWèÄ";
     Text[ chinese_simplified ] = "±Í◊º";
     Text[ chinese_traditional ] = "º–∑«";
