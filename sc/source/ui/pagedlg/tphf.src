@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 20:26:44 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ PushButton RID_SCBTN_HFEDIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Editar...";
 };
+
 
 
 
