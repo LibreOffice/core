@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:47:52 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,21 +368,6 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
                 Sequence< Any > arguments(1);
                 arguments[0] = makeAny(xToolkit);
-
-#ifdef WNT
-                // This code causes the AccessBridge to redirect the console output to log file,
-                // which is extremly helpful on Windows because there is currently no code that
-                // opens a console window on demand.
-
-                OUString aLogPath;
-                OUString aEnvVar("ACCESSBRIDGE_LOGPATH", sizeof("ACCESSBRIDGE_LOGPATH"), RTL_TEXTENCODING_ASCII_US);
-                osl_getEnvironment(aEnvVar.pData, &aLogPath.pData);
-                if( aLogPath.getLength() > 0 )
-                {
-                    arguments.realloc(2);
-                    arguments[1] = makeAny(aLogPath);
-                }
-#endif
 
                 // Disable default java error messages on startup, because they were probably unreadable
                 // for a disabled user. Use native message boxes which are accessible without java support.
