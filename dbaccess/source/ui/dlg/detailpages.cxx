@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 06:05:15 $
+ *  last change: $Author: oj $ $Date: 2002-10-15 09:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,6 +957,10 @@ namespace dbaui
         m_aNFPortNumber.SetModifyHdl(getControlModifiedLink());
         m_aNFRowCount.SetModifyHdl(getControlModifiedLink());
 
+        // #98982# OJ
+        m_aNFPortNumber.SetUseThousandSep(sal_False);
+        m_aNFRowCount.SetUseThousandSep(sal_False);
+
         FreeResource();
     }
 
@@ -1351,6 +1355,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2002/08/30 06:05:15  oj
+ *  #102756# move checkbox inside invalid class
+ *
  *  Revision 1.17  2002/08/26 08:53:54  oj
  *  #102576# move chweckbox to fixedline
  *
