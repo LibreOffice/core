@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:36:40 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ russian ] = "Θμÿ";
         Text[ greek ] = "Όνομα";
         Text[ dutch ] = "~Naam";
-        Text[ french ] = "~Nom";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "~Nombre";
         Text[ italian ] = "~Nome";
         Text[ danish ] = "Navn";
