@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:44:29 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@ String STR_SOLID
     Text [ italian ] = "Piena" ;
     Text [ portuguese_brazilian ] = "Sólido" ;
     Text [ portuguese ] = "Contínuo" ;
-    Text [ finnish ] = "Tasainen" ;
+    Text [ finnish ] = "Jatkuva" ;
     Text [ danish ] = "Gennemgående" ;
     Text [ french ] = "Continu" ;
     Text [ swedish ] = "Genomgående" ;
@@ -96,7 +96,7 @@ String STR_GRADIENT
     Text [ italian ] = "Sfumatura" ;
     Text [ portuguese_brazilian ] = "Dégradé" ;
     Text [ portuguese ] = "Gradação" ;
-    Text [ finnish ] = "Liukuväri" ;
+    Text [ finnish ] = "Gradientti" ;
     Text [ danish ] = "Farvegraduering" ;
     Text [ french ] = "Dégradé" ;
     Text [ swedish ] = "Färggradient" ;
@@ -124,7 +124,7 @@ String STR_DESC_GRADIENT
     Text [ italian ] = "Digitate un nome per la nuova sfumatura:" ;
     Text [ portuguese_brazilian ] = "Insira um nome para o novo dégradé:" ;
     Text [ portuguese ] = "Introduza um nome para a nova gradação de cor:" ;
-    Text [ finnish ] = "Kirjoita uuden liukuvärin nimi:" ;
+    Text [ finnish ] = "Määritä uuden gradientin nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye farvegraduering:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau dégradé :" ;
     Text [ swedish ] = "Mata in namnet för den nya färggradienten här:" ;
@@ -152,7 +152,7 @@ String STR_DEL_GRADIENT
     Text [ italian ] = "Elimina sfumatura" ;
     Text [ portuguese_brazilian ] = "Apagar dégradé" ;
     Text [ portuguese ] = "Eliminar gradação" ;
-    Text [ finnish ] = "Poista liukuväri" ;
+    Text [ finnish ] = "Poista gradientti" ;
     Text [ danish ] = "Slet farvegraduering" ;
     Text [ french ] = "Supprimer le dégradé" ;
     Text [ swedish ] = "Radera färggradient" ;
@@ -180,7 +180,7 @@ String STR_ASK_DEL_GRADIENT
     Text [ italian ] = "Eliminare la sfumatura?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o dégradé?" ;
     Text [ portuguese ] = "Deseja realmente eliminar a gradação?" ;
-    Text [ finnish ] = "Poistetaanko liukuväri?" ;
+    Text [ finnish ] = "Haluatko poistaa gradientin?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette farvegradueringen?" ;
     Text [ french ] = "Confirmez-vous la suppression du dégradé ?" ;
     Text [ swedish ] = "Skall färggradienten verkligen raderas?" ;
@@ -208,7 +208,7 @@ String STR_ASK_CHANGE_GRADIENT
     Text [ italian ] = "La sfumatura è stata modificata senza essere salvata.\nPotete modificare la sfumatura o aggiungerne una nuova" ;
     Text [ portuguese_brazilian ] = "O dégradé foi modificado sem gravar. Você poder  modificar o dégradé selecionado ou adicionar um novo dégradé" ;
     Text [ portuguese ] = "A gradação da cor foi modificada sem ter sido guardada. Poderá modificar a gradação seleccionada ou adicionar uma nova." ;
-    Text [ finnish ] = "Muutettua liukuväriä ei ole tallennettu. Voit muokata valittua liukuväriä tai lisätä uuden" ;
+    Text [ finnish ] = "Gradienttia ei tallennettu muokkauksen jälkeen. \nVoit vaihtaa valitun gradientin\n tai lisätä uuden." ;
     Text [ danish ] = "Farvegradueringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farvegraduering \neller tilføje en ny." ;
     Text [ french ] = "Les dernières modifications apportées au dégradé n'ont pas été sauvegardées. \nVous pouvez modifier le dégradé sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Färggradienten ändrades utan att sparas.\nDu kan ändra den markerade färggradienten eller lägga\ntill en ny färggradient." ;
@@ -291,7 +291,7 @@ String STR_DESC_EXT_BITMAP
     Text [ italian ] = "Inserisci un nome per la bitmap esterna:" ;
     Text [ portuguese_brazilian ] = "Insira um nome para o bitmap externo:" ;
     Text [ portuguese ] = "Introduza um nome para o mapa de bits externo:" ;
-    Text [ finnish ] = "Kirjoita ulkoisen bittikartan nimi:" ;
+    Text [ finnish ] = "Määritä ulkoisen bittikartan nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den eksterne bitmap:" ;
     Text [ french ] = "Veuillez saisir un nom pour le bitmap externe :" ;
     Text [ swedish ] = "Ange namn för extern bitmap:" ;
@@ -347,7 +347,7 @@ String STR_ASK_DEL_BITMAP
     Text [ italian ] = "Eliminare la bitmap?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o bitmap?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o bitmap?" ;
-    Text [ finnish ] = "Poistetaanko bittikartta?" ;
+    Text [ finnish ] = "Haluatko poistaa bittikartan?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette denne bitmap?" ;
     Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
     Text [ swedish ] = "Vill Du verkligen radera bitmappen?" ;
@@ -375,7 +375,7 @@ String STR_ASK_CHANGE_BITMAP
     Text [ italian ] = "La bitmap è stata modificata senza esseere salvata.\nPotete modificare la bitmap selezionata o aggiungerne una nuova." ;
     Text [ portuguese_brazilian ] = "O bitmap foi modificado sem gravar. Você poder  modificar o bitmap selecionado ou adicionar um novo bitmap" ;
     Text [ portuguese ] = "As modificações feitas no bitmap não foram guardadas. Poderá alterar o \nbitmap seleccionado ou adicionar um novo bitmap." ;
-    Text [ finnish ] = "Muutettua bittikarttaa ei ole tallennettu. Voit muokata valittua bittikarttaa tai lisätä uuden" ;
+    Text [ finnish ] = "Bittikarttaa ei tallennettu muokkauksen jälkeen. \nVoit vaihtaa valitun bittikartan tai lisätä uuden." ;
     Text [ danish ] = "Denne bitmap er blevet ændret, men ikke gemt. \nDu kan ændre den markerede bitmap\n eller tilføje en ny." ;
     Text [ french ] = "Les dernières modifications apportées au bitmap n'ont pas\nété sauvegardées. Vous pouvez modifier le bitmap\nsélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Bitmappen ändrades utan att sparas.\nDu kan ändra den valda bitmappen eller\nlägga till en ny bitmapp." ;
@@ -402,7 +402,7 @@ String STR_LINESTYLE
     Text [ italian ] = "Stile linea" ;
     Text [ portuguese_brazilian ] = "Estilo da Linha" ;
     Text [ portuguese ] = "Estilo da linha" ;
-    Text [ finnish ] = "Viivan tyyli" ;
+    Text [ finnish ] = "Viivatyyli" ;
     Text [ danish ] = "Stregtype" ;
     Text [ french ] = "Style de ligne" ;
     Text [ swedish ] = "Linjestil" ;
@@ -486,7 +486,7 @@ String STR_ASK_DEL_LINESTYLE
     Text [ italian ] = "Eliminare lo stile riga?" ;
     Text [ portuguese_brazilian ] = "Deseja Apagar o estilo de linha?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
-    Text [ finnish ] = "Poistetaanko viivatyyli?" ;
+    Text [ finnish ] = "Halutko poistaa viivatyylin?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette stregtypen?" ;
     Text [ french ] = "Confirmez-vous la suppression du style de ligne ?" ;
     Text [ swedish ] = "Skall linjestilen verkligen raderas?" ;
@@ -514,7 +514,7 @@ String STR_ASK_CHANGE_LINESTYLE
     Text [ italian ] = "Lo stile riga è stato modificato senza essere salvato.\nPotete modificare lo stile riga selezionato o aggiungerne uno nuovo." ;
     Text [ portuguese_brazilian ] = "O estilo de linha foi modificado sem gravar. Você poder  modificar o estilo de linha selecionado ou adicionar um novo estilo de linha" ;
     Text [ portuguese ] = "O estilo de linha foi modificado sem ter sido guardado. Poderá modificar \no estilo de linha seleccionado ou\nadicionar um novo." ;
-    Text [ finnish ] = "Muutettua viivatyyliä ei ole tallennettu. Voit muokata valittua viivatyyliä tai lisätä uuden" ;
+    Text [ finnish ] = "Viivatyyliä ei tallennettu muokkauksen jälkeen. \nVoit vaihtaa valitun viivatyylin\ntai lisätä uuden." ;
     Text [ danish ] = "Stregtypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede stregtype \neller tilføje en ny." ;
     Text [ french ] = "Les dernières modifications apportées au style de ligne n'ont pas été sauvegardées. \nVous pouvez modifier le style de ligne sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Linjestilen ändrades utan att sparas.\n Du kan ändra den markerade linjestilen eller\nlägga till en ny linjestil." ;
