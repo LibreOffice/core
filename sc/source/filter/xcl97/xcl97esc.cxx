@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:07:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,33 +439,6 @@ void XclExpEscherAnchor::SetFlags( const SdrObject& rSdrObj )
     mnFlags = ((rPos.X() == 0) && (rPos.Y() == 1)) ? EXC_ESC_ANCHOR_LOCKED : 0;
 }
 
-
-BOOL XclExpEscherAnchor::FindNextCol( sal_uInt16& nCol, short nDir )
-{
-    while ( nDir < 0 ? 0 < nCol : nCol < static_cast<sal_uInt16>(MAXCOL) )
-    {
-        nCol += nDir;
-        if ( !(GetDoc().GetColFlags( static_cast<SCCOL>(nCol),
-                        maAnchor.mnScTab) & CR_HIDDEN) )
-            return TRUE;
-    }
-    return FALSE;
-}
-
-
-BOOL XclExpEscherAnchor::FindNextRow( sal_uInt16& nRow, short nDir )
-{
-    while ( nDir < 0 ? 0 < nRow : nRow < static_cast<sal_uInt16>(MAXROW) )
-    {
-        nRow += nDir;
-        if ( !(GetDoc().GetRowFlags( static_cast<SCROW>(nRow),
-                        maAnchor.mnScTab) & CR_HIDDEN) )
-            return TRUE;
-    }
-    return FALSE;
-}
-
-
 void XclExpEscherAnchor::WriteData( EscherEx& rEx, const Rectangle& rRect )
 {
     // the rectangle is already in twips
@@ -483,104 +456,10 @@ void XclExpEscherAnchor::WriteData( EscherEx& rEx ) const
 
 // ----------------------------------------------------------------------------
 
-XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const ScAddress& rPos ) :
+XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
-    BOOL bBad = FALSE;
-    maAnchor.mnLCol = static_cast<sal_uInt16>(rPos.Col());
-    // go right
-    if ( !FindNextCol( maAnchor.mnLCol, 1 ) )
-        bBad = TRUE;
-    else
-    {
-        maAnchor.mnRCol = maAnchor.mnLCol;
-        bBad = !FindNextCol( maAnchor.mnRCol, 1 );
-    }
-    if ( bBad )
-    {   // go left
-        bBad = FALSE;
-        maAnchor.mnRCol = static_cast<sal_uInt16>(rPos.Col());
-        if ( !FindNextCol( maAnchor.mnRCol, -1 ) )
-            maAnchor.mnLCol = maAnchor.mnRCol =
-                static_cast<sal_uInt16>(rPos.Col()); // hopeless
-        else
-        {
-            maAnchor.mnLCol = maAnchor.mnRCol;
-            if ( !FindNextCol( maAnchor.mnLCol, -1 ) )
-                maAnchor.mnLCol = maAnchor.mnRCol;
-        }
-    }
-    if ( maAnchor.mnLCol == maAnchor.mnRCol )
-    {
-        maAnchor.mnLX = 0;
-        maAnchor.mnRX = 1023;
-    }
-    else
-    {
-        maAnchor.mnLX = 0x00c0;
-        maAnchor.mnRX = 0x0326;
-    }
-
-    BOOL bTop = FALSE;
-    maAnchor.mnTRow = static_cast<sal_uInt16>(rPos.Row());
-    switch ( maAnchor.mnTRow )
-    {
-        case 0 :
-        case 1 :
-            maAnchor.mnTRow = 0;
-            bTop = (GetDoc().GetRowFlags( static_cast<SCROW>(maAnchor.mnTRow),
-                        static_cast<SCTAB>(maAnchor.mnScTab)) & CR_HIDDEN) == 0;
-        break;
-        default:
-            maAnchor.mnTRow -= 2;
-    }
-    // go down
-    if ( !bTop && !FindNextRow( maAnchor.mnTRow, 1 ) )
-        bBad = TRUE;
-    else
-    {
-        maAnchor.mnBRow = maAnchor.mnTRow;
-        for ( int j=0; j<4 && !bBad; j++ )
-        {
-            bBad = !FindNextRow( maAnchor.mnBRow, 1 );
-        }
-    }
-    if ( bBad )
-    {   // go up
-        bBad = FALSE;
-        maAnchor.mnBRow = static_cast<sal_uInt16>(rPos.Row());
-        if ( !FindNextRow( maAnchor.mnBRow, -1 ) )
-            maAnchor.mnTRow = maAnchor.mnBRow =
-                static_cast<sal_uInt16>(rPos.Row()); // hopeless
-        else
-        {
-            maAnchor.mnTRow = maAnchor.mnBRow;
-            for ( int j=0; j<4 && !bBad; j++ )
-            {
-                USHORT nBkp = maAnchor.mnTRow;
-                if ( !FindNextRow( maAnchor.mnTRow, -1 ) )
-                {
-                    bBad = TRUE;
-                    maAnchor.mnTRow = nBkp;
-                }
-            }
-        }
-    }
-    if ( maAnchor.mnTRow == maAnchor.mnBRow )
-    {
-        maAnchor.mnTY = 0;
-        maAnchor.mnBY = 255;
-    }
-    else if ( maAnchor.mnTRow == 0 && maAnchor.mnTRow == rPos.Row() )
-    {
-        maAnchor.mnTY = 0x001e;
-        maAnchor.mnBY = 0x0078;
-    }
-    else
-    {
-        maAnchor.mnTY = 0x0069;
-        maAnchor.mnBY = 0x00c4;
-    }
+    maAnchor.SetRect( GetDoc(), rRect, MAP_100TH_MM );
 }
 
 
