@@ -9,11 +9,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP1TARGETN)"!=""
+.IF "$(ZIP1TARGET)"!=""
 
 ZIP1DIR*=$(ZIPDIR)
 ZIP1FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP1DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP1DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip1alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP1TARGET)"!=""
+
+.IF "$(ZIP1TARGETN)"!=""
+
 ZIP1TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP1TARGET).dpzz : $(ZIP1TARGETN)
@@ -64,7 +73,7 @@ $(ZIP1TARGETN) :
     +-zip $(ZIP1FLAGS) $@ $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP1DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR))) $(command_seperator) $(ZIPDEP) $(ZIP1FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP1DIR)))$/ $@ $(foreach,j,$(ZIP1LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP1TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -79,7 +88,7 @@ $(ZIP1TARGETN) :
 .ENDIF			# "$(ZIP1DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -94,11 +103,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP2TARGETN)"!=""
+.IF "$(ZIP2TARGET)"!=""
 
 ZIP2DIR*=$(ZIPDIR)
 ZIP2FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP2DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP2DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip2alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP2TARGET)"!=""
+
+.IF "$(ZIP2TARGETN)"!=""
+
 ZIP2TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP2TARGET).dpzz : $(ZIP2TARGETN)
@@ -149,7 +167,7 @@ $(ZIP2TARGETN) :
     +-zip $(ZIP2FLAGS) $@ $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP2DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR))) $(command_seperator) $(ZIPDEP) $(ZIP2FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP2DIR)))$/ $@ $(foreach,j,$(ZIP2LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP2TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -164,7 +182,7 @@ $(ZIP2TARGETN) :
 .ENDIF			# "$(ZIP2DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -179,11 +197,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP3TARGETN)"!=""
+.IF "$(ZIP3TARGET)"!=""
 
 ZIP3DIR*=$(ZIPDIR)
 ZIP3FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP3DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP3DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip3alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP3TARGET)"!=""
+
+.IF "$(ZIP3TARGETN)"!=""
+
 ZIP3TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP3TARGET).dpzz : $(ZIP3TARGETN)
@@ -234,7 +261,7 @@ $(ZIP3TARGETN) :
     +-zip $(ZIP3FLAGS) $@ $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP3DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR))) $(command_seperator) $(ZIPDEP) $(ZIP3FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP3DIR)))$/ $@ $(foreach,j,$(ZIP3LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP3TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -249,7 +276,7 @@ $(ZIP3TARGETN) :
 .ENDIF			# "$(ZIP3DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -264,11 +291,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP4TARGETN)"!=""
+.IF "$(ZIP4TARGET)"!=""
 
 ZIP4DIR*=$(ZIPDIR)
 ZIP4FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP4DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP4DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip4alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP4TARGET)"!=""
+
+.IF "$(ZIP4TARGETN)"!=""
+
 ZIP4TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP4TARGET).dpzz : $(ZIP4TARGETN)
@@ -319,7 +355,7 @@ $(ZIP4TARGETN) :
     +-zip $(ZIP4FLAGS) $@ $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP4DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR))) $(command_seperator) $(ZIPDEP) $(ZIP4FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP4DIR)))$/ $@ $(foreach,j,$(ZIP4LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP4TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -334,7 +370,7 @@ $(ZIP4TARGETN) :
 .ENDIF			# "$(ZIP4DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -349,11 +385,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP5TARGETN)"!=""
+.IF "$(ZIP5TARGET)"!=""
 
 ZIP5DIR*=$(ZIPDIR)
 ZIP5FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP5DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP5DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip5alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP5TARGET)"!=""
+
+.IF "$(ZIP5TARGETN)"!=""
+
 ZIP5TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP5TARGET).dpzz : $(ZIP5TARGETN)
@@ -404,7 +449,7 @@ $(ZIP5TARGETN) :
     +-zip $(ZIP5FLAGS) $@ $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP5DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR))) $(command_seperator) $(ZIPDEP) $(ZIP5FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP5DIR)))$/ $@ $(foreach,j,$(ZIP5LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP5TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -419,7 +464,7 @@ $(ZIP5TARGETN) :
 .ENDIF			# "$(ZIP5DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -434,11 +479,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP6TARGETN)"!=""
+.IF "$(ZIP6TARGET)"!=""
 
 ZIP6DIR*=$(ZIPDIR)
 ZIP6FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP6DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP6DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip6alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP6TARGET)"!=""
+
+.IF "$(ZIP6TARGETN)"!=""
+
 ZIP6TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP6TARGET).dpzz : $(ZIP6TARGETN)
@@ -489,7 +543,7 @@ $(ZIP6TARGETN) :
     +-zip $(ZIP6FLAGS) $@ $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP6DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR))) $(command_seperator) $(ZIPDEP) $(ZIP6FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP6DIR)))$/ $@ $(foreach,j,$(ZIP6LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP6TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -504,7 +558,7 @@ $(ZIP6TARGETN) :
 .ENDIF			# "$(ZIP6DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -519,11 +573,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP7TARGETN)"!=""
+.IF "$(ZIP7TARGET)"!=""
 
 ZIP7DIR*=$(ZIPDIR)
 ZIP7FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP7DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP7DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip7alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP7TARGET)"!=""
+
+.IF "$(ZIP7TARGETN)"!=""
+
 ZIP7TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP7TARGET).dpzz : $(ZIP7TARGETN)
@@ -574,7 +637,7 @@ $(ZIP7TARGETN) :
     +-zip $(ZIP7FLAGS) $@ $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP7DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR))) $(command_seperator) $(ZIPDEP) $(ZIP7FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP7DIR)))$/ $@ $(foreach,j,$(ZIP7LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP7TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -589,7 +652,7 @@ $(ZIP7TARGETN) :
 .ENDIF			# "$(ZIP7DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -604,11 +667,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP8TARGETN)"!=""
+.IF "$(ZIP8TARGET)"!=""
 
 ZIP8DIR*=$(ZIPDIR)
 ZIP8FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP8DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP8DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip8alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP8TARGET)"!=""
+
+.IF "$(ZIP8TARGETN)"!=""
+
 ZIP8TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP8TARGET).dpzz : $(ZIP8TARGETN)
@@ -659,7 +731,7 @@ $(ZIP8TARGETN) :
     +-zip $(ZIP8FLAGS) $@ $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP8DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR))) $(command_seperator) $(ZIPDEP) $(ZIP8FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP8DIR)))$/ $@ $(foreach,j,$(ZIP8LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP8TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -674,7 +746,7 @@ $(ZIP8TARGETN) :
 .ENDIF			# "$(ZIP8DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -689,11 +761,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP9TARGETN)"!=""
+.IF "$(ZIP9TARGET)"!=""
 
 ZIP9DIR*=$(ZIPDIR)
 ZIP9FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP9DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP9DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip9alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP9TARGET)"!=""
+
+.IF "$(ZIP9TARGETN)"!=""
+
 ZIP9TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP9TARGET).dpzz : $(ZIP9TARGETN)
@@ -744,7 +825,7 @@ $(ZIP9TARGETN) :
     +-zip $(ZIP9FLAGS) $@ $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP9DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR))) $(command_seperator) $(ZIPDEP) $(ZIP9FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP9DIR)))$/ $@ $(foreach,j,$(ZIP9LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP9TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -759,7 +840,7 @@ $(ZIP9TARGETN) :
 .ENDIF			# "$(ZIP9DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
@@ -774,11 +855,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP10TARGETN)"!=""
+.IF "$(ZIP10TARGET)"!=""
 
 ZIP10DIR*=$(ZIPDIR)
 ZIP10FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP10DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP10DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip10alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP10TARGET)"!=""
+
+.IF "$(ZIP10TARGETN)"!=""
+
 ZIP10TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP10TARGET).dpzz : $(ZIP10TARGETN)
@@ -829,7 +919,7 @@ $(ZIP10TARGETN) :
     +-zip $(ZIP10FLAGS) $@ $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP10DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR))) $(command_seperator) $(ZIPDEP) $(ZIP10FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP10DIR)))$/ $@ $(foreach,j,$(ZIP10LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP10TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -844,7 +934,7 @@ $(ZIP10TARGETN) :
 .ENDIF			# "$(ZIP10DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken

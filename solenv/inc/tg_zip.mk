@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-12 14:10:18 $
+#   last change: $Author: hjs $ $Date: 2002-06-21 13:13:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,11 +100,20 @@ command_seperator=;
 avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
-.IF "$(ZIP$(TNR)TARGETN)"!=""
+.IF "$(ZIP$(TNR)TARGET)"!=""
 
 ZIP$(TNR)DIR*=$(ZIPDIR)
 ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
-# gives a uniq filename as long as this dmake is running
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+.ELSE			# "$(GUI)"=="UNX"
+zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
+.ENDIF			# "$(GUI)"=="UNX"
+zip$(TNR)alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+.ENDIF			# "$(ZIP$(TNR)TARGET)"!=""
+
+.IF "$(ZIP$(TNR)TARGETN)"!=""
+
 ZIP$(TNR)TMP:=$(mktmp iii)
 
 $(MISC)$/$(TARGET).$(PWD:f).$(ZIP$(TNR)TARGET).dpzz : $(ZIP$(TNR)TARGETN)
@@ -155,7 +164,7 @@ $(ZIP$(TNR)TARGETN) :
     +-zip $(ZIP$(TNR)FLAGS) $@ $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
-.ELSE			# "$(make_zip_deps)" != ""
+.ELSE			# "$(make_zip_deps)" == ""
 .IF "$(common_build_zip)"!=""
 .IF "$(ZIP$(TNR)DIR)" != ""
     +-cd $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR))) $(command_seperator) $(ZIPDEP) $(ZIP$(TNR)FLAGS) -prefix $(subst,LANGDIR,. $(subst,$/LANGDIR, $(ZIP$(TNR)DIR)))$/ $@ $(foreach,j,$(ZIP$(TNR)LIST) "{$(subst,LANGDIR,$(longlang_{$(subst,$(BIN)$/$(ZIP$(TNR)TARGET), $(@:db))}) $j )}") $(avoid_cvs_dir) >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
@@ -170,7 +179,7 @@ $(ZIP$(TNR)TARGETN) :
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
 .ENDIF			# "$(common_build_zip)"!=""
     @+echo $@ : makefile.mk >> $(MISC)$/$(TARGET).$(PWD:f).$(@:b).dpzz
-.ENDIF			# "$(make_zip_deps)" != ""
+.ENDIF			# "$(make_zip_deps)" == ""
 .ENDIF
 
 # Anweisungen fuer das Linken
