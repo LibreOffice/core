@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node2lay.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:56:05 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,14 +279,38 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                 if( ((SwSectionNode*)pNode)->GetSection() ==
                     *((SwSectionFrm*)pFrm)->GetSection() )
                 {
-                    rpFrm = bMaster ? NULL : ((SwLayoutFrm*)pFrm)->Lower();
-                    return ((SwLayoutFrm*)pFrm);
+                    // OD 2004-06-02 #i22922# - consider columned sections
+                    // 'Go down' the section frame as long as the layout frame
+                    // is found, which would contain content.
+                    while ( pFrm->IsLayoutFrm() &&
+                            static_cast<SwLayoutFrm*>(pFrm)->Lower() &&
+                            !static_cast<SwLayoutFrm*>(pFrm)->Lower()->IsFlowFrm() &&
+                            static_cast<SwLayoutFrm*>(pFrm)->Lower()->IsLayoutFrm() )
+                    {
+                        pFrm = static_cast<SwLayoutFrm*>(pFrm)->Lower();
+                    }
+                    ASSERT( pFrm->IsLayoutFrm(),
+                            "<SwNode2LayImpl::UpperFrm(..)> - expected upper frame isn't a layout frame." );
+                    rpFrm = bMaster ? NULL
+                                    : static_cast<SwLayoutFrm*>(pFrm)->Lower();
+                    ASSERT( !rpFrm || rpFrm->IsFlowFrm(),
+                            "<SwNode2LayImpl::UpperFrm(..)> - expected sibling isn't a flow frame." );
+                    return static_cast<SwLayoutFrm*>(pFrm);
                 }
+
                 pUpper = new SwSectionFrm(((SwSectionNode*)pNode)->GetSection());
                 pUpper->Paste( rpFrm->GetUpper(),
                                bMaster ? rpFrm : rpFrm->GetNext() );
                 static_cast<SwSectionFrm*>(pUpper)->Init();
                 rpFrm = NULL;
+                // 'Go down' the section frame as long as the layout frame
+                // is found, which would contain content.
+                while ( pUpper->Lower() &&
+                        !pUpper->Lower()->IsFlowFrm() &&
+                        pUpper->Lower()->IsLayoutFrm() )
+                {
+                    pUpper = static_cast<SwLayoutFrm*>(pUpper->Lower());
+                }
                 return pUpper;
             }
         }
