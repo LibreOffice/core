@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:39:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,7 +721,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ russian ] = "Íóìåğàöèÿ";
         Text[ polish ] = "Numeracja";
         Text[ japanese ] = "”Ô†•t‚¯";
-        Text[ chinese_traditional ] = "­¶¼Æ";
+        Text[ chinese_traditional ] = "­¶½X";
         Text[ arabic ] = "ÇáÊÑŞíã";
         Text[ greek ] = "Áñßèìçóç";
         Text[ korean ] = "¹øÈ£ ¸Å±â±â";
@@ -875,7 +875,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "×İÏò(~P)";
         Text[ russian ] = "Êíèæíûé";
         Text[ polish ] = "Pionowo";
-        Text[ japanese ] = "c‘‚«(~P)";
+        Text[ japanese ] = "c(~P)";
         Text[ chinese_traditional ] = "ª½¦¡(~P)";
         Text[ arabic ] = "ÈÇáØæá";
         Text[ greek ] = "~Êáôáêüñõöá";
@@ -903,7 +903,7 @@ TabPage RID_SVXPAGE_PAGE
         Text[ chinese_simplified ] = "ºáÏò(~A)";
         Text[ russian ] = "Àëüáîìíûé";
         Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "‰¡‘‚«(~L)";
+        Text[ japanese ] = "‰¡(~L)";
         Text[ chinese_traditional ] = "¾î¦V(~L)";
         Text[ arabic ] = "ÈÇáÚÑÖ";
         Text[ greek ] = "Ïñé~æüíôéá";
@@ -1114,7 +1114,7 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Text [ portuguese_brazilian ] = "Einsch~alten" ;
         Text [ portuguese ] = "~Activar correspondência" ;
-        Text[ chinese_simplified ] = "¼¤»î(~A)";
+        Text[ chinese_simplified ] = "Æô¶¯(~A)";
         Text[ russian ] = "Âêëş÷èòü";
         Text[ polish ] = "W³¹cz";
         Text[ japanese ] = "‡‚í‚¹‚é(~A)";
@@ -1276,7 +1276,7 @@ String RID_SVXSTR_CALC_PAGE
     Text [ norwegian ] = "Orientation" ;
     Text [ italian ] = "Allineamento" ;
     Text [ portuguese_brazilian ] = "Orientação" ;
-    Text [ portuguese ] = "Orientação" ;
+    Text [ portuguese ] = "Alinhamento" ;
     Text [ finnish ] = "Suunta" ;
     Text [ danish ] = "Justering" ;
     Text [ french ] = "Alignement" ;
@@ -1860,7 +1860,7 @@ ItemList [ chinese_simplified ] =
         < "ĞÅ·â¸ñÊ½ #12 4,75 x 11 Ó¢´ç" ; PAPERSIZE_COM12; > ;
         < "16 ¿ª 184 x 260 ºÁÃ×" ; PAPERSIZE_KAI16; > ;
         < "32 ¿ª 130 x 184 ºÁÃ×" ; PAPERSIZE_KAI32; > ;
-        < "32 ¿ª 140 x 203 ºÁÃ×" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 ´ó¿ª 140 x 203 ºÁÃ×" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ russian ] =
     {
@@ -1923,8 +1923,8 @@ ItemList [ chinese_simplified ] =
         < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
         < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
-        < "•Ä‘‹KŠi 8.5x11 ²İÁ" ; PAPERSIZE_LETTER ; > ;
-        < "‹K’è»²½Ş8.5x14 ²İÁ" ; PAPERSIZE_LEGAL ; > ;
+        < "è† 8.5x11 ²İÁ" ; PAPERSIZE_LETTER ; > ;
+        < "‹KŠi»²½Ş 8.5x14 ²İÁ" ; PAPERSIZE_LEGAL ; > ;
         < "ÀÌŞÛ²ÄŞ" ; PAPERSIZE_TABLOID ; > ;
         < "Õ°»Ş°" ; PAPERSIZE_USER ; > ;
         < "B6 125x176 mm" ; PAPERSIZE_B6 ; > ;
@@ -1968,7 +1968,7 @@ ItemList [ chinese_simplified ] =
         < "«H«Ê®æ¦¡ #12 4,75 x 11 ­^¤o" ; PAPERSIZE_COM12; > ;
         < "16 ¶} 184 x 260 ²@¦Ì" ; PAPERSIZE_KAI16; > ;
         < "32 ¶} 130 x 184 ²@¦Ì" ; PAPERSIZE_KAI32; > ;
-        < "32 ¶} 140 x 203 ²@¦Ì" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 ¤j¶} 140 x 203 ²@¦Ì" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ arabic ] =
     {
@@ -2041,12 +2041,12 @@ ItemList [ chinese_simplified ] =
         < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
         < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
         < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
-        < "Envelope #6?3,625 x 6,5 ÀÎÄ¡" ; PAPERSIZE_COM675; > ;
-        < "Envelope Monarch 3,875 x 7,5 ÀÎÄ¡" ; PAPERSIZE_MONARCH; > ;
-        < "Envelope #9 3,875 x 8,875 ÀÎÄ¡" ; PAPERSIZE_COM9; > ;
-        < "Envelope #10 4,125 x 9,5 ÀÎÄ¡" ; PAPERSIZE_COM10; > ;
-        < "Envelope #11 4,5 x 10,375 ÀÎÄ¡" ; PAPERSIZE_COM11; > ;
-        < "Envelope #12 4,75 x 11 ÀÎÄ¡" ; PAPERSIZE_COM12; > ;
+        < "Envelope #6?3£®625 x 6£®5 ÀÎÄ¡" ; PAPERSIZE_COM675; > ;
+        < "Envelope Monarch 3£®875 x 7£®5 ÀÎÄ¡" ; PAPERSIZE_MONARCH; > ;
+        < "Envelope #9 3£®875 x 8£®875 ÀÎÄ¡" ; PAPERSIZE_COM9; > ;
+        < "Envelope #10 4£®125 x 9£®5 ÀÎÄ¡" ; PAPERSIZE_COM10; > ;
+        < "Envelope #11 4£®5 x 10£®375 ÀÎÄ¡" ; PAPERSIZE_COM11; > ;
+        < "Envelope #12 4£®75 x 11 ÀÎÄ¡" ; PAPERSIZE_COM12; > ;
         < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
         < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
         < "32 kai Å©±â140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
@@ -2418,7 +2418,7 @@ ItemList [ chinese_simplified ] =
         < "ÆÁÄ»" ; PAPERSIZE_SCREEN ; > ;
         < "16 ¿ª 184 x 260 ºÁÃ×" ; PAPERSIZE_KAI16; > ;
         < "32 ¿ª 130 x 184 ºÁÃ×" ; PAPERSIZE_KAI32; > ;
-        < "32 ¿ª 140 x 203 ºÁÃ×" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 ´ó¿ª 140 x 203 ºÁÃ×" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ russian ] =
     {
@@ -2483,7 +2483,7 @@ ItemList [ chinese_simplified ] =
         < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
         < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
         < "è† 8.5x11 ²İÁ" ; PAPERSIZE_LETTER ; > ;
-        < "‹K’è»²½Ş8.5x14 ²İÁ" ; PAPERSIZE_LEGAL ; > ;
+        < "‹KŠi»²½Ş 8.5x14 ²İÁ" ; PAPERSIZE_LEGAL ; > ;
         < "ÀÌŞÛ²ÄŞ" ; PAPERSIZE_TABLOID ; > ;
         < "Õ°»Ş°" ; PAPERSIZE_USER ; > ;
         < "B6 125x176 mm" ; PAPERSIZE_B6 ; > ;
@@ -2522,7 +2522,7 @@ ItemList [ chinese_simplified ] =
         < "¿Ã¹õ" ; PAPERSIZE_SCREEN ; > ;
         < "16 ¶} 184 x 260 ²@¦Ì" ; PAPERSIZE_KAI16; > ;
         < "32 ¶} 130 x 184 ²@¦Ì" ; PAPERSIZE_KAI32; > ;
-        < "32 ¶} 140 x 203 ²@¦Ì" ; PAPERSIZE_KAI32BIG; > ;
+        < "32 ¤j¶} 140 x 203 ²@¦Ì" ; PAPERSIZE_KAI32BIG; > ;
     };
     ItemList [ arabic ] =
     {
