@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-25 11:36:44 $
+ *  last change: $Author: ka $ $Date: 2001-06-08 14:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,6 +645,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
         SvMemoryStream aMemStm( 65535, 65535 );
 
         aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
+        aMemStm.SetCompressMode( COMPRESSMODE_NATIVE );
         aMemStm << rGraphic;
         maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
