@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 08:52:34 $
+ *  last change: $Author: sab $ $Date: 2001-11-20 16:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ class ScXMLTableRowCellContext : public SvXMLImportContext
     sal_Bool    bHasTextImport : 1;
     sal_Bool    bIsFirstTextImport : 1;
     sal_Bool    bSolarMutexLocked : 1;
+    sal_Bool    bFormulaTextResult : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

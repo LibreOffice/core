@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-15 10:19:19 $
+ *  last change: $Author: sab $ $Date: 2001-11-20 16:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,8 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     nCellsRepeated(1),
     fValue(0.0),
     rXMLImport((ScXMLImport&)rImport),
-    bSolarMutexLocked(sal_False)
+    bSolarMutexLocked(sal_False),
+    bFormulaTextResult(sal_False)
 {
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
@@ -315,7 +316,11 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         }
     }
     if (pOUFormula)
+    {
+        if (nCellType == util::NumberFormat::TEXT)
+            bFormulaTextResult = sal_True;
         nCellType = util::NumberFormat::UNDEFINED;
+    }
     rXMLImport.GetStylesImportHelper()->SetAttributes(pStyleName, pCurrencySymbol, nCellType);
 }
 
@@ -428,7 +433,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
         {
             bIsEmpty = sal_False;
             bTextP = sal_True;
-            if (nCellType == util::NumberFormat::TEXT)
+            if ((nCellType == util::NumberFormat::TEXT) || bFormulaTextResult)
             {
                 if (!bHasTextImport)
                 {
@@ -938,7 +943,7 @@ void ScXMLTableRowCellContext::EndElement()
                 if (!bIsMatrix)
                 {
                     xCell->setFormula(*pOUFormula);
-                    if ((nCellType == util::NumberFormat::TEXT) && pOUTextValue && pOUTextValue->getLength())
+                    if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
                     {
                         LockSolarMutex();
                         ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
