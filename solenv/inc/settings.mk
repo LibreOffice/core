@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.138 $
+#   $Revision: 1.139 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-22 07:38:39 $
+#   last change: $Author: rt $ $Date: 2003-12-01 16:17:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,7 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 .ELSE			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
     @+echo "#"
     @+echo "#"
-    @+echo "#" ERROR: minor.mk in solenv\inc does not match your version!
+    @+echo "# ERROR: minor.mk in solenv/inc does not match your version!"
     @+echo "#"
     @+echo "#"
     force_dmake_to_error
@@ -589,8 +589,8 @@ ROUT=$(OUTPATH).tlk
 .ENDIF
 
 # common output tree
-COMMON_OUTDIR*=common
 .IF "$(common_build)"!=""
+COMMON_OUTDIR*=common
 .IF "$(no_common_build_reslib)"==""
 common_build_reslib=true
 .ENDIF			# "$(no_common_build_reslib)"==""
@@ -600,6 +600,8 @@ common_build_zip=true
 .IF "$(no_common_build_sign_jar)"==""
 common_build_sign_jar=true
 .ENDIF			# "$(no_common_build_sign_jar)"==""
+.ELSE			# "$(common_build)"!=""
+COMMON_OUTDIR=$(OUTPATH)
 .ENDIF			# "$(common_build)"!=""
 
 # --- generate output tree -----------------------------------------
