@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_GRAPH_CXX
 
 #ifndef _SV_IMPGRAPH_HXX
 #include <impgraph.hxx>
