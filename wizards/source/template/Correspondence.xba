@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Correspondence" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Correspondence" script:language="StarBasic">Option Explicit
 
 Public msgNoTextmark$, msgError$
 Public sAddressbook$
@@ -17,7 +17,6 @@ Sub Main
 	DialogModel.Optmerge.State = True
 	LoadLanguageCorrespondence()
 	TemplateDialog.Execute
-  TemplateDialog.Dispose
 End Sub
 
 
@@ -65,6 +64,9 @@ Dim oFields as Object
 Dim oDocSettings as Object
 
 	bDBFields = DialogModel.Optmerge.State              &apos;database or placeholder
+	
+	TemplateDialog.EndExecute()
+	DialogExited = TRUE
 
 	If bDBFields Then
 		oDBAccess = GetRegistryKeyContent(&quot;org.openoffice.Office.DataAccess/AddressBook/&quot;)
@@ -88,9 +90,6 @@ Dim oDocSettings as Object
 		oFields = oDBAccess.GetByName(&quot;Fields&quot;)
 		Table = oDBAccess.GetByName(&quot;Command&quot;)
 	End If
-
-	TemplateDialog.EndExecute()
-	DialogExited = TRUE
 
 	ParaBreak = com.sun.star.text.ControlCharacter.PARAGRAPH_BREAK
   oDocument = ThisComponent
