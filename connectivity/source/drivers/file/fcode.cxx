@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:54:16 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TYPEINIT1(OOperandParam, OOperandRow);
 TYPEINIT1(OOperandValue, OOperand);
 TYPEINIT1(OOperandConst, OOperandValue);
 TYPEINIT1(OOperandResult, OOperandValue);
+TYPEINIT1(OStopOperand, OOperandValue);
 
 TYPEINIT1(OOperator, OCode);
 TYPEINIT1(OBoolOperator,OOperator);
@@ -117,16 +118,9 @@ TYPEINIT1(OOp_LIKE, OBoolOperator);
 TYPEINIT1(OOp_NOTLIKE, OOp_LIKE);
 TYPEINIT1(OOp_COMPARE, OBoolOperator);
 TYPEINIT1(ONumOperator, OOperator);
-
-//------------------------------------------------------------------
-#if SUPD < 632
-sal_Int32 compareIgnoreCase(const rtl::OUString& rStr1, const rtl::OUString& rStr2, const ::rtl::OLocale& rLocale)
-{
-    rtl::OUString aString1 = rStr1.toUpperCase(rLocale);
-    rtl::OUString aString2 = rStr2.toUpperCase(rLocale);
-    return aString1.compareTo(aString2);
-}
-#endif
+TYPEINIT1(ONthOperator, OOperator);
+TYPEINIT1(OBinaryOperator, OOperator);
+TYPEINIT1(OUnaryOperator, OOperator);
 
 //------------------------------------------------------------------
 DBG_NAME(OCode )
@@ -151,24 +145,24 @@ OOperandRow::OOperandRow(sal_uInt16 _nPos, sal_Int32 _rType)
     , m_nRowPos(_nPos)
 {}
 //------------------------------------------------------------------
-void OOperandRow::bindValue(OValueRow _pRow)
+void OOperandRow::bindValue(const OValueRefRow& _pRow)
 {
     OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    (*m_pRow)[m_nRowPos].setBound(sal_True);
+    (*m_pRow)[m_nRowPos]->setBound(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OOperandRow::setValue(const ORowSetValue& _rVal)
 {
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    (*m_pRow)[m_nRowPos] = _rVal;
+    (*(*m_pRow)[m_nRowPos]) = _rVal;
 }
 //------------------------------------------------------------------
 const ORowSetValue& OOperandRow::getValue() const
 {
     OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
-    return (*m_pRow)[m_nRowPos];
+    return (*m_pRow)[m_nRowPos]->getValue();
 }
 
 // -----------------------------------------------------------------------------
@@ -465,8 +459,63 @@ OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+//------------------------------------------------------------------
+void ONthOperator::Exec(OCodeStack& rCodeStack)
+{
+    ::std::vector<ORowSetValue> aValues;
+    ::std::vector<OOperand*> aOperands;
+    OOperand* pOperand;
+    do
+    {
+        OSL_ENSURE(!rCodeStack.empty(),"Stack must be none empty!");
+        pOperand    = rCodeStack.top();
+        rCodeStack.pop();
+        if ( !IS_TYPE(OStopOperand,pOperand) )
+            aValues.push_back( pOperand->getValue() );
+        aOperands.push_back( pOperand );
+    }
+    while ( !IS_TYPE(OStopOperand,pOperand) );
 
+    rCodeStack.push(new OOperandResult(operate(aValues)));
+
+    ::std::vector<OOperand*>::iterator aIter = aOperands.begin();
+    ::std::vector<OOperand*>::iterator aEnd = aOperands.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        if (IS_TYPE(OOperandResult,*aIter))
+            delete *aIter;
+    }
+}
+//------------------------------------------------------------------
+void OBinaryOperator::Exec(OCodeStack& rCodeStack)
+{
+    OOperand  *pRight   = rCodeStack.top();
+    rCodeStack.pop();
+    OOperand  *pLeft    = rCodeStack.top();
+    rCodeStack.pop();
+
+    if ( !rCodeStack.empty() && IS_TYPE(OStopOperand,rCodeStack.top()) )
+        rCodeStack.pop();
+
+    rCodeStack.push(new OOperandResult(operate(pLeft->getValue(),pRight->getValue())));
+    if (IS_TYPE(OOperandResult,pRight))
+        delete pRight;
+    if (IS_TYPE(OOperandResult,pLeft))
+        delete pLeft;
+}
+//------------------------------------------------------------------
+void OUnaryOperator::Exec(OCodeStack& rCodeStack)
+{
+    OSL_ENSURE(!rCodeStack.empty(),"Stack is empty!");
+    OOperand* pOperand = rCodeStack.top();
+    rCodeStack.pop();
+
+    rCodeStack.push(new OOperandResult(operate(pOperand->getValue())));
+    if (IS_TYPE(OOperandResult,pOperand))
+        delete pOperand;
+}
+// -----------------------------------------------------------------------------
+sal_uInt16 OUnaryOperator::getRequestedOperands() const {return 1;}
 
 
 
