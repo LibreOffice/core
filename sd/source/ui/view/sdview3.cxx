@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:58:41 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
