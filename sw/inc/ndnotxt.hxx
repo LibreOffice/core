@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:07:54 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,6 @@ inline SwGrfFmtColl* SwNoTxtNode::GetGrfColl() const
 }
 
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
-#if !(defined(MACOSX) && ( __GNUC__ < 3 ))
-// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline SwNoTxtNode *SwNode::GetNoTxtNode()
 {
     return ND_NOTXTNODE & nNodeType ? (SwNoTxtNode*)this : 0;
@@ -151,6 +149,5 @@ inline const SwNoTxtNode *SwNode::GetNoTxtNode() const
 {
     return ND_NOTXTNODE & nNodeType ? (const SwNoTxtNode*)this : 0;
 }
-#endif
 
 #endif  // _NDNOTXT_HXX
