@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:00:00 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
+#ifndef __com_sun_star_style_VerticalAlignment_idl__
+#include <com/sun/star/style/VerticalAlignment.idl>
+#endif
 
 //=============================================================================
 
@@ -202,6 +205,12 @@ published service UnoControlCheckBoxModel
         @see com::sun::star::awt::VisualEffect
     */
     [optional, property] short VisualEffect;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the vertical alignment of the text in the control
+    */
+    [optional, property] com::sun::star::style::VerticalAlignment VerticalAlign;
 };
 
 //=============================================================================
