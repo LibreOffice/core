@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 10:14:27 $
+ *  last change: $Author: nn $ $Date: 2000-12-14 16:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ void ScDocument::StoreDrawLayer(SvStream& rStream) const
         BOOL bNative = ( eMode == SvtSaveOptions::SaveGraphicsOriginal );
         pDrawLayer->SetSaveNative( bNative );
 
+        pDrawLayer->GetItemPool().SetFileFormatVersion( (USHORT)rStream.GetVersion() );
         pDrawLayer->Store(rStream);
     }
 }
