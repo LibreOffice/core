@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:06:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ TabPage TP_NUMPARA
         Text [ English ] = "~Include this paragraph in line numbering" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Include this paragraph in line numbering" ;
-        Text [ portuguese_brazilian ] = "~Die Zeilen dieses Absatzes mitzählen" ;
+        Text [ portuguese_brazilian ] = "~Die Zeilen dieses Absatzes mitz?hlen" ;
         Text [ swedish ] = "~Räkna med raderna i det här stycket" ;
         Text [ danish ] = "Inkluder dette afsnits rækker" ;
         Text [ italian ] = "~Conta le righe di questo paragrafo" ;
