@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-02 18:41:42 $
+ *  last change: $Author: nn $ $Date: 2001-10-12 12:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/urlbmk.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/system.hxx>
 #include <offmgr/app.hxx>
@@ -2280,12 +2281,14 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         StopMarking();
 
         Point aPosPixel = rCEvt.GetMousePosPixel();
+        Point aMenuPos = aPosPixel;
+        BOOL bMouse = rCEvt.IsMouseEvent();
         BOOL bDone = FALSE;
         BOOL bEdit = pViewData->HasEditView(eWhich);
         if ( !bEdit )
         {
                 // Edit-Zelle mit Spelling-Errors ?
-            if ( GetEditUrlOrError( TRUE, aPosPixel ) )
+            if ( bMouse && GetEditUrlOrError( TRUE, aPosPixel ) )
             {
                 //  GetEditUrlOrError hat den Cursor schon bewegt
 
@@ -2299,10 +2302,27 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
         {
             EditView* pEditView = pViewData->GetEditView( eWhich );     // ist dann nicht 0
 
+            if ( !bMouse )
+            {
+                Cursor* pCur = pEditView->GetCursor();
+                if ( pCur )
+                {
+                    Point aLogicPos = pCur->GetPos();
+                    //  use the position right of the cursor (spell popup is opened if
+                    //  the cursor is before the word, but not if behind it)
+                    aLogicPos.X() += pCur->GetWidth();
+                    aLogicPos.Y() += pCur->GetHeight() / 2;     // center vertically
+                    aMenuPos = LogicToPixel( aLogicPos );
+                }
+            }
+
             //  if edit mode was just started above, online spelling may be incomplete
             pEditView->GetEditEngine()->CompleteOnlineSpelling();
 
-            if( pEditView->IsWrongSpelledWordAtPos( aPosPixel ) )
+            //  IsCursorAtWrongSpelledWord could be used for !bMouse
+            //  if there was a corresponding ExecuteSpellPopup call
+
+            if( pEditView->IsWrongSpelledWordAtPos( aMenuPos ) )
             {
                 //  Wenn man unter OS/2 neben das Popupmenue klickt, kommt MouseButtonDown
                 //  vor dem Ende des Menue-Execute, darum muss SetModified vorher kommen
@@ -2311,15 +2331,28 @@ void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
                 if (pHdl)
                     pHdl->SetModified();
 
-                pEditView->ExecuteSpellPopup( aPosPixel );
+                pEditView->ExecuteSpellPopup( aMenuPos );
 
                 bDone = TRUE;
             }
         }
+        else if ( !bMouse )
+        {
+            //  non-edit menu by keyboard -> use lower right of cell cursor position
+
+            USHORT nCurX = pViewData->GetCurX();
+            USHORT nCurY = pViewData->GetCurY();
+            aMenuPos = pViewData->GetScrPos( nCurX, nCurY, eWhich, TRUE );
+            long nSizeXPix;
+            long nSizeYPix;
+            pViewData->GetMergeSizePixel( nCurX, nCurY, nSizeXPix, nSizeYPix );
+            aMenuPos.X() += nSizeXPix;
+            aMenuPos.Y() += nSizeYPix;
+        }
 
         if (!bDone)
         {
-            SfxDispatcher::ExecutePopup();
+            SfxDispatcher::ExecutePopup( 0, this, &aMenuPos );
         }
     }
 }
