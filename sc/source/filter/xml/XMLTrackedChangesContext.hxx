@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:41:21 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,8 +165,7 @@ public:
     ScXMLCellContentDeletionContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper,
-                                      const sal_uInt32 nID);
+                                      ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLCellContentDeletionContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
@@ -179,7 +178,6 @@ public:
 
 class ScXMLDependenceContext : public SvXMLImportContext
 {
-    sal_uInt32                          nID;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -213,6 +211,50 @@ public:
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                       ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
     virtual ~ScXMLDependingsContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                                    const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLChangeDeletionContext : public SvXMLImportContext
+{
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+    ScXMLChangeDeletionContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
+    virtual ~ScXMLChangeDeletionContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                                    const NAMESPACE_RTL(OUString)& rLocalName,
+                                                    const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
+class ScXMLDeletionsContext : public SvXMLImportContext
+{
+    ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+    ScXMLDeletionsContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
+                                      const ::com::sun::star::uno::Reference<
+                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLChangeTrackingImportHelper* pChangeTrackingImportHelper);
+    virtual ~ScXMLDeletionsContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                                     const NAMESPACE_RTL(OUString)& rLocalName,
@@ -262,7 +304,7 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     rtl::OUString           sValue;
     rtl::OUString           sFormula;
     rtl::OUString&          rAddress;
-    ScBaseCell*             pOldCell;
+    ScBaseCell*&                rOldCell;
     ScEditEngineTextObj*    pEditTextObj;
     double                  fValue;
     sal_Bool                bEmpty;
@@ -277,7 +319,7 @@ public:
     ScXMLChangeCellContext( ScXMLImport& rImport, USHORT nPrfx, const NAMESPACE_RTL(OUString)& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScBaseCell* pOldCell, rtl::OUString& sAddress);
+                                      ScBaseCell*& rOldCell, rtl::OUString& sAddress);
     virtual ~ScXMLChangeCellContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:41:21 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ class ScChangeTrackingExportHelper
 
     void WriteBigRange(const ScBigRange& rBigRange, const sal_Char *pName);
     void WriteChangeInfo(const ScChangeAction* pAction);
+    void WriteGenerated(const ScChangeAction* pDependAction);
+    void WriteDeleted(const ScChangeAction* pDependAction);
     void WriteDepending(const ScChangeAction* pDependAction);
     void WriteDependings(ScChangeAction* pAction);
 

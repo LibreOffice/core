@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:41:21 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 10:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,31 +209,91 @@ void ScChangeTrackingExportHelper::WriteChangeInfo(const ScChangeAction* pAction
     }
 }
 
-void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependAction)
+void ScChangeTrackingExportHelper::WriteGenerated(const ScChangeAction* pGeneratedAction)
 {
-    sal_uInt32 nActionNumber(pDependAction->GetActionNumber());
-    if (pChangeTrack->IsGenerated(nActionNumber))
+    sal_uInt32 nActionNumber(pGeneratedAction->GetActionNumber());
+    DBG_ASSERT(pChangeTrack->IsGenerated(nActionNumber), "a not generated action found");
+    SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
+    WriteBigRange(pGeneratedAction->GetBigRange(), sXML_cell_address);
+    WriteCell(static_cast<const ScChangeActionContent*>(pGeneratedAction)->GetNewCell());
+}
+
+void ScChangeTrackingExportHelper::WriteDeleted(const ScChangeAction* pDeletedAction)
+{
+    sal_uInt32 nActionNumber(pDeletedAction->GetActionNumber());
+    if (pDeletedAction->GetType() == SC_CAT_CONTENT)
     {
+        DBG_ASSERT(!pChangeTrack->IsGenerated(nActionNumber), "a generated action found");
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
         SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
-        WriteBigRange(pDependAction->GetBigRange(), sXML_cell_address);
-        WriteCell(static_cast<const ScChangeActionContent*>(pDependAction)->GetNewCell());
+        if (static_cast<const ScChangeActionContent*>(pDeletedAction)->IsTopContent() && pDeletedAction->IsDeletedIn())
+             WriteCell(static_cast<const ScChangeActionContent*>(pDeletedAction)->GetNewCell());
     }
     else
     {
         rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
-        SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE, sXML_dependence, sal_True, sal_True);
-        if(pDependAction->GetType() == SC_CAT_CONTENT)
+        SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_change_deletion, sal_True, sal_True);
+    }
+}
+
+void ScChangeTrackingExportHelper::WriteDepending(const ScChangeAction* pDependAction)
+{
+    sal_uInt32 nActionNumber(pDependAction->GetActionNumber());
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_id, GetChangeID(nActionNumber));
+    SvXMLElementExport aDependElem(rExport, XML_NAMESPACE_TABLE, sXML_dependence, sal_True, sal_True);
+}
+
+void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
+{
+    if (pAction->HasDependent())
+    {
+        SvXMLElementExport aDependingsElem (rExport, XML_NAMESPACE_TABLE, sXML_dependences, sal_True, sal_True);
+        const ScChangeActionLinkEntry* pEntry = pAction->GetFirstDependentEntry();
+        while (pEntry)
         {
-            if (static_cast<const ScChangeActionContent*>(pDependAction)->IsTopContent() && pDependAction->IsDeletedIn())
+            WriteDepending(pEntry->GetAction());
+            pEntry = pEntry->GetNext();
+        }
+    }
+    if (pAction->HasDeleted())
+    {
+        SvXMLElementExport aDependingsElem (rExport, XML_NAMESPACE_TABLE, sXML_deletions, sal_True, sal_True);
+        const ScChangeActionLinkEntry* pEntry = pAction->GetFirstDeletedEntry();
+        while (pEntry)
+        {
+            WriteDeleted(pEntry->GetAction());
+            pEntry = pEntry->GetNext();
+        }
+        if (pAction->IsDeleteType())
+        {
+            ScChangeActionDel* pDelAction = static_cast<ScChangeActionDel*> (pAction);
+            if (pDelAction)
             {
-                SvXMLElementExport aElemPrev(rExport, XML_NAMESPACE_TABLE, sXML_cell_content_deletion, sal_True, sal_True);
-                 WriteCell(static_cast<const ScChangeActionContent*>(pDependAction)->GetNewCell());
+                const ScChangeActionCellListEntry* pCellEntry = pDelAction->GetFirstCellEntry();
+                while (pCellEntry)
+                {
+                    WriteGenerated(pCellEntry->GetContent());
+                    pCellEntry = pCellEntry->GetNext();
+                }
+            }
+        }
+        else if (pAction->GetType() == SC_CAT_MOVE)
+        {
+            ScChangeActionMove* pMoveAction = static_cast<ScChangeActionMove*> (pAction);
+            if (pMoveAction)
+            {
+                const ScChangeActionCellListEntry* pCellEntry = pMoveAction->GetFirstCellEntry();
+                while (pCellEntry)
+                {
+                    WriteGenerated(pCellEntry->GetContent());
+                    pCellEntry = pCellEntry->GetNext();
+                }
             }
         }
     }
 }
 
-void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
+/*void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
 {
     pChangeTrack->GetDependents(pAction, *pDependings);
     if (pDependings->Count())
@@ -246,7 +306,7 @@ void ScChangeTrackingExportHelper::WriteDependings(ScChangeAction* pAction)
             pDependAction = pDependings->Next();
         }
     }
-}
+}*/
 
 void ScChangeTrackingExportHelper::WriteEmptyCell()
 {
@@ -517,6 +577,8 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
     rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_position, sBuffer.makeStringAndClear());
     if (pDelAction->GetType() != SC_CAT_DELETE_TABS)
     {
+        SvXMLUnitConverter::convertNumber(sBuffer, nStartSheet);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_table, sBuffer.makeStringAndClear());
         if (pDelAction->IsMultiDelete() && !pDelAction->GetDx() && !pDelAction->GetDy())
         {
             const ScChangeAction* p = pDelAction->GetNext();
@@ -543,8 +605,6 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
             SvXMLUnitConverter::convertNumber(sBuffer, nSlavesCount);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_multi_deletion_spanned, sBuffer.makeStringAndClear());
         }
-        SvXMLUnitConverter::convertNumber(sBuffer, nStartSheet);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_table, sBuffer.makeStringAndClear());
     }
 }
 
