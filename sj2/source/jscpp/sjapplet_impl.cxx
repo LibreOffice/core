@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-10 15:56:46 $
+ *  last change: $Author: pl $ $Date: 2001-08-15 11:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #define Region XLIB_Region
 #define Cursor XLIB_Cursor
 #include <jawt_md.h>
+#include <X11/Xatom.h>
 #undef String
 #undef Window
 #undef Time
@@ -153,16 +154,21 @@ static Atom getStateAtom(Display* pDisplay)
 }
 
 static Widget getAppletWidget(Widget widget) {
+    /*  Find the shell widget to reparent.
+     *  Normally you would just have to go up in the hierarchy
+     *  to the widget that has no parent. But the java created
+     *  widget hierarchy ends sometimes with a widget with no window.
+     *  Why ? Just to anger us ?
+     */
     sal_Bool found = sal_False;
     Display* pDisplay = XtDisplay(widget);
-    Atom nState = getStateAtom( pDisplay );
     do
     {
         XLIB_Window nWindow = XtWindow(widget);
         int nCount;
         Atom *pAtom = XListProperties(pDisplay, nWindow, &nCount);
         for (int i = 0; i < nCount && !found; ++i)
-            found = (pAtom[i] == nState);
+            found = (pAtom[i] == XA_WM_HINTS);
 
         XFree(pAtom);
 
@@ -210,7 +216,12 @@ extern "C" {
             )
         {
             if( pEvent->xproperty.state == PropertyDelete )
+            {
+#ifdef DEBUG
+                fprintf( stderr, "window 0x%x changed to WithdrawnState (WM_STATE deleted)\n", (XLIB_Window)arg );
+#endif
                 bRet = True;
+            }
             else
             {
                 Atom aType;
@@ -222,10 +233,23 @@ extern "C" {
                                         &aType, &format, &items, &bytes, &prop ) == 0
                     && prop
                     && format == 32
-                    && *(sal_uInt32*)prop == 0
                     )
                 {
-                    bRet = True;
+#ifdef DEBUG
+                    const char* pState = "<unknown>";
+                    switch( *(sal_uInt32*)prop )
+                    {
+                        case 0: pState = "Withdrawn";break;
+                        case 1: pState = "Normal";break;
+                        case 2: pState = "Iconic";break;
+                    }
+                    fprintf( stderr, "window 0x%x changed to %sState\n",
+                             (XLIB_Window)arg,
+                             pState );
+#endif
+                    if( *(sal_uInt32*)prop == 0 )
+                        bRet = True;
+
                     XFree( prop );
                 }
             }
@@ -331,10 +355,15 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
 #endif
 
         XWithdrawWindow( dsi_x11->display, XtWindow(appletWidget), DefaultScreen( dsi_x11->display ) );
+#ifdef DEBUG
+        fprintf( stderr, "enter wait (Withdraw)\n" );
+#endif
         XEvent aEvent;
         XIfEvent( dsi_x11->display, &aEvent, withdrawPredicate, (XPointer)XtWindow(appletWidget) );
-//      XPutBackEvent( dsi_x11->display, &aEvent );
 
+#ifdef DEBUG
+        fprintf( stderr, "leave wait (Withdraw)\n" );
+#endif
         XReparentWindow(dsi_x11->display, XtWindow(appletWidget), pEnvData->aWindow, 0, 0);
         XtMapWidget( appletWidget );
 
