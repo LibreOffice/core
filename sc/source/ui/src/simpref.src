@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-12 09:25:34 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   simpref.src  $
  //   $Author: kz $
- //     $Date: 2001-02-12 09:25:34 $
- // $Revision: 1.3 $
+ //     $Date: 2001-05-04 21:08:20 $
+ // $Revision: 1.4 $
  //  $Logfile:   T:/sc/source/ui/src/simpref.srv  $
  //----------------------------------------------------------------------------
 
@@ -108,6 +108,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Text[ korean ] = "¿µ¿ª";
         Text[ turkish ] = "Bölüm";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área";
     };
     Edit ED_ASSIGN
     {
@@ -143,6 +144,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText[ korean ] = "Ãà¼Ò!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
+        QuickHelpText[ catalan ] = "Reducir";
     };
     OKButton BTN_OK
     {
