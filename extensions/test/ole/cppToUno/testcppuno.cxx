@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-06 08:35:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 extern CComModule _Module;
 #include<atlcom.h>
 #include<atlimpl.cpp>
-
+#include <stdio.h>
 #include <com/sun/star/bridge/ModelDependent.hpp>
 #include <com/sun/star/bridge/XBridgeSupplier2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
