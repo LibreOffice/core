@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-22 11:25:02 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 13:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_CONTENTINFOATTRIBUTE_HPP_
+#include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -578,7 +581,7 @@ HierarchyContent::queryCreatableContentsInfo()
         // Folder.
         aSeq.getArray()[ 0 ].Type
             = OUString::createFromAscii( HIERARCHY_FOLDER_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes = 0;
+        aSeq.getArray()[ 0 ].Attributes = ContentInfoAttribute::KIND_FOLDER;
 
         Sequence< Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = Property(
@@ -591,7 +594,7 @@ HierarchyContent::queryCreatableContentsInfo()
         // Link.
         aSeq.getArray()[ 1 ].Type
             = OUString::createFromAscii( HIERARCHY_LINK_CONTENT_TYPE );
-        aSeq.getArray()[ 1 ].Attributes = 0;
+        aSeq.getArray()[ 1 ].Attributes = ContentInfoAttribute::KIND_LINK;
 
         Sequence< Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = Property(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-24 12:42:16 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 13:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,14 +648,15 @@ Sequence< ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
         // Folder.
         aSeq.getArray()[ 0 ].Type
             = OUString::createFromAscii( PACKAGE_FOLDER_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes = 0;
+        aSeq.getArray()[ 0 ].Attributes = ContentInfoAttribute::KIND_FOLDER;
         aSeq.getArray()[ 0 ].Properties = aProps;
 
         // Stream.
         aSeq.getArray()[ 1 ].Type
             = OUString::createFromAscii( PACKAGE_STREAM_CONTENT_TYPE );
         aSeq.getArray()[ 1 ].Attributes
-            = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM;
+            = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+              | ContentInfoAttribute::KIND_DOCUMENT;
         aSeq.getArray()[ 1 ].Properties = aProps;
 
         return aSeq;

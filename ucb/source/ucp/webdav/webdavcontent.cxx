@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 13:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,8 @@ Content::queryCreatableContentsInfo()
         aSeq.getArray()[ 0 ].Type
             = OUString::createFromAscii( WEBDAV_CONTENT_TYPE );
         aSeq.getArray()[ 0 ].Attributes
-            = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM;
+            = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+              | ContentInfoAttribute::KIND_DOCUMENT;
 
         Sequence< Property > aDocProps( 1 );
         aDocProps.getArray()[ 0 ] = Property(
@@ -1001,7 +1002,7 @@ Content::queryCreatableContentsInfo()
         // folder.
         aSeq.getArray()[ 1 ].Type
             = OUString::createFromAscii( WEBDAV_COLLECTION_TYPE );
-        aSeq.getArray()[ 1 ].Attributes = 0;
+        aSeq.getArray()[ 1 ].Attributes = ContentInfoAttribute::KIND_FOLDER;
 
         Sequence< Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = Property(

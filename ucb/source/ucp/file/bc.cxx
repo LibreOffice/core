@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-22 13:44:44 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 13:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,7 +691,8 @@ BaseContent::queryCreatableContentsInfo(
 
     // file
     seq[0].Type       = m_pMyShell->FileContentType;
-    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM;
+    seq[0].Attributes = ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+                        | ContentInfoAttribute::KIND_DOCUMENT;
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
@@ -704,7 +705,7 @@ BaseContent::queryCreatableContentsInfo(
 
     // folder
     seq[1].Type       = m_pMyShell->FolderContentType;
-    seq[1].Attributes = 0;
+    seq[1].Attributes = ContentInfoAttribute::KIND_FOLDER;
     seq[1].Properties = props;
     return seq;
 }
