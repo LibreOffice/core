@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:28:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
         /* } SAFE */
 
         // ask for his (sub)dispatcher for the given URL
-        LOG_ASSERT(xHandler.is(), "DispatchProvider::implts_searchProtocolHandler()\nThere is one non realy useable protocol handler, which couldn't be created.")
         if (xHandler.is())
             xDispatcher = xHandler->queryDispatch(aURL,SPECIALTARGET_SELF,0);
     }
