@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:58:57 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ english_us ] = "~Field delimiter" ;
         Text[ chinese_simplified ] = "×Ö¶Î·Ö¸ô·û(~F)";
         Text[ russian ] = "Ğàçäåëèòåëü ïîëÿ";
-        Text[ polish ] = "Ogranicznik pola";
+        Text[ polish ] = "Separator pola";
         Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì‹æØ‚è‹L†(~F)";
         Text[ chinese_traditional ] = "Äæ¦ì¤À¹j²Å(~F)";
         Text[ arabic ] = "İÇÕá ÇáÍŞá";
@@ -137,7 +137,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ english_us ] = "~Text delimiter" ;
         Text[ chinese_simplified ] = "ÎÄ×Ö·Ö¸ô·û(~T)";
         Text[ russian ] = "Ğàçäåëèòåëü òåêñòà";
-        Text[ polish ] = "Ogranicznik tekstu";
+        Text[ polish ] = "Separator tekstu";
         Text[ japanese ] = "Ã·½Ä‚Ì‹æØ‚è‹L†(~T)";
         Text[ chinese_traditional ] = "¤å¦r¤À¹j²Å(~T)";
         Text[ arabic ] = "İÇÕá ÇáäÕ";
@@ -255,6 +255,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Importar archivo";
 };
+
 
 
 
