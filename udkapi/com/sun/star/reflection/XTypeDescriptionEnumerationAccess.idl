@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeDescriptionEnumerationAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:32:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ interface XTypeDescriptionEnumerationAccess : com::sun::star::uno::XInterface
             <table border=1>
             <th>IDL       </th><th>interface</th>
             <td>module    </td><td><type>XModuleTypeDescription</td></type>
-            <td>interface </td><td><type>XInterfaceTypeDescription</td></type>
+            <td>interface </td><td><type>XInterfaceTypeDescription2</td></type>
             <td>service   </td><td><type>XServiceTypeDescription</td></type>
             <td>struct    </td><td><type>XCompoundTypeDescription</td></type>
             <td>enum      </td><td><type>XEnumTypeDescription</td></type>
