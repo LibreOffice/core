@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 20:25:03 $
+ *  last change: $Author: rt $ $Date: 2001-06-05 22:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,12 +72,12 @@ String WEBDIALOG
     Text[ greek ] = "~Help";
     Text[ dutch ] = "~Help";
     Text[ french ] = "~Help";
-    Text[ spanish ] = "~Help";
+    Text[ spanish ] = "Ay~uda";
     Text[ finnish ] = "~Help";
     Text[ italian ] = "~Help";
     Text[ danish ] = "~Help";
-    Text[ swedish ] = "~Help";
-    Text[ polish ] = "~Help";
+    Text[ swedish ] = "~Hjälp";
+    Text[ polish ] = "Po~moc";
     Text[ portuguese_brazilian ] = "~Help";
     Text[ japanese ] = "~Help";
     Text[ korean ] = "~Help";
