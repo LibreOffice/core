@@ -5,8 +5,8 @@
 #*	  Beschreibung		TARGET-Rules
 #*
 #*	  Ersterstellung	TH 28.03.94
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2000-10-06 11:15:49 $
-#*	  $Revision: 1.6 $
+#*	  Letzte Aenderung	$Author: pluby $ $Date: 2000-10-06 15:03:01 $
+#*	  $Revision: 1.7 $
 #*
 #*	  $Logfile:   T:/solar/inc/target.mkv  $
 #*
@@ -1960,7 +1960,7 @@ $(SUBDIRS) : $(SUBDIRSDEPS)
 #mhtest:
 #	@echo MYUNOIDLTARGETS : $(MYUNOIDLTARGETS) $(SLOFILES)
 #	@echo MHMISC_ : $(UNOIDLTARGETS) $(IDLPACKAGE) xxxx $(_PACKAGE)
-#	@+-echo #define SUPD "$(UPD)" >> ttt.mk
+#	@+-echo "#define" SUPD "$(UPD)" >> ttt.mk
 
 .INCLUDE : tg_dir.mk
 

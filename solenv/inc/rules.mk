@@ -7,8 +7,8 @@
 ##*                      Regeln
 ##*
 ##*    Ersterstellung    MH 9.2.96
-##*    Letzte Aenderung  $Author: hjs $ $Date: 2000-09-21 13:12:00 $
-##*    $Revision: 1.2 $
+##*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-06 15:03:01 $
+##*    $Revision: 1.3 $
 ##*
 ##*    $Logfile:   T:/solar/inc/rules.mkv  $
 ##*
@@ -85,8 +85,8 @@ $(SLO)$/%.obj : %.cxx
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
 .IF "$(COM)"=="WTC"
@@ -125,8 +125,8 @@ $(SLO)$/%.obj : %.cpp
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
 .IF "$(COM)"=="WTC"
@@ -165,8 +165,8 @@ $(SLO)$/%.obj : $(MISC)$/%.cxx
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
     @+if exist $@ $(RM) /q $@ >& nul
@@ -203,8 +203,8 @@ $(OBJ)$/$(IDLPACKAGE)$/%.obj : $(OUTCXX)$/$(IDLPACKAGE)$/%.cxx
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
     @+if exist $@ $(RM) /q $@ >& nul
@@ -237,8 +237,8 @@ $(SLO)$(SMARTPRE)$/$(IDLPACKAGE)$/%.obj : $(OUTCXX)$(SMARTPRE)$/$(IDLPACKAGE)$/%
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
     @+if exist $@ $(RM) /q $@ >& nul
@@ -271,8 +271,8 @@ $(OBJ)$/%.obj : $(MISC)$/%.cxx
 .ELSE
 .IF "$(MDB)" != ""
     @echo $@
-    @echo #$*#
-    @echo #$/#
+    @echo "#$*#"
+    @echo "#$/#"
     @echo $(&:+"\n"))
 .ENDIF
     @+if exist $@ $(RM) /q $@ >& nul
@@ -456,7 +456,7 @@ $(MISC)$/%.dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
     dmake $(MFLAGS) $(CALLMACROS) make_srs_deps=true SRCALLTARGET -u
     +-$(TYPE) $(SRS)$/$(PWD:f).*.dpr >> $@
 .ELSE
-    @+echo # > $@
+    @+echo "#" > $@
 .ENDIF
 .ELSE		# MAKEFILERC == ""
 $/.dpc : 
@@ -474,7 +474,7 @@ $(MISC)$/%.dpz :
     $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
 .ELSE
-    @+echo # > $@
+    @+echo "#" > $@
 .ENDIF
 
 # Dependencies fuer unoidl - Files
@@ -487,7 +487,7 @@ $(MISC)$/%.dp2 : makefile.mk
 .ENDIF   #NOSMARTUNO
 .ELSE
     @+echo not making dp2...
-    @+echo #> $@
+    @+echo "#" > $@
 .ENDIF
 
 $(MISC)$/%.dp1 : makefile.mk
@@ -505,7 +505,7 @@ $(MISC)$/%.dp1 : makefile.mk
 .ENDIF   #NOSMARTUNO
 .ELSE
     @+echo not making dp1...
-    @+echo #> $@
+    @+echo "#" > $@
 .ENDIF
 
 $(MISC)$/%.dp3 : makefile.mk
@@ -514,7 +514,7 @@ $(MISC)$/%.dp3 : makefile.mk
     +$(UNOIDL) @$(mktmp $(UNOIDLDEFS) $(UNOIDLINCEXTRA) $(UNOIDLINC) $(UNOIDLDEPFLAGS) -Bjava -P$(PRJNAME) -OH$(MISC)$/java $(DEPIDLFILES)) > $(MISC)$/$(TARGET).dp3
 .ELSE
     @+echo not making dp3...
-    @+echo #> $@
+    @+echo "#" > $@
 .ENDIF
 
 $(MISC)$/%.dpj : makefile.mk

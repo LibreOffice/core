@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: patrick.luby $ $Date: 2000-09-28 13:58:42 $
-#*    $Revision: 1.4 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-06 15:03:01 $
+#*    $Revision: 1.5 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -49,11 +49,11 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
     @+-$(MKDIRHIER) $(SOLARVERSION)$/$(INPATH)$/inc >& $(NULLDEV)
     @+$(COPY) $(SOLARENV)$/inc$/minor.mk $(SOLARVERSION)$/$(UPD)minor.mk >& $(NULLDEV)
 .ELSE			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
-    @+echo #
-    @+echo #
-    @+echo # ERROR: minor.mk in solenv\inc does not match your version!
-    @+echo #
-    @+echo #
+    @+echo "#"
+    @+echo "#"
+    @+echo "#" ERROR: minor.mk in solenv\inc does not match your version!
+    @+echo "#"
+    @+echo "#"
     force_dmake_to_error
 .ENDIF			# "$(SOURCEVERSION)"=="$(WORK_STAMP)"
 .IF "$(GUI)"=="UNX"
@@ -579,10 +579,10 @@ common_build_sign_jar=true
 
 %world.mk :
     @+_mkout $(OUT)
-    @+echo # > $(OUT)$/inc$/myworld.mk
+    @+echo "#" > $(OUT)$/inc$/myworld.mk
 .IF "$(common_build)"!=""
     @+_mkout $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
-    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
+    @+echo "#" > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : $(OUT)$/inc$/myworld.mk
@@ -595,10 +595,10 @@ common_build_sign_jar=true
 
 %worldremote.mk :
     @+_mkout -r
-    @+echo # > $(OUT)$/inc$/myworldremote.mk
+    @+echo "#" > $(OUT)$/inc$/myworldremote.mk
 .IF "$(common_build)"!=""
     @+_mkout -r $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
-    @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
+    @+echo "#" > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : $(OUT)$/inc$/myworldremote.mk

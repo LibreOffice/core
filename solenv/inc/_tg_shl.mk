@@ -115,18 +115,18 @@ $(SHL1TARGETN) : \
     @echo Making: $(SHL1TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -180,10 +180,10 @@ $(SHL1TARGETN) : \
     @-+echo 1 ICON $(SHL1ICON) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL1TARGET)$(DLLPOST) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL1TARGET:b) >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL1DEFAULTRES:b).rc
 .ENDIF			# "$(SHL1DEFAULTRES)"!=""
@@ -220,7 +220,7 @@ $(SHL1TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL1LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL1STDLIBS) $(STDSHL) $(SHL1RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -317,7 +317,7 @@ $(SHL1TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -343,7 +343,7 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL1OBJS) `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
@@ -515,18 +515,18 @@ $(SHL2TARGETN) : \
     @echo Making: $(SHL2TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -580,10 +580,10 @@ $(SHL2TARGETN) : \
     @-+echo 1 ICON $(SHL2ICON) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL2TARGET)$(DLLPOST) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL2TARGET:b) >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL2DEFAULTRES:b).rc
 .ENDIF			# "$(SHL2DEFAULTRES)"!=""
@@ -620,7 +620,7 @@ $(SHL2TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL2LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL2STDLIBS) $(STDSHL) $(SHL2RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -717,7 +717,7 @@ $(SHL2TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -743,7 +743,7 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL2OBJS) `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
@@ -915,18 +915,18 @@ $(SHL3TARGETN) : \
     @echo Making: $(SHL3TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -980,10 +980,10 @@ $(SHL3TARGETN) : \
     @-+echo 1 ICON $(SHL3ICON) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL3TARGET)$(DLLPOST) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL3TARGET:b) >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL3DEFAULTRES:b).rc
 .ENDIF			# "$(SHL3DEFAULTRES)"!=""
@@ -1020,7 +1020,7 @@ $(SHL3TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL3LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL3STDLIBS) $(STDSHL) $(SHL3RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -1117,7 +1117,7 @@ $(SHL3TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1143,7 +1143,7 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL3OBJS) `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
@@ -1315,18 +1315,18 @@ $(SHL4TARGETN) : \
     @echo Making: $(SHL4TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -1380,10 +1380,10 @@ $(SHL4TARGETN) : \
     @-+echo 1 ICON $(SHL4ICON) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL4TARGET)$(DLLPOST) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL4TARGET:b) >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL4DEFAULTRES:b).rc
 .ENDIF			# "$(SHL4DEFAULTRES)"!=""
@@ -1420,7 +1420,7 @@ $(SHL4TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL4LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL4STDLIBS) $(STDSHL) $(SHL4RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -1517,7 +1517,7 @@ $(SHL4TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1543,7 +1543,7 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL4OBJS) `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
@@ -1715,18 +1715,18 @@ $(SHL5TARGETN) : \
     @echo Making: $(SHL5TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -1780,10 +1780,10 @@ $(SHL5TARGETN) : \
     @-+echo 1 ICON $(SHL5ICON) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL5TARGET)$(DLLPOST) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL5TARGET:b) >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL5DEFAULTRES:b).rc
 .ENDIF			# "$(SHL5DEFAULTRES)"!=""
@@ -1820,7 +1820,7 @@ $(SHL5TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL5LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL5STDLIBS) $(STDSHL) $(SHL5RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -1917,7 +1917,7 @@ $(SHL5TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -1943,7 +1943,7 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL5OBJS) `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
@@ -2115,18 +2115,18 @@ $(SHL6TARGETN) : \
     @echo Making: $(SHL6TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2180,10 +2180,10 @@ $(SHL6TARGETN) : \
     @-+echo 1 ICON $(SHL6ICON) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL6TARGET)$(DLLPOST) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL6TARGET:b) >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL6DEFAULTRES:b).rc
 .ENDIF			# "$(SHL6DEFAULTRES)"!=""
@@ -2220,7 +2220,7 @@ $(SHL6TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL6LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL6STDLIBS) $(STDSHL) $(SHL6RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -2317,7 +2317,7 @@ $(SHL6TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2343,7 +2343,7 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL6OBJS) `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
@@ -2515,18 +2515,18 @@ $(SHL7TARGETN) : \
     @echo Making: $(SHL7TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2580,10 +2580,10 @@ $(SHL7TARGETN) : \
     @-+echo 1 ICON $(SHL7ICON) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL7TARGET)$(DLLPOST) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL7TARGET:b) >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL7DEFAULTRES:b).rc
 .ENDIF			# "$(SHL7DEFAULTRES)"!=""
@@ -2620,7 +2620,7 @@ $(SHL7TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL7LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL7STDLIBS) $(STDSHL) $(SHL7RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -2717,7 +2717,7 @@ $(SHL7TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -2743,7 +2743,7 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL7OBJS) `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
@@ -2915,18 +2915,18 @@ $(SHL8TARGETN) : \
     @echo Making: $(SHL8TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -2980,10 +2980,10 @@ $(SHL8TARGETN) : \
     @-+echo 1 ICON $(SHL8ICON) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL8TARGET)$(DLLPOST) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL8TARGET:b) >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL8DEFAULTRES:b).rc
 .ENDIF			# "$(SHL8DEFAULTRES)"!=""
@@ -3020,7 +3020,7 @@ $(SHL8TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL8LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL8STDLIBS) $(STDSHL) $(SHL8RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -3117,7 +3117,7 @@ $(SHL8TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3143,7 +3143,7 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL8OBJS) `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
@@ -3315,18 +3315,18 @@ $(SHL9TARGETN) : \
     @echo Making: $(SHL9TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -3380,10 +3380,10 @@ $(SHL9TARGETN) : \
     @-+echo 1 ICON $(SHL9ICON) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL9TARGET)$(DLLPOST) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL9TARGET:b) >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL9DEFAULTRES:b).rc
 .ENDIF			# "$(SHL9DEFAULTRES)"!=""
@@ -3420,7 +3420,7 @@ $(SHL9TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL9LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL9STDLIBS) $(STDSHL) $(SHL9RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -3517,7 +3517,7 @@ $(SHL9TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3543,7 +3543,7 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL9OBJS) `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
@@ -3715,18 +3715,18 @@ $(SHL10TARGETN) : \
     @echo Making: $(SHL10TARGETN)
 .IF "$(UPDATER)"=="YES"
 .IF "$(GUI)"=="UNX"
-        @+echo #define _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD \"$(UPD)\"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $(INCCOM)$/_version.h
         @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $(INCCOM)$/_version.h
-        @+echo #define _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $(INCCOM)$/_version.h
 .ELSE
-        @+echo #define _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
-        @+echo #define _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
-        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
-        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
-        @+echo #define _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
-        @+echo #define _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
+        @+echo "#define" _BUILD "$(BUILD)"	> $(INCCOM)$/_version.h
+        @+echo "#define" _UPD "$(UPD)"		>> $(INCCOM)$/_version.h
+        @+echo "#define" _LAST_MINOR '$(LAST_MINOR)'	>> $(INCCOM)$/_version.h
+        @+echo "#define" _DLL_POSTFIX "$(DLL_POSTFIX)">> $(INCCOM)$/_version.h
+        @+echo "#define" _RSCREVISION "$(RSCREVISION)">> $(INCCOM)$/_version.h
+        @+echo "#define" _INPATH "$(INPATH)"	>> $(INCCOM)$/_version.h
 .ENDIF
         @-+$(RM) $(SLO)$/_version.obj 
 .ENDIF
@@ -3780,10 +3780,10 @@ $(SHL10TARGETN) : \
     @-+echo 1 ICON $(SHL10ICON) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF
 .IF "$(use_shl_versions)" != ""
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
-    @-+echo #include "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo "#define" VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo "#define" ORG_NAME	$(SHL10TARGET)$(DLLPOST) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+    @-+echo "#define" INTERNAL_NAME $(SHL10TARGET:b) >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
+     @-+echo "#include"  "shlinfo.rc" >> $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(use_shl_versions)" != ""
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(SHL10DEFAULTRES:b).rc
 .ENDIF			# "$(SHL10DEFAULTRES)"!=""
@@ -3820,7 +3820,7 @@ $(SHL10TARGETN) : \
 .IF "$(COM)"=="GCC"
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
         $(STDOBJ) $(VERSIONOBJ) | tr -d ï\r\nï > $(MISC)$/$(@:b).cmd
-    @+$(TYPE) $(SHL10LIBS) | sed s#$(ROUT)#$(PRJ)$/$/$(ROUT)#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
+    @+$(TYPE) $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d ï\r\nï >> $(MISC)$/$(@:b).cmd
     @+echo  $(SHL10STDLIBS) $(STDSHL) $(SHL10RES) >> $(MISC)$/$(@:b).cmd
     $(MISC)$/$(@:b).cmd
 .ELSE
@@ -3917,7 +3917,7 @@ $(SHL10TARGETN) : \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
     $(VERSIONOBJ) -o $@ \
-    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` \
+    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
@@ -3943,7 +3943,7 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL10TARGETN)"!=""
 

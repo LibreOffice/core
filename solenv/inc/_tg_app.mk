@@ -42,7 +42,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP1OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -50,7 +50,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP1OBJS) `cat /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP1STDLIBS) $(APP1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP1OBJS) `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP1STDLIBS) $(APP1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -62,7 +62,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @-+echo 1 ICON $(APP1ICON) >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
 .IF "$(APP1VERINFO)" != ""
-    @-+echo #include "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
+     @-+echo "#include"  "$(APP1VERINFO)" >> $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
@@ -187,7 +187,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP2OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -195,7 +195,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP2OBJS) `cat /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP2STDLIBS) $(APP2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP2OBJS) `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP2STDLIBS) $(APP2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -207,7 +207,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @-+echo 1 ICON $(APP2ICON) >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
 .IF "$(APP2VERINFO)" != ""
-    @-+echo #include "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
+     @-+echo "#include"  "$(APP2VERINFO)" >> $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
@@ -332,7 +332,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP3OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -340,7 +340,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP3OBJS) `cat /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP3STDLIBS) $(APP3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP3OBJS) `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP3STDLIBS) $(APP3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -352,7 +352,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @-+echo 1 ICON $(APP3ICON) >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
 .IF "$(APP3VERINFO)" != ""
-    @-+echo #include "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
+     @-+echo "#include"  "$(APP3VERINFO)" >> $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
@@ -477,7 +477,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP4OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -485,7 +485,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP4OBJS) `cat /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP4STDLIBS) $(APP4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP4OBJS) `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP4STDLIBS) $(APP4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -497,7 +497,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @-+echo 1 ICON $(APP4ICON) >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
 .IF "$(APP4VERINFO)" != ""
-    @-+echo #include "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
+     @-+echo "#include"  "$(APP4VERINFO)" >> $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
@@ -622,7 +622,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP5OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -630,7 +630,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP5OBJS) `cat /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP5STDLIBS) $(APP5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP5OBJS) `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP5STDLIBS) $(APP5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -642,7 +642,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @-+echo 1 ICON $(APP5ICON) >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
 .IF "$(APP5VERINFO)" != ""
-    @-+echo #include "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
+     @-+echo "#include"  "$(APP5VERINFO)" >> $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
@@ -767,7 +767,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP6OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -775,7 +775,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP6OBJS) `cat /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP6STDLIBS) $(APP6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP6OBJS) `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP6STDLIBS) $(APP6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -787,7 +787,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @-+echo 1 ICON $(APP6ICON) >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
 .IF "$(APP6VERINFO)" != ""
-    @-+echo #include "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
+     @-+echo "#include"  "$(APP6VERINFO)" >> $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
@@ -912,7 +912,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP7OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -920,7 +920,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP7OBJS) `cat /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP7STDLIBS) $(APP7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP7OBJS) `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP7STDLIBS) $(APP7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -932,7 +932,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @-+echo 1 ICON $(APP7ICON) >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
 .IF "$(APP7VERINFO)" != ""
-    @-+echo #include "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
+     @-+echo "#include"  "$(APP7VERINFO)" >> $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
@@ -1057,7 +1057,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP8OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1065,7 +1065,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP8OBJS) `cat /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP8STDLIBS) $(APP8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP8OBJS) `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP8STDLIBS) $(APP8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -1077,7 +1077,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @-+echo 1 ICON $(APP8ICON) >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
 .IF "$(APP8VERINFO)" != ""
-    @-+echo #include "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
+     @-+echo "#include"  "$(APP8VERINFO)" >> $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
@@ -1202,7 +1202,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP9OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1210,7 +1210,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP9OBJS) `cat /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP9STDLIBS) $(APP9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP9OBJS) `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP9STDLIBS) $(APP9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -1222,7 +1222,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @-+echo 1 ICON $(APP9ICON) >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
 .IF "$(APP9VERINFO)" != ""
-    @-+echo #include "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
+     @-+echo "#include"  "$(APP9VERINFO)" >> $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
@@ -1347,7 +1347,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).cmd
     @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     -o $@ $(APP10OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
     $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
@@ -1355,7 +1355,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
-    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP10OBJS) `cat /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g` $(VERSIONOBJ)) $(APP10STDLIBS) $(APP10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
+    $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(APP10OBJS) `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(VERSIONOBJ)) $(APP10STDLIBS) $(APP10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF                  # "$(GUI)"=="MAC"
 
 .IF "$(GUI)" == "WNT"
@@ -1367,7 +1367,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @-+echo 1 ICON $(APP10ICON) >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
 .IF "$(APP10VERINFO)" != ""
-    @-+echo #include "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
+     @-+echo "#include"  "$(APP10VERINFO)" >> $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF
     $(RC) -DWIN32 $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
