@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2001-08-30 23:33:16 $
+ *  last change: $Author: bustamam $ $Date: 2001-09-16 15:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
