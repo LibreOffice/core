@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
             throw SQLException(aPath,*this,::rtl::OUString(),1000,Any());
     }
     OAdabasConnection* pCon = new OAdabasConnection(m_pDriverHandle,this);
+    Reference< XConnection > xCon = pCon;
     SQLRETURN nSQLRETURN = pCon->Construct(url,info);
 
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)
@@ -230,7 +231,7 @@ Reference< XConnection > SAL_CALL ODriver::connect( const ::rtl::OUString& url, 
     else if(SQL_SUCCESS_WITH_INFO == nSQLRETURN) // this driver does not support odbc3
     {
     }
-    Reference< XConnection > xCon = pCon;
+
     m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     return xCon;

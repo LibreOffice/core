@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:51:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ void OTools::ThrowException(OConnection* _pConnection,
 
 
         case SQL_INVALID_HANDLE:    OSL_ENSURE(0,"SdbODBC3_SetStatus: SQL_INVALID_HANDLE");
-                                    throw RuntimeException();
+                                    throw SQLException();
                                     break;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 04:56:10 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,9 +102,15 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
     if(!m_pConnection->isCatalogUsed())
     {
         osl_incrementInterlockedCount( &m_refCount );
-        m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
-        ::rtl::OUString sVersion = getDriverVersion();
-        m_bOdbc3        =  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
+        try
+        {
+            m_bUseCatalog   = !(usesLocalFiles() || usesLocalFilePerTable());
+            ::rtl::OUString sVersion = getDriverVersion();
+            m_bOdbc3        =  sVersion != ::rtl::OUString::createFromAscii("02.50") && sVersion != ::rtl::OUString::createFromAscii("02.00");
+        }
+        catch(SQLException& )
+        { // doesn't matter here
+        }
         osl_decrementInterlockedCount( &m_refCount );
     }
 }
@@ -141,6 +147,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
+
     ::rtl::OUString aVal;
     if(m_bUseCatalog)
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
@@ -648,19 +655,9 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
     Reference< XResultSet > xRef = pResult;
     pResult->setTableTypes();
-    sal_Bool bViewsSupported = sal_False;
-    if(m_bOdbc3)
-    {
-        try
-        {
-            SQLUINTEGER nValue = 0;
-            OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
-            bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
-        }
-        catch(SQLException&)
-        {
-        }
-    }
+    SQLUINTEGER nValue = 0;
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CREATE_VIEW,nValue,*this);
+    sal_Bool bViewsSupported = (nValue & SQL_CV_CREATE_VIEW) == SQL_CV_CREATE_VIEW;
 
     ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)

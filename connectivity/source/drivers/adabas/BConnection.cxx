@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:20:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,6 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    osl_incrementInterlockedCount( &m_refCount );
-
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     m_aURL  = url;
     m_aInfo = info;
@@ -167,7 +165,6 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
 
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, aUID,aPWD);
 
-    osl_decrementInterlockedCount( &m_refCount );
     return nSQLRETURN;
 }
 //-----------------------------------------------------------------------------
@@ -212,7 +209,6 @@ SQLRETURN OAdabasConnection::OpenConnection(const ::rtl::OUString& aConnectStr,s
 
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_AUTOCOMMIT,(SQLPOINTER)SQL_AUTOCOMMIT_ON,SQL_IS_INTEGER);
 #endif
-    buildTypeInfo();
 
     return nSQLRETURN;
 }

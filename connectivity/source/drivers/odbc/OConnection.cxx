@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 07:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,44 +525,48 @@ void OConnection::buildTypeInfo() throw( SQLException)
     ::osl::MutexGuard aGuard( m_aMutex );
 
     Reference< XResultSet> xRs = getMetaData ()->getTypeInfo ();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-
-    // Loop on the result set until we reach end of file
-
-    while (xRs->next ())
+    if(xRs.is())
     {
-        OTypeInfo aInfo;
-        aInfo.aTypeName         = xRow->getString   (1);
-        aInfo.nType             = xRow->getShort    (2);
-        aInfo.nPrecision        = xRow->getInt      (3);
-        aInfo.aLiteralPrefix    = xRow->getString   (4);
-        aInfo.aLiteralSuffix    = xRow->getString   (5);
-        aInfo.aCreateParams     = xRow->getString   (6);
-        aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
-        aInfo.bCaseSensitive    = xRow->getBoolean  (8);
-        aInfo.nSearchType       = xRow->getShort    (9);
-        aInfo.bUnsigned         = xRow->getBoolean  (10);
-        aInfo.bCurrency         = xRow->getBoolean  (11);
-        aInfo.bAutoIncrement    = xRow->getBoolean  (12);
-        aInfo.aLocalTypeName    = xRow->getString   (13);
-        aInfo.nMinimumScale     = xRow->getShort    (14);
-        aInfo.nMaximumScale     = xRow->getShort    (15);
-        aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
+        Reference< XRow> xRow(xRs,UNO_QUERY);
+        // Information for a single SQL type
+
+        // Loop on the result set until we reach end of file
+
+        while (xRs->next ())
+        {
+            OTypeInfo aInfo;
+            aInfo.aTypeName         = xRow->getString   (1);
+            aInfo.nType             = xRow->getShort    (2);
+            aInfo.nPrecision        = xRow->getInt      (3);
+            aInfo.aLiteralPrefix    = xRow->getString   (4);
+            aInfo.aLiteralSuffix    = xRow->getString   (5);
+            aInfo.aCreateParams     = xRow->getString   (6);
+            aInfo.bNullable         = xRow->getBoolean  (7) == ColumnValue::NULLABLE;
+            aInfo.bCaseSensitive    = xRow->getBoolean  (8);
+            aInfo.nSearchType       = xRow->getShort    (9);
+            aInfo.bUnsigned         = xRow->getBoolean  (10);
+            aInfo.bCurrency         = xRow->getBoolean  (11);
+            aInfo.bAutoIncrement    = xRow->getBoolean  (12);
+            aInfo.aLocalTypeName    = xRow->getString   (13);
+            aInfo.nMinimumScale     = xRow->getShort    (14);
+            aInfo.nMaximumScale     = xRow->getShort    (15);
+            aInfo.nNumPrecRadix     = (sal_Int16)xRow->getInt(18);
 
 
 
-        // Now that we have the type info, save it
-        // in the Hashtable if we don't already have an
-        // entry for this SQL type.
+            // Now that we have the type info, save it
+            // in the Hashtable if we don't already have an
+            // entry for this SQL type.
 
-        m_aTypeInfo.push_back(aInfo);
+            m_aTypeInfo.push_back(aInfo);
+        }
+
+        // Close the result set/statement.
+
+        Reference< XCloseable> xClose(xRs,UNO_QUERY);
+        if(xClose.is())
+            xClose->close();
     }
-
-    // Close the result set/statement.
-
-    Reference< XCloseable> xClose(xRs,UNO_QUERY);
-    xClose->close();
 }
 //------------------------------------------------------------------------------
 void OConnection::disposing()
@@ -601,19 +605,24 @@ SQLHANDLE OConnection::createStatementHandle()
 {
     OConnection* pConnectionTemp = this;
     sal_Bool bNew = sal_False;
-    sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
-    if(nMaxStatements && nMaxStatements <= m_nStatementCount)
+    try
     {
-        OConnection* pConnection = cloneConnection();
-        pConnection->acquire();
-        pConnection->Construct(m_aURL,m_aInfo);
-        pConnectionTemp = pConnection;
-        bNew = sal_True;
+        sal_Int32 nMaxStatements = getMetaData()->getMaxStatements();
+        if(nMaxStatements && nMaxStatements <= m_nStatementCount)
+        {
+            OConnection* pConnection = cloneConnection();
+            pConnection->acquire();
+            pConnection->Construct(m_aURL,m_aInfo);
+            pConnectionTemp = pConnection;
+            bNew = sal_True;
+        }
+    }
+    catch(SQLException&)
+    {
     }
 
     SQLHANDLE aStatementHandle = SQL_NULL_HANDLE;
     SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
-    OTools::ThrowException(pConnectionTemp,nRetcode,pConnectionTemp->getConnection(),SQL_HANDLE_DBC,*this);
     ++m_nStatementCount;
     if(bNew)
         m_aConnections.insert(::std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
