@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-02 09:37:39 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 15:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,11 +439,13 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         if ( bValidPage )
         {
+            Color aBorderColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+
             //  draw border
 
             if ( aOffset.X() <= 0 || aOffset.Y() <= 0 || bRight || bBottom )
             {
-                SetLineColor( COL_BLACK );      //! from settings
+                SetLineColor( aBorderColor );
                 SetFillColor();
 
                 Rectangle aPixel( LogicToPixel( Rectangle( -aOffset.X(), -aOffset.Y(), nPageEndX, nPageEndY ) ) );
@@ -455,7 +457,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             //  draw shadow
 
             SetLineColor();
-            SetFillColor( COL_BLACK );          //! from settings
+            SetFillColor( aBorderColor );
 
             Rectangle aPixel;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 17:06:21 $
+ *  last change: $Author: nn $ $Date: 2002-05-08 15:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,7 @@ void ScPreviewShell::Construct( Window* pParent )
 {
     eZoom = SVX_ZOOM_WHOLEPAGE;
 
-    pCorner = new Window(pParent, WinBits( WB_BORDER ));
-    pCorner->SetBackground( Color( COL_LIGHTGRAY ) );
+    pCorner = new ScrollBarBox( pParent, WB_SIZEABLE );
 
     pHorScroll = new ScrollBar(pParent, WB_HSCROLL );
     pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
