@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleSpreadsheet.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-04-28 12:25:49 $
+ *  last change:$Date: 2003-05-27 13:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sc;
 
 import lib.Status;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestCase;
 import lib.TestParameters;
 import java.io.PrintWriter;
@@ -114,7 +115,7 @@ public class ScAccessibleSpreadsheet extends TestCase {
      * Creates a spreadsheet document.
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
         try {
             log.println( "creating a Spreadsheet document" );
             xSheetDoc = SOF.createCalcDoc(null);
@@ -151,7 +152,7 @@ public class ScAccessibleSpreadsheet extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), xModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), xModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.TABLE  );
