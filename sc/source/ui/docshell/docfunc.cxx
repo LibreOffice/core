@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 19:23:38 $
+ *  last change: $Author: er $ $Date: 2001-09-05 09:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,14 +893,7 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, EditEngine& rEngine, BOOL bInter
 ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText )
 {
     ScTokenArray* pCode = new ScTokenArray;
-    xub_StrLen nPos = 0;
-    while ( nPos < rText.Len() )
-    {
-        xub_StrLen nChars = Min( rText.Len() - nPos, MAXSTRLEN-1 );
-        String aTmpStr( rText.Copy( nPos, nChars ) );
-        pCode->AddString( aTmpStr.GetBuffer() );
-        nPos += nChars;
-    }
+    pCode->AddString( rText );
     return pCode;
 }
 
