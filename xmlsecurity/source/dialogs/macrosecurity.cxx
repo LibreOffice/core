@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-22 06:28:36 $
+ *  last change: $Author: gt $ $Date: 2004-07-22 07:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@ MacroSecurity::MacroSecurity( Window* _pParent, cssu::Reference< lang::XMultiSer
 
 MacroSecurity::~MacroSecurity()
 {
+    delete maTabCtrl.GetTabPage( RID_XMLSECTP_TRUSTSOURCES );
+    delete maTabCtrl.GetTabPage( RID_XMLSECTP_SECLEVEL );
 }
 
 
@@ -164,10 +166,10 @@ RadioButton* MacroSecurityLevelTP::GetRadioButton( USHORT _nLevel )
     RadioButton*    pRet;
     switch( _nLevel )
     {
-        case 0:     pRet = &maVeryHighRB;       break;
-        case 1:     pRet = &maHighRB;           break;
-        case 2:     pRet = &maMediumRB;         break;
-        case 3:     pRet = &maLowRB;            break;
+        case 3:     pRet = &maVeryHighRB;       break;
+        case 2:     pRet = &maHighRB;           break;
+        case 1:     pRet = &maMediumRB;         break;
+        case 0:     pRet = &maLowRB;            break;
         default:    pRet = NULL;
     }
 
