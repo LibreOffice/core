@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-19 15:22:38 $
+ *  last change: $Author: sj $ $Date: 2001-02-13 16:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,29 +728,30 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 {
                     if ( bOutliner == FALSE )
                     {
-                        if ( ImplGetText() )
+                        bOutliner = TRUE;
+                        mnTextStyle = EPP_TEXTSTYLE_BODY;
+                        sal_uInt32 nTextType = ( bSecOutl ) ? EPP_TEXTTYPE_HalfBody : EPP_TEXTTYPE_Body;
+                        TextRuleEntry* pRule = new TextRuleEntry( i );
+                        SvMemoryStream aExtBu( 0x200, 0x200 );
+                        if ( !mbEmptyPresObj )
+                            ImplGetText();
+                        ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
+                        ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
+                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
+                        if ( rLayout.bSecOutlinerPossible )
                         {
-                            bOutliner = TRUE;
-                            mnTextStyle = EPP_TEXTSTYLE_BODY;
-                            sal_uInt32 nTextType = ( bSecOutl ) ? EPP_TEXTTYPE_HalfBody : EPP_TEXTTYPE_Body;
-                            TextRuleEntry* pRule = new TextRuleEntry( i );
-                            SvMemoryStream aExtBu( 0x200, 0x200 );
-                            ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
-                            ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                            maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
-                            if ( rLayout.bSecOutlinerPossible )
+                            if ( ( nIndex + 1 ) < nShapes )
                             {
-                                if ( ( nIndex + 1 ) < nShapes )
+                                if ( ImplGetShapeByIndex( nIndex + 1 ) && mType == "presentation.Outliner" )
                                 {
-                                    if ( ImplGetShapeByIndex( nIndex + 1 ) && mType == "presentation.Outliner" && ImplGetText() )
-                                    {
-                                        bSecOutl = TRUE;
-                                        TextRuleEntry* pRule = new TextRuleEntry( i );
-                                        SvMemoryStream aExtBu( 0x200, 0x200 );
-                                        ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
-                                        ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
-                                    }
+                                    bSecOutl = TRUE;
+                                    TextRuleEntry* pRule = new TextRuleEntry( i );
+                                    SvMemoryStream aExtBu( 0x200, 0x200 );
+                                    if ( !mbEmptyPresObj )
+                                        ImplGetText();
+                                    ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
+                                    ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
+                                    maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                                 }
                             }
                         }
@@ -760,16 +761,15 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 {
                     if ( bTitle == FALSE )
                     {
-                        if ( ImplGetText() )
-                        {
-                            bTitle = TRUE;
-                            mnTextStyle = EPP_TEXTSTYLE_TITLE;
-                            TextRuleEntry* pRule = new TextRuleEntry( i );
-                            SvMemoryStream aExtBu( 0x200, 0x200 );
-                            ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu );
-                            ImplWriteExtParaHeader( aExtBu, nPObjects++, EPP_TEXTTYPE_Title, i + 0x100 );
-                            maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
-                        }
+                        bTitle = TRUE;
+                        mnTextStyle = EPP_TEXTSTYLE_TITLE;
+                        TextRuleEntry* pRule = new TextRuleEntry( i );
+                        SvMemoryStream aExtBu( 0x200, 0x200 );
+                        if ( !mbEmptyPresObj )
+                            ImplGetText();
+                        ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu );
+                        ImplWriteExtParaHeader( aExtBu, nPObjects++, EPP_TEXTTYPE_Title, i + 0x100 );
+                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                     }
                 }
                 else
