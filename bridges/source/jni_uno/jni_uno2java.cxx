@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:23 $
+ *  last change: $Author: dbo $ $Date: 2002-11-22 11:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ void jni_Bridge::call_java(
         typelib_MethodParameter const & param = params[ nPos ];
         try
         {
+            java_args[ nPos ].l = 0; // build up array[ 1 ]
             map_to_java(
                 attach, &java_args[ nPos ],
                 uno_args[ nPos ],

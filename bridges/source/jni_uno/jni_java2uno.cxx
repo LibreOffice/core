@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:22 $
+ *  last change: $Author: dbo $ $Date: 2002-11-22 11:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,9 @@ void jni_Bridge::handle_uno_exc( JNI_attach const & attach, uno_Any * uno_exc ) 
         jvalue java_exc;
         try
         {
-            map_to_java( attach, &java_exc, uno_exc->pData, uno_exc->pType, 0, true, false );
+            map_to_java(
+                attach, &java_exc, uno_exc->pData, uno_exc->pType, 0,
+                true /* in */, false /* no out */ );
         }
         catch (...)
         {
@@ -257,12 +259,15 @@ jobject jni_Bridge::call_uno(
             {
                 try
                 {
-                    jvalue java_arg;
-                    map_to_java(
-                        attach, &java_arg, uno_args[ nPos ], param.pTypeRef, 0, true, true );
-                    JLocalAutoRef jo_arg( attach, java_arg.l );
-                    attach->SetObjectArrayElement( jo_args, nPos, jo_arg.get() );
+                    // get out holder array[ 1 ]
+                    JLocalAutoRef jo_out_holder(
+                        attach, attach->GetObjectArrayElement( jo_args, nPos ) );
                     attach.ensure_no_exception();
+                    jvalue java_arg;
+                    java_arg.l = jo_out_holder.get();
+                    map_to_java(
+                        attach, &java_arg, uno_args[ nPos ], param.pTypeRef, 0,
+                        true /* in */, true /* out holder */ );
                 }
                 catch (...)
                 {
@@ -290,7 +295,8 @@ jobject jni_Bridge::call_uno(
             {
                 jvalue java_ret;
                 map_to_java(
-                    attach, &java_ret, uno_ret, return_type, 0, true, false,
+                    attach, &java_ret, uno_ret, return_type, 0,
+                    true /* in */, false /* no out */,
                     true /* special_wrapped_integral_types */ );
                 return java_ret.l;
             }
