@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 07:02:09 $
+ *  last change: $Author: af $ $Date: 2002-07-16 12:39:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,9 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( 235, 25 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "WWW-Browser" ;
+        Text [ ENGLISH ] = "WWW-Browser" ;
+
         QuickHelpText = "WWW-Browser" ;
         QuickHelpText [ ENGLISH ] = "WWW-Browser" ;
         QuickHelpText [ english_us ] = "WWW Browser" ;
@@ -381,6 +384,9 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( 235, 40 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Sprungziel im Dokument" ;
+        Text [ ENGLISH ] = "Link target in document" ;
+
         QuickHelpText = "Sprungziel im Dokument" ;
         QuickHelpText [ ENGLISH ] = "Link target in document" ;
         QuickHelpText [ english_us ] = "Target in Document" ;
@@ -700,6 +706,9 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( 235, 104 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Ereignisse" ;
+        Text [ ENGLISH ] = "Events" ;
+
         QuickHelpText = "Ereignisse" ;
         QuickHelpText [ ENGLISH ] = "Events" ;
         QuickHelpText [ english_us ] = "Events" ;
@@ -927,6 +936,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
             MaskColor = STD_MASKCOLOR ;
         };
 
+        Text = "Datenquellen..." ;
+        Text [ english ] = "Data sources..." ;
         QuickHelpText = "Datenquellen..." ;
         QuickHelpText [ english ] = "Data sources..." ;
         QuickHelpText [ english_us ] = "Data Sources..." ;
@@ -1242,6 +1253,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Pos = MAP_APPFONT ( 235, 104 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Ereignisse" ;
+        Text [ ENGLISH ] = "Events" ;
         QuickHelpText = "Ereignisse" ;
         QuickHelpText [ ENGLISH ] = "Events" ;
         QuickHelpText [ english_us ] = "Events" ;
@@ -1374,6 +1387,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 14 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Datei öffnen" ;
+        Text [ ENGLISH ] = "Open file" ;
         QuickHelpText = "Datei öffnen" ;
         QuickHelpText [ ENGLISH ] = "Open file" ;
         QuickHelpText [ english_us ] = "Open File" ;
@@ -1530,6 +1545,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 51 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Sprungziel im Dokument" ;
+        Text [ ENGLISH ] = "Link target in document" ;
         QuickHelpText = "Sprungziel im Dokument" ;
         QuickHelpText [ ENGLISH ] = "Link target in document" ;
         QuickHelpText [ english_us ] = "Target in Document" ;
@@ -1850,6 +1867,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 104 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Ereignisse" ;
+        Text [ ENGLISH ] = "Events" ;
         QuickHelpText = "Ereignisse" ;
         QuickHelpText [ ENGLISH ] = "Events" ;
         QuickHelpText [ english_us ] = "Events" ;
@@ -2078,6 +2097,9 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Pos = MAP_APPFONT ( 235, 25 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Pfad auswählen" ;
+        Text [ ENGLISH ] = "Choose path" ;
+
         QuickHelpText = "Pfad auswählen" ;
         QuickHelpText [ ENGLISH ] = "Choose path" ;
         QuickHelpText [ english_us ] = "Select Path" ;
@@ -2398,6 +2420,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Pos = MAP_APPFONT ( 235, 104 ) ;
         Size = MAP_APPFONT( 13, 13 );
         TabStop = TRUE ;
+        Text = "Ereignisse" ;
+        Text [ ENGLISH ] = "Events" ;
         QuickHelpText = "Ereignisse" ;
         QuickHelpText [ ENGLISH ] = "Events" ;
         QuickHelpText [ english_us ] = "Events" ;
