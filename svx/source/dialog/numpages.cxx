@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 06:43:05 $
+ *  last change: $Author: os $ $Date: 2002-10-16 09:16:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _VALUESET_HXX //autogen
 #include <svtools/valueset.hxx>
+#endif
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
 #endif
 #ifndef _SVX_HELPID_HRC
 #include <helpid.hrc>
@@ -1769,7 +1772,7 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     //get advanced numbering types from the component
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     Reference<XNumberingTypeInfo> xInfo(xDefNum, UNO_QUERY);
-    if(xInfo.is())
+    if(xInfo.is() && SvtCJKOptions().IsCJKFontEnabled())
     {
         Sequence<sal_Int16> aTypes = xInfo->getSupportedNumberingTypes(  );
         const sal_Int16* pTypes = aTypes.getConstArray();
