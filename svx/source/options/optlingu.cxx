@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 11:46:20 $
+ *  last change: $Author: tl $ $Date: 2001-02-02 15:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2124,12 +2124,18 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
         // store language config
         LangSelectHdl_Impl(&aLanguageLB);
 
+        Sequence< OUString > aActiveDics;
+        INT32 nActiveDics = 0;
+
         // activate dictionaries according to checkbox state
         ULONG nEntries = aDicsCLB.GetEntryCount();
         for (ULONG i = 0;  i < nEntries;  ++i)
         {
             INT32 nDics = aDics.getLength();
             const Reference< XDictionary > *pDic = aDics.getConstArray();
+
+            aActiveDics.realloc( nDics );
+            OUString *pActiveDic = aActiveDics.getArray();
 
             SvLBoxEntry *pEntry = aDicsCLB.GetEntry( i );
             if (pEntry)
@@ -2143,14 +2149,24 @@ IMPL_LINK( SvxEditModulesDlg, ClickHdl_Impl, PushButton *, pBtn )
                     {
                         if (SvxGetIgnoreAllList() == xDic)
                             bChecked = TRUE;
-#ifndef PRODUCT
-                        String aDicName( xDic->getName() );
-#endif
                         xDic->setActive( bChecked );
+
+                        if (bChecked)
+                        {
+                            String aDicName( xDic->getName() );
+                            pActiveDic[ nActiveDics++ ] = aDicName;
+                        }
                     }
                 }
             }
         }
+
+        aActiveDics.realloc( nActiveDics );
+        Any aTmp;
+        aTmp <<= aActiveDics;
+        SvtLinguConfig aLngCfg;
+        aLngCfg.SetProperty( UPH_ACTIVE_DICTIONARIES, aTmp );
+
         EndDialog( RET_OK );
     }
     else if (&aNewPB == pBtn)
