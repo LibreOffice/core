@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XNamedNodeMap.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:05:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2003
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2003 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2003 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_xml_dom_XNamedNodeMap_idl__
+#define __com_sun_star_xml_dom_XNamedNodeMap_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_xml_dom_DOMException_idl__
+#include <com/sun/star/xml/dom/DOMException.idl>
+#endif
+
+module com { module sun { module star { module xml { module dom {
+
+interface XNode;
+
+interface XNamedNodeMap : com::sun::star::uno::XInterface
+{
+
+    /**
+    The number of nodes in this map.
+    */
+    long getLength();
+
+    /**
+    Retrieves a node specified by local name
+    */
+    XNode getNamedItem([in] string name);
+
+    /**
+    Retrieves a node specified by local name and namespace URI.
+    */
+    XNode getNamedItemNS([in] string namespaceURI,[in]  string localName);
+
+    /**
+    Returns the indexth item in the map.
+    */
+    XNode item([in] long index);
+
+    /**
+    Removes a node specified by name.
+    Throws:
+    DOMException - NOT_FOUND_ERR: Raised if there is no node named name in this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    */
+    XNode removeNamedItem([in] string name) raises (DOMException);
+
+    /**
+    Removes a node specified by local name and namespace URI.
+    Throws:
+    DOMException - NOT_FOUND_ERR: Raised if there is no node with the specified namespaceURI and localName in this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    */
+    XNode removeNamedItemNS([in] string namespaceURI, [in] string localName) raises (DOMException);
+
+    /**
+    Adds a node using its nodeName attribute.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if arg was created from a different document than the one that created this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if arg is an Attr that is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    HIERARCHY_REQUEST_ERR: Raised if an attempt is made to add a node doesn't belong in this NamedNodeMap. Examples would include trying to insert something other than an Attr node into an Element's map of attributes, or a non-Entity node into the DocumentType's map of Entities.
+    */
+    XNode setNamedItem([in] XNode arg) raises (DOMException);
+
+    /**
+    Adds a node using its namespaceURI and localName.
+    Throws:
+    DOMException - WRONG_DOCUMENT_ERR: Raised if arg was created from a different document than the one that created this map.
+    NO_MODIFICATION_ALLOWED_ERR: Raised if this map is readonly.
+    INUSE_ATTRIBUTE_ERR: Raised if arg is an Attr that is already an attribute of another Element object. The DOM user must explicitly clone Attr nodes to re-use them in other elements.
+    HIERARCHY_REQUEST_ERR: Raised if an attempt is made to add a node doesn't belong in this NamedNodeMap. Examples would include trying to insert something other than an Attr node into an Element's map of attributes, or a non-Entity node into the DocumentType's map of Entities.
+    NOT_SUPPORTED_ERR: Always thrown if the current document does not support the "XML" feature, since namespaces were defined by XML.
+    */
+    XNode setNamedItemNS([in] XNode arg) raises (DOMException);
+};
+}; }; }; }; };
+
+#endif
