@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfoAttribute.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:44:52 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 08:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,12 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** These are the possible values for the member Attributes of the struct
-    <type>ContentInfo</type>.
+/** These are the possible values for <member>ContentInfo::Attributes</member>.
 */
 constants ContentInfoAttribute
 {
     //-------------------------------------------------------------------------
-    /** No special attributes.
+    /** No extra attributes.
     */
     const short NONE = 0;
 
@@ -83,6 +82,23 @@ constants ContentInfoAttribute
     */
     const short INSERT_WITH_INPUTSTREAM = 1;
 
+    //-------------------------------------------------------------------------
+    /** The new content is of kind document. It's value for the property
+        "IsDocument" will be true.
+    */
+    const short KIND_DOCUMENT = 2;
+
+    //-------------------------------------------------------------------------
+    /** The new content is of kind folder. It's value for the property
+        "IsFolder" will be true.
+    */
+    const short KIND_FOLDER = 4;
+
+    //-------------------------------------------------------------------------
+    /** The new content is of kind link. It will support the property
+        "TargetURL" ( which identifies it as a link ).
+    */
+    const short KIND_LINK = 8;
 };
 
 //=============================================================================
