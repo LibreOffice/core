@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2002-08-02 12:04:48 $
+ *  last change: $Author: aw $ $Date: 2002-10-08 15:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,19 @@ void SdDrawViewShell::WriteFrameViewData()
 
 void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 {
+    // #103834# Fill var FillColor here to have it available on later call
+    svx::ColorConfig aColorConfig;
+    Color aFillColor;
+
+    if(DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType())
+    {
+        aFillColor = Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor );
+    }
+    else
+    {
+        aFillColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+    }
+
     if( pWin )
     {
         if( !pFuSlideShow || pWin != (SdWindow*) pFuSlideShow->GetShowWindow() )
@@ -564,8 +577,6 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             const Color         aOldLineColor( pWin->GetLineColor() );
             const Color         aOldFillColor( pWin->GetFillColor() );
             const ULONG         nOldDrawMode( pWin->GetDrawMode() );
-            svx::ColorConfig    aColorConfig;
-            Color               aFillColor;
             const BOOL          bOldMap = pWin->IsMapModeEnabled();
             Point               aNullPoint;
             const Rectangle     aOutputRect( aNullPoint, pWin->GetOutputSizePixel() );
@@ -577,11 +588,6 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
                 aPaperRect = Rectangle( aNullPoint, pActualPage->GetSize() );
 
             ( aOutputPaperRect = aPaperRect = pWin->LogicToPixel( aPaperRect ) ).Intersection( aOutputRect );
-
-            if( DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType() )
-                aFillColor = Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor );
-            else
-                aFillColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
 
             pWin->EnableMapMode( FALSE );
             pWin->SetDrawMode( DRAWMODE_DEFAULT );
@@ -626,6 +632,9 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     pDoc->GetDrawOutliner( NULL ).SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
+
+    // #103834# Set Application Background color for usage in SdrPaintView(s)
+    pDrView->SetApplicationBackgroundColor(aFillColor);
 
     pDrView->InitRedraw( pWin, Region( rRect ) );
 
