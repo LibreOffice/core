@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-22 14:11:08 $
+ *  last change: $Author: dv $ $Date: 2001-07-06 09:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #ifndef _SVTOOLS_INETOPTIONS_HXX_
 #include <inetoptions.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+#ifndef _WILDCARD_HXX
+#include <tools/wldcrd.hxx>
 #endif
 
 #include <algorithm>
@@ -737,6 +744,53 @@ void SvtInetOptions::SetProxySocksPort(sal_Int32 nValue, bool bFlush)
     m_pImpl->setProperty(Impl::INDEX_SOCKS_PROXY_PORT,
                          star::uno::makeAny(nValue),
                          bFlush);
+}
+
+//============================================================================
+sal_Bool SvtInetOptions::ShouldUseFtpProxy(const rtl::OUString &rUrl) const
+{
+    // Check URL.
+    INetURLObject aURL(rUrl);
+    if ( !(aURL.GetProtocol() == INET_PROT_FTP))
+        return sal_False;
+
+    rtl::OUString aFtpProxy = GetProxyFtpName();
+
+    if ( ! aFtpProxy.getLength() )
+        return sal_False;
+
+    rtl::OUString aNoProxyList = GetProxyNoProxy();
+
+    if ( aNoProxyList.getLength() )
+    {
+        // Setup Endpoint.
+        rtl::OUString aEndpoint( aURL.GetHost() );
+
+        if ( !aEndpoint.getLength() )
+            return sal_False;
+
+        aEndpoint += rtl::OUString( ':' );
+
+        if ( aURL.HasPort() )
+            aEndpoint += rtl::OUString::valueOf( (sal_Int64) aURL.GetPort() );
+        else
+            aEndpoint += rtl::OUString::createFromAscii( "21" );
+
+        // Match NoProxyList.
+        sal_Int32 nIndex = 0;
+        do {
+            rtl::OUString aWildToken = aNoProxyList.getToken( 0, ';', nIndex );
+            if ( aWildToken.indexOf( ':', 0 ) == -1 )
+                aWildToken += rtl::OUString::createFromAscii( ":*" );
+
+            WildCard aWildCard( aWildToken );
+            if ( aWildCard.Matches( aEndpoint ) )
+                return sal_False;
+        }
+        while ( nIndex != -1 );
+    }
+
+    return sal_True;
 }
 
 //============================================================================
