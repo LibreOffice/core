@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StreamSimulator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 16:27:32 $
+ *  last change: $Date: 2003-05-27 12:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ import com.sun.star.uno.UnoRuntime;
 
 
 import com.sun.star.lang.DisposedException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.Exception;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -135,7 +136,7 @@ public class StreamSimulator implements com.sun.star.io.XInputStream    ,
         {
             XSimpleFileAccess xHelper = (XSimpleFileAccess)
                 UnoRuntime.queryInterface(XSimpleFileAccess.class,
-                    param.getMSF().createInstance("com.sun.star.ucb.SimpleFileAccess"));
+                    ((XMultiServiceFactory)param.getMSF()).createInstance("com.sun.star.ucb.SimpleFileAccess"));
 /*            com.sun.star.ucb.XSimpleFileAccess xHelper = (com.sun.star.ucb.XSimpleFileAccess)OfficeConnect.createRemoteInstance(
                 com.sun.star.ucb.XSimpleFileAccess.class,
                 "com.sun.star.ucb.SimpleFileAccess");*/
