@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:52:07 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@
     Text[ japanese ] = "Êß½Ü°ÄŞ‚ğg—p"; \
     Text[ korean ] = "With password";   \
     Text[ chinese_simplified ] = "Ê¹ÓÃÃÜÂë";    \
-    Text[ chinese_traditional ] = "ªş¥[±K½X";   \
+    Text[ chinese_traditional ] = "±Ä¥Î±K½X";   \
     Text[ turkish ] = "With password";  \
     Text[ arabic ] = "With password";   \
     Text[ catalan ] = "With password";
@@ -825,7 +825,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
     Message[ russian ] = "Ïàğîëü íå óñòàíîâëåí.";
     Message[ polish ] = "Brak has³a.";
     Message[ japanese ] = "Êß½Ü°ÄŞ‚Íİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Message[ chinese_traditional ] = "ÁÙ¥¼³]©w±K½X¡C";
+    Message[ chinese_traditional ] = "ÁÙ¥¼³]©w¤@­Ó±K½X¡C";
     Message[ arabic ] = "áã íÊã ÅÏÎÇá ßáãÉ ÇáÓÑ.";
     Message[ greek ] = "Äåí êáèïñßóôçêå êùäéêüò ğñüóâáóçò.";
     Message[ korean ] = "ÆĞ½º¿öµå°¡ ÁöÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
@@ -1823,4 +1823,5 @@ TabPage TP_SECTION_FTNENDNOTES
         MaxTextLength = 50 ;
     };
 };
+
 
