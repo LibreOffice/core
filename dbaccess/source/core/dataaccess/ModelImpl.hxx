@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:32:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,10 @@ public:
 
 
     void lateInit();
+
+    /** determines whether the database document has an embedded data storage
+    */
+    inline bool isEmbeddedDatabase() const { return ( m_sConnectURL.compareToAscii( "sdbc:embedded:", 14 ) == 0 ); }
 
     /** stores the embedded storage ("database")
         @return <TRUE/> if the storage could be commited, otherwise <FALSE/>
