@@ -99,7 +99,7 @@ Function TwipTo100telMM(BYVAL nValue as long) as long
 End function
 
 
-Function TwipToPixel(BYVAL nValue as long) as long &apos; nur ungefaehre Berechnung
+Function TwipToPixel(BYVAL nValue as long) as long &apos; not an exact calculation
 	TwipToPixel = nValue / 15
 End function
 
@@ -108,7 +108,7 @@ Function PixelTo100thMMX(oControl as Object) as long
 	oPeer = oControl.GetPeer()
 	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterX/100000)
 
-&apos;	 PixelTo100thMM = nValue * 28					&apos; nur ungefähre Berechnung 
+&apos;	 PixelTo100thMM = nValue * 28					&apos; not an exact calculation
 End function
 
 
@@ -116,7 +116,7 @@ Function PixelTo100thMMY(oControl as Object) as long
 	oPeer = oControl.GetPeer()
 	PixelTo100mmX = Clng(Peer.GetInfo.PixelPerMeterY/100000)
 
-&apos;	 PixelTo100thMM = nValue * 28					&apos; nur ungefähre Berechnung 
+&apos;	 PixelTo100thMM = nValue * 28					&apos; not an exact calculation 
 End function
 
 
@@ -162,7 +162,6 @@ End Sub
 
 
 Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object	
-&apos;	Msgbox CurFieldName &amp; &quot;:&quot; &amp; chr(13) &amp; oLocObject.dbg_Properties
 	If CurControlType = cNumericBox Then
 		oLocObject.TreatAsNumber = True
 		Select Case iLocFieldType

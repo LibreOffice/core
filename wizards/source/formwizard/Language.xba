@@ -130,11 +130,6 @@ End Sub
 
 Sub InitializeWidthList()
 
-&apos; Todo: &apos;Currency&apos; ist ein Flag, dass grundsätzlich an jedes Feld angehängt sein kann.
-&apos; An der Connection kann man irgendwie abfragen, ob ein bestimmter Datentyp als Währung 
-&apos; interpretiert wird. Darstellung über Numberformatter. Ist nicht konsistent über Datenbanken.
-&apos; außerdem dürften hier einige Treiber auch buggy sein.
-
 	If Ubound(WidthList(),1) &gt; 15 Then
 		ReDim WidthList(15,4)
 	End If

@@ -70,7 +70,7 @@ Dim Nulllist()
 				End If
 			End If
 			If Not bGetConnection Then
-				iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)	&apos; &apos;?&apos; &amp; &apos; Repeat and Cancel&apos;
+				iMsg = Msgbox (sMsgNoConnection,32 + 2, sMsgWizardName)
 				bExitLoop = iMsg = SBCANCEL
 				Resume CLERROR
 				CLERROR:
@@ -130,17 +130,11 @@ Dim oField as Object
 		sFieldname = FieldNames(n)
 		oField = oColumns.GetByName(sFieldName)
 		iType = oField.Type
-&apos;		Msgbox IsEmpty(oField.HelpText)
-&apos;		Msgbox oField.HelpText
-&apos;		Msgbox oField.ControlDefault
-&apos;		Msgbox sFieldName &amp; &quot;:&quot; &amp; chr(13) &amp; oField.dbg_Properties
 		FieldMetaValues(n,0) = oField.Type
 		FieldMetaValues(n,1) = oField.Precision
 		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),1, WidthIndex)
 		FieldMetaValues(n,3) = WidthList(WidthIndex,3)
 		FieldMetaValues(n,4) = oField.FormatKey
-&apos; Todo: Check why the following lines do not work
-&apos;		Msgbox oField.ControlDefault
 		FieldMetaValues(n,5) = oField.DefaultValue
 		FieldMetaValues(n,6) = oField.IsCurrency
 		FieldMetaValues(n,7) = oField.Scale

@@ -115,8 +115,6 @@ Dim i as Integer
 	oProgressbar.Start(&quot;&quot;, MaxIndex)
 	If oDBForm.HasbyName(&quot;Grid1&quot;) Then
 		RemoveShapes()
-&apos;		PrintdbgInfo oDBForm.GetByName(&quot;Grid1&quot;)
-&apos;		oDBForm.GetByName(&quot;Grid1&quot;).Dispose
 	End If
 	ToggleLayoutPage(False)
 	Select Case CurArrangement
@@ -141,7 +139,6 @@ Dim oViewSettings as Object
 	oViewSettings = oDocument.CurrentController.ViewSettings
 	oViewSettings.ShowTableBoundaries = False
 	oViewSettings.ShowOnlineLayout = True
-&apos;	oViewSettings.ShowHoriRuler = True
 	oDrawPage = oDocument.DrawPage
 	oPageStyle = oDocument.StyleFamilies.GetByName(&quot;PageStyles&quot;).GetByName(&quot;Standard&quot;)
 End Sub
