@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-29 13:33:43 $
+ *  last change: $Author: dvo $ $Date: 2000-10-10 13:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -969,6 +969,10 @@ void XMLTextParagraphExport::exportTextField(
         sal_Bool bAutoStyles )
 {
     Reference < XPropertySet > xPropSet( rTextRange, UNO_QUERY );
+    // non-Writer apps need not support Property TextField, so test first
+    // TODO: fix indentation with next rev.
+    if (xPropSet->getPropertySetInfo()->hasPropertyByName( sTextField ))
+    {
     Any aAny = xPropSet->getPropertyValue( sTextField );
 
     Reference < XTextField > xTxtFld;
@@ -998,6 +1002,7 @@ void XMLTextParagraphExport::exportTextField(
                 pFieldExport->ExportField( xTxtFld );
             }
         }
+    }
     }
 }
 
