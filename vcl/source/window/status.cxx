@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #include <status.hxx>
 #endif
 
-#pragma hdrstop
+
 
 // =======================================================================
 
