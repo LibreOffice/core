@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hashtbl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-11 09:52:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ public:
 // class HashTable
 //
 
-/*static*/ double HashTable::m_defMaxLoadFactor = 0.8;
+/*static*/ double HashTable::m_defMaxLoadFactor = 0.5;
 /*static*/ double HashTable::m_defDefGrowFactor = 2.0;
 
 HashTable::HashTable(unsigned long lSize, bool bOwner, double dMaxLoadFactor, double dGrowFactor)
@@ -118,7 +118,7 @@ HashTable::HashTable(unsigned long lSize, bool bOwner, double dMaxLoadFactor, do
     m_bOwner         = bOwner;
     m_lElem          = 0;
     m_dMaxLoadFactor = MAX(0.5,MIN(1.0,dMaxLoadFactor));  // 0.5 ... 1.0
-    m_dGrowFactor    = MAX(1.3,(5.0,dGrowFactor));        // 1.3 ... 5.0
+    m_dGrowFactor    = MAX(2.0,MIN(5.0,dGrowFactor));     // 1.3 ... 5.0
     m_pData          = new HashItem [lSize];
 }
 
