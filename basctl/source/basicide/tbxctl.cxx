@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:29 $
+ *  last change: $Author: tbe $ $Date: 2002-04-18 12:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@ TbxControls::TbxControls( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
         SfxToolBoxControl( nId, rTbx, rBind )
 {
     nLastSlot = USHRT_MAX;
+
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 /*************************************************************************
