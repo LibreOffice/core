@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 16:46:47 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 10:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace dbp
                                         getServiceFactory();
         const OControlWizardContext&    getContext();
         sal_Bool                        updateContext();
-        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection() const;
 
@@ -198,7 +198,7 @@ namespace dbp
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
         sal_Bool                        updateContext(const OAccessRegulator&);
-        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, sal_Bool _bAutoDispose = sal_True );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection(const OAccessRegulator&) const;
 
@@ -237,6 +237,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/30 16:46:47  fs
+ *  #86714# functionality for displaying the form data source in a wizard page
+ *
  *  Revision 1.5  2001/04/03 12:42:48  fs
  *  #85223# get-/setFormConnection
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-02 14:42:19 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 10:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,9 +215,9 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OControlWizardPage::setFormConnection(const Reference< XConnection >& _rxConn)
+    void OControlWizardPage::setFormConnection( const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
     {
-        getDialog()->setFormConnection(OAccessRegulator(), _rxConn);
+        getDialog()->setFormConnection( OAccessRegulator(), _rxConn, _bAutoDispose );
     }
 
     //---------------------------------------------------------------------
@@ -542,7 +542,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    void OControlWizard::setFormConnection(const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn)
+    void OControlWizard::setFormConnection( const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn, sal_Bool _bAutoDispose )
     {
         try
         {
@@ -553,10 +553,17 @@ namespace dbp
             disposeComponent(xOldConn);
 
             // set the new connection
-            // for this, use a AutoDisposer (so the conn is cleaned up when the form dies or get's another connection)
-            Reference< XRowSet > xFormRowSet( m_aContext.xForm, UNO_QUERY );
-            OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer( xFormRowSet, _rxConn );
-            Reference< XPropertyChangeListener > xEnsureDelete( pAutoDispose );
+            if ( _bAutoDispose )
+            {
+                // for this, use a AutoDisposer (so the conn is cleaned up when the form dies or get's another connection)
+                Reference< XRowSet > xFormRowSet( m_aContext.xForm, UNO_QUERY );
+                OAutoConnectionDisposer* pAutoDispose = new OAutoConnectionDisposer( xFormRowSet, _rxConn );
+                Reference< XPropertyChangeListener > xEnsureDelete( pAutoDispose );
+            }
+            else
+            {
+                m_aContext.xForm->setPropertyValue( ::rtl::OUString::createFromAscii("ActiveConnection"), makeAny( _rxConn ) );
+            }
         }
         catch(const Exception&)
         {
@@ -808,6 +815,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/11/02 14:42:19  fs
+ *  #94077# use an AutoDisposer when setting a Connection on the RowSet
+ *
  *  Revision 1.6  2001/05/30 16:46:47  fs
  *  #86714# functionality for displaying the form data source in a wizard page
  *
