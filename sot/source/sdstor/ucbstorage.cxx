@@ -1023,29 +1023,31 @@ void UCBStorage_Impl::Init()
         {
             if( m_bIsRoot )
             {
-                // read the manifest.xml file
-                aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("META-INF") ) );
-                aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("manifest.xml") ) );
-
-                // create input stream
-                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
-                ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
-                com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
-
-                // create a manifest reader object that will read in the manifest from the stream
-                Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
-                    Reference< ::com::sun::star::packages::manifest::XManifestReader >
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestReader" )), UNO_QUERY) ;
-                Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
-
-                // cleanup
-                xReader = NULL;
-                xInputStream = NULL;
-                delete pStream;
-
                 ReadContent();
-                SetProps( aProps, String() );
+                if ( m_nError == ERRCODE_NONE )
+                {
+                    // read the manifest.xml file
+                    aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("META-INF") ) );
+                    aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("manifest.xml") ) );
+
+                    // create input stream
+                    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
+                    ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
+                    com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
+
+                    // create a manifest reader object that will read in the manifest from the stream
+                    Reference < ::com::sun::star::packages::manifest::XManifestReader > xReader =
+                        Reference< ::com::sun::star::packages::manifest::XManifestReader >
+                            ( ::comphelper::getProcessServiceFactory()->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.packages.manifest.ManifestReader" )), UNO_QUERY) ;
+                    Sequence < Sequence < PropertyValue > > aProps = xReader->readManifestSequence( xInputStream );
+
+                    // cleanup
+                    xReader = NULL;
+                    xInputStream = NULL;
+                    delete pStream;
+                    SetProps( aProps, String() );
+                }
             }
             else
                 ReadContent();
