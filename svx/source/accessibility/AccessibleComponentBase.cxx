@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-05-03 13:27:32 $
+ *  last change: $Author: af $ $Date: 2002-06-17 09:44:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::isEnabled (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getTitledBorderText (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Dummy Title Border Text");
+    return ::rtl::OUString::createFromAscii ("");
 }
 
 
@@ -285,7 +285,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::isEnabled (void)
 ::rtl::OUString SAL_CALL AccessibleComponentBase::getToolTipText (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii ("Dummy Tool Tip Text");
+    return ::rtl::OUString::createFromAscii ("");
 }
 
 
