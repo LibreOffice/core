@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: avy $ $Date: 2001-05-04 08:41:22 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace dbaccess;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

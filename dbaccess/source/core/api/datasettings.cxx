@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 08:38:17 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -114,6 +114,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::comphelper;
 using namespace ::cppu;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:22:15 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
@@ -217,7 +217,7 @@ protected:
 public:
     ODatabaseSource(
         ::cppu::OWeakObject& _rParent,
-        const OConfigurationNode& _rConfigRoot,
+        const ::utl::OConfigurationNode& _rConfigRoot,
         const ::rtl::OUString& _rRegistrationName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
     virtual ~ODatabaseSource();
@@ -308,7 +308,7 @@ protected:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const OConfigurationTreeRoot& _rConfigRoot);
+        const ::utl::OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 

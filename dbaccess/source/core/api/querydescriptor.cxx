@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
@@ -100,7 +100,7 @@ using namespace ::com::sun::star::container;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
-using namespace comphelper;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

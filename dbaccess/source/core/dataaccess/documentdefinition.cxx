@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:23:08 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

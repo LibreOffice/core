@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 08:22:30 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::registry;
 using namespace ::cppu;
 using namespace ::osl;
-using namespace dbaccess;
+using namespace ::utl;
 
 #define REGISTRYFILE    "dbaccess.rdb"
 

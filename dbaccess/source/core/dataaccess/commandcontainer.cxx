@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ protected:
 // ODefinitionContainer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject(
         const ::rtl::OUString& _rName,
-        const OConfigurationNode& _rObjectNode
+        const ::utl::OConfigurationNode& _rObjectNode
     );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject();
 };

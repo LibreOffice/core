@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 06:28:59 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::dbtools;
+using namespace ::utl;
 
 //........................................................................
 namespace dbaccess

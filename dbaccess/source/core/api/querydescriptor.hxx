@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,12 +202,12 @@ public:
     /** store all configuration relevant informations under the given configuration node
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    storeTo(const OConfigurationTreeRoot& _rConfigLocation);
+    virtual void    storeTo(const ::utl::OConfigurationTreeRoot& _rConfigLocation);
 
     /** initialize with the informations stored under the given configuration node
         @param      _rxConfigLocation       the configuration node.
     */
-    virtual void    initializeFrom(const OConfigurationNode& _rConfigLocation);
+    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 
 // pseudo-XComponent
     virtual void SAL_CALL dispose();
@@ -224,7 +224,7 @@ protected:
     }
     virtual void refreshColumns();
 
-    virtual void readColumnSettings(const OConfigurationNode& _rConfigLocation);
+    virtual void readColumnSettings(const ::utl::OConfigurationNode& _rConfigLocation);
 
 protected:
     // helper

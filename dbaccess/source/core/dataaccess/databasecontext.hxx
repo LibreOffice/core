@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-19 16:57:08 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 
 // needed for registration
@@ -144,7 +144,7 @@ class ODatabaseContext
 protected:
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
-    OConfigurationTreeRoot                                                                      m_aRootNode;
+    ::utl::OConfigurationTreeRoot                                                               m_aRootNode;
 
     DECLARE_STL_USTRINGACCESS_MAP( ::com::sun::star::uno::WeakReferenceHelper, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
@@ -208,7 +208,7 @@ public:
 
 private:
     /// get the node a data source is based on
-    OConfigurationNode getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw();
+    ::utl::OConfigurationNode getObjectNode(const ::rtl::OUString& _rTitle, sal_Bool _bCreate) throw();
 };
 
 //........................................................................

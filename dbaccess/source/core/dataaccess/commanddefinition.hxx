@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ public:
     OCommandDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::rtl::OUString& _rElementName,
-            const OConfigurationTreeRoot& _rConfigRoot
+            const ::utl::OConfigurationTreeRoot& _rConfigRoot
         );
 
 // ::com::sun::star::uno::XInterface
@@ -175,7 +175,7 @@ public:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const OConfigurationTreeRoot& _rConfigRoot);
+        const ::utl::OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 

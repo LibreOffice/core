@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 09:20:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
+using namespace ::utl;
 
 #define AGG_PROPERTY(handle, propname_out)  \
     static_cast< ::comphelper::OPropertyArrayAggregationHelper* >(const_cast< OQuery_LINUX* >(this)->getArrayHelper())->fillAggregatePropertyInfoByHandle(&propname_out, NULL, handle)

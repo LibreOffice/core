@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 09:09:05 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ using namespace ::com::sun::star::ucb;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::vos;
+using namespace ::utl;
 using namespace ::dbtools;
 using namespace ::comphelper;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ public:
     ODocumentDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::rtl::OUString& _rElementName,
-            const OConfigurationTreeRoot& _rObjectNode
+            const ::utl::OConfigurationTreeRoot& _rObjectNode
         );
 
 // ::com::sun::star::uno::XInterface
@@ -202,7 +202,7 @@ public:
     virtual void        inserted(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
         const ::rtl::OUString& _rElementName,
-        const OConfigurationTreeRoot& _rConfigRoot);
+        const ::utl::OConfigurationTreeRoot& _rConfigRoot);
 
     virtual void        removed();
 

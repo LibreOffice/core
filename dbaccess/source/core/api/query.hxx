@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 10:24:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,14 +180,14 @@ public:
     virtual void SAL_CALL dispose();
 
 // OQueryDescriptor
-    virtual void    initializeFrom(const OConfigurationNode& _rConfigLocation);
+    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 
 protected:
 // OConfigurationFlushable
     virtual void flush_NoBroadcast_NoCommit();
     virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
 
-    virtual void readColumnSettings(const OConfigurationNode& _rConfigLocation);
+    virtual void readColumnSettings(const ::utl::OConfigurationNode& _rConfigLocation);
 
 };
 class OQuery : public OQuery_LINUX

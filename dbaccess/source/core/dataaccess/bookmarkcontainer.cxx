@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 12:18:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,8 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
+using namespace ::utl;
 using namespace ::cppu;
-using namespace dbaccess;
 
 //........................................................................
 namespace dbaccess

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmarkcontainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 12:18:11 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
@@ -132,7 +132,7 @@ class OBookmarkContainer
 {
 protected:
     DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString, MapString2String);
-    DECLARE_STL_USTRINGACCESS_MAP(OConfigurationNode, ConfigNodeMap);
+    DECLARE_STL_USTRINGACCESS_MAP(::utl::OConfigurationNode, ConfigNodeMap);
     DECLARE_STL_VECTOR(MapString2StringIterator, MapIteratorVector);
 
     MapString2String        m_aBookmarks;           // the bookmarks itself
@@ -213,7 +213,7 @@ public:
                                             the given config node, else only the config node is saved (and propagated
                                             to all descendants which need to know it).
     */
-    virtual void    initialize(const OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead = sal_True);
+    virtual void    initialize(const ::utl::OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead = sal_True);
 
     /** tell the container to free all resources. After that it's in a state like after the construction, i.e.
         you may call <code>initialize</code> again (maybe with another configuration node).
@@ -223,7 +223,7 @@ public:
     /// flush all persistent information (into the configuration)
     virtual void    flush_NoBroadcast_NoCommit();
 
-    OConfigurationNode getConfigLocation() const { return m_aConfigurationNode; }
+    ::utl::OConfigurationNode getConfigLocation() const { return m_aConfigurationNode; }
 
 protected:
     /** checks whether the object is basically alive, i.e. it has been fully initialized (@see initialize) and
@@ -248,7 +248,7 @@ protected:
     void    implAppend(
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rDocumentLocation,
-        const OConfigurationNode& _rObjectNode
+        const ::utl::OConfigurationNode& _rObjectNode
         );
 
     void implRemove(const ::rtl::OUString& _rName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 09:09:55 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ protected:
     virtual ~OConnection();
 public:
     OConnection(
-        ODatabaseSource& _rDB,  const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
+        ODatabaseSource& _rDB,  const ::utl::OConfigurationNode& _rTablesConfig,const ::utl::OConfigurationTreeRoot& _rCommitLocation,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxMaster,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB);
 
