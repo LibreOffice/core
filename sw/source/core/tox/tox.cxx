@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:19:14 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,37 +467,6 @@ USHORT SwForm::GetFormMaxLevel( USHORT nType )
     }
     return nRet;
 }
-/* -----------------15.06.99 13:39-------------------
-    compatibilty methods: Version 5.0 and 5.1 need
-    a value for the first tab stop
- --------------------------------------------------*/
-USHORT lcl_GetPatternCount( const String& rPattern, const sal_Char* pToken )
-{
-    USHORT nRet = 0;
-    String aSearch; aSearch.AssignAscii( pToken );
-    aSearch.Erase( aSearch.Len() - 1, 1 );
-    xub_StrLen nFound = rPattern.Search( aSearch );
-    while( STRING_NOTFOUND != nFound )
-        if( STRING_NOTFOUND != ( nFound = rPattern.Search( '>', nFound ) ))
-        {
-            ++nRet;
-            nFound = rPattern.Search( aSearch, nFound );
-        }
-    return nRet;
-}
-
-String lcl_GetPattern( const String& rPattern, const sal_Char* pToken )
-{
-    String sRet;
-    String aSearch; aSearch.AssignAscii( pToken );
-    aSearch.Erase( aSearch.Len() - 1, 1 );
-
-    xub_StrLen nEnd, nFound = rPattern.Search( aSearch );
-    if( STRING_NOTFOUND != nFound &&
-        STRING_NOTFOUND != ( nEnd = rPattern.Search( '>', nFound )) )
-        sRet = rPattern.Copy( nFound, nEnd - nFound + 1 );
-    return sRet;
-}
 
 // #i21237#
 bool operator == (const SwFormToken & rToken, FormTokenType eType)
@@ -555,49 +524,7 @@ void SwForm::SetFirstTabPos( USHORT n )     // #i21237#
         }
     }
 }
-/* -----------------------------28.02.00 09:48--------------------------------
-    if the templates contain settings of the tab positions (<5.1) then
-    they must be imported into the pattern
- ---------------------------------------------------------------------------*/
-BOOL lcl_FindTabToken( const String& rPattern, xub_StrLen nSearchFrom,
-                    xub_StrLen& rFoundStart, xub_StrLen& rFoundEnd)
-{
-    // search for <T ...>
-    // special handling of <TX ...>
 
-    BOOL bRet = FALSE;
-    String sToFind; sToFind.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "<T" ));
-    xub_StrLen nFoundPos = rPattern.Search( sToFind, nSearchFrom );
-    while( STRING_NOTFOUND != nFoundPos )
-    {
-        if( rPattern.GetChar(nFoundPos +1) == 'X')
-        {
-            // handling of text tokens
-            xub_StrLen nTempDelim = rPattern.Search(TOX_STYLE_DELIMITER, nFoundPos);
-            xub_StrLen nTempEndSymbol = rPattern.Search(TOX_STYLE_DELIMITER, nFoundPos);
-            if( nTempEndSymbol < nTempDelim && STRING_NOTFOUND != nTempDelim )
-            {
-                //text delimiter must! be in pairs
-                nTempDelim = rPattern.Search(TOX_STYLE_DELIMITER, nTempDelim + 1);
-                nTempEndSymbol = rPattern.Search(TOX_STYLE_DELIMITER, nTempDelim + 1);
-            }
-            else
-            {
-                nFoundPos = nTempDelim;
-            }
-        }
-        else
-        {
-            //tab stop token found - find end position
-            rFoundStart = nFoundPos;
-            rFoundEnd = rPattern.Search('>', nFoundPos +1);
-            bRet = TRUE;
-            break;
-        }
-        nFoundPos = rPattern.Search( sToFind, nSearchFrom );
-    }
-    return bRet;
-}
 //-----------------------------------------------------------------------------
 void SwForm::AdjustTabStops(SwDoc& rDoc, BOOL bDefaultRightTabStop) // #i21237#
 {
@@ -689,11 +616,7 @@ BOOL SwForm::IsFirstTabPosFlag() const      //{ return bHasFirstTabPos; }
     return 2 <= count_if(aPattern[1].begin(), aPattern[1].end(),
                          SwFormTokenEqualToFormTokenType(TOKEN_TAB_STOP));
 }
-void SwForm::SetFirstTabPosFlag( BOOL b )   //{ bHasFirstTabPos = b; }
-{
-    //only used in the old index dialog and in Sw3IoImp::InTOXs()
-    DBG_WARNING("obsolete, isn't it?")
-}
+
 /* -----------------29.07.99 14:37-------------------
 
  --------------------------------------------------*/
@@ -900,17 +823,6 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
         aName = pDoc->GetUniqueTOXBaseName( *pType, &rSource.GetTOXName() );
 
     return *this;
-}
-
-/* -----------------30.06.99 14:46-------------------
-    Check if any style names are set in the array
- --------------------------------------------------*/
-BOOL    SwTOXBase::HasAnyStyleNames() const
-{
-    for(USHORT i = 0; i < MAXLEVEL; i++)
-        if(aStyleNames[i].Len())
-            return TRUE;
-    return FALSE;
 }
 
 /*--------------------------------------------------------------------
@@ -1234,12 +1146,4 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
     return eTokenType;
 }
 
-String SwFormTokensHelper::GetPatternString() const
-{
-    String aResult;
-
-    for_each(aTokens.begin(), aTokens.end(), SwFormTokenToString(aResult));
-
-    return aResult;
-}
 // <- #i21237#
