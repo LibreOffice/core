@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fillctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:18:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 17:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,8 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( USHORT nSlotId, USHORT nId, ToolBo
     pFillAttrLB     ( NULL ),
     pFillTypeLB     ( NULL ),
     bUpdate         ( FALSE ),
-    eLastXFS        ( XFILL_NONE )
+    eLastXFS        ( XFILL_NONE ),
+    bIgnoreStatusUpdate( FALSE )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )));
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )));
@@ -156,6 +157,9 @@ void SvxFillToolBoxControl::StateChanged(
 
 {
     FASTBOOL bEnableControls = FALSE;
+
+    if ( bIgnoreStatusUpdate )
+        return;
 
     if( eState == SFX_ITEM_DISABLED )
     {
@@ -258,6 +262,13 @@ void SvxFillToolBoxControl::StateChanged(
             }
         }
     }
+}
+
+//========================================================================
+
+void SvxFillToolBoxControl::IgnoreStatusUpdate( sal_Bool bSet )
+{
+    bIgnoreStatusUpdate = bSet;
 }
 
 //========================================================================
@@ -616,8 +627,8 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
         // Ein Typ wurde ausgewaehlt aber kein Attribut.
         // Die Selektion hat genau die gleichen Attribute wie die vorherige.
 //      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
-//      if( pControlerItem ) CD
-//          pControlerItem->ClearCache(); CD
+//      if( pControlerItem )
+//          pControlerItem->ClearCache();
 
         pLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -715,17 +726,29 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 //  DBG_ASSERT( pDisp, "invalid Dispatcher" );
     if ( bAction )
     {
+        Any a;
+        Sequence< PropertyValue > aArgs( 1 );
+
+        // First set the style
+        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
+        aXFillStyleItem.QueryValue(  a );
+        aArgs[0].Value = a;
+        ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( TRUE );
+        ((SvxFillToolBoxControl*)GetData())->Dispatch(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )), aArgs );
+        ( (SvxFillToolBoxControl*)GetData() )->IgnoreStatusUpdate( FALSE );
+
         switch( eXFS )
         {
             case XFILL_NONE:
             {
-                Any a;
-                Sequence< PropertyValue > aArgs( 1 );
+/*
                 aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
                 aXFillStyleItem.QueryValue( a );
                 aArgs[0].Value = a;
                 ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )),
                                                                 aArgs );
+*/
 //                pDisp->Execute( SID_ATTR_FILL_STYLE, SFX_CALLMODE_RECORD, &aXFillStyleItem, 0L );
             }
             break;
@@ -743,8 +766,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
                 XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
 
-                Any a;
-                Sequence< PropertyValue > aArgs( 1 );
                 aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ));
                 aXFillColorItem.QueryValue( a );
                 aArgs[0].Value = a;
@@ -769,8 +790,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XGradient aGradient = aItem.GetGradientList()->Get( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
 
-                        Any a;
-                        Sequence< PropertyValue > aArgs( 1 );
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
                         aXFillGradientItem.QueryValue( a );
                         aArgs[0].Value = a;
@@ -796,8 +815,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XHatch aHatch = aItem.GetHatchList()->Get( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
 
-                        Any a;
-                        Sequence< PropertyValue > aArgs( 1 );
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
                         aXFillHatchItem.QueryValue( a );
                         aArgs[0].Value = a;
@@ -824,8 +841,6 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                         XOBitmap aXOBitmap = aItem.GetBitmapList()->Get( nPos )->GetXBitmap();
                         XFillBitmapItem aXFillBitmapItem( pLbFillAttr->GetSelectEntry(), aXOBitmap );
 
-                        Any a;
-                        Sequence< PropertyValue > aArgs( 1 );
                         aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
                         aXFillBitmapItem.QueryValue( a );
                         aArgs[0].Value = a;
@@ -838,6 +853,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
             }
             break;
         }
+
         // release focus
         if ( pLbFillAttr->IsRelease()  && pBox && SfxViewShell::Current()->GetWindow() )
             SfxViewShell::Current()->GetWindow()->GrabFocus();
