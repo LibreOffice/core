@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-18 11:19:42 $
+ *  last change: $Author: mba $ $Date: 2001-11-15 15:11:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,17 +104,6 @@ class SfxObjectShell;
 class ResMgr;
 class Window;
 
-class StopButtonTimer_Impl : public Timer
-{
-    BOOL bState;
-protected:
-    virtual void Timeout();
-public:
-    StopButtonTimer_Impl();
-    void SetButtonState( BOOL bStateP );
-    BOOL GetButtonState() const { return bState; }
-};
-
 //=========================================================================
 // SfxAppData_Impl
 //=========================================================================
@@ -148,7 +137,6 @@ public:
 
     // special members
     SfxInitLinkList*                    pInitLinkList;
-    StopButtonTimer_Impl*               pStopButtonTimer;
 
     // application members
     SfxFilterMatcher*                   pMatcher;
