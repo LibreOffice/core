@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:26:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 #include <vector>
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::uno;
 namespace cppu
 {
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //==================================================================================================
 static inline void out( const char * p ) SAL_THROW( () )
 {
@@ -126,7 +126,7 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                         osl_File_E_None == FileBase::getFileURLFromSystemPath(aStr, aFileUrl) );
                     s_v.push_back( aFileUrl );
                 } while( nIndex != -1 );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 out( "> cpld: acknowledged following access path(s): \"" );
                 ::std::vector< OUString >::const_iterator iPos( s_v.begin() );
                 while (iPos != s_v.end())
@@ -143,7 +143,7 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
             else
             {
                 // no access path env set
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 out( "=> no CPLD_ACCESSPATH set.\n" );
 #endif
             }
@@ -171,7 +171,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
             if ( bAbsolute )
             {
                 aAbs = *pComp;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 out( "> taking path: \"" );
                 out( aAbs );
 #endif
@@ -182,7 +182,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
                 {
                     continue;
                 }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 out( "> found path: \"" );
                 out( aBaseDir );
                 out( "\" + \"" );
@@ -197,14 +197,14 @@ static bool checkAccessPath( OUString * pComp ) throw ()
                 (aBaseDir[ aBaseDir.getLength() -1 ] == (sal_Unicode)'/' ||
                  aAbs[ aBaseDir.getLength() ] == (sal_Unicode)'/')) // dir boundary
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 out( ": ok.\n" );
 #endif
                 // load from absolute path
                 *pComp = aAbs;
                 return true;
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             else
             {
                 out( "\" ...does not match given path \"" );
@@ -237,7 +237,7 @@ static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd 
 static OUString makeComponentPath(
     const OUString & rLibName, const OUString & rPath )
 {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     // No system path allowed here !
     {
         OUString aComp;
@@ -270,7 +270,7 @@ static OUString makeComponentPath(
     }
 
     OUString out( buf.makeStringAndClear() );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString str( OUStringToOString( out, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE( "component path=%s\n", str.getStr() );
 #endif
@@ -480,7 +480,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     if (! xRet.is())
     {
         osl_unloadModule( lib );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         out( "### cannot activate factory: " );
         out( aExcMsg );
         out( "\n" );
@@ -669,7 +669,7 @@ void SAL_CALL writeSharedLibComponentInfo(
 //! ::osl_unloadModule( lib);
     if (! bRet)
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         out( "### cannot write component info: " );
         out( aExcMsg );
         out( "\n" );
