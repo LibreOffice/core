@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internationaloptions.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:35:21 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,35 +74,8 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_0, ROW_0 );
         Size = MAP_APPFONT( WIDTH2END( COL_0 ), HEIGHT_FL );
-        Text = "Standard Textrichtung";
-        Text [ english ] = "Default text direction";
-        Text [ english_us ] = "Default text direction";
-        Text[ portuguese ] = "Default text direction";
-        Text[ russian ] = "Default text direction";
-        Text[ greek ] = "Default text direction";
-        Text[ dutch ] = "Standaard schrijfrichting";
-        Text[ french ] = "Orientation du texte par d�faut";
-        Text[ spanish ] = "Direcci�n predeterminada de escritura ";
-        Text[ finnish ] = "Default text direction";
-        Text[ italian ] = "Direzione standard del testo";
-        Text[ danish ] = "Standard tekstretning";
-        Text[ swedish ] = "Standardtextriktning";
-        Text[ polish ] = "Default text direction";
-        Text[ portuguese_brazilian ] = "Dire��o padr�o do texto";
-        Text[ japanese ] = "標準文字方向";
-        Text[ korean ] = "기본 텍스트 방향";
-        Text[ chinese_simplified ] = "标准的文字方向";
-        Text[ chinese_traditional ] = "標準的文字方向";
-        Text[ turkish ] = "�ntan�ml� metin y�nleri";
-        Text[ arabic ] = "Default text direction";
-        Text[ catalan ] = "Default text direction";
-        Text[ thai ] = "Default text direction";
-        Text[ czech ] = "Výchozí směr textu";
-        Text[ hebrew ] = "Standard Textrichtung";
-        Text[ hindi ] = "Default text direction";
-        Text[ slovak ] = "Východzí tok textu";
-        Text[ hungarian ] = "Alapértelmezett szövegirány";
-        Text[ slovenian ] = "Privzeta smer besedila";
+        Text [ de ] = "Standard Textrichtung";
+        Text [ en-US ] = "Default text direction";
     };
 
     RadioButton RB_TXTDIR_LEFT2RIGHT
@@ -110,175 +83,40 @@ TabPage RID_OFA_TP_INTERNATIONAL
         Pos = MAP_APPFONT( COL_1, ROW_1 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
         Group = TRUE;
-        Text = "~Links-nach-rechts";
-        Text[ english ] = "~Left-to-right";
-        Text[ english_us ] = "~Left-to-right";
-        Text[ portuguese ] = "~Left-to-right";
-        Text[ russian ] = "~Left-to-right";
-        Text[ greek ] = "~Left-to-right";
-        Text[ dutch ] = "Van ~Links naar rechts";
-        Text[ french ] = "De gauche � droite";
-        Text[ spanish ] = "~De izquierda a derecha";
-        Text[ finnish ] = "~Left-to-right";
-        Text[ italian ] = "~Sinistra verso destra";
-        Text[ danish ] = "~Venstre-til-h�jre";
-        Text[ swedish ] = "~V�nster-till-h�ger";
-        Text[ polish ] = "~Left-to-right";
-        Text[ portuguese_brazilian ] = "Da ~esquerda para a direita";
-        Text[ japanese ] = "左から右へ(~L)";
-        Text[ korean ] = "왼쪽에서 오른쪽으로(~L)";
-        Text[ chinese_simplified ] = "从左向右(~L)";
-        Text[ chinese_traditional ] = "從左向右(~L)";
-        Text[ turkish ] = "~Soldan sa�a";
-        Text[ arabic ] = "~Left-to-right";
-        Text[ catalan ] = "~Left-to-right";
-        Text[ thai ] = "~Left-to-right";
-        Text[ czech ] = "Zleva doprava";
-        Text[ hebrew ] = "‮משמאל-לימין‬";
-        Text[ hindi ] = "~Left-to-right";
-        Text[ slovak ] = "Zľava-~do-prava";
-        Text[ hungarian ] = "~Balról jobbra";
-        Text[ slovenian ] = "~Levo-desno";
+        Text [ de ] = "~Links-nach-rechts";
+        Text [ en-US ] = "~Left-to-right";
     };
 
     RadioButton RB_TXTDIR_RIGHT2LEFT
     {
         Pos = MAP_APPFONT( COL_1, ROW_2 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
-        Text = "~Rechts-nach-links";
-        Text[ english ] = "~Right-to-Left";
-        Text[ english_us ] = "~Right-to-left";
-        Text[ portuguese ] = "~Right-to-left";
-        Text[ russian ] = "~Right-to-left";
-        Text[ greek ] = "~Right-to-left";
-        Text[ dutch ] = "Van ~Rechts naar links";
-        Text[ french ] = "De droite � gauche";
-        Text[ spanish ] = "~De derecha a izquierda";
-        Text[ finnish ] = "~Right-to-left";
-        Text[ italian ] = "~Da destra a sinistra";
-        Text[ danish ] = "~H�jre-til-venstre";
-        Text[ swedish ] = "H�ge~r-till-v�nster";
-        Text[ polish ] = "~Right-to-left";
-        Text[ portuguese_brazilian ] = "Da ~direita para a esquerda";
-        Text[ japanese ] = "右から左へ(~R)";
-        Text[ korean ] = "오른쪽에서 왼쪽으로(~R)";
-        Text[ chinese_simplified ] = "从右向左(~R)";
-        Text[ chinese_traditional ] = "從右向左(~R)";
-        Text[ turkish ] = "~Sa�dan sola";
-        Text[ arabic ] = "~Right-to-left";
-        Text[ catalan ] = "~Right-to-left";
-        Text[ thai ] = "~Right-to-left";
-        Text[ czech ] = "Zprava doleva";
-        Text[ hebrew ] = "‮מימין-לשמאל‬";
-        Text[ hindi ] = "~Right-to-left";
-        Text[ slovak ] = "Sp~rava-do-ľava";
-        Text[ hungarian ] = "~Jobbról balra";
-        Text[ slovenian ] = "~Desno-levo";
+        Text [ de ] = "~Rechts-nach-links";
+        Text [ en-US ] = "~Right-to-left";
     };
 
     FixedLine FL_SHEETVIEW
     {
         Pos = MAP_APPFONT( COL_0, ROW_3 );
         Size = MAP_APPFONT( WIDTH2END( COL_0 ), HEIGHT_FL );
-        Text = "Tabellenansicht";
-        Text [ english ] = "Sheet view";
-        Text [ english_us ] = "Sheet view";
-        Text[ portuguese ] = "Ver tabela";
-        Text[ russian ] = "��� �������";
-        Text[ greek ] = "������� ������";
-        Text[ dutch ] = "Weergave tabel";
-        Text[ french ] = "Vue de la feuille";
-        Text[ spanish ] = "Ver tabla";
-        Text[ finnish ] = "Sheet view";
-        Text[ italian ] = "Vista tabella";
-        Text[ danish ] = "Arkvisning";
-        Text[ swedish ] = "Tabellvisning";
-        Text[ polish ] = "Sheet view";
-        Text[ portuguese_brazilian ] = "Modo planilha";
-        Text[ japanese ] = "表の表示";
-        Text[ korean ] = "시트 보기";
-        Text[ chinese_simplified ] = "表格视图";
-        Text[ chinese_traditional ] = "表格檢視";
-        Text[ turkish ] = "Yaprak g�ster";
-        Text[ arabic ] = "��� ������";
-        Text[ catalan ] = "Sheet view";
-        Text[ thai ] = "Sheet view";
-        Text[ czech ] = "Pohled na listy";
-        Text[ hebrew ] = "Tabellenansicht";
-        Text[ hindi ] = "Sheet view";
-        Text[ slovak ] = "Pohľad na zošit";
-        Text[ hungarian ] = "Munkalap nézet";
-        Text[ slovenian ] = "Pogled delovnega lista";
+        Text [ de ] = "Tabellenansicht";
+        Text [ en-US ] = "Sheet view";
     };
 
     CheckBox CB_SHTVW_RIGHT2LEFT
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_CB );
-        Text = "Rechts-~nach-links";
-        Text[ english ] = "Right-~to-Left";
-        Text[ english_us ] = "Right-~to-left";
-        Text[ portuguese ] = "Right-~to-left";
-        Text[ russian ] = "Right-~to-left";
-        Text[ greek ] = "Right-~to-left";
-        Text[ dutch ] = "Van Rechts naar links";
-        Text[ french ] = "De droite � gauche";
-        Text[ spanish ] = "De derecha ~a izquierda";
-        Text[ finnish ] = "Right-~to-left";
-        Text[ italian ] = "Da destra a sinistra";
-        Text[ danish ] = "H�jre-~til-venstre";
-        Text[ swedish ] = "H�ger-t~ill-v�nster";
-        Text[ polish ] = "Right-~to-left";
-        Text[ portuguese_brazilian ] = "Da esquerda ~para a direita";
-        Text[ japanese ] = "右から左へ(~T)";
-        Text[ korean ] = "오른쪽에서 왼쪽으로(~T)";
-        Text[ chinese_simplified ] = "从右向左(~T)";
-        Text[ chinese_traditional ] = "從右向左(~T)";
-        Text[ turkish ] = "S~a�dan sola";
-        Text[ arabic ] = "Right-~to-left";
-        Text[ catalan ] = "Right-~to-left";
-        Text[ thai ] = "Right-~to-left";
-        Text[ czech ] = "Zprava doleva";
-        Text[ hebrew ] = "‮מימין לשמאל‬";
-        Text[ hindi ] = "Right-~to-left";
-        Text[ slovak ] = "Spra~va-do-ľava";
-        Text[ hungarian ] = "Jobbról ba~lra";
-        Text[ slovenian ] = "De~sno-levo";
+        Text [ de ] = "Rechts-~nach-links";
+        Text [ en-US ] = "Right-~to-left";
     };
 
     CheckBox CB_SHTVW_CURRENTDOCONLY
     {
         Pos = MAP_APPFONT( COL_2, ROW_5 );
         Size = MAP_APPFONT( WIDTH2END( COL_2 ), HEIGHT_CB );
-        Text = "Nur f�r ~aktuelles Dokument";
-        Text[ english ] = "~Current document only";
-        Text[ english_us ] = "~Current document only";
-        Text[ portuguese ] = "~Current document only";
-        Text[ russian ] = "~Current document only";
-        Text[ greek ] = "~Current document only";
-        Text[ dutch ] = "~Alleen huidige document";
-        Text[ french ] = "Uniquement pour le document actif";
-        Text[ spanish ] = "~S�lo para el documento actual";
-        Text[ finnish ] = "~Current document only";
-        Text[ italian ] = "Solo per il docuemnto attivo";
-        Text[ danish ] = "~Kun for nuv�rende dokument";
-        Text[ swedish ] = "Bara f�r ~aktuellt dokument";
-        Text[ polish ] = "~Current document only";
-        Text[ portuguese_brazilian ] = "~Somente para o documento atual";
-        Text[ japanese ] = "現在のドキュメントのみ(~C)";
-        Text[ korean ] = "현재 문서만(~C)";
-        Text[ chinese_simplified ] = "仅适用于当前的文档(~C)";
-        Text[ chinese_traditional ] = "僅用於目前的文件(~C)";
-        Text[ turkish ] = "~Sadece g�ncel belge";
-        Text[ arabic ] = "~Current document only";
-        Text[ catalan ] = "~Current document only";
-        Text[ thai ] = "~Current document only";
-        Text[ czech ] = "Pouze současný dokument";
-        Text[ hebrew ] = "Nur für ~aktuelles Dokument";
-        Text[ hindi ] = "~Current document only";
-        Text[ slovak ] = "Len súčasný do~kument";
-        Text[ hungarian ] = "~Csak ebben a dokumentumban";
-        Text[ slovenian ] = "Samo ~trenutni dokument";
+        Text [ de ] = "Nur f�r ~aktuelles Dokument";
+        Text [ en-US ] = "~Current document only";
     };
 };
 
