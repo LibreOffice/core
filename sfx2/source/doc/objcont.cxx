@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:30:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,19 +112,16 @@
 #include <svtools/saveopt.hxx>
 #include <svtools/useroptions.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <vcl/virdev.hxx>
 
 #include "sfxresid.hxx"
-#include "stbmgr.hxx"
 #include "dinfdlg.hxx"
 #include "fltfnc.hxx"
 #include "docfac.hxx"
-#include "cfgmgr.hxx"
 #include "viewsh.hxx"
 #include "objsh.hxx"
 #include "objshimp.hxx"
-#include "cfgitem.hxx"
 #include "evntconf.hxx"
-//#include "interno.hxx"
 #include "sfxhelp.hxx"
 #include "dispatch.hxx"
 #include "urlframe.hxx"
@@ -135,10 +132,6 @@
 #include "doc.hrc"
 #include "appdata.hxx"
 #include "sfxbasemodel.hxx"
-#include "accmgr.hxx"
-#include "mnumgr.hxx"
-#include "imgmgr.hxx"
-#include "tbxconf.hxx"
 #include "docfile.hxx"
 #include "objuno.hxx"
 #include "request.hxx"
@@ -1471,6 +1464,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     }
 }
 
+/*
 SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
 {
     if ( bForce && !pImp->pEventConfig )
@@ -1483,7 +1477,7 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
     }
 
     return pImp->pEventConfig;
-}
+} */
 
 //REMOVE    SvStorageRef SfxObjectShell::GetConfigurationStorage( SotStorage* pStor )
 //REMOVE    {
@@ -1517,28 +1511,6 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
 //REMOVE
 //REMOVE        return xStream;
 //REMOVE    }
-
-SfxAcceleratorManager* SfxObjectShell::GetAccMgr_Impl()
-{
-    //TODO/LATER: new API after recync to docking1 cws???
-//REMOVE        // already constructed ?!
-//REMOVE        if ( pImp->pAccMgr )
-//REMOVE            return pImp->pAccMgr;
-//REMOVE
-//REMOVE        // get the typId ( = ResourceId )
-//REMOVE        const ResId* pResId = GetFactory().GetAccelId();
-//REMOVE        if ( !pResId )
-//REMOVE            return NULL;
-//REMOVE
-//REMOVE        if ( GetConfigManager() && pImp->pCfgMgr->HasConfigItem( pResId->GetId() ) )
-//REMOVE        {
-//REMOVE            // document has configuration
-//REMOVE            pImp->pAccMgr = new SfxAcceleratorManager( *pResId, pImp->pCfgMgr );
-//REMOVE            return pImp->pAccMgr;
-//REMOVE        }
-//REMOVE        else
-        return GetFactory().GetAccMgr_Impl();
-}
 
 SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pViewFrame )
 {
@@ -1596,6 +1568,7 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
     return xDoc;
 }
 
+/*
 SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
 {
     //TODO/LATER: new API after recync to docking1 cws???
@@ -1607,7 +1580,7 @@ SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
     }
 
     return pImp->pTbxConfig;
-}
+} */
 
 
 sal_Bool SfxObjectShell::IsHelpDocument() const
