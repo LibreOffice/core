@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:52:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3135,7 +3135,9 @@ void SwTabFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
         {
             const SwPageDesc *pDesc = GetFmt()->GetPageDesc().GetPageDesc();
             if ( (pDesc && pDesc != pPage->GetPageDesc()) ||
-                 (!pDesc && pPage->GetPageDesc() != &GetFmt()->GetDoc()->GetPageDesc(0)) )
+                 (!pDesc && pPage->GetPageDesc() !=
+                  &(const_cast<const SwDoc *>(GetFmt()->GetDoc())
+                    ->GetPageDesc(0))) )
                 CheckPageDescs( pPage, TRUE );
         }
     }
