@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:21:22 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 13:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ const SfxItemPropertyMap* lcl_GetSheetLinkMap()
         {MAP_CHAR_LEN(SC_UNONAME_FILTER),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_FILTOPT),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LINKURL),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_REFDELAY), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_REFDELAY), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {0,0,0,0}
     };
     return aSheetLinkMap_Impl;
