@@ -17,6 +17,7 @@
  <toolbar:toolbaritem xlink:href=".uno:AlignHorizontalCenter" toolbar:helpid="helpid:26373" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:26372" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbaritem xlink:href=".uno:AlignBlock" toolbar:helpid="helpid:26374" toolbar:text="" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleMergeCells" toolbar:helpid="helpid:26581" toolbar:text="" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ParaLeftToRight" toolbar:helpid="helpid:10950" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:ParaRightToLeft" toolbar:helpid="helpid:10951" toolbar:text="" toolbar:style="radio" toolbar:visible="false" />
