@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2000-11-10 12:23:27 $
+ *  last change: $Author: as $ $Date: 2000-11-10 14:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,13 +107,13 @@ using namespace ::com::sun::star::beans ;
 #define ROOTNODE_TABPAGES                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/TabPages"    ))
 #define ROOTNODE_WINDOWS                    OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Views/Windows"     ))
 
-#define PROPERTYNAME_X                      OUString(RTL_CONSTASCII_USTRINGPARAM("X"                        ))
-#define PROPERTYNAME_Y                      OUString(RTL_CONSTASCII_USTRINGPARAM("Y"                        ))
-#define PROPERTYNAME_WIDTH                  OUString(RTL_CONSTASCII_USTRINGPARAM("Width"                    ))
-#define PROPERTYNAME_HEIGHT                 OUString(RTL_CONSTASCII_USTRINGPARAM("Height"                   ))
-#define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("PageID"                   ))
-#define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("Visible"                  ))
-#define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("UserData"                 ))
+#define PROPERTYNAME_X                      OUString(RTL_CONSTASCII_USTRINGPARAM("/X"                       ))
+#define PROPERTYNAME_Y                      OUString(RTL_CONSTASCII_USTRINGPARAM("/Y"                       ))
+#define PROPERTYNAME_WIDTH                  OUString(RTL_CONSTASCII_USTRINGPARAM("/Width"                   ))
+#define PROPERTYNAME_HEIGHT                 OUString(RTL_CONSTASCII_USTRINGPARAM("/Height"                  ))
+#define PROPERTYNAME_PAGEID                 OUString(RTL_CONSTASCII_USTRINGPARAM("/PageID"                  ))
+#define PROPERTYNAME_VISIBLE                OUString(RTL_CONSTASCII_USTRINGPARAM("/Visible"                 ))
+#define PROPERTYNAME_USERDATA               OUString(RTL_CONSTASCII_USTRINGPARAM("/UserData"                ))
 
 #define SEPERATOR_NOT_FOUND                 -1
 #define PATHSEPERATOR                       sal_Unicode('/')
@@ -218,7 +218,7 @@ class SvtViewDialogOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
-        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        sal_Bool    Exists      (   const   OUString&   sName                                                           );
         sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
@@ -229,6 +229,10 @@ class SvtViewDialogOptions_Impl : public ConfigItem
 
     private:
 
+        void impl_ReadWholeList();
+
+    private:
+
         IMPL_TDialogHash    m_aList     ;
 };
 
@@ -236,10 +240,8 @@ class SvtViewDialogOptions_Impl : public ConfigItem
 SvtViewDialogOptions_Impl::SvtViewDialogOptions_Impl()
         :   ConfigItem  ( ROOTNODE_DIALOGS )
 {
-    // Build a list of current existing coniguration keys in right dialog set.
-    // We use these list and our Notify() to get his values!!!
-    Sequence< OUString > seqNames = GetNodeNames( ROOTNODE );
-    Notify( seqNames );
+    // Read complete list from configuration.
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -263,64 +265,10 @@ SvtViewDialogOptions_Impl::~SvtViewDialogOptions_Impl()
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    // Use given name list to get his values from our configuration management.
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    // Safe impossible cases.
-    // Name and value list must have the same size - otherwise some keys are deleted during notification and GetProperties ...
-    // but this is a bug - I think!
-    DBG_ASSERT( sal_False, "SvtViewDialogOptions_Impl::Notify()\nMiss some values for notified properties!\n" );
-    sal_uInt32  nCount          = seqPropertyNames.getLength();
-    sal_Int32   nFirstSeperator ;
-    OUString    sDialogName     ;
-    OUString    sPropertyName   ;
-    for( sal_uInt32 nProperty=0; nProperty<nCount; ++nCount )
-    {
-        // zB   seqPropertyNames[nProperty] =   "FileOpen/Position/X"
-        //  =>  sDialogName                 =   "FileOpen"
-        //  =>  sPropertyName               =   "Position/X"    => MUST one of predefined property names!!!
-        //                                      Otherwise our set tree is inconsistent - because somewhere has add other keys ...
-        // Attention:   We don't accept empty property names! Our baseclass never send notifications for trees yet ...
-        //              or somewhere has changed the implementation!
-
-        nFirstSeperator = seqPropertyNames[nProperty].indexOf( PATHSEPERATOR );
-
-        DBG_ASSERT( !(nFirstSeperator==SEPERATOR_NOT_FOUND), "SvtViewDialogOptions_Impl::Notify()\nBaselcass has changed his implementation - I don't accept notifications for a complete tree at one time!\n" );
-
-        sDialogName     = seqPropertyNames[nProperty].copy( 0, nFirstSeperator );
-        sPropertyName   = seqPropertyNames[nProperty].copy( nFirstSeperator, seqPropertyNames[nProperty].getLength()-nFirstSeperator );
-
-        // We use the index operator to set the new value.
-        // If the item already exist - all is ok ...
-        // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_X )
-        {
-            seqValues[nProperty] >>= m_aList[ sDialogName ].nX;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_Y )
-        {
-            seqValues[nProperty] >>= m_aList[ sDialogName ].nY;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_WIDTH )
-        {
-            seqValues[nProperty] >>= m_aList[ sDialogName ].nWidth;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_HEIGHT )
-        {
-            seqValues[nProperty] >>= m_aList[ sDialogName ].nHeight;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_USERDATA )
-        {
-            seqValues[nProperty] >>= m_aList[ sDialogName ].sUserData;
-        }
-        else
-        {
-            DBG_ASSERT( sal_False, "SvtViewDialogOptions_Impl::Notify()\nUnknown property detected!\n" );
-        }
-    }
+    // We ignore given name sequence.
+    // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
+    // I think to read the whole list is the best way.
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
@@ -352,7 +300,7 @@ void SvtViewDialogOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtViewDialogOptions_Impl::Exist( const OUString& sName )
+sal_Bool SvtViewDialogOptions_Impl::Exists( const OUString& sName )
 {
     return ( m_aList.find( sName ) != m_aList.end() );
 }
@@ -411,6 +359,45 @@ void SvtViewDialogOptions_Impl::SetUserData( const OUString& sName, const OUStri
     m_aList[ sName ].sUserData = sData;
 }
 
+//*****************************************************************************************************************
+void SvtViewDialogOptions_Impl::impl_ReadWholeList()
+{
+    // Clear cache, get current name list of existing dialogs in configuration.
+    // Insert 5 subkeys for every entry and use these list as SNAPSHOT to read ALL values of our subtree!
+    // At least add these values in our hash map.
+    m_aList.clear();
+
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
+    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
+    Sequence< OUString >    seqAllNames     ( nCount*5 )                ;
+    sal_uInt32              nItem           = 0                         ;
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
+        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
+        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_WIDTH     ;
+        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_HEIGHT    ;
+        seqAllNames[nItem+4] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+    }
+
+    Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+
+    // Safe impossible cases.
+    // We have asked for ALL our subtree keys and we would get all his values.
+    // It's neccessary for next loop and our index using!
+    DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for dialog set!\n" );
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
+        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
+        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nWidth   ;
+        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].nHeight  ;
+        seqAllValues[nItem+4] >>= m_aList[seqNodeNames[nItem]].sUserData;
+    }
+}
+
 /*-************************************************************************************************************//**
     @descr  Implement the data container for tab-dialogs.
 *//*-*************************************************************************************************************/
@@ -425,7 +412,7 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
-        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        sal_Bool    Exists      (   const   OUString&   sName                                                           );
         sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
@@ -436,6 +423,10 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
 
     private:
 
+        void impl_ReadWholeList();
+
+    private:
+
         IMPL_TTabDialogHash     m_aList     ;
 };
 
@@ -443,10 +434,8 @@ class SvtViewTabDialogOptions_Impl : public ConfigItem
 SvtViewTabDialogOptions_Impl::SvtViewTabDialogOptions_Impl()
         :   ConfigItem  ( ROOTNODE_TABDIALOGS )
 {
-    // Build a list of current existing coniguration keys in right tab dialog set.
-    // We use these list and our Notify() to get his values!!!
-    Sequence< OUString > seqNames = GetNodeNames( ROOTNODE );
-    Notify( seqNames );
+    // Read complete list from configuration.
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -470,59 +459,10 @@ SvtViewTabDialogOptions_Impl::~SvtViewTabDialogOptions_Impl()
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    // Use given name list to get his values from our configuration management.
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    // Safe impossible cases.
-    // Name and value list must have the same size - otherwise some keys are deleted during notification and GetProperties ...
-    // but this is a bug - I think!
-    DBG_ASSERT( sal_False, "SvtViewTabDialogOptions_Impl::Notify()\nMiss some values for notified properties!\n" );
-    sal_uInt32  nCount          = seqPropertyNames.getLength();
-    sal_Int32   nFirstSeperator ;
-    OUString    sTabDialogName  ;
-    OUString    sPropertyName   ;
-    for( sal_uInt32 nProperty=0; nProperty<nCount; ++nCount )
-    {
-        // zB   seqPropertyNames[nProperty] =   "TabDialog_001/Position/X"
-        //  =>  sTabDialogName              =   "TabDialog_001"
-        //  =>  sPropertyName               =   "Position/X"    => MUST one of predefined property names!!!
-        //                                      Otherwise our set tree is inconsistent - because somewhere has add other keys ...
-        // Attention:   We don't accept empty property names! Our baseclass never send notifications for trees yet ...
-        //              or somewhere has changed the implementation!
-
-        nFirstSeperator = seqPropertyNames[nProperty].indexOf( PATHSEPERATOR );
-
-        DBG_ASSERT( !(nFirstSeperator==SEPERATOR_NOT_FOUND), "SvtViewTabDialogOptions_Impl::Notify()\nBaselcass has changed his implementation - I don't accept notifications for a complete tree at one time!\n" );
-
-        sTabDialogName  = seqPropertyNames[nProperty].copy( 0, nFirstSeperator );
-        sPropertyName   = seqPropertyNames[nProperty].copy( nFirstSeperator, seqPropertyNames[nProperty].getLength()-nFirstSeperator );
-
-        // We use the index operator to set the new value.
-        // If the item already exist - all is ok ...
-        // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_X )
-        {
-            seqValues[nProperty] >>= m_aList[ sTabDialogName ].nX;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_Y )
-        {
-            seqValues[nProperty] >>= m_aList[ sTabDialogName ].nY;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_PAGEID )
-        {
-            seqValues[nProperty] >>= m_aList[ sTabDialogName ].nPageID;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_USERDATA )
-        {
-            seqValues[nProperty] >>= m_aList[ sTabDialogName ].sUserData;
-        }
-        else
-        {
-            DBG_ASSERT( sal_False, "SvtViewTabDialogOptions_Impl::Notify()\nUnknown property detected!\n" );
-        }
-    }
+    // We ignore given name sequence.
+    // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
+    // I think to read the whole list is the best way.
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
@@ -552,7 +492,7 @@ void SvtViewTabDialogOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtViewTabDialogOptions_Impl::Exist( const OUString& sName )
+sal_Bool SvtViewTabDialogOptions_Impl::Exists( const OUString& sName )
 {
     return ( m_aList.find( sName ) != m_aList.end() );
 }
@@ -609,6 +549,43 @@ void SvtViewTabDialogOptions_Impl::SetUserData( const OUString& sName, const OUS
     m_aList[ sName ].sUserData = sData;
 }
 
+//*****************************************************************************************************************
+void SvtViewTabDialogOptions_Impl::impl_ReadWholeList()
+{
+    // Clear cache, get current name list of existing dialogs in configuration.
+    // Insert 4 subkeys for every entry and use these list as SNAPSHOT to read ALL values of our subtree!
+    // At least add these values in our hash map.
+    m_aList.clear();
+
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
+    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
+    Sequence< OUString >    seqAllNames     ( nCount*4 )                ;
+    sal_uInt32              nItem           = 0                         ;
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
+        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
+        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_PAGEID    ;
+        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+    }
+
+    Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+
+    // Safe impossible cases.
+    // We have asked for ALL our subtree keys and we would get all his values.
+    // It's neccessary for next loop and our index using!
+    DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabDialogOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-dialog set!\n" );
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
+        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
+        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nPageID  ;
+        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].sUserData;
+    }
+}
+
 /*-************************************************************************************************************//**
     @descr  Implement the data container for tab-pages.
 *//*-*************************************************************************************************************/
@@ -623,10 +600,14 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
-        sal_Bool    Exist       (   const   OUString&   sName                               );
+        sal_Bool    Exists      (   const   OUString&   sName                               );
         sal_Bool    Delete      (   const   OUString&   sName                               );
         OUString    GetUserData (   const   OUString&   sName                               );
         void        SetUserData (   const   OUString&   sName,  const   OUString&   sData   );
+
+    private:
+
+        void impl_ReadWholeList();
 
     private:
 
@@ -637,10 +618,8 @@ class SvtViewTabPageOptions_Impl : public ConfigItem
 SvtViewTabPageOptions_Impl::SvtViewTabPageOptions_Impl()
         :   ConfigItem  ( ROOTNODE_TABPAGES )
 {
-    // Build a list of current existing coniguration keys in right pages set.
-    // We use these list and our Notify() to get his values!!!
-    Sequence< OUString > seqNames = GetNodeNames( ROOTNODE );
-    Notify( seqNames );
+    // Read complete list from configuration.
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -664,44 +643,10 @@ SvtViewTabPageOptions_Impl::~SvtViewTabPageOptions_Impl()
 //*****************************************************************************************************************
 void SvtViewTabPageOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    // Use given name list to get his values from our configuration management.
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    // Safe impossible cases.
-    // Name and value list must have the same size - otherwise some keys are deleted during notification and GetProperties ...
-    // but this is a bug - I think!
-    DBG_ASSERT( sal_False, "SvtViewTabPageOptions_Impl::Notify()\nMiss some values for notified properties!\n" );
-    sal_uInt32  nCount          = seqPropertyNames.getLength();
-    sal_Int32   nFirstSeperator ;
-    OUString    sTabPageName    ;
-    OUString    sPropertyName   ;
-    for( sal_uInt32 nProperty=0; nProperty<nCount; ++nCount )
-    {
-        // zB   seqPropertyNames[nProperty] =   "TabPage_001/Position/X"
-        //  =>  sTabPageName                =   "TabPage_001"
-        //  =>  sPropertyName               =   "UserData"  => MUST one of predefined property names!!!
-        //                                      Otherwise our set tree is inconsistent - because somewhere has add other keys ...
-        // Attention:   We don't accept empty property names! Our baseclass never send notifications for trees yet ...
-        //              or somewhere has changed the implementation!
-
-        nFirstSeperator = seqPropertyNames[nProperty].indexOf( PATHSEPERATOR );
-
-        DBG_ASSERT( !(nFirstSeperator==SEPERATOR_NOT_FOUND), "SvtViewTabPageOptions_Impl::Notify()\nBaselcass has changed his implementation - I don't accept notifications for a complete tree at one time!\n" );
-
-        sTabPageName    = seqPropertyNames[nProperty].copy( 0, nFirstSeperator );
-        sPropertyName   = seqPropertyNames[nProperty].copy( nFirstSeperator, seqPropertyNames[nProperty].getLength()-nFirstSeperator );
-
-        // We use the index operator to set the new value.
-        // If the item already exist - all is ok ...
-        // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_USERDATA )
-        {
-            seqValues[nProperty] >>= m_aList[ sTabPageName ].sUserData;
-        }
-        else
-        {
-            DBG_ASSERT( sal_False, "SvtViewTabPageOptions_Impl::Notify()\nUnknown property detected!\n" );
-        }
-    }
+    // We ignore given name sequence.
+    // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
+    // I think to read the whole list is the best way.
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
@@ -725,7 +670,7 @@ void SvtViewTabPageOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtViewTabPageOptions_Impl::Exist( const OUString& sName )
+sal_Bool SvtViewTabPageOptions_Impl::Exists( const OUString& sName )
 {
     return ( m_aList.find( sName ) != m_aList.end() );
 }
@@ -754,6 +699,37 @@ void SvtViewTabPageOptions_Impl::SetUserData( const OUString& sName, const OUStr
     m_aList[ sName ].sUserData = sData;
 }
 
+//*****************************************************************************************************************
+void SvtViewTabPageOptions_Impl::impl_ReadWholeList()
+{
+    // Clear cache, get current name list of existing dialogs in configuration.
+    // Use these list as SNAPSHOT to read ALL values of our subtree!
+    // At least add these values in our hash map.
+    m_aList.clear();
+
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
+    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
+    Sequence< OUString >    seqAllNames     ( nCount )                  ;
+    sal_uInt32              nItem           = 0                         ;
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllNames[nItem] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA    ;
+    }
+
+    Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+
+    // Safe impossible cases.
+    // We have asked for ALL our subtree keys and we would get all his values.
+    // It's neccessary for next loop and our index using!
+    DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewTabPageOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for tab-page set!\n" );
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllValues[nItem] >>= m_aList[seqNodeNames[nItem]].sUserData;
+    }
+}
+
 /*-************************************************************************************************************//**
     @descr  Implement the data container for windows.
 *//*-*************************************************************************************************************/
@@ -768,7 +744,7 @@ class SvtViewWindowOptions_Impl : public ConfigItem
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
         virtual void Commit();
 
-        sal_Bool    Exist       (   const   OUString&   sName                                                           );
+        sal_Bool    Exists      (   const   OUString&   sName                                                           );
         sal_Bool    Delete      (   const   OUString&   sName                                                           );
         void        GetPosition (   const   OUString&   sName   ,           sal_Int32&  nX      ,   sal_Int32&  nY      );
         void        SetPosition (   const   OUString&   sName   ,           sal_Int32   nX      ,   sal_Int32   nY      );
@@ -781,6 +757,10 @@ class SvtViewWindowOptions_Impl : public ConfigItem
 
     private:
 
+        void impl_ReadWholeList();
+
+    private:
+
         IMPL_TWindowHash    m_aList     ;
 };
 
@@ -788,10 +768,8 @@ class SvtViewWindowOptions_Impl : public ConfigItem
 SvtViewWindowOptions_Impl::SvtViewWindowOptions_Impl()
         :   ConfigItem  ( ROOTNODE_WINDOWS )
 {
-    // Build a list of current existing coniguration keys in right window set.
-    // We use these list and our Notify() to get his values!!!
-    Sequence< OUString > seqNames = GetNodeNames( ROOTNODE );
-    Notify( seqNames );
+    // Read complete list from configuration.
+    impl_ReadWholeList();
 
     // Enable notification for our whole set tree!
     // use "/" to do that!
@@ -815,69 +793,10 @@ SvtViewWindowOptions_Impl::~SvtViewWindowOptions_Impl()
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    // Use given name list to get his values from our configuration management.
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-    // Safe impossible cases.
-    // Name and value list must have the same size - otherwise some keys are deleted during notification and GetProperties ...
-    // but this is a bug - I think!
-    DBG_ASSERT( sal_False, "SvtViewWindowOptions_Impl::Notify()\nMiss some values for notified properties!\n" );
-    sal_uInt32  nCount          = seqPropertyNames.getLength();
-    sal_Int32   nFirstSeperator ;
-    OUString    sWindowName     ;
-    OUString    sPropertyName   ;
-    for( sal_uInt32 nProperty=0; nProperty<nCount; ++nCount )
-    {
-        // zB   seqPropertyNames[nProperty] =   "Window_001/Position/X"
-        //  =>  sWindowName                 =   "Window_001"
-        //  =>  sPropertyName               =   "Position/X"    => MUST one of predefined property names!!!
-        //                                      Otherwise our set tree is inconsistent - because somewhere has add other keys ...
-        // Attention:   We don't accept empty property names! Our baseclass never send notifications for trees yet ...
-        //              or somewhere has changed the implementation!
-
-        nFirstSeperator = seqPropertyNames[nProperty].indexOf( PATHSEPERATOR );
-
-        DBG_ASSERT( !(nFirstSeperator==SEPERATOR_NOT_FOUND), "SvtViewWindowOptions_Impl::Notify()\nBaselcass has changed his implementation - I don't accept notifications for a complete tree at one time!\n" );
-
-        sWindowName     = seqPropertyNames[nProperty].copy( 0, nFirstSeperator );
-        sPropertyName   = seqPropertyNames[nProperty].copy( nFirstSeperator, seqPropertyNames[nProperty].getLength()-nFirstSeperator );
-
-        // We use the index operator to set the new value.
-        // If the item already exist - all is ok ...
-        // otherwise these operator create a new hash item automaticly!
-        if( sPropertyName == PROPERTYNAME_X )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].nX;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_Y )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].nY;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_WIDTH )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].nWidth;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_HEIGHT )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].nHeight;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_VISIBLE )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].bVisible;
-        }
-        else
-        if( sPropertyName == PROPERTYNAME_USERDATA )
-        {
-            seqValues[nProperty] >>= m_aList[ sWindowName ].sUserData;
-        }
-        else
-        {
-            DBG_ASSERT( sal_False, "SvtViewWindowOptions_Impl::Notify()\nUnknown property detected!\n" );
-        }
-    }
+    // We ignore given name sequence.
+    // It's to complex to handle a dynamic set with notifys for add/delete/change elements!
+    // I think to read the whole list is the best way.
+    impl_ReadWholeList();
 }
 
 //*****************************************************************************************************************
@@ -911,7 +830,7 @@ void SvtViewWindowOptions_Impl::Commit()
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtViewWindowOptions_Impl::Exist( const OUString& sName )
+sal_Bool SvtViewWindowOptions_Impl::Exists( const OUString& sName )
 {
     return ( m_aList.find( sName ) != m_aList.end() );
 }
@@ -980,6 +899,47 @@ OUString SvtViewWindowOptions_Impl::GetUserData( const OUString& sName )
 void SvtViewWindowOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
     m_aList[ sName ].sUserData = sData;
+}
+
+//*****************************************************************************************************************
+void SvtViewWindowOptions_Impl::impl_ReadWholeList()
+{
+    // Clear cache, get current name list of existing dialogs in configuration.
+    // Insert 6 subkeys for every entry and use these list as SNAPSHOT to read ALL values of our subtree!
+    // At least add these values in our hash map.
+    m_aList.clear();
+
+    Sequence< OUString >    seqNodeNames    = GetNodeNames( OUString() );
+    sal_uInt32              nCount          = seqNodeNames.getLength()  ;
+    Sequence< OUString >    seqAllNames     ( nCount*6 )                ;
+    sal_uInt32              nItem           = 0                         ;
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllNames[nItem  ] = seqNodeNames[nItem] + PROPERTYNAME_X         ;
+        seqAllNames[nItem+1] = seqNodeNames[nItem] + PROPERTYNAME_Y         ;
+        seqAllNames[nItem+2] = seqNodeNames[nItem] + PROPERTYNAME_WIDTH     ;
+        seqAllNames[nItem+3] = seqNodeNames[nItem] + PROPERTYNAME_HEIGHT    ;
+        seqAllNames[nItem+4] = seqNodeNames[nItem] + PROPERTYNAME_VISIBLE   ;
+        seqAllNames[nItem+5] = seqNodeNames[nItem] + PROPERTYNAME_USERDATA  ;
+    }
+
+    Sequence< Any > seqAllValues = GetProperties( seqAllNames );
+
+    // Safe impossible cases.
+    // We have asked for ALL our subtree keys and we would get all his values.
+    // It's neccessary for next loop and our index using!
+    DBG_ASSERT( !(seqAllNames.getLength()!=seqAllValues.getLength()), "SvtViewWindowOptions_Impl::impl_ReadWholeList()\nMiss some configuration values for window set!\n" );
+
+    for( nItem=0; nItem<nCount; ++nItem )
+    {
+        seqAllValues[nItem  ] >>= m_aList[seqNodeNames[nItem]].nX       ;
+        seqAllValues[nItem+1] >>= m_aList[seqNodeNames[nItem]].nY       ;
+        seqAllValues[nItem+2] >>= m_aList[seqNodeNames[nItem]].nWidth   ;
+        seqAllValues[nItem+3] >>= m_aList[seqNodeNames[nItem]].nHeight  ;
+        seqAllValues[nItem+4] >>= m_aList[seqNodeNames[nItem]].bVisible ;
+        seqAllValues[nItem+5] >>= m_aList[seqNodeNames[nItem]].sUserData;
+    }
 }
 
 //_________________________________________________________________________________________________________________
@@ -1104,32 +1064,32 @@ SvtViewOptions::~SvtViewOptions()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-sal_Bool SvtViewOptions::Exist() const
+sal_Bool SvtViewOptions::Exists() const
 {
     // Ready for multithreading
     MutexGuard aGuard( GetOwnStaticMutex() );
 
-    sal_Bool bExist = sal_False;
+    sal_Bool bExists = sal_False;
     switch( m_eViewType )
     {
         case E_DIALOG       :   {
-                                    bExist = m_pDataContainer_Dialogs->Exist( m_sViewName );
+                                    bExists = m_pDataContainer_Dialogs->Exists( m_sViewName );
                                 }
                                 break;
         case E_TABDIALOG    :   {
-                                    bExist = m_pDataContainer_TabDialogs->Exist( m_sViewName );
+                                    bExists = m_pDataContainer_TabDialogs->Exists( m_sViewName );
                                 }
                                 break;
         case E_TABPAGE      :   {
-                                    bExist = m_pDataContainer_TabPages->Exist( m_sViewName );
+                                    bExists = m_pDataContainer_TabPages->Exists( m_sViewName );
                                 }
                                 break;
         case E_WINDOW       :   {
-                                    bExist = m_pDataContainer_Windows->Exist( m_sViewName );
+                                    bExists = m_pDataContainer_Windows->Exists( m_sViewName );
                                 }
                                 break;
     }
-    return bExist;
+    return bExists;
 }
 
 //*****************************************************************************************************************
@@ -1417,6 +1377,58 @@ void SvtViewOptions::SetUserData( const OUString& sData )
                                 }
                                 break;
     }
+}
+
+//*****************************************************************************************************************
+//  static public method
+//*****************************************************************************************************************
+Sequence< OUString > SvtViewOptions::SeperateUserData( const OUString& sData, sal_Unicode cSeperator )
+{
+    Sequence< OUString > seqToken;
+
+    sal_Int32 nLength   = sData.getLength() ;
+    sal_Int32 nStart    = 0                 ;
+    sal_Int32 nEnd      = 0                 ;
+    sal_Int32 nToken    = 0                 ;
+
+    while   (
+                nStart < nLength
+            )
+    {
+        nEnd = sData.indexOf( cSeperator, nStart );
+        if( nEnd != -1 )
+        {
+            seqToken[nToken] = sData.copy( nStart, nEnd-nStart );
+            nStart = nEnd;
+        }
+        else
+        if( nStart < nLength )
+        {
+            seqToken[nToken] = sData.copy( nStart, nLength-nStart );
+            nStart = nLength;
+        }
+        ++nToken;
+    }
+
+    return seqToken;
+}
+
+//*****************************************************************************************************************
+//  static public method
+//*****************************************************************************************************************
+OUString SvtViewOptions::GenerateUserData( const Sequence< OUString >& seqData, sal_Unicode cSeperator )
+{
+    OUString sUserData;
+    sal_Int32 nCount = seqData.getLength();
+    for( sal_Int32 nToken=0; nToken<nCount; ++nToken )
+    {
+        sUserData += seqData[nToken];
+        if( nToken < nCount )
+        {
+            sUserData += &cSeperator;
+        }
+    }
+    return sUserData;
 }
 
 //*****************************************************************************************************************
