@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:39:55 $
+ *  last change: $Author: mav $ $Date: 2001-05-14 17:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,18 @@ void executeCookieDialog(CntHTTPCookieRequest & rRequest);
 sal_Char const UUIInteractionHandler::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionHandler";
 
+
+//============================================================================
+
+UUIInteractionHandler::UUIInteractionHandler(
+    uno::Reference< lang::XMultiServiceFactory > const & aServiceManager )
+{
+    mPContainer = uno::Reference< task::XPasswordContainer >( aServiceManager->createInstance(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.PasswordContainer" ))),
+                        uno::UNO_QUERY );
+}
+
+
 //============================================================================
 // virtual
 uno::Any SAL_CALL UUIInteractionHandler::queryInterface(uno::Type const &
@@ -384,6 +396,56 @@ UUIInteractionHandler::handle(
             bRemember = false;
             bRememberPersistent = false;
         }
+
+        if( mPContainer.is() )
+        {
+            if (!aAuthenticationRequest.UserName.getLength())
+            {
+                task::UrlRecord  aRec = mPContainer->find( aAuthenticationRequest.ServerName,
+                                                uno::Reference< task::XInteractionHandler >());
+                if( aRec.UserList.getLength() )
+                {
+                    xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                    OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
+                    xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
+                    if( aRec.UserList[0].Passwords.getLength() > 1 )
+                    {
+                        if ( aAuthenticationRequest.HasRealm )
+                            xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
+                        else
+                            xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                    }
+                    xSupplyAuthentication->select();
+
+                    return;
+                }
+            }
+            else
+            {
+                task::UrlRecord aRec = mPContainer->findForName( aAuthenticationRequest.ServerName,
+                                                 aAuthenticationRequest.UserName,
+                                                uno::Reference< task::XInteractionHandler >());
+                if( aRec.UserList.getLength() )
+                {
+                    OSL_ENSURE( aRec.UserList[0].Passwords.getLength(), "Empty password list!\n" );
+                    if ( !aAuthenticationRequest.HasPassword || !aAuthenticationRequest.Password.equals( aRec.UserList[0].Passwords[0] ))
+                    {
+                        xSupplyAuthentication->setUserName( aRec.UserList[0].UserName.getStr() );
+                        xSupplyAuthentication->setPassword( aRec.UserList[0].Passwords[0].getStr() );
+                        if( aRec.UserList[0].Passwords.getLength() > 1 )
+                        {
+                            if ( aAuthenticationRequest.HasRealm )
+                                xSupplyAuthentication->setRealm( aRec.UserList[0].Passwords[1].getStr() );
+                            else
+                                xSupplyAuthentication->setAccount( aRec.UserList[0].Passwords[1].getStr() );
+                        }
+                        xSupplyAuthentication->select();
+                        return;
+                    }
+                }
+            }
+        }
+
         LoginErrorInfo aInfo;
         aInfo.SetTitle(aAuthenticationRequest.ServerName);
         aInfo.SetServer(aAuthenticationRequest.ServerName);
@@ -425,6 +487,20 @@ UUIInteractionHandler::handle(
                     else
                         xSupplyAuthentication->setAccount(aInfo.GetAccount());
                     xSupplyAuthentication->select();
+                }
+                if (mPContainer.is())
+                {
+                    uno::Sequence< rtl::OUString > aPassList(1);
+                    aPassList[0] = aInfo.GetPassword();
+                    if( aInfo.GetAccount().Len() )
+                    {
+                        aPassList.realloc(2);
+                        aPassList[1] = aInfo.GetAccount();
+                    }
+                    // after we are able to save encripted passwords
+                    // we should modify stuff below
+                    mPContainer->add( aAuthenticationRequest.ServerName, aInfo.GetUserName(), aPassList,
+                                                uno::Reference< task::XInteractionHandler >());
                 }
                 break;
 
@@ -793,10 +869,10 @@ UUIInteractionHandler::getSupportedServiceNames_static()
 {
     uno::Sequence< rtl::OUString > aNames(2);
     aNames[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.task.InteractionHandler"));
+                    "com.sun.star.task.InteractionHandler"));
     aNames[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.uui.InteractionHandler"));
-        // for backwards compatibility
+                    "com.sun.star.uui.InteractionHandler"));
+         // for backwards compatibility
     return aNames;
 }
 
@@ -804,10 +880,10 @@ UUIInteractionHandler::getSupportedServiceNames_static()
 // static
 uno::Reference< uno::XInterface > SAL_CALL
 UUIInteractionHandler::createInstance(
-    uno::Reference< lang::XMultiServiceFactory > const &)
+    uno::Reference< lang::XMultiServiceFactory > const & aServiceManager )
 {
     return static_cast< uno::XWeak * >(static_cast< cppu::OWeakObject * >(
-                                           new UUIInteractionHandler));
+                                           new UUIInteractionHandler(aServiceManager)));
 }
 
 //============================================================================
