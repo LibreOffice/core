@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2002-11-28 16:16:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,7 +454,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
             {
                 ScRangeData*    pNewEntry   = NULL;
                 RangeType       nType       = RT_NAME;
-                USHORT          nTab        = pViewData->GetTabNo();
+                SCTAB           nTab        = pViewData->GetTabNo();
                 USHORT          nFoundAt    = 0;
                 String          theSymbol   = aEdAssign.GetText();
                 String          aStrPos;
