@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ namespace dbaui
         sal_Bool        m_bCreateView;      // set to true when we should create a view otherwise we create a normal query
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getElements() const;
-        void askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
+        sal_Bool askForNewName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xElements,
                             sal_Bool _bSaveAs);
         // creates the querycomposer
         void setQueryComposer();

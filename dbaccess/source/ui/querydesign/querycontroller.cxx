@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 09:48:55 $
+ *  last change: $Author: oj $ $Date: 2001-10-01 11:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,8 +1028,9 @@ String OQueryController::getMenu() const
     return String::CreateFromInt32(RID_QUERY_DESIGN_MAIN_MENU);
 }
 // -----------------------------------------------------------------------------
-void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
+sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sal_Bool _bSaveAs)
 {
+    sal_Bool bRet = sal_True;
     sal_Bool bNew = 0 == m_sName.getLength();
     bNew = bNew || _bSaveAs || (_xElements.is() && !_xElements->hasByName(m_sName));
     if(bNew)
@@ -1056,18 +1057,19 @@ void OQueryController::askForNewName(const Reference<XNameAccess>& _xElements,sa
                 xMetaData, aDefaultName,
                 _bSaveAs ? SAD_OVERWRITE : SAD_DEFAULT);
 
-        if(aDlg.Execute() == RET_OK)
+        if(bRet = (aDlg.Execute() == RET_OK))
         {
             m_sName = aDlg.getName();
             if(m_bCreateView)
             {
                 m_sUpdateCatalogName    = aDlg.getCatalog();
-                m_sUpdateSchemaName = aDlg.getSchema();
+                m_sUpdateSchemaName     = aDlg.getSchema();
             }
         }
-        else
+        else if(!_bSaveAs)
             m_sName = ::rtl::OUString(); // reset the name because we don't want to save it
     }
+    return bRet;
 }
 // -----------------------------------------------------------------------------
 void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
@@ -1092,10 +1094,8 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                 sal_Bool bNew = 0 == m_sName.getLength();
                 bNew = bNew || _bSaveAs || !xElements->hasByName(m_sName);
                 // first we need a name for our query so ask the user
-                askForNewName(xElements,_bSaveAs);
-
                 // did we get a name
-                if(m_sName.getLength())
+                if(askForNewName(xElements,_bSaveAs) && m_sName.getLength())
                 {
                     SQLExceptionInfo aInfo;
                     try
