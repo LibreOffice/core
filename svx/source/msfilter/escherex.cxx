@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-11 14:39:17 $
+ *  last change: $Author: sj $ $Date: 2000-12-12 17:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,26 @@
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
+#include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
+#include <com/sun/star/drawing/FillStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
+#include <com/sun/star/drawing/LineDash.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
+#include <com/sun/star/drawing/PointSequence.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+#ifndef _TOOLKIT_UNOHLP_HXX
+#include <toolkit/unohlp.hxx>
 #endif
 
 #ifndef _RTL_CRC_H_
@@ -138,15 +156,35 @@ struct EscherPropSortStruct
     sal_uInt16  nPropId;
 };
 
-EscherPropertyContainer::EscherPropertyContainer() :
-    nSortCount      ( 0 ),
-    nCountCount     ( 0 ),
-    nCountSize      ( 0 ),
-    nSortBufSize    ( 64 ),
-    bHasComplexData ( sal_False ),
-    pSortStruct     ( new EscherPropSortStruct[ 64 ] )
+void EscherPropertyContainer::ImplInit()
 {
+    nSortCount = 0;
+    nCountCount = 0;
+    nCountSize = 0;
+    nSortBufSize = 64;
+    bHasComplexData = sal_False;
+    bSuppressRotation = sal_False;
+    pSortStruct = new EscherPropSortStruct[ nSortBufSize ];
+}
+
+EscherPropertyContainer::EscherPropertyContainer() :
+    pGraphicProvider    ( NULL ),
+    pPicOutStrm         ( NULL )
+{
+    ImplInit();
 };
+
+EscherPropertyContainer::EscherPropertyContainer(
+    EscherGraphicProvider& rGraphProv,
+            SvStream* pPiOutStrm,
+                Rectangle& rBoundRect ) :
+
+    pGraphicProvider    ( &rGraphProv ),
+    pPicOutStrm         ( pPiOutStrm ),
+    pShapeBoundRect     ( &rBoundRect )
+{
+    ImplInit();
+}
 
 EscherPropertyContainer::~EscherPropertyContainer()
 {
@@ -214,6 +252,22 @@ void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uI
     }
 }
 
+sal_Bool EscherPropertyContainer::GetOpt( sal_uInt16 nPropId, sal_uInt32& nPropValue ) const
+{
+    sal_Bool bRetValue = sal_False;
+    for( sal_uInt32 i = 0; i < nSortCount; i++ )
+    {
+        if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropId &~0xc000 ) )
+        {
+            nPropValue = pSortStruct[ i ].nPropValue;
+            bRetValue = sal_True;
+            break;
+        }
+    }
+    return bRetValue;
+}
+
+
 extern "C" int __LOADONCALLAPI EscherPropSortFunc( const void* p1, const void* p2 )
 {
     INT16   nID1 = ((EscherPropSortStruct*)p1)->nPropId &~0xc000;
@@ -233,31 +287,539 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion )
     if ( nSortCount )
     {
         qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
-        sal_Bool bComplex = sal_False;
         sal_uInt32 i;
 
         for ( i = 0; i < nSortCount; i++ )
         {
-            rSt << pSortStruct[ i ].nPropId
-                << pSortStruct[ i ].nPropValue;
-            if ( pSortStruct[ i ].pBuf )
-                bComplex = sal_True;
+            sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
+            sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
+
+            if ( bSuppressRotation && ( nPropId == ESCHER_Prop_Rotation ) )
+                nPropValue = 0;
+
+            rSt << nPropId
+                << nPropValue;
         }
-        if ( bComplex )
+        if ( bHasComplexData )
         {
             for ( i = 0; i < nSortCount; i++ )
             {
                 if ( pSortStruct[ i ].pBuf )
-                {
                     rSt.Write( pSortStruct[ i ].pBuf, pSortStruct[ i ].nPropSize );
-                    delete pSortStruct[ i ].pBuf;
-                }
             }
         }
-        nSortCount = 0;
     }
 }
 
+sal_uInt32 EscherPropertyContainer::ImplGetColor( const sal_uInt32 nSOColor, sal_Bool bSwap )
+{
+    if ( bSwap )
+    {
+        sal_uInt32 nColor = nSOColor & 0xff00;      // GRUEN
+        nColor |= (sal_uInt8)( nSOColor ) << 16;    // ROT
+        nColor |= (sal_uInt8)( nSOColor >> 16 );    // BLAU
+        return nColor;
+    }
+    else
+        return nSOColor & 0xffffff;
+}
+
+sal_uInt32 EscherPropertyContainer::ImplGetGradientColor(
+    const ::com::sun::star::awt::Gradient* pGradient,
+        sal_uInt32 nStartColor )
+{
+    sal_uInt32  nIntensity;
+    Color       aColor;
+
+    if ( pGradient )
+    {
+        if ( nStartColor & 1 )
+        {
+            nIntensity = pGradient->StartIntensity;
+            aColor = pGradient->StartColor;
+        }
+        else
+        {
+            nIntensity = pGradient->EndIntensity;
+            aColor = pGradient->EndColor;
+        }
+    }
+    sal_uInt32  nRed = ( ( aColor.GetRed() * nIntensity ) / 100 );
+    sal_uInt32  nGreen = ( ( aColor.GetGreen() * nIntensity ) / 100 ) << 8;
+    sal_uInt32  nBlue = ( ( aColor.GetBlue() * nIntensity ) / 100 ) << 16;
+    return nRed | nGreen | nBlue;
+}
+
+void EscherPropertyContainer::CreateGradientProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+{
+    ::com::sun::star::uno::Any          aAny;
+    ::com::sun::star::awt::Gradient*    pGradient = NULL;
+
+    sal_Int32   nAngle = 0;
+    sal_uInt32  nFillFocus = 0x64;
+    sal_uInt32  nFirstColor = 0;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ), sal_False ) )
+    {
+        pGradient = (::com::sun::star::awt::Gradient*)aAny.getValue();
+        nAngle = pGradient->Angle;
+    }
+    switch ( pGradient->Style )
+    {
+        default:
+        case ::com::sun::star::awt::GradientStyle_LINEAR :
+        {
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_AXIAL :
+        {
+            nFillFocus = 0x32;
+            nFirstColor = 1;
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_RADIAL :
+        {
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_ELLIPTICAL :
+        {
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_SQUARE :
+        {
+        }
+        break;
+        case ::com::sun::star::awt::GradientStyle_RECT :
+        {
+        }
+        break;
+    }
+    AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
+    AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + nAngle ) << 16 ) / 10 );
+    AddOpt( ESCHER_Prop_fillColor, ImplGetGradientColor( pGradient, nFirstColor ) );
+    AddOpt( ESCHER_Prop_fillBackColor, ImplGetGradientColor( pGradient, nFirstColor ^ 1 ) );
+    AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
+};
+
+void EscherPropertyContainer::CreateFillProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_Bool bEdge )
+{
+    ::com::sun::star::uno::Any aAny;
+    AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
+    AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+
+    sal_uInt32 nFillBackColor = 0;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ), sal_False ) )
+    {
+        ::com::sun::star::drawing::FillStyle eFS;
+        if ( ! ( aAny >>= eFS ) )
+            eFS = ::com::sun::star::drawing::FillStyle_SOLID;
+        switch( eFS )
+        {
+            case ::com::sun::star::drawing::FillStyle_GRADIENT :
+            {
+                CreateGradientProperties( rXPropSet );
+                AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+            }
+            break;
+
+            case ::com::sun::star::drawing::FillStyle_BITMAP :
+            {
+                CreateGraphicProperties( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ), sal_True );
+                AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+                AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
+            }
+            break;
+            case ::com::sun::star::drawing::FillStyle_HATCH :
+            case ::com::sun::star::drawing::FillStyle_SOLID :
+            default:
+            {
+                sal_uInt16 nTransparency = ( EscherPropertyValueHelper::GetPropertyValue(
+                                                aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillTransparence" ) ), sal_False ) )
+                                            ? *((sal_Int16*)aAny.getValue() )
+                                            : 0;
+                if ( nTransparency != 100 )
+                {
+                    if ( nTransparency )    // opacity
+                        AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
+                    if ( EscherPropertyValueHelper::GetPropertyValue(
+                            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ), sal_False ) )
+                    {
+                        sal_uInt32 nFillColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
+                        nFillBackColor = nFillColor ^ 0xffffff;
+                        AddOpt( ESCHER_Prop_fillColor, nFillColor );
+                    }
+                    AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+                    AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+                    break;
+                }
+            }
+            case ::com::sun::star::drawing::FillStyle_NONE :
+                AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+            break;
+        }
+    }
+    CreateLineProperties( rXPropSet, bEdge );
+}
+
+void EscherPropertyContainer::CreateLineProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        sal_Bool bEdge )
+{
+    ::com::sun::star::uno::Any aAny;
+    sal_uInt32 nLineFlags = 0x80008;
+    ESCHER_LineEnd eLineEnd = ESCHER_LineArrowEnd;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStart" ) ), sal_False ) )
+    {
+        ::com::sun::star::drawing::PointSequence* pPolyPolygon = (::com::sun::star::drawing::PointSequence*)aAny.getValue();
+        sal_Int32 nSequenceCount = pPolyPolygon->getLength();
+        if ( nSequenceCount )
+        {
+            // Zeiger auf innere sequences holen
+            ::com::sun::star::awt::Point* pSequence = pPolyPolygon->getArray();
+            if ( pSequence )
+            {
+                switch ( nSequenceCount )
+                {
+                    case 0x4 :
+                    {
+                        switch( pSequence->X )
+                        {
+                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
+                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                        }
+                    }
+                    break;
+                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
+                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                    case 0xd :
+                    {
+                        switch ( pSequence->X )
+                        {
+                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
+                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
+                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                        }
+                    }
+                }
+                AddOpt( ESCHER_Prop_lineStartArrowLength, 2 );
+                AddOpt( ESCHER_Prop_lineStartArrowWidth, 2 );
+                AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
+                nLineFlags |= 0x100010;
+            }
+        }
+    }
+
+    eLineEnd = ESCHER_LineArrowEnd;
+
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineEnd"  ) ), sal_False ) )
+    {
+        ::com::sun::star::drawing::PointSequence* pPolyPolygon = (::com::sun::star::drawing::PointSequence*)aAny.getValue();
+        sal_Int32 nSequenceCount = pPolyPolygon->getLength();
+        if ( nSequenceCount )
+        {
+            // Zeiger auf innere sequences holen
+            ::com::sun::star::awt::Point* pSequence = pPolyPolygon->getArray();
+            if ( pSequence )
+            {
+                switch ( nSequenceCount )
+                {
+                    case 0x4 :
+                    {
+                        switch( pSequence->X )
+                        {
+                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd;    break;
+                            case 0x529 : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                        }
+                    }
+                    break;
+                    case 0x7 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
+                    case 0xa : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                    case 0xd :
+                    {
+                        switch ( pSequence->X )
+                        {
+                            case 0 : eLineEnd = ESCHER_LineArrowDiamondEnd; break;
+                            case 0x64 : eLineEnd = ESCHER_LineArrowOvalEnd; break;
+                            case 0x87c : eLineEnd = ESCHER_LineArrowStealthEnd; break;
+                        }
+                    }
+                }
+                AddOpt( ESCHER_Prop_lineEndArrowLength, 2 );
+                AddOpt( ESCHER_Prop_lineEndArrowWidth, 2 );
+                AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
+                nLineFlags |= 0x100010;
+            }
+        }
+    }
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineStyle"  ) ), sal_False ) )
+    {
+        ::com::sun::star::drawing::LineStyle eLS;
+        if ( aAny >>= eLS )
+        {
+            switch ( eLS )
+            {
+                case ::com::sun::star::drawing::LineStyle_NONE :
+                    AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );           // 80000
+                break;
+
+                case ::com::sun::star::drawing::LineStyle_DASH :
+                {
+                    if ( EscherPropertyValueHelper::GetPropertyValue(
+                        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineDash" ) ), sal_False ) )
+                    {
+                        ESCHER_LineDashing eDash = ESCHER_LineSolid;
+                        ::com::sun::star::drawing::LineDash* pLineDash = (::com::sun::star::drawing::LineDash*)aAny.getValue();
+                        sal_Int32 nDistance = pLineDash->Distance << 1;
+                        switch ( pLineDash->Style )
+                        {
+                            case ::com::sun::star::drawing::DashStyle_ROUND :
+                            case ::com::sun::star::drawing::DashStyle_ROUNDRELATIVE :
+                                AddOpt( ESCHER_Prop_lineEndCapStyle, 0 ); // Style Round setzen
+                            break;
+                        }
+                        if ( ((!(pLineDash->Dots )) || (!(pLineDash->Dashes )) ) || ( pLineDash->DotLen == pLineDash->DashLen ) )
+                        {
+                            sal_Int32 nLen = pLineDash->DotLen;
+                            if ( pLineDash->Dashes )
+                                nLen = pLineDash->DashLen;
+
+                            if ( nLen >= nDistance )
+                                eDash = ESCHER_LineLongDashGEL;
+                            else if ( pLineDash->Dots )
+                                eDash = ESCHER_LineDotSys;
+                            else
+                                eDash = ESCHER_LineDashGEL;
+                        }
+                        else                                                            // X Y
+                        {
+                            if ( pLineDash->Dots != pLineDash->Dashes )
+                            {
+                                if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
+                                    eDash = ESCHER_LineLongDashDotDotGEL;
+                                else
+                                    eDash = ESCHER_LineDashDotDotSys;
+                            }
+                            else                                                        // X Y Y
+                            {
+                                if ( ( pLineDash->DashLen > nDistance ) || ( pLineDash->DotLen > nDistance ) )
+                                    eDash = ESCHER_LineLongDashDotGEL;
+                                else
+                                    eDash = ESCHER_LineDashDotGEL;
+
+                            }
+                        }
+                        AddOpt( ESCHER_Prop_lineDashing, eDash );
+                    }
+                }
+                case ::com::sun::star::drawing::LineStyle_SOLID :
+                default:
+                {
+                    AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+                }
+                break;
+            }
+        }
+        if ( EscherPropertyValueHelper::GetPropertyValue(
+            aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineColor"  ) ), sal_False ) )
+        {
+            sal_uInt32 nLineColor = ImplGetColor( *((sal_uInt32*)aAny.getValue()) );
+            AddOpt( ESCHER_Prop_lineColor, nLineColor );
+            AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
+        }
+    }
+
+    sal_uInt32 nLineSize = ( EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineWidth"  ) ), sal_False ) )
+        ? *((sal_uInt32*)aAny.getValue())
+        : 0;
+
+    if ( nLineSize > 1 )
+        AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
+    if ( bEdge == sal_False )
+    {
+        AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
+        AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+    }
+}
+
+sal_Bool EscherPropertyContainer::CreateGraphicProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        const String& rSource, sal_Bool bFillBitmap, sal_Bool bOle )
+{
+    sal_Bool        bRetValue = sal_False;
+
+    if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
+    {
+        sal_Bool        bMirrored = sal_False;
+        sal_Bool        bBitmapTile = sal_False;
+        GraphicAttr*    pGraphicAttr = NULL;
+        GraphicObject   aGraphicObject;
+        String          aGraphicUrl;
+        ByteString      aUniqueId;
+
+        ::com::sun::star::uno::Any aAny;
+
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, rSource ) )
+        {
+            Point aEmptyPoint;
+            Rectangle aRect( aEmptyPoint, pShapeBoundRect->GetSize() );
+
+            if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
+            {
+                ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
+                const sal_uInt8*    pAry = aSeq.getArray();
+                sal_uInt32          nAryLen = aSeq.getLength();
+
+                if ( pAry && nAryLen )
+                {
+                    Graphic         aGraphic;
+                    SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
+                    sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
+                    if ( nErrCode == ERRCODE_NONE )
+                    {
+                        aGraphicObject = aGraphic;
+                        aUniqueId = aGraphicObject.GetUniqueID();
+                    }
+                }
+            }
+            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
+                if ( ::cppu::extractInterface( xBitmap, aAny ) )
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
+                    if ( aAny >>= xBitmap )
+                    {
+                        BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
+                        Graphic     aGraphic( aBitmapEx );
+                        aGraphicObject = aGraphic;
+                        aUniqueId = aGraphicObject.GetUniqueID();
+                    }
+                }
+            }
+            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) )
+            {
+                aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+            }
+            else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
+            {
+                aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+            }
+            if ( aGraphicUrl.Len() )
+            {
+                xub_StrLen nIndex = aGraphicUrl.Search( (sal_Unicode)':', 0 );
+                if ( nIndex != STRING_NOTFOUND )
+                {
+                    nIndex++;
+                    if ( aGraphicUrl.Len() > nIndex  )
+                        aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+                }
+            }
+            if ( aUniqueId.Len() )
+            {
+                if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ), sal_True ) )
+                    aAny >>= bMirrored;
+                if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
+                {
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ) ) )
+                        aAny >>= bBitmapTile;
+                }
+                if ( !bFillBitmap )
+                {
+                    sal_uInt16 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                                            String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                                        ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
+                                        : 0;
+
+                    if ( bMirrored || nAngle )
+                    {
+                        pGraphicAttr = new GraphicAttr;
+                        pGraphicAttr->SetRotation( nAngle );
+                        if ( bMirrored )
+                            pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
+                        if ( nAngle )   // ppoint does not rotate graphics !
+                        {
+                            Polygon aPoly( *pShapeBoundRect );
+                            aPoly.Rotate( pShapeBoundRect->TopLeft(), nAngle );
+                            *pShapeBoundRect = aPoly.GetBoundRect();
+                            bSuppressRotation = sal_True;
+                        }
+                    }
+                }
+                if ( ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) ) && bBitmapTile )
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillTexture );
+                else
+                    AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+
+                sal_uInt32 nBlibId = 0;
+                if ( aUniqueId.Len() )
+                    nBlibId = pGraphicProvider->GetBlibID( *pPicOutStrm, aUniqueId, aRect, pGraphicAttr );
+                if ( nBlibId )
+                {
+                    AddOpt( ( bFillBitmap )
+                        ? ESCHER_Prop_fillBlip
+                        : ESCHER_Prop_pib, nBlibId, sal_True );
+                    bRetValue = sal_True;
+                }
+            }
+            delete pGraphicAttr;
+        }
+    }
+    return bRetValue;
+}
+
+sal_Bool EscherPropertyContainer::CreateShadowProperties(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet )
+{
+    ::com::sun::star::uno::Any aAny;
+
+    sal_Bool    bHasShadow = sal_False; // shadow is possible only if at least a fillcolor or linecolor is set
+    sal_uInt32  nLineFlags = 0;         // default : shape has no line
+    sal_uInt32  nFillFlags = 0x10;      //           shape is filled
+
+    GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+    GetOpt( ESCHER_Prop_fNoFillHitTest, nFillFlags );
+
+    if ( ( nLineFlags & 8 ) || ( nFillFlags & 0x10 ) )
+    {
+        if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                String( RTL_CONSTASCII_USTRINGPARAM( "Shadow" ) ), sal_True ) )
+        {
+            sal_Bool bBool;
+            if ( aAny >>= bBool )
+            {
+                if ( bBool )
+                {
+                    bHasShadow = sal_True;
+                    AddOpt( ESCHER_Prop_fshadowObscured, 0x20002 );
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "ShadowColor" ) ), sal_False ) )
+                        AddOpt( ESCHER_Prop_shadowColor, ImplGetColor( *((sal_uInt32*)aAny.getValue()) ) );
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "ShadowXDistance" ) ), sal_False ) )
+                        AddOpt( ESCHER_Prop_shadowOffsetX, *((sal_Int32*)aAny.getValue()) * 360 );
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "ShadowYDistance" ) ), sal_False ) )
+                        AddOpt( ESCHER_Prop_shadowOffsetY, *((sal_Int32*)aAny.getValue()) * 360 );
+                    if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                            String( RTL_CONSTASCII_USTRINGPARAM( "ShadowTransparence" ) ), sal_False ) )
+                        AddOpt( ESCHER_Prop_shadowOpacity,  ( ( ( 100 - (*((sal_uInt16*)aAny.getValue()) ) ) << 16 ) / 100 ) );
+                }
+            }
+        }
+    }
+    return bHasShadow;
+}
 
 // ---------------------------------------------------------------------------------------------
 
@@ -898,13 +1460,13 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
     if ( mbEscherDgg )                                                      // ESCHER_Dgg anpassen
     {
         PtReplaceOrInsert( ESCHER_Persist_CurrentPosition, mpOutStrm->Tell() );
-        if ( ImplSeek( ESCHER_Persist_Dgg ) )
+        if ( DoSeek( ESCHER_Persist_Dgg ) )
         {
             *mpOutStrm << mnCurrentShapeID << (UINT32)( mnFIDCLs + 1 ) << mnTotalShapesDgg << mnDrawings;
         }
         if ( mnBlibEntrys )
         {
-            if ( ImplSeek( ESCHER_Persist_BlibStoreContainer ) )            // ESCHER_BlibStoreContainer schreiben
+            if ( DoSeek( ESCHER_Persist_BlibStoreContainer ) )          // ESCHER_BlibStoreContainer schreiben
             {
                 sal_uInt32 nAddBytes = GetBlibStoreContainerSize( pPicStreamMergeBSE );
                 if ( nAddBytes )
@@ -1080,7 +1642,7 @@ void EscherEx::InsertPersistOffset( UINT32 nKey, UINT32 nOffset )
 
 // ---------------------------------------------------------------------------------------------
 
-BOOL EscherEx::ImplSeek( UINT32 nKey )
+BOOL EscherEx::DoSeek( UINT32 nKey )
 {
     UINT32 nPos = PtGetOffsetByID( nKey );
     if ( nPos )
@@ -1098,7 +1660,7 @@ BOOL EscherEx::ImplSeek( UINT32 nKey )
 
 BOOL EscherEx::SeekToPersistOffset( UINT32 nKey )
 {
-    return ImplSeek( ESCHER_Persist_PrivateEntry | nKey );
+    return DoSeek( ESCHER_Persist_PrivateEntry | nKey );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1204,12 +1766,12 @@ void EscherEx::CloseContainer()
             if ( mbEscherDg )
             {
                 mbEscherDg = FALSE;
-                if ( ImplSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
+                if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
                 {
                     // shapeanzahl des drawings setzen
                     mnTotalShapesDgg += mnTotalShapesDg;
                     *mpOutStrm << mnTotalShapesDg << mnCurrentShapeMaximumID;
-                    if ( ImplSeek( ESCHER_Persist_Dgg_FIDCL ) )
+                    if ( DoSeek( ESCHER_Persist_Dgg_FIDCL ) )
                     {
                         if ( mnTotalShapesDg == 0 )
                         {
@@ -1375,7 +1937,7 @@ BOOL EscherEx::SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect )
     if ( nGroupLevel )
     {
         UINT32 nCurrentPos = mpOutStrm->Tell();
-        if ( ImplSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
+        if ( DoSeek( ESCHER_Persist_Grouping_Snap | ( nGroupLevel - 1 ) ) )
         {
             *mpOutStrm  << (INT32)rRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
                         << (INT32)rRect.Top()
@@ -1395,7 +1957,7 @@ BOOL EscherEx::SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect )
     if ( nGroupLevel )
     {
         UINT32 nCurrentPos = mpOutStrm->Tell();
-        if ( ImplSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
+        if ( DoSeek( ESCHER_Persist_Grouping_Logic | ( nGroupLevel - 1 ) ) )
         {
             *mpOutStrm << (INT16)rRect.Top() << (INT16)rRect.Left() << (INT16)rRect.Right() << (INT16)rRect.Bottom();
             mpOutStrm->Seek( nCurrentPos );
