@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:24:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,7 +877,10 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         {
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
-                (long)(pStart + 1) < (long)pStr &&
+                // --> FME 2005-02-14 #i38971#
+                // l'intallazione at beginning of paragraph. Replaced < by <=
+                (long)(pStart + 1) <= (long)pStr &&
+                // <--
                 rCC.isLetter( aText, pStr-1 - pStart ) )
                 pWordStt = --pStr;
             else
