@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-27 13:33:52 $
+ *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,10 +385,9 @@ sal_Bool SwTxtFrm::IsIdxInside( const xub_StrLen nPos, const xub_StrLen nLen ) c
     if( nMax > nPos || nMax > GetTxt().Len() )
         return sal_True;
 
-    // WICHTIG: Nun kann es noch sein, dass das erste Wort unseres Follows
-    // in uns hochrutschen koennte:
-    const xub_StrLen nNewPos = FindBrk( GetTxt(), nMax, nPos + 1 );
-    return nNewPos >= nPos;
+    // changes made in the first line of a follow can modify the master
+    const SwParaPortion* pPara = GetFollow()->GetPara();
+    return pPara && ( nPos < nMax + pPara->GetLen() );
 }
 
 /*************************************************************************

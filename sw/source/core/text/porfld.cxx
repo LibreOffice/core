@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-10 06:18:59 $
+ *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,9 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
     SwFont *pNewFnt;
     if( 0 != ( pNewFnt = pFnt ) )
         pNewFnt = new SwFont( *pFnt );
-    return new SwFldPortion( rExpand, pNewFnt );
+    SwFldPortion* pClone = new SwFldPortion( rExpand, pNewFnt );
+    pClone->SetNextOffset( nNextOffset );
+    return pClone;
 }
 
 void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
@@ -169,6 +171,8 @@ SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
+    else
+        pFnt = 0;
 
     SetWhichPor( POR_FLD );
 }

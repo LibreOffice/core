@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-16 15:01:19 $
+ *  last change: $Author: fme $ $Date: 2001-05-17 16:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,6 +624,7 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         pRubyFont = NULL;
     String aStr( rRuby.GetText(), nOffs, STRING_LEN );
     SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
+    pFld->SetNextOffset( nOffs );
     pFld->SetFollow( sal_True );
     if( !rRuby.GetPosition() )
         GetRoot().SetPortion( pFld );
@@ -1743,18 +1744,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rMulti.Width( rMulti.Height() );
         rMulti.Height( KSHORT(nH) );
         rMulti.SetAscent( KSHORT(nAsc) );
-        if( rInf.GetPos().X() + rMulti.Width() > rInf.Width() )
-        {
-            bRet = sal_True;
-            rMulti.GetRoot().Truncate();
-            rMulti.GetRoot().SetLen(0);
-            rMulti.GetRoot().Width(0);
-            rMulti.CalcSize( *this, aInf );
-            rMulti.SetLen(0);
-            rInf.SetIdx( nStartIdx );
-        }
+        bRet = ( rInf.GetPos().X() + rMulti.Width() > rInf.Width() ) &&
+                 nStartIdx != rInf.GetLineStart();
     }
 
+    // line break has to be performed!
     if( bRet )
     {
         ASSERT( !pNextFirst || pNextFirst->InFldGrp(),
@@ -1767,19 +1761,45 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         {
             ASSERT( !pNextSecond || pNextSecond->InFldGrp(),
                 "BuildMultiPortion: Surprising restportion, field exspected" );
-            pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
+
+            if ( rInf.GetIdx() == rInf.GetLineStart() )
+            {
+                // the ruby portion has to be split in two portions
+                pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
                     ((SwRubyPortion&)rMulti).GetAdjustment(), !rMulti.OnTop(),
                     ((SwRubyPortion&)rMulti).GetRubyOffset() );
-            if( pNextSecond )
-            {
-                pTmp->GetRoot().SetNext( new SwLineLayout() );
-                pTmp->GetRoot().GetNext()->SetPortion( pNextSecond );
+                if( pNextSecond )
+                {
+                    pTmp->GetRoot().SetNext( new SwLineLayout() );
+                    pTmp->GetRoot().GetNext()->SetPortion( pNextSecond );
+                }
+                pTmp->SetFollowFld();
             }
-            pTmp->SetFollowFld();
+            else
+            {
+                // we try to keep our multi portion together
+                rMulti.GetRoot().Truncate();
+                rMulti.GetRoot().SetLen( 0 );
+                rMulti.GetRoot().Width( 0 );
+                rMulti.GetRoot().GetNext()->Truncate();
+                rMulti.GetRoot().GetNext()->SetLen( 0 );
+                rMulti.GetRoot().GetNext()->Width( 0 );
+                rMulti.Width( 0 );
+                rMulti.SetLen( 0 );
+                pTmp = 0;
+            }
         }
         else if( rMulti.HasRotation() )
+        {
+            rMulti.GetRoot().Truncate();
+            rMulti.GetRoot().SetLen(0);
+            rMulti.GetRoot().Width(0);
+            rMulti.CalcSize( *this, aInf );
+            rMulti.SetLen(0);
+            rInf.SetIdx( nStartIdx );
             pTmp = new SwRotatedPortion( nMultiLen + rInf.GetIdx(),
                                          rMulti.GetDirection() );
+        }
         else
             pTmp = NULL;
         if( pNextFirst && pTmp )
@@ -1789,6 +1809,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         rInf.SetRest( pTmp );
     }
+
     rInf.SetTxt( *pOldTxt );
     SeekAndChg( rInf );
     delete pFirstRest;
@@ -1897,7 +1918,13 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 
     nPos = nMultiPos + pMulti->GetLen();
     SwMultiCreator* pCreate = GetInfo().GetMultiCreator( nMultiPos );
-    ASSERT( pCreate, "Multiportion without attribut?" );
+    if ( !pCreate )
+    {
+        ASSERT( !pMulti->GetLen(), "Multiportion without attribut?" );
+        if ( nMultiPos )
+            --nMultiPos;
+        pCreate = GetInfo().GetMultiCreator( --nMultiPos );
+    }
 
     if( pRest || nMultiPos > nPos || ( pMulti->IsRuby() &&
         ((SwRubyPortion*)pMulti)->GetRubyOffset() < STRING_LEN ) )
