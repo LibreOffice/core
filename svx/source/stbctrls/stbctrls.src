@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:44:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ String RID_SVXSTR_INSERT_TEXT
     Text[ czech ] = "INSERT";
     Text[ hebrew ] = "‮INSRT‬";
     Text[ hindi ] = "INSRT";
+    Text[ slovak ] = "INSRT";
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
@@ -132,6 +133,7 @@ String RID_SVXSTR_OVERWRITE_TEXT
     Text[ czech ] = "OVER";
     Text[ hebrew ] = "‮OVER‬";
     Text[ hindi ] = "OVER";
+    Text[ slovak ] = "OVER";
 };
 String RID_SVXSTR_SELMODE_STD
 {
@@ -165,6 +167,7 @@ String RID_SVXSTR_SELMODE_STD
     Text[ czech ] = "STD";
     Text[ hebrew ] = "‮STD‬";
     Text[ hindi ] = "STD";
+    Text[ slovak ] = "STD";
 };
 String RID_SVXSTR_SELMODE_ER
 {
@@ -199,6 +202,7 @@ String RID_SVXSTR_SELMODE_ER
     TEXT[ czech ] = "EXT";
     TEXT[ hebrew ] = "‮EXT‬";
     TEXT[ hindi ] = "EXT";
+    TEXT[ slovak ] = "EXT";
 };
 String RID_SVXSTR_SELMODE_ERG
 {
@@ -233,6 +237,7 @@ String RID_SVXSTR_SELMODE_ERG
     TEXT[ czech ] = "ADD";
     TEXT[ hebrew ] = "‮ADD‬";
     TEXT[ hindi ] = "ADD";
+    TEXT[ slovak ] = "ADD";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMNU_ZOOM
@@ -302,6 +307,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ czech ] = "Optimální";
             Text[ hebrew ] = "‮אופטימלי‬";
             Text[ hindi ] = "योग्य";
+            Text[ slovak ] = "Optimálne";
         };
         MenuItem
         {
@@ -337,6 +343,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ czech ] = "Šířka stránky";
             Text[ hebrew ] = "‮רוחב הדף‬";
             Text[ hindi ] = "पृष्ठ चौड़ाई";
+            Text[ slovak ] = "Šírka strany";
         };
         MenuItem
         {
@@ -372,6 +379,7 @@ Menu RID_SVXMNU_ZOOM
             Text[ czech ] = "Celá stránka";
             Text[ hebrew ] = "‮דף שלם‬";
             Text[ hindi ] = "सम्पूर्ण पृष्ठ";
+            Text[ slovak ] = "Celá strana";
         };
     };
 };
@@ -413,6 +421,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Průměr";
             Text[ hebrew ] = "‮ממוצא‬";
             Text[ hindi ] = "माध्य";
+            Text[ slovak ] = "Priemer";
         };
         MenuItem
         {
@@ -447,6 +456,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "PočetA";
             Text[ hebrew ] = "‮מונה ב'‬";
             Text[ hindi ] = "गिनतीA";
+            Text[ slovak ] = "PočetA";
         };
         MenuItem
         {
@@ -481,6 +491,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Počet";
             Text[ hebrew ] = "‮מונה‬";
             Text[ hindi ] = "गिनती";
+            Text[ slovak ] = "Počet";
         };
         MenuItem
         {
@@ -515,6 +526,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Maximum";
             Text[ hebrew ] = "‮מירבי‬";
             Text[ hindi ] = "अधिकतम";
+            Text[ slovak ] = "Maximum";
         };
         MenuItem
         {
@@ -549,6 +561,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Minimum";
             Text[ hebrew ] = "‮מזערי‬";
             Text[ hindi ] = "न्यूनतम";
+            Text[ slovak ] = "Minimum";
         };
         MenuItem
         {
@@ -583,6 +596,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Součet";
             Text[ hebrew ] = "‮סכום‬";
             Text[ hindi ] = "कुलजोड";
+            Text[ slovak ] = "Celkom";
         };
         MenuItem
         {
@@ -617,6 +631,7 @@ Menu RID_SVXMNU_PSZ_FUNC
             Text[ czech ] = "Nic";
             Text[ hebrew ] = "‮ללא‬";
             Text[ hindi ] = "कोई नहीं";
+            Text[ slovak ] = "Žiadne";
         };
     };
 };
@@ -647,6 +662,8 @@ Image RID_SVXBMP_SIZE
         Blue = 0xFFFF ;
     };
 };
+
+
 
 
 
