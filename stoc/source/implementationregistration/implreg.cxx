@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:47 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,7 @@
 
 #include <uno/mapping.hxx>
 #include <osl/thread.h>
-//#include <vos/thread.hxx>
-#include <vos/conditn.hxx>
+
 
 #include <rtl/ustring.hxx>
 
@@ -267,7 +266,7 @@ static void prepareLink( const Reference < XSimpleRegistry > & xDest,
     {
         OUString linkRefName = xSource->getKeyName();
         OUString linkName(link);
-        sal_Bool    isRelativ = False;
+        sal_Bool    isRelativ = sal_False;
 
         const sal_Unicode*  pTmpName = link.getStr();
         const sal_Unicode*  pShortName;
