@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-10-16 09:16:36 $
+ *  last change: $Author: os $ $Date: 2002-10-18 13:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,6 +982,7 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
                     if((nOffset + nType) < aTypes.getLength())
                     {
                         nId = pTypes[nOffset + nType];
+                        break;
                     }
                 }
             }
