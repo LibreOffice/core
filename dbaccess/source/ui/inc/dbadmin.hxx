@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-25 12:49:01 $
+ *  last change: $Author: fs $ $Date: 2000-10-26 07:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,10 @@ protected:
             const SfxItemSet& _rSource,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDest);
 
+    /** fill a data source info array with the settings from a given item set
+    */
+    void fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo);
+
     /** get the property set for the data source with the given name
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDatasource(const ::rtl::OUString& _rName);
@@ -605,6 +609,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/25 12:49:01  fs
+ *  moved herein from ..\dlg
+ *
  *  Revision 1.7  2000/10/24 12:12:26  fs
  *  ODatasourceMap::update takes a non-constant set (to reset the ORIGINALNAME item)
  *
