@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-13 15:46:18 $
+ *  last change: $Author: ab $ $Date: 2001-08-20 07:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1331,7 +1331,30 @@ namespace pcr
                                     const ScriptEventDescriptor& rTheEvDe = pEvDes[nI];
                                     if (rTheEvDe.ScriptCode.getLength()>0 && rTheEvDe.ScriptType.getLength()>0)
                                     {
-                                        pMacro = new SvxMacro(rTheEvDe.ScriptCode,rTheEvDe.ScriptType);
+                                        if( m_xEventManager.is() )
+                                        {
+                                            pMacro = new SvxMacro(rTheEvDe.ScriptCode,rTheEvDe.ScriptType);
+                                        }
+                                        else
+                                        {
+                                            ::rtl::OUString aMacro = rTheEvDe.ScriptCode;
+                                            ::rtl::OUString aLibName;
+
+                                            sal_Int32 nIndex = rTheEvDe.ScriptCode.indexOf( (sal_Unicode)':' );
+                                            if (nIndex >= 0)
+                                            {
+                                                ::rtl::OUString aPrefix = rTheEvDe.ScriptCode.copy( 0, nIndex );
+                                                aMacro = rTheEvDe.ScriptCode.copy( nIndex + 1 );
+                                                if( String(aPrefix).EqualsAscii("application") )
+                                                    aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+                                                // else
+                                                    // ??? document name is unknown here!
+                                            }
+
+                                            SvxMacro aTmpMacro( aMacro, rTheEvDe.ScriptType );
+                                            pMacro = new SvxMacro( aMacro, aLibName, aTmpMacro.GetScriptType() );
+                                        }
+
                                         aTable.Insert(aNameArray.size(),pMacro);
                                     }
                                     else
@@ -1427,16 +1450,29 @@ namespace pcr
                                 SvxMacro *pMacro=aTab.Get(nIndex++);
                                 if (pMacro!=NULL)
                                 {
-                                    aMacStr = String(pMacro->GetMacName());
+                                       aMacStr = String(pMacro->GetMacName());
                                     if (nEventIndex<nEventCount)
                                     {
                                         if( m_xEventManager.is() )
+                                        {
                                             pSeqScriptEvts[nEventIndex].ListenerType = aListenerClassName;
+                                        }
                                         else    // Dialog editor mode
+                                        {
                                             pSeqScriptEvts[nEventIndex].ListenerType = aListener;
+                                            if( pMacro->GetLibName().EqualsAscii("StarOffice") )
+                                            {
+                                                aMacStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "application:" ));
+                                            }
+                                            else
+                                            {
+                                                aMacStr = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "document:" ));
+                                            }
+                                            aMacStr += pMacro->GetMacName();
+                                        }
+                                           pSeqScriptEvts[nEventIndex].ScriptCode = aMacStr;
                                         pSeqScriptEvts[nEventIndex].EventMethod = *pMethods;
                                         pSeqScriptEvts[nEventIndex].ScriptType = pMacro->GetLanguage();
-                                        pSeqScriptEvts[nEventIndex].ScriptCode = aMacStr;
                                     }
                                     nEventIndex++;
                                 }
@@ -2552,6 +2588,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.41  2001/08/13 15:46:18  fs
+ *  #90958# +getRowSet / +ensureRowsetConnection: allow to calc the connection even when only controls are inspected (and not forms)
+ *
  *  Revision 1.40  2001/08/07 08:39:59  fs
  *  #87690# set the connection as ActiveConnection explicitly
  *
