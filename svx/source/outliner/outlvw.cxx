@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:50:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1056,7 +1056,7 @@ void OutlinerView::PasteSpecial()
         pOwner->UndoActionStart( OLUNDO_INSERT );
 
         pOwner->pEditEngine->SetUpdateMode( FALSE );
-        ULONG nStart, nParaCount;
+//      ULONG nStart, nParaCount;
 //      nParaCount = pOwner->pEditEngine->GetParagraphCount();
         pOwner->bPasting = TRUE;
         pEditView->PasteSpecial();
@@ -1381,11 +1381,16 @@ EESpellState OutlinerView::StartThesaurus()
 }
 
 
-void OutlinerView::StartTextConversion( LanguageType nLang, BOOL bMultipleDoc )
+void OutlinerView::StartTextConversion(
+    LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+    INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc )
 {
     DBG_CHKTHIS(OutlinerView,0);
-    if (LANGUAGE_KOREAN == nLang)
-        pEditView->StartTextConversion( nLang, bMultipleDoc );
+    if (LANGUAGE_KOREAN == nSrcLang && LANGUAGE_KOREAN == nDestLang ||
+        LANGUAGE_CHINESE_SIMPLIFIED  == nSrcLang && LANGUAGE_CHINESE_TRADITIONAL == nDestLang ||
+        LANGUAGE_CHINESE_TRADITIONAL == nSrcLang && LANGUAGE_CHINESE_SIMPLIFIED  == nDestLang
+        )
+        pEditView->StartTextConversion( nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );
     else
         DBG_ERROR( "unexpected language" );
 }
