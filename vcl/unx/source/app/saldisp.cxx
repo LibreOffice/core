@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:31:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:43:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2060,7 +2060,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
 {
     if( ePointerStyle > POINTER_COUNT )
-        return NULL;
+        return 0;
 
     XLIB_Cursor &aCur = aPointerCache_[ePointerStyle];
 
@@ -2490,11 +2490,11 @@ void SalDisplay::SendEvent( Atom          aEvent,
     aData[1] = (UINT32)((long)pData >> 32);
 #else
     aData[0] = (UINT32)(long)pData;
-    aData[1] = NULL;
+    aData[1] = 0;
 #endif
-    aData[2] = NULL;
-    aData[3] = NULL;
-    aData[4] = NULL;
+    aData[2] = 0;
+    aData[3] = 0;
+    aData[4] = 0;
 
     SendEvent( aEvent, aData, hReceiver );
 }
