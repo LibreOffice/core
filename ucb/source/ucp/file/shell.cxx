@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 12:06:52 $
+ *  last change: $Author: sb $ $Date: 2001-03-08 15:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,22 +818,18 @@ XInputStream_impl::readBytes(
 {
     if( ! m_nIsOpen ) throw io::IOException();
 
-    sal_Int8 * buffer;
-    try
-    {
-        buffer = new sal_Int8[nBytesToRead];
-    }
-    catch( std::bad_alloc )
-    {
-        if( m_nIsOpen ) m_aFile.close();
-        throw io::BufferSizeExceededException();
-    }
+    aData.realloc(nBytesToRead);
+        //TODO! translate memory exhaustion (if it were detectable...) into
+        // io::BufferSizeExceededException
 
     sal_uInt64 nrc;
-    m_aFile.read( (void* )buffer,sal_uInt64(nBytesToRead),nrc );
+    m_aFile.read( aData.getArray(),sal_uInt64(nBytesToRead),nrc );
 
-    aData = uno::Sequence< sal_Int8 > ( buffer,nrc );
-    delete[] buffer;
+    // Shrink aData in case we read less than nBytesToRead (XInputStream
+    // documentation does not tell whether this is required, and I do not know
+    // if any code relies on this, so be conservative---SB):
+    if (nrc != nBytesToRead)
+        aData.realloc(sal_Int32(nrc));
     return ( sal_Int32 ) nrc;
 }
 
