@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:01:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef __SGI_STL_MAP
 #include <map>
 #endif
+#ifndef __SGI_STL_UTILITY
+#include <utility>
+#endif
+
 
 #ifndef _WW8STRUC_HXX
 #include "ww8struc.hxx"     // WW8_BRC
@@ -180,7 +184,6 @@ namespace com{namespace sun {namespace star{
 #define WW8FL_NO_STYLES      2
 #define WW8FL_NO_ZSTYLES     4  // keine Zeichenstyles importieren
 #define WW8FL_NO_FTN      0x20
-#define WW8FL_NO_FLD      0x40  // keine Felder
 #define WW8FL_NO_GRAF     0x80
 #define WW8FL_NO_LRUL    0x200
 
@@ -362,12 +365,27 @@ private:
 
 //For fields whose handling cannot be fully resolved until we hit the end of
 //the document.
+class Position
+{
+public:
+    SwNodeIndex maMkNode;
+    SwNodeIndex maPtNode;
+    xub_StrLen mnMkCntnt;
+    xub_StrLen mnPtCntnt;
+    Position(const SwPaM &rPaM);
+    Position(const Position &rEntry);
+private:
+    //No assignment
+    Position& operator=(const Position&);
+};
+
 class SwWW8FltRefStack : public SwFltEndStack
 {
 public:
     SwWW8FltRefStack(SwDoc* pDo, ULONG nFieldFl)
-        : SwFltEndStack( pDo, nFieldFl )
+        : SwFltEndStack( pDo, nFieldFl ), mnToggleVis(false)
     {}
+    virtual ~SwWW8FltRefStack();
     bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo);
 
     struct ltstr
@@ -377,16 +395,26 @@ public:
             return r1.CompareIgnoreCaseToAscii(r2) == COMPARE_LESS;
         }
     };
-
+    void SetToggleVisFlag(bool bOn)
+    {
+        mnToggleVis = bOn;
+    }
+    bool GetToggleVisFlag() const
+    {
+        return mnToggleVis;
+    }
     //Keep track of variable names created with fields, and the bookmark
     //mapped to their position, hopefully the same, but very possibly
     //an additional pseudo bookmark
     std::map<String, String, ltstr> aFieldVarNames;
 protected:
     SwFltStackEntry *RefToVar(const SwField* pFld,SwFltStackEntry *pEntry);
+    bool RangeToHidden(SwField* pFld, SwFltStackEntry *pEntry, SwPaM &rPaM);
     virtual void SetAttrInDoc(const SwPosition& rTmpPos,
         SwFltStackEntry* pEntry);
 private:
+    std::deque<Position> maScheduledForDelete;
+    bool mnToggleVis;
     //No copying
     SwWW8FltRefStack(const SwWW8FltRefStack&);
     SwWW8FltRefStack& operator=(const SwWW8FltRefStack&);
@@ -834,7 +862,7 @@ friend class wwSectionManager;
     //Keep track of tables within tables
     std::stack<WW8TabDesc*> aTableStack;
 
-    SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
+    SwNumRule* mpNumRule;       // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
@@ -965,6 +993,7 @@ friend class wwSectionManager;
 
 //---------------------------------------------
 
+    bool StyleExists(int nColl) const { return (nColl < nColls); }
     void AppendTxtNode(SwPosition& rPos);
     void GetNoninlineNodeAttribs(const SwTxtNode *pNode,
         std::vector<const xub_StrLen*> &rPositions);
@@ -1017,7 +1046,6 @@ friend class wwSectionManager;
     void ResetCharSetVars();
 
     const SfxPoolItem* GetFmtAttr( USHORT nWhich );
-    BYTE HdFtCorrectPara( BYTE nPara );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
     bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false);
@@ -1237,7 +1265,7 @@ friend class wwSectionManager;
 
     void PopTableDesc();
     void MoveInsideFly(const SwFrmFmt *pFlyFmt);
-    void MoveOutsideFly(const SwFrmFmt *pFlyFmt, const SwPosition &rPos,
+    sal_uInt16 MoveOutsideFly(SwFrmFmt *pFlyFmt, const SwPosition &rPos,
         bool bTableJoin = true);
 
     void SetOutLineStyles();
@@ -1252,7 +1280,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     long Read_Ftn(WW8PLCFManResult* pRes);
     long Read_Field(WW8PLCFManResult* pRes);
-    void End_Field();
+    sal_uInt16 End_Field();
     long Read_Book(WW8PLCFManResult*);
     long Read_And(WW8PLCFManResult* pRes);
 
@@ -1276,7 +1304,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_CColl(            USHORT, const BYTE*, short nLen );
     void Read_Kern(             USHORT, const BYTE* pData, short nLen );
     void Read_FontKern(         USHORT, const BYTE* pData, short nLen );
-    void Read_Invisible(USHORT, const BYTE*, short nLen);
+    void Read_Invisible(USHORT, const BYTE* pData, short nLen);
     void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
     void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
     void Read_Relief(           USHORT, const BYTE* pData, short nLen);
@@ -1392,8 +1420,9 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_IncludeText(    WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Seq( WW8FieldDesc*, String& rStr );
 
-    eF_ResT Read_F_OCX( WW8FieldDesc*, String& );
-    eF_ResT Read_F_Hyperlink( WW8FieldDesc*, String& rStr );
+    eF_ResT Read_F_OCX(WW8FieldDesc*, String&);
+    eF_ResT Read_F_Hyperlink(WW8FieldDesc*, String& rStr);
+        eF_ResT Read_F_Shape(WW8FieldDesc* pF, String& rStr);
 
     void DeleteFormImpl();
 
