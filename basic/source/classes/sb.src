@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-08 10:12:06 $
+ *  last change: $Author: obo $ $Date: 2000-12-11 23:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,7 +714,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onjuiste bestandsmodus";
         Text[ chinese_simplified ] = "΄νΞσµΔΞΔΌώΔ£Κ½";
         Text[ greek ] = "Μη έγκυρη κατάσταση αρχείου";
-        Text[ korean ] = "ΐίΈψµΘ ΖΔΐΟ ΗόΕΒ";
+        Text[ korean ] = "ΖΔΐΟ Έπµε Ζ²Έ²";
         Text[ turkish ] = "Dosya kipi yanlύώ";
         Text[ language_user1 ] = " ";
     };
@@ -1027,7 +1027,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Station niet bereid";
         Text[ chinese_simplified ] = "ΘνΕΜ»ΉΓ»ΣΠΧΌ±ΈΊΓ";
         Text[ greek ] = "Η δισκέτα δεν είναι έτοιμη";
-        Text[ korean ] = "µπ½ΊΕ©°΅ ΑΨΊρµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µπ½ΊΔΟΐΜ ΑΨΊρµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Disket hazύr deπil";
         Text[ language_user1 ] = " ";
     };
@@ -1708,7 +1708,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "DDE-resultaat verloren gegaan";
         Text[ chinese_simplified ] = "DDE ΠΕΟΆÒΕΚ§";
         Text[ greek ] = "Το μήνυμα του DDE χάθηκε";
-        Text[ korean ] = "DDE ΈήΌΌΑφ°΅ »η¶σΑ³ΐ½";
+        Text[ korean ] = "DDE Έή½ΓΑφ°΅ »η¶σΑ³ΐ½";
         Text[ turkish ] = "DDE iletisi kayboldu";
         Text[ language_user1 ] = " ";
     };
@@ -1911,7 +1911,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Onjuiste waarde voor eigenschap";
         Text[ chinese_simplified ] = "΄νΞσµΔΚτΠΤΚύΦµ";
         Text[ greek ] = "Μη έγκυρη τιμή για ιδιότητα";
-        Text[ korean ] = "ΐίΈψµΘ ΗΑ·ΞΖΫΖΌ °ª";
+        Text[ korean ] = "Ζ²Έ° µξ·ΟΑ¤ΊΈ °ª";
         Text[ turkish ] = "Yanlύώ φzellik deπeri";
         Text[ language_user1 ] = " ";
     };
@@ -1940,7 +1940,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap is schrijfbeveiligd";
         Text[ chinese_simplified ] = "·ΐΈ²Π΄µΔΚτΠΤ";
         Text[ greek ] = "Η ιδιότητα είναι μόνο για ανάγνωση";
-        Text[ korean ] = "ΐΜ ΗΑ·ΞΖΫΖΌ΄Β ΐΠ±β ΐόΏλΐΤ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ  µξ·ΟΑ¤ΊΈ΄Β ΐΠ±β ΐόΏλΐΤ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik yazma korumalύ";
         Text[ language_user1 ] = " ";
     };
@@ -1969,7 +1969,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap is leesbeveiligd";
         Text[ chinese_simplified ] = "·ΐ¶ΑΘ΅µΔΚτΠΤ";
         Text[ greek ] = "Η ιδιότητα είναι μόνο για εγγραφή";
-        Text[ korean ] = "ΐΜ ΗΑ·ΞΖΫΖΌ΄Β Ύ²±β ΐόΏλΐΤ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ  µξ·ΟΑ¤ΊΈ΄Β Ύ²±β ΐόΏλΐΤ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik okuma korumalύ";
         Text[ language_user1 ] = " ";
     };
@@ -2026,7 +2026,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap of methode niet gevonden";
         Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΚτΠΤ»ς·½·¨";
         Text[ greek ] = "Δεν βρέθηκε η ιδιότητα ή η μέθοδος";
-        Text[ korean ] = "ΗΑ·ΞΖΫΖΌ ¶Η΄Β ΈήΌÒµε°΅ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µξ·ΟΑ¤ΊΈ ¶Η΄Β ΈήΌÒµεΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik ya da yφntem bulunamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2140,7 +2140,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Deze eigenschap of methode wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "¶ΤΟσ²»Φ§³ΦΥβΈφΚτΠΤ»ς·½·¨";
         Text[ greek ] = "Το αντικείμενο δεν υποστηρίζει αυτή την ιδιότητα ή μέθοδο";
-        Text[ korean ] = "ΐΜ ΗΑ·ΞΖΫΖΌ ¶Η΄Β ΈήΌÒµε΄Β °³ΓΌΏ΅Ό­ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "ΐΜ  µξ·ΟΑ¤ΊΈ ¶Η΄Β ΈήΌÒµε΄Β °³ΓΌΏ΅ ΐΗΗΨ ΑφΏψµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne bu φzelliπi ya da yφntemi desteklemiyor";
         Text[ language_user1 ] = " ";
     };
@@ -2481,7 +2481,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Object heeft deze eigenschap niet";
         Text[ chinese_simplified ] = "¶ΤΟσ²»Ύί±ΈΥβΈφΚτΠΤ";
         Text[ greek ] = "Το αντικείμενο δεν έχει αυτή την ιδιότητα";
-        Text[ korean ] = "°³ΓΌ°΅ ΐΜ ΗΑ·ΞΖΫΖΌΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "°³ΓΌ°΅ ΐΜ  µξ·ΟΑ¤ΊΈΈ¦ °΅Αφ°ν ΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Nesne bu φzelliπe sahip deπil";
         Text[ language_user1 ] = " ";
     };
@@ -2623,7 +2623,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap kon niet worden ingesteld";
         Text[ chinese_simplified ] = "Ξή·¨Θ·¶¨ΚτΠΤ";
         Text[ greek ] = "Δεν ήταν δυνατόν να οριστεί αυτή η ιδιότητα";
-        Text[ korean ] = "ΗΑ·ΞΖΫΖΌ Ό³Α¤ΐ» ΗÒΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µξ·ΟΑ¤ΊΈ  Ό³Α¤ΐ» ΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik tanύmlanamadύ";
         Text[ language_user1 ] = " ";
     };
@@ -2651,7 +2651,7 @@ Resource RID_BASIC_START
         Text[ dutch ] = "Eigenschap kon niet worden vastgesteld";
         Text[ chinese_simplified ] = "Ξή·¨¶Α³φΚτΠΤ";
         Text[ greek ] = "Δεν ήταν δυνατόν να εξακριβωθεί η ιδιότητα";
-        Text[ korean ] = "ΗΑ·ΞΖΫΖΌ °αΑ¤ΐ» ΗÒΌφ Ύψ½ΐ΄Ο΄Ω.";
+        Text[ korean ] = "µξ·ΟΑ¤ΊΈΈ¦ Α¶»ηΗÒ Όφ ΎψΎϊ½ΐ΄Ο΄Ω.";
         Text[ turkish ] = "Φzellik belirlenemedi";
         Text[ language_user1 ] = " ";
     };
@@ -3560,7 +3560,7 @@ String IDS_SBERR_STOREREF
     Text[ turkish ] = "Referans kaydedilmeyecek: ";
     Text [ ENGLISH ] = "reference will not be saved: " ;
     Text [ norwegian ] = "reference will not be saved: " ;
-    Text [ italian ] = "Il riferimento non viene salvato: " ;
+    Text [ italian ] = "Il riferimento non viene salvato:  " ;
     Text [ finnish ] = "reference will not be saved: " ;
 };
 String ERRCODE_BASMGR_LIBLOAD & ERRCODE_RES_MASK
