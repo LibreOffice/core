@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:01 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@
 					<desc>Specifies the default document language.</desc>
 					<label>Default language</label>
 				</info>
-				<value>en-US</value>
+                <value/>
+                <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="DefaultLocale_CJK" oor:type="xs:string">
 				<!-- OldPath: DefaultLanguage -->
