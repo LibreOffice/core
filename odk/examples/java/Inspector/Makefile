@@ -81,7 +81,7 @@ $(REGISTERFLAG) : $(COMPONENTJARFLAG)
 ifneq "$(OFFICE_PROGRAM_PATH)" ""
 	$(BIN_DIR)$(PS)regmerge $(OFFICE_PROGRAM_PATH)$(PS)applicat.rdb /UCR $(GENURDFILES)
 	$(COPY) $(COMPONENT_JAR) $(OFFICE_PROGRAM_PATH)$(PS)classes
-	java -classpath $(OFFICE_CLASSPATH) com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/CalcAddins.jar" com.sun.star.loader.Java2
+	java -classpath $(OFFICE_CLASSPATH) com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/InstanceInspector.jar" com.sun.star.loader.Java2
 	@echo bla > $@
 else
 	@echo --------------------------------------------------------------------------------
