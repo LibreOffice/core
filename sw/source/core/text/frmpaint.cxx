@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-24 12:38:04 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 12:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,8 @@
 
 #pragma hdrstop
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
-#endif
 #endif
 
 #ifndef _SV_SOUND_HXX //autogen
@@ -79,7 +77,6 @@
 #include <tools/shl.hxx> // SW_MOD
 #endif
 
-#ifdef VERTICAL_LAYOUT
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
 #endif
@@ -91,7 +88,6 @@
 #endif
 #ifndef _PARATR_HXX
 #include <paratr.hxx>
-#endif
 #endif
 
 #ifndef _FMTLINE_HXX
@@ -174,9 +170,7 @@ class SwExtraPainter
 {
     SwSaveClip aClip;
     SwRect aRect;
-#ifdef VERTICAL_LAYOUT
     const SwTxtFrm* pTxtFrm;
-#endif
     ViewShell *pSh;
     SwFont* pFnt;
     const SwLineNumberInfo &rLineInf;
@@ -206,15 +200,9 @@ public:
 SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
     const SwLineNumberInfo &rLnInf, const SwRect &rRct, MSHORT nStart,
     SwHoriOrient eHor, sal_Bool bLnNm )
-#ifdef VERTICAL_LAYOUT
     : pTxtFrm( pFrm), pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ), aRect( rRct ),
       aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
       nLineNr( 1L ), bLineNum( bLnNm )
-#else
-    : pSh( pVwSh ), pFnt( 0 ), rLineInf( rLnInf ), aRect( rRct ),
-      aClip( pVwSh->GetWin() || pFrm->IsUndersized() ? pVwSh->GetOut() : 0 ),
-      nLineNr( 1L ), bLineNum( bLnNm )
-#endif
 {
     if( pFrm->IsUndersized() )
     {
@@ -239,9 +227,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->GetDoc() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
-#ifdef VERTICAL_LAYOUT
         pFnt->SetVertical( 0, pFrm->IsVertical() );
-#endif
         nLineNr += pFrm->GetAllLines() - pFrm->GetThisLines();
         LineNumberPosition ePos = rLineInf.GetPos();
         if( ePos != LINENUMBER_POS_LEFT && ePos != LINENUMBER_POS_RIGHT )
@@ -308,11 +294,13 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetLeft( 0 );
     aDrawInf.SetRight( LONG_MAX );
-#ifdef VERTICAL_LAYOUT
     aDrawInf.SetFrm( pTxtFrm );
     aDrawInf.SetFont( pFnt );
     aDrawInf.SetSnapToGrid( sal_False );
+#ifdef BIDI
+    aDrawInf.SetIgnoreFrmRTL( sal_True );
 #endif
+
     sal_Bool bTooBig = pFnt->GetSize( pFnt->GetActual() ).Height() > nMax &&
                 pFnt->GetHeight( pSh, pSh->GetOut() ) > nMax;
     SwFont* pTmpFnt;
@@ -345,11 +333,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
             if( aRct.Intersection( aRect ).IsEmpty() )
                 bPaint = sal_False;
             else
-#ifdef VERTICAL_LAYOUT
                 aClip.ChgClip( aRect, pTxtFrm );
-#else
-                aClip.ChgClip( aRect );
-#endif
         }
     }
     else if( bGoLeft )
@@ -357,6 +341,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->_DrawText( aDrawInf );
+
     if( bTooBig )
         delete pTmpFnt;
     if( bRed )
@@ -379,23 +364,17 @@ void SwExtraPainter::PaintRedline( SwTwips nY, long nMax )
         {
             if( aRct.Intersection( aRect ).IsEmpty() )
                 return;
-#ifdef VERTICAL_LAYOUT
             aClip.ChgClip( aRect, pTxtFrm );
-#else
-            aClip.ChgClip( aRect );
-#endif
         }
     }
     const Color aOldCol( pSh->GetOut()->GetLineColor() );
     pSh->GetOut()->SetLineColor( SW_MOD()->GetRedlineMarkColor() );
 
-#ifdef VERTICAL_LAYOUT
     if ( pTxtFrm->IsVertical() )
     {
         pTxtFrm->SwitchHorizontalToVertical( aStart );
         pTxtFrm->SwitchHorizontalToVertical( aEnd );
     }
-#endif
 
     pSh->GetOut()->DrawLine( aStart, aEnd );
     pSh->GetOut()->SetLineColor( aOldCol );
@@ -421,13 +400,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
             return;
         ViewShell *pSh = GetShell();
 
-#ifdef VERTICAL_LAYOUT
         SWAP_IF_NOT_SWAPPED( this )
         SwRect rOldRect( rRect );
 
         if ( IsVertical() )
             SwitchVerticalToHorizontal( (SwRect&)rRect );
-#endif
 
 #ifdef BIDI
         SwLayoutModeModifier aLayoutModeModifier( *pSh->GetOut() );
@@ -464,15 +441,11 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                       aLine.GetCurr()->HasCntnt() ) )
                     aExtra.IncLineNr();
                 if( !aLine.Next() )
-#ifdef VERTICAL_LAYOUT
                 {
                     (SwRect&)rRect = rOldRect;
                     UNDO_SWAP( this )
                     return;
                 }
-#else
-                    return;
-#endif
             }
 
             long nBottom = rRect.Bottom();
@@ -530,10 +503,8 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
                 aExtra.PaintRedline( Frm().Top()+Prt().Top(), Prt().Height() );
         }
 
-#ifdef VERTICAL_LAYOUT
         (SwRect&)rRect = rOldRect;
         UNDO_SWAP( this )
-#endif
     }
 }
 
@@ -572,10 +543,8 @@ SwRect SwTxtFrm::Paint()
         if ( IsRightToLeft() )
             SwitchLTRtoRTL( aRet );
 #endif
-#ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwitchHorizontalToVertical( aRet );
-#endif
     }
     ResetRepaint();
 
@@ -640,12 +609,8 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
-#ifdef VERTICAL_LAYOUT
                 pFnt->SetVertical( 0, IsVertical() );
                 SwFrmSwapper aSwapper( this, sal_True );
-#else
-                pFnt->SetVertical( 0 );
-#endif
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
@@ -660,7 +625,6 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
 
                 aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
 
-#ifdef VERTICAL_LAYOUT
                 if ( GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() &&
                      IsInDocBody() )
                 {
@@ -675,7 +639,6 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                             aPos.Y() += pGrid->GetRubyHeight();
                     }
                 }
-#endif
 
                 const XubString aTmp( CH_PAR );
                 SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
@@ -685,12 +648,9 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 aDrawInf.SetSpace( 0 );
                 aDrawInf.SetKanaComp( 0 );
                 aDrawInf.SetWrong( NULL );
-
-#ifdef VERTICAL_LAYOUT
                 aDrawInf.SetFrm( this );
                 aDrawInf.SetFont( pFnt );
                 aDrawInf.SetSnapToGrid( sal_False );
-#endif
 
                 pFnt->_DrawText( aDrawInf );
                 delete pClip;
@@ -722,13 +682,8 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         if( IsDbg( this ) )
             DBTXTFRM << "Paint()" << endl;
 #endif
-#ifdef VERTICAL_LAYOUT
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
-#else
-        if( IsLocked() || IsHiddenNow() || !Prt().Height() )
-            return;
-#endif
 
         //Kann gut sein, dass mir der IdleCollector mir die gecachten
         //Informationen entzogen hat.
@@ -777,7 +732,6 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         // Hier holen wir uns den String fuer die Ausgabe, besonders
         // die Laenge ist immer wieder interessant.
 
-#ifdef VERTICAL_LAYOUT
         // Rectangle
         ASSERT( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
@@ -790,7 +744,6 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 #endif
         if ( IsVertical() )
             SwitchVerticalToHorizontal( (SwRect&)rRect );
-#endif
 
         ViewShell *pSh = GetShell();
         OutputDevice *pOldRef = pSh->GetReferenzDevice();
@@ -862,48 +815,34 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         if( rRepaint.HasArea() )
             rRepaint.Clear();
 
-#ifdef VERTICAL_LAYOUT
-    UNDO_SWAP( this )
-    (SwRect&)rRect = aOldRect;
+        UNDO_SWAP( this )
+        (SwRect&)rRect = aOldRect;
 
-    ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
-#endif
+        ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
     }
 }
 
 void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
     long nOffs)
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
         "SwTxtFrm::CriticalLines with swapped frame" );
     SWRECTFN( this )
     long nFrmHeight;
-#endif
 
     GetFormatted();
     if( HasPara() )
     {
-#ifdef VERTICAL_LAYOUT
         const long nTopMargin = (this->*fnRect->fnGetTopMargin)();
         SwStripe aStripe( (Frm().*fnRect->fnGetTop)(), nTopMargin );
         if ( nTopMargin )
-#else
-        SwStripe aStripe( Frm().Top(), Prt().Top() );
-        if( Prt().Top() )
-#endif
         {
             rStripes.Insert( aStripe, rStripes.Count() );
-#ifdef VERTICAL_LAYOUT
             aStripe.Y() -= nTopMargin;
-#else
-            aStripe.Y() += Prt().Top();
-#endif
         }
         SwLineLayout* pLay = GetPara();
         do
         {
-#ifdef VERTICAL_LAYOUT
             SwTwips nBase = aStripe.GetY() +
                            ( bVert ? -pLay->GetAscent() : pLay->GetAscent() );
 
@@ -923,49 +862,25 @@ void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
             }
 
             if( nLogToPixBase != nLogToPixSum + nLogToPixOffs )
-#else
-            SwTwips nBase = aStripe.GetY() + pLay->GetAscent();
-            if( rOut.LogicToPixel( Point( 0, nBase ) ).Y() !=
-                rOut.LogicToPixel( Point( 0, nBase - nOffs ) ).Y() +
-                rOut.LogicToPixel( Size( 0, nOffs ) ).Height() )
-#endif
             {
                 aStripe.Height() = pLay->GetRealHeight();
                 rStripes.Insert( aStripe, rStripes.Count() );
             }
-#ifdef VERTICAL_LAYOUT
             aStripe.Y() += ( bVert ? -pLay->GetRealHeight() :
                                       pLay->GetRealHeight() );
-#else
-            aStripe.Y() += pLay->GetRealHeight();
-#endif
             pLay = pLay->GetNext();
         } while( pLay );
 
-#ifdef VERTICAL_LAYOUT
         const long nBottomMargin = (this->*fnRect->fnGetBottomMargin)();
         if( nBottomMargin )
-#else
-        if( Prt().Top() + Prt().Height() < Frm().Height() )
-#endif
         {
 
-#ifdef VERTICAL_LAYOUT
             aStripe.Height() = nBottomMargin;
-#else
-            aStripe.Height() = Frm().Height() - Prt().Top() - Prt().Height();
-#endif
-
             rStripes.Insert( aStripe, rStripes.Count() );
         }
     }
-#ifdef VERTICAL_LAYOUT
     else if( nFrmHeight = (Frm().*fnRect->fnGetHeight)() )
         rStripes.Insert( SwStripe( (Frm().*fnRect->fnGetTop)(), nFrmHeight ),
                          rStripes.Count() );
-#else
-    else if( Frm().Height() )
-        rStripes.Insert(SwStripe(Frm().Top(),Frm().Height()), rStripes.Count());
-#endif
 }
 
