@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 08:30:02 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 14:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,17 +83,21 @@
 #include <osl/thread.h>
 #endif
 
+#include <hash_set>
+
 using namespace rtl;
 using namespace psp;
 using namespace padmin;
+using namespace std;
 
-APTabPage::APTabPage( Window* pParent, const ResId& rResId )
+APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
             : TabPage( pParent, rResId ),
-              m_aTitle( PaResId( RID_ADDP_STR_TITLE ) )
+              m_aTitle( PaResId( RID_ADDP_STR_TITLE ) ),
+              m_pParent( pParent )
 {
 }
 
-APChooseDevicePage::APChooseDevicePage( Window* pParent ) :
+APChooseDevicePage::APChooseDevicePage( AddPrinterDialog* pParent ) :
         APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDEV ) ),
         m_aPrinterBtn( this, PaResId( RID_ADDP_CHDEV_BTN_PRINTER ) ),
         m_aFaxBtn( this, PaResId( RID_ADDP_CHDEV_BTN_FAX ) ),
@@ -135,7 +139,7 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 
 //--------------------------------------------------------------------
 
-APChooseDriverPage::APChooseDriverPage( Window* pParent )
+APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDRIVER ) ),
           m_aDriverTxt( this, PaResId( RID_ADDP_CHDRV_TXT_DRIVER ) ),
           m_aDriverBox( this, PaResId( RID_ADDP_CHDRV_BOX_DRIVER ) ),
@@ -336,7 +340,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
 
 //--------------------------------------------------------------------
 
-APNamePage::APNamePage( Window* pParent, const String& rInitName, DeviceKind::type eKind )
+APNamePage::APNamePage( AddPrinterDialog* pParent, const String& rInitName, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_NAME ) ),
           m_aNameTxt(
                      this,
@@ -384,7 +388,7 @@ void APNamePage::fill( PrinterInfo& rInfo )
 
 //--------------------------------------------------------------------
 
-APCommandPage::APCommandPage( Window* pParent, DeviceKind::type eKind )
+APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_COMMAND ) ),
           m_aCommandTxt( this, PaResId( RID_ADDP_CMD_TXT_COMMAND ) ),
           m_aCommandBox( this, PaResId( eKind == DeviceKind::Pdf ? RID_ADDP_CMD_BOX_PDFCOMMAND : RID_ADDP_CMD_BOX_COMMAND ) ),
@@ -437,6 +441,11 @@ APCommandPage::APCommandPage( Window* pParent, DeviceKind::type eKind )
 
     m_aHelpBtn.SetClickHdl( LINK( this, APCommandPage, ClickBtnHdl ) );
     m_aPdfDirBtn.SetClickHdl( LINK( this, APCommandPage, ClickBtnHdl ) );
+    if( m_eKind != DeviceKind::Printer )
+    {
+        m_aCommandBox.SetModifyHdl( LINK( this, APCommandPage, ModifyHdl ) );
+        m_pParent->enableNext( false );
+    }
 }
 
 APCommandPage::~APCommandPage()
@@ -474,6 +483,15 @@ IMPL_LINK( APCommandPage, ClickBtnHdl, PushButton*, pButton )
     return 0;
 }
 
+IMPL_LINK( APCommandPage, ModifyHdl, ComboBox*, pBox )
+{
+    if( pBox == &m_aCommandBox )
+    {
+        m_pParent->enableNext( m_aCommandBox.GetText().Len() );
+    }
+    return 0;
+}
+
 bool APCommandPage::check()
 {
     return true;
@@ -486,7 +504,7 @@ void APCommandPage::fill( PrinterInfo& rInfo )
 
 //--------------------------------------------------------------------
 
-APOldPrinterPage::APOldPrinterPage( Window* pParent )
+APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_OLDPRINTERS ) ),
           m_aOldPrinterTxt( this, PaResId( RID_ADDP_OLD_TXT_PRINTERS ) ),
           m_aOldPrinterBox( this, PaResId( RID_ADDP_OLD_BOX_PRINTERS ) ),
@@ -682,7 +700,7 @@ void APOldPrinterPage::fill( PrinterInfo& rInfo )
 
 //--------------------------------------------------------------------
 
-APFaxDriverPage::APFaxDriverPage( Window* pParent )
+APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_FAXDRIVER ) ),
           m_aFaxTxt( this, PaResId( RID_ADDP_FAXDRV_TXT_DRIVER ) ),
           m_aDefBtn( this, PaResId( RID_ADDP_FAXDRV_BTN_DEFAULT ) ),
@@ -714,7 +732,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 
 //--------------------------------------------------------------------
 
-APPdfDriverPage::APPdfDriverPage( Window* pParent )
+APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_PDFDRIVER ) ),
           m_aPdfTxt( this, PaResId( RID_ADDP_PDFDRV_TXT_DRIVER ) ),
           m_aDefBtn( this, PaResId( RID_ADDP_PDFDRV_BTN_DEFAULT ) ),
@@ -970,6 +988,7 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pFaxCommandPage )
     {
         m_pCurrentPage = m_pFaxDriverPage->isDefault() ? (APTabPage*)m_pFaxDriverPage : (APTabPage*)m_pFaxSelectDriverPage;
+        m_aNextPB.Enable( TRUE );
     }
     else if( m_pCurrentPage == m_pPdfDriverPage )
     {
@@ -988,6 +1007,7 @@ void AddPrinterDialog::back()
     else if( m_pCurrentPage == m_pPdfCommandPage )
     {
         m_pCurrentPage = m_pPdfDriverPage->isDefault() || m_pPdfDriverPage->isDist() ? (APTabPage*)m_pPdfDriverPage : (APTabPage*)m_pPdfSelectDriverPage;
+        m_aNextPB.Enable( TRUE );
     }
     m_pCurrentPage->Show( TRUE );
     m_aTitleImage.SetText( m_pCurrentPage->getTitle() );
@@ -1067,17 +1087,17 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
 
     int nVersion = 1;
     bool bDoublet;
-    do
+    list< OUString > aPrinterList;
+    rManager.listPrinters( aPrinterList );
+    hash_set< OUString, OUStringHash > aPrinters;
+    for( list< OUString >::const_iterator it = aPrinterList.begin(); it != aPrinterList.end(); ++it )
+        aPrinters.insert( *it );
+    while( aPrinters.find( aResult ) != aPrinters.end() )
     {
-        const PrinterInfo& rInfo( rManager.getPrinterInfo( aResult ) );
-        bDoublet = aResult == String( rInfo.m_aPrinterName );
-        if( bDoublet )
-        {
-            aResult = rBase;
-            aResult.AppendAscii( "_" );
-            aResult += String::CreateFromInt32( nVersion++ );
-        }
-    } while( bDoublet );
+        aResult = rBase;
+        aResult.AppendAscii( "_" );
+        aResult += String::CreateFromInt32( nVersion++ );
+    }
 
     return aResult;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-19 13:47:44 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 14:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,10 @@ namespace DeviceKind { enum type { Printer, Fax, Pdf }; }
 class APTabPage : public TabPage
 {
     String              m_aTitle;
+protected:
+    AddPrinterDialog*   m_pParent;
 public:
-    APTabPage( Window* pParent, const ResId& rResId );
+    APTabPage( AddPrinterDialog* pParent, const ResId& rResId );
 
     // returns false if information is incomplete or invalid
     virtual bool check() = 0;
@@ -114,7 +116,7 @@ class APChooseDevicePage : public APTabPage
     RadioButton             m_aOldBtn;
     FixedText               m_aOverTxt;
 public:
-    APChooseDevicePage( Window* pParent );
+    APChooseDevicePage( AddPrinterDialog* pParent );
     ~APChooseDevicePage();
 
     bool isPrinter() { return m_aPrinterBtn.IsChecked(); }
@@ -142,7 +144,7 @@ class APChooseDriverPage : public APTabPage
 
     void updateDrivers();
 public:
-    APChooseDriverPage( Window* pParent );
+    APChooseDriverPage( AddPrinterDialog* pParent );
     ~APChooseDriverPage();
 
     virtual bool check();
@@ -156,7 +158,7 @@ class APNamePage : public APTabPage
     CheckBox                m_aDefaultBox;
     CheckBox                m_aFaxSwallowBox;
 public:
-    APNamePage( Window* pParent, const String& rInitName, DeviceKind::type eKind );
+    APNamePage( AddPrinterDialog* pParent, const String& rInitName, DeviceKind::type eKind );
     ~APNamePage();
 
     bool isDefault() { return m_aDefaultBox.IsChecked(); }
@@ -181,9 +183,10 @@ class APCommandPage : public APTabPage
     DeviceKind::type        m_eKind;
 
     DECL_LINK( ClickBtnHdl, PushButton* );
+    DECL_LINK( ModifyHdl, ComboBox* );
 public:
 
-    APCommandPage( Window* pParent, DeviceKind::type eKind );
+    APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind );
     ~APCommandPage();
 
     virtual bool check();
@@ -202,7 +205,7 @@ class APOldPrinterPage : public APTabPage
 
     DECL_LINK( ClickBtnHdl, PushButton* );
 public:
-    APOldPrinterPage( Window* pParent );
+    APOldPrinterPage( AddPrinterDialog* pParent );
     ~APOldPrinterPage();
 
     virtual bool check();
@@ -217,7 +220,7 @@ class APFaxDriverPage : public APTabPage
     RadioButton             m_aDefBtn;
     RadioButton             m_aSelectBtn;
 public:
-    APFaxDriverPage( Window* pParent );
+    APFaxDriverPage( AddPrinterDialog* pParent );
     ~APFaxDriverPage();
 
     virtual bool check();
@@ -233,7 +236,7 @@ class APPdfDriverPage : public APTabPage
     RadioButton             m_aDistBtn;
     RadioButton             m_aSelectBtn;
 public:
-    APPdfDriverPage( Window* pParent );
+    APPdfDriverPage( AddPrinterDialog* pParent );
     ~APPdfDriverPage();
 
     virtual bool check();
@@ -282,6 +285,8 @@ public:
 
     static String uniquePrinterName( const String& rString );
     static String getOldPrinterLocation();
+
+    void enableNext( bool bEnable ) { m_aNextPB.Enable( bEnable ); }
 };
 
 } // namespace
