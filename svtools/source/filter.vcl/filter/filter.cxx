@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:41:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ static ::osl::Mutex& getListMutex()
     static ::osl::Mutex s_aListProtection;
     return s_aListProtection;
 }
+
+static GraphicFilter* pGraphicFilter=0;
 
 // -------------------------
 // - ImpFilterOutputStream -
@@ -2230,4 +2232,19 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
         }
     }
     return nRet;
+}
+
+GraphicFilter* GraphicFilter::GetGraphicFilter()
+{
+    if( !pGraphicFilter )
+    {
+        pGraphicFilter = new GraphicFilter;
+        pGraphicFilter->GetImportFormatCount();
+    }
+
+    const Link aLink;
+    pGraphicFilter->SetStartFilterHdl( aLink );
+    pGraphicFilter->SetEndFilterHdl( aLink );
+    pGraphicFilter->SetUpdatePercentHdl( aLink );
+    return pGraphicFilter;
 }
