@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-14 15:24:24 $
+ *  last change: $Author: mav $ $Date: 2003-11-14 15:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,8 +162,13 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         }
         else if ( nNextState == embed::EmbedStates::EMBED_ACTIVE )
         {
+            if ( !m_xClientSite.is() )
+                throw embed::WrongStateException(); //TODO: client site is not set!
+
             // create frame and load document in the frame
             m_pDocHolder->Show();
+
+            m_xClientSite->onShowWindow( sal_True );
 
             m_nObjectState = nNextState;
         }
@@ -203,6 +208,8 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             }
 
             m_pDocHolder->CloseFrame();
+
+            m_xClientSite->onShowWindow( sal_False );
             // when Hide() method is fixed the frame will not be closed but hided
             // m_pDocHolder->Hide();
 
