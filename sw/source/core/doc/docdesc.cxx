@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-04-11 14:04:26 $
+ *  last change: $Author: mib $ $Date: 2002-06-25 11:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,13 +180,16 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
+#ifndef _GETMETRICVAL_HXX
+#include <GetMetricVal.hxx>
+#endif
 
 #ifndef _STATSTR_HRC
 #include <statstr.hrc>
 #endif
 
-void lcl_DefaultPageFmt( SwFrmFmt &rFmt1, SwFrmFmt &rFmt2, SfxPrinter *pPrt,
-                     BOOL bCheck )
+void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId, SwFrmFmt &rFmt1,
+                         SwFrmFmt &rFmt2, SfxPrinter *pPrt, BOOL bCheck )
 {
     //Einstellung von Seitengroesse und Seitenraendern. Dazu wird
     //der Default-Printer benutzt.
@@ -230,7 +233,6 @@ void lcl_DefaultPageFmt( SwFrmFmt &rFmt1, SwFrmFmt &rFmt2, SfxPrinter *pPrt,
         aFrmSize.SetSize( aPhysSize );
 
         //Raender
-        Size    aOutSize;
         Point   aOffst( pPrt->GetPageOffset() );
         aOffst += pPrt->GetMapMode().GetOrigin();
 
@@ -238,27 +240,35 @@ void lcl_DefaultPageFmt( SwFrmFmt &rFmt1, SwFrmFmt &rFmt2, SfxPrinter *pPrt,
         //Raender haben eine defaultmaessige Mindestgroesse.
         //wenn der Drucker einen groesseren Rand vorgibt, so
         //ist mir dass auch recht.
-        long nMinTopBottom, nMinLeftRight;
-        if ( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
-            nMinTopBottom = nMinLeftRight = 1134;   //2 Zentimeter
+        // MIB 06/25/2002, #99397#: The HTML page desc had A4 as page size
+        // always. This has been changed to take the page size from the printer.
+        // Unfortunately, the margins of the HTML page desc are smaller than
+        // the margins used here in general, so one extra case is required.
+        // In the long term, this needs to be changed to always keep the
+        // margins from the page desc.
+        sal_Int32 nMinTop, nMinBottom, nMinLeft, nMinRight;
+        if( RES_POOLPAGE_HTML == nPoolFmtId )
+        {
+            nMinRight = nMinTop = nMinBottom = GetMetricVal( CM_1 );
+            nMinLeft = nMinRight * 2;
+        }
+        else if( MEASURE_METRIC == GetAppLocaleData().getMeasurementSystemEnum() )
+        {
+            nMinTop = nMinBottom = nMinLeft = nMinRight = 1134; //2 Zentimeter
+        }
         else
         {
-            nMinTopBottom = 1440;   //al la WW: 1Inch
-            nMinLeftRight = 1800;   //          1,25 Inch
+            nMinTop = nMinBottom = 1440;    //al la WW: 1Inch
+            nMinLeft = nMinRight = 1800;    //          1,25 Inch
         }
 
-        if ( aOffst.X() < nMinLeftRight )
-            aOffst.X() = nMinLeftRight;
-        if ( aOffst.Y() < nMinTopBottom )
-            aOffst.Y() = nMinTopBottom;
-        aOutSize.Width()  = aPhysSize.Width() - ( 2 * aOffst.X() );
-        aOutSize.Height() = aPhysSize.Height() - ( 2 * aOffst.Y() );
-
         //Raender einstellen.
-        aUL.SetUpper( USHORT(aOffst.Y()) );
-        aUL.SetLower( USHORT(aPhysSize.Height() - aOutSize.Height() - aOffst.Y()));
-        aLR.SetRight( USHORT(aOffst.X()) );
-        aLR.SetLeft(  USHORT(aPhysSize.Width() - aOutSize.Width() - aOffst.X()));
+        aUL.SetUpper( static_cast< sal_uInt16 >(
+                        nMinTop > aOffst.Y() ? nMinTop : aOffst.Y() ) );
+        aUL.SetLower( static_cast< sal_uInt16 >(
+                        nMinBottom > aOffst.Y() ? nMinBottom : aOffst.Y() ));
+        aLR.SetRight( nMinRight > aOffst.X() ? nMinRight : aOffst.X() );
+        aLR.SetLeft(  nMinLeft > aOffst.X() ? nMinLeft : aOffst.X());
     }
     else
     {
@@ -690,7 +700,8 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy)
     {
         pNew = new SwPageDesc( rName, GetDfltFrmFmt(), this );
         //Default-Seitenformat einstellen.
-        ::lcl_DefaultPageFmt( pNew->GetMaster(), pNew->GetLeft(), GetPrt(), FALSE );
+        ::lcl_DefaultPageFmt( USHRT_MAX, pNew->GetMaster(), pNew->GetLeft(),
+                              GetPrt(), FALSE );
         if( GetPrt() )
             pNew->SetLandscape( ORIENTATION_LANDSCAPE ==
                                 GetPrt()->GetOrientation() );
@@ -931,9 +942,9 @@ void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
         //und die Reader u.U. "unfertige" Formate stehenlassen.
         for ( USHORT i = 0; i < GetPageDescCnt(); ++i )
         {
-            ::lcl_DefaultPageFmt( _GetPageDesc( i ).GetMaster(),
-                              _GetPageDesc( i ).GetLeft(),
-                              pPrt, TRUE );
+            SwPageDesc& rDesc = _GetPageDesc( i );
+            ::lcl_DefaultPageFmt( rDesc.GetPoolFmtId(), rDesc.GetMaster(),
+                                    rDesc.GetLeft(), pPrt, TRUE );
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-06-17 11:06:43 $
+ *  last change: $Author: mib $ $Date: 2002-06-25 11:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,11 +1720,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
 
     case RES_POOLPAGE_HTML:             // HTML
         {
+            lcl_GetStdPgSize( this, aSet );
             aLR.SetRight( GetMetricVal( CM_1 ));
             aUL.SetUpper( (USHORT)aLR.GetRight() );
             aUL.SetLower( (USHORT)aLR.GetRight() );
-            Size aPSize( SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ) );
-            aSet.Put( SwFmtFrmSize( ATT_FIX_SIZE, aPSize.Width(), aPSize.Height() ));
             aSet.Put( aLR );
             aSet.Put( aUL );
 
