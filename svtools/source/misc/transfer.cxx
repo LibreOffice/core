@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-13 16:05:23 $
+ *  last change: $Author: ka $ $Date: 2001-03-14 13:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
 
 #include "urlbmk.hxx"
 #include "imap.hxx"
@@ -123,6 +126,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
@@ -174,6 +178,40 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
     return rOStm;
 }
 
+// -----------------------------------------
+// - TransferableHelper::TerminateListener -
+// -----------------------------------------
+
+TransferableHelper::TerminateListener::TerminateListener( TransferableHelper& rTransferableHelper ) :
+    mrParent( rTransferableHelper )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+TransferableHelper::TerminateListener::~TerminateListener()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::TerminateListener::disposing( const EventObject& Source ) throw( RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException )
+{
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& aEvent ) throw( RuntimeException )
+{
+    mrParent.FlushToClipboard();
+}
+
 // ----------------------
 // - TransferableHelper -
 // ----------------------
@@ -197,14 +235,11 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
         maLastFormat = rFlavor.MimeType;
         maAny = Any();
 
-        if( !maFormats.size() )
-        {
-            Application::GetSolarMutex().acquire();
-            AddSupportedFormats();
-            Application::GetSolarMutex().release();
-        }
-
         Application::GetSolarMutex().acquire();
+
+        if( !maFormats.size() )
+            AddSupportedFormats();
+
         GetData( rFlavor );
         Application::GetSolarMutex().release();
 
@@ -267,6 +302,21 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
 void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw( RuntimeException )
 {
+    if( mxTerminateListener.is() )
+    {
+        Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+
+        if( xFact.is() )
+        {
+            Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+            if( xDesktop.is() )
+                xDesktop->removeTerminateListener( mxTerminateListener );
+        }
+
+        mxTerminateListener = Reference< XTerminateListener >();
+    }
+
     Application::GetSolarMutex().acquire();
     ObjectReleased();
     Application::GetSolarMutex().release();
@@ -690,6 +740,22 @@ void TransferableHelper::CopyToClipboard() const
     {
         try
         {
+            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+
+            if( xFact.is() )
+            {
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+// #81926: should be enabled
+#if 0
+                if( xDesktop.is() )
+                {
+                    TransferableHelper* pThis = (TransferableHelper*) this;
+                    xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
+                }
+#endif
+            }
+
             const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
             Application::AcquireSolarMutex( nRef );
@@ -712,7 +778,11 @@ void TransferableHelper::FlushToClipboard() const
         try
         {
             if( xFlushableClipboard.is() )
+            {
+                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
                 xFlushableClipboard->flushClipboard();
+                Application::AcquireSolarMutex( nRef );
+            }
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
@@ -760,7 +830,7 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 
     try
     {
-        Reference< ::com::sun::star::lang::XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
+        Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
 
         if( xFact.is() )
         {
