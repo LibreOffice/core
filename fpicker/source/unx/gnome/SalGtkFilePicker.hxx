@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:07:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,16 +356,11 @@ class SalGtkFilePicker :
             LIST_LAST
               };
 
-        GtkWidget  *m_pLists[ LIST_LAST ];
-
-        enum {
-            VERSION_LABEL,
-            TEMPLATE_LABEL,
-            IMAGE_TEMPLATE_LABEL,
-            LIST_LABEL_LAST
-              };
-
-        GtkWidget  *m_pListLabels[ LIST_LABEL_LAST ];
+        GtkWidget *m_pHBoxs[ LIST_LAST ];
+        GtkWidget *m_pAligns[ LIST_LAST ];
+        GtkWidget *m_pLists[ LIST_LAST ];
+        GtkWidget *m_pListLabels[ LIST_LAST ];
+        bool mbListVisibility[ LIST_LAST ];
 
         ::rtl::OUString m_aCurrentFilter;
 
@@ -378,19 +373,28 @@ class SalGtkFilePicker :
         void implAddFilterGroup( const OUString& rFilter,
                      const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair>& _rFilters );
 
+        bool bVersionWidthUnset;
         sal_Bool mbPreviewState;
         gulong mHID_Preview;
+        gulong mHID_FolderChange;
+        gulong mHID_SelectionChange;
         GtkWidget* m_pPreview;
         sal_Int32 m_PreviewImageWidth;
         sal_Int32 m_PreviewImageHeight;
 
-        static void preview_toggled (GtkObject *cb, gpointer data);
+        void HandleSetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction,
+            const ::com::sun::star::uno::Any& rValue);
+        ::com::sun::star::uno::Any HandleGetListValue(GtkComboBox *pWidget, sal_Int16 nControlAction) const;
+
+        static void preview_toggled_cb (GtkObject *cb, SalGtkFilePicker *pobjFP);
         static void filter_changed_cb (GtkFileChooser *file_chooser, GParamSpec *pspec, SalGtkFilePicker *pobjFP);
-        static void update_preview_cb (GtkFileChooser *file_chooser, gpointer data);
+        static void folder_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+        static void selection_changed_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
+        static void update_preview_cb (GtkFileChooser *file_chooser, SalGtkFilePicker *pobjFP);
 
     public:
          virtual ~SalGtkFilePicker();
 
 };
-
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
 #endif // _SALGTKFILEPICKER_HXX_
