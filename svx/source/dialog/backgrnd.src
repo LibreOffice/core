@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:28:00 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     text [ dutch ] = "Niet-gekoppelde afbeelding" ; \
     text [ swedish ] = "ej länkad grafik" ; \
     text [ danish ] = "Ikke-kædet grafik" ; \
-    text [ portuguese_brazilian ] = "unverknüpfte Grafik" ; \
+    text [ portuguese_brazilian ] = "unverkn?fte Grafik" ; \
     text [ portuguese ] = "Imagem não ligada" ; \
     text[ chinese_simplified ] = "Î´Á´½ÓµÄÍ¼ÐÎ";    \
     text[ russian ] = "Íåñâÿçàííàÿ ãðàôèêà";    \
@@ -278,7 +278,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ dutch ] = "~Voor" ;
         Text [ swedish ] = "F~ör" ;
         Text [ danish ] = "For" ;
-        Text [ portuguese_brazilian ] = "Fü~r" ;
+        Text [ portuguese_brazilian ] = "F?r" ;
         Text [ portuguese ] = "~Para" ;
         Text[ chinese_simplified ] = "ÓÃÓÚ(~O)";
         Text[ russian ] = "Äëÿ";
@@ -582,7 +582,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ DANISH ] = "Baggrundsfarve" ;
         Text [ ENGLISH_US ] = "Background color" ;
         Text [ SPANISH ] = "C~olor de fondo" ;
-        Text [ FINNISH ] = "Background Color" ;
+        Text [ FINNISH ] = "Hintergrundfarbe" ;
         Text [ FRENCH ] = "Couleur d'arrière-plan" ;
         Text [ ITALIAN ] = "Colore di sfondo" ;
         Text [ DUTCH ] = "Achtergrondkleur" ;
@@ -612,7 +612,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ DANISH ] = "Eksempel" ;
         Text [ ENGLISH_US ] = "Preview" ;
         Text [ SPANISH ] = "Previsualización" ;
-        Text [ FINNISH ] = "Esikatselu" ;
+        Text [ FINNISH ] = "Vorschau" ;
         Text [ FRENCH ] = "Aperçu" ;
         Text [ ITALIAN ] = "Anteprima" ;
         Text [ DUTCH ] = "Voorbeeld" ;
@@ -661,7 +661,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ french ] = "~Lien" ;
         Text [ swedish ] = "Län~ka" ;
         Text [ danish ] = "Kæd" ;
-        Text [ portuguese_brazilian ] = "~Verknüpfen" ;
+        Text [ portuguese_brazilian ] = "~Verkn?fen" ;
         Text [ portuguese ] = "~Ligar" ;
         Text[ chinese_simplified ] = "Á´½Ó(~L)";
         Text[ russian ] = "Ñâÿçàòü";
@@ -760,6 +760,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Dosya";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "File";
+        Text[ finnish ] = "Datei";
     };
     RadioButton BTN_POSITION
     {
@@ -805,7 +806,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ french ] = "~Remplissage" ;
         Text [ swedish ] = "~Yta" ;
         Text [ danish ] = "F~lade" ;
-        Text [ portuguese_brazilian ] = "~Fläche" ;
+        Text [ portuguese_brazilian ] = "~Fl?che" ;
         Text [ portuguese ] = "~Preenchimento" ;
         Text[ chinese_simplified ] = "Æ½Ãæ(~E)";
         Text[ russian ] = "Îáëàñòü";
@@ -885,6 +886,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Type";
+        Text[ finnish ] = "Art";
     };
     Window WIN_PREVIEW2
     {
@@ -921,6 +923,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text[ korean ] = "±×·¡ÇÈ ¹Ì¸® º¸±â";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Preview";
+        Text[ finnish ] = "Grafikvorschau";
     };
     String STR_BROWSE
     {
