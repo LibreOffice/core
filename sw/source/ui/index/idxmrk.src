@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:44:42 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1211,10 +1211,8 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. "\
-    "Mцchten sie die bereits enthaltenen Eintrдge anpassen?" ;
-    MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data."\
-    "Do you want to adjust the existing bibliography entries?" ;
+    MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Mцchten sie die bereits enthaltenen Eintrдge anpassen?" ;
+    MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data. Do you want to adjust the existing bibliography entries?" ;
     MESSAGE[ english_us ] = "The bibliography entry is already contained in the document with different data. ";
     MESSAGE[ portuguese ] = "A entrada bibliogrбfica jб existe no documento com dados diferentes. ";
     MESSAGE[ russian ] = "Этот элемент библиографии с некоторыми отличными данными уже содержится в документе. ";
