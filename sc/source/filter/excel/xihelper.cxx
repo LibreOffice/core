@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:38:05 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,11 +730,9 @@ bool XclImpUrlHelper::DecodeLink( String& rApplic, String& rTopic, const String 
 
 // Cached Values ==============================================================
 
-XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm, sal_uInt16 nCol, sal_uInt16 nRow) :
+XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm ) :
     mfValue( 0.0 ),
-    mnCol( nCol ),
-    mnRow( nRow )
-
+    mnBoolErr( 0 )
 {
     rStrm >> mnType;
     switch( mnType )
@@ -752,17 +750,15 @@ XclImpCachedValue::XclImpCachedValue( XclImpStream& rStrm, sal_uInt16 nCol, sal_
         case EXC_CACHEDVAL_BOOL:
         case EXC_CACHEDVAL_ERROR:
         {
-            bool bIsErr = (mnType == EXC_CACHEDVAL_ERROR);
-            sal_uInt8 nErrBool;
             double fVal;
             rStrm.Ignore( 1 );
-            rStrm >> nErrBool;
+            rStrm >> mnBoolErr;
             rStrm.Ignore( 6 );
 
-            const ScTokenArray* pTok = rStrm.GetRoot().GetFmlaConverter().GetBoolErr(
-                XclTools::ErrorToEnum( fVal, bIsErr, nErrBool ) );
-            if( pTok )
-                mpTokArr.reset( new ScTokenArray( *pTok ) );
+            const ScTokenArray* pScTokArr = rStrm.GetRoot().GetFmlaConverter().GetBoolErr(
+                XclTools::ErrorToEnum( fVal, mnType == EXC_CACHEDVAL_ERROR, mnBoolErr ) );
+            if( pScTokArr )
+                mpTokArr.reset( pScTokArr->Clone() );
         }
         break;
         default:
@@ -774,39 +770,84 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
+USHORT XclImpCachedValue::GetError() const
+{
+    return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
+}
+
+
 // Matrix Cached Values ==============================================================
 
-XclImpCachedMatrix::XclImpCachedMatrix(sal_uInt16 nColumns, sal_uInt16 nRows) :
-    mnColumns(nColumns),
-    mnRows(nRows)
+XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
+    mnScCols( 0 ),
+    mnScRows( 0 )
 {
+    mnScCols = rStrm.ReaduInt8();
+    mnScRows = rStrm.ReaduInt16();
+
+    if( rStrm.GetRoot().GetBiff() < xlBiff8 )
+    {
+        // in BIFF2-BIFF7: 256 columns represented by 0 columns
+        if( mnScCols == 0 )
+            mnScCols = 256;
+    }
+    else
+    {
+        // in BIFF8: columns and rows decreaed by 1
+        ++mnScCols;
+        ++mnScRows;
+    }
+
+    for( USHORT nScRow = 0; nScRow < mnScRows; ++nScRow )
+        for( USHORT nScCol = 0; nScCol < mnScCols; ++nScCol )
+            maValueList.Append( new XclImpCachedValue( rStrm ) );
 }
 
 XclImpCachedMatrix::~XclImpCachedMatrix()
 {
 }
 
-void XclImpCachedMatrix::FillMatrix( ScDocument& rDoc, ScMatrix* pMatrix ) const
+ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
-    bool bString = false;
-    bool bEmpty = false;
-
-    for( const XclImpCachedValue* pCachedValue = maValueList.First(); pCachedValue; pCachedValue = maValueList.Next() )
+    ScMatrixRef pScMatrix;
+    DBG_ASSERT( mnScCols * mnScRows == maValueList.Count(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
+    if( mnScCols && mnScRows && static_cast< sal_uInt32 >( mnScCols * mnScRows ) <= maValueList.Count() )
     {
-        switch( pCachedValue->GetType() )
+        pScMatrix = new ScMatrix( mnScCols, mnScRows );
+        const XclImpCachedValue* pValue = maValueList.First();
+        for( USHORT nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
-            case EXC_CACHEDVAL_DOUBLE: bString = bEmpty = false; break;
-            case EXC_CACHEDVAL_STRING: bString = true; bEmpty = false; break;
-            case EXC_CACHEDVAL_BOOL:   bString = bEmpty = false; break;
-            case EXC_CACHEDVAL_ERROR:  bString = bEmpty = false; break;
-            default: bString = false;  bEmpty = true; break;
+            for( USHORT nScCol = 0; nScCol < mnScCols; ++nScCol )
+            {
+                switch( pValue->GetType() )
+                {
+                    case EXC_CACHEDVAL_EMPTY:
+                        // Excel shows 0.0 here, not an empty cell
+                        pScMatrix->PutDouble( 0.0, nScCol, nScRow );
+                    break;
+                    case EXC_CACHEDVAL_DOUBLE:
+                        pScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
+                    break;
+                    case EXC_CACHEDVAL_STRING:
+                        pScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
+                    break;
+                    case EXC_CACHEDVAL_BOOL:
+                        pScMatrix->PutDouble( pValue->GetBool() ? 1.0 : 0.0, nScCol, nScRow );
+                    break;
+                    case EXC_CACHEDVAL_ERROR:
+                        pScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
+                    break;
+                    default:
+                        DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
+                        pScMatrix->PutEmpty( nScCol, nScRow );
+                }
+                pValue = maValueList.Next();
+            }
         }
-        if(const String *pString = pCachedValue->GetString() )
-            rDoc.SetDdeLinkResult(pMatrix,pCachedValue->GetCol(),pCachedValue->GetRow(), *pString ,pCachedValue->GetValue(), bString, bEmpty);
-        else
-            rDoc.SetDdeLinkResult(pMatrix,pCachedValue->GetCol(),pCachedValue->GetRow(), EMPTY_STRING ,pCachedValue->GetValue(), bString, bEmpty);
     }
+    return pScMatrix;
 }
+
 
 // ============================================================================
 
