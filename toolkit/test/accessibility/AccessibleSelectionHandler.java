@@ -64,19 +64,28 @@ class AccessibleSelectionHandler
                         {
                             for( int i = 0; i < nCount; i++ )
                             {
-                                if( xSelection.isAccessibleChildSelected( i ) )
+                                try
                                 {
-                                    XAccessible xSelChild = xSelection.
-                                        getSelectedAccessibleChild(nSelected);
-                                    XAccessible xNChild =
-                                        ((AccTreeNode)aParent).
-                                        getContext().getAccessibleChild( i );
+                                    if( xSelection.isAccessibleChildSelected( i ) )
+                                    {
+                                        XAccessible xSelChild = xSelection.
+                                            getSelectedAccessibleChild(nSelected);
+                                        XAccessible xNChild =
+                                            ((AccTreeNode)aParent).
+                                            getContext().getAccessibleChild( i );
+                                        aVNode.addChild( new StringNode(
+                                            i + ": " +
+                                            xNChild.getAccessibleContext().
+                                            getAccessibleDescription() + " (" +
+                                            (xSelChild.equals(xNChild) ? "OK" : "XXX") +
+                                            ")", aParent ) );
+                                    }
+                                }
+                                catch (com.sun.star.lang.DisposedException e)
+                                {
                                     aVNode.addChild( new StringNode(
-                                        i + ": " +
-                                        xNChild.getAccessibleContext().
-                                        getAccessibleDescription() + " (" +
-                                        (xSelChild.equals(xNChild) ? "OK" : "XXX") +
-                                        ")", aParent ) );
+                                        i + ": caught DisposedException while creating",
+                                        aParent ));
                                 }
                             }
                             aChild = aVNode;
@@ -155,9 +164,9 @@ class SelectionDialog extends JDialog
         {
             try
             {
-                aChildVector.add(
-                    xContext.getAccessibleChild(i).
-                    getAccessibleContext().getAccessibleDescription() );
+                XAccessible xChild = xContext.getAccessibleChild(i);
+                XAccessibleContext xChildContext = xChild.getAccessibleContext();
+                aChildVector.add( i + " " + xChildContext.getAccessibleName());
             }
             catch( IndexOutOfBoundsException e )
             {
