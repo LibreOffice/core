@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibilityHints.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-12 09:35:13 $
+ *  last change: $Author: sab $ $Date: 2002-03-14 15:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #define SC_HINT_ACC_SIMPLE_START    SFX_HINT_USER00
 #define SC_HINT_ACC_TABLECHANGED    SC_HINT_ACC_SIMPLE_START + 1
 #define SC_HINT_ACC_CURSORCHANGED   SC_HINT_ACC_SIMPLE_START + 2
+#define SC_HINT_ACC_VISAREACHANGED  SC_HINT_ACC_SIMPLE_START + 3
 
 // ---------------------------------------------------------------------------
 
