@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 15:10:55 $
+ *  last change: $Author: ka $ $Date: 2002-09-01 15:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,11 +2073,11 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
             }
             else if( !ImpUpdateGraphicLink() )
             {
-                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
+                pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
             }
             else
             {
-                pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
+                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
             }
         }
         else
