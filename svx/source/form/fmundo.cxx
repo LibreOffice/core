@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 10:31:18 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,55 +823,71 @@ void FmXUndoEnvironment::firing_Impl( const ::com::sun::star::script::ScriptEven
 
     {
         Reference< XInterface >  xThis;
-        if (evt.Helper.getValueType() ==
-            ::getCppuType((const Reference< ::com::sun::star::form::XFormController>*)0))
-        {
-            Reference< ::com::sun::star::form::XFormController >  xController;
-            evt.Helper >>= xController;
-            xThis = Reference< XInterface > (xController, UNO_QUERY);
-        }
-        else if (evt.Helper.getValueType() ==
-            ::getCppuType((const Reference< ::com::sun::star::beans::XPropertySet>*)0))
+        evt.Helper >>= xThis;
 
-        {
-            Reference< ::com::sun::star::beans::XPropertySet >  xSet;
-            evt.Helper >>= xSet;
-            Reference< ::com::sun::star::form::XForm >  xForm(xSet, UNO_QUERY);
-
-            // ??? why has this code below made it in ???
-            // 86110 - 18.04.2001 - frank.schoenheit@germany.sun.com
-//          if ( xForm.is())
-//          {
-//              // these events can't be called for a database form
-//              if (evt.MethodName == ::rtl::OUString::createFromAscii("errorOccured"))
-//                  return;
-//              else if (evt.MethodName == ::rtl::OUString::createFromAscii("approveCursorMove") ||
-//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveRowChange") ||
-//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveRowSetChange") ||
-//                       evt.MethodName == ::rtl::OUString::createFromAscii("approveParameter"))
-//              {
-//                  sal_Bool bB = sal_True;
-//                  pSyncRet->setValue(&bB,::getBooleanCppuType());
-//                  return;
-//              }
-//          }
-
-            xThis = Reference< XInterface > (xSet, UNO_QUERY);
-        }
-        else if( evt.Helper.getValueType() ==
-            ::getCppuType((const Reference< ::com::sun::star::awt::XControl>*)0) )
-
-        {
-            Reference< ::com::sun::star::awt::XControl >  xControl;
-            evt.Helper >>= xControl;
-            xThis = Reference< XInterface > (xControl, UNO_QUERY);
-        }
+//      if (evt.Helper.getValueType() == ::getCppuType((const Reference< XFormController>*)0))
+//      {
+//          Reference< XFormController >  xController;
+//          evt.Helper >>= xController;
+//          xThis = Reference< XInterface > (xController, UNO_QUERY);
+//      }
+//      else if (evt.Helper.getValueType() == ::getCppuType((const Reference< XPropertySet>*)0))
+//
+//      {
+//          Reference< XPropertySet >  xSet;
+//          evt.Helper >>= xSet;
+//          Reference< XForm > xForm(xSet, UNO_QUERY);
+//
+//          xThis = Reference< XInterface > (xSet, UNO_QUERY);
+//      }
+//      else if( evt.Helper.getValueType() == ::getCppuType((const Reference< XControl>*)0) )
+//
+//      {
+//          Reference< XControl >  xControl;
+//          evt.Helper >>= xControl;
+//          xThis = Reference< XInterface > (xControl, UNO_QUERY);
+//      }
 
         aGuard.clear();
         if (xThis.is())
-            xObjSh->CallScript( evt.ScriptType, evt.ScriptCode,
-                                xThis, (void *)&evt.Arguments,
-                                pSyncRet );
+        {
+            ::rtl::OUString sScriptType = evt.ScriptType;
+            ::rtl::OUString sScriptCode = evt.ScriptCode;
+            Sequence< Any > aArguments = evt.Arguments;
+
+            ::rtl::OUString sMacroLocation;
+
+            // the object shell still want's the script in the old format where neither "document" nor "application" is prepended
+            if ( 0 == sScriptType.compareToAscii( "StarBasic" ) )
+            {   // it's a starbasic script
+                sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
+                DBG_ASSERT( 0 <= nPrefixLen, "FmXUndoEnvironment::firing_Impl: Basic script name in old format encountered!" );
+
+                if ( 0 <= nPrefixLen )
+                {
+                    // and it has such a prefix
+                    sMacroLocation = sScriptCode.copy( 0, nPrefixLen );
+                    DBG_ASSERT( 0 == sMacroLocation.compareToAscii( "document" )
+                            ||  0 == sMacroLocation.compareToAscii( "application" ),
+                            "FmXUndoEnvironment::firing_Impl: invalid (unknown) prefix!" );
+
+                    // strip the prefix: the SfxObjectShell::CallScript knows nothing about such prefixes
+                    sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
+
+                    // (On the medium run, we should migrate to the mechanism where scripts are executed via
+                    // XDispatch (or whatever they are planning to use). But at the moment this mechanism is not implemented at all ...)
+                }
+            }
+
+            if ( sMacroLocation.getLength() )
+            {   // we have a macro in the "new" runtime format (fully described)
+                xObjSh->CallStarBasicScript( sScriptCode, sMacroLocation, static_cast< void* >( &aArguments ), pSyncRet );
+            }
+            else
+            {   // we have a script in the old format
+                xObjSh->CallScript( sScriptType, sScriptCode, xThis, static_cast< void* >( &aArguments ), pSyncRet );
+            }
+        }
 
     }
 
