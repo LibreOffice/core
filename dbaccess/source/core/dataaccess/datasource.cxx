@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:03:54 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,6 +590,15 @@ void ODatabaseSource::lateInit()
     m_bReadOnly = sal_False;
     m_aContainer.resize(4);
     m_pChildCommitListen = NULL;
+    try
+    {
+        m_xDocEventBroadcaster.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
+            UNO_QUERY);
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+    }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseSource::setMeAsParent(const Reference< XNameAccess >& _xName)
@@ -786,6 +795,7 @@ void ODatabaseSource::clearConnections()
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
 {
+    notifyEvent(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnUnload")));
     OSubComponent::disposing();
     OPropertySetHelper::disposing();
 
