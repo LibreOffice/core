@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:38:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ arabic ] = "δήΨΙ/δήΗΨ";
         CustomUnitText[ greek ] = "Σημεία";
         CustomUnitText[ korean ] = "Α‘";
-        CustomUnitText[ turkish ] = "Noktalar";
+        CustomUnitText[ turkish ] = "Nokta";
         CustomUnitText[ language_user1 ] = " ";
     };
     MetricField MTR_FLD_DIVISION_Y
@@ -376,7 +376,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ arabic ] = "δήΨΙ/δήΗΨ";
         CustomUnitText[ greek ] = "Σημεία";
         CustomUnitText[ korean ] = "Α‘";
-        CustomUnitText[ turkish ] = "Noktalar";
+        CustomUnitText[ turkish ] = "Nokta";
         CustomUnitText[ language_user1 ] = " ";
     };
     CheckBox CBX_SYNCHRONIZE
