@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:17:08 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
@@ -153,6 +154,7 @@
 #include "seltrans.hxx"
 #include "sizedev.hxx"
 #include "AccessibilityHints.hxx"
+#include "dpsave.hxx"
 #include "viewuno.hxx"
 #include "compiler.hxx"
 
@@ -167,7 +169,8 @@ enum ScFilterBoxMode
 {
     SC_FILTERBOX_FILTER,
     SC_FILTERBOX_DATASELECT,
-    SC_FILTERBOX_SCENARIO
+    SC_FILTERBOX_SCENARIO,
+    SC_FILTERBOX_PAGEFIELD
 };
 
 extern SfxViewShell* pScActiveViewShell;            // global.cxx
@@ -503,6 +506,192 @@ IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, pFloat )
         pFilterBox->SetCancelled();     // nicht mehr auswaehlen
     GrabFocus();
     return 0;
+}
+
+void ScGridWindow::ExecPageFieldSelect( USHORT nCol, USHORT nRow, BOOL bHasSelection, const String& rStr )
+{
+    //! gridwin2 ?
+
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+    if ( pDPObj && nCol > 0 )
+    {
+        // look for the dimension header left of the drop-down arrow
+        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+        long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
+        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
+        {
+            ScDPSaveData aSaveData( *pDPObj->GetSaveData() );
+
+            BOOL bIsDataLayout;
+            String aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
+            if ( !bIsDataLayout )
+            {
+                ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
+
+                if ( bHasSelection )
+                    pDim->SetCurrentPage( &rStr );
+                else
+                    pDim->SetCurrentPage( NULL );
+
+                ScDPObject aNewObj( *pDPObj );
+                aNewObj.SetSaveData( aSaveData );
+                ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+                aFunc.DataPilotUpdate( pDPObj, &aNewObj, TRUE, FALSE );
+                pViewData->GetView()->CursorPosChanged();       // shells may be switched
+            }
+        }
+    }
+}
+
+void ScGridWindow::DoPageFieldMenue( USHORT nCol, USHORT nRow )
+{
+    //! merge position/size handling with DoAutoFilterMenue
+
+    delete pFilterBox;
+    delete pFilterFloat;
+
+    USHORT i;
+    ScDocument* pDoc = pViewData->GetDocument();
+    USHORT nTab = pViewData->GetTabNo();
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+
+    long nSizeX  = 0;
+    long nSizeY  = 0;
+    long nHeight = 0;
+    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich );
+    if ( bLayoutRTL )
+        aPos.X() -= nSizeX;
+
+    Rectangle aCellRect( OutputToScreenPixel(aPos), Size(nSizeX,nSizeY) );
+
+    aPos.X() -= 1;
+    aPos.Y() += nSizeY - 1;
+
+    pFilterFloat = new ScFilterFloatingWindow( this, WinBits(WB_BORDER) );      // not resizable etc.
+    pFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
+    pFilterBox = new ScFilterListBox( pFilterFloat, this, nCol, nRow, SC_FILTERBOX_PAGEFIELD );
+    if ( bLayoutRTL )
+        pFilterBox->EnableMirroring();
+
+    nSizeX += 1;
+
+    {
+        Font    aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
+        MapMode aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
+
+        nHeight  = GetTextHeight();
+        nHeight *= SC_FILTERLISTBOX_LINES;
+
+        SetMapMode( aOldMode );
+        SetFont( aOldFont );
+    }
+
+    //  SetSize comes later
+
+    TypedStrCollection aStrings( 128, 128 );
+
+    //  get list box entries and selection
+    BOOL bHasCurrentPage = FALSE;
+    String aCurrentPage;
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
+    if ( pDPObj && nCol > 0 )
+    {
+        // look for the dimension header left of the drop-down arrow
+        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+        long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
+        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
+        {
+            pDPObj->FillPageList( aStrings, nField );
+
+            // get current page from SaveData
+
+            ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            BOOL bIsDataLayout;
+            String aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
+            if ( pSaveData && !bIsDataLayout )
+            {
+                ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName(aDimName);
+                if ( pDim && pDim->HasCurrentPage() )
+                {
+                    aCurrentPage = pDim->GetCurrentPage();
+                    bHasCurrentPage = TRUE;
+                }
+            }
+        }
+    }
+
+    //  include all entry widths for the size of the drop-down
+    long nMaxText = 0;
+    USHORT nCount = aStrings.GetCount();
+    for (i=0; i<nCount; i++)
+    {
+        TypedStrData* pData = aStrings[i];
+        long nTextWidth = pFilterBox->GetTextWidth( pData->GetString() );
+        if ( nTextWidth > nMaxText )
+            nMaxText = nTextWidth;
+    }
+
+    //  add scrollbar width if needed (string entries are counted here)
+    //  (scrollbar is shown if the box is exactly full?)
+    if ( nCount >= SC_FILTERLISTBOX_LINES )
+        nMaxText += GetSettings().GetStyleSettings().GetScrollBarSize();
+
+    nMaxText += 4;              // for borders
+
+    if ( nMaxText > nSizeX )
+        nSizeX = nMaxText;      // just modify width - starting position is unchanged
+
+    //  adjust position and size to window
+
+    Size aParentSize = GetParent()->GetOutputSizePixel();
+    Size aSize( nSizeX, nHeight );
+
+    if ( aSize.Height() > aParentSize.Height() )
+        aSize.Height() = aParentSize.Height();
+    if ( aPos.Y() + aSize.Height() > aParentSize.Height() )
+        aPos.Y() = aParentSize.Height() - aSize.Height();
+
+    pFilterBox->SetSizePixel( aSize );
+    pFilterBox->Show();                 // Show must be called before SetUpdateMode
+    pFilterBox->SetUpdateMode(FALSE);
+
+    pFilterFloat->SetOutputSizePixel( aSize );
+    pFilterFloat->StartPopupMode( aCellRect, FLOATWIN_POPUPMODE_DOWN|FLOATWIN_POPUPMODE_GRABFOCUS);
+
+    //  fill the list box
+    BOOL bWait = ( nCount > 100 );
+
+    if (bWait)
+        EnterWait();
+
+    for (i=0; i<nCount; i++)
+        pFilterBox->InsertEntry( aStrings[i]->GetString() );
+
+    if (bWait)
+        LeaveWait();
+
+    pFilterBox->SetUpdateMode(TRUE);
+
+    USHORT nSelPos = LISTBOX_ENTRY_NOTFOUND;
+    if (bHasCurrentPage)
+        nSelPos = pFilterBox->GetEntryPos( aCurrentPage );
+
+    if ( nSelPos == LISTBOX_ENTRY_NOTFOUND )
+        nSelPos = 0;                            // first entry
+
+    pFilterBox->GrabFocus();
+
+    //  call Select after GrabFocus, so the focus rectangle ends up in the right position
+    if ( nSelPos != LISTBOX_ENTRY_NOTFOUND )
+        pFilterBox->SelectEntryPos( nSelPos );
+
+    pFilterBox->EndInit();
+
+    nMouseStatus = SC_GM_FILTER;
+    CaptureMouse();
 }
 
 void ScGridWindow::DoScenarioMenue( const ScRange& rScenRange )
@@ -1016,6 +1205,10 @@ void ScGridWindow::FilterSelect( ULONG nSel )
         case SC_FILTERBOX_SCENARIO:
             pViewData->GetView()->UseScenario( aString );
             break;
+        case SC_FILTERBOX_PAGEFIELD:
+            // first entry is "all"
+            ExecPageFieldSelect( nCol, nRow, (nSel != 0), aString );
+            break;
     }
 
     if (pFilterFloat)
@@ -1501,6 +1694,9 @@ void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
             if ( aDiffPix.X() >= nSizeX - nButWidth &&
                  aDiffPix.Y() >= nSizeY - nButHeight )
             {
+                if ( DoPageFieldSelection( nPosX, nPosY ) )
+                    return;
+
                 BOOL  bFilterActive = IsAutoFilterActive( nPosX, nPosY,
                                                           pViewData->GetTabNo() );
 
