@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:55:28 $
+ *  last change: $Author: sab $ $Date: 2002-09-12 10:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ const TypedStrCollection& ScSheetDPData::GetColumnEntries(long nColumn)
                 //  ignore empty member (if it's not the first row)
             }
             else if ( lcl_HasQuery(pImpl->aQuery) &&
-                        !pImpl->pDoc->ValidQuery( nRow, nDocTab, pImpl->aQuery ) )
+                        !pImpl->pDoc->ValidQuery( nRow, nDocTab, pImpl->aQuery, pSpecial ) )
             {
                 //  this row is filtered out
             }
