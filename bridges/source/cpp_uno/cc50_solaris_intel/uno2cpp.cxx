@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-06 11:59:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 13:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,16 +289,26 @@ static inline void cpp_call(
      {
         void* pExc = __Crun::ex_get();
         const char* pName;
-        if( ((void**)pExc)[-1] != (void*)0xbadfad )
-            pName = __Cimpl::ex_name();
-        else
-            pName = *(const char**)((void**)pExc)[-17];
+        typelib_TypeDescription * pExcTypeDescr = 0;
 
-          // get exception
-        cc50_solaris_intel_fillUnoException( pExc,
-                                             pName,
-                                             *ppUnoExc,
-                                             &pThis->pBridge->aCpp2Uno );
+        // test for magic code set in cc50_solaris_sparc_raiseException()
+        if( ((void**)pExc)[-1] != (void*)0xbadfad )
+        {
+            pName = __Cimpl::ex_name();
+        }
+        else
+        {
+            // in case of an exception thrown in
+            // cc50_solaris_sparc_raiseException(),
+            // the typedescription has not been released yet, but will be
+            // by deleteException().
+            pExcTypeDescr = (typelib_TypeDescription *)((void**)pExc)[-2];
+        }
+
+        // get exception
+        CPPU_CURRENT_NAMESPACE::cc50_solaris_intel_fillUnoException(
+            pExc, pName, pExcTypeDescr, *ppUnoExc, &pThis->pBridge->aCpp2Uno);
+
         // temporary params
         for ( ; nTempIndizes--; )
         {
