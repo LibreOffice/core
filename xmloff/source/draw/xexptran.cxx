@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-25 14:58:08 $
+ *  last change: $Author: aw $ $Date: 2001-06-14 15:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,31 +87,31 @@ using namespace ::com::sun::star;
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // parsing help functions for simple chars
-void Imp_SkipSpaces(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && sal_Unicode(' ') == rStr.GetChar(rPos))
+        && sal_Unicode(' ') == rStr[rPos])
         rPos++;
 }
 
-void Imp_SkipSpacesAndOpeningBraces(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipSpacesAndOpeningBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr.GetChar(rPos) || sal_Unicode('(') == rStr.GetChar(rPos)))
+        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode('(') == rStr[rPos]))
         rPos++;
 }
 
-void Imp_SkipSpacesAndCommas(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipSpacesAndCommas(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr.GetChar(rPos) || sal_Unicode(',') == rStr.GetChar(rPos)))
+        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode(',') == rStr[rPos]))
         rPos++;
 }
 
-void Imp_SkipSpacesAndClosingBraces(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
-        && (sal_Unicode(' ') == rStr.GetChar(rPos) || sal_Unicode(')') == rStr.GetChar(rPos)))
+        && (sal_Unicode(' ') == rStr[rPos] || sal_Unicode(')') == rStr[rPos]))
         rPos++;
 }
 
@@ -119,9 +119,9 @@ void Imp_SkipSpacesAndClosingBraces(const UniString& rStr, xub_StrLen& rPos, con
 //////////////////////////////////////////////////////////////////////////////
 // parsing help functions for integer numbers
 
-sal_Bool Imp_IsOnNumberChar(const UniString& rStr, const xub_StrLen nPos, BOOL bSignAllowed = TRUE)
+sal_Bool Imp_IsOnNumberChar(const OUString& rStr, const sal_Int32 nPos, BOOL bSignAllowed = TRUE)
 {
-    sal_Unicode aChar(rStr.GetChar(nPos));
+    sal_Unicode aChar(rStr[nPos]);
 
     if((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         || (bSignAllowed && sal_Unicode('+') == aChar)
@@ -131,9 +131,9 @@ sal_Bool Imp_IsOnNumberChar(const UniString& rStr, const xub_StrLen nPos, BOOL b
     return FALSE;
 }
 
-sal_Bool Imp_IsOnUnitChar(const UniString& rStr, const xub_StrLen nPos)
+sal_Bool Imp_IsOnUnitChar(const OUString& rStr, const sal_Int32 nPos)
 {
-    sal_Unicode aChar(rStr.GetChar(nPos));
+    sal_Unicode aChar(rStr[nPos]);
 
     if((sal_Unicode('a') <= aChar && sal_Unicode('z') >= aChar)
         || (sal_Unicode('A') <= aChar && sal_Unicode('Z') >= aChar)
@@ -143,7 +143,7 @@ sal_Bool Imp_IsOnUnitChar(const UniString& rStr, const xub_StrLen nPos)
     return FALSE;
 }
 
-void Imp_SkipNumber(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipNumber(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     BOOL bSignAllowed(TRUE);
 
@@ -154,45 +154,45 @@ void Imp_SkipNumber(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nL
     }
 }
 
-void Imp_SkipNumberAndSpacesAndCommas(const UniString& rStr, xub_StrLen& rPos,
-    const xub_StrLen nLen)
+void Imp_SkipNumberAndSpacesAndCommas(const OUString& rStr, sal_Int32& rPos,
+    const sal_Int32 nLen)
 {
     Imp_SkipNumber(rStr, rPos, nLen);
     Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
 }
 
-sal_Int32 Imp_GetNumberChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
+sal_Int32 Imp_GetNumberChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
     const SvXMLUnitConverter& rConv, sal_Int32 nRetval)
 {
-    UniString aNumberStr;
+    OUStringBuffer sNumberString;
     BOOL bCharValid(TRUE);
     BOOL bSignAllowed(TRUE);
 
     while(rPos < nLen && Imp_IsOnNumberChar(rStr, rPos, bSignAllowed))
     {
         bSignAllowed = FALSE;
-        aNumberStr.Append(rStr.GetChar(rPos++));
+        sNumberString.append(rStr[rPos++]);
     }
 
-    if(aNumberStr.Len())
-        rConv.convertNumber(nRetval, aNumberStr);
+    if(sNumberString.getLength())
+        rConv.convertNumber(nRetval, sNumberString.makeStringAndClear());
 
     return nRetval;
 }
 
-void Imp_PutNumberChar(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
+void Imp_PutNumberChar(OUString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
 {
     OUStringBuffer sStringBuffer;
     rConv.convertNumber(sStringBuffer, nValue);
-    rStr += UniString(sStringBuffer.makeStringAndClear());
+    rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
-void Imp_PutNumberCharWithSpace(UniString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
+void Imp_PutNumberCharWithSpace(OUString& rStr, const SvXMLUnitConverter& rConv, sal_Int32 nValue)
 {
-    const xub_StrLen aLen(rStr.Len());
+    const sal_Int32 aLen(rStr.getLength());
     if(aLen)
         if(Imp_IsOnNumberChar(rStr, aLen - 1, FALSE) && nValue >= 0)
-            rStr += sal_Unicode(' ');
+            rStr += OUString(sal_Unicode(' '));
     Imp_PutNumberChar(rStr, rConv, nValue);
 }
 
@@ -200,9 +200,9 @@ void Imp_PutNumberCharWithSpace(UniString& rStr, const SvXMLUnitConverter& rConv
 //////////////////////////////////////////////////////////////////////////////
 // parsing help functions for double numbers
 
-sal_Bool Imp_IsOnDoubleChar(const UniString& rStr, const xub_StrLen nPos)
+sal_Bool Imp_IsOnDoubleChar(const OUString& rStr, const sal_Int32 nPos)
 {
-    sal_Unicode aChar(rStr.GetChar(nPos));
+    sal_Unicode aChar(rStr[nPos]);
 
     if((sal_Unicode('0') <= aChar && sal_Unicode('9') >= aChar)
         || sal_Unicode('+') == aChar
@@ -215,39 +215,39 @@ sal_Bool Imp_IsOnDoubleChar(const UniString& rStr, const xub_StrLen nPos)
     return FALSE;
 }
 
-void Imp_SkipDouble(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen)
+void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen && Imp_IsOnDoubleChar(rStr, rPos))
         rPos++;
 }
 
-double Imp_GetDoubleChar(const UniString& rStr, xub_StrLen& rPos, const xub_StrLen nLen,
+double Imp_GetDoubleChar(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen,
     const SvXMLUnitConverter& rConv, double fRetval, BOOL bLookForUnits = FALSE)
 {
-    UniString aNumberStr;
+    OUStringBuffer sNumberString;
 
     while(rPos < nLen && Imp_IsOnDoubleChar(rStr, rPos))
-        aNumberStr.Append(rStr.GetChar(rPos++));
+        sNumberString.append(rStr[rPos++]);
 
     if(bLookForUnits)
     {
         Imp_SkipSpaces(rStr, rPos, nLen);
         while(rPos < nLen && Imp_IsOnUnitChar(rStr, rPos))
-            aNumberStr.Append(rStr.GetChar(rPos++));
+            sNumberString.append(rStr[rPos++]);
     }
 
-    if(aNumberStr.Len())
+    if(sNumberString.getLength())
     {
         if(bLookForUnits)
-            rConv.convertDouble(fRetval, aNumberStr, TRUE);
+            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear(), TRUE);
         else
-            rConv.convertDouble(fRetval, aNumberStr);
+            rConv.convertDouble(fRetval, sNumberString.makeStringAndClear());
     }
 
     return fRetval;
 }
 
-void Imp_PutDoubleChar(UniString& rStr, const SvXMLUnitConverter& rConv, double fValue,
+void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double fValue,
     BOOL bConvertUnits = FALSE)
 {
     OUStringBuffer sStringBuffer;
@@ -257,7 +257,7 @@ void Imp_PutDoubleChar(UniString& rStr, const SvXMLUnitConverter& rConv, double 
     else
         rConv.convertDouble(sStringBuffer, fValue);
 
-    rStr += UniString(sStringBuffer.makeStringAndClear());
+    rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -388,7 +388,9 @@ void SdXMLImExTransform2D::AddMatrix(const Matrix3D& rNew)
 // gen string for export
 const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& rConv)
 {
-    UniString aNewString;
+    OUString aNewString;
+    OUString aClosingBrace(sal_Unicode(')'));
+    OUString aEmptySpace(sal_Unicode(' '));
 
     for(sal_uInt32 a(0L); a < maList.Count(); a++)
     {
@@ -397,71 +399,71 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
         {
             case IMP_SDXMLEXP_TRANSOBJ2D_ROTATE :
             {
-                aNewString += UniString::CreateFromAscii("rotate (");
+                aNewString += OUString::createFromAscii("rotate (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SCALE      :
             {
-                aNewString += UniString::CreateFromAscii("scale (");
+                aNewString += OUString::createFromAscii("scale (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DScale*)pObj)->maScale.X());
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DScale*)pObj)->maScale.Y());
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_TRANSLATE  :
             {
-                aNewString += UniString::CreateFromAscii("translate (");
+                aNewString += OUString::createFromAscii("translate (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate.X(), TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DTranslate*)pObj)->maTranslate.Y(), TRUE);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWX      :
             {
-                aNewString += UniString::CreateFromAscii("skewX (");
+                aNewString += OUString::createFromAscii("skewX (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DSkewX*)pObj)->mfSkewX);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_SKEWY      :
             {
-                aNewString += UniString::CreateFromAscii("skewY (");
+                aNewString += OUString::createFromAscii("skewY (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DSkewY*)pObj)->mfSkewY);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ2D_MATRIX :
             {
-                aNewString += UniString::CreateFromAscii("matrix (");
+                aNewString += OUString::createFromAscii("matrix (");
 
                 // a
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[0][0]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // b
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[1][0]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // c
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[0][1]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // d
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[1][1]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // e
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[0][2], TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // f
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix[1][2], TRUE);
 
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             default : DBG_ERROR("SdXMLImExTransform2D: impossible entry!"); break;
@@ -469,11 +471,11 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
 
         // if not the last entry, add one space to next tag
         if(a+1 != maList.Count())
-            aNewString += sal_Unicode(' ');
+            aNewString += aEmptySpace;
     }
 
-    // fill string form UniString
-    msString = OUString(aNewString);
+    // fill string form OUString
+    msString = aNewString;
 
     return msString;
 }
@@ -494,9 +496,17 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
     if(msString.getLength())
     {
-        const UniString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
-        const xub_StrLen nLen(aStr.Len());
-        xub_StrLen nPos(0);
+        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const sal_Int32 nLen(aStr.getLength());
+
+        const OUString aString_rotate(OUString::createFromAscii("rotate"));
+        const OUString aString_scale(OUString::createFromAscii("scale"));
+        const OUString aString_translate(OUString::createFromAscii("translate"));
+        const OUString aString_skewX(OUString::createFromAscii("skewX"));
+        const OUString aString_skewY(OUString::createFromAscii("skewY"));
+        const OUString aString_matrix(OUString::createFromAscii("matrix"));
+
+        sal_Int32 nPos(0);
 
         while(nPos < nLen)
         {
@@ -506,11 +516,9 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
             // look for tag
             if(nPos < nLen)
             {
-                if(nPos == aStr.SearchAscii("rotate", nPos))
+                if(nPos == aStr.indexOf(aString_rotate, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
-
                     nPos += 6;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
@@ -519,11 +527,9 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("scale", nPos))
+                else if(nPos == aStr.indexOf(aString_scale, nPos))
                 {
-                    UniString aNumberStr;
                     Vector2D aValue(1.0, 1.0);
-
                     nPos += 5;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     aValue.X() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.X());
@@ -535,11 +541,9 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("translate", nPos))
+                else if(nPos == aStr.indexOf(aString_translate, nPos))
                 {
-                    UniString aNumberStr;
                     Vector2D aValue;
-
                     nPos += 9;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     aValue.X() = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.X(), TRUE);
@@ -551,11 +555,9 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("skewX", nPos))
+                else if(nPos == aStr.indexOf(aString_skewX, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
-
                     nPos += 5;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
@@ -564,11 +566,9 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("skewY", nPos))
+                else if(nPos == aStr.indexOf(aString_skewY, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
-
                     nPos += 5;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
                     fValue = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, fValue);
@@ -577,9 +577,8 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("matrix", nPos))
+                else if(nPos == aStr.indexOf(aString_matrix, nPos))
                 {
-                    UniString aNumberStr;
                     Matrix3D aValue;
 
                     nPos += 6;
@@ -802,7 +801,9 @@ void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMa
 // gen string for export
 const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& rConv)
 {
-    UniString aNewString;
+    OUString aNewString;
+    OUString aClosingBrace(sal_Unicode(')'));
+    OUString aEmptySpace(sal_Unicode(' '));
 
     for(sal_uInt32 a(0L); a < maList.Count(); a++)
     {
@@ -811,99 +812,99 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
         {
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X   :
             {
-                aNewString += UniString::CreateFromAscii("rotatex (");
+                aNewString += OUString::createFromAscii("rotatex (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateX*)pObj)->mfRotateX);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y   :
             {
-                aNewString += UniString::CreateFromAscii("rotatey (");
+                aNewString += OUString::createFromAscii("rotatey (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateY*)pObj)->mfRotateY);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Z   :
             {
-                aNewString += UniString::CreateFromAscii("rotatez (");
+                aNewString += OUString::createFromAscii("rotatez (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DRotateZ*)pObj)->mfRotateZ);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_SCALE      :
             {
-                aNewString += UniString::CreateFromAscii("scale (");
+                aNewString += OUString::createFromAscii("scale (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.X());
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Y());
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DScale*)pObj)->maScale.Z());
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE  :
             {
-                aNewString += UniString::CreateFromAscii("translate (");
+                aNewString += OUString::createFromAscii("translate (");
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.X(), TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Y(), TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DTranslate*)pObj)->maTranslate.Z(), TRUE);
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             case IMP_SDXMLEXP_TRANSOBJ3D_MATRIX :
             {
-                aNewString += UniString::CreateFromAscii("matrix (");
+                aNewString += OUString::createFromAscii("matrix (");
 
                 // a
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[0][0]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // b
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[1][0]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // c
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[2][0]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // d
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[0][1]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // e
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[1][1]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // f
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[2][1]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // g
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[0][2]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // h
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[1][2]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // i
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[2][2]);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // j
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[0][3], TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // k
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[1][3], TRUE);
-                aNewString += sal_Unicode(' ');
+                aNewString += aEmptySpace;
 
                 // l
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix[2][3], TRUE);
 
-                aNewString += sal_Unicode(')');
+                aNewString += aClosingBrace;
                 break;
             }
             default : DBG_ERROR("SdXMLImExTransform3D: impossible entry!"); break;
@@ -911,11 +912,11 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
 
         // if not the last entry, add one space to next tag
         if(a+1 != maList.Count())
-            aNewString += sal_Unicode(' ');
+            aNewString += aEmptySpace;
     }
 
-    // fill string form UniString
-    msString = OUString(aNewString);
+    // fill string form OUString
+    msString = aNewString;
 
     return msString;
 }
@@ -936,9 +937,17 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
     if(msString.getLength())
     {
-        const UniString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
-        const xub_StrLen nLen(aStr.Len());
-        xub_StrLen nPos(0);
+        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const sal_Int32 nLen(aStr.getLength());
+
+        const OUString aString_rotatex(OUString::createFromAscii("rotatex"));
+        const OUString aString_rotatey(OUString::createFromAscii("rotatey"));
+        const OUString aString_rotatez(OUString::createFromAscii("rotatez"));
+        const OUString aString_scale(OUString::createFromAscii("scale"));
+        const OUString aString_translate(OUString::createFromAscii("translate"));
+        const OUString aString_matrix(OUString::createFromAscii("matrix"));
+
+        sal_Int32 nPos(0);
 
         while(nPos < nLen)
         {
@@ -948,9 +957,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
             // look for tag
             if(nPos < nLen)
             {
-                if(nPos == aStr.SearchAscii("rotatex", nPos))
+                if(nPos == aStr.indexOf(aString_rotatex, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
 
                     nPos += 7;
@@ -961,9 +969,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("rotatey", nPos))
+                else if(nPos == aStr.indexOf(aString_rotatey, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
 
                     nPos += 7;
@@ -974,9 +981,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("rotatez", nPos))
+                else if(nPos == aStr.indexOf(aString_rotatez, nPos))
                 {
-                    UniString aNumberStr;
                     double fValue(0.0);
 
                     nPos += 7;
@@ -987,9 +993,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("scale", nPos))
+                else if(nPos == aStr.indexOf(aString_scale, nPos))
                 {
-                    UniString aNumberStr;
                     Vector3D aValue(1.0, 1.0, 1.0);
 
                     nPos += 5;
@@ -1005,9 +1010,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("translate", nPos))
+                else if(nPos == aStr.indexOf(aString_translate, nPos))
                 {
-                    UniString aNumberStr;
                     Vector3D aValue;
 
                     nPos += 9;
@@ -1023,9 +1027,8 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
                     Imp_SkipSpacesAndClosingBraces(aStr, nPos, nLen);
                 }
-                else if(nPos == aStr.SearchAscii("matrix", nPos))
+                else if(nPos == aStr.indexOf(aString_matrix, nPos))
                 {
-                    UniString aNumberStr;
                     Matrix4D aValue;
 
                     nPos += 6;
@@ -1171,9 +1174,9 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
 {
     if(msString.getLength())
     {
-        const UniString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
-        const xub_StrLen nLen(aStr.Len());
-        xub_StrLen nPos(0);
+        const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+        const sal_Int32 nLen(aStr.getLength());
+        sal_Int32 nPos(0);
 
         // skip starting spaces
         Imp_SkipSpaces(aStr, nPos, nLen);
@@ -1203,21 +1206,22 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
 
 const OUString& SdXMLImExViewBox::GetExportString(const SvXMLUnitConverter& rConv)
 {
-    UniString aNewString;
+    OUString aNewString;
+    OUString aEmptySpace(sal_Unicode(' '));
 
     Imp_PutNumberChar(aNewString, rConv, mnX);
-    aNewString += sal_Unicode(' ');
+    aNewString += aEmptySpace;
 
     Imp_PutNumberChar(aNewString, rConv, mnY);
-    aNewString += sal_Unicode(' ');
+    aNewString += aEmptySpace;
 
     Imp_PutNumberChar(aNewString, rConv, mnW);
-    aNewString += sal_Unicode(' ');
+    aNewString += aEmptySpace;
 
     Imp_PutNumberChar(aNewString, rConv, mnH);
 
     // set new string
-    msString = OUString(aNewString);
+    msString = aNewString;
 
     return msString;
 }
@@ -1233,7 +1237,7 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
 :   maPoly( 0L )
 {
     // add polygon to string
-    UniString aNewString;
+    OUString aNewString;
     sal_Int32 nCnt(pPoints->getLength());
     awt::Point* pArray = pPoints->getArray();
 
@@ -1267,19 +1271,19 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(drawing::PointSequence* pPoints,
 
         // X and comma
         Imp_PutNumberChar(aNewString, rConv, nX);
-        aNewString += sal_Unicode(',');
+        aNewString += OUString(sal_Unicode(','));
 
         // Y and space (not for last)
         Imp_PutNumberChar(aNewString, rConv, nY);
         if(a + 1 != nCnt)
-            aNewString += sal_Unicode(' ');
+            aNewString += OUString(sal_Unicode(' '));
 
         // next point
         pArray++;
     }
 
     // set new string
-    msString = OUString(aNewString);
+    msString = aNewString;
 }
 
 SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
@@ -1291,9 +1295,9 @@ SdXMLImExPointsElement::SdXMLImExPointsElement(const OUString& rNew,
     maPoly( 0L )
 {
     // convert string to polygon
-    const UniString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
-    const xub_StrLen nLen(aStr.Len());
-    xub_StrLen nPos(0);
+    const OUString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
+    const sal_Int32 nLen(aStr.getLength());
+    sal_Int32 nPos(0);
     sal_Int32 nNumPoints(0L);
 
     // skip starting spaces
@@ -1439,8 +1443,8 @@ void SdXMLImExSvgDElement::AddPolygon(
     const SvXMLUnitConverter& rConv,
     sal_Bool bClosed, sal_Bool bRelative)
 {
-    // add polygon to string
-    UniString aNewString(msString);
+    // append polygon to string
+    OUString aNewString;
     sal_Int32 nCnt(pPoints->getLength());
     sal_Unicode aLastCommand;
     awt::Point* pPointArray = pPoints->getArray();
@@ -1572,7 +1576,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                     if(bRelative)
                                     {
                                         if(aLastCommand != sal_Unicode('s'))
-                                            aNewString += sal_Unicode('s');
+                                            aNewString += OUString(sal_Unicode('s'));
 
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX2 - mnLastX);
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY2 - mnLastY);
@@ -1584,7 +1588,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                     else
                                     {
                                         if(aLastCommand != sal_Unicode('S'))
-                                            aNewString += sal_Unicode('S');
+                                            aNewString += OUString(sal_Unicode('S'));
 
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX2);
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY2);
@@ -1606,7 +1610,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                     if(bRelative)
                                     {
                                         if(aLastCommand != sal_Unicode('c'))
-                                            aNewString += sal_Unicode('c');
+                                            aNewString += OUString(sal_Unicode('c'));
 
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX1 - mnLastX);
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY1 - mnLastY);
@@ -1620,7 +1624,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                                     else
                                     {
                                         if(aLastCommand != sal_Unicode('C'))
-                                            aNewString += sal_Unicode('C');
+                                            aNewString += OUString(sal_Unicode('C'));
 
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX1);
                                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY1);
@@ -1661,7 +1665,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         if(bRelative)
                         {
                             if(aLastCommand != sal_Unicode('v'))
-                                aNewString += sal_Unicode('v');
+                                aNewString += OUString(sal_Unicode('v'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
 
@@ -1670,7 +1674,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         else
                         {
                             if(aLastCommand != sal_Unicode('V'))
-                                aNewString += sal_Unicode('V');
+                                aNewString += OUString(sal_Unicode('V'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
 
@@ -1682,7 +1686,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         if(bRelative)
                         {
                             if(aLastCommand != sal_Unicode('h'))
-                                aNewString += sal_Unicode('h');
+                                aNewString += OUString(sal_Unicode('h'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
 
@@ -1691,7 +1695,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         else
                         {
                             if(aLastCommand != sal_Unicode('H'))
-                                aNewString += sal_Unicode('H');
+                                aNewString += OUString(sal_Unicode('H'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
 
@@ -1703,7 +1707,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         if(bRelative)
                         {
                             if(aLastCommand != sal_Unicode('l'))
-                                aNewString += sal_Unicode('l');
+                                aNewString += OUString(sal_Unicode('l'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
@@ -1713,7 +1717,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                         else
                         {
                             if(aLastCommand != sal_Unicode('L'))
-                                aNewString += sal_Unicode('L');
+                                aNewString += OUString(sal_Unicode('L'));
 
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
                             Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
@@ -1727,7 +1731,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                     // write as start point
                     if(bRelative)
                     {
-                        aNewString += sal_Unicode('m');
+                        aNewString += OUString(sal_Unicode('m'));
 
                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX - mnLastX);
                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY - mnLastY);
@@ -1736,7 +1740,7 @@ void SdXMLImExSvgDElement::AddPolygon(
                     }
                     else
                     {
-                        aNewString += sal_Unicode('M');
+                        aNewString += OUString(sal_Unicode('M'));
 
                         Imp_PutNumberCharWithSpace(aNewString, rConv, nX);
                         Imp_PutNumberCharWithSpace(aNewString, rConv, nY);
@@ -1763,18 +1767,18 @@ void SdXMLImExSvgDElement::AddPolygon(
     if(bClosed)
     {
         if(bRelative)
-            aNewString += sal_Unicode('z');
+            aNewString += OUString(sal_Unicode('z'));
         else
-            aNewString += sal_Unicode('Z');
+            aNewString += OUString(sal_Unicode('Z'));
     }
 
-    // set new string
-    msString = OUString(aNewString);
+    // append new string
+    msString += aNewString;
 }
 
 sal_Int32 Imp_ImportNumberAndSpaces(
-    sal_Int32 nRetval, const UniString& rStr, xub_StrLen& rPos,
-    const xub_StrLen nLen, const SvXMLUnitConverter& rConv)
+    sal_Int32 nRetval, const OUString& rStr, sal_Int32& rPos,
+    const sal_Int32 nLen, const SvXMLUnitConverter& rConv)
 {
     nRetval = Imp_GetNumberChar(rStr, rPos, nLen, rConv, nRetval);
     Imp_SkipSpacesAndCommas(rStr, rPos, nLen);
@@ -1841,9 +1845,9 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     maFlag( 0L )
 {
     // convert string to polygon
-    const UniString aStr(msString.getStr(), (sal_uInt16)msString.getLength());
-    const xub_StrLen nLen(aStr.Len());
-    xub_StrLen nPos(0);
+    const OUString aStr(msString.getStr(), msString.getLength());
+    const sal_Int32 nLen(aStr.getLength());
+    sal_Int32 nPos(0);
     sal_Int32 nNumPolys(0L);
     sal_Bool bQuadraticBeziers(FALSE);
     sal_Bool bEllipticalArc(FALSE);
@@ -1857,7 +1861,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     Imp_SkipSpaces(aStr, nPos, nLen);
     while(nPos < nLen)
     {
-        switch(aStr.GetChar(nPos++))
+        switch(aStr[nPos++])
         {
             case 'Z' :
             case 'z' :
@@ -1925,7 +1929,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         Imp_SkipSpaces(aStr, nPos, nLen);
         while(nPos < nLen)
         {
-            switch(aStr.GetChar(nPos))
+            switch(aStr[nPos])
             {
                 case 'z' :
                 case 'Z' :
@@ -2043,7 +2047,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
         {
             BOOL bRelative(FALSE);
 
-            switch(aStr.GetChar(nPos))
+            switch(aStr[nPos])
             {
                 case 'z' :
                 case 'Z' :
