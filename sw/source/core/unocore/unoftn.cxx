@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 09:48:45 $
+ *  last change: $Author: os $ $Date: 2001-04-05 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,17 +537,8 @@ void    SwXFootnote::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
 Reference< XPropertySetInfo > SwXFootnote::getPropertySetInfo(  )
     throw(RuntimeException)
 {
-    static uno::Reference< beans::XPropertySetInfo >  xRef;
-    if(!xRef.is())
-    {
-        const SfxItemPropertyMap* pMap = aSwMapProvider.GetPropertyMap(PROPERTY_MAP_FOOTNOTE);
-        uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(pMap);
-        // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-        xRef = new SfxExtItemPropertySetInfo(
-            aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
-            aPropSeq );
-    }
+    static uno::Reference< beans::XPropertySetInfo >  xRef =
+        new SfxItemPropertySetInfo(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_FOOTNOTE));
     return xRef;
 }
 /*-- 11.09.00 13:12:04---------------------------------------------------
@@ -619,6 +610,9 @@ void SwXFootnote::removeVetoableChangeListener( const OUString& PropertyName,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/08 09:48:45  os
+    getAnco corrected
+
     Revision 1.6  2001/01/15 11:26:06  mib
     #81708#: new frame size properties and XML attributes
 
