@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:59:27 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
     UINT8   nGreen;
     UINT8   nBlue;
     long    nSteps2;
-    long    nStepsHalf;
+    long    nStepsHalf = 0;
     if ( bLinear )
     {
         // Um 1 erhoeht, um die Border innerhalb der Schleife
