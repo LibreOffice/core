@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 10:26:31 $
+ *  last change: $Author: th $ $Date: 2001-05-18 10:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1052,7 +1052,6 @@ void* ResMgr::Increment( USHORT nSize )
 
 const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
 {
-
     if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
         nType = ::GetSystemLanguage();
 
@@ -1188,7 +1187,7 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
                 return "37";
 
             default:
-                return "01";
+                return "99";
         }
     }
     else if ( nPrio == 1 )
@@ -1209,8 +1208,10 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
         return "01";
     else if ( nPrio == 3 )
         return "44";
-    else
+    else if ( nPrio == 4 )
         return "49";
+    else
+        return "99";
 }
 
 // -----------------------------------------------------------------------
@@ -1227,7 +1228,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
     UniString aName;
     InternalResMgr* pInternalResMgr = NULL;
     int i;
-    for ( i = 0; i < 5; i++ )
+    for ( i = 0; i < 6; i++ )
     {
         pLang[i] = GetLang( nType, i );
 
