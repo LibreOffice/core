@@ -1,3 +1,4 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\bin%_EXT%\remote
 mkdir: %_DEST%\lib%_EXT%\remote
 mkdir: %_DEST%\inc%_EXT%\sv
@@ -7,6 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\uno\awt
 mkdir: %_DEST%\inc%_EXT%\vcl
 mkdir: %_DEST%\inc%_EXT%\vcl\unx
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\remote\vcl?????.dll %_DEST%\bin%_EXT%\remote\vcl?????.dll
 ..\%__SRC%\bin\vcl?????.res %_DEST%\bin%_EXT%\vcl?????.res
 ..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
