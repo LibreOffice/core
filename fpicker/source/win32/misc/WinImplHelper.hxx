@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:10:59 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,5 +128,22 @@ void SAL_CALL CheckboxSetState(
 // e.g. Filter\0*.txt\0\0
 // the returned length excludes the last '\0'
 sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr );
+
+
+// converts a soffice label to a windows label
+// the following rules for character replacements
+// will be done:
+// '~'  -> '&'
+// '~~' -> '~'
+// '&'  -> '&&'
+rtl::OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel );
+
+// converts a windows label to a soffice label
+// the following rules for character replacements
+// will be done:
+// '&'  -> '~'
+// '&&' -> '&'
+// '~'  -> '~~'
+rtl::OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel );
 
 #endif

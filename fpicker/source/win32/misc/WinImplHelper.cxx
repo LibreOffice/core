@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinImplHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:11:06 $
+ *  last change: $Author: tra $ $Date: 2001-08-10 12:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _AUTO_BUFFER_HXX_
 #include "AutoBuffer.hxx"
 #endif
@@ -86,11 +90,21 @@
 //------------------------------------------------------------
 
 using rtl::OUString;
+using rtl::OUStringBuffer;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+const rtl::OUString TILDE = OUString::createFromAscii( "~" );
+const sal_Unicode   TILDE_SIGN = L'~';
+const rtl::OUString AMPERSAND = OUString::createFromAscii( "&" );
+const sal_Unicode   AMPERSAND_SIGN = L'&';
 
 //------------------------------------------------------------
 // determine if we are running under Win2000
@@ -401,3 +415,124 @@ sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr )
 
     return strLen;
 }
+
+//------------------------------------------------------------
+//
+//------------------------------------------------------------
+
+void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, OUStringBuffer& aBuffer )
+{
+    OSL_ASSERT( aLabel.getLength( ) );
+    OSL_ASSERT( aBuffer.getCapacity( ) >= (aLabel.getLength( )) );
+
+    sal_Int32 i = 0;
+    const sal_Unicode* pCurrent  = aLabel.getStr( );
+    const sal_Unicode* pNext     = aLabel.getStr( ) + 1;
+    const sal_Unicode* pEnd      = aLabel.getStr( ) + aLabel.getLength( );
+
+    while( pCurrent < pEnd )
+    {
+        OSL_ASSERT( pNext <= pEnd );
+        OSL_ASSERT( (i >= 0) && (i < aBuffer.getCapacity( )) );
+
+        if ( OldChar == *pCurrent )
+        {
+            if ( OldChar == *pNext )
+            {
+                // two OldChars in line will
+                // be replaced by one
+                // e.g. ~~ -> ~
+                aBuffer.insert( i, *pCurrent );
+
+                // skip the next one
+                pCurrent++;
+                pNext++;
+            }
+            else
+            {
+                // one OldChar will be replace
+                // by NexChar
+                aBuffer.insert( i, NewChar );
+            }
+         }
+         else if ( *pCurrent == NewChar )
+         {
+            // a NewChar will be replaced by
+             // two NewChars
+             // e.g. & -> &&
+            aBuffer.insert( i++, *pCurrent );
+            aBuffer.insert( i, *pCurrent );
+         }
+         else
+         {
+            aBuffer.insert( i, *pCurrent );
+         }
+
+         pCurrent++;
+         pNext++;
+         i++;
+    }
+}
+
+//------------------------------------------------------------
+// converts a soffice label to a windows label
+// the following rules for character replacements
+// will be done:
+// '~'  -> '&'
+// '~~' -> '~'
+// '&'  -> '&&'
+//------------------------------------------------------------
+
+OUString SOfficeToWindowsLabel( const rtl::OUString& aSOLabel )
+{
+    OUString aWinLabel = aSOLabel;
+
+    if ( (aWinLabel.indexOf( TILDE ) > -1) || (aWinLabel.indexOf( AMPERSAND ) > -1) )
+    {
+        sal_Int32 nStrLen = aWinLabel.getLength( );
+
+        // in the worst case the new string is
+        // doubled in length, maybe some waste
+        // of memory but how long is a label
+        // normaly(?)
+        rtl::OUStringBuffer aBuffer( nStrLen * 2 );
+
+        Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer );
+
+        aWinLabel = aBuffer.makeStringAndClear( );
+    }
+
+    return aWinLabel;
+}
+
+//------------------------------------------------------------
+// converts a windows label to a soffice label
+// the following rules for character replacements
+// will be done:
+// '&'  -> '~'
+// '&&' -> '&'
+// '~'  -> '~~'
+//------------------------------------------------------------
+
+OUString WindowsToSOfficeLabel( const rtl::OUString& aWinLabel )
+{
+    OUString aSOLabel = aWinLabel;
+
+    if ( (aSOLabel.indexOf( TILDE ) > -1) || (aSOLabel.indexOf( AMPERSAND ) > -1) )
+    {
+        sal_Int32 nStrLen = aSOLabel.getLength( );
+
+        // in the worst case the new string is
+        // doubled in length, maybe some waste
+        // of memory but how long is a label
+        // normaly(?)
+        rtl::OUStringBuffer aBuffer( nStrLen * 2 );
+
+        Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer );
+
+        aSOLabel = aBuffer.makeStringAndClear( );
+    }
+
+    return aSOLabel;
+}
+
