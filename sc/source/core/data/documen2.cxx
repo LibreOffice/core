@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:21:50 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ ScDocument::~ScDocument()
 
     delete pUnoListenerCalls;
 
-    Clear();
+    Clear( sal_True );              // TRUE = from destructor (needed for SdrModel::ClearModel)
 
     if (pCondFormList)
     {
@@ -1716,6 +1716,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
+            BOOL bNamesLost = FALSE;
             USHORT nSrcRangeNames = pSrcDoc->pRangeName->GetCount();
             // array containing range names which might need update of indices
             ScRangeData** pSrcRangeNames = nSrcRangeNames ? new ScRangeData* [nSrcRangeNames] : NULL;
@@ -1727,36 +1728,45 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             {
                 ScRangeData* pSrcData = (*pSrcDoc->pRangeName)[i];
                 USHORT nOldIndex = pSrcData->GetIndex();
-                BOOL bInUse = FALSE;
-                for (SCTAB j = 0; !bInUse && (j <= MAXTAB); j++)
-                {
-                    if (pSrcDoc->pTab[j])
-                        bInUse = pSrcDoc->pTab[j]->IsRangeNameInUse(0, 0, MAXCOL, MAXROW,
-                                                           nOldIndex);
-                }
+                // only the copied source table is interesting for bInUse
+                BOOL bInUse = pSrcDoc->pTab[nSrcPos]->IsRangeNameInUse(0, 0, MAXCOL, MAXROW, nOldIndex);
                 if (bInUse)
                 {
-                    ScRangeData* pData = new ScRangeData( *pSrcData );
-                    pData->SetDocument(this);
-                    if ( pRangeName->FindIndex( pData->GetIndex() ) )
-                        pData->SetIndex(0);     // need new index, done in Insert
-                    if (!pRangeName->Insert(pData))
+                    USHORT nExisting = 0;
+                    if ( pRangeName->SearchName( pSrcData->GetName(), nExisting ) )
                     {
-                        delete pData;
-                        nRetVal += 2;
-                        // InfoBox :: Name doppelt
-                        pSrcRangeNames[i] = NULL;
-                        aSrcRangeMap.SetPair( i, nOldIndex, 0 );
+                        // the name exists already in the destination document
+                        // -> use the existing name, but show a warning
+                        // (when refreshing links, the existing name is used and the warning not shown)
+
+                        ScRangeData* pExistingData = (*pRangeName)[nExisting];
+                        USHORT nExistingIndex = pExistingData->GetIndex();
+
+                        pSrcRangeNames[i] = NULL;       // don't modify the named range
+                        aSrcRangeMap.SetPair( i, nOldIndex, nExistingIndex );
                         bRangeNameReplace = TRUE;
+                        bNamesLost = TRUE;
                     }
                     else
                     {
-                        pData->TransferTabRef( nSrcPos, nDestPos );
-                        pSrcRangeNames[i] = pData;
-                        USHORT nNewIndex = pData->GetIndex();
-                        aSrcRangeMap.SetPair( i, nOldIndex, nNewIndex );
-                        if ( !bRangeNameReplace )
-                            bRangeNameReplace = ( nOldIndex != nNewIndex );
+                        ScRangeData* pData = new ScRangeData( *pSrcData );
+                        pData->SetDocument(this);
+                        if ( pRangeName->FindIndex( pData->GetIndex() ) )
+                            pData->SetIndex(0);     // need new index, done in Insert
+                        if (!pRangeName->Insert(pData))
+                        {
+                            DBG_ERROR("can't insert name");     // shouldn't happen
+                            delete pData;
+                        }
+                        else
+                        {
+                            pData->TransferTabRef( nSrcPos, nDestPos );
+                            pSrcRangeNames[i] = pData;
+                            USHORT nNewIndex = pData->GetIndex();
+                            aSrcRangeMap.SetPair( i, nOldIndex, nNewIndex );
+                            if ( !bRangeNameReplace )
+                                bRangeNameReplace = ( nOldIndex != nNewIndex );
+                        }
                     }
                 }
                 else
@@ -1792,6 +1802,11 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             {
                 nRetVal += 1;
                     // InfoBox AbsoluteRefs sind möglicherweise nicht mehr korrekt!!
+            }
+            if (bNamesLost)
+            {
+                nRetVal += 2;
+                // message: duplicate names
             }
             pTab[nDestPos]->CompileAll();
         }
