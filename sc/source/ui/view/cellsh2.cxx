@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:06:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,25 +456,25 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-basiert
                     }
 
-                    USHORT nField0 = 0;
+                    SCCOLROW nField0 = 0;
                     if ( pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField0 = ((const SfxUInt16Item*)pItem)->GetValue();
+                        nField0 = ((const SfxInt32Item*)pItem)->GetValue();
                     aSortParam.bDoSort[0] = ( nField0 != 0 );
-                    aSortParam.nField[0] = nField0 ? (nField0-1) : 0;
+                    aSortParam.nField[0] = nField0 > 0 ? (nField0-1) : 0;
                     if ( pArgs->GetItemState( FN_PARAM_2, TRUE, &pItem ) == SFX_ITEM_SET )
                         aSortParam.bAscending[0] = ((const SfxBoolItem*)pItem)->GetValue();
-                    USHORT nField1 = 0;
+                    SCCOLROW nField1 = 0;
                     if ( pArgs->GetItemState( FN_PARAM_3, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField1 = ((const SfxUInt16Item*)pItem)->GetValue();
+                        nField1 = ((const SfxInt32Item*)pItem)->GetValue();
                     aSortParam.bDoSort[1] = ( nField1 != 0 );
-                    aSortParam.nField[1] = nField1 ? (nField1-1) : 0;
+                    aSortParam.nField[1] = nField1 > 0 ? (nField1-1) : 0;
                     if ( pArgs->GetItemState( FN_PARAM_4, TRUE, &pItem ) == SFX_ITEM_SET )
                         aSortParam.bAscending[1] = ((const SfxBoolItem*)pItem)->GetValue();
-                    USHORT nField2 = 0;
+                    SCCOLROW nField2 = 0;
                     if ( pArgs->GetItemState( FN_PARAM_5, TRUE, &pItem ) == SFX_ITEM_SET )
-                        nField2 = ((const SfxUInt16Item*)pItem)->GetValue();
+                        nField2 = ((const SfxInt32Item*)pItem)->GetValue();
                     aSortParam.bDoSort[2] = ( nField2 != 0 );
-                    aSortParam.nField[2] = nField2 ? (nField2-1) : 0;
+                    aSortParam.nField[2] = nField2 > 0 ? (nField2-1) : 0;
                     if ( pArgs->GetItemState( FN_PARAM_6, TRUE, &pItem ) == SFX_ITEM_SET )
                         aSortParam.bAscending[2] = ((const SfxBoolItem*)pItem)->GetValue();
 
@@ -524,21 +524,21 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             rReq.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
                             if ( rOutParam.bDoSort[0] )
                             {
-                                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1,
+                                rReq.AppendItem( SfxInt32Item( FN_PARAM_1,
                                                     rOutParam.nField[0] + 1 ) );
                                 rReq.AppendItem( SfxBoolItem( FN_PARAM_2,
                                                     rOutParam.bAscending[0] ) );
                             }
                             if ( rOutParam.bDoSort[1] )
                             {
-                                rReq.AppendItem( SfxUInt16Item( FN_PARAM_3,
+                                rReq.AppendItem( SfxInt32Item( FN_PARAM_3,
                                                     rOutParam.nField[1] + 1 ) );
                                 rReq.AppendItem( SfxBoolItem( FN_PARAM_4,
                                                     rOutParam.bAscending[1] ) );
                             }
                             if ( rOutParam.bDoSort[2] )
                             {
-                                rReq.AppendItem( SfxUInt16Item( FN_PARAM_5,
+                                rReq.AppendItem( SfxInt32Item( FN_PARAM_5,
                                                     rOutParam.nField[2] + 1 ) );
                                 rReq.AppendItem( SfxBoolItem( FN_PARAM_6,
                                                     rOutParam.bAscending[2] ) );
@@ -613,8 +613,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 const ScQueryItem& rItem   = (const ScQueryItem&)
                                              pOutSet->Get( SCITEM_QUERYDATA );
 
-                USHORT nCurTab = GetViewData()->GetTabNo();
-                USHORT nRefTab = GetViewData()->GetRefTabNo();
+                SCTAB nCurTab = GetViewData()->GetTabNo();
+                SCTAB nRefTab = GetViewData()->GetRefTabNo();
 
                 // Wenn RefInput auf andere Tabelle als Datentabelle umgeschaltet
                 // hat wieder zurueckschalten:
@@ -640,8 +640,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 ScDBData*    pDBData = pTabViewShell->GetDBData();
 
                 pDBData->GetQueryParam( aParam );
-                USHORT nEC = aParam.GetEntryCount();
-                for (USHORT i=0; i<nEC; i++)
+                SCSIZE nEC = aParam.GetEntryCount();
+                for (SCSIZE i=0; i<nEC; i++)
                     aParam.GetEntry(i).bDoQuery = FALSE;
                 aParam.bDuplicate = TRUE;
                 pTabViewShell->Query( aParam, NULL, TRUE );
@@ -665,8 +665,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pReqArgs && SFX_ITEM_SET ==
                         pReqArgs->GetItemState( SCITEM_PIVOTDATA, TRUE, &pItem ) )
                 {
-                    USHORT nCurTab = GetViewData()->GetTabNo();
-                    USHORT nRefTab = GetViewData()->GetRefTabNo();
+                    SCTAB nCurTab = GetViewData()->GetTabNo();
+                    SCTAB nRefTab = GetViewData()->GetRefTabNo();
 
                     // Wenn RefInput auf andere Tabelle als Datentabelle umgeschaltet
                     // hat wieder zurueckschalten:
@@ -971,9 +971,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     String aErrTitle, aErrText;
 
                     ScDocument* pDoc = GetViewData()->GetDocument();
-                    USHORT nCurX = GetViewData()->GetCurX();
-                    USHORT nCurY = GetViewData()->GetCurY();
-                    USHORT nTab = GetViewData()->GetTabNo();
+                    SCCOL nCurX = GetViewData()->GetCurX();
+                    SCROW nCurY = GetViewData()->GetCurY();
+                    SCTAB nTab = GetViewData()->GetTabNo();
                     ScAddress aCursorPos( nCurX, nCurY, nTab );
                     ULONG nIndex = ((SfxUInt32Item*)pDoc->GetAttr(
                                 nCurX, nCurY, nTab, ATTR_VALIDDATA ))->GetValue();
@@ -1056,7 +1056,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
                             aErrText = ((const SfxStringItem*)pItem)->GetValue();
 
-                        USHORT nTab = GetViewData()->GetTabNo();
+                        SCTAB nTab = GetViewData()->GetTabNo();
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
@@ -1085,9 +1085,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    USHORT      nPosX       = pViewData->GetCurX();
-    USHORT      nPosY       = pViewData->GetCurY();
-    USHORT      nTab        = pViewData->GetTabNo();
+    SCCOL       nPosX       = pViewData->GetCurX();
+    SCROW       nPosY       = pViewData->GetCurY();
+    SCTAB       nTab        = pViewData->GetTabNo();
 
     BOOL bAutoFilter;
     BOOL bAutoFilterTested = FALSE;
@@ -1215,8 +1215,9 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_UNFILTER:
                 {
-                    USHORT nStartCol, nStartRow, nStartTab;
-                    USHORT nEndCol,   nEndRow,   nEndTab;
+                    SCCOL nStartCol, nEndCol;
+                    SCROW  nStartRow, nEndRow;
+                    SCTAB  nStartTab, nEndTab;
                     BOOL bAnyQuery = FALSE;
 
                     BOOL bSelected = GetViewData()->GetSimpleArea(
