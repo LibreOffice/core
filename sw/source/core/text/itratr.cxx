@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:41:22 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice *pOut )
     {
         // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
         // des gewuenschten Fonts ...
-        if ( !nChgCnt )
+        if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
         pFnt->ChgPhysFnt( pShell, pOut );
@@ -259,7 +259,7 @@ sal_Bool SwAttrIter::SeekAndChg( const xub_StrLen nNewPos, OutputDevice *pOut )
 sal_Bool SwAttrIter::IsSymbol( const xub_StrLen nNewPos )
 {
     Seek( nNewPos );
-    if ( !nChgCnt )
+    if ( !nChgCnt && !nPropFont )
         pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
             aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
     return pFnt->IsSymbol( pShell );
@@ -308,6 +308,8 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
     pFnt->GetTox() = 0;
     pFnt->GetRef() = 0;
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
+    if( nPropFont )
+        pFnt->SetProportion( nPropFont );
     if( pRedln )
     {
         pRedln->Clear( pFnt );
@@ -342,7 +344,7 @@ sal_Bool SwAttrIter::SeekStartAndChg( OutputDevice *pOut, const sal_Bool bParaFo
     {
         // wenn der Aenderungszaehler auf Null ist, kennen wir die MagicNo
         // des gewuenschten Fonts ...
-        if ( !nChgCnt )
+        if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
         pFnt->ChgPhysFnt( pShell, pOut );
@@ -411,6 +413,8 @@ sal_Bool SwAttrIter::Seek( const xub_StrLen nNewPos )
             pFnt->SetFnt( pAttrSet );
             pFnt->GetTox() = 0;
             pFnt->GetRef() = 0;
+            if( nPropFont )
+                pFnt->SetProportion( nPropFont );
             nStartIndex = nEndIndex = nPos = 0;
             nChgCnt = 0;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:37:32 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _FRMSH_HXX
 #include <frmsh.hxx>
+#endif
+#ifndef _ITRATR_HXX
+#include <itratr.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1156,23 +1159,31 @@ SwTxtSlotLen::~SwTxtSlotLen()
  *                     SwFontSave::SwFontSave()
  *************************************************************************/
 
-SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNewFnt )
-        : pFnt( pNewFnt ? ((SwTxtSizeInfo&)rInf).GetFont() : 0 )
+SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
+        SwAttrIter* pItr )
+        : pFnt( pNew ? ((SwTxtSizeInfo&)rInf).GetFont() : 0 )
 {
     if( pFnt )
     {
         pInf = &((SwTxtSizeInfo&)rInf);
-        if( pFnt->DifferentMagic( pNewFnt, pFnt->GetActual() ) ||
-            pNewFnt->GetActual() != pFnt->GetActual() )
+        if( pFnt->DifferentMagic( pNew, pFnt->GetActual() ) ||
+            pNew->GetActual() != pFnt->GetActual() )
         {
-            pNewFnt->SetTransparent( sal_True );
-            pNewFnt->SetAlign( ALIGN_BASELINE );
-            pInf->SetFont( pNewFnt );
+            pNew->SetTransparent( sal_True );
+            pNew->SetAlign( ALIGN_BASELINE );
+            pInf->SetFont( pNew );
         }
         else
             pFnt = 0;
-        pNewFnt->Invalidate();
-        pNewFnt->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        pNew->Invalidate();
+        pNew->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        if( pItr && pItr->GetFnt() == pFnt )
+        {
+            pIter = pItr;
+            pIter->SetFnt( pNew );
+        }
+        else
+            pIter = NULL;
     }
 }
 
@@ -1187,6 +1198,11 @@ SwFontSave::~SwFontSave()
         // SwFont zurueckstellen
         pFnt->Invalidate();
         pInf->SetFont( pFnt );
+        if( pIter )
+        {
+            pIter->SetFnt( pFnt );
+            pIter->nPos = STRING_LEN;
+        }
     }
 }
 

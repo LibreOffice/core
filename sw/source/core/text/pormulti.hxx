@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-14 11:38:37 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class SwTxtPaintInfo;
 
 struct SwBracket
 {
+    xub_StrLen nStart;      // Start of text attribute determins the font
     KSHORT nAscent;         // Ascent of the brackets
     KSHORT nHeight;         // Height of them
     KSHORT nPreWidth;       // Width of the opening bracket
@@ -107,16 +108,18 @@ class SwMultiPortion : public SwLinePortion
     sal_Bool bTop       :1; // Phonetic position
     sal_Bool bFormatted :1; // Already formatted
     sal_Bool bFollowFld :1; // Field follow inside
+    sal_Bool bRotation  :1; // Rotation (horizontal <-> vertical)
 protected:
     SwMultiPortion( xub_StrLen nEnd ) : pFldRest( 0 ), bTab1( sal_False ),
         bTab2( sal_False ), bDouble( sal_False ), bRuby( sal_False ),
-        bFormatted( sal_False ), bFollowFld( sal_False )
+        bFormatted( sal_False ), bFollowFld( sal_False ), bRotation( sal_False )
         { SetWhichPor( POR_MULTI ); SetLen( nEnd ); }
     inline void SetDouble() { bDouble = sal_True; }
     inline void SetRuby() { bRuby = sal_True; }
     inline void SetTop( sal_Bool bNew ) { bTop = bNew; }
     inline void SetTab1( sal_Bool bNew ) { bTab1 = bNew; }
     inline void SetTab2( sal_Bool bNew ) { bTab2 = bNew; }
+    inline void SetRotation( sal_Bool bNew ) { bRotation = bNew; }
     inline sal_Bool GetTab1() const { return bTab1; }
     inline sal_Bool GetTab2() const { return bTab2; }
 public:
@@ -144,6 +147,7 @@ public:
 
     inline sal_Bool ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd );
     inline sal_Bool HasBrackets() const;
+    inline sal_Bool GetRotation() const { return bRotation; }
     OUTPUT_OPERATOR
 };
 
@@ -159,9 +163,7 @@ public:
     ~SwDoubleLinePortion();
 
     inline SwBracket* GetBrackets() const { return pBracket; }
-    void SetBrackets( sal_Unicode cPre, sal_Unicode cPost );
-    inline void SetBrackets( const SwDoubleLinePortion& rDouble )
-        { SetBrackets( rDouble.pBracket->cPre, rDouble.pBracket->cPost ); }
+    void SetBrackets( const SwDoubleLinePortion& rDouble );
     void PaintBracket( SwTxtPaintInfo& rInf, short nSpc, sal_Bool bOpen ) const;
     void FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWidth );
     inline KSHORT PreWidth() const { return pBracket->nPreWidth; };
@@ -211,6 +213,7 @@ class SwTxtCursorSave
     SwLineLayout* pCurr;
     SwTwips nWidth;
     xub_StrLen nStart;
+    BYTE nOldProp;
     sal_Bool bSpaceChg;
 public:
     SwTxtCursorSave( SwTxtCursor* pTxtCursor, SwMultiPortion* pMulti,

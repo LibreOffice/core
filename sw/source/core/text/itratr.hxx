@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:53:38 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class ViewShell;
 
 class SwAttrIter
 {
+    friend class SwFontSave;
 protected:
     ViewShell *pShell;
     SwFont *pFnt;
@@ -102,23 +103,25 @@ private:
     SwRedlineItr *pRedln;
     xub_StrLen nStartIndex, nEndIndex, nPos;
     MSHORT nChgCnt;
+    BYTE nPropFont;
     void SeekFwd( const xub_StrLen nPos );
+    inline SetFnt( SwFont* pNew ) { pFnt = pNew; }
 
 protected:
     void Chg( SwTxtAttr *pHt );
     void Rst( SwTxtAttr *pHt );
     void CtorInit( SwTxtNode& rTxtNode );
-    inline SwAttrIter() : pFnt(0), pLastOut(0), nChgCnt(0), pShell(0), pRedln(0)
-        { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
+    inline SwAttrIter() : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0),
+        pShell(0), pRedln(0) { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
           aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; }
     USHORT ScriptType( const xub_StrLen nPos );
 
 public:
     // Konstruktor, Destruktor
     inline SwAttrIter( SwTxtNode& rTxtNode )
-           : pFnt(0), pLastOut(0), nChgCnt(0), pRedln(0)
-           { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
-               aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; CtorInit( rTxtNode ); }
+        : pFnt(0), pLastOut(0), nChgCnt(0), nPropFont(0), pShell(0), pRedln(0)
+        { aMagicNo[0] = aMagicNo[1] = aMagicNo[2] = 0;
+          aFntIdx[0] = aFntIdx[1] = aFntIdx[2] = 0; CtorInit( rTxtNode ); }
 
     virtual ~SwAttrIter();
 
@@ -152,6 +155,9 @@ public:
 
     inline SwFont *GetFnt() { return pFnt; }
     inline const SwFont *GetFnt() const { return pFnt; }
+
+    inline const BYTE GetPropFont() const { return nPropFont; }
+    inline void SetPropFont( const BYTE nNew ) { nPropFont = nNew; }
 #ifdef DEBUG
     void Dump( SvStream &rOS ) const;
 #endif

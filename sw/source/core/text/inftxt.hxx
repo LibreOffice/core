@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 15:13:45 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ class SwTxtSizeInfo;
 class SwViewOption;
 class ViewShell;
 class SwTxtFtn;
+class SwAttrIter;
 
 /* Minimum: Prozentwert fuers kernen */
 #define MINKERNPERCENT 5
@@ -677,9 +678,10 @@ class SwFontSave
 {
     SwTxtSizeInfo *pInf;
     SwFont        *pFnt;
-    SwFont        *pNewFnt;
+    SwAttrIter    *pIter;
 public:
-    SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pFnt );
+    SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pFnt,
+                SwAttrIter* pItr = NULL );
    ~SwFontSave();
 };
 

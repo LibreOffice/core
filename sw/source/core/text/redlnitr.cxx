@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-30 11:40:40 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode )
     }
 
     nStartIndex = nEndIndex = nPos = nChgCnt = 0;
+    nPropFont = 0;
     SwDoc* pDoc = rTxtNode.GetDoc();
 
     const SwExtTextInput* pExtInp = pDoc->GetExtTextInput( rTxtNode );

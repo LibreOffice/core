@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2000-12-01 12:55:48 $
+ *  last change: $Author: ama $ $Date: 2000-12-11 11:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,9 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
     xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
 {
     SetDouble();
+
+    pBracket->nStart = *rAttr.GetStart();
+
     if( RES_CHRATR_TWO_LINES == rAttr.Which() )
     {
         pBracket->cPre = rAttr.Get2Lines().GetStartBracket();
@@ -261,6 +264,11 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
             pBracket->cPre = 0;
             pBracket->cPost = 0;
          }
+    }
+    if( !pBracket->cPre && !pBracket->cPost )
+    {
+        delete pBracket;
+        pBracket = 0;
     }
 }
 
@@ -306,13 +314,14 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
  * and fills it, if not both characters are 0x00.
  * --------------------------------------------------*/
 
-void SwDoubleLinePortion::SetBrackets( sal_Unicode cPre, sal_Unicode cPost )
+void SwDoubleLinePortion::SetBrackets( const SwDoubleLinePortion& rDouble )
 {
-    if( cPre || cPost )
+    if( rDouble.pBracket )
     {
         pBracket = new SwBracket;
-        pBracket->cPre = cPre;
-        pBracket->cPost = cPost;
+        pBracket->cPre = rDouble.pBracket->cPre;
+        pBracket->cPost = rDouble.pBracket->cPost;
+        pBracket->nStart = rDouble.pBracket->nStart;
     }
 }
 
@@ -927,19 +936,28 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwSpaceManipulator aManip( GetInfo(), rMulti );
 
     SwFontSave *pFontSave;
+    SwFont* pTmpFnt;
+
     if( rMulti.IsDouble() )
     {
-        SwFont* pTmpFnt = new SwFont( *GetInfo().GetFont() );
-        pTmpFnt->SetProportion( 50 );
-        pFontSave = new SwFontSave( GetInfo(), pTmpFnt );
+        pTmpFnt = new SwFont( *GetInfo().GetFont() );
+        SetPropFont( 50 );
+        pTmpFnt->SetProportion( GetPropFont() );
+        pFontSave = new SwFontSave( GetInfo(), pTmpFnt, this );
     }
     else
+    {
         pFontSave = NULL;
+        pTmpFnt = NULL;
+    }
 
     if( rMulti.HasBrackets() )
     {
+        xub_StrLen nOldIdx = GetInfo().GetIdx();
+        GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         ((SwDoubleLinePortion&)rMulti).PaintBracket( GetInfo(), 0, sal_True );
+        GetInfo().SetIdx( nOldIdx );
     }
 
     KSHORT nTmpX = GetInfo().X();
@@ -1004,8 +1022,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
             pLay = pLay->GetNext();
             pPor = pLay->GetFirstPortion();
             bRest = pLay->IsRest();
-            GetInfo().X( nTmpX );
             aManip.SecondLine();
+            GetInfo().X( nTmpX );
             // We switch to the baseline of the next inner line
             GetInfo().Y( GetInfo().Y() + rMulti.GetRoot().Height()
                 - rMulti.GetRoot().GetAscent() + pLay->GetAscent() );
@@ -1017,15 +1035,20 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     if( rMulti.HasBrackets() )
     {
+        xub_StrLen nOldIdx = GetInfo().GetIdx();
+        GetInfo().SetIdx(((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart);
         SeekAndChg( GetInfo() );
         GetInfo().X( nOldX );
         ((SwDoubleLinePortion&)rMulti).PaintBracket( GetInfo(),
             aManip.GetSpaceAdd(), sal_False );
+        GetInfo().SetIdx( nOldIdx );
     }
     // Restore the saved values
     GetInfo().X( nOldX );
     GetInfo().SetLen( nOldLen );
     delete pFontSave;
+    delete pTmpFnt;
+    SetPropFont( 0 );
 }
 
 /*-----------------13.10.00 16:46-------------------
@@ -1062,19 +1085,27 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
     SwTwips nMaxWidth = rInf.Width();
+
+    if( rMulti.HasBrackets() )
+    {
+        xub_StrLen nOldIdx = rInf.GetIdx();
+        rInf.SetIdx( ((SwDoubleLinePortion&)rMulti).GetBrackets()->nStart );
+        SeekAndChg( rInf );
+        ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
+        rInf.SetIdx( nOldIdx );
+    }
+
     SeekAndChg( rInf );
     SwFontSave *pFontSave;
     if( rMulti.IsDouble() )
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        pTmpFnt->SetProportion( 50 );
-        pFontSave = new SwFontSave( rInf, pTmpFnt );
+        SetPropFont( 50 );
+        pTmpFnt->SetProportion( GetPropFont() );
+        pFontSave = new SwFontSave( rInf, pTmpFnt, this );
     }
     else
         pFontSave = NULL;
-
-    if( rMulti.HasBrackets() )
-        ((SwDoubleLinePortion&)rMulti).FormatBrackets( rInf, nMaxWidth );
 
     SwTwips nTmpX = rInf.X();
 
@@ -1273,9 +1304,11 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         rInf.SetRest( pTmp );
     }
     rInf.SetTxt( *pOldTxt );
+    SeekAndChg( rInf );
     delete pFirstRest;
     delete pSecondRest;
     delete pFontSave;
+    SetPropFont( 0 );
     return bRet;
 }
 
@@ -1428,8 +1461,10 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
         pTxtCursor->Next() )
         ; // nothing
     nWidth = pTxtCursor->pCurr->Width();
+    nOldProp = pTxtCursor->GetPropFont();
     if( pMulti->IsDouble() )
     {
+        pTxtCursor->SetPropFont( 50 );
         bSpaceChg = pMulti->ChgSpaceAdd( pTxtCursor->pCurr, nSpaceAdd );
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
             pTxtCursor->pCurr->Width( nWidth + nSpaceAdd *
@@ -1446,5 +1481,6 @@ SwTxtCursorSave::~SwTxtCursorSave()
     pTxtCrsr->pCurr->Width( nWidth );
     pTxtCrsr->pCurr = pCurr;
     pTxtCrsr->nStart = nStart;
+    pTxtCrsr->SetPropFont( nOldProp );
 }
 
