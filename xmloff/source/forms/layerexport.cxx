@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:04:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 06:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,7 @@ namespace xmloff
                     xLoop = xNextContainer;
                     nChildPos = -1; // will be incremented below
                 }
+                ++nChildPos;
             }
             else
             {
@@ -464,11 +465,17 @@ namespace xmloff
                     aContainerHistory.pop();
                     nChildPos = aIndexHistory.top();
                     aIndexHistory.pop();
+
+                    ++nChildPos;
                 }
+                if (nChildPos >= xLoop->getCount())
+                    // exited the loop above because we have no history anymore (0 == aContainerHistory.size()),
+                    // and on the current level there are no more children
+                    // -> leave
+                    break;
             }
-            ++nChildPos;
         }
-        while (xLoop.is() && aContainerHistory.size());
+        while (xLoop.is());
     }
 
     //---------------------------------------------------------------------
@@ -656,6 +663,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/05/28 15:04:18  fs
+ *  #86712# no releaseContext anymore
+ *
  *  Revision 1.13  2001/05/28 14:59:18  fs
  *  #86712# added control number style related functionality
  *
