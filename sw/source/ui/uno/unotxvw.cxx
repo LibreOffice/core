@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-10-16 09:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,10 @@ sal_Bool SwXTextViewCursor::goRight(sal_Int16 nCount, sal_Bool bExpand) throw( u
 /* -----------------08.03.99 11:18-------------------
  *
  * --------------------------------------------------*/
-void SwXTextViewCursor::gotoRange(const Reference< text::XTextRange > & xRange, sal_Bool bExpand) throw(::com::sun::star::uno::RuntimeException)
+void SwXTextViewCursor::gotoRange(
+    const Reference< text::XTextRange > & xRange,
+    sal_Bool bExpand)
+        throw(RuntimeException)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(pView && xRange.is())
@@ -1007,6 +1010,8 @@ void SwXTextViewCursor::gotoRange(const Reference< text::XTextRange > & xRange, 
             SwBookmark* pBkm = pRange->GetBookmark();
             pSrcNode = &pBkm->GetPos().nNode.GetNode();
         }
+        else
+            throw RuntimeException();
         const SwStartNode* pTmp = pSrcNode ? pSrcNode->FindSttNodeByType(eSearchNodeType) : 0;
 
         //SectionNodes ueberspringen
@@ -1044,7 +1049,7 @@ void SwXTextViewCursor::gotoRange(const Reference< text::XTextRange > & xRange, 
                 pParamLeft = new SwPosition(*pTmp->GetPoint());
                 pParamRight = new SwPosition(pTmp->HasMark() ? *pTmp->GetMark() : *pParamLeft);
             }
-            else
+            else if(pRange)
             {
                 SwBookmark* pBkm = pRange->GetBookmark();
                 pParamLeft = new SwPosition(pBkm->GetPos());
@@ -1502,95 +1507,6 @@ Any  SwXTextViewCursor::getPropertyDefault( const OUString& rPropertyName )
     }
     return aRet;
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.76  2000/09/18 16:06:16  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.75  2000/09/07 15:59:34  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.74  2000/07/10 12:32:19  os
-    chg: acquire/release don't throw exceptions
-
-    Revision 1.73  2000/06/29 16:45:50  os
-    #75928# XTextViewCursor implements XPropertySet/XPropertyState
-
-    Revision 1.72  2000/06/27 07:57:29  obo
-    #65293#
-
-    Revision 1.71  2000/05/24 13:36:13  hr
-    exception specifications
-
-    Revision 1.70  2000/05/23 07:39:15  os
-    SwXTextView : inheritance changed
-
-    Revision 1.69  2000/05/18 08:35:56  os
-    XInterface - mothods
-
-    Revision 1.68  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.67  2000/05/10 11:55:31  os
-    Basic API removed
-
-    Revision 1.66  2000/04/26 15:00:45  os
-    GetName() returns const String&
-
-    Revision 1.65  2000/04/11 08:05:00  os
-    UNICODE
-
-    Revision 1.64  2000/03/27 10:36:31  os
-    UNO III
-
-    Revision 1.63  2000/03/21 15:39:44  os
-    UNOIII
-
-    Revision 1.62  2000/02/11 14:59:57  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.61  2000/01/03 12:16:26  os
-    #71284# ::select: query for SwXShape-base class before calling getImplementation()
-
-
-    Revision 1.60  1999/11/25 15:37:50  os
-    headers corrected
-
-    Revision 1.59  1999/11/19 16:38:03  os
-    modules renamed
-
-    Revision 1.58  1999/11/03 14:39:20  os
-    getString:: convert to UNICODE
-
-    Revision 1.57  1999/10/12 07:24:19  os
-    #69115# API parameter in GotoLeftRight/LRMargin; getText/getStart+End/collapse
-
-    Revision 1.56  1999/10/05 10:22:04  os
-    new method: getPage
-
-    Revision 1.55  1999/09/28 09:12:43  os
-    #67167# view::XLineCursor, view::XViewCursor inherited
-
-    Revision 1.54  1999/09/07 05:59:43  os
-    #67887# frame::XDispatchProvider
-
-    Revision 1.53  1999/08/31 09:32:00  OS
-    #68459# ::select: correct conversion from uno::Any
-
-
-      Rev 1.52   31 Aug 1999 11:32:00   OS
-   #68459# ::select: correct conversion from uno::Any
-
-      Rev 1.51   26 Aug 1999 11:44:10   HR
-   select/getSelection corrected
-
-      Rev 1.50   25 Aug 1999 16:47:32   OS
-   getSelection/select with uno::Any
-
-      Rev 1.49   16 Aug 1999 17:21:14   OS
-   #65953# select(): shapes implemented
-=======
 /*-- 28.09.99 08:31:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1699,227 +1615,4 @@ Sequence< OUString > SwXTextViewCursor::getSupportedServiceNames(void) throw( Ru
     pArray[0] = C2U("com.sun.star.text.TextViewCursor");
     return aRet;
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.76  2000/09/18 16:06:16  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.75  2000/09/07 15:59:34  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.74  2000/07/10 12:32:19  os
-    chg: acquire/release don't throw exceptions
-
-    Revision 1.73  2000/06/29 16:45:50  os
-    #75928# XTextViewCursor implements XPropertySet/XPropertyState
-
-    Revision 1.72  2000/06/27 07:57:29  obo
-    #65293#
-
-    Revision 1.71  2000/05/24 13:36:13  hr
-    exception specifications
-
-    Revision 1.70  2000/05/23 07:39:15  os
-    SwXTextView : inheritance changed
-
-    Revision 1.69  2000/05/18 08:35:56  os
-    XInterface - mothods
-
-    Revision 1.68  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.67  2000/05/10 11:55:31  os
-    Basic API removed
-
-    Revision 1.66  2000/04/26 15:00:45  os
-    GetName() returns const String&
-
-    Revision 1.65  2000/04/11 08:05:00  os
-    UNICODE
-
-    Revision 1.64  2000/03/27 10:36:31  os
-    UNO III
-
-    Revision 1.63  2000/03/21 15:39:44  os
-    UNOIII
-
-    Revision 1.62  2000/02/11 14:59:57  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.61  2000/01/03 12:16:26  os
-    #71284# ::select: query for SwXShape-base class before calling getImplementation()
-
-
-    Revision 1.60  1999/11/25 15:37:50  os
-    headers corrected
-
-    Revision 1.59  1999/11/19 16:38:03  os
-    modules renamed
-
-    Revision 1.58  1999/11/03 14:39:20  os
-    getString:: convert to UNICODE
-
-    Revision 1.57  1999/10/12 07:24:19  os
-    #69115# API parameter in GotoLeftRight/LRMargin; getText/getStart+End/collapse
-
-    Revision 1.56  1999/10/05 10:22:04  os
-    new method: getPage
-
-    Revision 1.55  1999/09/28 09:12:43  os
-    #67167# view::XLineCursor, view::XViewCursor inherited
-
-
-      Rev 1.48   13 Jul 1999 09:34:00   OS
-   getPosition etwas optimiert
-
-      Rev 1.47   07 Jul 1999 08:52:10   OS
-   #67471# view::XSelectionChangeListener now supported
-
-      Rev 1.46   22 Apr 1999 16:09:06   OS
-   #65194# throw -> throw
-
-      Rev 1.45   22 Apr 1999 15:28:52   OS
-   #65124# not implemented - nur noch DBG_WARNING
-
-      Rev 1.44   07 Apr 1999 10:26:32   OS
-   #60348# richtiges Shape liefern
-
-      Rev 1.43   15 Mar 1999 14:38:26   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.42   12 Mar 1999 09:57:24   OS
-   #62845# lang::XServiceInfo impl.
-
-      Rev 1.41   10 Mar 1999 16:19:38   OS
-   #63127# Controller-Methoden von der Basisklasse
-
-      Rev 1.40   09 Mar 1999 12:38:08   OS
-   #62393# gotoRange verbessert, #62008# Solar-Mutex
-
-      Rev 1.39   08 Mar 1999 07:43:02   MH
-   update 515
-
-      Rev 1.38   05 Mar 1999 08:51:46   OS
-   #62191# INT statt UINT
-
-      Rev 1.37   10 Feb 1999 16:15:26   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   #52654# lang::XComponent im queryInterface
-
-
-      Rev 1.36   28 Jan 1999 16:27:50   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.35   27 Jan 1999 12:06:08   OS
-   #56371# TF_ONE51
-
-      Rev 1.34   27 Jan 1999 09:59:16   OS
-   #56371# TF_ONE51
-
-      Rev 1.33   17 Dec 1998 12:09:10   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.32   10 Dec 1998 15:54:04   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.31   11 Nov 1998 10:58:06   AWO
-   Include fehlte
-
-      Rev 1.30   09 Nov 1998 14:44:10   OS
-   #58785# getSelection an der XTextView vollstaendig
-
-      Rev 1.29   04 Nov 1998 15:55:26   OS
-   #58289# getControl geht auch in Gruppen
-
-      Rev 1.28   05 Oct 1998 17:32:22   HR
-   UIK() Makro
-
-      Rev 1.27   01 Oct 1998 15:58:14   OM
-   #52654# SelectionChangeListener
-
-      Rev 1.26   01 Oct 1998 11:40:54   HR
-   Typo beseitigt
-
-      Rev 1.25   18 Sep 1998 11:40:56   OS
-   #56651# GotoBookmark optimiert
-
-      Rev 1.24   18 Sep 1998 09:31:34   OS
-   52654# view::XScreenCursor
-
-      Rev 1.23   17 Sep 1998 15:53:38   OS
-   #52654# text::TextViewCursor(-Supplier)
-
-      Rev 1.22   07 Sep 1998 09:07:06   OS
-   #54862# add/removeSelectionChangeListener
-
-      Rev 1.21   10 Jul 1998 18:09:40   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.20   08 Jul 1998 10:00:00   TJ
-   include
-
-      Rev 1.19   03 Jul 1998 07:22:40   OS
-   Ableitung von view::XControlAccess
-
-      Rev 1.18   18 Jun 1998 13:23:34   OS
-   include-Umstellung 396c
-
-      Rev 1.17   18 Jun 1998 09:23:14   OS
-   Ableitung von SfxOfficeDocController
-
-      Rev 1.16   11 Jun 1998 11:06:40   TJ
-   getActualViewData -> getViewData
-
-      Rev 1.15   11 Jun 1998 08:15:48   OS
-   Code-Kopie war nix#
-
-      Rev 1.14   04 Jun 1998 09:40:28   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   getIdlClasses
-
-
-      Rev 1.13   02 Jun 1998 16:18:10   OS
-   391-Anpassung
-
-      Rev 1.12   02 Jun 1998 15:50:34   OS
-   SwXTextView von frame::XController abgeleitet
-
-      Rev 1.11   26 May 1998 12:33:12   OS
-   SetSelection fuer Cursor
-
-      Rev 1.10   22 May 1998 15:15:24   OS
-   get/setSelection erweitert
-
-      Rev 1.9   14 May 1998 17:50:08   OS
-   div. Namensaenderungen
-
-      Rev 1.8   09 Apr 1998 15:10:34   OS
-   Uno-Umstellung
-
-      Rev 1.7   08 Apr 1998 12:52:24   OS
-   text::ViewSettings auch fuer die TextView; select fuer Frames u. text::Bookmarks
-
-      Rev 1.6   03 Apr 1998 14:37:52   OS
-   wieder aktiviert
-
-      Rev 1.5   30 Jan 1998 15:10:46   OS
-   wieder uebersetzbar
-
-      Rev 1.4   19 Jan 1998 14:58:04   OS
-   wieder uebersetzbar
-
-      Rev 1.3   08 Jan 1998 12:56:48   OS
-   UsrUik -> uno::Uik
-
-      Rev 1.2   19 Dec 1997 18:04:56   OS
-   Jahressicherung
-
-      Rev 1.1   17 Dec 1997 16:19:48   OS
-   Tabellenanfang
-
-      Rev 1.0   16 Dec 1997 11:52:34   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
