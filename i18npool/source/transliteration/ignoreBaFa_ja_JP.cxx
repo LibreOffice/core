@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreBaFa_ja_JP.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:50:29 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@ using namespace rtl;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 static Mapping BaFa[] = {
-        { 0x30F4, 0x30A1, 0x30D0 },
-        { 0x3094, 0x3041, 0x3070 },
-        { 0x30D5, 0x30A1, 0x30CF },
-        { 0x3075, 0x3041, 0x306F },
-        { 0, 0, 0 }
+        { 0x30F4, 0x30A1, 0x30D0, sal_True },
+        { 0x3094, 0x3041, 0x3070, sal_True },
+        { 0x30D5, 0x30A1, 0x30CF, sal_True },
+        { 0x3075, 0x3041, 0x306F, sal_True },
+        { 0, 0, 0, sal_True }
 };
 
 ignoreBaFa_ja_JP::ignoreBaFa_ja_JP()
