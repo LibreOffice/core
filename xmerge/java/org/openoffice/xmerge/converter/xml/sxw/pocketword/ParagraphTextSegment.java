@@ -152,33 +152,35 @@ class ParagraphTextSegment implements PocketWordConstants {
         // TODO: Font changes need to be worked out here
 
         try {
-            if (pStyle.getFontColor() != null) {
-                short colourCode = ColourConverter.convertFromRGB(pStyle.getFontColor());
-                if (colourCode != BLACK) {
-                    data.write(COLOUR_TAG);
-                    data.write(EndianConverter.writeShort(colourCode));
-                    colourSet = true;
+            if (pStyle != null) {
+                if (pStyle.getFontColor() != null) {
+                    short colourCode = ColourConverter.convertFromRGB(pStyle.getFontColor());
+                    if (colourCode != BLACK) {
+                        data.write(COLOUR_TAG);
+                        data.write(EndianConverter.writeShort(colourCode));
+                        colourSet = true;
+                    }
                 }
-            }
-            if (pStyle.isSet(TextStyle.BOLD) && pStyle.getAttribute(TextStyle.BOLD)) {
-                data.write(new byte[] { FONT_WEIGHT_TAG, FONT_WEIGHT_BOLD, 0x00 } );
-                boldSet = true;
-            }
-            if (pStyle.isSet(TextStyle.ITALIC) && pStyle.getAttribute(TextStyle.ITALIC)) {
-                data.write(new byte[] { ITALIC_TAG, 0x01 } );
-                italicSet = true;
-            }
-            if (pStyle.isSet(TextStyle.UNDERLINE) && pStyle.getAttribute(TextStyle.UNDERLINE)) {
-                data.write(new byte[] { UNDERLINE_TAG, 0x01 } );
-                underlineSet = true;
-            }
-            if (pStyle.isSet(TextStyle.STRIKETHRU) && pStyle.getAttribute(TextStyle.STRIKETHRU)) {
-                data.write(new byte[] { STRIKETHROUGH_TAG, 0x01 } );
-                strikeSet = true;
-            }
-            if (pStyle.getBackgroundColor() != null) {
-                data.write(new byte[] { HIGHLIGHT_TAG, 0x01 } );
-                highlightSet = true;
+                if (pStyle.isSet(TextStyle.BOLD) && pStyle.getAttribute(TextStyle.BOLD)) {
+                    data.write(new byte[] { FONT_WEIGHT_TAG, FONT_WEIGHT_BOLD, 0x00 } );
+                    boldSet = true;
+                }
+                if (pStyle.isSet(TextStyle.ITALIC) && pStyle.getAttribute(TextStyle.ITALIC)) {
+                    data.write(new byte[] { ITALIC_TAG, 0x01 } );
+                    italicSet = true;
+                }
+                if (pStyle.isSet(TextStyle.UNDERLINE) && pStyle.getAttribute(TextStyle.UNDERLINE)) {
+                    data.write(new byte[] { UNDERLINE_TAG, 0x01 } );
+                    underlineSet = true;
+                }
+                if (pStyle.isSet(TextStyle.STRIKETHRU) && pStyle.getAttribute(TextStyle.STRIKETHRU)) {
+                    data.write(new byte[] { STRIKETHROUGH_TAG, 0x01 } );
+                    strikeSet = true;
+                }
+                if (pStyle.getBackgroundColor() != null) {
+                    data.write(new byte[] { HIGHLIGHT_TAG, 0x01 } );
+                    highlightSet = true;
+                }
             }
 
 

@@ -563,7 +563,7 @@ class Paragraph implements PocketWordConstants {
 
             bos.write(bullets);
 
-            if (pStyle.isAttributeSet(ParaStyle.TEXT_ALIGN)) {
+            if (pStyle != null && pStyle.isAttributeSet(ParaStyle.TEXT_ALIGN)) {
                 switch (pStyle.getAttribute(ParaStyle.TEXT_ALIGN)) {
 
                     case ParaStyle.ALIGN_RIGHT:
