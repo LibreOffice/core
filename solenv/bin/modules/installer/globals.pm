@@ -113,6 +113,7 @@ BEGIN
     $startupfolder = "StartupFolder";
     $programfilesfolder = "ProgramFilesFolder";
     $templatefolder = "TemplateFolder";
+    $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
     $adafolder = "adabas";
     $encodinglistname = "msi-encodinglist.txt";
@@ -121,6 +122,8 @@ BEGIN
     $sofficeiconadded = 0;
     $temppath = "";
     $temppathdefined = 0;
+    $packageversion = 1;
+    $packagerevision = 1;
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -155,6 +158,7 @@ BEGIN
     $ismultilingual = 0;
     $isopensourceproduct = 1;
     $manufacturer = "";
+    $longmanufacturer = "";
     $sundirname = "Sun";
     $codefilename = "codes.txt";
     $productcode = "";
@@ -193,10 +197,12 @@ BEGIN
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @languagepackfeature =();
     $msiassemblyfiles = "";
+    $nsisfilename = "Nsis.mlf";
     $langpackfilename = "Langpack.mlf";
     $languagenames = "";
 
     @removedirs = ();
+    @emptypackages = ();
 
     $plat = $^O;
 
