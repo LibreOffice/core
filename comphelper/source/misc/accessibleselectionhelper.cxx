@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-06 09:59:53 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 06:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,11 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
+    {
+    }
+
+    //--------------------------------------------------------------------
     IMPLEMENT_FORWARD_XINTERFACE2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OAccessibleSelectionHelper, OAccessibleComponentHelper, OAccessibleSelectionHelper_Base )
     // (order matters: the first is the class name, the second is the class doing the ref counting)
@@ -169,49 +174,49 @@ namespace comphelper
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleSelectionHelper::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::selectAccessibleChild( nChildIndex );
     }
 
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL OAccessibleSelectionHelper::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::isAccessibleChildSelected( nChildIndex ) );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleSelectionHelper::clearAccessibleSelection(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::clearAccessibleSelection();
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleSelectionHelper::selectAllAccessible(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::selectAllAccessible();
     }
 
     //--------------------------------------------------------------------
     sal_Int32 SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::getSelectedAccessibleChildCount() );
     }
 
     //--------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL OAccessibleSelectionHelper::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         return( OCommonAccessibleSelection::getSelectedAccessibleChild( nSelectedChildIndex ) );
     }
 
     //--------------------------------------------------------------------
     void SAL_CALL OAccessibleSelectionHelper::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
-        OContextEntryGuard aGuard( this );
+        OExternalLockGuard aGuard( this );
         OCommonAccessibleSelection::deselectSelectedAccessibleChild( nSelectedChildIndex );
     }
 
@@ -222,4 +227,7 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/05/06 09:59:53  ka
+ *  #95585#: added AccessibleSelection helper
+ *
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibleselectionhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-06 09:58:52 $
+ *  last change: $Author: oj $ $Date: 2002-07-30 06:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@ namespace comphelper
 
         OAccessibleSelectionHelper( );
 
+        /// see the respective base class ctor for an extensive comment on this, please
+        OAccessibleSelectionHelper( IMutex* _pExternalLock );
+
         // return ourself here by default
         virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > implGetAccessibleContext() throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -174,4 +177,7 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/05/06 09:58:52  ka
+ *  #95585#: added AccessibleSelection helper
+ *
  ************************************************************************/
