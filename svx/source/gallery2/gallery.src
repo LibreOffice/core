@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:37:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ TabDialog RID_SVXTABDLG_GALLERY
     };
     Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³a?ciwo?ci ";
+    Text[ polish ] = "W³aœciwoœci ";
     Text[ japanese ] = "‘®« ";
     Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ arabic ] = "ÎÕÇÆÕ";
@@ -280,7 +280,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
     };
     Text[ chinese_simplified ] = "ÊôĞÔ£º ";
     Text[ russian ] = "Ñâîéñòâà ";
-    Text[ polish ] = "W³a?ciwo?ci ";
+    Text[ polish ] = "W³aœciwoœci ";
     Text[ japanese ] = "‘®« ";
     Text[ chinese_traditional ] = "Äİ©Ê¡G ";
     Text[ arabic ] = "ÎÕÇÆÕ";
@@ -407,7 +407,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text [ portuguese ] = "Conteúdo:" ;
         Text[ chinese_simplified ] = "ÄÚÈİ:";
         Text[ russian ] = "Ñîäåğæèìîå:";
-        Text[ polish ] = "Zawarto?æ:";
+        Text[ polish ] = "Zawartoœæ:";
         Text[ japanese ] = "“à—e:";
         Text[ chinese_traditional ] = "¤º®e¡G";
         Text[ arabic ] = ":ÇáãÍÊæíÇÊ";
@@ -1427,7 +1427,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text [ portuguese_brazilian ] = "Wave - Klangdatei" ;
     Text[ chinese_simplified ] = "Wave ÒôÆµÎÄ¼ş";
     Text[ russian ] = "Wave - Ôàéë çâóêîâ";
-    Text[ polish ] = "Plik d?wiêkowy typu Wave";
+    Text[ polish ] = "Plik dŸwiêkowy typu Wave";
     Text[ japanese ] = "Wave »³İÄŞÌ§²Ù";
     Text[ chinese_traditional ] = "Wave - Án­µÀÉ®×";
     Text[ arabic ] = "ãáİ ÕæÊí -  Wave";
@@ -1490,7 +1490,7 @@ String RID_SVXSTR_EXTFORMAT3_UI
     Text[ italian ] = "File sound - AU";
     Text[ danish ] = "AU - lydfil";
     Text[ swedish ] = "AU - ljudfil";
-    Text[ polish ] = "Plik d?wiêkowy AU";
+    Text[ polish ] = "Plik dŸwiêkowy AU";
     Text[ portuguese_brazilian ] = "AU - Sound File";
     Text[ japanese ] = "AU »³İÄŞÌ§²Ù";
     Text[ korean ] = "AU - »ç¿îµå ÆÄÀÏ";
@@ -1546,7 +1546,7 @@ String RID_SVXSTR_GALLERY_LENGTH
     Text [ portuguese_brazilian ] = "L?nge:" ;
     Text[ chinese_simplified ] = "³¤¶È:";
     Text[ russian ] = "Äëèíà:";
-    Text[ polish ] = "D³ugo?æ:";
+    Text[ polish ] = "D³ugoœæ:";
     Text[ japanese ] = "’·‚³:";
     Text[ chinese_traditional ] = "ªø«×:";
     Text[ arabic ] = ":ÇáØæá";
@@ -1666,7 +1666,7 @@ String RID_SVXSTR_GALLERY_SGIERROR
     Text [ portuguese_brazilian ] = "Diese Datei kann nicht ge?fnet werden. \nM?hten Sie einen anderen Suchpfad angeben? " ;
     Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒªÖ¸¶¨ÁíÒ»¸öÂ·¾¶£¿ ";
     Text[ russian ] = "Îòêğûòü ıòîò ôàéë íå óäàåòñÿ.\nÂû õîòèòå çàäàòü äğóãîé ïóòü ïîèñêà? ";
-    Text[ polish ] = "Pliku tego nie mo¿na otworzyæ.\nCzy chcesz podaæ inn¹ ?cie¿kê wyszukiwania? ";
+    Text[ polish ] = "Pliku tego nie mo¿na otworzyæ.\nCzy chcesz podaæ inn¹ œcie¿kê wyszukiwania? ";
     Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍŠJ‚¯‚Ü‚¹‚ñB\n•Ê‚ÌŒŸõÊß½–¼‚ğ“ü—Í‚µ‚Ü‚·‚©B ";
     Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C\n±z­n¿é¤J¤@­Ó¨ä¥L¸ô®|¡S ";
     Text[ arabic ] = "áÇ íãßä İÊÍ åĞÇ Çáãáİ.\nåá ÊÑíÏ ÅÏÎÇá ãÓÇÑ ÈÍË ÂÎÑ¿ ";
@@ -2026,15 +2026,15 @@ String RID_SVXSTR_GALLERY_TITLE
     Text[ portuguese ] = "Título";
     Text[ russian ] = "Çàãîëîâîê";
     Text[ greek ] = "Ôßôëïò";
-    Text[ dutch ] = "Titel";
+    Text[ dutch ] = "Title";
     Text[ french ] = "Titre";
     Text[ spanish ] = "Título";
     Text[ italian ] = "Titolo";
-    Text[ danish ] = "Titel";
+    Text[ danish ] = "Overskrift";
     Text[ swedish ] = "Namn";
     Text[ polish ] = "Tytu³";
     Text[ portuguese_brazilian ] = "Title";
-    Text[ japanese ] = "À²ÄÙ(T)";
+    Text[ japanese ] = "À²ÄÙ";
     Text[ korean ] = "Á¦¸ñ(T)";
     Text[ chinese_simplified ] = "±êÌâ(T)";
     Text[ chinese_traditional ] = "¼ĞÃD(T)";
@@ -2060,7 +2060,7 @@ String RID_SVXSTR_GALLERY_PATH
     Text [ english_us ] = "Path" ;
     Text[ chinese_simplified ] = "Â·¾¶";
     Text[ russian ] = "Ïóòü";
-    Text[ polish ] = "?cie¿ka";
+    Text[ polish ] = "Œcie¿ka";
     Text[ japanese ] = "Êß½";
     Text[ chinese_traditional ] = "¸ô®|";
     Text[ arabic ] = "ÇáãÓÇÑ";
@@ -2328,7 +2328,7 @@ Menu RID_SVXMN_GALLERY1
             Text [ portuguese ] = "~Propriedades ..." ;
             Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
             Text[ russian ] = "Ñâîéñòâà ...";
-            Text[ polish ] = "W³a?ciwo?ci ...";
+            Text[ polish ] = "W³aœciwoœci ...";
             Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
             Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
             Text[ arabic ] = "...ÎÕÇÆÕ";
@@ -2650,3 +2650,4 @@ Menu RID_SVXMN_GALLERY2
         };
     };
 };
+
