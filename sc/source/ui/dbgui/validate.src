@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:55:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include "validate.hrc"
 
@@ -374,8 +373,8 @@ TabPage TP_VALIDATION_VALUES
             < "十进制" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
             < "日期" ; SC_VALIDDLG_ALLOW_DATE ; > ;
             < "时间" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "单元格区域" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "列表" ; SC_VALIDDLG_ALLOW_LIST ; > ;
             < "文字长度" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         StringList [ russian ] =
@@ -999,7 +998,7 @@ TabPage TP_VALIDATION_VALUES
         Text [ french ] = "Autoriser ~cellules vides" ;
         Text [ portuguese_brazilian ] = "~Permitir c�lulas vazias" ;
         Text [ portuguese ] = "~Permitir c�lulas vazias" ;
-        Text[ chinese_simplified ] = "允许空单元格(~B)";
+        Text[ chinese_simplified ] = "允许空单元格";
         Text[ russian ] = "��������� ������";
         Text[ polish ] = "Zezwalaj na ~puste kom�rki";
         Text[ japanese ] = "空白セルを許可する(~B)";
@@ -1025,6 +1024,7 @@ TabPage TP_VALIDATION_VALUES
         TabStop = TRUE ;
         Text = "~Auswahlliste anzeigen" ;
         Text[ english_us ] = "Show selection ~list" ;
+        Text[ chinese_simplified ] = "显示选择列表";
     };
     CheckBox CB_SORTLIST
     {
@@ -1033,6 +1033,7 @@ TabPage TP_VALIDATION_VALUES
         TabStop = TRUE ;
         Text = "Ein~tr�ge aufsteigend sortieren" ;
         Text[ english_us ] = "Sor~t entries ascending" ;
+        Text[ chinese_simplified ] = "按升序排列项目";
     };
     FixedText FT_SOURCEHINT
     {
@@ -1041,6 +1042,7 @@ TabPage TP_VALIDATION_VALUES
         WordBreak = TRUE ;
         Text = "Als Quelle ist nur eine zusammenh�ngende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgew�hlten Bereichs zur Auswertung herangezogen." ;
         Text[ english_us ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
+        Text[ chinese_simplified ] = "有效的源由临近单一行或单一列的选项组成。如果有几个选项，只有第一次选择的区域中的第一个列才被用于验证。";
     };
     Text [ dutch ] = "Waarden" ;
     Text [ english_us ] = "Values" ;
