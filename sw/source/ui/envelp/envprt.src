@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:33:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ TabPage TP_ENV_PRT
         Text [ FRENCH ] = "Vers la ~droite" ;
         Text [ ITALIAN ] = "Sposta a destra" ;
         Text [ DUTCH ] = "Naar re~chts" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar Ó direita" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Trocar ? direita" ;
         Text [ SWEDISH ] = "Åt höger" ;
         Text [ PORTUGUESE ] = "À direita" ;
         Left = TRUE ;
