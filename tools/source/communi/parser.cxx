@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2002-01-09 17:34:58 $
+ *  last change: $Author: gh $ $Date: 2002-01-11 09:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 // class InformationParser
 //
 
-const char InformationParser::cKeyLevelChars = '\t';
+#define cKeyLevelChar '\t'
 
 /*****************************************************************************/
 InformationParser::InformationParser( BOOL bReplace )
@@ -250,7 +250,7 @@ void InformationParser::Recover()
 /*****************************************************************************/
 BOOL InformationParser::Save( SvStream &rOutStream,
                   const GenericInformationList *pSaveList,
-                  USHORT nLevel )
+                  USHORT nLevel, BOOL bStripped )
 /*****************************************************************************/
 {
     USHORT i;
@@ -259,19 +259,23 @@ BOOL InformationParser::Save( SvStream &rOutStream,
     GenericInformation *pGenericInfo;
     GenericInformationList *pGenericInfoList;
 
+     static ByteString aKeyLevel;
+    aKeyLevel.Expand( nLevel, cKeyLevelChar );
+
     for ( nInfoListCount = 0; nInfoListCount < pSaveList->Count(); nInfoListCount++) {
         // Key-Value Paare schreiben
         pGenericInfo = pSaveList->GetObject( nInfoListCount );
         sTmpStr = "";
-        for( ULONG j=0; j<nLevel; j++)
-              sTmpStr += cKeyLevelChars;
+        if ( !bStripped && nLevel )
+            sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
 
-        for ( i = 0; i < pGenericInfo->GetComment().GetTokenCount( '\n' ); i++ ) {
-            sTmpStr += pGenericInfo->GetComment().GetToken( i, '\n' );
-            sTmpStr += "\n";
-            for( ULONG j=0; j<nLevel; j++)
-                  sTmpStr += cKeyLevelChars;
-        }
+        if ( !bStripped )
+            for ( i = 0; i < pGenericInfo->GetComment().GetTokenCount( '\n' ); i++ ) {
+                sTmpStr += pGenericInfo->GetComment().GetToken( i, '\n' );
+                sTmpStr += "\n";
+                if ( nLevel )
+                    sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
+            }
 
         sTmpStr += pGenericInfo->GetBuffer();
         sTmpStr += ' ';
@@ -283,18 +287,18 @@ BOOL InformationParser::Save( SvStream &rOutStream,
         if (( pGenericInfoList = pGenericInfo->GetSubList() ) != 0) {
               // oeffnende Klammer
               sTmpStr = "";
-              for( i=0; i<nLevel; i++)
-                sTmpStr += cKeyLevelChars;
+            if ( !bStripped && nLevel )
+                sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
               sTmpStr += '{';
               if ( !rOutStream.WriteLine( sTmpStr ) )
                 return FALSE;
               // recursiv die sublist abarbeiten
-              if ( !Save( rOutStream, pGenericInfoList, nLevel+1 ) )
+              if ( !Save( rOutStream, pGenericInfoList, nLevel+1, bStripped ) )
                 return FALSE;
                   // schliessende Klammer
               sTmpStr = "";
-              for( i=0; i<nLevel; i++)
-                sTmpStr += cKeyLevelChars;
+            if ( !bStripped && nLevel )
+                sTmpStr.Append( aKeyLevel.GetBuffer(), nLevel );
               sTmpStr += '}';
               if ( !rOutStream.WriteLine( sTmpStr ) )
                 return FALSE;
@@ -428,7 +432,7 @@ BOOL InformationParser::Save( SvFileStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0 ))
+    if ( !rSourceStream.IsOpen() || !Save( (SvStream &)rSourceStream, pSaveList, 0, FALSE ))
     {
         printf( "ERROR saving file \"%s\"\n",ByteString( rSourceStream.GetFileName(), gsl_getSystemTextEncoding()).GetBuffer() );
         return FALSE;
@@ -442,7 +446,11 @@ BOOL InformationParser::Save( SvMemoryStream &rSourceStream,
                   const GenericInformationList *pSaveList )
 /*****************************************************************************/
 {
-    return Save( (SvStream &)rSourceStream, pSaveList, 0 );
+    Time a;
+    BOOL bRet = Save( (SvStream &)rSourceStream, pSaveList, 0, TRUE );
+    Time b;
+    b = b - a;
+    return bRet;
 }
 
 /*****************************************************************************/
