@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:52:55 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 10:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,11 +478,9 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             else
             {
                 SvStream* pStream = aMedium.GetInStream();
-                if ( !pStream )
-                {
-                    pFilter = 0;
-                }
-                else
+                const SfxFilter* pPreselectedFilter = pFilter;
+                pFilter = 0;
+                if ( pStream )
                 {
                     SotStorageRef aStorage = new SotStorage ( pStream, FALSE );
                     if ( !aStorage->GetError() )
@@ -500,13 +498,13 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             {
                                 String aOldName;
                                 BOOL bIsCalcFilter = TRUE;
-                                if ( pFilter )
+                                if ( pPreselectedFilter )
                                 {
                                     // cross filter; now this should be a type detection only, not a filter detection
                                     // we can simulate it by preserving the preselected filter if the type matches
                                     // example: Excel filters for Writer
-                                    aOldName = pFilter->GetFilterName();
-                                    bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                    aOldName = pPreselectedFilter->GetFilterName();
+                                    bIsCalcFilter = pPreselectedFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
                                 }
 
                                 if ( aOldName.EqualsAscii(pFilterEx97Temp) || !bIsCalcFilter )
@@ -529,13 +527,13 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             {
                                 String aOldName;
                                 BOOL bIsCalcFilter = TRUE;
-                                if ( pFilter )
+                                if ( pPreselectedFilter )
                                 {
                                     // cross filter; now this should be a type detection only, not a filter detection
                                     // we can simulate it by preserving the preselected filter if the type matches
                                     // example: Excel filters for Writer
-                                    aOldName = pFilter->GetFilterName();
-                                    bIsCalcFilter = pFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
+                                    aOldName = pPreselectedFilter->GetFilterName();
+                                    bIsCalcFilter = pPreselectedFilter->GetServiceName().EqualsAscii("com.sun.star.sheet.SpreadsheetDocument");
                                 }
 
                                 if ( aOldName.EqualsAscii(pFilterExcel95) || aOldName.EqualsAscii(pFilterEx95Temp) ||
@@ -709,8 +707,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                 }
                                 else if( nMuster & M_ENDE )
                                 { //                                        Format detected
-                                    if ( pFilterName[nFilter] == pFilterExcel4 && pFilter &&
-                                        ( (pFilter)->GetFilterName().EqualsAscii(pFilterEx4Temp) || pFilter->GetTypeName().EqualsAscii("calc_MS_Excel_40") ) )
+                                    if ( pFilterName[nFilter] == pFilterExcel4 && pPreselectedFilter &&
+                                        ( (pPreselectedFilter)->GetFilterName().EqualsAscii(pFilterEx4Temp) || pPreselectedFilter->GetTypeName().EqualsAscii("calc_MS_Excel_40") ) )
                                     {
                                         //  Excel 4 erkannt, Excel 4 Vorlage eingestellt -> auch gut
                                         // oder Excel 4 Filter anderer Applikation (simulated type detection!)
@@ -735,10 +733,12 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                         // file extension) it takes precedence over HTML and RTF and dBase
                         // detection. Otherwise something like, for example, "lala <SUP> gugu"
                         // would trigger HTML to be recognized.
-                        if ( !pFilter->GetFilterName().EqualsAscii(pFilterAscii) || !lcl_MayBeAscii( rStr ) )
+                        if ( !pFilter && pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
                         {
-                            pFilter = 0;
-
+                            pFilter = pPreselectedFilter;
+                        }
+                        else if ( !pFilter )
+                        {
                             // get file header
                             rStr.Seek( 0 );
                             const int nTrySize = 80;
@@ -755,9 +755,9 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
 
                             if ( HTMLParser::IsHTMLFormat( aHeader.GetBuffer() ) )
                             {
-                                if ( aPreselectedFilterName.EqualsAscii(pFilterHtml) )
+                                if ( pPreselectedFilter->GetName().EqualsAscii(pFilterHtml) )
                                 {
-                                    pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                                    pFilter = pPreselectedFilter;
                                 }
                                 else
                                 {
@@ -783,8 +783,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             }*/
 
                             // dBase cannot safely be recognized - only test if the filter was set
-                            if ( aPreselectedFilterName.EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
-                                pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
+                            if ( pPreselectedFilter->GetName().EqualsAscii(pFilterDBase) && lcl_MayBeDBase( rStr ) )
+                                pFilter = pPreselectedFilter;
                         }
                     }
                 }
