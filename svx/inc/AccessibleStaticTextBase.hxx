@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-07 12:09:58 $
+ *  last change: $Author: thb $ $Date: 2002-06-10 17:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ namespace accessibility
         edit source. Every interface method will then properly throw
         an exception.
     */
-    class AccessibleStaticTextBase
+    class AccessibleStaticTextBase : public ::drafts::com::sun::star::accessibility::XAccessibleText
     {
 
     public:
