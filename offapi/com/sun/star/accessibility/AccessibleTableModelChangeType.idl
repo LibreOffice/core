@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableModelChangeType.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:45:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module accessibility {
 
     @since #107627#
 */
-constants AccessibleTableModelChangeType
+published constants AccessibleTableModelChangeType
 {
     /** One or more rows and/or columns have been inserted.
 
