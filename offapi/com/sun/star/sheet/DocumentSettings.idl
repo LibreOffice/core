@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:41:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com {  module sun {  module star {  module sheet {
     <type>SpreadsheetViewSettings</type> can be used to alter a specific
     view that is already open.</p>
  */
-service DocumentSettings
+published service DocumentSettings
 {
     service com::sun::star::document::Settings;
 
