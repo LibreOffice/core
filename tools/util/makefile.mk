@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-24 13:28:02 $
+#   last change: $Author: rt $ $Date: 2003-04-30 08:25:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=TOOLS
 TARGET=tools
 VERSION=$(UPD)
+ENABLE_EXCEPTIONS=true
 
 # --- Settings -----------------------------------------------------
 
