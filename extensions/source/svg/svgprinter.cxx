@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgprinter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:53 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,13 +110,8 @@ protected:
 
 public:
 
-#ifndef _SVG_UNO3
-                            SVGPrinterExport( const XDocumentHandlerRef rxHandler, const JobSetup& rSetup,
-                                              const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate );
-#else
                             SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, const JobSetup& rSetup,
                                               const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate );
-#endif
     virtual                 ~SVGPrinterExport();
 
     virtual void            writePage( const JobSetup& rJobSetup, const GDIMetaFile& rMtf );
@@ -124,13 +119,8 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#ifndef _SVG_UNO3
-SVGPrinterExport::SVGPrinterExport( const XDocumentHandlerRef rxHandler, const JobSetup& rSetup,
-                  const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate ) :
-#else
 SVGPrinterExport::SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler, const JobSetup& rSetup,
                   const NMSP_RTL::OUString& rJobName, sal_uInt32 nCopies, sal_Bool bCollate ) :
-#endif
         SvXMLExport( NMSP_RTL::OUString(), rxHandler ),
         mpVDev( NULL ),
         mnPage( 0 )
@@ -139,11 +129,7 @@ SVGPrinterExport::SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxH
 
     GetDocHandler()->startDocument();
 
-#ifndef _SVG_UNO3
-    XExtendedDocumentHandlerRef xExtDocHandler( GetDocHandler(), USR_QUERY );
-#else
     REF( NMSP_SAX::XExtendedDocumentHandler ) xExtDocHandler( GetDocHandler(), NMSP_UNO::UNO_QUERY );
-#endif
 
     if( xExtDocHandler.is() )
     {
@@ -151,7 +137,7 @@ SVGPrinterExport::SVGPrinterExport( const REF( NMSP_SAX::XDocumentHandler )& rxH
         const NMSP_RTL::OUString    aLineFeed( NMSP_RTL::OUString::valueOf( (sal_Unicode) 0x0a ) );
 
         // intro
-        xExtDocHandler->unknown( ( aString = B2UCONST( "<!DOCTYPE svg SYSTEM \"svg-19990812.dtd\" [" ) ) += aLineFeed );
+        xExtDocHandler->unknown( ( aString = SVG_DTD_STRING ) += aLineFeed );
         xExtDocHandler->unknown( ( aString = B2UCONST( "<!ELEMENT metadata (#PCDATA | staroffice:svgElementMeta)*> " ) += aLineFeed ) );
         xExtDocHandler->unknown( ( aString = B2UCONST( "<!ELEMENT staroffice:svgElementMeta ANY> " ) += aLineFeed ) );
         xExtDocHandler->unknown( ( aString = B2UCONST( "<!ATTLIST staroffice:svgElementMeta " ) += aLineFeed ) );
@@ -330,13 +316,7 @@ sal_Bool SAL_CALL SVGPrinter::startJob( const REF( NMSP_SAX::XDocumentHandler )&
         aMemStm.SetCompressMode( COMPRESSMODE_FULL );
         aMemStm >> aJobSetup;
 
-#ifndef _SVG_UNO3
-        NMSP_UNO::Mapping ecpptosmart( CPPU_CURRENT_LANGUAGE_BINDING_NAME, "smart" );
-        XDocumentHandlerRef xDocumentHandler( (XDocumentHandler*) ecpptosmart.mapInterface( rxHandler.get(), getCppuType( &rxHandler ) ) );
-        xDocumentHandler->release();
-#else
         const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxHandler );
-#endif
 
         mpWriter = new SVGPrinterExport( xDocumentHandler, aJobSetup, rJobName, nCopies, bCollate );
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:53 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,7 @@ protected:
 
 public:
 
-#ifndef _SVG_UNO3
-                            SVGMtfExport( XDocumentHandlerRef& rXHandler );
-#else
                             SVGMtfExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler );
-#endif
     virtual                 ~SVGMtfExport();
 
     virtual void            writeMtf( const GDIMetaFile& rMtf );
@@ -96,11 +92,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-#ifndef _SVG_UNO3
-SVGMtfExport::SVGMtfExport( XDocumentHandlerRef& rxHandler ) :
-#else
 SVGMtfExport::SVGMtfExport( const REF( NMSP_SAX::XDocumentHandler )& rxHandler ) :
-#endif
         SvXMLExport( NMSP_RTL::OUString(), rxHandler )
 {
     GetDocHandler()->startDocument();
@@ -119,14 +111,10 @@ void SVGMtfExport::writeMtf( const GDIMetaFile& rMtf )
 {
     const Size                                  aSize( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_MM ) );
     NMSP_RTL::OUString                          aAttr;
-#ifndef _SVG_UNO3
-    XExtendedDocumentHandlerRef                 xExtDocHandler( GetDocHandler(), USR_QUERY );
-#else
     REF( NMSP_SAX::XExtendedDocumentHandler )   xExtDocHandler( GetDocHandler(), NMSP_UNO::UNO_QUERY );
-#endif
 
     if( xExtDocHandler.is() )
-        xExtDocHandler->unknown( B2UCONST( "<!DOCTYPE svg SYSTEM \"svg-19990812.dtd\">" ) );
+        xExtDocHandler->unknown( SVG_DTD_STRING );
 
     aAttr = NMSP_RTL::OUString::valueOf( aSize.Width() );
     aAttr += B2UCONST( "mm" );
@@ -200,13 +188,7 @@ void SAL_CALL SVGWriter::write( const REF( NMSP_SAX::XDocumentHandler )& rxDocHa
     aMemStm.SetCompressMode( COMPRESSMODE_FULL );
     aMemStm >> aMtf;
 
-#ifndef _SVG_UNO3
-    NMSP_UNO::Mapping ecpptosmart( CPPU_CURRENT_LANGUAGE_BINDING_NAME, "smart" );
-    XDocumentHandlerRef xDocumentHandler( (XDocumentHandler*)ecpptosmart.mapInterface( rxDocHandler.get(), getCppuType(&rxDocHandler)) );
-    xDocumentHandler->release();
-#else
     const REF( NMSP_SAX::XDocumentHandler ) xDocumentHandler( rxDocHandler );
-#endif
 
     SVGMtfExport* pWriter = new SVGMtfExport( xDocumentHandler );
     pWriter->writeMtf( aMtf );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:53 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <vcl/metric.hxx>
 
-// -----------
-// - Defines -
-// -----------
-
-// #define _SVG_WRITE_TSPAN
-// #define _SVG_WRITE_STRIKEOUT
+#undef _SVG_USE_NATIVE_TEXTDECORATION
 
 // -----------
 // - statics -
@@ -300,17 +295,12 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
 
     // font family
     aStyle += B2UCONST( "font-family:" );
-    aStyle += NMSP_RTL::OUString( UniString( rFont.GetName() ) );
+    aStyle += NMSP_RTL::OUString( rFont.GetName().GetToken( 0, ';' ) );
 
     // font size
-    const Size aFontSize( mrParent.GetVDev().LogicToLogic( Size( 0, rFont.GetHeight() ), mrParent.GetVDev().GetMapMode(), MAP_POINT ) );
-
     aStyle += B2UCONST( ";" );
     aStyle += B2UCONST( "font-size:" );
-    aStyle += NMSP_RTL::OUString::valueOf( aFontSize.Height() );
-
-    if( !mrParent.HasDoublePoints() )
-        aStyle += B2UCONST( "pt" );
+    aStyle += mrParent.GetValueString( mrParent.ImplMap( Size( 0, rFont.GetHeight() ) ).Height(), mrParent.HasDoublePoints() );
 
     // font style
     if( rFont.GetItalic() != ITALIC_NONE )
@@ -351,7 +341,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
     // font-stretch
     // font-size-adjust
 
-#ifdef _SVG_WRITE_STRIKEOUT
+#ifdef _SVG_USE_NATIVE_TEXTDECORATION
 
     if( rFont.GetUnderline() != UNDERLINE_NONE || rFont.GetStrikeout() != STRIKEOUT_NONE )
     {
@@ -362,19 +352,10 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
             aStyle += B2UCONST( " underline" );
 
         if( rFont.GetStrikeout() != STRIKEOUT_NONE )
-            aStyle += B2UCONST( " line-trough" );
+            aStyle += B2UCONST( " line-through" );
     }
 
-#else // _SVG_WRITE_STRIKEOUT
-
-    if( rFont.GetUnderline() != UNDERLINE_NONE )
-    {
-        aStyle += B2UCONST( ";" );
-        aStyle += B2UCONST( "text-decoration:" );
-        aStyle += B2UCONST( "underline" );
-    }
-
-#endif // _SVG_WRITE_STRIKEOUT
+#endif // _SVG_USE_NATIVE_TEXTDECORATION
 
     return aStyle.GetString();
 }
@@ -688,7 +669,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
         else if( bLineOnly )
         {
             for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
-                ImplWritePolygon( rPolyPoly[ i ], sal_False, pStyle );
+                ImplWritePolygon( rPolyPoly[ (USHORT) i ], sal_False, pStyle );
         }
         else
         {
@@ -699,7 +680,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
 
             for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
             {
-                const Polygon&  rPoly = rPolyPoly[ i ];
+                const Polygon&  rPoly = rPolyPoly[ (USHORT) i ];
                 USHORT          n = 1, nSize = rPoly.GetSize();
 
                 if( nSize > 1 )
@@ -803,31 +784,19 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         if( pDXArray )
         {
             pOwnArray = NULL;
-#ifdef _SVG_UNO3
             aNormSize = Size( mpVDev->GetTextWidth( aText ), 0 );
-#else
-            aNormSize = mpVDev->GetTextSize( aText );
-#endif
             pDX = (long*) pDXArray;
         }
         else
         {
             pOwnArray = new long[ nLen ];
-#ifdef _SVG_UNO3
             aNormSize = Size( mpVDev->GetTextArray( aText, pOwnArray ), 0 );
-#else
-            aNormSize = mpVDev->GetTextArray( aText, pOwnArray );
-#endif
             pDX = pOwnArray;
         }
 
         if( nLen > 1 )
         {
-#ifdef _SVG_UNO3
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( aText.GetChar(  nLen - 1 ) );
-#else
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextSize( aText[ (USHORT) ( nLen - 1 ) ] ).Width();
-#endif
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( aText.GetChar(  (USHORT) nLen - 1 ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -842,15 +811,12 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         const Font&         rFont = mpVDev->GetFont();
         const FontMetric    aMetric( mpVDev->GetFontMetric() );
         Point               aBaseLinePos( rPos );
+        SvXMLElementExport* pTransform = NULL;
 
         // leading whitespaces erased? => adjust position
         if( nLen < rText.Len() )
         {
-#ifdef _SVG_UNO3
             aBaseLinePos.X() += mpVDev->GetTextWidth( ' ' ) * ( rText.Len() - nLen );
-#else
-            aBaseLinePos.X() += mpVDev->GetTextSize( ' ' ).Width() * ( rText.Len() - nLen );
-#endif
         }
 
         // always adjust text position to match baseline alignment
@@ -871,12 +837,39 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         // get mapped text position
         const Point aPt( ImplMap( aBaseLinePos ) );
 
+        // if text is rotated, set transform at new g element
+        if( rFont.GetOrientation() )
+        {
+            String aTransform;
+
+            aTransform = NMSP_RTL::OUString::createFromAscii( "translate" );
+            aTransform += '(';
+            aTransform += String( GetValueString( aPt.X(), mbDoublePoints ) );
+            aTransform += ',';
+            aTransform += String( GetValueString( aPt.Y(), mbDoublePoints ) );
+            aTransform += ')';
+
+            aTransform += String( NMSP_RTL::OUString::createFromAscii( " rotate" ) );
+            aTransform += '(';
+            aTransform += String( NMSP_RTL::OUString::valueOf( rFont.GetOrientation() * -0.1 ) );
+            aTransform += ')';
+
+            aTransform += String( NMSP_RTL::OUString::createFromAscii( " translate" ) );
+            aTransform += '(';
+            aTransform += String( GetValueString( -aPt.X(), mbDoublePoints ) );
+            aTransform += ',';
+            aTransform += String( GetValueString( -aPt.Y(), mbDoublePoints ) );
+            aTransform += ')';
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
+            pTransform = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        }
+
         // add additional style if requested
         if( pStyle && pStyle->getLength() )
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
         // write text element
-#ifdef _SVG_WRITE_TSPAN
         if( pDXArray )
         {
             SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
@@ -902,7 +895,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             }
         }
         else
-#endif // _SVG_WRITE_TSPAN
         {
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X(), mbDoublePoints ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y(), mbDoublePoints ) );
@@ -910,26 +902,44 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
             mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
         }
-#ifndef _SVG_WRITE_STRIKEOUT
+
+#ifndef _SVG_USE_NATIVE_TEXTDECORATION
 
         // write strikeout if neccessary
-        if( rFont.GetStrikeout() )
+        if( rFont.GetStrikeout() || rFont.GetUnderline() )
         {
-            const long  nYStrikeoutPos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
-            const long  nStrikeoutHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
             Polygon     aPoly( 4 );
+            const long  nLineHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
 
-            aPoly[ 0 ].X() = aBaseLinePos.X(); aPoly[ 0 ].Y() = nYStrikeoutPos - ( nStrikeoutHeight >> 1 );
-            aPoly[ 1 ].X() = aBaseLinePos.X() + aNormSize.Width() - 1; aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
-            aPoly[ 2 ].X() = aPoly[ 1 ].X(); aPoly[ 2 ].Y() = aPoly[ 0 ].Y() + nStrikeoutHeight - 1;
-            aPoly[ 3 ].X() = aPoly[ 0 ].X(); aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
+            if( rFont.GetStrikeout() )
+            {
+                const long  nYLinePos = aBaseLinePos.Y() - FRound( aMetric.GetAscent() * 0.26 );
 
-            ImplWritePolygon( aPoly, FALSE );
+                aPoly[ 0 ].X() = aBaseLinePos.X(); aPoly[ 0 ].Y() = nYLinePos - ( nLineHeight >> 1 );
+                aPoly[ 1 ].X() = aBaseLinePos.X() + aNormSize.Width() - 1; aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
+                aPoly[ 2 ].X() = aPoly[ 1 ].X(); aPoly[ 2 ].Y() = aPoly[ 0 ].Y() + nLineHeight - 1;
+                aPoly[ 3 ].X() = aPoly[ 0 ].X(); aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
+
+                ImplWritePolygon( aPoly, FALSE );
+            }
+
+            if( rFont.GetUnderline() )
+            {
+                const long  nYLinePos = aBaseLinePos.Y() + ( nLineHeight << 1 );
+
+                aPoly[ 0 ].X() = aBaseLinePos.X(); aPoly[ 0 ].Y() = nYLinePos - ( nLineHeight >> 1 );
+                aPoly[ 1 ].X() = aBaseLinePos.X() + aNormSize.Width() - 1; aPoly[ 1 ].Y() = aPoly[ 0 ].Y();
+                aPoly[ 2 ].X() = aPoly[ 1 ].X(); aPoly[ 2 ].Y() = aPoly[ 0 ].Y() + nLineHeight - 1;
+                aPoly[ 3 ].X() = aPoly[ 0 ].X(); aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
+
+                ImplWritePolygon( aPoly, FALSE );
+            }
         }
 
-#endif // _SVG_WRITE_STRIKEOUT
+#endif // _SVG_USE_NATIVE_TEXTDECORATION
 
         delete[] pOwnArray;
+        delete pTransform;
     }
 }
 
@@ -959,11 +969,7 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                 const Point                                 aPt( ImplMap( rPt ) );
                 const Size                                  aSz( ImplMap( rSz ) );
                 FastString                                  aImageData( (sal_Char*) aOStm.GetData(), aOStm.Tell() );
-#ifndef _SVG_UNO3
-                XExtendedDocumentHandlerRef                 xExtDocHandler( mrExport.GetDocHandler(), USR_QUERY );
-#else
                 REF( NMSP_SAX::XExtendedDocumentHandler )   xExtDocHandler( mrExport.GetDocHandler(), NMSP_UNO::UNO_QUERY );
-#endif
 
                 if( xExtDocHandler.is() )
                 {
@@ -1183,17 +1189,43 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
 
             case( META_TRANSPARENT_ACTION ):
             {
-                // !!!
-                mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                DBG_ERROR( "META_TRANSPARENT_ACTION not supported" );
+                const MetaTransparentAction*    pA = (const MetaTransparentAction*) pAction;
+                const PolyPolygon&              rPolyPoly = pA->GetPolyPolygon();
+
+                if( rPolyPoly.Count() )
+                {
+                    mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                    ImplWritePolyPolygon( rPolyPoly, sal_False, pStyle );
+                }
             }
             break;
 
             case( META_FLOATTRANSPARENT_ACTION ):
             {
-                // !!!
-                mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
-                DBG_ERROR( "META_FLOATTRANSPARENT_ACTION not supported" );
+                const MetaFloatTransparentAction*   pA = (const MetaFloatTransparentAction*) pAction;
+                GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
+                Point                               aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
+                const Size                          aSrcSize( aTmpMtf.GetPrefSize() );
+                const Point                         aDestPt( pA->GetPoint() );
+                const Size                          aDestSize( pA->GetSize() );
+                const double                        fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
+                const double                        fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
+                long                                nMoveX, nMoveY;
+
+                if( fScaleX != 1.0 || fScaleY != 1.0 )
+                {
+                    aTmpMtf.Scale( fScaleX, fScaleY );
+                    aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+                }
+
+                nMoveX = aDestPt.X() - aSrcPt.X(), nMoveY = aDestPt.Y() - aSrcPt.Y();
+
+                if( nMoveX || nMoveY )
+                    aTmpMtf.Move( nMoveX, nMoveY );
+
+                mpVDev->Push();
+                ImplWriteActions( aTmpMtf, pStyle );
+                mpVDev->Pop();
             }
             break;
 
@@ -1210,10 +1242,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
                         bFound = sal_True;
-                        const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pAction;
+                        const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*) pSubstAct;
                         mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
                         ImplWriteBmp( pBmpScaleAction->GetBitmap(),
-                                      pBmpScaleAction->GetPoint(), pBmpScaleAction->GetSize(),
+                                      pA->GetPoint(), pA->GetSize(),
                                       Point(), pBmpScaleAction->GetBitmap().GetSizePixel(), pStyle );
                     }
                 }
@@ -1225,11 +1257,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
                 String                      aSkipComment;
 
-#ifndef _SVG_UNO3
-                if( pA->GetComment().ICompare( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
-#else
                 if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )
-#endif
                 {
                     const MetaGradientExAction* pGradAction = NULL;
                     sal_Bool                    bDone = sal_False;
@@ -1241,12 +1269,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                         if( pAction->GetType() == META_GRADIENTEX_ACTION )
                             pGradAction = (const MetaGradientExAction*) pAction;
                         else if( ( pAction->GetType() == META_COMMENT_ACTION ) &&
-#ifndef _SVG_UNO3
-                                 ( ( (const MetaCommentAction*) pAction )->GetComment().ICompare( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
-
-#else
                                  ( ( (const MetaCommentAction*) pAction )->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_END" ) == COMPARE_EQUAL ) )
-#endif
                         {
                             bDone = sal_True;
                         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svguno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:53 $
+ *  last change: $Author: ka $ $Date: 2001-03-22 17:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,22 +70,14 @@
 // - factory methods -
 // -------------------
 
-#if SUPD>=590
 static REF( NMSP_UNO::XInterface ) SAL_CALL create_SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxFact )
-#else
-static REF( NMSP_UNO::XInterface ) create_SVGWriter( const REF( NMSP_LANG::XMultiServiceFactory )& rxFact )
-#endif
 {
     return REF( NMSP_UNO::XInterface )( *new SVGWriter( rxFact ) );
 }
 
 // -----------------------------------------------------------------------------
 
-#if SUPD>=590
 static REF( NMSP_UNO::XInterface ) SAL_CALL create_SVGPrinter( const REF( NMSP_LANG::XMultiServiceFactory )& rxFact )
-#else
-static REF( NMSP_UNO::XInterface ) create_SVGPrinter( const REF( NMSP_LANG::XMultiServiceFactory )& rxFact )
-#endif
 {
     return REF( NMSP_UNO::XInterface )( *new SVGPrinter( rxFact ) );
 }
