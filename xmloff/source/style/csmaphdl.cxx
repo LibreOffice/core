@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csmaphdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 12:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,11 +148,20 @@ XMLCaseMapVariantHdl::~XMLCaseMapVariantHdl()
 
 sal_Bool XMLCaseMapVariantHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    if( !rStrImpValue.compareToAscii( sXML_casemap_small_caps ) )
-        return sal_False;
+    sal_Bool bRet = sal_False;
 
-    rValue <<= (sal_Int16)style::CaseMap::SMALLCAPS;
-    return sal_True;
+    if( 0 == rStrImpValue.compareToAscii( sXML_casemap_small_caps ) )
+    {
+        rValue <<= (sal_Int16)style::CaseMap::SMALLCAPS;
+        bRet = sal_True;
+    }
+    else if( 0 == rStrImpValue.compareToAscii( sXML_casemap_normal ) )
+    {
+        rValue <<= (sal_Int16)style::CaseMap::NONE;
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 sal_Bool XMLCaseMapVariantHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
