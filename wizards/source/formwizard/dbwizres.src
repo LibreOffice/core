@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 23:35:56 $
+ *  last change: $Author: bc $ $Date: 2002-05-17 15:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3791,64 +3791,11 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ finnish ] = "(ei mitään)";
 };
 
-String RID_DB_REPORT_WIZARD_START + 9
-{
-    Text = ": Tabellenauswahl";
-    Text [ english_us ] = ": Table Selection";
-    Text[ portuguese ] = ": Selecção de tabela";
-    Text[ russian ] = ": Âûáîğ òàáëèöû";
-    Text[ dutch ] = ": tabel selecteren";
-    Text[ french ] = " : Sélection de table";
-    Text[ spanish ] = ": Selección de tabla";
-    Text[ italian ] = ": Selezione tabella";
-    Text[ danish ] = ": Tabeludvalg";
-    Text[ swedish ] = ": tabellurval";
-    Text[ polish ] = ": Wybór tabeli";
-    Text[ portuguese_brazilian ] = ": Tabellenauswahl";
-    Text[ japanese ] = ": ï¾ƒï½°ï¾Œï¾ï¾™ã®é¸æŠ";
-    Text[ chinese_simplified ] = "ï¼šé€‰æ‹©è¡¨æ ¼";
-    Text[ chinese_traditional ] = "ï¼šé¸æ“‡è¡¨æ ¼";
-    Text[ arabic ] = ": ÊÍÏíÏ ÇáÌÏæá";
-    Text[ dutch ] = ": tabel selecteren";
-    Text[ chinese_simplified ] = "ï¼šé€‰æ‹©è¡¨æ ¼";
-    Text[ greek ] = ": ÅğéëïãŞ ğßíáêá";
-    Text[ korean ] = ": ì‹œíŠ¸ ì„ íƒ";
-    Text[ turkish ] = ": Tablo seçimi";
-    Text[ catalan ] = ": Table Selection";
-    Text[ finnish ] = ": Taulukon valinta";
-};
-
-String RID_DB_REPORT_WIZARD_START + 10
-{
-    Text = ": Feldauswahl";
-    Text [ english_us ] = ": Field Selection";
-    Text[ portuguese ] = ": Selecção de campo";
-    Text[ russian ] = ": Âûáîğ ïîëÿ";
-    Text[ dutch ] = ": veld selecteren";
-    Text[ french ] = " : Sélection de champ";
-    Text[ spanish ] = ": Selección de campo";
-    Text[ italian ] = ": Selezione campo";
-    Text[ danish ] = ": Feltudvalg";
-    Text[ swedish ] = ": fälturval";
-    Text[ polish ] = ": Wybór pola";
-    Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®é¸æŠ";
-    Text[ chinese_simplified ] = "ï¼šé€‰æ‹©å­—æ®µ";
-    Text[ chinese_traditional ] = "ï¼šé¸æ“‡æ¬„ä½";
-    Text[ arabic ] = ": ÊÍÏíÏ ÇáÍŞá";
-    Text[ dutch ] = ": veld selecteren";
-    Text[ chinese_simplified ] = "ï¼šé€‰æ‹©å­—æ®µ";
-    Text[ greek ] = ": ÅğéëïãŞ ğåäßïõ";
-    Text[ korean ] = ": í•„ë“œ ì„ íƒ";
-    Text[ turkish ] = ": Alan seçimi";
-    Text[ catalan ] = ": Field Selection";
-    Text[ finnish ] = ": Kentän valinta";
-};
 
 String RID_DB_REPORT_WIZARD_START + 11
 {
-    Text = ": Gliederung";
-    Text [ english_us ] = ": Structure";
+    Text = "Gliederung";
+    Text [ english_us ] = "Structure";
     Text[ portuguese ] = ": Esquema";
     Text[ russian ] = ": Ñòğóêòóğà";
     Text[ dutch ] = ": overzicht";
@@ -3874,8 +3821,8 @@ String RID_DB_REPORT_WIZARD_START + 11
 
 String RID_DB_REPORT_WIZARD_START + 12
 {
-    Text = ": Sortieroptionen";
-    Text [ english_us ] = ": Sort Options";
+    Text = "Sortieroptionen";
+    Text [ english_us ] = "Sort Options";
     Text[ portuguese ] = ": Opções de ordem";
     Text[ russian ] = ": Ïàğàìåòğû ñîğòèğîâêè";
     Text[ dutch ] = ": sorteeropties";
@@ -3902,8 +3849,8 @@ String RID_DB_REPORT_WIZARD_START + 12
 
 String RID_DB_REPORT_WIZARD_START + 13
 {
-    Text = ": Stilauswahl";
-    Text [ english_us ] = ": Style Selection";
+    Text = "Stilauswahl";
+    Text [ english_us ] = "Style Selection";
     Text[ portuguese ] = ": Selecção de estilo";
     Text[ russian ] = ": Âûáîğ ñòèëÿ";
     Text[ dutch ] = ": stijl selecteren";
@@ -3929,8 +3876,8 @@ String RID_DB_REPORT_WIZARD_START + 13
 
 String RID_DB_REPORT_WIZARD_START + 14
 {
-    Text = ": Formatvorlagen";
-    Text [ english_us ] = ": Styles";
+    Text = "Layout der Datenstruktur";
+    Text [ english_us ] = "Layout of the data structure";
     Text[ portuguese ] = ": Estilos";
     Text[ russian ] = ":Ñòèëè ôîğìàòà";
     Text[ dutch ] = ": opmaakprofielen";
@@ -3956,8 +3903,8 @@ String RID_DB_REPORT_WIZARD_START + 14
 
 String RID_DB_REPORT_WIZARD_START + 15
 {
-    Text = ": Fertig stellen";
-    Text [ english_us ] = ": Create";
+    Text = "Layout der Seitenköpfe";
+    Text [ english_us ] = "Layout of the page headers";
     Text[ portuguese ] = ": Criar";
     Text[ russian ] = ": Ãîòîâî";
     Text[ dutch ] = ": voltooien";
@@ -3981,91 +3928,10 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ finnish ] = ": Luo";
 };
 
-String RID_DB_REPORT_WIZARD_START + 16
-{
-    Text = "Datenq~uelle";
-    Text [ english_us ] = "Data source";
-    Text[ portuguese ] = "~Fonte de dados";
-    Text[ russian ] = "Èñõîäíûå äàííûå";
-    Text[ dutch ] = "~Gegevensbron";
-    Text[ french ] = "S~ource de données";
-    Text[ spanish ] = "~Fuente de datos";
-    Text[ italian ] = "~Sorgente dati";
-    Text[ danish ] = "Data~kilde";
-    Text[ swedish ] = "Data~källa";
-    Text[ polish ] = "ród³o danych";
-    Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½";
-    Text[ chinese_simplified ] = "æ•°æ®æº";
-    Text[ chinese_traditional ] = "è³‡æ–™æº";
-    Text[ arabic ] = "~ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ dutch ] = "~Gegevensbron";
-    Text[ chinese_simplified ] = "æ•°æ®æº";
-    Text[ greek ] = "Ğñïİëå~õóç äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤";
-    Text[ turkish ] = "Veri kaynağı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Data Source";
-    Text[ finnish ] = "Tietolähde";
-};
-
-String RID_DB_REPORT_WIZARD_START + 17
-{
-    Text = "~Vorhandene Felder";
-    Text [ english_us ] = "Existing fields";
-    Text[ portuguese ] = "Campos ~disponíveis";
-    Text[ russian ] = "~Èìåşùèåñÿ ïîëÿ";
-    Text[ dutch ] = "~Bestaande velden";
-    Text[ french ] = "Champs ~existants";
-    Text[ spanish ] = "~Campos existentes";
-    Text[ italian ] = "~Campi disponibili";
-    Text[ danish ] = "~Eksisterende felter";
-    Text[ swedish ] = "~Existerande fält";
-    Text[ polish ] = "Istniej¹ce pola";
-    Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "æ—¢å­˜ï¾Œï½¨ï½°ï¾™ï¾„ï¾";
-    Text[ chinese_simplified ] = "ç°æœ‰çš„å­—æ®µ";
-    Text[ chinese_traditional ] = "ç¾å­˜çš„æ¬„ä½";
-    Text[ arabic ] = "~ÇáÍŞæá ÇáãÊæİÑÉ";
-    Text[ dutch ] = "~Bestaande velden";
-    Text[ chinese_simplified ] = "ç°æœ‰çš„å­—æ®µ";
-    Text[ greek ] = "ÕğÜñ÷ïíôá ğåäßá";
-    Text[ korean ] = "ê¸°ì¡´ í•„ë“œ";
-    Text[ turkish ] = "~Mevcut alanlar";
-    Text[ catalan ] = "Existing fields";
-    Text[ finnish ] = "Nykyiset kentät";
-};
-
-String RID_DB_REPORT_WIZARD_START + 18
-{
-    Text = "~Übernommen";
-    Text [ english_us ] = "~Applied";
-    Text[ portuguese ] = "~Aplicado";
-    Text[ russian ] = "~Ïğèìåíåíî";
-    Text[ dutch ] = "~Overgenomen";
-    Text[ french ] = "Champs ~appliqués";
-    Text[ spanish ] = "~Aceptado";
-    Text[ italian ] = "~Applicati";
-    Text[ danish ] = "An~vendt";
-    Text[ swedish ] = "Över~tagna";
-    Text[ polish ] = "~Zastosowano";
-    Text[ portuguese_brazilian ] = "~?bernommen";
-    Text[ japanese ] = "é©ç”¨(~A)";
-    Text[ chinese_simplified ] = "å·²ç»é‡‡ç”¨(~A)";
-    Text[ chinese_traditional ] = "å·²ç¶“æ¡ç”¨(~A)";
-    Text[ arabic ] = "~ÊØÈíŞ";
-    Text[ dutch ] = "~Overgenomen";
-    Text[ chinese_simplified ] = "å·²ç»é‡‡ç”¨(~A)";
-    Text[ greek ] = "Åöáñìüóôçêå";
-    Text[ korean ] = "ì¸ìˆ˜ë¨(~A)";
-    Text[ turkish ] = "~Seçilen";
-    Text[ catalan ] = "~Applied";
-    Text[ finnish ] = "~Käytössä";
-};
 
 String RID_DB_REPORT_WIZARD_START + 19
 {
-    Text = "Felder ~Gliedern";
+    Text = "Gliederung der Felder";
     Text [ english_us ] = "Organize fields";
     Text[ portuguese ] = "Estruturar ~campos";
     Text[ russian ] = "Ğàçäåëèòü ïîëÿ";
@@ -4092,8 +3958,8 @@ String RID_DB_REPORT_WIZARD_START + 19
 
 String RID_DB_REPORT_WIZARD_START + 20
 {
-    Text = "~Sortierung";
-    Text [ english_us ] = "~Sort order";
+    Text = "Zusätzliche Sortierkriterien:";
+    Text [ english_us ] = "Additional ~Sorting Criterias";
     Text[ portuguese ] = "~Ordenar";
     Text[ russian ] = "~Ñîğòèğîâêà";
     Text[ dutch ] = "~Sortering";
@@ -4225,168 +4091,6 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ finnish ] = "~Tyyli";
 };
 
-String RID_DB_REPORT_WIZARD_START + 25
-{
-    Text = "~Gliederung A";
-    Text [ english_us ] = "~Outline A";
-    Text[ portuguese ] = "~Esquema A";
-    Text[ russian ] = "~Ñòğóêòóğà A";
-    Text[ dutch ] = "~Overzicht A";
-    Text[ french ] = "~Structure A";
-    Text[ spanish ] = "~Esquema A";
-    Text[ italian ] = "~Struttura A";
-    Text[ danish ] = "~Disposition A";
-    Text[ swedish ] = "~Disposition A";
-    Text[ polish ] = "~Konspekt A";
-    Text[ portuguese_brazilian ] = "~Gliederung A";
-    Text[ japanese ] = "ï½±ï½³ï¾„ï¾—ï½²ï¾ A(~O)";
-    Text[ chinese_simplified ] = "å¤§çº² A(~O)";
-    Text[ chinese_traditional ] = "å¤§ç¶± A(~O)";
-    Text[ arabic ] = "~ÇáÊŞÓíã A";
-    Text[ dutch ] = "~Overzicht A";
-    Text[ chinese_simplified ] = "å¤§çº² A(~O)";
-    Text[ greek ] = "ÄéÜñèñùóç A";
-    Text[ korean ] = "ë‹¤ë‹¨ê³„ A(~O)";
-    Text[ turkish ] = "~ Anahat A";
-    Text[ catalan ] = "~Outline A";
-    Text[ finnish ] = "~Jäsennys A";
-};
-
-String RID_DB_REPORT_WIZARD_START + 26
-{
-    Text = "Glie~derung B";
-    Text [ english_us ] = "Outline ~B";
-    Text[ portuguese ] = "~Esquema B";
-    Text[ russian ] = "Ñòğóêòóğà B";
-    Text[ dutch ] = "Over~zicht B";
-    Text[ french ] = "Struc~ture B";
-    Text[ spanish ] = "~Esquema B";
-    Text[ italian ] = "Str~ruttura B";
-    Text[ danish ] = "Di~sposition B";
-    Text[ swedish ] = "Dis~position B";
-    Text[ polish ] = "Konspekt B";
-    Text[ portuguese_brazilian ] = "Glie~derung B";
-    Text[ japanese ] = "ï½±ï½³ï¾„ï¾—ï½²ï¾ ~B";
-    Text[ chinese_simplified ] = "å¤§çº² ~B";
-    Text[ chinese_traditional ] = "å¤§ç¶± ~B";
-    Text[ arabic ] = "ÇáÊŞÓíã B";
-    Text[ dutch ] = "Over~zicht B";
-    Text[ chinese_simplified ] = "å¤§çº² ~B";
-    Text[ greek ] = "~ÄéÜñèñùóç B";
-    Text[ korean ] = "ë‹¤ë‹¨ê³„ ~B";
-    Text[ turkish ] = "Anahat B";
-    Text[ catalan ] = "Outline~ B";
-    Text[ finnish ] = "Jä~sennys B";
-};
-
-String RID_DB_REPORT_WIZARD_START + 27
-{
-    Text = "~Links A";
-    Text [ english_us ] = "~Left A";
-    Text[ portuguese ] = "~Esquerda A";
-    Text[ russian ] = "Ñëåâà A";
-    Text[ dutch ] = "~Links A";
-    Text[ french ] = "À ~gauche A";
-    Text[ spanish ] = "~Izquierda A";
-    Text[ italian ] = "~Sinistra A";
-    Text[ danish ] = "~Venstre A";
-    Text[ swedish ] = "~Vänster A";
-    Text[ polish ] = "~Z lewej A";
-    Text[ portuguese_brazilian ] = "~Links A";
-    Text[ japanese ] = "å·¦ A(~L)";
-    Text[ chinese_simplified ] = "å·¦å‘ A(~L)";
-    Text[ chinese_traditional ] = "å‘å·¦ A(~L)";
-    Text[ arabic ] = "~íÓÇÑ A";
-    Text[ dutch ] = "~Links A";
-    Text[ chinese_simplified ] = "å·¦å‘ A(~L)";
-    Text[ greek ] = "ÁñéóôåñÜ A";
-    Text[ korean ] = "ì¢Œì¸¡ A(~L)";
-    Text[ turkish ] = "S~ol A";
-    Text[ catalan ] = "~Left A";
-    Text[ finnish ] = "~Vasen A";
-};
-
-String RID_DB_REPORT_WIZARD_START + 28
-{
-    Text = "L~inks B";
-    Text [ english_us ] = "L~eft B";
-    Text[ portuguese ] = "E~squerda B";
-    Text[ russian ] = "Ñëåâà Â";
-    Text[ dutch ] = "L~inks B";
-    Text[ french ] = "À g~auche B";
-    Text[ spanish ] = "I~zquierda B";
-    Text[ italian ] = "S~inistra B";
-    Text[ danish ] = "V~enstre B";
-    Text[ swedish ] = "V~änster B";
-    Text[ polish ] = "~Z lewej B";
-    Text[ portuguese_brazilian ] = "L~inks B";
-    Text[ japanese ] = "å·¦ B(~E)";
-    Text[ chinese_simplified ] = "å·¦å‘ B(~E)";
-    Text[ chinese_traditional ] = "å‘å·¦ B(~E)";
-    Text[ arabic ] = "~íÓÇÑ B";
-    Text[ dutch ] = "L~inks B";
-    Text[ chinese_simplified ] = "å·¦å‘ B(~E)";
-    Text[ greek ] = "Áñ~éóôåñÜ B";
-    Text[ korean ] = "ì¢Œì¸¡ B(~E)";
-    Text[ turkish ] = "So~l B";
-    Text[ catalan ] = "L~eft B";
-    Text[ finnish ] = "~Oikea B";
-};
-
-String RID_DB_REPORT_WIZARD_START + 29
-{
-    Text = "~Stufig";
-    Text [ english_us ] = "~Indented";
-    Text[ portuguese ] = "~Escalonado";
-    Text[ russian ] = "~Ñòóïåí÷àòûé";
-    Text[ dutch ] = "~Trapsgewijs";
-    Text[ french ] = "En ~escalier";
-    Text[ spanish ] = "~Escalonado";
-    Text[ italian ] = "~Rientrato";
-    Text[ danish ] = "~Opdelt";
-    Text[ swedish ] = "Uppd~elad";
-    Text[ polish ] = "~Stopniowy";
-    Text[ portuguese_brazilian ] = "~Stufig";
-    Text[ japanese ] = "æ®µéšçš„(~I)";
-    Text[ chinese_simplified ] = "åˆ†çº§(~I)";
-    Text[ chinese_traditional ] = "ç­‰ç´š(~I)";
-    Text[ arabic ] = "~ãÊÏÑÌ";
-    Text[ dutch ] = "~Trapsgewijs";
-    Text[ chinese_simplified ] = "åˆ†çº§(~I)";
-    Text[ greek ] = "Ìå å~óï÷Ş";
-    Text[ korean ] = "ë“¤ì—¬ì“°ê¸°(~I)";
-    Text[ turkish ] = "~Girintilenmiş";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Indented";
-    Text[ finnish ] = "S~isennetty";
-};
-
-String RID_DB_REPORT_WIZARD_START + 30
-{
-    Text = "~Bündig";
-    Text [ english_us ] = "~Justified";
-    Text[ portuguese ] = "~Justificado";
-    Text[ russian ] = "~Ñâÿçíûé";
-    Text[ dutch ] = "~Uitgelijnd";
-    Text[ french ] = "~Concis";
-    Text[ spanish ] = "~Justificado";
-    Text[ italian ] = "~Giustificato";
-    Text[ danish ] = "~Justeret";
-    Text[ swedish ] = "~Justerad";
-    Text[ polish ] = "~Wyrównany";
-    Text[ portuguese_brazilian ] = "~B?dig";
-    Text[ japanese ] = "æ®µéšãªã—(~J)";
-    Text[ chinese_simplified ] = "å¯¹é½(~J)";
-    Text[ chinese_traditional ] = "å°é½Š(~J)";
-    Text[ arabic ] = "~ÖÈØ";
-    Text[ dutch ] = "~Uitgelijnd";
-    Text[ chinese_simplified ] = "å¯¹é½(~J)";
-    Text[ greek ] = "ĞëŞñçò óôïß÷éóç";
-    Text[ korean ] = "ê°„ê²°(~J)";
-    Text[ turkish ] = "~İki yana yasla";
-    Text[ catalan ] = "~Justified";
-    Text[ finnish ] = "Tas~attu";
-};
 
 String RID_DB_REPORT_WIZARD_START + 31
 {
@@ -4417,7 +4121,7 @@ String RID_DB_REPORT_WIZARD_START + 31
 
 String RID_DB_REPORT_WIZARD_START + 32
 {
-    Text = "~Name des Berichts";
+    Text = "Name des Berichts";
     Text [ english_us ] = "~Name of report";
     Text[ portuguese ] = "~Nome do relatório";
     Text[ russian ] = "~Íàçâàíèå îò÷åòà";
@@ -4551,28 +4255,27 @@ String RID_DB_REPORT_WIZARD_START + 36
 
 String RID_DB_REPORT_WIZARD_START + 37
 {
-    Text = "Berichts-Namen dürfen maximal 32 Zeichen lang sein.";
-    Text [ english ] = "Report names must not contain more than 32 characters.";
-    Text [ english_us ] = "Report names cannot be longer than 32 characters.";
-    Text[ portuguese ] = "Os nomes de relatórios só podem ter um máximo de 32 caracteres.";
-    Text[ russian ] = "Èìåíà îò÷åòîâ ìîãóò ñîäåğæàòü íå áîëåå 32 çíàêîâ.";
-    Text[ greek ] = "Ôï ìŞêïò ôùí ïíïìÜôùí ôùí áíáöïñşí äåí ğñİğåé íá õğåñâáßíåé ôïõò 32 ÷áñáêôŞñåò.";
-    Text[ dutch ] = "Namen van berichten mogen maximaal 32 tekens lang zijn.";
-    Text[ french ] = "Un nom d'état peut contenir au maximum 32 caractères.";
-    Text[ spanish ] = "Los nombres de los informes no pueden exceder los 32 caracteres.";
-    Text[ italian ] = "I nomi del rapporto possono avere una lunghezza massima di 32 caratteri.";
-    Text[ danish ] = "Rapport-navne må højst indeholder 32 tegn.";
-    Text[ swedish ] = "Rapportnamn får inte innehålla mer än 32 tecken.";
-    Text[ polish ] = "Nazwy raportów mog¹ siê sk³adaæ z maksymalnie 32 znaków.";
-    Text[ portuguese_brazilian ] = "Report names must not contain more than 32 characters.";
-    Text[ japanese ] = "ï¾šï¾ï¾Ÿï½°ï¾„åã¯æœ€é«˜32æ–‡å­—ã¾ã§ã§ã™ã€‚";
-    Text[ korean ] = "ë¦¬í¬íŠ¸ì˜ ì´ë¦„ì€ ìµœëŒ€ 32ë¬¸ìë¥¼ ì´ˆê³¼í•´ì„œëŠ” ì•ˆë©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æŠ¥è¡¨åç§°æœ€å¤šåªèƒ½ç”±32ä¸ªå­—ç¬¦ç»„æˆã€‚";
-    Text[ chinese_traditional ] = "å ±å‘Šåç¨±æœ€é•·ä¸å¾—è¶…é32å€‹å­—å…ƒã€‚";
-    Text[ arabic ] = "íÌÈ ÃáÇ íÒíÏ Øæá ÃÓãÇÁ ÇáÊŞÑíÑ Úä 32 ÍÑİÇğ.";
-    Text[ turkish ] = "Rapor adları en fazla 32 karakter olmalıdır.";
-    Text[ catalan ] = "Report names cannot be longer than 32 characters.";
-    Text[ finnish ] = "Raporttien nimet eivät saa olla yli 32 merkin pituisia.";
+    Text = "Z;A";
+    Text [ english_us ] = "Z;A";
+    Text[ portuguese ] = "Z;A";
+    Text[ greek ] = "Ù;A";
+    Text[ dutch ] = "Z;A";
+    Text[ french ] = "Z;A";
+    Text[ spanish ] = "Z;A";
+    Text[ swedish ] = "Z;A";
+    Text[ russian ] = "ß;À";
+    Text[ italian ] = "Z;A";
+    Text[ danish ] = "Z;A";
+    Text[ polish ] = "Z;A";
+    Text[ portuguese_brazilian ] = "Z;A";
+    Text[ japanese ] = "Z;A";
+    Text[ korean ] = "Z;A";
+    Text[ chinese_simplified ] = "Z;A";
+    Text[ chinese_traditional ] = "Z;A";
+    Text[ arabic ] = "Z;A";
+    Text[ turkish ] = "Z;A";
+    Text[ catalan ] = "Z;A";
+    Text[ finnish ] = "Z;A";
 };
 
 // ============================================================================
