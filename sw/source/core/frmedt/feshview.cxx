@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:57:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,10 +402,10 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
     if( pObj->ISA(SwVirtFlyDrawObj) )
     {
         pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-        pOld = pFly->GetAnchor();
+        pOld = pFly->AnchorFrm();
     }
     else
-        pOld = ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
+        pOld = ((SwDrawContact*)GetUserCall(pObj))->GetAnchorFrm( pObj );
     sal_Bool bRet = sal_False;
     if( pOld )
     {
@@ -415,7 +415,6 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         RndStdIds nAnchorId = aAnch.GetAnchorId();
         if ( FLY_IN_CNTNT == nAnchorId )
             return sal_False;
-#ifdef VERTICAL_LAYOUT
         if( pOld->IsVertical() )
         {
             if( pOld->IsTxtFrm() )
@@ -435,7 +434,6 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                 }
             }
         }
-#endif
         switch ( nAnchorId ) {
             case FLY_PAGE:
             {
@@ -539,7 +537,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
                                 {
                                     if( pCheck == pFly )
                                         break;
-                                    const SwFrm *pNxt = pCheck->GetAnchor();
+                                    const SwFrm *pNxt = pCheck->GetAnchorFrm();
                                     pCheck = pNxt ? pNxt->FindFlyFrm() : NULL;
                                 }
                                 if( pCheck || pTmp->IsProtected() )
@@ -862,7 +860,7 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 
         if( pFly )
         {
-            pFly->GetAnchor()->Calc();
+            pFly->GetAnchorFrm()->Calc();
             SwCntntFrm *pCFrm = pFly->ContainsCntnt();
             if ( pCFrm )
             {
@@ -930,7 +928,7 @@ void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         }
         else
         {
-            SwFrm *pAnch = ( (SwDrawContact*)GetUserCall(pO) )->GetAnchor();
+            SwFrm* pAnch = ( (SwDrawContact*)GetUserCall(pO) )->GetAnchorFrm( pO );
             if( !pAnch )
                 continue;
             pPage = pAnch->FindPageFrm();
@@ -1707,11 +1705,11 @@ BOOL SwFEShell::ImpEndCreate()
 
     if( rSdrObj.GetUpGroup() )
     {
-        Point aTmpPos( rSdrObj.GetRelativePos() + rSdrObj.GetAnchorPos() );
+        Point aTmpPos( rSdrObj.GetSnapRect().TopLeft() );
         Point aNewAnchor( rSdrObj.GetUpGroup()->GetAnchorPos() );
+        // OD 2004-04-05 #i26791# - direct object positioning for group members
         rSdrObj.NbcSetRelativePos( aTmpPos - aNewAnchor );
         rSdrObj.NbcSetAnchorPos( aNewAnchor );
-        // Imp()->GetDrawView()->UnmarkAll();
         ::FrameNotify( this, FLY_DRAG );
         return TRUE;
     }
@@ -1810,8 +1808,8 @@ BOOL SwFEShell::ImpEndCreate()
                             pPage = pTmpFrm;
                         break;
                     }
-                    pTmp = pTmp->GetAnchor()
-                                ? pTmp->GetAnchor()->FindFlyFrm()
+                    pTmp = pTmp->GetAnchorFrm()
+                                ? pTmp->GetAnchorFrm()->FindFlyFrm()
                                 : 0;
                     pTmpFrm = pTmp;
                 }
@@ -1852,17 +1850,11 @@ BOOL SwFEShell::ImpEndCreate()
                                             RES_SURROUND, RES_ANCHOR, 0 );
     aSet.Put( aAnch );
 
-    if( OBJ_NONE == nIdent )
+    // OD 2004-03-30 #i26791# - determine relative object position
+    SwTwips nXOffset;
+    SwTwips nYOffset = rBound.Top() - pAnch->Frm().Top();
     {
-        //Bei OBJ_NONE wird ein Fly eingefuegt.
-        const long nWidth = rBound.Right()  - rBound.Left();
-        const long nHeight= rBound.Bottom() - rBound.Top();
-        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,  long(MINFLY) ),
-                                              Max( nHeight, long(MINFLY) )));
-
         SWRECTFN( pAnch )
-        SwTwips nXOffset;
-        SwTwips nYOffset = rBound.Top() - pAnch->Frm().Top();
         if( bVert )
         {
             nXOffset = nYOffset;
@@ -1872,18 +1864,29 @@ BOOL SwFEShell::ImpEndCreate()
             nXOffset = pAnch->Frm().Left()+pAnch->Frm().Width()-rBound.Right();
         else
             nXOffset = rBound.Left() - pAnch->Frm().Left();
-
-        SwFmtHoriOrient aHori( nXOffset, HORI_NONE, FRAME );
         if( pAnch->IsTxtFrm() && ((SwTxtFrm*)pAnch)->IsFollow() )
         {
             SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
             do {
                 pTmp = pTmp->FindMaster();
                 ASSERT( pTmp, "Where's my Master?" );
+                // OD 2004-03-30 #i26791# - correction: add frame area height
+                // of master frames.
                 nYOffset += pTmp->IsVertical() ?
-                            pTmp->Prt().Width() : pTmp->Prt().Height();
+                            pTmp->Frm().Width() : pTmp->Frm().Height();
             } while ( pTmp->IsFollow() );
         }
+    }
+
+    if( OBJ_NONE == nIdent )
+    {
+        //Bei OBJ_NONE wird ein Fly eingefuegt.
+        const long nWidth = rBound.Right()  - rBound.Left();
+        const long nHeight= rBound.Bottom() - rBound.Top();
+        aSet.Put( SwFmtFrmSize( ATT_MIN_SIZE, Max( nWidth,  long(MINFLY) ),
+                                              Max( nHeight, long(MINFLY) )));
+
+        SwFmtHoriOrient aHori( nXOffset, HORI_NONE, FRAME );
         SwFmtVertOrient aVert( nYOffset, VERT_NONE, FRAME );
         aSet.Put( SwFmtSurround( SURROUND_PARALLEL ) );
         aSet.Put( aHori );
@@ -1939,7 +1942,6 @@ BOOL SwFEShell::ImpEndCreate()
     else
     {
         Point aRelNullPt;
-
         if( OBJ_CAPTION == nIdent )
             aRelNullPt = ((SdrCaptionObj&)rSdrObj).GetTailPos();
         else
@@ -1947,6 +1949,22 @@ BOOL SwFEShell::ImpEndCreate()
 
         aSet.Put( aAnch );
         aSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
+        // OD 2004-03-30 #i26791# - set horizontal position
+        SwFmtHoriOrient aHori( nXOffset, HORI_NONE, FRAME );
+        aSet.Put( aHori );
+        // OD 2004-03-30 #i26791# - set vertical position
+        if( pAnch->IsTxtFrm() && ((SwTxtFrm*)pAnch)->IsFollow() )
+        {
+            SwTxtFrm* pTmp = (SwTxtFrm*)pAnch;
+            do {
+                pTmp = pTmp->FindMaster();
+                ASSERT( pTmp, "Where's my Master?" );
+                nYOffset += pTmp->IsVertical() ?
+                            pTmp->Prt().Width() : pTmp->Prt().Height();
+            } while ( pTmp->IsFollow() );
+        }
+        SwFmtVertOrient aVert( nYOffset, VERT_NONE, FRAME );
+        aSet.Put( aVert );
         SwDrawFrmFmt* pFmt = (SwDrawFrmFmt*)GetDoc()->MakeLayoutFmt( RND_DRAW_OBJECT, 0, &aSet );
 
         SwDrawContact *pContact = new SwDrawContact( pFmt, &rSdrObj );
@@ -1969,11 +1987,6 @@ BOOL SwFEShell::ImpEndCreate()
             } while( pTmp->IsFollow() );
             pAnch = pTmp;
         }
-
-        Point aNewAnchor = pAnch->GetFrmAnchorPos( ::HasWrap( &rSdrObj ) );
-        Point aRelPos( aRelNullPt - aNewAnchor );
-        rSdrObj.NbcSetRelativePos( aRelPos );
-        rSdrObj.NbcSetAnchorPos( aNewAnchor );
 
         pContact->ConnectToLayout();
 
@@ -2226,7 +2239,7 @@ void SwFEShell::ChgAnchor( int eAnchorId, BOOL bSameOnly, BOOL bPosCorr )
     {
         StartAllAction();
 
-        if( GetDoc()->ChgAnchor( rMrkList, eAnchorId, bSameOnly, bPosCorr ))
+        if( GetDoc()->ChgAnchor( rMrkList, (RndStdIds)eAnchorId, bSameOnly, bPosCorr ))
             Imp()->GetDrawView()->UnmarkAll();
 
         EndAllAction();
@@ -2296,7 +2309,7 @@ Point SwFEShell::GetAnchorObjDiff() const
     if ( IsFrmSelected() )
     {
         SwFlyFrm *pFly = FindFlyFrm();
-        aRet -= pFly->GetAnchor()->Frm().Pos();
+        aRet -= pFly->GetAnchorFrm()->Frm().Pos();
     }
     else
     {
@@ -2385,22 +2398,15 @@ bool SwFEShell::IsGroupAllowed() const
                             static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();
                     if ( pFlyFrm )
                     {
-                        pAnchorFrm = pFlyFrm->GetAnchor();
+                        pAnchorFrm = pFlyFrm->GetAnchorFrm();
                     }
                 }
                 else
                 {
-                    if ( pObj->ISA(SwDrawVirtObj) )
+                    SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall( pObj ));
+                    if ( pDrawContact )
                     {
-                        pAnchorFrm = static_cast<const SwDrawVirtObj*>(pObj)->GetAnchorFrm();
-                    }
-                    else
-                    {
-                        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(pObj->GetUserCall());
-                        if ( pDrawContact )
-                        {
-                            pAnchorFrm = pDrawContact->GetAnchor();
-                        }
+                        pAnchorFrm = pDrawContact->GetAnchorFrm( pObj );
                     }
                 }
                 if ( pAnchorFrm )
@@ -2442,7 +2448,8 @@ void SwFEShell::GroupSelection()
         StartUndo( UNDO_START );
 
         GetDoc()->GroupSelection( *Imp()->GetDrawView() );
-        ChgAnchor( 0, TRUE );
+        // OD 2004-04-01 #i26791# - no longer needed
+        //ChgAnchor( 0, TRUE );
 
         EndUndo( UNDO_END );
         EndAllAction();
@@ -2526,7 +2533,7 @@ static BYTE __READONLY_DATA aChkArr[ 4 ] = {
             }
             else
             {
-                pFrm->GetAnchor()->Calc();
+                pFrm->GetAnchorFrm()->Calc();
                 SwCntntFrm *pCFrm = pFrm->ContainsCntnt();
                 if ( pCFrm )
                 {
@@ -2614,13 +2621,13 @@ BYTE SwFEShell::IsSelObjProtected( FlyProtectType eType ) const
                 if( nChk == eType )
                     return eType;
             }
-            SwFrm* pAnch;
+            const SwFrm* pAnch;
             if( pObj->ISA(SwVirtFlyDrawObj) )
-                pAnch = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor();
+                pAnch = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchorFrm();
             else
             {
                 SwDrawContact* pTmp = (SwDrawContact*)GetUserCall(pObj);
-                pAnch = pTmp ? pTmp->GetAnchor() : NULL;
+                pAnch = pTmp ? pTmp->GetAnchorFrm( pObj ) : NULL;
             }
             if( pAnch && pAnch->IsProtected() )
                 return eType;
@@ -2755,10 +2762,6 @@ void SwFEShell::CheckUnboundObjects()
 
             SwDrawContact *pContact = new SwDrawContact(
                                             (SwDrawFrmFmt*)pFmt, pObj );
-
-            Point aNewAnchor = pAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
-            pObj->NbcSetRelativePos( aRelNullPt - aNewAnchor );
-            pObj->NbcSetAnchorPos  ( aNewAnchor );
 
             pContact->ConnectToLayout();
 
@@ -3139,7 +3142,7 @@ const Color SwFEShell::GetShapeBackgrd() const
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
-                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchor();
+                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrm( pSdrObj );
                 ASSERT( pAnchorFrm, "inconsistent modell - no anchor at shape!");
                 if ( pAnchorFrm )
                 {
@@ -3191,7 +3194,7 @@ const bool SwFEShell::IsShapeDefaultHoriTextDirR2L() const
             {
                 // determine page frame of the frame the shape is anchored.
                 const SwFrm* pAnchorFrm =
-                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchor();
+                        static_cast<SwDrawContact*>(GetUserCall(pSdrObj))->GetAnchorFrm( pSdrObj );
                 ASSERT( pAnchorFrm, "inconsistent modell - no anchor at shape!");
                 if ( pAnchorFrm )
                 {
