@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:12:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #include "viewdata.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleRelationSet.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONSET_HPP_
+#include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #endif
 #ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
@@ -98,7 +98,7 @@ public:
     //=====  internal  ========================================================
     ScAccessibleCell(
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+        ::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
@@ -123,8 +123,8 @@ public:
 
     ///=====  XAccessibleComponent  ============================================
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
-        SAL_CALL getAccessibleAt(
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAtPoint(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -151,19 +151,19 @@ public:
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
+            ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
         getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
+        ::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
            getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
@@ -202,13 +202,13 @@ private:
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     virtual sal_Bool IsEditable(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsOpaque(
         const com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+        ::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
     sal_Bool IsSelected();
 
     ScDocument* GetDocument(ScTabViewShell* mpViewShell);
