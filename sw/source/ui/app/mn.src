@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:06:19 $
+ *  last change: $Author: obo $ $Date: 2000-11-03 16:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ Menu MN_TAB_POPUPMENU
             Text [ english_us ] = "Table Limits" ;
             Text[ chinese_simplified ] = "±нЄс±яљз";
             Text[ russian ] = "√раницы таблицы";
-            Text[ polish ] = "obramowanie tabeli";
+            Text[ polish ] = "Obramowanie tabeli";
             Text[ japanese ] = "Х\\ВћЛЂКE";
             Text[ chinese_traditional ] = "™нЃж√дђ…";
             Text[ arabic ] = "Ќѕжѕ «бћѕжб";
