@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 11:49:21 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,16 +137,6 @@ SmViewShell * SmGetActiveView();
 
 
 ////////////////////////////////////////////////////////////
-
-class SmFace;
-
-SvStream& operator << (SvStream& rStream, const SmFace& rFont);
-SvStream& operator >> (SvStream& rStream, SmFace& rFont);
-
-void ReadSM20Font(SvStream& rStream, Font& rFont);
-
-
-////////////////////////////////////////////////////////////
 //
 // SmRectCache
 //
@@ -265,9 +255,6 @@ protected:
 
     virtual String  GetStringItem(void *pItem) = 0;
 
-    virtual void    LoadItem(SvStream& rStream, void *pItem) = 0;
-    virtual void    SaveItem(SvStream& rStream, const void *pItem) const = 0;
-
     void       *GetPtr(USHORT nPos) const { return SfxPtrArr::GetObject(nPos); }
     void      *&GetPtr(USHORT nPos) { return SfxPtrArr::GetObject(nPos); }
     void        InsertPtr(USHORT nPos, void *pItem) { SfxPtrArr::Insert(nPos, pItem); }
@@ -292,9 +279,6 @@ public:
 
     BOOL        Contains(const void *pItem) const;
     void        Clear();
-
-    friend SvStream&   operator << (SvStream& rStream, const SmPickList& rPickList);
-    friend SvStream&   operator >> (SvStream& rStream, SmPickList& rPickList);
 };
 
 
@@ -313,9 +297,6 @@ protected:
     virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
     virtual String  GetStringItem(void *pItem);
-
-    virtual void    LoadItem(SvStream& rStream, void *pItem);
-    virtual void    SaveItem(SvStream& rStream, const void *pItem) const;
 
 public:
     SmStringPickList()
@@ -375,9 +356,6 @@ protected:
     virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
     virtual String  GetStringItem(void *pItem);
-
-    virtual void    LoadItem(SvStream& rStream, void *pItem);
-    virtual void    SaveItem(SvStream& rStream, const void *pItem) const;
 
 public:
     SmFontPickList()
