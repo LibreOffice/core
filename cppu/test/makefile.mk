@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:08 $
+#   last change: $Author: dbo $ $Date: 2001-03-19 14:46:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,8 +83,8 @@ INCPRE+=	$(OUT)$/inc$/test
 
 OBJFILES=	\
         $(OBJ)$/testcppu.obj	\
-        $(OBJ)$/test_di.obj
-#		$(OBJ)$/test_Cincludes.obj
+        $(OBJ)$/test_di.obj	\
+        $(OBJ)$/test_Cincludes.obj
 #		$(OBJ)$/test_sec.obj	\
 
 APP1TARGET=	testcppu
