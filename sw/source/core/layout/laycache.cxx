@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: od $ $Date: 2002-11-15 11:04:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,7 +802,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
           ( ++nIndex < pImpl->Count() &&
           pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) ) )
         bFirst = FALSE;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     ULONG nBreakIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
 #endif
@@ -813,7 +813,7 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
         {
             if( pImpl || bLongTab )
             {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 ULONG nBrkIndex = ( pImpl && nIndex < pImpl->Count() ) ?
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
 #endif
