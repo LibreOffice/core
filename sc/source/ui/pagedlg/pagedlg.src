@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-06 17:37:07 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:51:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_REPEATROW
@@ -317,7 +317,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ russian ] = "Οξβςξπ ρςπξκθ";
         Text[ polish ] = "Powtarzaj wiersz";
         Text[ japanese ] = "J‚θ•Τ‚·s";
-        Text[ chinese_traditional ] = "­«½ΖΔζ";
+        Text[ chinese_traditional ] = "­«½Ζ¦C";
         Text[ arabic ] = "ΗαΥέ ΗαγίΡΡ";
         Text[ greek ] = "Επαναλαμβανόμενη γραμμή";
         Text[ korean ] = "Ηΰ ΉέΊΉ";
@@ -474,7 +474,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
     GroupBox GB_REPEATCOL
@@ -655,7 +655,7 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
     Text [ swedish ] = "Redigera utskriftsomrεden" ;
@@ -669,7 +669,7 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ chinese_traditional ] = "½sΏθ¦C¦L½d³ς";
     Text[ arabic ] = "ΚΝΡνΡ δΨΗήΗΚ ΗαΨΘΗΪΙ";
     Text[ greek ] = "Επεξεργασία περιοχών εκτύπωσης";
-    Text[ korean ] = "ΐΞΌβ Ήόΐ§ ΖνΑύ";
+    Text[ korean ] = "ΐΞΌβΉόΐ§ ΖνΑύ";
     Text[ turkish ] = "Yazdύrma aralύklarύnύ dόzenle";
 };
 TabPage RID_SCPAGE_TABLE
@@ -705,7 +705,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "Δζ©M¦CΌΠΓD(~H)";
         Text[ arabic ] = "ΡΔζΣ ΗαΓΣΨΡ ζΗαΓΪγΟΙ";
         Text[ greek ] = "Κεφαλίδες γραμμών/στηλών";
-        Text[ korean ] = "Ώ­°ϊ Ηΰ ΈΣΈ®±Ϋ(~C)";
+        Text[ korean ] = "Ώ­°ϊ Ηΰ ΈΣΈ®±Ϋ";
         Text[ turkish ] = "Satύr ve sόtun ~baώlύklarύ";
     };
     CheckBox BTN_GRID
@@ -733,7 +733,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "¤u§@ªνΊτ®ζ(~G)";
         Text[ arabic ] = "ΤΘίΙ ΗαΜΟζα";
         Text[ greek ] = "Πλέ~γμα πίνακα";
-        Text[ korean ] = "΄«±έΌ±(~G)";
+        Text[ korean ] = "Η¥΅΅΄«±έΌ±";
         Text[ turkish ] = "~Kύlavuz ηizgiler";
     };
     CheckBox BTN_NOTES
@@ -785,11 +785,11 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_simplified ] = "¶ΤΟσ/ΝΌΠΞ(~O)";
         Text[ russian ] = "Ξαϊεκςϋ θ πθρσνκθ";
         Text[ polish ] = "Obiekty/~Grafiki";
-        Text[ japanese ] = "µΜήΌήªΈΔ/}(~O)";
-        Text[ chinese_traditional ] = "ª«¥σ/ΉΟ¤ω(~O)";
+        Text[ japanese ] = "µΜήΌήªΈΔ‚Ζ}(~O)";
+        Text[ chinese_traditional ] = "ª«¥σ/ΉΟ§Ξ(~O)";
         Text[ arabic ] = "ίΗΖδΗΚ/ΥζΡ";
         Text[ greek ] = "Αντικείμενα/Γραφικά";
-        Text[ korean ] = "°³ΓΌ/±Χ·΅ΗΘ(~O)";
+        Text[ korean ] = "°³ΓΌ/±Χ·΅ΗΘ";
         Text[ turkish ] = "~Nesne/grafikler";
     };
     CheckBox BTN_CHARTS
@@ -817,7 +817,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "ΉΟªν(~C)";
         Text[ arabic ] = "ΡΣζγ ΘνΗδνΙ";
         Text[ greek ] = "Διαγράμματα";
-        Text[ korean ] = "ΒχΖ®(~A)";
+        Text[ korean ] = "ΒχΖ®";
         Text[ turkish ] = "~ήemalar";
     };
     CheckBox BTN_DRAWINGS
@@ -842,10 +842,10 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Γπΰτθχερκθε ξαϊεκςϋ";
         Text[ polish ] = "Obiekty g~raficzne";
         Text[ japanese ] = "}`•`‰ζµΜήΌήªΈΔ(~D)";
-        Text[ chinese_traditional ] = "¦r¤Έª«¥σ(~D)";
+        Text[ chinese_traditional ] = "ΓΈΉΟª«¥σ(~D)";
         Text[ arabic ] = "ίΗΖδΗΚ ΡΣζγνΙ";
         Text[ greek ] = "Αντικείμενα σχεδίασης";
-        Text[ korean ] = "°³ΓΌ ±ΧΈ®±β(~D)";
+        Text[ korean ] = "°³ΓΌ ±ΧΈ®±β";
         Text[ turkish ] = "Ηizim nesnele~ri";
     };
     CheckBox BTN_FORMULAS
@@ -873,7 +873,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "¤½¦΅(~F)";
         Text[ arabic ] = "ΥνΫ";
         Text[ greek ] = "Τύποι";
-        Text[ korean ] = "Όφ½Δ(~F)";
+        Text[ korean ] = "Όφ½Δ";
         Text[ turkish ] = "~Formόl";
     };
     CheckBox BTN_NULLVALS
@@ -901,7 +901,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "Ήs­Θ(~Z)";
         Text[ arabic ] = "ήνγ ΗαΥέΡ";
         Text[ greek ] = "Μηδενικές τιμές";
-        Text[ korean ] = "0 °ª(~Z)";
+        Text[ korean ] = "0 °ª";
         Text[ turkish ] = "Sύfύr deπer~leri";
     };
     GroupBox GB_PRINT
@@ -956,7 +956,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "±q¤W¦V¤U(~T)";
         Text[ arabic ] = "γδ ΓΪαμ αΓΣέα";
         Text[ greek ] = "Από πάνω προς τα κάτω";
-        Text[ korean ] = "ΐ§Ώ΅Ό­ ΎΖ·΅·Ξ(~T)";
+        Text[ korean ] = "ΐ§Ώ΅Ό­ ΎΖ·΅·Ξ";
         Text[ turkish ] = "~Yukardan aώaπύ";
     };
     RadioButton BTN_LEFTRIGHT
@@ -985,7 +985,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ arabic ] = "γδ ΗανΣΗΡ Εαμ Ηανγνδ";
         Text[ language_user1 ] = "Μήκος; - - - -";
         Text[ greek ] = "Από αριστερά προς τα δεξιά";
-        Text[ korean ] = "ΏήΒΚΏ΅Ό­ ΏΐΈ¥ΒΚΐΈ·Ξ(~L)";
+        Text[ korean ] = "ΏήΒΚΏ΅Ό­ ΏΐΈ¥ΒΚΐΈ·Ξ";
         Text[ turkish ] = "S~oldan saπa";
     };
     FixedBitmap BMP_PAGEDIR
@@ -1019,10 +1019,10 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Οεπβΰÿ ρςπΰνθφΰ Ή";
         Text[ polish ] = "Pierwszy nu~mer strony";
         Text[ japanese ] = "Ε‰‚ΜΝί°Όή”Τ†(~P)";
-        Text[ chinese_traditional ] = "²Δ¤@­Σ­¶ΌΖ(~P)";
+        Text[ chinese_traditional ] = "²Δ¤@­¶­¶½X(~P)";
         Text[ arabic ] = "Ρήγ ΗαΥέΝΙ ΗαΓζαμ";
         Text[ greek ] = "Πρώτος αριθμός σελίδας";
-        Text[ korean ] = "ΓΉ ΖδΐΜΑφ ΉψΘ£(~P)";
+        Text[ korean ] = "ΓΉ ΒΚ ΉψΘ£";
         Text[ turkish ] = "έlk sayfa ~numarasύ";
     };
     NumericField ED_PAGENO
@@ -1061,7 +1061,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "­¶§Η";
         Text[ arabic ] = "ΚΡΚνΘ ΗαΥέΝΙ";
         Text[ greek ] = "Διάταξη σελιδών";
-        Text[ korean ] = "ΖδΐΜΑφ ΌψΌ­";
+        Text[ korean ] = "ΒΚ ΌψΌ­";
         Text[ turkish ] = "Sayfa sύrasύ";
     };
     RadioButton BTN_SCALEALL
@@ -1117,7 +1117,7 @@ TabPage RID_SCPAGE_TABLE
         Text[ chinese_traditional ] = "³Μ¦h­¶ΌΖ(~M)";
         Text[ arabic ] = "ΗαΪΟΟ ΗαΓήΥμ ααΥέΝΗΚ";
         Text[ greek ] = "Μέ~γ. αριθμός σελίδων";
-        Text[ korean ] = "ΓΦ΄λ ΖδΐΜΑφ ΉψΘ£(~M)";
+        Text[ korean ] = "ΓΦ΄λ ΒΚ Όφ";
         Text[ turkish ] = "A~zami sayfa sayύsύ";
     };
     NumericField ED_SCALEALL
