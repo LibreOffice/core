@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:32:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ class ScImpExpLogMsg;
 struct ScSortParam;
 class ScRefreshTimerControl;
 class ScUnoListenerCalls;
+class ScRecursionHelper;
 struct RowInfo;
 struct ScTableInfo;
 struct ScTabOpParam;
@@ -326,6 +327,8 @@ private:
     ScConsolidateParam* pConsolidateDlgData;
 
     List*               pLoadedSymbolStringCellList;    // binary file format import of symbol font string cells
+
+    ScRecursionHelper*  pRecursionHelper;               // information for recursive and iterative cell formulas
 
     sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
@@ -1468,6 +1471,8 @@ private:
 
     DECL_LINK( TrackTimeHdl, Timer* );
 
+    static ScRecursionHelper*   CreateRecursionHelperInstance();
+
 public:
     void                StartListeningArea( const ScRange& rRange,
                                             SvtListener* pListener );
@@ -1555,6 +1560,12 @@ public:
                         // add a formula to be remembered for TableOp broadcasts
     void                AddTableOpFormulaCell( ScFormulaCell* );
     void                InvalidateLastTableOpParams() { aLastTableOpParams.bValid = FALSE; }
+    ScRecursionHelper&  GetRecursionHelper()
+                            {
+                                if (!pRecursionHelper)
+                                    pRecursionHelper = CreateRecursionHelperInstance();
+                                return *pRecursionHelper;
+                            }
     BOOL                IsInDtorClear() const { return bInDtorClear; }
     void                SetExpandRefs( BOOL bVal ) { bExpandRefs = bVal; }
     BOOL                IsExpandRefs() { return bExpandRefs; }
