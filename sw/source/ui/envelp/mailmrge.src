@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:54:16 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@
     Text[ turkish ] = "~Posta Birle�tir";   \
     Text[ thai ] = "Mail Merge";    \
     Text[ greek ] = "Mail Merge";   \
-    Text[ dutch ] = "Mail Merge";   \
+    Text[ dutch ] = "Standaardbrief";   \
     Text[ french ] = "Mailing"; \
     Text[ finnish ] = "Mail Merge"; \
-    Text[ danish ] = "Mail Merge";  \
+    Text[ danish ] = "Brevfletning";    \
     Text[ chinese_simplified ] = "邮件合并";    \
     Text[ chinese_traditional ] = "合併列印";   \
     Text[ arabic ] = "Mail Merge";  \
@@ -91,7 +91,9 @@
     Text[ czech ] = "Hromadná korespondence";  \
     Text[ hebrew ] = "Mail Merge";  \
     Text[ hindi ] = "Mail Merge";   \
-    Text[ slovak ] = "Formulárové listy";
+    Text[ slovak ] = "Formulárové listy"; \
+    Text[ hungarian ] = "Körlevél"; \
+    Text[ slovenian ] = "Spajanje dokumentov";
 
 ModalDialog DLG_MAILMERGE
 {
@@ -117,7 +119,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese_brazilian ] = "~Todos" ;
         Text [ portuguese ] = "~Todos" ;
         Text [ finnish ] = "~Kaikki" ;
-        Text [ danish ] = "Alle" ;
+        Text [ danish ] = "A~lle" ;
         Text [ french ] = "~Tous" ;
         Text [ swedish ] = "~Alla" ;
         Text [ dutch ] = "~Alles" ;
@@ -140,6 +142,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "~सब";
         Text[ slovak ] = "~Všetky";
+        Text[ hungarian ] = "~Mind";
+        Text[ slovenian ] = "~Vse";
     };
     RadioButton RB_MARKED
     {
@@ -152,7 +156,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese_brazilian ] = "~Registros selecionados" ;
         Text [ portuguese ] = "~Registos seleccionados" ;
         Text [ finnish ] = "~Valitut tietueet" ;
-        Text [ danish ] = "Markerede dataposter" ;
+        Text [ danish ] = "~Markerede dataposter" ;
         Text [ french ] = "Enregistrements ~marqu�s" ;
         Text [ swedish ] = "Markerade ~dataposter" ;
         Text [ dutch ] = "~Gemarkeerde records" ;
@@ -175,6 +179,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Markierte ~Datensätze";
         Text[ hindi ] = "~चुने हुए अभिलेखें";
         Text[ slovak ] = "Vy~brané záznamy";
+        Text[ hungarian ] = "~Kijelölt rekordok";
+        Text[ slovenian ] = "I~zbrani zapisi";
     };
     RadioButton RB_FROM
     {
@@ -187,7 +193,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese_brazilian ] = "~De:" ;
         Text [ portuguese ] = "~De:" ;
         Text [ finnish ] = "~L�hde:" ;
-        Text [ danish ] = "Fra:" ;
+        Text [ danish ] = "~Fra:" ;
         Text [ french ] = "~De :" ;
         Text [ swedish ] = "~Fr�n:" ;
         Text [ dutch ] = "~Vanaf:" ;
@@ -210,6 +216,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "~Von:";
         Text[ hindi ] = "~से:";
         Text[ slovak ] = "~Od:";
+        Text[ hungarian ] = "~Első:";
+        Text[ slovenian ] = "~Od:";
     };
     NumericField NF_FROM
     {
@@ -232,7 +240,7 @@ ModalDialog DLG_MAILMERGE
         Text [ portuguese_brazilian ] = "~Para:" ;
         Text [ portuguese ] = "~Para:" ;
         Text [ finnish ] = "~Kohteeseen:" ;
-        Text [ danish ] = "Til:" ;
+        Text [ danish ] = "~Til:" ;
         Text [ french ] = "~� :" ;
         Text [ swedish ] = "~Till:" ;
         Text [ dutch ] = "~Tot:" ;
@@ -255,6 +263,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "~Bis:";
         Text[ hindi ] = "~को:";
         Text[ slovak ] = "~Do:";
+        Text[ hungarian ] = "~Utolsó:";
+        Text[ slovenian ] = "~Do:";
     };
     NumericField NF_TO
     {
@@ -299,6 +309,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Datensätze";
         Text[ hindi ] = "अभिलेखें";
         Text[ slovak ] = "Záznamy";
+        Text[ hungarian ] = "Rekordok";
+        Text[ slovenian ] = "Zapisi";
     };
     RadioButton RB_PRINTER
     {
@@ -314,7 +326,7 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "Impresora" ;
         Text [ french ] = "Imprimante" ;
         Text [ swedish ] = "S~krivare" ;
-        Text [ danish ] = "Printer" ;
+        Text [ danish ] = "~Printer" ;
         Text [ portuguese ] = "~Impressora" ;
         Text [ portuguese_brazilian ] = "~Impressora" ;
         Text[ chinese_simplified ] = "打印机(~P)";
@@ -334,6 +346,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "‮מדפסת‬";
         Text[ hindi ] = "~मुद्रक";
         Text[ slovak ] = "T~lačiareň";
+        Text[ hungarian ] = "~Nyomtató";
+        Text[ slovenian ] = "~Tiskalnik";
     };
     RadioButton RB_MAILING
     {
@@ -348,7 +362,7 @@ ModalDialog DLG_MAILMERGE
         Text [ spanish ] = "~Enviar correo" ;
         Text [ french ] = "E-mail" ;
         Text [ swedish ] = "~E-post" ;
-        Text [ danish ] = "Mailing" ;
+        Text [ danish ] = "~Elektronisk" ;
         Text [ portuguese ] = "~Correio-e" ;
         Text [ portuguese_brazilian ] = "~Eletr�nico" ;
         Text[ chinese_simplified ] = "电子邮件(~E)";
@@ -368,6 +382,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "~Mailing";
         Text[ hindi ] = "~ऐलेक्ट्रोनिक";
         Text[ slovak ] = "~Elektronický";
+        Text[ hungarian ] = "~E-mail";
+        Text[ slovenian ] = "~Elektronsko";
     };
     RadioButton RB_FILE
     {
@@ -402,6 +418,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
         Text[ slovak ] = "Súbor";
+        Text[ hungarian ] = "Fájl";
+        Text[ slovenian ] = "Datoteka";
     };
     FixedText FT_PATH
     {
@@ -435,6 +453,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Pfad";
         Text[ hindi ] = "मार्ग";
         Text[ slovak ] = "Cesta";
+        Text[ hungarian ] = "Útvonal";
+        Text[ slovenian ] = "Pot";
     };
     Edit ED_PATH
     {
@@ -483,6 +503,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Dateiname generiert aus";
         Text[ hindi ] = "से फाइल नाम उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť meno súboru z";
+        Text[ hungarian ] = "Fájlnév generálása:";
+        Text[ slovenian ] = "Ustvari ime datoteke iz";
     };
     RadioButton RB_COLUMN
     {
@@ -517,6 +539,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Datenbankfeld";
         Text[ hindi ] = "लेखासंचय क्षेत्र";
         Text[ slovak ] = "Pole databázy";
+        Text[ hungarian ] = "Adatbázismező";
+        Text[ slovenian ] = "Polje zbirke podatkov";
     };
     RadioButton RB_FILENAME
     {
@@ -530,7 +554,7 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "Manual setting" ;
         Text [ portuguese_brazilian ] = "Configura��o manual" ;
         Text [ swedish ] = "Manuell inst�llning" ;
-        Text [ danish ] = "Manuel forudindstilling" ;
+        Text [ danish ] = "Manuel indstilling" ;
         Text [ italian ] = "Preimpostazione manuale" ;
         Text [ spanish ] = "Configuraci�n manual" ;
         Text [ french ] = "Saisie manuelle" ;
@@ -552,6 +576,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Manueller Vorgabe";
         Text[ hindi ] = "मान्युवल निर्धारण";
         Text[ slovak ] = "Nastaviť ručne";
+        Text[ hungarian ] = "Kézi beállítások";
+        Text[ slovenian ] = "Ročno nastavljanje";
     };
     ListBox LB_COLUMN
     {
@@ -578,7 +604,7 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "~Single print jobs" ;
         Text [ portuguese_brazilian ] = "Tarefas de impress�o ~individuais" ;
         Text [ swedish ] = "Skapa ~enstaka utskriftsjobb" ;
-        Text [ danish ] = "Opret enkelte printerjob" ;
+        Text [ danish ] = "~Opret enkelte printerjob" ;
         Text [ italian ] = "Crea singoli ordini di stampa" ;
         Text [ spanish ] = "Crear tareas individuales de impresi�n" ;
         Text [ french ] = "Travaux d'impression individuels" ;
@@ -601,6 +627,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "~Einzelne Druckjobs erzeugen";
         Text[ hindi ] = "~अकेला छपाई कार्य";
         Text[ slovak ] = "J~ednotlivé tlačové úlohy";
+        Text[ hungarian ] = "Ö~nálló nyomtatási feladatok";
+        Text[ slovenian ] = "~Posamezna tiskalniška opravila";
     };
     FixedText FT_ADDRESS
     {
@@ -636,6 +664,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Adress~feld";
         Text[ hindi ] = "पता ~क्षेत्र";
         Text[ slovak ] = "A~dresa";
+        Text[ hungarian ] = "Cí~m";
+        Text[ slovenian ] = "~Polje za naslov";
     };
     ListBox LB_ADDRESSFLD
     {
@@ -660,7 +690,7 @@ ModalDialog DLG_MAILMERGE
         Text [ french ] = "Objet" ;
         Text [ dutch ] = "~Betreft" ;
         Text [ swedish ] = "A~ng�ende" ;
-        Text [ danish ] = "Emne" ;
+        Text [ danish ] = "~Emne" ;
         Text [ portuguese_brazilian ] = "~Assunto" ;
         Text [ portuguese ] = "~Assunto" ;
         Text[ chinese_simplified ] = "事由(~S)";
@@ -680,6 +710,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "~विषय";
         Text[ slovak ] = "~Predmet";
+        Text[ hungarian ] = "~Tárgy";
+        Text[ slovenian ] = "~Zadeva";
     };
     Edit ED_SUBJECT
     {
@@ -722,6 +754,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Anhänge";
         Text[ hindi ] = "बाँधा हुआ";
         Text[ slovak ] = "Prílohy";
+        Text[ hungarian ] = "Mellékletek";
+        Text[ slovenian ] = "Priloge";
     };
     Edit ED_ATTACH
     {
@@ -751,7 +785,7 @@ ModalDialog DLG_MAILMERGE
         Text [ english_us ] = "Mail Format" ;
         Text [ portuguese_brazilian ] = "Formato do Correio" ;
         Text [ swedish ] = "E-postformat" ;
-        Text [ danish ] = "Mail-format" ;
+        Text [ danish ] = "Brevformat" ;
         Text [ italian ] = "Formato mail" ;
         Text [ spanish ] = "Formato de correo" ;
         Text [ french ] = "Format de courrier" ;
@@ -774,6 +808,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Mail-Format";
         Text[ hindi ] = "मेइल रचना";
         Text[ slovak ] = "Formát pošty";
+        Text[ hungarian ] = "Levélformátum";
+        Text[ slovenian ] = "Oblika pošte";
     };
     CheckBox CB_FORMAT_HTML
     {
@@ -809,6 +845,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "HTM~L";
         Text[ hindi ] = "HTM~L";
         Text[ slovak ] = "HTM~L";
+        Text[ hungarian ] = "~HTML";
+        Text[ slovenian ] = "HTM~L";
     };
     CheckBox CB_FORMAT_RTF
     {
@@ -843,6 +881,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "~RTF";
         Text[ hindi ] = "RT~F";
         Text[ slovak ] = "RT~F";
+        Text[ hungarian ] = "RT~F";
+        Text[ slovenian ] = "RT~F";
     };
     CheckBox CB_FORMAT_SW
     {
@@ -877,6 +917,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "%PRODUCTNAME Writer";
         Text[ hindi ] = "%PRODUCTNAME लेखक";
         Text[ slovak ] = "%PRODUCTNAME Writer";
+        Text[ hungarian ] = "%PRODUCTNAME Writer";
+        Text[ slovenian ] = "%PRODUCTNAME Writer";
     };
     FixedLine FL_SEPARATOR
     {
@@ -916,6 +958,8 @@ ModalDialog DLG_MAILMERGE
         Text[ hebrew ] = "Ausgabe";
         Text[ hindi ] = "औटपुट्";
         Text[ slovak ] = "Výstup";
+        Text[ hungarian ] = "Kimenet";
+        Text[ slovenian ] = "Izhod";
     };
     OKButton BTN_OK
     {
@@ -960,11 +1004,11 @@ ModalDialog DLG_MERGE_CREATE
         Text[ korean ] = "만들기";
         Text[ turkish ] = "Yarat";
         Text[ thai ] = "Create from";
-        Text[ greek ] = "Create from";
-        Text[ dutch ] = "Create from";
+        Text[ greek ] = "����������";
+        Text[ dutch ] = "Aanmaken";
         Text[ french ] = "Cr�er";
         Text[ finnish ] = "Create from";
-        Text[ danish ] = "Create from";
+        Text[ danish ] = "Opret";
         Text[ chinese_simplified ] = "建立采用";
         Text[ chinese_traditional ] = "建立採用";
         Text[ arabic ] = "Create from";
@@ -974,6 +1018,8 @@ ModalDialog DLG_MERGE_CREATE
         Text[ hindi ] = "उत्पन्न करो";
         Text[ language_user1 ] = "; EM April 2003: this text is followed by the check boxes: \"From this ~document\", \"From a ~template\"";
         Text[ slovak ] = "Vytvoriť";
+        Text[ hungarian ] = "Létrehozás";
+        Text[ slovenian ] = "Ustvari";
     };
     RadioButton RB_THISDOC
     {
@@ -994,11 +1040,11 @@ ModalDialog DLG_MERGE_CREATE
         Text[ korean ] = "이 문서로부터(~D)";
         Text[ turkish ] = "Bu ~belgeden";
         Text[ thai ] = "~This document";
-        Text[ greek ] = "~This document";
-        Text[ dutch ] = "~This document";
+        Text[ greek ] = "��� ���� �� �~������";
+        Text[ dutch ] = "Uit dit document";
         Text[ french ] = "� partir de ce document";
         Text[ finnish ] = "~This document";
-        Text[ danish ] = "~This document";
+        Text[ danish ] = "~Fra dette dokument";
         Text[ chinese_simplified ] = "采用这个文档(~D)";
         Text[ chinese_traditional ] = "採用此文件(~D)";
         Text[ arabic ] = "~This document";
@@ -1007,6 +1053,8 @@ ModalDialog DLG_MERGE_CREATE
         Text[ hebrew ] = "From this ~document";
         Text[ hindi ] = "From this ~document";
         Text[ slovak ] = "Z tohto ~dokumentu";
+        Text[ hungarian ] = "Ebből a ~dokumentumból";
+        Text[ slovenian ] = "Iz tega ~dokumenta";
     };
     RadioButton RB_TEMPLATE
     {
@@ -1027,11 +1075,11 @@ ModalDialog DLG_MERGE_CREATE
         Text[ korean ] = "서식 파일로부터(~T)";
         Text[ turkish ] = "Bir �ablondan";
         Text[ thai ] = "~Use template";
-        Text[ greek ] = "~Use template";
-        Text[ dutch ] = "~Use template";
+        Text[ greek ] = "��� ��� ~�������";
+        Text[ dutch ] = "~Uit sjabloon";
         Text[ french ] = "� partir d'un mod�le";
         Text[ finnish ] = "~Use template";
-        Text[ danish ] = "~Use template";
+        Text[ danish ] = "~Fra en skabelon";
         Text[ chinese_simplified ] = "采用一个样式(~T)";
         Text[ chinese_traditional ] = "採用樣式(~T)";
         Text[ arabic ] = "~Use template";
@@ -1040,6 +1088,8 @@ ModalDialog DLG_MERGE_CREATE
         Text[ hebrew ] = "From a ~template";
         Text[ hindi ] = "~शैली";
         Text[ slovak ] = "~Zo šablóny";
+        Text[ hungarian ] = "~Sablonból";
+        Text[ slovenian ] = "Iz ~predloge";
     };
     OKButton BT_OK
     {
@@ -1098,6 +1148,8 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ thai ] = "เชื่อมต่อ";
         Text[ hindi ] = "कनेक्ट";
         Text[ slovak ] = "Pripojiť";
+        Text[ hungarian ] = "Kapcsolat";
+        Text[ slovenian ] = "Poveži";
     };
     RadioButton RB_USEEXISTING
     {
@@ -1116,11 +1168,11 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ chinese_simplified ] = "使用现有的数据库(~U)";
         Text[ chinese_traditional ] = "使用現有的資料源(~U)";
         Text[ turkish ] = "Mevcut veri kayna��na";
-        Text[ greek ] = "~Use existing";
-        Text[ dutch ] = "~Use existing";
+        Text[ greek ] = "����� ~����������";
+        Text[ dutch ] = "~Gebruik bestaande";
         Text[ finnish ] = "~Use existing";
         Text[ czech ] = "Použít existující";
-        Text[ danish ] = "~Use existing";
+        Text[ danish ] = "~Brug eksisterende";
         Text[ arabic ] = "~Use existing";
         Text[ hebrew ] = "~Use existing";
         Text[ catalan ] = "~Use existing";
@@ -1131,6 +1183,8 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ thai ] = "~Use existing";
         Text[ hindi ] = "~Use existing";
         Text[ slovak ] = "Po~užiť existujúce";
+        Text[ hungarian ] = "~Meglévő használata";
+        Text[ slovenian ] = "~Uporabi obstoječe";
     };
     RadioButton RB_CREATENEW
     {
@@ -1148,11 +1202,11 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ chinese_simplified ] = "建立一个新连接(~C)";
         Text[ chinese_traditional ] = "新增連線(~C)";
         Text[ turkish ] = "~Di�er veri kaynaklar�na";
-        Text[ greek ] = "~Create new connection";
-        Text[ dutch ] = "~Create new connection";
+        Text[ greek ] = "~���������� ���� ��������";
+        Text[ dutch ] = "~Maak nieuwe connectie aan";
         Text[ finnish ] = "~Create new connection";
         Text[ czech ] = "Vytvořit nové připojení";
-        Text[ danish ] = "~Create new connection";
+        Text[ danish ] = "~Opret ny forbindelse";
         Text[ arabic ] = "~Create new connection";
         Text[ hebrew ] = "~Create new connection";
         Text[ catalan ] = "~Create new connection";
@@ -1163,6 +1217,8 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ thai ] = "~Create new connection";
         Text[ hindi ] = "~Create new connection";
         Text[ slovak ] = "Vytvoriť ~nové spojenie";
+        Text[ hungarian ] = "Új ~kapcsolat létrehozása";
+        Text[ slovenian ] = "U~stvari novo povezavo";
     };
     FixedText FT_INFO
     {
@@ -1170,7 +1226,7 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Size = MAP_APPFONT ( 141 , 50 ) ;
         WordBreak = TRUE;
         Text = "Serienbriefe ben�tigen f�r eine Personalisierung Felder. Felder sind in diesem Falle Platzhalter f�r Daten, die aus einer Datenquelle stammen, z.B. aus einer Datenbank. Die Felder in dem Serienbrief m�ssen mit der Datenquelle verbunden sein. " ;
-        Text [ english_us ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source." ;
+        Text [ english_us ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source." ;
         Text[ french ] = "Les champs sont utilis�s pour la personnalisation des lettres types et sont des substituants pour les donn�es provenant d'une source de donn�es (base de donn�es. Les champs de la lettre type doivent �tre connect�s � la source de donn�es.";
         Text[ spanish ] = "Los campos se utilizan para personalizar   cartas en serie. Los campos son comodines para los datos de una fuente de datos como puede ser una base de datos. Los campos de una carta en serie deben estar conectados a la fuente de datos.";
         Text[ italian ] = "I campi sono utilizzati per personalizzare stampe in serie e si comportano come wildcard per i dati di una sergente dati, come un database. I campi nelle stampe in serie devono essere collegati alla sorgente dati.";
@@ -1179,22 +1235,24 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Text[ korean ] = "편지 양식을 개별적으로 설정하려면 필드가 필요합니다. 필드는 이 경우에, 데이터베이스와 같은 데이터 원본에서 온 데이터의 플레이스홀더입니다. 편지 양식의 필드는 데이터 원본과 연결되어야 합니다.";
         Text[ chinese_simplified ] = "邮件合并需要使用个人信息的字段。此处的字段是代表来源于一个数据库信息的通配符，例如通讯簿的数据库。字段必须和数据源相连接。";
         Text[ chinese_traditional ] = "合併列印需要使用個人資訊的欄位。此處的欄位是代表來源於一個資料庫資料的萬用字元，例如通訊錄的資料庫。欄位必須和資料源相連結。";
-        Text[ turkish ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ greek ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ dutch ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ finnish ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ turkish ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ greek ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ dutch ] = "Velden worden gebruikt om standaardbrieven persoonlijk te maken. De velden staan voor de gegevens uit een gegevensbron, zoals een database. De velden in de standaardbrief moeten worden gekoppeld aan de gegevensbron.";
+        Text[ finnish ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
         Text[ czech ] = "Pole se používají k personalizaci sériových dopisů. Do polí se doplní hodnoty ze zdroje dat, např. databáze. Pole v sériovém dopisu musí být připojena ke zdroji dat.";
-        Text[ danish ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ arabic ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ hebrew ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ catalan ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ portuguese ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ russian ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ polish ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ danish ] = "Felterne bruges til at personligg�re formularbreve. Felterne er pladsholdere for data fra en datakilde, s�som en database. Felterne i formularbrevet skal forbindes til datakilden.";
+        Text[ arabic ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ hebrew ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ catalan ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ portuguese ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ russian ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ polish ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
         Text[ portuguese_brazilian ] = "Os campos s�o usados para personalizar cartas-formul�rios ou mala direta. Os campos s�o marcadores de posi��o de uma fonte de dados, tal como um banco de dados. Os campos da mala direta devem estar conectados � fonte de dados.";
-        Text[ thai ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
-        Text[ hindi ] = "Fields are used to personlaize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ thai ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
+        Text[ hindi ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source.";
         Text[ slovak ] = "Polia sú použité pre personalizáciu formulárových listov. Polia sú zástupcami dát zo Zdroja dát, ako napr. databázy. Polia vo formulárovom liste musia byť prepojené so Zdrojom dát.";
+        Text[ hungarian ] = "A mezőket a körlevél testreszabásához használhatja. A mezők más, rendszerint adatbázisban lévő adatokat helyettesítenek. A körlevél mezőinek kitöltéséhez kapcsolódnia kell az adatforráshoz.";
+        Text[ slovenian ] = "Polja se uporabljajo za poosebitev tipskih pisem. Polja so ograde, v katere bodo vstavljeni podatki iz vira podatkov, npr. iz zbirke podatkov. Polja v tipskem pismu morajo biti povezana z virom podatkov.";
     };
     OKButton BT_OK
     {
@@ -1223,10 +1281,10 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     Text[ chinese_traditional ] = "連線到資料源";
     Text[ turkish ] = "Veri Kayna�� Ba�lant�s�";
     Text[ greek ] = "Data Source Connection";
-    Text[ dutch ] = "Data Source Connection";
+    Text[ dutch ] = "Gegevensbron Connectie";
     Text[ finnish ] = "Data Source Connection";
     Text[ czech ] = "Připojení ke zdrojům dat";
-    Text[ danish ] = "Data Source Connection";
+    Text[ danish ] = "Datakilde forbindelse";
     Text[ arabic ] = "Data Source Connection";
     Text[ hebrew ] = "Data Source Connection";
     Text[ catalan ] = "Data Source Connection";
@@ -1237,7 +1295,11 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     Text[ thai ] = "Data Source Connection";
     Text[ hindi ] = "Data Source Connection";
     Text[ slovak ] = "Spojenie so Zdrojom dát";
+    Text[ hungarian ] = "Adatforrás-kapcsolat";
+    Text[ slovenian ] = "Povezava z virom podatkov";
 };
+
+
 
 
 
