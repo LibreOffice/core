@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FunctionDescriptions.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com {  module sun {  module star {  module sheet {
     The properties contained in the sequence are collected in the
     service <type>FunctionDescription</type>.</p>
  */
-service FunctionDescriptions
+published service FunctionDescriptions
 {
     //-------------------------------------------------------------------------
 
