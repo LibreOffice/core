@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-12 17:05:04 $
+ *  last change: $Author: mba $ $Date: 2002-01-24 15:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2947,6 +2947,14 @@ void ToolBox::ImplStartCustomizeMode()
 
         pItem = mpItemList->Next();
     }
+}
+
+void ToolBox::SetCustomizeMode( BOOL bSet )
+{
+    if ( bSet )
+        ImplStartCustomizeMode();
+    else
+        ImplEndCustomizeMode();
 }
 
 // -----------------------------------------------------------------------
