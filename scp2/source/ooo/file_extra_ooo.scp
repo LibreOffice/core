@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 13:46:32 $
+*  last change: $Author: rt $ $Date: 2004-06-15 16:10:47 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -387,7 +387,7 @@ End
 File gid_File_Extra_Tplwizletter
     Dir = gid_Dir_Template_Wizard_Letter;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "tplwizletter.zip";
+    EXTRA_IDENT_ALL_LANG(tplwizletter.zip);
 End
 
 File gid_File_Extra_Tplwizmemo_Lang
