@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 12:54:27 $
+ *  last change: $Author: mt $ $Date: 2002-02-08 08:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
 
+#include <unotools/accessiblestatesethelper.hxx>
+
 struct AccessibilityInfos
 {
     String  aAccName;
@@ -109,28 +111,6 @@ struct AccessibilityInfos
 };
 
 // Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
-
-Window* ImplGetAccessibleParentWindow( Window* pWindow )
-{
-    Window* pParent = pWindow->GetParent();
-    if ( pParent && ( pParent->GetType() == WINDOW_BORDERWINDOW ) )
-    {
-        DBG_ASSERT( pParent->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
-        pParent = pParent->GetParent();
-    }
-    return pParent;
-}
-
-Window* ImplGetAccessibleChildWindow( Window* pWindow, USHORT n )
-{
-    Window* pChild = pWindow->GetChild( n );
-    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) )
-    {
-        DBG_ASSERT( pChild->GetChildCount() == 1, "BorderWindow with more than 1 child?" );
-        pChild = pChild->GetChild( 0 );
-    }
-    return pChild;
-}
 
 void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
 {
@@ -492,6 +472,12 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
     }
 }
+
+/*
+void VCLXWindow::FillAccessibleStateSet( AccessibleStateSetHelper& rStateSet )
+{
+}
+*/
 
 Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 {
@@ -1429,7 +1415,7 @@ sal_Int32 VCLXWindow::getAccessibleChildCount() throw (::com::sun::star::uno::Ru
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        Window* pChild = ImplGetAccessibleChildWindow( GetWindow(), (USHORT)i );
+        Window* pChild = GetWindow()->GetAccessibleChildWindow( (USHORT)i );
         if ( pChild )
             xAcc = pChild->GetAccessible();
     }
@@ -1444,7 +1430,7 @@ sal_Int32 VCLXWindow::getAccessibleChildCount() throw (::com::sun::star::uno::Ru
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
-        Window* pParent = ImplGetAccessibleParentWindow( GetWindow() );
+        Window* pParent = GetWindow()->GetAccessibleParentWindow();
         if ( pParent )
             xAcc = GetWindow()->GetParent()->GetAccessible();
     }
@@ -1459,7 +1445,7 @@ sal_Int32 VCLXWindow::getAccessibleIndexInParent(  ) throw (::com::sun::star::un
     sal_Int32 nIndex = 0;
     if ( GetWindow() )
     {
-        Window* pParent = ImplGetAccessibleParentWindow( GetWindow() );
+        Window* pParent = GetWindow()->GetAccessibleParentWindow();
         if ( pParent )
         {
             for ( USHORT n = pParent->GetChildCount(); n; )
@@ -1625,6 +1611,11 @@ sal_Int16 VCLXWindow::getAccessibleRole(  ) throw (::com::sun::star::uno::Runtim
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > VCLXWindow::getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
+
+//  AccessibleStateSetHelper* pStateSetHelper = new AccessibleStateSetHelper;
+//  ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
+//  ...
+//  FillStateSet( *pStateSetHelper );
     return NULL;
 }
 
@@ -1656,10 +1647,22 @@ sal_Bool VCLXWindow::contains( const ::com::sun::star::awt::Point& aPoint ) thro
     return sal_False;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleAt( const ::com::sun::star::awt::Point& rPoint ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
-    return NULL;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
+    if ( GetWindow() )
+    {
+        Window* pWindow = GetWindow()->FindWindow( VCLPoint( rPoint ) );
+        if ( !pWindow )
+            pWindow = GetWindow();
+
+        xAcc = pWindow->GetAccessible();
+
+    }
+    return xAcc;
 }
 
 ::com::sun::star::awt::Rectangle VCLXWindow::getBounds() throw (::com::sun::star::uno::RuntimeException)
