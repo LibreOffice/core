@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:18 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,9 @@ namespace configmgr
         bool isDefault()   const { return m_aAttributes.isDefault(); }
         bool isLocalized() const { return m_aAttributes.bLocalized; }
 
-        void forceWritableToFinalized(); /// make non-writable nodes writable but finalized
+        void modifyState(node::State _eNewState);
+        void modifyAccess(bool _bWritable,bool _bFinalized);
+          void forceWritableToFinalized();
 
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence

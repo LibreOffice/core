@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,8 @@
 #ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
 #endif
-#ifndef _CONFIGMGR_TREEACTIONS_HXX_
-#include "treeactions.hxx"
-#endif
+
+//#include "treeactions.hxx"
 
 #ifndef _RTL_STRING_HXX_
 #include <rtl/string.hxx>
@@ -147,6 +146,19 @@ namespace configmgr
     ValueNode*       INode::asValueNode() {return NULL;}
     ValueNode const* INode::asValueNode() const {return NULL;}
 
+    void INode::modifyState(node::State _eNewState)
+    {
+        m_aAttributes.setState(_eNewState);
+    }
+
+    void INode::modifyAccess(bool _bWritable,bool _bFinalized)
+    {
+        // this state can only occurs a s a result of forceWritableToFinalized()
+        OSL_ENSURE(!(_bWritable && _bFinalized),"Invalid access state: Node is both writable and finalized");
+
+        m_aAttributes.bWritable  = _bWritable;
+        m_aAttributes.bFinalized = _bFinalized;
+    }
 
       void INode::forceWritableToFinalized()
       {
