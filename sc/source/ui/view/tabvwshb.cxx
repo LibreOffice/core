@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-23 17:26:41 $
+ *  last change: $Author: nn $ $Date: 2002-05-24 17:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,12 @@
 
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/pfiledlg.hxx>
+#include <svx/svditer.hxx>
 #include <svx/svdmark.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdouno.hxx>
 #include <svx/svdview.hxx>
 #include <svx/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
@@ -466,6 +469,25 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             Rectangle aNewObjectRectangle(aObjPos, aObjSize);
 
                             pNewDBField->SetLogicRect(aNewObjectRectangle);
+
+                            // controls must be on control layer, groups on front layer
+                            if ( pNewDBField->ISA(SdrUnoObj) )
+                                pNewDBField->NbcSetLayer(SC_LAYER_CONTROLS);
+                            else
+                                pNewDBField->NbcSetLayer(SC_LAYER_FRONT);
+                            if (pNewDBField->ISA(SdrObjGroup))
+                            {
+                                SdrObjListIter aIter( *pNewDBField, IM_DEEPWITHGROUPS );
+                                SdrObject* pSubObj = aIter.Next();
+                                while (pSubObj)
+                                {
+                                    if ( pSubObj->ISA(SdrUnoObj) )
+                                        pSubObj->NbcSetLayer(SC_LAYER_CONTROLS);
+                                    else
+                                        pSubObj->NbcSetLayer(SC_LAYER_FRONT);
+                                    pSubObj = aIter.Next();
+                                }
+                            }
 
                             pView->InsertObject(pNewDBField, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
                         }
