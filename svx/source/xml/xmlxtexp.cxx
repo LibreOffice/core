@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 14:17:21 $
+ *  last change: $Author: cl $ $Date: 2001-03-08 10:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,10 @@ sal_Bool SvxXMLXTableExportComponent::save( const OUString& rURL, const uno::Ref
     }
 
     if( pMedium )
+    {
+        pMedium->Commit();
         delete pMedium;
+    }
 
     return bRet;
 }
