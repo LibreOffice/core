@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-21 07:49:03 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 11:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,24 +287,15 @@ struct SvxBrush
     INT32       BackColor       MID_BACK_COLOR;
     String      URL             MID_GRAPHIC_URL;
     String      Filtername      MID_GRAPHIC_FILTER;
-    UINT16      Position        MID_GRAPHIC_POSITION;
+    INT16       Position        MID_GRAPHIC_POSITION;
 };
 item SvxBrush SvxBrushItem;
 
 //-------------------------------------------------------------------------
-// No Query/PutValue methods implemented!
-struct SvxCharSetColor
-{
-    CharSet     CharSet         MID_CHARSET;    // ???
-    UINT32      Color           MID_FG_COLOR;   // ???
-};
-item SvxCharSetColor SvxCharSetColorItem;
 
-//-------------------------------------------------------------------------
-
-item BOOL           SvxAutoKernItem;
-item UINT32         SvxColorItem;
-item BOOL           SvxContourItem;
+item BOOL          SvxAutoKernItem;
+item INT32         SvxColorItem;
+item BOOL          SvxContourItem;
 
 //-------------------------------------------------------------------------
 
@@ -317,17 +308,8 @@ struct SvxEscapement
 item SvxEscapement SvxEscapementItem;
 
 //-------------------------------------------------------------------------
-// Only one value is returned but no MID is used in implementation
 
-struct SvxFmtBreak
-{
-    SvxBreak    BreakBefore     MID_BREAK_BEFORE;   // This define exists, maybe used!
-    SvxBreak    BreakAfter      MID_BREAK_AFTER;    // This define exists, maybe used!
-}
-item SvxFmtBreak SvxFmtBreakItem;
-
-//-------------------------------------------------------------------------
-
+item INT16 SvxFmtBreakItem;
 item BOOL SvxFmtKeepItem;
 item BOOL SvxFmtSplitItem;
 
@@ -355,14 +337,12 @@ item SvxHyphenZone SvxHyphenZoneItem;
 item INT16 SvxKerningItem;
 
 //-------------------------------------------------------------------------
-// No Query/PutValue methods implemented!
-
 struct SvxLine
 {
-    UINT32      LineFGColor     MID_FG_COLOR;       // ???
-    UINT16      LineOutWidth    MID_OUTER_WIDTH;    // ???
-    UINT16      LineInWidth     MID_INNER_WIDTH;    // ???
-    UINT16      LineDistance    MID_DISTANCE;       // ???
+    INT32      LineFGColor     MID_FG_COLOR;
+    INT32      LineOutWidth    MID_OUTER_WIDTH;
+    INT32      LineInWidth     MID_INNER_WIDTH;
+    INT32      LineDistance    MID_DISTANCE;
 };
 item SvxLine SvxLineItem;
 
@@ -383,13 +363,12 @@ item SvxLRSpace SvxLRSpaceItem;
 
 //-------------------------------------------------------------------------
 
-item UINT16 SvxLanguageItem;
+item INT16 SvxLanguageItem;
 
-// Very interesting, a uno struct is used as a return value for QueryValue!
-// How could this be expressed in IDL syntax??
 struct SvxLineSpacing
 {
-    SvxLineSpace        LineSpace   MID_LS_FIXED;   // ????
+    INT16               Mode        MID_LINESPACE;
+    INT16               Height      MID_HEIGHT;
 };
 item SvxLineSpacing SvxLineSpacingItem;
 
@@ -415,8 +394,6 @@ item SvxPage SvxPageItem;
 item String SvxPageModelItem;
 
 //-------------------------------------------------------------------------
-// No Query/PutValue methods implemented!
-
 struct SvxPagePosSize
 {
     INT32               XPos            MID_X;          // ???
@@ -440,14 +417,14 @@ item FontItalic SvxPostureItem;
 
 item BOOL       SvxPrintItem;
 
-item UINT16     SvxPropSizeItem;
+item UINT16     SvxPropSizeItem;        // derived from UInt16Item
 
 item String     SvxProtectItem;
 
 item BOOL       SvxShadowedItem;
 
 //-------------------------------------------------------------------------
-// No Query/PutValue methods implemented!
+// Bug for PB!
 
 struct SvxSearch
 {
@@ -469,28 +446,21 @@ struct SvxSearch
 item SvxSearch SvxSearchItem;
 
 //-------------------------------------------------------------------------
-
-// Very interesting, a uno struct is used as a return value for QueryValue!
-// How could this be expressed in IDL syntax??
 struct SvxShadow
 {
-    SvxShadowLocation   ShadowLocation      MID_LOCATION;       // ???
-    UINT16              ShadowWidth         MID_WIDTH;          // ???
-    BrushStyle          ShadowStyle         MID_BRUSHSTYLE;     // ???
-    BOOL                ShadowTransparent   MID_TRANSPARENT;    // ???
-    UINT32              ShadowBackColor     MID_BG_COLOR;       // ???
-    UINT32              ShadowFillColor     MID_FG_COLOR;       // ???
+    SvxShadowLocation   Location        MID_LOCATION;
+    INT16               Width           MID_WIDTH;
+    BOOL                IsTransparent   MID_TRANSPARENT;
+    INT32               Color           MID_BG_COLOR;
 };
 item SvxShadow SvxShadowItem;
 
 //-------------------------------------------------------------------------
 
-// Very interesting, a uno struct is used as a return value for QueryValue!
-// How could this be expressed in IDL syntax??
 struct SvxSize
 {
-    UINT32              Width           MID_WIDTH;      // ???
-    UINT32              Height          MID_HEIGHT;     // ???
+    INT32               Width           MID_SIZE_WIDTH;
+    INT32               Height          MID_SIZE_HEIGHT;
 };
 item SvxSize SvxSizeItem;
 
@@ -641,7 +611,6 @@ item SvxCellOrientationEnum SvxOrientationItem;
 
 //-------------------------------------------------------------------------
 
-// No Query/PutValue methods implemented!
 struct SvxLongLRSpace
 {
     INT32           Left        MID_LEFT;   // ???
@@ -651,7 +620,6 @@ item SvxLongLRSpace SvxLongLRSpaceItem;
 
 //-------------------------------------------------------------------------
 
-// No Query/PutValue methods implemented!
 struct SvxLongULSpace
 {
     INT32           Upper       MID_UPPER;  // ???
@@ -666,7 +634,7 @@ struct SvxHyperlink
     String  LinkName    MID_HLINK_NAME;
     String  LinkURL     MID_HLINK_URL;
     String  LinkTarget  MID_HLINK_TARGET;
-    UINT16  LinkType    MID_HLINK_TYPE;
+    INT32   LinkType    MID_HLINK_TYPE;
 };
 item SvxHyperlink SvxHyperlinkItem;
 
@@ -696,87 +664,14 @@ item Address SvxAddressItem;
 
 //-------------------------------------------------------------------------
 
-/*interface TabStops: Object
-[
-    uuid( "E3701920-6131-11cf-89CA-008029E4B0B1" );
-]
-{
-    void    Insert      SID_TAB_INSERT
-    (
-        UINT16  Pos     SID_TAB_POSITION,
-        String  Adjust  SID_TAB_ADJUST,
-        String  Decimal SID_TAB_DECIMAL,
-        String  Fill    SID_TAB_FILLCHAR
-    );
-
-    void    Remove      SID_TAB_REMOVE
-    (
-        UINT16  Pos     SID_TAB_POSITION
-    );
-    void    RemoveByIndex   SID_TAB_REMOVE_BY_INDEX
-    (
-        UINT16  Idx     SID_TAB_POSITION
-    );
-    void    RemoveAll   SID_TAB_REMOVE_ALL();
-
-    UINT16  Count       SID_TAB_COUNT;
-    UINT16  GetPosition SID_TAB_POSITION(UINT16 No SID_TAB_POSITION);
-    String  GetAdjust   SID_TAB_ADJUST(UINT16 No SID_TAB_POSITION);
-    String  GetDecimal  SID_TAB_DECIMAL(UINT16 No SID_TAB_POSITION);
-    String  GetFillChar SID_TAB_FILLCHAR(UINT16 No SID_TAB_POSITION);
-};
-*/
-//-------------------------------------------------------------------------
-/*
-shell _TabStop_Dummy
-{
-    import TabStops [Automation];
-}
-*/
-//-------------------------------------------------------------------------
-
-/*interface BorderLine: Object
-[
-    uuid( "FF4D6443-6C71-11cf-B45A-00A0243D303B" );
-]
-{
-    UINT16      Style           SID_ATTR_LINE_STYLE;
-    UINT32      Color           SID_ATTR_LINE_COLOR;
-}
-*/
-//-------------------------------------------------------------------------
-
-/*interface Border: Object
-[
-    uuid( "FF4D6444-6C71-11cf-B45A-00A0243D303B" );
-]
-{
-    SbxObject   TopLine         SID_BORDER_TOPLINE;
-    SbxObject   BottomLine      SID_BORDER_BOTTOMLINE;
-    SbxObject   LeftLine        SID_BORDER_LEFTLINE;
-    SbxObject   RightLine       SID_BORDER_RIGHTLINE;
-    SbxObject   HorizontalLine  SID_BORDER_HORIZONTALLINE;
-    SbxObject   VerticalLine    SID_BORDER_VERTICALLINE;
-
-    UINT16      Distance        SID_BORDER_DISTANCE;
-}
- */
 item String SvxBoxItem;
 item String SvxBoxInfoItem;
-
-// No Query/PutValue methods implemented!
-struct SvxPageSize
-{
-    UINT32  PageWidth           MID_WIDTH;  // ???
-    UINT32  PageHeight          MID_HEIGHT; // ???
-};
-item SvxPageSize SvxPageSizeItem;
 
 //umdefiniert wg. doppelter Benutzung
 struct SwPageSize
 {
-    UINT32  PageWidth           MID_WIDTH;
-    UINT32  PageHeight          MID_HEIGHT;
+    INT32  PageWidth           MID_WIDTH;
+    INT32  PageHeight          MID_HEIGHT;
 };
 item SwPageSize SwPageSizeItem;
 /* umdefiniertes ShadowItem fuer das Shadow-Interface */
@@ -784,11 +679,9 @@ item SwPageSize SwPageSizeItem;
 struct SwShadow
 {
     SvxShadowLocation   Location        MID_LOCATION;
-    UINT16              Width           MID_WIDTH;
-    BrushStyle          Style           MID_BRUSHSTYLE;
-    BOOL                Transparent     MID_TRANSPARENT;
-    UINT32              BackColor       MID_BG_COLOR;
-    UINT32              FillColor       MID_FG_COLOR;
+    INT16               Width           MID_WIDTH;
+    BOOL                IsTransparent   MID_TRANSPARENT;
+    INT32               Color           MID_BG_COLOR;
 };
 item SwShadow SwShadowItem;
 
@@ -796,18 +689,16 @@ item BOOL   SdrShadowItem;
 item String SfxSetItem;
 item String SvxColumnItem;
 item String SvxShadowItem;
-item UINT32 SvxObjectItem;
+item INT32  SvxObjectItem;
 item String SdrTextFitToSizeTypeItem;
 item String SvxClipboardFmtItem;
 item String SfxStringListItem;
 
-// Returns always FALSE on QueryValue and SetValue! Looks
-// like it must be implemented.
 struct FmFormInfo
 {
-    INT32 Pos MID_POS ;                 // ???
-    INT32 Count MID_COUNT ;             // ???
-    BOOL ReadOnly MID_READONLY ;        // ???
+    INT32 Pos MID_POS ;
+    INT32 Count MID_COUNT ;
+    BOOL ReadOnly MID_READONLY ;
 } ;
 
 item FmFormInfo FmFormInfoItem ;
