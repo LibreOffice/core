@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:34:29 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3624,7 +3624,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
 
             if (bInsert)
             {
-                ScRangeData* pData = new ScRangeData( pDoc, aName, aContent, nPosX, nPosY, nTab );
+                ScRangeData* pData = new ScRangeData( pDoc, aName, aContent, ScAddress( nPosX, nPosY, nTab ) );
                 if (!rList.Insert(pData))
                 {
                     DBG_ERROR("nanu?");
@@ -3885,7 +3885,7 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     String aFilterName = rFilter;
     String aNewOptions = rOptions;
     if (!aFilterName.Len())
-        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions );
+        ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions, TRUE );
 
     //  remove application prefix from filter name here, so the filter options
     //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
