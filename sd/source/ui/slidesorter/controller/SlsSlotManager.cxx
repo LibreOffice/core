@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:49:51 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,7 +800,7 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem(SID_STYLE_CATALOG);
     //  rSet.DisableItem(SID_SIZE_ALL);
-    rSet.DisableItem(SID_SPELLING);
+    rSet.DisableItem(SID_SPELL_DIALOG);
     rSet.DisableItem(SID_SEARCH_DLG);
 
     if ( ! rShell.GetZoomList()->IsNextPossible())
