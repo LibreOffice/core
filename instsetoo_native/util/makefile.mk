@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 15:00:25 $
+#   last change: $Author: hr $ $Date: 2004-10-14 12:57:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,7 @@
 PRJ=..
 PRJNAME=OpenOffice
 TARGET=util
+GEN_HID2=TRUE
 
 .INCLUDE:  settings.mk
 .EXPORT: LAST_MINOR
