@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-20 02:33:25 $
+ *  last change: $Author: khong $ $Date: 2002-07-25 04:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,10 @@ IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_zhuyin )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_radical )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_zh_TW_stroke )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ko_dict )
-IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable )
+IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_nl_alphanumeric )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_da_alphanumeric )
@@ -219,7 +222,8 @@ IMPL_CREATEINSTANCE( Collator_ko_dict )
 IMPL_CREATEINSTANCE( Collator_ko_charset )
 IMPL_CREATEINSTANCE( Collator_zh_charset )
 IMPL_CREATEINSTANCE( Collator_ja_charset )
-IMPL_CREATEINSTANCE( Collator_ja_phonetic )
+IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_first )
+IMPL_CREATEINSTANCE( Collator_ja_phonetic_alphanumeric_last )
 IMPL_CREATEINSTANCE( Collator_zh_TW_charset )
 IMPL_CREATEINSTANCE( Collator_de_phonebook )
 
@@ -379,9 +383,24 @@ static const struct InstancesArray {
     {   "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
         "com.sun.star.i18n.IndexEntrySupplier_ko_charset",
         &IndexEntrySupplier_ko_dict_CreateInstance },   // share same table with ko_dict
-    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic",
-        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic",
-        &IndexEntrySupplier_ja_phonetic_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by syllable)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric first) (grouped by consonant)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_consonant_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by syllable)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_syllable_CreateInstance },
+    {   "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
+        "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic (alphanumeric last) (grouped by consonant)",
+        &IndexEntrySupplier_ja_phonetic_alphanumeric_last_by_consonant_CreateInstance },
     {   "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
         "com.sun.star.i18n.IndexEntrySupplier_da_alphanumeric",
         &IndexEntrySupplier_da_alphanumeric_CreateInstance },
@@ -487,9 +506,12 @@ static const struct InstancesArray {
         {       "com.sun.star.i18n.Collator_ko_charset",
                 "com.sun.star.i18n.Collator_ko_charset",
                 &Collator_ko_charset_CreateInstance },
-        {       "com.sun.star.i18n.Collator_ja_phonetic",
-                "com.sun.star.i18n.Collator_ja_phonetic",
-                &Collator_ja_phonetic_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric first)",
+                "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric first)",
+                &Collator_ja_phonetic_alphanumeric_first_CreateInstance },
+        {       "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric last)",
+                "com.sun.star.i18n.Collator_ja_phonetic (alphanumeric last)",
+                &Collator_ja_phonetic_alphanumeric_last_CreateInstance },
         {       "com.sun.star.i18n.Collator_ja_charset",
                 "com.sun.star.i18n.Collator_ja_charset",
                 &Collator_ja_charset_CreateInstance },
