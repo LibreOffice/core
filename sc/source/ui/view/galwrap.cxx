@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galwrap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 09:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <vcl/graph.hxx>
 #include <svx/gallery.hxx>
 #include <sfx2/app.hxx>
-#include <sfx2/explorer.hxx>
 
 // -----------------------------------------------------------------------
 
