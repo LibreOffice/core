@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:43:59 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 07:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,11 +1198,17 @@ void SwDocShell::FormatPage( const String& rPage, BOOL bColumn, SwWrtShell*     
     Edit( rPage, aEmptyStr, SFX_STYLE_FAMILY_PAGE, 0, FALSE, bColumn, pActShell);
 }
 
-Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
+Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily, BmpColorMode eColorMode )
 {
     if( SFX_STYLE_FAMILY_PSEUDO == eFamily )
-        return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
-    return SfxObjectShell::GetStyleFamilyBitmap( eFamily );
+    {
+        if ( eColorMode == BMP_COLOR_NORMAL )
+            return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM ));
+        else
+            return Bitmap( SW_RES( BMP_STYLES_FAMILY_NUM_HC ));
+    }
+
+    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, eColorMode );
 }
 
 
