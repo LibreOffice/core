@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-08 07:08:47 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,86 +222,86 @@ IMPL_LINK(FmFormObjFactory, MakeObject, SdrObjFactory*, pObjFactory)
         {
             case OBJ_FM_CONTROL:    // allgemeines Object
             {
-                pObjFactory->pNewObj = new FmFormObj();
+                pObjFactory->pNewObj = new FmFormObj(pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_EDIT:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_EDIT);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_EDIT,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_BUTTON:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMMANDBUTTON);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMMANDBUTTON,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_FIXEDTEXT:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FIXEDTEXT);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FIXEDTEXT,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_LISTBOX:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_LISTBOX);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_LISTBOX,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_CHECKBOX:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CHECKBOX);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CHECKBOX,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_RADIOBUTTON:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_RADIOBUTTON);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_RADIOBUTTON,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_GROUPBOX:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GROUPBOX);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GROUPBOX,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_COMBOBOX:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMBOBOX);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_COMBOBOX,pObjFactory->nIdentifier);
                 lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_DROPDOWN, makeAny( sal_True ) );
 
             }   break;
             case OBJ_FM_GRID:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GRID);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_GRID,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_IMAGEBUTTON:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGEBUTTON);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGEBUTTON,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_FILECONTROL:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FILECONTROL);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FILECONTROL,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_DATEFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_DATEFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_DATEFIELD,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_TIMEFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_TIMEFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_TIMEFIELD,pObjFactory->nIdentifier);
                 lcl_initProperty( static_cast< FmFormObj* >( pObjFactory->pNewObj ), FM_PROP_TIMEMAX, makeAny( (sal_Int32)( Time( 23, 59, 59, 99 ).GetTime() ) ) );
             }   break;
             case OBJ_FM_NUMERICFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_NUMERICFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_NUMERICFIELD,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_CURRENCYFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CURRENCYFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_CURRENCYFIELD,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_PATTERNFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_PATTERNFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_PATTERNFIELD,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_HIDDEN:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_HIDDEN);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_HIDDEN,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_IMAGECONTROL:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGECONTROL);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_IMAGECONTROL,pObjFactory->nIdentifier);
             }   break;
             case OBJ_FM_FORMATTEDFIELD:
             {
-                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FORMATTEDFIELD);
+                pObjFactory->pNewObj = new FmFormObj(FM_COMPONENT_FORMATTEDFIELD,pObjFactory->nIdentifier);
             }   break;
             default:
                 return 0;
