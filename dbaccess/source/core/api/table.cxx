@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:57:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
 {
     sal_Int64 nRet(0);
     if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
-        nRet = (sal_Int64)this;
+        nRet = reinterpret_cast<sal_Int64>(this);
     else
         nRet = OTable_Base::getSomething(rId);
 
