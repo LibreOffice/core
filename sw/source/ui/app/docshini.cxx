@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 13:37:05 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@
 #ifndef _SOT_STORINFO_HXX
 #include <sot/storinfo.hxx>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
@@ -208,9 +206,6 @@
 #ifndef _TOX_HXX
 #include <tox.hxx>
 #endif
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>        // I/O, Hausformat
-#endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
@@ -291,11 +286,11 @@ using namespace ::rtl;
  --------------------------------------------------------------------*/
 
 
-sal_Bool SwDocShell::InitNew( SvStorage * pStor )
+sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::InitNew" );
 
-    sal_Bool bRet = SfxInPlaceObject::InitNew( pStor );
+    sal_Bool bRet = SfxObjectShell::InitNew( xStor );
     ASSERT( GetMapUnit() == MAP_TWIP, "map unit is not twip!" );
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
@@ -317,11 +312,8 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
                     RES_PARATR_TABSTOP));
 */
         if ( GetCreateMode() ==  SFX_CREATE_MODE_EMBEDDED )
-        {
-            // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
-            SvEmbeddedObject* pObj = this;
-            SwTransferable::InitOle( pObj, *pDoc );
-        }
+            SwTransferable::InitOle( this, *pDoc );
+
         // set forbidden characters if necessary
         SvxAsianConfig aAsian;
         Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
@@ -505,12 +497,12 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
 
 SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     pDoc(0),
-    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
+    pOLEChildList( 0 ),
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
     bInUpdateFontList(false)
 {
@@ -525,12 +517,12 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
 
 SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     pDoc(pD),
-    pIo(0),
     pBasePool(0),
     pFontList(0),
     SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
+    pOLEChildList( 0 ),
     nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
     bInUpdateFontList(false)
 {
@@ -546,7 +538,6 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
  SwDocShell::~SwDocShell()
 {
     RemoveLink();
-    delete pIo;
     delete pFontList;
 
     // wir als BroadCaster werden auch unser eigener Listener
@@ -561,13 +552,14 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
         if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
             delete pTable;
     }
+
+    delete pOLEChildList;
 }
 /* -----------------------------10.09.2001 15:59------------------------------
 
  ---------------------------------------------------------------------------*/
 void  SwDocShell::Init_Impl()
 {
-    SetShell(this);
     SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
     // wir als BroadCaster werden auch unser eigener Listener
@@ -598,11 +590,6 @@ void SwDocShell::AddLink()
     pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
-
-    if( !pIo )
-        pIo = new Sw3Io( *pDoc );
-    else
-        pIo->SetDoc( *pDoc );
 
     SetPool(&pDoc->GetAttrPool());
 
@@ -671,12 +658,11 @@ void SwDocShell::ReactivateModel()
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocShell::Load(SvStorage* pStor)
+sal_Bool  SwDocShell::Load(const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::Load" );
     sal_Bool bRet = sal_False;
-    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
-    if( SfxInPlaceObject::Load( pStor ))
+    if( SfxObjectShell::Load( xStor ))
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
         if( pDoc )              // fuer Letzte Version !!
@@ -686,8 +672,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 
         // Das Laden
         // fuer MD
-        if( bXML )
-        {
             ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
             pBasePool = new SwDocStyleSheetPool( *pDoc,
                             SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
@@ -698,8 +682,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
                 nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
             }
 
-        }
-
         SwWait aWait( *this, sal_True );
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
@@ -709,27 +691,22 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 //          break;
 
         case SFX_CREATE_MODE_ORGANIZER:
-            if( bXML )
             {
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                    SwReader aRdr( xStor, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
                     ReadXML->SetOrganizerMode( FALSE );
                 }
             }
-            else
-                nErr = pIo->LoadStyles( pStor );
             break;
 
         case SFX_CREATE_MODE_INTERNAL:
         case SFX_CREATE_MODE_EMBEDDED:
-            if ( bXML )
             {
                 // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
-                SvEmbeddedObject* pObj = this;
-                SwTransferable::InitOle( pObj, *pDoc );
+                SwTransferable::InitOle( this, *pDoc );
             }
             // SfxProgress unterdruecken, wenn man Embedded ist
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
@@ -738,18 +715,12 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
             {
-                Reader *pReader = bXML ? ReadXML : ReadSw3;
+                Reader *pReader = ReadXML;
                 if( pReader )
                 {
                     // die DocInfo vom Doc am DocShell-Medium setzen
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
-                    if( !bXML )
-                    {
-                        SfxDocumentInfo aInfo;
-                        aInfo.Load( pStor );
-                        pDoc->DocInfoChgd( aInfo );
-                    }
-                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                    SwReader aRdr( xStor, aEmptyStr, pDoc );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
                     nErr = aRdr.Read( *pReader );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after Read" );
@@ -782,12 +753,6 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 
         }
 
-        if( !bXML )
-        {
-            ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-            pBasePool = new SwDocStyleSheetPool( *pDoc,
-                            SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
-        }
         UpdateFontList();
         InitDraw();
 
@@ -801,55 +766,8 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
 
         // SfxProgress unterdruecken, wenn man Embedded ist
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
-
-        if( pDoc->IsGlobalDoc() && !pDoc->IsGlblDocSaveLinks() )
-        {
-            // dann entferne alle nicht referenzierte OLE-Objecte
-            SvStorageInfoList aInfoList;
-            pStor->FillInfoList( &aInfoList );
-
-            // erstmal alle nicht "OLE-Objecte" aus der Liste entfernen
-            sal_uInt32 n;
-            for( n = aInfoList.Count(); n; )
-            {
-                const String& rName = aInfoList.GetObject( --n ).GetName();
-                // in ndole.cxx wird dieser PreFix benutzt
-                if( 3 != rName.Match( String::CreateFromAscii("Obj") ))
-                    aInfoList.Remove( n );
-            }
-
-            // dann alle referenzierten Object aus der Liste entfernen
-            SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-            for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-                    pNd; pNd = (SwCntntNode*)aIter.Next() )
-            {
-                SwOLENode* pOLENd = pNd->GetOLENode();
-                if( pOLENd )
-                {
-                    const String& rOLEName = pOLENd->GetOLEObj().GetName();
-                    for( n = aInfoList.Count(); n; )
-                    {
-                        const String& rName = aInfoList.GetObject( --n ).GetName();
-                        if( rOLEName == rName )
-                        {
-                            aInfoList.Remove( n );
-                            break;
-                        }
-                    }
-                }
-            }
-            // und jetzt haben wir alle Objecte, die nicht mehr
-            // referenziert werden
-            SvPersist* p = this;
-            for( n = aInfoList.Count(); n; )
-            {
-                const String& rName = aInfoList.GetObject( --n ).GetName();
-                SvInfoObjectRef aRef( p->Find( rName ) );
-                if( aRef.Is() )
-                    p->Remove( &aRef );
-            }
-        }
     }
+
     return bRet;
 }
 
@@ -858,7 +776,7 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
+sal_Bool  SwDocShell::LoadFrom( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::LoadFrom" );
     sal_Bool bRet = sal_False;
@@ -869,18 +787,14 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
-        const String& rNm = pStor->GetName();
+        //const String& rNm = pStor->GetName();
         String aStreamName;
-        sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
-        if( bXML )
-            aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
-        else
-            aStreamName = SfxStyleSheetBasePool::GetStreamName();
-        if( pStor->IsStream( aStreamName ) )
+        aStreamName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("styles.xml"));
+        uno::Reference < container::XNameAccess > xAccess( xStor, uno::UNO_QUERY );
+        if ( xAccess->hasByName( aStreamName ) && xStor->isStreamElement( aStreamName ) )
         {
             // Das Laden
             SwWait aWait( *this, sal_True );
-            if( bXML )
             {
                 ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
                 pBasePool = new SwDocStyleSheetPool( *pDoc,
@@ -888,16 +802,17 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
                 if( ReadXML )
                 {
                     ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( *pStor, aEmptyStr, pDoc );
+                    SwReader aRdr( xStor, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
                     ReadXML->SetOrganizerMode( FALSE );
                 }
             }
-            else
-                nErr = pIo->LoadStyles( pStor );
         }
         else
         {
+            DBG_ERROR("Code removed!");
+        /*
+        //TODO/LATER: looks like some binary stuff?!
             // sollte es sich um eine 2. Vrolage handeln ??
             if( SvStorage::IsStorageFile( rNm ) )
                 break;
@@ -913,13 +828,7 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
                 SwReader aRead( aMed, rNm, pDoc );
                 nErr = aRead.Read( *ReadSwg );
             }
-        }
-
-        if( !bXML )
-        {
-            ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
-            pBasePool = new SwDocStyleSheetPool( *pDoc,
-                                SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
+         */
         }
 
         SetError( nErr );
@@ -927,7 +836,7 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
 
     } while( sal_False );
 
-    SfxObjectShell::LoadFrom( pStor );
+    SfxObjectShell::LoadFrom( xStor );
     pDoc->ResetModified();
     return bRet;
 }
