@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:45:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ polish ] = "Cofnij $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Undo $(ARG1) action";
     Text[ japanese ] = "$(ARG1) ±¸¼®Ý‚ðŒ³‚É–ß‚·";
-    Text[ korean ] = "Undo $(ARG1) action";
+    Text[ korean ] = "$(ARG1) ÀÛ¾÷ ½ÇÇà Ãë¼Ò";
     Text[ chinese_simplified ] = "³·ÏûÃüÁî $(ARG1) ²Ù×÷";
     Text[ chinese_traditional ] = "´_­ì $(ARG1) «ü¥O";
     Text[ turkish ] = "Undo $(ARG1) action";
@@ -133,13 +133,14 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ polish ] = "Odtwórz $(ARG1) akcjê(e)";
     Text[ portuguese_brazilian ] = "Redo $(ARG1) action";
     Text[ japanese ] = "$(ARG1) ±¸¼®Ý‚Ì‚â‚è’¼‚µ";
-    Text[ korean ] = "Redo $(ARG1) action";
+    Text[ korean ] = "$(ARG1) ÀÛ¾÷ »èÁ¦ Ãë¼Ò";
     Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî $(ARG1) ²Ù×÷";
     Text[ chinese_traditional ] = "«ì´_ºM®ø $(ARG1) «ü¥O";
     Text[ turkish ] = "Redo $(ARG1) action";
     Text[ arabic ] = "Redo $(ARG1) action";
     Text[ catalan ] = "Redo $(ARG1) action";
 };
+
 
 
 
