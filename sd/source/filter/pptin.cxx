@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 16:35:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,9 @@
 
 #include "glob.hrc"
 #include "pptin.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "sdresid.hxx"
@@ -204,12 +206,16 @@
 #endif
 
 #ifndef MAC
-#include "../ui/inc/docshell.hxx"
-#else
-#include "docshell.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
 #endif
-#ifndef _SD_FRMVIEW_HXX
-#include <../ui/inc/frmview.hxx>
+#else
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include <../ui/inc/FrameView.hxx>
 #endif
 #ifndef _SD_OPTSITEM_HXX
 #include <../ui/inc/optsitem.hxx>
@@ -364,7 +370,7 @@ sal_Bool ImplSdPPTImport::Import()
     nBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
     nBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
 
-    SdDrawDocShell* pDocShell = pDoc->GetDocSh();
+    ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     if ( pDocShell )
         SeekOle( pDocShell, nFilterOptions );
 
@@ -605,7 +611,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 {
                                                     pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
                                                     pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
-                                                    pHyperlink->aConvSubString.Append( pDoc->CreatePageNumValue( (sal_Int32)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString.Append( pDoc->CreatePageNumValue( (USHORT)nPageNumber + 1 ) );
                                                 }
                                             }
                                         }
@@ -1237,13 +1243,13 @@ sal_Bool ImplSdPPTImport::Import()
         pDoc->SetSummationOfParagraphs( sal_True );
         if ( pDocShell )
         {
-            FrameView* pFrameView = pDoc->GetFrameView( 0 );
+            ::sd::FrameView* pFrameView = pDoc->GetFrameView( 0 );
             if ( !pFrameView )
             {
                 List* pFrameViewList = pDoc->GetFrameViewList();
                 if ( pFrameViewList )
                 {
-                    pFrameView = new FrameView( pDoc );
+                    pFrameView = new ::sd::FrameView( pDoc );
                     if ( pFrameView )
                         pFrameViewList->Insert( pFrameView );
                 }
