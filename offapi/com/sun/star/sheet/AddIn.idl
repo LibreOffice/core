@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AddIn.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:45 $
+ *  last change: $Author: mi $ $Date: 2000-12-19 13:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,22 +108,22 @@
     <dd>for text strings.
     </dd>
     <dt>
-    <atom dim="[][]">long</atom>
+    <atom>long[][]</atom>
     </dt>
     <dd>for (two-dimensional) arrays of integer values.
     </dd>
     <dt>
-    <atom dim="[][]">double</atom>
+    <atom>double[][]</atom>
     </dt>
     <dd>for (two-dimensional) arrays of floating point values.
     </dd>
     <dt>
-    <atom dim="[][]">string</atom>
+    <atom>string[][]</atom>
     </dt>
     <dd>for (two-dimensional) arrays of text strings.
     </dd>
     <dt>
-    <atom dim="[][]">any</atom>
+    <atom>any[][]</atom>
     </dt>
     <dd>for (two-dimensional) arrays of mixed contents.
     Each <atom>any</atom> will contain a <atom>double</atom>
@@ -134,7 +134,7 @@
     </dt>
     <dd>Depending on the data, a <atom>double</atom>,
     a <atom>string</atom>, or an
-    <atom dim="[][]">any</atom>
+    <atom>any[][]</atom>
     will be passed. If no argument is specified in the
     function call, <void></void> will be passed. This allows
     for optional parameters.
@@ -156,7 +156,7 @@
     <member>SpreadsheetDocumentSettings::NullDate</member>.
     </dd>
     <dt>
-    <atom dim="[]">any</atom>
+    <atom>any[]</atom>
     </dt>
     <dd>for varying parameters. Only the last parameter of a
     function may have this type. It will be filled with the
@@ -179,16 +179,16 @@
     <atom>string</atom>
     </li>
     <li>
-    <atom dim="[][]">long</atom>
+    <atom>long[][]</atom>
     </li>
     <li>
-    <atom dim="[][]">double</atom>
+    <atom>double[][]</atom>
     </li>
     <li>
-    <atom dim="[][]">string</atom>
+    <atom>string[][]</atom>
     </li>
     <li>
-    <atom dim="[][]">any</atom>
+    <atom>any[][]</atom>
     </li>
     <li>
     <type>XVolatileResult</type>
@@ -222,6 +222,9 @@ service AddIn
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:45  mi
+    moved from api
+
     Revision 1.2  2000/10/05 12:51:28  mi
     sequences presentation in documentation as attribute dim=[]
 
