@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: va $ $Date: 2002-08-09 16:01:23 $
+ *  last change: $Author: bc $ $Date: 2002-08-14 14:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,6 +674,14 @@ String RID_DB_COMMON_START + 35
     Text[ chinese_traditional ] = "The connection to the Datasource could not be established";
     Text[ turkish ] = "The connection to the Datasource could not be established";
     Text[ arabic ] = "The connection to the Datasource could not be established";
+};
+
+
+String RID_DB_COMMON_START + 36
+{
+    Text = "Ihr eingegebener Dateipfad is ungültig!";
+    Text [ english ] = "Your entered file path is not valid!";
+    Text[ english_us ] = "Your entered file path is not valid!";
 };
 
 
