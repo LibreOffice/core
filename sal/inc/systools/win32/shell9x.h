@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell9x.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-27 13:28:36 $
+ *  last change: $Author: tra $ $Date: 2001-04-27 13:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ SHELL9X_API BOOL ( WINAPI * lpfnShellExecuteExW ) ( LPSHELLEXECUTEINFOW lpExecIn
 #define SHBrowseForFolderW   lpfnSHBrowseForFolderW
 #define SHGetPathFromIDListW lpfnSHGetPathFromIDListW
 
-#define ShellExecuteEx lpfnShellExecuteExW
+#define ShellExecuteExW lpfnShellExecuteExW
 
 #ifdef __cplusplus
 }
