@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-12 08:11:22 $
+ *  last change: $Author: mt $ $Date: 2001-06-12 11:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3104,7 +3104,7 @@ void MenuBarWindow::MouseButtonDown( const MouseEvent& rMEvt )
     USHORT nEntry = ImplFindEntry( rMEvt.GetPosPixel() );
     if ( ( nEntry != ITEMPOS_INVALID ) && ( nEntry != nHighlightedItem ) )
     {
-        ChangeHighlightItem( nEntry, /* ImplIsMouseFollow() ? FALSE : */ TRUE ); // Issuezilla#591
+        ChangeHighlightItem( nEntry, ImplIsMouseFollow() ? FALSE : TRUE );
     }
     else
     {
