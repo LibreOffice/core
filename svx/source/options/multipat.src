@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 22:26:39 $
+ *  last change: $Author: pb $ $Date: 2001-12-05 12:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,18 @@
  *
  *
  ************************************************************************/
- // include --------------------------------------------------------------
+
 #include "multipat.hrc"
 #include "helpid.hrc"
 #include "dialogs.hrc"
- // pragma ---------------------------------------------------------------
 
- // RID_SVXDLG_MULTIPATH --------------------------------------------------
+// RID_SVXDLG_MULTIPATH --------------------------------------------------
+
 ModalDialog RID_SVXDLG_MULTIPATH
 {
     HelpId = HID_MULTIPATH ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 256 , 90 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Pfade auswählen : Pfade auswõhlen */
-    /* ### ACHTUNG: Neuer Text in Resource? Pfade auswählen : Pfade auswõhlen */
     Text = "Pfade auswählen" ;
     Text [ English ] = "Select paths" ;
     Text [ english_us ] = "Select Paths" ;
@@ -83,6 +81,20 @@ ModalDialog RID_SVXDLG_MULTIPATH
     Text [ french ] = "Sélection de chemins" ;
     Text [ dutch ] = "Paden selecteren" ;
     Text [ portuguese ] = "Seleccionar atalhos" ;
+    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
+    Text[ russian ] = "Âûáğàòü ïóòè";
+    Text[ polish ] = "Wybierz œcie¿ki";
+    Text[ japanese ] = "ï¾Šï¾Ÿï½½ã®é¸æŠ";
+    Text[ chinese_traditional ] = "é¸æ“‡è·¯å¾‘";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
+    Text[ dutch ] = "Paden selecteren";
+    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
+    Text[ greek ] = "ÅğéëïãŞ äéáäñïìşí";
+    Text[ korean ] = "ê²½ë¡œ ì„ íƒ";
+    Text[ turkish ] = "Veri yollarını seç";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Seleccionar rutas";
+    Text[ finnish ] = "Valitse polut";
     Moveable = TRUE ;
     Closeable = TRUE ;
     ListBox LB_MULTIPATH
@@ -96,8 +108,6 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Pos = MAP_APPFONT ( 138 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Hi~nzufügen... : Hi~nzuf³gen... */
-        /* ### ACHTUNG: Neuer Text in Resource? Hi~nzufügen... : Hi~nzuf³gen... */
         Text = "Hi~nzufügen..." ;
         Text [ English ] = "Add..." ;
         Text [ portuguese ] = "~Adicionar..." ;
@@ -128,8 +138,6 @@ ModalDialog RID_SVXDLG_MULTIPATH
     {
         Pos = MAP_APPFONT ( 138 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
         Text = "~Löschen" ;
         Text [ English ] = "~Delete" ;
         Text [ portuguese ] = "E~liminar" ;
@@ -201,20 +209,6 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Pos = MAP_APPFONT ( 200 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
-    Text[ russian ] = "Âûáğàòü ïóòè";
-    Text[ polish ] = "Wybierz œcie¿ki";
-    Text[ japanese ] = "ï¾Šï¾Ÿï½½ã®é¸æŠ";
-    Text[ chinese_traditional ] = "é¸æ“‡è·¯å¾‘";
-    Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
-    Text[ dutch ] = "Paden selecteren";
-    Text[ chinese_simplified ] = "é€‰æ‹©è·¯å¾„";
-    Text[ greek ] = "ÅğéëïãŞ äéáäñïìşí";
-    Text[ korean ] = "ê²½ë¡œ ì„ íƒ";
-    Text[ turkish ] = "Veri yollarını seç";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Seleccionar rutas";
-    Text[ finnish ] = "Valitse polut";
 };
 String RID_MULTIPATH_DBL_ERR
 {
@@ -244,34 +238,6 @@ String RID_MULTIPATH_DBL_ERR
     Text[ catalan ] = "La ruta %1 ya existe.";
     Text[ finnish ] = "Polku %1 on jo olemassa.";
 };
-String RID_SVXSTR_MULTIFILE_DBL_ERR
-{
-    Text = "Die Datei %1 ist bereits vorhanden." ;
-    Text [ ENGLISH ] = "The file %1 is already defined." ;
-    Text [ english_us ] = "The file %1 already exists." ;
-    Text [ portuguese ] = "O ficheiro %1 já existe." ;
-    Text [ portuguese_brazilian ] = "Die Datei %1 ist bereits vorhanden." ;
-    Text [ swedish ] = "Filen %1 existerar redan." ;
-    Text [ danish ] = "Filen %1 findes allerede." ;
-    Text [ italian ] = "Il file %1 esiste già." ;
-    Text [ spanish ] = "El archivo %1 ya existe." ;
-    Text [ french ] = "Le fichier %1existe déjà." ;
-    Text [ dutch ] = "Bestand %1 bestaat reeds" ;
-    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
-    Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
-    Text[ polish ] = "Plik %1 ju¿ istnieje.";
-    Text[ japanese ] = "%1ã®ï¾Œï½§ï½²ï¾™ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆ %1 å·²ç¶“å­˜åœ¨ã€‚";
-    Text[ arabic ] = "Çáãáİ %1 ãæÌæÏ ãÓÈŞÇğ.";
-    Text[ dutch ] = "Bestand %1 bestaat reeds";
-    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
-    Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
-    Text[ korean ] = "íŒŒì¼%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Dosya %1 mevcut durumda.";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El archivo %1 ya existe.";
-    Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
-};
 String RID_SVXSTR_FILE_TITLE
 {
     Text = "Dateien auswählen" ;
@@ -300,7 +266,7 @@ String RID_SVXSTR_FILE_TITLE
     Text[ catalan ] = "Seleccionar archivos";
     Text[ finnish ] = "Valitse tiedostot";
 };
-String RID_SVXSTR_FILE_GB
+String RID_SVXSTR_FILE_HEADLINE
 {
     Text = "Dateien" ;
     Text [ English ] = "Files" ;
@@ -328,7 +294,48 @@ String RID_SVXSTR_FILE_GB
     Text[ catalan ] = "Archivos";
     Text[ finnish ] = "Tiedostot";
 };
- // ******************************************************************* EOF
+String RID_SVXSTR_ARCHIVE_TITLE
+{
+    Text = "Archive auswählen" ;
+    Text [ English ] = "Select archives" ;
+    Text [ english_us ] = "Select archives" ;
+};
+String RID_SVXSTR_ARCHIVE_HEADLINE
+{
+    Text = "Archive" ;
+    Text [ English ] = "Archives" ;
+    Text [ english_us ] = "Archives" ;
+};
+String RID_SVXSTR_MULTIFILE_DBL_ERR
+{
+    Text = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ ENGLISH ] = "The file %1 is already defined." ;
+    Text [ english_us ] = "The file %1 already exists." ;
+    Text [ portuguese ] = "O ficheiro %1 já existe." ;
+    Text [ portuguese_brazilian ] = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ swedish ] = "Filen %1 existerar redan." ;
+    Text [ danish ] = "Filen %1 findes allerede." ;
+    Text [ italian ] = "Il file %1 esiste già." ;
+    Text [ spanish ] = "El archivo %1 ya existe." ;
+    Text [ french ] = "Le fichier %1existe déjà." ;
+    Text [ dutch ] = "Bestand %1 bestaat reeds" ;
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
+    Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
+    Text[ polish ] = "Plik %1 ju¿ istnieje.";
+    Text[ japanese ] = "%1ã®ï¾Œï½§ï½²ï¾™ã¯æ—¢ã«ã‚ã‚Šã¾ã™ã€‚";
+    Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆ %1 å·²ç¶“å­˜åœ¨ã€‚";
+    Text[ arabic ] = "Çáãáİ %1 ãæÌæÏ ãÓÈŞÇğ.";
+    Text[ dutch ] = "Bestand %1 bestaat reeds";
+    Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶ %1 å·²ç»å­˜åœ¨ã€‚";
+    Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
+    Text[ korean ] = "íŒŒì¼%1ì´(ê°€) ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.";
+    Text[ turkish ] = "Dosya %1 mevcut durumda.";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El archivo %1 ya existe.";
+    Text[ finnish ] = "Tiedosto %1 on jo olemassa.";
+};
+
+
 
 
 
