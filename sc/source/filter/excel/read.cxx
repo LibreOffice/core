@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:15:57 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:33:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
+#ifndef SC_XIPAGE_HXX
+#include "xipage.hxx"
+#endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
@@ -97,6 +100,9 @@
 #endif
 #ifndef SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
+#endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
 
 #include "root.hxx"
@@ -241,10 +247,10 @@ FltError ImportExcel::Read( void )
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
-                    case 0x14:  Header(); break;        // HEADER       [ 2345]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345]
+                    case 0x14:
+                    case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x18:  Name25(); break;        // NAME         [ 2  5]
+                    case 0x18:  GetNameBuffer().ReadName( maStrm );             break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                     case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
@@ -253,11 +259,12 @@ FltError ImportExcel::Read( void )
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
                     case 0x24:  Colwidth(); break;      // COLWIDTH     [ 2   ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
-                    case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345]
-                    case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345]
-                    case 0x28:  Topmargin(); break;     // TOPMARGIN    [ 2345]
-                    case 0x29:  Bottommargin(); break;  // BOTTOMMARGIN [ 2345]
-                    case 0x2A:  Printheaders(); break;  // PRINTHEADERS [ 2345]
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:  GetPageSettings().ReadMargin( maStrm );         break;
+                    case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
+                    case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -284,21 +291,21 @@ FltError ImportExcel::Read( void )
                         EndSheet();
                         eAkt = Z_Ende;
                         break;
-                    case 0x14:  Header(); break;        // HEADER       [ 2345]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345]
+                    case 0x14:
+                    case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x1A:  Verticalpagebreaks(); break;
-                    case 0x1B:  Horizontalpagebreaks(); break;
+                    case 0x1A:
+                    case 0x1B:  GetPageSettings().ReadPageBreaks( maStrm );     break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                     case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
-                    case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345]
-                    case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345]
-                    case 0x28:  Topmargin(); break;     // TOPMARGIN    [ 2345]
-                    case 0x29:  Bottommargin(); break;  // BOTTOMMARGIN [ 2345]
-                    case 0x2A:  Printheaders(); break;  // PRINTHEADERS [ 2345]
-                    case 0x2B:  Prntgrdlns(); break;    // PRINTGRIDLINE[ 2345]
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:  GetPageSettings().ReadMargin( maStrm );         break;
+                    case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
+                    case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -320,7 +327,7 @@ FltError ImportExcel::Read( void )
                     case 0x0206: Formula3(); break;     // FORMULA      [  3  ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
-                    case 0x0218: Name34(); break;       // NAME         [  34 ]
+                    case 0x0218: GetNameBuffer().ReadName( maStrm );            break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
@@ -343,14 +350,20 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Ende;
                         break;
                     case 0x12:  Protect(); break;       // SHEET PROTECTION
-                    case 0x14:  Header(); break;        // HEADER       [ 2345]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345]
+                    case 0x14:
+                    case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x1A:  Verticalpagebreaks(); break;
-                    case 0x1B:  Horizontalpagebreaks(); break;
+                    case 0x1A:
+                    case 0x1B:  GetPageSettings().ReadPageBreaks( maStrm );     break;
                     case 0x1C:  Note(); break;          // NOTE         [ 2345]
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:  GetPageSettings().ReadMargin( maStrm );         break;
+                    case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
+                    case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -365,7 +378,7 @@ FltError ImportExcel::Read( void )
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
-                    case 0xA1:  Setup(); break;         // SETUP        [   45]
+                    case 0xA1:  GetPageSettings().ReadSetup( maStrm );          break;
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                     case 0x0201: Blank34(); break;      // BLANK        [  34 ]
                     case 0x0203: Number34(); break;     // NUMBER       [  34 ]
@@ -373,7 +386,7 @@ FltError ImportExcel::Read( void )
                     case 0x0205: Boolerr34(); break;    // BOOLERR      [  34 ]
                     case 0x0207: RecString(); break;    // STRING       [ 2345]
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
-                    case 0x0218: Name34(); break;       // NAME         [  34 ]
+                    case 0x0218: GetNameBuffer().ReadName( maStrm );            break;
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
@@ -411,7 +424,7 @@ FltError ImportExcel::Read( void )
                     case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
-                    case 0x0218: Name34(); break;       // NAME         [  34 ]
+                    case 0x0218: GetNameBuffer().ReadName( maStrm );            break;
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x0231: GetFontBuffer().ReadFont( maStrm );            break;
@@ -443,10 +456,10 @@ FltError ImportExcel::Read( void )
                         IncScTab();
                         break;
                     case 0x12:  Protect(); break;       // SHEET PROTECTION
-                    case 0x14:  Header(); break;        // HEADER       [ 2345]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345]
-                    case 0x1A:  Verticalpagebreaks(); break;
-                    case 0x1B:  Horizontalpagebreaks(); break;
+                    case 0x14:
+                    case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
+                    case 0x1A:
+                    case 0x1B:  GetPageSettings().ReadPageBreaks( maStrm );     break;
                     case 0x1C:                          // NOTE         [ 2345]
                         Note();
                         eAkt = Z_Biff4T;
@@ -468,7 +481,7 @@ FltError ImportExcel::Read( void )
                     case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
-                    case 0xA1:  Setup(); break;         // SETUP        [   45]
+                    case 0xA1:  GetPageSettings().ReadSetup( maStrm );          break;
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                     case 0x0201:                        // BLANK        [  34 ]
                         Blank34();
@@ -487,7 +500,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff4T;
                         break;
                     case 0x0208: Row34(); break;        // ROW          [  34 ]
-                    case 0x0218: Name34(); break;       // NAME         [  34 ]
+                    case 0x0218: GetNameBuffer().ReadName( maStrm );            break;
                     case 0x0221:                        // ARRAY        [  34 ]
                         Array34();
                         eAkt = Z_Biff4T;
@@ -592,7 +605,7 @@ FltError ImportExcel::Read( void )
                     case 0x0A:                          // EOF          [ 2345]
                         eAkt = Z_Biff5E;
                         break;
-                    case 0x18:  Name25(); break;        // NAME         [ 2  5]
+                    case 0x18:  GetNameBuffer().ReadName( maStrm );             break;
                     case 0x1E:  GetNumFmtBuffer().ReadFormat( maStrm );         break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2   ]
@@ -612,7 +625,6 @@ FltError ImportExcel::Read( void )
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
                     case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
-                    case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
                 }
@@ -646,11 +658,12 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff5T;
                         break;
                     case 0x0A:                          // EOF          [ 2345]
+                        EndSheet();
                         eAkt = Z_Biff5E;
                         IncScTab();
                         break;
-                    case 0x14:  Header(); break;        // HEADER       [ 2345]
-                    case 0x15:  Footer(); break;        // FOOTER       [ 2345]
+                    case 0x14:
+                    case 0x15:  GetPageSettings().ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x1C:                          // NOTE         [ 2345]
                         Note();
@@ -658,12 +671,12 @@ FltError ImportExcel::Read( void )
                         break;
                     case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
-                    case 0x26:  Leftmargin(); break;    // LEFTMARGIN   [ 2345]
-                    case 0x27:  Rightmargin(); break;   // RIGHTMARGIN  [ 2345]
-                    case 0x28:  Topmargin(); break;     // TOPMARGIN    [ 2345]
-                    case 0x29:  Bottommargin(); break;  // BOTTOMMARGIN [ 2345]
-                    case 0x2A:  Printheaders(); break;  // PRINTHEADERS [ 2345]
-                    case 0x2B:  Prntgrdlns(); break;    // PRINTGRIDLINE[ 2345]
+                    case 0x26:
+                    case 0x27:
+                    case 0x28:
+                    case 0x29:  GetPageSettings().ReadMargin( maStrm );         break;
+                    case 0x2A:  GetPageSettings().ReadPrintheaders( maStrm );   break;
+                    case 0x2B:  GetPageSettings().ReadPrintgridlines( maStrm ); break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         if( Filepass() )
                         {
@@ -680,10 +693,9 @@ FltError ImportExcel::Read( void )
                         Rk();
                         eAkt = Z_Biff5T;
                         break;
-                    case 0x82:  Gridset(); break;       // GRIDSET      [  345]
-                    case 0x83:  Hcenter(); break;       // HCENTER      [  345]
-                    case 0x84:  Vcenter(); break;       // VCENTER      [  345]
-                    case 0xA1:  Setup5(); break;        // SETUP
+                    case 0x83:
+                    case 0x84:  GetPageSettings().ReadCenter( maStrm );         break;
+                    case 0xA1:  GetPageSettings().ReadSetup( maStrm );          break;
                     case 0xBD:                          // MULRK        [    5]
                         Mulrk();
                         eAkt = Z_Biff5T;
@@ -863,8 +875,8 @@ FltError ImportExcel::Read( void )
                             aIn.SeekGlobalPosition(); // und zurueck an alte Position
                             break;
                         case 0x12:  Protect(); break;       // SHEET PROTECTION
-                        case 0x1A:  Verticalpagebreaks(); break;
-                        case 0x1B:  Horizontalpagebreaks(); break;
+                        case 0x1A:
+                        case 0x1B:  GetPageSettings().ReadPageBreaks( maStrm );     break;
                         case 0x1D:  Selection(); break;     // SELECTION    [ 2345]
                         case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                         case 0x21:  Array25(); break;       // ARRAY        [ 2  5]
@@ -979,18 +991,6 @@ FltError ImportExcel::Read( void )
     if( eLastErr == eERR_OK )
     {
         pD->CalcAfterLoad();
-
-        ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
-
-        UINT16                  nTabLast;// = pExcRoot->pTabNameBuff->GetLastIndex();
-        if( pExcRoot->eHauptDateiTyp <= Biff3 || (pExcRoot->eHauptDateiTyp == Biff4 && !bBiff4Workbook) )
-            nTabLast = 1;
-        else
-            nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
-
-        UINT16                  nTabCount;
-        for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
-            pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
         pProgress.reset();
 
@@ -1109,6 +1109,7 @@ FltError ImportExcel8::Read( void )
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         if( Filepass() )
                         {
+                            GetTracer().TraceLog(ePassword);
                             eLastErr = eERR_FILEPASSWD;
                             eAkt = Z_Ende;
                         }
@@ -1129,7 +1130,6 @@ FltError ImportExcel8::Read( void )
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = Z_Biff8E;
                         break;
-                    case 0x18:  Name(); break;          // NAME         [ 2  5 8 ]
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
                     case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
@@ -1146,13 +1146,13 @@ FltError ImportExcel8::Read( void )
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0x01BA: Codename( TRUE ); break;
-                    case 0x0218: Name(); break;         // NAME         [      8 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
 
                     case EXC_ID_SST:            GetSst().ReadSst( maStrm );                 break;
                     case EXC_ID_TABID:          GetTabIdBuffer().ReadTabid( maStrm );       break;
+                    case EXC_ID_NAME:           GetNameBuffer().ReadName( maStrm );         break;
                     case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm ); break;
                     case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );     break;
                     case EXC_ID_XCT:            GetLinkManager().ReadXct( maStrm );         break;
@@ -1177,20 +1177,24 @@ FltError ImportExcel8::Read( void )
                         case 0x000C:    Calccount();            break;  // CALCCOUNT
                         case 0x0010:    Delta();                break;  // DELTA
                         case 0x0011:    Iteration();            break;  // ITERATION
-                        case 0x0014:    Header();               break;  // HEADER       [ 2345   ]
-                        case 0x0015:    Footer();               break;  // FOOTER       [ 2345   ]
                         case 0x001D:    Selection();            break;  // SELECTION    [ 2345   ]
-                        case 0x0026:    Leftmargin();           break;  // LEFTMARGIN   [ 2345   ]
-                        case 0x0027:    Rightmargin();          break;  // RIGHTMARGIN  [ 2345   ]
-                        case 0x0028:    Topmargin();            break;  // TOPMARGIN    [ 2345   ]
-                        case 0x0029:    Bottommargin();         break;  // BOTTOMMARGIN [ 2345   ]
-                        case 0x002A:    Printheaders();         break;  // PRINTHEADERS [ 2345   ]
-                        case 0x002B:    Prntgrdlns();           break;  // PRINTGRIDLINE[ 2345   ]
-                        case 0x0082:    Gridset();              break;  // GRIDSET      [  345   ]
-                        case 0x0083:    Hcenter();              break;  // HCENTER      [  345   ]
-                        case 0x0084:    Vcenter();              break;  // VCENTER      [  345   ]
-                        case 0x00A1:    Setup5();               break;  // SETUP
                         case 0x0200:    Dimensions();           break;  // DIMENSIONS   [      8 ]
+
+                        case EXC_ID_HORPAGEBREAKS:
+                        case EXC_ID_VERPAGEBREAKS:  GetPageSettings().ReadPageBreaks( maStrm );     break;
+                        case EXC_ID_HEADER:
+                        case EXC_ID_FOOTER:         GetPageSettings().ReadHeaderFooter( maStrm );   break;
+                        case EXC_ID_LEFTMARGIN:
+                        case EXC_ID_RIGHTMARGIN:
+                        case EXC_ID_TOPMARGIN:
+                        case EXC_ID_BOTTOMMARGIN:   GetPageSettings().ReadMargin( maStrm );         break;
+                        case EXC_ID_PRINTHEADERS:   GetPageSettings().ReadPrintheaders( maStrm );   break;
+                        case EXC_ID_PRINTGRIDLINES: GetPageSettings().ReadPrintgridlines( maStrm ); break;
+                        case EXC_ID_HCENTER:
+                        case EXC_ID_VCENTER:        GetPageSettings().ReadCenter( maStrm );         break;
+                        case EXC_ID_SETUP:          GetPageSettings().ReadSetup( maStrm );          break;
+                        case EXC_ID_BITMAP:         GetPageSettings().ReadBitmap( maStrm );         break;
+
                         case 0x0809:                                    // BOF          [    5   ]
                         {
                             Bof5();
@@ -1410,8 +1414,6 @@ FltError ImportExcel8::Read( void )
                             aIn.SeekGlobalPosition();         // und zurueck an alte Position
                             break;
                         case 0x12:  Protect(); break;
-                        case 0x1A:  Verticalpagebreaks(); break;
-                        case 0x1B:  Horizontalpagebreaks(); break;
                         case 0x1D:  Selection(); break;     // SELECTION    [ 2345   ]
                         case 0x41:  Pane(); break;          // PANE         [ 2345   ]
                         case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
@@ -1429,8 +1431,6 @@ FltError ImportExcel8::Read( void )
                         case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                         case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                         case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
-
-                        case EXC_ID_BITMAP:     XclImpBitmap::ReadBitmap( maStrm );             break;
                     }
                 }
             }
@@ -1471,14 +1471,6 @@ FltError ImportExcel8::Read( void )
     if( eLastErr == eERR_OK )
     {
         pD->CalcAfterLoad();
-
-        ScStyleSheetPool*       pPool = pD->GetStyleSheetPool();
-
-        UINT16                  nTabLast = pExcRoot->pTabNameBuff->GetLastIndex();
-
-        UINT16                  nTabCount;
-        for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
-            pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
         pProgress.reset();
 
@@ -1530,18 +1522,24 @@ FltError ImportExcel8::ReadChart8( ScfSimpleProgressBar& rProgress, const BOOL b
 
         rProgress.Progress( aIn.Tell() );
 
+        // page settings - only for charts in entire sheet
+        if( bOwnTab ) switch( nOpcode )
+        {
+            case 0x0014:
+            case 0x0015:    GetPageSettings().ReadHeaderFooter( maStrm );       break;
+            case 0x0026:
+            case 0x0027:
+            case 0x0028:
+            case 0x0029:    GetPageSettings().ReadMargin( maStrm );             break;
+            case 0x002A:    GetPageSettings().ReadPrintheaders( maStrm );       break;
+            case 0x002B:    GetPageSettings().ReadPrintgridlines( maStrm );     break;
+            case 0x00A0:    ChartScl();                                         break;  // SCL
+            case 0x00A1:    GetPageSettings().ReadSetup( maStrm );              break;
+        }
+
         switch( nOpcode )
         {
             case 0x000A:    ChartEof(); bLoop = FALSE;                          break;  // EOF
-            case 0x0014:    Header();                                           break;  // HEADER
-            case 0x0015:    Footer();                                           break;  // FOOTER
-            case 0x0026:    Leftmargin();                                       break;  // LEFTMARGIN
-            case 0x0027:    Rightmargin();                                      break;  // RIGHTMARGIN
-            case 0x0028:    Topmargin();                                        break;  // TOPMARGIN
-            case 0x0029:    Bottommargin();                                     break;  // BOTTOMMARGIN
-            case 0x002A:    Printheaders();                                     break;  // PRINTHEADERS
-            case 0x00A0:    ChartScl();                                         break;  // SCL
-            case 0x00A1:    if( bOwnTab ) Setup5();                             break;  // SETUP
             case 0x1002:    pChart->ReadChart();                                break;  // CHART
             case 0x1003:    pChart->ReadSeries();                               break;  // SERIES
             case 0x1006:    pChart->ReadDataformat( aIn );                      break;  // DATAFORMAT
