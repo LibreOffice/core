@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:32:55 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,16 @@
 #ifndef _XMLOFF_XMLEVENTEXPORT_HXX
 #include "XMLEventExport.hxx"
 #endif
+#ifndef XMLOFF_FORMS_FORMCELLBINDING
+#include "formcellbinding.hxx"
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
+#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
+#include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#endif
 
 #include <algorithm>
 
@@ -145,6 +155,8 @@ namespace xmloff
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::io;
+    using namespace ::com::sun::star::table;
+    using namespace ::drafts::com::sun::star::form;
 
     //=====================================================================
     //= OElementExport
@@ -263,7 +275,7 @@ namespace xmloff
         CHECK_N_TRANSLATE( IMAGECONTROL );
         CHECK_N_TRANSLATE( FORMATTEDFIELD );
         else if (0 == sServiceName.compareToAscii(SERVICE_PERSISTENT_COMPONENT_EDIT))
-        {   // special handling for the edit field: we have to controls using this as persistence service name
+        {   // special handling for the edit field: we have two controls using this as persistence service name
             sToWriteServiceName = SERVICE_EDIT;
             Reference< XServiceInfo > xSI(m_xProps, UNO_QUERY);
             if (xSI.is() && xSI->supportsService(SERVICE_FORMATTEDFIELD))
@@ -308,6 +320,7 @@ namespace xmloff
         ,m_nIncludeDatabase(0)
         ,m_nIncludeSpecial(0)
         ,m_nIncludeEvents(0)
+        ,m_nIncludeBindings(0)
         ,m_nClassId(FormComponentType::CONTROL)
         ,m_pOuterElement(NULL)
     {
@@ -370,6 +383,9 @@ namespace xmloff
 
         // common database attributes
         exportDatabaseAttributes();
+
+        // attributes related to external bindings
+        exportBindingAtributes();
 
         // attributes special to the respective control type
         exportSpecialAttributes();
@@ -791,6 +807,40 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OControlExport::exportBindingAtributes()
+    {
+#if OSL_DEBUG_LEVEL > 0
+        sal_Int32 nIncludeBinding = m_nIncludeBindings;
+#endif
+
+        // ....................................................
+        if ( m_nIncludeBindings & BA_LINKED_CELL )
+        {
+            exportCellBindingAttributes( ( m_nIncludeBindings & BA_LIST_LINKING_TYPE ) != 0 );
+        #if OSL_DEBUG_LEVEL > 0
+            //  reset the bit for later checking
+            nIncludeBinding = nIncludeBinding & ~( BA_LINKED_CELL | BA_LIST_LINKING_TYPE );
+        #endif
+        }
+
+        // ....................................................
+        if ( m_nIncludeBindings & BA_LIST_CELL_RANGE )
+        {
+            exportCellListSourceRange();
+        #if OSL_DEBUG_LEVEL > 0
+            //  reset the bit for later checking
+            nIncludeBinding = nIncludeBinding & ~BA_LIST_CELL_RANGE;
+        #endif
+        }
+
+
+        OSL_ENSURE( 0 == nIncludeBinding,
+            "OControlExport::exportBindingAtributes: forgot some flags!");
+            // in the debug version, we should have removed every bit we handled from the mask, so it should
+            // be 0 now ...
+    }
+
+    //---------------------------------------------------------------------
     void OControlExport::exportSpecialAttributes()
     {
         sal_Int32 i=0;
@@ -1145,7 +1195,7 @@ namespace xmloff
             {   // it's some kind of edit. To know which type we need further investigation
 
                 if (FORMATTED_TEXT != m_eType)
-                {   // not coming from the presious cases which had a class id .ne. TEXTFIELD
+                {   // not coming from the previous cases which had a class id .ne. TEXTFIELD
 
                     // check if it's a formatted field
                     if (m_xPropertyInfo->hasPropertyByName(PROPERTY_FORMATKEY))
@@ -1353,6 +1403,7 @@ namespace xmloff
                 m_nIncludeEvents = EA_CONTROL_EVENTS;
                     // we always should be able to export events - this is not control type dependent
                 break;
+
             default:
                 OSL_ENSURE(sal_False, "OControlExport::examineControl: unknown control type (class id)!");
                 break;
@@ -1360,6 +1411,97 @@ namespace xmloff
 
         // in general, all control types need to export the control id
         m_nIncludeCommon |= CCA_CONTROL_ID;
+
+        // is is a control bound to a calc cell?
+        if ( FormCellBindingHelper::livesInSpreadsheetDocument( m_xProps ) )
+        {
+            FormCellBindingHelper aHelper( m_xProps, NULL );
+            {
+                if ( aHelper.isCellBinding( aHelper.getCurrentBinding( ) ) )
+                {
+                    m_nIncludeBindings |= BA_LINKED_CELL;
+                    if ( m_nClassId == FormComponentType::LISTBOX )
+                        m_nIncludeBindings |= BA_LIST_LINKING_TYPE;
+                }
+            }
+
+            // is it a list-like control which uses a calc cell range as list source?
+            {
+                if ( aHelper.isCellRangeListSource( aHelper.getCurrentListSource( ) ) )
+                    m_nIncludeBindings |= BA_LIST_CELL_RANGE;
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportCellBindingAttributes( bool _bIncludeListLinkageType )
+    {
+        try
+        {
+            FormCellBindingHelper aHelper( m_xProps, NULL );
+            Reference< XValueBinding > xBinding( aHelper.getCurrentBinding() );
+            OSL_ENSURE( xBinding.is(), "OControlExport::exportCellBindingAttributes: invalid bindable or invalid binding!" );
+            if ( xBinding.is() )
+            {
+                // ....................................................
+                AddAttribute(
+                    getBindingAttributeNamespace( BA_LINKED_CELL ),
+                    getBindingAttributeName( BA_LINKED_CELL ),
+                    aHelper.getStringAddressFromCellBinding( xBinding )
+                );
+
+                // ....................................................
+                if ( _bIncludeListLinkageType )
+                {
+                    sal_Int16 nLinkageType = aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0;
+
+                    ::rtl::OUStringBuffer sBuffer;
+                    m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(
+                        sBuffer,
+                        (sal_uInt16)nLinkageType,
+                        OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
+                    );
+
+                    AddAttribute(
+                        getBindingAttributeNamespace( BA_LIST_LINKING_TYPE ),
+                        getBindingAttributeName( BA_LIST_LINKING_TYPE ),
+                        sBuffer.makeStringAndClear()
+                    );
+                }
+
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlExport::exportCellBindingAttributes: caught an exception!" );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OControlExport::exportCellListSourceRange( )
+    {
+        try
+        {
+            Reference< XListEntrySink > xSink( m_xProps, UNO_QUERY );
+            Reference< XListEntrySource > xSource;
+            if ( xSink.is() )
+                xSource = xSource.query( xSink->getListEntrySource() );
+            OSL_ENSURE( xSource.is(), "OControlExport::exportCellListSourceRange: list source or sink!" );
+            if ( xSource.is() )
+            {
+                FormCellBindingHelper aHelper( m_xProps, NULL );
+
+                AddAttribute(
+                    getBindingAttributeNamespace( BA_LIST_CELL_RANGE ),
+                    getBindingAttributeName( BA_LIST_CELL_RANGE ),
+                    aHelper.getStringAddressFromCellListSource( xSource )
+                );
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OControlExport::exportCellListSourceRange: caught an exception!" );
+        }
     }
 
     //=====================================================================
@@ -1572,7 +1714,7 @@ namespace xmloff
                     OEnumMapper::getEnumMap(eEnumPropertyMaps[i]),
                     nEnumPropertyAttrDefaults[i],
                     nEnumPropertyAttrDefaultFlags[i]
-                    );
+                );
         }
 
         // the service name
