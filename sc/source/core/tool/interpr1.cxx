@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:51:02 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifdef RS6000
-#pragma options FLTTRAP
-#include <fptrap.h>
-#include <fpxcp.h>
-#endif
-
 #include "scitems.hxx"
 #include <svx/langitem.hxx>
 #include <svx/algitem.hxx>
@@ -102,22 +96,14 @@
 #include "docoptio.hxx"
 #include "globstr.hrc"
 #include "attrib.hxx"
+#include "jumpmatrix.hxx"
 
 
-// PI jetzt als F_PI aus solar.h
-//#define   PI            3.1415926535897932
-//#define   MINVALUE      1.7e-307
-//#define SQRT_2_PI   2.506628274631000
-
-//  globale Variablen
-
-#pragma code_seg("SCSTATICS")
+#define SC_DOUBLE_MAXVALUE  1.7e307
 
 IMPL_FIXEDMEMPOOL_NEWDEL( ScTokenStack, 8, 4 )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScErrorStack, 8, 4 )
 IMPL_FIXEDMEMPOOL_NEWDEL( ScInterpreter, 32, 16 )
-
-#pragma code_seg()
 
 ScTokenStack* ScInterpreter::pGlobalStack = NULL;
 ScErrorStack* ScInterpreter::pGlobalErrorStack = NULL;
@@ -133,32 +119,118 @@ void ScInterpreter::ScIfJump()
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    if ( GetBool() )
-    {   // TRUE
-        if( nJumpCount >= 2 )
-        {   // then Zweig
-            nFuncFmtType = NUMBERFORMAT_UNDEFINED;
-            aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+    MatrixDoubleRefToMatrix();
+    switch ( GetStackType() )
+    {
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                SetIllegalArgument();
+            else
+            {
+                // DoubleError handled by JumpMatrix
+                pMat->SetErrorInterpreter( NULL);
+                USHORT nCols, nRows;
+                pMat->GetDimensions( nCols, nRows );
+                if ( nCols == 0 || nRows == 0 )
+                    SetIllegalParameter();
+                else
+                {
+                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    for ( USHORT nC=0; nC < nCols; ++nC )
+                    {
+                        for ( USHORT nR=0; nR < nRows; ++nR )
+                        {
+                            double fVal;
+                            bool bTrue;
+                            BOOL bIsValue;
+                            const MatValue* pMatVal = pMat->Get( nC, nR,
+                                    bIsValue);      // bIsValue used as bString
+                            bIsValue = !bIsValue;
+                            if ( bIsValue )
+                            {
+                                fVal = pMatVal->fVal;
+                                bIsValue = ::rtl::math::isFinite( fVal );
+                                bTrue = bIsValue && (fVal != 0.0);
+                                if ( bTrue )
+                                    fVal = 1.0;
+                            }
+                            else
+                            {
+                                bTrue = false;
+                                fVal = 0.0;
+                            }
+                            if ( bTrue )
+                            {   // TRUE
+                                if( nJumpCount >= 2 )
+                                {   // THEN path
+                                    pJumpMat->SetJump( nC, nR, fVal,
+                                            pJump[ 1 ],
+                                            pJump[ nJumpCount ]);
+                                }
+                                else
+                                {   // no parameter given for THEN
+                                    pJumpMat->SetJump( nC, nR, fVal,
+                                            pJump[ nJumpCount ],
+                                            pJump[ nJumpCount ]);
+                                }
+                            }
+                            else
+                            {   // FALSE
+                                if( nJumpCount == 3 && bIsValue )
+                                {   // ELSE path
+                                    pJumpMat->SetJump( nC, nR, fVal,
+                                            pJump[ 2 ],
+                                            pJump[ nJumpCount ]);
+                                }
+                                else
+                                {   // no parameter given for ELSE,
+                                    // or DoubleError
+                                    pJumpMat->SetJump( nC, nR, fVal,
+                                            pJump[ nJumpCount ],
+                                            pJump[ nJumpCount ]);
+                                }
+                            }
+                        }
+                    }
+                    PushTempToken( new ScJumpMatrixToken( pJumpMat ) );
+                    // set endpoint of path for main code line
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                }
+            }
         }
-        else
-        {   // kein Parameter fuer then
-            nFuncFmtType = NUMBERFORMAT_LOGICAL;
-            PushInt(1);
-            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
-        }
-    }
-    else
-    {   // FALSE
-        if( nJumpCount == 3 )
-        {   // else Zweig
-            nFuncFmtType = NUMBERFORMAT_UNDEFINED;
-            aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
-        }
-        else
-        {   // kein Parameter fuer else
-            nFuncFmtType = NUMBERFORMAT_LOGICAL;
-            PushInt(0);
-            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+        break;
+        default:
+        {
+            if ( GetBool() )
+            {   // TRUE
+                if( nJumpCount >= 2 )
+                {   // THEN path
+                    nFuncFmtType = NUMBERFORMAT_UNDEFINED;
+                    aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+                }
+                else
+                {   // no parameter given for THEN
+                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    PushInt(1);
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                }
+            }
+            else
+            {   // FALSE
+                if( nJumpCount == 3 )
+                {   // ELSE path
+                    nFuncFmtType = NUMBERFORMAT_UNDEFINED;
+                    aCode.Jump( pJump[ 2 ], pJump[ nJumpCount ] );
+                }
+                else
+                {   // no parameter given for ELSE
+                    nFuncFmtType = NUMBERFORMAT_LOGICAL;
+                    PushInt(0);
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                }
+            }
         }
     }
 }
@@ -168,37 +240,369 @@ void ScInterpreter::ScChoseJump()
 {
     const short* pJump = pCur->GetJump();
     short nJumpCount = pJump[ 0 ];
-    double nJumpIndex = ::rtl::math::approxFloor( GetDouble() );
-    if ((nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
-        aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
-    else
-        SetError(errIllegalArgument);
+    MatrixDoubleRefToMatrix();
+    switch ( GetStackType() )
+    {
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                SetIllegalArgument();
+            else
+            {
+                // DoubleError handled by JumpMatrix
+                pMat->SetErrorInterpreter( NULL);
+                USHORT nCols, nRows;
+                pMat->GetDimensions( nCols, nRows );
+                if ( nCols == 0 || nRows == 0 )
+                    SetIllegalParameter();
+                else
+                {
+                    ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
+                    for ( USHORT nC=0; nC < nCols; ++nC )
+                    {
+                        for ( USHORT nR=0; nR < nRows; ++nR )
+                        {
+                            double fVal;
+                            BOOL bIsValue;
+                            const MatValue* pMatVal = pMat->Get( nC, nR,
+                                    bIsValue);      // bIsValue used as bString
+                            bIsValue = !bIsValue;
+                            if ( bIsValue )
+                            {
+                                fVal = pMatVal->fVal;
+                                bIsValue = ::rtl::math::isFinite( fVal );
+                                if ( bIsValue )
+                                {
+                                    fVal = ::rtl::math::approxFloor( fVal);
+                                    if ( (fVal < 1) || (fVal >= nJumpCount))
+                                    {
+                                        bIsValue = FALSE;
+                                        fVal = CreateDoubleError(
+                                                errIllegalArgument);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                fVal = CreateDoubleError( errNoValue);
+                            }
+                            if ( bIsValue )
+                            {
+                                pJumpMat->SetJump( nC, nR, fVal,
+                                        pJump[ (short)fVal ],
+                                        pJump[ nJumpCount ]);
+                            }
+                            else
+                            {
+                                pJumpMat->SetJump( nC, nR, fVal,
+                                        pJump[ nJumpCount ],
+                                        pJump[ nJumpCount ]);
+                            }
+                        }
+                    }
+                    PushTempToken( new ScJumpMatrixToken( pJumpMat ) );
+                    // set endpoint of path for main code line
+                    aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+                }
+            }
+        }
+        break;
+        default:
+        {
+            double nJumpIndex = ::rtl::math::approxFloor( GetDouble() );
+            if ((nJumpIndex >= 1) && (nJumpIndex < nJumpCount))
+                aCode.Jump( pJump[ (short) nJumpIndex ], pJump[ nJumpCount ] );
+            else
+                SetError(errIllegalArgument);
+        }
+    }
 }
 
 
-short ScInterpreter::CompareFunc( const ScCompare& rComp )
+bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
-    short nRes = 0;
+    pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
+    ScMatrixRef pResMat = pJumpMatrix->GetResultMatrix();
+    USHORT nC, nR;
+    if ( nStackLevel == 2 )
+    {
+        if ( aCode.HasStacked() )
+            aCode.Pop();    // pop what Jump() pushed
+        else
+            DBG_ERRORFILE( "ScInterpreter::JumpMatrix: pop goes the weasel" );
+
+        if ( !pResMat )
+        {
+            Pop();
+            SetError( errUnknownStackVariable );
+        }
+        else
+        {
+            pJumpMatrix->GetPos( nC, nR );
+            switch ( GetStackType() )
+            {
+                case svDouble:
+                {
+                    double fVal = GetDouble();
+                    if ( nGlobalError )
+                    {
+                        fVal = CreateDoubleError( nGlobalError );
+                        nGlobalError = 0;
+                    }
+                    pResMat->PutDouble( fVal, nC, nR );
+                }
+                break;
+                case svString:
+                {
+                    const String& rStr = GetString();
+                    if ( nGlobalError )
+                    {
+                        pResMat->PutDouble( CreateDoubleError( nGlobalError),
+                                nC, nR);
+                        nGlobalError = 0;
+                    }
+                    else
+                        pResMat->PutString( rStr, nC, nR );
+                }
+                break;
+                case svSingleRef:
+                {
+                    ScAddress aAdr;
+                    PopSingleRef( aAdr );
+                    if ( nGlobalError )
+                    {
+                        pResMat->PutDouble( CreateDoubleError( nGlobalError),
+                                nC, nR);
+                        nGlobalError = 0;
+                    }
+                    else
+                    {
+                        ScBaseCell* pCell = GetCell( aAdr );
+                        switch ( GetCellType( pCell ) )
+                        {
+                            case CELLTYPE_NONE:
+                            case CELLTYPE_NOTE:
+                                pResMat->PutEmpty( nC, nR );
+                            break;
+                            default:
+                            {
+                                if ( HasCellValueData( pCell ) )
+                                {
+                                    double fVal = GetCellValue( aAdr, pCell);
+                                    if ( nGlobalError )
+                                    {
+                                        fVal = CreateDoubleError(
+                                                nGlobalError);
+                                        nGlobalError = 0;
+                                    }
+                                    pResMat->PutDouble( fVal, nC, nR );
+                                }
+                                else
+                                {
+                                    String aStr;
+                                    GetCellString( aStr, pCell );
+                                    if ( nGlobalError )
+                                    {
+                                        pResMat->PutDouble( CreateDoubleError(
+                                                    nGlobalError), nC, nR);
+                                        nGlobalError = 0;
+                                    }
+                                    else
+                                        pResMat->PutString( aStr, nC, nR);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+                case svDoubleRef:
+                {   // upper left plus offset within matrix
+                    double fVal;
+                    ScRange aRange;
+                    PopDoubleRef( aRange );
+                    ScAddress& rAdr = aRange.aStart;
+                    ULONG nCol = (ULONG)rAdr.Col() + nC;
+                    ULONG nRow = (ULONG)rAdr.Row() + nR;
+                    if ( nGlobalError )
+                    {
+                        fVal = CreateDoubleError( nGlobalError );
+                        nGlobalError = 0;
+                        pResMat->PutDouble( fVal, nC, nR );
+                    }
+                    else if ( nCol > aRange.aEnd.Col() ||
+                            nRow > aRange.aEnd.Row())
+                    {
+                        fVal = CreateDoubleError( errNoValue );
+                        pResMat->PutDouble( fVal, nC, nR );
+                    }
+                    else
+                    {
+                        rAdr.SetCol( (USHORT)nCol );
+                        rAdr.SetRow( (USHORT)nRow );
+                        ScBaseCell* pCell = GetCell( rAdr );
+                        switch ( GetCellType( pCell ) )
+                        {
+                            case CELLTYPE_NONE:
+                            case CELLTYPE_NOTE:
+                                pResMat->PutEmpty( nC, nR );
+                            break;
+                            default:
+                            {
+                                if ( HasCellValueData( pCell ) )
+                                {
+                                    double fVal = GetCellValue( rAdr, pCell);
+                                    if ( nGlobalError )
+                                    {
+                                        fVal = CreateDoubleError(
+                                                nGlobalError);
+                                        nGlobalError = 0;
+                                    }
+                                    pResMat->PutDouble( fVal, nC, nR );
+                                }
+                                else
+                                {
+                                    String aStr;
+                                    GetCellString( aStr, pCell );
+                                    if ( nGlobalError )
+                                    {
+                                        pResMat->PutDouble( CreateDoubleError(
+                                                    nGlobalError), nC, nR);
+                                        nGlobalError = 0;
+                                    }
+                                    else
+                                        pResMat->PutString( aStr, nC, nR );
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+                case svMatrix:
+                {   // match matrix offsets
+                    double fVal;
+                    ScMatrixRef pMat = PopMatrix();
+                    if ( nGlobalError )
+                    {
+                        fVal = CreateDoubleError( nGlobalError );
+                        nGlobalError = 0;
+                        pResMat->PutDouble( fVal, nC, nR );
+                    }
+                    else if ( !pMat )
+                    {
+                        fVal = CreateDoubleError( errUnknownVariable );
+                        pResMat->PutDouble( fVal, nC, nR );
+                    }
+                    else
+                    {
+                        USHORT nCols, nRows;
+                        pMat->GetDimensions( nCols, nRows );
+                        if ( nCols <= nC || nRows <= nR )
+                        {
+                            fVal = CreateDoubleError( errNoValue );
+                            pResMat->PutDouble( fVal, nC, nR );
+                        }
+                        else
+                        {
+                            if ( pMat->IsValue( nC, nR ) )
+                            {
+                                fVal = pMat->GetDouble( nC, nR );
+                                pResMat->PutDouble( fVal, nC, nR );
+                            }
+                            else if ( pMat->IsEmpty( nC, nR ) )
+                                pResMat->PutEmpty( nC, nR );
+                            else
+                            {
+                                const String& rStr = pMat->GetString( nC, nR );
+                                pResMat->PutString( rStr, nC, nR );
+                            }
+                        }
+                    }
+                }
+                break;
+                default:
+                {
+                    Pop();
+                    double fVal = CreateDoubleError( errIllegalArgument);
+                    pResMat->PutDouble( fVal, nC, nR );
+                }
+            }
+        }
+    }
+    bool bCont = pJumpMatrix->Next( nC, nR );
+    if ( bCont )
+    {
+        double fBool;
+        short nStart, nNext, nStop;
+        pJumpMatrix->GetJump( nC, nR, fBool, nStart, nNext, nStop );
+        while ( bCont && nStart == nNext )
+        {   // push all results that have no jump path
+            if ( pResMat )
+            {
+                // a FALSE without path results in an empty path value
+                if ( fBool == 0.0 )
+                    pResMat->PutEmptyPath( nC, nR );
+                else
+                    pResMat->PutDouble( fBool, nC, nR );
+            }
+            bCont = pJumpMatrix->Next( nC, nR );
+            if ( bCont )
+                pJumpMatrix->GetJump( nC, nR, fBool, nStart, nNext, nStop );
+        }
+        if ( bCont && nStart != nNext )
+        {
+            const ScTokenVec* pParams = pJumpMatrix->GetJumpParameters();
+            if ( pParams )
+            {
+                for ( ScTokenVec::const_iterator i = pParams->begin();
+                        i != pParams->end(); ++i )
+                {
+                    Push( *(*i));
+                }
+            }
+            aCode.Jump( nStart, nNext, nStop );
+        }
+    }
+    if ( !bCont )
+    {   // we're done with it, throw away jump matrix, keep result
+        pJumpMatrix = NULL;
+        Pop();
+        PushMatrix( pResMat );
+        return true;
+    }
+    return false;
+}
+
+
+double ScInterpreter::CompareFunc( const ScCompare& rComp )
+{
+    // Keep DoubleError if encountered
+    if ( rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
+        return rComp.nVal[0];
+    if ( rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
+        return rComp.nVal[1];
+
+    double fRes = 0;
     if ( rComp.bEmpty[ 0 ] )
     {
         if ( rComp.bEmpty[ 1 ] )
-            ;       // leere Zelle == leere Zelle, nRes 0
+            ;       // empty cell == empty cell, fRes 0
         else if( rComp.bVal[ 1 ] )
         {
             if ( !::rtl::math::approxEqual( rComp.nVal[ 1 ], 0.0 ) )
             {
                 if ( rComp.nVal[ 1 ] < 0.0 )
-                    nRes = 1;       // leere Zelle > -x
+                    fRes = 1;       // empty cell > -x
                 else
-                    nRes = -1;      // leere Zelle < x
+                    fRes = -1;      // empty cell < x
             }
-            // else: leere Zelle == 0.0
+            // else: empty cell == 0.0
         }
         else
         {
             if ( rComp.pVal[ 1 ]->Len() )
-                nRes = -1;      // leere Zelle < "..."
-            // else: leere Zelle == ""
+                fRes = -1;      // empty cell < "..."
+            // else: empty cell == ""
         }
     }
     else if ( rComp.bEmpty[ 1 ] )
@@ -208,17 +612,17 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
             if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], 0.0 ) )
             {
                 if ( rComp.nVal[ 0 ] < 0.0 )
-                    nRes = -1;      // -x < leere Zelle
+                    fRes = -1;      // -x < empty cell
                 else
-                    nRes = 1;       // x > leere Zelle
+                    fRes = 1;       // x > empty cell
             }
-            // else: leere Zelle == 0.0
+            // else: empty cell == 0.0
         }
         else
         {
             if ( rComp.pVal[ 0 ]->Len() )
-                nRes = 1;       // "..." > leere Zelle
-            // else: "" == leere Zelle
+                fRes = 1;       // "..." > empty cell
+            // else: "" == empty cell
         }
     }
     else if( rComp.bVal[ 0 ] )
@@ -228,30 +632,30 @@ short ScInterpreter::CompareFunc( const ScCompare& rComp )
             if ( !::rtl::math::approxEqual( rComp.nVal[ 0 ], rComp.nVal[ 1 ] ) )
             {
                 if( rComp.nVal[ 0 ] - rComp.nVal[ 1 ] < 0 )
-                    nRes = -1;
+                    fRes = -1;
                 else
-                    nRes = 1;
+                    fRes = 1;
             }
         }
         else
-            nRes = -1;  // Zahl ist kleiner als String
+            fRes = -1;  // number is less than string
     }
     else if( rComp.bVal[ 1 ] )
-        nRes = 1;   // Zahl ist kleiner als String
+        fRes = 1;   // number is less than string
     else
     {
         if (pDok->GetDocOptions().IsIgnoreCase())
-            nRes = (short) ScGlobal::pCollator->compareString(
+            fRes = (double) ScGlobal::pCollator->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
         else
-            nRes = (short) ScGlobal::pCaseCollator->compareString(
+            fRes = (double) ScGlobal::pCaseCollator->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
     }
-    return nRes;
+    return fRes;
 }
 
 
-short ScInterpreter::Compare()
+double ScInterpreter::Compare()
 {
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
     String aVal1, aVal2;
@@ -303,16 +707,12 @@ short ScInterpreter::Compare()
 }
 
 
-ScMatrix* ScInterpreter::CompareMat()
+ScMatrixRef ScInterpreter::CompareMat()
 {
     nCurFmtType = nFuncFmtType = NUMBERFORMAT_LOGICAL;
     String aVal1, aVal2;
     ScCompare aComp( &aVal1, &aVal2 );
-    ScMatrix* pMat[2];
-    pMat[0] = pMat[1] = NULL;
-    USHORT nMatInd[2];
-    BOOL bTmpMat[2];
-    bTmpMat[0] = bTmpMat[1] = FALSE;
+    ScMatrixRef pMat[2];
     ScAddress aAdr;
     for( short i = 1; i >= 0; i-- )
     {
@@ -348,21 +748,22 @@ ScMatrix* ScInterpreter::CompareMat()
             }
             break;
             case svDoubleRef:
-                bTmpMat[ i ] = TRUE;
             case svMatrix:
-                pMat[ i ] = GetMatrix( nMatInd[ i ] );
+                pMat[ i ] = GetMatrix();
                 if ( !pMat[ i ] )
                     SetError(errIllegalParameter);
+                else
+                    pMat[i]->SetErrorInterpreter( NULL);
+                    // errors are transported as DoubleError inside matrix
                 break;
             default:
                 SetError(errIllegalParameter);
             break;
         }
     }
-    ScMatrix* pResMat = NULL;
+    ScMatrixRef pResMat = NULL;
     if( !nGlobalError )
     {
-        USHORT nResMatInd;
         if ( pMat[0] && pMat[1] )
         {
             USHORT nC0, nR0, nC1, nR1;
@@ -370,7 +771,7 @@ ScMatrix* ScInterpreter::CompareMat()
             pMat[1]->GetDimensions( nC1, nR1 );
             USHORT nC = Max( nC0, nC1 );
             USHORT nR = Max( nR0, nR1 );
-            pResMat = GetNewMat( nC, nR, nResMatInd );
+            pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;
             for ( USHORT j=0; j<nC; j++ )
@@ -400,14 +801,13 @@ ScMatrix* ScInterpreter::CompareMat()
                         pResMat->PutString( ScGlobal::GetRscString(STR_NO_VALUE), j,k );
                 }
             }
-            nRetMat = nResMatInd;
         }
         else if ( pMat[0] || pMat[1] )
         {
             short i = ( pMat[0] ? 0 : 1);
             USHORT nC, nR;
             pMat[i]->GetDimensions( nC, nR );
-            pResMat = GetNewMat( nC, nR, nResMatInd );
+            pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;
             ULONG n = (ULONG) nC * nR;
@@ -427,15 +827,6 @@ ScMatrix* ScInterpreter::CompareMat()
                 }
                 pResMat->PutDouble( CompareFunc( aComp ), j );
             }
-            nRetMat = nResMatInd;
-        }
-    }
-    for( short x=1; x >= 0; x-- )
-    {
-        if ( bTmpMat[x] && pMat[x] )
-        {
-            delete pMat[x];
-            ResetNewMat( nMatInd[x] );
         }
     }
     return pResMat;
@@ -444,14 +835,9 @@ ScMatrix* ScInterpreter::CompareMat()
 
 void ScInterpreter::ScEqual()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -467,14 +853,9 @@ void ScInterpreter::ScEqual()
 
 void ScInterpreter::ScNotEqual()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -490,14 +871,9 @@ void ScInterpreter::ScNotEqual()
 
 void ScInterpreter::ScLess()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -513,14 +889,9 @@ void ScInterpreter::ScLess()
 
 void ScInterpreter::ScGreater()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -536,14 +907,9 @@ void ScInterpreter::ScGreater()
 
 void ScInterpreter::ScLessEqual()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -559,14 +925,9 @@ void ScInterpreter::ScLessEqual()
 
 void ScInterpreter::ScGreaterEqual()
 {
-    StackVar eType;
-    if ( ((eType = GetStackType(2)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef) ||
-            ((eType = GetStackType(1)) == svMatrix) ||
-            (bMatrixFormula && eType == svDoubleRef)
-        )
+    if ( GetStackType(1) == svMatrix || GetStackType(2) == svMatrix )
     {
-        ScMatrix* pMat = CompareMat();
+        ScMatrixRef pMat = CompareMat();
         if ( !pMat )
             SetIllegalParameter();
         else
@@ -642,12 +1003,19 @@ void ScInterpreter::ScAnd()
                     break;
                     case svMatrix:
                     {
-                        USHORT nMatInd;
-                        ScMatrix* pMat = GetMatrix( nMatInd );
+                        ScMatrixRef pMat = GetMatrix();
                         if ( pMat )
                         {
                             bHaveValue = TRUE;
-                            nRes &= pMat->And();
+                            double fVal = pMat->And();
+                            USHORT nErr = GetDoubleErrorValue( fVal );
+                            if ( nErr )
+                            {
+                                SetError( nErr );
+                                nRes = FALSE;
+                            }
+                            else
+                                nRes &= (fVal != 0.0);
                         }
                         // else: GetMatrix hat errIllegalParameter gesetzt
                     }
@@ -731,12 +1099,19 @@ void ScInterpreter::ScOr()
                     case svMatrix:
                     {
                         bHaveValue = TRUE;
-                        USHORT nMatInd;
-                        ScMatrix* pMat = GetMatrix( nMatInd );
+                        ScMatrixRef pMat = GetMatrix();
                         if ( pMat )
                         {
                             bHaveValue = TRUE;
-                            nRes |= pMat->Or();
+                            double fVal = pMat->Or();
+                            USHORT nErr = GetDoubleErrorValue( fVal );
+                            if ( nErr )
+                            {
+                                SetError( nErr );
+                                nRes = FALSE;
+                            }
+                            else
+                                nRes |= (fVal != 0.0);
                         }
                         // else: GetMatrix hat errIllegalParameter gesetzt
                     }
@@ -759,21 +1134,20 @@ void ScInterpreter::ScOr()
 
 void ScInterpreter::ScNeg()
 {
-    MatrixDoubleRefToMatrix();
     switch ( GetStackType() )
     {
         case svMatrix :
         {
-            USHORT nMatInd;
-            ScMatrix* pMat = GetMatrix( nMatInd );
-            if ( pMat )
+            ScMatrixRef pMat = GetMatrix();
+            if ( !pMat )
+                PushError();
+            else
             {
                 USHORT nC, nR;
                 pMat->GetDimensions( nC, nR );
-                USHORT nResMat;
-                ScMatrix* pResMat = GetNewMat( nC, nR, nResMat );
+                ScMatrixRef pResMat = GetNewMat( nC, nR);
                 if ( !pResMat )
-                    SetNoValue();
+                    PushError();
                 else
                 {
                     ULONG nCount = nC * nR;
@@ -785,7 +1159,6 @@ void ScInterpreter::ScNeg()
                             pResMat->PutString(
                                 ScGlobal::GetRscString( STR_NO_VALUE ), j );
                     }
-                    nRetMat = nResMat;
                     PushMatrix( pResMat );
                 }
             }
@@ -815,7 +1188,39 @@ void ScInterpreter::ScPercentSign()
 void ScInterpreter::ScNot()
 {
     nFuncFmtType = NUMBERFORMAT_LOGICAL;
-    PushInt( GetDouble() == 0.0 );
+    switch ( GetStackType() )
+    {
+        case svMatrix :
+        {
+            ScMatrixRef pMat = GetMatrix();
+            if ( !pMat )
+                PushError();
+            else
+            {
+                USHORT nC, nR;
+                pMat->GetDimensions( nC, nR );
+                ScMatrixRef pResMat = GetNewMat( nC, nR);
+                if ( !pResMat )
+                    PushError();
+                else
+                {
+                    ULONG nCount = nC * nR;
+                    for ( ULONG j=0; j<nCount; ++j )
+                    {
+                        if ( pMat->IsValueOrEmpty(j) )
+                            pResMat->PutDouble( (pMat->GetDouble(j) == 0.0), j );
+                        else
+                            pResMat->PutString(
+                                ScGlobal::GetRscString( STR_NO_VALUE ), j );
+                    }
+                    PushMatrix( pResMat );
+                }
+            }
+        }
+        break;
+        default:
+            PushInt( GetDouble() == 0.0 );
+    }
 }
 
 
@@ -999,6 +1404,24 @@ void ScInterpreter::ScIsEmpty()
                 nRes = 1;
         }
         break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                ;   // nothing
+            else if ( !pJumpMatrix )
+                nRes = pMat->IsEmpty( 0 );
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                    nRes = pMat->IsEmpty( nC, nR);
+                // else: FALSE, not empty (which is what Xcl does)
+            }
+        }
+        break;
         default:
             Pop();
     }
@@ -1039,7 +1462,24 @@ short ScInterpreter::IsString()
             PopError();
             if ( !nGlobalError )
                 nRes = 1;
-            break;
+        break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                ;   // nothing
+            else if ( !pJumpMatrix )
+                nRes = pMat->IsString(0) && !pMat->IsEmpty(0);
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                    nRes = pMat->IsString( nC, nR) && !pMat->IsEmpty( nC, nR);
+            }
+        }
+        break;
         default:
             Pop();
     }
@@ -1083,6 +1523,10 @@ void ScInterpreter::ScIsLogical(UINT16 aOldNumType)
             }
         }
         break;
+        case svMatrix:
+            // TODO: we don't have type information for arrays except
+            // numerical/string.
+        // Fall thru
         default:
             PopError();
             if ( !nGlobalError )
@@ -1144,7 +1588,19 @@ void ScInterpreter::ScType()
             }
             else
                 nType = 2;
-            break;
+        break;
+        case svMatrix:
+            PopMatrix();
+            if ( nGlobalError )
+            {
+                nType = 16;
+                nGlobalError = 0;
+            }
+            else
+                nType = 64;
+                // we could return the type of one element if in JumpMatrix or
+                // ForceArray mode, but Xcl doesn't ...
+        break;
         default:
             PopError();
             if ( nGlobalError )
@@ -1430,7 +1886,24 @@ void ScInterpreter::ScIsValue()
         break;
         case svString:
             Pop();
-            break;
+        break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                ;   // nothing
+            else if ( !pJumpMatrix )
+                nRes = pMat->IsValue( 0 );
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                    nRes = pMat->IsValue( nC, nR);
+            }
+        }
+        break;
         default:
             PopError();
             if ( !nGlobalError )
@@ -1516,6 +1989,23 @@ void ScInterpreter::ScIsNV()
             }
         }
         break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                ;   // nothing
+            else if ( !pJumpMatrix )
+                nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) == NOVALUE);
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                    nRes = (GetDoubleErrorValue( pMat->GetDouble( nC, nR)) == NOVALUE);
+            }
+        }
+        break;
         default:
             PopError();
             if ( nGlobalError == NOVALUE )
@@ -1544,6 +2034,29 @@ void ScInterpreter::ScIsErr()
                 ScBaseCell* pCell = GetCell( aAdr );
                 USHORT nErr = GetCellErrCode( pCell );
                 nRes = (nErr && nErr != NOVALUE);
+            }
+        }
+        break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( nGlobalError || !pMat )
+                nRes = ((nGlobalError && nGlobalError != NOVALUE) || !pMat);
+            else if ( !pJumpMatrix )
+            {
+                USHORT nErr = GetDoubleErrorValue( pMat->GetDouble( 0 ));
+                nRes = (nErr && nErr != NOVALUE);
+            }
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                {
+                    USHORT nErr = GetDoubleErrorValue( pMat->GetDouble( nC, nR));
+                    nRes = (nErr && nErr != NOVALUE);
+                }
             }
         }
         break;
@@ -1581,6 +2094,23 @@ void ScInterpreter::ScIsError()
             }
         }
         break;
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( nGlobalError || !pMat )
+                nRes = 1;
+            else if ( !pJumpMatrix )
+                nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) != 0);
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                    nRes = (GetDoubleErrorValue( pMat->GetDouble( nC, nR)) != 0);
+            }
+        }
+        break;
         default:
             PopError();
             if ( nGlobalError )
@@ -1615,18 +2145,14 @@ short ScInterpreter::IsEven()
                     case CELLTYPE_VALUE :
                         fVal = GetCellValue( aAdr, pCell );
                         nRes = 1;
-                        break;
+                    break;
                     case CELLTYPE_FORMULA :
                         if( ((ScFormulaCell*)pCell)->IsValue() )
                         {
                             fVal = GetCellValue( aAdr, pCell );
                             nRes = 1;
                         }
-                        else
-                            SetIllegalParameter();
-                        break;
-                    default:
-                        SetIllegalParameter();
+                    break;
                 }
             }
         }
@@ -1637,10 +2163,37 @@ short ScInterpreter::IsEven()
             nRes = 1;
         }
         break;
-        default:
-            SetIllegalParameter();
+        case svMatrix:
+        {
+            ScMatrixRef pMat = PopMatrix();
+            if ( !pMat )
+                ;   // nothing
+            else if ( !pJumpMatrix )
+            {
+                nRes = pMat->IsValue( 0 );
+                if ( nRes )
+                    fVal = pMat->GetDouble( 0 );
+            }
+            else
+            {
+                USHORT nCols, nRows, nC, nR;
+                pMat->GetDimensions( nCols, nRows);
+                pJumpMatrix->GetPos( nC, nR);
+                if ( nC < nCols && nR < nRows )
+                {
+                    nRes = pMat->IsValue( nC, nR);
+                    if ( nRes )
+                        fVal = pMat->GetDouble( nC, nR);
+                }
+                else
+                    SetError( errNoValue);
+            }
+        }
+        break;
     }
-    if (nRes)
+    if ( !nRes )
+        SetError( errIllegalParameter);
+    else
         nRes = ( fmod( ::rtl::math::approxFloor( fabs( fVal ) ), 2.0 ) < 0.5 );
     return nRes;
 }
@@ -1901,7 +2454,7 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     USHORT nC, nR;
@@ -2021,7 +2574,7 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
@@ -2280,7 +2833,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     USHORT nC, nR;
@@ -2441,7 +2994,7 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
             break;
             case svMatrix :
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     USHORT nC, nR;
@@ -2538,7 +3091,7 @@ void ScInterpreter::ScColumns()
                 break;
             case svMatrix:
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     USHORT nC, nR;
@@ -2575,7 +3128,7 @@ void ScInterpreter::ScRows()
                 break;
             case svMatrix:
             {
-                ScMatrix* pMat = PopMatrix();
+                ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
                     USHORT nC, nR;
@@ -2653,21 +3206,16 @@ void ScInterpreter::ScColumn()
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     if (nCol2 > nCol1)
                     {
-                        USHORT nMatInd;
-                        ScMatrix* pResMat = GetNewMat(nCol2-nCol1+1, 1, nMatInd);
+                        ScMatrixRef pResMat = GetNewMat(nCol2-nCol1+1, 1);
                         if (pResMat)
                         {
                             for (USHORT i = nCol1; i <= nCol2; i++)
                                 pResMat->PutDouble((double)(i+1), i-nCol1, 0);
                             PushMatrix(pResMat);
-                            nRetMat = nMatInd;
                             return;
                         }
                         else
-                        {
-                            SetError( errIllegalParameter );
                             nVal = 0.0;
-                        }
                     }
                     else
                         nVal = (double) (nCol1 + 1);
@@ -2708,21 +3256,16 @@ void ScInterpreter::ScRow()
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     if (nRow2 > nRow1)
                     {
-                        USHORT nMatInd;
-                        ScMatrix* pResMat = GetNewMat(1, nRow2-nRow1+1, nMatInd);
+                        ScMatrixRef pResMat = GetNewMat(1, nRow2-nRow1+1);
                         if (pResMat)
                         {
                             for (USHORT i = nRow1; i <= nRow2; i++)
                                 pResMat->PutDouble((double)(i+1), 0, i-nRow1);
                             PushMatrix(pResMat);
-                            nRetMat = nMatInd;
                             return;
                         }
                         else
-                        {
-                            SetError( errIllegalParameter );
                             nVal = 0.0;
-                        }
                     }
                     else
                         nVal = (double) (nRow1 + 1);
@@ -3323,8 +3866,8 @@ void ScInterpreter::ScLookup()
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return ;
     USHORT nC3, nR3, nC1, nR1;
-    ScMatrix* pMat3 = NULL;
-    ScMatrix* pMat1 = NULL;
+    ScMatrixRef pMat3 = NULL;
+    ScMatrixRef pMat1 = NULL;
     USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
     USHORT nCol3, nRow3, nTab3, nCol4, nRow4, nTab4;
     USHORT nDelta;
@@ -3688,7 +4231,7 @@ void ScInterpreter::ScHLookup()
         else
             bSorted = TRUE;
         double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
-        ScMatrix* pMat = NULL;
+        ScMatrixRef pMat = NULL;
         USHORT nC, nR;
         USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
         if (GetStackType() == svDoubleRef)
@@ -3942,7 +4485,7 @@ void ScInterpreter::ScVLookup()
         else
             bSorted = TRUE;
         double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
-        ScMatrix* pMat = NULL;
+        ScMatrixRef pMat = NULL;
         USHORT nC, nR;
         USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
         if (GetStackType() == svDoubleRef)
@@ -4791,12 +5334,11 @@ void ScInterpreter::ScIndex()
         {
             if (nBereich != 1)
                 SetError(errIllegalParameter);
-            USHORT nMatInd1;
             USHORT nOldSp = sp;
-            ScMatrix* pMat = GetMatrix(nMatInd1);
+            ScMatrixRef pMat = GetMatrix();
             if (pMat)
             {
-                USHORT nC, nR, nMatInd;
+                USHORT nC, nR;
                 pMat->GetDimensions(nC, nR);
                 if (nC == 0 || nR == 0 || nCol > nC || nRow > nR)
                     SetIllegalArgument();
@@ -4804,7 +5346,7 @@ void ScInterpreter::ScIndex()
                     sp = nOldSp;
                 else if (nRow == 0)
                 {
-                    ScMatrix* pResMat = GetNewMat(nC, 1, nMatInd);
+                    ScMatrixRef pResMat = GetNewMat(nC, 1);
                     if (pResMat)
                     {
                         USHORT nColMinus1 = nCol - 1;
@@ -4816,14 +5358,13 @@ void ScInterpreter::ScIndex()
                                 pResMat->PutString(pMat->GetString(i,
                                     nColMinus1), i, 0);
                         PushMatrix(pResMat);
-                        nRetMat = nMatInd;
                     }
                     else
-                        SetNoValue();
+                        PushError();
                 }
                 else if (nCol == 0)
                 {
-                    ScMatrix* pResMat = GetNewMat(1, nR, nMatInd);
+                    ScMatrixRef pResMat = GetNewMat(1, nR);
                     if (pResMat)
                     {
                         USHORT nRowMinus1 = nRow - 1;
@@ -4835,10 +5376,9 @@ void ScInterpreter::ScIndex()
                                 pResMat->PutString(pMat->GetString(nRowMinus1,
                                     i), i);
                         PushMatrix(pResMat);
-                        nRetMat = nMatInd;
                     }
                     else
-                        SetNoValue();
+                        PushError();
                 }
                 else
                 {
@@ -4847,7 +5387,6 @@ void ScInterpreter::ScIndex()
                     else
                         PushString(pMat->GetString(nCol-1, nRow-1));
                 }
-                ResetNewMat(nMatInd1);
             }
         }
         else if (GetStackType() == svSingleRef || GetStackType() == svDoubleRef)
