@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:37:52 $
+ *  last change: $Author: aw $ $Date: 2002-04-12 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,15 @@ BOOL SdDrawViewShell::GotoBookmark(const String& rBookmark)
 
 void SdDrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
 {
+    // #98568# In older versions, if in X or Y the size of the object was smaller than the
+    // visible area, the user-defined zoom was changed. This was decided to be a bug for 6.x,
+    // thus I developed a version which instead handles X/Y bigger/smaller and visibility
+    // questions seperately. The new behaviour is triggered with the bZoomAllowed parameter
+    // which for old behaviour should be set to sal_True. I looked at all uses of MakeVisible()
+    // in the application and found no valid reason for really changing the zoom factor, thus
+    // I decided to NOT expand (incompatible) this virtual method to get one more parameter. If
+    // this is wanted in later versions, feel free to add that bool to the parameter list.
+    sal_Bool bZoomAllowed(sal_False);
     Size aLogicSize(rRect.GetSize());
 
     // Sichtbarer Bereich
@@ -124,41 +133,84 @@ void SdDrawViewShell::MakeVisible(const Rectangle& rRect, Window& rWin)
     if(!aVisArea.IsInside(rRect) && !pFuSlideShow)
     {
         // Objekt liegt nicht komplett im sichtbaren Bereich
-        INT32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
-        INT32 nFreeSpaceY(aVisAreaSize.Height() - aLogicSize.Height());
+        sal_Int32 nFreeSpaceX(aVisAreaSize.Width() - aLogicSize.Width());
+        sal_Int32 nFreeSpaceY(aVisAreaSize.Height() - aLogicSize.Height());
 
-        if(nFreeSpaceX < 0 || nFreeSpaceY < 0)
+        if(bZoomAllowed && (nFreeSpaceX < 0 || nFreeSpaceY < 0))
         {
             // Objekt passt nicht in sichtbaren Bereich -> auf Objektgroesse zoomen
             SetZoomRect(rRect);
         }
         else
         {
-            // aVisArea needs to be moved to make rRect lie inside it
-            INT32 nMaxMoveSize(((rRect.GetWidth() * 2L) + (rRect.GetHeight() * 2L)) / 2L);
-            Point aPos(aVisArea.TopLeft());
+            // #98568# allow a mode for move-only visibility without zooming.
+            const sal_Int32 nPercentBorder(30);
+            const Rectangle aInnerRectangle(
+                aVisArea.Left() + ((aVisAreaSize.Width() * nPercentBorder) / 200),
+                aVisArea.Top() + ((aVisAreaSize.Height() * nPercentBorder) / 200),
+                aVisArea.Right() - ((aVisAreaSize.Width() * nPercentBorder) / 200),
+                aVisArea.Bottom() - ((aVisAreaSize.Height() * nPercentBorder) / 200)
+                );
+            Point aNewPos(aVisArea.TopLeft());
 
-            if(!nMaxMoveSize)
-                nMaxMoveSize = 1;
+            if(nFreeSpaceX < 0)
+            {
+                if(aInnerRectangle.Left() > rRect.Right())
+                {
+                    // object moves out to the left
+                    aNewPos.X() -= aVisAreaSize.Width() / 2;
+                }
 
-            if(nFreeSpaceX > nMaxMoveSize)
-                nFreeSpaceX = nMaxMoveSize;
+                if(aInnerRectangle.Right() < rRect.Left())
+                {
+                    // object moves out to the right
+                    aNewPos.X() += aVisAreaSize.Width() / 2;
+                }
+            }
+            else
+            {
+                if(nFreeSpaceX > rRect.GetWidth())
+                    nFreeSpaceX = rRect.GetWidth();
 
-            if(nFreeSpaceY > nMaxMoveSize)
-                nFreeSpaceY = nMaxMoveSize;
+                while(rRect.Right() > aNewPos.X() + aVisAreaSize.Width())
+                    aNewPos.X() += nFreeSpaceX;
 
-            while(rRect.Right() > aPos.X() + aVisArea.GetWidth())
-                aPos.X() += nFreeSpaceX;
-            while(rRect.Left() < aPos.X())
-                aPos.X() -= nFreeSpaceX;
+                while(rRect.Left() < aNewPos.X())
+                    aNewPos.X() -= nFreeSpaceX;
+            }
 
-            while(rRect.Top() < aPos.Y())
-                aPos.Y() -= nFreeSpaceY;
-            while(rRect.Bottom() > aPos.Y() + aVisArea.GetHeight())
-                aPos.Y() += nFreeSpaceY;
+            if(nFreeSpaceY < 0)
+            {
+                if(aInnerRectangle.Top() > rRect.Bottom())
+                {
+                    // object moves out to the top
+                    aNewPos.Y() -= aVisAreaSize.Height() / 2;
+                }
 
-            aVisArea.SetPos(aPos);
-            SetZoomRect(aVisArea);
+                if(aInnerRectangle.Bottom() < rRect.Top())
+                {
+                    // object moves out to the right
+                    aNewPos.Y() += aVisAreaSize.Height() / 2;
+                }
+            }
+            else
+            {
+                if(nFreeSpaceY > rRect.GetHeight())
+                    nFreeSpaceY = rRect.GetHeight();
+
+                while(rRect.Bottom() > aNewPos.Y() + aVisAreaSize.Height())
+                    aNewPos.Y() += nFreeSpaceY;
+
+                while(rRect.Top() < aNewPos.Y())
+                    aNewPos.Y() -= nFreeSpaceY;
+            }
+
+            // did position change? Does it need to be set?
+            if(aNewPos != aVisArea.TopLeft())
+            {
+                aVisArea.SetPos(aNewPos);
+                SetZoomRect(aVisArea);
+            }
         }
     }
 }
