@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 10:21:03 $
+ *  last change: $Author: fme $ $Date: 2001-06-05 15:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,9 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
     SwTwips nReal )
 {
     long nRealWidth;
-    const long nHeight = GetLineHeight();
+    const USHORT nRealHeight = GetLineHeight();
+    const USHORT nLineHeight = pCurr->Height();
+
     KSHORT nPrtWidth = pCurr->PrtWidth();
     SwLinePortion *pLast = pCurr->FindLastPortion();
 
@@ -409,8 +411,8 @@ SwMarginPortion *SwTxtAdjuster::CalcRightMargin( SwLineLayout *pCurr,
         // Fuer jeden FlyFrm, der in den rechten Rand hineinragt,
         // wird eine FlyPortion angelegt.
         const long nLeftMar = GetLeftMargin();
-        SwRect aCurrRect( nLeftMar + nPrtWidth, Y(),
-                          nRealWidth - nPrtWidth, nHeight );
+        SwRect aCurrRect( nLeftMar + nPrtWidth, Y() + nRealHeight - nLineHeight,
+                          nRealWidth - nPrtWidth, nLineHeight );
 
         SwFlyPortion *pFly = CalcFlyPortion( nRealWidth, aCurrRect );
         while( pFly && long( nPrtWidth )< nRealWidth )
@@ -614,7 +616,7 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
         // aLocal ist framelokal
         SwRect aLocal( aFlyRect );
         aLocal.Pos( aLocal.Left() - GetLeftMargin(), aLocal.Top() );
-        if( nCurrWidth > KSHORT( aLocal.Left() ) )
+        if( nCurrWidth > aLocal.Left() )
             aLocal.Left( nCurrWidth );
 
         // Wenn das Rechteck breiter als die Zeile ist, stutzen
