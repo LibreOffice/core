@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:34:12 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 12:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ using namespace ::std;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
+
 void SvXMLAutoStylePoolP::exportStyleAttributes(
         SvXMLAttributeList& rAttrList,
         sal_Int32 nFamily,
@@ -105,6 +106,30 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
+    if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
+    {
+        for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
+        {
+            UniReference< XMLPropertySetMapper > aPropMapper = rPropExp.getPropertySetMapper();
+            sal_Int32 nIndex = pProp->mnIndex;
+            sal_Int16 nContextID = aPropMapper->GetEntryContextId( nIndex );
+            switch( nContextID )
+            {
+                case CTF_PM_PAGEUSAGE:
+                {
+                    OUString sAttrName( rNamespaceMap.GetQNameByKey(
+                        aPropMapper->GetEntryNameSpace( nIndex ), aPropMapper->GetEntryXMLName( nIndex ) ) );
+                    OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM( sXML_CDATA ) );
+                    OUString sValue;
+                    const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
+                    if( pPropHdl && pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
+                        (sValue.compareToAscii( sXML_all ) != 0) )
+                        rAttrList.AddAttribute( sAttrName, sCDATA, sValue );
+                }
+                break;
+            }
+        }
+    }
 }
 
 void SvXMLAutoStylePoolP::exportStyleContent(
@@ -139,11 +164,12 @@ void SvXMLAutoStylePoolP::exportStyleContent(
                 const XMLPropertyHandler* pPropHdl = aPropMapper->GetPropertyHandler( nIndex );
                 if( pPropHdl )
                 {
-                    if( pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) )
+                    if( pPropHdl->exportXML( sValue, pProp->maValue, rUnitConverter ) &&
+                        (pProp->mnIndex >= 0) )
                     {
                         if( nId & CTF_PM_HEADERFLAG )
                             pHeaderAttr->AddAttribute( sName, sType, sValue );
-                        else if( nId & CTF_PM_FOOTERFLAG )
+                        else
                             pFooterAttr->AddAttribute( sName, sType, sValue );
                     }
                 }

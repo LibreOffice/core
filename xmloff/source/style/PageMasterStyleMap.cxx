@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:30:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 12:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
 {
 // page master
-    { "PageStyleLayout",        XML_NAMESPACE_STYLE,    sXML_page_usage,                XML_PM_TYPE_PAGESTYLELAYOUT,    0 },
+    { "PageStyleLayout",        XML_NAMESPACE_STYLE,    sXML_page_usage,                XML_PM_TYPE_PAGESTYLELAYOUT | MID_FLAG_SPECIAL_ITEM, CTF_PM_PAGEUSAGE },
     { "PageWidth",              XML_NAMESPACE_FO,       sXML_page_width,                XML_TYPE_MEASURE,               0 },
     { "PageHeight",             XML_NAMESPACE_FO,       sXML_page_height,               XML_TYPE_MEASURE,               0 },
     { "NumberingType",          XML_NAMESPACE_STYLE,    sXML_num_format,                XML_PM_TYPE_NUMFORMAT | MID_FLAG_MERGE_PROPERTY, 0 },
@@ -103,8 +103,8 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "LeftBorderDistance",     XML_NAMESPACE_FO,       sXML_padding_left,              XML_TYPE_MEASURE,               CTF_PM_PADDINGLEFT },
     { "RightBorderDistance",    XML_NAMESPACE_FO,       sXML_padding_right,             XML_TYPE_MEASURE,               CTF_PM_PADDINGRIGHT },
     { "ShadowFormat",           XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW,           0 },
-    { "BackgroundColor",        XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_MULTI_PROPERTY, CTF_PM_BACKGROUNDCOLOR },
-    { "IsBackgroundTransparent",XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_MULTI_PROPERTY, CTF_PM_ISBACKGROUNDTRANS },
+    { "BackgroundColor",        XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 },
+    { "IsBackgroundTransparent",XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, 0 },
 // header
     { "HeaderHeight",                   XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_HEADERHEIGHT },
     { "HeaderHeight",                   XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_HEADERMINHEIGHT },
@@ -128,8 +128,8 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "HeaderLeftBorderDistance",       XML_NAMESPACE_FO,       sXML_padding_left,              XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_HEADERPADDINGLEFT },
     { "HeaderRightBorderDistance",      XML_NAMESPACE_FO,       sXML_padding_right,             XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_HEADERPADDINGRIGHT },
     { "HeaderShadowFormat",             XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW | MID_FLAG_SPECIAL_ITEM,   CTF_PM_HEADERFLAG },
-    { "HeaderBackgroundColor",          XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERBACKGROUNDCOLOR },
-    { "HeaderIsBackgroundTransparent",  XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY, CTF_PM_HEADERISBACKGROUNDTRANS },
+    { "HeaderBackgroundColor",          XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, CTF_PM_HEADERFLAG },
+    { "HeaderIsBackgroundTransparent",  XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, CTF_PM_HEADERFLAG },
 // footer
     { "FooterHeight",                   XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_FOOTERHEIGHT },
     { "FooterHeight",                   XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_FOOTERMINHEIGHT },
@@ -153,8 +153,8 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "FooterLeftBorderDistance",       XML_NAMESPACE_FO,       sXML_padding_left,              XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_FOOTERPADDINGLEFT },
     { "FooterRightBorderDistance",      XML_NAMESPACE_FO,       sXML_padding_right,             XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM,       CTF_PM_FOOTERPADDINGRIGHT },
     { "FooterShadowFormat",             XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW | MID_FLAG_SPECIAL_ITEM,   CTF_PM_FOOTERFLAG },
-    { "FooterBackgroundColor",          XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERBACKGROUNDCOLOR },
-    { "FooterIsBackgroundTransparent",  XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY, CTF_PM_FOOTERISBACKGROUNDTRANS },
+    { "FooterBackgroundColor",          XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, CTF_PM_FOOTERFLAG },
+    { "FooterIsBackgroundTransparent",  XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_SPECIAL_ITEM | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE, CTF_PM_FOOTERFLAG },
     { 0L }
 };
 

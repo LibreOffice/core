@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-18 11:30:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-19 12:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,13 @@ void XMLPageMasterPropSetMapper::ContextFilter(
     XMLPropertyState*   pPMPaddingLeft          = NULL;
     XMLPropertyState*   pPMPaddingRight         = NULL;
 
-    XMLPropertyState*   pPMBackgroundColor      = NULL;
-    XMLPropertyState*   pPMIsBackgroundTrans    = NULL;
+    XMLPropertyState*   pPMHeaderHeight         = NULL;
+    XMLPropertyState*   pPMHeaderMinHeight      = NULL;
+    XMLPropertyState*   pPMHeaderDynamic        = NULL;
+
+    XMLPropertyState*   pPMFooterHeight         = NULL;
+    XMLPropertyState*   pPMFooterMinHeight      = NULL;
+    XMLPropertyState*   pPMFooterDynamic        = NULL;
 
     for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
     {
@@ -153,8 +158,12 @@ void XMLPageMasterPropSetMapper::ContextFilter(
             case CTF_PM_PADDINGBOTTOM:      pPMPaddingBottom        = pProp;    break;
             case CTF_PM_PADDINGLEFT:        pPMPaddingLeft          = pProp;    break;
             case CTF_PM_PADDINGRIGHT:       pPMPaddingRight         = pProp;    break;
-            case CTF_PM_BACKGROUNDCOLOR:    pPMBackgroundColor      = pProp;    break;
-            case CTF_PM_ISBACKGROUNDTRANS:  pPMIsBackgroundTrans    = pProp;    break;
+            case CTF_PM_HEADERHEIGHT:       pPMHeaderHeight         = pProp;    break;
+            case CTF_PM_HEADERMINHEIGHT:    pPMHeaderMinHeight      = pProp;    break;
+            case CTF_PM_HEADERDYNAMIC:      pPMHeaderDynamic        = pProp;    break;
+            case CTF_PM_FOOTERHEIGHT:       pPMFooterHeight         = pProp;    break;
+            case CTF_PM_FOOTERMINHEIGHT:    pPMFooterMinHeight      = pProp;    break;
+            case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic        = pProp;    break;
         }
     }
 
@@ -235,14 +244,26 @@ void XMLPageMasterPropSetMapper::ContextFilter(
             lcl_RemoveState( pPMPaddingAll );
     }
 
-    if( pPMBackgroundColor && pPMIsBackgroundTrans )
+    if( pPMHeaderHeight && pPMHeaderMinHeight )
     {
-        sal_Bool bTransparent;
-
-        if( (pPMIsBackgroundTrans->maValue >>= bTransparent) && bTransparent )
-            lcl_RemoveState( pPMBackgroundColor );
+        sal_Bool bIsDynamic;
+        if( pPMHeaderDynamic && (pPMHeaderDynamic->maValue >>= bIsDynamic) && bIsDynamic )
+            lcl_RemoveState( pPMHeaderHeight );
         else
-            lcl_RemoveState( pPMIsBackgroundTrans );
+            lcl_RemoveState( pPMHeaderMinHeight );
     }
+    if( pPMHeaderDynamic )
+        lcl_RemoveState( pPMHeaderDynamic );
+
+    if( pPMFooterHeight && pPMFooterMinHeight )
+    {
+        sal_Bool bIsDynamic;
+        if( pPMFooterDynamic && (pPMFooterDynamic->maValue >>= bIsDynamic) && bIsDynamic )
+            lcl_RemoveState( pPMFooterHeight );
+        else
+            lcl_RemoveState( pPMFooterMinHeight );
+    }
+    if( pPMFooterDynamic )
+        lcl_RemoveState( pPMFooterDynamic );
 }
 
