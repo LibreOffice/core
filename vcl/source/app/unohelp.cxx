@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-13 05:51:35 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,14 +110,19 @@ struct VCLRegServiceInfo
 
 static VCLRegServiceInfo aVCLComponentsArray[] =
 {
-    {"i18n",            sal_True},
+#if SUPD >= 625
+    {"i18n", sal_True},
+#else
+    {"int", sal_True},
+#endif
 #ifdef UNIX
-    {"dtransX11",       sal_True},
+    {"dtransX11", sal_True},
 #endif
 #ifdef WNT
-    {"sysdtrans",       sal_False},
+    {"sysdtrans", sal_False},
 #endif
-    {NULL,              sal_False}
+    {"dtrans", sal_False},
+    {NULL, sal_False}
 };
 
 uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFactory()
@@ -143,37 +148,9 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
 
         sal_Int32 nCompCount = 0;
 
-        // create variable library name suffixes
-        OUString aSUPDString( OUString::valueOf( (sal_Int32)SUPD, 10 ));
-        OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLSUFFIX) );
-
         while ( aVCLComponentsArray[ nCompCount ].pLibName )
         {
-            OUString aComponentPathString;
-
-#ifdef WNT
-            aComponentPathString = OUString::createFromAscii( aVCLComponentsArray[ nCompCount ].pLibName );
-            if ( aVCLComponentsArray[ nCompCount ].bHasSUPD )
-            {
-                aComponentPathString += aSUPDString;
-                aComponentPathString += aDLLSuffix;
-            }
-            aComponentPathString += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".dll" ));
-#else
-            aComponentPathString = OUString( RTL_CONSTASCII_USTRINGPARAM( "lib" ));
-            aComponentPathString += OUString::createFromAscii( aVCLComponentsArray[ nCompCount ].pLibName );
-            if ( aVCLComponentsArray[ nCompCount ].bHasSUPD )
-            {
-                aComponentPathString += aSUPDString;
-                aComponentPathString += aDLLSuffix;
-            }
-#ifdef MACOSX
-            aComponentPathString += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib.framework" ));
-#else
-            aComponentPathString += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
-#endif
-#endif
-
+            OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
             if (aComponentPathString.getLength() )
             {
                 try
@@ -240,4 +217,37 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     return xB;
 }
 
+::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, BOOL bSUPD )
+{
+    // create variable library name suffixes
+    OUString aSUPDString( OUString::valueOf( (sal_Int32)SUPD, 10 ));
+    OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLSUFFIX) );
+
+    OUString aLibName;
+
+#ifdef WNT
+    aLibName = OUString::createFromAscii( pModName );
+    if ( bSUPD )
+    {
+        aLibName += aSUPDString;
+        aLibName += aDLLSuffix;
+    }
+    aLibName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".dll" ));
+#else
+    aLibName = OUString( RTL_CONSTASCII_USTRINGPARAM( "lib" ));
+    aLibName += OUString::createFromAscii( pModName );
+    if ( bSUPD )
+    {
+        aLibName += aSUPDString;
+        aLibName += aDLLSuffix;
+    }
+#ifdef MACOSX
+    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".dylib.framework" ));
+#else
+    aLibName += OUString( RTL_CONSTASCII_USTRINGPARAM( ".so" ));
+#endif
+#endif
+
+    return aLibName;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-19 09:18:59 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3895,7 +3895,7 @@ Window::~Window()
 
     mbInDtor = TRUE;
 
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( FALSE );
     if ( pWrapper )
         pWrapper->WindowDestroyed( this );
 

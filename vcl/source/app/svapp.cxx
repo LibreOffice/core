@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 15:37:03 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,8 @@
 #include <xconnection.hxx>
 #endif
 
+#include <unohelp.hxx>
+
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -170,11 +172,17 @@
 #include <com/sun/star/portal/client/XRmSync.hpp>
 #endif
 
+#include <osl/module.h>
+
 
 // #include <usr/refl.hxx>
 class Reflection;
 
 #pragma hdrstop
+
+extern "C" {
+    typedef UnoWrapperBase* (SAL_CALL *FN_TkCreateUnoWrapper)();
+};
 
 #ifdef REMOTE_APPSERVER
 class RVPConnectionListener : public ::cppu::WeakAggImplHelper1< ::com::sun::star::io::XStreamListener >
@@ -1576,7 +1584,7 @@ void* Application::GetRemoteEnvironment()
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > Application::GetVCLToolkit()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > xT;
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
+    UnoWrapperBase* pWrapper = Application::GetUnoWrapper( TRUE );
     if ( pWrapper )
         xT = pWrapper->GetVCLToolkit();
     return xT;
@@ -1584,11 +1592,27 @@ void* Application::GetRemoteEnvironment()
 
 // -----------------------------------------------------------------------
 
-void Application::RegisterUnoServices()
+UnoWrapperBase* Application::GetUnoWrapper( BOOL bCreateIfNotExist )
 {
-    UnoWrapperBase* pWrapper = Application::GetUnoWrapper();
-    if ( pWrapper )
-        pWrapper->RegisterUnoServices();
+    ImplSVData* pSVData = ImplGetSVData();
+    static BOOL bAlreadyTriedToCreate = FALSE;
+    if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
+    {
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "tk", TRUE );
+        oslModule hTkLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        if ( hTkLib )
+        {
+            ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateUnoWrapper" ) );
+            FN_TkCreateUnoWrapper fnCreateWrapper = (FN_TkCreateUnoWrapper)osl_getSymbol( hTkLib, aFunctionName.pData );
+            if ( fnCreateWrapper )
+            {
+                pSVData->mpUnoWrapper = fnCreateWrapper();
+            }
+        }
+        DBG_ASSERT( pSVData->mpUnoWrapper, "UnoWrapper could not be created!" );
+        bAlreadyTriedToCreate = TRUE;
+    }
+    return pSVData->mpUnoWrapper;
 }
 
 // -----------------------------------------------------------------------
@@ -1598,14 +1622,6 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     ImplSVData* pSVData = ImplGetSVData();
     DBG_ASSERT( !pSVData->mpUnoWrapper, "SetUnoWrapper: Wrapper allready exists" );
     pSVData->mpUnoWrapper = pWrapper;
-}
-
-// -----------------------------------------------------------------------
-
-UnoWrapperBase* Application::GetUnoWrapper()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    return pSVData->mpUnoWrapper;
 }
 
 // -----------------------------------------------------------------------
