@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-10-23 10:31:06 $
+ *  last change: $Author: os $ $Date: 2001-10-29 13:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,10 +306,12 @@ Sequence<OUString> SwLayoutViewConfig::GetPropertyNames()
         "Window/HorizontalRulerUnit",       //10
         "Window/VerticalRulerUnit",         //11
         "Window/SmoothScroll",              //12
-        "Other/MeasureUnit",                //13
-        "Other/TabStop",                    //14
+        "Zoom/Value",                       //13
+        "Zoom/Type",                        //14
+        "Other/MeasureUnit",                //15
+        "Other/TabStop"                     //16
     };
-    const int nCount = bWeb ? 14 : 15;
+    const int nCount = bWeb ? 16 : 17;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -369,8 +371,10 @@ void SwLayoutViewConfig::Commit()
                     pValues[nProp] <<= (sal_Int32)rParent.eVScrollMetric; // "Window/VerticalRulerUnit"
             break;
             case 12: bSet = rParent.IsSmoothScroll(); break;// "Window/SmoothScroll",
-            case 13: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
-            case 14: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
+            case 13: pValues[nProp] <<= (sal_Int32)rParent.GetZoom(); break;// "Zoom/Value",
+            case 14: pValues[nProp] <<= (sal_Int32)rParent.GetZoomType(); break;// "Zoom/Type",
+            case 15: pValues[nProp] <<= (sal_Int32)rParent.GetMetric(); break;// "Other/MeasureUnit",
+            case 16: pValues[nProp] <<= rParent.GetDefTab(); break;// "Other/TabStop",
         }
         if(nProp < 10 || nProp == 12)
             pValues[nProp].setValue(&bSet, ::getBooleanCppuType());
@@ -422,11 +426,23 @@ void SwLayoutViewConfig::Load()
                     case 12: rParent.SetSmoothScroll(bSet); break;// "Window/SmoothScroll",
                     case 13:
                     {
+                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        rParent.SetZoom(nVal);
+                    }
+                    break;// "Zoom/Value",
+                    case 14:
+                    {
+                        sal_Int32 nVal; pValues[nProp] >>= nVal;
+                        rParent.SetZoomType((BYTE)nVal);
+                    }
+                    break;// "Zoom/Type",
+                    case 15:
+                    {
                         sal_Int32 nUnit; pValues[nProp] >>= nUnit;
                         rParent.SetMetric((FieldUnit)nUnit, TRUE);
                     }
                     break;// "Other/MeasureUnit",
-                    case 14:
+                    case 16:
                     {
                         sal_Int32 nTab; pValues[nProp] >>= nTab;
                         rParent.SetDefTab(nTab, TRUE);
