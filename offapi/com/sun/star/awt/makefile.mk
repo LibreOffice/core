@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fs $ $Date: 2001-04-19 08:43:06 $
+#   last change: $Author: tbe $ $Date: 2001-05-02 16:27:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -146,7 +146,9 @@ IDLFILES=\
     UnoControlModel.idl\
     UnoControlNumericFieldModel.idl\
     UnoControlPatternFieldModel.idl\
+    UnoControlProgressBarModel.idl\
     UnoControlRadioButtonModel.idl\
+    UnoControlScrollBarModel.idl\
     UnoControlTimeFieldModel.idl\
     UnoControlCurrencyField.idl\
     UnoControlDateField.idl\
@@ -159,7 +161,9 @@ IDLFILES=\
     UnoControlListBox.idl\
     UnoControlNumericField.idl\
     UnoControlPatternField.idl\
+    UnoControlProgressBar.idl\
     UnoControlRadioButton.idl\
+    UnoControlScrollBar.idl\
     UnoControlTimeField.idl\
     VclContainerEvent.idl\
     VclWindowPeerAttribute.idl\
