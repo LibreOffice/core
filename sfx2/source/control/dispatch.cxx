@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 09:53:58 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ sal_uInt16 SfxDispatcher::GetShellLevel( const SfxShell& rShell )
     Dazu wird dieser ggf. zuvor geflusht.
 
 
-    [RÅckgabewert]
+    [Rueckgabewert]
 
     sal_uInt16                      == USRT_MAX
                                 Die SfxShell befindet sich nicht auf
