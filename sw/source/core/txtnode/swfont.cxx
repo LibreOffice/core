@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-12 11:21:31 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,34 @@ Color* SwFont::XChgBackColor( Color* pNewColor )
     aSub[SW_LATIN].pMagic = aSub[SW_CJK].pMagic = aSub[SW_CTL].pMagic = 0;
     return pRet;
 }
+
+#ifdef VERTICAL_LAYOUT
+void SwFont::SetVertical( USHORT nDir, const BOOL bVertFormat )
+{
+    // map direction if frame has vertical layout
+    if ( bVertFormat )
+    {
+        switch ( nDir )
+        {
+        case 0 :
+            nDir = 2700;
+            break;
+        case 900 :
+        case 2700 :
+            nDir = 0;
+            break;
+        }
+    }
+
+    if( nDir != aSub[0].GetOrientation() )
+    {
+        bFntChg = TRUE;
+        aSub[0].SetVertical( nDir );
+        aSub[1].SetVertical( nDir );
+        aSub[2].SetVertical( nDir );
+    }
+}
+#endif
 
 /*************************************************************************
  Escapement:

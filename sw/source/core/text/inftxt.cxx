@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-24 09:09:11 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,6 +651,10 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     aDrawInf.SetSpace( nSpaceAdd );
     aDrawInf.SetKanaComp( nComp );
 
+#ifdef VERTICAL_LAYOUT
+    aDrawInf.SetFrm( GetTxtFrm() );
+#endif
+
     if( COL_AUTO == GetFont()->GetColor().GetColor() )
     {
         const Color* pCol = GetFont()->GetBackColor();
@@ -690,10 +694,6 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     else
     {
         aDrawInf.SetPos( aPos );
-// Nothing but a test...
-    if( GetTxtFrm()->IsVertical() != pFnt->IsOutline() )
-        pFnt->SetOutline( GetTxtFrm()->IsVertical() );
-// end of test
         if( bKern )
             pFnt->_DrawStretchText( aDrawInf );
         else
@@ -1470,7 +1470,12 @@ SwDefFontSave::SwDefFontSave( const SwTxtSizeInfo &rInf )
 
     const sal_Bool bFamily = bAlter && COMPARE_EQUAL !=
             pFnt->GetName( pFnt->GetActual() ).CompareToAscii( sBulletFntName );
+#ifdef VERTICAL_LAYOUT
+    const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation() &&
+                                ! rInf.GetTxtFrm()->IsVertical();
+#else
     const sal_Bool bRotation = (sal_Bool)pFnt->GetOrientation();
+#endif
 
     if( bFamily || bRotation )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-09 08:01:30 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1223,8 +1223,10 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 SwCrsrMoveState aTmpState( MV_NONE );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
+#ifndef VERTICAL_LAYOUT
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
                     ASSERT( !this, "GetCharRect failed." );
+#endif
             }
 //          ALIGNRECT( aCharRect );
 
@@ -1404,8 +1406,10 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 Point& rPt = pCurCrsr->GetPtPos();
                 rPt = aCharRect.Center();
                 pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), rPt, &aTmpState );
+#ifndef VERTICAL_LAYOUT
                 if ( !pFrm->GetCharRect(aCharRect, *pCurCrsr->GetPoint(), &aTmpState) )
                     ASSERT( !this, "GetCharRect failed." );
+#endif
             }
 //          ALIGNRECT( aCharRect );
 

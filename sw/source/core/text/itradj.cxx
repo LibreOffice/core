@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-18 09:18:41 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,11 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurr )
 SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
                                              const SwRect &rCurrRect )
 {
+#ifdef VERTICAL_LAYOUT
+    SwTxtFly aTxtFly( GetTxtFrm() );
+#else
     SwTxtFly aTxtFly( (SwCntntFrm*)GetTxtFrm() );
+#endif
 
     const KSHORT nCurrWidth = pCurr->PrtWidth();
     SwFlyPortion *pFlyPortion = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-25 14:02:45 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,30 @@ class SwStripes;
 struct SwCrsrMoveState;
 struct SwFillData;
 
+#ifdef VERTICAL_LAYOUT
+
+#define SWAP_IF_SWAPPED\
+    sal_Bool bUndoSwap = sal_False;   \
+    if ( IsVertical() && IsSwapped() )\
+    {                                 \
+        bUndoSwap = sal_True;         \
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();         \
+    }
+
+#define SWAP_IF_NOT_SWAPPED\
+    sal_Bool bUndoSwap = sal_False;     \
+    if ( IsVertical() && ! IsSwapped() )\
+    {                                   \
+        bUndoSwap = sal_True;           \
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();         \
+    }
+
+#define UNDO_SWAP\
+    if ( IsVertical() && bUndoSwap )\
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+
+#endif
+
 class SwTxtFrm: public SwCntntFrm
 {
     friend class SwTxtIter;
@@ -149,6 +173,10 @@ class SwTxtFrm: public SwCntntFrm
     sal_Bool bBlinkPor      : 1;        // enthaelt Blink-Portions
     sal_Bool bFieldFollow   : 1;        // beginne mit Feldrest des Masters
     sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
+#ifdef VERTICAL_LAYOUT
+    sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
+                                        // width and height for vertical formatting
+#endif
 
     void ResetPreps();
     inline void Lock() { bLocked = sal_True; }
@@ -349,6 +377,10 @@ public:
         { ( (SwTxtFrm*)this )->bHasAnimation = sal_True; }
     inline sal_Bool HasAnimation() const { return bHasAnimation; }
 
+#ifdef VERTICAL_LAYOUT
+    inline sal_Bool IsSwapped() const { return bIsSwapped; }
+#endif
+
     // Hat der Frm eine lokale Fussnote (in diesem Frm bzw. Follow)?
 #ifdef PRODUCT
     void CalcFtnFlag();
@@ -460,6 +492,23 @@ public:
     void StopAnimation( OutputDevice *pOut );
 
     void CriticalLines(const OutputDevice& rOut,SwStripes &rStripes,long nOffs);
+
+#ifdef VERTICAL_LAYOUT
+    // Swaps width and height of the text frame
+    void SwapWidthAndHeight();
+    // Calculates the coordinates of a rectangle when switching from
+    // horizontal to vertical layout.
+    void SwitchHorizontalToVertical( SwRect& rRect ) const;
+    // Calculates the coordinates of a point when switching from
+    // horizontal to vertical layout.
+    void SwitchHorizontalToVertical( Point& rPoint ) const;
+    // Calculates the coordinates of a rectangle when switching from
+    // vertical to horizontal layout.
+    void SwitchVerticalToHorizontal( SwRect& rRect ) const;
+    // Calculates the coordinates of a point when switching from
+    // vertical to horizontal layout.
+    void SwitchVerticalToHorizontal( Point& rPoint ) const;
+#endif
 };
 
 /*************************************************************************

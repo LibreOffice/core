@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-25 14:01:00 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,12 @@ void SwTxtIter::CtorInit( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
     ASSERT( pNewFrm->GetPara(), "No paragraph" );
+
+#ifdef VERTICAL_LAYOUT
+    SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo(), pNewFrm );
+#else
     SwAttrIter::CtorInit( *pNode, pNewFrm->GetPara()->GetScriptInfo() );
+#endif
 
     pFrm = pNewFrm;
     pInf = pNewInf;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-15 08:56:33 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,10 @@ SwLinePortion *SwArrowPortion::Compress() { return this; }
 
 SwTwips SwTxtFrm::EmptyHeight() const
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
+#endif
+
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
     ViewShell *pSh = GetShell();
@@ -401,6 +405,10 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
 sal_Bool SwTxtFrm::FormatEmpty()
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
+#endif
+
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
         0 != GetTxtNode()->GetOutlineNum() ||
@@ -427,7 +435,14 @@ sal_Bool SwTxtFrm::FormatEmpty()
         {
             SwTwips nHeight = EmptyHeight();
 
+#ifdef VERTICAL_LAYOUT
+            const SwTwips nChg = IsVertical() ?
+                                 nHeight - Prt().SSize().Width() :
+                                 nHeight - Prt().SSize().Height();
+#else
             const SwTwips nChg = nHeight - Prt().SSize().Height();
+#endif
+
             if( !nChg )
                 SetUndersized( sal_False );
             AdjustFrm( nChg );
@@ -549,5 +564,3 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
     }
     return ( 0 != rRegDiff );
 }
-
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@ typedef MSHORT _FlyCntnt;
 
 SV_DECL_PTRARR( SwFlyList, SdrObject*, 10, 10 )
 
+#ifdef VERTICAL_LAYOUT
+SV_DECL_VARARR( SwRotRectList, SwRect, 10, 10 )
+#endif
+
 /*************************************************************************
  *                      class SwFlyIter
  *************************************************************************/
@@ -103,6 +107,10 @@ class SwDrawTextInfo;
 class SwContourCache;
 extern SwContourCache *pContourCache;
 
+#ifdef VERTICAL_LAYOUT
+class SwTxtFrm;
+#endif
+
 #define POLY_CNT 20
 #define POLY_MIN 5
 #define POLY_MAX 4000
@@ -114,16 +122,29 @@ class SwContourCache
     TextRanger *pTextRanger[ POLY_CNT ];
     long nPntCnt;
     MSHORT nObjCnt;
+#ifdef VERTICAL_LAYOUT
+    const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
+        const SwRect &rLine, const long nXPos, const sal_Bool bRight,
+        const sal_Bool bRot = sal_False );
+#else
     const SwRect ContourRect( const SwFmt* pFmt, const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight );
+#endif
+
 public:
     SwContourCache();
     ~SwContourCache();
     const SdrObject* GetObject( MSHORT nPos ){ return pSdrObj[ nPos ]; }
     MSHORT GetCount() const { return nObjCnt; }
     void ClrObject( MSHORT nPos );
+#ifdef VERTICAL_LAYOUT
+    static const SwRect CalcBoundRect( const SdrObject* pObj,
+        const SwRect &rLine, const long nXPos, const sal_Bool bRight,
+        const SwTxtFrm* pFrm, const SwRect* pRotRect = 0 );
+#else
     static const SwRect CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight );
+#endif
 #ifndef PRODUCT
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
@@ -138,9 +159,20 @@ class SwTxtFly
 {
     const SwPageFrm     *pPage;
     const SdrObject     *pCurrFly;
+
+#ifdef VERTICAL_LAYOUT
+    const SwTxtFrm      *pCurrFrm;
+#else
     const SwCntntFrm    *pCurrFrm;
+#endif
+
     const SwCntntFrm    *pMaster;
     SwFlyList           *pFlyList;
+
+#ifdef VERTICAL_LAYOUT
+    SwRotRectList       *pRotRectList;
+#endif
+
     long nMinBottom;
     long nNextTop; // Hier wird die Oberkante des "naechsten" Rahmens gespeichert
     ULONG nIndex;
@@ -163,10 +195,19 @@ class SwTxtFly
 
 public:
     inline SwTxtFly() { pFlyList = 0; pMaster = 0; }
+#ifdef VERTICAL_LAYOUT
+    inline SwTxtFly( const SwTxtFrm *pFrm ) { CtorInit( pFrm ); }
+#else
     inline SwTxtFly( const SwCntntFrm *pFrm ) { CtorInit( pFrm ); }
+#endif
+
     SwTxtFly( const SwTxtFly& rTxtFly );
     inline ~SwTxtFly() { delete pFlyList; }
+#ifdef VERTICAL_LAYOUT
+    void CtorInit( const SwTxtFrm *pFrm );
+#else
     void CtorInit( const SwCntntFrm *pFrm );
+#endif
     void SetTopRule(){ bTopRule = sal_False; }
 
     SwFlyList* GetFlyList() const
@@ -186,7 +227,12 @@ public:
 
     // Liefert zu einem SdrObject das von ihm _beanspruchte_ Rect
     // (unter Beruecksichtigung der Order) zurueck.
+#ifdef VERTICAL_LAYOUT
+    SwRect FlyToRect( const SdrObject *pObj, const SwRect &rRect,
+                      const SwRect* pRotRect ) const;
+#else
     SwRect FlyToRect( const SdrObject *pObj, const SwRect &rRect ) const;
+#endif
 
     // Die Drawmethoden stellen sicher, dass ueberlappende Frames
     // (ausser bei transparenten Frames) nicht uebergepinselt werden.
@@ -227,6 +273,9 @@ inline SwRect SwTxtFly::GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:26  hr
+      initial import
+
       Revision 1.105  2000/09/18 16:04:23  willem.vandorp
       OpenOffice header added.
 

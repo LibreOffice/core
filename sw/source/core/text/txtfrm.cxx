@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-24 09:05:59 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,105 @@ extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
+#ifdef VERTICAL_LAYOUT
+
+// Switches width and height of the text frame
+void SwTxtFrm::SwapWidthAndHeight()
+{
+    bIsSwapped = ! bIsSwapped;
+
+    const long nFrmWidth = Frm().Width();
+    Frm().Width( Frm().Height() );
+    Frm().Height( nFrmWidth );
+    const long nPrtWidth = Prt().Width();
+    Prt().Width( Prt().Height() );
+    Prt().Height( nPrtWidth );
+    const long nPrtOfstX = Prt().Pos().X(); //Frm().Width() - ( Prt().Pos().X() + Prt().Width() );
+    Prt().Pos().X() = Prt().Pos().Y();
+    Prt().Pos().Y() = nPrtOfstX;
+}
+
+// Calculates the coordinates of a rectangle when switching from
+// horizontal to vertical layout.
+void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
+{
+    // calc offset inside frame
+    const long nOfstX = rRect.Left() - Frm().Left();
+    const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    const long nWidth = rRect.Width();
+    const long nHeight = rRect.Height();
+
+    if ( bIsSwapped )
+        rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+    else
+        // frame is rotated
+        rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+
+    rRect.Top( Frm().Top() + nOfstX );
+    rRect.Width( nHeight );
+    rRect.Height( nWidth );
+}
+
+// Calculates the coordinates of a point when switching from
+// horizontal to vertical layout.
+void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
+{
+    // calc offset inside frame
+    const long nOfstX = rPoint.X() - Frm().Left();
+    const long nOfstY = rPoint.Y() - Frm().Top();
+
+    if ( bIsSwapped )
+        rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+    else
+        // calc rotated coords
+        rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+
+    rPoint.Y() = Frm().Top() + nOfstX;
+}
+
+// Calculates the coordinates of a rectangle when switching from
+// vertical to horizontal layout.
+void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
+{
+    long nOfstX;
+
+    // calc offset inside frame
+    if ( bIsSwapped )
+        nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+    else
+        nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+
+    const long nOfstY = rRect.Top() - Frm().Top();
+    const long nWidth = rRect.Height();
+    const long nHeight = rRect.Width();
+
+    // calc rotated coords
+    rRect.Left( Frm().Left() + nOfstY );
+    rRect.Top( Frm().Top() + nOfstX );
+    rRect.Width( nWidth );
+    rRect.Height( nHeight );
+}
+
+// Calculates the coordinates of a point when switching from
+// vertical to horizontal layout.
+void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
+{
+    long nOfstX;
+
+    // calc offset inside frame
+    if ( bIsSwapped )
+        nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+    else
+        nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+
+    const long nOfstY = rPoint.Y() - Frm().Top();
+
+    // calc rotated coords
+    rPoint.X() = Frm().Left() + nOfstY;
+    rPoint.Y() = Frm().Top() + nOfstX;
+}
+
+#endif
 
 /*************************************************************************
  *                      SwTxtFrm::Init()
@@ -233,7 +332,7 @@ void SwTxtFrm::InitCtor()
     nType = FRMC_TXT;
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
-        bFieldFollow = bHasAnimation = sal_False;
+        bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
 }
 
 
@@ -269,7 +368,9 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
+#ifndef VERTICAL_LAYOUT
         ASSERT( Frm().Width(), "SwTxtFrm::IsHiddenNow: thin frame" );
+#endif
         return sal_True;
     }
 
@@ -1585,6 +1686,10 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
 
 KSHORT SwTxtFrm::GetParHeight() const
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED
+#endif
+
     if( !HasPara() )
     {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
         // bei UnderSized ruhig nur 1 Twip mehr anfordern.
@@ -1596,6 +1701,9 @@ KSHORT SwTxtFrm::GetParHeight() const
             else
                 ++nRet;
         }
+#ifdef VERTICAL_LAYOUT
+        UNDO_SWAP
+#endif
         return nRet;
     }
     SwTxtFrm *pThis = (SwTxtFrm*)this;
@@ -1606,6 +1714,11 @@ KSHORT SwTxtFrm::GetParHeight() const
         nHeight += aLine.GetLineHeight();   // bisherige Hoehe mind. eine Zeilenhoehe zu gering
     while( aLine.Next() )
         nHeight += aLine.GetLineHeight();
+
+#ifdef VERTICAL_LAYOUT
+        UNDO_SWAP
+#endif
+
     return nHeight;
 }
 
@@ -1617,6 +1730,10 @@ KSHORT SwTxtFrm::GetParHeight() const
 // returnt this _immer_ im formatierten Zustand!
 SwTxtFrm *SwTxtFrm::GetFormatted()
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED
+#endif
+
     //Kann gut sein, dass mir der IdleCollector mir die gecachten
     //Informationen entzogen hat. Calc() ruft unser Format.
                       //Nicht bei leeren Absaetzen!
@@ -1633,6 +1750,11 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
         if( bFormat && !FormatQuick() )
             Format();
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
+
     return this;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtpaint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,28 @@ void SwSaveClip::Reset()
  *                      SwSaveClip::_ChgClip()
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+void SwSaveClip::_ChgClip( const SwRect &rRect, SwTxtFrm* pFrm )
+#else
 void SwSaveClip::_ChgClip( const SwRect &rRect )
+#endif
 {
+#ifdef VERTICAL_LAYOUT
+    SwRect aOldRect( rRect );
+
+    if ( pFrm && pFrm->IsVertical() )
+        pFrm->SwitchHorizontalToVertical( (SwRect&)rRect );
+#endif
+
     if ( !pOut || (!rRect.HasArea() && !pOut->IsClipRegion()) )
+#ifdef VERTICAL_LAYOUT
+    {
+        (SwRect&)rRect = aOldRect;
         return;
+    }
+#else
+        return;
+#endif
 
     if ( !bChg )
     {
@@ -118,7 +136,14 @@ void SwSaveClip::_ChgClip( const SwRect &rRect )
         // Wenn das ClipRect identisch ist, passiert nix.
         if(pOut->IsClipRegion()) // kein && wg Mac
           if (aRect == pOut->GetClipRegion().GetBoundRect())
-            return;
+#ifdef VERTICAL_LAYOUT
+            {
+                (SwRect&)rRect = aOldRect;
+                return;
+            }
+#else
+                return;
+#endif
 
         if( SwRootFrm::HasSameRect( rRect ) )
             pOut->SetClipRegion();
@@ -139,6 +164,11 @@ void SwSaveClip::_ChgClip( const SwRect &rRect )
 #endif
     }
     bChg = sal_True;
+
+#ifdef VERTICAL_LAYOUT
+    (SwRect&)rRect = aOldRect;
+#endif
+
 }
 
 

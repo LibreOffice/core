@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-07 07:22:46 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ void ValidateTxt( SwFrm *pFrm )     // Freund vom Frame
 void SwTxtFrm::ValidateFrm()
 {
     // Umgebung validieren, um Oszillationen zu verhindern.
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED
+#endif
 
     if ( !IsInFly() )
     {   //Innerhalb eines Flys nur this validieren, der Rest sollte eigentlich
@@ -229,6 +232,10 @@ void SwTxtFrm::ValidateFrm()
     const sal_Bool bMustFit = pPara->IsPrepMustFit();
     ResetPreps();
     pPara->SetPrepMustFit( bMustFit );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
 }
 
 /*************************************************************************
@@ -260,9 +267,17 @@ void _ValidateBodyFrm( SwFrm *pFrm )
 
 void SwTxtFrm::ValidateBodyFrm()
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED
+#endif
+
      //siehe Kommtar in ValidateFrm()
     if ( !IsInFly() && !( IsInSct() && FindSctFrm()->Lower()->IsColumnFrm() ) )
         _ValidateBodyFrm( GetUpper() );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
 }
 
 /*************************************************************************
@@ -307,6 +322,10 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
 
 sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED
+#endif
+
     ASSERT( HasFollow(), "CalcFollow: missing Follow." );
 
     SwTxtFrm *pFollow = GetFollow();
@@ -314,15 +333,31 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
     SwParaPortion *pPara = GetPara();
     sal_Bool bFollowFld = pPara ? pPara->IsFollowField() : sal_False;
 
+#ifdef VERTICAL_LAYOUT
+    if( !pFollow->GetOfst() || pFollow->GetOfst() != nTxtOfst ||
+        bFollowFld || pFollow->IsFieldFollow() ||
+        ( pFollow->IsVertical() && !pFollow->Prt().Width() ) ||
+        ( ! pFollow->IsVertical() && !pFollow->Prt().Height() ) )
+#else
     if( !pFollow->GetOfst() || pFollow->GetOfst() != nTxtOfst ||
         bFollowFld || pFollow->IsFieldFollow() || !pFollow->Prt().Height() )
+#endif
     {
 #ifndef PRODUCT
         const SwFrm *pOldUp = GetUpper();
 #endif
 
+#ifdef VERTICAL_LAYOUT
+        SwTwips nOldBottom = IsVertical() ?
+                             GetUpper()->Frm().Left() :
+                             GetUpper()->Frm().Bottom();
+        SwTwips nMyPos = IsVertical() ?
+                         Frm().Right() :
+                         Frm().Top();
+#else
         SwTwips nOldBottom = GetUpper()->Frm().Bottom();
         SwTwips nMyPos = Frm().Top();
+#endif
 
         const SwPageFrm *pPage = 0;
         sal_Bool  bOldInvaCntnt,
@@ -369,7 +404,12 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                 {
                     if( pSct->GetFollow() )
                         pSct->SimpleFormat();
+#ifdef VERTICAL_LAYOUT
+                    else if( ( pSct->IsVertical() && !pSct->Frm().Width() ) ||
+                             ( ! pSct->IsVertical() && !pSct->Frm().Height() ) )
+#else
                     else if( !pSct->Frm().Height() )
+#endif
                         break;
                 }
                 pFollow->Calc();
@@ -420,10 +460,31 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
         ASSERT( pOldUp == GetUpper(), "SwTxtFrm::CalcFollow: heavy follow" );
 #endif
 
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() && nOldBottom != LONG_MAX &&
+            nOldBottom > GetUpper()->Frm().Left()  && !GetUpper()->IsSctFrm() &&
+            nOldBottom - GetUpper()->Frm().Left() != nMyPos - Frm().Right() )
+        {
+#ifdef VERTICAL_LAYOUT
+            UNDO_SWAP
+#endif
+            return sal_True;
+        }
+        else if( ! IsVertical() && nOldBottom < GetUpper()->Frm().Bottom()  &&
+                 ! GetUpper()->IsSctFrm() &&
+                   GetUpper()->Frm().Bottom() - nOldBottom != Frm().Top() - nMyPos )
+            return sal_True;
+#else
         if( nOldBottom < GetUpper()->Frm().Bottom()  && !GetUpper()->IsSctFrm()
             && GetUpper()->Frm().Bottom() - nOldBottom != Frm().Top() - nMyPos )
             return sal_True;
+#endif
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
+
     return sal_False;
 }
 
@@ -439,6 +500,13 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             return;
         SetUndersized( nChgHght == 0 || bHasToFit );
     }
+
+#ifdef VERTICAL_LAYOUT
+    // AdjustFrm is called with a swapped frame during
+    // formatting but the frame is not swapped during FormatEmpty
+    SWAP_IF_SWAPPED
+#endif
+
     // Die Size-Variable des Frames wird durch Grow inkrementiert
     // oder durch Shrink dekrementiert. Wenn die Groesse
     // unveraendert ist, soll nichts passieren!
@@ -459,6 +527,10 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                     {
                         Frm().SSize().Height() += nChgHght;
                         Prt().SSize().Height() += nChgHght;
+#ifdef VERTICAL_LAYOUT
+                        UNDO_SWAP
+#endif
+
                         return;
                     }
                 }
@@ -495,10 +567,26 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         // Fall und korrigieren die Werte.
         // MA 06. May. 93: Der Frm darf allerdings auch im Notfall nicht
         // weiter geschrumpft werden als es seine Groesse zulaesst.
+#ifdef VERTICAL_LAYOUT
+        SwTwips nRstHeight;
+        if ( IsVertical() )
+        {
+            ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
+            nRstHeight = Frm().Right() -
+                         ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
+        }
+        else
+            nRstHeight = GetUpper()->Frm().Top()
+                       + GetUpper()->Prt().Top()
+                       + GetUpper()->Prt().Height()
+                       - Frm().Top();
+#else
         SwTwips nRstHeight = GetUpper()->Frm().Top()
                             + GetUpper()->Prt().Top()
                             + GetUpper()->Prt().Height()
                             - Frm().Top();
+#endif
+
         //In Tabellenzellen kann ich mir evtl. noch ein wenig dazuholen, weil
         //durch eine vertikale Ausrichtung auch oben noch Raum sein kann.
         if ( IsInTab() )
@@ -515,6 +603,41 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
  * folgenden Grow-Versuch durchzufuehren. Im Bugfall fuehrte dies sogar zur
  * Endlosschleife.
  * -----------------------------------*/
+#ifdef VERTICAL_LAYOUT
+        SwTwips nFrmHeight = IsVertical() ? Frm().Width() : Frm().Height();
+        SwTwips nPrtHeight = IsVertical() ? Prt().Width() : Prt().Height();
+
+        if( nRstHeight < nFrmHeight )
+        {
+            //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
+            //klein ist und der Upper noch Platz schaffen kann.
+            if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
+                nRstHeight += GetUpper()->Grow( nFrmHeight -nRstHeight, pHeight );
+            // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
+            // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
+            // schrumpfen wir und notieren bUndersized, damit FormatWidthCols die richtige
+            // Spaltengroesse ermitteln kann.
+            if ( nRstHeight < nFrmHeight )
+            {
+                if( bHasToFit || !IsMoveable() ||
+                    ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
+                {
+                    SetUndersized( sal_True );
+                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight ),
+                                  pHeight );
+                }
+                else
+                    SetUndersized( sal_False );
+            }
+        }
+        else if( nChgHeight )
+        {
+            if( nRstHeight - nFrmHeight < nChgHeight )
+                nChgHeight = nRstHeight - nFrmHeight;
+            if( nChgHeight )
+                Grow( nChgHeight, pHeight );
+        }
+#else
         if( nRstHeight < Frm().Height() )
         {
             //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
@@ -545,9 +668,15 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             if( nChgHeight )
                 Grow( nChgHeight, pHeight );
         }
+
+#endif
     }
     else if ( nChgHght )
         Shrink( -nChgHght, pHeight );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
 }
 
 /*************************************************************************
@@ -565,6 +694,9 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const xub_StrLen nOffset, const xub_StrLen nEnd,
                              const sal_uInt8 nMode )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED
+#endif
     // Wir haben den Rest der Textmasse: alle Follows loeschen
     // Sonderfall sind DummyPortions()
     if( HasFollow() && !(nMode & 1) && nOffset == nEnd )
@@ -574,10 +706,16 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             if( ((SwTxtFrm*)GetFollow())->IsLocked() )
             {
                 ASSERT( sal_False, "+SwTxtFrm::JoinFrm: Follow ist locked." );
+#ifdef VERTICAL_LAYOUT
+                UNDO_SWAP
+#endif
                 return;
             }
             JoinFrm();
         }
+#ifdef VERTICAL_LAYOUT
+        UNDO_SWAP
+#endif
         return;
     }
 
@@ -612,6 +750,9 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         if ( CalcFollow( nNewOfst ) )   // CalcFollow erst zum Schluss, dort erfolgt ein SetOfst
             rLine.SetOnceMore( sal_True );
     }
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
 }
 
 /*************************************************************************
@@ -776,6 +917,10 @@ void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 
 sal_Bool SwTxtFrm::CalcPreps()
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(), "SwTxtFrm::CalcPreps with swapped frame" );
+#endif
+
     SwParaPortion *pPara = GetPara();
     if ( !pPara )
         return sal_False;
@@ -807,12 +952,25 @@ sal_Bool SwTxtFrm::CalcPreps()
             // -> dann lassen wir unseren Frame zu gross werden.
 
             SwTwips nChgHeight = GetParHeight();
+#ifdef VERTICAL_LAYOUT
+            if( ( IsVertical() && nChgHeight >= Prt().Width() ) ||
+                ( ! IsVertical() && nChgHeight >= Prt().Height() ) )
+#else
             if( nChgHeight >= Prt().Height() )
+#endif
             {
                 if( bPrepMustFit )
                 {
                     GetFollow()->SetJustWidow( sal_True );
                     GetFollow()->Prepare( PREP_CLEAR );
+                }
+#ifdef VERTICAL_LAYOUT
+                else if ( IsVertical() )
+                {
+                    Frm().Width( Frm().Width() + Frm().Left() );
+                    Prt().Width( Prt().Width() + Frm().Left() );
+                    Frm().Left( 0 );
+                    SetWidow( sal_True );
                 }
                 else
                 {
@@ -822,20 +980,64 @@ sal_Bool SwTxtFrm::CalcPreps()
                     Prt().Height( Prt().Height() + nDiff );
                     SetWidow( sal_True );
                 }
+#else
+                else
+                {
+                    SwTwips nTmp  = LONG_MAX - (Frm().Top()+10000);
+                    SwTwips nDiff = nTmp - Frm().Height();
+                    Frm().Height( nTmp );
+                    Prt().Height( Prt().Height() + nDiff );
+                    SetWidow( sal_True );
+                }
+#endif
             }
             else
             {
+#ifdef VERTICAL_LAYOUT
+                ASSERT( (   IsVertical() && nChgHeight < Prt().Width() ) ||
+                        ( ! IsVertical() && nChgHeight < Prt().Height() ),
+                        "+SwTxtFrm::CalcPrep: wanna shrink" );
+#else
                 ASSERT( nChgHeight < Prt().Height(),
                         "+SwTxtFrm::CalcPrep: wanna shrink" );
+#endif
+
+#ifdef VERTICAL_LAYOUT
+                nChgHeight = IsVertical() ?
+                             Prt().Width() - nChgHeight :
+                             Prt().Height() - nChgHeight;
+#else
                 nChgHeight = Prt().Height() - nChgHeight;
+#endif
+
                 GetFollow()->SetJustWidow( sal_True );
                 GetFollow()->Prepare( PREP_CLEAR );
                 Shrink( nChgHeight, pHeight );
                 SwRect &rRepaint = *(pPara->GetRepaint());
+
+#ifdef VERTICAL_LAYOUT
+                if ( IsVertical() )
+                {
+                    SwRect aRepaint( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+                    SwitchVerticalToHorizontal( aRepaint );
+                    rRepaint.Chg( aRepaint.Pos(), aRepaint.SSize() );
+                }
+                else
+                    rRepaint.Chg( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+#else
                 rRepaint.Chg( Frm().Pos() + Prt().Pos(), Prt().SSize() );
+#endif
+
                 // 6792: Rrand < LRand und Repaint
+#ifdef VERTICAL_LAYOUT
+                if( IsVertical() && 0 >= rRepaint.Height() )
+                    rRepaint.Height(1);
+                else if ( ! IsVertical() && 0 >= rRepaint.Width() )
+                    rRepaint.Width(1);
+#else
                 if( 0 >= rRepaint.Width() )
                     rRepaint.Width(1);
+#endif
             }
             bRet = sal_True;
         }
@@ -854,6 +1056,10 @@ sal_Bool SwTxtFrm::CalcPreps()
                     return sal_False;
                 }
             }
+
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED
+#endif
 
             SwTxtFormatInfo aInf( this );
             SwTxtFormatter aLine( this, &aInf );
@@ -902,13 +1108,45 @@ sal_Bool SwTxtFrm::CalcPreps()
                 }
             }
 
+#ifdef VERTICAL_LAYOUT
+            UNDO_SWAP
+#endif
             // Eine letzte Ueberpruefung, falls das FormatAdjust() nichts
             // brachte, muessen wir amputieren.
             if( bPrepMustFit )
             {
-                const SwTwips nMust = GetUpper()->Frm().Top()
-                    + GetUpper()->Prt().Top() + GetUpper()->Prt().Height();
+#ifdef VERTICAL_LAYOUT
+                const SwTwips nMust = IsVertical() ?
+                                      GetUpper()->Frm().Left()
+                                            + GetUpper()->Prt().Left() :
+                                      GetUpper()->Frm().Top()
+                                            + GetUpper()->Prt().Top()
+                                            + GetUpper()->Prt().Height();
+                const SwTwips nIs   = IsVertical() ?
+                                      Frm().Left() :
+                                      Frm().Top() + Frm().Height();
+#else
+                const SwTwips nMust = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
+                                    + GetUpper()->Prt().Height();
                 const SwTwips nIs   = Frm().Top() + Frm().Height();
+#endif
+
+#ifdef VERTICAL_LAYOUT
+                if( IsVertical() && nIs < nMust )
+                {
+                    Shrink( nMust - nIs, pHeight );
+                    if( Prt().Width() < 0 )
+                        Prt().Width( 0 );
+                    SetUndersized( sal_True );
+                }
+                else if ( ! IsVertical() && nIs > nMust )
+                {
+                    Shrink( nIs - nMust, pHeight );
+                    if( Prt().Height() < 0 )
+                        Prt().Height( 0 );
+                    SetUndersized( sal_True );
+                }
+#else
                 if( nIs > nMust )
                 {
                     Shrink( nIs - nMust, pHeight );
@@ -916,6 +1154,7 @@ sal_Bool SwTxtFrm::CalcPreps()
                         Prt().Height( 0 );
                     SetUndersized( sal_True );
                 }
+#endif
             }
         }
     }
@@ -936,10 +1175,14 @@ sal_Bool SwTxtFrm::CalcPreps()
             MoveFlyInCnt( pFrm, nNew, STRING_LEN );\
     }
 
-void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
+void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                              WidowsAndOrphans &rFrmBreak,
                              const xub_StrLen nStrLen, const sal_Bool bDummy )
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED
+#endif
+
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
 
     xub_StrLen nEnd = rLine.GetStart();
@@ -1033,6 +1276,10 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     if( HasFollow() || IsInFtn() )
         _AdjustFollow( rLine, nEnd, nStrLen, nNew );
     pPara->SetPrepMustFit( sal_False );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP
+#endif
 }
 
 /*************************************************************************
@@ -1193,6 +1440,10 @@ sal_Bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const sal_Bool bPrev )
 void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                         const sal_Bool bAdjust )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || IsSwapped(),"SwTxtFrm::_Format with unswapped frame" );
+#endif
+
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
     rLine.SetUnclipped( sal_False );
 
@@ -1590,10 +1841,24 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
         pPara->SetPrepMustFit( bMustFit );
     }
 
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsSwapped(), "A frame is swapped before _Format" );
+
+    if ( IsVertical() )
+        SwapWidthAndHeight();
+#endif
+
     SwTxtFormatInfo aInf( this );
     SwTxtFormatter  aLine( this, &aInf );
 
     _Format( aLine, aInf );
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        SwapWidthAndHeight();
+
+    ASSERT( ! IsSwapped(), "A frame is swapped after _Format" );
+#endif
 
     if( aLine.IsOnceMore() )
         FormatOnceMore( aLine, aInf );
@@ -1670,7 +1935,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     {
         // Vom Berichtsautopiloten oder ueber die BASIC-Schnittstelle kommen
         // gelegentlich TxtFrms mit einer Breite <=0.
+#ifdef VERTICAL_LAYOUT
+        if( Prt().Width() <= 0 && ! IsVertical() )
+#else
         if( Prt().Width() <= 0 )
+#endif
         {
             // Wenn MustFit gesetzt ist, schrumpfen wir ggf. auf die Unterkante
             // des Uppers, ansonsten nehmen wir einfach eine Standardgroesse
@@ -1694,6 +1963,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 Prt().Height( 0 );
             return;
         }
+
         sal_Bool bChkAtCnt = sal_False;
         const xub_StrLen nStrLen = GetTxtNode()->GetTxt().Len();
         if ( nStrLen || !FormatEmpty() )
@@ -1723,7 +1993,11 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 
             // 8708: Vorsicht, das Format() kann auch durch GetFormatted()
             // angestossen werden.
+#ifdef VERTICAL_LAYOUT
+            if( IsHiddenNow() && ! IsVertical() )
+#else
             if( IsHiddenNow() )
+#endif
             {
                 if( Prt().Height() )
                 {

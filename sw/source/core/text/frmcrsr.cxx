@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-07 09:54:06 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,10 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
 sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                             SwCrsrMoveState *pCMS ) const
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::GetCharRect with swapped frame" );
+#endif
+
     if( IsLocked() || IsHiddenNow() )
         return sal_False;
 
@@ -261,6 +265,27 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
         short nFirstOffset;
         pTxtNd->GetFirstLineOfsWithNum( nFirstOffset );
+#ifdef VERTICAL_LAYOUT
+        Point aPnt2;
+        if ( pFrm->IsVertical() )
+        {
+            if( nFirstOffset > 0 )
+                aPnt1.Y() += nFirstOffset;
+            if( aPnt1.Y() > nMaxY )
+                aPnt1.Y() = nMaxY;
+            aPnt2 = Point( aPnt1.X() + pFrm->Prt().Width(), aPnt1.Y() );
+        }
+        else
+        {
+            if( nFirstOffset > 0 )
+                aPnt1.X() += nFirstOffset;
+            if( aPnt1.Y() > nMaxY )
+                aPnt1.Y() = nMaxY;
+            aPnt2 = Point( aPnt1.X(), aPnt1.Y() + pFrm->Prt().Height() );
+            if( aPnt2.Y() > nMaxY )
+                aPnt2.Y() = nMaxY;
+        }
+#else
         if( nFirstOffset > 0 )
             aPnt1.X() += nFirstOffset;
         if( aPnt1.Y() > nMaxY )
@@ -268,12 +293,21 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         Point aPnt2( aPnt1.X(), aPnt1.Y() + pFrm->Prt().Height() );
         if( aPnt2.Y() > nMaxY )
             aPnt2.Y() = nMaxY;
+#endif
         rOrig = SwRect( aPnt1, aPnt2 );
+
         if ( pCMS )
         {
             pCMS->aRealHeight.X() = 0;
+#ifdef VERTICAL_LAYOUT
+            pCMS->aRealHeight.Y() = pFrm->IsVertical() ?
+                                   -rOrig.Width() :
+                                    rOrig.Height();
+#else
             pCMS->aRealHeight.Y() = rOrig.Height();
+#endif
         }
+
         bRet = sal_True;
     }
     else
@@ -284,6 +318,12 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         sal_Bool bPrvLine;
         xub_StrLen nOffset = rPos.nContent.GetIndex();
         xub_StrLen nNextOfst;
+
+#ifdef VERTICAL_LAYOUT
+        if ( pFrm->IsVertical() )
+            pFrm->SwapWidthAndHeight();
+#endif
+
         do
         {
             {
@@ -303,6 +343,22 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             else
                 bGoOn = sal_False;
         } while ( bGoOn );
+
+#ifdef VERTICAL_LAYOUT
+        if ( pFrm->IsVertical() )
+        {
+            pFrm->SwapWidthAndHeight();
+            pFrm->SwitchHorizontalToVertical( rOrig );
+
+            if ( pCMS && pCMS->bRealHeight )
+            {
+                pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
+                pCMS->aRealHeight.X() =  ( rOrig.Width() -
+                                           pCMS->aRealHeight.X() +
+                                           pCMS->aRealHeight.Y() );
+            }
+        }
+#endif
     }
     if( bRet )
     {
@@ -441,6 +497,15 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     }
     else
     {
+#ifdef VERTICAL_LAYOUT
+        Point aOldPoint( rPoint );
+        if ( IsVertical() )
+        {
+            SwitchVerticalToHorizontal( (Point&)rPoint );
+            ((SwTxtFrm*)this)->SwapWidthAndHeight();
+        }
+#endif
+
         SwTxtSizeInfo aInf( (SwTxtFrm*)this );
         SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
 
@@ -460,6 +525,12 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
                 aLine.Prev();
 
         xub_StrLen nOffset = aLine.GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
+
+#ifdef VERTICAL_LAYOUT
+        if ( IsVertical() )
+            ((SwTxtFrm*)this)->SwapWidthAndHeight();
+       (Point&)rPoint = aOldPoint;
+#endif
 
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
             ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
@@ -790,6 +861,12 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     const xub_StrLen nPos = pPam->pPoint->nContent.GetIndex();
     SwRect aCharBox;
     const SwCntntFrm *pFollow;
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+#endif
+
     if ( !IsEmpty() && !IsHiddenNow() )
     {
         xub_StrLen nFormat = STRING_LEN;
@@ -832,6 +909,12 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                     nOfst = nStart + 1;
                 pPam->pPoint->nContent =
                       SwIndex( ((SwTxtFrm*)this)->GetTxtNode(), nOfst );
+
+#ifdef VERTICAL_LAYOUT
+                if ( IsVertical() )
+                    ((SwTxtFrm*)this)->SwapWidthAndHeight();
+#endif
+
                 return sal_True;
             }
             if( 0 != ( pFollow = GetFollow() ) )
@@ -847,7 +930,16 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                     }
                 }
                 if( !pFollow ) // nur noch geschuetzte
+#ifdef VERTICAL_LAYOUT
+                {
+                    if ( IsVertical() )
+                        ((SwTxtFrm*)this)->SwapWidthAndHeight();
                     return pTmp->SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
+                }
+#else
+                    return pTmp->SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
+#endif
+
                 aLine.GetCharRect( &aCharBox, nPos );
                 aCharBox.SSize().Width() /= 2;
             }
@@ -871,6 +963,11 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     }
     else
         pFollow = GetFollow();
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+#endif
 
     // Bei Follows schlagen wir eine Abkuerzung
     if( pFollow )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-14 06:43:41 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,12 @@ SwRect SwTxtFrm::Paint()
         aRet = *pRepaint;
     }
     ResetRepaint();
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        SwitchHorizontalToVertical( aRet );
+#endif
+
     return aRet;
 }
 
@@ -544,7 +550,11 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                     pFnt->SetStyleName( aEmptyStr, SW_LATIN );
                     pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, SW_LATIN );
                 }
+#ifdef VERTICAL_LAYOUT
+                pFnt->SetVertical( 0, IsVertical() );
+#else
                 pFnt->SetVertical( 0 );
+#endif
                 pFnt->Invalidate();
                 pFnt->ChgPhysFnt( pSh, pSh->GetOut() );
                 Point aPos = Frm().Pos() + Prt().Pos();
@@ -556,7 +566,9 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 }
                 else
                     pClip = NULL;
+
                 aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
+
                 const XubString aTmp( CH_PAR );
                 SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
                 aDrawInf.SetLeft( rRect.Left() );
@@ -565,6 +577,11 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 aDrawInf.SetSpace( 0 );
                 aDrawInf.SetKanaComp( 0 );
                 aDrawInf.SetWrong( NULL );
+
+#ifdef VERTICAL_LAYOUT
+                aDrawInf.SetFrm( this );
+#endif
+
                 pFnt->_DrawText( aDrawInf );
                 delete pClip;
             }
@@ -595,8 +612,14 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         if( IsDbg( this ) )
             DBTXTFRM << "Paint()" << endl;
 #endif
+#ifdef VERTICAL_LAYOUT
+        if( IsLocked() || IsHiddenNow() ||
+            IsVertical() ? ! Prt().Width() : !Prt().Height() )
+            return;
+#else
         if( IsLocked() || IsHiddenNow() || !Prt().Height() )
             return;
+#endif
 
         //Kann gut sein, dass mir der IdleCollector mir die gecachten
         //Informationen entzogen hat.
@@ -644,6 +667,18 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
 
         // Hier holen wir uns den String fuer die Ausgabe, besonders
         // die Laenge ist immer wieder interessant.
+
+#ifdef VERTICAL_LAYOUT
+        // Rectangle
+        ASSERT( ! IsSwapped(), "A frame is swapped before Paint" );
+        SwRect aOldRect( rRect );
+
+        if ( IsVertical() )
+        {
+            SwitchVerticalToHorizontal( (SwRect&)rRect );
+            ((SwTxtFrm*)this)->SwapWidthAndHeight();
+        }
+#endif
 
         ViewShell *pSh = GetShell();
         OutputDevice *pOldRef = pSh->GetReferenzDevice();
@@ -714,6 +749,14 @@ void SwTxtFrm::Paint(const SwRect &rRect ) const
         }
         if( rRepaint.HasArea() )
             rRepaint.Clear();
+
+#ifdef VERTICAL_LAYOUT
+    if ( IsVertical() )
+        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+    (SwRect&)rRect = aOldRect;
+
+    ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
+#endif
     }
 }
 

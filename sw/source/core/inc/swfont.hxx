@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:32:25 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,11 @@ public:
     inline void SetUnderColor( const Color &rColor ) { aUnderColor = rColor; }
     inline void SetStrikeout( const FontStrikeout eStrikeout );
     inline void SetOutline( const BOOL bOutline );
+#ifdef VERTICAL_LAYOUT
+           void SetVertical( USHORT nDir, const BOOL nVertLayout = FALSE );
+#else
     inline void SetVertical( const USHORT nDir );
+#endif
     inline void SetShadow( const BOOL bShadow );
     inline void SetAutoKern( BYTE nAutoKern );
     inline void SetTransparent( const BOOL bTrans );
@@ -835,6 +839,7 @@ inline void SwSubFont::SetVertical( const USHORT nDir )
     Font::SetOrientation( nDir );
 }
 
+#ifndef VERTICAL_LAYOUT
 inline void SwFont::SetVertical( const USHORT nDir )
 {
     if( nDir != aSub[0].GetOrientation() )
@@ -845,6 +850,7 @@ inline void SwFont::SetVertical( const USHORT nDir )
         aSub[2].SetVertical( nDir );
     }
 }
+#endif
 
 /*************************************************************************
  *                      class SvStatistics

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-01 10:16:34 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,11 @@ USHORT SwAttrHandler::SwAttrStack::Pos( const SwTxtAttr& rAttr ) const
  *                      SwAttrHandler::SwAttrHandler()
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+SwAttrHandler::SwAttrHandler() : pFnt( 0 ), bVertLayout( sal_False )
+#else
 SwAttrHandler::SwAttrHandler() : pFnt( 0 )
+#endif
 {
     memset( pDefaultArray, 0, NUM_DEFAULT_VALUES * sizeof(SfxPoolItem*) );
 }
@@ -380,8 +384,13 @@ void SwAttrHandler::Init( const SwAttrSet& rAttrSet, const SwDoc& rDoc )
         pDefaultArray[ StackPos[ i ] ] = &rAttrSet.Get( i, TRUE );
 }
 
+#ifdef VERTICAL_LAYOUT
+void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet* pAS,
+                          const SwDoc& rDoc, SwFont& rFnt, sal_Bool bVL )
+#else
 void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
                           const SwDoc& rDoc, SwFont& rFnt, sal_Bool bAttrSet )
+#endif
 {
     // initialize default array
     memcpy( pDefaultArray, pPoolItem,
@@ -390,9 +399,18 @@ void SwAttrHandler::Init( const SfxPoolItem** pPoolItem, const SwAttrSet& rAS,
     pDoc = &rDoc;
 
     // do we have to apply additional paragraph attributes?
+#ifdef VERTICAL_LAYOUT
+
+    bVertLayout = bVL;
+
+    if ( pAS && pAS->Count() )
+    {
+        SfxItemIter aIter( *pAS );
+#else
     if ( bAttrSet && rAS.Count() )
     {
         SfxItemIter aIter( rAS );
+#endif
         register USHORT nWhich;
         const SfxPoolItem* pItem = aIter.GetCurItem();
         while( TRUE )
@@ -610,12 +628,24 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         if ( pRotateAttr )
         {
             pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+#ifdef VERTICAL_LAYOUT
+            rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
+                               bVertLayout );
+#else
             rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue() );
+#endif
         }
         else
+#ifdef VERTICAL_LAYOUT
+            rFnt.SetVertical(
+                ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
+                 bVertLayout
+            );
+#else
             rFnt.SetVertical(
                 ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue()
             );
+#endif
     }
 }
 
@@ -798,7 +828,12 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                     ((SvxTwoLinesItem*)pDefaultArray[ nTwoLineStack ])->GetValue();
 
             if ( !bTwoLineAct )
+#ifdef VERTICAL_LAYOUT
+                rFnt.SetVertical( ((SvxCharRotateItem&)rItem).GetValue(),
+                                   bVertLayout );
+#else
                 rFnt.SetVertical( ((SvxCharRotateItem&)rItem).GetValue() );
+#endif
 
             break;
         }
@@ -815,7 +850,11 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
 
             if ( !bRuby && bTwoLineAct )
             {
+#ifdef VERTICAL_LAYOUT
+                rFnt.SetVertical( 0, bVertLayout );
+#else
                 rFnt.SetVertical( 0 );
+#endif
                 break;
             }
 
@@ -831,17 +870,34 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             if ( pRotateAttr )
             {
                 pRotateItem = lcl_GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
+#ifdef VERTICAL_LAYOUT
+                rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue(),
+                                   bVertLayout );
+#else
                 rFnt.SetVertical( ((SvxCharRotateItem*)pRotateItem)->GetValue() );
+#endif
             }
             else
+#ifdef VERTICAL_LAYOUT
+                rFnt.SetVertical(
+                    ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue(),
+                     bVertLayout
+                );
+#else
                 rFnt.SetVertical(
                     ((SvxCharRotateItem*)pDefaultArray[ nRotateStack ])->GetValue()
                 );
+#endif
 
             break;
         }
         case RES_TXTATR_CJK_RUBY :
+#ifdef VERTICAL_LAYOUT
+            rFnt.SetVertical( 0, bVertLayout );
+#else
             rFnt.SetVertical( 0 );
+#endif
+
             break;
         case RES_TXTATR_REFMARK :
             if ( bPush )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-29 15:50:31 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,12 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().GetPos().Y() + nTmpHeight > rPaint.Top() + rPaint.Height() )
         {
             bClip = sal_False;
+
+#ifdef VERTICAL_LAYOUT
+            rClip.ChgClip( rPaint, pFrm );
+#else
             rClip.ChgClip( rPaint );
+#endif
         }
 #ifdef DEBUG
         static sal_Bool bClipAlways = sal_False;
@@ -278,7 +283,11 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     if( pCurr->IsClipping() )
     {
+#ifdef VERTICAL_LAYOUT
+        rClip.ChgClip( aLineRect, pFrm );
+#else
         rClip.ChgClip( aLineRect );
+#endif
         bClip = sal_False;
     }
 
@@ -384,7 +393,11 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             GetInfo().X() + pPor->Width() + ( pPor->Height() / 2 ) > nMaxRight )
         {
             bClip = sal_False;
+#ifdef VERTICAL_LAYOUT
+            rClip.ChgClip( rPaint, pFrm );
+#else
             rClip.ChgClip( rPaint );
+#endif
         }
 
         // Portions, die "unter" dem Text liegen wie PostIts
@@ -467,7 +480,11 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( pCurr->IsClipping() )
+#ifdef VERTICAL_LAYOUT
+        rClip.ChgClip( rPaint, pFrm );
+#else
         rClip.ChgClip( rPaint );
+#endif
 }
 
 void SwTxtPainter::CheckSpecialUnderline()

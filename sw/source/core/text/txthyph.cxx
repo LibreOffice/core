@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-17 11:05:47 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@ Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
 
 sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! IsVertical() || ! IsSwapped(),"swapped frame at SwTxtFrm::Hyphenate" );
+#endif
     if( !pBreakIt->xBreak.is() )
         return sal_False;;
     // Wir machen den Laden erstmal dicht:
@@ -164,6 +167,12 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         // Wir muessen die Trennung immer einschalten.
         // Keine Angst, der SwTxtIter sichert im Hyphenate die alte Zeile.
         SwTxtFrmLocker aLock( this );
+
+#ifdef VERTICAL_LAYOUT
+        if ( IsVertical() )
+            SwapWidthAndHeight();
+#endif
+
         SwTxtFormatInfo aInf( this, sal_True );     // sal_True fuer interactive hyph!
         SwTxtFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
@@ -189,6 +198,12 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
                 break;
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+        if ( IsVertical() )
+            SwapWidthAndHeight();
+#endif
+
     return bRet;
 }
 

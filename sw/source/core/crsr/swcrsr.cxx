@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-28 14:27:33 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1401,9 +1401,24 @@ FASTBOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
                 eTmpState.bSetInReadOnly = bInReadOnly;
                 SwRect aTmpRect;
                 pFrm->GetCharRect( aTmpRect, *GetPoint(), &eTmpState );
+#ifdef VERTICAL_LAYOUT
+                if ( pFrm->IsVertical() )
+                {
+                    aPt.X() = aTmpRect.Center().X();
+                    pFrm->Calc();
+                    aPt.Y() = pFrm->Frm().Top() + nUpDownX;
+                }
+                else
+                {
+                    aPt.Y() = aTmpRect.Center().Y();
+                    pFrm->Calc();
+                    aPt.X() = pFrm->Frm().Left() + nUpDownX;
+                }
+#else
                 aPt.Y() = aTmpRect.Center().Y();
                 pFrm->Calc();
                 aPt.X() = pFrm->Frm().Left() + nUpDownX;
+#endif
                 pFrm->GetCrsrOfst( GetPoint(), aPt, &eTmpState );
             }
             bRet = TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 14:00:31 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,21 +177,50 @@ SwTxtFrmBreak::SwTxtFrmBreak( SwTxtFrm *pFrm, const SwTwips nRst )
 
 const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
 {
+#ifdef VERTICAL_LAYOUT
+    sal_Bool bUndoSwap = sal_False;
+    if ( pFrm->IsVertical() && pFrm->IsSwapped() )
+    {
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+        bUndoSwap = sal_True;
+    }
+#endif
+
     register sal_Bool bFit = sal_False;
     SwTwips nLineHeight = rLine.Y() - nOrigin + rLine.GetLineHeight();
 
     // 7455 und 6114: Raum fuer die Umrandung unten einkalkulieren.
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->IsVertical() )
+        nLineHeight += pFrm->Prt().Left();
+    else
+        nLineHeight += pFrm->Frm().Height() - pFrm->Prt().Height()
+                       - pFrm->Prt().Top();
+#else
     nLineHeight += pFrm->Frm().Height() - pFrm->Prt().Height()
                    - pFrm->Prt().Top();
+#endif
 
     if( nRstHeight )
         bFit = nRstHeight >= nLineHeight;
     else
     {
         // Der Frm besitzt eine Hoehe, mit der er auf die Seite passt.
+#ifdef VERTICAL_LAYOUT
+        SwTwips nHeight;
+        if ( pFrm->IsVertical() )
+            nHeight = pFrm->Frm().Right()
+                    - pFrm->GetUpper()->Frm().Left()
+                    - pFrm->GetUpper()->Prt().Left();
+        else
+            nHeight = pFrm->GetUpper()->Frm().Top()
+                    + pFrm->GetUpper()->Prt().Top()
+                    + pFrm->GetUpper()->Prt().Height() - nOrigin;
+#else
         SwTwips nHeight = pFrm->GetUpper()->Frm().Top()
                         + pFrm->GetUpper()->Prt().Top()
                         + pFrm->GetUpper()->Prt().Height() - nOrigin;
+#endif
 
         // Wenn sich alles innerhalb des bestehenden Frames abspielt,
         // ist das Ergebnis sal_True;
@@ -209,6 +238,12 @@ const sal_Bool SwTxtFrmBreak::IsInside( SwTxtMargin &rLine ) const
             bFit = nHeight >= nLineHeight;
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->IsVertical() && bUndoSwap )
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
+#endif
+
     return bFit;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:13:43 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@ class Size;
 class SwFont;
 class ViewShell;
 class SwTxtNode;
+
+#ifdef VERTICAL_LAYOUT
+class SwTxtFrm;
+#endif
 
 /*************************************************************************
  *                      class SwScriptInfo
@@ -175,6 +179,9 @@ inline USHORT SwScriptInfo::GetCompType( const USHORT nCnt ) const
 
 class SwDrawTextInfo
 {
+#ifdef VERTICAL_LAYOUT
+    const SwTxtFrm* pFrm;
+#endif
     OutputDevice* pOut;
     ViewShell* pSh;
     const SwScriptInfo* pScriptInfo;
@@ -242,6 +249,12 @@ public:
             bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
 #endif
     }
+
+#ifdef VERTICAL_LAYOUT
+    const SwTxtFrm* GetFrm() const { return pFrm; }
+    void SetFrm( const SwTxtFrm* pNewFrm ) { pFrm = pNewFrm; }
+#endif
+
     ViewShell *GetShell() const { return pSh; }
     OutputDevice& GetOut() const {
         ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );

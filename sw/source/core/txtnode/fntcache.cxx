@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-10 15:16:35 $
+ *  last change: $Author: fme $ $Date: 2001-08-31 06:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,13 @@
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx>     // SwDrawTextInfo
 #endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _TXTFRM_HXX
+#include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#endif
+
 
 
 // Enable this to use the helpclass SwRVPMark
@@ -643,6 +650,7 @@ void SwFntObj::SetDevFont( ViewShell *pSh, OutputDevice *pOut )
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
+
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     BOOL bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType();
     Font* pTmpFont = bPrt ? pPrtFont : GetScrFont();
@@ -762,6 +770,11 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
                 // Bei durch/unterstr. Blocksatz erfordert ein Blank am Ende
                 // einer Textausgabe besondere Massnahmen:
+#ifdef VERTICAL_LAYOUT
+                if ( rInf.GetFrm() && rInf.GetFrm()->IsVertical() )
+                    rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+#endif
+
                 if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
                     rInf.GetText().GetChar( rInf.GetIdx()+rInf.GetLen()-1 ) ) )
                 {
@@ -1172,6 +1185,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if( nOffs < nLen )
             {
                 register xub_StrLen nTmpIdx = bBullet ? 0 : rInf.GetIdx();
+
+#ifdef VERTICAL_LAYOUT
+                if ( rInf.GetFrm() && rInf.GetFrm()->IsVertical() )
+                    rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+#endif
+
                 rInf.GetOut().DrawTextArray( aPos, *pStr, pKernArray + nOffs,
                                     nTmpIdx + nOffs , nLen - nOffs );
             }
