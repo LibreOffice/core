@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.5 2001-05-04 19:49:40 rt Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.6 2001-05-10 05:44:55 kz Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: rt $ $Date: 2001-05-04 19:49:40 $ $Revision: 1.5 $
+ //  $Author: kz $ $Date: 2001-05-10 05:44:55 $ $Revision: 1.6 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -55,6 +55,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ arabic ] = "ÇáÌÏÇæá ÇáãÚäíÉ";
         Text[ turkish ] = "Ýlgili tablolar";
         Text[ catalan ] = "tablas implicadas";
+        Text[ finnish ] = "beteiligte Tabellen";
     };
 
     ListBox LB_LEFT_TABLE
@@ -100,6 +101,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ arabic ] = "ÇáÍÞæá ÇáãÚäíÉ";
         Text[ turkish ] = "Ýlgili alanlar";
         Text[ catalan ] = "campos implicados";
+        Text[ finnish ] = "beteiligte Felder";
     };
 
     GroupBox GB_CASC_UPD
@@ -128,6 +130,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Güncelleme seçnekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de actualización";
+        Text[ finnish ] = "Update Optionen";
     };
     RadioButton RB_NO_CASC_UPD
     {
@@ -156,6 +159,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Ýþlem yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ninguna acción";
+        Text[ finnish ] = "~Keine Aktion";
     };
     RadioButton RB_CASC_UPD
     {
@@ -183,6 +187,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Basamaklarý güncelle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Actualizar ~cascada";
+        Text[ finnish ] = "K~ask. Update";
     };
     RadioButton RB_CASC_UPD_NULL
     {
@@ -210,6 +215,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Sýfýr belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Poner ~null";
+        Text[ finnish ] = "~Null setzen";
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
@@ -237,6 +243,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminar";
+        Text[ finnish ] = "~Default setzen";
     };
 // zweite Groupbox
     GroupBox GB_CASC_DEL
@@ -265,6 +272,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Silme seçenekleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Opciones de eliminación";
+        Text[ finnish ] = "Löschoptionen";
     };
     RadioButton RB_NO_CASC_DEL
     {
@@ -293,6 +301,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Ýþlem yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ninguna a~cción";
+        Text[ finnish ] = "K~eine Aktion";
     };
     RadioButton RB_CASC_DEL
     {
@@ -320,6 +329,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Basamaklarý sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Eliminar c~ascada";
+        Text[ finnish ] = "Ka~sk. Löschen";
     };
     RadioButton RB_CASC_DEL_NULL
     {
@@ -347,6 +357,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Sýfýr belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Poner ~null";
+        Text[ finnish ] = "Nu~ll setzen";
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
@@ -374,6 +385,7 @@ ModalDialog DLG_REL_PROPERTIES
         Text[ turkish ] = "Standart belirle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pre~determinar";
+        Text[ finnish ] = "De~fault setzen";
     };
 
     OKButton PB_OK
@@ -416,4 +428,5 @@ ModalDialog DLG_REL_PROPERTIES
     Text[ turkish ] = "Ýliþkiler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Relaciones";
+    Text[ finnish ] = "Relationen";
 };
