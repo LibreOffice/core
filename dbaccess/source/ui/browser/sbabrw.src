@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:40:25 $
+ *  last change: $Author: kz $ $Date: 2001-09-06 20:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,10 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ swedish ] = "Stäng";
             Text[ polish ] = "Zamknij";
             Text[ portuguese_brazilian ] = "Close";
-            Text[ japanese ] = "•Â‚¶‚é";
-            Text[ korean ] = "´İ±â";
-            Text[ chinese_simplified ] = "¹Ø±Õ";
-            Text[ chinese_traditional ] = "Ãö³¬";
+            Text[ japanese ] = "é–‰ã˜ã‚‹";
+            Text[ korean ] = "ë‹«ê¸°";
+            Text[ chinese_simplified ] = "å…³é—­";
+            Text[ chinese_traditional ] = "é—œé–‰";
             Text[ turkish ] = "Close";
             Text[ arabic ] = "ÅÛáÇŞ";
             Text[ finnish ] = "Sulje";
@@ -323,10 +323,10 @@ String RID_STR_LOADING_DATASOURCE
     Text[ danish ] = "Indlæs data";
     Text[ polish ] = "£aduj dane";
     Text[ portuguese_brazilian ] = "load data";
-    Text[ japanese ] = "ÃŞ°À‚Ì“Ç‚İ‚İ";
-    Text[ korean ] = "µ¥ÀÌÅÍ ·Îµå";
-    Text[ chinese_simplified ] = "ÏÂÔØÊı¾İ";
-    Text[ chinese_traditional ] = "¤U¸ü¸ê®Æ";
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ã®èª­ã¿è¾¼ã¿";
+    Text[ korean ] = "ë°ì´í„° ë¡œë“œ";
+    Text[ chinese_simplified ] = "ä¸‹è½½æ•°æ®";
+    Text[ chinese_traditional ] = "ä¸‹è¼‰è³‡æ–™";
     Text[ arabic ] = "ÊÍãíá ÇáÈíÇäÇÊ";
     Text[ turkish ] = "Verileri yükle";
     Text[ finnish ] = "Lataa tiedot";
@@ -351,14 +351,14 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message[ swedish ] = "Den aktuella dataposten har ändrats.\nSka ändringarna sparas?";
     Message[ polish ] = "Aktualny rekord zosta³ zmodyfikowany.\nCzy zapisaæ zmodyfikowane dane?";
     Message[ portuguese_brazilian ] = "Soll der ge?nderter Datensatz gespeichert werden?";
-    Message[ japanese ] = "Œ»İ‚ÌÚº°ÄŞ‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
-    Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
-    Message[ chinese_traditional ] = "·í«eªº¸ê®Æ¤w¸gÅÜ§ó¡C­nÀx¦sÅÜ§óªº¸ê®Æ±ø¥Ø¡H";
+    Message[ japanese ] = "ç¾åœ¨ã®ï¾šï½ºï½°ï¾„ï¾ã¯å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\nå¤‰æ›´ã‚’ä¿å­˜ã—ã¾ã™ã‹ã€‚";
+    Message[ chinese_simplified ] = "æ•°æ®æ¡ç›®å·²ç»è¢«æ›´æ”¹ã€‚\næ‚¨è¦å­˜ç›˜æ›´æ”¹åçš„æ•°æ®è®°å½•å—ï¼Ÿ";
+    Message[ chinese_traditional ] = "ç•¶å‰çš„è³‡æ–™å·²ç¶“è®Šæ›´ã€‚è¦å„²å­˜è®Šæ›´çš„è³‡æ–™æ¢ç›®ï¼Ÿ";
     Message[ arabic ] = "Êã ÊÛííÑ ÇáÓÌá ÇáÍÇáí.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊı¿";
     Message[ dutch ] = "De actuele record werd gewijzigd.\nWilt u de wijzigingen opslaan?";
-    Message[ chinese_simplified ] = "Êı¾İÌõÄ¿ÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª´æÅÌ¸ü¸ÄºóµÄÊı¾İ¼ÇÂ¼Âğ£¿";
+    Message[ chinese_simplified ] = "æ•°æ®æ¡ç›®å·²ç»è¢«æ›´æ”¹ã€‚\næ‚¨è¦å­˜ç›˜æ›´æ”¹åçš„æ•°æ®è®°å½•å—ï¼Ÿ";
     Message[ greek ] = "Ç ôñİ÷ïõóá åããñáöŞ ôñïğïğïéŞèçêå.\nÍá áğïèçêåõôïıí ïé áëëáãİò;";
-    Message[ korean ] = "ÇöÀçÀÇ  µ¥ÀÌÅÍ ·¹ÄÚµå°¡ º¯°æµÇ¾ú½À´Ï´Ù.\n º¯°æ»çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "í˜„ì¬ì˜  ë°ì´í„° ë ˆì½”ë“œê°€ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.\n ë³€ê²½ì‚¬í•­ì„ ì €ì¥í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Güncel veri kümesi değiştirildi.\nDeğişiklikler saklansın mı?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Nykyistä tietuetta on muutettu.\nHaluatko tallentaa muutokset?";
@@ -380,14 +380,14 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message [ spanish ] = "¿Desea eliminar los datos seleccionados?" ;
     Message [ french ] = "Voulez-vous supprimer les données sélectionnées ?" ;
     Message [ dutch ] = "Wilt u de geselecteerde gegevens verwijderen?" ;
-    Message[ chinese_simplified ] = "ÄúÒªÉ¾³ıÑ¡ÖĞµÄÊı¾İÂğ£¿";
+    Message[ chinese_simplified ] = "æ‚¨è¦åˆ é™¤é€‰ä¸­çš„æ•°æ®å—ï¼Ÿ";
     Message[ russian ] = "Óäàëèòü âûäåëåííûå äàííûå?";
     Message[ polish ] = "Usun¹æ zaznaczone dane?";
-    Message[ japanese ] = "‘I‘ğ‚µ‚½ÃŞ°À‚ğíœ‚µ‚Ü‚·‚©B";
-    Message[ chinese_traditional ] = "±z­n§R°£¿ï¤¤ªº¸ê®Æ¡S";
+    Message[ japanese ] = "é¸æŠã—ãŸï¾ƒï¾ï½°ï¾€ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+    Message[ chinese_traditional ] = "æ‚¨è¦åˆªé™¤é¸ä¸­çš„è³‡æ–™ï¹–";
     Message[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÈíÇäÇÊ ÇáãÍÏÏÉ¿";
     Message[ greek ] = "Èİëåôå íá äéáãñáöïıí ôá åğéëåãìİíá äåäïìİíá;";
-    Message[ korean ] = "¼±ÅÃµÈ µ¥ÀÌÅÍ¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "ì„ íƒëœ ë°ì´í„°ë¥¼ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Message[ turkish ] = "Seçilen veriler silinsin mi?";
     Message[ language_user1 ] = " ";
     Message[ finnish ] = "Haluatko palauttaa poistaa valitut tiedot?";
@@ -407,16 +407,16 @@ String RID_STR_DATABROWSER_FILTERED
     Text[ swedish ] = "(filtrerad)";
     Text[ dutch ] = "(gefilterd)";
     Text[ spanish ] = "(filtrado)";
-    Text[ chinese_simplified ] = "(ÒÑ¾­É¸Ñ¡)";
+    Text[ chinese_simplified ] = "(å·²ç»ç­›é€‰)";
     Text[ russian ] = "(îòôèëüòğîâàíî)";
     Text[ polish ] = "(przefiltrowane)";
-    Text[ japanese ] = "(Ì¨ÙÀÏ‚İ)";
-    Text[ chinese_traditional ] = "(¤w¸g¿z¿ï)";
+    Text[ japanese ] = "(ï¾Œï½¨ï¾™ï¾€æ¸ˆã¿)";
+    Text[ chinese_traditional ] = "(å·²ç¶“ç¯©é¸)";
     Text[ arabic ] = "(ãõÕİøì)";
     Text[ dutch ] = "(gefilterd)";
-    Text[ chinese_simplified ] = "(ÒÑ¾­É¸Ñ¡)";
+    Text[ chinese_simplified ] = "(å·²ç»ç­›é€‰)";
     Text[ greek ] = "(öéëôñáñéóìİíá)";
-    Text[ korean ] = "(ÇÊÅÍµÊ)";
+    Text[ korean ] = "(í•„í„°ë¨)";
     Text[ turkish ] = "(filtrelenmiş)";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "(suodatettu)";
@@ -439,10 +439,10 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ swedish ] = "Fel vid definition av sorteringskriterier";
     Text[ polish ] = "B³¹d podczas osadzania kryteriów sortowania";
     Text[ portuguese_brazilian ] = "error setting the sort criteria";
-    Text[ japanese ] = "•À‚×‘Ö‚¦ğŒ‚Ìİ’è‚Ì´×°";
-    Text[ korean ] = "Á¤·Ä±âÁØ ¼³Á¤½Ã¿¡ ¿À·ù";
-    Text[ chinese_simplified ] = "ÔÚÉè¶¨ÅÅĞòÌõ¼şÊ±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "³]©w½s±Æ±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
+    Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆæ¡ä»¶ã®è¨­å®šæ™‚ã®ï½´ï¾—ï½°";
+    Text[ korean ] = "ì •ë ¬ê¸°ì¤€ ì„¤ì •ì‹œì— ì˜¤ë¥˜";
+    Text[ chinese_simplified ] = "åœ¨è®¾å®šæ’åºæ¡ä»¶æ—¶å‘ç”Ÿé”™è¯¯";
+    Text[ chinese_traditional ] = "è¨­å®šç·¨æ’æ¢ä»¶æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáİÑÒ";
     Text[ turkish ] = "Sıralama ölçütlerinin ayarlanmasında hata";
     Text[ finnish ] = "Virhe lajittelujärjestyksen määrityksessä";
@@ -464,10 +464,10 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ swedish ] = "Fel vid definition av filterkriterier";
     Text[ polish ] = "B³¹d podczas osadzania kryteriów filtra";
     Text[ portuguese_brazilian ] = "error setting the filter criteria";
-    Text[ japanese ] = "Ì¨ÙÀğŒ‚Ìİ’è‚Ì´×°";
-    Text[ korean ] = "ÇÊÅÍ±âÁØ ¼³Á¤½Ã¿¡ ¿À·ù";
-    Text[ chinese_simplified ] = "ÔÚÉè¶¨É¸Ñ¡Ìõ¼şÊ±·¢Éú´íÎó";
-    Text[ chinese_traditional ] = "³]©w¿z¿ï±ø¥ó®Éµo¥Í¤@­Ó¿ù»~";
+    Text[ japanese ] = "ï¾Œï½¨ï¾™ï¾€æ¡ä»¶ã®è¨­å®šæ™‚ã®ï½´ï¾—ï½°";
+    Text[ korean ] = "í•„í„°ê¸°ì¤€ ì„¤ì •ì‹œì— ì˜¤ë¥˜";
+    Text[ chinese_simplified ] = "åœ¨è®¾å®šç­›é€‰æ¡ä»¶æ—¶å‘ç”Ÿé”™è¯¯";
+    Text[ chinese_traditional ] = "è¨­å®šç¯©é¸æ¢ä»¶æ™‚ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕİíÉ";
     Text[ turkish ] = "Filtre ölçütlerinin ayarlanmasında hata";
     Text[ finnish ] = "Virhe suodatinehtojen määrityksessä";
@@ -490,10 +490,10 @@ String RID_STR_CONNECTION_LOST
     Text[ swedish ] = "Bruten förbindelse";
     Text[ polish ] = "Brak po³¹czenia";
     Text[ portuguese_brazilian ] = "connection lost";
-    Text[ japanese ] = "Ú‘±‚ÍØ’f‚³‚ê‚Ü‚µ‚½";
-    Text[ korean ] = "¿¬°á »ó½Ç";
-    Text[ chinese_simplified ] = "Ê§È¥Á¬½Ó";
-    Text[ chinese_traditional ] = "³s½u¤w¸g¤¤Â_";
+    Text[ japanese ] = "æ¥ç¶šã¯åˆ‡æ–­ã•ã‚Œã¾ã—ãŸ";
+    Text[ korean ] = "ì—°ê²° ìƒì‹¤";
+    Text[ chinese_simplified ] = "å¤±å»è¿æ¥";
+    Text[ chinese_traditional ] = "é€£ç·šå·²ç¶“ä¸­æ–·";
     Text[ arabic ] = "Êã İŞÏÇä ÇáÇÊÕÇá";
     Text[ turkish ] = "Bağlantı koptu";
     Text[ finnish ] = "Yhteys menetetty";
@@ -540,10 +540,10 @@ String RID_STR_QUERIES_CONTAINER
     Text[ swedish ] = "Sökningar";
     Text[ polish ] = "Kwerendy";
     Text[ portuguese_brazilian ] = "Queries";
-    Text[ japanese ] = "¸´Ø°";
-    Text[ korean ] = "ÁúÀÇ";
-    Text[ chinese_simplified ] = "²éÑ¯";
-    Text[ chinese_traditional ] = "¬d¸ß";
+    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°";
+    Text[ korean ] = "ì§ˆì˜";
+    Text[ chinese_simplified ] = "æŸ¥è¯¢";
+    Text[ chinese_traditional ] = "æŸ¥è©¢";
     Text[ turkish ] = "Queries";
     Text[ arabic ] = "ÇÓÊİÓÇÑÇÊ";
     Text[ finnish ] = "Abfragen";
@@ -566,10 +566,10 @@ String RID_STR_TABLES_CONTAINER
     Text[ swedish ] = "Tabeller";
     Text[ polish ] = "Tabele";
     Text[ portuguese_brazilian ] = "Tables";
-    Text[ japanese ] = "Ã°ÌŞÙ";
-    Text[ korean ] = "Å×ÀÌºí";
-    Text[ chinese_simplified ] = "±í¸ñ";
-    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™";
+    Text[ korean ] = "í…Œì´ë¸”";
+    Text[ chinese_simplified ] = "è¡¨æ ¼";
+    Text[ chinese_traditional ] = "è¡¨æ ¼";
     Text[ turkish ] = "Tables";
     Text[ arabic ] = "Tables";
     Text[ finnish ] = "Laskentataulukot";
@@ -593,10 +593,10 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ swedish ] = "Länkar";
     Text[ polish ] = "£¹cza";
     Text[ portuguese_brazilian ] = "Bookmarks";
-    Text[ japanese ] = "Øİ¸";
-    Text[ korean ] = "¸µÅ©";
-    Text[ chinese_simplified ] = "Á´½Ó";
-    Text[ chinese_traditional ] = "±¶®|";
+    Text[ japanese ] = "ï¾˜ï¾ï½¸";
+    Text[ korean ] = "ë§í¬";
+    Text[ chinese_simplified ] = "é“¾æ¥";
+    Text[ chinese_traditional ] = "æ·å¾‘";
     Text[ turkish ] = "Bookmarks";
     Text[ arabic ] = "Bookmarks";
     Text[ catalan ] = "Bookmarks";
@@ -617,12 +617,12 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ italian ] = "Amministra ~sorgente dati...";   \
     Text[ danish ] = "administrate ~data sources ...";  \
     Text[ swedish ] = "Administrera ~datakällor...";    \
-    Text[ polish ] = "~Zarz¹dzaj Ÿród³ami danych...";   \
+    Text[ polish ] = "~Administracja Ÿróde³ danych..."; \
     Text[ portuguese_brazilian ] = "administrate ~data sources ...";    \
-    Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—(~D)...";  \
-    Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º °ü¸®(~D)..."; \
-    Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´(~D)...";   \
-    Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½(~D)...";  \
+    Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®ç®¡ç†(~D)..."; \
+    Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ê´€ë¦¬(~D)...";  \
+    Text[ chinese_simplified ] = "ç®¡ç†æ•°æ®æº(~D)...";  \
+    Text[ chinese_traditional ] = "ç®¡ç†è³‡æ–™æº(~D)..."; \
     Text[ turkish ] = "administrate ~data sources ..."; \
     Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ..."; \
     Text[ finnish ] = "~Datenquellen verwalten ...";    \
@@ -672,10 +672,10 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ swedish ] = "Stän~g förbindelse"; \
     Text[ polish ] = "~Roz³¹cz";    \
     Text[ portuguese_brazilian ] = "~close connection"; \
-    Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é(~N)";  \
-    Text[ korean ] = "¿¬°á Á¾·á(~N)";   \
-    Text[ chinese_simplified ] = "½áÊøÁ¬½Ó(~N)";    \
-    Text[ chinese_traditional ] = "µ²§ô³s½u(~N)";   \
+    Text[ japanese ] = "æ¥ç¶šã‚’é–‰ã˜ã‚‹(~N)";    \
+    Text[ korean ] = "ì—°ê²° ì¢…ë£Œ(~N)";   \
+    Text[ chinese_simplified ] = "ç»“æŸè¿æ¥(~N)";    \
+    Text[ chinese_traditional ] = "çµæŸé€£ç·š(~N)";   \
     Text[ turkish ] = "~close connection";  \
     Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá"; \
     Text[ finnish ] = "Verbindung s~chließen";  \
@@ -699,10 +699,10 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ swedish ] = "Fö~rnya förbindelse";    \
     Text[ polish ] = "~Odtwórz po³¹czenie"; \
     Text[ portuguese_brazilian ] = "~refresh connection";   \
-    Text[ japanese ] = "Ú‘±‚ğXV(~R)";    \
-    Text[ korean ] = "»õ·Î ¿¬°á(~R)";   \
-    Text[ chinese_simplified ] = "ÖØĞÂÁ¬½Ó(~R)";    \
-    Text[ chinese_traditional ] = "­«·s³s½u(~R)";   \
+    Text[ japanese ] = "æ¥ç¶šã‚’æ›´æ–°(~R)";   \
+    Text[ korean ] = "ìƒˆë¡œ ì—°ê²°(~R)";   \
+    Text[ chinese_simplified ] = "é‡æ–°è¿æ¥(~R)";    \
+    Text[ chinese_traditional ] = "é‡æ–°é€£ç·š(~R)";   \
     Text[ turkish ] = "~refresh connection";    \
     Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";   \
     Text[ finnish ] = "Verbindung e~rneuern";   \
@@ -828,10 +828,10 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ swedish ] = "~Kopiera sökning";
             Text[ polish ] = "K~opiuj kwerendê";
             Text[ portuguese_brazilian ] = "c~opy query";
-            Text[ japanese ] = "¸´Ø°‚ÌºËß°(~O)";
-            Text[ korean ] = "ÁúÀÇ º¹»ç(~O)";
-            Text[ chinese_simplified ] = "¸´ÖÆ²éÑ¯(~O)";
-            Text[ chinese_traditional ] = "½Æ»s¬d¸ß(~O)";
+            Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°ã®ï½ºï¾‹ï¾Ÿï½°(~O)";
+            Text[ korean ] = "ì§ˆì˜ ë³µì‚¬(~O)";
+            Text[ chinese_simplified ] = "å¤åˆ¶æŸ¥è¯¢(~O)";
+            Text[ chinese_traditional ] = "è¤‡è£½æŸ¥è©¢(~O)";
             Text[ turkish ] = "c~opy query";
             Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
             Text[ finnish ] = "Abfrage ~kopieren";
@@ -856,10 +856,10 @@ Menu MENU_BROWSER_QUERYCONTEXT
             Text[ swedish ] = "~Infoga sökning...";
             Text[ polish ] = "~Wstaw kwerendê...";
             Text[ portuguese_brazilian ] = "~Insert Query...";
-            Text[ japanese ] = "¸´Ø°‚Ì‘}“ü...";
-            Text[ korean ] = "~Insert Query...";
-            Text[ chinese_simplified ] = "²åÈë²éÑ¯(~I)...";
-            Text[ chinese_traditional ] = "´¡¤J¬d¸ß...";
+            Text[ japanese ] = "ï½¸ï½´ï¾˜ï½°ã®æŒ¿å…¥...";
+            Text[ korean ] = "ì§ˆì˜ ì‚½ì…...";
+            Text[ chinese_simplified ] = "æ’å…¥æŸ¥è¯¢(~I)...";
+            Text[ chinese_traditional ] = "æ’å…¥æŸ¥è©¢...";
             Text[ turkish ] = "~Insert Query...";
             Text[ arabic ] = "~Insert Query...";
             Text[ catalan ] = "~Insert Query...";
@@ -899,10 +899,10 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ swedish ] = "~Kopiera tabell";
             Text[ polish ] = "~Kopiuj tabelê";
             Text[ portuguese_brazilian ] = "c~opy table";
-            Text[ japanese ] = "Ã°ÌŞÙ‚ÌºËß°(~O)";
-            Text[ korean ] = "Å×ÀÌºí º¹»ç(~O)";
-            Text[ chinese_simplified ] = "¸´ÖÆ±í¸ñ(~O)";
-            Text[ chinese_traditional ] = "½Æ»sªí®æ(~O)";
+            Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®ï½ºï¾‹ï¾Ÿï½°(~O)";
+            Text[ korean ] = "í…Œì´ë¸” ë³µì‚¬(~O)";
+            Text[ chinese_simplified ] = "å¤åˆ¶è¡¨æ ¼(~O)";
+            Text[ chinese_traditional ] = "è¤‡è£½è¡¨æ ¼(~O)";
             Text[ turkish ] = "c~opy table";
             Text[ arabic ] = "äÓÎ ÇáÌÏæá";
             Text[ finnish ] = "Tabelle ~kopieren";
@@ -924,15 +924,15 @@ Menu MENU_BROWSER_TABLECONTEXT
                 Text[ finnish ] = "Tabelle e~infügen";
                 Text[ italian ] = "~Inserisci tabella...";
                 Text[ danish ] = "~insert table";
-                Text[ swedish ] = "~Infoga tabell...";
+                Text[ swedish ] = "Kl~istra in tabell...";
                 Text[ polish ] = "~Wstaw tabelê...";
                 Text[ portuguese_brazilian ] = "~insert table";
-                Text[ japanese ] = "Ã°ÌŞÙ‚Ì‘}“ü(~I)";
-                Text[ korean ] = "Å×ÀÌºí »ğÀÔ(~I)";
-                Text[ chinese_simplified ] = "²åÈë±í¸ñ(~I)...";
-                Text[ chinese_traditional ] = "´¡¤Jªí®æ(~I)...";
+                Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®æŒ¿å…¥(~I)";
+                Text[ korean ] = "í…Œì´ë¸” ì‚½ì…(~I)";
+                Text[ chinese_simplified ] = "æ’å…¥è¡¨æ ¼(~I)...";
+                Text[ chinese_traditional ] = "æ’å…¥è¡¨æ ¼(~I)...";
                 Text[ turkish ] = "~insert table";
-                Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá";
+                Text[ arabic ] = "ÅÏÑÇÌ ÌÏæá...";
                 Text[ catalan ] = "~Insert Table";
             };
         MenuItem
@@ -957,10 +957,10 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
-            Text[ japanese ] = "ØÚ°¼®İÃŞ»Ş²İ(~A)";
-            Text[ korean ] = "µğÀÚÀÎ °ü°è(~A)";
-            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ(~A)";
-            Text[ chinese_traditional ] = "ÃöÁp³]­p(~A)";
+            Text[ japanese ] = "ï¾˜ï¾šï½°ï½¼ï½®ï¾ï¾ƒï¾ï½»ï¾ï½²ï¾(~A)";
+            Text[ korean ] = "ë””ìì¸ ê´€ê³„(~A)";
+            Text[ chinese_simplified ] = "å…³è”è®¾è®¡(~A)";
+            Text[ chinese_traditional ] = "é—œè¯è¨­è¨ˆ(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
             Text[ finnish ] = "Relatio~nenentwurf";
@@ -1000,10 +1000,10 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ swedish ] = "~Kopiera vy";
                 Text[ polish ] = "~Kopiuj widok";
                 Text[ portuguese_brazilian ] = "C~opy View";
-                Text[ japanese ] = "ËŞ­°‚ÌºËß°(~O)";
-                Text[ korean ] = "º¸±â º¹»ç(~O)";
-                Text[ chinese_simplified ] = "¸´ÖÆÊÓÍ¼(~O)";
-                Text[ chinese_traditional ] = "½Æ»sÀËµø(~O)";
+                Text[ japanese ] = "ï¾‹ï¾ï½­ï½°ã®ï½ºï¾‹ï¾Ÿï½°(~O)";
+                Text[ korean ] = "ë³´ê¸° ë³µì‚¬(~O)";
+                Text[ chinese_simplified ] = "å¤åˆ¶è§†å›¾(~O)";
+                Text[ chinese_traditional ] = "è¤‡è£½æª¢è¦–(~O)";
                 Text[ turkish ] = "C~opy View";
                 Text[ arabic ] = "C~opy View";
                 Text[ catalan ] = "C~opy View";
@@ -1024,13 +1024,13 @@ Menu MENU_BROWSER_VIEWCONTEXT
                 Text[ finnish ] = "~Insert View";
                 Text[ italian ] = "~Inserisci vista";
                 Text[ danish ] = "~Insert View";
-                Text[ swedish ] = "~Infoga vy";
+                Text[ swedish ] = "Kl~istra in vy";
                 Text[ polish ] = "~Wstaw widok";
                 Text[ portuguese_brazilian ] = "~Insert View";
-                Text[ japanese ] = "ËŞ­°‚Ì‘}“ü(~I)";
-                Text[ korean ] = "º¸±â »ğÀÔ(~I)";
-                Text[ chinese_simplified ] = "²åÈëÊÓÍ¼(~I)";
-                Text[ chinese_traditional ] = "¶K¤WÀËµø(~I)";
+                Text[ japanese ] = "ï¾‹ï¾ï½­ï½°ã®æŒ¿å…¥(~I)";
+                Text[ korean ] = "ë³´ê¸° ì‚½ì…(~I)";
+                Text[ chinese_simplified ] = "æ’å…¥è§†å›¾(~I)";
+                Text[ chinese_traditional ] = "è²¼ä¸Šæª¢è¦–(~I)";
                 Text[ turkish ] = "~Insert View";
                 Text[ arabic ] = "~Insert View";
                 Text[ catalan ] = "~Insert View";
@@ -1057,10 +1057,10 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
-            Text[ japanese ] = "ØÚ°¼®İÃŞ»Ş²İ(~A)";
-            Text[ korean ] = "µğÀÚÀÎ °£°è »ı¼º(~A)";
-            Text[ chinese_simplified ] = "¹ØÁªÉè¼Æ(~A)";
-            Text[ chinese_traditional ] = "ÃöÁp³]­p(~A)";
+            Text[ japanese ] = "ï¾˜ï¾šï½°ï½¼ï½®ï¾ï¾ƒï¾ï½»ï¾ï½²ï¾(~A)";
+            Text[ korean ] = "ë””ìì¸ ê°„ê³„ ìƒì„±(~A)";
+            Text[ chinese_simplified ] = "å…³è”è®¾è®¡(~A)";
+            Text[ chinese_traditional ] = "é—œè¯è¨­è¨ˆ(~A)";
             Text[ turkish ] = "relatio~n design";
             Text[ arabic ] = "ÊÕãíã ÚáÇŞÇÊ";
             Text[ finnish ] = "Rel~ation Design";
@@ -1086,10 +1086,10 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ swedish ] = "Bekräfta radering";
     Text[ polish ] = "PotwierdŸ usuniêcie";
     Text[ portuguese_brazilian ] = "confirm deletion";
-    Text[ japanese ] = "íœ‚ÌŠm”F";
-    Text[ korean ] = "»èÁ¦ È®ÀÎ";
-    Text[ chinese_simplified ] = "È·¶¨É¾³ı";
-    Text[ chinese_traditional ] = "½T»{§R°£";
+    Text[ japanese ] = "å‰Šé™¤ã®ç¢ºèª";
+    Text[ korean ] = "ì‚­ì œ í™•ì¸";
+    Text[ chinese_simplified ] = "ç¡®å®šåˆ é™¤";
+    Text[ chinese_traditional ] = "ç¢ºèªåˆªé™¤";
     Text[ turkish ] = "confirm deletion";
     Text[ arabic ] = "ÊÃßíÏ ÇáÍĞİ";
     Text[ finnish ] = "Vahvista poistaminen";
@@ -1112,12 +1112,12 @@ String STR_QUERY_DELETE_QUERY
     Text[ swedish ] = "Ska sökningen '$name$' raderas?";
     Text[ polish ] = "Usun¹æ kwerendê'$name$'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
-    Text[ japanese ] = "¸´Ø° '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "ÁúÀÇ '$name$'À»(¸¦) »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
-    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '$name$' ?";
-    Text[ chinese_traditional ] = "­n§R°£³o­Ó¬d¸ß'$name$'?";
+    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½° '%1' ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "ì§ˆì˜ '$name$'ì„(ë¥¼) ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "è¦åˆ é™¤è¿™ä¸ªæŸ¥è¯¢ '$name$' ?";
+    Text[ chinese_traditional ] = "è¦åˆªé™¤é€™å€‹æŸ¥è©¢<$name$>?";
     Text[ turkish ] = "Do you want to delete the query '%1'?";
-    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '%1'¿";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '$name$'?";
     Text[ finnish ] = "Soll die Abfrage '$name$' gelöscht werden?";
     Text[ catalan ] = "¿Desea eliminar la consulta '%1'?";
 };
@@ -1138,10 +1138,10 @@ String STR_QUERY_DELETE_TABLE
     Text[ swedish ] = "Ska tabellen '%1' raderas?";
     Text[ polish ] = "Usun¹æ tabelê'%1'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the table '%1'?";
-    Text[ japanese ] = "Ã°ÌŞÙ '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "Å×ÀÌºí '%1'À»(¸¦) »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
-    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö±í¸ñ '%1'?";
-    Text[ chinese_traditional ] = "­n§R°£ªí®æ '%1'?";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ '%1' ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "í…Œì´ë¸” '%1'ì„(ë¥¼) ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "è¦åˆ é™¤è¿™ä¸ªè¡¨æ ¼ '%1'?";
+    Text[ chinese_traditional ] = "è¦åˆªé™¤è¡¨æ ¼<%1>?";
     Text[ turkish ] = "Do you want to delete the table '%1'?";
     Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÌÏæá '%1'¿";
     Text[ finnish ] = "Soll die Tabelle '%1' gelöscht werden?";
@@ -1165,10 +1165,10 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ swedish ] = "Sökningen finns redan. Ska den raderas?";
     Message[ polish ] = "Kwerenda ju¿ istnieje. Usun¹æ j¹?";
     Message[ portuguese_brazilian ] = "The query already exists. Do you want to delete the query?";
-    Message[ japanese ] = "¸´Ø°‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B¸´Ø°‚ğíœ‚µ‚Ü‚·‚©B";
-    Message[ korean ] = "ÀÌ ÁúÀÇ°¡ ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù. »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
-    Message[ chinese_simplified ] = "Õâ¸ö²éÑ¯ÒÑ¾­´æÔÚ¡£ÒªÉ¾³ıËü£¿";
-    Message[ chinese_traditional ] = "³o­Ó¬d¸ß¤w¸g¦s¦b¡C­n§R°£¥¦¡H";
+    Message[ japanese ] = "ï½¸ï½´ï¾˜ï½°ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚ï½¸ï½´ï¾˜ï½°ã‚’å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+    Message[ korean ] = "ì´ ì§ˆì˜ê°€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤. ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Message[ chinese_simplified ] = "è¿™ä¸ªæŸ¥è¯¢å·²ç»å­˜åœ¨ã€‚è¦åˆ é™¤å®ƒï¼Ÿ";
+    Message[ chinese_traditional ] = "é€™å€‹æŸ¥è©¢å·²ç¶“å­˜åœ¨ã€‚è¦åˆªé™¤å®ƒï¼Ÿ";
     Message[ turkish ] = "The query already exists. Do you want to delete the query?";
     Message[ arabic ] = "åĞÇ ÇáÇÓÊİÓÇÑ ãæÌæÏ ÈÇáİÚá. åá ÊÑíÏ ÍĞİå¿";
     Message[ finnish ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?";
@@ -1192,10 +1192,10 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ swedish ] = "Förbindelsen till databasen har raderats! Ska den upprättas igen?";
     Message[ polish ] = "Po³¹czenie z baz¹ danych zosta³o przerwane! Czy po³¹czyæ ponownie?";
     Message[ portuguese_brazilian ] = "The connection to the database was lost! Reconnect";
-    Message[ japanese ] = "ÃŞ°ÀÍŞ°½‚Ö‚ÌÚ‘±‚Ííœ‚³‚ê‚Ü‚µ‚½BÚ‘±‚µ‚È‚¨‚µ‚Ü‚·‚©B";
-    Message[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º¿ÍÀÇ ¿¬°áÀÌ ²÷¾îÁ³½À´Ï´Ù! ´Ù½Ã ¿¬°áÇÒ±î¿ä?";
-    Message[ chinese_simplified ] = "ºÍÊı¾İ¿âµÄÁ¬½ÓÒÑ¾­ÖĞ¶Ï¡£ÒªÖØĞÂÁ¬½ÓÊı¾İ¿â£¿";
-    Message[ chinese_traditional ] = "©M¸ê®Æ®wªº³s½u¤w¸gÃö³¬¡C­n­«·s³s½u¡H";
+    Message[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã¸ã®æ¥ç¶šã¯å‰Šé™¤ã•ã‚Œã¾ã—ãŸã€‚æ¥ç¶šã—ãªãŠã—ã¾ã™ã‹ã€‚";
+    Message[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ì™€ì˜ ì—°ê²°ì´ ëŠì–´ì¡ŒìŠµë‹ˆë‹¤! ë‹¤ì‹œ ì—°ê²°í• ê¹Œìš”?";
+    Message[ chinese_simplified ] = "å’Œæ•°æ®åº“çš„è¿æ¥å·²ç»ä¸­æ–­ã€‚è¦é‡æ–°è¿æ¥æ•°æ®åº“ï¼Ÿ";
+    Message[ chinese_traditional ] = "å’Œè³‡æ–™åº«çš„é€£ç·šå·²ç¶“é—œé–‰ã€‚è¦é‡æ–°é€£ç·šï¼Ÿ";
     Message[ turkish ] = "The connection to the database was lost! Reconnect";
     Message[ arabic ] = "İõŞÏ ÇáÇÊÕÇá ÈŞÇÚÏÉ ÇáÈíÇäÇÊ. åá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá ãÑÉ ÃÎÑì¿";
     Message[ finnish ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?";
@@ -1218,10 +1218,10 @@ String STR_OPENTABLES_WARNINGS
     Text[ swedish ] = "Varningar har förekommit.";
     Text[ polish ] = "Wyst¹pi³y ostrze¿enia.";
     Text[ portuguese_brazilian ] = "Warnings encountered.";
-    Text[ japanese ] = "Œx‚ª‚ ‚è‚Ü‚µ‚½B";
-    Text[ korean ] = "°æ°í ¹ß»ı";
-    Text[ chinese_simplified ] = "·¢³öÒ»¸ö¾¯¸æ¡£";
-    Text[ chinese_traditional ] = "µo¥X¤@­ÓÄµ§i¡C";
+    Text[ japanese ] = "è­¦å‘ŠãŒã‚ã‚Šã¾ã—ãŸã€‚";
+    Text[ korean ] = "ê²½ê³  ë°œìƒ";
+    Text[ chinese_simplified ] = "å‘å‡ºä¸€ä¸ªè­¦å‘Šã€‚";
+    Text[ chinese_traditional ] = "ç™¼å‡ºä¸€å€‹è­¦å‘Šã€‚";
     Text[ turkish ] = "Warnings encountered.";
     Text[ arabic ] = "ÍÏËÊ ÊÍĞíÑÇÊ.";
     Text[ finnish ] = "Warnungen aufgetreten.";
@@ -1244,10 +1244,10 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ swedish ] = "Databasförbindelsen rapporterade varningar medan tabellerna bestämdes.";
     Text[ polish ] = "W trakcie ustalania tabel, po³¹czenie z baz¹ danych wysy³a³o ostrze¿enia.";
     Text[ portuguese_brazilian ] = "While retrieving the tables, warnings were provided by the connection.";
-    Text[ japanese ] = "Ã°ÌŞÙ‚Ì“]‘—’†‚ÉAÃŞ°ÀÍŞ°½‚ÌÚ‘±‚©‚çŒx‚ª‚ ‚è‚Ü‚µ‚½B";
-    Text[ korean ] = "Å×ÀÌºíÀ» °Ë»öÇÏ´Â µ¿¾È µ¥ÀÌÅÍ ¿¬°á¿¡¼­ °æ°í ¸Ş½ÃÁö¸¦ Ç¥½ÃÇß½À´Ï´Ù";
-    Text[ chinese_simplified ] = "¶ÁÈ¡±í¸ñÊ±·¢³öÒ»¸öÊı¾İ¿âÁ¬½ÓµÄ¾¯¸æ¡£";
-    Text[ chinese_traditional ] = "¦b¦s¨úªí®æ®Éµo¥X¸ê®Æ®w³s½uªºÄµ§i¡C";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ã®è»¢é€ä¸­ã«ã€ï¾ƒï¾ï½°ï¾€ï¾ï¾ï½°ï½½ã®æ¥ç¶šã‹ã‚‰è­¦å‘ŠãŒã‚ã‚Šã¾ã—ãŸã€‚";
+    Text[ korean ] = "í…Œì´ë¸”ì„ ê²€ìƒ‰í•˜ëŠ” ë™ì•ˆ ë°ì´í„° ì—°ê²°ì—ì„œ ê²½ê³  ë©”ì‹œì§€ë¥¼ í‘œì‹œí–ˆìŠµë‹ˆë‹¤";
+    Text[ chinese_simplified ] = "è¯»å–è¡¨æ ¼æ—¶å‘å‡ºä¸€ä¸ªæ•°æ®åº“è¿æ¥çš„è­¦å‘Šã€‚";
+    Text[ chinese_traditional ] = "åœ¨å­˜å–è¡¨æ ¼æ™‚ç™¼å‡ºè³‡æ–™åº«é€£ç·šçš„è­¦å‘Šã€‚";
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ arabic ] = "Êã ÊÈáíÛ ÊÍĞíÑÇÊ ãä ÇÊÕÇá ŞÇÚÏÉ ÇáÈíÇäÇÊ ÃËäÇÁ ãÍÇæáÉ ÇÓÊÑÏÇÏ ÇáÌÏÇæá.";
     Text[ finnish ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
@@ -1270,10 +1270,10 @@ String STR_CONNECTING_DATASOURCE
     Text[ swedish ] = "Kopplar till \"$name$\" ...";
     Text[ polish ] = "Trwa ³¹czenie z \"$name$\" ...";
     Text[ portuguese_brazilian ] = "connecting to \"$name$\" ...";
-    Text[ japanese ] = "\"$name$\" ‚ÉÚ‘±’†...";
-    Text[ korean ] = "\"$name$\"¿¡ ¿¬°áÇÏ´Â Áß ...";
-    Text[ chinese_simplified ] = "Á¬½Óµ½ \"$name$\" ...";
-    Text[ chinese_traditional ] = "³s½u¨ì \"$name$\" ...";
+    Text[ japanese ] = "\"$name$\" ã«æ¥ç¶šä¸­...";
+    Text[ korean ] = "\"$name$\"ì— ì—°ê²°í•˜ëŠ” ì¤‘ ...";
+    Text[ chinese_simplified ] = "è¿æ¥åˆ° \"$name$\" ...";
+    Text[ chinese_traditional ] = "é€£ç·šåˆ°<$name$>...";
     Text[ turkish ] = "connecting to \"$name$\" ...";
     Text[ arabic ] = "connecting to \"$name$\" ...";
     Text[ finnish ] = "Verbindungsaufbau zu \"$name$\" ...";
@@ -1296,10 +1296,10 @@ String STR_LOADING_QUERY
     Text[ swedish ] = "Laddar sökning $name$ ...";
     Text[ polish ] = "Trwa ³adowanie kwerendy $name$ ...";
     Text[ portuguese_brazilian ] = "loading query $name$ ...";
-    Text[ japanese ] = "¸´Ø° $name$ ‚Ì“Ç‚İ‚İ’†...";
-    Text[ korean ] = "ÁúÀÇ $name$À»(¸¦) ·ÎµåÇÏ´Â Áß ...";
-    Text[ chinese_simplified ] = "ÕıÔÚÔØÈë²éÑ¯ $name$ ...";
-    Text[ chinese_traditional ] = "¸ü¤J¬d¸ß $name$ ...";
+    Text[ japanese ] = "ï½¸ï½´ï¾˜ï½° $name$ ã®èª­ã¿è¾¼ã¿ä¸­...";
+    Text[ korean ] = "ì§ˆì˜ $name$ì„(ë¥¼) ë¡œë“œí•˜ëŠ” ì¤‘ ...";
+    Text[ chinese_simplified ] = "æ­£åœ¨è½½å…¥æŸ¥è¯¢ $name$ ...";
+    Text[ chinese_traditional ] = "è¼‰å…¥æŸ¥è©¢ $name$ ...";
     Text[ turkish ] = "loading query $name$ ...";
     Text[ arabic ] = "loading query $name$ ...";
     Text[ finnish ] = "lade Abfrage $name$ ...";
@@ -1322,10 +1322,10 @@ String STR_LOADING_TABLE
     Text[ swedish ] = "Laddar tabell $name$ ...";
     Text[ polish ] = "Trwa ³adowanie tabeli $name$ ...";
     Text[ portuguese_brazilian ] = "loading table $name$ ...";
-    Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Ì“Ç‚İ‚İ’†...";
-    Text[ korean ] = "Å×ÀÌºí $name$À»(¸¦) ·ÎµåÇÏ´Â Áß ...";
-    Text[ chinese_simplified ] = "ÕıÔÚÔØÈë±í¸ñ $name$ ...";
-    Text[ chinese_traditional ] = "¸ü¤Jªí®æ $name$ ...";
+    Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™ $name$ ã®èª­ã¿è¾¼ã¿ä¸­...";
+    Text[ korean ] = "í…Œì´ë¸” $name$ì„(ë¥¼) ë¡œë“œí•˜ëŠ” ì¤‘ ...";
+    Text[ chinese_simplified ] = "æ­£åœ¨è½½å…¥è¡¨æ ¼ $name$ ...";
+    Text[ chinese_traditional ] = "è¼‰å…¥è¡¨æ ¼ $name$ ...";
     Text[ turkish ] = "loading table $name$ ...";
     Text[ arabic ] = "loading table $name$ ...";
     Text[ finnish ] = "lade Tabelle $name$ ...";
@@ -1349,10 +1349,10 @@ String STR_DSBROWSER_TITLE
         Text[ swedish ] = "Datakällor vy";
         Text[ polish ] = "Widok Ÿróde³ danych";
         Text[ portuguese_brazilian ] = "Data source browser";
-        Text[ japanese ] = "ÃŞ°À¿°½‚Ì•\\¦";
-        Text[ korean ] = "Data source browser";
-        Text[ chinese_simplified ] = "Êı¾İÔ´¼ìÊÓ";
-        Text[ chinese_traditional ] = "¸ê®Æ·½ÀËµø";
+        Text[ japanese ] = "ï¾ƒï¾ï½°ï¾€ï½¿ï½°ï½½ã®è¡¨ç¤º";
+        Text[ korean ] = "ë°ì´í„° ì†ŒìŠ¤ ë³´ê¸°";
+        Text[ chinese_simplified ] = "æ•°æ®æºæ£€è§†";
+        Text[ chinese_traditional ] = "è³‡æ–™æºæª¢è¦–";
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
         Text[ catalan ] = "Data source browser";
@@ -1362,7 +1362,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
 {
     Text = "Es konnte kein Tabellenformat gefunden werden." ;
     Text [ english ] = "No table format found." ;
-    Text [ english_us ] = "No table format found." ;
+    Text [ english_us ] = "No table format could be found." ;
     Text[ portuguese ] = "Foi impossível encontrar um formato de tabela.";
         Text[ russian ] = "Ôîğìàò òàáëèöû íàéòè íå óäàëîñü.";
         Text[ greek ] = "No table format found.";
@@ -1375,10 +1375,10 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ swedish ] = "Det gick inte att hitta något tabellformat.";
         Text[ polish ] = "Nie znaleziono ¿adnego formatu tabeli.";
         Text[ portuguese_brazilian ] = "No table format found.";
-        Text[ japanese ] = "Ã°ÌŞÙ‘®‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
-        Text[ korean ] = "No table format found.";
-        Text[ chinese_simplified ] = "No table format found.";
-        Text[ chinese_traditional ] = "µLªk§ä¨ìªí®æ®æ¦¡¡C";
+        Text[ japanese ] = "ï¾ƒï½°ï¾Œï¾ï¾™æ›¸å¼ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
+        Text[ korean ] = "ì‹œíŠ¸ ì„œì‹ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+        Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°è¡¨æ ¼æ ¼å¼ã€‚";
+        Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°è¡¨æ ¼æ ¼å¼ã€‚";
         Text[ turkish ] = "No table format found.";
         Text[ arabic ] = "No table format found.";
         Text[ catalan ] = "No table format found.";
@@ -1389,7 +1389,26 @@ String STR_COULDNOTCONNECT_DATASOURCE
     Text = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergstellt werden.";
     Text [ english ] = "The connection to the data source \"$name$\" could not be established.";
     Text [ english_us ] = "The connection to the data source \"$name$\" could not be established.";
-};
+    Text[ portuguese ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ russian ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ greek ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ dutch ] = "De verbinding met de gegevensbron \"$name$\" kon niet tot stand worden gebracht.";
+        Text[ french ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ spanish ] = "No se pudo realizar la conexión a la fuente de datos \"$name$\".";
+        Text[ finnish ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna \"$name$\".";
+        Text[ danish ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ swedish ] = "Det gick inte att skapa förbindelsen till datakällan \"$name$\".";
+        Text[ polish ] = "Brak po³¹czenia ze Ÿród³em danych \"$name$\".";
+        Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ japanese ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ korean ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ chinese_simplified ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ chinese_traditional ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
+    };
 
 Menu RID_MENU_REFRESH_DATA
 {
@@ -1407,6 +1426,26 @@ Menu RID_MENU_REFRESH_DATA
             Text = "neu aufbauen";
             Text [ english ] = "reconstruct";
             Text [ english_us ] = "reconstruct";
-        };
+            Text[ portuguese ] = "reconstruct";
+                Text[ russian ] = "reconstruct";
+                Text[ greek ] = "reconstruct";
+                Text[ dutch ] = "opnieuw opbouwen";
+                Text[ french ] = "reconstruct";
+                Text[ spanish ] = "reconstruir";
+                Text[ finnish ] = "reconstruct";
+                Text[ italian ] = "Ricostruire";
+                Text[ danish ] = "reconstruct";
+                Text[ swedish ] = "reconstruct";
+                Text[ polish ] = "odœwie¿";
+                Text[ portuguese_brazilian ] = "reconstruct";
+                Text[ japanese ] = "reconstruct";
+                Text[ korean ] = "reconstruct";
+                Text[ chinese_simplified ] = "reconstruct";
+                Text[ chinese_traditional ] = "reconstruct";
+                Text[ turkish ] = "reconstruct";
+                Text[ arabic ] = "reconstruct";
+                Text[ catalan ] = "reconstruct";
+            };
     };
 };
+
