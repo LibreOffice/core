@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:17:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,7 +347,7 @@ void TokenParser::Parse( const ByteString &aCode )
 
     nActiveRefTypes = 0;
 
-    //Ausführen der Start-Produktion
+    //Ausfuehren der Start-Produktion
     Paragraph();
 
     //Es wurde nicht die ganze Kette abgearbeitet, bisher ist aber
@@ -480,7 +480,7 @@ void TokenParser::Paragraph()
             {
                 if ( ! bPfCaseActive )
                 {
-                    //PfCases dürfen nicht verschachtelt sein:
+                    //PfCases duerfen nicht verschachtelt sein:
                     bPfCaseActive = TRUE;
                     PfCase();
 
@@ -502,11 +502,11 @@ void TokenParser::Paragraph()
             {
                 if ( !bAppCaseActive )
                 {
-                    //AppCases dürfen nicht verschachtelt sein:
+                    //AppCases duerfen nicht verschachtelt sein:
                     bAppCaseActive = TRUE;
                     AppCase();
 
-                    //jetzt können wieder AppCases kommen:
+                    //jetzt koennen wieder AppCases kommen:
                     bAppCaseActive = FALSE;
                     Paragraph();
                 }
@@ -547,7 +547,7 @@ void TokenParser::PfCase()
         default:
             ParseError( 8, "<#ELSE> or <#END> or platform-tag expected." );
     }
-    //Die gemerkten Tags wieder löschen für nächstes PfCase:
+    //Die gemerkten Tags wieder loeschen fuer naechstes PfCase:
     nPfCaseOptions = 0;
 }
 
@@ -612,7 +612,7 @@ void TokenParser::AppCase()
             ParseError( 1, "<#ELSE> or <#END> or application-case-tag expected." );
         }
 
-    //Die gemerkten Tags wieder löschen für nächstes AppCase:
+    //Die gemerkten Tags wieder loeschen fuer naechstes AppCase:
     nAppCaseOptions = 0;
 }
 
@@ -846,7 +846,7 @@ void TokenParser::ParseError( USHORT nErrNr, const ByteString &aErrMsg )
     USHORT nTokenLength = aParser.GetTokenText().Len() + 2;
     aErrorList.Insert( new ParserMessage( nErrNr, aErrMsg, aParser.GetScanningPosition()-nTokenLength, nTokenLength), LIST_APPEND );
 
-    // Das Fehlerhafte Tag überspringen
+    // Das Fehlerhafte Tag ueberspringen
     aTag = aParser.GetNextToken( aErrorList );
 }
 
