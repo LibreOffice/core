@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-10 17:27:12 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,8 +845,8 @@ void OutputDevice::SetMapMode()
         mbInitFont  = TRUE;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
-            if ( ((Window*)this)->mpCursor )
-                ((Window*)this)->mpCursor->ImplNew();
+            if ( ((Window*)this)->mpWindowImpl->mpCursor )
+                ((Window*)this)->mpWindowImpl->mpCursor->ImplNew();
         }
 
         // #106426# Adapt logical offset when changing mapmode
@@ -939,8 +939,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     mbInitFont  = TRUE;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        if ( ((Window*)this)->mpCursor )
-            ((Window*)this)->mpCursor->ImplNew();
+        if ( ((Window*)this)->mpWindowImpl->mpCursor )
+            ((Window*)this)->mpWindowImpl->mpCursor->ImplNew();
     }
 
     // #106426# Adapt logical offset when changing mapmode
@@ -2157,7 +2157,7 @@ long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 {
     if ( eUnit != MAP_PIXEL )
     {
-        ImplFrameData* pFrameData = mpFrameData;
+        ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
 
         // Map-Einheit verschieden, dann neu berechnen
         if ( pFrameData->meMapUnit != eUnit )
@@ -2184,7 +2184,7 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
 {
     if ( eUnit != MAP_PIXEL )
     {
-        ImplFrameData* pFrameData = mpFrameData;
+        ImplFrameData* pFrameData = mpWindowImpl->mpFrameData;
 
         // Map-Einheit verschieden, dann neu berechnen
         if ( pFrameData->meMapUnit != eUnit )
