@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:06:25 $
+ *  last change: $Author: mba $ $Date: 2004-09-02 14:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,13 +215,47 @@ int sendMsg( PLUGIN_MSG* pMsg, unsigned int len, int iEnsure)
     return len_w;
 }
 
+const char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
+"application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;"
+"application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;"
+"application/vnd.stardivision.impress:sdd:StarImpress 3.0 - 5.0;"
+"application/vnd.stardivision.impress-packed:sdp:StarImpress-packed 3.0 - 5.0;"
+"application/vnd.stardivision.math:smf:StarMath 3.0 - 5.0;"
+"application/vnd.stardivision.writer:vor:StarWriter Template 3.0 - 5.0;"
+"application/vnd.stardivision.writer-global:sgl:StarWriter Global 3.0 - 5.0;"
+"application/vnd.staroffice.writer:sdw:StarWriter 3.0 - 5.0;"
+"application/vnd.sun.xml.calc:sxc:StarCalc;"
+"application/vnd.sun.xml.calc.template:stc:StarCalc Template;"
+"application/vnd.sun.xml.draw:sxd:StarDraw;"
+"application/vnd.sun.xml.draw.template:std:StarDraw Template;"
+"application/vnd.sun.xml.impress:sxi:StarImpress;"
+"application/vnd.sun.xml.impress.template:sti:StarImpress Template;"
+"application/vnd.sun.xml.math:sxm:StarMath;"
+"application/vnd.sun.xml.writer:sxw:StarWriter;"
+"application/vnd.sun.xml.writer.global:sxg:StarWriter Global;"
+"application/vnd.sun.xml.writer.template:stw:StarWriter Template;"
+"application/msword:doc:Microsoft Word Document;"
+"application/vnd.ms-excel:xls:Microsoft Excel Document;"
+"application/vnd.ms-powerpoint:ppt:Microsoft Powerpoint Document;"
+"application/x-vnd.oasis.openoffice.text:oot:Open Office Text;"
+"application/x-vnd.oasis.openoffice-template:ott:Open Office Text Template;"
+"application/x-vnd.oasis.openoffice.text-master:oom:Open Office Master Document;"
+"application/x-vnd.oasis.openoffice.text-web:oth:HTML Document Template;"
+"application/x-vnd.oasis.openoffice.spreadsheet:oos:Open Office Spreadsheet;"
+"application/x-vnd.oasis.openoffice.spreadsheet-template:ots:Open Office Spreadsheet Template;"
+"application/x-vnd.oasis.openoffice.drawing:ood:Open Office Drawing;"
+"application/x-vnd.oasis.openoffice.drawing-template:otd:Open Office Drawing Template;"
+"application/x-vnd.oasis.openoffice.presentation:oop:Open Office Presentation;"
+"application/x-vnd.oasis.openoffice.presentation-template:otp:Open Office Presentation Template;"
+"application/x-vnd.oasis.openoffice.formula:oof:Open Office Formula";
+
 extern "C"
 {
-char*
+const char*
 NPP_GetMIMEDescription(void)
 {
-    debug_fprintf(NSP_LOG_APPEND, "print by Netscape Plugin,  NPP_GetMIMEDescription:%s.\n", MIME_TYPES_HANDLED);
-    return(MIME_TYPES_HANDLED);
+    debug_fprintf(NSP_LOG_APPEND, "print by Netscape Plugin,  NPP_GetMIMEDescription:%s.\n", pMimeTypes);
+    return(pMimeTypes);
 }
 
 #ifdef UNIX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:06:36 $
+ *  last change: $Author: mba $ $Date: 2004-09-02 14:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,31 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define MIME_TYPES_HANDLED "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;\
-application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;\
-application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;\
-application/vnd.stardivision.impress:sdd:StarImpress 3.0 - 5.0;\
-application/vnd.stardivision.impress-packed:sdp:StarImpress-packed 3.0 - 5.0;\
-application/vnd.stardivision.math:smf:StarMath 3.0 - 5.0;\
-application/vnd.stardivision.writer:vor:StarWriter Vorlage 3.0 - 5.0;\
-application/vnd.stardivision.writer-global:sgl:StarWriter Global 3.0 - 5.0;\
-application/vnd.staroffice.writer:sdw:StarWriter;\
-application/vnd.sun.xml.calc:sxc:StarCalc;\
-application/vnd.sun.xml.calc.template:stc:StarCalc Tempalte;\
-application/vnd.sun.xml.chart:sxs:StarChart;\
-application/vnd.sun.xml.chart.template:sts:StarChart Template;\
-application/vnd.sun.xml.draw:sxd:StarDraw;\
-application/vnd.sun.xml.draw.template:std:StarDraw Template;\
-application/vnd.sun.xml.impress:sxi:StarImpress;\
-application/vnd.sun.xml.impress.template:sti:StarImpress Template;\
-application/vnd.sun.xml.math:sxm:StarMath;\
-application/vnd.sun.xml.writer:sxw:StarWriter;\
-application/vnd.sun.xml.writer.global:sxg:StarWriter Global;\
-application/vnd.sun.xml.writer.template:stw:StarWriter Template;\
-application/msword:doc:Microsoft Word Document;\
-application/vnd.ms-excel:xls:Microsoft Excel Document;\
-application/vnd.ms-powerpoint:ppt:Microsoft Powerpoint Document"
 
 #define PLUGIN_NAME         "StarOffice Plugin"
 #define PLUGIN_DESCRIPTION  "The StarOffice plugin handles all staroffice documents"
