@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:40:59 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <svtools/lstner.hxx>
 #endif
 #ifndef SW_SWDLL_HXX
-#include <swdll.hxx>
+//#include <swdll.hxx>
 #endif
 #include "shellid.hxx"
 #ifndef _STRING_HXX
@@ -120,7 +120,7 @@ namespace com{ namespace sun{ namespace star{ namespace scanner{
     class XScannerManager;
 }}}}
 
-class SwModule: public SwModuleDummy , public SfxListener
+class SwModule: public SfxModule, public SfxListener
 {
     String              sActAuthor;
 
@@ -181,15 +181,11 @@ public:
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE);
 
     // dieser Ctor nur fuer SW-Dll
-    SwModule( SvFactory* pFact,
-                SvFactory* pWebFact,
-                    SvFactory* pGlobalFact );
-    // dieser Ctor nur fuer Web-Dll
-    SwModule( SvFactory* pWebFact );
+    SwModule( SfxObjectFactory* pFact,
+                SfxObjectFactory* pWebFact,
+                    SfxObjectFactory* pGlobalFact );
 
     ~SwModule();
-
-    virtual SfxModule* Load();
 
     // View setzen nur fuer internen Gebrauch,
     // aus techn. Gruenden public
