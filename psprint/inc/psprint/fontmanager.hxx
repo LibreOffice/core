@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 16:32:28 $
+ *  last change: $Author: pl $ $Date: 2001-06-25 14:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,8 @@ class PrintFontManager
         virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
     };
 
+    static ::rtl::OString s_aEmptyOString;
+
     fontID                                      m_nNextFontID;
     ::std::hash_map< fontID, PrintFont* >       m_aFonts;
     ::std::hash_map< int, family::type >        m_aFamilyTypes;
@@ -326,8 +328,15 @@ class PrintFontManager
 
     ::std::hash_map< ::rtl::OString, int, ::rtl::OStringHash >
     m_aDirToAtom;
-    ::std::hash_map< int, ::rtl::OString >      m_aAtomToDir;
-    int                                         m_nNextDirAtom;
+    ::std::hash_map< int, ::rtl::OString >     m_aAtomToDir;
+    int                                        m_nNextDirAtom;
+
+    ::std::hash_map< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >
+                                                m_aAdobenameToUnicode;
+    ::std::hash_map< sal_Unicode, ::rtl::OString >
+                                                m_aUnicodeToAdobename;
+    ::std::hash_map< sal_Unicode, sal_uInt8 >   m_aUnicodeToAdobecode;
+    ::std::hash_map< sal_uInt8, sal_Unicode >   m_aAdobecodeToUnicode;
 
 
     ::rtl::OString getAfmFile( PrintFont* pFont ) const;
@@ -488,6 +497,28 @@ public:
     // type1 fonts do not have such a feature, so return for them is true
     // returns true for builtin fonts (surprise!)
     bool isFontDownloadingAllowed( fontID nFont ) const;
+
+    // helper for type 1 fonts
+    const ::rtl::OString& getAdobeNameFromUnicode( sal_Unicode aChar ) const
+    {
+        ::std::hash_map< sal_Unicode, ::rtl::OString >::const_iterator it( m_aUnicodeToAdobename.find( aChar ) );
+        return it != m_aUnicodeToAdobename.end() ? it->second : s_aEmptyOString;
+    }
+    sal_uInt8 getAdobeCodeFromUnicode( sal_Unicode aChar ) const
+    {
+        ::std::hash_map< sal_Unicode, sal_uInt8 >::const_iterator it( m_aUnicodeToAdobecode.find( aChar ) );
+        return it != m_aUnicodeToAdobecode.end() ? it->second : 0;
+    }
+    sal_Unicode getUnicodeFromAdobeName( const ::rtl::OString& rName ) const
+    {
+        ::std::hash_map< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >::const_iterator it( m_aAdobenameToUnicode.find( rName ) );
+        return it != m_aAdobenameToUnicode.end() ? it->second : 0;
+    }
+    sal_Unicode getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
+    {
+        ::std::hash_map< sal_uInt8, sal_Unicode >::const_iterator it( m_aAdobecodeToUnicode.find( aChar ) );
+        return it != m_aAdobecodeToUnicode.end() ? it->second : 0;
+    }
 
     // font administration functions
 

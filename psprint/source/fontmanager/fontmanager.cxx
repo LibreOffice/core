@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-21 16:46:29 $
+ *  last change: $Author: pl $ $Date: 2001-06-25 14:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,8 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
 bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, MultiAtomProvider* pProvider )
 {
+    PrintFontManager& rManager( PrintFontManager::get() );
+
     int i;
     FILE* fp = fopen( rFileName.getStr(), "r" );
     if( ! fp )
@@ -646,68 +648,24 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
             }
             else if( pChar->name )
             {
-                for( int n = 0; n < sizeof(aAdobeStandardNoneCodes)/sizeof(aAdobeStandardNoneCodes[0]); n++ )
-                {
-                    if( ! strcmp( pChar->name, aAdobeStandardNoneCodes[n].pAdobename ) )
-                    {
-                        m_pMetrics->m_aMetrics[ aAdobeStandardNoneCodes[n].aUnicode ] = aMetric;
-                    }
-                }
+                sal_Unicode aChar = rManager.getUnicodeFromAdobeName( pChar->name );
+                if( aChar != 0 )
+                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
             }
         }
-        else if( nAdobeEncoding == 1 )
+        else if( nAdobeEncoding == 1 || nAdobeEncoding == 2 )
         {
-            if( pChar->code == -1 )
+            if( pChar->name )
             {
-                if( pChar->name )
-                {
-
-                    for( int n = 0; n < sizeof(aAdobeStandardNoneCodes)/sizeof(aAdobeStandardNoneCodes[0]); n++ )
-                    {
-                        if( ! strcmp( pChar->name, aAdobeStandardNoneCodes[n].pAdobename ) )
-                        {
-                            m_pMetrics->m_aMetrics[ aAdobeStandardNoneCodes[n].aUnicode ] = aMetric;
-                        }
-                    }
-                }
+                sal_Unicode aChar = rManager.getUnicodeFromAdobeName( pChar->name );
+                if( aChar != 0 )
+                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
             }
-            else
+            else if( pChar->code != -1 )
             {
-                for( int n = 0; n < sizeof(aAdobeStandardConvTable)/sizeof(aAdobeStandardConvTable[0]); n++ )
-                {
-                    if( pChar->code == aAdobeStandardConvTable[n].aAdobecode )
-                    {
-                        m_pMetrics->m_aMetrics[ aAdobeStandardConvTable[n].aUnicode ] = aMetric;
-                        break;
-                    }
-                }
-            }
-        }
-        else if( nAdobeEncoding == 2 )
-        {
-            if( pChar->code == -1 )
-            {
-                if( pChar->name )
-                {
-                    for( int n = 0; n < sizeof(aAdobeSymbolConvTable)/sizeof(aAdobeSymbolConvTable[0]); n++ )
-                    {
-                        if( ! strcmp( pChar->name, aAdobeStandardNoneCodes[n].pAdobename ) )
-                        {
-                            m_pMetrics->m_aMetrics[ aAdobeStandardNoneCodes[n].aUnicode ] = aMetric;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                for( int n = 0; n < sizeof(aAdobeSymbolConvTable)/sizeof(aAdobeSymbolConvTable[0]); n++ )
-                {
-                    if( pChar->code == aAdobeSymbolConvTable[n].aAdobecode )
-                    {
-                        m_pMetrics->m_aMetrics[ aAdobeSymbolConvTable[n].aUnicode ] = aMetric;
-                        break;
-                    }
-                }
+                sal_Unicode aChar = rManager.getUnicodeFromAdobeCode( pChar->code );
+                if( aChar != 0 )
+                    m_pMetrics->m_aMetrics[ aChar ] = aMetric;
             }
         }
         else if( nAdobeEncoding == 3 )
@@ -765,6 +723,8 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 
 // -------------------------------------------------------------------------
 
+OString PrintFontManager::s_aEmptyOString;
+
 /*
  *  one instance only
  */
@@ -790,6 +750,16 @@ PrintFontManager::PrintFontManager() :
         m_nNextFontID( 1 ),
         m_nNextDirAtom( 1 )
 {
+    for( int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
+    {
+        m_aUnicodeToAdobename[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].pAdobename;
+        m_aAdobenameToUnicode[ aAdobeCodes[i].pAdobename ] = aAdobeCodes[i].aUnicode;
+        if( aAdobeCodes[i].aAdobeStandardCode )
+        {
+            m_aUnicodeToAdobecode[ aAdobeCodes[i].aUnicode ] = aAdobeCodes[i].aAdobeStandardCode;
+            m_aAdobecodeToUnicode[ aAdobeCodes[i].aAdobeStandardCode ] = aAdobeCodes[i].aUnicode;
+        }
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -805,9 +775,8 @@ PrintFontManager::~PrintFontManager()
 
 const OString& PrintFontManager::getDirectory( int nAtom ) const
 {
-    static OString aEmpty;
     ::std::hash_map< int, OString >::const_iterator it( m_aAtomToDir.find( nAtom ) );
-    return it != m_aAtomToDir.end() ? it->second : aEmpty;
+    return it != m_aAtomToDir.end() ? it->second : s_aEmptyOString;
 }
 
 // -------------------------------------------------------------------------
@@ -1352,8 +1321,8 @@ void PrintFontManager::initialize( void* pInitDisplay )
     m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
     m_aFontDirectories.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
     m_aFontDirectories.push_back( "/usr/X11R6/lib/X11/fonts/Type1" );
-#ifdef SOLARIS
 
+#ifdef SOLARIS
     /* cde specials, from /usr/dt/bin/Xsession: here are the good fonts,
        the OWfontpath file may contain as well multiple lines as a comma
        separated list of fonts in each line. to make it even more weird
