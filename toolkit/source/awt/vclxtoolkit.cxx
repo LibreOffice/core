@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-01 09:47:04 $
+ *  last change: $Author: ssa $ $Date: 2001-11-02 18:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ void SAL_CALL VCLXToolkit::disposing()
     if ( pNewWindow )
     {
         pNewWindow->SetCreatedWithToolkit( sal_True );
-        pNewWindow->SetPosPixel( Point() );
+        //pNewWindow->SetPosPixel( Point() ); // do not force (0,0) position, keep default pos instead
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::MINSIZE )
         {
