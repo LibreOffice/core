@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Database.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module text { module FieldMaster {
 /** specifies service of a Database field master.
     @see com::sun::star::text::TextField
 */
-service Database
+published service Database
 {
     service  com::sun::star::text::TextFieldMaster;
 
