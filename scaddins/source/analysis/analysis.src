@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:04:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:32:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,7 +645,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Datum";
             Text[ english ] = "Datum";
-            Text[ english_us ] = "Date";
+            Text[ english_us ] = "The date";
             Text[ portuguese ] = "Data";
             Text[ russian ] = "Дата, относящаяся к неделе.";
             Text[ greek ] = "ЗмеспмзнЯб";
@@ -1108,7 +1108,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Zahl";
             Text[ english ] = "Zahl";
-            Text[ english_us ] = "The value tested";
+            Text[ english_us ] = "The number";
             Text[ portuguese ] = "Nъm_sйrie";
             Text[ russian ] = "Проверяемое значение.";
             Text[ greek ] = "Бсйимьт";
@@ -1138,7 +1138,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Gibt den Wert WAHR zurьck, wenn die Zahl ungerade ist.";
             Text[ english ] = "Returns true if the number is odd";
             Text[ english_us ] = "Returns the value 'true' if the number is odd";
-            Text[ portuguese ] = "Returns true if the number is odd";
+            Text[ portuguese ] = "Devolve o valor VERDADEIRO se o nъmero for нmpar.";
             Text[ russian ] = "Возвращает значение ИСТИНА, если число является нечетным.";
             Text[ greek ] = "Returns true if the number is odd";
             Text[ dutch ] = "Geeft als resultaat de waarde WAAR als het getal oneven is.";
@@ -1189,8 +1189,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Zahl";
             Text[ english ] = "Zahl";
-            Text[ english_us ] = "Number";
-            Text[ portuguese ] = "Probabilidade";
+            Text[ english_us ] = "The number";
+            Text[ portuguese ] = "Nъmero";
             Text[ russian ] = "Проверяемое значение.";
             Text[ greek ] = "Бсйимьт";
             Text[ dutch ] = "Getal";
@@ -2047,7 +2047,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den grцЯten gemeinsamen Teiler.";
             Text[ english ] = "Returns the greatest common divisor";
             Text[ english_us ] = "Returns the greatest common divisor";
-            Text[ portuguese ] = "Returns the greatest common divisor";
+            Text[ portuguese ] = "Devolve o maior divisor comum.";
             Text[ russian ] = "Возвращает наибольший общий делитель.";
             Text[ greek ] = "Returns the greatest common divisor";
             Text[ dutch ] = "Geeft als resultaat de grootste gemene deler.";
@@ -2073,7 +2073,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl(en)";
             Text[ english ] = "Zahl(en)";
             Text[ english_us ] = "Number(s)";
-            Text[ portuguese ] = "Zahl(en)";
+            Text[ portuguese ] = "Nъmero(s)";
             Text[ russian ] = "Число(а)";
             Text[ greek ] = "Zahl(en)";
             Text[ dutch ] = "Getal(len)";
@@ -2099,7 +2099,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl oder Liste von Zahlen";
             Text[ english ] = "Zahl oder Liste von Zahlen";
             Text[ english_us ] = "Number or list of numbers";
-            Text[ portuguese ] = "Zahl oder Liste von Zahlen";
+            Text[ portuguese ] = "Nъmero ou sйrie de nъmeros.";
             Text[ russian ] = "Число или набор чисел.";
             Text[ greek ] = "Zahl oder Liste von Zahlen";
             Text[ dutch ] = "Getal of lijst met getallen";
@@ -2128,7 +2128,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert das kleinste gemeinsame Vielfache.";
             Text[ english ] = "Returns the least common multiple";
             Text[ english_us ] = "Returns the least common multiple";
-            Text[ portuguese ] = "Returns the least common multiple";
+            Text[ portuguese ] = "Devolve o menor mъltiplo comum.";
             Text[ russian ] = "Возвращает наименьшее общее кратное.";
             Text[ greek ] = "Returns the least common multiple";
             Text[ dutch ] = "Geeft als resultaat het kleinste gemene veelvoud.";
@@ -2154,7 +2154,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl(en)";
             Text[ english ] = "Zahl(en)";
             Text[ english_us ] = "Number(s)";
-            Text[ portuguese ] = "Zahl(en)";
+            Text[ portuguese ] = "Nъmero(s)";
             Text[ russian ] = "Число(а)";
             Text[ greek ] = "Zahl(en)";
             Text[ dutch ] = "Getal(len)";
@@ -2180,7 +2180,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl oder Liste von Zahlen";
             Text[ english ] = "Zahl oder Liste von Zahlen";
             Text[ english_us ] = "Number or list of numbers";
-            Text[ portuguese ] = "Zahl oder Liste von Zahlen";
+            Text[ portuguese ] = "Nъmero ou sйrie de nъmeros.";
             Text[ russian ] = "Число или набор чисел, для которых необходимо найти наибольший общий делитель.";
             Text[ greek ] = "Zahl oder Liste von Zahlen";
             Text[ dutch ] = "Getal of lijst met getallen";
@@ -3808,7 +3808,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Dezimalzahl";
             Text[ english ] = "Dezimalzahl";
-            Text[ english_us ] = "Number";
+            Text[ english_us ] = "The decimal number";
             Text[ portuguese ] = "Dezimalzahl";
             Text[ russian ] = "Преобразуемое десятичное число.";
             Text[ greek ] = "Dezimalzahl";
@@ -4859,7 +4859,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -4943,7 +4943,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5027,7 +5027,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5138,7 +5138,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Liefert den Winkel im BogenmaЯ zur Darstellung der komplexen Zahl in trigonometrischer Schreibweise.";
             Text[ english ] = "Returns the argument q, an angle expressed in radians";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Returns the argument q, an angle expressed in radians";
+            Text[ english_us ] = "Returns the argument theta, an angle expressed in radians";
             Text[ portuguese ] = "Returns the argument q, an angle expressed in radians";
             Text[ russian ] = "Возвращает аргумент комплексного числа, т.е. угол, выраженный в радианах.";
             Text[ greek ] = "Returns the argument q, an angle expressed in radians";
@@ -5165,7 +5165,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5249,7 +5249,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5333,7 +5333,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zдhler";
             Text[ english ] = "Zдhler";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 1";
+            Text[ english_us ] = "Numerator";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Компл_число 1";
             Text[ greek ] = "inumber 1";
@@ -5387,12 +5387,12 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nenner";
             Text[ english ] = "Nenner";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 2";
+            Text[ english_us ] = "Denominator";
             Text[ portuguese ] = "inumber 2";
             Text[ russian ] = "Компл_число 2";
             Text[ greek ] = "inumber 2";
             Text[ dutch ] = "inumber 2";
-            Text[ french ] = "Numйrateur";
+            Text[ french ] = "Dйnominateur";
             Text[ spanish ] = "Denominador";
             Text[ finnish ] = "inumber 2";
             Text[ italian ] = "Denominatore";
@@ -5471,7 +5471,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5555,7 +5555,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5639,7 +5639,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5723,7 +5723,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5807,7 +5807,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -5891,7 +5891,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 1";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Компл_число 1";
             Text[ greek ] = "inumber 1";
@@ -5945,7 +5945,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 2";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber 2";
             Text[ russian ] = "Компл_число 2";
             Text[ greek ] = "inumber 2";
@@ -6029,7 +6029,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -6113,7 +6113,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -6197,7 +6197,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl 1";
             Text[ english ] = "Komplexe Zahl 1";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 1";
+            Text[ english_us ] = "Complex number 1";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Компл_число 1";
             Text[ greek ] = "inumber 1";
@@ -6224,7 +6224,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl 1";
             Text[ english ] = "Komplexe Zahl 1";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The complex number from which to subtract Inumber 2";
+            Text[ english_us ] = "Complex number 1";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Уменьшаемое комплексное число.";
             Text[ greek ] = "inumber 1";
@@ -6251,7 +6251,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl 2";
             Text[ english ] = "Komplexe Zahl 2";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 2";
+            Text[ english_us ] = "Complex number 2";
             Text[ portuguese ] = "inumber 2";
             Text[ russian ] = "Компл_число 2";
             Text[ greek ] = "inumber 2";
@@ -6278,7 +6278,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl 2";
             Text[ english ] = "Komplexe Zahl 2";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The complex number to subtract from Inumber1";
+            Text[ english_us ] = "Complex number 2";
             Text[ portuguese ] = "inumber 2";
             Text[ russian ] = "Вычитаемое комплексное число.";
             Text[ greek ] = "inumber 2";
@@ -6335,7 +6335,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber";
             Text[ russian ] = "Компл_число";
             Text[ greek ] = "inumber";
@@ -6419,13 +6419,13 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Inumber 1";
+            Text[ english_us ] = "Complex number";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Компл_число 1";
             Text[ greek ] = "inumber 1";
             Text[ dutch ] = "inumber 1";
-            Text[ french ] = "Nombre complexe 1";
-            Text[ spanish ] = "Nъmero complejo 1";
+            Text[ french ] = "Nombre complexe";
+            Text[ spanish ] = "Nъmero complejo";
             Text[ finnish ] = "inumber 1";
             Text[ italian ] = "Numero complesso 1";
             Text[ danish ] = "inumber 1";
@@ -6446,13 +6446,13 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Komplexe Zahl";
             Text[ english ] = "Komplexe Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The first complex number";
+            Text[ english_us ] = "The complex number";
             Text[ portuguese ] = "inumber 1";
             Text[ russian ] = "Первое суммируемое комплексное число.";
             Text[ greek ] = "inumber 1";
             Text[ dutch ] = "inumber 1";
-            Text[ french ] = "Nombre complexe 1";
-            Text[ spanish ] = "Nъmero complejo 1";
+            Text[ french ] = "Nombre complexe";
+            Text[ spanish ] = "Nъmero complejo";
             Text[ finnish ] = "inumber 1";
             Text[ italian ] = "Numero complesso 1";
             Text[ danish ] = "inumber 1";
@@ -6639,7 +6639,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Suffix";
             Text[ english ] = "Suffix";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The suffix for the imaginary component";
+            Text[ english_us ] = "The suffix";
             Text[ portuguese ] = "suffix";
             Text[ russian ] = "Обозначение мнимой единицы в комплексом числе.";
             Text[ greek ] = "suffix";
@@ -6720,7 +6720,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Zahl";
             Text[ english ] = "Zahl";
-            Text[ english_us ] = "Number";
+            Text[ english_us ] = "The number";
             Text[ portuguese ] = "Probabilidade";
             Text[ russian ] = "Значение в старых единицах измерения, которое нужно преобразовать.";
             Text[ greek ] = "Бсйимьт";
@@ -7156,7 +7156,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Ставка";
             Text[ greek ] = "Rate";
             Text[ dutch ] = "Rate";
-            Text[ french ] = "Rate";
+            Text[ french ] = "Taux";
             Text[ spanish ] = "Tasa";
             Text[ finnish ] = "Rate";
             Text[ italian ] = "Tasso interesse";
@@ -7564,7 +7564,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "Ставка";
             Text[ greek ] = "Rate";
             Text[ dutch ] = "Rate";
-            Text[ french ] = "Rate";
+            Text[ french ] = "Taux";
             Text[ spanish ] = "Tasa";
             Text[ finnish ] = "Rate";
             Text[ italian ] = "Tasso interesse";
@@ -7832,7 +7832,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The settlement date of the security";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -7886,7 +7886,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nominalzins";
             Text[ english ] = "Nominalzins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The annual coupon rate of the security";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -7940,7 +7940,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nennwert";
             Text[ english ] = "Nennwert";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The par value of the security";
+            Text[ english_us ] = "The par value";
             Text[ portuguese ] = "Par";
             Text[ russian ] = "Номинальная стоимость ценных бумаг.";
             Text[ greek ] = "Par";
@@ -7994,7 +7994,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The number of coupon payments per year";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -8048,7 +8048,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The basis to use";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -8132,7 +8132,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Emission";
             Text[ english ] = "Emission";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The issue date of the security";
+            Text[ english_us ] = "The issue date";
             Text[ portuguese ] = "Issue";
             Text[ russian ] = "Дата выпуска ценных бумаг.";
             Text[ greek ] = "Issue";
@@ -8186,7 +8186,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения (в данном случае срок погашения) для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -8240,7 +8240,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nominalzins";
             Text[ english ] = "Nominalzins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -8348,7 +8348,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The year basis to be used";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -8432,7 +8432,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The settlement date of the security";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -8486,7 +8486,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -8540,7 +8540,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Anlage";
             Text[ english ] = "Anlage";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Investment";
+            Text[ english_us ] = "The investment";
             Text[ portuguese ] = "Investment";
             Text[ russian ] = "Объем инвестиции в ценные бумаги.";
             Text[ greek ] = "Investment";
@@ -8594,7 +8594,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Disagio";
             Text[ english ] = "Disagio";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Discount";
+            Text[ english_us ] = "The discount";
             Text[ portuguese ] = "Discount";
             Text[ russian ] = "Норма скидки для ценных бумаг.";
             Text[ greek ] = "Discount";
@@ -8648,7 +8648,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -8732,7 +8732,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The settlement date of the security";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -8786,7 +8786,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The maturity date of the security";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -8840,7 +8840,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The price of the security per $100 face value";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Курс (стоимость) ценных бумаг.";
             Text[ greek ] = "Price";
@@ -8894,7 +8894,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "The redemption value of the security per $100 face value";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -8948,7 +8948,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -9032,7 +9032,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -9086,7 +9086,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -9140,7 +9140,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nominalzins";
             Text[ english ] = "Nominalzins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Coupon";
+            Text[ english_us ] = "The coupon rate";
             Text[ portuguese ] = "Coupon";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Coupon";
@@ -9194,7 +9194,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -9248,7 +9248,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -9302,7 +9302,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -9383,7 +9383,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Nominalzins";
             Text[ english ] = "Nominalzins";
-            Text[ english_us ] = "Nominal rate";
+            Text[ english_us ] = "The nominal rate";
             Text[ portuguese ] = "Nominalzins";
             Text[ russian ] = "Номинальная годовая процентная ставка.";
             Text[ greek ] = "Nominalzins";
@@ -9435,7 +9435,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Perioden";
             Text[ english ] = "Perioden";
-            Text[ english_us ] = "Npery";
+            Text[ english_us ] = "The periods";
             Text[ portuguese ] = "Perioden";
             Text[ russian ] = "Количество периодов, составляющих год.";
             Text[ greek ] = "Perioden";
@@ -9464,7 +9464,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Liefert die aufgelaufene Tilgung eines Darlehens, die zwischen zwei Perioden zu zahlen ist.";
             Text[ english ] = "Returns the cumulative principal paid a loan between two periods";
-            Text[ english_us ] = "Returns the cumulative principal paid on a loan between two periods";
+            Text[ english_us ] = "Returns the cumulative principal on a loan to be paid between two periods";
             Text[ portuguese ] = "Returns the cumulative principal paid a loan between two periods";
             Text[ russian ] = "Возвращает основные выплаты по займу между двумя периодами.";
             Text[ greek ] = "Returns the cumulative principal paid a loan between two periods";
@@ -9516,7 +9516,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Zins";
             Text[ english ] = "Zins";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "TAXA";
             Text[ russian ] = "Процентная ставка.";
             Text[ greek ] = "RATE";
@@ -9673,7 +9673,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Startperiode";
             Text[ english ] = "Startperiode";
-            Text[ english_us ] = "Start period";
+            Text[ english_us ] = "The start period";
             Text[ portuguese ] = "Startperiode";
             Text[ russian ] = "Номер первого периода в вычислениях.";
             Text[ greek ] = "Startperiode";
@@ -9725,7 +9725,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Endperiode";
             Text[ english ] = "Endperiode";
-            Text[ english_us ] = "End period";
+            Text[ english_us ] = "The end period";
             Text[ portuguese ] = "Endperiode";
             Text[ russian ] = "Номер последнего периода в вычислениях.";
             Text[ greek ] = "Endperiode";
@@ -9858,7 +9858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Zins";
             Text[ english ] = "Zins";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "TAXA";
             Text[ russian ] = "Процентная ставка.";
             Text[ greek ] = "RATE";
@@ -10014,7 +10014,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Startperiode";
             Text[ english ] = "Startperiode";
-            Text[ english_us ] = "Start period";
+            Text[ english_us ] = "The start period";
             Text[ portuguese ] = "Startperiode";
             Text[ russian ] = "Номер первого периода в вычислениях.";
             Text[ greek ] = "Startperiode";
@@ -10066,7 +10066,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Endperiode";
             Text[ english ] = "Endperiode";
-            Text[ english_us ] = "End period";
+            Text[ english_us ] = "The end period";
             Text[ portuguese ] = "Endperiode";
             Text[ russian ] = "Номер последнего периода в вычислениях.";
             Text[ greek ] = "Endperiode";
@@ -10202,7 +10202,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -10256,7 +10256,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -10310,7 +10310,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -10364,7 +10364,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -10418,7 +10418,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -10472,7 +10472,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -10526,7 +10526,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -10610,7 +10610,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -10664,7 +10664,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -10718,7 +10718,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Disagio";
             Text[ english ] = "Disagio";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Discount";
+            Text[ english_us ] = "The discount";
             Text[ portuguese ] = "Discount";
             Text[ russian ] = "Норма скидки для ценных бумаг.";
             Text[ greek ] = "Discount";
@@ -10772,7 +10772,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -10826,7 +10826,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -10910,7 +10910,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -10964,7 +10964,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -11018,7 +11018,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Emission";
             Text[ english ] = "Emission";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Issue";
+            Text[ english_us ] = "The issue date";
             Text[ portuguese ] = "Issue";
             Text[ russian ] = "Дата выпуска ценных бумаг.";
             Text[ greek ] = "Issue";
@@ -11072,7 +11072,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам на дату выпуска.";
             Text[ greek ] = "Rate";
@@ -11126,7 +11126,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -11180,7 +11180,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -11264,7 +11264,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -11318,7 +11318,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -11372,7 +11372,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Nominalzins";
             Text[ english ] = "Nominalzins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Coupon";
+            Text[ english_us ] = "The coupon rate";
             Text[ portuguese ] = "Coupon";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Coupon";
@@ -11426,7 +11426,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -11480,7 +11480,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -11534,7 +11534,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -11615,7 +11615,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Effektiver Zins";
             Text[ english ] = "Effektiver Zins";
-            Text[ english_us ] = "Effect rate";
+            Text[ english_us ] = "The effective interest rate";
             Text[ portuguese ] = "Effektiver Zins";
             Text[ russian ] = "Фактическая (эффективная) процентная ставка.";
             Text[ greek ] = "Effektiver Zins";
@@ -11667,7 +11667,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         {
             Text = "Perioden";
             Text[ english ] = "Perioden";
-            Text[ english_us ] = "Npery";
+            Text[ english_us ] = "The periods";
             Text[ portuguese ] = "Perioden";
             Text[ russian ] = "Количество периодов, составляющих год.";
             Text[ greek ] = "Perioden";
@@ -11751,7 +11751,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl";
             Text[ english ] = "Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Decimal dollar";
+            Text[ english_us ] = "The decimal number";
             Text[ portuguese ] = "Decimal dollar";
             Text[ russian ] = "Десятичное число.";
             Text[ greek ] = "Decimal dollar";
@@ -11805,7 +11805,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Teiler";
             Text[ english ] = "Teiler";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Fraction";
+            Text[ english_us ] = "The divisor";
             Text[ portuguese ] = "Fraction";
             Text[ russian ] = "Целое число, которое нужно использовать в качестве знаменателя дроби.";
             Text[ greek ] = "Fraction";
@@ -11889,7 +11889,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zahl";
             Text[ english ] = "Zahl";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Fractional dollar";
+            Text[ english_us ] = "The number as a fraction";
             Text[ portuguese ] = "Fractional dollar";
             Text[ russian ] = "Число, выраженное в виде дроби.";
             Text[ greek ] = "Fractional dollar";
@@ -11943,7 +11943,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Teiler";
             Text[ english ] = "Teiler";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Fraction";
+            Text[ english_us ] = "The divisor";
             Text[ portuguese ] = "Fraction";
             Text[ russian ] = "Целое, которое нужно использовать в качестве знаменателя.";
             Text[ greek ] = "Fraction";
@@ -12027,7 +12027,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -12081,7 +12081,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -12135,7 +12135,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Годовая процентная ставка для купонов по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -12189,7 +12189,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Par";
             Text[ russian ] = "Стоимость ценных бумаг.";
             Text[ greek ] = "Par";
@@ -12243,7 +12243,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -12297,7 +12297,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -12351,7 +12351,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -12435,7 +12435,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -12489,7 +12489,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -12543,7 +12543,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Стоимость ценных бумаг.";
             Text[ greek ] = "Price";
@@ -12597,7 +12597,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -12651,7 +12651,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -12735,7 +12735,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -12789,7 +12789,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -12843,7 +12843,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Emission";
             Text[ english ] = "Emission";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Issue";
+            Text[ english_us ] = "The issue date";
             Text[ portuguese ] = "Issue";
             Text[ russian ] = "Дата выпуска ценных бумаг.";
             Text[ greek ] = "Issue";
@@ -12897,7 +12897,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам на дату выпуска.";
             Text[ greek ] = "Rate";
@@ -12951,7 +12951,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Стоимость ценных бумаг.";
             Text[ greek ] = "Price";
@@ -13005,7 +13005,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -13089,7 +13089,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для казначейского чека.";
             Text[ greek ] = "Settlement";
@@ -13143,7 +13143,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения для казначейского чека.";
             Text[ greek ] = "Maturity";
@@ -13197,7 +13197,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Disagio";
             Text[ english ] = "Disagio";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Discount";
+            Text[ english_us ] = "The discount rate";
             Text[ portuguese ] = "Discount";
             Text[ russian ] = "Норма скидки для казначейского чека.";
             Text[ greek ] = "Discount";
@@ -13281,7 +13281,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для казначейского чека.";
             Text[ greek ] = "Settlement";
@@ -13335,7 +13335,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения для казначейского чека.";
             Text[ greek ] = "Maturity";
@@ -13389,7 +13389,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Disagio";
             Text[ english ] = "Disagio";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Discount";
+            Text[ english_us ] = "The discount rate";
             Text[ portuguese ] = "Discount";
             Text[ russian ] = "Норма скидки по казначейскому чеку.";
             Text[ greek ] = "Discount";
@@ -13473,7 +13473,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для казначейского чека.";
             Text[ greek ] = "Settlement";
@@ -13527,7 +13527,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения для казначейского чека.";
             Text[ greek ] = "Maturity";
@@ -13581,7 +13581,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Стоимость казначейского чека.";
             Text[ greek ] = "Price";
@@ -13665,7 +13665,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -13719,7 +13719,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -13773,7 +13773,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Emission";
             Text[ english ] = "Emission";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Issue";
+            Text[ english_us ] = "The issue date";
             Text[ portuguese ] = "Issue";
             Text[ russian ] = "Дата выпуска ценных бумаг.";
             Text[ greek ] = "Issue";
@@ -13827,7 +13827,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Erster Zinstermin";
             Text[ english ] = "Erster Zinstermin";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "First coupon";
+            Text[ english_us ] = "The first coupon date";
             Text[ portuguese ] = "First coupon";
             Text[ russian ] = "Дата первого купона для ценных бумаг.";
             Text[ greek ] = "First coupon";
@@ -13881,7 +13881,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -13935,7 +13935,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -13989,7 +13989,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -14043,7 +14043,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -14097,7 +14097,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -14181,7 +14181,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -14235,7 +14235,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -14289,7 +14289,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Emission";
             Text[ english ] = "Emission";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Issue";
+            Text[ english_us ] = "The issue date";
             Text[ portuguese ] = "Issue";
             Text[ russian ] = "Дата выпуска ценных бумаг.";
             Text[ greek ] = "Issue";
@@ -14343,7 +14343,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Erster Zinstermin";
             Text[ english ] = "Erster Zinstermin";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "First coupon";
+            Text[ english_us ] = "The first coupon date";
             Text[ portuguese ] = "First coupon";
             Text[ russian ] = "Дата первого купона по ценным бумагам.";
             Text[ greek ] = "First coupon";
@@ -14397,7 +14397,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -14451,7 +14451,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Стоимость ценных бумаг.";
             Text[ greek ] = "Price";
@@ -14505,7 +14505,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Выкупная цена ценных бумаг.";
             Text[ greek ] = "Redemption";
@@ -14559,7 +14559,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -14613,7 +14613,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -14697,7 +14697,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -14751,7 +14751,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -14805,7 +14805,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Letzter Zinstermin";
             Text[ english ] = "Letzter Zinstermin";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Last interest";
+            Text[ english_us ] = "The last interest date";
             Text[ portuguese ] = "Last interst";
             Text[ russian ] = "Дата последнего купона для ценных бумаг.";
             Text[ greek ] = "Last interst";
@@ -14859,7 +14859,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -14913,7 +14913,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rendite";
             Text[ english ] = "Rendite";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Yield";
+            Text[ english_us ] = "The yield";
             Text[ portuguese ] = "Yield";
             Text[ russian ] = "Годовой доход по ценным бумагам.";
             Text[ greek ] = "Yield";
@@ -14967,7 +14967,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Стоимость ценных бумаг при погашении.";
             Text[ greek ] = "Redemption";
@@ -15021,7 +15021,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -15075,7 +15075,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -15159,7 +15159,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -15213,7 +15213,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -15267,7 +15267,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Letzter Zinstermin";
             Text[ english ] = "Letzter Zinstermin";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Last interest";
+            Text[ english_us ] = "The last interest date";
             Text[ portuguese ] = "Last interest";
             Text[ russian ] = "Дата последнего купона для ценных бумаг.";
             Text[ greek ] = "Last interest";
@@ -15321,7 +15321,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Процентная ставка дохода по ценным бумагам.";
             Text[ greek ] = "Rate";
@@ -15375,7 +15375,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kurs";
             Text[ english ] = "Kurs";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Price";
+            Text[ english_us ] = "The price";
             Text[ portuguese ] = "Price";
             Text[ russian ] = "Стоимость ценных бумаг.";
             Text[ greek ] = "Price";
@@ -15429,7 +15429,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
             Text[ portuguese ] = "Redemption";
             Text[ russian ] = "Стоимость ценных бумаг при погашении.";
             Text[ greek ] = "Redemption";
@@ -15483,7 +15483,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -15537,7 +15537,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -15621,7 +15621,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Werte";
             Text[ english ] = "Werte";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Values";
+            Text[ english_us ] = "The values";
             Text[ portuguese ] = "Values";
             Text[ russian ] = "Ряд операций с наличными, которые соответствуют расписанию выплат.";
             Text[ greek ] = "Values";
@@ -15675,7 +15675,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zeitpunkte";
             Text[ english ] = "Zeitpunkte";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Dates";
+            Text[ english_us ] = "The dates";
             Text[ portuguese ] = "Dates";
             Text[ russian ] = "Расписание выплат, которое соответствует ряду операций с наличными.";
             Text[ greek ] = "Dates";
@@ -15729,7 +15729,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Schдtzwert";
             Text[ english ] = "Schдtzwert";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Guess";
+            Text[ english_us ] = "The guess";
             Text[ portuguese ] = "Guess";
             Text[ russian ] = "Предполагаемое значение результата данной функции.";
             Text[ greek ] = "Guess";
@@ -15813,7 +15813,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zins";
             Text[ english ] = "Zins";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Rate";
+            Text[ english_us ] = "The rate";
             Text[ portuguese ] = "Rate";
             Text[ russian ] = "Норма скидки, применяемая к операциям с наличными.";
             Text[ greek ] = "Rate";
@@ -15867,7 +15867,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Werte";
             Text[ english ] = "Werte";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Values";
+            Text[ english_us ] = "The values";
             Text[ portuguese ] = "Values";
             Text[ russian ] = "Ряд операций с наличными, котороые соответствуют расписанию выплат.";
             Text[ greek ] = "Values";
@@ -15895,7 +15895,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Zeitpunkte";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Dates";
-            Text[ portuguese ] = "Dates";
+            Text[ portuguese ] = "Datas";
             Text[ russian ] = "Даты";
             Text[ greek ] = "Dates";
             Text[ dutch ] = "Datums";
@@ -15921,8 +15921,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zeitpunkte";
             Text[ english ] = "Zeitpunkte";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Dates";
-            Text[ portuguese ] = "Dates";
+            Text[ english_us ] = "The dates";
+            Text[ portuguese ] = "Datas";
             Text[ russian ] = "Расписание дат платежей, которое соответствует ряду операций с наличными.";
             Text[ greek ] = "Dates";
             Text[ dutch ] = "Datums";
@@ -15952,7 +15952,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Returns the interest rate for a fully invested security";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the interest rate for a fully invested security";
-            Text[ portuguese ] = "Returns the interest rate for a fully invested security";
+            Text[ portuguese ] = "Devolve a taxa de juro de um tнtulo totalmente investido.";
             Text[ russian ] = "Возвращает процентную ставку для полностью инвестированных ценных бумаг.";
             Text[ greek ] = "Returns the interest rate for a fully invested security";
             Text[ dutch ] = "Geeft als resultaat het rentepercentage voor een volgestort waardepapier.";
@@ -15979,7 +15979,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата_согл";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16005,8 +16005,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ english_us ] = "The settlement";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16059,7 +16059,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения для ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -16087,7 +16087,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Anlage";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Investment";
-            Text[ portuguese ] = "Investment";
+            Text[ portuguese ] = "Investimento";
             Text[ russian ] = "Инвестиция";
             Text[ greek ] = "Investment";
             Text[ dutch ] = "Investering";
@@ -16113,8 +16113,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Anlage";
             Text[ english ] = "Anlage";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Investment";
-            Text[ portuguese ] = "Investment";
+            Text[ english_us ] = "The investment";
+            Text[ portuguese ] = "Investimento";
             Text[ russian ] = "Объем инвестиции в ценные бумаги.";
             Text[ greek ] = "Investment";
             Text[ dutch ] = "Investering";
@@ -16141,7 +16141,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Redemption";
-            Text[ portuguese ] = "Redemption";
+            Text[ portuguese ] = "Reembolso";
             Text[ russian ] = "Погашение";
             Text[ greek ] = "Redemption";
             Text[ dutch ] = "Aflossingsprijs";
@@ -16167,8 +16167,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Rьckzahlung";
             Text[ english ] = "Rьckzahlung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Redemption";
-            Text[ portuguese ] = "Redemption";
+            Text[ english_us ] = "The redemption value";
+            Text[ portuguese ] = "Reembolso";
             Text[ russian ] = "Объем средств, которые должны быть получены на дату вступления в силу ценных бумаг.";
             Text[ greek ] = "Redemption";
             Text[ dutch ] = "Aflossingsprijs";
@@ -16221,7 +16221,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "ВЬуз";
@@ -16252,7 +16252,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Returns the next coupon date after the settlement date";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the first coupon date after the settlement date";
-            Text[ portuguese ] = "Returns the next coupon date after the settlement date";
+            Text[ portuguese ] = "Devolve a data do primeiro cupгo apуs a data de liquidaзгo.";
             Text[ russian ] = "Возвращает число, представляющее следующую дату купона после даты соглашения.";
             Text[ greek ] = "Returns the next coupon date after the settlement date";
             Text[ dutch ] = "Geeft als resultaat de eerste coupondatum na de stortingsdatum.";
@@ -16279,7 +16279,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата_согл";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16305,8 +16305,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ english_us ] = "The settlement";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16359,7 +16359,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -16413,7 +16413,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -16467,7 +16467,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -16525,7 +16525,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата_согл";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16551,8 +16551,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
-            Text[ portuguese ] = "Expediзгo";
+            Text[ english_us ] = "The settlement";
+            Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
             Text[ dutch ] = "Stortingsdatum";
@@ -16605,7 +16605,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -16659,7 +16659,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -16713,7 +16713,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -16797,7 +16797,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -16851,7 +16851,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -16905,7 +16905,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -16959,7 +16959,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -17043,7 +17043,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -17097,7 +17097,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -17151,7 +17151,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Frequency";
             Text[ greek ] = "Frequency";
@@ -17205,7 +17205,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "Base";
@@ -17289,7 +17289,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Expediзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -17343,7 +17343,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -17397,7 +17397,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Число выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -17451,7 +17451,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "ВЬуз";
@@ -17535,7 +17535,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Abrechnung";
             Text[ english ] = "Abrechnung";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Settlement";
+            Text[ english_us ] = "The settlement";
             Text[ portuguese ] = "Liquidaзгo";
             Text[ russian ] = "Дата соглашения для ценных бумаг.";
             Text[ greek ] = "Settlement";
@@ -17589,7 +17589,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Fдlligkeit";
             Text[ english ] = "Fдlligkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Maturity";
+            Text[ english_us ] = "The maturity";
             Text[ portuguese ] = "Expiraзгo";
             Text[ russian ] = "Срок погашения ценных бумаг.";
             Text[ greek ] = "Maturity";
@@ -17643,7 +17643,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Hдufigkeit";
             Text[ english ] = "Hдufigkeit";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Frequency";
+            Text[ english_us ] = "The frequency";
             Text[ portuguese ] = "Frequкncia";
             Text[ russian ] = "Количество выплат по купонам за год.";
             Text[ greek ] = "Frequency";
@@ -17697,7 +17697,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Basis";
             Text[ english ] = "Basis";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Basis";
+            Text[ english_us ] = "The basis";
             Text[ portuguese ] = "Base";
             Text[ russian ] = "Используемый способ вычисления дня.";
             Text[ greek ] = "ВЬуз";
@@ -17755,7 +17755,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Kapital";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Principal";
-            Text[ portuguese ] = "Principal";
+            Text[ portuguese ] = "Capital";
             Text[ russian ] = "Основной_капитал";
             Text[ greek ] = "Principal";
             Text[ dutch ] = "Hoofdsom";
@@ -17781,8 +17781,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Kapital";
             Text[ english ] = "Kapital";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Principal";
-            Text[ portuguese ] = "Principal";
+            Text[ english_us ] = "The principal";
+            Text[ portuguese ] = "Capital";
             Text[ russian ] = "Текущая стоимость инвестиции.";
             Text[ greek ] = "Principal";
             Text[ dutch ] = "Hoofdsom";
@@ -17809,7 +17809,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ english ] = "Zinsen";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Schedule";
-            Text[ portuguese ] = "Schedule";
+            Text[ portuguese ] = "Juros";
             Text[ russian ] = "Ставки";
             Text[ greek ] = "Schedule";
             Text[ dutch ] = "Rentewaarden";
@@ -17835,8 +17835,8 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text = "Zinsen";
             Text[ english ] = "Zinsen";
             Text[ language_user1 ] = " ";
-            Text[ english_us ] = "Schedule";
-            Text[ portuguese ] = "Schedule";
+            Text[ english_us ] = "The schedule";
+            Text[ portuguese ] = "Juros";
             Text[ russian ] = "Массив применяемых процентных ставок.";
             Text[ greek ] = "Schedule";
             Text[ dutch ] = "Rentewaarden";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
