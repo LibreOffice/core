@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2002-10-25 10:08:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,11 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 
+// #107253#
+#ifndef _SWLINGUCONFIG_HXX
+#include <swlinguconfig.hxx>
+#endif
+
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
@@ -356,6 +361,12 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     bIsDocReadOnly(sal_False),
     bResume(sal_False)
 {
+    // #107253# Hold one local SwLinguConfig here. This creates one incarnation
+    // of a SvtLinguConfig which is then used as long as this local incarnation
+    // exists. Other dialogs may be equipped with the same startup-mechanism
+    // when required.
+    SwLinguConfig aLocalLinguConfig;
+
     // Static-Pointer initialisieren
     if( !pCurrGlosGroup )
         pCurrGlosGroup = new String;//(SwGlossaries::GetDefName());
