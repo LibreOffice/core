@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:06:43 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 14:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@
 #include "patattr.hxx"
 
 #include "excdoc.hxx"
-#include "excupn.hxx"
 #include "namebuff.hxx"
 
 #include "xcl97dum.hxx"
