@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:17:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ void SwWW8ImplReader::ReplaceObj(const SdrObject &rReplaceObj,
         pGrafObj->SetModel(pDrawModel);
 #endif
 
-        rSubObj.SetLogicRect(rReplaceObj.GetBoundRect());
+        rSubObj.SetLogicRect(rReplaceObj.GetCurrentBoundRect());
         rSubObj.SetLayer(rReplaceObj.GetLayer());
 
         // altes Objekt raus aus Gruppen-Liste und neues rein
