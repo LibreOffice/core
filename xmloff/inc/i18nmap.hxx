@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18nmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 16:48:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,17 @@
 #ifndef _XMLOFF_I18NMAP_HXX
 #define _XMLOFF_I18NMAP_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 #ifndef _SOLAR_H //autogen wg. USHORT
 #include <tools/solar.h>
 #endif
@@ -75,11 +86,11 @@ namespace rtl
 class SvI18NMap_Impl;
 class SvI18NMapEntry_Impl;
 
-class SvI18NMap
+class XMLOFF_DLLPUBLIC SvI18NMap
 {
     SvI18NMap_Impl      *pImpl;
 
-    SvI18NMapEntry_Impl *_Find( USHORT nKind,
+    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( USHORT nKind,
                                 const ::rtl::OUString& rName ) const;
 
 public:
