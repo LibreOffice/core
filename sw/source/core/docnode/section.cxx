@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:22:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1525,7 +1525,8 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         aStrm.Seek( 0 );
 #endif
 
-        SwReader aTmpReader( aStrm, aEmptyStr, *pPam );
+        // TODO/MBA: it's impossible to set a BaseURL here!
+        SwReader aTmpReader( aStrm, aEmptyStr, pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );
 
         if( !IsError( aTmpReader.Read( *pRead ) ))
             rSection.SetConnectFlag( TRUE );
