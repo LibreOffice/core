@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,8 @@
 #ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
 #include "providerfactory.hxx"
 #endif
-#ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
-#include "confsvccomponent.hxx"
+#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
+#include "serviceinfohelper.hxx"
 #endif
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
@@ -177,13 +177,10 @@ struct ServiceImplementationRequest
         if (this->shouldCreate(pInfo))
         try
         {
-            const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
+            const Sequence< OUString > Services=  configmgr::ServiceInfoHelper(pInfo).getSupportedServiceNames();
 
-#if SUPD<633
-            xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
-#else
             xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services,0);
-#endif
+
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");
         }
         catch(Exception&)
@@ -203,7 +200,7 @@ struct ServiceImplementationRequest
         if (this->shouldCreate(pInfo))
         try
         {
-            const Sequence< OUString > Services=  configmgr::ServiceComponentImpl::getServiceNames(pInfo);
+            const Sequence< OUString > Services=  configmgr::ServiceInfoHelper(pInfo).getSupportedServiceNames();
 
             xRet = creator( m_xServiceManager, OUString::createFromAscii(pInfo->implementationName),Factory, Services);
             OSL_ENSURE(xRet.is(), "CreateProvider : WHERE IS THE return value !");

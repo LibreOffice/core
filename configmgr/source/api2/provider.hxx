@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:31:26 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ namespace configmgr
             OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
         }
 
-        static sal_Int32 countServices(ServiceInfo const* aInfo) { return ServiceComponentImpl::countServices(aInfo); }
+        static sal_Int32 countServices(ServiceInfo const* aInfo) { return ServiceInfoHelper(aInfo).countServices(); }
 
     protected:
         // creates a new session

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: apiserviceinfo.hxx,v $
+ *  $RCSfile: serviceinfohelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
  *
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,48 +59,69 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_API_SERVICEINFO_HXX_
-#define CONFIGMGR_API_SERVICEINFO_HXX_
-
-#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
 #include "serviceinfohelper.hxx"
-#endif
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    namespace configapi
+// ---------------------------------------------------------------------------
+
+    sal_Int32 ServiceInfoHelper::countServices( ) const
     {
-//-----------------------------------------------------------------------------
+        AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
+        if (p == 0)
+            return 0;
 
- extern const AsciiServiceName c_aUserAdministrationServices[];
- extern const AsciiServiceName c_aGroupAdministrationServices[];
+        sal_Int32 nCount = 0;
+        while (*p != 0)
+        {
+            ++nCount;
+            ++p;
+        }
 
-//-----------------------------------------------------------------------------
- extern ServiceInfo const aInnerGroupInfoSI;
- extern ServiceInfo const aInnerGroupUpdateSI;
- extern ServiceInfo const aInnerSetInfoSI;
- extern ServiceInfo const aInnerTreeSetSI;
- extern ServiceInfo const aInnerValueSetSI;
- extern ServiceInfo const aSetElementGroupInfoSI;
- extern ServiceInfo const aSetElementGroupUpdateSI;
- extern ServiceInfo const aSetElementSetInfoSI;
- extern ServiceInfo const aSetElementTreeSetSI;
- extern ServiceInfo const aSetElementValueSetSI;
- extern ServiceInfo const aRootElementGroupInfoSI;
- extern ServiceInfo const aRootElementGroupUpdateSI;
- extern ServiceInfo const aRootElementSetInfoSI;
- extern ServiceInfo const aRootElementTreeSetUpdateSI;
- extern ServiceInfo const aRootElementValueSetUpdateSI;
-
-//-----------------------------------------------------------------------------
- extern ServiceInfo const aCreateReadAccessSI;
- extern ServiceInfo const aCreateUpdateAccessSI;
-// extern ServiceInfo const aRootElementAdminAccessSI;
-
-//-----------------------------------------------------------------------------
+        return nCount;
     }
-}
-//-----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-#endif // CONFIGMGR_API_SERVICEINFO_HXX_
+    OUString ServiceInfoHelper::getImplementationName( ) const
+        throw(uno::RuntimeException)
+    {
+        AsciiServiceName p= m_info ? m_info->implementationName : 0;
+
+        return p ? OUString::createFromAscii(p) : OUString();
+    }
+// ---------------------------------------------------------------------------
+
+    sal_Bool ServiceInfoHelper::supportsService( OUString const & ServiceName ) const
+        throw(uno::RuntimeException)
+    {
+        AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
+        if (p == 0)
+            return false;
+
+        while (*p != 0)
+        {
+            if (0 == ServiceName.compareToAscii(*p))
+                return true;
+            ++p;
+        }
+
+        return false;
+    }
+// ---------------------------------------------------------------------------
+
+    uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames( ) const
+        throw(uno::RuntimeException)
+    {
+        sal_Int32 const nCount = countServices();
+
+        uno::Sequence< OUString > aServices( nCount );
+
+        for(sal_Int32 i= 0; i < nCount; ++i)
+            aServices[i] = OUString::createFromAscii(m_info->serviceNames[i]);
+
+        return aServices;
+    }
+// ---------------------------------------------------------------------------
+} // namespace config
+
+

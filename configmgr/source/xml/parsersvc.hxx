@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-17 11:56:02 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef CONFIGMGR_XML_PARSERSVC_HXX
 #define CONFIGMGR_XML_PARSERSVC_HXX
 
-#ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
-#include "confsvccomponent.hxx"
+#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
+#include "serviceinfohelper.hxx"
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
@@ -131,6 +131,7 @@ namespace configmgr
                 getSupportedServiceNames(  )
                     throw (uno::RuntimeException);
 
+            // XActiveDataSink
             virtual void SAL_CALL
                 setInputStream( const uno::Reference< io::XInputStream >& aStream )
                     throw (uno::RuntimeException);
@@ -151,7 +152,8 @@ namespace configmgr
         private:
             ServiceFactory   m_xServiceFactory;
             sax::InputSource m_aInputSource;
-            ServiceInfo const * const m_pServiceInfo;
+
+            static ServiceInfoHelper getServiceInfo();
         };
 
 // -----------------------------------------------------------------------------

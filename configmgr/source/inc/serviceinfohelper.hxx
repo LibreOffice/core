@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: apiserviceinfo.hxx,v $
+ *  $RCSfile: serviceinfohelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,48 +59,55 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_API_SERVICEINFO_HXX_
-#define CONFIGMGR_API_SERVICEINFO_HXX_
-
 #ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
-#include "serviceinfohelper.hxx"
+#define CONFIGMGR_SERVICEINFOHELPER_HXX_
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    namespace configapi
+// -----------------------------------------------------------------------------
+    namespace uno   = ::com::sun::star::uno;
+    namespace lang  = ::com::sun::star::lang;
+    using ::rtl::OUString;
+// -----------------------------------------------------------------------------
+
+    typedef sal_Char const * AsciiServiceName;
+// -----------------------------------------------------------------------------
+
+    struct ServiceInfo
     {
-//-----------------------------------------------------------------------------
+        AsciiServiceName implementationName;
+        AsciiServiceName const * serviceNames;
+    };
+// -----------------------------------------------------------------------------
 
- extern const AsciiServiceName c_aUserAdministrationServices[];
- extern const AsciiServiceName c_aGroupAdministrationServices[];
+    class ServiceInfoHelper
+    {
+        ServiceInfo const*const m_info;
 
-//-----------------------------------------------------------------------------
- extern ServiceInfo const aInnerGroupInfoSI;
- extern ServiceInfo const aInnerGroupUpdateSI;
- extern ServiceInfo const aInnerSetInfoSI;
- extern ServiceInfo const aInnerTreeSetSI;
- extern ServiceInfo const aInnerValueSetSI;
- extern ServiceInfo const aSetElementGroupInfoSI;
- extern ServiceInfo const aSetElementGroupUpdateSI;
- extern ServiceInfo const aSetElementSetInfoSI;
- extern ServiceInfo const aSetElementTreeSetSI;
- extern ServiceInfo const aSetElementValueSetSI;
- extern ServiceInfo const aRootElementGroupInfoSI;
- extern ServiceInfo const aRootElementGroupUpdateSI;
- extern ServiceInfo const aRootElementSetInfoSI;
- extern ServiceInfo const aRootElementTreeSetUpdateSI;
- extern ServiceInfo const aRootElementValueSetUpdateSI;
+    public:
+        ServiceInfoHelper(ServiceInfo const* _info)
+        : m_info(_info)
+        {}
 
-//-----------------------------------------------------------------------------
- extern ServiceInfo const aCreateReadAccessSI;
- extern ServiceInfo const aCreateUpdateAccessSI;
-// extern ServiceInfo const aRootElementAdminAccessSI;
+        sal_Int32 countServices() const;
 
-//-----------------------------------------------------------------------------
-    }
-}
-//-----------------------------------------------------------------------------
+        OUString getImplementationName( ) const
+            throw(uno::RuntimeException);
 
-#endif // CONFIGMGR_API_SERVICEINFO_HXX_
+        sal_Bool supportsService( OUString const & ServiceName ) const
+            throw(uno::RuntimeException);
+
+        uno::Sequence< OUString > getSupportedServiceNames( ) const
+            throw(uno::RuntimeException);
+    };
+// -----------------------------------------------------------------------------
+
+} // namespace configmgr
+
+#endif
+
+

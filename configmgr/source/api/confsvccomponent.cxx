@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confsvccomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-07 17:15:12 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,22 +100,6 @@ namespace configmgr {
             throw lang::DisposedException(sMessage, *this);
     }
 
-    sal_Int32 ServiceComponentImpl::countServices(ServiceInfo const* aInfo)
-    {
-        AsciiServiceName const* p= aInfo ? aInfo->serviceNames : 0;
-        if (p == 0)
-            return 0;
-
-        sal_Int32 nCount = 0;
-        while (*p != 0)
-        {
-            ++nCount;
-            ++p;
-        }
-
-        return nCount;
-    }
-
     // XTypeProvider
     uno::Sequence<sal_Int8> ServiceComponentImpl::getStaticImplementationId(ServiceInfo const* pServiceInfo)
         throw(uno::RuntimeException)
@@ -136,42 +120,17 @@ namespace configmgr {
     // XServiceInfo
     OUString SAL_CALL ServiceComponentImpl::getImplementationName(  ) throw(uno::RuntimeException)
     {
-        AsciiServiceName p= m_info ? m_info->implementationName : 0;
-
-        return p ? OUString::createFromAscii(p) : OUString();
+        return ServiceInfoHelper(m_info).getImplementationName();
     }
 
     sal_Bool SAL_CALL ServiceComponentImpl::supportsService( const ::rtl::OUString& ServiceName ) throw(uno::RuntimeException)
     {
-        AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
-        if (p == 0)
-            return false;
-
-        while (*p != 0)
-        {
-            if (0 == ServiceName.compareToAscii(*p))
-                return true;
-            ++p;
-        }
-
-        return false;
-    }
-
-    uno::Sequence< OUString > ServiceComponentImpl::getServiceNames(ServiceInfo const* pInfo  ) throw(uno::RuntimeException)
-    {
-        sal_Int32 const nCount = countServices(pInfo);
-
-        uno::Sequence< OUString > aServices( nCount );
-
-        for(sal_Int32 i= 0; i < nCount; ++i)
-            aServices[i] = OUString::createFromAscii(pInfo->serviceNames[i]);
-
-        return aServices;
+        return ServiceInfoHelper(m_info).supportsService( ServiceName );
     }
 
     uno::Sequence< OUString > SAL_CALL ServiceComponentImpl::getSupportedServiceNames(  ) throw(uno::RuntimeException)
     {
-        return getServiceNames( m_info );
+        return ServiceInfoHelper(m_info).getSupportedServiceNames( );
     }
 
     //ServiceComponentImpl::

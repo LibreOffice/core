@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confsvccomponent.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #define CONFIGMGR_API_SVCCOMPONENT_HXX_
 
+#ifndef CONFIGMGR_SERVICEINFOHELPER_HXX_
+#include "serviceinfohelper.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -80,28 +84,25 @@
 #include <rtl/ustring.hxx>
 #endif
 
-namespace configmgr {
+namespace configmgr
+{
 
-    namespace css = ::com::sun::star;
-    namespace uno = css::uno;
-    namespace lang = css::lang;
+//----------------------------------------------------------------------------
+    namespace css   = ::com::sun::star;
+    namespace uno   = css::uno;
+    namespace lang  = css::lang;
     using ::rtl::OUString;
 
-    typedef sal_Char const * AsciiServiceName;
-    struct ServiceInfo
-    {
-        AsciiServiceName implementationName;
-        AsciiServiceName const * serviceNames;
-    };
-
+//----------------------------------------------------------------------------
     typedef ::cppu::WeakComponentImplHelper1< lang::XServiceInfo > ServiceImplBase;
 
+//----------------------------------------------------------------------------
     class ServiceComponentImpl
         : public ServiceImplBase
     {
     protected:
-        ::osl::Mutex m_aMutex;
-        ServiceInfo const* const m_info;
+        ::osl::Mutex                m_aMutex;
+        ServiceInfo const*const     m_info;
     public:
         ServiceComponentImpl(ServiceInfo const* aInfo);
 
@@ -123,14 +124,13 @@ namespace configmgr {
         void checkAlive(OUString const& message) throw (uno::RuntimeException);
 
         // Extra helpers
-        static sal_Int32 countServices(ServiceInfo const* aInfo);
-        static uno::Sequence< OUString > getServiceNames(ServiceInfo const* aInfo) throw(uno::RuntimeException);
         static uno::Sequence<sal_Int8> getStaticImplementationId(ServiceInfo const* pServiceInfo) throw(uno::RuntimeException);
 
     private: // no implementation
         ServiceComponentImpl(ServiceComponentImpl&);
         void operator=(ServiceComponentImpl&);
     };
+//----------------------------------------------------------------------------
 
 } // namespace configmgr
 

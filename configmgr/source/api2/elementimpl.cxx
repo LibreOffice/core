@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,7 +487,7 @@ uno::Sequence< OUString > implGetSupportedServiceNames( NodeAccess& rNode, NodeE
     ServiceInfo const* pInfo = rElement.getServiceInfo();
     OSL_ENSURE(pInfo, "Configuration: Object has no service info");
 
-    return ServiceComponentImpl::getServiceNames(pInfo);
+    return ServiceInfoHelper(pInfo).getSupportedServiceNames();
 }
 //-----------------------------------------------------------------------------
 

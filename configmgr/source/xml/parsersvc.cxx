@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsersvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 10:59:40 $
+ *  last change: $Author: jb $ $Date: 2002-05-22 09:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,63 +83,6 @@
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
-    namespace ServiceInfoHelper
-    {
-        sal_Int32 countServices(ServiceInfo const* m_info)
-        {
-            AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
-            if (p == 0)
-                return 0;
-
-            sal_Int32 nCount = 0;
-            while (*p != 0)
-            {
-                ++nCount;
-                ++p;
-            }
-
-            return nCount;
-        }
-
-        OUString getImplementationName( ServiceInfo const * m_info )
-            throw(uno::RuntimeException)
-        {
-            AsciiServiceName p= m_info ? m_info->implementationName : 0;
-
-            return p ? OUString::createFromAscii(p) : OUString();
-        }
-
-        sal_Bool supportsService( ServiceInfo const * m_info, OUString const & ServiceName )
-            throw(uno::RuntimeException)
-        {
-            AsciiServiceName const* p= m_info ? m_info->serviceNames : 0;
-            if (p == 0)
-                return false;
-
-            while (*p != 0)
-            {
-                if (0 == ServiceName.compareToAscii(*p))
-                    return true;
-                ++p;
-            }
-
-            return false;
-        }
-
-        uno::Sequence< OUString > getSupportedServiceNames(ServiceInfo const* m_info  )
-            throw(uno::RuntimeException)
-        {
-            sal_Int32 const nCount = countServices(m_info);
-
-            uno::Sequence< OUString > aServices( nCount );
-
-            for(sal_Int32 i= 0; i < nCount; ++i)
-                aServices[i] = OUString::createFromAscii(m_info->serviceNames[i]);
-
-            return aServices;
-        }
-    }
-// -----------------------------------------------------------------------------
     namespace xml
     {
 // -----------------------------------------------------------------------------
@@ -160,12 +103,11 @@ template <class BackendInterface>
 ParserService<BackendInterface>::ParserService(CreationArg _xServiceFactory)
 : m_xServiceFactory(_xServiceFactory)
 , m_aInputSource()
-, m_pServiceInfo( ParserServiceTraits<BackendInterface>::getServiceInfo() )
 {
     if (!m_xServiceFactory.is())
     {
         OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration Parser: Unexpected NULL context"));
-        throw uno::RuntimeException(sMessage,*this);
+        throw uno::RuntimeException(sMessage,NULL);
     }
 }
 // -----------------------------------------------------------------------------
@@ -202,13 +144,21 @@ void SAL_CALL
 }
 // -----------------------------------------------------------------------------
 
+template <class BackendInterface>
+inline
+ServiceInfoHelper ParserService<BackendInterface>::getServiceInfo()
+{
+    return ParserServiceTraits<BackendInterface>::getServiceInfo();
+}
+// -----------------------------------------------------------------------------
+
 // XServiceInfo
 template <class BackendInterface>
 ::rtl::OUString SAL_CALL
     ParserService<BackendInterface>::getImplementationName(  )
         throw (uno::RuntimeException)
 {
-    return ServiceInfoHelper::getImplementationName( m_pServiceInfo );
+    return getServiceInfo().getImplementationName();
 }
 // -----------------------------------------------------------------------------
 
@@ -217,7 +167,7 @@ sal_Bool SAL_CALL
     ParserService<BackendInterface>::supportsService( const ::rtl::OUString& ServiceName )
         throw (uno::RuntimeException)
 {
-    return ServiceInfoHelper::supportsService( m_pServiceInfo, ServiceName );
+    return getServiceInfo().supportsService( ServiceName );
 }
 // -----------------------------------------------------------------------------
 
@@ -226,7 +176,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL
     ParserService<BackendInterface>::getSupportedServiceNames(  )
         throw (uno::RuntimeException)
 {
-    return ServiceInfoHelper::getSupportedServiceNames( m_pServiceInfo );
+    return getServiceInfo().getSupportedServiceNames( );
 }
 // -----------------------------------------------------------------------------
 
