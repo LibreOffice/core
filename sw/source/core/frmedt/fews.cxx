@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 14:42:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:00:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,9 +976,9 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             objectpositioning::SwEnvironmentOfAnchoredObject aEnvOfObj(
                                                             _bFollowTextFlow );
             const SwLayoutFrm& rHoriEnvironLayFrm =
-                                aEnvOfObj.GetHoriEnvironmentLayoutFrm( *pFrm, false );
+                                aEnvOfObj.GetHoriEnvironmentLayoutFrm( *pFrm );
             const SwLayoutFrm& rVertEnvironLayFrm =
-                                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pFrm, false );
+                                aEnvOfObj.GetVertEnvironmentLayoutFrm( *pFrm );
             SwRect aHoriEnvironRect( rHoriEnvironLayFrm.Frm() );
             SwRect aVertEnvironRect;
             if ( _bFollowTextFlow )
