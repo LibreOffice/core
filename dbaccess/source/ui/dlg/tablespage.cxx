@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 08:50:24 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 14:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -890,57 +890,65 @@ namespace dbaui
                 pSelected = m_aTablesList.NextSelected(pSelected);
             }
 
-            for (::std::vector< void* >::const_iterator aLoop = aSelection.begin();
-                aLoop != aSelection.end();
-                ++aLoop
-                )
+            if ( !aSelection.empty() )
             {
-                SvLBoxEntry* pSelected = static_cast<SvLBoxEntry*>(*aLoop);
-                // the composed table name
-                String sCompleteTableName = getComposedEntryName(pSelected);
+                ::std::vector< void* >::const_iterator aLast = aSelection.end();
+                --aLast;
 
-                // let the user confirm this
-                sal_Int32 nResult = RET_YES;
-                if (bConfirm)
+                for (   ::std::vector< void* >::const_iterator aLoop = aSelection.begin();
+                        aLoop != aSelection.end();
+                        ++aLoop
+                    )
                 {
+                    SvLBoxEntry* pSelected = static_cast<SvLBoxEntry*>(*aLoop);
+                    // the composed table name
+                    String sCompleteTableName = getComposedEntryName(pSelected);
+
                     // let the user confirm this
-                    String sMessage(ModuleRes(STR_QUERY_DELETE_TABLE));
-                    sMessage.SearchAndReplace(String::CreateFromAscii("%1"), sCompleteTableName);
-
-                    QueryBox aAsk(GetParent(), WB_YES_NO | WB_DEF_YES, sMessage);
-                    aAsk.SetText(String(ModuleRes(STR_TITLE_CONFIRM_DELETION)));
-
-                    // add an "all" button
-                    aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
-                    aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
-
-                    nResult = aAsk.Execute();
-                }
-
-                if ((RET_YES == nResult) || (RET_ALL == nResult))
-                {
-                    SQLExceptionInfo aErrorInfo;
-                    try
+                    sal_Int32 nResult = RET_YES;
+                    if (bConfirm)
                     {
-                        xDropTable->dropByName(sCompleteTableName);
+                        // let the user confirm this
+                        String sMessage(ModuleRes(STR_QUERY_DELETE_TABLE));
+                        sMessage.SearchAndReplace(String::CreateFromAscii("%1"), sCompleteTableName);
 
-                        // remove the entry from the list
-                        m_aTablesList.GetModel()->Remove(pSelected);
+                        QueryBox aAsk(GetParent(), WB_YES_NO | WB_DEF_YES, sMessage);
+                        aAsk.SetText(String(ModuleRes(STR_TITLE_CONFIRM_DELETION)));
+
+                        // add an "all" button
+                        if ( aLast != aLoop )
+                        {
+                            aAsk.AddButton(String(ModuleRes(STR_BUTTON_TEXT_ALL)), RET_ALL, 0);
+                            aAsk.GetPushButton(RET_ALL)->SetHelpId(HID_CONFIRM_DROP_BUTTON_ALL);
+                        }
+
+                        nResult = aAsk.Execute();
                     }
-                    catch(SQLContext& e) { aErrorInfo = e; }
-                    catch(SQLWarning& e) { aErrorInfo = e; }
-                    catch(SQLException& e) { aErrorInfo = e; }
-                    catch(Exception&)
+
+                    if ((RET_YES == nResult) || (RET_ALL == nResult))
                     {
-                        DBG_ERROR("OTableSubscriptionPage::dropSelection: suspicious exception caught!");
+                        SQLExceptionInfo aErrorInfo;
+                        try
+                        {
+                            xDropTable->dropByName(sCompleteTableName);
+
+                            // remove the entry from the list
+                            m_aTablesList.GetModel()->Remove(pSelected);
+                        }
+                        catch(SQLContext& e) { aErrorInfo = e; }
+                        catch(SQLWarning& e) { aErrorInfo = e; }
+                        catch(SQLException& e) { aErrorInfo = e; }
+                        catch(Exception&)
+                        {
+                            DBG_ERROR("OTableSubscriptionPage::dropSelection: suspicious exception caught!");
+                        }
+                        if (aErrorInfo.isValid())
+                            showError(aErrorInfo, GetParent(), m_xORB);
                     }
-                    if (aErrorInfo.isValid())
-                        showError(aErrorInfo, GetParent(), m_xORB);
+
+                    if (RET_ALL == nResult)
+                        bConfirm = sal_False;
                 }
-
-                if (RET_ALL == nResult)
-                    bConfirm = sal_False;
-
             }
         }
 
@@ -1306,6 +1314,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/08/15 08:50:24  fs
+ *  #89822# doToolboxAction -> onToolBoxAction / enable KEY_DELETE
+ *
  *  Revision 1.5  2001/08/14 14:12:22  fs
  *  #86945# add notifiers to the tables container of newly opened table design components
  *
