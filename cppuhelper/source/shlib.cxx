@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ok $ $Date: 2001-06-28 09:37:48 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 16:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,10 @@
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <osl/module.h>
+#include <osl/module.hxx>
 #include <rtl/unload.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
@@ -234,6 +235,34 @@ static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd 
     }
     return -1;
 }
+
+static void MyDummySymbolWithinLibrary(){}
+// private forward
+static Bootstrap const & __getBstrapHandle() SAL_THROW( () )
+{
+    static rtlBootstrapHandle s_bstrap = 0;
+    if (! s_bstrap)
+    {
+        OUString libraryFileUrl;
+        Module::getUrlFromAddress((void*)MyDummySymbolWithinLibrary, libraryFileUrl);
+
+        OUString iniName = libraryFileUrl.copy(0, libraryFileUrl.lastIndexOf((sal_Unicode)'/') + 1); // cut the library extension
+        iniName += OUString(RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("uno"))); // add the rc file extension
+        rtlBootstrapHandle bstrap = rtl_bootstrap_args_open( iniName.pData );
+        ClearableMutexGuard guard( Mutex::getGlobalMutex() );
+        if (s_bstrap)
+        {
+            guard.clear();
+            rtl_bootstrap_args_close( bstrap );
+        }
+        else
+        {
+            s_bstrap = bstrap;
+        }
+    }
+    return *(Bootstrap const *)&s_bstrap;
+}
+
 //==================================================================================================
 static OUString makeComponentPath( const OUString & rLibName, const OUString & rPath ) SAL_THROW( () )
 {
@@ -300,7 +329,13 @@ static OUString makeComponentPath( const OUString & rLibName, const OUString & r
     }
 #endif
 
-    return buf.makeStringAndClear();
+    OUString out( buf.makeStringAndClear() );
+    __getBstrapHandle().expandMacrosFrom( out );
+#ifdef DEBUG
+    OString str( OUStringToOString( out, RTL_TEXTENCODING_ASCII_US ) );
+    OSL_TRACE( "component path=%s\n", str.getStr() );
+#endif
+    return out;
 }
 
 //==================================================================================================
