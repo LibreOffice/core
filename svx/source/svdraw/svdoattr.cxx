@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-21 08:53:27 $
+ *  last change: $Author: aw $ $Date: 2001-10-08 15:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,7 +597,13 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
                 aMetricFactor = GetMapFactor(aOldUnit, aNewUnit).X();
 
                 if(mpObjectItemSet)
-                    ImpScaleItemSet(*mpObjectItemSet, aMetricFactor);
+                {
+                    // #75371# To have a notify on scaling, do it on a copy of the
+                    // local ItemSet and set this one then
+                    SfxItemSet aItemSet(*mpObjectItemSet);
+                    ImpScaleItemSet(aItemSet, aMetricFactor);
+                    SetItemSet(aItemSet);
+                }
             }
 
             // Und nun alle Items auf die das Obj verweisst aus
