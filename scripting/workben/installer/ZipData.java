@@ -23,16 +23,26 @@ public class ZipData
 
     if (statusLabel != null) {
         statusLabel.setText("Copying " + entry);
-        System.out.println("Copying " + entry);
     }
 
+        String entryName;
         if (entry.lastIndexOf("/") != -1) {
-            String name = entry.substring(entry.lastIndexOf("/") + 1);
-            destination = destination.concat(name);
+            entryName = entry.substring(entry.lastIndexOf("/") + 1);
         }
         else {
-            destination = destination.concat(entry);
+            entryName = entry;
         }
+
+        String destName;
+        if (destination.lastIndexOf(File.separator) != -1) {
+            destName = destination.substring(destination.lastIndexOf(File.separator) + 1);
+        }
+        else {
+            destName = destination;
+        }
+
+        if (!destName.equals(entryName))
+            destination = destination.concat(entryName);
 
         System.out.println("Unzipping " + entry + " to " + destination);
 

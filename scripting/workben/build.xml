@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-01-31 13:53:09 $
+#   last change: $Author: toconnor $ $Date: 2003-02-06 18:19:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,36 +119,37 @@
   </target>
   <!-- ===================== Build the examples ========================= -->
   <target name="buildexamples">
-    <mkdir dir="${out}/class/examples/Highlight"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/Highlight/"
+    <mkdir dir="${out}/class/examples/java/Highlight"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/Highlight/"
               includes="**/Highlight*.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy todir="${out}/class/examples/Highlight/">
+    <copy todir="${out}/class/examples/java/Highlight/">
         <fileset dir="${prj}/examples/java/">
             <include name="**/Highlight*.java"/>
         </fileset>
     </copy>
-    <copy file="${prj}/examples/java/HighlightTextParcel.xml" tofile="${out}/class/examples/Highlight/parcel-descriptor.xml"/>
-    <jar jarfile="${out}/class/examples/Highlight/Highlight.jar"
-        basedir="${out}/class/examples/Highlight"
+    <copy file="${prj}/examples/java/HighlightTextParcel.xml" tofile="${out}/class/examples/java/Highlight/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/Highlight/Highlight.jar"
+        basedir="${out}/class/examples/java/Highlight"
         includes="**/*.java,**/*.class,**/*.xml"
-        excludes="${out}/class/examples/Highlight/Highlight.jar">
+        excludes="${out}/class/examples/java/Highlight/Highlight.jar">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="ScriptFramework-Version" value="${sfversion}"/>
         </manifest>
     </jar>
-    <mkdir dir="${out}/class/examples/MemoryUsage"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/MemoryUsage/"
+    <mkdir dir="${out}/class/examples/java/MemoryUsage"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/MemoryUsage/"
               includes="**/MemoryUsage.java" classpathref="idlclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/MemoryUsage/"/>
-    <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/MemoryUsage/parcel-descriptor.xml"/>
-    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/MemoryUsage/"/>
-    <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/MemoryUsage/"/>
-    <mkdir dir="${out}/class/examples/InteractiveBeanShell"/>
-    <copy file="${prj}/examples/java/interactive.bsh" todir="${out}/class/examples/InteractiveBeanShell/"/>
-    <copy file="${prj}/examples/java/interactive.xml" tofile="${out}/class/examples/InteractiveBeanShell/parcel-descriptor.xml"/>
+    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
+    <copy file="${prj}/examples/java/MemoryUsageParcel.xml" tofile="${out}/class/examples/java/MemoryUsage/parcel-descriptor.xml"/>
+    <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
+    <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
+    <mkdir dir="${out}/class/examples/beanshell"/>
+    <copy todir="${out}/class/examples/beanshell">
+        <fileset dir="${prj}/examples/beanshell" includes="**"/>
+    </copy>
   </target>
 
   <!-- ===================== Build UNO package ========================= -->

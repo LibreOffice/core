@@ -111,12 +111,6 @@ public class XmlUpdater extends Thread {
         starBasicPath= starBasicPath.concat(File.separator+"user"+File.separator+"basic"+File.separator+"ScriptBindingLibrary"+File.separator);
         //System.out.println( "Office StarBasic path: " + starBasicPath );
 
-    String scriptsPath=installPath;
-    scriptsPath= scriptsPath.concat(File.separator+"user"+File.separator+"Scripts"+File.separator+"java"+File.separator);
-        String bshScriptsPath = installPath + File.separator + "user" +
-            File.separator + "beanshell" + File.separator;
-
-    //System.out.println( " Office Scripts Path: " + scriptsPath );
 
         // Get the NetBeans installation
         //String netbeansPath=
@@ -152,33 +146,6 @@ public class XmlUpdater extends Thread {
         else
             System.out.println( "soffice.cfg exists" );
 
-// Robert Kinsella test 1
-
-        //Adding <Office>/user/Scripts/java/
-        File scriptsDir = new File( scriptsPath );
-    File highlightDir = new File( scriptsPath+"Highlight" );
-    File memoryDir = new File( scriptsPath+"MemoryUsage" );
-    File bshDir = new File( bshScriptsPath +"InteractiveBeanShell" );
-        if( !highlightDir.mkdirs() ) {
-            System.out.println( "Highlight script directory failed");
-        }
-        if( !bshDir.mkdirs() )
-    {
-            System.out.println( "InteractiveBeanShell script directory failed");
-        }
-        if( !memoryDir.mkdirs() )
-    {
-            System.out.println( "MemoryUsage script directory failed");
-        }
-        else
-    {
-            System.out.println( "Scripts/java directory created");
-        }
-
-//Robert Kinsella test 1 end
-
-
-
 //--------------------------------
     // Adding Scripting Framework and tools
         if (!zd.extractEntry("sframework/ooscriptframe.zip",progpath, statusLabel))
@@ -208,75 +175,55 @@ public class XmlUpdater extends Thread {
 //--------------------------------
 // Robert Kinsella test 2
 
-    // adding (JAVA) script examples
-    File highlightScript = new File( scriptsPath+File.separator+"Highlight"+File.separator+"HighlightUtil.java" );
-    if( !highlightScript.exists() ) {
-        if (!zd.extractEntry("examples/Highlight/HighlightUtil.java",scriptsPath+File.separator+"Highlight"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/Highlight/HighlightText.java",scriptsPath+File.separator+"Highlight"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/Highlight/Highlight.jar",scriptsPath+File.separator+"Highlight"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/Highlight/parcel-descriptor.xml",scriptsPath+File.separator+"Highlight"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-    }
-    else {
-        System.out.println( "Highlight script already deployed" );
-    }
-    File memoryScript = new File( scriptsPath+File.separator+"MemoryUsage"+File.separator+"MemoryUsage.java" );
-    if( !memoryScript.exists() ) {
-        if (!zd.extractEntry("examples/MemoryUsage/MemoryUsage.java",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/MemoryUsage/MemoryUsage.class",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/MemoryUsage/parcel-descriptor.xml",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/MemoryUsage/ExampleSpreadSheet.sxc",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-    }
-    else {
-        System.out.println( "MemoryUsage script already deployed" );
+        String path = installPath + File.separator +
+            "user" + File.separator + "Scripts" + File.separator;
+
+        String[] dirs = {
+        "java" + File.separator + "Highlight",
+        "java" + File.separator + "MemoryUsage",
+            "beanshell" + File.separator + "InteractiveBeanShell",
+            "beanshell" + File.separator + "Highlight",
+            "beanshell" + File.separator + "MemoryUsage"
+        };
+
+        String[] names = {
+            "java/Highlight/HighlightUtil.java",
+            "java/Highlight/HighlightText.java",
+            "java/Highlight/Highlight.jar",
+            "java/Highlight/parcel-descriptor.xml",
+            "java/MemoryUsage/MemoryUsage.java",
+            "java/MemoryUsage/MemoryUsage.class",
+            "java/MemoryUsage/parcel-descriptor.xml",
+            "java/MemoryUsage/ExampleSpreadSheet.sxc",
+            "beanshell/InteractiveBeanShell/parcel-descriptor.xml",
+            "beanshell/InteractiveBeanShell/interactive.bsh",
+            "beanshell/Highlight/parcel-descriptor.xml",
+            "beanshell/Highlight/highlighter.bsh",
+            "beanshell/MemoryUsage/parcel-descriptor.xml",
+            "beanshell/MemoryUsage/memusage.bsh"
+        };
+
+        for (int i = 0; i < dirs.length; i++) {
+            File dir = new File(path + dirs[i]);
+
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) {
+                    System.err.println("Error making dir: " +
+                        dir.getAbsolutePath());
+                    onInstallComplete();
+                    return;
+                }
+            }
         }
 
-    File script = new File( bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator+"interactive.bsh" );
-    if( !script.exists() ) {
-        if (!zd.extractEntry("examples/InteractiveBeanShell/interactive.bsh",bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-        if (!zd.extractEntry("examples/InteractiveBeanShell/parcel-descriptor.xml",bshScriptsPath+File.separator+"InteractiveBeanShell"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-    }
-    else {
-        System.out.println( "InteractiveBeanShell script already deployed" );
+        for (int i = 0; i < names.length; i++) {
+            String source = "/examples/" + names[i];
+            String dest = path + names[i].replace('/', File.separatorChar);
+
+            if (!zd.extractEntry(source, dest, statusLabel)) {
+                onInstallComplete();
+                return;
+            }
         }
 
 // Robert Kinsella test 2 end
