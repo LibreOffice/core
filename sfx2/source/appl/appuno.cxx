@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-16 12:39:56 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #include <svtools/intitem.hxx>
 #include <svtools/eitem.hxx>
 
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -266,6 +269,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sURL            = String::CreateFromAscii( "URL"            );
             static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
             static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
+            static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
+
+            if ( aName == sStatusInd )
+                rSet.Put( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, rProp.Value ) );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -279,7 +286,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             // OpenNewView-Parameter ?
             else if ( aName == sOpenNewView && rProp.Value.getValueType() == ::getBooleanCppuType() )
-
                 rSet.Put( SfxBoolItem( SID_OPEN_NEW_VIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
 
             // ViewId-Parameter ?
@@ -362,6 +368,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
 
     if ( nSlotId == SID_OPENDOC )
     {
+        if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
+            nItems++;
         if ( rSet.GetItemState( SID_OPENURL ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
@@ -439,8 +447,14 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sURL            = String::CreateFromAscii( "URL"            );
         static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
         static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
+        static const String sStatusInd      = String::CreateFromAscii( "StatusIndicator" );
 
         const SfxPoolItem *pItem=0;
+        if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sStatusInd;
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+        }
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sInputStream;
