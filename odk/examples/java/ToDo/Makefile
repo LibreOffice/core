@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.16 $
+#  $Revision: 1.17 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:42:39 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:32:49 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,18 +48,18 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-COMPONENT1_NAME=ToDo
-OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT1_NAME)
-OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT1_NAME)
-COMPONENT1_RDB_NAME=$(COMPONENT1_NAME).uno.rdb
-COMPONENT1_RDB=$(OUT_COMP_GEN)/$(COMPONENT1_RDB_NAME)
-COMPONENT1_PACKAGE=$(OUT_BIN)/$(COMPONENT1_NAME).uno.zip
-COMPONENT1_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).uno.zip")
-COMPONENT1_JAR_NAME=$(COMPONENT1_NAME).uno.jar
-COMPONENT1_JAR=$(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
-COMPONENT1_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
+COMPONENT_NAME=ToDo
+OUT_COMP_CLASS=$(OUT_CLASS)/$(COMPONENT_NAME)
+OUT_COMP_GEN=$(OUT_MISC)/$(COMPONENT_NAME)
+COMPONENT_RDB_NAME=$(COMPONENT_NAME).uno.rdb
+COMPONENT_RDB=$(OUT_COMP_GEN)/$(COMPONENT_RDB_NAME)
+COMPONENT_PACKAGE=$(OUT_BIN)/$(COMPONENT_NAME).uno.zip
+COMPONENT_PACKAGE_URL=$(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_JAR_NAME=$(COMPONENT_NAME).uno.jar
+COMPONENT_JAR=$(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE=$(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
 
-REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT1_NAME)_register_component.flag
+REGISTERFLAG=$(OUT_MISC)$(PS)java_$(COMPONENT_NAME)_register_component.flag
 
 IDLFILES = XToDo.idl
 
@@ -75,10 +75,10 @@ GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 CLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
 
-$(COMPONENT1_NAME)_CLASSFILES = $(COMPONENT1_NAME).class \
-		$(COMPONENT1_NAME)$(QUOTE)$$$(COMPONENT1_NAME)Implementation.class
+$(COMPONENT_NAME)_CLASSFILES = $(COMPONENT_NAME).class \
+		$(COMPONENT_NAME)$(QUOTE)$$$(COMPONENT_NAME)Implementation.class
 
-$(COMPONENT1_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
+$(COMPONENT_NAME)_CLASSFILES += $(subst $(OUT_COMP_GEN)/,,$(GENJAVAFILES:.java=.class))
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
@@ -100,36 +100,36 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	idlc -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
+	$(IDLC) -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
 $(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ /UCR $(GENURDFILES)
 
-$(OUT_COMP_GEN)/%.java : $(COMPONENT1_RDB)
+$(OUT_COMP_GEN)/%.java : $(COMPONENT_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javamaker -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT1_RDB) $(DKREGISTRYNAME)
+	$(JAVAMAKER) -BUCR -nD -T$(subst /,.,$(patsubst $(OUT_COMP_GEN)/%.java,%,$@)) -O$(OUT_COMP_GEN) $(COMPONENT_RDB) $(DKREGISTRYNAME)
 
 $(CLASSFILES) : $(JAVAFILES) $(GENJAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(GENJAVAFILES) $(JAVAFILES) 
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && jar cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
 
-$(OUT_BIN)/%.zip : $(OUT_COMP_GEN)/%.rdb $(OUT_CLASS)/%.jar
+$(COMPONENT_PACKAGE) : $(COMPONENT_RDB) $(COMPONENT_JAR)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_CLASS))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && jar cvfM ../bin/$(@F) $(^F)
+	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
 	$(DEL) $(subst /,$(PS),$(OUT_CLASS)/$(<F))
 
-$(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -150,6 +150,6 @@ JavaToDoExample : $(REGISTERFLAG)
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_JAR))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
