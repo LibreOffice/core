@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:29:31 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,6 @@ class SwDrawVirtObj : public SdrVirtObj
         // OD 2004-03-25 #i26791# - anchored drawing object instance for the
         // 'virtual' drawing object
         SwAnchoredDrawObject maAnchoredDrawObj;
-        SwPageFrm* mpPageFrm;
 
         // writer-drawing contact object the 'virtual' drawing object is controlled by.
         // This object is also the <UserCall> of the drawing object, if it's
@@ -343,6 +342,8 @@ class SwDrawVirtObj : public SdrVirtObj
         // is 'virtual' drawing object connected to writer layout and
         // to drawing layer.
         bool IsConnected() const;
+
+        virtual void NbcSetAnchorPos(const Point& rPnt);
 
         // #108784#
         // All overloaded methods which need to use the offset
@@ -403,8 +404,6 @@ class SwDrawContact : public SwContact
         // object has been cleared.
         bool mbMasterObjCleared;
 
-        SwPageFrm* mpPageFrm;
-
         // OD 10.10.2003 #112299# - internal flag to indicate that disconnect
         // from layout is in progress
         bool mbDisconnectInProgress;
@@ -447,7 +446,7 @@ class SwDrawContact : public SwContact
         void RemoveAllVirtObjs();
 
         // OD 2004-03-31 #i26791#
-        void _InvalidateObjs();
+        void _InvalidateObjs( const bool _bUpdateSortedObjsList = false );
 
     public:
         TYPEINFO();
@@ -472,9 +471,20 @@ class SwDrawContact : public SwContact
             maAnchoredDrawObj.ChgAnchorFrm( _pNewAnchorFrm);
         }
 
-        const SwPageFrm* GetPageFrm() const { return mpPageFrm; }
-        SwPageFrm* GetPageFrm() { return mpPageFrm; }
-        void ChgPage( SwPageFrm* _pNewPageFrm ) { mpPageFrm = _pNewPageFrm; }
+        // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
+        inline const SwPageFrm* GetPageFrm() const
+        {
+            return maAnchoredDrawObj.GetPageFrm();
+        }
+        inline SwPageFrm* GetPageFrm()
+        {
+            return maAnchoredDrawObj.GetPageFrm();
+        }
+        void SetPageFrm( SwPageFrm* _pNewPageFrm )
+        {
+            return maAnchoredDrawObj.SetPageFrm( _pNewPageFrm );
+        }
+        // <--
         void ChkPage();
         SwPageFrm* FindPage( const SwRect &rRect );
 
