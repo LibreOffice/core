@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:11:33 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:05:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
 #include <toolkit/awt/vclxwindow.hxx>
+#endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
 #endif
 
 // .........................................................................
@@ -234,11 +237,13 @@ void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< 
             aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
             aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(_pParent)), PropertyState_DIRECT_VALUE);
 
-
+            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
             Reference< XExecutableDialog > xErrorDialog(
-                _xFactory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog"), aArgs), UNO_QUERY);
+                _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
             if (xErrorDialog.is())
                 xErrorDialog->execute();
+            else
+                ShowServiceNotAvailableError(_pParent, s_sDialogServiceName, sal_True);
         }
         catch(Exception&)
         {
