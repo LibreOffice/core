@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Math.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:35:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1757,31 +1757,31 @@
 						<desc xml:lang="th">Ignores spacing symbols at the end of a line.</desc>
 						<desc xml:lang="hi-IN">Ignores spacing symbols at the end of a line.</desc>
 						<desc xml:lang="x-comment">Ignores spacing symbols at the end of a line.</desc>
-					<label xml:lang="en-US">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="el">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="nl">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="fr">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="fi">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="cs">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="da">Ignore ~ and &amp;apos; at the end of the line</label>
+					<label xml:lang="en-US">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="el">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="nl">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="fr">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="fi">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="cs">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="da">Ignore ~ and &apos; at the end of the line</label>
 					<label xml:lang="zh-CN">忽略行末的符号 ~ 和 `</label>
-					<label xml:lang="zh-TW">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="ar">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="he">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="ca">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="pt">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="ru">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="es">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="it">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="sv">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="pl">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="pt-BR">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="ja">行末の「~」と &amp;apos; を無視します。</label>
-					<label xml:lang="ko">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="tr">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="th">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="hi-IN">Ignore ~ and &amp;apos; at the end of the line</label>
-					<label xml:lang="x-comment">Ignore ~ and &amp;apos; at the end of the line</label>
+					<label xml:lang="zh-TW">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="ar">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="he">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="ca">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="pt">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="ru">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="es">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="it">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="sv">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="pl">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="pt-BR">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="ja">行末の「~」と &apos; を無視します。</label>
+					<label xml:lang="ko">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="tr">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="th">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="hi-IN">Ignore ~ and &apos; at the end of the line</label>
+					<label xml:lang="x-comment">Ignore ~ and &apos; at the end of the line</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4431,31 +4431,31 @@
 					<!-- UIHints: Format - Spacing - Category - Operators - Spacing -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="el">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="nl">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="fr">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="fi">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="cs">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="da">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
+						<desc xml:lang="en-US">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="el">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="nl">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="fr">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="fi">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="cs">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="da">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
 							<desc xml:lang="zh-CN">指定大运算符与其变量之间的间隔。[UNIT=%]</desc>
-							<desc xml:lang="zh-TW">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ar">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="he">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ca">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="ru">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="es">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="it">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="sv">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pl">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="pt-BR">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="zh-TW">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="ar">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="he">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="ca">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="pt">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="ru">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="es">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="it">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="sv">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="pl">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="pt-BR">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
 							<desc xml:lang="ja">大きい演算子とその引数までの距離を指定します。[UNIT = %]</desc>
-							<desc xml:lang="ko">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="tr">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="th">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="hi-IN">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
-							<desc xml:lang="x-comment">Specifies the distance between the large operator and it&amp;apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="ko">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="tr">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="th">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="hi-IN">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
+							<desc xml:lang="x-comment">Specifies the distance between the large operator and it&apos;s argument.  [UNIT=%]</desc>
 						<label xml:lang="en-US">Distance to large operator</label>
 						<label xml:lang="el">Distance to large operator</label>
 						<label xml:lang="nl">Distance to large operator</label>
