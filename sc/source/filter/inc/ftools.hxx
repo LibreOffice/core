@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:18:28 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,15 @@
 #endif
 
 #include <vector>
+#include <list>
 #include <stack>
 #include <algorithm>
 #include <memory>
+#include <limits>
+#include <boost/shared_ptr.hpp>
 
 
-// Common Macros ==============================================================
+// Common macros ==============================================================
 
 /** Expands to the size of a STATIC data array. */
 #define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
@@ -94,6 +97,7 @@
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 /** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
 #define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
+
 
 // items and item sets --------------------------------------------------------
 
@@ -107,6 +111,19 @@
 
 
 // Global static helpers ======================================================
+
+// Value range limit helpers --------------------------------------------------
+
+/** Returns the value, if it is not greater than nMax, otherwise nMax. */
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit( Type nValue, ReturnType nMax )
+{ return static_cast< ReturnType >( ::std::min< Type >( nValue, nMax ) ); }
+
+/** Returns the value, if it fits into ReturnType, otherwise the maximum value of ReturnType. */
+template< typename ReturnType, typename Type >
+inline ReturnType ulimit( Type nValue )
+{ return ::ulimit( nValue, ::std::numeric_limits< ReturnType >::max() ); }
+
 
 // Read from bitfields --------------------------------------------------------
 
@@ -212,6 +229,7 @@ class ScfNoInstance : private ScfNoCopy {};
 
 // ============================================================================
 
+class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
@@ -263,6 +281,25 @@ public:
         @param bDeep  true = Searches in parent item sets too. */
     static bool                 CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep );
 
+    /** Puts the item into the passed item set.
+        @descr  The item will be put into the item set, if bSkipPoolDef is false,
+        or if the item differs from the default pool item.
+        @param rItemSet  The destination item set.
+        @param rItem  The item to put into the item set.
+        @param nWhichId  The Which-ID to set with the item.
+        @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
+    static void                 PutItem(
+                                    SfxItemSet& rItemSet, const SfxPoolItem& rItem,
+                                    sal_uInt16 nWhichId, bool bSkipPoolDef );
+
+    /** Puts the item into the passed item set.
+        @descr  The item will be put into the item set, if bSkipPoolDef is false,
+        or if the item differs from the default pool item.
+        @param rItemSet  The destination item set.
+        @param rItem  The item to put into the item set.
+        @param bSkipPoolDef  true = Do not put item if it is equal to pool default; false = Always put the item. */
+    static void                 PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSkipPoolDef );
+
 // *** style sheet handling ***
 
     /** Creates and returns a cell style sheet and inserts it into the pool.
@@ -270,6 +307,13 @@ public:
         @param bForceName  Controls behaviour, if the style already exists:
         true = Old existing style will be renamed; false = New style gets another name. */
     static ScStyleSheet&        MakeCellStyleSheet(
+                                    ScStyleSheetPool& rPool,
+                                    const String& rStyleName, bool bForceName );
+    /** Creates and returns a page style sheet and inserts it into the pool.
+        @descr  If the style sheet is already in the pool, another unused style name is used.
+        @param bForceName  Controls behaviour, if the style already exists:
+        true = Old existing style will be renamed; false = New style gets another name. */
+    static ScStyleSheet&        MakePageStyleSheet(
                                     ScStyleSheetPool& rPool,
                                     const String& rStyleName, bool bForceName );
 
