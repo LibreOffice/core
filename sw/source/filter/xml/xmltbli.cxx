@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:30:58 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1311,7 +1311,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     nWidth( 0UL ),
     bFirstSection( sal_True ),
     bRelWidth( sal_True ),
-    bHasHeading( sal_False ),
+    nHeaderRows( 0 ),
     pDDESource(NULL),
     pSharedBoxFormats(NULL)
 {
@@ -1451,7 +1451,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     nWidth( 0UL ),
     bFirstSection( sal_False ),
     bRelWidth( sal_True ),
-    bHasHeading( sal_False ),
+    nHeaderRows( 0 ),
     pDDESource(NULL),
     pSharedBoxFormats(NULL)
 {
@@ -1722,8 +1722,8 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     while( nCurCol<GetColumnCount() && GetCell(nCurRow,nCurCol)->IsUsed() )
         nCurCol++;
 
-    if( 0UL == nCurRow )
-        bHasHeading = bInHead;
+    if( bInHead  &&  nHeaderRows == nCurRow )
+        nHeaderRows++;
 }
 
 void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
@@ -2618,7 +2618,7 @@ void SwXMLTableContext::MakeTable()
     sal_Bool bCalcWidth = sal_False;
     sal_Bool bSetWidth = sal_False;
 
-    pTableNode->GetTable().SetHeadlineRepeat( bHasHeading );
+    pTableNode->GetTable().SetRowsToRepeat( nHeaderRows );
 
     const SfxItemSet *pAutoItemSet = 0;
     if( aStyleName.getLength() &&
