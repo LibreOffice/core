@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcfunc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-15 09:21:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:55:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ namespace ftp {
     {
     public:
 
-        virtual write(void *buffer,size_t size,size_t nmemb) = 0;
+        virtual size_t write(void *buffer,size_t size,size_t nmemb) = 0;
     };
 
 }
