@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2003-04-02 16:42:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "ui_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -1516,8 +1513,7 @@ Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const ::rtl::O
 
     // look up the group in the cache
     UnoAutoTextGroups::iterator aSearch = aGlossaryGroups.begin();
-    UnoAutoTextGroups::iterator aSearchEnd = aGlossaryGroups.end();
-    for ( ; aSearch != aSearchEnd; )
+    for ( ; aSearch != aGlossaryGroups.end(); )
     {
         Reference< lang::XUnoTunnel > xGroupTunnel( aSearch->get(), UNO_QUERY );
 
@@ -1586,8 +1582,7 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry( const String& 
     String sEntryName( _rEntryName );
 
     UnoAutoTextEntries::iterator aSearch( aGlossaryEntries.begin() );
-    UnoAutoTextEntries::iterator aSearchEnd( aGlossaryEntries.end() );
-    for ( ; aSearch != aSearchEnd; )
+    for ( ; aSearch != aGlossaryEntries.end(); )
     {
         Reference< lang::XUnoTunnel > xEntryTunnel( aSearch->get(), UNO_QUERY );
 
