@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
+ *  last change: $Author: cl $ $Date: 2003-01-13 11:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,16 +733,24 @@ long SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
     {
         if( KEY_ESCAPE == pKEvt->GetKeyCode().GetCode() )
         {
-            SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
-
-            if( pViewShell )
+            if( SdPageObjsTLB::IsInDrag() )
             {
-                FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+                // during drag'n'drop we just stop the drag but do not close the navigator
+                nOK = TRUE;
+            }
+            else
+            {
+                SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
 
-                if( pFuSlideShow )
+                if( pViewShell )
                 {
-                    nOK = TRUE;
-                    pFuSlideShow->Terminate();
+                    FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+
+                    if( pFuSlideShow )
+                    {
+                        nOK = TRUE;
+                        pFuSlideShow->Terminate();
+                    }
                 }
             }
         }
@@ -767,17 +775,25 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
-        SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
-
-        if (pViewShell)
+        if( SdPageObjsTLB::IsInDrag() )
         {
-            FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+            // during drag'n'drop we just stop the drag but do not close the navigator
+            nOK = TRUE;
+        }
+        else
+        {
+            SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
 
-            if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
+            if (pViewShell)
             {
-                // Im Native-Mode soll ESC die Pr„sentation beenden
-                nOK = TRUE;
-                pFuSlideShow->Terminate();
+                FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
+
+                if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
+                {
+                    // Im Native-Mode soll ESC die Pr„sentation beenden
+                    nOK = TRUE;
+                    pFuSlideShow->Terminate();
+                }
             }
         }
     }
