@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-01 19:30:12 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1264,7 +1264,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text = "Tabellen hinzufügen..." ;
             Text [ ENGLISH ] = "Add tables..." ;
             Text[ english_us ] = "Add Tables...";
-            Text[ portuguese ] = "Adicionar tabelas";
+            Text[ portuguese ] = "Adicionar tabelas...";
             Text[ russian ] = "Äîáàâèòü òàáëèöû...";
             Text[ greek ] = "ĞñïóèŞêç ğßíáêá";
             Text[ dutch ] = "Tabellen toevoegen";
@@ -1274,12 +1274,12 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ italian ] = "Aggiungi tabelle...";
             Text[ danish ] = "Add tables";
             Text[ swedish ] = "Lägg till tabeller...";
-            Text[ polish ] = "Dodaj tabelê";
+            Text[ polish ] = "Dodaj tabelê...";
             Text[ portuguese_brazilian ] = "Add tables";
             Text[ japanese ] = "Ã°ÌŞÙ‚Ì’Ç‰Á...";
             Text[ korean ] = "Å×ÀÌºí Ãß°¡";
             Text[ chinese_simplified ] = "ĞÂÔö±í¸ñ...";
-            Text[ chinese_traditional ] = "¼W¥[ªí®æ";
+            Text[ chinese_traditional ] = "·s¼Wªí®æ...";
             Text[ turkish ] = "Add tables";
             Text[ arabic ] = "ÅÖÇİÉ ÌÏÇæá";
             Text[ catalan ] = "Añadir tablas";
@@ -1536,7 +1536,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ russian ] = "Ñîõğàíèòü êàê";
             Text[ greek ] = "ÁğïèŞêåõóç ùò";
             Text[ dutch ] = "Opslaan als";
-            Text[ french ] = "Enregistrer sous";
+            Text[ french ] = "Enregistrer comme";
             Text[ spanish ] = "Guardar como";
             Text[ italian ] = "Salva con nome";
             Text[ danish ] = "Save as";
@@ -1720,7 +1720,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message = "Die Tabellensicht wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ English ] = "The view has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The table view has been changed.\nDo you want to save the changes?" ;
-    Message[ portuguese ] = "The view has been changed.\nDo you want to save the changes?";
+    Message[ portuguese ] = "A vista da tabela foi modificada.\nGuardar as modificações?";
     Message[ russian ] = "Âèä òàáëèöû áûë èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Message[ greek ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ dutch ] = "The view has been changed.\nDo you want to save the changes?";
@@ -2400,4 +2400,5 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
