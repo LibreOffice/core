@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Date: 2003-09-08 13:00:49 $
+ *  last change: $Date: 2004-01-05 20:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
-
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
@@ -81,6 +71,17 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
 
 
 /**
@@ -218,7 +219,8 @@ public class AccessibleMenuItem extends TestCase {
      * Disposes document.
      */
     protected void cleanup(TestParameters Param, PrintWriter log) {
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
