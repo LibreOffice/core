@@ -69,21 +69,25 @@ import drafts.com.sun.star.rendering.*;
 import drafts.com.sun.star.geometry.*;
 
 public class CanvasBitmap
-    extends com.sun.star.lib.uno.helper.ComponentBase
+    extends CanvasBase
     implements com.sun.star.lang.XServiceInfo,
+               drafts.com.sun.star.rendering.XBitmapCanvas,
                drafts.com.sun.star.rendering.XIntegerBitmap
 {
     private java.awt.image.BufferedImage    bitmap;
+    private java.awt.Graphics2D             graphics;
 
     public CanvasBitmap( java.awt.image.BufferedImage _bitmap )
     {
         bitmap = _bitmap;
+        graphics = bitmap.createGraphics();
     }
 
     public CanvasBitmap( IntegerSize2D mySize )
     {
         bitmap = new java.awt.image.BufferedImage(mySize.Width, mySize.Height,
                                                   java.awt.image.BufferedImage.TYPE_4BYTE_ABGR);
+        graphics = bitmap.createGraphics();
     }
 
     public CanvasBitmap( RealSize2D newSize, boolean beFast, CanvasBitmap source )
@@ -109,6 +113,11 @@ public class CanvasBitmap
         return bitmap;
     }
 
+    public java.awt.Graphics2D getGraphics()
+    {
+        return graphics;
+    }
+
     //
     // XBitmap implementation
     // ======================
@@ -124,10 +133,7 @@ public class CanvasBitmap
 
     public synchronized XBitmapCanvas queryBitmapCanvas()
     {
-        java.awt.Graphics2D bitmapGraphics = bitmap.createGraphics();
-        CanvasUtils.initGraphics( bitmapGraphics );
-
-        return new BitmapCanvas( bitmapGraphics );
+        return this;
     }
 
     //----------------------------------------------------------------------------------
@@ -135,6 +141,52 @@ public class CanvasBitmap
     public synchronized drafts.com.sun.star.rendering.XBitmap getScaledBitmap( RealSize2D newSize, boolean beFast ) throws com.sun.star.lang.IllegalArgumentException, VolatileContentDestroyedException
     {
         return new CanvasBitmap( newSize, beFast, this );
+    }
+
+    //----------------------------------------------------------------------------------
+
+    //
+    // XBitmapCanvas impl
+    // ==================
+    //
+
+    public synchronized void copyRect( drafts.com.sun.star.rendering.XBitmapCanvas  sourceCanvas,
+                                       drafts.com.sun.star.geometry.RealRectangle2D sourceRect,
+                                       drafts.com.sun.star.rendering.ViewState      sourceViewState,
+                                       drafts.com.sun.star.rendering.RenderState    sourceRenderState,
+                                       drafts.com.sun.star.geometry.RealRectangle2D destRect,
+                                       drafts.com.sun.star.rendering.ViewState      destViewState,
+                                       drafts.com.sun.star.rendering.RenderState    destRenderState )
+    {
+        CanvasUtils.printLog( "JavaCanvas.copyRect() called" );
+
+        // TODO: create temp image when transform is non-trivial
+
+        if( sourceCanvas == this )
+        {
+            // copy rectangle within the canvas
+            getGraphics().copyArea((int)sourceRect.X1,
+                                   (int)sourceRect.Y1,
+                                   (int)(sourceRect.X2 - sourceRect.X1),
+                                   (int)(sourceRect.Y2 - sourceRect.Y1),
+                                   (int)(destRect.X1 - sourceRect.X1),
+                                   (int)(destRect.Y1 - sourceRect.Y1) );
+        }
+        else
+        {
+            if( sourceCanvas instanceof JavaCanvas )
+            {
+                // cache
+                CanvasUtils.setupGraphicsState( getGraphics(), destViewState, destRenderState, CanvasUtils.alsoSetupPaint );
+
+                java.awt.Image backBuffer = ((JavaCanvas)sourceCanvas).backBuffer.getBackBuffer();
+
+                // TODO: really extract correct source rect here
+                getGraphics().drawImage( backBuffer, 0, 0, null);
+                CanvasUtils.postRenderImageTreatment( backBuffer );
+            }
+            // TODO: foreign canvas
+        }
     }
 
     //----------------------------------------------------------------------------------
@@ -153,7 +205,7 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized void setData( byte[] data, IntegerRectangle2D rect )
+    public synchronized void setData( byte[] data, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerRectangle2D rect )
     {
         int [] pixelData = CanvasUtils.byte2int( data );
         bitmap.setRGB( rect.X1, rect.Y1, rect.X2 - rect.X1, rect.Y2 - rect.Y1, pixelData, 0, bitmap.getWidth() );
@@ -161,7 +213,7 @@ public class CanvasBitmap
 
     //----------------------------------------------------------------------------------
 
-    public synchronized void setPixel( byte[] color, IntegerPoint2D pos )
+    public synchronized void setPixel( byte[] color, IntegerBitmapLayout bitmapLayout, drafts.com.sun.star.geometry.IntegerPoint2D pos )
     {
         if( color.length != 4 )
             CanvasUtils.printLog( "CanvasBitmap.setPixel: Wrong color format" );
