@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:57:34 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1275,6 +1275,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ENDNOTE_NUMBERING_SUFFIX)      ,RES_END_AT_TXTEND,     &::getCppuType((const OUString*)0)  ,        PROPERTY_NONE,   MID_SUFFIX       },
                     { SW_PROP_NAME(UNO_NAME_DOCUMENT_INDEX), WID_SECT_DOCUMENT_INDEX, &::getCppuType((uno::Reference<text::XDocumentIndex>*)0), PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_GLOBAL_DOCUMENT_SECTION), WID_SECT_IS_GLOBAL_DOC_SECTION, &::getBooleanCppuType(), PropertyAttribute::READONLY, 0 },
+                    { SW_PROP_NAME(UNO_NAME_PASSWORD),                  WID_SECT_PASSWORD,      &::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8>*)0), PROPERTY_NONE, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0}

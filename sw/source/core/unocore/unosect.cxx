@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-02-27 09:25:29 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:51:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ struct SwTextSectionProperties_Impl
     String  sLinkFileName;
     String  sSectionFilter;
     String  sSectionRegion;
+    uno::Sequence<sal_Int8> aPassword;
 
     SwFmtCol*   pColItem;
     SvxBrushItem* pBrushItem;
@@ -386,17 +387,21 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
             if(pProps->pEndItem)
                 aSet.Put(*pProps->pEndItem);
 
+        // section password
+        if (pProps->aPassword.getLength() > 0)
+            aSect.SetPasswd(pProps->aPassword);
+
         pRet = pDoc->Insert( aPam, aSect, aSet.Count() ? &aSet : 0 );
         pRet->GetFmt()->Add(this);
 
         // set update type if DDE link (and connect, if necessary)
         if (pProps->bDDE)
         {
-            if (! aSect.IsConnected())
+            if (! pRet->IsConnected())
             {
-                aSect.CreateLink(CREATE_CONNECT);
+                pRet->CreateLink(CREATE_CONNECT);
             }
-            aSect.SetUpdateType(pProps->bUpdateType ? LINKUPDATE_ALWAYS :
+            pRet->SetUpdateType(pProps->bUpdateType ? LINKUPDATE_ALWAYS :
                                 LINKUPDATE_ONCALL);
         }
 
@@ -653,6 +658,16 @@ void SwXTextSection::setPropertyValues(
                             aSection.SetProtect(bVal);
                     }
                     break;
+                    case WID_SECT_PASSWORD:
+                    {
+                        uno::Sequence<sal_Int8> aSeq;
+                        pValues[nProperty] >>= aSeq;
+                        if (m_bIsDescriptor)
+                            pProps->aPassword = aSeq;
+                        else
+                            aSection.SetPasswd(aSeq);
+                    }
+                    break;
                     default:
                         if(pFmt)
                         {
@@ -903,6 +918,11 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                                 break;
                             }
                         }
+                    }
+                    break;
+                    case WID_SECT_PASSWORD:
+                    {
+                        pRet[nProperty] <<= m_bIsDescriptor ? pProps->aPassword : pSect->GetPasswd();
                     }
                     break;
                     default:
