@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:50:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,8 @@
 #endif
 
 #pragma hdrstop
-
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 //------------------------------------------------------------------
 
 // TOOLS
@@ -311,12 +312,11 @@
 
 #include <svx/eeitem.hxx>
 #include <svx/fontwork.hxx>
-#include <svx/labdlg.hxx>
+//#include <svx/labdlg.hxx> CHINA001
 #include <svx/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
-#include <svx/textanim.hxx>
-#include <svx/transfrm.hxx>
+//CHINA001 #include <svx/transfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
@@ -335,6 +335,9 @@
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
+//add header of cui CHINA001
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #define ScDrawShell
 #include "scslots.hxx"
@@ -466,34 +469,45 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 // --------- Itemset fuer Groesse und Position --------
                                 SfxItemSet aNewGeoAttr(pView->GetGeoAttrFromMarked());
 
-                                SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
-
-                                const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
-                                SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
-                                aCombSet.Put( aNewAttr );
-                                aCombSet.Put( aNewGeoAttr );
-                                pDlg->SetInputSet( &aCombSet );
-
-                                if (pDlg->Execute() == RET_OK)
+                                //SvxCaptionTabDialog* pDlg = new SvxCaptionTabDialog(pWin, pView);
+                                //change for cui CHINA001
+                                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                                if ( pFact )
                                 {
-                                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                                    pView->SetAttributes(*pDlg->GetOutputItemSet());
-                                    pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
-                                }
+                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView, ResId( RID_SVXDLG_CAPTION ) );
 
-                                delete pDlg;
+                                    const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
+                                    SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
+                                    aCombSet.Put( aNewAttr );
+                                    aCombSet.Put( aNewGeoAttr );
+                                    pDlg->SetInputSet( &aCombSet );
+
+                                    if (pDlg->Execute() == RET_OK)
+                                    {
+                                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                                        pView->SetAttributes(*pDlg->GetOutputItemSet());
+                                        pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
+                                    }
+
+                                    delete pDlg;
+                                }// change for cui
                             }
                             else
                             {
                                 SfxItemSet aNewAttr(pView->GetGeoAttrFromMarked());
-                                SvxTransformTabDialog* pDlg = new SvxTransformTabDialog(pWin, &aNewAttr, pView);
-
-                                if (pDlg->Execute() == RET_OK)
+                                //CHINA001 SvxTransformTabDialog* pDlg = new SvxTransformTabDialog(pWin, &aNewAttr, pView);
+                                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                                if(pFact)
                                 {
-                                    rReq.Done(*(pDlg->GetOutputItemSet()));
-                                    pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
+                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView, ResId(RID_SVXDLG_TRANSFORM) );
+                                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                                    if (pDlg->Execute() == RET_OK)
+                                    {
+                                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                                        pView->SetGeoAttrToMarked(*pDlg->GetOutputItemSet());
+                                    }
+                                    delete pDlg;
                                 }
-                                delete pDlg;
                             }
                         }
 
@@ -524,13 +538,21 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-    SvxLineTabDialog* pDlg
-        = new SvxLineTabDialog( pViewData->GetDialogParent(),
-                                &aNewAttr,
-                                pViewData->GetDocument()->GetDrawLayer(),
-                                pObj,
-                                bHasMarked );
-
+//CHINA001  SvxLineTabDialog* pDlg
+//CHINA001  = new SvxLineTabDialog( pViewData->GetDialogParent(),
+//CHINA001  &aNewAttr,
+//CHINA001  pViewData->GetDocument()->GetDrawLayer(),
+//CHINA001  pObj,
+//CHINA001  bHasMarked );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+        SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
+                    &aNewAttr,
+                pViewData->GetDocument()->GetDrawLayer(),
+                ResId(RID_SVXDLG_LINE),
+                pObj,
+                bHasMarked);
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
 
@@ -557,11 +579,21 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-    SvxAreaTabDialog* pDlg
-        = new SvxAreaTabDialog( pViewData->GetDialogParent(),
-                                &aNewAttr,
-                                pViewData->GetDocument()->GetDrawLayer(),
-                                pView );
+    //CHINA001 SvxAreaTabDialog* pDlg
+    //CHINA001  = new SvxAreaTabDialog( pViewData->GetDialogParent(),
+//CHINA001                              &aNewAttr,
+//CHINA001                              pViewData->GetDocument()->GetDrawLayer(),
+//CHINA001                              pView );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet Factory fail!");//CHINA001
+    AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
+                                                                    &aNewAttr,
+                                                            pViewData->GetDocument()->GetDrawLayer(),
+                                                            ResId(RID_SVXDLG_AREA),
+                                                            pView);
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+
 
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
@@ -589,8 +621,8 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
     if( bHasMarked )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
-    SvxTextTabDialog* pDlg =
-        new SvxTextTabDialog( pViewData->GetDialogParent(), &aNewAttr , pView);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
 
     USHORT nResult = pDlg->Execute();
 
