@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConvWatchCancelException.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:08:19 $
+ *  last change: $Date: 2005-02-24 17:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@ package convwatch;
 
 import convwatch.ConvWatchException;
 
-class ConvWatchCancelException extends ConvWatchException
+public class ConvWatchCancelException extends ConvWatchException
 {
     public ConvWatchCancelException(String _aMessage)
         {
