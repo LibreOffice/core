@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:06:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
+
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
@@ -98,6 +102,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
 
 
@@ -166,6 +173,8 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::beans;
 using namespace ::xmloff::token;
+using ::com::sun::star::container::XEnumerationAccess;
+using ::com::sun::star::container::XEnumeration;
 
 class XMLImpCharContext_Impl : public SvXMLImportContext
 {
@@ -1688,7 +1697,9 @@ XMLParaContext::XMLParaContext(
                     nOutlineLevel = (sal_Int8)nTmp;
                 }
             }
-
+        case XML_TOK_TEXT_P_ID:
+            sId = rValue;
+            break;
         }
     }
 
@@ -1887,6 +1898,27 @@ XMLParaContext::~XMLParaContext()
         }
     }
     delete pHints;
+
+    // if we have an id set for this paragraph, get the latest added
+    // paragraph and register it with this identifier
+    if( sId.getLength() )
+    {
+        Reference< XEnumerationAccess > xParaEnumAccess( xTxtImport->GetText(), UNO_QUERY );
+        if( xParaEnumAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                Reference< XInterface > xRef;
+
+                while( xEnumeration->hasMoreElements() )
+                    xEnumeration->nextElement() >>= xRef;
+
+                if( xRef.is() )
+                    GetImport().getInterfaceToIdentifierMapper().registerReference( sId, xRef );
+            }
+        }
+    }
 }
 
 SvXMLImportContext *XMLParaContext::CreateChildContext(
