@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:07:09 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ class ScQueryValueIterator            // alle Zahlenwerte in einem Bereich durch
 private:
     ScQueryParam    aParam;
     ScDocument*     pDoc;
-    ScAttrArray*    pAttrArray;
+    const ScAttrArray*  pAttrArray;
     ULONG           nNumFormat;     // fuer CalcAsShown
     ULONG           nNumFmtIndex;
     SCCOL           nCol;
@@ -240,7 +240,7 @@ class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
 private:
     ScQueryParam    aParam;
     ScDocument*     pDoc;
-    ScAttrArray*    pAttrArray;
+    const ScAttrArray*  pAttrArray;
     ULONG           nNumFormat;
     SCTAB           nTab;
     SCCOL           nCol;
@@ -250,8 +250,21 @@ private:
     BYTE            nStopOnMismatch;
     BYTE            nTestEqualCondition;
     BOOL            bAdvanceQuery;
+    BOOL            bIgnoreMismatchOnLeadingStrings;
 
     ScBaseCell*     GetThis();
+
+                    /* Only works if no regular expression is involved, only
+                       searches for rows in one column, and only the first
+                       query entry is considered with simple conditions
+                       SC_LESS_EQUAL (sorted ascending) or SC_GREATER_EQUAL
+                       (sorted descending). Check these things before
+                       invocation! Delivers a starting point, continue with
+                       GetThis() and GetNext() afterwards. Introduced for
+                       FindEqualOrSortedLastInRange()
+                     */
+    ScBaseCell*     BinarySearch();
+
 public:
                     ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
                                         const ScQueryParam& aParam, BOOL bMod = TRUE);
@@ -259,8 +272,8 @@ public:
                                         // weiter aufgefuellt sein (bIsString)
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
-    SCCOL          GetCol() { return nCol; }
-    SCROW          GetRow() { return nRow; }
+    SCCOL           GetCol() { return nCol; }
+    SCROW           GetRow() { return nRow; }
     ULONG           GetNumberFormat();
 
                     // setzt alle Entry.nField einen weiter, wenn Spalte
@@ -301,18 +314,36 @@ public:
     BOOL            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
 
-                    /** In a range assumed to be sorted find either the first
-                        equal entry or the last being less than (or greater
-                        than) the queried value. Continues searching for an
-                        equal entry even if the last entry matching the range
-                        is found, in case the data is not sorted. Used by the
-                        interpreter for LOOKUP() and similar. Column and row
-                        position of the found entry are returned, otherwise
+                    /** In a range assumed to be sorted find either the last of
+                        a sequence of equal entries or the last being less than
+                        (or greater than) the queried value. Used by the
+                        interpreter for [HV]?LOOKUP() and MATCH(). Column and
+                        row position of the found entry are returned, otherwise
                         invalid.
+
+                        @param bSearchForEqualAfterMismatch
+                            Continue searching for an equal entry even if the
+                            last entry matching the range was found, in case
+                            the data is not sorted. Is always done if regular
+                            expressions are involved.
+
+                        @param bIgnoreMismatchOnLeadingStrings
+                            Normally strings are sorted behind numerical
+                            values. If this parameter is TRUE, the search does
+                            not stop when encountering a string and does not
+                            assume that no values follow anymore.
+                            If querying for a string a mismatch on the first
+                            entry, e.g. column header, is ignored.
+
                         @ATTENTION! StopOnMismatch, TestEqualCondition and
-                        the internal query params are in an undefined state
-                        upon return! */
-    BOOL            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
+                        the internal IgnoreMismatchOnLeadingStrings and query
+                        params are in an undefined state upon return! The
+                        iterator is not usable anymore except for obtaining the
+                        number format!
+                      */
+    BOOL            FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+                        SCROW& nFoundRow, BOOL bSearchForEqualAfterMismatch = FALSE,
+                        BOOL bIgnoreMismatchOnLeadingStrings = TRUE );
 };
 
 class ScDocAttrIterator             // alle Attribut-Bereiche
