@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,30 +66,15 @@ PRJNAME=sfx2
 TARGET=toolbox
 ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-#		schdldrp.cxx \
-
-CXXFILES = \
-        tbxmgr.cxx \
-        tbxchild.cxx \
-        tbxitem.cxx \
-        imgmgr.cxx \
-        tbxopdlg.cxx \
-        tbxcust.cxx \
-        tbxconf.cxx \
-        $(PROJECTPCHSOURCE).cxx
-
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
     tbxopdlg.src\
     tbxcust.src\
     tbxpopup.src\
