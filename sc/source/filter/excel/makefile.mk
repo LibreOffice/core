@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-04 14:00:14 $
+#   last change: $Author: obo $ $Date: 2004-08-11 09:00:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
+        $(SLO)$/xlstream.obj				\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
