@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:29:30 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "refreshtimer.hxx"
 #include "dbcolect.hxx"
 #include "scextopt.hxx"
+#include "compiler.hxx"
 #include "cfgids.hxx"
 
 #include "docsh.hxx"
