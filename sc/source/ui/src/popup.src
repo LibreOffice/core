@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:40:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ String RID_POPUP_PIVOT
     Text[ chinese_traditional ] = "¸ê®Æ§U²z§ÖÅã¥\\¯àªí";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ ááãÑÔÏ ÇáÂáí ááÈíÇäÇÊ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôïí ğéëüôï äåäïìİíùí";
-    Text[ korean ] = "Å×ÀÌÅÍÆÄÀÏ·µ ÆË¾÷¸Ş´º";
+    Text[ korean ] = "Å×ÀÌÅÍÆÄÀÏ·µÀÇ ÆË¾÷ ¸Ş´º";
     Text[ turkish ] = "Veri pilotu için popup mönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Menú emergente del piloto de datos";
