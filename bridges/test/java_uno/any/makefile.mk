@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 08:41:04 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:05:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,6 @@ GIVE_EXEC_RIGHTS = @echo
 .ELSE
 GIVE_EXEC_RIGHTS = chmod +x
 .ENDIF
-
-JAVAFLAGS += -sourcepath $(OUT)$/misc$/java$/test
 
 JAVAFILES = \
     $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASSFILES)))
@@ -156,5 +154,5 @@ $(BIN)$/test_java_uno_anytest.rdb : types.idl
 $(MISC)$/gen_files.flag : $(BIN)$/test_java_uno_anytest.rdb
     +cppumaker -C -BUCR -O $(OUT)$/inc$/test -X $(SOLARBINDIR)$/udkapi.rdb $?
     +cppumaker -C -BUCR -O $(OUT)$/inc$/test -T com.sun.star.uno.XInterface $(SOLARBINDIR)$/udkapi.rdb
-    +javamaker -nD -BUCR -O $(OUT)$/misc$/java$/test -X $(SOLARBINDIR)$/udkapi.rdb $?
+    +javamaker -nD -BUCR -O $(CLASSDIR) -X $(SOLARBINDIR)$/udkapi.rdb $?
     +$(TOUCH) $@
