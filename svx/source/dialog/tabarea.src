@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bm $ $Date: 2001-02-06 14:14:35 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text = "Transparenz~verlauf" ;
         Text [ ENGLISH ] = "Transparence ~gradient" ;
-        Text[ english_us ] = "Transparency ~gradient";
+        Text[ english_us ] = "~Transparency gradient";
         Text[ portuguese ] = "~Gradação da transparência";
         Text[ russian ] = "~Ïğîçğà÷íàÿ ãğàäèåíòíàÿ";
         Text[ greek ] = "ÄéáâÜèìéóç äéáöÜíåéáò";
@@ -447,7 +447,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ swedish ] = "Centrum X";
         Text[ polish ] = "Centrum ~X";
         Text[ portuguese_brazilian ] = "Center ~X";
-        Text[ japanese ] = "’†S X(~X)";
+        Text[ japanese ] = "’†S ~X";
         Text[ korean ] = "Áß¾Ó X(~X)";
         Text[ chinese_simplified ] = "ÖĞĞÄ ~X";
         Text[ chinese_traditional ] = "©~¤¤ ~X";
@@ -488,7 +488,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ swedish ] = "Centrum Y";
         Text[ polish ] = "Centrum ~Y";
         Text[ portuguese_brazilian ] = "Center ~Y";
-        Text[ japanese ] = "’†S Y(~Y)";
+        Text[ japanese ] = "’†S ~Y";
         Text[ korean ] = "Áß¾Ó Y(~Y)";
         Text[ chinese_simplified ] = "ÖĞĞÄ ~Y";
         Text[ chinese_traditional ] = "©~¤¤ ~Y";
@@ -551,7 +551,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText [ ENGLISH ] = " degree" ;
         Last = 359 ;
         SpinSize = 15 ;
-        CustomUnitText[ english_us ] = "degree";
+        CustomUnitText[ english_us ] = " degrees";
         CustomUnitText[ portuguese ] = "graus";
         CustomUnitText[ russian ] = "ãğàäóñîâ";
         CustomUnitText[ greek ] = "ìïßñåò";
@@ -560,7 +560,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         CustomUnitText[ spanish ] = "grados";
         CustomUnitText[ italian ] = "grado";
         CustomUnitText[ danish ] = "grader";
-        CustomUnitText[ swedish ] = "grad";
+        CustomUnitText[ swedish ] = " grader";
         CustomUnitText[ polish ] = "stopnie";
         CustomUnitText[ portuguese_brazilian ] = "degree";
         CustomUnitText[ japanese ] = "“x";
@@ -589,7 +589,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ polish ] = "KrawêdŸ";
         Text[ portuguese_brazilian ] = "~Border";
         Text[ japanese ] = "—]”’(~B)";
-        Text[ korean ] = "Å×µÎ¸®(~B)";
+        Text[ korean ] = "¿©¹é";
         Text[ chinese_simplified ] = "±ß¾à(~B)";
         Text[ chinese_traditional ] = "­¶¹MªÅ¥Õ(~B)";
         Text[ arabic ] = "ÇáÍÏ";
@@ -751,8 +751,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ polish ] = "Podgl¹d";
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËŞ­°";
-        Text[ korean ] = "¹Ì¸® º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ korean ] = "¹Ì¸®º¸±â";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄı";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizleme";
@@ -977,7 +977,7 @@ TabPage RID_SVXPAGE_AREA
         StringList [ chinese_traditional ]  =
         {
             < "Áô¤Jªº" ; AREADLG_INVISIBLE ; > ;
-            < "ÃC¦â" ; AREADLG_COLOR ; > ;
+            < "±m¦â" ; AREADLG_COLOR ; > ;
             < "±m¦â¹Ï®×" ; AREADLG_GRADIENT ; > ;
             < "³±¼v½u" ; AREADLG_HATCH ; > ;
             < "ÂI°}¹Ï" ; AREADLG_BITMAP ; > ;
@@ -994,7 +994,7 @@ TabPage RID_SVXPAGE_AREA
         {
             < "Ìç ïñáôÜ" ; AREADLG_INVISIBLE ; > ;
             < "×ñşìá" ; AREADLG_COLOR ; > ;
-            < "ÄéáâÜèì. ÷ñşìá" ; AREADLG_GRADIENT ; > ;
+            < "ÄéáâÜèìéóç ÷ñşìáôïò" ; AREADLG_GRADIENT ; > ;
             < "ÃñáììïóêéÜ" ; AREADLG_HATCH ; > ;
             < "Bitmap" ; AREADLG_BITMAP ; > ;
         };
@@ -1014,6 +1014,14 @@ TabPage RID_SVXPAGE_AREA
             < "Desen" ; AREADLG_HATCH ; > ;
             < "Bit eşlem" ; AREADLG_BITMAP ; > ;
         };
+    StringList [ language_user1 ] =
+    {
+            < "Unsichtbar" ; AREADLG_BITMAP ; > ;
+        < "Farbe" ; AREADLG_BITMAP ; > ;
+        < "Farbverlauf" ; AREADLG_BITMAP ; > ;
+        < "Schraffur" ; AREADLG_BITMAP ; > ;
+        < "Bitmap" ; AREADLG_BITMAP ; > ;
+    };
     };
 
     ListBox LB_COLOR
@@ -1071,7 +1079,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -1108,14 +1116,14 @@ TabPage RID_SVXPAGE_AREA
         Text [ danish ] = "Trinvidde" ;
         Text [ portuguese_brazilian ] = "Schrittweite" ;
         Text [ portuguese ] = "Incremento" ;
-        Text[ chinese_simplified ] = "ÔöÁ¿";
-        Text[ russian ] = "Øèğèíà øàãà";
+        Text[ chinese_simplified ] = "µİÔö";
+        Text[ russian ] = "Ïğèğàùåíèå";
         Text[ polish ] = "Inkrement";
         Text[ japanese ] = "½Ã¯Ìß”";
         Text[ chinese_traditional ] = "º¥¶i";
         Text[ arabic ] = "ÇáÊÒÇíÏ";
         Text[ greek ] = "ÂŞìá";
-        Text[ korean ] = "Áõ°¡ºĞ";
+        Text[ korean ] = "Áõ°¡Æø";
         Text[ turkish ] = "Adım";
         Text[ language_user1 ] = " ";
     };
@@ -1186,7 +1194,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_simplified ] = "ÒõÓ°Ïß±³¾°";
         Text[ chinese_traditional ] = "³±¼v½u±ø­I´º";
         Text[ arabic ] = "ÎáİíÉ ãä ÇáäŞæÔ";
-        Text[ turkish ] = "Artalan deseni";
+        Text[ turkish ] = "Artalan taraması";
     };
     CheckBox CB_HATCHBCKGRD
     {
@@ -1658,7 +1666,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "²¾°Ê";
         Text[ arabic ] = "ÇáÅÒÇÍÉ";
         Text[ greek ] = "Ìåôáôüğéóç";
-        Text[ korean ] = "º¯À§";
+        Text[ korean ] = "ÀÌµ¿";
         Text[ turkish ] = "Kaydırma";
         Text[ language_user1 ] = " ";
     };
@@ -1773,11 +1781,11 @@ TabPage RID_SVXPAGE_SHADOW
         Text [ dutch ] = "~Afstand" ;
         Text [ spanish ] = "~Distancia" ;
         Text [ english_us ] = "~Distance" ;
-        Text[ chinese_simplified ] = "¼ä¸ô(~D)";
+        Text[ chinese_simplified ] = "¾àÀë(~D)";
         Text[ russian ] = "Ğàññòîÿíèå";
         Text[ polish ] = "Odleg³oœæ";
         Text[ japanese ] = "ŠÔŠu(~D)";
-        Text[ chinese_traditional ] = "¶¡¹j(~D)";
+        Text[ chinese_traditional ] = "¶ZÖÃ(~D)";
         Text[ arabic ] = "ÇáÈÚÏ";
         Text[ greek ] = "Áğüóôáóç";
         Text[ korean ] = "°Å¸®(~D)";
@@ -1931,7 +1939,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -2337,10 +2345,10 @@ TabPage RID_SVXPAGE_HATCH
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ french ] = " degrés" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         Last = 359 ;
         SpinSize = 15 ;
         CustomUnitText[ chinese_simplified ] = "¶È";
@@ -2451,7 +2459,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -2487,7 +2495,7 @@ TabPage RID_SVXPAGE_HATCH
         Text[ arabic ] = "ŞÇÆãÉ ÇáäŞæÔ";
         Text[ greek ] = "Ğßíáêáò ãñáììïóêéşí";
         Text[ korean ] = "ÇØÄª Ç¥";
-        Text[ turkish ] = "Desen";
+        Text[ turkish ] = "Tarama";
         Text[ language_user1 ] = " ";
     };
     GroupBox GRP_LINE
@@ -2551,17 +2559,17 @@ TabPage RID_SVXPAGE_HATCH
         };
         QuickHelpText[ russian ] = "Çàãğóçèòü íàáîğ øòğèõîâîê";
         QuickHelpText[ polish ] = "£aduj tabelê kreskowañ";
-        QuickHelpText[ japanese ] = "Ê¯Áİ¸Ş•\\‚ğÛ°ÄŞ‚·‚é";
-        QuickHelpText[ chinese_simplified ] = "×°ÔØÒõÓ°±í";
-        QuickHelpText[ chinese_traditional ] = "¸Ë¸ü³±¼vªí";
+        QuickHelpText[ japanese ] = "Ê¯Áİ¸Ş•\\‚ğ“Ç‚İ‚Ş!";
+        QuickHelpText[ chinese_simplified ] = "×°ÈëÒõÓ°±í!";
+        QuickHelpText[ chinese_traditional ] = "¸ü¤J³±¼vªí!";
         QuickHelpText[ arabic ] = "ÊÍãíá ŞÇÆãÉ ÇáäŞæÔ";
         QuickHelpText[ greek ] = "Öüñôùóç ëßóôáò ìå ãñáììïóêéİò";
-        QuickHelpText[ korean ] = "Load Hatches List";
+        QuickHelpText[ korean ] = "ÇØÄ¡ ¸ñ·Ï ·Îµå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Schraffurentabelle laden";
+        QuickHelpText[ turkish ] = "Tarama tablosu yükle!";
     };
     ImageButton BTN_SAVE
     {
@@ -2596,17 +2604,17 @@ TabPage RID_SVXPAGE_HATCH
         };
         QuickHelpText[ russian ] = "Ñîõğàíèòü íàáîğ øòğèõîâîê";
         QuickHelpText[ polish ] = "Zapisz tabelê kreskowañ";
-        QuickHelpText[ japanese ] = "Ê¯Áİ¸Ş•\\‚ğ•Û‘¶‚·‚é";
+        QuickHelpText[ japanese ] = "Ê¯Áİ¸Ş•\\‚ğ•Û‘¶‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "±£´æÒõÓ°±í";
         QuickHelpText[ chinese_traditional ] = "«O¦s³±¼vªí";
         QuickHelpText[ arabic ] = "ÍİÙ ŞÇÆãÉ ÇáäŞæÔ";
         QuickHelpText[ greek ] = "ÁğïèŞêåõóç ëßóôáò ìå ãñáììïóêéİò";
-        QuickHelpText[ korean ] = "Save Hatches List";
+        QuickHelpText[ korean ] = "ÇØÄ¡ ¸ñ·Ï ÀúÀå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Schraffurentabelle sichern";
+        QuickHelpText[ turkish ] = "Tarama tablosunu kaydet!";
     };
     Text[ chinese_simplified ] = "ÒõÓ°Ïß";
     Text[ russian ] = "Øòğèõîâêè";
@@ -2616,7 +2624,7 @@ TabPage RID_SVXPAGE_HATCH
     Text[ arabic ] = "äŞæÔ";
     Text[ greek ] = "Ãñáììïóêéİò";
     Text[ korean ] = "ÇØÄª";
-    Text[ turkish ] = "Desen";
+    Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
@@ -2748,13 +2756,13 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ swedish ] = "I~mport..." ;
         Text [ dutch ] = "~Importeren..." ;
         Text [ spanish ] = "~Importar..." ;
-        Text [ english_us ] = "I~mport..." ;
+        Text [ english_us ] = "~Import..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÊäÈë(~M)...";
         Text[ russian ] = "Èìïîğò...";
         Text[ polish ] = "Import...";
         Text[ japanese ] = "²İÎß°Ä(~M)...";
-        Text[ chinese_traditional ] = "¿é¤J(~M)...";
+        Text[ chinese_traditional ] = "¶×¤J(~M)...";
         Text[ arabic ] = "ÇÓÊíÑÇÏ...";
         Text[ greek ] = "ÅéóáãùãŞ...";
         Text[ korean ] = "°¡Á® ¿À±â(~M)...";
@@ -2879,7 +2887,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö";
+        Text[ korean ] = "»ö»ó";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
     };
@@ -2896,7 +2904,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ finnish ] = "Pisteiden muokkaus" ;
         Text [ danish ] = "Pixel-redigering" ;
         Text [ french ] = "Éditeur de pixels" ;
-        Text [ swedish ] = "Pixel-Editor" ;
+        Text [ swedish ] = "Pixeleditor" ;
         Text [ dutch ] = "Pixel Editor" ;
         Text [ spanish ] = "Editor de píxeles" ;
         Text [ english_us ] = "Pixel editor" ;
@@ -2956,7 +2964,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -3000,12 +3008,12 @@ TabPage RID_SVXPAGE_BITMAP
         };
         QuickHelpText[ russian ] = "Çàãğóçèòü íàáîğ Bitmap";
         QuickHelpText[ polish ] = "£aduj tabelê mapy bitowej";
-        QuickHelpText[ japanese ] = "ËŞ¯ÄÏ¯Ìß•\\‚ğ“Ç‚İ‚Ş";
-        QuickHelpText[ chinese_simplified ] = "×°ÔØÎ»Í¼ÁĞ±í";
-        QuickHelpText[ chinese_traditional ] = "¸Ë¸üÂI°}¹Ï";
+        QuickHelpText[ japanese ] = "ËŞ¯ÄÏ¯Ìß•\\‚ğ“Ç‚İ‚Ş!";
+        QuickHelpText[ chinese_simplified ] = "×°ÈëÎ»Í¼ÁĞ±í!";
+        QuickHelpText[ chinese_traditional ] = "¸ü¤JÂI°}¹Ï!";
         QuickHelpText[ arabic ] = "ÊÍãíá ŞÇÆãÉ ÇáÕæÑ ÇáäŞØíÉ";
         QuickHelpText[ greek ] = "Öüñôùóç ëßóôáò ìå Bitmap";
-        QuickHelpText[ korean ] = "Load Bitmap List";
+        QuickHelpText[ korean ] = "ºñÆ®¸Ê ¸ñ·Ï ·Îµå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -3045,12 +3053,12 @@ TabPage RID_SVXPAGE_BITMAP
         };
         QuickHelpText[ russian ] = "Ñîõğàíèòü íàáîğ Bitmap";
         QuickHelpText[ polish ] = "Zapisz tabelê mapy bitowej";
-        QuickHelpText[ japanese ] = "ËŞ¯ÄÏ¯Ìß•\\‚ğ•Û‘¶‚·‚é";
+        QuickHelpText[ japanese ] = "ËŞ¯ÄÏ¯Ìß•\\‚ğ•Û‘¶‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "´æÅÌÎ»Í¼ÁĞ±í";
         QuickHelpText[ chinese_traditional ] = "«O¦sÂI°}¹Ï";
         QuickHelpText[ arabic ] = "ÍİÙ ŞÇÆãÉ ÇáÕæÑ ÇáäŞØíÉ";
         QuickHelpText[ greek ] = "ÁğïèŞêåõóç ëßóôáò ìå Bitmap";
-        QuickHelpText[ korean ] = "Save Bitmap List";
+        QuickHelpText[ korean ] = "ºñÆ®¸Ê ¸ñ·Ï ÀúÀå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -3270,7 +3278,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "Án~gulo" ;
-        Text [ english_us ] = "~Angle" ;
+        Text [ english_us ] = "A~ngle" ;
         Text[ chinese_simplified ] = "½Ç¶È(~A)";
         Text[ russian ] = "Óãîë";
         Text[ polish ] = "K¹t";
@@ -3301,10 +3309,10 @@ TabPage RID_SVXPAGE_GRADIENT
         CustomUnitText [ finnish ] = " astetta" ;
         CustomUnitText [ danish ] = "grader" ;
         CustomUnitText [ french ] = " degrés" ;
-        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ swedish ] = " grader" ;
         CustomUnitText [ dutch ] = "graden" ;
         CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ english_us ] = "degrees" ;
+        CustomUnitText [ english_us ] = " degrees" ;
         Last = 359 ;
         SpinSize = 15 ;
         CustomUnitText[ chinese_simplified ] = "¶È";
@@ -3419,7 +3427,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ dutch ] = "Centrum ~X" ;
         Text [ spanish ] = "Centro ~X" ;
         Text [ english_us ] = "Center ~X" ;
-        Text[ chinese_simplified ] = "ÖĞĞÄ X(~X)";
+        Text[ chinese_simplified ] = "ÖĞĞÄ ~X";
         Text[ russian ] = "Öåíòğ ~X";
         Text[ polish ] = "Centrum X";
         Text[ japanese ] = "~X‚Ì’†‰›";
@@ -3447,10 +3455,10 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ dutch ] = "Centrum ~Y" ;
         Text [ spanish ] = "Centro ~Y" ;
         Text [ english_us ] = "Center ~Y" ;
-        Text[ chinese_simplified ] = "ÖĞĞÄ Y(~Y)";
+        Text[ chinese_simplified ] = "ÖĞĞÄ ~Y";
         Text[ russian ] = "Öåíòğ Y";
         Text[ polish ] = "Centrum Y";
-        Text[ japanese ] = "Y‚Ì’†‰›(~Y)";
+        Text[ japanese ] = "~Y‚Ì’†‰›";
         Text[ chinese_traditional ] = "¶°¤¤(~Y)";
         Text[ arabic ] = "ÇáãÑßÒ Õ";
         Text[ greek ] = "Êİíôñï ~Y";
@@ -3482,7 +3490,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_traditional ] = "Ãä¬É(~B)";
         Text[ arabic ] = "ÇáÍÏ";
         Text[ greek ] = "Ğå~ñéèşñéï";
-        Text[ korean ] = "Å×µÎ¸®(~B)";
+        Text[ korean ] = "¿©¹é(~B)";
         Text[ turkish ] = "~Kenar";
         Text[ language_user1 ] = " ";
     };
@@ -3732,7 +3740,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ arabic ] = "Çááæä";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "»ö";
+        Text[ korean ] = "»ö»ó";
         Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
     };
@@ -3783,7 +3791,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -3855,12 +3863,12 @@ TabPage RID_SVXPAGE_GRADIENT
         };
         QuickHelpText[ russian ] = "Çàãğóçèòü íàáîğ ãğàäèåíòíûõ";
         QuickHelpText[ polish ] = "£aduj tabelê gradientów";
-        QuickHelpText[ japanese ] = "¸Ş×ÃŞ°¼®İ•\\‚ğÛ°ÄŞ‚·‚é";
-        QuickHelpText[ chinese_simplified ] = "×°ÔØ²ÊÉ«Í¼°¸±í";
-        QuickHelpText[ chinese_traditional ] = "¸Ë¸ü±m¦â¹Ï®×ªí";
+        QuickHelpText[ japanese ] = "¸Ş×ÃŞ°¼®İ•\\‚ğ“Ç‚İ‚Ş!";
+        QuickHelpText[ chinese_simplified ] = "×°Èë²ÊÉ«Í¼°¸±í!";
+        QuickHelpText[ chinese_traditional ] = "¸ü¤J±m¦â¹Ï®×ªí!";
         QuickHelpText[ arabic ] = "ÊÍãíá ŞÇÆãÉ ÊÏÑÌ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "Öüñôùóç ëßóôáò äéáâÜèìéóçò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "Load Gradients List";
+        QuickHelpText[ korean ] = "°æ»çµµ ¸ñ·Ï ·Îµå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -3900,12 +3908,12 @@ TabPage RID_SVXPAGE_GRADIENT
         };
         QuickHelpText[ russian ] = "Ñîõğàíèòü íàáîğ ãğàäèåíòíûõ";
         QuickHelpText[ polish ] = "Zapisz tabelê gradientów";
-        QuickHelpText[ japanese ] = "¸Ş×ÃŞ°¼®İ•\\‚ğ•Û‘¶‚·‚é";
+        QuickHelpText[ japanese ] = "¸Ş×ÃŞ°¼®İ•\\‚ğ•Û‘¶‚·‚é!";
         QuickHelpText[ chinese_simplified ] = "±£´æ²ÊÉ«Í¼°¸±í";
         QuickHelpText[ chinese_traditional ] = "«O¦sÃC¦â¹Ï®×ªí";
         QuickHelpText[ arabic ] = "ÍİÙ ŞÇÆãÉ ÊÏÑÌ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "ÁğïèŞêåõóç ëßóôáò äéáâÜèìéóçò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "Save Gradients List";
+        QuickHelpText[ korean ] = "°æ»çµµ ¸ñ·Ï ÀúÀå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -4171,7 +4179,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ swedish ] = "~Ändra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "M~odificar" ;
-        Text [ english_us ] = "Modi~fy" ;
+        Text [ english_us ] = "~Modify" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
         Text[ russian ] = "Èçìåíèòü";
@@ -4385,7 +4393,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ dutch ] = "Voorbeeld" ;
         Text [ spanish ] = "Previsualización" ;
         Text [ english_us ] = "Preview" ;
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ russian ] = "Ïğîñìîòğ";
         Text[ polish ] = "Podgl¹d";
         Text[ japanese ] = "ÌßÚËŞ­°";
@@ -4434,7 +4442,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText [ norwegian ] = "Last inn fargeliste" ;
         QuickHelpText [ italian ] = "Carica tavola dei colori" ;
         QuickHelpText [ portuguese_brazilian ] = "Carregar lista de cores" ;
-        QuickHelpText [ portuguese ] = "Carrega a palete de cores" ;
+        QuickHelpText [ portuguese ] = "Carrega a paleta de cores!" ;
         QuickHelpText [ finnish ] = "Lue väriluettelo" ;
         QuickHelpText [ danish ] = "Indlæs farvetabel" ;
         QuickHelpText [ french ] = "Charger la palette de couleurs" ;
@@ -4458,11 +4466,11 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ russian ] = "Çàãğóçèòü íàáîğ öâåòîâ";
         QuickHelpText[ polish ] = "£aduj tabelê kolorów";
         QuickHelpText[ japanese ] = "F‚Ì•\\‚ğÛ°ÄŞ‚·‚é";
-        QuickHelpText[ chinese_simplified ] = "×°ÔØÑÕÉ«±í";
-        QuickHelpText[ chinese_traditional ] = "¸Ë¸üÃC¦âªí";
+        QuickHelpText[ chinese_simplified ] = "×°ÈëÑÕÉ«±í!";
+        QuickHelpText[ chinese_traditional ] = "¸ü¤JÃC¦âªí!";
         QuickHelpText[ arabic ] = "ÊÍãíá ŞÇÆãÉ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "Öüñôùóç ëßóôáò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "Load Color List";
+        QuickHelpText[ korean ] = "»ö»ó ¸ñ·Ï  Îµ?!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -4479,7 +4487,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText [ norwegian ] = "Lagre fargeliste" ;
         QuickHelpText [ italian ] = "Salva tavola dei colori" ;
         QuickHelpText [ portuguese_brazilian ] = "Gravar lista de cores" ;
-        QuickHelpText [ portuguese ] = "Guarda a palete de cores" ;
+        QuickHelpText [ portuguese ] = "Guarda a paleta de cores!" ;
         QuickHelpText [ finnish ] = "Tallenna väriluettelo" ;
         QuickHelpText [ danish ] = "Gem farvetabel" ;
         QuickHelpText [ french ] = "Enregistrer la palette de couleurs" ;
@@ -4507,7 +4515,7 @@ TabPage RID_SVXPAGE_COLOR
         QuickHelpText[ chinese_traditional ] = "Àx¦sÃC¦âªí";
         QuickHelpText[ arabic ] = "ÍİÙ ŞÇÆãÉ ÇáÃáæÇä";
         QuickHelpText[ greek ] = "ÁğïèŞêåõóç ëßóôáò ÷ñùìÜôùí";
-        QuickHelpText[ korean ] = "Save Color List";
+        QuickHelpText[ korean ] = "»ö»ó ¸ñ·Ï ÀúÀå!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -4521,7 +4529,7 @@ TabPage RID_SVXPAGE_COLOR
     Text[ chinese_traditional ] = "ÃC¦â";
     Text[ arabic ] = "ÇáÃáæÇä";
     Text[ greek ] = "×ñşìáôá";
-    Text[ korean ] = "»ö";
+    Text[ korean ] = "»ö»ó";
     Text[ turkish ] = "Renkler";
     Text[ language_user1 ] = " ";
 };
@@ -4575,7 +4583,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ chinese_traditional ] = "¥R¶ñ";
                 Text[ arabic ] = "ÇáãÓÇÍÉ";
                 Text[ greek ] = "ÅğéöÜíåéá";
-                Text[ korean ] = "¿µ¿ª";
+                Text[ korean ] = "¸é";
                 Text[ turkish ] = "Yüzey";
                 Text[ language_user1 ] = " ";
             };
@@ -4653,7 +4661,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ chinese_traditional ] = "ÃC¦â";
                 Text[ arabic ] = "ÇáÃáæÇä";
                 Text[ greek ] = "×ñşìáôá";
-                Text[ korean ] = "»ö";
+                Text[ korean ] = "»ö»ó";
                 Text[ turkish ] = "Renkler";
                 Text[ language_user1 ] = " ";
             };
@@ -4710,7 +4718,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ arabic ] = "äŞæÔ";
                 Text[ greek ] = "Ãñáììïóêéİò";
                 Text[ korean ] = "ÇØÄª";
-                Text[ turkish ] = "Desen";
+                Text[ turkish ] = "Tarama";
                 Text[ language_user1 ] = " ";
             };
             PageItem
@@ -4750,7 +4758,7 @@ TabDialog RID_SVXDLG_AREA
     Text[ chinese_traditional ] = "¥­­±";
     Text[ arabic ] = "ÇáãÓÇÍÉ";
     Text[ greek ] = "ÅğéöÜíåéá";
-    Text[ korean ] = "¿µ¿ª";
+    Text[ korean ] = "¸é";
     Text[ turkish ] = "Yüzey";
     Text[ language_user1 ] = " ";
 };
