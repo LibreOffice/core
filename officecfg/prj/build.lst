@@ -1,0 +1,4 @@
+oc	officecfg								usr30073	-	none	 NULL
+oc	officecfg								usr1	-	all	oc_mkout NULL
+oc	officecfg\org\openoffice\helper			nmake	-	all	oc_helper NULL
+oc	officecfg\data							nmake	-	all	oc_data oc_helper NULL

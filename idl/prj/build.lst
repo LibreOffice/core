@@ -1,0 +1,9 @@
+id	idl	:	tools NULL
+id	idl										usr1	-	all	idl_mkout NULL
+id	idl\prj									get		-	all	idl_gprj NULL
+id	idl\inc									get		-	all	idl_inc NULL
+id	idl\jobs								get		-	all	idl_jobs NULL
+id	idl\source\cmptools						nmake	-	all	idl_cmp NULL
+id	idl\source\objects						nmake	-	all	idl_obj NULL
+id	idl\source\prj							nmake	-	all	idl_prj NULL
+id	idl\util								nmake	-	all	idl_util idl_cmp idl_obj idl_prj NULL

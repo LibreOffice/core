@@ -1,0 +1,12 @@
+xo	xmloff	:	lingu NULL
+xo	xmloff									usr1	-	all	xo_mkout NULL
+xo	xmloff\prj								get		-	all	xo_prj NULL
+xo	xmloff\source\core						nmake	-	all	xo_core NULL
+xo	xmloff\source\meta						nmake	-	all	xo_meta NULL
+xo	xmloff\source\style						nmake	-	all	xo_style NULL
+xo	xmloff\source\text						nmake	-	all	xo_text NULL
+xo	xmloff\source\draw						nmake	-	all	xo_draw NULL
+xo	xmloff\source\chart						nmake	-	all	xo_chart NULL
+xo	xmloff\source\forms						nmake	-	all	xo_forms NULL
+xo	xmloff\source\script					nmake	-	all	xo_script NULL
+xo	xmloff\util								nmake	-	all	xo_util xo_chart xo_core xo_draw xo_forms xo_meta xo_script xo_style xo_text NULL

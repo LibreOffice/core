@@ -1,0 +1,9 @@
+sb	basic	:	goodies NULL
+sb	basic									usr1	-	all	sb_mkout NULL
+sb	basic\source\app						nmake	-	all	sb_app sb_class NULL
+sb	basic\source\basmgr						nmake	-	all	sb_mgr NULL
+sb	basic\source\classes					nmake	-	all	sb_class NULL
+sb	basic\source\comp						nmake	-	all	sb_comp NULL
+sb	basic\source\runtime					nmake	-	all	sb_rt NULL
+sb	basic\source\sample						nmake	-	all	sb_samp NULL
+sb	basic\util								nmake	-	all	sb_util sb_app sb_class sb_comp sb_mgr sb_rt sb_samp NULL

@@ -1,0 +1,13 @@
+uc	ucb	:	comphelper svtools tools ucbhelper NULL
+uc	ucb										usr1	-	all	uc_mkout NULL
+uc	ucb\unotypes							nmake	-	all	uc_unotypes NULL
+uc	ucb\source\regexp						nmake	-	all	uc_regexp uc_unotypes NULL
+uc	ucb\source\core							nmake	-	all	uc_core uc_regexp uc_unotypes NULL
+uc	ucb\source\main							nmake	-	all	uc_main uc_core uc_unotypes NULL
+uc	ucb\source\cacher						nmake	-	all	uc_cacher uc_main uc_unotypes NULL
+uc	ucb\source\sorter						nmake	-	all	uc_sorter uc_cacher uc_unotypes NULL
+uc	ucb\source\ucp\file						nmake	-	all	uc_file uc_sorter uc_unotypes NULL
+uc	ucb\source\ucp\hierarchy				nmake	-	all	uc_hierarchy uc_file uc_unotypes NULL
+uc	ucb\source\ucp\remote					nmake	-	all	uc_remote uc_hierarchy uc_unotypes NULL
+uc	ucb\source\ucp\webdav					nmake	-	all	uc_webdav uc_remote uc_unotypes NULL
+uc	ucb\source\ucp\package					nmake	-	all	uc_package uc_unotypes NULL

@@ -1,0 +1,4 @@
+ea	eventattacher	:	cppuhelper offapi NULL
+ea	eventattacher							usr1	-	all	ea_mkout NULL
+ea	eventattacher\prj						get		-	all	ea_prj NULL
+ea	eventattacher\source					nmake	-	all	ea_source NULL

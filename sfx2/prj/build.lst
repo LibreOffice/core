@@ -1,0 +1,24 @@
+sf	sfx2	:	idl setup2 NULL
+sf	sfx2									usr1	-	all	sf_mkout NULL
+sf	sfx2\inc								get		-	all	sf_inc NULL
+sf	sfx2\prj								get		-	all	sf_prj NULL
+sf	sfx2\jobs								get		-	all	sf_jobs NULL
+sf	sfx2\win\res							get		-	all	sf_wres NULL
+sf	sfx2\mac\res							get		-	all	sf_mres NULL
+sf	sfx2\source\inc							get		-	all	sf_sinc NULL
+sf	sfx2\sdi								nmake	-	all	sf_sdi NULL
+sf	sfx2\source\accel						nmake	-	all	sf_accl sf_sdi NULL
+sf	sfx2\source\appl						nmake	-	all	sf_appl sf_sdi NULL
+sf	sfx2\source\view						nmake	-	all	sf_view sf_sdi NULL
+sf	sfx2\source\bastyp						nmake	-	all	sf_bast sf_sdi NULL
+sf	sfx2\source\config						nmake	-	all	sf_cnfg sf_sdi NULL
+sf	sfx2\source\control						nmake	-	all	sf_ctrl sf_sdi NULL
+sf	sfx2\source\dialog						nmake	-	all	sf_dlg sf_sdi NULL
+sf	sfx2\source\doc							nmake	-	all	sf_doc sf_sdi NULL
+sf	sfx2\source\menu						nmake	-	all	sf_menu sf_sdi NULL
+sf	sfx2\source\notify						nmake	-	all	sf_noti sf_sdi NULL
+sf	sfx2\source\statbar						nmake	-	all	sf_sbar sf_sdi NULL
+sf	sfx2\source\toolbox						nmake	-	all	sf_tbox sf_sdi NULL
+sf	sfx2\source\inet						nmake	-	all	sf_inet sf_sdi NULL
+sf	sfx2\source\explorer					nmake	-	all	sf_expl sf_sdi NULL
+sf	sfx2\util								nmake	-	all	sf_util sf_accl sf_appl sf_bast sf_cnfg sf_ctrl sf_dlg sf_doc sf_expl sf_inet sf_menu sf_noti sf_sbar sf_tbox sf_view NULL

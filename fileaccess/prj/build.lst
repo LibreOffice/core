@@ -1,0 +1,3 @@
+fa	fileaccess	:	rdbmaker tools ucbhelper NULL
+fa	fileaccess								usr1	-	all	fa_mkout NULL
+fa	fileaccess\source						nmake	-	all	fa_src NULL

@@ -1,0 +1,4 @@
+xh	xmlhelp	:	XmlSearch external jut offuh unoil NULL
+xh	xmlhelp									usr1	-	all	xh_mkout NULL
+xh	xmlhelp\source\helpprovider				nmake	-	all	xh_helpprovider NULL
+xh	xmlhelp\source\com\sun\star\help		nmake	-	all	xh_help NULL

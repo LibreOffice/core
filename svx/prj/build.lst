@@ -1,0 +1,32 @@
+sx	svx	:	connectivity xmloff NULL
+sx	svx										usr1	-	all	sx_mkout NULL
+sx	svx\inc									get		-	all	sx_inc NULL
+sx	svx\prj									get		-	all	sx_prj NULL
+sx	svx\jobs								get		-	all	sx_jobs NULL
+sx	svx\win\res								get		-	all	sx_wres NULL
+sx	svx\os2\res								get		-	all	sx_ores NULL
+sx	svx\unx\res								get		-	all	sx_ures NULL
+sx	svx\source\inc							get		-	all	sx_sinc NULL
+sx	svx\mac\inc								get		-	all	sx_minc NULL
+sx	svx\sdi									nmake	-	all	sx_sdi NULL
+sx	svx\source\items						nmake	-	all	sx_items sx_sdi NULL
+sx	svx\source\xoutdev						nmake	-	all	sx_xout sx_items NULL
+sx	svx\source\editeng						nmake	-	all	sx_eeng NULL
+sx	svx\source\outliner						nmake	-	all	sx_outl NULL
+sx	svx\source\svdraw						nmake	-	all	sx_draw NULL
+sx	svx\source\stbctrls						nmake	-	all	sx_stbc NULL
+sx	svx\source\mnuctrls						nmake	-	all	sx_mnuc NULL
+sx	svx\source\engine3d						nmake	-	all	sx_3deng NULL
+sx	svx\source\svxlink						nmake	-	all	sx_link NULL
+sx	svx\source\form							nmake	-	all	sx_form sx_sdi NULL
+sx	svx\source\fmcomp						nmake	-	all	sx_fmcmp sx_sdi NULL
+sx	svx\source\tbxctrls						nmake	-	all	sx_tbxc NULL
+sx	svx\source\options						nmake	-	all	sx_opt NULL
+sx	svx\source\dialog						nmake	-	all	sx_dlg NULL
+sx	svx\source\svrtf						nmake	-	all	sx_rtf NULL
+sx	svx\source\unodraw						nmake	-	all	sx_undrw NULL
+sx	svx\source\unoedit						nmake	-	all	sx_unedt NULL
+sx	svx\source\gallery2						nmake	-	all	sx_gall NULL
+sx	svx\source\msfilter						nmake	-	all	sx_msfilt NULL
+sx	svx\source\xml							nmake	-	all	sx_xml NULL
+sx	svx\util								nmake	-	all	sx_util sx_3deng sx_dlg sx_draw sx_eeng sx_fmcmp sx_form sx_gall sx_items sx_link sx_mnuc sx_msfilt sx_opt sx_outl sx_rtf sx_sdi sx_stbc sx_tbxc sx_undrw sx_unedt sx_xml sx_xout NULL

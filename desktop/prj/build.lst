@@ -1,0 +1,10 @@
+dt	desktop	:	sc sd sw NULL
+dt	desktop									usr1	-	all	dt_mkout NULL
+dt	desktop\inc								get		-	all	dt_inc NULL
+dt	desktop\prj								get		-	all	dt_prj NULL
+dt	desktop\jobs							get		-	all	dt_jobs NULL
+dt	desktop\res								get		-	all	dt_res NULL
+dt	desktop\script							nmake	-	all	dt_scrp NULL
+dt	desktop\source\app						nmake	-	all	dt_app NULL
+dt	desktop\source\javaldx					nmake	-	u	dt_javaldx NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app NULL
