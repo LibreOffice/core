@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:03:41 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,7 @@ void OFlatTable::fillColumns()
                     }
                 }
 
-                // jetzt könnte es noch ein Datumsfeld sein
+                // jetzt koennte es noch ein Datumsfeld sein
                 if (!bNumeric)
                 {
                     try
