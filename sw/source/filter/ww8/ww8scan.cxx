@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,7 +944,7 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
     SvStream* pDataSt, const WW8Fib* pWwFib )
     : pWw8Fib( pWwFib ), pPieceGrpprls( 0 ), pMainFdoa( 0 ), pHdFtFdoa( 0 ),
     pMainTxbx( 0 ), pMainTxbxBkd( 0 ), pHdFtTxbx( 0 ), pHdFtTxbxBkd( 0 ),
-    nNoAttrScan( 0 )
+    pMagicTables(0), nNoAttrScan( 0 )
 {
     pPiecePLCF = OpenPieceTable( pTblSt, pWw8Fib );             // Complex
     if( pPiecePLCF )
@@ -1035,6 +1035,12 @@ WW8ScannerBase::WW8ScannerBase( SvStream* pSt, SvStream* pTblSt,
                 pHdFtTxbxBkd = new WW8PLCFspecial( pTblSt,
                     pWwFib->fcPlcfHdrtxbxBkd, pWwFib->lcbPlcfHdrtxbxBkd, 0);
             }
+            // Sub table cp positions
+            if (pWwFib->fcMagicTable && pWwFib->lcbMagicTable)
+            {
+                pMagicTables = new WW8PLCFspecial( pTblSt,
+                    pWwFib->fcMagicTable, pWwFib->lcbMagicTable, 4);
+            }
             break;
         default:
             ASSERT( !this, "Es wurde vergessen, nVersion zu kodieren!" );
@@ -1087,6 +1093,7 @@ WW8ScannerBase::~WW8ScannerBase()
     delete pMainTxbxBkd;
     delete pHdFtTxbx;
     delete pHdFtTxbxBkd;
+    delete pMagicTables;
 }
 
 //-----------------------------------------
@@ -3399,6 +3406,8 @@ WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
     if( pBkm )
         pBkm->pPLCFx = pBase->pBook;
 
+    pMagicTables = pBase->pMagicTables;
+
     switch( nType )                 // Feld-Initialisierung
     {
         case MAN_HDFT:
@@ -4392,6 +4401,9 @@ WW8Fib::WW8Fib( SvStream& rSt, BYTE nWantedVersion,UINT32 nOffset )
             rSt.Seek( 0x372 );          // fcSttbListNames
             rSt >> fcSttbListNames;
             rSt >> lcbSttbListNames;
+            rSt.Seek( 0x382 );          // MagicTables
+            rSt >> fcMagicTable;
+            rSt >> lcbMagicTable;
             if( 0 != rSt.GetError() )
                 nFibError = ERR_SWG_READ_ERROR;
 
@@ -6188,9 +6200,11 @@ static SprmInfo aWwSprmTab[] = {
     0x845E, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft"
     0x8460, 2, L_FIX, // undoc, must be asian version of "sprmPDxaLeft1"
     0x3615, 1, L_FIX, // undocumented
-    0x360D, 0, L_VAR, // undocumented
+    0x360D, 1, L_FIX, // undocumented
     0x703A, 4, L_FIX, // undocumented, sep, perhaps related to textgrids ?
-    0x303B, 1, L_FIX  // undocumented sep
+    0x303B, 1, L_FIX, // undocumented sep
+    0x244B, 1, L_FIX, // undocumented, must be subtable "sprmPFInTable" equiv
+    0x244C, 1, L_FIX  // undocumented, must be subtable "sprmPFTtp" equiv
 };
 
 extern "C"

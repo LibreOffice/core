@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,7 +858,7 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     bHdFtFtnEdn     = pRdr->bHdFtFtnEdn;
     bApo            = pRdr->bApo;
     bTxbxFlySection = pRdr->bTxbxFlySection;
-    bTable          = pRdr->bTable ;
+    nTable          = pRdr->nTable ;
     bTableInApo     = pRdr->bTableInApo;
     bAnl            = pRdr->bAnl;
     bInHyperlink    = pRdr->bInHyperlink;
@@ -870,7 +870,8 @@ WW8ReaderSave::WW8ReaderSave( SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
                                     // Tracking beginnt neu
     pRdr->bHdFtFtnEdn = TRUE;
     pRdr->bApo = pRdr->bTxbxFlySection
-               = pRdr->bTable = pRdr->bTableInApo = pRdr->bAnl = FALSE;
+               = pRdr->bTableInApo = pRdr->bAnl = FALSE;
+    pRdr->nTable = 0;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
     pRdr->pTableDesc = 0;
@@ -909,7 +910,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->bHdFtFtnEdn   = bHdFtFtnEdn;
     pRdr->bApo          = bApo;
     pRdr->bTxbxFlySection=bTxbxFlySection;
-    pRdr->bTable        = bTable ;
+    pRdr->nTable        = nTable;
     pRdr->bTableInApo   = bTableInApo;
     pRdr->bAnl          = bAnl;
     pRdr->bInHyperlink  = bInHyperlink;
@@ -1480,6 +1481,20 @@ void SwWW8ImplReader::UpdatePageDescs(USHORT nInPageDescOffset)
     }
 }
 
+USHORT SwWW8ImplReader::TabCellSprm() const
+{
+    if (bVer67)
+        return 24;
+    return nTable ? 0x244B : 0x2416;
+}
+
+USHORT SwWW8ImplReader::TabRowSprm() const
+{
+    if (bVer67)
+        return 25;
+    return nTable ? 0x244C : 0x2417;
+}
+
 BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
     WW8_CP nStartCp )   // Frame / Table / Anl
 {
@@ -1487,16 +1502,20 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
         return FALSE;
 
     *pbReSync = FALSE;
-    if( bAllEnd ){
+    if( bAllEnd )
+    {
         if( bAnl )
             StopAnl();                  // -> bAnl = FALSE
-        if( bTable && !bFtnEdn )        // Tabelle in FtnEdn nicht erlaubt
+        if( nTable && !bFtnEdn )        // Tabelle in FtnEdn nicht erlaubt
             StopTable();
         if( bApo )
             StopApo();
-        bTable = bApo = FALSE;
+        --nTable;
+        bApo = FALSE;
         return FALSE;
     }
+
+    ASSERT(nTable >= 0,"nTable < 0!");
 
     // TabRowEnd
     BOOL bTableRowEnd = (pPlcxMan->HasParaSprm(bVer67 ? 25 : 0x2417) != 0 );
@@ -1525,12 +1544,22 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
 //      missing for the 2nd, 3rd... paragraphs of each cell.
 
 
-//  1st look for in-table flag
-    BOOL bSprm24 = (pPlcxMan->HasParaSprm(bVer67 ? 24 : 0x2416) != 0);
+//  1st look for in-table flag, for 2000+ there is a subtable flag to
+//  be considered, the sprm 6649 gives the level of the table
+    BYTE nCellLevel = 0;
+
+    if (bVer67)
+        nCellLevel = 0 != pPlcxMan->HasParaSprm(24);
+    else
+    {
+        nCellLevel = 0 != pPlcxMan->HasParaSprm(0x2416);
+        if (!nCellLevel)
+            nCellLevel = 0 != pPlcxMan->HasParaSprm(0x244B);
+    }
 
     WW8_TablePos *pTabPos=0;
     WW8_TablePos aTabPos;
-    if (bSprm24 && !bVer67)
+    if (nCellLevel && !bVer67)
     {
         WW8PLCFxSave1 aSave;
         pPlcxMan->GetPap()->Save( aSave );
@@ -1538,12 +1567,11 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
         WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
         WW8_CP nMyStartCp=nStartCp;
 
-        if (SearchRowEnd( bVer67, pWwFib->fComplex, pPap, nMyStartCp ))
-        {
-            const BYTE *pGiveMePatience = pPap->HasSprm(0x360D);
-            if (pGiveMePatience && ParseTabPos(&aTabPos,pGiveMePatience))
-                pTabPos = &aTabPos;
-        }
+        if (const BYTE *pLevel = pPlcxMan->HasParaSprm(0x6649))
+            nCellLevel = *pLevel;
+
+        if (SearchRowEnd(pPap, nMyStartCp) && (ParseTabPos(&aTabPos,pPap)))
+            pTabPos = &aTabPos;
 
         pPlcxMan->GetPap()->Restore( aSave );
     }
@@ -1552,22 +1580,23 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
 
     BOOL bStartApo, bStopApo, bNowStyleApo;
 
-    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo, bTable,
+    const BYTE* pSprm29 = TestApo( bStartApo, bStopApo, bNowStyleApo, nTable,
         bTableRowEnd && bTableInApo, pTabPos);
 
     //look to see if we are in a Table, but Table in foot/end note not allowed
-    BOOL bStartTab = bSprm24 && !bTable && !bFtnEdn;
+    BOOL bStartTab = (nTable < nCellLevel) && !bFtnEdn;
 
-    BOOL bStopTab = bTable && (bWasTabRowEnd && !bSprm24) && !bFtnEdn;
+    BOOL bStopTab = bWasTabRowEnd && (nTable > nCellLevel) && !bFtnEdn;
 
     bWasTabRowEnd = FALSE;  // must be deactivated right here to prevent next
                             // WW8TabDesc::TableCellEnd() from making nonsense
-
-    if( bTable && !bStopTab && ( bStartApo || bStopApo ) )
+#if 0
+    //we shouldn't need this anymore with table in table support.
+    if( nTable && !bStopTab && ( bStartApo || bStopApo ) )
     {                                   // Wenn Apowechsel in Tabelle
         bStopTab = bStartTab = TRUE;    // ... dann auch neue Tabelle
     }
-
+#endif
 //  Dann auf Anl (Nummerierung) testen
 //  und dann alle Ereignisse in der richtigen Reihenfolge bearbeiten
 
@@ -1596,7 +1625,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
     if( bStopTab )
     {
         StopTable();
-        bTable = FALSE;
+        --nTable;
     }
     if( bStopApo )
     {
@@ -1612,20 +1641,20 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
                                             // die Apo ueber eine FKP-Grenze
                                             // geht
     }
-    if( bStartTab && !( nIniFlags & WW8FL_NO_TABLE ) ){
+    if( bStartTab && !( nIniFlags & WW8FL_NO_TABLE ) )
+    {
         if( bAnl )                          // Nummerierung ueber Zellengrenzen
             StopAnl();                      // fuehrt zu Absturz -> keine Anls
                                             // in Tabellen
-        bTable = StartTable(nStartCp);
+        nTable += StartTable(nStartCp);
         *pbReSync = TRUE;                   // nach StartTable ist ein ReSync
                                             // noetig ( eigentlich nur, falls
                                             // die Tabelle ueber eine
                                             // FKP-Grenze geht
-        bTableInApo = bTable && bApo;
+        bTableInApo = nTable && bApo;
     }
     return bTableRowEnd;
 }
-
 
 #if defined OS2
 // eigentlich besser inline, aber das kann der BLC nicht
@@ -1795,7 +1824,7 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
             they are inside tables. Appears impossible to create one from
             scratch with winword.
             */
-            if (!bTable)
+            if (!nTable)
             {
                 SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
                 if ( pNd )
@@ -1846,7 +1875,7 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
         case 0xc:
             //#i1909# section/page breaks should not occur in tables, word
             //itself ignores them in this case.
-            if (!bTable)
+            if (!nTable)
             {
                 bPgSecBreak = TRUE;
                 // new behavior: insert additional node only WHEN the
@@ -1894,6 +1923,21 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
             break;
         case 0xd:
             bRet = TRUE;
+            if (nTable > 1)
+            {
+                WW8PLCFspecial* pTest = pPlcxMan->GetMagicTables();
+                if (pTest && pTest->SeekPosExact(nPosCp+1+nCpOfs) &&
+                    pTest->Where() == nPosCp+1+nCpOfs)
+                {
+                    TabCellEnd();
+                    if (bWasTabRowEnd)
+                    {
+                        ASSERT(nTable > 1, "Complicated subtable mishap");
+                        pSBase->SetNoAttrScan( 0 );
+                    }
+                    bRet = FALSE;
+                }
+            }
             break;              // line end
         case 0x5:                           // Annotation reference
         case 0x13:
@@ -2105,10 +2149,11 @@ void SwWW8ImplReader::ReadAttrEnds( long& rNext, long& rTxtPos )
     ProcessSpecial( TRUE, &bDummyReSync, -1 );
 }
 
-void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
+BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 {
+    BOOL bJoined=FALSE;
     if( nIniFlags & WW8FL_NO_TEXT )
-        return;
+        return bJoined;
 
     BOOL bStartLine = TRUE;
     short nCrCount = 0;
@@ -2215,11 +2260,12 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
     }
     ReadAttrEnds( nNext, l );
     if (!bInHyperlink)
-        JoinNode( pPaM );
+        bJoined = JoinNode( pPaM );
     if( nType == MAN_MAINTEXT )
         UpdatePageDescs( nPageDescOffset ); // muss passieren, solange es den
                                             // PlcxMan noch gibt
     DELETEZ( pPlcxMan );
+    return bJoined;
 }
 
 /***************************************************************************
@@ -2252,8 +2298,9 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pFmtOfJustInsertedGraphicOrOLE = 0;
     nColls = nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;
+    nTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bApo = bTxbxFlySection
-               = bHasBorder = bSymbol = bIgnoreText = bDontCreateSep = bTable
+               = bHasBorder = bSymbol = bIgnoreText = bDontCreateSep
                = bTableInApo = bWasTabRowEnd = bTxtCol = FALSE;
     bShdTxtCol = bCharShdTxtCol = bAnl = bHdFtFtnEdn = bFtnEdn
                = bIsHeader = bIsFooter = bSectionHasATitlePage

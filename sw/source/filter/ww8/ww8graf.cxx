@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 17:09:23 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,13 +351,16 @@ BOOL SwWW8ImplReader::ReadGrafStart( void* pData, short nDataSiz,
     nDrawXOfs2 = nDrawXOfs;
     nDrawYOfs2 = nDrawYOfs;
 
-    if( eAnchor == FLY_AT_CNTNT ){
+    if( eAnchor == FLY_AT_CNTNT )
+    {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
             nDrawXOfs2 -= nPgLeft;
-        if( bTable )                            // Obj in Table
+        if( nTable )                            // Obj in Table
             nDrawXOfs2 -= GetTableLeft();       // -> siehe Kommentar
                                                 // bei GetTableLeft()
-    }else{
+    }
+    else
+    {
         if( SVBT8ToByte( pDo->bx ) != 1 )
             nDrawXOfs2 += nPgLeft;
         if( SVBT8ToByte( pDo->by ) == 0 )
@@ -2702,21 +2705,21 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         {
             WW8AnchoringProperties aAnchoring;
             aAnchoring.Remove(*this,pCtrlStck);
+
             // rette Flags u.ae. und setze sie zurueck
             WW8ReaderSave aSave( this );
-            // setze Pam in den FlyFrame
-            const SwFmtCntnt& rCntnt = pRetFrmFmt->GetCntnt();
-            ASSERT(rCntnt.GetCntntIdx(),"Kein Inhalt vorbereitet.");
-            pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
-            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
+
+            MoveInsideFly(pRetFrmFmt);
 
             SwNodeIndex aStart(pPaM->GetPoint()->nNode);
 
             // lies den Text ein
             bTxbxFlySection = TRUE;
-            ReadText( nStartCp, (nEndCp-nStartCp),
+            BOOL bJoined = ReadText( nStartCp, (nEndCp-nStartCp),
                 MAN_MAINTEXT == pPlcxMan->GetManType() ?
                 MAN_TXBX : MAN_TXBX_HDFT );
+
+            MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
 
             /*
             ##505##
@@ -2754,7 +2757,7 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
      position by the left of the table, which at least puts it close, theres
      nothing we can do about the vertical either.
      */
-    if( bTable )
+    if (nTable)
         pF->nXaLeft -= GetTableLeft();
 
     ProcessEscherAlign( pRecord, pF, rFlySet, TRUE );

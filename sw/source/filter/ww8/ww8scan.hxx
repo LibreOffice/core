@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,7 @@ private:
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFldTxbx, *pFldTxbxHdft,
                  *pFtn, *pEdn,
                  *pBkm, *pPcd, *pPcdA, *pAnd;
-    WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd;
+    WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd,*pMagicTables;
 
     const WW8Fib* pWwFib;
 
@@ -819,6 +819,7 @@ public:
     WW8PLCFspecial* GetFdoa() const { return pFdoa; }
     WW8PLCFspecial* GetTxbx() const { return pTxbx; }
     WW8PLCFspecial* GetTxbxBkd() const { return pTxbxBkd; }
+    WW8PLCFspecial* GetMagicTables() const { return pMagicTables; }
     short GetManType() const { return nManType; }
     BOOL GetDoingDrawTextBox() const { return bDoingDrawTextBox; }
     void SetDoingDrawTextBox(BOOL bIn) { bDoingDrawTextBox = bIn; }
@@ -860,6 +861,7 @@ private:
     WW8PLCFspecial*   pMainTxbxBkd;     // Break-Deskriptoren fuer diese
     WW8PLCFspecial*   pHdFtTxbx;        // TextBoxen in Header / Footer
     WW8PLCFspecial*   pHdFtTxbxBkd;     // Break-Deskriptoren fuer diese
+    WW8PLCFspecial*   pMagicTables;     // Break-Deskriptoren fuer diese
     WW8PLCFx_Book*    pBook;            // Bookmarks
 
     WW8PLCFpcd*         pPiecePLCF; // fuer FastSave ( Basis-PLCF ohne Iterator )

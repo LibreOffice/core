@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-04 13:39:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
+#ifndef __SGI_STLSTACK
+#include <stack>
 #endif
 #ifndef __SGI_STL_MAP
 #include <map>
@@ -413,15 +416,16 @@ class WW8ReaderSave
     BOOL bHdFtFtnEdn    : 1;
     BOOL bApo           : 1;
     BOOL bTxbxFlySection: 1;
-    BOOL bTable         : 1;
     BOOL bTableInApo    : 1;
     BOOL bAnl           : 1;
     BOOL bInHyperlink : 1;
     BOOL bPgSecBreak : 1;
     BOOL bVerticalEnviron :1;
+    int nTable;
 public:
     WW8ReaderSave( SwWW8ImplReader* pRdr, WW8_CP nStart=-1 );
     void Restore( SwWW8ImplReader* pRdr );
+    const SwPosition &GetStartPos() const { return aTmpPos; }
 };
 
 enum eF_ResT{ FLD_OK, FLD_TEXT, FLD_TAGIGN, FLD_TAGTXT, FLD_READ_FSPA };
@@ -622,6 +626,8 @@ friend class WW8FormulaControl;
     WW8SwFlyPara* pSFlyPara;    // daraus erzeugte Sw-Parameter
 
     WW8TabDesc* pTableDesc;     // Beschreibung der Tabelleneigenschaften
+    //Keep track of tables within tables
+    ::std::stack<WW8TabDesc*> aTableStack;
 
     SwNumRule* pNumRule;        // fuer Nummerierung / Aufzaehlungen im Text
     WW8_OLST* pNumOlst;         // Gliederung im Text
@@ -740,7 +746,7 @@ friend class WW8FormulaControl;
     BOOL bSymbol;           // z.B. Symbol statt Times
     BOOL bIgnoreText;       // z.B. fuer FieldVanish
     BOOL bDontCreateSep;    // e.g. when skipping result of multi-column index-field
-     BOOL bTable;           // wird gerade eine Tabelle eingelesen
+     int  nTable;           // wird gerade eine Tabelle eingelesen
     BOOL bTableInApo;       // Table is contained in Apo
     BOOL bWasTabRowEnd;     // Tabelle : Row End Mark
     BOOL bTxtCol;           // TextFarbe direkt gesetzt
@@ -834,9 +840,10 @@ friend class WW8FormulaControl;
     long ReadTextAttr( long& rTxtPos, BOOL& rbStartLine );
     void ReadAttrs( long& rNext, long& rTxtPos, BOOL& rbStartLine );
     void ReadAttrEnds( long& rNext, long& rTxtPos );
-    void ReadText( long nStartCp, long nTextLen, short nType );
+    BOOL ReadText( long nStartCp, long nTextLen, short nType );
 
-    void ReadRevMarkAuthorStrTabl( SvStream& rStrm, INT32 nTblPos, INT32 nTblSiz, SwDoc& rDoc );
+    void ReadRevMarkAuthorStrTabl( SvStream& rStrm, INT32 nTblPos,
+        INT32 nTblSiz, SwDoc& rDoc );
 
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, short nType );
@@ -894,9 +901,11 @@ friend class WW8FormulaControl;
     BOOL TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         WW8_TablePos *pTabPos);
     const BYTE* TestApo( BOOL& rbStartApo, BOOL& rbStopApo, BOOL& rbNowStyleApo,
-        BOOL bInTable, BOOL bTableRowEnd, WW8_TablePos *pTabPos);
+        int nInTable, BOOL bTableRowEnd, WW8_TablePos *pTabPos);
 
     BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
+    USHORT TabCellSprm() const;
+    USHORT TabRowSprm() const;
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
     BOOL ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
@@ -1059,6 +1068,11 @@ friend class WW8FormulaControl;
             _ChkToggleAttr( nOldStyle81Mask, nNewStyle81Mask );
     }
 
+    void PopTableDesc();
+    void MoveInsideFly(const SwFrmFmt *pFlyFmt);
+    void MoveOutsideFly(const SwFrmFmt *pFlyFmt, const SwPosition &rPos,
+        BOOL bTableJoin=TRUE);
+
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);
@@ -1132,7 +1146,7 @@ public:     // eigentlich private, geht aber leider nur public
 
 
     void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
-    static BOOL ParseTabPos(WW8_TablePos *aTabPos, const BYTE *pParams);
+    static BOOL ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
     void Read_Shade(            USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );
     void Read_ANLevelDesc(      USHORT, const BYTE* pData, short nLen );
@@ -1202,8 +1216,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     short ImportSprm( const BYTE* pPos, USHORT nId = 0 );
 
-    static BOOL SearchRowEnd(BOOL bVer67, BOOL bComplex, WW8PLCFx_Cp_FKP* pPap,
-        WW8_CP &rStartCp );
+    BOOL SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp) const;
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
     SwDoc& GetDoc() const           { return rDoc; }

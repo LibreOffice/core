@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-05 11:59:06 $
+ *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2249,12 +2249,9 @@ void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29)
         nSp26 = pTabPos->nSp26;
         nSp27 = pTabPos->nSp27;
         nSp49 = pTabPos->nSp49;
+        //Assume that the older one overrides the newer one.
         if (!pSprm29)
-        {
-            //Assume that there are to be set in the absense of an override
             nSp29 = pTabPos->nSp29;
-            nSp37 = pTabPos->nSp37;
-        }
     }
 }
 
@@ -2627,7 +2624,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
     {
         // hier duerfen neg. Werte bis minimal -nPgLeft entstehen
         nXPos -= nPgLeft;
-        if( rIo.bTable )
+        if( rIo.nTable )
             nXPos -= rIo.GetTableLeft();
     }
 }
@@ -2830,6 +2827,67 @@ void WW8AnchoringProperties::Insert(SwFltControlStack *pCtrlStck)
     }
 }
 
+void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
+{
+    WW8DupProperties aDup(rDoc,pCtrlStck);
+
+    pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
+
+    // Setze Pam in den FlyFrame
+    const SwFmtCntnt& rCntnt = pFlyFmt->GetCntnt();
+    ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
+    pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
+    pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
+
+    aDup.Insert(*pPaM->GetPoint());
+}
+
+void SwWW8ImplReader::MoveOutsideFly(const SwFrmFmt *pFlyFmt,
+    const SwPosition &rPos, BOOL bTableJoin)
+{
+    // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
+    // die aus Flys rausragen
+    WW8DupProperties aDup(rDoc,pCtrlStck);
+    pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
+
+    /*
+    #i1291
+    If this fly frame consists entirely of one table inside a frame
+    followed by an empty paragraph then we want to delete the empty
+    paragraph so as to get the frame to autoshrink to the size of the
+    table to emulate words behaviour closer.
+    */
+    if (bTableJoin)
+    {
+        const SwNodeIndex* pNodeIndex = pFlyFmt->GetCntnt().
+            GetCntntIdx();
+        if (pNodeIndex)
+        {
+            SwNodeIndex aIdx( *pNodeIndex, 1 ),
+            aEnd( *pNodeIndex->GetNode().EndOfSectionNode() );
+
+            if (aIdx < aEnd)
+            {
+                if(aIdx.GetNode().IsTableNode())
+                {
+                    aIdx = *aIdx.GetNode().EndOfSectionNode();
+                    aIdx++;
+                    if ( (aIdx < aEnd) && aIdx.GetNode().IsTxtNode() )
+                    {
+                        SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
+                        aIdx++;
+                        if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
+                            rDoc.DelFullPara( *pPaM );
+                    }
+                }
+            }
+        }
+    }
+
+    *pPaM->GetPoint() = rPos;
+    aDup.Insert(*pPaM->GetPoint());
+}
+
 BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
     WW8_TablePos *pTabPos)
 {
@@ -2867,6 +2925,7 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         // Grafik angewendet.
 
         WW8FlySet aFlySet( *this, pWFlyPara, pSFlyPara, FALSE );
+
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
 
@@ -2881,17 +2940,8 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         //frame, which makes no sense, restore them after the frame is
         //closed
         pSFlyPara->aAnchoring.Remove(*this,pCtrlStck);
-        WW8DupProperties aDup(rDoc,pCtrlStck);
 
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
-
-        // Setze Pam in den FlyFrame
-        const SwFmtCntnt& rCntnt = pSFlyPara->pFlyFmt->GetCntnt();
-        ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
-        pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
-        pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
-
-        aDup.Insert(*pPaM->GetPoint());
+        MoveInsideFly(pSFlyPara->pFlyFmt);
 
         // 1) ReadText() wird nicht wie beim W4W-Reader rekursiv aufgerufen,
         //    da die Laenge des Apo zu diesen Zeitpunkt noch nicht feststeht,
@@ -2941,16 +2991,12 @@ void SwWW8ImplReader::StopApo()
         // Positionieren einer einzelnen Grafik dient.
         JoinNode( pPaM, FALSE );// UEberfluessigen Absatz entfernen
 
-        if( !pSFlyPara->pMainTextPos || !pWFlyPara ){
+        if( !pSFlyPara->pMainTextPos || !pWFlyPara )
+        {
             ASSERT( pSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
             ASSERT( pWFlyPara, "StopApo: pWFlyPara ist 0" );
             return;
         }
-
-        // Alle Attribute schliessen, da sonst Attribute entstehen koennen,
-        // die aus Flys rausragen
-        WW8DupProperties aDup(rDoc,pCtrlStck);
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), 0, FALSE );
 
         /*
         ##582##
@@ -2961,41 +3007,14 @@ void SwWW8ImplReader::StopApo()
         if (pItem)
             pSFlyPara->pFlyFmt->SetAttr(*pItem);
 
-        /*
-        #i1291
-        If this fly frame consists entirely of one table inside a frame
-        followed by an empty paragraph then we want to delete the empty
-        paragraph so as to get the frame to autoshrink to the size of the
-        table to emulate words behaviour closer.
-        */
-        const SwNodeIndex* pNodeIndex = pSFlyPara->pFlyFmt->GetCntnt().
-            GetCntntIdx();
-        if( pNodeIndex )
-        {
-            SwNodeIndex aIdx( *pNodeIndex, 1 ),
-            aEnd( *pNodeIndex->GetNode().EndOfSectionNode() );
+        MoveOutsideFly(pSFlyPara->pFlyFmt,*pSFlyPara->pMainTextPos);
 
-            if (aIdx < aEnd)
-            {
-                if(aIdx.GetNode().IsTableNode())
-                {
-                    aIdx = *aIdx.GetNode().EndOfSectionNode();
-                    aIdx++;
-                    if ( (aIdx < aEnd) && aIdx.GetNode().IsTxtNode() )
-                    {
-                        SwTxtNode *pNd = aIdx.GetNode().GetTxtNode();
-                        aIdx++;
-                        if (aIdx == aEnd && pNd && !pNd->GetTxt().Len())
-                            rDoc.DelFullPara( *pPaM );
-                    }
-                }
-            }
-        }
+        pSFlyPara->aAnchoring.Insert(pCtrlStck);
 
-// Ist die Fly-Breite durch eine innenliegende Grafik vergroessert worden
-// ( bei automatischer Breite des Flys ), dann muss die Breite des SW-Flys
-// entsprechend umgesetzt werden, da der SW keine automatische Breite kennt.
-
+        // Ist die Fly-Breite durch eine innenliegende Grafik vergroessert
+        // worden ( bei automatischer Breite des Flys ), dann muss die Breite
+        // des SW-Flys entsprechend umgesetzt werden, da der SW keine
+        // automatische Breite kennt.
         if( pSFlyPara->nNewNettoWidth > MINFLY )    // BoxUpWidth ?
         {
             long nW = pSFlyPara->nNewNettoWidth;
@@ -3017,11 +3036,6 @@ void SwWW8ImplReader::StopApo()
                 pSFlyPara->nWidth );
             pSFlyPara->pFlyFmt->SetAttr( aFlySet.Get( RES_FRM_SIZE ) );
         }
-
-        *pPaM->GetPoint() = *pSFlyPara->pMainTextPos;
-
-        aDup.Insert(*pPaM->GetPoint());
-        pSFlyPara->aAnchoring.Insert(pCtrlStck);
 
         DELETEZ( pSFlyPara->pMainTextPos );
 
@@ -4762,25 +4776,19 @@ void SwWW8ImplReader::Read_ApoPPC( USHORT, const BYTE* pData, short )
     }
 }
 
-const BYTE* WW8FindSprm( USHORT nId, long nLen, const BYTE* pSprms,
-    BYTE nVersion );
-
-BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, const BYTE *pParams)
+BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
 {
     BOOL bRet=FALSE;
-    BYTE nLen = ( pParams ) ? *( (BYTE*)pParams - 1 ) : 0 ;
-    const BYTE *pRes;
-    if (nLen)
+    const BYTE *pRes=0;
+    memset(pTabPos, 0, sizeof(WW8_TablePos));
+    if (pRes = pPap->HasSprm(0x360D))
     {
-        memset(pTabPos, 0, sizeof(WW8_TablePos));
-        pRes = WW8FindSprm( 0x940E, nLen, pParams,8);
-        if (pRes)
+        pTabPos->nSp29 = *pRes;
+        if (pRes = pPap->HasSprm(0x940E))
             pTabPos->nSp26 = SVBT16ToShort(pRes);
-        pRes = WW8FindSprm( 0x940F, nLen, pParams,8);
-        if (pRes)
+        if (pRes = pPap->HasSprm(0x940F))
             pTabPos->nSp27 = SVBT16ToShort(pRes);
-        pRes = WW8FindSprm( 0x9410, nLen, pParams,8);
-        if (pRes)
+        if (pRes = pPap->HasSprm(0x9410))
             pTabPos->nSp49 = SVBT16ToShort(pRes);
         bRet=TRUE;
     }
@@ -5343,7 +5351,10 @@ SprmReadInfo aSprmReadTab[] = {
     0x3615, (FNReadRecord)0, //undocumented
     0x360D, (FNReadRecord)0, //undocumented
     0x703A, (FNReadRecord)0, //undocumented
-    0x303B, (FNReadRecord)0  //undocumented
+    0x303B, (FNReadRecord)0, //undocumented
+    0x244B, (FNReadRecord)0, // undocumented, must be subtable "sprmPFInTable"
+    // undocumented, must be subtable "sprmPFTtp"
+    0x244C, &SwWW8ImplReader::Read_TabRowEnd
 };
 
 //-----------------------------------------
