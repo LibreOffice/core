@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 15:28:02 $
+ *  last change: $Author: dv $ $Date: 2001-07-10 15:14:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
 IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
 {
     SvtURLBox* pURLBox = GetURLBox();
-    String aName( pURLBox->GetText() );
+    String aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && aName.Len() )
     {
@@ -209,7 +209,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
 IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
 {
     SvtURLBox* pURLBox = GetURLBox();
-    OpenURL( pURLBox->GetText(), pURLBox->IsCtrlOpen() );
+    OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
     SfxViewFrame* pFrm = SfxViewFrame::Current();
     if( pFrm )
         pFrm->GetFrame()->GrabFocusOnComponent_Impl();
@@ -243,8 +243,10 @@ void SfxURLToolBoxControl_Impl::StateChanged
         {
             DBG_ASSERT( pPickList->GetHistoryPickEntry( nPickEntry ),
                         "Pickentry ist invalid" );
-            pURLBox->InsertEntry(
-                        pPickList->GetHistoryPickEntry( nPickEntry )->aTitle );
+
+            INetURLObject aURL ( pPickList->GetHistoryPickEntry( nPickEntry )->aTitle );
+
+            pURLBox->InsertEntry( aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
         }
 
         const SfxStringItem *pURL = PTR_CAST(SfxStringItem,pState);
