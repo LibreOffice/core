@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:10:00 $
+ *  last change:$Date: 2003-09-08 13:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,18 @@
 
 package mod._ucprmt;
 
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.ucb.XContentIdentifierFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.Status;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.ucb.XContentIdentifierFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 public class ProxyProvider extends TestCase {
 
@@ -78,7 +80,6 @@ public class ProxyProvider extends TestCase {
             ( TestParameters Param, PrintWriter log ) {
 
         XInterface oObj = null;
-        Object oInterface = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         XContentIdentifierFactory cntIDFac = null ;
 
