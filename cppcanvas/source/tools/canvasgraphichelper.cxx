@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasgraphichelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#include "canvasgraphichelper.hxx"
+#include <canvasgraphichelper.hxx>
 
 #ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP_
 #include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
@@ -79,7 +79,7 @@
 #endif
 
 #include <cppcanvas/polypolygon.hxx>
-#include "tools.hxx"
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -125,7 +125,11 @@ namespace cppcanvas
         void CanvasGraphicHelper::setClip( const PolyPolygonSharedPtr& rClipPoly )
         {
             mpClipPolyPolygon = rClipPoly;
-            maRenderState.Clip = rClipPoly.get() != NULL ? rClipPoly->getUNOPolyPolygon() : NULL;
+
+            if( rClipPoly.get() )
+                maRenderState.Clip = rClipPoly->getUNOPolyPolygon();
+            else
+                maRenderState.Clip.clear();
         }
 
         PolyPolygonSharedPtr CanvasGraphicHelper::getClip() const
