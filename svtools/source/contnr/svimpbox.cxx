@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:28:32 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,12 +950,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
 
     long nRectHeight = rRect.GetHeight();
     long nEntryHeight = pView->GetEntryHeight();
-
-    int bHorSBar;
-    if( (pView->nWindowStyle) & WB_HSCROLL )
-        bHorSBar = TRUE;
-    else
-        bHorSBar = FALSE;
 
     // Bereich der zu zeichnenden Entries berechnen
     USHORT nStartLine = (USHORT)( rRect.Top() / nEntryHeight );
