@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 14:56:24 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,20 +1111,6 @@ void SwHistory::Add( const SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
 }
 
 
-void SwHistory::Add( const SwFmt* pFmt, ULONG nNodeIdx, BYTE nWhichNd )
-{
-    ASSERT( !nEndDiff, "nach REDO wurde die History noch nicht geloescht" );
-    SwHstryHint * pHt;
-    const USHORT nWh = pFmt->Which();
-    if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
-    {
-        pHt = new SwHstryTxtFlyCnt( (SwFlyFrmFmt*)pFmt );
-        Insert( pHt, Count() );
-    }
-}
-
-
-
 // JP 21.03.94: Bookmarks jetzt auch in die History mitaufnehmen
 void SwHistory::Add( const SwBookmark& rBkmk, BYTE nTyp )
 {
@@ -1359,37 +1345,12 @@ SwRegHistory::SwRegHistory( SwModify* pRegIn, const SwNode& rNd,
         _MakeSetWhichIds();
 }
 
-
-SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, SwTxtAttr* pTxtHt,
-                            USHORT nFlags, SwHistory* pHst )
-    : SwClient( 0 ), pHstry( pHst ), nNodeIdx( pTxtNode->GetIndex() )
-{
-    ASSERT( pTxtHt->Which() >= RES_TXTATR_BEGIN &&
-        pTxtHt->Which() < RES_TXTATR_END, "SwRegHistory: Falsches Attribut" );
-    if( !pTxtHt->GetEnd() )
-    {
-        if( pTxtNode->Insert( pTxtHt, nFlags ) && pHst )
-            pHst->Add( pTxtHt, nNodeIdx, TRUE );
-    }
-    else if( pTxtNode->GetpSwpHints() && pHst )
-    {
-        pTxtNode->GetpSwpHints()->Register( this );
-        pTxtNode->Insert( pTxtHt, nFlags );
-        pTxtNode->GetpSwpHints()->DeRegister();
-    }
-    else if( pTxtNode->Insert( pTxtHt, nFlags ) && pHst )
-        pHst->Add( pTxtHt, nNodeIdx, TRUE );
-}
-
-
 SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     : SwClient( 0 ), pHstry( pHst ), nNodeIdx( rNd.GetIndex() )
 {
     if( pHstry )
         _MakeSetWhichIds();
 }
-
-
 
 void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
