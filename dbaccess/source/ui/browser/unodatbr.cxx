@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-03 14:49:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 14:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1338,6 +1338,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_EXPLORER:
             toggleExplorer();
             break;
+
         case ID_BROWSER_EDITDOC:
             SbaXDataBrowserController::Execute(nId);
             break;
@@ -1419,7 +1420,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_PASTE:
             if(m_pTreeView->HasChildPathFocus())
             {
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
                 SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
                 implPasteTable( pEntry, aTransferData );
                 break;
@@ -1434,7 +1435,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 pTransfer       = implCopyObject( pEntry, eType == ET_QUERY ? CommandType::QUERY : CommandType::TABLE);
                 aEnsureDelete   = pTransfer;
                 if (pTransfer)
-                    pTransfer->CopyToClipboard();
+                    pTransfer->CopyToClipboard(getView());
                 break;
             }// else run through
         case ID_BROWSER_CUT:// cut isn't allowed for the treeview
@@ -3056,7 +3057,7 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             TransferableHelper* pTransfer = implCopyObject( pEntry, CommandType::QUERY );
             Reference< XTransferable> aEnsureDelete = pTransfer;
             if (pTransfer)
-                pTransfer->CopyToClipboard();
+                pTransfer->CopyToClipboard(getView());
         }
         break;
 
@@ -3066,13 +3067,13 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             Reference< XTransferable> aEnsureDelete = pTransfer;
 
             if (pTransfer)
-                pTransfer->CopyToClipboard();
+                pTransfer->CopyToClipboard(getView());
         }
         break;
 
         case ID_TREE_TABLE_PASTE:
         {
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
             implPasteTable( pEntry, aTransferData );
         }
         break;

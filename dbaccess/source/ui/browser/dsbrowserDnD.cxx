@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 14:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ namespace dbaui
     sal_Bool SbaTableQueryBrowser::isTableFormat()
     {
         sal_Bool bTableFormat = sal_False;
-        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
         bTableFormat    =   aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_TABLE)
                     ||  aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY)
                     ||  aTransferData.HasFormat(SOT_FORMAT_RTF)
@@ -807,6 +807,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/04/26 11:36:16  fs
+ *  added support for data source associated bookmarks
+ *
  *  Revision 1.8  2001/04/11 12:58:38  fs
  *  use the ODataAccessDescriptor instead of the dbatools functions
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-03 09:23:19 $
+ *  last change: $Author: fs $ $Date: 2001-05-07 14:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1021,7 +1021,7 @@ void SbaGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupM
                 vClipboardList.push_back(pTableRow);
                 OTableRowExchange* pData = new OTableRowExchange(vClipboardList);
                 Reference< ::com::sun::star::datatransfer::XTransferable> xRef = pData;
-                pData->CopyToClipboard();
+                pData->CopyToClipboard(GetParent());
             }
             break;
 
