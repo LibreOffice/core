@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:41:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,18 +203,15 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
     aSortSequence()
 {
     nSourceType = sheet::DataImportMode_NONE;
-    String sUnbenannt = ScGlobal::GetRscString(STR_DB_NONAME);
-    rtl::OUString sOUUnbenannt (sUnbenannt);
-    sDatabaseRangeName = sOUUnbenannt;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -343,9 +340,8 @@ void ScXMLDatabaseRangeContext::EndElement()
         ScDocument* pDoc = GetScImport().GetDocument();
         if (pDoc && xPropertySet.is())
         {
-            uno::Any aDatabaseRanges = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG)));
-            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges;
-            if (aDatabaseRanges >>= xDatabaseRanges)
+            uno::Reference <sheet::XDatabaseRanges> xDatabaseRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATABASERNG))), uno::UNO_QUERY);
+            if (xDatabaseRanges.is())
             {
                 table::CellRangeAddress aCellRangeAddress;
                 sal_Int32 nOffset(0);
@@ -370,24 +366,19 @@ void ScXMLDatabaseRangeContext::EndElement()
                     }
                     if (bInsert)
                     {
-                        uno::Any aDatabaseRange = xDatabaseRanges->getByName(sDatabaseRangeName);
-                        uno::Reference <sheet::XDatabaseRange> xDatabaseRange;
-                        if (aDatabaseRange >>= xDatabaseRange)
+                        uno::Reference <sheet::XDatabaseRange> xDatabaseRange(xDatabaseRanges->getByName(sDatabaseRangeName), uno::UNO_QUERY);
+                        if (xDatabaseRange.is())
                         {
                             uno::Reference <beans::XPropertySet> xDatabaseRangePropertySet (xDatabaseRange, uno::UNO_QUERY);
                             if (xDatabaseRangePropertySet.is())
                             {
-                                uno::Any aTempValue;
-                                aTempValue = ::cppu::bool2any(bKeepFormats);
-                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)), aTempValue);
-                                aTempValue = ::cppu::bool2any(bMoveCells);
-                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)), aTempValue);
-                                aTempValue = ::cppu::bool2any(bStripData);
-                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)), aTempValue);
+                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_KEEPFORM)), uno::makeAny(bKeepFormats));
+                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)), uno::makeAny(bMoveCells));
+                                xDatabaseRangePropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)), uno::makeAny(bStripData));
                             }
-                            uno::Sequence <beans::PropertyValue> aImportDescriptor = xDatabaseRange->getImportDescriptor();
+                            uno::Sequence <beans::PropertyValue> aImportDescriptor(xDatabaseRange->getImportDescriptor());
                             sal_Int32 nImportProperties = aImportDescriptor.getLength();
-                            for (sal_Int16 i = 0; i < nImportProperties; i++)
+                            for (sal_Int16 i = 0; i < nImportProperties; ++i)
                             {
                                 if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
                                 {
@@ -402,23 +393,11 @@ void ScXMLDatabaseRangeContext::EndElement()
                                     }
                                 }
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCOBJ)))
-                                {
-                                    uno::Any aSourceObject;
-                                    aSourceObject <<= sSourceObject;
-                                    aImportDescriptor[i].Value = aSourceObject;
-                                }
+                                    aImportDescriptor[i].Value <<= sSourceObject;
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCTYPE)))
-                                {
-                                    uno::Any aSourceType;
-                                    aSourceType <<= nSourceType;
-                                    aImportDescriptor[i].Value = aSourceType;
-                                }
+                                    aImportDescriptor[i].Value <<= nSourceType;
                                 else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISNATIVE)))
-                                {
-                                    uno::Any aNative;
-                                    aNative = ::cppu::bool2any(bNative);
-                                    aImportDescriptor[i].Value = aNative;
-                                }
+                                    aImportDescriptor[i].Value <<= bNative;
                             }
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
                             sal_uInt16 nIndex;
@@ -455,28 +434,20 @@ void ScXMLDatabaseRangeContext::EndElement()
 
                                 pDBData->SetSortParam(aSortParam);
                             }
-                            uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
+                            uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor(xDatabaseRange->getFilterDescriptor());
                             if (xSheetFilterDescriptor.is())
                             {
                                 uno::Reference <beans::XPropertySet> xFilterPropertySet (xSheetFilterDescriptor, uno::UNO_QUERY);
                                 if (xFilterPropertySet.is())
                                 {
-                                    uno::Any aTemp;
                                     sal_Bool bOrientation(table::TableOrientation_COLUMNS == eOrientation);
-                                    aTemp = ::cppu::bool2any(bOrientation);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)), aTemp);
-                                    aTemp = ::cppu::bool2any(bContainsHeader);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)), aTemp);
-                                    aTemp = ::cppu::bool2any(bFilterCopyOutputData);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)), aTemp);
-                                    aTemp = ::cppu::bool2any(bFilterIsCaseSensitive);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
-                                    aTemp = ::cppu::bool2any(bFilterSkipDuplicates);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)), aTemp);
-                                    aTemp = ::cppu::bool2any(bFilterUseRegularExpressions);
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), aTemp);
-                                    aTemp <<= aFilterOutputPosition;
-                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), aTemp);
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)), uno::makeAny(bOrientation));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONTHDR)), uno::makeAny(bContainsHeader));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT)), uno::makeAny(bFilterCopyOutputData));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), uno::makeAny(bFilterIsCaseSensitive));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)), uno::makeAny(bFilterSkipDuplicates));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_USEREGEX)), uno::makeAny(bFilterUseRegularExpressions));
+                                    xFilterPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS)), uno::makeAny(aFilterOutputPosition));
                                 }
                                 xSheetFilterDescriptor->setFilterFields(aFilterFields);
                                 if (bFilterConditionSourceRange)
@@ -488,23 +459,17 @@ void ScXMLDatabaseRangeContext::EndElement()
                             }
                             if (bContainsSubTotal)
                             {
-                                uno::Reference <sheet::XSubTotalDescriptor> xSubTotalDescriptor = xDatabaseRange->getSubTotalDescriptor();
+                                uno::Reference <sheet::XSubTotalDescriptor> xSubTotalDescriptor(xDatabaseRange->getSubTotalDescriptor());
                                 if (xSubTotalDescriptor.is())
                                 {
                                     uno::Reference <beans::XPropertySet> xSubTotalPropertySet (xSubTotalDescriptor, uno::UNO_QUERY);
                                     if( xSubTotalPropertySet.is())
                                     {
-                                        uno::Any aTemp;
-                                        aTemp = ::cppu::bool2any(bSubTotalsBindFormatsToContent);
-                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)), aTemp);
-                                        aTemp = ::cppu::bool2any(bSubTotalsEnabledUserList);
-                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)), aTemp);
-                                        aTemp <<= nSubTotalsUserListIndex;
-                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)), aTemp);
-                                        aTemp = ::cppu::bool2any(bSubTotalsInsertPageBreaks);
-                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)), aTemp);
-                                        aTemp = ::cppu::bool2any(bSubTotalsIsCaseSensitive);
-                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), aTemp);
+                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)), uno::makeAny(bSubTotalsBindFormatsToContent));
+                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)), uno::makeAny(bSubTotalsEnabledUserList));
+                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERSORTLISTINDEX)), uno::makeAny(nSubTotalsUserListIndex));
+                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)), uno::makeAny(bSubTotalsInsertPageBreaks));
+                                        xSubTotalPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)), uno::makeAny(bSubTotalsIsCaseSensitive));
                                     }
                                     ScSubTotalParam aSubTotalParam;
                                     aSubTotalParam.bDoSort = bSubTotalsSortGroups;
@@ -540,18 +505,18 @@ ScXMLSourceSQLContext::ScXMLSourceSQLContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceSQLAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -613,18 +578,18 @@ ScXMLSourceTableContext::ScXMLSourceTableContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceTableAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -681,18 +646,18 @@ ScXMLSourceQueryContext::ScXMLSourceQueryContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceQueryAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -800,18 +765,18 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSubTotalRulesAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -878,19 +843,19 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext)
 {
-    pDatabaseRangeContext = pTempDatabaseRangeContext;
     pDatabaseRangeContext->SetSubTotalsSortGroups(sal_True);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRulesSortGroupsAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -967,13 +932,13 @@ ScXMLSubTotalRuleContext::ScXMLSubTotalRuleContext( ScXMLImport& rImport,
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRulesSubTotalRuleAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -1031,13 +996,13 @@ ScXMLSubTotalFieldContext::ScXMLSubTotalFieldContext( ScXMLImport& rImport,
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSubTotalRuleSubTotalFieldAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
