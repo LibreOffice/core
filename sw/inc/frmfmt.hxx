@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:30:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,9 @@ class SwDrawFrmFmt: public SwFrmFmt
     // --> OD 2004-08-06 #i28749#
     sal_Int16 mnPositionLayoutDir;
     // <--
+    // --> OD 2005-03-11 #i44334#, #i44681#
+    bool mbPosAttrSet;
+    // <--
 protected:
     SwDrawFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
@@ -267,10 +270,11 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          // --> OD 2004-10-25 #i36010# - change default value of <mnPositionLayoutDir>
-          // in order to force an setting of the positioning attributes at the
-          // first time the drawing object is positioned.
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInHoriL2R ),
+          // --> OD 2005-03-10 #i44344#, #i44681# - undo change of issue #i36010#
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          // <--
+          // --> OD 2005-03-11 #i44334#, #i44681#
+          mbPosAttrSet( false ),
           // <--
           pSdrObjCached(NULL)
     {}
@@ -281,10 +285,11 @@ protected:
           meLayoutDir( SwFrmFmt::HORI_L2R ),
           // <--
           // --> OD 2004-08-06 #i28749#
-          // --> OD 2004-10-25 #i36010# - change default value of <mnPositionLayoutDir>
-          // in order to force an setting of the positioning attributes at the
-          // first time the drawing object is positioned.
-          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInHoriL2R ),
+          // --> OD 2005-03-10 #i44344#, #i44681# - undo change of issue #i36010#
+          mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
+          // <--
+          // --> OD 2005-03-11 #i44334#, #i44681#
+          mbPosAttrSet( false ),
           // <--
           pSdrObjCached(NULL)
     {}
@@ -311,6 +316,16 @@ public:
     // --> OD 2004-08-06 #i28749#
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    // <--
+    // --> OD 2005-03-11 #i44334#, #i44681#
+    inline bool IsPosAttrSet() const
+    {
+        return mbPosAttrSet;
+    }
+    inline void PosAttrSet()
+    {
+        mbPosAttrSet = true;
+    }
     // <--
     virtual String GetDescription() const;
 
