@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2000-11-22 13:53:10 $
+ *  last change: $Author: jl $ $Date: 2000-12-06 08:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,9 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_openProfile [not opened]\n");
 #endif
+        if( FileName)
+            rtl_uString_release( FileName);
+
         return (NULL);
     }
 
@@ -323,6 +326,9 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *strProfileName, sal_uInt32 Flag
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("Out osl_openProfile [ok]\n");
 #endif
+    if( FileName)
+        rtl_uString_release( FileName);
+
     return (pProfile);
 }
 
