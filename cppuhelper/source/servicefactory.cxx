@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 12:30:59 $
+ *  last change: $Author: dbo $ $Date: 2001-05-11 10:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,15 +213,6 @@ static Reference< lang::XMultiComponentFactory > bootstrapInitialSF(
     xSet->insert( aFac );
     OSL_ENSURE( xSet->has( aFac ), "### failed registering registry td provider!" );
     }
-    // registry td provider
-    {
-    Any aFac( makeAny( loadSharedLibComponentFactory(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("rdbtdp") ), rBootstrapPath,
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider") ),
-        xSF, Reference< registry::XRegistryKey >() ) ) );
-    xSet->insert( aFac );
-    OSL_ENSURE( xSet->has( aFac ), "### failed registering registry td provider!" );
-    }
     // implementation registration
     {
     Any aFac( makeAny( loadSharedLibComponentFactory(
@@ -267,6 +258,15 @@ static Reference< XComponentContext > initializeSF(
 
     if (xRegistry.is())
     {
+        // add registry td provider
+        Reference< container::XSet > xSet( xSF, UNO_QUERY );
+        Any aFac( makeAny( loadSharedLibComponentFactory(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("rdbtdp") ), rBootstrapPath,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider") ),
+            Reference< lang::XMultiServiceFactory >( xSF, UNO_QUERY ), Reference< registry::XRegistryKey >() ) ) );
+        xSet->insert( aFac );
+        OSL_ENSURE( xSet->has( aFac ), "### failed registering registry td provider!" );
+
         // rdbtdp: registries to be used
         context_values[ 3 ].bLateInitService = false;
         context_values[ 3 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider.Registries") );
