@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 21:47:26 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:30:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2097,7 +2097,7 @@ Menu RID_FILE {
             TEXT[ polish ] = "~New ";
             TEXT[ portuguese_brazilian ] = "~Neu";
             TEXT[ japanese ] = "新規作成(~N)";
-            TEXT[ korean ] = "새로(~N)";
+            TEXT[ korean ] = "새로 만들기(~N)";
             TEXT[ chinese_simplified ] = "~New";
             TEXT[ chinese_traditional ] = "~New";
             TEXT[ arabic ] = "~New";
@@ -2503,7 +2503,7 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Paste ";
             TEXT[ portuguese_brazilian ] = "E~inf?en";
             TEXT[ japanese ] = "貼り付け(~P)";
-            TEXT[ korean ] = "삽입(~P)";
+            TEXT[ korean ] = "붙여넣기(~P)";
             TEXT[ chinese_simplified ] = "~Paste";
             TEXT[ chinese_traditional ] = "~Paste";
             TEXT[ arabic ] = "~Insert";
@@ -4599,7 +4599,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "True";
         Text[ portuguese_brazilian ] = "True";
         Text[ japanese ] = "True";
-        Text[ korean ] = "참";
+        Text[ korean ] = "TRUE";
         Text[ chinese_simplified ] = "True";
         Text[ chinese_traditional ] = "True";
         Text[ arabic ] = "True";
@@ -4627,7 +4627,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "False";
         Text[ portuguese_brazilian ] = "False";
         Text[ japanese ] = "False";
-        Text[ korean ] = "거짓";
+        Text[ korean ] = "FALSE";
         Text[ chinese_simplified ] = "False";
         Text[ chinese_traditional ] = "False";
         Text[ arabic ] = "False";
