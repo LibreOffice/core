@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-10 11:13:16 $
+ *  last change: $Author: os $ $Date: 2001-07-12 10:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,8 +290,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     sal_Bool bLazy = 0 != (rCfgItem.GetMode()&CONFIG_MODE_DELAYED_UPDATE);
     PropertyValue aUpdate;
     aUpdate.Name = C2U("lazywrite");
-    sal_Bool bTrue = sal_True;
-    aUpdate.Value.setValue(&bTrue, ::getBooleanCppuType());
+    aUpdate.Value.setValue(&bLazy, ::getBooleanCppuType());
     pArgs[1] <<= aUpdate;
 
     // Initialize item with support for reading/writing more then one locales at same time!
