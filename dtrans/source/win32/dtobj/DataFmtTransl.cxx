@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 15:21:17 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
 {
     DataFlavor aFlavor;
 
+    aFlavor.MimeType             = OUString::createFromAscii( "" );
+    aFlavor.HumanPresentableName = OUString::createFromAscii( "" );
+    aFlavor.DataType             = getCppuType( (const Sequence< sal_Int8 >*) 0 );
+
     try
     {
         CLIPFORMAT aClipformat = aFormatEtc.cfFormat;
@@ -202,7 +206,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const Reference< X
             aFlavor.HumanPresentableName = OUString::createFromAscii( "OEM/ANSI Text" );
             aFlavor.DataType             = CPPUTYPE_SEQSALINT8;
         }
-        else
+        else if ( CF_INVALID != aClipformat )
         {
             aFlavor = m_XDataFormatTranslator->getDataFlavorFromSystemDataType( aAny );
 

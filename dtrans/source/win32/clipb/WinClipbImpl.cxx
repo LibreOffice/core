@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipbImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 16:29:04 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 10:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ CWinClipbImpl::CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* the
 
 CWinClipbImpl::~CWinClipbImpl( )
 {
-    unregisterClipboardViewer( );
 }
 
 //------------------------------------------------------------------------
@@ -262,6 +261,8 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
 
 void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
 {
+    unregisterClipboardViewer( );
+
     OSL_ENSURE( !m_rOldClipbContent.is( ) &&
                 !m_rOldClipbOwner.is( ) &&
                 !m_rCurrentClipbContent.is( ) &&

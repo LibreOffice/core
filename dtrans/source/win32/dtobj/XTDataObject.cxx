@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-09 15:21:55 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 10:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,10 @@ void SAL_CALL CXTDataObject::renderUnicodeAndSetupStgMedium(
     // spec. an do throw an UnsupportedFlavorException
     // so we must check the any
     if ( !aAny.hasValue( ) )
+    {
+        OSL_ENSURE( sal_False, "XTransferable should throw an exception if ask for an unsupported flavor" );
         throw UnsupportedFlavorException( );
+    }
 
     OUString aText;
     aAny >>= aText;

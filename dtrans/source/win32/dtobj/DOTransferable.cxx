@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-05 13:10:39 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 10:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void SAL_CALL CDOTransferable::initFlavorList( )
 //
 //------------------------------------------------------------------------
 
-//inline
+inline
 void SAL_CALL CDOTransferable::addSupportedFlavor( const DataFlavor& aFlavor )
 {
     // we ignore all formats that couldn't be translated

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:48:23 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 10:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,12 +135,12 @@ private:
     unsigned                    m_uOleThreadId;
     HANDLE                      m_hEvtThrdReady;
     HANDLE                      m_hEvtOpComplete;
-    HANDLE                      m_hEvtWmDrawClipboardReady;
+    //HANDLE                        m_hEvtWmDrawClipboardReady;
     HWND                        m_hwndMtaOleReqWnd;
     HWND                        m_hwndNextClipViewer;
     LPFNC_CLIPVIEWER_CALLBACK_t m_pfncClipViewerCallback;
     sal_Bool                    m_bInRegisterClipViewer;
-    sal_Bool                    m_bInFlushClipboard;
+    sal_Bool                    m_bInCallbackTriggerOperation;
 
     static CMtaOleClipboard* s_theMtaOleClipboardInst;
 
