@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:42:10 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,17 +626,27 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
 
         if ( xTableProp.is() )
         {
+            sal_Int32 nPos = 0;
             // is the filter intially applied ?
-            aProperties.getArray()[0]   = PROPERTY_APPLYFILTER;
-            aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_APPLYFILTER);
+            aProperties.getArray()[nPos]    = PROPERTY_APPLYFILTER;
+            aValues.getArray()[nPos++]      = xTableProp->getPropertyValue(PROPERTY_APPLYFILTER);
 
             // the initial filter
-            aProperties.getArray()[1]   = PROPERTY_FILTER;
-            aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_FILTER);
+            aProperties.getArray()[nPos]    = PROPERTY_FILTER;
+            aValues.getArray()[nPos++]      = xTableProp->getPropertyValue(PROPERTY_FILTER);
+
+            if ( xTableProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_HAVING_CLAUSE) )
+            {
+                aProperties.realloc(aProperties.getLength()+1);
+                aValues.realloc(aValues.getLength()+1);
+                // the initial having clause
+                aProperties.getArray()[nPos]    = PROPERTY_HAVING_CLAUSE;
+                aValues.getArray()[nPos++]      = xTableProp->getPropertyValue(PROPERTY_HAVING_CLAUSE);
+            }
 
             // the initial ordering
-            aProperties.getArray()[2]   = PROPERTY_ORDER;
-            aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_ORDER);
+            aProperties.getArray()[nPos]    = PROPERTY_ORDER;
+            aValues.getArray()[nPos++]      = xTableProp->getPropertyValue(PROPERTY_ORDER);
 
             Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
             xFormMultiSet->setPropertyValues(aProperties, aValues);
@@ -981,6 +991,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
         else if (   evt.PropertyName.equals(PROPERTY_FONT)          // the font ?
                 ||  evt.PropertyName.equals(PROPERTY_TEXTCOLOR)     // the text color ?
                 ||  evt.PropertyName.equals(PROPERTY_FILTER)        // the filter ?
+                ||  evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE) // the having clause ?
                 ||  evt.PropertyName.equals(PROPERTY_ORDER)         // the sort ?
                 ||  evt.PropertyName.equals(PROPERTY_APPLYFILTER)   // the appliance of the filter ?
                 ||  evt.PropertyName.equals(PROPERTY_TEXTLINECOLOR) // the text line color ?
@@ -1604,6 +1615,10 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 // the slot is enabled if we have an external dispatcher able to handle it,
                 // and the dispatcher must have enabled the slot in general
                 aReturn.bEnabled = getExternalSlotState( ID_BROWSER_DOCUMENT_DATASOURCE );
+                bHandled = sal_True;
+                break;
+            case ID_BROWSER_REFRESH:
+                aReturn.bEnabled = sal_True;
                 bHandled = sal_True;
                 break;
         }
