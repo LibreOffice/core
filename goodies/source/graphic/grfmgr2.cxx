@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 09:35:47 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,20 @@ ULONG GraphicManager::GetUsedCacheSize() const
 ULONG GraphicManager::GetFreeCacheSize() const
 {
     return mpCache->GetFreeDisplayCacheSize();
+}
+
+// -----------------------------------------------------------------------------
+
+void GraphicManager::SetCacheTimeout( ULONG nTimeoutSeconds )
+{
+    mpCache->SetCacheTimeout( nTimeoutSeconds );
+}
+
+// -----------------------------------------------------------------------------
+
+ULONG GraphicManager::GetCacheTimeout() const
+{
+    return mpCache->GetCacheTimeout();
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-15 11:48:22 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,16 +70,13 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
+#include <svtools/cacheoptions.hxx>
 #include "grfmgr.hxx"
 
 // -----------
 // - Defines -
 // -----------
 
-#define GRFMGR_CACHESIZE_STANDARD           10000000UL
-#define GRFMGR_OBJCACHESIZE_STANDARD        2500000UL
-#define GRFMGR_CACHESIZE_APPSERVER          10000000UL
-#define GRFMGR_OBJCACHESIZE_APPSERVER       2500000UL
 #define WATERMARK_LUM_OFFSET                50
 #define WATERMARK_CON_OFFSET                -70
 
@@ -247,10 +244,11 @@ void GraphicObject::ImplSetGraphicManager( const GraphicManager* pMgr, const Byt
             {
                 if( !mpGlobalMgr )
                 {
-                    if( Application::IsRemoteServer() )
-                        mpGlobalMgr = new GraphicManager( GRFMGR_CACHESIZE_APPSERVER, GRFMGR_OBJCACHESIZE_APPSERVER );
-                    else
-                        mpGlobalMgr = new GraphicManager( GRFMGR_CACHESIZE_STANDARD, GRFMGR_OBJCACHESIZE_STANDARD );
+                    SvtCacheOptions aCacheOptions;
+
+                    mpGlobalMgr = new GraphicManager( aCacheOptions.GetGraphicManagerTotalCacheSize(),
+                                                      aCacheOptions.GetGraphicManagerObjectCacheSize() );
+                    mpGlobalMgr->SetCacheTimeout( aCacheOptions.GetGraphicManagerObjectReleaseTime() );
                 }
 
                 mpMgr = mpGlobalMgr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-10 16:06:27 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,17 @@
  *
  ************************************************************************/
 
+#include <vos/timer.hxx>
 #include <tools/debug.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/poly.hxx>
 #include "grfcache.hxx"
+
+// -----------
+// - Defines -
+// -----------
+
+#define RELEASE_TIMEOUT 10000
 
 // -----------
 // - statics -
@@ -437,6 +444,7 @@ class GraphicDisplayCacheEntry
 {
 private:
 
+    ::vos::TTimeValue           maReleaseTime;
     const GraphicCacheEntry*    mpRefCacheEntry;
     GDIMetaFile*                mpMtf;
     BitmapEx*                   mpBmpEx;
@@ -458,7 +466,9 @@ public:
                                     mpRefCacheEntry( pRefCacheEntry ),
                                     mpMtf( NULL ), mpBmpEx( new BitmapEx( rBmpEx ) ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ) {}
+                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) )
+                                    {
+                                    }
 
                                 GraphicDisplayCacheEntry( const GraphicCacheEntry* pRefCacheEntry,
                                                           OutputDevice* pOut, const Point& rPt, const Size& rSz,
@@ -467,7 +477,10 @@ public:
                                     mpRefCacheEntry( pRefCacheEntry ),
                                     mpMtf( new GDIMetaFile( rMtf ) ), mpBmpEx( NULL ),
                                     maAttr( rAttr ), maOutSizePix( pOut->LogicToPixel( rSz ) ),
-                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) ) {}
+                                    mnCacheSize( GetNeededSize( pOut, rPt, rSz, rObj, rAttr ) )
+                                    {
+                                    }
+
 
                                 ~GraphicDisplayCacheEntry();
 
@@ -475,6 +488,9 @@ public:
     const Size&                 GetOutputSizePixel() const { return maOutSizePix; }
     const ULONG                 GetCacheSize() const { return mnCacheSize; }
     const GraphicCacheEntry*    GetReferencedCacheEntry() const { return mpRefCacheEntry; }
+
+    void                        SetReleaseTime( const ::vos::TTimeValue& rReleaseTime ) { maReleaseTime = rReleaseTime; }
+    const ::vos::TTimeValue&    GetReleaseTime() const { return maReleaseTime; }
 
     BOOL                        Matches( OutputDevice* pOut, const Point& rPtPixel, const Size& rSzPixel,
                                          const GraphicCacheEntry* pCacheEntry, const GraphicAttr& rAttr ) const
@@ -558,11 +574,15 @@ void GraphicDisplayCacheEntry::Draw( OutputDevice* pOut, const Point& rPt, const
 // -----------------------
 
 GraphicCache::GraphicCache( GraphicManager& rMgr, ULONG nDisplayCacheSize, ULONG nMaxObjDisplayCacheSize ) :
-    mrMgr               ( rMgr ),
-    mnMaxDisplaySize    ( nDisplayCacheSize ),
-    mnMaxObjDisplaySize ( nMaxObjDisplayCacheSize ),
-    mnUsedDisplaySize   ( 0UL )
+    mrMgr                   ( rMgr ),
+    mnMaxDisplaySize        ( nDisplayCacheSize ),
+    mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
+    mnUsedDisplaySize       ( 0UL ),
+    mnReleaseTimeoutSeconds ( 0UL )
 {
+    maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
+    maReleaseTimer.SetTimeout( RELEASE_TIMEOUT );
+    maReleaseTimer.Start();
 }
 
 // -----------------------------------------------------------------------------
@@ -743,6 +763,29 @@ void GraphicCache::SetMaxObjDisplayCacheSize( ULONG nNewMaxObjSize, BOOL bDestro
 
 // -----------------------------------------------------------------------------
 
+void GraphicCache::SetCacheTimeout( ULONG nTimeoutSeconds )
+{
+    if( mnReleaseTimeoutSeconds != nTimeoutSeconds )
+    {
+        GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
+        ::vos::TTimeValue           aReleaseTime;
+
+        if( ( mnReleaseTimeoutSeconds = nTimeoutSeconds ) != 0 )
+        {
+            osl_getSystemTime( &aReleaseTime );
+            aReleaseTime.addTime( ::vos::TTimeValue( nTimeoutSeconds, 0 ) );
+        }
+
+        while( pDisplayEntry )
+        {
+            pDisplayEntry->SetReleaseTime( aReleaseTime );
+            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 void GraphicCache::ClearDisplayCache()
 {
     for( void* pObj = maDisplayCache.First(); pObj; pObj = maDisplayCache.Next() )
@@ -816,8 +859,16 @@ BOOL GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, 
         GraphicDisplayCacheEntry* pNewEntry = new GraphicDisplayCacheEntry( ImplGetCacheEntry( rObj ),
                                                                             pOut, rPt, rSz, rObj, rAttr, rBmpEx );
 
+        if( GetCacheTimeout() )
+        {
+            ::vos::TTimeValue aReleaseTime;
 
-        maDisplayCache.Insert( pNewEntry, (ULONG) 0 );
+            osl_getSystemTime( &aReleaseTime );
+            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            pNewEntry->SetReleaseTime( aReleaseTime );
+        }
+
+        maDisplayCache.Insert( pNewEntry, LIST_APPEND );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
         bRet = TRUE;
     }
@@ -842,8 +893,16 @@ BOOL GraphicCache::CreateDisplayCacheObj( OutputDevice* pOut, const Point& rPt, 
         GraphicDisplayCacheEntry* pNewEntry = new GraphicDisplayCacheEntry( ImplGetCacheEntry( rObj ),
                                                                             pOut, rPt, rSz, rObj, rAttr, rMtf );
 
+        if( GetCacheTimeout() )
+        {
+            ::vos::TTimeValue aReleaseTime;
 
-        maDisplayCache.Insert( pNewEntry, (ULONG) 0 );
+            osl_getSystemTime( &aReleaseTime );
+            aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            pNewEntry->SetReleaseTime( aReleaseTime );
+        }
+
+        maDisplayCache.Insert( pNewEntry, LIST_APPEND );
         mnUsedDisplaySize += pNewEntry->GetCacheSize();
         bRet = TRUE;
     }
@@ -866,8 +925,18 @@ BOOL GraphicCache::DrawDisplayCacheObj( OutputDevice* pOut, const Point& rPt, co
     {
         if( pDisplayCacheEntry->Matches( pOut, aPtPixel, aSzPixel, pCacheEntry, rAttr ) )
         {
+            ::vos::TTimeValue aReleaseTime;
+
             // put found object at last used position
             maDisplayCache.Insert( maDisplayCache.Remove( pDisplayCacheEntry ), LIST_APPEND );
+
+            if( GetCacheTimeout() )
+            {
+                osl_getSystemTime( &aReleaseTime );
+                aReleaseTime.addTime( ::vos::TTimeValue( GetCacheTimeout(), 0 ) );
+            }
+
+            pDisplayCacheEntry->SetReleaseTime( aReleaseTime );
             bRet = TRUE;
         }
         else
@@ -886,9 +955,12 @@ BOOL GraphicCache::ImplFreeDisplayCacheSpace( ULONG nSizeToFree )
 {
     ULONG nFreedSize = 0UL;
 
-    if( nSizeToFree && ( nSizeToFree <= mnMaxDisplaySize ) )
+    if( nSizeToFree )
     {
         void* pObj = maDisplayCache.First();
+
+        if( nSizeToFree > mnUsedDisplaySize )
+            nSizeToFree = mnUsedDisplaySize;
 
         while( pObj )
         {
@@ -922,3 +994,33 @@ GraphicCacheEntry* GraphicCache::ImplGetCacheEntry( const GraphicObject& rObj )
     return pRet;
 }
 
+// -----------------------------------------------------------------------------
+
+IMPL_LINK( GraphicCache, ReleaseTimeoutHdl, Timer*, pTimer )
+{
+    pTimer->Stop();
+
+    ::vos::TTimeValue           aCurTime;
+    GraphicDisplayCacheEntry*   pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.First();
+
+    osl_getSystemTime( &aCurTime );
+
+    while( pDisplayEntry )
+    {
+        const ::vos::TTimeValue& rReleaseTime = pDisplayEntry->GetReleaseTime();
+
+        if( !rReleaseTime.isEmpty() && ( rReleaseTime < aCurTime ) )
+        {
+            mnUsedDisplaySize -= pDisplayEntry->GetCacheSize();
+            maDisplayCache.Remove( pDisplayEntry );
+            delete pDisplayEntry;
+            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.GetCurObject();
+        }
+        else
+            pDisplayEntry = (GraphicDisplayCacheEntry*) maDisplayCache.Next();
+    }
+
+    pTimer->Start();
+
+    return 0;
+}

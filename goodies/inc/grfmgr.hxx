@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-15 11:34:13 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,6 +441,9 @@ public:
 
     ULONG           GetUsedCacheSize() const;
     ULONG           GetFreeCacheSize() const;
+
+    void            SetCacheTimeout( ULONG nTimeoutSeconds );
+    ULONG           GetCacheTimeout() const;
 
     void            ClearCache();
 

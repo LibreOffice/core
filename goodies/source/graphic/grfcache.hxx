@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 
 #include <tools/list.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/timer.hxx>
 #include "grfmgr.hxx"
 
 // -----------------------
@@ -77,14 +78,19 @@ class GraphicCache
 private:
 
     GraphicManager&             mrMgr;
+    Timer                       maReleaseTimer;
     List                        maGraphicCache;
     List                        maDisplayCache;
+    ULONG                       mnReleaseTimeoutSeconds;
     ULONG                       mnMaxDisplaySize;
     ULONG                       mnMaxObjDisplaySize;
     ULONG                       mnUsedDisplaySize;
 
     BOOL                        ImplFreeDisplayCacheSpace( ULONG nSizeToFree );
     GraphicCacheEntry*          ImplGetCacheEntry( const GraphicObject& rObj );
+
+
+                                DECL_LINK( ReleaseTimeoutHdl, Timer* pTimer );
 
 public:
 
@@ -114,6 +120,9 @@ public:
 
     ULONG                       GetUsedDisplayCacheSize() const { return mnUsedDisplaySize; }
     ULONG                       GetFreeDisplayCacheSize() const { return( mnMaxDisplaySize - mnUsedDisplaySize ); }
+
+    void                        SetCacheTimeout( ULONG nTimeoutSeconds );
+    ULONG                       GetCacheTimeout() const { return mnReleaseTimeoutSeconds; }
 
     void                        ClearDisplayCache();
     BOOL                        IsDisplayCacheable( OutputDevice* pOut, const Point& rPt, const Size& rSz,
