@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 11:09:15 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,15 +160,25 @@ ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
             OUString sStreamName = rName.copy( nOldIndex, rName.getLength() - nOldIndex);
             if (isZipFile(aEntry))
             {
-                // do stuff
+                Reference < XInputStream > xStream = pZipFile->getInputStream(aEntry);
+                ZipPackage *pInZip = new ZipPackage (xStream, xFactory, pZipBuffer, pZipOut );
+                aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
+                pPkgFolder = pInZip->getRootFolder();
+                pPkgFolder->setName(sStreamName);
+                pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
+                aAny <<= Reference < XUnoTunnel > (pPkgFolder);
+                xCurrent->insertByName(sStreamName, aAny);
             }
-            pPkgStream = new ZipPackageStream( *pZipFile );
-            pPkgStream->bPackageMember = sal_True;
-            pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
-            pPkgStream->setZipEntry( aEntry );
-            pPkgStream->setName( sStreamName );
-            aAny <<= Reference < XUnoTunnel > (pPkgStream);
-            xCurrent->insertByName(sStreamName, aAny);
+            else
+            {
+                pPkgStream = new ZipPackageStream( *pZipFile );
+                pPkgStream->bPackageMember = sal_True;
+                pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
+                pPkgStream->setZipEntry( aEntry );
+                pPkgStream->setName( sStreamName );
+                aAny <<= Reference < XUnoTunnel > (pPkgStream);
+                xCurrent->insertByName(sStreamName, aAny);
+            }
         }
     }
 }
@@ -186,6 +196,14 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , xZipOut(NULL)
 , xFactory(xNewFactory)
 {
+    pZipBuffer  = new ZipPackageBuffer(65535);
+    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
+
+    pZipOut     = new ZipOutputStream(xBuffer, 65535);
+    pRootFolder = new ZipPackageFolder(*pZipOut);
+
+    xZipOut     = Reference < XZipOutputStream > (pZipOut);
+    xFolder     = Reference < XNameContainer >   (pRootFolder );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -215,16 +233,7 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         xStream = xSink->getInputStream();
 
     pZipFile    = new ZipFile(xStream);
-    pZipBuffer  = new ZipPackageBuffer(65535);
-
     xZipFile    = Reference < XZipFile >         (pZipFile);
-    xBuffer     = Reference < XOutputStream >    (pZipBuffer);
-
-    pZipOut     = new ZipOutputStream(xBuffer, 65535);
-    pRootFolder = new ZipPackageFolder(*pZipOut);
-
-    xZipOut     = Reference < XZipOutputStream > (pZipOut);
-    xFolder     = Reference < XNameContainer >   (pRootFolder );
 
     Reference< XEnumeration > xEnum = pZipFile->entries();
     Reference< XNameContainer > xCurrent  = xFolder;
@@ -432,9 +441,9 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     Reference < XInterface > xRef;
     aArguments[0] >>= bArg;
     if (bArg)
-        xRef = *new ZipPackageStream ( *pZipFile );
-    else
         xRef = *new ZipPackageFolder ( *pZipOut );
+    else
+        xRef = *new ZipPackageStream ( *pZipFile );
 
     return xRef;
 }

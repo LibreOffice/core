@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-28 11:00:27 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 12:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
     {
         uno::Reference < lang::XUnoTunnel > xRef;
         aElement >>= xRef;
+        uno::Reference < container::XNamed > xNamed (xRef, uno::UNO_QUERY);
+        xNamed->setName (sName);
         aContents[sName] = xRef;
     }
 }
@@ -333,6 +335,8 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             rFoo.writeBytes(bSeq);
 #endif
             uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
+            uno::Reference < io::XSeekable > xSeek (xStream, uno::UNO_QUERY);
+            xSeek->seek(0);
             pStream->aEntry.nCrc = -1;
             pStream->aEntry.nSize = -1;
             pStream->aEntry.nCompressedSize = -1;
