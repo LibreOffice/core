@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: as $ $Date: 2002-09-09 12:25:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,8 +912,13 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
                 aParserInput.aInputStream = new ::utl::OInputStreamWrapper( *xDocStream );
 
                 // create importer service
+                sal_Bool bOASIS = pStorage->GetVersion() > SOFFICE_FILEFORMAT_60;
+                const sal_Char *pServiceName = bOASIS
+                    ? "com.sun.star.document.XMLOasisMetaImporter"
+                    : "com.sun.star.document.XMLMetaImporter";
+
                 Reference < xml::sax::XDocumentHandler > xDocHandler( _xFactory->createInstanceWithArguments(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.XMLMetaImporter")),
+                        rtl::OUString::createFromAscii(pServiceName),
                         Sequence < Any >() ), UNO_QUERY );
 
                 // connect importer with this object
