@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:42:58 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_COMPANY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "~Firma" ;
         Text [ en-US ] = "~Company" ;
@@ -96,7 +96,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "~Vor-/Name/Kürzel" ;
         Text [ en-US ] = "First/Last ~name/Initials" ;
@@ -105,7 +105,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_NAME_RUSS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text [ de ] = "~Vor-/Vaters-/Name/Kürzel" ;
@@ -139,7 +139,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_STREET
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "~Straße" ;
         Text [ en-US ] = "~Street" ;
@@ -148,7 +148,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_STREET_RUSS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
         Text [ de ] = "~Straße/Wohnungsnummer" ;
@@ -170,7 +170,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_CITY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "PL~Z/Ort" ;
         Text [ en-US ] = "Zip/City";
@@ -209,7 +209,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_COUNTRY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "~Land/Region" ;
         Text [ en-US ] = "Country/Region";
@@ -224,7 +224,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_TITLEPOS
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "~Titel/Position" ;
         Text [ en-US ] = "~Title/Position" ;
@@ -245,7 +245,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_PHONE
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         Text [ de ] = "T~el. (Priv/Ge.)" ;
         Text [ en-US ] = "Tel. (Home/Work)" ;
         LeftLabel = TRUE ;
@@ -266,7 +266,7 @@ TabPage RID_SFXPAGE_GENERAL
     FixedText FT_FAXMAIL
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
-        Size = MAP_APPFONT ( MID-LEFT-3 , FLINEH ) ;
+        Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Text [ de ] = "Fa~x/E-Mail" ;
         Text [ en-US ] = "Fa~x / E-mail" ;
