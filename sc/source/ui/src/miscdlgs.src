@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:44:37 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 15:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ japanese ] = "‘Ss‚ğíœ(~Rj";
         Text[ chinese_traditional ] = "§R°£¾ã¦C(~R)";
         Text[ arabic ] = "ÍĞİ ÃÓØÑ ÈÃßãáåÇ";
-        Text[ greek ] = "ÄéáãñáöŞ ïëüêëçñçò ãñáììŞò";
+        Text[ greek ] = "ÄéáãñáöŞ ïëüêëçñùí ãñáììşí";
         Text[ korean ] = "ÀüÃ¼ Çà »èÁ¦(~R)";
         Text[ turkish ] = "S~atırın tümünü sil";
         Text[ language_user1 ] = " ";
@@ -1270,7 +1270,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ english_us ] = "~Link" ;
         Text [ italian ] = "Collega" ;
         Text [ spanish ] = "~Vincular" ;
-        Text [ french ] = "Coller avec ~lien" ;
+        Text [ french ] = "~Lier" ;
         Text [ swedish ] = "~Länka" ;
         Text [ danish ] = "Kæd" ;
         Text [ portuguese_brazilian ] = "Verknü~pfen" ;
@@ -1517,7 +1517,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text [ finnish ] = "~Lisää edelle" ;
         Text [ danish ] = "Indsæt før" ;
         Text [ french ] = "I~nsérer avant" ;
-        Text [ swedish ] = "I~nfoga före" ;
+        Text [ swedish ] = "I~nfoga framför" ;
         Text [ dutch ] = "~Invoegen voor" ;
         Text [ spanish ] = "Insertar ~delante de" ;
         Text [ english_us ] = "~Insert before" ;
@@ -2960,7 +2960,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ chinese_simplified ] = "³äÌîÏµÁĞ";
     Text[ russian ] = "Çàïîëíèòü ğÿäû";
     Text[ polish ] = "Wype³nij serie";
-    Text[ japanese ] = "˜A‘±ÃŞ°À‚Ìì¬";
+    Text[ japanese ] = "˜A‘±ÃŞ°À";
     Text[ chinese_traditional ] = "¶¶§Ç";
     Text[ arabic ] = "ÊÚÈÆÉ ÇáÓáÓáÉ";
     Text[ greek ] = "ÓõìğëŞñùóç óåéñÜò";
@@ -3554,7 +3554,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text [ portuguese_brazilian ] = "Erste ~Spalte als Beschriftung" ;
         Text [ portuguese ] = "Primeira ~coluna como legenda" ;
         Text[ chinese_simplified ] = "½«µÚÒ»¸öÁĞµ±×÷Êı¾İ±êÖ¾(~C)";
-        Text[ russian ] = "Ïåğâàÿ ñòğîêà â êà÷åñòâå íàçâàíèÿ";
+        Text[ russian ] = "Ïåğâûé ñòîëáåö êàê ïîäïèñü";
         Text[ polish ] = "Pierwsza kolumna jako etykieta";
         Text[ japanese ] = "Å‰‚Ì—ñ‚ğ€–Ú–¼‚Éˆø—p(~C)";
         Text[ chinese_traditional ] = "±N²Ä¤@Äæ·í§@¼ĞÃD(~C)";
@@ -3580,7 +3580,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text [ portuguese_brazilian ] = "Erste ~Reihe als Beschriftung" ;
         Text [ portuguese ] = "Primeira ~fila como legenda" ;
         Text[ chinese_simplified ] = "µÚÒ»ĞĞµ±×÷Êı¾İ±êÖ¾(~R)";
-        Text[ russian ] = "Ïåğâàÿ ñòğîêà â êà÷åñòâå íàçâàíèÿ";
+        Text[ russian ] = "Ïåğâàÿ ñòğîêà êàê ïîäïèñü";
         Text[ polish ] = "Pierwszy wiersz jako etykieta";
         Text[ japanese ] = "Å‰‚Ìs‚ğ€–Ú–¼‚Éˆø—p(~R)";
         Text[ chinese_traditional ] = "²Ä¤@¦C·í§@¼ĞÃD(~R)";
