@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-21 14:58:04 $
+ *  last change: $Author: cl $ $Date: 2002-11-22 14:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ void Writer::Impl_writeGradientEx( const PolyPolygon& rPolyPoly, const Gradient&
         PolyPolygon aPolyPolygon( rPolyPoly );
         map( aPolyPolygon );
 
-        if( (rGradient.GetStyle() == GRADIENT_LINEAR) || (rGradient.GetStyle() == GRADIENT_RADIAL) )
+        if( (rGradient.GetStyle() == GRADIENT_LINEAR && rGradient.GetAngle() == 900) || (rGradient.GetStyle() == GRADIENT_RADIAL)  )
         {
             const Rectangle aBoundRect( aPolyPolygon.GetBoundRect() );
 
