@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:58:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,10 +210,6 @@ public:
     /** Writes the Escher anchor structure with the current anchor position. */
     void                        WriteData( EscherEx& rEx ) const;
 
-protected:
-    BOOL                        FindNextCol( sal_uInt16& nCol, short nDir );
-    BOOL                        FindNextRow( sal_uInt16& nRow, short nDir );
-
 protected:  // for access in derived classes
     XclEscherAnchor             maAnchor;       /// The client anchor data.
     sal_uInt16                  mnFlags;        /// Flags for Escher stream export.
@@ -225,7 +221,7 @@ protected:  // for access in derived classes
 class XclExpEscherNoteAnchor : public XclExpEscherAnchor
 {
 public:
-    explicit                    XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const ScAddress& rPos );
+    explicit                    XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect );
 };
 
 
