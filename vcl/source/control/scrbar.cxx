@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:55:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,6 +397,7 @@ void ScrollBar::ImplCalc( BOOL bUpdate )
             else
             {
                 aBtnSize            = Size( aSize.Height(), aSize.Height() );
+                maBtn2Rect.Top()    = maBtn1Rect.Top();
                 maBtn2Rect.Left()   = aSize.Width()-aSize.Height();
                 maBtn1Rect.SetSize( aBtnSize );
                 maBtn2Rect.SetSize( aBtnSize );
@@ -433,6 +434,7 @@ void ScrollBar::ImplCalc( BOOL bUpdate )
             else
             {
                 aBtnSize            = Size( aSize.Width(), aSize.Width() );
+                maBtn2Rect.Left()   = maBtn1Rect.Left();
                 maBtn2Rect.Top()    = aSize.Height()-aSize.Width();
                 maBtn1Rect.SetSize( aBtnSize );
                 maBtn2Rect.SetSize( aBtnSize );
@@ -1443,16 +1445,14 @@ long ScrollBar::PreNotify( NotifyEvent& rNEvt )
 
 void ScrollBar::Scroll()
 {
-    ImplCallEventListeners( VCLEVENT_SCROLLBAR_SCROLL );
-    maScrollHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_SCROLL, maScrollHdl, this );
 }
 
 // -----------------------------------------------------------------------
 
 void ScrollBar::EndScroll()
 {
-    ImplCallEventListeners( VCLEVENT_SCROLLBAR_ENDSCROLL );
-    maEndScrollHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_SCROLLBAR_ENDSCROLL, maEndScrollHdl, this );
 }
 
 // -----------------------------------------------------------------------
