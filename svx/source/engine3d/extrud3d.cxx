@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrud3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:35:59 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,10 +206,29 @@ PolyPolygon3D E3dExtrudeObj::GetFrontSide()
     // Start- und Endpunkte verhindern
     aPolyPoly3D.RemoveDoublePoints();
 
+    // THB: Temporary fix for SJ's flipping problem
+    // TODO: Clarify with AW
+    // Check whether matrix mirrors (then, polygon flipping must happen the other way around)
+    Matrix4D aTrans;
+    GetFullTransform( aTrans );
+    const sal_Bool bMirror( aTrans.Determinant() < 0.0 );
+
     // Normale holen
     Vector3D aNormal = aPolyPoly3D.GetNormal();
-    if((aNormal.Z() > 0.0) != (GetExtrudeDepth() != 0))
-        aPolyPoly3D.FlipDirections();
+
+    // THB: Temporary fix for SJ's flipping problem
+    // TODO: Clarify with AW
+    if( bMirror )
+    {
+        // for mirroring transforms, the condition for polygon flip is inverted
+        if( (aNormal.Z() > 0.0) == (GetExtrudeDepth() != 0) )
+            aPolyPoly3D.FlipDirections();
+    }
+    else
+    {
+        if( (aNormal.Z() > 0.0) != (GetExtrudeDepth() != 0) )
+            aPolyPoly3D.FlipDirections();
+    }
 
     // Orientierung evtl. vorhandener Loecher in einen definierten
     // Ausgangszustand bringen
