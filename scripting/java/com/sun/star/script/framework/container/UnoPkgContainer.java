@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoPkgContainer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:36:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 15:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,16 +245,13 @@ public class UnoPkgContainer extends ParcelContainer
         String parcelName = psu.parcel;
         String location = psu.location;
 
-        String pkgLocationUrl = convertPkgLocation( location );
-
-        LogUtils.DEBUG("** pkg location = " + pkgLocationUrl +
+        LogUtils.DEBUG("*** UnoPkgContainer.findScript() ***" +
+            "\ncontainerUrl = " + containerUrl +
             "\nfunction = " + functionName +
             "\nlocation = " + location +
             "\nparcel = " + parcelName );
 
-        ParcelContainer pc =
-              pc = getChildContainer( pkgLocationUrl );
-
+        ParcelContainer pc = getChildContainer( location );
 
         if (  pc  == null )
         {
@@ -268,32 +265,6 @@ public class UnoPkgContainer extends ParcelContainer
         return scriptData;
 
     }
-
-    private String convertPkgLocation( String str )
-    {
-        int indexOfUnoPackage = str.indexOf( ":uno_packages/" );
-        StringBuffer buf = new StringBuffer( 90 );
-        if ( indexOfUnoPackage == -1 )
-            return null;
-
-        String key =  str.substring( 0, indexOfUnoPackage );
-        if ( key.equals("user") )
-        {
-            buf.append( "vnd.sun.star.pkg://vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE%2Funo_packages%2F" );
-        }
-        else if ( key.equals("share") )
-        {
-            buf.append( "vnd.sun.star.pkg://vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE%2Funo_packages%2F" );
-        }
-        else
-        {
-            buf.append("DON'T_KNOW_WHAT_TO_DO_WITH_DOC_URL_YET");
-        }
-        String restOfPath = str.substring( indexOfUnoPackage + ":uno_packages/".length() );
-        buf.append( restOfPath );
-        return buf.toString();
-    }
-
 
     private DeployedUnoPackagesDB getUnoPackagesDB() throws com.sun.star.lang.WrappedTargetException
     {
@@ -435,11 +406,19 @@ public class UnoPkgContainer extends ParcelContainer
         String parentUrl = uri;
 
 
-        if ( uri.indexOf( "%2Funo_packages%2F" ) > -1 )
+        if ( uri.indexOf( "%2Funo_packages%2F" ) > -1 ||
+             uri.indexOf( "/uno_packages/" ) > -1 )
         {
             //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");
+
             int index = uri.lastIndexOf("/");
+            if ( uri.endsWith("/") )
+            {
+                uri = uri.substring( 0, index );
+                index = uri.lastIndexOf("/");
+            }
+
             if ( index > -1 )
             {
                 parentUrl = uri.substring( 0, index  );
