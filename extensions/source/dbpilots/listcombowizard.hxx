@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:30 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,16 +114,16 @@ namespace dbp
 
     protected:
         // OWizardMachine overridables
-        virtual ::svt::OWizardPage*     createPage(sal_uInt16 _nState);
-        virtual sal_uInt16      determineNextState(sal_uInt16 _nCurrentState);
-        virtual void            enterState(sal_uInt16 _nState);
-        virtual sal_Bool        leaveState(sal_uInt16 _nState);
+        virtual ::svt::OWizardPage* createPage( WizardState _nState );
+        virtual WizardState         determineNextState( WizardState _nCurrentState );
+        virtual void                enterState( WizardState _nState );
+        virtual sal_Bool            leaveState( WizardState _nState );
 
         virtual sal_Bool onFinish(sal_Int32 _nResult);
 
         virtual sal_Bool approveControl(sal_Int16 _nClassId);
 
-        sal_uInt16 getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
+        WizardState getFinalState() const { return isListBox() ? LCW_STATE_FIELDLINK : LCW_STATE_COMBODBFIELD; }
 
     private:
         void implApplySettings();
