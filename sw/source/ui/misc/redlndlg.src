@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 13:37:29 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text [ English ] = "Accept or reject changes" ;
     Text [ english_us ] = "Accept or Reject Changes" ;
     Text [ portuguese_brazilian ] = "Redlining" ;
-    Text [ swedish ] = "Acceptera eller avslå ändringar" ;
+    Text [ swedish ] = "Acceptera eller ignorera ändringar" ;
     Text [ danish ] = "Accepter eller forkast ændringer" ;
     Text [ italian ] = "Accetta o annulla le modifiche" ;
     Text [ spanish ] = "Aceptar o rechazar modificaciones" ;
@@ -99,18 +99,19 @@ ModelessDialog DLG_REDLINE_ACCEPT
     Text [ dutch ] = "Wijzigingen accepteren of verwerpen" ;
     Text [ portuguese ] = "Aceitar ou rejeitar modificações" ;
     REDLNDLG
-    Text[ chinese_simplified ] = "½ÓÊÜ»òÕßÈ¡Ïû¸ü¸Ä";
+    Text[ chinese_simplified ] = "æ¥å—æˆ–è€…èˆå¼ƒæ›´æ”¹å†…å®¹";
     Text[ russian ] = "Ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Zaakceptuj albo odrzuæ zmiany";
-    Text[ japanese ] = "•ÏX‚Ì“K—p‚Æ·¬İ¾Ù";
-    Text[ chinese_traditional ] = "±µ¨ü©Î¨ú®øÅÜ§ó";
+    Text[ japanese ] = "å¤‰æ›´ã®æ‰¿èªã¾ãŸã¯å´ä¸‹";
+    Text[ chinese_traditional ] = "æ¥å—æˆ–æ¨æ£„è®Šæ›´å…§å®¹";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ";
     Text[ greek ] = "Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "º¯°æ»çÇ×  Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ korean ] = "ë³€ê²½ ì‚¬í•­  ì ìš© ë˜ëŠ” ì·¨ì†Œ";
     Text[ turkish ] = "Değişiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Aceptar o rechazar modificaciones";
     Text[ finnish ] = "Hyväksy tai hylkää muutokset";
+    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
@@ -124,22 +125,23 @@ ModalDialog DLG_MOD_REDLINE_ACCEPT
     Text[ portuguese ] = "AutoFormato: aceitar ou rejeitar modificações";
     Text[ danish ] = "Accepter eller forkast AutoFormat ændringer";
     Text[ french ] = "Revoir les modifications de l'AutoFormat";
-    Text[ swedish ] = "Acceptera eller avslå autoformat-ändringar";
+    Text[ swedish ] = "Acceptera eller ignorera AutoFormat-ändringar";
     Text[ dutch ] = "AutoOpmaak: Wijzigingen accepteren of verwerpen";
     Text[ spanish ] = "AutoFormato: Aceptar o rechazar cambios";
     Text[ english_us ] = "Accept or Reject AutoFormat Changes";
-    Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½: ½ÓÊÜ»òÕß¾Ü¾ø¸ü¸Ä";
+    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼: æ¥å—æˆ–è€…èˆå¼ƒæ›´æ”¹å†…å®¹";
     Text[ russian ] = "Àâòîôîğìàò: ïğèíÿòü èëè îòêëîíèòü èçìåíåíèÿ";
     Text[ polish ] = "Autoformat: Zaakceptuj lub odrzuæ zmiany";
-    Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä: •ÏX‚Ì“K—p‚Æ·¬İ¾Ù";
-    Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡: ±µ¨ü©Î©Úµ´ÅÜ§ó";
+    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ: å¤‰æ›´ã®æ‰¿èªã¾ãŸã¯å´ä¸‹";
+    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼: æ¥å—æˆ–æ¨æ£„è®Šæ›´å…§å®¹";
     Text[ arabic ] = "ŞÈæá Ãæ ÑİÖ ÊÛííÑÇÊ ÇáÊäÓíŞ ÇáÊáŞÇÆí";
     Text[ greek ] = "ÁõôïÌïñöŞ:Áğïäï÷Ş Ş áğüññéøç áëëáãşí";
-    Text[ korean ] = "ÀÚµ¿¼­½Ä£º º¯°æ»çÇ× Àû¿ë ¶Ç´Â Ãë¼Ò";
+    Text[ korean ] = "ìë™ ì„œì‹ï¼š ë³€ê²½ ì‚¬í•­ ì ìš© ë˜ëŠ” ì·¨ì†Œ";
     Text[ turkish ] = "Otomatik formatlama: Değişiklikleri onayla ya da reddet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato: Aceptar o rechazar cambios";
     Text[ finnish ] = "Hyväksy tai hylkää automaattisen muotoilun muutokset";
+    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
 };
 
 Menu MN_REDLINE_POPUP
@@ -161,18 +163,19 @@ Menu MN_REDLINE_POPUP
             Text [ french ] = "Éditer le commentaire..." ;
             Text [ dutch ] = "Commentaar bewerken..." ;
             Text [ portuguese ] = "Editar comentário..." ;
-            Text[ chinese_simplified ] = "±à¼­×¢½â...";
-            Text[ russian ] = "Îáğàáîòêà êîììåíòàğèÿ...";
+            Text[ chinese_simplified ] = "ç¼–è¾‘æ³¨è§£...";
+            Text[ russian ] = "Ïğàâêà êîììåíòàğèåâ...";
             Text[ polish ] = "Edytuj komentarz...";
-            Text[ japanese ] = "ºÒİÄ‚Ì•ÒW...";
+            Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®ç·¨é›†...";
             Text[ language_user1 ] = " ";
-            Text[ chinese_traditional ] = "½s¿èµù¸Ñ...";
+            Text[ chinese_traditional ] = "ç·¨è¼¯è¨»è§£...";
             Text[ arabic ] = "ÊÍÑíÑ ÇáÊÚáíŞ...";
             Text[ greek ] = "Åğåîåñãáóßá ó÷ïëßïõ...";
-            Text[ korean ] = "ÁÖ¼®  ÆíÁı...";
+            Text[ korean ] = "ì£¼ì„  í¸ì§‘...";
             Text[ turkish ] = "Açıklamaları düzenle...";
             Text[ catalan ] = "Modificar comentario...";
-            Text[ finnish ] = "Muokkaa huomautusta";
+            Text[ finnish ] = "Muokkaa huomautusta...";
+            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™...";
         };
         MenuItem
         {
@@ -193,25 +196,26 @@ Menu MN_REDLINE_POPUP
                         RadioCheck = TRUE ;
                         Text [ english_us ] = "Action" ;
                         Text [ portuguese_brazilian ] = "Aktion" ;
-                        Text [ swedish ] = "Aktivitet" ;
+                        Text [ swedish ] = "Åtgärd" ;
                         Text [ danish ] = "Handling" ;
                         Text [ italian ] = "Operazione" ;
                         Text [ spanish ] = "Acción" ;
                         Text [ french ] = "Action" ;
                         Text [ dutch ] = "Activiteit" ;
                         Text [ portuguese ] = "Acção" ;
-                        Text[ chinese_simplified ] = "²Ù×÷";
+                        Text[ chinese_simplified ] = "æ“ä½œ";
                         Text[ russian ] = "Äåéñòâèå";
                         Text[ polish ] = "Akcja";
-                        Text[ japanese ] = "±¸¼®İ";
+                        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³";
                         Text[ language_user1 ] = " ";
-                        Text[ chinese_traditional ] = "°Ê§@";
+                        Text[ chinese_traditional ] = "å‹•ä½œ";
                         Text[ arabic ] = "ÅÌÑÇÁ";
                         Text[ greek ] = "Åíİñãåéá";
-                        Text[ korean ] = "µ¿ÀÛ";
+                        Text[ korean ] = "ë™ì‘";
                         Text[ turkish ] = "İşlem";
                         Text[ catalan ] = "Acción";
                         Text[ finnish ] = "Toiminto";
+                        Text[ thai ] = "à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
                     };
                     MenuItem
                     {
@@ -229,18 +233,19 @@ Menu MN_REDLINE_POPUP
                         Text [ french ] = "Auteur" ;
                         Text [ dutch ] = "Auteur" ;
                         Text [ portuguese ] = "Autor" ;
-                        Text[ chinese_simplified ] = "×÷Õß";
+                        Text[ chinese_simplified ] = "ä½œè€…";
                         Text[ russian ] = "Àâòîğ";
                         Text[ polish ] = "Autor";
-                        Text[ japanese ] = "ì¬Ò";
-                        Text[ chinese_traditional ] = "§@ªÌ";
+                        Text[ japanese ] = "ä½œæˆè€…";
+                        Text[ chinese_traditional ] = "ä½œè€…";
                         Text[ arabic ] = "ÇáãÄáİ";
                         Text[ greek ] = "ÓõíôÜêôçò";
-                        Text[ korean ] = "ÀÛ¼ºÀÚ";
+                        Text[ korean ] = "ì‘ì„±ì";
                         Text[ turkish ] = "Yazan";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Autor";
                         Text[ finnish ] = "Laatija";
+                        Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
                     };
                     MenuItem
                     {
@@ -258,18 +263,19 @@ Menu MN_REDLINE_POPUP
                         Text [ french ] = "Date" ;
                         Text [ dutch ] = "Datum" ;
                         Text [ portuguese ] = "Data" ;
-                        Text[ chinese_simplified ] = "ÈÕÆÚ";
+                        Text[ chinese_simplified ] = "æ—¥æœŸ";
                         Text[ russian ] = "Äàòà";
                         Text[ polish ] = "Data";
-                        Text[ japanese ] = "“ú•t";
-                        Text[ chinese_traditional ] = "¤é´Á";
+                        Text[ japanese ] = "æ—¥ä»˜";
+                        Text[ chinese_traditional ] = "æ—¥æœŸ";
                         Text[ arabic ] = "ÇáÊÇÑíÎ";
                         Text[ greek ] = "Çìåñïìçíßá";
-                        Text[ korean ] = "ÀÏÀÚ";
+                        Text[ korean ] = "ì¼ì";
                         Text[ turkish ] = "Tarih";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Fecha";
                         Text[ finnish ] = "Päivämäärä";
+                        Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆ";
                     };
                     MenuItem
                     {
@@ -287,18 +293,19 @@ Menu MN_REDLINE_POPUP
                         Text [ french ] = "Description" ;
                         Text [ dutch ] = "Beschrijving" ;
                         Text [ portuguese ] = "Descrição" ;
-                        Text[ chinese_simplified ] = "ËµÃ÷";
+                        Text[ chinese_simplified ] = "è¯´æ˜";
                         Text[ russian ] = "Îïèñàíèå";
                         Text[ polish ] = "Opis";
-                        Text[ japanese ] = "ºÒİÄ";
-                        Text[ chinese_traditional ] = "´y­z";
+                        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
+                        Text[ chinese_traditional ] = "æè¿°";
                         Text[ arabic ] = "ÊÚáíŞ";
                         Text[ greek ] = "ĞåñéãñáöŞ";
-                        Text[ korean ] = "¼³¸í";
+                        Text[ korean ] = "ì„¤ëª…";
                         Text[ turkish ] = "Açıklama";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Descripción";
-                        Text[ finnish ] = "Kommentti";
+                        Text[ finnish ] = "Huomautus";
+                        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
                     };
                     MenuItem
                     {
@@ -316,42 +323,44 @@ Menu MN_REDLINE_POPUP
                         Text [ french ] = "Emplacement dans le document" ;
                         Text [ dutch ] = "Documentpositie" ;
                         Text [ portuguese ] = "Posição no documento" ;
-                        Text[ chinese_simplified ] = "ÎÄµµÎ»ÖÃ";
+                        Text[ chinese_simplified ] = "æ–‡æ¡£ä½ç½®";
                         Text[ russian ] = "Ïîçèöèÿ äîêóìåíòà";
                         Text[ polish ] = "Pozycja dokumentu";
-                        Text[ japanese ] = "ÄŞ·­ÒİÄ‚ÌˆÊ’u";
-                        Text[ chinese_traditional ] = "¤å¥ó¦ì¸m";
+                        Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ä½ç½®";
+                        Text[ chinese_traditional ] = "æ–‡ä»¶ä½ç½®";
                         Text[ arabic ] = "ÇáãæÖÚ İí ÇáãÓÊäÏ";
                         Text[ greek ] = "Èİóç åããñÜöïõ";
-                        Text[ korean ] = "¹®¼­ À§Ä¡";
+                        Text[ korean ] = "ë¬¸ì„œ ìœ„ì¹˜";
                         Text[ turkish ] = "Belge konumu";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Posición del documento";
                         Text[ finnish ] = "Asiakirjan sijainti";
+                        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
                     };
                 };
             };
             Text [ english_us ] = "Sort By" ;
             Text [ portuguese_brazilian ] = "Sortiere" ;
-            Text [ swedish ] = "Sorterar" ;
+            Text [ swedish ] = "Sortera efter" ;
             Text [ danish ] = "Sorter" ;
             Text [ italian ] = "Ordina" ;
             Text [ spanish ] = "Ordenar" ;
             Text [ french ] = "Trier" ;
             Text [ dutch ] = "Sorteer" ;
             Text [ portuguese ] = "Ordenar" ;
-            Text[ chinese_simplified ] = "ÅÅĞò";
+            Text[ chinese_simplified ] = "æ’åº";
             Text[ russian ] = "Ñîğòèğîâêà";
             Text[ polish ] = "Sortuj";
-            Text[ japanese ] = "•À‚×‘Ö‚¦";
-            Text[ chinese_traditional ] = "±Æ§Ç";
+            Text[ japanese ] = "ä¸¦ã¹æ›¿ãˆ";
+            Text[ chinese_traditional ] = "æ’åº";
             Text[ arabic ] = "İÑÒ";
             Text[ greek ] = "Ôáîéíüìçóç";
-            Text[ korean ] = "ºĞ·ù";
+            Text[ korean ] = "ë¶„ë¥˜";
             Text[ turkish ] = "Sırala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Ordenar";
-            Text[ finnish ] = "Lajitellaan";
+            Text[ finnish ] = "Lajitteluperuste";
+            Text[ thai ] = "à¹€à¸£à¸µà¸¢à¸‡à¹‚à¸”à¸¢";
         };
     };
 };
