@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:56:50 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,9 @@
 #endif
 #ifndef _SVX_FORBIDDENRULEITEM_HXX
 #include <svx/forbiddenruleitem.hxx>
+#endif
+#ifndef _SVX_PARAVERTALIGNITEM_HXX
+#include <svx/paravertalignitem.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -525,7 +528,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },// RES_PARATR_HANGINGPUNCTUATION
 
     { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },// RES_PARATR_FORBIDDEN_RULES
-    { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY2
+    { SID_PARA_VERTALIGN, SFX_ITEM_POOLABLE },      // RES_PARATR_VERTALIGN
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY3
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_PARATR_DUMMY5
@@ -776,8 +779,9 @@ void _InitCore()
                                         new SvxHangingPunctuationItem( TRUE );
     aAttrTab[ RES_PARATR_FORBIDDEN_RULES - POOLATTR_BEGIN ] =
                                         new SvxForbiddenRuleItem( TRUE );
+    aAttrTab[ RES_PARATR_VERTALIGN - POOLATTR_BEGIN ] =
+                            new SvxParaVertAlignItem( 0 );
 // ParaAttr - Dummies
-    aAttrTab[ RES_PARATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY2 );
     aAttrTab[ RES_PARATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY3 );
     aAttrTab[ RES_PARATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY4 );
     aAttrTab[ RES_PARATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_PARATR_DUMMY5 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 12:44:46 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ RES_PARATR_BEGIN = RES_TXTATR_END,
     RES_PARATR_SCRIPTSPACE,                         // 65
     RES_PARATR_HANGINGPUNCTUATION,                  // 66
     RES_PARATR_FORBIDDEN_RULES,                     // 67
-    RES_PARATR_DUMMY2,                              // 68
+    RES_PARATR_VERTALIGN,                           // 68
     RES_PARATR_DUMMY3,                              // 69
     RES_PARATR_DUMMY4,                              // 70
     RES_PARATR_DUMMY5,                              // 71
@@ -488,6 +488,7 @@ BOOL IsInRange( const USHORT* pRange, const USHORT nId );
 #define ITEMID_SCRIPTSPACE  RES_PARATR_SCRIPTSPACE
 #define ITEMID_HANGINGPUNCTUATION   RES_PARATR_HANGINGPUNCTUATION
 #define ITEMID_FORBIDDENRULE    RES_PARATR_FORBIDDEN_RULES
+#define ITEMID_PARAVERTALIGN RES_PARATR_VERTALIGN
 
 //Defines fuer die ehemaligen GrfAttribute, die jetzt im svx zu finden sind.
 #define ITEMID_GRF_CROP     RES_GRFATR_CROPGRF

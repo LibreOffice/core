@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ class SwFmtDrop;
 class SvxScriptSpaceItem;
 class SvxHangingPunctuationItem;
 class SvxForbiddenRuleItem;
+class SvxParaVertAlignItem;
 
 // TabellenBox-Attribute
 class SwTblBoxNumFormat;
@@ -345,6 +346,7 @@ public:
     inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
     inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
+    inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;
@@ -358,6 +360,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/03/05 13:50:48  jp
+      new: SvxCharReliefItem
+
       Revision 1.7  2001/02/15 20:10:38  jp
       new character attribute: rotate and scalewidth
 

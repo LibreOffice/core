@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 10:18:54 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,7 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
         { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  },    \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  },    \
         { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID ,0  }, \
+        { SW_PROP_NAME(UNO_NAME_PARA_VERT_ALIGNMENT),           RES_PARATR_VERTALIGN,&::getCppuType((sal_Int16*)0),     PropertyAttribute::MAYBEVOID,     0      },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID,     MID_ROTATE      },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PropertyAttribute::MAYBEVOID,         MID_FITTOLINE  },  \
         { SW_PROP_NAME(UNO_NAME_CHAR_SCALE_WIDTH            ),  RES_CHRATR_SCALEW,      &::getCppuType((const sal_Int16*)0),    PropertyAttribute::MAYBEVOID,          0 },  \
@@ -899,6 +900,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_HANGING_PUNCTUATION),   RES_PARATR_HANGINGPUNCTUATION,  &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_CHARACTER_DISTANCE),    RES_PARATR_SCRIPTSPACE,         &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
                     { SW_PROP_NAME(UNO_NAME_PARA_IS_FORBIDDEN_RULES),       RES_PARATR_FORBIDDEN_RULES,     &::getBooleanCppuType(),    PROPERTY_NONE ,0     },
+                    { SW_PROP_NAME(UNO_NAME_PARA_VERT_ALIGNMENT),           RES_PARATR_VERTALIGN,               &::getCppuType((sal_Int16*)0),    PROPERTY_NONE , 0  },
                     _PROP_DIFF_FONTHEIGHT
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION               ),  RES_CHRATR_ROTATE,      &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,    MID_ROTATE      },
                     { SW_PROP_NAME(UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE),  RES_CHRATR_ROTATE,      &::getBooleanCppuType(),    PROPERTY_NONE,        MID_FITTOLINE  },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:50:48 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ public:
     inline const SvxScriptSpaceItem     &GetScriptSpace(BOOL = TRUE) const;
     inline const SvxHangingPunctuationItem &GetHangingPunctuation(BOOL = TRUE) const;
     inline const SvxForbiddenRuleItem   &GetForbiddenRule(BOOL = TRUE) const;
+    inline const SvxParaVertAlignItem   &GetParaVertAlign(BOOL = TRUE) const;
 
     // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline const SwTblBoxNumFormat      &GetTblBoxNumFmt( BOOL = TRUE ) const;
