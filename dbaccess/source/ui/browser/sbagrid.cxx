@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
+ *  last change: $Author: fs $ $Date: 2001-09-24 12:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,28 +1781,15 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (getDataSource(),UNO_QUERY)).is())
         return nAction;
 
-/*
-    // check formats
-    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-    if (!xDataObj.Is())
-        return sal_False;
-
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-    if ((rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT)))) )
-    {
-        bAllow = (GetOptions() & OPT_INSERT) && rEvt.GetColumnId() > 0 && rEvt.GetRow() >= 0;
-        ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
-    }
-
-    if (rTypeList.Get(FORMAT_STRING)) do
+    if ( IsDropFormatSupported( FORMAT_STRING ) ) do
     {   // odd construction, but spares us a lot of (explicit ;) goto's
 
         if (!GetEmptyRow().Is())
             // without an empty row we're not in update mode
             break;
 
-        long    nRow = GetRowAtYPosPixel(rEvt.GetPosPixel().Y(), sal_False);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.GetPosPixel().X(), sal_False);
+        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), sal_False);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), sal_False);
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & OPT_INSERT)
@@ -1818,7 +1805,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
         nCol = GetColumnId(nCol);
 
         Rectangle aRect = GetCellRect(nRow, nCol, sal_False);
-        if (!aRect.IsInside(rEvt.GetPosPixel()))
+        if (!aRect.IsInside(rEvt.maPosPixel))
             // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
             break;
 
@@ -1842,40 +1829,54 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             if (::comphelper::getBOOL(xField->getPropertyValue(PROPERTY_ISREADONLY)))
                 break;
         }
-        catch(Exception&)
+        catch (const Exception& e )
         {
+            e; // make compiler happy
             // assume RO
             break;
         }
 
-
-        // assume that text can be dropped into a field if the column has a ::com::sun::star::awt::XTextComponent interface
-        Reference< XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
-        if (xColumnControls.is())
+        try
         {
-            Reference< ::com::sun::star::awt::XTextComponent >  xColControl;
-            ::cppu::extractInterface(xColControl,xColumnControls->getByIndex(GetViewColumnPos(nCol)));
-            if (xColControl.is())
+            // assume that text can be dropped into a field if the column has a ::com::sun::star::awt::XTextComponent interface
+            Reference< XIndexAccess >  xColumnControls((::com::sun::star::form::XGridPeer*)GetPeer(), UNO_QUERY);
+            if (xColumnControls.is())
             {
-                m_bActivatingForDrop = sal_True;
-                GoToRowColumnId(nRow, nCol);
-                m_bActivatingForDrop = sal_False;
+                Reference< ::com::sun::star::awt::XTextComponent >  xColControl;
+                ::cppu::extractInterface(xColControl,xColumnControls->getByIndex(GetViewColumnPos(nCol)));
+                if (xColControl.is())
+                {
+                    m_bActivatingForDrop = sal_True;
+                    GoToRowColumnId(nRow, nCol);
+                    m_bActivatingForDrop = sal_False;
 
-                bAllow = sal_True;
-
-                ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
-                // see below. as we don't have a m_bDraggingOwnText we have to be more restrictive. text can't be moved into a grid control.
+                    nAction = DND_ACTION_COPY;
+                }
             }
+        }
+        catch( const Exception& e )
+        {
+            e; // make compiler happy
+            DBG_ERROR( "SbaGridControl::AcceptDrop: caught an exception!" );
         }
 
     } while (sal_False);
 
+/*
+    // check formats
+    SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
+    if (!xDataObj.Is())
+        return sal_False;
+
+    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
+    if ((rTypeList.Get(Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT)))) )
+    {
+        bAllow = (GetOptions() & OPT_INSERT) && rEvt.GetColumnId() > 0 && rEvt.GetRow() >= 0;
+        ((BrowserDropEvent&)rEvt).SetAction(DROP_COPY);
+    }
+
 */
-#if SUPD<628
-    return DND_ACTION_NONE;
-#else
     return (DND_ACTION_NONE != nAction) ? nAction : FmGridControl::AcceptDrop(rEvt);
-#endif
 }
 
 //------------------------------------------------------------------------------
@@ -1890,16 +1891,10 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
     if (!::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (xDataSource,UNO_QUERY)).is())
         return DND_ACTION_NONE;
 
-/*
-    //////////////////////////////////////////////////////////////////////
-    // DataExch-String holen
-    SotDataObjectRef xDataObj = ((DropEvent&)rEvt).GetData();
-    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
-
-    if (rTypeList.Get(FORMAT_STRING))
+    if ( IsDropFormatSupported( FORMAT_STRING ) )
     {
-        long    nRow = GetRowAtYPosPixel(rEvt.GetPosPixel().Y(), sal_False);
-        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.GetPosPixel().X(), sal_False);
+        long    nRow = GetRowAtYPosPixel(rEvt.maPosPixel.Y(), sal_False);
+        sal_uInt16  nCol = GetColumnAtXPosPixel(rEvt.maPosPixel.X(), sal_False);
 
         long nCorrectRowCount = GetRowCount();
         if (GetOptions() & OPT_INSERT)
@@ -1919,24 +1914,28 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
 
         CellControllerRef xCurrentController = Controller();
         if (!xCurrentController.Is() || !xCurrentController->ISA(EditCellController))
-            return sal_False;
+            return DND_ACTION_NONE;
         Edit& rEdit = (Edit&)xCurrentController->GetWindow();
 
-        // Daten aus
-        SvData aData(FORMAT_STRING);
-        if (!xDataObj->GetData(&aData))
-            return sal_False;
-
+        // get the dropped string
+        TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
         String sDropped;
-        aData.GetData(sDropped);
-        rEdit.SetText(sDropped);
+        if ( !aDropped.GetString( FORMAT_STRING, sDropped ) )
+            return DND_ACTION_NONE;
+
+        rEdit.SetText( sDropped );
         xCurrentController->SetModified();
         rEdit.Modify();
             // SetText itself doesn't call a Modify as it isn't a user interaction
 
-        return sal_True;
+        return DND_ACTION_COPY;
     }
 
+/*
+    //////////////////////////////////////////////////////////////////////
+    // DataExch-String holen
+    SotDataObjectRef xDataObj = ((DropEvent&)rEvt).GetData();
+    const SvDataTypeList& rTypeList = xDataObj->GetTypeList();
     // the last known format
     sal_uInt32 nSbaDataExchangeFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_DATAEXCHANGE_FORMAT));
     if( !rTypeList.Get(nSbaDataExchangeFormat) )
