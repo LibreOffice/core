@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: jsc $ $Date: 2001-12-04 16:49:05 $
+#   last change: $Author: jsc $ $Date: 2001-12-07 14:54:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,6 +148,7 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 ALLTAR: $(REGISTRYCHECKFLAG)
 
 $(REGISTRYCHECKFLAG) : $(UNOIDLDBTARGET)
-    +regcompare -r1 $(UNOIDLDBTARGET) -r2 $(REFERENCE_SO_60_RDB) && echo > $(REGISTRYCHECKFLAG)
+    +regcompare -t -r1 $(REFERENCE_SO_60_RDB) -r2 $(UNOIDLDBTARGET)
+    +regcompare -t -r1 $(REFERENCE_SO_60_DOC_RDB) -r2 $(UNOIDLDBTARGET) && echo > $(REGISTRYCHECKFLAG)
 
 .ENDIF
