@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteServiceTest.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:59:11 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,9 @@ package testtools.servicetests;
 
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.bridge.XUnoUrlResolver;
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
-import com.sun.star.connection.XAcceptor;
+import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.container.XSet;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -87,19 +87,12 @@ public final class RemoteServiceTest extends TestBase {
         Thread.sleep(5000); // wait for server to start accepting
         return new TestServiceFactory() {
                 public Object get() throws Exception {
-                    XComponentContext context
-                        = Bootstrap.createInitialComponentContext(null);
-                    XMultiComponentFactory serviceManager
-                        = context.getServiceManager();
-                    XUnoUrlResolver resolver
-                        = (XUnoUrlResolver) UnoRuntime.queryInterface(
-                            XUnoUrlResolver.class,
-                            serviceManager.createInstanceWithContext(
-                                "com.sun.star.bridge.UnoUrlResolver", context));
-                    return resolver.resolve(
-                        "uno:" + CONNECTION_DESCRIPTION + ";"
-                        + PROTOCOL_DESCRIPTION
-                        + ";testtools.servicetests.TestService2");
+                    return (UnoUrlResolver.create(
+                                Bootstrap.createInitialComponentContext(null))).
+                        resolve(
+                            "uno:" + CONNECTION_DESCRIPTION + ";"
+                            + PROTOCOL_DESCRIPTION
+                            + ";testtools.servicetests.TestService2");
                 }
 
                 public void dispose() throws Exception {
@@ -123,11 +116,8 @@ public final class RemoteServiceTest extends TestBase {
                     XBridgeFactory.class,
                     serviceManager.createInstanceWithContext(
                         "com.sun.star.bridge.BridgeFactory", context));
-            XAcceptor acceptor = (XAcceptor) UnoRuntime.queryInterface(
-                XAcceptor.class,
-                serviceManager.createInstanceWithContext(
-                    "com.sun.star.connection.Acceptor", context));
-            XConnection connection = acceptor.accept(CONNECTION_DESCRIPTION);
+            XConnection connection = Acceptor.create(context).accept(
+                CONNECTION_DESCRIPTION);
             bridgeFactory.createBridge(
                 "", PROTOCOL_DESCRIPTION, connection,
                 new XInstanceProvider() {
