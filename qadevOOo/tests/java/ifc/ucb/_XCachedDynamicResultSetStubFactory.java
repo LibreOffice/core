@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCachedDynamicResultSetStubFactory.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:39 $
+ *  last change:$Date: 2003-05-27 12:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 package ifc.ucb;
 
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.ucb.XCachedDynamicResultSetFactory;
 import com.sun.star.ucb.XCachedDynamicResultSetStubFactory;
@@ -167,7 +168,7 @@ public class _XCachedDynamicResultSetStubFactory extends MultiMethodTest {
         XCachedDynamicResultSetFactory setFac = null ;
 
         try {
-            Object fac = tParam.getMSF().createInstance
+            Object fac = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.ucb.CachedDynamicResultSetFactory") ;
 
             setFac = (XCachedDynamicResultSetFactory) UnoRuntime.queryInterface
