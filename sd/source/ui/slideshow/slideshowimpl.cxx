@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:17:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -583,13 +583,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         hideChildWindows();
 
         ::Window* pParent;
-        if( maPresSettings.mbFullScreen )
-        {
-            SfxFrame* pFrame = getViewFrame()->GetTopFrame();
-            pParent = pFrame->GetWindow().GetParent();
-        }
-        else
-            pParent = &getViewFrame()->GetWindow();
+        pParent = &getViewFrame()->GetWindow();
 
         mpShowWindow = new ShowWindow( pParent );
         if( mpViewShell )
@@ -1138,7 +1132,7 @@ void SlideshowImpl::gotoPreviousSlide()
             if( nLastPageIndex > 0 )
                 mpShowWindow->RestartShow( nLastPageIndex );
         }
-        else
+        else if( mpAnimationPageList->getCurrentPageIndex() > 0 )
         {
             mxShow->previousSlide();
             update();
