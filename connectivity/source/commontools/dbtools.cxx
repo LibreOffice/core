@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:15:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ Sequence< ::rtl::OUString > getFieldNamesByCommandDescriptor( const Reference< X
 {
     // get the container for the fields
     Reference< XComponent > xKeepFieldsAlive;
-    Reference< XNameAccess > xFieldContainer = getFieldsByCommandDescriptor( _rxConnection, _nCommandType, _rCommand, xKeepFieldsAlive );
+    Reference< XNameAccess > xFieldContainer = getFieldsByCommandDescriptor( _rxConnection, _nCommandType, _rCommand, xKeepFieldsAlive, _pErrorInfo );
 
     // get the names of the fields
     Sequence< ::rtl::OUString > aNames;
@@ -1220,144 +1220,194 @@ sal_Bool canDelete(const Reference< XPropertySet>& _rxCursorSet)
 
 
 //------------------------------------------------------------------------------
-Reference< XSQLQueryComposer> getCurrentSettingsComposer(
-                const Reference< XPropertySet>& _rxRowSetProps,
-                const Reference< XMultiServiceFactory>& _rxFactory)
+::rtl::OUString getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+                                   sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder, Reference< XSQLQueryComposer >* _pxComposer )
+    SAL_THROW( ( SQLException ) )
 {
-    Reference< XSQLQueryComposer> xReturn;
-    Reference< XRowSet> xRowSet(_rxRowSetProps, UNO_QUERY);
+    ::rtl::OUString sStatement;
     try
     {
-        Reference< XConnection> xConn( calcConnection(xRowSet, _rxFactory));
-        if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
+        Reference< XConnection> xConn( calcConnection( Reference< XRowSet >( _rxRowSet, UNO_QUERY ), _rxFactory ) );
+        if ( xConn.is() )       // implies _rxRowSet.is()
         {
             // build the statement the row set is based on (can't use the ActiveCommand property of the set
-            // as this reflects the status after the last execute, not the currently set properties
+            // as this reflects the status after the last execute, not the currently set properties)
 
-            ::rtl::OUString sStatement;
-            const ::rtl::OUString sPropCommandType = ::rtl::OUString::createFromAscii("CommandType");
-            const ::rtl::OUString sPropFilter = ::rtl::OUString::createFromAscii("Filter");
-            const ::rtl::OUString sPropOrder = ::rtl::OUString::createFromAscii("Order");
-            const ::rtl::OUString sPropApplyFilter = ::rtl::OUString::createFromAscii("ApplyFilter");
+            const ::rtl::OUString sPropCommandType  = ::rtl::OUString::createFromAscii( "CommandType" );
+            const ::rtl::OUString sPropFilter       = ::rtl::OUString::createFromAscii( "Filter"      );
+            const ::rtl::OUString sPropOrder        = ::rtl::OUString::createFromAscii( "Order"       );
+            const ::rtl::OUString sPropApplyFilter  = ::rtl::OUString::createFromAscii( "ApplyFilter" );
+
+            const ::rtl::OUString sPropCommand      = OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_COMMAND          );
+            const ::rtl::OUString sPropEspaceProc   = OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING );
 
             // first ensure we have all properties needed
-            if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND), _rxRowSetProps) && hasProperty(sPropCommandType, _rxRowSetProps)
-                && hasProperty(sPropFilter, _rxRowSetProps) && hasProperty(sPropOrder, _rxRowSetProps)
-                && hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING), _rxRowSetProps) && hasProperty(sPropApplyFilter, _rxRowSetProps))
+            if  (   hasProperty( sPropCommand,      _rxRowSet )
+                &&  hasProperty( sPropCommandType,  _rxRowSet )
+                &&  hasProperty( sPropFilter,       _rxRowSet )
+                &&  hasProperty( sPropOrder,        _rxRowSet )
+                &&  hasProperty( sPropEspaceProc,   _rxRowSet )
+                &&  hasProperty( sPropApplyFilter,  _rxRowSet )
+                )
             {
-                sal_Int32 nCommandType = getINT32(_rxRowSetProps->getPropertyValue(sPropCommandType));
-                ::rtl::OUString sCommand = getString(_rxRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)));
-                sal_Bool bEscapeProcessing = getBOOL(_rxRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING)));
-                switch (nCommandType)
+                sal_Int32 nCommandType = CommandType::COMMAND;
+                ::rtl::OUString sCommand;
+                sal_Bool bEscapeProcessing = sal_False;
+
+                _rxRowSet->getPropertyValue( sPropCommandType ) >>= nCommandType     ;
+                _rxRowSet->getPropertyValue( sPropCommand     ) >>= sCommand         ;
+                _rxRowSet->getPropertyValue( sPropEspaceProc  ) >>= bEscapeProcessing;
+
+                switch ( nCommandType )
                 {
                     case CommandType::COMMAND:
-                        if (!bEscapeProcessing)
-                        {   // native sql -> no parsable statement
-                            sStatement = ::rtl::OUString();
-                        }
-                        else
-                        {
+                        if ( bEscapeProcessing )
                             sStatement = sCommand;
-                        }
+                        // (in case of no escape processing  we assume a not parseable statement)
                         break;
+
                     case CommandType::TABLE:
                     {
-                        if (!sCommand.getLength())
+                        if ( !sCommand.getLength() )
                             break;
 
                         sStatement = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                        sStatement += quoteTableName(xConn->getMetaData(), sCommand,eInDataManipulation);
+                        sStatement += quoteTableName( xConn->getMetaData(), sCommand, eInDataManipulation );
                     }
                     break;
+
                     case CommandType::QUERY:
                     {
                         // ask the connection for the query
-                        Reference< XQueriesSupplier> xSupplyQueries(xConn, UNO_QUERY);
-                        if (!xSupplyQueries.is())
+                        Reference< XQueriesSupplier > xSupplyQueries( xConn, UNO_QUERY );
+                        Reference< XNameAccess >      xQueries;
+                        if ( xSupplyQueries.is() )
+                            xQueries = xQueries.query( xSupplyQueries->getQueries() );
+                        OSL_ENSURE( xQueries.is(), "getComposedRowSetStatement: a connection which cannot supply queries?" );
+                        if ( !xQueries.is() )
                             break;
 
-                        Reference< XNameAccess> xQueries(xSupplyQueries->getQueries(), UNO_QUERY);
-                        if (!xQueries.is() || !xQueries->hasByName(sCommand))
+                        if ( !xQueries->hasByName( sCommand ) )
                             break;
 
-                        Reference< XPropertySet> xQueryProps;
-                        xQueries->getByName(sCommand) >>= xQueryProps;
-                        if (!xQueryProps.is())
+                        Reference< XPropertySet > xQuery;
+                        xQueries->getByName( sCommand ) >>= xQuery;
+                        OSL_ENSURE( xQuery.is(), "getComposedRowSetStatement: invalid query!" );
+                        if ( !xQuery.is() )
                             break;
 
                         //  a native query ?
-                        if (!hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING), xQueryProps))
-                            break;
-                        if (!getBOOL(xQueryProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING))))
-                            break;
-
-                        if (!hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND), xQueryProps))
+                        sal_Bool bQueryEscapeProcessing = sal_False;
+                        xQuery->getPropertyValue( sPropEspaceProc ) >>= bQueryEscapeProcessing;
+                        if ( !bQueryEscapeProcessing )
                             break;
 
                         // the command used by the query
-                        sStatement = getString(xQueryProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)));
-                        OSL_ENSURE(sStatement.getLength(),"Statement is empty!");
+                        xQuery->getPropertyValue( sPropCommand ) >>= sStatement;
 
-                        // use an additional composer to build a statement from the query filter/order props
-                        Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
-                        Reference< XSQLQueryComposer> xLocalComposer;
+                        // use a composer to build a statement from the query filter/order props
+                        Reference< XSQLQueryComposerFactory> xFactory( xConn, UNO_QUERY );
+                        Reference< XSQLQueryComposer> xComposer;
                         if (xFactory.is())
-                            xLocalComposer = xFactory->createQueryComposer();
-                        if (!xLocalComposer.is() || !sStatement.getLength())
+                            xComposer = xFactory->createQueryComposer();
+                        if (!xComposer.is() || !sStatement.getLength())
                             break;
 
-                        xLocalComposer->setQuery(sStatement);
+                        // the "basic" statement
+                        xComposer->setQuery( sStatement );
+
                         // the sort order
-                        if (hasProperty(sPropOrder, xQueryProps))
-                            xLocalComposer->setOrder(getString(xQueryProps->getPropertyValue(sPropOrder)));
+                        if ( hasProperty( sPropOrder, xQuery ) )
+                            xComposer->setOrder( getString( xQuery->getPropertyValue( sPropOrder ) ) );
 
-                        sal_Bool bApplyFilter = sal_False;
-                        if (hasProperty(sPropApplyFilter, xQueryProps))
-                            bApplyFilter = getBOOL(xQueryProps->getPropertyValue(sPropApplyFilter));
+                        // the filter
+                        sal_Bool bApplyFilter = sal_True;
+                        if ( hasProperty( sPropApplyFilter, xQuery ) )
+                            bApplyFilter = getBOOL( xQuery->getPropertyValue( sPropApplyFilter ) );
 
-                        if (bApplyFilter)
-                        {
-                            if (hasProperty(sPropFilter, xQueryProps))
-                                xLocalComposer->setFilter(getString(xQueryProps->getPropertyValue(sPropFilter)));
-                        }
-                        sStatement = xLocalComposer->getComposedQuery();
+                        if ( bApplyFilter )
+                            xComposer->setFilter( getString( xQuery->getPropertyValue( sPropFilter ) ) );
+
+                        // the composed statement
+                        sStatement = xComposer->getComposedQuery();
                     }
                     break;
+
                     default:
-                        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : no table, no query, no statement - what else ?!");
+                        OSL_ENSURE(sal_False, "getComposedRowSetStatement: no table, no query, no statement - what else ?!");
                         break;
                 }
             }
 
-            if (sStatement.getLength())
+            if ( sStatement.getLength() && ( _bUseRowSetFilter || _bUseRowSetOrder ) )
             {
                 // create an composer
-                Reference< XSQLQueryComposerFactory> xFactory(xConn, UNO_QUERY);
-                if (xFactory.is())
-                    xReturn = xFactory->createQueryComposer();
-                if (xReturn.is())
+                Reference< XSQLQueryComposerFactory > xFactory( xConn, UNO_QUERY );
+                Reference< XSQLQueryComposer > xComposer;
+                if ( xFactory.is() )
+                    xComposer = xFactory->createQueryComposer();
+                if ( xComposer.is() )
                 {
-                    xReturn->setQuery(sStatement);
-                    // append filter/sort
-                    xReturn->setOrder(getString(_rxRowSetProps->getPropertyValue(sPropOrder)));
-                    sal_Bool bApplyFilter = getBOOL(_rxRowSetProps->getPropertyValue(sPropApplyFilter));
-                    if (bApplyFilter)
-                        xReturn->setFilter(getString(_rxRowSetProps->getPropertyValue(sPropFilter)));
+                    xComposer->setQuery( sStatement );
+
+                    // append sort
+                    if ( _bUseRowSetOrder )
+                        xComposer->setOrder( getString( _rxRowSet->getPropertyValue( sPropOrder ) ) );
+
+                    // append filter
+                    if ( _bUseRowSetFilter )
+                    {
+                        sal_Bool bApplyFilter = sal_True;
+                        _rxRowSet->getPropertyValue( sPropApplyFilter ) >>= bApplyFilter;
+                        if ( bApplyFilter )
+                            xComposer->setFilter( getString( _rxRowSet->getPropertyValue( sPropFilter ) ) );
+                    }
+
+                    sStatement = xComposer->getComposedQuery();
+                    if ( _pxComposer )
+                        *_pxComposer = xComposer;
                 }
             }
         }
     }
-    catch(SQLException&)
+    catch( const SQLException& )
     {
-        xReturn = NULL;
         throw;
     }
-    catch(Exception&)
+    catch( const Exception& )
     {
-        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : caught an exception !");
-        xReturn = NULL;
+        OSL_ENSURE( sal_False, "getComposedRowSetStatement: caught an (non-SQL) exception!" );
     }
 
+    return sStatement;
+}
+
+//------------------------------------------------------------------------------
+::rtl::OUString getComposedRowSetStatement(
+                    const Reference< XPropertySet >& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+                    sal_Bool _bUseRowSetFilter, sal_Bool _bUseRowSetOrder )
+{
+    return getComposedRowSetStatement( _rxRowSet, _rxFactory, _bUseRowSetFilter, _bUseRowSetOrder, NULL );
+}
+
+//------------------------------------------------------------------------------
+Reference< XSQLQueryComposer> getCurrentSettingsComposer(
+                const Reference< XPropertySet>& _rxRowSetProps,
+                const Reference< XMultiServiceFactory>& _rxFactory)
+{
+    Reference< XSQLQueryComposer > xReturn;
+    try
+    {
+        getComposedRowSetStatement( _rxRowSetProps, _rxFactory, sal_True, sal_True, &xReturn );
+    }
+    catch( const SQLException& )
+    {
+        throw;
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "::getCurrentSettingsComposer : caught an exception !" );
+    }
 
     return xReturn;
 }
