@@ -17,3 +17,4 @@ hedabu: ..\inc\b3dpair.hxx %_DEST%\inc%_EXT%\basegfx\b3dpair.hxx
 hedabu: ..\inc\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\b3dvector.hxx
 hedabu: ..\inc\b3dpoint.hxx %_DEST%\inc%_EXT%\basegfx\b3dpoint.hxx
 hedabu: ..\inc\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\b3dhompoint.hxx
+hedabu: ..\inc\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\b3dhommatrix.hxx

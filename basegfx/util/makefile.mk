@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: aw $ $Date: 2002-10-18 15:32:57 $
+#   last change: $Author: aw $ $Date: 2002-12-05 17:19:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ TARGET=basegfx
 
 LIB1TARGET=$(SLB)$/basegfx.lib
 LIB1FILES=\
-    $(SLB)$/base2d.lib
+    $(SLB)$/base2d.lib	\
+    $(SLB)$/base3d.lib
 
 SHL1TARGET= basegfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ibasegfx
