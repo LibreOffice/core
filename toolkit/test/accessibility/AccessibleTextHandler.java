@@ -8,19 +8,27 @@ import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.Point;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.beans.PropertyValue;
 
 import java.util.Vector;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JDialog;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.Icon;
 import javax.swing.JTextArea;
 import javax.swing.JOptionPane;
+import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
+import javax.swing.BoxLayout;
 import javax.swing.text.JTextComponent;
 
 
@@ -43,7 +51,7 @@ class AccessibleTextHandler extends NodeHandler
     public AccessibleTextHandler (XAccessibleText xText)
     {
         if (xText != null)
-            maChildList.setSize (12);
+            maChildList.setSize (13);
     }
 
     public AccessibleTreeNode createChild (AccessibleTreeNode aParent, int nIndex)
@@ -110,6 +118,9 @@ class AccessibleTextHandler extends NodeHandler
                         break;
                     case 11:
                         aChild = new StringNode (bounds( xText ), aParent);
+                        break;
+                    case 12:
+                        aChild = getAttributes( xText, aParent );
                         break;
                     default:
                         aChild = new StringNode ("unknown child index " + nIndex, aParent);
@@ -269,11 +280,52 @@ class AccessibleTextHandler extends NodeHandler
     }
 
 
+    private AccessibleTreeNode getAttributes( XAccessibleText xText,
+                                  AccessibleTreeNode aParent)
+    {
+        AccessibleTreeNode aRet;
+
+        try
+        {
+            VectorNode aPortions = new VectorNode ("getAttributes", aParent);
+
+            int nIndex = 0;
+            int nLength = xText.getCharacterCount();
+            while( nIndex < nLength )
+            {
+                // get attribute run
+                String aPortion = xText.getTextAtIndex(
+                    nIndex, (short)6/*AccessibleTextType.ATTRIBUTE*/ );
+
+                // get attributes and make node with attribute children
+                PropertyValue[] aValues = xText.getCharacterAttributes(nIndex);
+                VectorNode aAttrs = new VectorNode (aPortion, aPortions);
+                for( int i = 0; i < aValues.length; i++ )
+                {
+                    new StringNode( aValues[i].Name + ": " + aValues[i].Value,
+                                    aAttrs );
+                }
+
+                // get next portion, but advance at least one
+                nIndex += (aPortion.length() > 0) ? aPortion.length() : 1;
+            }
+
+            aRet = aPortions;
+        }
+        catch( IndexOutOfBoundsException e )
+        {
+            aRet = new StringNode( "Exception caught:" + e, aParent );
+        }
+
+        return aRet;
+    }
+
+
     static String[] aTextActions =
         new String[] { "select...", "copy..." };
     static String[] aEditableTextActions =
         new String[] { "select...", "copy...",
-                       "cut...", "paste...", "edit..." };
+                       "cut...", "paste...", "edit...", "format..." };
 
     public String[] getActions (AccessibleTreeNode aNode)
     {
@@ -289,75 +341,77 @@ class AccessibleTextHandler extends NodeHandler
         if ( ! (aNode instanceof AccTreeNode))
             return;
 
+        AccTreeNode aATNode = (AccTreeNode)aNode;
         TextActionDialog aDialog = null;
-
-        XAccessibleText xText = ((AccTreeNode)aNode).getText();
 
         // create proper dialog
         switch( nIndex )
         {
             case 0:
-                aDialog = new TextActionDialog( aNode,
+                aDialog = new TextActionDialog( aATNode,
                                                 "Select range:",
-                                                xText.getText(),
                                                 "select" )
                     {
-                        void action( JTextComponent aText, Object aObject )
-                                throws IndexOutOfBoundsException
+                        boolean action(
+                            JTextComponent aText, AccTreeNode aNode )
+                            throws IndexOutOfBoundsException
                         {
-                            ((AccTreeNode)aObject).getText().setSelection(
-                                aText.getSelectionStart(),
-                                aText.getSelectionEnd() );
+                            return aNode.getText().setSelection(
+                                getSelectionStart(),
+                                getSelectionEnd() );
                         }
                     };
                 break;
             case 1:
-                aDialog = new TextActionDialog( aNode,
+                aDialog = new TextActionDialog( aATNode,
                                                 "Select range and copy:",
-                                                xText.getText(),
                                                 "copy" )
                     {
-                        void action( JTextComponent aText, Object aObject )
-                                throws IndexOutOfBoundsException
+                        boolean action(
+                            JTextComponent aText, AccTreeNode aNode )
+                            throws IndexOutOfBoundsException
                         {
-                            ((AccTreeNode)aObject).getText().copyText(
-                                aText.getSelectionStart(),
-                                aText.getSelectionEnd() );
+                            return aNode.getText().copyText(
+                                getSelectionStart(),
+                                getSelectionEnd() );
                         }
                     };
                 break;
             case 2:
-                aDialog = new TextActionDialog( aNode,
+                aDialog = new TextActionDialog( aATNode,
                                                 "Select range and cut:",
-                                                xText.getText(),
                                                 "cut" )
                     {
-                        void action( JTextComponent aText, Object aObject )
-                                throws IndexOutOfBoundsException
+                        boolean action(
+                            JTextComponent aText, AccTreeNode aNode )
+                            throws IndexOutOfBoundsException
                         {
-                            ((AccTreeNode)aObject).getEditText().cutText(
-                                aText.getSelectionStart(),
-                                aText.getSelectionEnd() );
+                            return aNode.getEditText().cutText(
+                                getSelectionStart(),
+                                getSelectionEnd() );
                         }
                     };
                 break;
             case 3:
-                aDialog = new TextActionDialog( aNode,
+                aDialog = new TextActionDialog( aATNode,
                                                 "Place Caret and paste:",
-                                                xText.getText(),
                                                 "paste" )
                     {
-                        void action( JTextComponent aText, Object aObject )
-                                throws IndexOutOfBoundsException
+                        boolean action(
+                            JTextComponent aText, AccTreeNode aNode )
+                            throws IndexOutOfBoundsException
                         {
-                            ((AccTreeNode)aObject).getEditText().pasteText(
+                            return aNode.getEditText().pasteText(
                                 aText.getCaretPosition() );
                         }
                     };
                 break;
             case 4:
-                aDialog = new TextEditDialog( aNode, "Edit text:",
-                                              xText.getText(), "edit" );
+                aDialog = new TextEditDialog( aATNode, "Edit text:",
+                                              "edit" );
+                break;
+            case 5:
+                aDialog = new TextAttributeDialog( aATNode );
                 break;
         }
 
@@ -373,20 +427,22 @@ class AccessibleTextHandler extends NodeHandler
 class TextActionDialog extends JDialog
     implements ActionListener
 {
+    AccTreeNode aNode;
     JTextArea aText;
-    Object aObject;
     String sName;
+    JCheckBox aIndexToggle;
 
-    public TextActionDialog( Object aObj,
+    public TextActionDialog( AccTreeNode aNd,
                              String sExplanation,
-                             String sText,
                              String sButtonText )
     {
         super( AccessibilityWorkBench.get() );
 
-        aObject = aObj;
+        aNode = aNd;
         sName = sButtonText;
-        init( sExplanation, sText, sButtonText );
+        init( sExplanation, aNode.getText().getText(), sButtonText );
+//        setSize( getPreferredSize() );
+        setSize( 350, 225 );
     }
 
     /** build dialog */
@@ -407,27 +463,27 @@ class TextActionDialog extends JDialog
         // the text field
         aText = new JTextArea();
         aText.setText( sText );
-        aText.setColumns( 40 );
-        aText.setRows( Math.max( sText.length() / 40, 5 ) );
+        aText.setColumns( Math.min( Math.max( 40, sText.length() ), 20 ) );
+        aText.setRows( sText.length() / 40 + 1 );
         aText.setLineWrap( true );
         aText.setEditable( false );
         aContent.add( aText, BorderLayout.CENTER );
 
         JPanel aButtons = new JPanel();
         aButtons.setLayout( new FlowLayout() );
+        aIndexToggle = new JCheckBox( "reverse selection" );
+        aButtons.add( aIndexToggle );
         JButton aActionButton = new JButton( sButtonText );
         aActionButton.setActionCommand( "Action" );
         aActionButton.addActionListener( this );
         aButtons.add( aActionButton );
-        JButton aCancelButton = new JButton( "Cancel" );
+        JButton aCancelButton = new JButton( "cancel" );
         aCancelButton.setActionCommand( "Cancel" );
         aCancelButton.addActionListener( this );
         aButtons.add( aCancelButton );
 
         // add Panel with buttons
         aContent.add( aButtons, BorderLayout.SOUTH );
-
-        setSize( aContent.getPreferredSize() );
     }
 
     void cancel()
@@ -438,16 +494,23 @@ class TextActionDialog extends JDialog
 
     void action()
     {
+        String sError = null;
         try
         {
-            action( aText, aObject );
+            boolean bSuccess = action( aText, aNode );
+            if( !bSuccess )
+                sError = "Can't execute";
         }
         catch( IndexOutOfBoundsException e )
         {
-            JOptionPane.showMessageDialog(
-                AccessibilityWorkBench.get(), "Index out of bounds",
-                sName, JOptionPane.ERROR_MESSAGE);
+            sError = "Index out of bounds";
         }
+
+        if( sError != null )
+            JOptionPane.showMessageDialog( AccessibilityWorkBench.get(),
+                                           sError, sName,
+                                           JOptionPane.ERROR_MESSAGE);
+
         cancel();
     }
 
@@ -462,22 +525,32 @@ class TextActionDialog extends JDialog
     }
 
 
+    int getSelectionStart()     { return getSelection(true); }
+    int getSelectionEnd()       { return getSelection(false); }
+    int getSelection(boolean bStart)
+    {
+        return ( bStart ^ aIndexToggle.isSelected() )
+            ? aText.getSelectionStart() : aText.getSelectionEnd();
+    }
+
+
+
     /** override this for dialog-specific action */
-    void action( JTextComponent aText, Object aObject )
+    boolean action( JTextComponent aText, AccTreeNode aNode )
         throws IndexOutOfBoundsException
     {
+        return false;
     }
 }
 
 
 class TextEditDialog extends TextActionDialog
 {
-    public TextEditDialog( Object aObj,
+    public TextEditDialog( AccTreeNode aNode,
                            String sExplanation,
-                           String sText,
                            String sButtonText )
     {
-        super( aObj, sExplanation, sText, sButtonText );
+        super( aNode, sExplanation, sButtonText );
     }
 
     protected void init( String sExplanation,
@@ -490,13 +563,11 @@ class TextEditDialog extends TextActionDialog
 
 
     /** edit the text */
-    void action( JTextComponent aText, Object aObject )
+    boolean action( JTextComponent aText, AccTreeNode aNode )
     {
         // is this text editable? if not, fudge you and return
-        XAccessibleEditableText xEdit =
-            (XAccessibleEditableText) UnoRuntime.queryInterface (
-                  XAccessibleEditableText.class, aObject);
-        if( xEdit != null )
+        XAccessibleEditableText xEdit = aNode.getEditText();
+        return ( xEdit == null ) ? false :
             updateText( xEdit, aText.getText() );
     }
 
@@ -561,3 +632,125 @@ class TextEditDialog extends TextActionDialog
     }
 }
 
+
+class TextAttributeDialog extends TextActionDialog
+{
+    public TextAttributeDialog(
+        AccTreeNode aNode )
+    {
+        super( aNode, "Choose attributes, select text, and press 'Set':",
+               "set" );
+    }
+
+    private JCheckBox aBold, aUnderline, aItalics;
+    private Color aForeground, aBackground;
+
+    protected void init( String sExplanation,
+                         String sText,
+                         String sButtonText )
+    {
+        super.init( sExplanation, sText, sButtonText );
+
+        aForeground = Color.BLACK;
+        aBackground = Color.WHITE;
+
+        JPanel aAttr = new JPanel();
+        aAttr.setLayout( new BoxLayout( aAttr, BoxLayout.Y_AXIS ) );
+
+        aBold = new JCheckBox( "bold" );
+        aUnderline = new JCheckBox( "underline" );
+        aItalics = new JCheckBox( "italics" );
+
+        JButton aForeButton = new JButton("Foreground", new ColorIcon(true));
+        aForeButton.addActionListener( new ActionListener() {
+                public void actionPerformed(ActionEvent e)
+                {
+                    aForeground = JColorChooser.showDialog(
+                        TextAttributeDialog.this,
+                        "Select Foreground Color",
+                        aForeground);
+                }
+            } );
+
+        JButton aBackButton = new JButton("Background", new ColorIcon(false));
+        aBackButton.addActionListener( new ActionListener() {
+                public void actionPerformed(ActionEvent e)
+                {
+                    aBackground = JColorChooser.showDialog(
+                        TextAttributeDialog.this,
+                        "Select Background Color",
+                        aBackground);
+                }
+            } );
+
+        aAttr.add( aBold );
+        aAttr.add( aUnderline );
+        aAttr.add( aItalics );
+        aAttr.add( aForeButton );
+        aAttr.add( aBackButton );
+
+        getContentPane().add( aAttr, BorderLayout.WEST );
+    }
+
+
+    class ColorIcon implements Icon
+    {
+        boolean bForeground;
+        static final int nHeight = 16;
+        static final int nWidth = 16;
+
+        public ColorIcon(boolean bWhich) { bForeground = bWhich; }
+        public int getIconHeight()  { return nHeight; }
+        public int getIconWidth() { return nWidth; }
+        public void paintIcon(Component c, Graphics g, int x, int y)
+        {
+            g.setColor( getColor() );
+            g.fillRect( x, y, nHeight, nWidth );
+            g.setColor( c.getForeground() );
+            g.drawRect( x, y, nHeight, nWidth );
+        }
+        Color getColor()
+        {
+            return bForeground ? aForeground : aBackground;
+        }
+    }
+
+
+
+    /** edit the text */
+    boolean action( JTextComponent aText, AccTreeNode aNode )
+        throws IndexOutOfBoundsException
+    {
+        // is this text editable? if not, fudge you and return
+        XAccessibleEditableText xEdit = aNode.getEditText();
+        boolean bSuccess = false;
+        if( xEdit != null )
+        {
+            PropertyValue[] aSequence = new PropertyValue[6];
+            aSequence[0] = new PropertyValue();
+            aSequence[0].Name = "CharWeight";
+            aSequence[0].Value = new Integer( aBold.isSelected() ? 150 : 100 );
+            aSequence[1] = new PropertyValue();
+            aSequence[1].Name = "CharUnderline";
+            aSequence[1].Value = new Integer( aUnderline.isSelected() ? 1 : 0 );
+            aSequence[2] = new PropertyValue();
+            aSequence[2].Name = "CharBackColor";
+            aSequence[2].Value = new Integer( aBackground.getRGB() );
+            aSequence[3] = new PropertyValue();
+            aSequence[3].Name = "CharColor";
+            aSequence[3].Value = new Integer( aForeground.getRGB() );
+            aSequence[4] = new PropertyValue();
+            aSequence[4].Name = "CharPosture";
+            aSequence[4].Value = new Integer( aItalics.isSelected() ? 1 : 0 );
+            aSequence[5] = new PropertyValue();
+            aSequence[5].Name = "CharBackTransparent";
+            aSequence[5].Value = new Boolean( false );
+
+            bSuccess = xEdit.setAttributes( getSelectionStart(),
+                                            getSelectionEnd(),
+                                            aSequence );
+        }
+        return bSuccess;
+    }
+
+}

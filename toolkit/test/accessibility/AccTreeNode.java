@@ -106,6 +106,12 @@ class AccTreeNode
         return mxAccessible;
     }
 
+    public XAccessibleSelection getSelection ()
+    {
+        return (XAccessibleSelection)UnoRuntime.queryInterface(
+                XAccessibleSelection.class, mxContext);
+    }
+
     public void addHandler( NodeHandler aHandler )
     {
         if (aHandler != null)
