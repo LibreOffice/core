@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSetStubFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:04:13 $
+ *  last change:$Date: 2003-05-27 12:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public class CachedDynamicResultSetStubFactory extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object relationContainer = null ;
 
 

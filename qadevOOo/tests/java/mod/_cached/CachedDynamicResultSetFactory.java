@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedDynamicResultSetFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-01-31 10:01:44 $
+ *  last change:$Date: 2003-05-27 12:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ public class CachedDynamicResultSetFactory extends TestCase {
                                                     throws StatusException {
         XInterface oObj = null;
         Object oInterface = null;
-        XMultiServiceFactory xMSF = Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)Param.getMSF();
         Object relationContainer = null ;
 
 
