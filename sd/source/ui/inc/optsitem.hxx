@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:19:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,6 @@ class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
-    ULONG   nPreviewQuality;                // !!!Misc/Preview (double=>integer)!!!
-
     // #97016#
     ULONG   nDefaultObjectSizeWidth;
     ULONG   nDefaultObjectSizeHeight;
@@ -370,7 +368,6 @@ public:
     BOOL    IsDoubleClickTextEdit() const { Init(); return (BOOL) bDoubleClickTextEdit; }
     BOOL    IsClickChangeRotation() const { Init(); return (BOOL) bClickChangeRotation; }
     BOOL    IsStartWithActualPage() const { Init(); return (BOOL) bStartWithActualPage; }
-    ULONG   GetPreviewQuality() const { Init(); return nPreviewQuality; }
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
@@ -410,7 +407,6 @@ public:
             values are reserved for future use.
     */
     void    SetPrinterIndependentLayout (USHORT nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
-    void    SetPreviewQuality( ULONG nQual ) { if( nPreviewQuality != nQual ) { OptionsChanged(); nPreviewQuality = nQual; } }
     void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
     // #90356#
