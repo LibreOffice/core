@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 08:38:35 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,15 @@ namespace xmloff
         const sal_Char* ascii;
         sal_Int32       length;
 
-        inline  operator ::rtl::OUString () const;
+        inline const ::rtl::OUString* operator& () const;
+        inline  operator const ::rtl::OUString& () const { return *(&(*this)); }
         inline  operator const sal_Char* () const { return ascii; }
 
         inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
         inline ~ConstAsciiString();
 
     private:
-        mutable rtl_uString*    ustring;
+        mutable ::rtl::OUString*    m_pString;
 
     private:
         ConstAsciiString(); // never implemented
@@ -97,28 +98,28 @@ namespace xmloff
 
     //------------------------------------------------------------
     inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
-        :ascii(_pAsciiZeroTerminated)
-        ,length(_nLength)
-        ,ustring(NULL)
+        :ascii( _pAsciiZeroTerminated )
+        ,length( _nLength )
+        ,m_pString( NULL )
     {
     }
 
     //------------------------------------------------------------
     inline ConstAsciiString::~ConstAsciiString()
     {
-        if (ustring)
+        if ( m_pString )
         {
-            rtl_uString_release(ustring);
-            ustring = NULL;
+            delete m_pString;
+            m_pString = NULL;
         }
     }
 
     //------------------------------------------------------------
-    inline ConstAsciiString::operator ::rtl::OUString () const
+    inline const ::rtl::OUString* ConstAsciiString::operator& () const
     {
-        if (!ustring)
-            rtl_uString_newFromAscii( &ustring, ascii );
-        return ustring;
+        if ( !m_pString )
+            m_pString = new ::rtl::OUString( ascii, length, RTL_TEXTENCODING_ASCII_US );
+        return m_pString;
     }
 
 #ifndef XMLFORM_IMPLEMENT_STRINGS
@@ -286,6 +287,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2002/05/30 08:38:35  fs
+ *  #99693# +PROPERTY_HIDDEN_VALUE
+ *
  *  Revision 1.7  2001/09/04 10:18:40  fs
  *  #91865# some script related strings
  *
