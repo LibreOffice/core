@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: aw $ $Date: 2001-05-14 14:43:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,12 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         {
             DBG_ERROR( "could not export layer name for shape!" );
         }
+    }
+
+    // #82003# test export count
+    if(rExport.getExportFlags() & EXPORT_CONTENT)
+    {
+        rExport.GetProgressBarHelper()->Increment();
     }
 
     // --------------------
