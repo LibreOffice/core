@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>draw_StarOffice_XML_Draw_Template</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Draw 6.0 Template</value>
+            <value>Draw 6.0 Template</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>Draw 6.0</value></prop>
     </node>
