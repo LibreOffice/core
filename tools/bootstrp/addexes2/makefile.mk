@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-02 13:05:17 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:19:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,20 +74,20 @@ TARGETTHREAD=MT
 
 # --- Files --------------------------------------------------------
 
-APP3TARGET=	mkunroll
-APP3OBJS=   $(OBJ)$/mkfilt.obj
-APP3STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB) 
+APP1TARGET=	mkunroll
+APP1OBJS=   $(OBJ)$/mkfilt.obj
+APP1STDLIBS= $(SALLIB) $(VOSLIB) $(TOOLSLIB) 
 .IF "$(OS)"=="LINUX"
-APP3STDLIBS+=-lpthread
+APP1STDLIBS+=-lpthread
 .ENDIF
 .IF "$(OS)"=="NETBSD"
-APP3STDLIBS+=-lpthread
+APP1STDLIBS+=-lpthread
 .ENDIF
-APP3LIBS=	$(LB)$/bootstrp.lib
-APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
+APP1LIBS=	$(LB)$/bootstrp.lib
+APP1DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
 
-DEPOBJFILES		=	$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
+DEPOBJFILES		=	$(APP1OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
