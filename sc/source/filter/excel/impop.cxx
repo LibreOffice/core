@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:25:43 $
+ *  last change: $Author: gt $ $Date: 2001-01-11 14:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1607,10 +1607,8 @@ void ImportExcel::Setup( void )
         // fNotes
         pStyleSheetItemSet->Put( SfxBoolItem( ATTR_PAGE_NOTES, TRUE ) );
 
-    if( nOpt & 0x0080 )
-        // fUsePage
-        pStyleSheetItemSet->Put(
-            SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, nStartPage ) );
+    // fUsePage
+    pStyleSheetItemSet->Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, ( nOpt & 0x0080 )? nStartPage : 0 ) );
 
     pStyleSheetItemSet->Put( aPageItem );
 }
