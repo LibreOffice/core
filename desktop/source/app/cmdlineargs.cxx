@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:35:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:21:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bPrintEvent     = sal_False;
     sal_Bool    bOpenEvent      = sal_True;
     sal_Bool    bViewEvent      = sal_False;
+    sal_Bool    bStartEvent     = sal_False;
     sal_Bool    bPrintToEvent   = sal_False;
     sal_Bool    bPrinterName    = sal_False;
     sal_Bool    bForceOpenEvent = sal_False;
@@ -217,6 +218,17 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                         bForceNewEvent  = sal_False;
                         bForceOpenEvent = sal_False;
                     }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-start" ))
+                    {
+                            // open in viewmode
+                            bOpenEvent      = sal_False;
+                            bViewEvent      = sal_False;
+                            bStartEvent     = sal_True;
+                            bPrintEvent     = sal_False;
+                            bPrintToEvent   = sal_False;
+                            bForceNewEvent  = sal_False;
+                            bForceOpenEvent = sal_False;
+                    }
                 }
                 else
                 {
@@ -233,6 +245,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArgStr );
                         else if ( bViewEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
+                        else if ( bStartEvent )
+                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArgStr );
                         else if ( bPrintEvent )
                             AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArgStr );
                         else if ( bPrintToEvent )
@@ -641,6 +655,13 @@ sal_Bool CommandLineArgs::GetViewList( ::rtl::OUString& rPara) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_VIEWLIST ];
     return m_aStrSetParams[ CMD_STRINGPARAM_VIEWLIST ];
+}
+
+sal_Bool CommandLineArgs::GetStartList( ::rtl::OUString& rPara) const
+{
+      osl::MutexGuard  aMutexGuard( m_aMutex );
+      rPara = m_aStrParams[ CMD_STRINGPARAM_STARTLIST ];
+      return m_aStrSetParams[ CMD_STRINGPARAM_STARTLIST ];
 }
 
 sal_Bool CommandLineArgs::GetForceOpenList( ::rtl::OUString& rPara) const
