@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-17 16:02:37 $
+ *  last change: $Author: ssa $ $Date: 2002-10-18 15:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1641,7 +1641,7 @@ ToolBox::ToolBox( Window* pParent, const ResId& rResId ) :
 ToolBox::~ToolBox()
 {
     // #103005# make sure our activate/deactivate balance is right
-    while( mnActivateCount )
+    while( mnActivateCount > 0 )
         Deactivate();
 
     // Falls noch ein Floating-Window connected ist, dann den
@@ -2976,20 +2976,24 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
         {
             DrawSelectionBackground( pItem->maRect, bHighlight, pItem->meState == STATE_CHECK, TRUE, pItem->mpWindow ? TRUE : FALSE );
 
-            // no shadows until our icons are not redesigned
-            /*
+            // draw shadows
             if( bHighlight == 2 && pItem->meState != STATE_CHECK )
             {
                 nTempOffX++;
                 nTempOffY++;
-                // draw shadow using active title bar color
                 if( pImage->HasMaskBitmap() )
-                    DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(),
-                            GetpApp()->GetSettings().GetStyleSettings().GetActiveColor() );
+                {
+                    Color aMaskCol = GetpApp()->GetSettings().GetStyleSettings().GetHighlightColor();
+                    USHORT h,s,b;
+                    ImplRGBtoHSB( aMaskCol, h, s, b );
+                    if( s > 20 ) s=20;
+                    aMaskCol = ImplHSBtoRGB( h, s, b );
+                    DrawMask( Point( nTempOffX, nTempOffY ), pImage->GetMaskBitmap(), aMaskCol );
+                }
                 nTempOffX-=2;
                 nTempOffY-=2;
             }
-            */
+
             if( bHighlight )
             {
                 if( bHighContrastWhite )
@@ -3069,13 +3073,13 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint )
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
         Point aArrowPos( nOffX, nOffY );
-        // no shadows until our icons are not redesigned
-        /*if( bHighlight == 2 )
+        // shadows
+        if( bHighlight == 2 )
         {
             aArrowPos.X() -= 2;
             aArrowPos.Y() -= 2;
         }
-        */
+
         aArrowPos.X() += nBtnWidth-6;
 
         Color       aOldLineColor = GetLineColor();
@@ -3510,7 +3514,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
             if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
             {
                 mnCurItemId = mnHighItemId = pItem->mnId;
-                ImplDrawItem( mnCurPos, TRUE );
+                ImplDrawItem( mnCurPos, 2 /*TRUE*/ ); // always use shadow effect (2)
             }
             else
                 mnCurItemId = mnHighItemId = 0;
@@ -5038,7 +5042,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
             }
 
             mnHighItemId = pItem->mnId;
-            ImplDrawItem( aPos, mbSelection ? 1 : 2 );
+            ImplDrawItem( aPos, 2 );    // always use shadow effect (2)
 
             if( mbSelection )
                 mnCurPos = aPos;

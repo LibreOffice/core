@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-20 16:46:25 $
+ *  last change: $Author: ssa $ $Date: 2002-10-18 15:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8255,6 +8255,9 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
 
 void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
 {
+    extern void ImplRGBtoHSB( const Color& rColor, USHORT& nHue, USHORT& nSat, USHORT& nBri );
+    extern Color ImplHSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri );
+
     // colors used for item highlighting
     Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetHighlightColor() );
     Color aSelectionFillCol( aSelectionBorderCol );
@@ -8262,6 +8265,20 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
 
     BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
     BOOL bBright = GetSettings().GetStyleSettings().GetFaceColor().IsBright();
+
+    int c1 = aSelectionBorderCol.GetLuminance();
+    int c2 = GetDisplayBackground().GetColor().GetLuminance();
+
+    if( !bDark && !bBright && abs( c2-c1 ) < 75 )
+    {
+        // constrast too low
+        USHORT h,s,b;
+        ImplRGBtoHSB( aSelectionFillCol, h, s, b );
+        if( b > 50 )    b -= 40;
+        else            b += 40;
+        aSelectionFillCol = ImplHSBtoRGB( h, s, b );
+        aSelectionBorderCol = aSelectionFillCol;
+    }
 
     Rectangle aRect( rRect );
     if( bDrawExtBorderOnly )
@@ -8285,8 +8302,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
         if( bDark )
             aSelectionFillCol = COL_BLACK;
         else
-            nPercent = 95;              // just checked (light)
-
+            nPercent = 80;              // just checked (light)
     }
     else
     {
@@ -8301,7 +8317,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
                 nPercent = 0;
             }
             else
-                nPercent = 55;          // selected, pressed or checked ( very dark )
+                nPercent = 35;          // selected, pressed or checked ( very dark )
         }
         else
         {
@@ -8314,7 +8330,7 @@ void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, 
                 nPercent = 0;
             }
             else
-                nPercent = 85;          // selected ( dark )
+                nPercent = 70;          // selected ( dark )
         }
     }
 
