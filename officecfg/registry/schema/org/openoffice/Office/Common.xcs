@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-16 15:58:39 $
+ *  last change: $Author: tl $ $Date: 2002-07-18 13:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,6 +531,10 @@
             </info>
         </group>
         <group oor:name="FontReplacement">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains settings for the font replacement.</desc>
+            </info>
             <prop oor:name="ReplaceFont" oor:type="xs:string">
                 <info>
                     <desc xml:lang="en-US">The name of font that is to be replaced</desc>
@@ -593,8 +597,20 @@
             </info>
         </group>
         <group oor:name="StartEndCharacters">
-            <prop oor:name="StartCharacters" oor:type="xs:string"/>
-            <prop oor:name="EndCharacters" oor:type="xs:string"/>
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains the characters (so called forbidden characters) that are not allowed at the begin or and of a line.</desc>
+            </info>
+            <prop oor:name="StartCharacters" oor:type="xs:string">
+                <info>
+                    <desc xml:lang="en-US">Contains the characters that are not allowed at the begin.</desc>
+                </info>
+            </prop>
+            <prop oor:name="EndCharacters" oor:type="xs:string">
+                <info>
+                    <desc xml:lang="en-US">Contains the characters that are not allowed at the end.</desc>
+                </info>
+            </prop>
         </group>
         <group oor:name="NameCounter">
             <prop oor:name="Name" oor:type="xs:string"/>
@@ -1230,7 +1246,15 @@
             </group>
         </group>
         <group oor:name="Font">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains some common settings for fonts.</desc>
+            </info>
             <group oor:name="Substitution">
+                <!-- Responsible: OS -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings for the font substitution.</desc>
+                </info>
                 <prop oor:name="Replacement" oor:type="xs:boolean">
                     <!-- OldPath: FontSubstitution -->
                     <!-- OldLocation: fntsubst.ini -->
@@ -1253,6 +1277,10 @@
                 </set>
             </group>
             <group oor:name="View">
+                <!-- Responsible: PB / OS -->
+                <info>
+                    <desc xml:lang="en-US">Settings for the font selection box in the object bar.</desc>
+                </info>
                 <prop oor:name="History" oor:type="xs:boolean">
                     <!-- OldPath: Desktop/FontHistory -->
                     <!-- OldLocation: soffice.ini -->
@@ -2110,6 +2138,10 @@
                 </info>
             </prop>
             <group oor:name="Warning">
+                <!-- Responsible: (OS) -->
+                <info>
+                    <desc xml:lang="en-US">Contains settings for print specific warnings.</desc>
+                </info>
                 <prop oor:name="PaperSize" oor:type="xs:boolean">
                     <!-- OldPath: General/Print/Warning -->
                     <!-- OldLocation: soffice.cfg -->
@@ -2213,7 +2245,7 @@
                         <value>false</value>
                         <info>
                             <desc xml:lang="en-US">Indicates whether to reduce the memory usage of
-                            bitmaps for print process by limiting the resolution.</desc> 
+                            bitmaps for print process by limiting the resolution.</desc>
                             <label xml:lang="en-US">(PrinterOptions) ReduceBitmaps</label>
                         </info>
                     </prop>
@@ -3872,6 +3904,10 @@
             </prop>
         </group>
         <group oor:name="AsianLayout">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains Asian layout specific settings.</desc>
+            </info>
             <prop oor:name="IsKerningWesternTextOnly" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
@@ -3895,8 +3931,9 @@
                 </info>
             </prop>
             <set oor:name="StartEndCharacters" oor:node-type="StartEndCharacters">
+                <!-- Responsible: OS -->
                 <info>
-                    <desc xml:lang="en-US">Contains the characters at which lines are not allowed to begin or to end</desc>
+                    <desc xml:lang="en-US">Contains the characters at which lines are not allowed to begin or to end. For each locale there is a separate entry with the locale as its node name.</desc>
                     <label xml:lang="en-US">StartEndCharacters</label>
                 </info>
             </set>
@@ -4257,26 +4294,33 @@
             <set oor:name="Profiles" oor:node-type="MailCommandLineProfile"/>
         </group>
         <group oor:name="I18N">
+            <!-- Responsible: OS -->
+            <info>
+                <desc xml:lang="en-US">Contains various language/localization specific settings.</desc>
+            </info>
             <group oor:name="CJK">
+                <info>
+                    <desc xml:lang="en-US">Contains settings for the Asian languages (Chinese, Japanese, Korean,...) layout.</desc>
+                </info>
                 <prop oor:name="CJKFont" oor:type="xs:boolean">
                     <!-- UIHints: setup -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US">Specifies, wheter CJK font settings are available (true) or not (false).</desc>
+                        <desc xml:lang="en-US">Specifies, whether CJK font settings are available (true) or not (false).</desc>
                     </info>
                 </prop>
                 <prop oor:name="VerticalText" oor:type="xs:boolean">
                     <!-- UIHints: setup -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US">Specifies, whether vertucak text is available (true) or not (false).</desc>
+                        <desc xml:lang="en-US">Specifies, whether vertical text is available (true) or not (false).</desc>
                     </info>
                 </prop>
                 <prop oor:name="AsianTypography" oor:type="xs:boolean">
                     <!-- UIHints: setup -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US">Specifies, wheter asian typography options like compression and forbidden characters are available (true) or not (false).</desc>
+                        <desc xml:lang="en-US">Specifies, whether asian typography options like compression and forbidden characters are available (true) or not (false).</desc>
                     </info>
                 </prop>
                 <prop oor:name="JapaneseFind" oor:type="xs:boolean">
@@ -4323,6 +4367,9 @@
                 </prop>
             </group>
             <group oor:name="CTL">
+                <info>
+                    <desc xml:lang="en-US">Contains settings for the languages with complex text layout (Hebrew, Arabic, Thai,...).</desc>
+                </info>
                 <prop oor:name="CTLFont" oor:type="xs:boolean">
                     <!-- UIHints: setup -->
                     <value>false</value>
