@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerNotifier.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 /** Interface to be implemented in order to support listener management.
 */
-interface XFilePickerNotifier: com::sun::star::uno::XInterface
+published interface XFilePickerNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** Interface for clients to register as XFilePickerListener
