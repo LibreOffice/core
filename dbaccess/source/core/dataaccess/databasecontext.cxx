@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-23 12:57:47 $
+ *  last change: $Author: fs $ $Date: 2000-10-24 07:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,9 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
 
     pObjectImpl->inserted(*this, _rName, aObjectNode.cloneAsRoot());
     pObjectImpl->flush();
+
+    // add the object to our bag
+    m_aDatabaseObjects[_rName] = WeakReferenceHelper(_rxObject);
 }
 
 //------------------------------------------------------------------------------
@@ -384,15 +387,17 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
                 pObjectImpl->removed();
         }
         m_aDatabaseObjects.erase(aExistent);
-    }
 
-    // the configuration does not support different types of operations in one transaction, so we must commit
-    // before and after we create the new node, to ensure, that every transaction we ever do contains only
-    // one type of operation (insert, remove, update)
-    OSL_VERIFY(m_aRootNode.commit());
-    if (!m_aRootNode.removeNode(_rName))
-        throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
-    OSL_VERIFY(m_aRootNode.commit());
+        // the configuration does not support different types of operations in one transaction, so we must commit
+        // before and after we create the new node, to ensure, that every transaction we ever do contains only
+        // one type of operation (insert, remove, update)
+        OSL_VERIFY(m_aRootNode.commit());
+        if (!m_aRootNode.removeNode(_rName))
+            throw Exception(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("An unexpected und unknown error occured.")), static_cast<XNamingService*>(this));
+        OSL_VERIFY(m_aRootNode.commit());
+    }
+    else
+        DBG_ERROR("ODatabaseContext::revokeObject: inconsistent state!");
 }
 
 // ::com::sun::star::container::XElementAccess
