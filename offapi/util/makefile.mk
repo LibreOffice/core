@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obr $ $Date: 2002-01-28 14:45:01 $
+#   last change: $Author: bustamam $ $Date: 2002-03-26 04:53:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,7 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
     $(UCR)$/dcssabridge.db\
+    $(UCR)$/dcssi18n.db
 
 
 REFERENCE_SO_60_RDB=$(SOLARROOT)$/odk_reference$/SO-6.0$/applicat.rdb
