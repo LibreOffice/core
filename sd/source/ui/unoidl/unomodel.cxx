@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 19:56:16 $
+ *  last change: $Author: cl $ $Date: 2001-02-15 09:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -898,6 +898,65 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
     return aAny;
 }
 
+// XNameAccess
+uno::Any SAL_CALL SdDrawPagesAccess::getByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    if( aName.getLength() != 0 )
+    {
+        const sal_uInt16 nCount = rModel.pDoc->GetSdPageCount( PK_STANDARD );
+        sal_uInt16 nPage;
+        for( nPage = 0; nPage < nCount; nPage++ )
+        {
+            SdPage* pPage = rModel.pDoc->GetSdPage( nPage, PK_STANDARD );
+            if(NULL == pPage)
+                continue;
+
+            if( aName == SdDrawPage::getPageApiName( pPage ) )
+            {
+                uno::Any aAny;
+                uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+                aAny <<= xDrawPage;
+                return aAny;
+            }
+        }
+    }
+
+    throw container::NoSuchElementException();
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getElementNames() throw(uno::RuntimeException)
+{
+    const sal_uInt16 nCount = rModel.pDoc->GetSdPageCount( PK_STANDARD );
+    uno::Sequence< OUString > aNames( nCount );
+    OUString* pNames = aNames.getArray();
+
+    sal_uInt16 nPage;
+    for( nPage = 0; nPage < nCount; nPage++ )
+    {
+        SdPage* pPage = rModel.pDoc->GetSdPage( nPage, PK_STANDARD );
+        *pNames++ = SdDrawPage::getPageApiName( pPage );
+    }
+
+    return aNames;
+}
+
+sal_Bool SAL_CALL SdDrawPagesAccess::hasByName( const OUString& aName ) throw(uno::RuntimeException)
+{
+    const sal_uInt16 nCount = rModel.pDoc->GetSdPageCount( PK_STANDARD );
+    sal_uInt16 nPage;
+    for( nPage = 0; nPage < nCount; nPage++ )
+    {
+        SdPage* pPage = rModel.pDoc->GetSdPage( nPage, PK_STANDARD );
+        if(NULL == pPage)
+            continue;
+
+        if( aName == SdDrawPage::getPageApiName( pPage ) )
+            return sal_True;
+    }
+
+    return sal_False;
+}
+
 // XElementAccess
 uno::Type SAL_CALL SdDrawPagesAccess::getElementType()
     throw(uno::RuntimeException)
@@ -925,7 +984,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 
     if( rModel.pDoc )
     {
-        SdPage* pPage = rModel.InsertSdPage(nIndex );
+        SdPage* pPage = rModel.InsertSdPage( (sal_uInt16)nIndex );
         if( pPage )
         {
             uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
@@ -1087,7 +1146,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             bUnique = sal_True;
             for( sal_Int32 nMaster = 1; nMaster < nMPageCount; nMaster++ )
             {
-                SdPage* pPage = (SdPage*)pDoc->GetMasterPage(nMaster);
+                SdPage* pPage = (SdPage*)pDoc->GetMasterPage((USHORT)nMaster);
                 if( pPage && pPage->GetName() == aPrefix )
                 {
                     bUnique = sal_False;
@@ -1122,7 +1181,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetUppBorder(),
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
-        pDoc->InsertMasterPage(pMPage,  nInsertPos);
+        pDoc->InsertMasterPage(pMPage,  (USHORT)nInsertPos);
         pMPage->SetLayoutName( aLayoutName );
 
         { // insert background object
