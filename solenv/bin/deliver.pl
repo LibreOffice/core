@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-07 11:33:49 $
+#   last change: $Author: hr $ $Date: 2001-06-12 08:55:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.10 $ ';
+$id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -206,7 +206,7 @@ sub do_linklib {
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        if ( $lib =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
+        if ( $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/ ) {
            push(@{$globbed_hash{$1}}, $lib);
         }
         else {
@@ -217,7 +217,7 @@ sub do_linklib {
     foreach $lib_base ( sort keys %globbed_hash ) {
         $lib = get_latest_patchlevel(@{$globbed_hash{$lib_base}});
 
-        $lib =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        $lib =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
         $lib_major = "$lib_base.$2";
 
         if ( $opt_check ) {
@@ -297,6 +297,12 @@ sub init_globals {
     $solarversion   = $ENV{SOLARVERSION};
     $upd            = $ENV{UPD};
     $updminor       = $ENV{UPDMINOR};
+
+    # do we have a valid environment?
+    if ( !defined($inpath) ) {
+            print_error("no environment", 0);
+            exit(3);
+    }
 
     # product build?
     $common_outdir = $common_outdir . ".pro" if $inpath =~ /\.pro$/;
@@ -549,9 +555,9 @@ sub get_latest_patchlevel {
     # comparison function for sorting
         my (@field_a, @field_b, $i);
 
-        $a =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        $a =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
         @field_a = ($2, $3, $4);
-        $b =~ /^(lib\w+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
+        $b =~ /^(lib[\w-]+\.so)\.(\d+)\.(\d+)\.(\d+)$/;
         @field_b = ($2, $3, $4);
 
         for ($i = 0; $i < 3; $i++)
