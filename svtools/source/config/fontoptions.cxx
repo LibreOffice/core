@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-13 09:48:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ void SvtFontOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_BOOLEAN), "SvtFontOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\Font\\View\\ShowFontBoxWYSIWYG\"?" );
             seqValues[nProperty] >>= m_bFontWYSIWYG;
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         else DBG_ASSERT( sal_False, "SvtFontOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
         #endif
     }
