@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:54:17 $
+ *  last change: $Author: os $ $Date: 2001-02-28 09:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@ ModalDialog DLG_INSERT_TABLE
     HelpID = FN_INSERT_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 110 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
+    Size = MAP_APPFONT ( 280 , 110 ) ;
     Text = "Tabelle einfügen" ;
     Text [ ENGLISH ] = "Insert table" ;
     Text [ norwegian ] = "Insert table" ;
@@ -89,13 +88,13 @@ ModalDialog DLG_INSERT_TABLE
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 179, 12 ) ;
+        Size = MAP_APPFONT ( 199, 12 ) ;
         TabStop = TRUE ;
     };
     GroupBox GB_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 191, 30 ) ;
+        Size = MAP_APPFONT ( 211, 30 ) ;
         Text = "Name" ;
         Text[ENGLISH] = "Name" ;
             Text[ italian ] = "Nome";
@@ -210,7 +209,6 @@ ModalDialog DLG_INSERT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 81 , 68 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Größe : Gr÷˜e */
         Text = "Größe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ norwegian ] = "Størrelse" ;
@@ -238,7 +236,7 @@ ModalDialog DLG_INSERT_TABLE
     CheckBox CB_HEADER
     {
         Pos = MAP_APPFONT ( 99 , 49 ) ;
-        Size = MAP_APPFONT ( 93 , 10 ) ;
+        Size = MAP_APPFONT (113 , 10 ) ;
         Text = "Übe~rschrift" ;
         Text [ ENGLISH ] = "Header" ;
         TabStop = TRUE ;
@@ -264,8 +262,8 @@ ModalDialog DLG_INSERT_TABLE
     };
     CheckBox CB_REPEAT_HEADER
     {
-        Pos = MAP_APPFONT ( 109 , 62 ) ;
-        Size = MAP_APPFONT ( 83 , 10 ) ;
+        Pos = MAP_APPFONT ( 105 , 62 ) ;
+        Size = MAP_APPFONT ( 107 , 10 ) ;
         Text = "Auf jeder Seite ~wiederholen" ;
         Text [ ENGLISH ] = "Repeat on every page" ;
         TabStop = TRUE ;
@@ -292,7 +290,7 @@ ModalDialog DLG_INSERT_TABLE
     CheckBox CB_DONT_SPLIT
     {
         Pos = MAP_APPFONT ( 99 , 75 ) ;
-        Size = MAP_APPFONT ( 93 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "Tabelle ~nicht trennen" ;
         Text [ ENGLISH ] = "Don't split table" ;
         TabStop = TRUE ;
@@ -319,7 +317,7 @@ ModalDialog DLG_INSERT_TABLE
     CheckBox CB_BORDER
     {
         Pos = MAP_APPFONT ( 99 , 88 ) ;
-        Size = MAP_APPFONT ( 93 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , 10 ) ;
         Text = "~Umrandung" ;
         Text [ ENGLISH ] = "Border" ;
         TabStop = TRUE ;
@@ -346,7 +344,7 @@ ModalDialog DLG_INSERT_TABLE
     GroupBox GB_OPTIONS
     {
         Pos = MAP_APPFONT ( 93 , 36 ) ;
-        Size = MAP_APPFONT ( 105 , 68 ) ;
+        Size = MAP_APPFONT ( 125 , 68 ) ;
         Text = "Optionen" ;
         Text [ English ] = "Options" ;
         Text[ italian ] = "Opzioni";
@@ -371,26 +369,26 @@ ModalDialog DLG_INSERT_TABLE
     };
     OKButton BT_OK
     {
-        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Pos = MAP_APPFONT ( 224 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Pos = MAP_APPFONT ( 224 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BT_HELP
     {
-        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Pos = MAP_APPFONT ( 224 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BT_AUTOFORMAT
     {
-        Pos = MAP_APPFONT ( 204 , 60 ) ;
+        Pos = MAP_APPFONT ( 224 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Autoformat..." ;
