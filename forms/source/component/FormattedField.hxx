@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 14:30:12 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 16:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,9 @@ namespace frm
         virtual sal_Bool _commit();
 
     // XPersistObject
-        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream);
-        virtual ::rtl::OUString SAL_CALL getServiceName();
+        virtual void SAL_CALL write(const ::com::sun::star::uno::Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL read(const ::com::sun::star::uno::Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
@@ -167,10 +167,10 @@ namespace frm
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                               sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                                             throw(::com::sun::star::lang::IllegalArgumentException);
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
 
     // XLoadListener
-        virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent);
+        virtual void SAL_CALL loaded(const ::com::sun::star::lang::EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException);
         virtual void _loaded(const ::com::sun::star::lang::EventObject& rEvent);
         virtual void _unloaded();
 
@@ -225,11 +225,11 @@ namespace frm
         virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XKeyListener
-        virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e);
-        virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e);
+        virtual void SAL_CALL keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
-        virtual void SAL_CALL setDesignMode(sal_Bool bOn);
+        virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw ( ::com::sun::star::uno::RuntimeException);
 
     private:
         DECL_LINK( OnKeyPressed, void* );
