@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 12:03:53 $
+ *  last change: $Author: hr $ $Date: 2004-05-13 10:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2163,31 +2163,16 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
         BOOL bTmp = FALSE;
         USHORT nOldLevel = 0;
 
-        if (bOutline)
+        pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE,TRUE);
+
+        if (pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
         {
-            if (NO_NUMBERING != pTNd->GetTxtColl()->GetOutlineLevel())
+            pNum = pTNd->GetNum();
+
+            if (pNum)
             {
-                pNum = pTNd->GetOutlineNum();
-
-                if (pNum)
-                {
-                    pRule = GetOutlineNumRule();
-                }
-            }
-        }
-        else
-        {
-            pItem = pTNd->GetNoCondAttr(RES_PARATR_NUMRULE,TRUE);
-
-            if (pItem && ((SwNumRuleItem*)pItem)->GetValue().Len() )
-            {
-                pNum = pTNd->GetNum();
-
-                if (pNum)
-                {
-                    pRule = FindNumRulePtr(((SwNumRuleItem*)pItem)->
-                                           GetValue());
-                }
+                pRule = FindNumRulePtr(((SwNumRuleItem*)pItem)->
+                                        GetValue());
             }
         }
         if (pRule)
@@ -2204,17 +2189,18 @@ BOOL SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, BOOL bDel )
             SVX_NUM_NUMBER_NONE != pRule->Get(GetRealLevel(pNum->GetLevel())).
             GetNumberingType())
         {
+            SwNodeNum aNum(*pNum);
+
+            if (bDel)
+                aNum.SetNoNum(FALSE);
+            else
+                aNum.SetNoNum(TRUE);
+
             if( DoesUndo() )
             {
                 ClearRedo();
-                AppendUndo( new SwUndoNumOrNoNum( rIdx, bDel, bOutline ) );
+                AppendUndo( new SwUndoNumOrNoNum( rIdx, *pNum, aNum ) );
             }
-            SwNodeNum aNum( *pNum );
-
-            if( bDel )
-                aNum.SetLevel( aNum.GetLevel() & ~NO_NUMLEVEL );
-            else
-                aNum.SetLevel( aNum.GetLevel() | NO_NUMLEVEL );
 
             pTNd->UpdateNum( aNum );
 #ifndef NUM_RELSPACE
