@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-18 11:44:22 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 07:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,12 +536,10 @@ BOOL SfxApplication::InitializeDde()
 
 void SfxAppData_Impl::DeInitDDE()
 {
-/*
     DELETEZ( pTriggerTopic );
     DELETEZ( pDdeService2 );
     DELETEZ( pDocTopics );
     DELETEZ( pDdeService );
- */
 }
 
 //--------------------------------------------------------------------

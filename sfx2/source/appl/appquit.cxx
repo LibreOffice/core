@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-10-11 07:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,6 @@ void SfxApplication::Deinitialize()
     SvFactory::DeInit();
 
     SfxPickList_Impl::Delete();
-    delete GetDdeService();
     delete pAppData_Impl->pLabelResMgr;
 
 #ifndef PRODUCT
