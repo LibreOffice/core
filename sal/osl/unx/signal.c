@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 10:54:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,61 +346,62 @@ static int ReportCrash( int Signal )
                     const char *dli_fdir = NULL;
 
                     memset( &dl_info, 0, sizeof(dl_info) );
-                    dladdr( stackframes[iFrame], &dl_info);
-
-                    dli_fname = strrchr(  dl_info.dli_fname, '/' );
-                    if ( dli_fname )
+                    if( dladdr( stackframes[iFrame], &dl_info) )
                     {
-                        ++dli_fname;
-                        memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
-                        buffer[dli_fname - dl_info.dli_fname] = 0;
-                        dli_fdir = buffer;
+                        dli_fname = strrchr(  dl_info.dli_fname, '/' );
+                        if ( dli_fname )
+                        {
+                            ++dli_fname;
+                            memcpy( buffer, dl_info.dli_fname, dli_fname - dl_info.dli_fname );
+                            buffer[dli_fname - dl_info.dli_fname] = 0;
+                            dli_fdir = buffer;
+                        }
+                        else
+                            dli_fname = dl_info.dli_fname;
+
+                        fprintf( stackout, "0x%x:",
+                                 stackframes[iFrame] );
+
+                        if ( dl_info.dli_fbase && dl_info.dli_fname )
+                        {
+                            fprintf( stackout, " %s + 0x%x",
+                                     dl_info.dli_fname,
+                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
+                                     );
+                        }
+                        else
+                            fprintf( stackout, " ????????" );
+
+                        if ( dl_info.dli_sname && dl_info.dli_saddr )
+                            fprintf( stackout, " (%s + 0x%x)",
+                                     dl_info.dli_sname,
+                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr
+                                     );
+
+                        fprintf( stackout, "\n" );
+
+                        fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
+                                 iFrame,
+                                 stackframes[iFrame]
+                                 );
+
+                        if ( dl_info.dli_fbase && dl_info.dli_fname )
+                            fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
+
+                        if ( dli_fname )
+                            fprintf( xmlout, " name=\"%s\"", dli_fname );
+
+                        if ( dli_fdir )
+                            fprintf( xmlout, " path=\"%s\"", dli_fdir );
+
+                        if ( dl_info.dli_sname && dl_info.dli_saddr )
+                            fprintf( xmlout, " ordinal=\"%s+0x%x\"", dl_info.dli_sname, (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
+
+                        fprintf( xmlout, "/>\n" );
+
                     }
-                    else
-                        dli_fname = dl_info.dli_fname;
-
-                    fprintf( stackout, "0x%x:",
-                        stackframes[iFrame] );
-
-                    if ( dl_info.dli_fbase && dl_info.dli_fname )
-                    {
-                        fprintf( stackout, " %s + 0x%x",
-                            dl_info.dli_fname,
-                            (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
-                            );
-                    }
-                    else
-                        fprintf( stackout, " ????????" );
-
-                    if ( dl_info.dli_sname && dl_info.dli_saddr )
-                        fprintf( stackout, " (%s + 0x%x)",
-                            dl_info.dli_sname,
-                            (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr
-                            );
-
-                    fprintf( stackout, "\n" );
-
-                    fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
-                        iFrame,
-                        stackframes[iFrame]
-                        );
-
-                    if ( dl_info.dli_fbase && dl_info.dli_fname )
-                        fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
-
-                    if ( dli_fname )
-                        fprintf( xmlout, " name=\"%s\"", dli_fname );
-
-                    if ( dli_fdir )
-                        fprintf( xmlout, " path=\"%s\"", dli_fdir );
-
-                    if ( dl_info.dli_sname && dl_info.dli_saddr )
-                        fprintf( xmlout, " ordinal=\"%s+0x%x\"", dl_info.dli_sname, (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
-
-                    fprintf( xmlout, "/>\n" );
-
+                    fprintf( xmlout, "</errormail:Stack>\n" );
                 }
-                fprintf( xmlout, "</errormail:Stack>\n" );
 
                 fclose( stackout );
                 fclose( xmlout );
