@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:24:53 $
+ *  last change: $Author: sj $ $Date: 2002-05-13 10:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -892,30 +892,82 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
 
     UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
     if ( nLineFlags & 8 )
-    {   // Linienattribute
+    {
+        // Linienattribute
+        sal_Int32 nLineWidth = (INT32)GetPropertyValue( DFF_Prop_lineWidth, 9525 );
+
         MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
         if ( eLineDashing == mso_lineSolid )
             rSet.Put(XLineStyleItem( XLINE_SOLID ) );
         else
         {
+//          MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare );
+
+            XDashStyle  eDash = XDASH_RECT;
+            sal_uInt16  nDots = 1;
+            sal_uInt32  nDotLen = nLineWidth / 360;
+            sal_uInt16  nDashes = 0;
+            sal_uInt32  nDashLen = ( 8 * nLineWidth ) / 360;
+            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;;
+
             switch ( eLineDashing )
             {
-                case mso_lineDotSys           : rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,1,LLEN_POINT,0,0,LLEN_SPACE_POINT)));             break;
-                case mso_lineDashGEL          : rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,0,0,1,LLEN_MIDDLE,LLEN_SPACE_MIDDLE)));           break;
-                case mso_lineDashDotGEL       : rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,1,LLEN_POINT,1,LLEN_MIDDLE, LLEN_SPACE_MIDDLE))); break;
-                case mso_lineLongDashGEL      : rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,0,0,1,LLEN_LONG,LLEN_SPACE_LONG)));               break;
-                case mso_lineLongDashDotGEL   : rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,1,LLEN_POINT,1,LLEN_LONG,LLEN_SPACE_LONG)));      break;
-                case mso_lineLongDashDotDotGEL: rSet.Put(XLineDashItem(String(),XDash(XDASH_RECT,2,LLEN_POINT,1,LLEN_LONG,LLEN_SPACE_LONG)));      break;
+                default:
+                case mso_lineDotSys :
+                {
+                    nDots = 1;
+                    nDashes = 0;
+                    nDistance = nDotLen;
+                }
+                break;
+
+                case mso_lineDashGEL :
+                {
+                    nDots = 0;
+                    nDashes = 1;
+                    nDashLen = ( 4 * nLineWidth ) / 360;
+                }
+                break;
+
+                case mso_lineDashDotGEL :
+                {
+                    nDots = 1;
+                    nDashes = 1;
+                    nDashLen = ( 4 * nLineWidth ) / 360;
+                }
+                break;
+
+                case mso_lineLongDashGEL :
+                {
+                    nDots = 0;
+                    nDashes = 1;
+                }
+                break;
+
+                case mso_lineLongDashDotGEL :
+                {
+                    nDots = 1;
+                    nDashes = 1;
+                }
+                break;
+
+                case mso_lineLongDashDotDotGEL:
+                {
+                    nDots = 2;
+                    nDashes = 1;
+                }
+                break;
             }
+
+            rSet.Put( XLineDashItem( String(), XDash( eDash, nDots, nDotLen, nDashes, nDashLen, nDistance ) ) );
             rSet.Put( XLineStyleItem( XLINE_DASH ) );
         }
         rSet.Put( XLineColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_lineColor ), DFF_Prop_lineColor ) ) );
         if ( IsProperty( DFF_Prop_lineOpacity ) )
             rSet.Put( XLineTransparenceItem( USHORT( 100 - ( ( GetPropertyValue( DFF_Prop_lineOpacity, 0x10000 ) * 100 ) >> 16 ) ) ) );
 
-        INT32 nVal = (INT32)GetPropertyValue( DFF_Prop_lineWidth, 9525 );
-        rManager.ScaleEmu( nVal );
-        rSet.Put( XLineWidthItem( nVal ) );
+        rManager.ScaleEmu( nLineWidth );
+        rSet.Put( XLineWidthItem( nLineWidth ) );
 
         if ( nLineFlags & 0x10 )
         {
