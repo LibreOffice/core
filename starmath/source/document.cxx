@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 19:12:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #pragma hdrstop
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _RTL_USTRING_HXX_
@@ -241,7 +241,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 #define A2OU(x)        rtl::OUString::createFromAscii( x )
 
@@ -378,7 +378,7 @@ void SmDocShell::SetText(const String& rBuffer)
             uno::Any aOldValue, aNewValue;
             aOldValue <<= rtl::OUString( aText );
             aNewValue <<= rtl::OUString( rBuffer );
-            pAcc->LaunchEvent( AccessibleEventId::ACCESSIBLE_TEXT_EVENT,
+            pAcc->LaunchEvent( AccessibleEventId::TEXT_CHANGED,
                     aOldValue, aNewValue );
         }
     }
