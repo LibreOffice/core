@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:44:20 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
     if ( sTemp.getLength() )
     {
         INetURLObject aURL(sTemp);
-        if ( aURL.GetExtension().EqualsIgnoreCaseAscii("odb") )
+        if ( aURL.GetExtension().equalsIgnoreAsciiCaseAscii("odb") )
             return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StarBase"));
     }
     return ::rtl::OUString();
