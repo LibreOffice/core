@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:05:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 09:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,12 @@
 #include "CustomAnimationPane.hrc"
 #include "CustomAnimation.hrc"
 
-ModalDialog DLG_CUSTOMANIMATIONPANE
+Control DLG_CUSTOMANIMATIONPANE
 {
     OutputSize = TRUE;
-    Moveable = TRUE;
-    CloseAble = TRUE;
-    Sizeable = TRUE;
+    DialogControl = TRUE;
+    Border = FALSE;
+
     Size = MAP_APPFONT( 160, 300 );
     Text [ de ] = "Benutzerdefinierte Animation";
     Text [ en-US ] = "Custom Animation";
@@ -87,8 +87,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "Hinzufügen...";
-        Text [ en-US ] = "Add...";
+        Text [ de ] = "~Hinzufügen...";
+        Text [ en-US ] = "~Add...";
     };
 
     PushButton PB_CHANGE_EFFECT
@@ -97,8 +97,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "Ändern...";
-        Text [ en-US ] = "Change...";
+        Text [ de ] = "~Ändern...";
+        Text [ en-US ] = "~Change...";
     };
 
     PushButton PB_REMOVE_EFFECT
@@ -107,8 +107,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "Entfernen";
-        Text [ en-US ] = "Remove";
+        Text [ de ] = "~Entfernen";
+        Text [ en-US ] = "~Remove";
     };
 
     FixedLine FL_MODIFY
@@ -125,8 +125,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Starten";
-        Text [ en-US ] = "Start";
+        Text [ de ] = "~Starten";
+        Text [ en-US ] = "~Start";
     };
 
     ListBox LB_START
@@ -173,8 +173,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 16, 14 );
 
-        Text [ de ] = "...";
-        Text [ en-US ] = "...";
+        Text [ de ] = "~...";
+        Text [ en-US ] = "~...";
 
         QuickHelpText [ de ] = "Effektoptionen";
         QuickHelpText [en-US ] = "Effect Options";
@@ -185,8 +185,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Geschwindigkeit";
-        Text [ en-US ] = "Speed";
+        Text [ de ] = "~Geschwindigkeit";
+        Text [ en-US ] = "Sp~eed";
     };
 
     ComboBox CB_SPEED
@@ -237,8 +237,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ de ] = "Wiedergabe";
-        Text [ en-US ] = "Play";
+        Text [ de ] = "~Wiedergabe";
+        Text [ en-US ] = "~Play";
     };
 
     PushButton PB_SLIDE_SHOW
@@ -246,8 +246,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 80 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ de ] = "Bildschirmpräsentation";
-        Text [ en-US ] = "Slide Show";
+        Text [ de ] = "~Bildschirmpräsentation";
+        Text [ en-US ] = "Slide Sho~w";
     };
 
     FixedLine FL_SEPERATOR2
@@ -259,8 +259,8 @@ ModalDialog DLG_CUSTOMANIMATIONPANE
     {
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatische Vorschau" ;
-        Text [ en-US ] = "Automatic preview" ;
+        Text [ de ] = "Automatische ~Vorschau" ;
+        Text [ en-US ] = "Automatic pre~view" ;
     };
 };
 

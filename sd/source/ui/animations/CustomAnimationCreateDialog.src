@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:04:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 09:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,21 +132,12 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
 TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
 {
     Hide = TRUE;
-    Size = MAP_APPFONT ( 160, 217 );
-
-    ListBox LB_CATEGORY
-    {
-        Pos = MAP_APPFONT ( 3 , 3  ) ;
-        Size = MAP_APPFONT ( 153, 48 );
-        TabStop = TRUE ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-    };
+    Size = MAP_APPFONT ( 156, 217 );
 
     ListBox LB_EFFECTS
     {
-        Pos = MAP_APPFONT ( 3 , 20  ) ;
-        Size = MAP_APPFONT( 153, 150 );
+        Pos = MAP_APPFONT ( 3 , 3  ) ;
+        Size = MAP_APPFONT( 144, 165 );
         OutputSize = TRUE;
         TabStop = TRUE ;
         Border = TRUE ;
@@ -162,10 +153,10 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
         Text [ en-US ] = "Speed";
     };
 
-    ListBox LB_SPEED
+    ComboBox CB_SPEED
     {
         Pos = MAP_APPFONT ( 48 , 173 ) ;
-        Size = MAP_APPFONT ( 108, 48 );
+        Size = MAP_APPFONT ( 101, 48 );
         TabStop = TRUE ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -174,7 +165,7 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
     CheckBox CBX_PREVIEW
     {
         Pos = MAP_APPFONT ( 3 , 188 ) ;
-        Size = MAP_APPFONT ( 153 , 10 ) ;
+        Size = MAP_APPFONT ( 143 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Automatische Vorschau" ;
         Text [ en-US ] = "Automatic preview" ;

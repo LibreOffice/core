@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-02 14:06:21 $
+#   last change: $Author: rt $ $Date: 2004-11-30 09:54:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,8 @@
 
 PRJ=..$/..$/..
 
+PROJECTPCH=sd
+PROJECTPCHSOURCE=$(PRJ)$/util$/sd
 PRJNAME=sd
 TARGET=animui
 ENABLE_EXCEPTIONS=TRUE
@@ -75,11 +77,22 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
+    AnimationSchemesPane.src\
     CustomAnimationPane.src\
     CustomAnimationDialog.src\
     CustomAnimationCreateDialog.src\
     SlideTransitionPane.src\
     CustomAnimationSchemesPane.src\
+    CustomAnimation.src
+
+SLOFILES =  \
+        $(SLO)$/AnimationSchemesPane.obj \
+        $(SLO)$/CustomAnimationCreateDialog.obj\
+        $(SLO)$/CustomAnimationDialog.obj\
+        $(SLO)$/CustomAnimationPane.obj \
+        $(SLO)$/CustomAnimationList.obj \
+        $(SLO)$/SlideTransitionPane.obj \
+        $(SLO)$/STLPropertySet.obj
 
 # --- Tagets -------------------------------------------------------
 

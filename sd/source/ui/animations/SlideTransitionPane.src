@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:05:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-30 09:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,35 +62,57 @@
 #include "CustomAnimation.hrc"
 #include "SlideTransitionPane.hrc"
 
-ModalDialog DLG_SLIDE_TRANSITION_PANE
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
+// Note: Sizes of 1 usually mean they are auto-calculated
+
+Control DLG_SLIDE_TRANSITION_PANE
 {
+    OutputSize = TRUE;
+    DialogControl = TRUE;
+    Size = MAP_APPFONT( 1, 1 );
+
     Text [ de ] = "Folienübergang";
     Text [ en-US ] = "Slide Transition";
 
-    FixedLine 1
+    FixedLine FL_APPLY_TRANSITION
     {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Für ausgewählte Folien übernehmen";
         Text [ en-US ] = "Apply to selected slides";
     };
 
-    Control 3
+    ListBox LB_SLIDE_TRANSITIONS
     {
+        Border = TRUE ;
+        TabStop = TRUE ;
+
+        Size = MAP_APPFONT( 1, 1 );
     };
 
-    Fixedline 4
+    Fixedline FL_MODIFY_TRANSITION
     {
-        Text [ de ] = "Modify transition";
-        Text [ en-US ] = "Übergang ändern";
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ de ] = "Übergang ändern";
+        Text [ en-US ] = "Modify transition";
     };
 
-    FixedText 5
+    FixedText FT_SPEED
     {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "Geschwindigkeit";
         Text [ en-US ] = "Speed";
     };
 
-    ListBox 6
+    ListBox LB_SPEED
     {
+        Border = TRUE ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+
+        Size = MAP_APPFONT( 1, RSC_CD_DROPDOWN_HEIGHT );
         StringList [ de ] =
         {
             < "Langsam" ; > ;
@@ -105,62 +127,139 @@ ModalDialog DLG_SLIDE_TRANSITION_PANE
         };
     };
 
-    FixedText 7
+    FixedText FT_SOUND
     {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "Klang";
         Text [ en-US ] = "Sound";
     };
 
-    Fixedline 8
+    ListBox LB_SOUND
     {
+        Border = TRUE ;
+        DropDown = TRUE ;
+        TabStop = TRUE ;
+
+        Size = MAP_APPFONT( 1, RSC_CD_DROPDOWN_HEIGHT );
+
+        StringList [ de ] =
+        {
+            < "<Ohne Klang>" ; > ;
+            < "<Vorherigen Klang Anhalten>" ; > ;
+            < "Anderer Klang..." ; > ;
+        };
+        StringList [ en-US ] =
+        {
+            < "<No Sound>" ; > ;
+            < "<Stop Previous Sound>" ; > ;
+            < "Other Sound..." ; > ;
+        };
+    };
+
+    Checkbox CB_LOOP_SOUND
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ de ] = "Wiederholen bis zum nächsten Klang";
+        Text [ en-US ] = "Loop until next sound";
+    };
+
+    Fixedline FL_ADVANCE_SLIDE
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ de ] = "Nächste Folie";
         Text [ en-US ] = "Advance slide";
     };
 
-    Checkbox 9
+    RadioButton RB_ADVANCE_ON_MOUSE
     {
+        Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
         Text [ de ] = "Bei Mausklick";
         Text [ en-US ] = "On mouse click";
     };
 
-    Checkbox 10
+    RadioButton RB_ADVANCE_AUTO
     {
+        Size = MAP_APPFONT( 1, RSC_CD_RADIOBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
         Text [ de ] = "Automatisch nach";
         Text [ en-US ] = "Automatically after";
     };
 
-    Metricfield 11
+    MetricField MF_ADVANCE_AUTO_AFTER
     {
-        CustomUnitText [ de ] = "Sek";
+        Size = MAP_APPFONT( 1, RSC_CD_TEXTBOX_HEIGHT );
+
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 999 ;
+        // decimal digits should be 1, but for now the model only supports whole seconds
+        DecimalDigits = 0 ;
+        // spin size (increment value) should be 5 if digits are 1
+        SpinSize = 1 ;
+
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText [ de ] = "Sek" ;
         CustomUnitText [ en-US ] = "sec";
     };
 
-    PushButton 12
+    FixedLine FL_EMPTY1
     {
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+
+    PushButton PB_APPLY_TO_ALL
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
         Text [ de ] = "Für alle Folien übernehmen";
         Text [ en-US ] = "Apply to All Slides";
     };
 
 
-    PushButton 13
+    PushButton PB_PLAY
     {
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
         Text [ de ] = "Wiedergabe";
         Text [ en-US ] = "Play";
     };
 
-    PushButton 14
+    PushButton PB_SLIDE_SHOW
     {
+        Size = MAP_APPFONT( 1, RSC_CD_PUSHBUTTON_HEIGHT );
+        TabStop = TRUE ;
+
         Text [ de ] = "Bildschirmpräsentation";
         Text [ en-US ] = "Slide Show";
     };
 
-    Checkbox 15
+    FixedLine FL_EMPTY2
     {
-        Text [ de ] = "Automatische Vorschau";
-        Text [ en-US ] = "Automatische preview";
+        Size = MAP_APPFONT( 1, RSC_CD_FIXEDLINE_HEIGHT );
     };
 
-    String 16
+    Checkbox CB_AUTO_PREVIEW
+    {
+        Size = MAP_APPFONT( 1, RSC_CD_CHECKBOX_HEIGHT );
+        TabStop = TRUE ;
+
+        Text [ de ] = "Automatische Vorschau";
+        Text [ en-US ] = "Automatic preview";
+    };
+
+    // --------------------
+
+    String STR_NO_TRANSITION
     {
         Text [ de ] = "Ohne übergang";
         Text [ en-US ] = "No Transition";
