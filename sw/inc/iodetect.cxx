@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:15:17 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 14:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,7 +339,7 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
 {
     SfxFilterContainer aCntSw( String::CreateFromAscii( pSw ) );
     SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
-    const SfxFilterContainer* pFltCnt = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
+    const SfxFilterContainer* pFltCnt = pCnt ? pCnt : ( IsDocShellRegistered() ? &aCntSw : &aCntSwWeb );
 
     do {
         if( pFltCnt )
