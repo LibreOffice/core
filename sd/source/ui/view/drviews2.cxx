@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-04 17:42:44 $
+ *  last change: $Author: bm $ $Date: 2002-11-06 16:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 SvxNameDialog aNameDlg( pWindow, aPageName, aDescr );
                 aNameDlg.SetText( aTitle );
-                aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ) );
+                aNameDlg.SetCheckNameHdl( LINK( this, SdDrawViewShell, RenameSlideHdl ), true );
                 aNameDlg.SetEditHelpId( HID_SD_NAMEDIALOG_PAGE );
 
                 if( aNameDlg.Execute() == RET_OK )
