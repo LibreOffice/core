@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:32:56 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,12 @@ namespace framework{
 #define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
 
 #define LAYOUTMANAGER_PROPCOUNT                         1
+
+//_______________________________________________
+/** properties for "UICommandDescription" class */
+#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST        "private:resource/image/commandimagelist"
+#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
+#define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST  "private:resource/image/commandmirrorimagelist"
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
