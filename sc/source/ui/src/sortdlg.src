@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 10:04:35 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 21:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,24 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Size = MAP_APPFONT ( 196 , 8 ) ;
         Text = "S~prache" ;
         Text [ ENGLISH ] = "Language Settings" ;
+        Text[ english_us ] = "Language Settings";
+        Text[ portuguese ] = "Language Settings";
+        Text[ russian ] = "ßçûê";
+        Text[ greek ] = "Language Settings";
+        Text[ dutch ] = "Language Settings";
+        Text[ french ] = "Language Settings";
+        Text[ spanish ] = "Language Settings";
+        Text[ italian ] = "Language Settings";
+        Text[ danish ] = "Language Settings";
+        Text[ swedish ] = "S~pråk";
+        Text[ polish ] = "Jêzyk";
+        Text[ portuguese_brazilian ] = "Language Settings";
+        Text[ japanese ] = "Language Settings";
+        Text[ korean ] = "Language Settings";
+        Text[ chinese_simplified ] = "Language Settings";
+        Text[ chinese_traditional ] = "Language Settings";
+        Text[ turkish ] = "Language Settings";
+        Text[ arabic ] = "Language Settings";
     };
     ListBox LB_LANGUAGE
     {
