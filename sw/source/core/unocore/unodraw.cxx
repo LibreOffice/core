@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:10:53 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2021,14 +2021,22 @@ void SwXShape::dispose(void) throw( uno::RuntimeException )
         // <pObj> must be the same as <pFmt->FindSdrObject()>, if <pObj> isn't
         // a 'virtual' drawing object.
         // OD 25.08.2003 #111713# - refine assertion for safety reason.
+        // --> OD 2005-02-02 #119236# - correct assertion and refine it.
         ASSERT( !pObj ||
-                !pObj->ISA(SwDrawVirtObj) || pObj == pFmt->FindSdrObject(),
+                pObj->ISA(SwDrawVirtObj) ||
+                pObj->GetUpGroup() ||
+                pObj == pFmt->FindSdrObject(),
                 "<SwXShape::dispose(..) - different 'master' drawing objects!!" );
+        // <--
         // OD 10.07.2003 #110742# - perform delete of draw frame format *not*
         // for 'virtual' drawing objects.
+        // --> OD 2005-02-02 #119236# - no delete of draw format for members
+        // of a group
         if ( pObj &&
              !pObj->ISA(SwDrawVirtObj) &&
+             !pObj->GetUpGroup() &&
              pObj->IsInserted() )
+        // <--
         {
             if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
             {
