@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:29:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -17088,26 +17088,26 @@ sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
             double      output = result->toDouble();
             OString     *final = new OString();
             *final = final->valueOf(output);
-printf("the OStringvalus is:");
+t_print("the OStringvalus is:");
 for(int m=0;m<final->getLength();m++)
 {
-    printf("%c",final->pData->buffer[m]);
+    t_print("%c",final->pData->buffer[m]);
 }
-printf("\n");
-printf("the OStringBuffer is %d\n", aStrBuf.getLength());
-printf("the expVal is %d\n", expVal.getLength());
-printf("the OStringbuffervalus is:");
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
 for(int j=0;j<aStrBuf.getLength();j++)
 {
-    printf("%c",*(aStrBuf.getStr()+j));
+    t_print("%c",*(aStrBuf.getStr()+j));
 }
-printf("\n");
-printf("the expVlavalus is:");
+t_print("\n");
+t_print("the expVlavalus is:");
 for(int k=0;k<expVal.getLength();k++)
 {
-    printf("%c",expVal.pData->buffer[k]);
+    t_print("%c",expVal.pData->buffer[k]);
 }
-printf("\n");
+t_print("\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "arrOUS[1] append 3.141592653589793",
@@ -17817,26 +17817,26 @@ printf("\n");
             double      output = result->toDouble();
             OString     *final = new OString();
             *final = final->valueOf(output);
-printf("the OStringvalus is:");
+t_print("the OStringvalus is:");
 for(int m=0;m<final->getLength();m++)
 {
-    printf("%c",final->pData->buffer[m]);
+    t_print("%c",final->pData->buffer[m]);
 }
-printf("\n");
-printf("the OStringBuffer is %d\n", aStrBuf.getLength());
-printf("the expVal is %d\n", expVal.getLength());
-printf("the OStringbuffervalus is:");
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
 for(int j=0;j<aStrBuf.getLength();j++)
 {
-    printf("%c",*(aStrBuf.getStr()+j));
+    t_print("%c",*(aStrBuf.getStr()+j));
 }
-printf("\n");
-printf("the expVlavalus is:");
+t_print("\n");
+t_print("the expVlavalus is:");
 for(int k=0;k<expVal.getLength();k++)
 {
-    printf("%c",expVal.pData->buffer[k]);
+    t_print("%c",expVal.pData->buffer[k]);
 }
-printf("\n");
+t_print("\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "arrOUS[1] append -3.0625",
@@ -17856,26 +17856,26 @@ printf("\n");
             double      output = atof("-3.50252");
             OString     *final = new OString();
             *final = final->valueOf(output);
-printf("the OStringvalus is:");
+t_print("the OStringvalus is:");
 for(int m=0;m<final->getLength();m++)
 {
-    printf("%c",final->pData->buffer[m]);
+    t_print("%c",final->pData->buffer[m]);
 }
-printf("\n");
-printf("the OStringBuffer is %d\n", aStrBuf.getLength());
-printf("the expVal is %d\n", expVal.getLength());
-printf("the OStringbuffervalus is:");
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
 for(int j=0;j<aStrBuf.getLength();j++)
 {
-    printf("%c",*(aStrBuf.getStr()+j));
+    t_print("%c",*(aStrBuf.getStr()+j));
 }
-printf("\n");
-printf("the expVlavalus is:");
+t_print("\n");
+t_print("the expVlavalus is:");
 for(int k=0;k<expVal.getLength();k++)
 {
-    printf("%c",expVal.pData->buffer[k]);
+    t_print("%c",expVal.pData->buffer[k]);
 }
-printf("\n");
+t_print("\n");
             CPPUNIT_ASSERT_MESSAGE
             (
                 "arrOUS[1] append -3.502525",
