@@ -325,6 +325,7 @@ hedabu: ..\inc\inettbc.hxx %_DEST%\inc%_EXT%\svtools\inettbc.hxx
 hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
 
 hedabu: ..\inc\helpid.hrc %_DEST%\inc%_EXT%\svtools\helpid.hrc
+hedabu: ..\inc\wizardheader.hxx %_DEST%\inc%_EXT%\svtools\wizardheader.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
