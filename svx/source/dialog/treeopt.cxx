@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:13:58 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 11:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1293,13 +1293,15 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             USHORT nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
-            if ( pViewFrame && USHRT_MAX != nY2K)
+            if( USHRT_MAX != nY2K )
             {
-                SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+                if ( pViewFrame )
+                {
+                    SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
+                    pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
+                }
+                pMisc->SetYear2000(nY2K);
             }
-
-            pMisc->SetYear2000(nY2K);
 
 // -------------------------------------------------------------------------
 //          Drucken auswerten
