@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 07:04:22 $
+ *  last change: $Author: oj $ $Date: 2000-11-08 09:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ double DBTypeConversion::getValue(const Reference<XColumn>& xVariant,
                 {
                     double fValue = xVariant->getDouble();
                     if (!xVariant->wasNull())
-                        xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
+                        aString = xFormatter->convertNumberToString(nKey, toNullDate(rNullDate, fValue));
                 }   break;
                 case NumberFormat::TIME:
                 case NumberFormat::NUMBER:
@@ -652,6 +652,9 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/10/27 07:04:22  fs
+ *  corrected the starutil namespace
+ *
  *  Revision 1.4  2000/10/27 07:01:07  fs
  *  new: toDate(sal_Int32) / toTime(sal_Int32)
  *
