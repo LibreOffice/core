@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:01:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Belge";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Documento";
+                Text[ finnish ] = "Asiakirja";
             };
             PageItem
             {
@@ -129,6 +130,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Referanslar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Referencias";
+                Text[ finnish ] = "Viitteet";
             };
             PageItem
             {
@@ -156,6 +158,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Ýþlevler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Funciones";
+                Text[ finnish ] = "Toiminnot";
             };
             PageItem
             {
@@ -183,6 +186,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Belge bilgileri";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Información del documento";
+                Text[ finnish ] = "Asiakirjatiedot";
             };
             PageItem
             {
@@ -210,6 +214,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Deðiþkenler";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Variables";
+                Text[ finnish ] = "Muuttujat";
             };
             PageItem
             {
@@ -237,6 +242,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ turkish ] = "Veritabaný";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Base de datos";
+                Text[ finnish ] = "Tietokanta";
             };
         };
     };
@@ -291,6 +297,7 @@ TabDialog DLG_FLD_INSERT
         Text[ turkish ] = "~Çýkýþ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerrar";
+        Text[ finnish ] = "~Sulje";
     };
     Text [ english_us ] = "Fields" ;
     Text [ portuguese_brazilian ] = "Feldbefehle" ;
@@ -312,4 +319,5 @@ TabDialog DLG_FLD_INSERT
     Text[ turkish ] = "Alan öðeleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campos";
+    Text[ finnish ] = "Kentät";
 };
