@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-14 14:22:11 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,27 +132,86 @@ void ScDocument::Broadcast( ULONG nHint, const ScAddress& rAddr,
     )
 {
     if ( !pBASM )
-        return ;    // Clipboard oder Undo
+        return ;    // Clipboard or Undo
+    ScHint aHint( nHint, rAddr, pCell );
+    Broadcast( aHint );
+}
+
+
+void ScDocument::Broadcast( const ScHint& rHint )
+{
+    if ( !pBASM )
+        return ;    // Clipboard or Undo
     if ( !nHardRecalcState )
     {
         BOOL bIsBroadcasted = FALSE;
-        ScHint aHint( nHint, rAddr, pCell );
+        ScBaseCell* pCell = rHint.GetCell();
         if ( pCell )
         {
-            ScBroadcasterList* pBC;
-            if ( pBC = pCell->GetBroadcaster() )
+            ScBroadcasterList* pBC = pCell->GetBroadcaster();
+            if ( pBC )
             {
-                pBC->Broadcast( aHint );
+                pBC->Broadcast( rHint );
                 bIsBroadcasted = TRUE;
             }
         }
-        if ( pBASM->AreaBroadcast( rAddr, aHint ) || bIsBroadcasted )
-            TrackFormulas( nHint );
+        if ( pBASM->AreaBroadcast( rHint ) || bIsBroadcasted )
+            TrackFormulas( rHint.GetId() );
     }
 
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
-    if ( pCondFormList && rAddr != BCA_BRDCST_ALWAYS )
-        pCondFormList->SourceChanged( rAddr );
+    if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+        pCondFormList->SourceChanged( rHint.GetAddress() );
+}
+
+
+void ScDocument::AreaBroadcast( const ScHint& rHint )
+{
+    if ( !pBASM )
+        return ;    // Clipboard or Undo
+    if ( !nHardRecalcState )
+    {
+        if ( pBASM->AreaBroadcast( rHint ) )
+            TrackFormulas( rHint.GetId() );
+    }
+
+    //  Repaint fuer bedingte Formate mit relativen Referenzen:
+    if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+        pCondFormList->SourceChanged( rHint.GetAddress() );
+}
+
+
+void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHint )
+{
+    if ( !pBASM )
+        return ;    // Clipboard or Undo
+    if ( !nHardRecalcState )
+    {
+        if ( pBASM->AreaBroadcastInRange( rRange, rHint ) )
+            TrackFormulas( rHint.GetId() );
+    }
+
+    // Repaint for conditional formats containing relative references.
+    //! This is _THE_ bottle neck!
+    if ( pCondFormList )
+    {
+        USHORT nCol, nRow, nTab, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        ScAddress aAddress( rRange.aStart );
+        for ( nTab = nTab1; nTab <= nTab2; ++nTab )
+        {
+            aAddress.SetTab( nTab );
+            for ( nCol = nCol1; nCol <= nCol2; ++nCol )
+            {
+                aAddress.SetCol( nCol );
+                for ( nRow = nRow1; nRow <= nRow2; ++nRow )
+                {
+                    aAddress.SetRow( nRow );
+                    pCondFormList->SourceChanged( aAddress );
+                }
+            }
+        }
+    }
 }
 
 
@@ -448,7 +507,7 @@ void ScDocument::TrackFormulas( ULONG nHintId )
             ScHint aHint( nHintId, pTrack->aPos, pTrack );
             if ( pBC = pTrack->GetBroadcaster() )
                 pBC->Broadcast( aHint );
-            pBASM->AreaBroadcast( pTrack->aPos, aHint );
+            pBASM->AreaBroadcast( aHint );
             //  Repaint fuer bedingte Formate mit relativen Referenzen:
             if ( pCondFormList )
                 pCondFormList->SourceChanged( pTrack->aPos );
