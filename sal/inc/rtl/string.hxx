@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:28:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:42:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,16 +755,16 @@ public:
         }
         while ( nIndex >= 0 );
 
-      @param    token       the number of the token to return. The number
-                            must be greater or equal as 0.
+      @param    token       the number of the token to return.
       @param    cTok        the character which seperate the tokens.
       @param    index       the position at which the token is searched in the
                             string.
-                            The index must be greater or equal as 0 and
-                            less or equal as the length of the string.
+                            The index must not be greater thanthe length of the
+                            string.
                             This param is set to the position of the
                             next token or to -1, if it is the last token.
-      @return   the token
+      @return   the token; if either token or index is negative, an empty token
+                is returned (and index is set to -1)
     */
     OString getToken( sal_Int32 token, sal_Char cTok, sal_Int32& index ) const SAL_THROW(())
     {
