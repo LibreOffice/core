@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:42:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,8 +394,16 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
         mnAlign = EDIT_ALIGN_CENTER;
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
-    SetFillColor( rStyleSettings.GetFieldColor() );
+    if ( IsNativeControlSupported(ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE) )
+    {
+        SetBackground();
+        SetFillColor();
+    }
+    else
+    {
+        SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
+        SetFillColor( rStyleSettings.GetFieldColor() );
+    }
     SetCursor( new Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
@@ -468,7 +476,13 @@ void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
 
     if ( bBackground )
     {
-        if( IsControlBackground() )
+        if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+        {
+            // Transparent background
+            SetBackground();
+            SetFillColor();
+        }
+        else if ( IsControlBackground() )
         {
             SetBackground( GetControlBackground() );
             SetFillColor( GetControlBackground() );
@@ -574,7 +588,11 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     else
         SetTextColor( rStyleSettings.GetDisableColor() );
 
-    SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+    // Set background color of the normal text
+    if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+        SetTextFillColor();
+    else
+        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
 
     BOOL bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
@@ -618,8 +636,14 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         // draw normal text
         Color aNormalTextColor = GetTextColor();
         SetClipRegion( aNormalClipRegion );
-        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+
+        // Set background color when part of the text is selected
+        if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+            SetTextFillColor();
+        else
+            SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
         DrawText( aPos, aText, nStart, nEnd - nStart );
+
         // draw highlighted text
         SetClipRegion( aHiglightClipRegion );
         SetTextColor( rStyleSettings.GetHighlightTextColor() );
@@ -852,6 +876,51 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
 
 // -----------------------------------------------------------------------
 
+int Edit::ImplGetNativeControlType()
+{
+    int nCtrl = 0;
+    Window *pControl = mbIsSubEdit ? GetParent() : this;
+
+    switch( pControl->GetType() )
+    {
+        case WINDOW_COMBOBOX:
+        case WINDOW_PATTERNBOX:
+        case WINDOW_NUMERICBOX:
+        case WINDOW_METRICBOX:
+        case WINDOW_CURRENCYBOX:
+        case WINDOW_DATEBOX:
+        case WINDOW_TIMEBOX:
+        case WINDOW_LONGCURRENCYBOX:
+            nCtrl = CTRL_COMBOBOX;
+            break;
+
+        case WINDOW_EDIT:
+        case WINDOW_MULTILINEEDIT:
+        case WINDOW_PATTERNFIELD:
+        case WINDOW_METRICFIELD:
+        case WINDOW_CURRENCYFIELD:
+        case WINDOW_DATEFIELD:
+        case WINDOW_TIMEFIELD:
+        case WINDOW_LONGCURRENCYFIELD:
+        case WINDOW_NUMERICFIELD:
+        case WINDOW_SPINFIELD:
+            if( pControl->GetStyle() & WB_SPIN )
+                nCtrl = CTRL_SPINBOX;
+            else
+            {
+                if ( GetWindow( WINDOW_BORDER ) != this )
+                    nCtrl = CTRL_EDITBOX;
+                else
+                    nCtrl = CTRL_EDITBOX_NOBORDER;
+            }
+            break;
+
+        default:
+            nCtrl = CTRL_EDITBOX;
+    }
+    return nCtrl;
+}
+
 void Edit::ImplClearBackground( long nXStart, long nXEnd )
 {
     Point aTmpPoint;
@@ -864,7 +933,43 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     if ( pCursor )
         pCursor->Hide();
 
-    Erase( aRect );
+    if ( IsNativeControlSupported( ImplGetNativeControlType(), HAS_BACKGROUND_TEXTURE ) )
+    {
+        // draw the inner part by painting the whole control using its border window
+        Window *pControl = this;
+        Window *pBorder = GetWindow( WINDOW_BORDER );
+        if( pBorder == this )
+        {
+            // we have no border, use parent
+            pControl = mbIsSubEdit ? GetParent() : this;
+            pBorder = pControl->GetWindow( WINDOW_BORDER );
+        }
+
+        if( pBorder )
+        {
+            // set proper clipping region to not overdraw the whole control
+            Region aClipRgn = GetPaintRegion();
+            if( !aClipRgn.IsNull() )
+            {
+                // transform clipping region to border window's coordinate system
+                Point aBorderOffs;
+                aBorderOffs = pBorder->ScreenToOutputPixel( OutputToScreenPixel( aBorderOffs ) );
+                aClipRgn.Move( aBorderOffs.X(), aBorderOffs.Y() );
+
+                Region oldRgn( pBorder->GetClipRegion() );
+                pBorder->SetClipRegion( aClipRgn );
+
+                pBorder->Paint( Rectangle() );
+
+                pBorder->SetClipRegion( oldRgn );
+            }
+            else
+                pBorder->Paint( Rectangle() );
+
+        }
+    }
+    else
+        Erase( aRect );
 
     if ( pCursor )
         pCursor->Show();
@@ -1839,6 +1944,16 @@ void Edit::Command( const CommandEvent& rCEvt )
         SetInsertMode( bInsertMode );
 
         ImplModified();
+
+        // #i25161# call auto complete handler for ext text commit also
+        if ( maAutocompleteHdl.IsSet() )
+        {
+            if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.Len()) )
+            {
+                meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
+                maAutocompleteHdl.Call( this );
+            }
+        }
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUT )
     {
