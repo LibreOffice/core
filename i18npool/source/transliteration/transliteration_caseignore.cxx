@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_caseignore.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:54:32 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,12 @@ Transliteration_caseignore::transliterateRange( const OUString& str1, const OUSt
     OUString u2 = l2u.transliterateString2String(str2, 0, str2.getLength());
 
     if ((l1 == u1) && (l2 == u2)) {
-        Sequence< OUString > &r = *new Sequence< OUString > (2);
+        Sequence< OUString > r(2);
         r[0] = l1;
         r[1] = l2;
         return r;
     } else {
-        Sequence< OUString > &r = *new Sequence< OUString > (4);
+        Sequence< OUString > r(4);
         r[0] = l1;
         r[1] = l2;
         r[2] = u1;
