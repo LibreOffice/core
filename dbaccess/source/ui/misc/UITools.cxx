@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:01:49 $
+ *  last change: $Author: fs $ $Date: 2002-05-24 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,13 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _DBAUI_DLGSIZE_HXX
+#include "dlgsize.hxx"
+#endif
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
+#endif
+
 // .........................................................................
 namespace dbaui
 {
@@ -1059,6 +1066,37 @@ sal_Bool isHiContrast(Window* _pWindow)
     }
     return pIter && pIter->GetBackground().GetColor().IsDark();
 }
+
+// -----------------------------------------------------------------------------
+void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId )
+{
+    sal_Int32 nColSize = -1;
+    sal_uInt32 nDefaultWidth = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
+    if ( nDefaultWidth != _pBox->GetColumnWidth( _nColId ) )
+    {
+        Size aSizeMM = _pBox->PixelToLogic( Size( _pBox->GetColumnWidth( _nColId ), 0 ), MapMode( MAP_MM ) );
+        nColSize = aSizeMM.Width() * 10;
+    }
+
+    Size aDefaultMM = _pBox->PixelToLogic( Size( nDefaultWidth, 0 ), MapMode( MAP_MM ) );
+
+    DlgSize aColumnSizeDlg( _pBox, nColSize, sal_False, aDefaultMM.Width() * 10 );
+    if ( aColumnSizeDlg.Execute() )
+    {
+        sal_Int32 nValue = aColumnSizeDlg.GetValue();
+        if ( -1 == nValue )
+        {   // default width
+            nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
+        }
+        else
+        {
+            Size aSizeMM( nValue / 10, 0 );
+            nValue = _pBox->LogicToPixel( aSizeMM, MapMode( MAP_MM ) ).Width();
+        }
+        _pBox->SetColumnWidth( _nColId, nValue );
+    }
+}
+
 // .........................................................................
 }
 // .........................................................................
