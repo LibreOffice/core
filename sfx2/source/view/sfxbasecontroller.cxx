@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:40:29 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ class SfxStatusIndicator : public ::cppu::WeakImplHelper2< ::com::sun::star::tas
 {
 friend class SfxBaseController;
     ::com::sun::star::uno::Reference < XCONTROLLER > xOwner;
+    ::com::sun::star::uno::Reference < ::com::sun::star::task::XStatusIndicator > xProgress;
     SfxWorkWindow*          pWorkWindow;
     sal_Int32               _nRange;
     sal_Int32               _nValue;
@@ -255,12 +256,13 @@ void SAL_CALL SfxStatusIndicator::start(const ::rtl::OUString& aText, sal_Int32 
     {
         _nRange = nRange;
         _nValue = 0;
-        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( !pMgr )
-            pWorkWindow->SetTempStatusBar_Impl( TRUE );
-        pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( pMgr && !pMgr->IsProgressMode() )
-            pMgr->StartProgressMode( aText, nRange );
+
+        if ( !xProgress.is() )
+            xProgress = pWorkWindow->GetStatusIndicator();
+
+        if ( xProgress.is() )
+            xProgress->start( aText, nRange );
+
         _nStartTime = Get10ThSec();
         reschedule();
     }
@@ -271,9 +273,12 @@ void SAL_CALL SfxStatusIndicator::end(void) throw(::com::sun::star::uno::Runtime
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( xOwner.is() )
     {
-        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( pMgr && pMgr->IsProgressMode() )
-            pMgr->EndProgressMode();
+        if ( !xProgress.is() )
+            xProgress = pWorkWindow->GetStatusIndicator();
+
+        if ( xProgress.is() )
+            xProgress->end();
+
         reschedule();
     }
 }
@@ -283,32 +288,11 @@ void SAL_CALL SfxStatusIndicator::setText(const ::rtl::OUString& aText) throw(::
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( xOwner.is() )
     {
-        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( !pMgr )
-            pWorkWindow->SetTempStatusBar_Impl( TRUE );
-        pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( pMgr )
-        {
-            if( pMgr->IsProgressMode() )
-            {
-                // anders kann VCL das leider nicht
-                pMgr->GetStatusBar()->SetUpdateMode( FALSE );
-                pMgr->EndProgressMode();
-                pMgr->StartProgressMode( aText, _nRange );
-                pMgr->SetProgressState( _nValue );
-                pMgr->GetStatusBar()->SetUpdateMode( TRUE );
-            }
-            else
-            {
-                if ( aText.getLength() )
-                    pMgr->ShowHelpText( aText );
-                else
-                {
-                    pMgr->ShowItems();
-                    reset();
-                }
-            }
-        }
+        if ( !xProgress.is() )
+            xProgress = pWorkWindow->GetStatusIndicator();
+
+        if ( xProgress.is() )
+            xProgress->setText( aText );
 
         reschedule();
     }
@@ -320,9 +304,13 @@ void SAL_CALL SfxStatusIndicator::setValue( sal_Int32 nValue ) throw(::com::sun:
     if ( xOwner.is() )
     {
         _nValue = nValue;
-        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( pMgr && pMgr->IsProgressMode() )
-            pMgr->SetProgressState( nValue );
+
+        if ( !xProgress.is() )
+            xProgress = pWorkWindow->GetStatusIndicator();
+
+        if ( xProgress.is() )
+            xProgress->setValue( nValue );
+
         sal_Bool bReschedule = (( Get10ThSec() - _nStartTime ) > TIMEOUT_START_RESCHEDULE );
         if ( bReschedule )
             reschedule();
@@ -334,10 +322,12 @@ void SAL_CALL SfxStatusIndicator::reset() throw(::com::sun::star::uno::RuntimeEx
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( xOwner.is() )
     {
-        SfxStatusBarManager* pMgr = pWorkWindow->GetStatusBarManager_Impl();
-        if ( pMgr )
-            pMgr->ShowItems();
-        pWorkWindow->SetTempStatusBar_Impl( FALSE );
+        if ( !xProgress.is() )
+            xProgress = pWorkWindow->GetStatusIndicator();
+
+        if ( xProgress.is() )
+            xProgress->reset();
+
         reschedule();
     }
 }
@@ -346,6 +336,7 @@ void SAL_CALL SfxStatusIndicator::disposing( const com::sun::star::lang::EventOb
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     xOwner = 0;
+    xProgress.clear();
 }
 
 //________________________________________________________________________________________________________
