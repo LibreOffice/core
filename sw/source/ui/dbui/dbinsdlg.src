@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:50:56 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Daten einfügen als:";
         Text[ hindi ] = "ड़ॉटा जोड़ो जैसे:";
         Text[ slovak ] = "Vložiť dáta ako:";
+        Text[ hungarian ] = "Adat beillesztése másként:";
+        Text[ slovenian ] = "Vstavi podatke kot:";
     };
     RadioButton RB_AS_TABLE
     {
@@ -120,7 +122,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "T~able" ;
         Text [ portuguese_brazilian ] = "T~abela" ;
         Text [ swedish ] = "T~abell" ;
-        Text [ danish ] = "Tabel" ;
+        Text [ danish ] = "Ta~bel" ;
         Text [ italian ] = "T~abella" ;
         Text [ spanish ] = "T~abla" ;
         Text [ french ] = "T~able" ;
@@ -143,6 +145,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "T~abelle";
         Text[ hindi ] = "सा~रणी";
         Text[ slovak ] = "T~abuľka";
+        Text[ hungarian ] = "~Táblázat";
+        Text[ slovenian ] = "T~abela";
     };
     RadioButton RB_AS_FIELD
     {
@@ -155,7 +159,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "~Fields" ;
         Text [ portuguese_brazilian ] = "~Campos" ;
         Text [ swedish ] = "~F�lt" ;
-        Text [ danish ] = "Felter" ;
+        Text [ danish ] = "~Felter" ;
         Text [ italian ] = "~Campi" ;
         Text [ spanish ] = "~Campos" ;
         Text [ french ] = "~Champs" ;
@@ -178,6 +182,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "‮שדות‬";
         Text[ hindi ] = "~क्षेत्रें";
         Text[ slovak ] = "~Pole";
+        Text[ hungarian ] = "~Mezők";
+        Text[ slovenian ] = "~Polja";
     };
     RadioButton RB_AS_TEXT
     {
@@ -190,7 +196,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "~Text" ;
         Text [ portuguese_brazilian ] = "~Texto" ;
         Text [ swedish ] = "~Text" ;
-        Text [ danish ] = "Tekst" ;
+        Text [ danish ] = "~Tekst" ;
         Text [ italian ] = "~Testo" ;
         Text [ spanish ] = "~Texto" ;
         Text [ french ] = "Texte" ;
@@ -213,6 +219,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Text";
+        Text[ hungarian ] = "~Szöveg";
+        Text[ slovenian ] = "~Besedilo";
     };
     OKButton BT_OK
     {
@@ -273,6 +281,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Datenbank~spalten";
         Text[ hindi ] = "लेखासंचय ~स्तंभें";
         Text[ slovak ] = "Databázové ~stĺpce";
+        Text[ hungarian ] = "~Adatbázisoszlopok";
+        Text[ slovenian ] = "~Stolpci zbirke podatkov";
     };
     FixedLine FL_FORMAT
     {
@@ -307,6 +317,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "For~mat";
         Text[ hindi ] = "रच~ना";
         Text[ slovak ] = "For~mát";
+        Text[ hungarian ] = "~Formátum";
+        Text[ slovenian ] = "Ob~lika";
     };
     RadioButton RB_DBFMT_FROM_DB
     {
@@ -343,6 +355,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "A~us Datenbank";
         Text[ hindi ] = "~लेखासंचय से";
         Text[ slovak ] = "Z ~databázy";
+        Text[ hungarian ] = "~Adatbázisból";
+        Text[ slovenian ] = "Iz zbirke pod~atkov";
     };
     RadioButton RB_DBFMT_FROM_USR
     {
@@ -430,6 +444,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ hebrew ] = "Absat~zvorlage:";
         TEXT[ hindi ] = "परिच्छे~द शैली:";
         TEXT[ slovak ] = "Štýl ~odstavca:";
+        TEXT[ hungarian ] = "~Bekezdés stílusa:";
+        TEXT[ slovenian ] = "~Slog odstavka:";
     };
     ListBox LB_DB_PARA_COLL
     {
@@ -515,7 +531,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "Tab~le column(s)" ;
         Text [ portuguese_brazilian ] = "Ta~bela" ;
         Text [ swedish ] = "Tabe~llkolumn(er)" ;
-        Text [ danish ] = "Tabel" ;
+        Text [ danish ] = "Tabelkolonne(r)" ;
         Text [ italian ] = "Colonna/e tabe~lla" ;
         Text [ spanish ] = "Columnas de tab~la" ;
         Text [ french ] = "Colonnes de table" ;
@@ -539,6 +555,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Tabe~llenspalte(n)";
         Text[ hindi ] = "~सारणी";
         Text[ slovak ] = "Tabuľ~ka";
+        Text[ hungarian ] = "~Táblázatoszlopok";
+        Text[ slovenian ] = "Stolpci tabe~le";
     };
     ListBox LB_TABLE_COL
     {
@@ -585,6 +603,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Tabellenüberschrift einfügen";
         Text[ hindi ] = "सारणी शीर्षक को जोड़ो";
         Text[ slovak ] = "Vložiť nadpis tabuľky";
+        Text[ hungarian ] = "Táblázat-címsor beszúrása";
+        Text[ slovenian ] = "Vstavi naslov tabele";
     };
     RadioButton RB_HEADL_COLNMS
     {
@@ -619,6 +639,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "S~paltenamen übernehmen";
         Text[ hindi ] = "स्तंभ ~नाम को लागू करो";
         Text[ slovak ] = "Použiť ~názov stĺpca";
+        Text[ hungarian ] = "Oszlop~név alkalmazása";
+        Text[ slovenian ] = "Uporabi ~ime stolpca";
     };
     RadioButton RB_HEADL_EMPTY
     {
@@ -636,7 +658,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ spanish ] = "Crear s�lo fila";
         Text[ finnish ] = "Luo vain rivi";
         Text[ italian ] = "Crea solo righe";
-        Text[ danish ] = "Opret kun linje";
+        Text[ danish ] = "Opret kun r�kke";
         Text[ swedish ] = "Skapa bara rad";
         Text[ polish ] = "Utw�rz tylko wiersz";
         Text[ portuguese_brazilian ] = "Criar somente linha";
@@ -653,6 +675,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Nur Zeile erstellen";
         Text[ hindi ] = "केवल पंक्ति उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť len riadok";
+        Text[ hungarian ] = "Csak sor létrehozása";
+        Text[ slovenian ] = "Ustvari samo vrstico";
     };
     PushButton PB_TBL_FORMAT
     {
@@ -663,7 +687,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "Pr~operties..." ;
         Text [ portuguese_brazilian ] = "~Propriedades..." ;
         Text [ swedish ] = "E~genskaper..." ;
-        Text [ danish ] = "Egenskaber..." ;
+        Text [ danish ] = "~Egenskaber..." ;
         Text [ italian ] = "Propriet�..." ;
         Text [ spanish ] = "P~ropiedades..." ;
         Text [ french ] = "Propri�t�s..." ;
@@ -688,6 +712,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "वि~शेषतायें...";
         Text[ slovak ] = "~Vlastnosti...";
+        Text[ hungarian ] = "~Tulajdonságok...";
+        Text[ slovenian ] = "Lastn~osti...";
     };
     PushButton PB_TBL_AUTOFMT
     {
@@ -700,7 +726,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text [ english_us ] = "Aut~oFormat..." ;
         Text [ portuguese_brazilian ] = "Aut~oFormata��o..." ;
         Text [ swedish ] = "Aut~oFormat..." ;
-        Text [ danish ] = "AutoFormat..." ;
+        Text [ danish ] = "Auto~Format..." ;
         Text [ italian ] = "Formatt. auto..." ;
         Text [ spanish ] = "~Formateado autom�tico..." ;
         Text [ french ] = "Aut~oFormat..." ;
@@ -723,6 +749,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "Aut~oFormat...";
         Text[ hindi ] = "स्व~चालित ढंग से रचना...";
         Text[ slovak ] = "Aut~omatické formátovanie";
+        Text[ hungarian ] = "~Automatikus formázás...";
+        Text[ slovenian ] = "S~amooblikovanje...";
     };
     String STR_NOTEMPL
     {
@@ -755,6 +783,8 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ hebrew ] = "<keine>";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<nič>";
+        Text[ hungarian ] = "<semmi>";
+        Text[ slovenian ] = "<brez>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
     Text [ portuguese_brazilian ] = "Inserir Colunas do Banco de Dados" ;
@@ -783,7 +813,10 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ hebrew ] = "Datenbankspalten einfügen";
     Text[ hindi ] = "लेखासंचय स्तंभों को जोड़ो";
     Text[ slovak ] = "Vložiť stĺpce databázy";
+    Text[ hungarian ] = "Adatbázis-oszlopok beszúrása";
+    Text[ slovenian ] = "Vstavi stolpce zbirke podatkov";
 };
+
 
 
 
