@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-12 06:00:01 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ class cIMPL_Dialog  :   public ModalDialog
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        cIMPL_Dialog( LanguageType aLanguage, Window* pParent );
+        cIMPL_Dialog( ::com::sun::star::lang::Locale aLocale, Window* pParent );
 
         /*-****************************************************************************************************//**
             @short      default dtor
@@ -486,7 +486,7 @@ class cIMPL_Dialog  :   public ModalDialog
         *//*-*****************************************************************************************************/
 
         static ResId impl_getResId( sal_uInt16      nId         ,
-                                    LanguageType    aLanguage   );
+                                    ::com::sun::star::lang::Locale  aLocale );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
