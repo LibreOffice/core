@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ namespace padmin {
         FixedLine                           m_aFromFL;
         Edit                                m_aFromDirEdt;
         PushButton                          m_aFromBtn;
+        CheckBox                            m_aSubDirsBox;
+        FixedLine                           m_aTargetOptFL;
         CheckBox                            m_aLinkOnlyBox;
         FixedText                           m_aFixedText;
         bool                                m_bOverwriteAll;
@@ -137,6 +139,7 @@ namespace padmin {
 
         DECL_LINK( ClickBtnHdl, Button* );
         DECL_LINK( ModifyHdl, Edit* );
+        DECL_LINK( ToggleHdl, CheckBox* );
 
         // implement ImportFontCallback
         virtual void importFontsFailed( ::psp::PrintFontManager::ImportFontCallback::FailCondition eReason );
