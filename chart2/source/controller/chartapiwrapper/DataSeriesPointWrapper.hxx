@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-18 13:49:36 $
+ *  last change: $Author: bm $ $Date: 2003-12-19 15:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,17 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+
+    void SAL_CALL getStatisticsPropertyValue
+        ( ::com::sun::star::uno::Any& rValue,
+          sal_Int32 nHandle ) const;
+
+    void SAL_CALL setStatisticsPropertyValue_NoBroadcast(
+        sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+        throw (::com::sun::star::uno::Exception);
+
+    // ----------------------------------------
+
     mutable ::osl::Mutex &    m_rMutex;
 
     ::com::sun::star::uno::Reference<
