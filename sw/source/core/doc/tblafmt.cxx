@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblafmt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:41:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,7 +1011,7 @@ BOOL SwTableAutoFmtTbl::Load()
 BOOL SwTableAutoFmtTbl::Save() const
 {
     SvtPathOptions aPathOpt;
-    String sNm( URIHelper::SmartRelToAbs( aPathOpt.GetUserConfigPath() ));
+    String sNm( aPathOpt.GetUserConfigPath() );
     sNm += INET_PATH_TOKEN;
     sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( sAutoTblFmtName ));
     SfxMedium aStream(sNm, STREAM_STD_WRITE, TRUE );
