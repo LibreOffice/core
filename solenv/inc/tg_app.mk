@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-25 21:01:55 $
-#*    $Revision: 1.5 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-25 23:34:59 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -102,9 +102,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(COPY) $@ $@.app$/Contents$/MacOS$/$(@:f) ; \
     $(RM) $@ ; \
     echo '#\!/bin/sh' >> $@ ; \
-    echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@ ; \   
+    echo 'exec `dirname $$0`$/$(@:f).app$/Contents$/MacOS$/$(@:f)' >> $@ ; \
     chmod a+x $@ ; \
-    endif  
+    endif
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
