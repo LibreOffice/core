@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:46:28 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,20 +885,22 @@ void SfxObjectShell::SetProgress_Impl
 
 //--------------------------------------------------------------------
 
-void SfxObjectShell::PostActivateEvent_Impl()
+void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
 {
     SfxApplication* pSfxApp = SFX_APP();
     if ( !pSfxApp->IsDowning() && !IsLoading() )
     {
         if (pImp->nEventId)
         {
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem,
-                             SfxStringItem, SID_DOC_SALVAGE, sal_False );
             sal_uInt16 nId = pImp->nEventId;
             pImp->nEventId = 0;
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
             if ( !pSalvageItem )
                 pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
+
+        if ( pFrame && pFrame->ClearEventFlag_Impl() )
+            pSfxApp->NotifyEvent(SfxEventHint(SFX_EVENT_VIEWCREATED, this), sal_False);
 
         if ( GetFrame() )
             pSfxApp->NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, this), sal_False);
