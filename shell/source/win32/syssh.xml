@@ -18,8 +18,10 @@
         <type>  com.sun.star.system.SystemShellExecuteFlags </type>
         <type>  com.sun.star.lang.XMultiServiceFactory      </type>
         <type>  com.sun.star.lang.XSingleServiceFactory     </type>
+        <type>  com.sun.star.lang.XSingleComponentFactory   </type>
         <type>  com.sun.star.lang.XServiceInfo              </type>
         <type>  com.sun.star.lang.XTypeProvider             </type>
+        <type>  com.sun.star.lang.XComponent                </type>
         <type>  com.sun.star.lang.EventObject               </type>
         <type>  com.sun.star.uno.XComponentContext          </type>
         <type>  com.sun.star.lang.IllegalArgumentException  </type>
