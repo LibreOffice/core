@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:38:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef _LINKMGR_HXX //autogen
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 #ifndef _USRFLD_HXX
@@ -539,8 +539,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet
                         String sCmd( pType->GetCmd() );
-                        USHORT nTmpPos = sCmd.SearchAndReplace( so3::cTokenSeperator, ' ' );
-                        sCmd.SearchAndReplace( so3::cTokenSeperator, ' ', nTmpPos );
+                        USHORT nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
+                        sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ', nTmpPos );
 
                         aValueED.SetText( sCmd );
                         aFormatLB.SelectEntryPos(pType->GetType());
@@ -1116,8 +1116,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', so3::cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
+                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
                         ((SwDDEFieldType*)pType)->SetCmd(sValue);
                         ((SwDDEFieldType*)pType)->SetType((USHORT)nFormat);
                     }
@@ -1147,8 +1147,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', so3::cTokenSeperator );
-                        sValue.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
+                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+                        sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
                         SwDDEFieldType aType(sName, sValue, (USHORT)nFormat);
                         aSelectionLB.InsertEntry(sName);
