@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-05-31 09:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ class ByteChucker
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
+    com::sun::star::uno::Sequence < sal_Int8 > a1Sequence, a2Sequence, a4Sequence;
+    sal_Int8 *p1Sequence, *p2Sequence, *p4Sequence;
 
 public:
     ByteChucker (com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xOstream);
