@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-13 13:28:28 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #include <filectrl.hrc>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 // =======================================================================
 
