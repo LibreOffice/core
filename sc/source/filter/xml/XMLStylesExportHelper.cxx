@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:46:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:10:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,13 +440,13 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     switch (aItr->nShowList)
                     {
                     case sheet::TableValidationVisibility::INVISIBLE:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_NO);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_NO);
                     break;
                     case sheet::TableValidationVisibility::UNSORTED:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_UNSORTED);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_UNSORTED);
                     break;
                     case sheet::TableValidationVisibility::SORTEDASCENDING:
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SHOW_LIST, XML_SORTED_ASCENDING);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_LIST, XML_SORTED_ASCENDING);
                     break;
                     default:
                         DBG_ERROR("unknown ListType");
@@ -483,12 +483,14 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                     break;
                     case sheet::ValidationAlertStyle_MACRO :
                     {
-                        //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
-                        if (aItr->bShowErrorMessage)
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
-                        else
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
-                        SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
+                        {
+                            //rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
+                            if (aItr->bShowErrorMessage)
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
+                            else
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
+                            SvXMLElementExport aEMElem(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
+                        }
                         {
                             uno::Sequence<beans::PropertyValue> aSeq(3);
                             beans::PropertyValue* pArr = aSeq.getArray();
