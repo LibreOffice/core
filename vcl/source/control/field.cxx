@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 14:10:33 $
+ *  last change: $Author: mt $ $Date: 2001-10-31 09:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1096,8 +1096,27 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
                 break;
         }
     }
-
     return aStr;
+
+/*
+    // MT: #90545# Preparation for translated strings...
+    String aMetricText;
+    for ( USHORT n = rStr.Len(); n; )
+    {
+        sal_Unicode c = rStr.GetChar( --n );
+        sal_Int32 nType = xCharClass->getStringType( rStr, n, 1, rLocale );
+
+        if ( CharClass::isLetterType( nType ) )
+        {
+            aMetricText.Insert( c, 0 );
+        }
+        else
+        {
+            if ( aMetricText.Len() )
+                break;
+        }
+    }
+*/
 }
 
 // -----------------------------------------------------------------------
