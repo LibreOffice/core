@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:24:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,8 +339,9 @@ sal_uInt16 SwEditShell::StartUndo( sal_uInt16 nUndoId,
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-sal_uInt16 SwEditShell::EndUndo(sal_uInt16 nUndoId)
-{ return GetDoc()->EndUndo(nUndoId); }
+sal_uInt16 SwEditShell::EndUndo(sal_uInt16 nUndoId,
+                                const SwRewriter *pRewriter)
+{ return GetDoc()->EndUndo(nUndoId, pRewriter); }
 
 // liefert die Id der letzten undofaehigen Aktion zurueck
 // fuellt ggf. VARARR mit sdbcx::User-UndoIds
