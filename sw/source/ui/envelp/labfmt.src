@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:53:31 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ TabPage TP_LAB_FMT
         Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
         Text[ japanese ] = "•Û‘¶(~S)...";
-        Text[ korean ] = "~ÀúÀå...";
+        Text[ korean ] = "ÀúÀå...";
         Text[ chinese_simplified ] = "´æÅÌ(~S)...";
         Text[ chinese_traditional ] = "Àx¦s(~S)...";
         Text[ turkish ] = "Save...";
@@ -532,7 +532,7 @@ String STR_WIDTH
     Text [ english_us ] = "Width" ;
     Text[ chinese_simplified ] = "¿í";
     Text[ russian ] = "Øèğèíà";
-    Text[ polish ] = "Szeroko?æ";
+    Text[ polish ] = "Szerokoœæ";
     Text[ japanese ] = "•";
     Text[ chinese_traditional ] = "¼e";
     Text[ arabic ] = "ÇáÚÑÖ";
@@ -559,7 +559,7 @@ String STR_HEIGHT
     Text [ english_us ] = "Height" ;
     Text[ chinese_simplified ] = "¸ß";
     Text[ russian ] = "Âûñîòà";
-    Text[ polish ] = "Wysoko?æ";
+    Text[ polish ] = "Wysokoœæ";
     Text[ japanese ] = "‚‚³";
     Text[ chinese_traditional ] = "°ª";
     Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -819,7 +819,7 @@ ModalDialog DLG_SAVE_LABEL
         Message[ dutch ] = "Etiket \"%1 / %2\" bestaat reeds.\nOverschrijven?";
         Message[ french ] = "L'étiquette \"%1 / %2\" existe déjà.\nVoulez-vous écraser les données ?";
         Message[ spanish ] = "La etiqueta \"%1 / %2\" existe ya.\n¿Desea sobrescribila?";
-        Message[ italian ] = "L'etichetta \"%1 / %2\" esiste già.\nVolete soprascriverla?";
+        Message[ italian ] = "L'etichetta \"%1 / %2\" esiste già.\nVolete sovrascriverla?";
         Message[ danish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ swedish ] = "Etiketten \"%1 / %2\" finns redan.\nVill du skriva över den?";
         Message[ polish ] = "Etykieta \"%1 / %2\" ju¿ istnieje.\nSkasowaæ dane przez zapisanie?";
@@ -854,3 +854,4 @@ ModalDialog DLG_SAVE_LABEL
     Text[ catalan ] = "Guardar formato de etiqueta";
     Text[ finnish ] = "Etikettenformat speichern";
 };
+
