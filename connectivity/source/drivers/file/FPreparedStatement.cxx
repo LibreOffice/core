@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 14:25:53 $
+ *  last change: $Author: oj $ $Date: 2001-04-06 14:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@ void OPreparedStatement::disposing()
 
     ::osl::MutexGuard aGuard(m_aMutex);
     m_xMetaData = NULL;
-    m_xRS       = NULL;
     if(m_aRow.isValid())
     {
         m_aRow->clear();
@@ -157,10 +156,6 @@ void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLExcepti
                 m_pTable->acquire();
         }
 
-        m_pResultSet = createResultSet();
-        m_xRS = m_pResultSet;
-        if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_UPDATE)
-            m_pResultSet->describeParameter();
         m_aRow = new OValueVector();
         m_aRow->push_back(sal_Int32(0));
     }
@@ -207,7 +202,7 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
-    m_xRS = NULL;
+
     clearMyResultSet();
 }
 // -------------------------------------------------------------------------
@@ -218,8 +213,8 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    m_pResultSet->setParameterRow(m_aRow);
-    m_pResultSet->OpenImpl();
+    Reference< XResultSet > rs = initResultSet();
+
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT_COUNT;
 }
 // -------------------------------------------------------------------------
@@ -230,9 +225,8 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    m_pResultSet->setParameterRow(m_aRow);
-    m_pResultSet->OpenImpl();
-    return m_pResultSet->getRowCountResult();
+    Reference< XResultSet > rs = initResultSet();
+    return m_pResultSet ? m_pResultSet->getRowCountResult() : sal_Int32(0);
 }
 // -------------------------------------------------------------------------
 
@@ -267,9 +261,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     if (OStatement_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    Reference< XResultSet > rs = m_pResultSet;
-    m_pResultSet->setParameterRow(m_aRow);
-    m_pResultSet->OpenImpl();
+    Reference< XResultSet > rs = initResultSet();
     return rs;
 }
 // -------------------------------------------------------------------------
@@ -596,4 +588,18 @@ OResultSet* OPreparedStatement::createResultSet()
 {
     return new OResultSet(this,m_aSQLIterator);
 }
+// -----------------------------------------------------------------------------
+Reference<XResultSet> OPreparedStatement::initResultSet()
+{
+    ::comphelper::disposeComponent(m_xResultSet.get());
+    m_pResultSet = createResultSet();
+    Reference<XResultSet> xRs(m_pResultSet);
+    m_xResultSet = xRs;
+    if(m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT || m_aSQLIterator.getStatementType() == SQL_STATEMENT_UPDATE)
+        m_pResultSet->describeParameter();
+    m_pResultSet->setParameterRow(m_aRow);
+    m_pResultSet->OpenImpl();
+    return xRs;
+}
+// -----------------------------------------------------------------------------
 
