@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:36:00 $
+ *  last change: $Author: rt $ $Date: 2001-04-10 20:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ TabPage TP_COLUMN
         Text[ russian ] = "–аспределить равномерно содержимое во всех колонках";
         Text[ greek ] = "Їуз кбфбнпмё фпх ресйечпмЁнпх уе ьлет фйт уфёлет";
         Text[ dutch ] = "~Kolommen uitbalanceren";
-        Text[ french ] = "Optimiser les ~colonnes";
+        Text[ french ] = "Rйpartition rйguliиre du contenu sur toutes les ~colonnes";
         Text[ spanish ] = "~Optimar columnas";
         Text[ italian ] = "Ottimizza colonne";
         Text[ danish ] = "Udjжvn kolonner";
@@ -457,7 +457,7 @@ TabPage TP_COLUMN
         Text [ portuguese ] = "Largura da coluna" ;
         Text [ finnish ] = "Sarakeleveys" ;
         Text [ danish ] = "Kolonnebredde" ;
-        Text [ french ] = "Largeur des colonnes" ;
+        Text [ french ] = "Largeur de colonne" ;
         Text [ swedish ] = "Kolumnbredd" ;
         Text [ dutch ] = "Kolombreedte" ;
         Text [ spanish ] = "Ancho de columna" ;
