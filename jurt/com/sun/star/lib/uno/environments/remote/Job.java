@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:41:00 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2001-05-08 09:41:00 $
+ * @version     $Revision: 1.9 $ $ $Date: 2001-05-17 12:46:27 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -103,7 +103,7 @@ public class Job {
         _iReceiver    = iReceiver;
         _iMessage     = iMessage;
 
-          if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + _iReceiver + " " + _iMessage);
+          if(DEBUG) System.err.println("##### " + getClass().getName() + ".<init>:" + _iReceiver + " " + _iMessage + " " + iMessage.getOperation() + " " + iMessage.getData(new Object[1][]));
     }
 
     /**
@@ -159,7 +159,7 @@ public class Job {
 
         Object result = _iMessage.getData(params);
 
-         if(DEBUG) System.err.println("##### " + getClass().getName() + ".execute:" + result);
+         if(DEBUG) System.err.println("##### " + getClass().getName() + ".execute:" + result + " " + _iMessage.isException());
 
         if(_iMessage.isException())
             throw (Throwable)result;
@@ -174,7 +174,7 @@ public class Job {
                     xresult = dispatch_MethodCall(params[0]);
 
                 if(_iMessage.mustReply())
-                    _iReceiver.sendReply(false, _iMessage.getThreadID(), xresult);
+                    _iReceiver.sendReply(false, _iMessage.getThreadId(), xresult);
             }
         }
           catch(Exception exception) {
@@ -185,7 +185,6 @@ public class Job {
                 throwable = ((InvocationTargetException)exception).getTargetException();;
 
             if(DEBUG) System.err.println("##### Job.execute - exception occured:" + throwable);
-
             // Here we have to be aware of non UNO exceptions, cause they may kill
             // a remote side (which does not know anything about theire types)
             if(!(throwable instanceof com.sun.star.uno.Exception)
@@ -197,7 +196,7 @@ public class Job {
             }
 
             if(_iMessage.mustReply())
-                _iReceiver.sendReply(true, _iMessage.getThreadID(), throwable);
+                _iReceiver.sendReply(true, _iMessage.getThreadId(), throwable);
         }
 
         return result;
@@ -226,8 +225,8 @@ public class Job {
      * <p>
      * @return  returns the thread id
      */
-    public ThreadID getThreadId() {
-        return _iMessage.getThreadID();
+    public ThreadId getThreadId() {
+        return _iMessage.getThreadId();
     }
 
     /**

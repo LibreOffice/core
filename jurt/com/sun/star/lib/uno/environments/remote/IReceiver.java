@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IReceiver.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:56:03 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ import com.sun.star.lib.uno.environments.java.IRequester;
  * This interface is an abstraction for giving back
  * a reply for a request.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-05-04 11:56:03 $
+ * @version     $Revision: 1.3 $ $ $Date: 2001-05-17 12:46:27 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.IQueryInterface
  */
@@ -86,6 +86,6 @@ public interface IReceiver {
      * @param  params      the out and in/out parameters passed with the request
      * @param  signature   the types of the out and in/out parameters
      */
-    public void sendReply(boolean exception, ThreadID threadId, Object result);
+    public void sendReply(boolean exception, ThreadId threadId, Object result);
 }
 

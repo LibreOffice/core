@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:41:01 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ import com.sun.star.uno.XInterface;
 
 import com.sun.star.lib.uno.environments.remote.IUnmarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
-import com.sun.star.lib.uno.environments.remote.ThreadID;
+import com.sun.star.lib.uno.environments.remote.ThreadId;
 
 import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.IFieldDescription;
@@ -107,14 +107,14 @@ class Unmarshal implements IUnmarshal {
     private IBridge     _iBridge;
     private Object      _objectCache[];
     private ITypeDescription        _iTypeDescriptionCache[];
-    private ThreadID    _threadIdCache[];
+    private ThreadId    _threadIdCache[];
 
     Unmarshal(IBridge iBridge, short cacheSize) {
         _iBridge         = iBridge;
 
         _objectCache          = new Object[cacheSize];
         _iTypeDescriptionCache = new ITypeDescription[cacheSize];
-        _threadIdCache        = new ThreadID[cacheSize];
+        _threadIdCache        = new ThreadId[cacheSize];
         _inputStream          = new ByteArrayInputStream(new byte[0]);
         _dataInput            = new DataInputStream(_inputStream);
     }
@@ -377,8 +377,9 @@ class Unmarshal implements IUnmarshal {
         case TypeClass.STRING_value:    result = readString();        break;  // is it a String ?
         case TypeClass.EXCEPTION_value: result = readThrowable(iTypeDescription); break;  // is it an exception?
         case TypeClass.STRUCT_value:
-            if(iTypeDescription.getZClass() == ThreadID.class) // read a thread id ?
-                result = readThreadID();
+            if(iTypeDescription.getZClass() == ThreadId.class) // read a thread id ?
+                result = readThreadId();
+
             else   // otherwise read a struct
                 result = readStruct(iTypeDescription);
 
@@ -528,19 +529,19 @@ class Unmarshal implements IUnmarshal {
         }
     }
 
-    ThreadID readThreadID() {
+    ThreadId readThreadId() {
         Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.__M_ThreadIdTypeDescription);
 
-        ThreadID threadId = null;
+        ThreadId threadId = null;
 
         if(m_threadId.cache != (short)0xffff) { // is the cache entry valid?
             if(m_threadId.full.length != 0)
-                _threadIdCache[m_threadId.cache] = new ThreadID(m_threadId.full);
+                _threadIdCache[m_threadId.cache] = new ThreadId(m_threadId.full);
 
             threadId = _threadIdCache[m_threadId.cache];
         }
         else if(m_threadId.full.length != 0)
-            threadId = new ThreadID(m_threadId.full);
+            threadId = new ThreadId(m_threadId.full);
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThreadID:" + _threadIdCache[m_threadId.cache]);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:41:01 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ import com.sun.star.uno.XInterface;
 
 import com.sun.star.lib.uno.environments.remote.IMarshal;
 import com.sun.star.lib.uno.environments.remote.Protocol;
-import com.sun.star.lib.uno.environments.remote.ThreadID;
+import com.sun.star.lib.uno.environments.remote.ThreadId;
 
 import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.IFieldDescription;
@@ -384,8 +384,8 @@ class Marshal implements IMarshal {
         case TypeClass.DOUBLE_value:    writeDouble((Double)object);                          break; // is it a double ?
         case TypeClass.STRING_value:    writeString((String)object);                          break; // is it a String ?
         case TypeClass.STRUCT_value:
-            if(object instanceof ThreadID) // is it a thread id ?
-                writeThreadID((ThreadID)object);
+            if(object instanceof ThreadId) // is it a thread id ?
+                writeThreadId((ThreadId)object);
             else // is it a struct ?
                 writeStruct(iTypeDescription, object);
 
@@ -502,17 +502,17 @@ class Marshal implements IMarshal {
         }
     }
 
-    void writeThreadID(ThreadID threadID) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThreadID:" + threadID);
+    void writeThreadId(ThreadId threadId) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeThreadID:" + threadId);
 
         boolean found[] = new boolean[1];
         short index;
         if(_useCaches)
-            index = _threadIdCache.add(found, threadID.getBytes());
+            index = _threadIdCache.add(found, threadId.getBytes());
         else
             index = (short)0xffff;
 
-        M_ThreadId m_ThreadId = new M_ThreadId(found[0] ? null : threadID.getBytes(), index);
+        M_ThreadId m_ThreadId = new M_ThreadId(found[0] ? null : threadId.getBytes(), index);
 
         writeObject(__M_ThreadIdTypeDescription, m_ThreadId);
     }

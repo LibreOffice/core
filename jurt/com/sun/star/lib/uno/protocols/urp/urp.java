@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:41:01 $
+ *  last change: $Author: kr $ $Date: 2001-05-17 12:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ import com.sun.star.lib.uno.environments.remote.IMarshal;
 import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.Protocol;
 import com.sun.star.lib.uno.environments.remote.IUnmarshal;
-import com.sun.star.lib.uno.environments.remote.ThreadID;
+import com.sun.star.lib.uno.environments.remote.ThreadId;
 
 import com.sun.star.uno.IMethodDescription;
 import com.sun.star.uno.ITypeDescription;
@@ -97,7 +97,7 @@ import com.sun.star.uno.Type;
  * from uno. The functionality is reachable through
  * the <code>IProtocol</code> interface.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2001-05-08 09:41:01 $
+ * @version     $Revision: 1.10 $ $ $Date: 2001-05-17 12:46:28 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -116,11 +116,11 @@ public class urp extends Protocol {
 
     private String   _in_oid;
     private ITypeDescription     _in_interface;
-    private ThreadID _in_threadId;
+    private ThreadId _in_threadId;
 
     private String   _out_oid;
     private ITypeDescription     _out_interface;
-    private ThreadID _out_threadId;
+    private ThreadId _out_threadId;
 
     private int       _message_count;
     private boolean   _ignore_cache;
@@ -166,7 +166,7 @@ public class urp extends Protocol {
 
     private Object readReply(byte header, boolean exception[]) {
         if((header & NEWTID) != 0) // new thread id ?
-            _in_threadId = _unmarshal.readThreadID();
+            _in_threadId = _unmarshal.readThreadId();
 
         // get the out signature and parameter array of the reply
         Object objects[] = (Object[])removePendingRequest(_in_threadId);
@@ -274,7 +274,7 @@ public class urp extends Protocol {
             _in_oid = _unmarshal.readOid();
 
         if((header & NEWTID) != 0) // new thread id ?
-            _in_threadId = _unmarshal.readThreadID();
+            _in_threadId = _unmarshal.readThreadId();
 
         _ignore_cache = ((header & IGNORECACHE) != 0); // do not use cache for this request?
 
@@ -316,7 +316,7 @@ public class urp extends Protocol {
     public void writeRequest(String oid,
                              ITypeDescription zInterface,
                              String operation,
-                             ThreadID threadId,
+                             ThreadId threadId,
                              Object params[],
                              Boolean synchron[],
                              Boolean mustReply[])
@@ -413,7 +413,7 @@ public class urp extends Protocol {
                 _marshal.writeOid(_out_oid);
 
             if(threadId != null) // has the thread id changed? -> write it
-                _marshal.writeThreadID(threadId);
+                _marshal.writeThreadId(threadId);
         }
         else { // simple request
             if(iMethodDescription.getIndex() <= 0x2f) // does the method id fit in the header?
@@ -443,7 +443,7 @@ public class urp extends Protocol {
             putPendingRequest(_out_threadId, new Object[]{params, out_sig, iMethodDescription.getReturnSignature()});
     }
 
-    public void writeReply(boolean exception, ThreadID threadId, Object result) {
+    public void writeReply(boolean exception, ThreadId threadId, Object result) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".writeReply:" + exception + " " + threadId + " " + result);
 
         ++ _message_count;
@@ -473,7 +473,7 @@ public class urp extends Protocol {
         _marshal.writebyte(header);
 
         if(threadId != null) // has the thread id changed? -> write it
-            _marshal.writeThreadID(threadId);
+            _marshal.writeThreadId(threadId);
 
         // write the result
         _marshal.writeObject(resType, result);
@@ -515,7 +515,7 @@ public class urp extends Protocol {
         Object    _result;
         ITypeDescription      _iTypeDescription;
         String    _operation;
-        ThreadID  _threadId;
+        ThreadId  _threadId;
         boolean   _synchron;
         boolean   _mustReply;
         boolean   _exception;
@@ -525,7 +525,7 @@ public class urp extends Protocol {
                 Object    result,
                 ITypeDescription      iTypeDescription,
                 String    operation,
-                ThreadID  threadId,
+                ThreadId  threadId,
                 boolean   synchron,
                 boolean   mustReply,
                 boolean   exception,
@@ -546,7 +546,7 @@ public class urp extends Protocol {
             return _operation;
         }
 
-        public ThreadID getThreadID() {
+        public ThreadId getThreadId() {
             return _threadId;
         }
 
