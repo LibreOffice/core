@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbtn.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:52:49 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_SPIN_CXX
-
-#ifndef _SV_RCID_H
-#include <rcid.h>
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
 #endif
 #ifndef _SV_SPIN_H
 #include <spin.h>
