@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-29 15:35:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,5 +456,13 @@ BOOL VirtualDevice::SetOutputSizePixel( const Size& rNewSize, BOOL bErase )
 
     return bRet;
 #endif
+}
+
+void VirtualDevice::SetReferenceDevice()
+{
+    // reference device has 600dpi
+    mnDPIX = 600;
+    mnDPIY = 600;
+    // TODO: increase maFont's size accordingly?
 }
 
