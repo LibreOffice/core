@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:16:31 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,8 @@ public class ReportWizard {
     boolean[] baskbeforeOverwrite = new boolean[2];
     boolean[] bmodifiedbySaveAsDialog = new boolean[2];
     boolean bfinalaskbeforeOverwrite;
-    boolean[] bCommandIsSelected = new boolean[1];
-    boolean[] bDataSourceIsSelected = new boolean[1];
+//    boolean[] bCommandIsSelected = new boolean[1];
+//    boolean[] bDataSourceIsSelected = new boolean[1];
     int iOldContentPos;
     int iOldLayoutPos;
     int ScrollBarValue;
@@ -365,7 +365,7 @@ public class ReportWizard {
             bGetConnection = CurReportDocument.CurDBMetaData.getConnection(sMsgNoConnection, sMsgConnectionImpossible);
         else
             bGetConnection = true;
-        bCommandIsSelected[0] = false;
+//      bCommandIsSelected[0] = false;
         fillupCommandListBox(CurReportDocument.CurDBMetaData, false);
         }
         if (bGetConnection == false)
@@ -529,10 +529,10 @@ public class ReportWizard {
         int iKey  =  CurUNODialog.getControlKey(mouseEvent.Source, CurUNODialog.ControlList);
         switch (iKey) {
         case SODBLST:
-            CurUNODialog.deletefirstListboxEntry("lstDatabases", slstDatabasesDefaultText, bDataSourceIsSelected);
+            CurUNODialog.deletefirstListboxEntry("lstDatabases", slstDatabasesDefaultText); //, bDataSourceIsSelected);
             break;
         case SOTBLLST:
-            CurUNODialog.deletefirstListboxEntry("lstTables", slstTablesDefaultText, bCommandIsSelected);
+            CurUNODialog.deletefirstListboxEntry("lstTables", slstTablesDefaultText);//, bCommandIsSelected);
             break;
         default:
             break;
@@ -554,17 +554,17 @@ public class ReportWizard {
         int iKey  =  CurUNODialog.getControlKey(EventObject.Source, CurUNODialog.ControlList);
         switch (iKey) {
         case SODBLST:
-            if (bDataSourceIsSelected[0] == true){
-            CurUNODialog.deletefirstListboxEntry("lstDatabases", slstDatabasesDefaultText, bDataSourceIsSelected);
+//          if (bDataSourceIsSelected[0] == true){
+            CurUNODialog.deletefirstListboxEntry("lstDatabases", slstDatabasesDefaultText); //, bDataSourceIsSelected);
             getSelectedDBMetaData(xMSF);
-            }
+//          }
             break;
 
         case SOTBLLST:
-                   if (bCommandIsSelected[0] == true)
-            CurUNODialog.deletefirstListboxEntry("lstTables", slstTablesDefaultText, bCommandIsSelected);
+//                  if (bCommandIsSelected[0] == true)
+            CurUNODialog.deletefirstListboxEntry("lstTables", slstTablesDefaultText); //, bCommandIsSelected);
             fillUpFieldsListbox(CurReportDocument.CurDBMetaData, true);
-            bCommandIsSelected[0] = true;
+//          bCommandIsSelected[0] = true;
             break;
 
         case SOFLDSLST:
@@ -1244,8 +1244,9 @@ public class ReportWizard {
         bIsSame = Arrays.equals(CurDBMetaData.GroupFieldNames, CurDBMetaData.OldGroupFieldNames) && (CurDBMetaData.GroupFieldNames != null);
         CurDBMetaData.OldGroupFieldNames = Tools.copyStringArray(CurDBMetaData.GroupFieldNames);
     }
-    if ((bIsSame == true) && (iStep >= 4))
+    if ((bIsSame == true) && (iStep >= 4)){
         bIsSame = Arrays.equals(CurDBMetaData.SortFieldNames, CurDBMetaData.OldSortFieldNames) && (CurDBMetaData.SortFieldNames != null);
+    }
     return !bIsSame;
     }
 
@@ -1262,11 +1263,11 @@ public class ReportWizard {
     try{
         String CurFieldTitle;
         CurUNODialog.setFocus("lstSort1");
-        if (checkIfToupdateStep(CurReportDocument.CurDBMetaData, 3) == true){
         getGroupFieldNames(CurDBMetaData);
         int FieldCount = CurDBMetaData.FieldNames.length;
         int GroupFieldCount = CurDBMetaData.GroupFieldNames.length;
-        SortFieldCount = FieldCount - CurDBMetaData.GroupFieldNames.length;
+        SortFieldCount = FieldCount - GroupFieldCount;
+        if (checkIfToupdateStep(CurReportDocument.CurDBMetaData, 3) == true){
         if (SortFieldCount == 0)
             PageAddCount = 2;
         String SortFieldNames[] = new String[SortFieldCount + 1];
@@ -1300,7 +1301,7 @@ public class ReportWizard {
         }
         //      System.out.println(xSortListBox[0].getSelectedItemPos());
         }
-    return (SortFieldCount > 0);
+        return (SortFieldCount > 0);
     }
     catch(Exception exception){
         exception.printStackTrace(System.out);
@@ -1576,7 +1577,7 @@ public class ReportWizard {
         LocDBList = UNODialogs.combineListboxList(slstDatabasesDefaultText, CurReportDocument.CurDBMetaData.DataSourceNames);
         else
         LocDBList = CurReportDocument.CurDBMetaData.DataSourceNames;
-        bDataSourceIsSelected[0] = true;
+//      bDataSourceIsSelected[0] = true;
         CurUNODialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblDatabases",
         new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
         new Object[] {new Integer(8), slblDatabases, new Integer(6), new Integer(39), new Integer(SOMAINPAGE), new Short((short) 1), new Integer(74)});
