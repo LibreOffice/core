@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdcgmfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:08:44 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ typedef BOOL ( __LOADONCALLAPI *ExportCGM )( ::rtl::OUString&, Reference< XModel
 // - SdPPTFilter -
 // ---------------
 
-SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress ) :
+SdCGMFilter::SdCGMFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress ) :
     SdFilter( rMedium, rDocShell, bShowProgress )
 {
 }
