@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-23 15:17:53 $
+ *  last change: $Author: af $ $Date: 2002-11-22 12:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,13 +518,13 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(2,
         m_pPage2Medium5RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM5) ));
     m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
-    m_aAssistentFunc.InsertControl(2,
-        m_pPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
-    m_aAssistentFunc.InsertControl(2,
         m_pPage2Medium3RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM3) ));
     m_aAssistentFunc.InsertControl(2,
         m_pPage2Medium4RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM4) ));
+    m_aAssistentFunc.InsertControl(2,
+        m_pPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
+    m_aAssistentFunc.InsertControl(2,
+        m_pPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
     m_pPage2Medium5RB->Check();
 
     m_pPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
