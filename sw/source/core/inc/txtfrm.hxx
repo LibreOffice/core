@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:28:51 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 16:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,22 @@ public:
     USHORT CalcFitToContent();
 
     // liefert den zusaetzlichen Zeilenabstand fuer den naechsten Absatz
-    USHORT GetLineSpace() const;
+    // OD 07.01.2004 #i11859# - change return data type;
+    //      add default parameter <_bNoPropLineSpacing> to control, if the
+    //      value of a proportional line spacing is returned or not
+    long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
+
+    /** determine height of last line for the calculation of the proportional line
+        spacing
+
+        OD 08.01.2004 #i11859#
+        Used by method <SwTxtFrm::GetLineSpace(..)> and class <SwCntntNotify>.
+
+        @author OD
+
+        @return long - height of last line
+    */
+    long GetHeightOfLastLineForPropLineSpacing() const;
 
     // liefert die erste Zeilenhoehe zurueck
     USHORT FirstLineHeight() const;
@@ -528,7 +543,6 @@ public:
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
 
-#ifdef BIDI
     // Calculates the coordinates of a rectangle when switching from
     // LTR to RTL layout
     void SwitchLTRtoRTL( SwRect& rRect ) const;
@@ -541,8 +555,6 @@ public:
     // Calculates the coordinates of a point when switching from
     // RTL to LTR layout.
     inline void SwitchRTLtoLTR( Point& rPoint ) const { SwitchLTRtoRTL( rPoint ); };
-
-#endif
 
     // OD 14.03.2003 #i11760# - access to new member <mbNoFollowFormat>
     inline const bool FollowFormatAllowed() const
@@ -564,6 +576,14 @@ public:
                  mnFlyAnchorOfst :
                  mnFlyAnchorOfstNoWrap );
     }
+
+    /** method to invalidate printing area of next frame
+
+        OD 09.01.2004 #i11859#
+
+        @author OD
+    */
+    void InvalidateNextPrtArea();
 };
 
 /*************************************************************************
@@ -762,8 +782,6 @@ public:
     ~SwFrmSwapper();
 };
 
-#ifdef BIDI
-
 class SwLayoutModeModifier
 {
     const OutputDevice& rOut;
@@ -774,7 +792,5 @@ public:
     void Modify( sal_Bool bChgToRTL );
     void SetAuto();
 };
-
-#endif
 
 #endif
