@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:31 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ bool GraphicPropertyItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::
 
 void GraphicPropertyItemConverter::FillSpecialItem(
     USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
 {
 //     if( m_eGraphicObjectType == LINE_DATA_POINT ||
 //         m_eGraphicObjectType == LINE_PROPERTIES )
@@ -416,6 +417,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
 bool GraphicPropertyItemConverter::ApplySpecialItem(
     USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    throw( uno::Exception )
 {
 //     if( m_eGraphicObjectType == LINE_DATA_POINT ||
 //         m_eGraphicObjectType == LINE_PROPERTIES )

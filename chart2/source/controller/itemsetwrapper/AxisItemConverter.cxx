@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:28 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ bool AxisItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & 
 }
 
 void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
 {
     if( ! m_xAxis.is() ||
         ! m_xCoordinateSystem.is() )
@@ -436,6 +437,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
 }
 
 bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    throw( uno::Exception )
 {
     if( ! ( m_xAxis.is() &&
             m_xCoordinateSystem.is()))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:30 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ bool DataPointItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUStri
 
 bool DataPointItemConverter::ApplySpecialItem(
     USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    throw( uno::Exception )
 {
     bool bChanged = false;
     uno::Any aValue;
@@ -271,6 +272,7 @@ bool DataPointItemConverter::ApplySpecialItem(
 
 void DataPointItemConverter::FillSpecialItem(
     USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
 {
     switch( nWhichId )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:17 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,10 @@ protected:
     virtual const USHORT * GetWhichPairs() const;
     virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
 
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const;
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const;
+    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+        throw( ::com::sun::star::uno::Exception );
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+        throw( ::com::sun::star::uno::Exception );
 
     void FillBitmapItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::beans::UnknownPropertyException );

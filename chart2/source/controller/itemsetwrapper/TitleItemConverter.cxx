@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:35 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ bool TitleItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString &
 
 bool TitleItemConverter::ApplySpecialItem(
     USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    throw( uno::Exception )
 {
     bool bChanged = false;
 
@@ -240,6 +241,7 @@ bool TitleItemConverter::ApplySpecialItem(
 
 void TitleItemConverter::FillSpecialItem(
     USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
 {
     switch( nWhichId )
     {

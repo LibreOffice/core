@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:32 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include "ItemConverter.hxx"
+#include "macros.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
@@ -177,24 +178,30 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
                     }
                     catch( beans::UnknownPropertyException ex )
                     {
+                        delete pItem;
                         OSL_ENSURE( false,
                                     ::rtl::OUStringToOString(
                                         ex.Message +
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                                              " - unknown Property: " )) + aPropName,
                                         RTL_TEXTENCODING_ASCII_US ).getStr());
-                        delete pItem;
                     }
                     catch( uno::Exception ex )
                     {
-                        OSL_ENSURE( false, ::rtl::OUStringToOString(
-                                        ex.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+                        ASSERT_EXCEPTION( ex );
                     }
                 }
             }
             else
             {
-                FillSpecialItem( nWhich, rOutItemSet );
+                try
+                {
+                    FillSpecialItem( nWhich, rOutItemSet );
+                }
+                catch( uno::Exception ex )
+                {
+                    ASSERT_EXCEPTION( ex );
+                }
             }
         }
     }
@@ -208,12 +215,14 @@ bool ItemConverter::GetItemPropertyName(
 
 void ItemConverter::FillSpecialItem(
     USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
     USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    throw( uno::Exception )
 {
     OSL_ENSURE( false, "ItemConverter: Unhandled special item found!" );
     return false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:17 $
+ *  last change: $Author: bm $ $Date: 2003-10-17 14:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,8 @@ protected:
 
         The default implementation does nothing except showing an assertion
      */
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const;
+    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+        throw( ::com::sun::star::uno::Exception );
 
     /** for items that can not be mapped directly to a property.
 
@@ -214,7 +215,8 @@ protected:
 
         @return true if the item changed a property, false otherwise.
      */
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const;
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+        throw( ::com::sun::star::uno::Exception );
 
     // ________
 
