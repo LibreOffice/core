@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:07:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,8 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
         }
         else
         {
-            DBG_ASSERT( MAP_TWIP == eDstUnit || MAP_POINT ||
-                        MAP_100TH_MM == eDstUnit, "unit is not supported");
+            DBG_ASSERT( MAP_TWIP == eDstUnit || MAP_POINT == eDstUnit ||
+                        MAP_100TH_MM == eDstUnit || MAP_10TH_MM == eDstUnit, "unit is not supported");
             const sal_Char *aCmpsL[2] = { 0, 0 };
             const sal_Char *aCmpsU[2] = { 0, 0 };
             double aScales[2] = { 1., 1. };
@@ -384,15 +384,16 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 }
             }
-            else if( MAP_100TH_MM == eDstUnit )
+            else if( MAP_100TH_MM == eDstUnit || MAP_10TH_MM == eDstUnit )
             {
+                double nScaleFactor = (MAP_100TH_MM == eDstUnit) ? 100.0 : 10.0;
                 switch( rString[nPos] )
                 {
                 case sal_Unicode('c'):
                 case sal_Unicode('C'):
                     aCmpsL[0] = "cm";
                     aCmpsU[0] = "CM";
-                    aScales[0] = 1000.; // mm/100
+                    aScales[0] = 10.0 * nScaleFactor; // mm/100
                     break;
                 case sal_Unicode('e'):
                 case sal_Unicode('E'):
@@ -412,17 +413,17 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                 case sal_Unicode('M'):
                     aCmpsL[0] = "mm";
                     aCmpsU[0] = "MM";
-                    aScales[0] = 100.; // mm/100
+                    aScales[0] = 1.0 * nScaleFactor; // mm/100
                     break;
                 case sal_Unicode('p'):
                 case sal_Unicode('P'):
                     aCmpsL[0] = "pt";
                     aCmpsU[0] = "PT";
-                    aScales[0] = (1000.*2.54)/72.; // mm/100
+                    aScales[0] = (10.0 * nScaleFactor*2.54)/72.; // mm/100
 
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
-                    aScales[1] = (1000.*2.54)/12.; // mm/100
+                    aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
 
         //          pCmp3 = sXML_unit_px;
         //          nToken3 = CSS1_PIXLENGTH;
