@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: armin $ $Date: 2002-03-19 11:58:57 $
+#   last change: $Author: hr $ $Date: 2002-08-19 17:33:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,15 @@ ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
+
+.IF "$(OS)"=="MACOSX"
+
+dummy:
+    @echo "		Not building the mozillasrc stuff in OpenOffice.org build"
+    @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
+
+.ELSE
+
 .INCLUDE :  $(PRJ)$/version.mk
 
 
@@ -163,6 +172,7 @@ CDEFS     += -DTRACING
 
 SHL1TARGET_NAME=$(TARGET)$(MOZAB_MAJOR)
 
+.ENDIF # MACOSX
 
 # --- Targets ----------------------------------
 
