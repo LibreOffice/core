@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-07 15:51:52 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 09:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,11 @@
 // - Defines -
 // -----------
 
-#define GRFMGR_DRAW_NOTCACHED           0x00000000UL
-#define GRFMGR_DRAW_CACHED              0x00000001UL
-#define GRFMGR_DRAW_BILINEAR            0x00000002UL
-#define GRFMGR_DRAW_STANDARD            (GRFMGR_DRAW_CACHED|GRFMGR_DRAW_BILINEAR)
+#define GRFMGR_DRAW_NOTCACHED               0x00000000UL
+#define GRFMGR_DRAW_CACHED                  0x00000001UL
+#define GRFMGR_DRAW_BILINEAR                0x00000002UL
+#define GRFMGR_DRAW_USE_DRAWMODE_SETTINGS   0x00000004UL
+#define GRFMGR_DRAW_STANDARD                (GRFMGR_DRAW_CACHED|GRFMGR_DRAW_BILINEAR)
 
 // --------------------
 // - AutoSwap Defines -

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-30 12:58:11 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 10:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,12 +663,16 @@ List* GraphicObject::GetAnimationInfoList() const
 BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                           const GraphicAttr* pAttr, ULONG nFlags )
 {
-    GraphicAttr aAttr( pAttr ? *pAttr : GetAttr() );
-    Point       aPt( rPt );
-    Size        aSz( rSz );
-    BOOL        bCropped = aAttr.IsCropped();
-    BOOL        bCached = FALSE;
-    BOOL        bRet;
+    GraphicAttr         aAttr( pAttr ? *pAttr : GetAttr() );
+    Point               aPt( rPt );
+    Size                aSz( rSz );
+    const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
+    BOOL                bCropped = aAttr.IsCropped();
+    BOOL                bCached = FALSE;
+    BOOL                bRet;
+
+    if( !( GRFMGR_DRAW_USE_DRAWMODE_SETTINGS & nFlags ) )
+        pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
 
     // mirrored horizontically
     if( aSz.Width() < 0L )
@@ -715,6 +719,8 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
     if( bCropped )
         pOut->Pop();
+
+    pOut->SetDrawMode( nOldDrawMode );
 
     return bRet;
 }

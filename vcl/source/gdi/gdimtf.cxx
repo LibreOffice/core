@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-04 17:06:28 $
+ *  last change: $Author: ka $ $Date: 2002-08-01 09:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,10 +466,6 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
         MetaAction* pAction = GetCurAction();
         const ULONG nCount = Count();
         ULONG       i  = 0, nSyncCount = ( pOut->GetOutDevType() == OUTDEV_WINDOW ) ? 0x000000ff : 0xffffffff;
-        const ULONG nOldDrawMode( pOut->GetDrawMode() );
-
-        pOut->SetDrawMode( nOldDrawMode & ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL |
-                                             DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) );
 
         if( nPos > nCount )
             nPos = nCount;
@@ -487,8 +483,6 @@ void GDIMetaFile::Play( OutputDevice* pOut, ULONG nPos )
 
             pAction = (MetaAction*) Next();
         }
-
-        pOut->SetDrawMode( nOldDrawMode );
     }
 }
 
