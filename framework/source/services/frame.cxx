@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:15 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,10 @@
 #include <classes/targetfinder.hxx>
 #endif
 
+#if SUPD>626
 #ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
+#endif
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -121,6 +123,10 @@
 
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
+#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -386,6 +392,14 @@ Reference< XStatusIndicator > SAL_CALL Frame::createStatusIndicator() throw( Run
 {
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::createStatusIndicator()" )
+
+    Reference < XStatusIndicatorSupplier > xSup( m_xController, UNO_QUERY );
+    if ( xSup.is() )
+    {
+        Reference < XStatusIndicator > xIndicator = xSup->getStatusIndicator();
+        if ( xIndicator.is() )
+            return xIndicator;
+    }
 
     // Forward operation to our helper.
     return m_xIndicatorFactoryHelper->createStatusIndicator();
