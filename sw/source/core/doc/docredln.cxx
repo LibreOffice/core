@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 14:44:24 $
+ *  last change: $Author: jp $ $Date: 2001-05-23 15:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,9 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                     if( pRedl->IsOwnRedline( *pNewRedl ) )
                     {
                         SwRedlineMode eOld = eRedlineMode;
+                        if( eOld & REDLINE_DONTCOMBINE_REDLINES )
+                            break;
+
 // auf NONE setzen, damit das Delete::Redo die RedlineDaten wieder richtig
 // zusammen fasst! Der ShowMode muss erhalten bleiben!
                         eRedlineMode = (SwRedlineMode)(eOld & ~(REDLINE_ON | REDLINE_IGNORE));

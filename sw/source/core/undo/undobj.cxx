@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:09:39 $
+ *  last change: $Author: jp $ $Date: 2001-05-23 16:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,18 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // Dinge passieren, wie z.B. eine Delete in eigenen Insert. Dann wird
     // naehmlich das gerade restaurierte wieder geloescht - nicht das gewollte
     rDoc.DeleteRedline( *pRedl, FALSE );
+
+#ifndef PRODUCT
+    USHORT nLasCnt = rDoc.GetRedlineTbl().Count();
+#endif
+    SwRedlineMode eOld = rDoc.GetRedlineMode();
+    rDoc.SetRedlineMode_intern( eOld | REDLINE_DONTCOMBINE_REDLINES );
     rDoc.AppendRedline( pRedl );
+    rDoc.SetRedlineMode_intern( eOld );
+#ifndef PRODUCT
+    ASSERT( nLasCnt + 1 == rDoc.GetRedlineTbl().Count(),
+                "Undo: can't insert a redline" );
+#endif
 }
 
 BOOL SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
@@ -1007,6 +1018,8 @@ BOOL SwUndo::FillSaveDataForFmt( const SwPaM& rRange, SwRedlineSaveDatas& rSData
                                                     *pRedl, TRUE );
                 rSData.Insert( pNewData, rSData.Count() );
             }
+
+
         }
     }
     return 0 != rSData.Count();
@@ -1070,11 +1083,14 @@ BOOL SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 
    Source Code Control System - Header
 
-   $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undobj.cxx,v 1.2 2001-01-26 18:09:39 jp Exp $
+   $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undobj.cxx,v 1.3 2001-05-23 16:00:15 jp Exp $
 
    Source Code Control System - Update
 
    $Log: not supported by cvs2svn $
+   Revision 1.2  2001/01/26 18:09:39  jp
+   new ComparePositions values and new function
+
    Revision 1.1.1.1  2000/09/19 00:08:27  hr
    initial import
 
