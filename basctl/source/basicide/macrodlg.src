@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-13 12:51:18 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 16:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,10 +431,6 @@ String RID_STR_STDMACRONAME
     Text[ turkish ] = "Makro";
     Text[ catalan ] = "Macro";
     Text[ thai ] = "มาโคร";
-};
-Bitmap RID_BMP_APPICON
-{
-    FILE = "basapp.bmp" ;
 };
 String RID_STR_BTNDEL
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:26:00 $
+ *  last change: $Author: sb $ $Date: 2002-07-03 16:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,14 +1285,6 @@ String RID_STR_DOC
     Text[ finnish ] = "Asiakirja";
     Text[ thai ] = "เอกสาร";
 };
-Bitmap RID_BMP_BRKPNT0
-{
-    FILE = "basbrk0.bmp" ;
-};
-Bitmap RID_BMP_BRKPNT1
-{
-    FILE = "basbrk.bmp" ;
-};
 String RID_BASICIDE_OBJECTBAR
 {
     Text = "Makro-Leiste" ;
@@ -1852,6 +1844,11 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ catalan ] = "Eliminar observador";
     QuickHelpText[ finnish ] = "Poista kello";
     QuickHelpText[ thai ] = "Remove Watch";
+};
+Image RID_IMG_REMOVEWATCH_HC
+{
+    ImageBitmap = Bitmap { File = "baswatr_h.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 ImageButton RID_IMGBTN_GOTOCALL
 {
@@ -3054,6 +3051,23 @@ ImageList RID_IMGLST_OBJECTS
         IMGID_LIBNOTLOADED ;
     };
 };
+ImageList RID_IMGLST_OBJECTS_HC
+{
+    ImageBitmap = Bitmap { FILE = "imh_ges.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    IdList =
+    {
+        IMGID_APPICON ;
+        IMGID_LIB ;
+        IMGID_MODULE ;
+        IMGID_MACRO ;
+        IMGID_OBJECT ;
+        IMGID_SUBOBJ ;
+        IMGID_PROP ;
+        IMGID_DOCUMENT ;
+        IMGID_LIBNOTLOADED ;
+    };
+};
 ImageList RID_IMGLST_LAYOUT
 {
     ImageBitmap = Bitmap { FILE = "im_ges2.bmp" ; };
@@ -3066,15 +3080,27 @@ ImageList RID_IMGLST_LAYOUT
         IMGID_ERRORMARKER ;
     };
 };
-Image RID_IMG_MARKER
+ImageList RID_IMGLST_LAYOUT_HC
 {
-    ImageBitmap = Bitmap { File = "basstep.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+    ImageBitmap = Bitmap { FILE = "imh_ges2.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    IdList =
+    {
+        IMGID_BRKENABLED ;
+        IMGID_BRKDISABLED ;
+        IMGID_STEPMARKER ;
+        IMGID_ERRORMARKER ;
+    };
 };
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+};
+Image RID_IMG_LOCKED_HC
+{
+    ImageBitmap = Bitmap { File = "locked_h.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 String RID_STR_QUERYREPLACEMACRO
 {
@@ -3102,33 +3128,3 @@ String RID_STR_QUERYREPLACEMACRO
     Text[ catalan ] = "Do you want to overwrite the macro XX ?";
     Text[ thai ] = "Do you want to overwrite the macro XX ?";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
