@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 12:48:35 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 09:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #endif
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
+#endif
+#ifndef _SFXDOCINF_HXX
+#include <sfx2/docinf.hxx>
 #endif
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
@@ -251,6 +254,13 @@
 #include <svtools/zforlist.hxx>
 #endif
 
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
+#ifndef _DRAWDOC_HXX
+#include <drawdoc.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace com::sun::star::i18n;
@@ -2076,6 +2086,51 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             aRequest.AppendItem(SfxUInt16Item( SID_ATTR_YEAR2000, static_cast < sal_uInt16 > ( nYear ) ) );
             pDocShell->Execute ( aRequest );
         }
+        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
+        {
+            SwDrawDocument * pDrawDoc;
+            sal_Bool bAuto = *(sal_Bool*)aValue.getValue();
+
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+                pDrawDoc->SetOpenInDesignMode( bAuto );
+            else if (bAuto)
+            {
+                // if setting to true, and we don't have an
+                // SdrModel, then we are changing the default and
+                // must thus create an SdrModel, if we don't have an
+                // SdrModel and we are leaving the default at false,
+                // we don't need to make an SdrModel and can do nothing
+                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
+                pDrawDoc->SetOpenInDesignMode ( bAuto );
+            }
+        }
+        break;
+        case WID_DOC_APPLY_FORM_DESIGN_MODE:
+        {
+            SwDrawDocument * pDrawDoc;
+            sal_Bool bMode = *(sal_Bool*)aValue.getValue();
+
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+                pDrawDoc->SetOpenInDesignMode( bMode );
+            else if (!bMode)
+            {
+                // if setting to false, and we don't have an
+                // SdrModel, then we are changing the default and
+                // must thus create an SdrModel, if we don't have an
+                // SdrModel and we are leaving the default at true,
+                // we don't need to make an SdrModel and can do
+                // nothing
+                pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->MakeDrawModel() );
+                pDrawDoc->SetOpenInDesignMode ( bMode );
+            }
+        }
+        case WID_DOC_APPLY_USER_DATA:
+        {
+            SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
+            sal_Bool bUseUserData = *(sal_Bool*)aValue.getValue();
+            rInfo.SetUseUserData(bUseUserData);
+        }
+        break;
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -2218,6 +2273,34 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             sal_Bool bParaSpace = pDocShell->GetDoc()->IsKernAsianPunctuation();
             aAny.setValue(&bParaSpace, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
+        {
+            SwDrawDocument * pDrawDoc;
+            sal_Bool bAuto;
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+                bAuto = pDrawDoc->GetAutoControlFocus();
+            else
+                bAuto = sal_False;
+            aAny.setValue(&bAuto, ::getBooleanCppuType());
+        }
+        break;
+        case WID_DOC_APPLY_FORM_DESIGN_MODE:
+        {
+            SwDrawDocument * pDrawDoc;
+            sal_Bool bMode;
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+                bMode = pDrawDoc->GetOpenInDesignMode();
+            else
+                bMode = sal_True;
+            aAny.setValue(&bMode, ::getBooleanCppuType());
+        }
+        case WID_DOC_APPLY_USER_DATA:
+        {
+            SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
+            sal_Bool bUseUserInfo = rInfo.IsUseUserData();
+            aAny.setValue(&bUseUserInfo, ::getBooleanCppuType());
         }
         break;
         case WID_DOC_CHARACTER_COMPRESSION_TYPE:
@@ -2380,6 +2463,28 @@ PropertyState SAL_CALL SwXTextDocument::getPropertyState( const OUString& rPrope
         case WID_DOC_ADD_PARA_TABLE_SPACING_AT_START:
         {
             if (!pDocShell->GetDoc()->IsParaSpaceMaxAtPages())
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
+        {
+            SwDrawDocument * pDrawDoc;
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) &&
+                   !pDrawDoc->GetAutoControlFocus())
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+        case WID_DOC_APPLY_FORM_DESIGN_MODE:
+        {
+            SwDrawDocument * pDrawDoc;
+            if ( ( pDrawDoc = reinterpret_cast < SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) &&
+                   pDrawDoc->GetOpenInDesignMode())
+                eRet = PropertyState_DEFAULT_VALUE;
+        }
+        case WID_DOC_APPLY_USER_DATA:
+        {
+            SfxDocumentInfo &rInfo = pDocShell->GetDocInfo();
+            if (rInfo.IsUseUserData())
                 eRet = PropertyState_DEFAULT_VALUE;
         }
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 14:41:33 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 09:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@
 #define WID_DOC_IS_KERN_ASIAN_PUNCTUATION       1016
 #define WID_DOC_CHARACTER_COMPRESSION_TYPE      1017
 #define WID_DOC_TWO_DIGIT_YEAR                  1018
+#define WID_DOC_AUTOMATIC_CONTROL_FOCUS         1019
+#define WID_DOC_APPLY_FORM_DESIGN_MODE          1020
+#define WID_DOC_APPLY_USER_DATA                 1021
 
 //AutoText
 #define WID_GROUP_PATH                          0

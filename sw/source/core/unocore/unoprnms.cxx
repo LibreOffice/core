@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-03 14:44:39 $
+ *  last change: $Author: mtg $ $Date: 2001-04-06 09:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,3 +696,6 @@ const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME                        (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_IS_KERN_ASIAN_PUNCTUATION           (MAP_CHAR_LEN("IsKernAsianPunctuation"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_COMPRESSION_TYPE          (MAP_CHAR_LEN("CharacterCompressionType"));
 const SwPropNameLen __FAR_DATA UNO_NAME_TWO_DIGIT_YEAR                      (MAP_CHAR_LEN("TwoDigitYear"));
+const SwPropNameLen __FAR_DATA UNO_NAME_AUTOMATIC_CONTROL_FOCUS             (MAP_CHAR_LEN("AutomaticControlFocus"));
+const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_FORM_DESIGN_MODE              (MAP_CHAR_LEN("ApplyFormDesignMode"));
+const SwPropNameLen __FAR_DATA UNO_NAME_APPLY_USER_DATA                     (MAP_CHAR_LEN("ApplyUserData"));
