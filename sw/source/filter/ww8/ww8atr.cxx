@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:39:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3109,7 +3109,7 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                     pTxtNd = (SwTxtNode*)rWW8Wrt.pOutFmtNode;
                     const SwNodeNum* pNum = pTxtNd->GetNum();
 
-                    if( pNum && NO_NUM > pNum->GetLevel() )
+                    if( pNum && pNum->IsShowNum() )
                         nLvl = GetRealLevel( pNum->GetLevel() );
 
                     if (pNum && (USHRT_MAX != pNum->GetSetValue() || pNum->IsStart()))
