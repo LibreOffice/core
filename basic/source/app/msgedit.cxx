@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgedit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-11 08:38:47 $
+ *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,11 @@ BOOL TTTreeListBox::DoubleClickHdl()
         {
             AppWin *pWin = pBasicFrame->FindModuleWin( aFilename );
             pWin->ToTop();
+        }
+        else if ( pBasicFrame->Basic().FindModule( CUniString( "--" ).Append( aFilename ) ) )
+        {
+            SbModule* pMod = pBasicFrame->Basic().FindModule( CUniString( "--" ).Append( aFilename ) );
+            pBasicFrame->CreateModuleWin( pMod );
         }
         else
             pBasicFrame->LoadFile( aFilename );

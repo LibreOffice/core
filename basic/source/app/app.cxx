@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-12 13:47:08 $
+ *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1280,6 +1280,19 @@ IMPL_LINK( BasicFrame, WinInfo, WinInfoRec*, pWinInfo )
         pDisplayHidDlg->Show();
     }
     return 0;
+}
+
+AppBasEd* BasicFrame::CreateModuleWin( SbModule* pMod )
+{
+    String aModName = pMod->GetName();
+    if ( aModName.Copy(0,2).CompareToAscii("--") == COMPARE_EQUAL )
+        aModName.Erase(0,2);
+    pMod->SetName(aModName);
+    AppBasEd* p = new AppBasEd( this, pMod );
+    p->Show();
+    p->GrabFocus();
+    p->ToTop();
+    return p;
 }
 
 BOOL BasicFrame::LoadFile( String aFilename )

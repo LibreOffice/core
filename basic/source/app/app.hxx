@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:15:43 $
+ *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ public:
     BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave );// Dateinamen ermitteln
     DECL_LINK( ModuleWinExists, String* );
     DECL_LINK( WriteString, String* );
+    AppBasEd* CreateModuleWin( SbModule* pMod );
     AppBasEd* FindModuleWin( const String& );
     AppError* FindErrorWin( const String& );
     AppWin* FindWin( const String& );

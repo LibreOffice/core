@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-03-18 15:01:56 $
+ *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,25 +223,18 @@ BOOL MyBasic::Compile( SbModule* p )
 
 BOOL MyBasic::ErrorHdl()
 {
-    AppBasEd *pCurrWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
-    if(pCurrWin)
-        pCurrWin->ToTop();
-    else
+    AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( GetActiveModule()->GetName() );
+    if( !pWin )
     {       // erstmal Fenster aufmachen
-        String aModName = GetActiveModule()->GetName();
-        if ( aModName.Copy(0,2).CompareToAscii("--") == COMPARE_EQUAL )
-            aModName.Erase(0,2);
-        GetActiveModule()->SetName(aModName);
-        AppBasEd* p = new AppBasEd( aBasicApp.pFrame, GetActiveModule() );
-        p->Show();
-        p->GrabFocus();
-        pCurrWin = p;
+        pWin = aBasicApp.pFrame->CreateModuleWin( GetActiveModule() );
     }
+    else
+        pWin->ToTop();
     if( IsCompilerError() )
     {
         aErrors.Insert(
           new BasicError
-            ( pCurrWin,
+            ( pWin,
               0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
               LIST_APPEND );
         nError++;
@@ -249,7 +242,7 @@ BOOL MyBasic::ErrorHdl()
     }
     else
     {
-        ReportRuntimeError( pCurrWin );
+        ReportRuntimeError( pWin );
         return FALSE;
     }
 }
@@ -277,19 +270,13 @@ USHORT MyBasic::BreakHdl()
     SbModule* pMod = GetActiveModule();
     if( pMod )
     {
-        AppEdit* pWin = aBasicApp.pFrame->FindModuleWin( pMod->GetName() );
+        AppBasEd* pWin = aBasicApp.pFrame->FindModuleWin( pMod->GetName() );
         if( !pWin )
         {       // erstmal Fenster aufmachen
-            String aModName = GetActiveModule()->GetName();
-            if ( aModName.Copy(0,2).CompareToAscii("--") == COMPARE_EQUAL )
-                aModName.Erase(0,2);
-            GetActiveModule()->SetName(aModName);
-            AppWin* p = new AppBasEd( aBasicApp.pFrame, GetActiveModule() );
-            p->Show();
-            p->GrabFocus();
-            p->ToTop();
-            pWin = aBasicApp.pFrame->FindModuleWin( aModName );
+            pWin = aBasicApp.pFrame->CreateModuleWin( pMod );
         }
+        else
+            pWin->ToTop();
         pWin->Highlight( GetLine(), GetCol1(), GetCol2() );
     }
 
