@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:40:00 $
+ *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,686 +160,11 @@ using namespace com::sun::star;
 extern const sal_Char* pVBAStorageName;
 extern const sal_Char* pVBASubStorageName;
 
-ExcStreamConsumer::ExcStreamConsumer() :
-    pNode               ( NULL ),
-    nBytesLeft          ( 0 )
-{
-};
-
-ExcStreamConsumer::~ExcStreamConsumer()
-{
-    while ( pNode )
-        RemoveNode();
-}
-
-void ExcStreamConsumer::UpdateNode( const DffRecordHeader& rHd )
-{
-    while ( pNode && ( ( pNode->nPos + pNode->nSize ) <= rHd.nFilePos ) )
-        RemoveNode();
-    ExcStreamNode* pTemp = pNode;
-    pNode = new ExcStreamNode;
-    pNode->nPos = rHd.nFilePos;
-    pNode->nSize = rHd.nRecLen + 8;
-    pNode->pPrev = pTemp;
-}
-
-void ExcStreamConsumer::RemoveNode()
-{
-    ExcStreamNode* pTemp = pNode;
-    pNode = pNode->pPrev;
-    delete pTemp;
-}
-
-const DffRecordHeader* ExcStreamConsumer::Consume( SvStream& rSrcStrm )
-{
-    sal_uInt32 nEntry = aStrm.Tell();
-    sal_uInt32 nSrcLen = rSrcStrm.Seek( STREAM_SEEK_TO_END );
-    if( !nSrcLen )
-        return NULL;
-
-    rSrcStrm.Seek( STREAM_SEEK_TO_BEGIN );
-    sal_Char* pBuf = new sal_Char[ nSrcLen ];
-    rSrcStrm.Read( pBuf, nSrcLen );
-    aStrm.Write( pBuf, nSrcLen );
-    delete[] pBuf;
-
-    sal_uInt32 nPos = aStrm.Tell();
-    aStrm.Seek( nEntry );
-    if( nBytesLeft )
-    {
-        if( nSrcLen < nBytesLeft )
-        {
-            aStrm.SeekRel( nSrcLen );
-            nBytesLeft -= nSrcLen;
-        }
-        else
-        {
-            aStrm.SeekRel( nBytesLeft );
-            nBytesLeft = 0;
-        }
-    }
-    while( aStrm.Tell() < nPos )
-    {
-        aStrm >> aHd;
-        if( aHd.IsContainer() )
-            UpdateNode( aHd );
-        else if( (aStrm.Tell() + aHd.nRecLen) <= nPos )
-            aStrm.SeekRel( aHd.nRecLen );
-        else
-        {
-            nBytesLeft = aStrm.Tell() + aHd.nRecLen - nPos;
-            aStrm.Seek( nPos );
-        }
-    }
-    aStrm.Seek( nPos );
-
-    return nBytesLeft ? NULL : &aHd;
-}
-
-sal_Bool ExcStreamConsumer::AppendData( sal_Char* pBuf, sal_uInt32 nLen )
-{
-    sal_Bool bRetValue = FALSE;
-    if ( aHd.nRecType && ( aHd.IsContainer() == FALSE ) && ( nBytesLeft == 0 ) )
-    {
-        while ( pNode && ( ( pNode->nPos + pNode->nSize ) <= aHd.nFilePos ) )
-            RemoveNode();
-        ExcStreamNode* pTemp = pNode;
-        while ( pTemp )
-        {
-            pTemp->nSize += nLen;               // updating container sizes
-            aStrm.Seek( pTemp->nPos + 4 );
-            aStrm << ( pTemp->nSize - 8 );
-            pTemp = pTemp->pPrev;
-        }
-        aHd.nRecLen += nLen;
-        aStrm.Seek( aHd.nFilePos + 4 );        // updating atom size
-        aStrm << aHd.nRecLen;
-        aStrm.Seek( STREAM_SEEK_TO_END );
-        aStrm.Write( pBuf, nLen );
-        return TRUE;
-    }
-    return bRetValue;
-}
-
-struct PosBufferCont
-{
-    const UINT32        nStart;
-    const UINT32        nEnd;
-    const UINT32        nObjNum;
-    const UINT16        nTabNum;
-
-    ClientAnchorData*   pAnchDat;
-
-    inline              PosBufferCont( const UINT32 nS, const UINT32 nE, const UINT32 nO,
-                                        const UINT16 nTab );
-    inline              ~PosBufferCont();
-    inline BOOL         IsInRange( const UINT32 n ) const;
-    inline void         SetAnchor( ClientAnchorData* p );
-};
-
-
-inline PosBufferCont::PosBufferCont( const UINT32 nS, const UINT32 nE, const UINT32 nO,
-    const UINT16 nTab ) :
-    nStart( nS ), nEnd( nE ), nObjNum( nO ), pAnchDat( NULL ), nTabNum( nTab )
-{
-}
-
-
-inline PosBufferCont::~PosBufferCont()
-{
-    if( pAnchDat )
-        delete pAnchDat;
-}
-
-
-inline BOOL PosBufferCont::IsInRange( const UINT32 n ) const
-{
-    return ( n >= nStart && n <= nEnd );
-}
-
-
-inline void PosBufferCont::SetAnchor( ClientAnchorData* p )
-{
-    p->nTab = nTabNum;
-
-    if( pAnchDat )
-        delete pAnchDat;
-    pAnchDat = p;
-}
-
-
-
-Biff8MSDffManager::Biff8MSDffManager(
-                    RootData*           p,
-                    PosBuffer&          rPosBuffer,
-                    ExcEscherObjList&   rEOL,
-                    SvStream&           rStCtrl,
-                    long                nOffsDgg,
-                    SvStream*           pStData,
-                    SdrModel*           pSdrModel_,
-                    long                nApplicationScale,
-                    ColorData           mnDefaultColor_,
-                    ULONG               nDefaultFontHeight_,
-                    SvStream*           pStData2_ ) :
-    ExcRoot( p ),
-    rPosBuff( rPosBuffer ),
-    rEscherObjList( rEOL ),
-    SvxMSDffManager( rStCtrl, nOffsDgg, pStData, pSdrModel_, nApplicationScale, mnDefaultColor_,
-                    nDefaultFontHeight_, pStData2_ )
-{
-    SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | SVXMSDFF_SETTINGS_IMPORT_EXCEL );
-}
-
-
-Biff8MSDffManager::~Biff8MSDffManager()
-{
-}
-
-
-void Biff8MSDffManager::ProcessClientAnchor2( SvStream& rStr, DffRecordHeader& rH, void*, DffObjData& rD )
-{
-    rH.SeekToContent( rStr );
-    rStr.SeekRel( 2 );
-    UINT32                  nFilePos = rStr.Tell();
-
-    ClientAnchorData*   p = new ClientAnchorData;
-
-    if( rPosBuff.SetAnchorData( rStr.Tell(), p ) )
-    {
-        rStr >> p->nCol >> p->nX >> p->nRow >> p->nY >> p->nDCol >> p->nDX >> p->nDRow >> p->nDY;
-
-        const UINT16        nAnchTab = p->nTab;
-        const UINT16        nAnchRow = p->nRow;
-        const UINT16        nAnchCol = p->nCol;
-        ScDocument*         pDoc = pExcRoot->pDoc;
-
-        Rectangle&          rRect = rD.aChildAnchor;
-        rRect.nLeft     = XclImpHelper::CalcX( nAnchTab, nAnchCol, p->nX, HMM_PER_TWIPS, pDoc );
-        rRect.nTop      = XclImpHelper::CalcY( nAnchTab, nAnchRow, p->nY, HMM_PER_TWIPS, pDoc );
-        rRect.nRight    = XclImpHelper::CalcX( nAnchTab, p->nDCol, p->nDX, HMM_PER_TWIPS, pDoc );
-        rRect.nBottom   = XclImpHelper::CalcY( nAnchTab, p->nDRow, p->nDY, HMM_PER_TWIPS, pDoc );
-
-        rD.bChildAnchor = TRUE;
-
-        UINT32              nObjNum;
-        if( rPosBuff.GetObjNum( nFilePos, nObjNum ) )
-        {
-            ExcEscherObj* pObj = (ExcEscherObj*) rEscherObjList.Get( nObjNum );
-            if ( pObj )
-            {
-                pObj->SetAnchor( rRect );
-                if ( pObj->GetObjType() == OT_OLE )
-                {
-                        ((ExcEscherOle*)pObj)->SetBlipId( GetPropertyValue( DFF_Prop_pib ) );
-                }
-            }
-        }
-    }
-    else
-        delete p;
-}
-
-
-SdrObject* Biff8MSDffManager::ProcessObj(
-    SvStream& rSt, DffObjData& rObjData, void* pData, Rectangle& rTextRect, SdrObject* pRet )
-{
-    if( pRet && ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
-        ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
-    {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-        pRet->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
-
-//-/        SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-//-/        pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
-//-/        pRet->SetItemSet(*pSet);
-//-/
-//-/        delete pSet;
-    }
-
-    if( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
-    {
-        const DffRecordHeader* pHd = maShapeRecords.Current();
-        sal_Bool bDummy = FALSE;
-    }
-
-    if( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientTextbox, SEEK_FROM_CURRENT_AND_RESTART ) )
-    {
-        const DffRecordHeader* pHd = maShapeRecords.Current();
-        sal_Bool bDummy = FALSE;
-    }
-
-    UINT32                      nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
-    if( nTextId )
-    {
-        if( rObjData.eShapeType == mso_sptRectangle )
-            delete pRet, pRet = NULL;
-
-        SdrObject*              pTObj = NULL;
-
-        // Abstaende an den Raendern der Textbox lesen
-
-        INT32                   nDefault = 92076;
-        if( GetPropertyValue( DFF_Prop_FitTextToShape ) & 0x08 )
-            nDefault = 20000;   // auto default
-
-        INT32                   nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, nDefault );
-        INT32                   nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, nDefault );
-        INT32                   nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, nDefault / 2 );
-        INT32                   nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, nDefault / 2 );
-        ScaleEmu( nTextLeft );
-        ScaleEmu( nTextRight );
-        ScaleEmu( nTextTop );
-        ScaleEmu( nTextBottom );
-        // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin, hier rausrechnen
-        rTextRect.Bottom() -= nTextTop + nTextBottom;
-
-        INT32                   nTextRotationAngle = 0;
-        if( IsProperty( DFF_Prop_txflTextFlow ) )
-        {
-            MSO_TextFlow eTextFlow = (MSO_TextFlow)( GetPropertyValue( DFF_Prop_txflTextFlow ) & 0xFFFF );
-            switch( eTextFlow )
-            {
-                case mso_txflBtoT :                     // Bottom to Top non-@, unten -> oben
-                    nTextRotationAngle = 9000;
-                break;
-                case mso_txflTtoBA :    /* #68110# */   // Top to Bottom @-font, oben -> unten
-                case mso_txflTtoBN :                    // Top to Bottom non-@, oben -> unten
-                case mso_txflVertN :                    // Vertical, non-@, oben -> unten
-                    nTextRotationAngle = 27000;
-                break;
-                case mso_txflHorzN :                    // Horizontal non-@, normal
-                case mso_txflHorzA :                    // Horizontal @-font, normal
-                default :
-                    nTextRotationAngle = 0;
-                break;
-            }
-            if( nTextRotationAngle )
-            {
-                if( rObjData.nSpFlags & SP_FFLIPV )
-                {
-                    if( nTextRotationAngle == 9000 )
-                        nTextRotationAngle = 27000;
-                    else if( nTextRotationAngle == 27000 )
-                        nTextRotationAngle = 9000;
-                }
-                Point nCenter( rTextRect.Center() );
-                long            nDX = rTextRect.Right() - rTextRect.Left();
-                long            nDY = rTextRect.Bottom() - rTextRect.Top();
-                rTextRect.Left()       = nCenter.X() - nDY/2;
-                rTextRect.Top()        = nCenter.Y() - nDX/2;
-                rTextRect.Right()      = rTextRect.Left() + nDY;
-                rTextRect.Bottom()     = rTextRect.Top()  + nDX;
-            }
-        }
-        pTObj = new SdrRectObj( OBJ_TEXT, rTextRect );
-
-
-        if( nTextRotationAngle )
-        {
-            double              f = nTextRotationAngle * nPi180;
-            pTObj->NbcRotate( rTextRect.Center(), nTextRotationAngle, sin( f ), cos( f ) );
-        }
-
-        SfxItemSet              aSet( pSdrModel->GetItemPool() );
-        if( !pRet )
-        {
-            if( ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) &&
-                ( IsProperty( DFF_Prop_fillColor ) == 0 ) )
-            {   // maybe if there is no color, we could do this in ApplyAttributes ( writer ?, calc ? )
-                pTObj->SetItem(XFillColorItem(XubString(), Color(0xffffff)));
-
-//-/                SfxItemSet* pSet = new SfxItemSet( pSdrModel->GetItemPool() );
-//-/                pSet->Put( XFillColorItem( XubString(), Color( 0xffffff ) ) );
-//-/                pTObj->NbcSetAttributes( *pSet, FALSE );
-//-/
-//-/                delete pSet;
-            }
-
-            ((SvxMSDffManager*)this)->ApplyAttributes( rSt, aSet, pTObj );
-        }
-        switch( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
-        {
-            case mso_wrapNone :
-            {
-                if( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )   // be sure this is FitShapeToText
-                    aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-            }
-                break;
-
-            case mso_wrapByPoints :
-                aSet.Put( SdrTextContourFrameItem( TRUE ) );
-                break;
-        }
-
-        // Abstaende an den Raendern der Textbox setzen
-        aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
-        aSet.Put( SdrTextRightDistItem( nTextRight ) );
-        aSet.Put( SdrTextUpperDistItem( nTextTop ) );
-        aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
-
-        // Textverankerung lesen
-        if( IsProperty( DFF_Prop_anchorText ) )
-        {
-            MSO_Anchor          eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
-
-            SdrTextVertAdjust   eTVA = SDRTEXTVERTADJUST_CENTER;
-            BOOL                bTVASet = FALSE;
-            SdrTextHorzAdjust   eTHA = SDRTEXTHORZADJUST_CENTER;
-            BOOL                bTHASet = FALSE;
-
-            switch( eTextAnchor )
-            {
-                case mso_anchorTop:
-                {
-                    eTVA = SDRTEXTVERTADJUST_TOP;
-                    bTVASet = TRUE;
-                }
-                    break;
-                case mso_anchorTopCentered:
-                {
-                    eTVA = SDRTEXTVERTADJUST_TOP;
-                    bTVASet = TRUE;
-                    bTHASet = TRUE;
-                }
-                    break;
-
-                case mso_anchorMiddle:
-                    bTVASet = TRUE;
-                    break;
-                case mso_anchorMiddleCentered:
-                {
-                    bTVASet = TRUE;
-                    bTHASet = TRUE;
-                }
-                    break;
-                case mso_anchorBottom:
-                {
-                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                    bTVASet = TRUE;
-                }
-                    break;
-                case mso_anchorBottomCentered:
-                {
-                    eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                    bTVASet = TRUE;
-                    bTHASet = TRUE;
-                }
-                    break;
-            }
-
-            // Einsetzen
-            if( bTVASet )
-                aSet.Put( SdrTextVertAdjustItem( eTVA ) );
-            if( bTHASet )
-                aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
-        }
-
-        aSet.Put( SdrTextMinFrameHeightItem( rTextRect.Bottom() - rTextRect.Top() ) );
-        pTObj->SetModel( pSdrModel );
-
-//-/        pTObj->NbcSetAttributes( aSet, FALSE );
-        pTObj->SetItemSet(aSet);
-
-
-        UINT32                  nObjNum;
-
-        if( rPosBuff.GetObjNum( rObjData.rSpHd.nFilePos, nObjNum ) )
-        {
-            ExcEscherTxo*       pExcTxoObj = rEscherObjList.GetTxo( nObjNum );
-            if( pExcTxoObj )
-                pExcTxoObj->Apply( pTObj );
-        }
-
-        if( pTObj )
-        {   // rotate text with shape ?
-            if( mnFix16Angle )
-            {
-                double          f = mnFix16Angle * nPi180;
-                pTObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle, sin( f ), cos( f ) );
-            }
-
-            if( pRet )
-            {
-                SdrObject*      pGroup = new SdrObjGroup;
-                pGroup->GetSubList()->NbcInsertObject( pRet );
-                pGroup->GetSubList()->NbcInsertObject( pTObj );
-                pRet = pGroup;
-            }
-            else
-                pRet = pTObj;
-        }
-//      if( !rObjData.bCalledByGroup )
-            if( ( rObjData.nCalledByGroup == 0 )
-                ||
-                ( (rObjData.nSpFlags & SP_FGROUP)
-                 && (rObjData.nCalledByGroup < 2) )
-              )
-            StoreShapeOrder( rObjData.nShapeId, nTextId, pRet );
-    }
-    return pRet;
-}
-
-
-ULONG Biff8MSDffManager::Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const
-{
-    return nStreamPos + 4;
-}
-
-
-FASTBOOL Biff8MSDffManager::GetColorFromPalette( USHORT n, Color& r) const
-{
-    const SvxColorItem* p = pExcRoot->pColor->GetColor( n, FALSE );
-
-    if( p )
-    {
-        r = p->GetValue();
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-
-BOOL Biff8MSDffManager::ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const
-{
-    UINT32  n;
-
-    if( rPosBuff.GetObjNum( nFilePos, n ) )
-    {
-        const ExcEscherObj* p = rEscherObjList.Get( n );
-        if( p && p->GetObjType() == OT_TXO )
-        {
-            return ( ( const ExcEscherTxo* ) p )->GetText() != NULL;
-        }
-    }
-
-    return FALSE;
-}
-
-void Biff8MSDffManager::SetSdrObject( ExcEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData )
-{
-    SdrObject* pSdrObj = NULL;
-    BOOL bRet = GetShape( nId, pSdrObj, rData );
-    if( bRet )
-        pEscherObj->SetObj( pSdrObj );
-    else if( pSdrObj )
-        delete pSdrObj;
-}
-
 
 
 String      ImportExcel8::aSstErrTxt( _STRINGCONST( "*** ERROR IN SST ***" ) );
 
 #define INVALID_POS     0xFFFFFFFF
-
-
-
-void TxoCont::ReadTxo( XclImpStream& rStrm )
-{
-    if( !nStepCount )
-    {
-        rStrm.Ignore( 10 );
-        rStrm >> nTextLen >> nFormCnt;
-        nFormCnt /= 8;
-
-        nStepCount = 1;
-    }
-}
-
-
-void TxoCont::ReadCont( XclImpStream& rStrm, RootData& rRootData, ScEditEngineDefaulter& rEdEngine )
-{
-    if( nStepCount == 1 )
-    {// Record mit Text
-        if( nTextLen )
-        {
-            if( !pText )
-            {
-                pText = new String;
-                rStrm.AppendUniString( *pText, nTextLen );
-            }
-        }
-
-        nStepCount = 2;
-    }
-    else if( nStepCount == 2 /*&& nFormCnt*/ )
-    {
-//      DBG_ASSERT( nFormCnt >= 2, "TxoCont::ReadCont(): Das war nicht abgemacht!" );
-
-        if( pText )
-        {
-            if( nFormCnt )
-                nFormCnt--;
-
-            SvMemoryStream aMemStrm;
-            UINT16 nChar, nFont;
-
-            aMemStrm << (UINT16) 0x0001 << (UINT16)(4 * nFormCnt);
-            for( UINT16 nIndex = 0; nIndex < nFormCnt; nIndex++ )
-            {
-                rStrm >> nChar >> nFont;
-                rStrm.Ignore( 4 );
-                aMemStrm << nChar << nFont;
-            }
-
-            XclImpStream aImpStrm( aMemStrm, rRootData.pCharset, TRUE );
-            aImpStrm.StartNextRecord();
-            ShStrTabFormEntry aHelpObj( *pText, aImpStrm, nFormCnt );
-
-            DBG_ASSERT( !pFormText, "TxoCont::ReadCont(): Ich bin doch nicht alleine!!" );
-
-            pFormText = aHelpObj.CreateEditTextObject( rEdEngine, *rRootData.pFontBuffer );
-        }
-
-        nStepCount = 3;
-    }
-    else
-    {
-        DBG_ERROR( "TxoCont::ReadCont(): Stop Du Verkehrs-Rowdy!" );
-    }
-}
-
-
-TxoCont::~TxoCont()
-{
-    if( pText )
-        delete pText;
-    if( pFormText )
-        delete pFormText;
-}
-
-
-void TxoCont::Clear( void )
-{
-    if( pText )
-    {
-        delete pText;
-        pText = NULL;
-    }
-    if( pFormText )
-    {
-        delete pFormText;
-        pFormText = NULL;
-    }
-
-    nTextLen = nFormCnt = 0;
-    nStepCount = 0;
-}
-
-
-
-
-PosBuffer::~PosBuffer()
-{
-    PosBufferCont*  p = ( PosBufferCont* ) List::First();
-
-    while( p )
-    {
-        delete p;
-        p = ( PosBufferCont* ) List::Next();
-    }
-}
-
-
-void PosBuffer::Append( const UINT32 nS, const UINT32 nE, const UINT32 n, const UINT16 nT )
-{
-    List::Insert( new PosBufferCont( nS, nE, n, nT ), LIST_APPEND );
-}
-
-
-BOOL PosBuffer::GetObjNum( const UINT32 n, UINT32& r )
-{
-    const PosBufferCont*    p = ( const PosBufferCont* ) List::First();
-
-    while( p )
-    {
-        if( p->IsInRange( n ) )
-        {
-            r = p->nObjNum;
-            return TRUE;
-        }
-
-        p = ( const PosBufferCont* ) List::Next();
-    }
-
-    return FALSE;
-}
-
-
-BOOL PosBuffer::SetAnchorData( const UINT32 n, ClientAnchorData* pData )
-{
-    PosBufferCont*      p = ( PosBufferCont* ) List::First();
-
-    while( p )
-    {
-        if( p->IsInRange( n ) )
-        {
-            p->SetAnchor( pData );
-            return TRUE;
-        }
-
-        p = ( PosBufferCont* ) List::Next();
-    }
-
-    return FALSE;
-}
-
-
-const ClientAnchorData* PosBuffer::GetAnchorData( const UINT32 nObjNum ) const
-{
-    UINT32                  n = 0;
-    const PosBufferCont*    p = ( const PosBufferCont* ) List::GetObject( n );
-
-    while( p )
-    {
-        if( p->nObjNum == nObjNum )
-            return p->pAnchDat;
-
-        n++;
-        p = ( const PosBufferCont* ) List::GetObject( n );
-    }
-
-    return NULL;
-}
 
 
 
@@ -1223,7 +548,8 @@ void DVList::Apply( ScDocument& rDoc, UINT16 nTab )
 
 
 ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* pDoc, SvStorage* pPivotCache ) :
-    ImportExcel( rStream, pDoc ), aEscherObjList( aPosBuffer, pExcRoot )
+    ImportExcel( rStream, pDoc ),
+    aObjManager( *pExcRoot )
 {
     delete pFormConv;
 
@@ -1231,15 +557,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
     pExcRoot->pImpTabIdBuffer = new XclImpTabIdBuffer;
 
     pFormConv = new ExcelToSc8( pExcRoot, aIn, nTab );
-
-    pActTxo = NULL;
-
-    bLeadingTxo = FALSE;
-    bMaybeTxo = FALSE;
-    bCond4EscherCont = bLeadingObjRec = FALSE;
-    bTabStartDummy = TRUE;
-
-    pActEscherObj = NULL;
 
     pActChart = NULL;
 
@@ -1265,10 +582,6 @@ ImportExcel8::ImportExcel8( SvStorage* pStorage, SvStream& rStream, ScDocument* 
 
 ImportExcel8::~ImportExcel8()
 {
-    if( pActTxo )
-        delete pActTxo;
-    if( pActEscherObj )
-        delete pActEscherObj;
     if( pCondFormList )
         delete pCondFormList;
     if( pDVList )
@@ -1375,15 +688,10 @@ void ImportExcel8::Note( void )
     {
         if( nId )
         {
-            const ExcEscherObj*     pObj = aEscherObjList.Get( nId, nTab );
-
-            if( pObj && pObj->GetObjType() == OT_NOTE )
-            {
-                const String*   p = ( ( ExcEscherNote* ) pObj )->GetText();
-
-                if( p )
-                    pD->SetNote( nCol, nRow, nTab, ScPostIt( *p ) );
-            }
+            const XclImpEscherNote* pObj = aObjManager.GetObjNote( nId, nTab );
+            const String* pText = pObj ? pObj->GetText() : NULL;
+            if( pText )
+                pD->SetNote( nCol, nRow, nTab, ScPostIt( *pText ) );
         }
     }
     else
@@ -1451,54 +759,7 @@ void ImportExcel8::Font( void )
 
 void ImportExcel8::Cont( void )
 {
-    if( pActTxo )
-    {
-        pActTxo->ReadCont( aIn, *pExcRoot, GetEdEng() );
-
-        if( pActTxo->IsComplete() )
-        {
-            if( pActEscherObj )
-            {
-                if( pActEscherObj->GetObjType() == OT_TXO || pActEscherObj->GetObjType() == OT_NOTE )
-                {
-                    ( ( ExcEscherTxo* ) pActEscherObj )->TakeTxo( *pActTxo );
-
-                    if( bMaybeTxo )
-                    {
-                        aEscherObjList.MorpheLastObj( pActEscherObj );
-                        bMaybeTxo = FALSE;
-                    }
-                    else
-                        aEscherObjList.Append( pActEscherObj );
-                }
-                else
-                    delete pActEscherObj;
-
-                pActEscherObj = NULL;
-            }
-
-            delete pActTxo;
-            pActTxo = NULL;
-        }
-    }
-    else if( bCond4EscherCont )
-        Msodrawing();
-    else if( bLeadingObjRec )
-    {
-        aIn.PushPosition();
-        UINT32      nId;
-        aIn >> nId;
-
-        if( ( nId & 0xF000000F ) == 0xF000000F )
-        {
-            aIn.PopPosition();
-            Msodrawing();
-        }
-        else
-            aIn.RejectPosition();
-
-        bLeadingObjRec = FALSE;
-    }
+    aObjManager.ReadContinue( aIn );
 }
 
 
@@ -1527,103 +788,7 @@ void ImportExcel8::Dconref( void )
 
 void ImportExcel8::Obj()
 {
-    UINT16          nOpcode, nLenRec;
-    BOOL            bLoop = TRUE;
-    ExcEscherObj*   pObj = NULL;
-
-    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
-
-    while( bLoop && (aIn.GetRecLeft() >= 4) )
-    {
-        aIn >> nOpcode >> nLenRec;
-        aIn.PushPosition();
-
-        switch( nOpcode )
-        {
-            case 0x00:  bLoop = FALSE;                  break;
-            case 0x15:  pObj = ObjFtCmo();              break;
-            case 0x08:  ObjFtPioGrbit( pObj );          break;
-            case 0x09:  ObjFtPictFmla( pObj, nLenRec ); break;
-        }
-
-        aIn.PopPosition();
-        // sometimes the last subrecord has an invalid length -> Min()
-        aIn.Ignore( Min( (ULONG) nLenRec, aIn.GetRecLeft() ) );
-    }
-
-    bLeadingObjRec = TRUE;
-}
-
-
-ExcEscherObj* ImportExcel8::ObjFtCmo( void )
-{
-    UINT16          nOt, nOid, nGrbit;
-
-    aIn >> nOt >> nOid >> nGrbit;
-
-    if( !pActEscherObj )
-        pActEscherObj = new ExcEscherObj( 0, 0, nTab, pExcRoot );
-
-    if ( pActEscherObj )
-        pActEscherObj->SetId( nOid );
-
-    bMaybeTxo = FALSE;
-
-    ExcEscherObj* pObj;
-    switch( nOt )
-    {
-        case 0x05:              // Chart
-            pActEscherObj = pObj = new ExcEscherChart( pActEscherObj/*, pActChart */);
-            break;
-        case 0x02:              // rectangel
-        case 0x01:              // line
-        case 0x03:              // oval
-        case 0x04:              // arc
-        case 0x09:              // polygon
-            aEscherObjList.Append( pObj = new ExcEscherDrwObj( pActEscherObj ) );
-            bMaybeTxo = TRUE;
-            break;
-        case 0x08:              // picture
-            aEscherObjList.Append( pObj = new ExcEscherOle( pActEscherObj ) );
-            break;
-        case 0x06:              // text
-            bLeadingTxo = TRUE;
-            pActEscherObj = pObj = new ExcEscherTxo( pActEscherObj );
-            break;
-        case 0x19:              // Note
-            bLeadingTxo = TRUE;
-            pActEscherObj = pObj = new ExcEscherNote( pActEscherObj );
-            break;
-        default:
-            aEscherObjList.Append( pObj = new ExcEscherDrwObj( pActEscherObj ) );
-    }
-
-    if( nOt != 0x05 )
-        bCond4EscherCont = FALSE;
-
-    return pObj;
-}
-
-
-void ImportExcel8::ObjFtPioGrbit( ExcEscherObj* pObj )
-{
-    DBG_ASSERT( pObj && pObj->GetObjType() == OT_OLE, "ImportExcel8::ObjFtPioGrbit: no OLE object" );
-    if ( !(pObj && pObj->GetObjType() == OT_OLE) )
-        return ;
-    ExcEscherOle* pOle = (ExcEscherOle*) pObj;
-    UINT16 nBits;
-    aIn >> nBits;
-    pOle->SetAsSymbol( nBits & 0x0008 );
-    pOle->SetLinked( nBits & 0x0002 );
-}
-
-
-void ImportExcel8::ObjFtPictFmla( ExcEscherObj* pObj, UINT16 nLen )
-{
-    DBG_ASSERT( pObj && pObj->GetObjType() == OT_OLE, "ImportExcel8::ObjFtPictFmla: no OLE object" );
-    if ( !(pObj && pObj->GetObjType() == OT_OLE) )
-        return ;
-    ((ExcEscherOle*)pObj)->ReadPictFmla( aIn, nLen );
+    aObjManager.ReadObj( aIn );
 }
 
 
@@ -1851,94 +1016,20 @@ void ImportExcel8::BGPic( void )
 
 void ImportExcel8::Msodrawinggroup( void )
 {
-    SvMemoryStream aMemStrm;
-    aIn.CopyRecordToStream( aMemStrm );
-    const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( aMemStrm );
+    aObjManager.ReadMsodrawinggroup( aIn );
 }
 
 
 void ImportExcel8::Msodrawing( void )
 {
-    bCond4EscherCont = TRUE;
-    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
-    ULONG nL = aIn.GetRecLen();
-
-    if ( !aExcStreamConsumer.HasData() )
-        return;
-
-    aIn.PushPosition();
-
-    if( bTabStartDummy )
-    {// Dummy fuer ungueltigen ersten Shape einfuegen
-        aEscherObjList.Append( new ExcEscherObj( 0, 0, nTab, pExcRoot ) );
-
-        bTabStartDummy = FALSE;
-    }
-    const ULONG nS = aExcStreamConsumer.GetStream().Tell();
-    if( nL )
-    {
-        SvMemoryStream aMemStrm;
-        aIn.CopyRecordToStream( aMemStrm );
-        const DffRecordHeader* pLatestRecHd = aExcStreamConsumer.Consume( aMemStrm );
-        if ( pLatestRecHd )
-        {
-            switch ( pLatestRecHd->nRecType )
-            {
-                case DFF_msofbtClientData :
-                {
-                    sal_Char* pBuf = new sal_Char[ 0x100 ];
-                    aExcStreamConsumer.AppendData( pBuf, 0x100 );
-                    delete pBuf;
-                }
-                break;
-                case DFF_msofbtClientTextbox :
-                {
-                    sal_Char* pBuf = new sal_Char[ 0x200 ];
-                    aExcStreamConsumer.AppendData( pBuf, 0x200 );
-                    delete pBuf;
-                }
-                break;
-            }
-        }
-    }
-    if( bLeadingTxo )
-    {
-        DBG_ASSERTWARNING( pActEscherObj && pActEscherObj->GetObjType() == OT_TXO,
-                    "ImportExcel8::Msodrawing(): Vorgaenger wech oder falsch!" );
-        bLeadingTxo = FALSE;
-    }
-    else
-    {
-        if( pActEscherObj )
-            delete pActEscherObj;   // aEscherObjList.Append( pActEscherObj );
-
-        pActEscherObj = new ExcEscherObj( nS, aExcStreamConsumer.GetStream().Tell() - 1, nTab, pExcRoot );
-
-        if( bMaybeTxo )
-        {
-            if( nL <= 8 )
-            {
-                UINT16  nFBT;
-
-                aIn.PopPosition();
-                aIn.Ignore( 2 );
-
-                aIn >> nFBT;
-
-                if( nFBT != 0xF00D )
-                    bMaybeTxo = FALSE;  // != Client Text Box
-            }
-            else
-                bMaybeTxo = FALSE;
-        }
-    }
+    aObjManager.ReadMsodrawing( aIn );
 }
 
 
 void ImportExcel8::Msodrawingselection( void )
 {
+    aObjManager.ReadMsodrawingselection( aIn );
 }
-
 
 void ImportExcel8::Sst( void )
 {
@@ -2078,25 +1169,7 @@ void ImportExcel8::Tabid( void )
 
 void ImportExcel8::Txo( void )
 {
-    if( pActTxo )
-        pActTxo->Clear();
-    else
-        pActTxo = new TxoCont;
-
-    aIn.InitializeRecord( FALSE );      // disable internal CONTINUE handling
-
-    pActTxo->ReadTxo( aIn );
-
-    if( pActEscherObj && pActEscherObj->GetObjType() != OT_NOTE )
-        pActEscherObj = new ExcEscherTxo( pActEscherObj );
-
-    if( bMaybeTxo )
-    {
-        if( !pActEscherObj )
-            pActEscherObj = new ExcEscherObj( 0, 0, nTab, pExcRoot );
-
-        pActEscherObj = new ExcEscherTxo( pActEscherObj );
-    }
+    aObjManager.ReadTxo( aIn );
 }
 
 
@@ -2511,10 +1584,10 @@ void ImportExcel8::PostDocLoad( void )
     if( pWebQBuffer )
         pWebQBuffer->Apply( pD );
 
-    if( aExcStreamConsumer.HasData() )
+    if( aObjManager.HasEscherStream() )
     {
-        Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( pExcRoot, aPosBuffer, aEscherObjList,
-                                            aExcStreamConsumer.GetStream(), 0, 0, pD->GetDrawLayer(), 1440 );
+        Biff8MSDffManager*      pDffMan = new Biff8MSDffManager( *pExcRoot, aObjManager,
+                                            0, 0, pD->GetDrawLayer(), 1440 );
 
         const String            aStrName( _STRING( "Ctls" ) );
         SvStorage&              rStrg = *pExcRoot->pRootStorage;
@@ -2528,9 +1601,7 @@ void ImportExcel8::PostDocLoad( void )
             xStStream = pExcRoot->pRootStorage->OpenStream( aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
         }
 
-        const UINT32                    nMax = aPosBuffer.Count();
-        const ClientAnchorData*         pAnch;
-
+        const XclImpAnchorData*         pAnch;
         const SvxMSDffShapeInfos*       pShpInf = pDffMan->GetShapeInfos();
 
         if( pShpInf )
@@ -2542,7 +1613,6 @@ void ImportExcel8::PostDocLoad( void )
             SdrObject*                  pSdrObj = NULL;
             SvxMSDffImportData*         pMSDffImportData;
             UINT32                      n;
-            UINT32                      nObjNum;
             BOOL                        bRangeTest;
 
             UINT32                      nOLEImpFlags = 0;
@@ -2566,51 +1636,47 @@ void ImportExcel8::PostDocLoad( void )
 
                 nShapeId = p->nShapeId;
 
-                if( aPosBuffer.GetObjNum( p->nFilePos, nObjNum ) )
+                XclImpEscherObj* pObj = aObjManager.GetObjFromStream( p->nFilePos );
+                if( pObj && !pObj->GetSdrObj() )
                 {
                     pMSDffImportData = new SvxMSDffImportData;
+                    pDffMan->SetSdrObject( pObj, nShapeId, *pMSDffImportData );
 
-                    ExcEscherObj* p = (ExcEscherObj*) aEscherObjList.Get( nObjNum );
-                    if( p && !p->GetObj() )
+                    if( pObj->GetSdrObj() )
                     {
-                        pDffMan->SetSdrObject( p, nShapeId, *pMSDffImportData );
-
-                        if( p->GetObj() )
+                        pAnch = aObjManager.GetAnchorData( p->nFilePos );
+                        bRangeTest = FALSE;
+                        if( pAnch )
                         {
-                            pAnch = aPosBuffer.GetAnchorData( nObjNum );
-                            bRangeTest = FALSE;
-                            if( pAnch )
+                            bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                            if( pAutoFilterBuffer )
+                                bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
+                        }
+                        if( bRangeTest )
+                            pObj->SetSdrObj( NULL );      // delete SdrObject
+                        else
+                        {
+                            switch ( pObj->GetObjType() )
                             {
-                                bRangeTest = aPivotTabList.IsInPivotRange( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                                if( pAutoFilterBuffer )
-                                    bRangeTest |= pAutoFilterBuffer->HasDropDown( pAnch->nCol, pAnch->nRow, pAnch->nTab );
-                            }
-                            if( bRangeTest )
-                                p->SetObj( NULL );      // delete SdrObject
-                            else
-                            {
-                                switch ( p->GetObjType() )
-                                {
-                                    case OT_CHART:
-                                        nChartCnt++;
-                                    break;
-                                    case OT_OLE:
-                                        ((ExcEscherOle*)p)->CreateSdrOle( *pDffMan, nOLEImpFlags );
-                                    break;
-                                    case OT_CTRL:
-                                        if( bHasCtrls )
+                                case otChart:
+                                    nChartCnt++;
+                                break;
+                                case otOle:
+                                    ((XclImpEscherOle*)pObj)->CreateSdrOle( *pDffMan, nOLEImpFlags );
+                                break;
+                                case otCtrl:
+                                    if( bHasCtrls )
+                                    {
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                                                xShapeRef = GetXShapeForSdrObject( pSdrObj );
+                                        if( pCtrlConv->ReadOCXExcelKludgeStream( xStStream, &xShapeRef, TRUE ) )
                                         {
-                                            ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                                                    xShapeRef = GetXShapeForSdrObject( pSdrObj );
-                                            if( pCtrlConv->ReadOCXExcelKludgeStream( xStStream, &xShapeRef, TRUE ) )
-                                            {
-                                                SdrObject*  pNewObj = GetSdrObjectFromXShape( xShapeRef );
-                                                if( pNewObj )
-                                                    p->SetObj( pNewObj );
-                                            }
+                                            SdrObject*  pNewObj = GetSdrObjectFromXShape( xShapeRef );
+                                            if( pNewObj )
+                                                pObj->SetSdrObj( pNewObj );
                                         }
-                                        break;
-                                }
+                                    }
+                                break;
                             }
                         }
                     }
@@ -2627,7 +1693,7 @@ void ImportExcel8::PostDocLoad( void )
         delete pDffMan;
     }
 
-    aEscherObjList.Apply();
+    aObjManager.Apply();
 
     // controls
 /*

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: dr $ $Date: 2001-02-26 06:53:43 $
+#   last change: $Author: dr $ $Date: 2001-07-12 17:08:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,7 @@ CXXFILES = \
         XclImpChartsApi.cxx					\
         XclImpPivotTables.cxx				\
         XclImpChangeTrack.cxx				\
+        XclImpObjects.cxx					\
         XclExpCharts.cxx					\
         XclExpPivotTables.cxx				\
         XclExpChangeTrack.cxx
@@ -101,6 +102,7 @@ SLOFILES =	\
         $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclImpPivotTables.obj		\
         $(SLO)$/XclImpChangeTrack.obj		\
+        $(SLO)$/XclImpObjects.obj			\
         $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/XclExpPivotTables.obj		\
         $(SLO)$/XclExpChangeTrack.obj

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-29 12:04:28 $
+ *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1047,7 +1047,7 @@ FltError ImportExcel8::Read( void )
             pPrgrsBar->Progress();
 
         if( nOpcode != 0x5D && nOpcode != 0x3C )    // no obj-record and no cont-record
-            bLeadingObjRec = FALSE;
+            aObjManager.ClearLeadingObj();
 
         if( nOpcode != 0x003C )
             aIn.InitializeRecord( TRUE );           // enable internal CONTINUE handling
@@ -1177,7 +1177,7 @@ FltError ImportExcel8::Read( void )
                             NeueTabelle();
                             if( pExcRoot->eDateiTyp == Biff8C )
                             {
-                                if( bWithDrawLayer && pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
+                                if( bWithDrawLayer && aObjManager.GetCurrObjChart() )
                                     ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                                 else
                                 {// Stream-Teil mit Chart ueberlesen
@@ -1278,7 +1278,7 @@ FltError ImportExcel8::Read( void )
                         {
                             Bof5();
                             if( pExcRoot->eDateiTyp == Biff8C && bWithDrawLayer &&
-                                pActEscherObj && pActEscherObj->GetObjType() == OT_CHART )
+                                aObjManager.GetCurrObjChart() )
                                 ReadChart8( *pPrgrsBar, FALSE );    // zunaechst Return vergessen
                             else
                             {
@@ -1305,7 +1305,7 @@ FltError ImportExcel8::Read( void )
                             EndSheet();
                             eAkt = Z_Biff8E;
                             nTab++;
-                            bCond4EscherCont = FALSE;
+                            aObjManager.ClearEscherContinue();
                         }
                         break;
                         case 0x002F:                            // FILEPASS     [ 2345   ]
@@ -1331,7 +1331,7 @@ FltError ImportExcel8::Read( void )
                         Bof5();
                         NeueTabelle();
 
-                        bTabStartDummy = TRUE;
+                        aObjManager.StartWithDummyObj();
 
                         switch( pExcRoot->eDateiTyp )
                         {
@@ -1344,14 +1344,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreUserPosition();
                                 break;
                             case Biff8C:
-                                if ( pActEscherObj )
-                                {
-                                    DBG_ERRORFILE( "+ImportExcel8::Read(): Diagramm schon Escher?!?" );
-                                    delete pActEscherObj;
-                                }
-                                pActEscherObj = new ExcEscherObj( 0, 0, nTab, pExcRoot );
-                                // erstmal irgendeine Groesse setzen
-                                pActEscherObj = new ExcEscherChart( pActEscherObj );
+                                aObjManager.SetCurrObjChart();
                                 pExcRoot->bChartTab = TRUE;
                                 ReadChart8( *pPrgrsBar, TRUE );
                                 pExcRoot->bChartTab = FALSE;

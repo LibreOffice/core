@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-05 15:26:05 $
+ *  last change: $Author: dr $ $Date: 2001-07-12 17:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _SC_XCLIMPPIVOTTABLES_HXX
 #include "XclImpPivotTables.hxx"
 #endif
+#ifndef _SC_XCLIMPOBJECTS_HXX
+#include "XclImpObjects.hxx"
+#endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
 #endif
@@ -115,303 +118,6 @@ class ScDBData;
 class XclImpStream;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
-
-class Biff8MSDffManager : public SvxMSDffManager, protected ExcRoot
-{
-private:
-    PosBuffer&              rPosBuff;
-    ExcEscherObjList&       rEscherObjList;
-protected:
-    virtual void            ProcessClientAnchor2( SvStream&, DffRecordHeader&, void*, DffObjData& );
-    virtual SdrObject*      ProcessObj( SvStream&, DffObjData&, void* pData, Rectangle& rTextRect,
-                                        SdrObject* pObj = NULL );
-    virtual ULONG           Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
-    virtual FASTBOOL        GetColorFromPalette( USHORT nNum, Color& ) const;
-    virtual BOOL            ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
-public:
-                            Biff8MSDffManager(
-                                            RootData*           pRootData,
-                                            PosBuffer&          rPosBuffer,
-                                            ExcEscherObjList&   rEscherObjList,
-                                            SvStream&           rStCtrl,
-                                            long                nOffsDgg,
-                                            SvStream*           pStData,
-                                            SdrModel*           pSdrModel_          = 0,
-                                            long                nApplicationScale   = 0,
-                                            ColorData           mnDefaultColor_     = COL_DEFAULT,
-                                            ULONG               nDefaultFontHeight_ = 24,
-                                            SvStream*           pStData2_           = 0);
-    virtual                 ~Biff8MSDffManager();
-
-    void                    SetSdrObject( ExcEscherObj* pEscherObj, ULONG nId, SvxMSDffImportData& rData );
-};
-
-
-
-
-class TxoCont
-{
-private:
-    friend class ImportExcel8;
-    friend class ExcEscherTxo;
-
-    String*                         pText;
-    EditTextObject*                 pFormText;
-    UINT16                          nTextLen;
-    UINT16                          nFormCnt;
-    UINT16                          nStepCount;
-
-    void                            ReadTxo( XclImpStream& );
-    void                            ReadCont( XclImpStream&, RootData&, ScEditEngineDefaulter& );
-public:
-    inline                          TxoCont( void );
-    virtual                         ~TxoCont();
-
-    inline BOOL                     HasText( void ) const;
-    inline const String*            GetText( void ) const;
-
-    inline BOOL                     HasFormText( void ) const;
-    inline const EditTextObject*    GetTextObject( void ) const;
-
-    inline BOOL                     IsComplete( void ) const;
-
-    void                            Clear( void );
-};
-
-
-
-
-class PosBuffer : protected List
-{
-private:
-protected:
-public:
-    virtual                     ~PosBuffer();
-    void                        Append( const UINT32 nStartRange, const UINT32 nEndRange,
-                                        const UINT32 nObjNum, const UINT16 nTabNum );
-    BOOL                        GetObjNum( const UINT32 nPos, UINT32& rObjNum );
-
-    BOOL                        SetAnchorData( const UINT32 nPos, ClientAnchorData* );
-    const ClientAnchorData*     GetAnchorData( const UINT32 nObjNum ) const;
-
-    List::Count;
-};
-
-
-
-
-struct ClientAnchorData
-{
-    UINT32                      nObjNum;
-
-    UINT16                      nTab;
-    UINT16                      nCol;
-    UINT16                      nX;
-    UINT16                      nRow;
-    UINT16                      nY;
-    UINT16                      nDCol;
-    UINT16                      nDX;
-    UINT16                      nDRow;
-    UINT16                      nDY;
-
-    inline                      ClientAnchorData( void );
-    inline                      ClientAnchorData( const ClientAnchorData& );
-};
-
-
-
-
-enum OBJECTTYPE
-{
-    OT_UNKNOWN = 0,
-    OT_CHART,
-    OT_PICTURE,
-    OT_TXO,
-    OT_NOTE,
-    OT_OLE,
-    OT_CTRL
-};
-
-
-
-class ExcEscherObj : public ExcRoot
-{
-private:
-    friend class ExcEscherObjList;
-protected:
-    UINT32                      nStrPosStart;
-    UINT32                      nStrPosEnd;
-    UINT16                      nTab;
-    UINT16                      nId;
-    Rectangle*                  pAnchor;
-    SdrObject*                  pSdrObj;
-public:
-                                ExcEscherObj( const UINT32 nStrPosStart, const UINT32 nStrPosEnd,
-                                                const UINT16 nT, RootData* );
-                                ExcEscherObj( ExcEscherObj& rCopy );
-                                // !ACHTUNG: pSdrObj von rCopy wandert nach this!
-                                //  rCopy.pSdrObj ist danach NULL!!!
-    virtual                     ~ExcEscherObj();
-
-    inline void                 SetId( UINT16 );
-    inline UINT16               GetId( void ) const;
-
-    virtual OBJECTTYPE          GetObjType( void ) const;
-
-    void                        SetAnchor( const Rectangle& );
-
-    inline const Rectangle*     GetAnchor( void ) const;
-
-    virtual void                SetObj( SdrObject* );
-    inline const SdrObject*     GetObj( void ) const;
-
-    virtual void                Apply( void );
-
-    void                        MorpheFrom( ExcEscherObj*& rp );
-
-    virtual ExcChart*           GetChartData( void );       // Special for ExcEscherChart
-    virtual void                SetChartData( ExcChart* );
-};
-
-
-
-
-class ExcEscherChart : public ExcEscherObj
-{
-private:
-protected:
-    ExcChart*                   pChrtData;
-public:
-                                ExcEscherChart( ExcEscherObj*& rp );
-    virtual                     ~ExcEscherChart();
-
-    virtual OBJECTTYPE          GetObjType( void ) const;
-
-    virtual ExcChart*           GetChartData( void );
-    virtual void                SetChartData( ExcChart* );
-
-    virtual void                Apply( void );
-};
-
-
-
-
-class ExcEscherOle : public ExcEscherObj
-{
-private:
-    String                      aStorageName;
-    UINT32                      nBlipId;
-    BOOL                        bAsSymbol   : 1;
-    BOOL                        bLinked     : 1;
-
-    OBJECTTYPE                  eType;      // OLE or CTRL
-protected:
-public:
-                                ExcEscherOle( ExcEscherObj*& rpCopyAndDel );
-    virtual                     ~ExcEscherOle();
-
-    virtual OBJECTTYPE          GetObjType( void ) const;
-    virtual void                Apply( void );
-
-    inline  void                SetAsSymbol( BOOL bVal )    { bAsSymbol = (bVal != 0); }
-    inline  void                SetLinked( BOOL bVal )      { bLinked = (bVal != 0); }
-    inline  void                SetBlipId( UINT32 nVal )    { nBlipId = nVal; }
-
-    void                        ReadPictFmla( XclImpStream&, UINT16 nLen );
-    void                        CreateSdrOle( Biff8MSDffManager&, UINT32 nOLEImpFlags = 0 );
-};
-
-
-
-
-class ExcEscherDrwObj : public ExcEscherObj
-{
-private:
-protected:
-    SdrObject*                  pSdrObj;
-public:
-                                ExcEscherDrwObj( ExcEscherObj*& rp );
-    virtual                     ~ExcEscherDrwObj();
-
-    virtual OBJECTTYPE          GetObjType( void ) const;
-};
-
-
-
-
-class ExcEscherTxo : public ExcEscherObj
-{
-private:
-protected:
-    String*                     pText;
-    EditTextObject*             pFormText;
-    BOOL                        bIsApplied;
-
-    void                        ApplyTextOnObject( SdrObject* pSdrObj = NULL );
-public:
-                                ExcEscherTxo( ExcEscherObj*& rp );
-    virtual                     ~ExcEscherTxo();
-
-    virtual OBJECTTYPE          GetObjType( void ) const;
-
-    virtual void                SetObj( SdrObject* );
-
-    void                        SetText( const String& );
-    inline const String*        GetText( void ) const;
-
-    void                        TakeTxo( TxoCont& );
-
-    virtual void                Apply( void );
-    void                        Apply( SdrObject* );
-                                // also set bIsApplied, but doesn't put on drawing layer!
-};
-
-
-
-
-class ExcEscherNote : public ExcEscherTxo
-{
-private:
-protected:
-public:
-                                ExcEscherNote( ExcEscherObj*& rp );
-    virtual OBJECTTYPE          GetObjType( void ) const;
-    virtual void                Apply( void );
-};
-
-
-
-
-class ExcEscherObjList : protected List, protected ExcRoot
-{
-private:
-    UINT32                      nLastReqTabStart;
-    UINT16                      nLastReqTab;
-
-    BOOL                        SetTabStart( const UINT16 nNewTab );
-protected:
-    PosBuffer&                  rPosBuffer;
-public:
-                                ExcEscherObjList( PosBuffer&, RootData* );
-    virtual                     ~ExcEscherObjList();
-
-    void                        Append( ExcEscherObj* );
-    void                        MorpheLastObj( ExcEscherObj* );
-
-    inline const ExcEscherObj*  First( void );
-    inline const ExcEscherObj*  Next( void );
-    const ExcEscherObj*         Get( const UINT32 nObjNum, const UINT16 nTab = 0xFFFF ) const;
-    ExcEscherTxo*               GetTxo( const UINT32 nObjNum, const UINT16 nTab = 0xFFFF ) const;
-
-    void                        SetData( const UINT32 nObjNum, SdrObject* pDrawObj );
-    void                        SetData( const UINT32 nObjNum, const Rectangle& rAnchor );
-    void                        SetData( const UINT32 nObjNum, const Rectangle& rAnchor,
-                                        SdrObject* pDrawObj );
-
-    List::Count;
-
-    void                        Apply( void );
-};
 
 
 
@@ -456,38 +162,6 @@ class ExcCondFormList : protected List
 
 
 
-struct ExcStreamNode
-{
-    sal_uInt32      nPos;
-    sal_uInt32      nSize;
-    ExcStreamNode*  pPrev;
-};
-
-
-
-
-class ExcStreamConsumer
-{
-private:
-    sal_uInt32                  nBytesLeft;
-    SvMemoryStream              aStrm;
-    ExcStreamNode*              pNode;
-    DffRecordHeader             aHd;
-
-    void                        UpdateNode( const DffRecordHeader& rHd );
-    void                        RemoveNode();
-
-public:
-                                ExcStreamConsumer();
-                                ~ExcStreamConsumer();
-
-    const DffRecordHeader*      Consume( SvStream& rSrcStrm );
-    sal_Bool                    AppendData( sal_Char* pBuf, sal_uInt32 nLen );
-    sal_Bool                    HasData() const { return aStrm.Tell() > 0; }
-    SvStream&                   GetStream() { return aStrm; }
-};
-
-
 
 
 struct DVData;
@@ -514,20 +188,8 @@ class ImportExcel8 : public ImportExcel
 
         SharedStringTable       aSharedStringTable;
 
-        ExcStreamConsumer       aExcStreamConsumer;
-        PosBuffer               aPosBuffer;
-
+        XclImpObjectManager     aObjManager;
         ExcChart*               pActChart;
-
-        ExcEscherObj*           pActEscherObj;
-        BOOL                    bLeadingTxo;
-        BOOL                    bMaybeTxo;
-        BOOL                    bTabStartDummy;
-        BOOL                    bCond4EscherCont;
-        BOOL                    bLeadingObjRec;
-        ExcEscherObjList        aEscherObjList;
-
-        TxoCont*                pActTxo;
 
         ExcScenarioList         aScenList;
 
@@ -671,11 +333,6 @@ class ImportExcel8 : public ImportExcel
         void                    ChartGelframe( void );          // 0x1066
         void                    ChartBoppcustom( void );        // 0x1067
 
-        // Subrecords fuer OBJ (nach Obj( void )
-        ExcEscherObj*           ObjFtCmo( void );               // 0x15
-        void                    ObjFtPioGrbit( ExcEscherObj* pObj );    // 0x08
-        void                    ObjFtPictFmla( ExcEscherObj* pObj, UINT16 nLen );   // 0x09
-
         void                    Formula( UINT16 nCol, UINT16 nRow, UINT16 nTab,
                                     UINT16 nXF, UINT16 nFormLen, double &rCurVal,
                                     BYTE nFlag, BOOL bShrFmla );
@@ -692,7 +349,10 @@ class ImportExcel8 : public ImportExcel
                                                     const String& rURL );
         void                    CreateTmpCtrlStorage( void );
                                     // if possible generate a SvxMSConvertOCXControls compatibel storage
-        inline ExcChart*        GetActChartData( void );
+        inline void             SetActChartData( ExcChart* pNewData )
+                                                    { aObjManager.SetCurrChartData( pNewData ); }
+        inline ExcChart*        GetActChartData()   { return aObjManager.GetCurrChartData(); }
+
     public:
                                 ImportExcel8(
                                     SvStorage*  pStorage,
@@ -1000,120 +660,10 @@ public:
 //___________________________________________________________________
 // inlines
 
-inline ClientAnchorData::ClientAnchorData( void )
-{
-    memset( this, 0x00, sizeof( ClientAnchorData ) );
-}
-
-
-inline ClientAnchorData::ClientAnchorData( const ClientAnchorData& r )
-{
-    memcpy( this, &r, sizeof( ClientAnchorData ) );
-}
-
-
-
-
-inline void ExcEscherObj::SetId( UINT16 n )
-{
-        nId = n;
-}
-
-inline UINT16 ExcEscherObj::GetId( void ) const
-{
-        return nId;
-}
-
-inline const Rectangle* ExcEscherObj::GetAnchor( void ) const
-{
-    return pAnchor;
-}
-
-
-inline const SdrObject* ExcEscherObj::GetObj( void ) const
-{
-    return pSdrObj;
-}
-
-
-
-
-inline const String* ExcEscherTxo::GetText( void ) const
-{
-    return pText;
-}
-
-
-
-
-inline const ExcEscherObj* ExcEscherObjList::First( void )
-{
-    return ( const ExcEscherObj* ) List::First();
-}
-
-
-inline const ExcEscherObj* ExcEscherObjList::Next( void )
-{
-    return ( const ExcEscherObj* ) List::Next();
-}
-
-
-
-
-inline TxoCont::TxoCont( void )
-{
-    pText = NULL;
-    pFormText = NULL;
-    Clear();
-}
-
-
-inline BOOL TxoCont::HasText( void ) const
-{
-    return pText != NULL;
-}
-
-
-inline const String* TxoCont::GetText( void ) const
-{
-    return pText;
-}
-
-
-inline BOOL TxoCont::HasFormText( void ) const
-{
-    return pFormText != NULL;
-}
-
-
-inline const EditTextObject* TxoCont::GetTextObject( void ) const
-{
-    return pFormText;
-}
-
-
-inline BOOL TxoCont::IsComplete( void ) const
-{
-    return nStepCount > 2;
-}
-
-
-
-
 inline void ExcCondFormList::Append( ExcCondForm* p )
 {
     List::Insert( p, LIST_APPEND );
 }
-
-
-inline ExcChart* ImportExcel8::GetActChartData( void )
-{
-    if( pActEscherObj )
-        return pActEscherObj->GetChartData();
-    else
-        return NULL;
-}
-
 
 #endif
 

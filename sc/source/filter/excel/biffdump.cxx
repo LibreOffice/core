@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
+ *  last change: $Author: dr $ $Date: 2001-07-12 17:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,16 +543,14 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
     rStr += ", f=";
     __AddHex( rStr, nGrbit );
     rStr += " (";
-    rStr += b16Bit ? "16-Bit, " : "8-Bit, ";
+    rStr += b16Bit ? "16-Bit" : "8-Bit";
 
     if( bRichString && bFarEast )
-        rStr += "FarEast RichString";
+        rStr += ", Rich, FarEast";
     else if( bRichString && !bFarEast )
-        rStr += "RichString";
+        rStr += ", Rich";
     else if ( !bRichString && bFarEast )
-        rStr += "FarEast";
-    else
-        rStr += "Standard";
+        rStr += ", FarEast";
     rStr += ")]: \'";
 
     ByteString aData( rStrm.ReadRawUniString( nLen, b16Bit ), RTL_TEXTENCODING_MS_1252 );
@@ -5613,15 +5611,17 @@ void Biff8RecDumper::ControlsDump( SvStream& rIn )
     ULONG nLen = rIn.Tell();
     rIn.Seek( STREAM_SEEK_TO_BEGIN );
 
-    if( nLen < ~((ULONG)0) )
+    if( nLen == ~0UL )
+        return;
+
+    *pDumpStream << "### start Ctls stream ###\n";
+    while( nLen )
     {
-        while( nLen )
-        {
-            UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
-            ContDumpStream( rIn, nPart );
-            nLen -= nPart;
-        }
+        UINT16  nPart = ( nLen >= 1024 )? 1024 : ( UINT16 ) nLen;
+        ContDumpStream( rIn, nPart );
+        nLen -= nPart;
     }
+    *pDumpStream << "\n### end Ctls stream ###\n";
 }
 
 
@@ -6907,14 +6907,6 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         if( pTitle )
             *pDumpStream << pTitle->GetBuffer();
 
-        SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
-        if( pContrIn )
-        {
-            *pDumpStream << "### start Ctls stream ###\n";
-            ControlsDump( *pContrIn );
-            *pDumpStream << "\n### end Ctls stream ###\n";
-        }
-
         pIn = &r;
         r.StoreUserPosition();
         r.SetWarningMode( bWarnings );
@@ -6942,6 +6934,10 @@ BOOL Biff8RecDumper::Dump( XclImpStream& r )
         // dump substreams
         DumpSubStream( pExcRoot->pRootStorage, pUserNamesStreamName );
         DumpSubStream( pExcRoot->pRootStorage, pRevLogStreamName );
+
+        SvStorageStream*    pContrIn = pExcRoot->pRootStorage->OpenStream( _STRINGCONST( "Ctls" ), STREAM_STD_READ );
+        if( pContrIn )
+            ControlsDump( *pContrIn );
     }
 
     return !bEndLoading;

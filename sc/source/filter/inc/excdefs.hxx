@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:26:23 $
+ *  last change: $Author: dr $ $Date: 2001-07-12 17:06:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,19 @@
 #define EXC_CRN_STRING              0x02
 #define EXC_CRN_BOOL                0x04
 #define EXC_CRN_ERROR               0x10
+
+//_________________________________________________________
+// (0x005D) OBJ
+
+#define EXC_OBJT_LINE               0x01
+#define EXC_OBJT_RECT               0x02
+#define EXC_OBJT_ELLIP              0x03
+#define EXC_OBJT_ARC                0x04
+#define EXC_OBJT_CHART              0x05
+#define EXC_OBJT_TEXT               0x06
+#define EXC_OBJT_PICT               0x08
+#define EXC_OBJT_POLYGON            0x09
+#define EXC_OBJT_NOTE               0x19
 
 //_________________________________________________________
 // (0x007E) RK
