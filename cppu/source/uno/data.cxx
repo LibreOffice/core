@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:28 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 10:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@ using namespace com::sun::star::uno;
 
 namespace cppu
 {
+
+uno_Sequence * s_pSeq = 0;
+uno_Sequence s_seq;
+typelib_TypeDescriptionReference * s_pVoidType = 0;
+typelib_TypeDescription * s_pQITD = 0;
 
 //==================================================================================================
 void defaultConstructStruct(

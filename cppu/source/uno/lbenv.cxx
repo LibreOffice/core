@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 16:29:27 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 10:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,8 +277,8 @@ inline const InterfaceEntry * ObjectEntry::find(
 {
     // shortcut common case
     if (((typelib_TypeDescription *)pTypeDescr)->pTypeName->length == sizeof("com.sun.star.uno.XInterface") &&
-        rtl_ustr_ascii_compare( ((typelib_TypeDescription *)pTypeDescr)->pTypeName->buffer,
-                                "com.sun.star.uno.XInterface" ) == 0)
+        ::rtl_ustr_ascii_compare( ((typelib_TypeDescription *)pTypeDescr)->pTypeName->buffer,
+                                  "com.sun.star.uno.XInterface" ) == 0)
     {
         return &aInterfaces[0];
     }
@@ -431,7 +431,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
     OSL_ENSHURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (*ppOId)
     {
-        rtl_uString_release( *ppOId );
+        ::rtl_uString_release( *ppOId );
         *ppOId = 0;
     }
 
@@ -441,7 +441,7 @@ static void SAL_CALL defenv_getObjectIdentifier(
         static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.find( pInterface ) );
     if (iFind != static_cast< uno_DefaultEnvironment * >( pEnv )->aPtr2ObjectMap.end())
     {
-        rtl_uString_acquire( *ppOId = (*iFind).second->oid.pData );
+        ::rtl_uString_acquire( *ppOId = (*iFind).second->oid.pData );
     }
     else
     {
@@ -502,14 +502,14 @@ static void SAL_CALL defenv_getRegisteredInterfaces(
 static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
     throw ()
 {
-    osl_incrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef );
+    ::osl_incrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef );
 }
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL defenv_release( uno_Environment * pEnv )
     throw ()
 {
     ClearableMutexGuard aGuard( getEnvironmentsData().aMutex );
-    if (! osl_decrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef ))
+    if (! ::osl_decrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef ))
     {
         getEnvironmentsData().revokeEnvironment( pEnv );
         aGuard.clear();
@@ -529,19 +529,20 @@ uno_DefaultEnvironment::uno_DefaultEnvironment(
     : nRef( 0 )
     , hModule( hMod_ )
 {
-    ((uno_Environment *)this)->pReserved                = 0;
+    uno_Environment * that = (uno_Environment *)this;
+    that->pReserved                 = 0;
     // functions
-    ((uno_Environment *)this)->acquire                  = defenv_acquire;
-    ((uno_Environment *)this)->release                  = defenv_release;
-    ((uno_Environment *)this)->dispose                  = defenv_dispose;
-    ((uno_Environment *)this)->pExtEnv                  = this;
+    that->acquire                   = defenv_acquire;
+    that->release                   = defenv_release;
+    that->dispose                   = defenv_dispose;
+    that->pExtEnv                   = this;
     // identifier
-    rtl_uString_acquire( rTypeName_.pData );
-    ((uno_Environment *)this)->pTypeName                = rTypeName_.pData;
-    ((uno_Environment *)this)->pContext                 = pContext_;
+    ::rtl_uString_acquire( rTypeName_.pData );
+    that->pTypeName                 = rTypeName_.pData;
+    that->pContext                  = pContext_;
 
     // will be late initialized
-    ((uno_Environment *)this)->environmentDisposing     = 0;
+    that->environmentDisposing      = 0;
 
     uno_ExtEnvironment::registerInterface       = defenv_registerInterface;
     uno_ExtEnvironment::registerProxyInterface  = defenv_registerProxyInterface;
@@ -556,12 +557,17 @@ uno_DefaultEnvironment::~uno_DefaultEnvironment() throw ()
 {
     OSL_ENSHURE( aOId2ObjectMap.empty(), "### object entries left!" );
 
-    if (((uno_Environment *)this)->environmentDisposing)
-        (*((uno_Environment *)this)->environmentDisposing)( (uno_Environment *)this );
+    uno_Environment * that = (uno_Environment *)this;
+    if (that->environmentDisposing)
+    {
+        (*that->environmentDisposing)( that );
+    }
     if (hModule)
-        osl_unloadModule( hModule );
+    {
+        ::osl_unloadModule( hModule );
+    }
 
-    rtl_uString_release( ((uno_Environment *)this)->pTypeName );
+    ::rtl_uString_release( that->pTypeName );
 }
 
 //==================================================================================================
@@ -709,13 +715,13 @@ inline static const OUString & unoenv_getStaticOIdPart() throw ()
             // pid
             oslProcessInfo info;
             info.Size = sizeof(oslProcessInfo);
-            if (osl_getProcessInfo( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
+            if (::osl_getProcessInfo( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
                 aRet.append( (sal_Int64)info.Ident, 16 );
             else
                 aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("unknown process id") );
             // good guid
             sal_uInt8 ar[16];
-            rtl_getGlobalProcessId( ar );
+            ::rtl_getGlobalProcessId( ar );
             aRet.append( (sal_Unicode)';' );
             for ( sal_Int32 i = 0; i < 16; ++i )
                 aRet.append( (sal_Int32)ar[i], 16 );
@@ -735,7 +741,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
     OSL_ENSHURE( pEnv && ppOId && pInterface, "### null ptr!" );
     if (*ppOId)
     {
-        rtl_uString_release( *ppOId );
+        ::rtl_uString_release( *ppOId );
         *ppOId = 0;
     }
 
@@ -773,7 +779,7 @@ static void SAL_CALL unoenv_computeObjectIdentifier(
             // process;good guid
             oid.append( unoenv_getStaticOIdPart() );
             OUString aStr( oid.makeStringAndClear() );
-            rtl_uString_acquire( *ppOId = aStr.pData );
+            ::rtl_uString_acquire( *ppOId = aStr.pData );
         }
         __destructAny( &aRet, 0 );
     }
@@ -809,7 +815,12 @@ EnvironmentsData::~EnvironmentsData() throw ()
 #endif
     while (iPos != aName2EnvMap.end())
     {
-        (*(*iPos).second->dispose)( (*iPos).second );
+        uno_Environment * pEnv = (*iPos).second;
+#ifdef CPPU_LEAK_STATIC_DATA
+        pEnv->environmentDisposing = 0; // set to null => wont be called in dtor
+#else
+        (*pEnv->dispose)( pEnv ); // send explicit dispose
+#endif
         ++iPos;
     }
 }
@@ -955,7 +966,7 @@ static uno_Environment * initDefaultEnvironment(
             }
             else
             {
-                osl_unloadModule( hMod );
+                ::osl_unloadModule( hMod );
             }
         }
     }
@@ -966,7 +977,7 @@ static uno_Environment * initDefaultEnvironment(
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL anonymous_defenv_release( uno_Environment * pEnv ) throw ()
 {
-    if (! osl_decrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef ))
+    if (! ::osl_decrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef ))
         delete (uno_DefaultEnvironment *)pEnv;
 }
 }

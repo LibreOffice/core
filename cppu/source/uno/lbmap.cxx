@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbmap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:08 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 10:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ static void SAL_CALL mediate_free( uno_Mapping * pMapping ) throw ()
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL mediate_acquire( uno_Mapping * pMapping ) throw ()
 {
-    if (1 == osl_incrementInterlockedCount(
+    if (1 == ::osl_incrementInterlockedCount(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
         uno_registerMapping(
@@ -249,7 +249,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping ) throw ()
 //--------------------------------------------------------------------------------------------------
 static void SAL_CALL mediate_release( uno_Mapping * pMapping ) throw ()
 {
-    if (! osl_decrementInterlockedCount(
+    if (! ::osl_decrementInterlockedCount(
         & static_cast< uno_Mediate_Mapping * >( pMapping )->nRef ))
     {
         uno_revokeMapping( pMapping );

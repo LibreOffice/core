@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:29 $
+ *  last change: $Author: dbo $ $Date: 2001-02-20 10:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,11 @@
 namespace cppu
 {
 
+extern uno_Sequence * s_pSeq;
+extern uno_Sequence s_seq;
+extern typelib_TypeDescriptionReference * s_pVoidType;
+extern typelib_TypeDescription * s_pQITD;
+
 //--------------------------------------------------------------------------------------------------
 inline void * __map(
     void * p,
@@ -146,14 +151,12 @@ inline void __releaseRef( void ** pRef, uno_ReleaseFunc release ) throw ()
         else
             (*((uno_Interface *)*pRef)->release)( (uno_Interface *)*pRef );
     }
-#ifdef DEBUG
-    *pRef = (void *)0xdeadbeef;
+#ifdef _DEBUG
+    *pRef = (void *)0xdeaddead;
 #endif
 }
 
 //--------------------------------------------------------------------------------------------------
-static uno_Sequence * s_pSeq = 0;
-static uno_Sequence s_seq;
 inline uno_Sequence * __getEmptySequence() throw ()
 {
     if (! s_pSeq)
@@ -170,7 +173,6 @@ inline uno_Sequence * __getEmptySequence() throw ()
     return s_pSeq;
 }
 //--------------------------------------------------------------------------------------------------
-static typelib_TypeDescriptionReference * s_pVoidType = 0;
 inline typelib_TypeDescriptionReference * __getVoidType() throw ()
 {
     if (! s_pVoidType)
@@ -186,13 +188,14 @@ inline typelib_TypeDescriptionReference * __getVoidType() throw ()
 }
 
 //--------------------------------------------------------------------------------------------------
-#ifdef DEBUG
+#ifdef _DEBUG
 #define __CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = __getVoidType(); \
 (pAny)->pData = (void *)0xdeadbeef;
 #else
 #define __CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = __getVoidType();
+(pAny)->pData = 0;
 #endif
 
 //--------------------------------------------------------------------------------------------------
@@ -200,7 +203,6 @@ inline typelib_TypeDescriptionReference * __getVoidType() throw ()
     ::osl_incrementInterlockedCount( &(pType)->nRefCount );
 
 //--------------------------------------------------------------------------------------------------
-static typelib_TypeDescription * s_pQITD = 0;
 inline typelib_TypeDescription * __getQueryInterfaceTypeDescr() throw ()
 {
     if (! s_pQITD)
