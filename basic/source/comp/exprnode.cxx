@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprnode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2000-10-10 13:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,8 +124,8 @@ void SbiExprNode::BaseInit( SbiParser* p )
     eTok = NIL;
     pLeft       = NULL;
     pRight      = NULL;
+    pWithParent = NULL;
     bComposite  = FALSE;
-    bPartOfWith = FALSE;
     bError      = FALSE;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2000-10-10 13:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,12 @@ void SbiExprNode::Gen()
     }
     else if( IsOperand() )
     {
+        SbiExprNode* pWithParent = NULL;
         SbiOpcode eOp;
         if( aVar.pDef->GetScope() == SbPARAM )
             eOp = _PARAM;
         // AB: 17.12.1995, Spezialbehandlung fuer WITH
-        else if( IsPartOfWith() )
+        else if( (pWithParent = GetWithParent()) != NULL )
         {
             eOp = _ELEM;            // .-Ausdruck in WITH
         }
@@ -137,8 +138,8 @@ void SbiExprNode::Gen()
 
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
-            if( p->IsPartOfWith() )
-                pGen->GetParser()->GetWithVar()->Gen();
+            if( p == this && pWithParent != NULL )
+                pWithParent->Gen();
             p->GenElement( eOp );
             eOp = _ELEM;
         }

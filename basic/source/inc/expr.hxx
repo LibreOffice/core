@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2000-10-10 12:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,13 @@ class SbiExprNode {                  // Operatoren (und Operanden)
     };
     SbiExprNode* pLeft;             // linker Zweig
     SbiExprNode* pRight;            // rechter Zweig (NULL bei unaeren Ops)
+    SbiExprNode* pWithParent;       // Knoten, dessen Member this per with ist
     SbiCodeGen*  pGen;              // Code-Generator
     SbiNodeType  eNodeType;         // Art des Nodes
     SbxDataType eType;              // aktueller Datentyp
     SbiToken     eTok;              // Token des Operators
     BOOL  bComposite;               // TRUE: Zusammengesetzter Ausdruck
     BOOL  bError;                   // TRUE: Fehlerhaft
-    BOOL  bPartOfWith;              // TRUE: .-Anweisung in with-Block
     void  FoldConstants();          // Constant Folding durchfuehren
     void  CollectBits();            // Umwandeln von Zahlen in Strings
     BOOL  IsOperand();              // TRUE, wenn Operand
@@ -136,8 +136,8 @@ public:
     BOOL IsIntConst();              // TRUE bei Integer-Konstanten
     BOOL IsVariable();              // TRUE, wenn Variable
 
-    BOOL IsPartOfWith()             { return bPartOfWith; }
-    void SetPartOfWith( BOOL b )    { bPartOfWith = b; }
+    SbiExprNode* GetWithParent()            { return pWithParent; }
+    void SetWithParent( SbiExprNode* p )    { pWithParent = p; }
 
     SbxDataType GetType()           { return eType; }
     void SetType( SbxDataType eTp ) { eType = eTp; }
