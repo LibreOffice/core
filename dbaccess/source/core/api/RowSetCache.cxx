@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-24 14:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,6 +1059,9 @@ sal_Bool ORowSetCache::moveWindow()
                     m_pCacheSet->fillValueRow(*aIter++,++nPos);
                 }
             }
+            // we know that this is the current maximal rowcount here
+            if(!m_bRowCountFinal)
+                m_nRowCount = max(nPos,m_nRowCount);
             // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;
@@ -1078,6 +1081,8 @@ sal_Bool ORowSetCache::moveWindow()
                     m_nRowCount      = nPos; // here we have the row count
                     m_bRowCountFinal = sal_True;
                 }
+                else if(!m_bRowCountFinal)
+                    m_nRowCount = max(++nPos,m_nRowCount);
             }
             else
             {   // the end was reached before end() so we can set the start before nNewStartPos
