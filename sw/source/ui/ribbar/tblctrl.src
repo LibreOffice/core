@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-06 09:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ FloatingWindow RID_TBL_OPT_CTRL
     Text[ chinese_simplified ] = "×î¼Ñ»¯";
     Text[ russian ] = "Îïòèìèçèğîâàòü";
     Text[ polish ] = "Optymalizuj";
-    Text[ japanese ] = "Å“K‰»‚·‚é";
+    Text[ japanese ] = "Å“K‰»";
     Text[ chinese_traditional ] = "³ÌÓì¤Æ";
     Text[ arabic ] = "ÇáÔßá ÇáÃãËá";
     Text[ greek ] = "Âåëôéóôïğïßçóç";
