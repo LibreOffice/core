@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:32:05 $
+ *  last change: $Author: jp $ $Date: 2001-11-23 15:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -950,17 +950,10 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     // naehmlich das gerade restaurierte wieder geloescht - nicht das gewollte
     rDoc.DeleteRedline( *pRedl, FALSE );
 
-#ifndef PRODUCT
-    USHORT nLasCnt = rDoc.GetRedlineTbl().Count();
-#endif
     SwRedlineMode eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern( eOld | REDLINE_DONTCOMBINE_REDLINES );
     rDoc.AppendRedline( pRedl );
     rDoc.SetRedlineMode_intern( eOld );
-#ifndef PRODUCT
-    ASSERT( nLasCnt + 1 == rDoc.GetRedlineTbl().Count(),
-                "Undo: can't insert a redline" );
-#endif
 }
 
 BOOL SwUndo::FillSaveData( const SwPaM& rRange, SwRedlineSaveDatas& rSData,
