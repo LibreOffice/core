@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:02:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #include <vcl/group.hxx>
 #endif
 
+#ifndef _LSTBOX_HXX //autogen
+#include <vcl/lstbox.hxx>
+#endif
+
 #ifndef SC_ITEMS_HXX
 #include "scitems.hxx"          // wegen enum SvxNumType
 #endif
@@ -136,6 +140,7 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+    inline ScHeaderEditEngine*  GetEditEngine() const {return pEdEngine;}
 protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    MouseMove( const MouseEvent& rMEvt );
