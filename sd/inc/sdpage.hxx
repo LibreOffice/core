@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:39:12 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,20 @@
 #ifndef _SDPAGE_HXX
 #define _SDPAGE_HXX
 
+#ifndef INCLUDED_LIST
 #include <list>
-#include <functional>
+#define INCLUDED_LIST
+#endif
 
+#ifndef INCLUDED_FUNCTIONAL
+#include <functional>
+#define INCLUDED_FUNCTIONAL
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #endif
@@ -76,14 +86,19 @@
 #ifndef _FM_FMPAGE_HXX //autogen
 #include <svx/fmpage.hxx>
 #endif
+
 #ifndef _SD_FADEDEF_H
 #include "fadedef.h"
 #endif
 #ifndef _SD_DIADEF_H
-#include <diadef.h>
+#include "diadef.h"
 #endif
 #ifndef _PRESENTATION
 #include "pres.hxx"
+#endif
+
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
 #endif
 
 class SfxStyleSheet;
@@ -150,7 +165,7 @@ namespace sd {
         SdPage* mpPage;
     };
 
-    struct HeaderFooterSettings
+    struct SD_DLLPUBLIC HeaderFooterSettings
     {
         bool mbHeaderVisible;
         String maHeaderText;
@@ -171,7 +186,7 @@ namespace sd {
     };
 };
 
-class SdPage : public FmFormPage, public SdrObjUserCall
+class SD_DLLPUBLIC SdPage : public FmFormPage, public SdrObjUserCall
 {
 friend class SdGenericDrawPage;
 
