@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderConnectionControl.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-03-21 16:45:44 $
+ *  last change: $Author: kso $ $Date: 2001-06-14 10:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,7 @@ module com { module sun { module star { module ucb {
 /** A simple mechanism to find out if the connection between a remote content
     provider distributor and acceptor gets lost.
 
-    @descr
-    This interface should be supported by the <code>DoneListener</code>
+    <p>This interface should be supported by the <code>DoneListener</code>
     parameter of
     <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>.
 
@@ -91,8 +90,7 @@ interface XRemoteContentProviderConnectionControl:
     /** Enable connection control, using as a token some object implemented on
         the remote content provider acceptor's side.
 
-        @descr
-        The implementation of this interface must hold a reference to the
+        <p>The implementation of this interface must hold a reference to the
         supplied token.  If the connection gets lost, the reference count of
         the token will drop, which the remote content provider acceptor can
         observe.

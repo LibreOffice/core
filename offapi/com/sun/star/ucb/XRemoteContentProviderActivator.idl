@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRemoteContentProviderActivator.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: kso $ $Date: 2001-06-14 10:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,7 @@ interface XRemoteContentProviderActivator: com::sun::star::uno::XInterface
         that until now have only been remembered by
         <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>, but not registered.
 
-        @descr
-        This allows for
+        <p>This allows for
         <method scope="com::sun::star::ucb::XRemoteContentProviderAcceptor">addRemoteContentProvider</method>
         to be implemented in a layz fashion (remember the remote content
         providers, but do not register them right away), which can increase
