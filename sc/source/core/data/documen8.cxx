@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-30 11:22:48 $
+ *  last change: $Author: dr $ $Date: 2001-09-21 06:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,36 +1095,6 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
             }
         }
     }
-}
-
-void ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem )
-{
-    //  DDE-Link anlegen und nicht updaten (z.B. fuer Excel-Import,
-    //  damit nicht ohne Nachfrage Verbindungen aufgebaut werden)
-
-    BYTE nMode = SC_DDE_DEFAULT;
-
-    //  zuerst suchen, ob schon vorhanden
-    //! Dde-Links (zusaetzlich) effizienter am Dokument speichern?
-    const ::so3::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-    USHORT nCount = rLinks.Count();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        ::so3::SvBaseLink* pBase = *rLinks[i];
-        if (pBase->ISA(ScDdeLink))
-        {
-            ScDdeLink* pLink = (ScDdeLink*)pBase;
-            if ( pLink->GetAppl() == rAppl &&
-                 pLink->GetTopic() == rTopic &&
-                 pLink->GetItem() == rItem &&
-                 pLink->GetMode() == nMode )
-                return;                                     // dann nichts tun
-        }
-    }
-
-    //  neu anlegen, aber kein TryUpdate
-    ScDdeLink* pNew = new ScDdeLink( this, rAppl, rTopic, rItem, nMode );
-    pLinkManager->InsertDDELink( pNew, rAppl, rTopic, rItem );
 }
 
 USHORT ScDocument::GetDdeLinkCount() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: er $ $Date: 2001-08-10 18:01:16 $
+ *  last change: $Author: dr $ $Date: 2001-09-21 06:12:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,21 +658,18 @@ public:
     void            CopyDdeLinks( ScDocument* pDestDoc ) const;
     void            DisconnectDdeLinks();
 
-                    // Fuer Excel-Import:
-    void            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
-
                     // Fuer StarOne Api:
     USHORT          GetDdeLinkCount() const;
     BOOL            GetDdeLinkData( USHORT nPos, String& rAppl, String& rTopic, String& rItem ) const;
     BOOL            UpdateDdeLink( const String& rAppl, const String& rTopic, const String& rItem );
 
-                    // For XML Export/Import:
-                    // nPos is index of DDE links only
+                    // For XCL/XML Export (nPos is index of DDE links only):
     BOOL            GetDdeLinkMode(USHORT nPos, USHORT& nMode);
     BOOL            GetDdeLinkResultDimension( USHORT nPos , USHORT& nCol, USHORT& nRow, ScMatrix*& pMatrix);
     BOOL            GetDdeLinkResult(const ScMatrix* pMatrix, USHORT nCol, USHORT nRow, String& rStrValue, double& rDoubValue, BOOL& bIsString);
 
-    void            CreateDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode );
+                    // For XCL/XML Import (nPos is index of DDE links only):
+    void            CreateDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode = SC_DDE_DEFAULT );
     BOOL            FindDdeLink(const String& rAppl, const String& rTopic, const String& rItem, const BYTE nMode, USHORT& nPos );
     BOOL            CreateDdeLinkResultDimension(USHORT nPos, USHORT nCols, USHORT nRows, ScMatrix*& pMatrix);
     void            SetDdeLinkResult(ScMatrix* pMatrix, const USHORT nCol, const USHORT nRow, const String& rStrValue, const double& rDoubValue, BOOL bString, BOOL bEmpty);
