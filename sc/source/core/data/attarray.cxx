@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:57:17 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -874,13 +874,10 @@ void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
 
 
 void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
-                                    SfxItemSet** ppSet, BOOL bDeep ) const
+                                    ScMergePatternState& rState, BOOL bDeep ) const
 {
     if (ValidRow(nStartRow) && ValidRow(nEndRow))
     {
-        const ScPatternAttr* pOld1 = NULL;
-        const ScPatternAttr* pOld2 = NULL;
-
         SCSIZE nPos;
         SCROW nStart=0;
         if (!Search( nStartRow, nPos ))
@@ -894,28 +891,28 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
             //  gleiche Patterns muessen nicht mehrfach angesehen werden
 
             const ScPatternAttr* pPattern = pData[nPos].pPattern;
-            if ( pPattern != pOld1 && pPattern != pOld2 )
+            if ( pPattern != rState.pOld1 && pPattern != rState.pOld2 )
             {
                 const SfxItemSet& rThisSet = pPattern->GetItemSet();
-                if (*ppSet)
+                if (rState.pItemSet)
                 {
                     //  (*ppSet)->MergeValues( rThisSet, FALSE );
                     //  geht nicht, weil die Vorlagen nicht beruecksichtigt werden
 
                     if (bDeep)
-                        lcl_MergeDeep( **ppSet, rThisSet );
+                        lcl_MergeDeep( *rState.pItemSet, rThisSet );
                     else
-                        (*ppSet)->MergeValues( rThisSet, FALSE );
+                        rState.pItemSet->MergeValues( rThisSet, FALSE );
                 }
                 else
                 {
                     //  erstes Pattern - in Set ohne Parent kopieren
-                    *ppSet = new SfxItemSet( *rThisSet.GetPool(), rThisSet.GetRanges() );
-                    (*ppSet)->Set( rThisSet, bDeep );
+                    rState.pItemSet = new SfxItemSet( *rThisSet.GetPool(), rThisSet.GetRanges() );
+                    rState.pItemSet->Set( rThisSet, bDeep );
                 }
 
-                pOld2 = pOld1;
-                pOld1 = pPattern;
+                rState.pOld2 = rState.pOld1;
+                rState.pOld1 = pPattern;
             }
 
             nStart = pData[nPos].nRow + 1;
