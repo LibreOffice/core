@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:11 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 09:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,7 @@ protected:
     BOOL       bOpt     : 1;        // TRUE: optionaler Parameter
     BOOL       bStatic  : 1;        // TRUE: STATIC-Variable
     BOOL       bAs      : 1;        // TRUE: Datentyp per AS XXX definiert
+    BOOL       bGlobal  : 1;        // TRUE: Global-Variable
 public:
     SbiSymDef( const String& );
     virtual ~SbiSymDef();
@@ -195,11 +196,13 @@ public:
     void       SetStatic()      { bStatic = TRUE;   }
     void       SetNew()         { bNew = TRUE;      }
     void       SetDefinedAs()   { bAs = TRUE;       }
+    void       SetGlobal(BOOL b){ bGlobal = b;  }
     BOOL       IsOptional() const{ return bOpt;     }
     BOOL       IsByVal() const  { return bByVal;    }
     BOOL       IsStatic() const { return bStatic;   }
     BOOL       IsNew() const    { return bNew;      }
     BOOL       IsDefinedAs() const { return bAs;    }
+    BOOL       IsGlobal() const { return bGlobal;   }
 
     SbiSymPool& GetPool();
     USHORT     Define();        // Symbol in Code definieren
