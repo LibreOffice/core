@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hdu $ $Date: 2001-07-06 13:49:30 $
+ *  last change: $Author: hdu $ $Date: 2001-09-18 15:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef NO_FREETYPE_FONTS
 
 #include <glyphcache.hxx>
+#include <rtl/textcvt.h>
 typedef int FT_Int;
 
 // -----------------------------------------------------------------------
@@ -184,6 +185,7 @@ private:
 
     typedef ::std::hash_map<int,int> GlyphSubstitution;
     GlyphSubstitution           aGlyphSubstitution;
+    rtl_UnicodeToTextConverter  maRecodeConverter;
 };
 
 // -----------------------------------------------------------------------

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.55 $
- *  last change: $Author: hdu $ $Date: 2001-08-02 17:21:09 $
+ *  $Revision: 1.56 $
+ *  last change: $Author: hdu $ $Date: 2001-09-18 15:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,8 @@ FreetypeServerFont* FreetypeManager::CreateFont( const ImplFontSelectData& rFSD 
 FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontInfo* pFI )
 :   ServerFont(rFSD),
     mpFontInfo(pFI),
-    maFaceFT(NULL)
+    maFaceFT(NULL),
+    maRecodeConverter(NULL)
 {
     if( !pFI->MapFile() )
         return;
@@ -511,6 +512,50 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
+
+    // no standard encoding applies => we need an encoding converter
+    if( rc != FT_Err_Ok )
+    {
+        rtl_TextEncoding eRecodeFrom = RTL_TEXTENCODING_UNICODE;
+        for( int i = maFaceFT->num_charmaps; --i >= 0; )
+        {
+            const FT_CharMap aCM = maFaceFT->charmaps[i];
+            if( aCM->platform_id == TT_PLATFORM_MICROSOFT)
+            {
+                switch( aCM->encoding_id )
+                {
+                    case TT_MS_ID_SJIS:
+                        eEncoding = ft_encoding_sjis;
+                        eRecodeFrom = RTL_TEXTENCODING_SHIFT_JIS;
+                        break;
+                    case TT_MS_ID_GB2312:
+                        eEncoding = ft_encoding_gb2312;
+                        eRecodeFrom = RTL_TEXTENCODING_GB_2312;
+                        break;
+                    case TT_MS_ID_BIG_5:
+                        eEncoding = ft_encoding_big5;
+                        eRecodeFrom = RTL_TEXTENCODING_BIG5;
+                        break;
+                    case TT_MS_ID_WANSUNG:
+                        eEncoding = ft_encoding_wansung;
+                        eRecodeFrom = RTL_TEXTENCODING_MS_949;
+                        break;
+                    case TT_MS_ID_JOHAB:
+                        eEncoding = ft_encoding_johab;
+                        eRecodeFrom = RTL_TEXTENCODING_MS_1361;
+                        break;
+                }
+            }
+        }
+
+        if( FT_Err_Ok != FT_Select_Charmap( maFaceFT, eEncoding ) )
+        {
+            maFaceFT->num_glyphs = 0;
+            return;
+        }
+
+        maRecodeConverter = rtl_createUnicodeToTextConverter( eRecodeFrom );
+    }
 
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
@@ -667,6 +712,7 @@ static void SetTransform( int nSin, int nCos, int nHeight, int nGlyphFlags, FT_G
 int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 {
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
+    {
         if( FT_IS_SFNT( maFaceFT ) )
             aChar |= 0xF000;    // emulate W2K high/low mapping of symbols
         else
@@ -676,6 +722,27 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
             else if( aChar > 0xFF )
                 return 0;
         }
+    }
+
+    // need to recode from unicode to font encoding?
+    if( maRecodeConverter )
+    {
+        sal_Char aTempArray[2];
+        sal_Size nTempSize;
+        sal_uInt32 nCvtInfo;
+
+        rtl_UnicodeToTextContext aContext = rtl_createUnicodeToTextContext( maRecodeConverter );
+        int nChars = rtl_convertUnicodeToText( maRecodeConverter, aContext,
+            &aChar, 1, aTempArray, sizeof(aTempArray),
+            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK
+            | RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK,
+            &nCvtInfo, &nTempSize );
+        rtl_destroyUnicodeToTextContext( maRecodeConverter, aContext );
+
+        aChar = 0;
+        for( int i = 0; i < nChars; ++i )
+            aChar = aChar*256 + (aTempArray[i] & 0xFF);
+    }
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
 
