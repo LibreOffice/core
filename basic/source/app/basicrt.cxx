@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicrt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-06 13:23:44 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 #include "runtime.hxx"
 #include "basicrt.hxx"
 
+const String BasicRuntime::GetSourceRevision()
+{
+    return pRun->GetModule()->GetComment();
+}
 
 const String BasicRuntime::GetModuleName( SbxNameType nType )
 {
@@ -102,6 +106,11 @@ BasicRuntime BasicRuntime::GetNextRuntime()
 
 
 
+
+const String BasicErrorStackEntry::GetSourceRevision()
+{
+    return pEntry->aMethod->GetModule()->GetComment();
+}
 
 const String BasicErrorStackEntry::GetModuleName( SbxNameType nType )
 {
