@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 09:46:56 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,8 +693,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( pDispatch &&
-        ( aURL.Protocol.equalsAscii( ".uno:" ) && aURL.Path.equalsAscii( pUnoName ) ||
-          aURL.Protocol.equalsAscii( "slot:" ) && aURL.Path.toInt32() == GetId() ) )
+        ( aURL.Protocol.equalsAsciiL( ".uno:", 5 ) && aURL.Path == aDispatchURL.Path ||
+          aURL.Protocol.equalsAsciiL( "slot:", 5 ) && aURL.Path.toInt32() == GetId() ) )
     {
         /*
         if ( !IsBound() && pBindings )
