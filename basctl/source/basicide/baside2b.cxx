@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-25 08:01:10 $
+ *  last change: $Author: tbe $ $Date: 2001-11-07 10:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,13 @@
 //#ifndef _SFX_HELP_HXX //autogen
 //#include <sfx2/sfxhelp.hxx>
 //#endif
+
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
 long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
@@ -757,8 +764,15 @@ void EditorWindow::CreateEditEngine()
 
     DBG_ASSERT( pModulWindow->GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
 
-    BasicManager* pBasMgr = BasicIDE::FindBasicManager( pModulWindow->GetBasic() );
-    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+    // set readonly mode for readonly libraries
+    SfxObjectShell* pShell = pModulWindow->GetShell();
+    ::rtl::OUString aOULibName( pModulWindow->GetLibName() );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
+    {
+        pEditView->SetReadOnly( TRUE );
+    }
+
     if ( pShell && pShell->IsReadOnly() )
         pEditView->SetReadOnly( TRUE );
 }

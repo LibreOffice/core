@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
+ *  last change: $Author: tbe $ $Date: 2001-11-07 10:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,391 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 
 
+//----------------------------------------------------------------------------
+//  BasicLibUserData
+//----------------------------------------------------------------------------
+
+class BasicLibUserData
+{
+private:
+    SfxObjectShell* m_pShell;
+
+public:
+                    BasicLibUserData( SfxObjectShell* pShell ) { m_pShell = pShell; }
+                    virtual         ~BasicLibUserData() {};
+
+    SfxObjectShell* GetShell() const { return m_pShell; }
+};
+
+
+//----------------------------------------------------------------------------
+//  BasicLibLBoxString
+//----------------------------------------------------------------------------
+
+class BasicLibLBoxString : public SvLBoxString
+{
+public:
+    BasicLibLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
+        SvLBoxString( pEntry, nFlags, rTxt ) {}
+
+    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
+};
+
+//----------------------------------------------------------------------------
+
+void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
+{
+
+    Font aOldFont( rDev.GetFont() );
+    Font aFont( aOldFont );
+    DBG_ASSERT( pEntry && pEntry->GetUserData(), "BasicLibLBoxString::Paint: Entry or UserData invalid!" );
+
+    // change text color, if library is readonly
+    SfxObjectShell* pShell = ((BasicLibUserData*)pEntry->GetUserData())->GetShell();
+    ::rtl::OUString aOULibName( ((SvLBoxString*)pEntry->GetItem(1))->GetText() );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+    {
+        aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
+    }
+
+    rDev.SetFont( aFont );
+    rDev.DrawText( rPos, GetText() );
+    rDev.SetFont( aOldFont );
+}
+
+
+//----------------------------------------------------------------------------
+//  BasicCheckBox
+//----------------------------------------------------------------------------
+
+BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
+        SvTabListBox( pParent, rResId )
+{
+    nMode = 0;
+    pBasMgr = 0;
+    long aTabs[] = { 1, 12 };   // Mindestens einen braucht die TabPos...
+                                // 12 wegen der Checkbox
+    SetTabs( aTabs );
+    Init();
+}
+
+//----------------------------------------------------------------------------
+
+__EXPORT BasicCheckBox::~BasicCheckBox()
+{
+    //delete pCheckButton;
+}
+
+
+//----------------------------------------------------------------------------
+
+/*
+void __EXPORT BasicCheckBox::CheckButtonHdl()
+{
+    SvLBoxEntry* pEntry = GetHdlEntry();
+    DBG_ASSERT( pEntry, "HdlEntry?!" );
+    ULONG nPos = GetModel()->GetAbsPos( pEntry );
+    if ( !nPos && ( GetMode() == LIBMODE_MANAGER ) )
+    {
+        CheckEntryPos( 0, TRUE );
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTUNLOADSTDLIB ) ) ).Execute();
+    }
+    else
+    {
+        // SelectHdl ausloesen, damit Buttons geprueft werden.
+        SelectEntryPos( nPos, FALSE );
+        SelectEntryPos( nPos, TRUE );
+    }
+}
+*/
+
+//----------------------------------------------------------------------------
+
+void BasicCheckBox::Init()
+{
+    /*
+    BasicCheckBoxBitmaps theBmps;
+
+    pCheckButton = new SvLBoxButtonData;
+    pCheckButton->aBmps[SV_BMP_UNCHECKED]   = theBmps.GetUncheckedBmp();
+    pCheckButton->aBmps[SV_BMP_CHECKED]     = theBmps.GetCheckedBmp();
+    pCheckButton->aBmps[SV_BMP_HICHECKED]   = theBmps.GetHiCheckedBmp();
+    pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = theBmps.GetHiUncheckedBmp();
+    pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
+    pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
+    EnableCheckButton( pCheckButton );
+    */
+    SetHighlightRange();
+}
+
+//----------------------------------------------------------------------------
+
+SvLBoxEntry* BasicCheckBox::InsertEntry( const String& rStr, ULONG nPos )
+{
+//  return SvTreeListBox::InsertEntry( rStr, NULL, FALSE, nPos );
+    return SvTabListBox::InsertEntry( rStr, nPos, 0 );
+}
+
+//----------------------------------------------------------------------------
+
+void BasicCheckBox::RemoveEntry( ULONG nPos )
+{
+    if ( nPos < GetEntryCount() )
+        SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
+}
+
+//----------------------------------------------------------------------------
+
+SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
+{
+    ULONG nCount = GetEntryCount();
+    for ( ULONG i = 0; i < nCount; i++ )
+    {
+        SvLBoxEntry* pEntry = GetEntry( i );
+        DBG_ASSERT( pEntry, "pEntry?!" );
+        if ( rName.CompareIgnoreCaseToAscii( GetEntryText( pEntry, 0 ) ) == COMPARE_EQUAL )
+            return pEntry;
+    }
+    return 0;
+}
+
+//----------------------------------------------------------------------------
+
+void BasicCheckBox::SelectEntryPos( ULONG nPos, BOOL bSelect )
+{
+    if ( nPos < GetEntryCount() )
+        Select( GetEntry( nPos ), bSelect );
+}
+
+//----------------------------------------------------------------------------
+
+ULONG BasicCheckBox::GetSelectEntryPos() const
+{
+    return GetModel()->GetAbsPos( FirstSelected() );
+}
+
+//----------------------------------------------------------------------------
+
+/*
+ULONG BasicCheckBox::GetCheckedEntryCount() const
+{
+    ULONG   nCheckCount = 0;
+    ULONG   nCount      = GetEntryCount();
+
+    for (ULONG i=0; i<nCount; i++ )
+    {
+        if ( IsChecked( i ) )
+            nCheckCount++;
+    }
+
+    return nCheckCount;
+}
+*/
+
+//----------------------------------------------------------------------------
+
+/*
+void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
+{
+    if ( nPos < GetEntryCount() )
+    {
+        SvLBoxEntry* pEntry = GetEntry( nPos );
+
+        if ( bCheck != GetCheckButtonState( pEntry ) )
+            SetCheckButtonState( pEntry,
+                                 bCheck
+                                    ? SvButtonState(SV_BUTTON_CHECKED)
+                                    : SvButtonState(SV_BUTTON_UNCHECKED) );
+    }
+}
+*/
+
+//----------------------------------------------------------------------------
+
+/*
+BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
+{
+    if ( nPos < GetEntryCount() )
+        return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
+    return FALSE;
+}
+*/
+
+//----------------------------------------------------------------------------
+
+void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2 )
+{
+    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
+    USHORT nCount = pEntry->ItemCount();
+
+    // initialize all columns with own string class (column 0 == bitmap)
+    for ( USHORT nCol = 1; nCol < nCount; ++nCol )
+    {
+        SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
+        BasicLibLBoxString* pStr = new BasicLibLBoxString( pEntry, 0, pCol->GetText() );
+        pEntry->ReplaceItem( pStr, nCol );
+    }
+}
+
+//----------------------------------------------------------------------------
+
+BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+{
+    if ( nMode != LIBMODE_MANAGER )
+        return FALSE;
+
+    DBG_ASSERT( pEntry, "Kein Eintrag?" );
+
+    // check, if Standard library
+    String aLibName = GetEntryText( pEntry, 0 );
+    if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
+    {
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMESTDLIB ) ) ).Execute();
+        return FALSE;
+    }
+
+    // check, if library is readonly
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+    ::rtl::OUString aOULibName( aLibName );
+    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) && !xModLibContainer->isLibraryLink( aOULibName ) ) ||
+         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) && !xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+    {
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
+        return FALSE;
+    }
+
+    // TODO: check if library is reference/link
+
+    // Prueffen, ob Referenz...
+    /*
+    USHORT nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
+    DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
+    if ( pBasMgr->IsReference( nLib ) )
+    {
+        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
+        return FALSE;
+    }
+    */
+    return TRUE;
+}
+
+//----------------------------------------------------------------------------
+
+BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+{
+    BOOL bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
+    String aCurText( GetEntryText( pEntry, 0 ) );
+    if ( bValid && ( aCurText != rNewText ) )
+    {
+        DBG_ASSERT( pBasMgr, "BasMgr nicht gesetzt!" );
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+
+        try
+        {
+            ::rtl::OUString aOUOldName( aCurText );
+            ::rtl::OUString aOUNewName( rNewText );
+
+            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+            if ( xModLibContainer.is() )
+            {
+                xModLibContainer->renameLibrary( aOUOldName, aOUNewName );
+            }
+
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            if ( xDlgLibContainer.is() )
+            {
+                xDlgLibContainer->renameLibrary( aOUOldName, aOUNewName );
+            }
+
+            BasicIDE::MarkDocShellModified( pShell );
+            BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
+            BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );
+        }
+        catch ( container::ElementExistException& )
+        {
+            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
+            return FALSE;
+        }
+        catch ( container::NoSuchElementException& e )
+        {
+            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+            DBG_ERROR( aBStr.GetBuffer() );
+            return FALSE;
+        }
+    }
+
+    if ( !bValid )
+    {
+        if ( rNewText.Len() > 30 )
+            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
+        else
+            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
+    }
+
+    return bValid;
+}
+
+//----------------------------------------------------------------------------
+
+/*
+BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
+    Resource        ( ResId( RID_RES_CHECKBITMAPS ) ),
+    aUncheckedBmp   ( ResId( CHKBTN_UNCHECKED ) ),
+    aCheckedBmp     ( ResId( CHKBTN_CHECKED ) ),
+    aHiCheckedBmp   ( ResId( CHKBTN_HICHECKED ) ),
+    aHiUncheckedBmp ( ResId( CHKBTN_HIUNCHECKED ) ),
+    aTriStateBmp    ( ResId( CHKBTN_TRISTATE ) ),
+    aHiTriStateBmp  ( ResId( CHKBTN_HITRISTATE ) )
+{
+    FreeResource();
+}
+*/
+
+
+//----------------------------------------------------------------------------
+// NewObjectDialog
+//----------------------------------------------------------------------------
+
+NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
+    : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
+        aText( this, IDEResId( RID_FT_NEWLIB ) ),
+        aEdit( this, IDEResId( RID_ED_LIBNAME ) ),
+        aOKButton( this, IDEResId( RID_PB_OK ) ),
+        aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
+{
+    FreeResource();
+    aEdit.GrabFocus();
+
+    if ( nMode == NEWOBJECTMODE_LIB )
+    {
+        SetText( String( IDEResId( RID_STR_NEWLIB ) ) );
+    }
+    else if ( nMode == NEWOBJECTMODE_MOD )
+    {
+        SetText( String( IDEResId( RID_STR_NEWMOD ) ) );
+    }
+    else
+    {
+        SetText( String( IDEResId( RID_STR_NEWDLG ) ) );
+    }
+}
+
+//----------------------------------------------------------------------------
+
+NewObjectDialog::~NewObjectDialog()
+{
+}
+
+
+//----------------------------------------------------------------------------
+//  LibPage
+//----------------------------------------------------------------------------
+
 LibPage::LibPage( Window * pParent ) :
         TabPage(        pParent,IDEResId( RID_TP_LIBS ) ),
         aBasicsText(    this,   IDEResId( RID_STR_BASICS ) ),
@@ -168,6 +553,8 @@ LibPage::LibPage( Window * pParent ) :
     CheckButtons();
 }
 
+//----------------------------------------------------------------------------
+
 void LibPage::CheckButtons()
 {
     /*
@@ -196,11 +583,27 @@ void LibPage::CheckButtons()
     SvLBoxEntry* pCur = aLibBox.GetCurEntry();
     if ( pCur )
     {
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( aLibBox.GetBasicManager() );
         String aLibName = aLibBox.GetEntryText( pCur, 0 );
+        ::rtl::OUString aOULibName( aLibName );
+        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+
         if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
         {
             aPasswordButton.Disable();
             aDelButton.Disable();
+        }
+        else if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
+                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
+        {
+            aPasswordButton.Disable();
+
+            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) && !xModLibContainer->isLibraryLink( aOULibName ) ) ||
+                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) && !xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+                aDelButton.Disable();
+            else
+                aDelButton.Enable();
         }
         else
         {
@@ -210,6 +613,7 @@ void LibPage::CheckButtons()
     }
 }
 
+//----------------------------------------------------------------------------
 
 /*
 IMPL_LINK_INLINE_START( LibPage, CheckBoxHdl, SvTreeListBox *, EMPTYARG )
@@ -220,12 +624,15 @@ IMPL_LINK_INLINE_START( LibPage, CheckBoxHdl, SvTreeListBox *, EMPTYARG )
 IMPL_LINK_INLINE_END( LibPage, CheckBoxHdl, SvTreeListBox *, EMPTYARG )
 */
 
+//----------------------------------------------------------------------------
+
 
 void __EXPORT LibPage::ActivatePage()
 {
     SetCurLib();
 }
 
+//----------------------------------------------------------------------------
 
 
 void __EXPORT LibPage::DeactivatePage()
@@ -233,6 +640,7 @@ void __EXPORT LibPage::DeactivatePage()
     //ActivateCurrentLibSettings();
 }
 
+//----------------------------------------------------------------------------
 
 
 IMPL_LINK_INLINE_START( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
@@ -243,7 +651,7 @@ IMPL_LINK_INLINE_START( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 }
 IMPL_LINK_INLINE_END( LibPage, TreeListHighlightHdl, SvTreeListBox *, pBox )
 
-
+//----------------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
 {
@@ -253,7 +661,7 @@ IMPL_LINK_INLINE_START( LibPage, BasicSelectHdl, ListBox *, pBox )
 }
 IMPL_LINK_INLINE_END( LibPage, BasicSelectHdl, ListBox *, pBox )
 
-
+//----------------------------------------------------------------------------
 
 IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 {
@@ -349,6 +757,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
     return 0;
 }
 
+//----------------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 {
@@ -377,6 +786,7 @@ IMPL_LINK_INLINE_START( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 }
 IMPL_LINK_INLINE_END( LibPage, CheckPasswordHdl, SvxPasswordDialog *, pDlg )
 
+//----------------------------------------------------------------------------
 
 void LibPage::NewLib()
 {
@@ -429,20 +839,8 @@ void LibPage::NewLib()
                 Reference< container::XNameContainer > xModLib = BasicIDE::CreateModuleLibrary( pShell, aLibName );
                 Reference< container::XNameContainer > xDlgLib = BasicIDE::CreateDialogLibrary( pShell, aLibName );
 
-                // check if libraries are loaded
-                /*
-                BOOL bLoaded = FALSE;
-                ::rtl::OUString aOULibName( aLibName );
-                Reference< script::XLibraryContainer > xModuleLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
-                Reference< script::XLibraryContainer > xDialogLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
-                if ( xModuleLibContainer.is() && xModuleLibContainer->isLibraryLoaded( aOULibName ) &&
-                     xDialogLibContainer.is() && xDialogLibContainer->isLibraryLoaded( aOULibName ) )
-                {
-                    bLoaded = TRUE;
-                }
-                */
-
                 SvLBoxEntry* pEntry = aLibBox.InsertEntry( aLibName );
+                pEntry->SetUserData( new BasicLibUserData( pShell ) );
                 aLibBox.SetCurEntry( pEntry );
                 //USHORT nPos = (USHORT)aLibBox.GetModel()->GetAbsPos( pEntry );
                 //aLibBox.CheckEntryPos( nPos, bLoaded );
@@ -474,6 +872,8 @@ void LibPage::NewLib()
     }
     delete pNewDlg;
 }
+
+//----------------------------------------------------------------------------
 
 void LibPage::InsertLib()
 {
@@ -648,6 +1048,8 @@ void LibPage::InsertLib()
     }
 }
 
+//----------------------------------------------------------------------------
+
 void LibPage::DeleteCurrent()
 {
     BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
@@ -693,7 +1095,7 @@ void LibPage::DeleteCurrent()
     }
 }
 
-
+//----------------------------------------------------------------------------
 
 void LibPage::EndTabDialog( USHORT nRet )
 {
@@ -702,7 +1104,7 @@ void LibPage::EndTabDialog( USHORT nRet )
         pTabDlg->EndDialog( nRet );
 }
 
-
+//----------------------------------------------------------------------------
 
 void LibPage::FillListBox()
 {
@@ -733,7 +1135,7 @@ void LibPage::FillListBox()
     }
 }
 
-
+//----------------------------------------------------------------------------
 
 void LibPage::SetCurLib()
 {
@@ -765,6 +1167,7 @@ void LibPage::SetCurLib()
     }
 }
 
+//----------------------------------------------------------------------------
 
 /*
 void LibPage::ActivateCurrentLibSettings()
@@ -812,6 +1215,8 @@ void LibPage::ActivateCurrentLibSettings()
 }
 */
 
+//----------------------------------------------------------------------------
+
 SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
 {
     // check, if library is password protected
@@ -837,6 +1242,7 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
     }
 
     SvLBoxEntry* pNewEntry = aLibBox.InsertEntry( rLibName, nPos );
+    pNewEntry->SetUserData( new BasicLibUserData( pShell ) );
 
     // check, if library is link
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) )
@@ -878,280 +1284,4 @@ SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
     return pNewEntry;
 }
 
-
-BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
-        SvTabListBox( pParent, rResId )
-{
-    nMode = 0;
-    pBasMgr = 0;
-    long aTabs[] = { 1, 12 };   // Mindestens einen braucht die TabPos...
-                                // 12 wegen der Checkbox
-    SetTabs( aTabs );
-    Init();
-}
-
-
-
-__EXPORT BasicCheckBox::~BasicCheckBox()
-{
-    //delete pCheckButton;
-}
-
-/*
-void __EXPORT BasicCheckBox::CheckButtonHdl()
-{
-    SvLBoxEntry* pEntry = GetHdlEntry();
-    DBG_ASSERT( pEntry, "HdlEntry?!" );
-    ULONG nPos = GetModel()->GetAbsPos( pEntry );
-    if ( !nPos && ( GetMode() == LIBMODE_MANAGER ) )
-    {
-        CheckEntryPos( 0, TRUE );
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTUNLOADSTDLIB ) ) ).Execute();
-    }
-    else
-    {
-        // SelectHdl ausloesen, damit Buttons geprueft werden.
-        SelectEntryPos( nPos, FALSE );
-        SelectEntryPos( nPos, TRUE );
-    }
-}
-*/
-
-void BasicCheckBox::Init()
-{
-    /*
-    BasicCheckBoxBitmaps theBmps;
-
-    pCheckButton = new SvLBoxButtonData;
-    pCheckButton->aBmps[SV_BMP_UNCHECKED]   = theBmps.GetUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_CHECKED]     = theBmps.GetCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HICHECKED]   = theBmps.GetHiCheckedBmp();
-    pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = theBmps.GetHiUncheckedBmp();
-    pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
-    pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
-    EnableCheckButton( pCheckButton );
-    */
-    SetHighlightRange();
-}
-
-SvLBoxEntry* BasicCheckBox::InsertEntry( const String& rStr, ULONG nPos )
-{
-//  return SvTreeListBox::InsertEntry( rStr, NULL, FALSE, nPos );
-    return SvTabListBox::InsertEntry( rStr, nPos, 0 );
-}
-
-
-void BasicCheckBox::RemoveEntry( ULONG nPos )
-{
-    if ( nPos < GetEntryCount() )
-        SvTreeListBox::GetModel()->Remove( GetEntry( nPos ) );
-}
-
-SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
-{
-    ULONG nCount = GetEntryCount();
-    for ( ULONG i = 0; i < nCount; i++ )
-    {
-        SvLBoxEntry* pEntry = GetEntry( i );
-        DBG_ASSERT( pEntry, "pEntry?!" );
-        if ( rName.CompareIgnoreCaseToAscii( GetEntryText( pEntry, 0 ) ) == COMPARE_EQUAL )
-            return pEntry;
-    }
-    return 0;
-}
-
-
-void BasicCheckBox::SelectEntryPos( ULONG nPos, BOOL bSelect )
-{
-    if ( nPos < GetEntryCount() )
-        Select( GetEntry( nPos ), bSelect );
-}
-
-
-
-ULONG BasicCheckBox::GetSelectEntryPos() const
-{
-    return GetModel()->GetAbsPos( FirstSelected() );
-}
-
-
-/*
-ULONG BasicCheckBox::GetCheckedEntryCount() const
-{
-    ULONG   nCheckCount = 0;
-    ULONG   nCount      = GetEntryCount();
-
-    for (ULONG i=0; i<nCount; i++ )
-    {
-        if ( IsChecked( i ) )
-            nCheckCount++;
-    }
-
-    return nCheckCount;
-}
-*/
-
-/*
-void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
-{
-    if ( nPos < GetEntryCount() )
-    {
-        SvLBoxEntry* pEntry = GetEntry( nPos );
-
-        if ( bCheck != GetCheckButtonState( pEntry ) )
-            SetCheckButtonState( pEntry,
-                                 bCheck
-                                    ? SvButtonState(SV_BUTTON_CHECKED)
-                                    : SvButtonState(SV_BUTTON_UNCHECKED) );
-    }
-}
-*/
-
-/*
-BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
-{
-    if ( nPos < GetEntryCount() )
-        return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
-    return FALSE;
-}
-*/
-
-BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
-{
-    if ( nMode != LIBMODE_MANAGER )
-        return FALSE;
-
-    DBG_ASSERT( pEntry, "Kein Eintrag?" );
-
-    // check, if Standard library
-    String aLibName = GetEntryText( pEntry, 0 );
-    if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMESTDLIB ) ) ).Execute();
-        return FALSE;
-    }
-
-    // check, if library is readonly
-    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-    ::rtl::OUString aOULibName( aLibName );
-    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-    if ( ( xModLibContainer.is() && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-         ( xDlgLibContainer.is() && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
-        return FALSE;
-    }
-
-    // TODO: check if library is reference/link
-
-    // Prueffen, ob Referenz...
-    /*
-    USHORT nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
-    DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
-    if ( pBasMgr->IsReference( nLib ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
-        return FALSE;
-    }
-    */
-    return TRUE;
-}
-
-
-BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
-{
-    BOOL bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
-    String aCurText( GetEntryText( pEntry, 0 ) );
-    if ( bValid && ( aCurText != rNewText ) )
-    {
-        DBG_ASSERT( pBasMgr, "BasMgr nicht gesetzt!" );
-        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-
-        try
-        {
-            ::rtl::OUString aOUOldName( aCurText );
-            ::rtl::OUString aOUNewName( rNewText );
-
-            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-            if ( xModLibContainer.is() )
-            {
-                xModLibContainer->renameLibrary( aOUOldName, aOUNewName );
-            }
-
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-            if ( xDlgLibContainer.is() )
-            {
-                xDlgLibContainer->renameLibrary( aOUOldName, aOUNewName );
-            }
-
-            BasicIDE::MarkDocShellModified( pShell );
-            BasicIDE::GetBindings().Invalidate( SID_BASICIDE_LIBSELECTOR );
-            BasicIDE::GetBindings().Update( SID_BASICIDE_LIBSELECTOR );
-        }
-        catch ( container::ElementExistException& )
-        {
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
-            return FALSE;
-        }
-        catch ( container::NoSuchElementException& e )
-        {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
-            return FALSE;
-        }
-    }
-
-    if ( !bValid )
-    {
-        if ( rNewText.Len() > 30 )
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
-        else
-            ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
-    }
-
-    return bValid;
-}
-
-/*
-BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
-    Resource        ( ResId( RID_RES_CHECKBITMAPS ) ),
-    aUncheckedBmp   ( ResId( CHKBTN_UNCHECKED ) ),
-    aCheckedBmp     ( ResId( CHKBTN_CHECKED ) ),
-    aHiCheckedBmp   ( ResId( CHKBTN_HICHECKED ) ),
-    aHiUncheckedBmp ( ResId( CHKBTN_HIUNCHECKED ) ),
-    aTriStateBmp    ( ResId( CHKBTN_TRISTATE ) ),
-    aHiTriStateBmp  ( ResId( CHKBTN_HITRISTATE ) )
-{
-    FreeResource();
-}
-*/
-
-NewObjectDialog::NewObjectDialog( Window* pParent, USHORT nMode )
-    : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
-        aText( this, IDEResId( RID_FT_NEWLIB ) ),
-        aEdit( this, IDEResId( RID_ED_LIBNAME ) ),
-        aOKButton( this, IDEResId( RID_PB_OK ) ),
-        aCancelButton( this, IDEResId( RID_PB_CANCEL ) )
-{
-    FreeResource();
-    aEdit.GrabFocus();
-
-    if ( nMode == NEWOBJECTMODE_LIB )
-    {
-        SetText( String( IDEResId( RID_STR_NEWLIB ) ) );
-    }
-    else if ( nMode == NEWOBJECTMODE_MOD )
-    {
-        SetText( String( IDEResId( RID_STR_NEWMOD ) ) );
-    }
-    else
-    {
-        SetText( String( IDEResId( RID_STR_NEWDLG ) ) );
-    }
-}
-
-NewObjectDialog::~NewObjectDialog()
-{
-}
-
+//----------------------------------------------------------------------------

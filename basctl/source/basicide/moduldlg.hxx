@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:10 $
+ *  last change: $Author: tbe $ $Date: 2001-11-07 10:18:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ public:
     //void          CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
     //BOOL          IsChecked( ULONG nPos ) const;
 
+    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
@@ -178,7 +179,6 @@ public:
 
     void            SetMode( USHORT n )     { nMode = n; }
     USHORT          GetMode() const         { return nMode; }
-
 };
 
 /*
