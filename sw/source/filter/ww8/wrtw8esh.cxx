@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:55:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,6 @@
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -704,10 +702,15 @@ void PlcDrawObj::WritePlc(SwWW8Writer& rWrt) const
                 case SURROUND_RIGHT:
                     nFlags |= 0x0400 | nContour;
                     break;
+                default:
+                    ASSERT(!this, "Unsupported surround type for export");
+                    break;
             }
-            if( pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
-                    pObj->GetLayer() == rWrt.pDoc->GetInvisibleHellId()) )
+            if (pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
+                    pObj->GetLayer() == rWrt.pDoc->GetInvisibleHellId()))
+            {
                 nFlags |= 0x4000;
+            }
 
             /*
              #i3958# Required to make this inline stuff work in WordXP, not
@@ -1155,25 +1158,25 @@ bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 // Attribut-Anfangposition fragen kann.
 // Es koennen nur Attribute mit Ende abgefragt werden.
 // Es wird mit bDeep gesucht
-const SfxPoolItem* WW8_SdrAttrIter::HasTextItem( USHORT nWhich ) const
+const SfxPoolItem* WW8_SdrAttrIter::HasTextItem(USHORT nWhich) const
 {
     const SfxPoolItem* pRet = 0;
-    USHORT nSlotId = rWrt.pDoc->GetAttrPool().GetSlotId( nWhich );
-    if( nSlotId && nWhich != nSlotId &&
-        0 != ( nWhich = pEditPool->GetWhich( nSlotId ) ) &&
-        nWhich != nSlotId )
+    nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
+        rWrt.pDoc->GetAttrPool(), nWhich);
+    if (nWhich)
     {
-        register USHORT i;
-        for( i = 0; i < aTxtAtrArr.Count(); ++i )
+        for (USHORT i = 0; i < aTxtAtrArr.Count(); ++i)
         {
-            const EECharAttrib& rHt = aTxtAtrArr[ i ];
-            if( nWhich == rHt.pAttr->Which() &&
-                nTmpSwPos >= rHt.nStart && nTmpSwPos < rHt.nEnd )
+            const EECharAttrib& rHt = aTxtAtrArr[i];
+            if (
+                 nWhich == rHt.pAttr->Which() && nTmpSwPos >= rHt.nStart &&
+                 nTmpSwPos < rHt.nEnd
+               )
             {
-                pRet = rHt.pAttr;       // gefunden
+                pRet = rHt.pAttr;   // Found
                 break;
             }
-            else if( nTmpSwPos < rHt.nStart )
+            else if (nTmpSwPos < rHt.nStart)
                 break;              // dann kommt da nichts mehr
         }
     }
@@ -1182,16 +1185,14 @@ const SfxPoolItem* WW8_SdrAttrIter::HasTextItem( USHORT nWhich ) const
 
 const SfxPoolItem& WW8_SdrAttrIter::GetItem( USHORT nWhich ) const
 {
-    const SfxPoolItem* pRet = HasTextItem( nWhich );
-    if( !pRet )
+    using sw::hack::GetSetWhichFromSwDocWhich;
+    const SfxPoolItem* pRet = HasTextItem(nWhich);
+    if (!pRet)
     {
-        SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
-
-        USHORT nNewW, nSlotId = rWrt.pDoc->GetAttrPool().GetSlotId( nWhich );
-        if( nSlotId && nWhich != nSlotId &&
-            0 != ( nNewW = aSet.GetPool()->GetWhich( nSlotId ) ) &&
-            nNewW != nSlotId )
-            pRet = &aSet.Get( nNewW );
+        SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
+        nWhich = GetSetWhichFromSwDocWhich(aSet, *rWrt.pDoc, nWhich);
+        ASSERT(nWhich, "Impossible, catastrophic failure imminent");
+        pRet = &aSet.Get(nWhich);
     }
     return *pRet;
 }
