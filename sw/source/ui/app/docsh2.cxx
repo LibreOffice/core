@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:37:25 $
+ *  last change: $Author: os $ $Date: 2002-06-24 08:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,7 +1644,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
 
     AddLink();
-    //has to be set to have the right setting before the view is created
     pDoc->SetBrowseMode(bWasBrowseMode);
     pSrcView->SetPool(&GetPool());
 
@@ -1666,8 +1665,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SfxMedium aMed( rStreamName, STREAM_READ, FALSE );
     SwReader aReader( aMed, rMedname, pDoc );
     aReader.Read( *ReadHTML );
-    //has to be set twice - the reader always sets to browse mode
-    pDoc->SetBrowseMode(bWasBrowseMode);
 
     INetURLObject::SetBaseURL(sBaseURL);
     const SwView* pView = GetView();
