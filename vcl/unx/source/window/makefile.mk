@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-11-18 14:57:51 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:44:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,10 +83,8 @@ dummy:
 
 .ELSE		# "$(GUIBASE)"!="unx"
 
-.IF "$(remote)"
 SLOFILES=	\
         $(SLO)/FWS.obj $(SLO)/salframe.obj $(SLO)/salobj.obj $(SLO)/salmenu.obj
-.ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="unx"
 
