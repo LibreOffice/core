@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:04:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-18 09:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,6 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_BROWSER );
     SFX_CHILDWINDOW_REGISTRATION( SID_RECORDING_FLOATWINDOW );
-    SFX_CHILDWINDOW_REGISTRATION( SID_CUSTOMIZETOOLBOX );
 
     SFX_OBJECTBAR_REGISTRATION(
             SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN,
