@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-22 09:28:43 $
+ *  last change: $Author: as $ $Date: 2001-02-26 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,21 +775,21 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("impress_CGM_Computer_Graphics_Metafile"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: CGM - Computer Graphics Metafile"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("impress_StarImpress_50_packed"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("simpress: StarImpress 5.0 (packed)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarOffice_XML_Draw"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarOffice XML (Draw)"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_GIF_Graphics_Interchange"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: GIF - Graphics Interchange"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCD_Photo_CD"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCD - Photo CD"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCX_Zsoft_Paintbrush"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCX - Zsoft Paintbrush"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PSD_Adobe_Photoshop"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PSD - Adobe Photoshop"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PNG_Portable_Network_Graphic"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PNG - Portable Network Graphic"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("gif_Graphics_Interchange"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: GIF - Graphics Interchange"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("pcd_Photo_CD"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCD - Photo CD"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("pcx_Zsoft_Paintbrush"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCX - Zsoft Paintbrush"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("psd_Adobe_Photoshop"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PSD - Adobe Photoshop"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("png_Portable_Network_Graphic"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PNG - Portable Network Graphic"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_50"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PBM_Portable_Bitmap"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PBM - Portable Bitmap"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PGM_Portable_Graymap"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PGM - Portable Graymap"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PPM_Portable_Pixelmap"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PPM - Portable Pixelmap"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_RAS_Sun_Rasterfile"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: RAS - Sun Rasterfile"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_TGA_Truevision_TARGA"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TGA - Truevision TARGA"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SGV_StarDraw_20"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGV - StarDraw 2.0"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_TIF_Tag_Image_File"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TIF - Tag Image File"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SGF_StarOffice_Writer_SGF"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGF - StarOffice Writer SGF"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XPM"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XPM"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("pbm_Portable_Bitmap"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PBM - Portable Bitmap"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("pgm_Portable_Graymap"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PGM - Portable Graymap"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("ppm_Portable_Pixelmap"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PPM - Portable Pixelmap"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("ras_Sun_Rasterfile"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: RAS - Sun Rasterfile"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("tga_Truevision_TARGA"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TGA - Truevision TARGA"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sgv_StarDraw_20"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGV - StarDraw 2.0"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("tif_Tag_Image_File"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: TIF - Tag Image File"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("sgf_StarOffice_Writer_SGF"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SGF - StarOffice Writer SGF"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("xpm_XPM"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XPM"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_50_Vorlage"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 5.0 Vorlage"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_50_StarDraw"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 (StarDraw)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_50_Vorlage_StarDraw"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 5.0 Vorlage (StarDraw)"));
@@ -797,16 +797,16 @@ void impl_initFilterHashNew2Old( TFilterNames& aHash )
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarImpress_40_Vorlage_StarDraw"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarImpress 4.0 Vorlage (StarDraw)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_30"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_StarDraw_30_Vorlage"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: StarDraw 3.0 Vorlage"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_EMF_MS_Windows_Metafile"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EMF - MS Windows Metafile"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_MET_OS2_Metafile"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: MET - OS/2 Metafile"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_DXF_AutoCAD_Interchange"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: DXF - AutoCAD Interchange"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_EPS_Encapsulated_PostScript"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EPS - Encapsulated PostScript"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_WMF_MS_Windows_Metafile"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: WMF - MS Windows Metafile"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_PCT_Mac_Pict"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCT - Mac Pict"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_SVM_StarView_Metafile"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SVM - StarView Metafile"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_BMP_MS_Windows"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_JPG_JPEG"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"));
-    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("draw_XBM_X_Consortium"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("emf_MS_Windows_Metafile"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EMF - MS Windows Metafile"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("met_OS2_Metafile"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: MET - OS/2 Metafile"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("dxf_AutoCAD_Interchange"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: DXF - AutoCAD Interchange"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("eps_Encapsulated_PostScript"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: EPS - Encapsulated PostScript"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("wmf_MS_Windows_Metafile"))] =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: WMF - MS Windows Metafile"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("pct_Mac_Pict"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: PCT - Mac Pict"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("svm_StarView_Metafile"))]   =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: SVM - StarView Metafile"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("bmp_MS_Windows"))]  =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: BMP - MS Windows"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("jpg_JPEG"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: JPG - JPEG"));
+    aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("xbm_X_Consortium"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("sdraw: XBM - X-Consortium"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarOffice_XML_Math"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarOffice XML (Math)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_MathML_XML_Math"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: MathML XML (Math)"));
     aHash[OUString(RTL_CONSTASCII_USTRINGPARAM("math_StarMath_50"))]    =   OUString(RTL_CONSTASCII_USTRINGPARAM("smath: StarMath 5.0"));
