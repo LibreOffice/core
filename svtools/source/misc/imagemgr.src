@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 14:02:13 $
+ *  last change: $Author: rt $ $Date: 2002-12-09 11:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1443,7 +1443,7 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
 String STR_DESCRIPTION_SXMATH_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formel" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Formula" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Formula";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Formula";
     Text[ italian ] = "%PRODUCTNAME 6.0 Formula";
@@ -1469,7 +1469,7 @@ String STR_DESCRIPTION_SXMATH_DOC
 String STR_DESCRIPTION_SXCHART_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Diagramm" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Chart" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Chart";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Chart";
     Text[ italian ] = "%PRODUCTNAME 6.0 Chart";
@@ -1495,7 +1495,7 @@ String STR_DESCRIPTION_SXCHART_DOC
 String STR_DESCRIPTION_SXDRAW_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnung" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Drawing" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ italian ] = "%PRODUCTNAME 6.0 Drawing";
@@ -1521,7 +1521,7 @@ String STR_DESCRIPTION_SXDRAW_DOC
 String STR_DESCRIPTION_SXCALC_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ italian ] = "%PRODUCTNAME 6.0 Spreadsheet";
@@ -1547,7 +1547,7 @@ String STR_DESCRIPTION_SXCALC_DOC
 String STR_DESCRIPTION_SXIMPRESS_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Presentation" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ italian ] = "%PRODUCTNAME 6.0 Presentation";
@@ -1573,7 +1573,7 @@ String STR_DESCRIPTION_SXIMPRESS_DOC
 String STR_DESCRIPTION_SXWRITER_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Text Document" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ italian ] = "%PRODUCTNAME 6.0 Text Document";
@@ -1599,7 +1599,7 @@ String STR_DESCRIPTION_SXWRITER_DOC
 String STR_DESCRIPTION_SXGLOBAL_DOC
 {
     Text = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument" ;
-    Text [ english_us ] = "%PRODUCTNAME 6.0 Master Document" ;
+    Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
     Text[ french ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ spanish ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ italian ] = "%PRODUCTNAME 6.0 Master Document";
