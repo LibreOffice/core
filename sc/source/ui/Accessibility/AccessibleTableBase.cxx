@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-05 09:49:43 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 14:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
     IsObjectValid();
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
-    return (nRow * maRange.aEnd.Col() + 1) + nColumn;
+    return (nRow * (maRange.aEnd.Col() + 1)) + nColumn;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
@@ -312,9 +312,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    sal_Int32 nRow(-1);
-    nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-    return nRow;
+    return nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
@@ -322,9 +320,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    sal_Int32 nColumn(-1);
-    nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
-    return nColumn;
+    return nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
     //=====  XAccessibleContext  ==============================================
