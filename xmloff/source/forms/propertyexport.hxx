@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-29 12:18:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 07:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,8 @@ namespace xmloff
             const sal_Char* _pAttributeName,
             const sal_Char* _pPropertyName,
             const SvXMLEnumMapEntry* _pValueMap,
-            const sal_Int32 _nDefault);
+            const sal_Int32 _nDefault,
+            const sal_Bool _bVoidDefault = sal_False);
 
         // some very special methods for some very special attribute/property pairs
 
@@ -347,10 +348,13 @@ namespace xmloff
 
 #ifdef DBG_UTIL
                 void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue);
+                void AddAttributeASCII( sal_uInt16 nPrefix, const sal_Char *pName, const sal_Char *pValue );
 #else
         //  in the product version, inline this, so it does not cost us extra time calling into our method
         inline  void AddAttribute(sal_uInt16 _nPrefix, const sal_Char* _pName, const ::rtl::OUString& _rValue)
             { m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue); }
+        inline  void AddAttributeASCII( sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue )
+            { m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue); }
 #endif
 
 #ifdef DBG_UTIL
@@ -400,6 +404,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/03/29 12:18:58  fs
+ *  #85097# when exporting boolean properties, allow for MAYBEVOID props
+ *
  *  Revision 1.10  2001/02/01 09:46:47  fs
  *  no own style handling anymore - the shape exporter is responsible for our styles now
  *

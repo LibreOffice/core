@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 13:44:23 $
+ *  last change: $Author: fs $ $Date: 2001-04-17 07:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,21 +480,33 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportEnumPropertyAttribute(
             const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName, const SvXMLEnumMapEntry* _pValueMap, const sal_Int32 _nDefault)
+            const sal_Char* _pPropertyName, const SvXMLEnumMapEntry* _pValueMap,
+            const sal_Int32 _nDefault, const sal_Bool _bVoidDefault)
     {
         // get the value
         sal_Int32 nCurrentValue(_nDefault);
         ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
-        ::cppu::enum2int(nCurrentValue, m_xProps->getPropertyValue(sPropertyName));
+        Any aValue = m_xProps->getPropertyValue(sPropertyName);
 
-        // add the attribute
-        if (_nDefault != nCurrentValue)
+        if (aValue.hasValue())
+        {   // we have a non-void current value
+            ::cppu::enum2int(nCurrentValue, aValue);
+
+            // add the attribute
+            if ((_nDefault != nCurrentValue) || _bVoidDefault)
+            {   // the default does not equal the value, or the default is void and the value isn't
+
+                // let the formatter of the export context build a string
+                ::rtl::OUStringBuffer sBuffer;
+                m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
+
+                AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
+            }
+        }
+        else
         {
-            // let the formatter of the export context build a string
-            ::rtl::OUStringBuffer sBuffer;
-            m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
-
-            AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
+            if (!_bVoidDefault)
+                AddAttributeASCII(_nNamespaceKey, _pAttributeName, "");
         }
 
         // the property does not need to be handled anymore
@@ -735,6 +747,15 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    void OPropertyExport::AddAttributeASCII(sal_uInt16 _nPrefix, const sal_Char* _pName, const sal_Char *pValue)
+    {
+        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName(::rtl::OUString::createFromAscii(_pName)).getLength(),
+            "OPropertyExport::AddAttributeASCII: already have such an attribute");
+
+        m_rContext.getGlobalContext().AddAttributeASCII(_nPrefix, _pName, pValue);
+    }
+
+    //---------------------------------------------------------------------
     void OPropertyExport::dbg_implCheckProperty(const ::rtl::OUString& _rPropertyName, const Type* _pType)
     {
         try
@@ -770,6 +791,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/04/11 13:44:23  fs
+ *  #85904# exportRemainingProperties: create the form:properties element only if there is at least one sub element (form:property)
+ *
  *  Revision 1.14  2001/03/29 12:18:58  fs
  *  #85097# when exporting boolean properties, allow for MAYBEVOID props
  *
