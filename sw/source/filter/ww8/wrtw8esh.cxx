@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-22 12:13:12 $
+ *  last change: $Author: dr $ $Date: 2002-11-29 11:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,7 +1733,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
 
         EndSdrObjectPage();         // ???? Bugfix for 74724
 
-        LeaveGroup();
+//        LeaveGroup();             // done in EndSdrObjectPage()
 
         if( nSecondShapeId )
         {
