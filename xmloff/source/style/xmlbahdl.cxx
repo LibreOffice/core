@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:36:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,5 +858,47 @@ sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString& rStrExpValue, const Any& rV
 {
     DBG_ASSERT( !this, "exportXML called for compare-only-property" );
     return sal_False;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// class XMLNumberWithoutZeroPropHdl
+//
+
+XMLNumberWithoutZeroPropHdl::XMLNumberWithoutZeroPropHdl( sal_Int8 nB ) :
+    nBytes( nB )
+{
+}
+
+XMLNumberWithoutZeroPropHdl::~XMLNumberWithoutZeroPropHdl()
+{
+}
+
+sal_Bool XMLNumberWithoutZeroPropHdl::importXML(
+    const OUString& rStrImpValue,
+    Any& rValue,
+    const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Int32 nValue = 0;
+    sal_Bool bRet = rUnitConverter.convertNumber( nValue, rStrImpValue );
+    if( bRet )
+        lcl_xmloff_setAny( rValue, nValue, nBytes );
+    return bRet;
+}
+
+sal_Bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+
+    sal_Int32 nValue = 0;
+    sal_Bool bRet = lcl_xmloff_getAny( rValue, nValue, nBytes );
+    bRet &= nValue != 0;
+
+    if( bRet )
+    {
+          OUStringBuffer aBuffer;
+        rUnitConverter.convertNumber( aBuffer, nValue );
+        rStrExpValue = aBuffer.makeStringAndClear();
+    }
+
+    return bRet;
 }
 
