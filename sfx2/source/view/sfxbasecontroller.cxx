@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:09:08 $
+ *  last change: $Author: mba $ $Date: 2001-02-14 13:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,12 +521,11 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
                     pFrame->SetChildWindow( SID_BROWSER, TRUE );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
-                REFERENCE < XFRAME > xFrame( pChildWin->GetFrame() );
+                REFERENCE < XFRAME > xFrame;
+                if ( pChildWin )
+                    xFrame = ( pChildWin->GetFrame() );
                 if ( xFrame.is() )
-                {
                     xFrame->setName( sTargetFrameName );
-
-                }
 
                 REFERENCE < XDISPATCHPROVIDER > xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
                 if ( xProv.is() )
