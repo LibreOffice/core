@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-08-29 12:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
+#endif
+#ifndef _NEONURI_HXX_
+#include "NeonUri.hxx"
 #endif
 
 using namespace com::sun::star;
@@ -428,7 +431,8 @@ sal_Bool DataSupplier::getData()
         std::vector< DAVResource > resources;
         try
         {
-            // propfind depth 1, get property values for each child
+            // propfind depth 1, get property values for parent AND for each
+            // child
             m_pImpl->m_xContent->getResourceAccess()
                 .PROPFIND( ONE,
                            propertyNames,
@@ -441,11 +445,36 @@ sal_Bool DataSupplier::getData()
             return sal_False;
           }
 
-        // Note: Last elem of resources contains data for the folder itself.
-        for ( sal_uInt32 n = 0; n < resources.size() - 1 ; ++n )
+        NeonUri aURI(
+            m_pImpl->m_xContent->getIdentifier()->getContentIdentifier() );
+        rtl::OUString aPath = aURI.GetPath();
+        if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+            aPath = aPath.copy( 0, aPath.getLength() - 1 );
+
+        bool bFoundParent = false;
+
+        for ( sal_uInt32 n = 0; n < resources.size(); ++n )
         {
+            const DAVResource & rRes = resources[ n ];
+
+            // Filter out parent, which is contained somewhere(!) in the vector.
+            if ( !bFoundParent )
+            {
+                NeonUri aCurrURI( rRes.uri );
+                rtl::OUString aCurrPath = aCurrURI.GetPath();
+                if ( aCurrPath.getStr()[
+                        aCurrPath.getLength() - 1 ] == sal_Unicode( '/' ) )
+                    aCurrPath = aCurrPath.copy( 0, aCurrPath.getLength() - 1 );
+
+                if ( aPath == aCurrPath )
+                {
+                    bFoundParent = true;
+                    continue;
+                }
+            }
+
             ContentProperties* pContentProperties
-                = new ContentProperties( resources[ n ] );
+                = new ContentProperties( rRes );
 
             // Check resource against open mode.
             switch ( m_pImpl->m_nOpenMode )
