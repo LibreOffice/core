@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-23 15:16:08 $
+ *  last change: $Author: mt $ $Date: 2001-09-04 06:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/unowrapper.hxx>
+#include <toolkit/helper/servicenames.hxx>
 
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -443,8 +444,8 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
-    : cppu::WeakComponentImplHelper3< ::com::sun::star::awt::XToolkit, ::com::sun::star::awt::XSystemChildFactory,
-    ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
+    : cppu::WeakComponentImplHelper4< ::com::sun::star::awt::XToolkit, ::com::sun::star::lang::XServiceInfo,
+                                        ::com::sun::star::awt::XSystemChildFactory, ::com::sun::star::awt::XDataTransferProviderAccess >( GetMutex() )
 {
     hSvToolsLib = NULL;
     fnSvtCreateWindow = NULL;
@@ -1096,3 +1097,28 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >();
 }
 
+// XServiceInfo
+::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "stardiv.Toolkit.VCLXToolkit" );
+}
+
+sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
+    const ::rtl::OUString* pArray = aSNL.getConstArray();
+    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    for (; pArray != pArrayEnd; ++pArray )
+        if( *pArray == rServiceName )
+            break;
+
+    return pArray != pArrayEnd;
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXToolkit::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName2_Toolkit ) );
+    return ::com::sun::star::uno::Sequence< ::rtl::OUString >( &aServiceName, 1);
+}
