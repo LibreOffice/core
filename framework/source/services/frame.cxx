@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: as $ $Date: 2001-07-18 06:22:42 $
+ *  last change: $Author: as $ $Date: 2001-08-10 11:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include <helper/oframes.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_OSTATUSINDICATORFACTORY_HXX_
-#include <helper/ostatusindicatorfactory.hxx>
+#ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
+#include <helper/statusindicatorfactory.hxx>
 #endif
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
@@ -153,6 +153,10 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_WINDOWATTRIBUTE_HPP_
+#include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -561,9 +565,10 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     WriteGuard aWriteLock( m_aLock );
 
     // Look for rejected calls first!
-    // It could be that we are called twice ...
-    // Use soft exceptions ... because if mode is set to E_INIT our manager don't throw any exception ... otherwise he do it!
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
+
+    // Enable object for real working ... so follow impl methods don't must handle it special! (e.g. E_SOFTEXCEPTIONS for rejected calls)
+    m_aTransactionManager.setWorkingMode( E_WORK );
 
     // This must be the first call of this method!
     // We should initialize our object and open it for working.
@@ -576,7 +581,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // Initialize helper.
     if( m_xContainerWindow.is() == sal_True )
     {
-        OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
+        StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory( m_xFactory, this, m_xContainerWindow );
         m_xIndicatorFactoryHelper = css::uno::Reference< css::task::XStatusIndicatorFactory >( static_cast< ::cppu::OWeakObject* >( pIndicatorFactoryHelper ), css::uno::UNO_QUERY );
     }
 
@@ -584,9 +589,6 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // If we hold this lock - we will produce our own deadlock!
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-
-    // Enable object for real working ... so follow impl methods don't must handle it special! (e.g. E_SOFTEXCEPTIONS for rejected calls)
-    m_aTransactionManager.setWorkingMode( E_WORK );
 
     // Start listening for events after setting it on helper class ...
     // So superflous messages are filtered to NULL :-)
@@ -1461,8 +1463,8 @@ void SAL_CALL Frame::removeEventListener( const css::uno::Reference< css::lang::
     @descr      Use returned status indicator to show progresses and some text informations.
                 All created objects share the same dialog! Only the last one can show his information.
 
-    @seealso    class OStatusIndicatorFactory
-    @seealso    class OStatusIndicator
+    @seealso    class StatusIndicatorFactory
+    @seealso    class StatusIndicator
 
     @param      -
     @return     A reference to created object.
@@ -1490,11 +1492,16 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
     if( xSupplier.is() == sal_True )
     {
         xIndicator = xSupplier->getStatusIndicator();
-        if( xIndicator.is() == sal_False )
-        {
-            xIndicator = xFactory->createStatusIndicator();
-        }
     }
+
+    if(
+        ( xIndicator.is() == sal_False ) &&
+        ( xFactory.is()   == sal_True  )
+      )
+    {
+        xIndicator = xFactory->createStatusIndicator();
+    }
+
     return xIndicator;
 }
 
