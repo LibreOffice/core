@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-20 18:24:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 14:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@ public:
 
     void    Execute(SfxRequest& rReq);
     void    GetAttrState(SfxItemSet &rSet);
+
+    void    ExecuteFilter(SfxRequest& rReq);
+    void    GetFilterState(SfxItemSet &rSet);
 };
 
 #endif
