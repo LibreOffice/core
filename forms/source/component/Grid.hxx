@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-11 11:47:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 08:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,9 +209,7 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
 // ::com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
-    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle );
+    virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(

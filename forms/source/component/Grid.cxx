@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-12 14:13:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 08:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,207 +812,63 @@ IMPL_LINK( OGridControlModel, OnFontChanged, void*, EMPTYARG )
 }
 
 //XPropertyState
-//------------------------------------------------------------------------------
-PropertyState OGridControlModel::getPropertyStateByHandle(sal_Int32 nHandle)
-{
-    PropertyState eState(PropertyState_DIRECT_VALUE);
-    switch (nHandle)
-    {
-        case PROPERTY_ID_TEXTLINECOLOR:
-            if (!m_aTextLineColor.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONTEMPHASISMARK:
-            if (awt::FontEmphasisMark::NONE == m_nFontEmphasis)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONTRELIEF:
-            if (awt::FontRelief::NONE == m_nFontRelief)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_HELPURL:
-            if (m_sHelpURL.getLength() == 0)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_DISPLAYSYNCHRON:
-            if (m_bDisplaySynchron)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_ALWAYSSHOWCURSOR:
-            if (!m_bAlwaysShowCursor)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_CURSORCOLOR:
-            if (!m_aCursorColor.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_PRINTABLE:
-            if (m_bPrintable)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_HASNAVIGATION:
-            if (m_bNavigation)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_RECORDMARKER:
-            if (m_bRecordMarker)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_TABSTOP:
-            if (!m_aTabStop.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_TEXTCOLOR:
-            if (!m_aTextColor.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_BACKGROUNDCOLOR:
-            if (!m_aBackgroundColor.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_NAME:
-            if (!m_aFont.Name.getLength())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_STYLENAME:
-            if (!m_aFont.StyleName.getLength())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_FAMILY:
-            if (!m_aFont.Family)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_CHARSET:
-            if (!m_aFont.CharSet)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_HEIGHT:
-            if (!m_aFont.Height)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_WEIGHT:
-            if (!m_aFont.Weight)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_SLANT:
-            if (m_aFont.Slant == FontSlant_NONE)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_UNDERLINE:
-            if (!m_aFont.Underline)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_STRIKEOUT:
-            if (!m_aFont.Strikeout)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_FONT_WORDLINEMODE:
-            if (!m_aFont.WordLineMode)
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        case PROPERTY_ID_ROWHEIGHT:
-            if (!m_aRowHeight.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-        default:
-            eState = OControlModel::getPropertyStateByHandle(nHandle);
-    }
-    return eState;
-}
 
 //------------------------------------------------------------------------------
-void OGridControlModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_FONTEMPHASISMARK:
-            setFastPropertyValue(nHandle, makeAny(awt::FontEmphasisMark::NONE));
-            break;
-        case PROPERTY_ID_FONTRELIEF:
-            setFastPropertyValue(nHandle, makeAny(awt::FontRelief::NONE));
-            break;
-        case PROPERTY_ID_ALWAYSSHOWCURSOR:
-            setFastPropertyValue(nHandle, makeBoolAny(sal_False));
-            break;
-            break;
-        case PROPERTY_ID_PRINTABLE:
-        case PROPERTY_ID_HASNAVIGATION:
-        case PROPERTY_ID_RECORDMARKER:
-        case PROPERTY_ID_DISPLAYSYNCHRON:
-            setFastPropertyValue(nHandle, makeBoolAny(sal_True));
-            break;
-        case PROPERTY_ID_TABSTOP:
-        case PROPERTY_ID_TEXTCOLOR:
-        case PROPERTY_ID_BACKGROUNDCOLOR:
-        case PROPERTY_ID_ROWHEIGHT:
-        case PROPERTY_ID_CURSORCOLOR:
-        case PROPERTY_ID_TEXTLINECOLOR:
-            setFastPropertyValue(nHandle, Any());
-            break;
-        case PROPERTY_ID_HELPURL:
-        case PROPERTY_ID_FONT_NAME:
-        case PROPERTY_ID_FONT_STYLENAME:
-            setFastPropertyValue(nHandle, makeAny(::rtl::OUString()));
-            break;
-        case PROPERTY_ID_FONT_FAMILY:
-        case PROPERTY_ID_FONT_CHARSET:
-        case PROPERTY_ID_FONT_SLANT:
-        case PROPERTY_ID_FONT_UNDERLINE:
-        case PROPERTY_ID_FONT_STRIKEOUT:
-        {
-            Any aVal;
-            aVal <<= (sal_Int16)0;
-            setFastPropertyValue(nHandle, aVal);
-        }   break;
-        case PROPERTY_ID_FONT_HEIGHT:
-            setFastPropertyValue(nHandle, makeAny((float)0));
-            break;
-        case PROPERTY_ID_FONT_WEIGHT:
-            setFastPropertyValue(nHandle, makeAny((float)0));
-            break;
-        case PROPERTY_ID_FONT_WORDLINEMODE:
-            setFastPropertyValue(nHandle, ::cppu::bool2any(sal_False));
-            break;
-        default:
-            OControlModel::setPropertyToDefaultByHandle(nHandle);
-    }
-}
-
-//------------------------------------------------------------------------------
-Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
+Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     Any aReturn;
     switch (nHandle)
     {
+        case PROPERTY_ID_FONT:
+            aReturn <<= ::comphelper::getDefaultFont();
+            break;
+
+        case PROPERTY_ID_DEFAULTCONTROL:
+            aReturn <<= ::rtl::OUString( FRM_CONTROL_GRID  );
+            break;
+
         case PROPERTY_ID_FONTEMPHASISMARK:
             aReturn <<= awt::FontEmphasisMark::NONE;
             break;
+
         case PROPERTY_ID_FONTRELIEF:
             aReturn <<= awt::FontRelief::NONE;
             break;
+
         case PROPERTY_ID_PRINTABLE:
         case PROPERTY_ID_HASNAVIGATION:
         case PROPERTY_ID_RECORDMARKER:
+        case PROPERTY_ID_DISPLAYSYNCHRON:
+        case PROPERTY_ID_ENABLED:
             aReturn = makeBoolAny(sal_True);
             break;
+
+        case PROPERTY_ID_ALWAYSSHOWCURSOR:
         case PROPERTY_ID_FONT_WORDLINEMODE:
             aReturn = makeBoolAny(sal_False);
             break;
+
+        case PROPERTY_ID_HELPURL:
+        case PROPERTY_ID_HELPTEXT:
         case PROPERTY_ID_FONT_NAME:
         case PROPERTY_ID_FONT_STYLENAME:
             aReturn <<= ::rtl::OUString();
             break;
+
+        case PROPERTY_ID_BORDER:
         case PROPERTY_ID_FONT_FAMILY:
         case PROPERTY_ID_FONT_CHARSET:
         case PROPERTY_ID_FONT_SLANT:
         case PROPERTY_ID_FONT_UNDERLINE:
         case PROPERTY_ID_FONT_STRIKEOUT:
-            aReturn <<= (sal_Int16)0;
+            aReturn <<= (sal_Int16)1;
             break;
+
         case PROPERTY_ID_FONT_HEIGHT:
         case PROPERTY_ID_FONT_WEIGHT:
             aReturn <<= (float)0;
             break;
+
         case PROPERTY_ID_TABSTOP:
         case PROPERTY_ID_TEXTCOLOR:
         case PROPERTY_ID_BACKGROUNDCOLOR:
@@ -1021,6 +877,7 @@ Any OGridControlModel::getPropertyDefaultByHandle( sal_Int32 nHandle )
         case PROPERTY_ID_TEXTLINECOLOR:
             // void
             break;
+
         default:
             aReturn = OControlModel::getPropertyDefaultByHandle(nHandle);
     }
