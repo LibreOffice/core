@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 14:11:17 $
+ *  last change: $Author: khz $ $Date: 2000-11-24 11:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,7 +1410,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
                 {
                     for(nFIdx = 0;  !bFldFound && (nFldCnt  > nFIdx); ++nFIdx)
                     {
-                        if( aStr.EqualsIgnoreCaseAscii( aNameSet_26[nFIdx][nLIdx] ) )
+                        if( aStr.Equals( String( aNameSet_26[nFIdx][nLIdx], RTL_TEXTENCODING_MS_1252 ) ) )
                         {
                             bFldFound = TRUE;
                             pF->nId   = aNameSet_26[nFIdx][0][0];
@@ -2831,12 +2831,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.4 2000-11-20 14:11:17 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.5 2000-11-24 11:04:38 khz Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/20 14:11:17  jp
+      Read_FieldIniFlags removed
+
       Revision 1.3  2000/10/25 14:19:04  khz
       code cleaned up
 
