@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi_timetest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-05 12:40:27 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,10 +247,10 @@ static void loadDefaults()
 #else
         sExecutable += ::rtl::OUString::createFromAscii("cfgapi.ini");
 #endif
-        ::rtl::OUString sNormalized;
-        if (osl_File_E_None == osl_normalizePath(sExecutable.pData, &sNormalized.pData))
+        ::rtl::OUString sSystem;
+        if (osl_File_E_None == osl_getSystemPathFromFileURL(sExecutable.pData, &sSystem.pData))
         {
-            ::osl::Profile aProfile(sNormalized);
+            ::osl::Profile aProfile(sExecutable);
 
             static ::rtl::OString   sSection("defaults");
             static ::rtl::OString   sSourcePath("sourcepath");
@@ -475,7 +475,7 @@ int _cdecl main( int argc, char * argv[] )
 
         rtl::OUString sUser, sPasswd;
 
-        bool bLocal = sServerType.equalsIgnoreCase(ASCII("local")) || sServerType.equalsIgnoreCase(ASCII("setup"));
+        bool bLocal = sServerType.equalsIgnoreAsciiCase(ASCII("local")) || sServerType.equalsIgnoreAsciiCase(ASCII("setup"));
         if (!bLocal)
         {
             rtl::OUString sServer;
@@ -570,6 +570,7 @@ int _cdecl main( int argc, char * argv[] )
         cerr << "Caught exception: " << e.Message << endl;
         return 1;
     }
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -916,17 +917,17 @@ bool ask(Reference< XInterface >& xIface, const Reference< XMultiServiceFactory 
                                     sal_Bool bValue = false;
 
                                     Any aValueAny;
-                                    if (aInput.equalsIgnoreCase(ASCII("true")))
+                                    if (aInput.equalsIgnoreAsciiCase(ASCII("true")))
                                     {
                                         bValue = true;
                                         aValueAny <<= bValue;
                                     }
-                                    else if (aInput.equalsIgnoreCase(ASCII("false")))
+                                    else if (aInput.equalsIgnoreAsciiCase(ASCII("false")))
                                     {
                                         bValue = false;
                                         aValueAny <<= bValue;
                                     }
-                                    else if (aInput.equalsIgnoreCase(ASCII("null")))
+                                    else if (aInput.equalsIgnoreAsciiCase(ASCII("null")))
                                     {
                                     }
 

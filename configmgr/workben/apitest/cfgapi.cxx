@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgapi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lla $ $Date: 2001-06-14 07:29:26 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,8 +215,8 @@ static const sal_Char*      s_pPassword     =   "";
 #else
 static const sal_Char*      s_pSourcePath   =   "g:/src/configmgr/workben/local_io/share";
 static const sal_Char*      s_pUpdatePath   =   "g:/src/configmgr/workben/local_io/user";
-static const sal_Char*      s_pRootNode     =   "org.openoffice.test";
-static const sal_Char*      s_pServerType   =   "local";
+static const sal_Char*      s_pRootNode     =   "org.openoffice.Office.TypeDetection";
+static const sal_Char*      s_pServerType   =   "setup";
 static const sal_Char*      s_pLocale       =   "de-DE";
 static const sal_Char*      s_pServer       =   "lautrec-3108:19205";
 static const sal_Char*      s_pUser         =   "lars";

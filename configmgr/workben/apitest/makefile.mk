@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: lla $ $Date: 2001-06-14 07:29:26 $
+#   last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,9 @@ APP6TARGET= $(TARGET6)
 APP6OBJS=	\
     $(SLO)$/cfgapi_timetest.obj	\
     $(SLO)$/strimpl.obj \
-    $(SLO)$/typeconverter.obj
+    $(SLO)$/typeconverter.obj \
+    $(SLO)$/simpletypehelper.obj \
+
 # ... cfgreg ..............................
 APP2STDLIBS = $(APPSTDLIBS)
 
@@ -160,8 +162,8 @@ APP4TARGET= $(TARGET4)
 APP4OBJS=	\
     $(SLO)$/cfgadmin.obj	\
     $(SLO)$/strimpl.obj \
-    $(SLO)$/typeconverter.obj
-
+    $(SLO)$/typeconverter.obj \
+    $(SLO)$/simpletypehelper.obj \
 
 # ... cfgupdate ..............................
 APP5STDLIBS = $(APPSTDLIBS)
@@ -176,8 +178,8 @@ APP5TARGET= $(TARGET5)
 APP5OBJS=	\
     $(SLO)$/cfgupdate.obj	\
     $(SLO)$/strimpl.obj \
-    $(SLO)$/typeconverter.obj
-
+    $(SLO)$/typeconverter.obj \
+    $(SLO)$/simpletypehelper.obj \
 
 .INCLUDE :  target.mk
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgupdate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-29 13:59:55 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 20:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <iostream>
 using namespace std;
 
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
@@ -85,6 +86,7 @@ using namespace std;
 
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
+#include <osl/time.h>
 
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
