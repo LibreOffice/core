@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:32:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,8 @@ ImpUndoDeleteWarning::ImpUndoDeleteWarning(Window* pParent)
 void DrawViewShell::FuTemporary(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-    if(mpSlideShow)
+    if(mpSlideShow &&
+       rReq.GetSlot() != SID_NAVIGATOR)
         return;
 
     CheckLineTo (rReq);
