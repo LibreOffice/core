@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   connectr    </module-name>
+    <module-name>   connector.uno   </module-name>
     <component-description>
         <author> Joerg Budischewski </author>
         <name>  com.sun.star.comp.io.Connector </name>
