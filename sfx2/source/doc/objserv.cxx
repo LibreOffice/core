@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 15:47:38 $
+ *  last change: $Author: mba $ $Date: 2001-09-27 10:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,9 +233,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // fragen, ob im default-Format gespeichert werden soll
             String aWarn(SfxResId(STR_QUERY_MUSTOWNFORMAT));
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
-                        GetMedium()->GetFilter()->GetFilterName() );
+                        GetMedium()->GetFilter()->GetUIName() );
             aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                        GetFactory().GetFilter(0)->GetFilterName() );
+                        GetFactory().GetFilter(0)->GetUIName() );
             QueryBox aWarnBox(0,WB_OK_CANCEL|WB_DEF_OK,aWarn);
             if ( aWarnBox.Execute() == RET_OK )
             {
@@ -263,9 +263,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // fragen, ob im default-Format gespeichert werden soll
                     String aWarn(SfxResId(STR_QUERY_SAVEOWNFORMAT));
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(FORMAT)" ),
-                                GetMedium()->GetFilter()->GetFilterName());
+                                GetMedium()->GetFilter()->GetUIName());
                     aWarn = SearchAndReplace( aWarn, DEFINE_CONST_UNICODE( "$(OWNFORMAT)" ),
-                                GetFactory().GetFilter(0)->GetFilterName());
+                                GetFactory().GetFilter(0)->GetUIName());
 
                     SfxViewFrame *pFrame = SfxObjectShell::Current() == this ?
                         SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
