@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:11:58 $
+#   last change: $Author: rt $ $Date: 2004-07-13 16:39:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ $(OBJ)$/sxl_%.obj : %.cxx
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
@@ -96,7 +96,7 @@ $(SLO)$/sxl_%.obj : %.cxx
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXSLO) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/sxl_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(SVXLIGHTDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/sxl_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
@@ -120,7 +120,7 @@ $(OBJ)$/$(SECOND_BUILD)_%.obj : %.cxx
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSCXXOBJ) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$(SECOND_BUILD)_$*.o $(CFLAGSINCXX)$(PWD)$/$*.cxx
     +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
 .ELSE
-    @+if exist $@ $(RM) /q $@ >& nul
+    @+if exist $@ $(RM) /q $@ >& $(NULLDEV)
     $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $($(SECOND_BUILD)CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$(SECOND_BUILD)_$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
 .ENDIF
 
