@@ -17640,3 +17640,11 @@ _TI2?AVUnsupportedFlavorException@datatransfer@star@sun@com@@
 ?MouseButtonUp@GalleryBrowser2@@UAEXABVMouseEvent@@@Z
 ?MouseButtonUp@GalleryValueSet@@EAEXABVMouseEvent@@@Z
 ?StartDragHdl@GalleryBrowser2@@AAEJPAVTimer@@@Z
+??1SvxCharReliefItem@@UAE@XZ
+?MouseMove@GalleryPreview@@EAEXABVMouseEvent@@@Z
+?CopyToClipboard@GalleryTheme@@QAEXK@Z
+?IsCurrentClipboardSupported@GalleryTheme@@QBEEXZ
+?CopyToClipboard@GalleryTransferable@@IAEXXZ
+?InitData@GalleryTransferable@@IAEXXZ
+?MouseMove@GalleryBrowser2@@UAEXABVMouseEvent@@@Z
+?MouseMove@GalleryValueSet@@EAEXABVMouseEvent@@@Z
