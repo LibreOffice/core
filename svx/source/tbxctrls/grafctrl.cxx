@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:22 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ using namespace ::com::sun::star::lang;
 
 #define SYMBOL_TO_FIELD_OFFSET      4
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
+#define TOOLBOX_NAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
 
 // ----------------
 // - TbxImageItem -
@@ -1138,7 +1139,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
         case SID_COLOR_SETTINGS:
         {
-            svx::ColorToolboxAccess aToolboxAccess;
+            svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
             aToolboxAccess.toggleToolbox();
             rReq.Done();
             break;
@@ -1300,7 +1301,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case SID_COLOR_SETTINGS :
             {
-                svx::ColorToolboxAccess aToolboxAccess;
+                svx::ToolboxAccess aToolboxAccess( TOOLBOX_NAME );
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible() ) );
                 break;
             }
