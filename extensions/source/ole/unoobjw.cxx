@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
+ *  last change: $Author: jl $ $Date: 2002-09-17 11:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,6 +968,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
                 }
             }
         }
+        else
+            ret= DISP_E_MEMBERNOTFOUND;
     }
     else
         ret = DISP_E_MEMBERNOTFOUND;
@@ -1587,6 +1589,10 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
                 {
                     ret= doGetProperty( pdispparams, pvarResult,
                               pexcepinfo, info.name);
+                }
+                else
+                {
+                    ret= DISP_E_MEMBERNOTFOUND;
                 }
             }
         }//     if( it_MemberInfo != m_idToMemberInfoMap.end() )
