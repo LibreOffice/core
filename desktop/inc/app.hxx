@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:37:19 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 08:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ class Desktop : public Application
         void                    DoFirstRunInitializations();
 
         static sal_Bool             SaveTasks(sal_Int32 options);
+        static sal_Bool _bTasksSaved;
 
         // on-demand acceptors
         static AcceptorMap                  m_acceptorMap;
