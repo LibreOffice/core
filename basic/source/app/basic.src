@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:14:50 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ ModalDialog IDD_TT_ABOUT_DIALOG {
         TEXT[ polish ] = "Version 1.0";
         TEXT[ portuguese_brazilian ] = "Version 1.0";
         TEXT[ japanese ] = "Version 1.0";
-        TEXT[ korean ] = "¹öÁ¯ 1.0";
+        TEXT[ korean ] = "¹öÀü 1.0";
         TEXT[ chinese_simplified ] = "Version 1.0";
         TEXT[ chinese_traditional ] = "Version 1.0";
         TEXT[ arabic ] = "Version 1.0";
@@ -401,7 +401,7 @@ ModalDialog IDD_REPLACE_DIALOG {
             Size = MAP_APPFONT( 55, 10 );
             TEXT = "~Neuer Text";
             TEXT [ english_us ] = "~New text";
-            TEXT[ portuguese ] = "~Texto novo";
+            TEXT[ portuguese ] = "No~vo texto";
         TEXT[ russian ] = "~New text";
         TEXT[ greek ] = "~New text";
         TEXT[ dutch ] = "~Nieuwe tekst";
@@ -514,7 +514,7 @@ InfoBox IDS_NOPRINTERERROR {
     MESSAGE[ polish ] = "The print function is not available! ";
     MESSAGE[ portuguese_brazilian ] = "Drucken steht nicht zur Verfügung!";
     MESSAGE[ japanese ] = "ÌßØİÀ‚ª‚ ‚è‚Ü‚¹‚ñ";
-    MESSAGE[ korean ] = "ÇÁ¸°ÅÍ ±â´ÉÀÌ ¾ÈµÊ!";
+    MESSAGE[ korean ] = "ÇÁ¸°Æ® ±â´É ¾ÈµÊ!";
     MESSAGE[ chinese_simplified ] = "The print function is not available!";
     MESSAGE[ chinese_traditional ] = "The print function is not available!";
     MESSAGE[ arabic ] = "The print function is not available";
@@ -537,7 +537,7 @@ ErrorBox IDS_CANTLOAD {
     MESSAGE[ polish ] = "Library cannot be loaded! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht geladen werden!";
     MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®°¡ ·ÎµåµÉ ¼ö ¾ø½À´Ï´Ù!";
+    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®¸¦ ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Library cannot be loaded!";
     MESSAGE[ chinese_traditional ] = "Library cannot be loaded!";
     MESSAGE[ arabic ] = "Library cannot be loaded!";
@@ -553,7 +553,7 @@ ErrorBox IDS_CANTLOAD {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -577,7 +577,7 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ polish ] = "Library cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Library kann nicht gespeichert werden!";
     MESSAGE[ japanese ] = "×²ÌŞ×Ø‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®°¡ ÀúÀåµÇÁö¾Ê¾ÒÀ½!";
+    MESSAGE[ korean ] = "¶óÀÌºê·¯¸®¸¦ ÀúÀåÇÒ¼ö¡¡¾ø½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Library cannot be saved!";
     MESSAGE[ chinese_traditional ] = "Library cannot be saved!";
     MESSAGE[ arabic ] = "Library cannot be saved!";
@@ -593,7 +593,7 @@ ErrorBox IDS_CANTSAVE {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -633,7 +633,7 @@ ErrorBox IDS_NOMAINPGM {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -673,7 +673,7 @@ ErrorBox IDS_READERROR {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -697,7 +697,7 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ polish ] = "File cannot be saved! ";
     MESSAGE[ portuguese_brazilian ] = "Datei kann nicht abgespeichert werden!";
     MESSAGE[ japanese ] = "Ì§²Ù‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "ÆÄÀÏÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù !";
+    MESSAGE[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÒ¼ö¡¡¾ø½À´Ï´Ù !";
     MESSAGE[ chinese_simplified ] = "File cannot be saved!";
     MESSAGE[ chinese_traditional ] = "File cannot be saved!";
     MESSAGE[ arabic ] = "File cannot be saved!";
@@ -713,7 +713,7 @@ ErrorBox IDS_WRITEERROR {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ùr!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -737,7 +737,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ polish ] = "Search key not found!";
     MESSAGE[ portuguese_brazilian ] = "Suchbegriff nicht gefunden!";
     MESSAGE[ japanese ] = "ŒŸõ·°‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
-    MESSAGE[ korean ] = "°Ë»ö¾î¸¦ Ã£Áö ¸øÇßÀ½!";
+    MESSAGE[ korean ] = "°Ë»ö¿ë¾î¸¦ Ã£Áö ¸øÇß½À´Ï´Ù!";
     MESSAGE[ chinese_simplified ] = "Search key not found!";
     MESSAGE[ chinese_traditional ] = "Search key not found!";
     MESSAGE[ arabic ] = "Search term not found!";
@@ -753,7 +753,7 @@ ErrorBox IDS_PATTERNNOTFOUND {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "StarBasic-Fehler";
-    Title[ korean ] = "StarBasic-Fehler";
+    Title[ korean ] = "StarBasic-¿À·ù!";
     Title[ chinese_simplified ] = "StarBasic-Fehler";
     Title[ chinese_traditional ] = "StarBasic-Fehler";
     Title[ arabic ] = "StarBasic-Fehler";
@@ -793,7 +793,7 @@ ErrorBox IDS_INVALID_VALUE {
     Title[ polish ] = "B³¹d StarBasic";
     Title[ portuguese_brazilian ] = "StarBasic Error";
     Title[ japanese ] = "StarBasic Error";
-    Title[ korean ] = "StarBasic Error";
+    Title[ korean ] = "StarBasic£­¿À·ù!";
     Title[ chinese_simplified ] = "StarBasic Error";
     Title[ chinese_traditional ] = "StarBasic Error";
     Title[ arabic ] = "StarBasic Error";
@@ -860,7 +860,7 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     MESSAGE[ polish ] = "File has been changed. Save? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist geändert worden. Abspeichern?";
     MESSAGE[ japanese ] = "Ì§²Ù‚É•ÏX‚ª‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
-    MESSAGE[ korean ] = "ÆÄÀÏÀÌ ¹Ù²î¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "ÆÄÀÏÀÌ º¯°æµÇ¾ú½À´Ï´Ù. ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed. Save?";
     MESSAGE[ arabic ] = "File has been changed. Save?";
@@ -901,7 +901,7 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Save? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Abspeichern?";
     MESSAGE[ japanese ] = "Ì§²Ù‚ÍÃŞ¨½¸ã‚Å\n•ÒW’†‚É•ÏX‚³‚ê‚Ä‚¢‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©?";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌº¯°æµÇ¾ú½À´Ï´Ù.  \nÀúÀåÇÏ½Ã°Ú½À´Ï±î ?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù.  \nÀúÀåÇÏ½Ã°Ú½À´Ï±î ?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Save?";
@@ -942,7 +942,7 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     MESSAGE[ polish ] = "File has been changed on data medium.\nOverwrite? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden.\nÜberschreiben?";
     MESSAGE[ japanese ] = "Ì§²Ù‚ÍÃŞ¨½¸ã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\nã‘‚«‚µ‚Ü‚·‚©?";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼ÀÇ ÆÄÀÏÀÌº¯°æµÇ¾ú½À´Ï´Ù. \n µ¤¾î¾²½Ã°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ arabic ] = "File has been changed on data medium.\nOverwrite?";
@@ -983,7 +983,7 @@ QueryBox IDS_ASKRELOAD {
     MESSAGE[ polish ] = "File has been changed on data medium. Reload? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger geändert worden. Erneut Laden?";
     MESSAGE[ japanese ] = "Ì§²Ù‚ÍÃŞ¨½¸ã‚Å•ÏX‚³‚ê‚Ä‚¢‚Ü‚·BÄ“Ç‚İ‚İ‚µ‚Ü‚·‚©?";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌº¯°æµÇ¾ú½À´Ï´Ù.  ´Ù½Ã ·ÎµåÇÏ°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù.  ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium. Reload?";
@@ -1024,7 +1024,7 @@ QueryBox IDS_ASKDIRTYRELOAD {
     MESSAGE[ polish ] = "File has been changed on data medium\nand in the Editor. Reload? ";
     MESSAGE[ portuguese_brazilian ] = "Datei ist auf dem Datenträger und\nim Editor geändert worden. Erneut Laden?";
     MESSAGE[ japanese ] = "Ì§²Ù‚ÍÃŞ¨½¸ã‚Å\n•ÒW’†‚É•ÏX‚³‚ê‚Ä‚¢‚Ü‚·BÄ“Ç‚İ‚İ‚µ‚Ü‚·‚©?";
-    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌº¯°æµÇ¾ú½À´Ï´Ù. \n ´Ù½Ã ·ÎµåÇÏ°Ú½À´Ï±î?";
+    MESSAGE[ korean ] = "µ¥ÀÌÅÍ ¸ÅÃ¼¿Í ÆíÁı±â ³»ÀÇ ÆÄÀÏÀÌ¡¡º¯°æµÇ¾ú½À´Ï´Ù. \n ´Ù½Ã ·ÎµåÇÏ½Ã°Ú½À´Ï±î?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Reload?";
@@ -1065,7 +1065,7 @@ QueryBox IDS_RUNNING {
     MESSAGE[ polish ] = "BASIC is still running! Exit anyway? ";
     MESSAGE[ portuguese_brazilian ] = "BASIC-Programm ist noch aktiv! Dennoch beenden?";
     MESSAGE[ japanese ] = "BASICÌßÛ¸Ş×Ñ‚Í‚Ü‚¾±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·! ‚»‚Ì‚Ü‚ÜI—¹‚µ‚Ü‚·‚©?";
-    MESSAGE[ korean ] = "BASIC ÇÁ·Î±×·¥ÀÌ ¾ÆÁ÷ ÀÛµ¿ÁßÀÔ´Ï´Ù. Á¾·áÇÏ½Ã°Ú½À´Ï±î??";
+    MESSAGE[ korean ] = "BASIC ÇÁ·Î±×·¥ÀÌ ¾ÆÁ÷ ÀÛµ¿ÁßÀÔ´Ï´Ù. ±×·¡µµ¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î??";
     MESSAGE[ chinese_simplified ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ chinese_traditional ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ arabic ] = "BASIC is still running! Exit anyway?";
@@ -1106,7 +1106,7 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     MESSAGE[ polish ] = "Saving in an external format causes information loss.";
     MESSAGE[ portuguese_brazilian ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ japanese ] = "ŠO•”‚Ì‘®İ’è‚Å•Û‘¶‚·‚é‚Æî•ñ‚ğ¸‚¤‚±‚Æ‚É‚È‚è‚Ü‚·";
-    MESSAGE[ korean ] = "¿ÜºÎ Æ÷¸ËÀÇ ÀúÀåÀº Á¤º¸ ¼Õ½ÇÀ» À¯¹ßÇÕ´Ï´Ù.";
+    MESSAGE[ korean ] = "¿ÜºÎ Æ÷¸Ë¿¡ ÀúÀåÇÏ´Â°ÍÀº Á¤º¸ ¼Õ½ÇÀ»¡¡ÃÊ·¡ÇÕ´Ï´Ù.";
     MESSAGE[ chinese_simplified ] = "Saving in an external format causes information loss.";
     MESSAGE[ chinese_traditional ] = "Saving in an external format causes information loss.";
     MESSAGE[ arabic ] = "Saving in an external format causes information loss.";
@@ -1157,7 +1157,7 @@ InfoBox IDS_NOT_YET_IMPLEMENTED
 String IDS_WARNING1 {
     TEXT = "Warnung ";
     TEXT [ english_us ] = "Warning ";
-    TEXT[ portuguese ] = "Aviso ";
+    TEXT[ portuguese ] = "Advertência";
     TEXT[ russian ] = "Warning ";
     TEXT[ greek ] = "Warning ";
     TEXT[ dutch ] = "Waarschuwing  ";
@@ -1232,7 +1232,7 @@ String IDS_NO_LONGNAME {
     TEXT[ polish ] = "No entries in Hid.Lst";
     TEXT[ portuguese_brazilian ] = "Kein Eintrag in Hid.Lst";
     TEXT[ japanese ] = "Hid.Lst‚É€–Ú‚Í‚ ‚è‚Ü‚¹‚ñ";
-    TEXT[ korean ] = "Hid.Lst ¿¡ µî·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    TEXT[ korean ] = "Hid.Lst ¿¡ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
     TEXT[ chinese_simplified ] = "No entries in Hid.Lst";
     TEXT[ chinese_traditional ] = "No entries in Hid.Lst";
     TEXT[ arabic ] = "No entries in Hid.Lst";
@@ -1242,7 +1242,7 @@ String IDS_WARNING_PREFIX
 {
     Text = "Warnung: ";
     Text[ english_us ] = "Warning: ";
-    Text[ portuguese ] = "Aviso:  ";
+    Text[ portuguese ] = "Advertência:";
     Text[ russian ] = "Warning: ";
     Text[ greek ] = "Warning: ";
     Text[ dutch ] = "Waarschuwing:  ";
@@ -1364,7 +1364,7 @@ String IDS_APPMODE_BREAK {
     text[ polish ] = "Break";
     text[ portuguese_brazilian ] = "Break";
     text[ japanese ] = "Break";
-    text[ korean ] = "Break";
+    text[ korean ] = "Áß´Ü";
     text[ chinese_simplified ] = "Break";
     text[ chinese_traditional ] = "Break";
     text[ arabic ] = "Break";
@@ -1464,7 +1464,7 @@ String IDS_LOADDLG {
     TEXT[ polish ] = "StarBasic: Load File ";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei einlesen";
     TEXT[ japanese ] = "StarBasic: Ì§²Ù‚Ì“Ç‚İ‚İ";
-    TEXT[ korean ] = "StarBasic: ÆÄÀÏ ·Îµå";
+    TEXT[ korean ] = "StarBasic: ÆÄÀÏ ÆÇµ¶";
     TEXT[ chinese_simplified ] = "StarBasic: Load File";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME Basic¡GLoad File";
     TEXT[ arabic ] = "StarBasic: Load File";
@@ -1506,7 +1506,7 @@ String IDS_BASFILTER {
     TEXT[ polish ] = "Source text (*.BAS) ";
     TEXT[ portuguese_brazilian ] = "Quelltexte (*.BAS)";
     TEXT[ japanese ] = "¿°½(*.BAS)";
-    TEXT[ korean ] = "¼Ò½º ÅØ½ºÆ® (*.BAS)";
+    TEXT[ korean ] = "¼Ò½ºÅØ½ºÆ® (*.BAS)";
     TEXT[ chinese_simplified ] = "Source text (*.BAS)";
     TEXT[ chinese_traditional ] = "Source text(*.BAS)";
     TEXT[ arabic ] = "Source text (*.BAS)";
@@ -1611,7 +1611,7 @@ String IDS_PAGE {
     TEXT[ polish ] = "Page  ";
     TEXT[ portuguese_brazilian ] = "Seite ";
     TEXT[ japanese ] = "Íß°¼Ş ";
-    TEXT[ korean ] = "ÆäÀÌÁö ";
+    TEXT[ korean ] = "ÂÊ ";
     TEXT[ chinese_simplified ] = "page ";
     TEXT[ chinese_traditional ] = "Page ";
     TEXT[ arabic ] = "Page  ";
@@ -1695,7 +1695,7 @@ String IDS_DISASWIN {
     TEXT[ polish ] = "Disassembly ";
     TEXT[ portuguese_brazilian ] = "Disassembly";
     TEXT[ japanese ] = "Disassembly";
-    TEXT[ korean ] = "Disassembly";
+    TEXT[ korean ] = "¿ª¾î¼Àºí¸®";
     TEXT[ chinese_simplified ] = "Disassembly";
     TEXT[ chinese_traditional ] = "Disassembly";
     TEXT[ arabic ] = "Disassembly";
@@ -2004,7 +2004,7 @@ Menu RID_FILE {
             TEXT[ polish ] = "~Load Library... ";
             TEXT[ portuguese_brazilian ] = "~Library laden...";
             TEXT[ japanese ] = "×²ÌŞ×Ø‚Ì“Ç‚İ‚İ(~L)...";
-            TEXT[ korean ] = "·Îµå ¶óÀÌºê·¯¸®(~L)...";
+            TEXT[ korean ] = " ¶óÀÌºê·¯¸®¡¡·Îµå(~L)...";
             TEXT[ chinese_simplified ] = "~Load Library...";
             TEXT[ chinese_traditional ] = "~Load Library...";
             TEXT[ arabic ] = "~Load Library...";
@@ -2445,7 +2445,7 @@ Menu RID_RUN {
             TEXT[ polish ] = "~Single Stepping ";
             TEXT[ portuguese_brazilian ] = "~Einzelschritt";
             TEXT[ japanese ] = "~Single Stepping";
-            TEXT[ korean ] = "°³º° ´Ü°è(~S)";
+            TEXT[ korean ] = "°¢ ´Ü°è(~S)";
             TEXT[ chinese_simplified ] = "~Single Stepping";
             TEXT[ chinese_traditional ] = "~Single Stepping";
             TEXT[ arabic ] = "~Single Stepping";
@@ -2470,7 +2470,7 @@ Menu RID_RUN {
             TEXT[ polish ] = "Si~ngle Step over Procedure";
             TEXT[ portuguese_brazilian ] = "Einzelschritt über ~Prozeduren";
             TEXT[ japanese ] = "Si~ngle Stepping (subroutines excluded)";
-            TEXT[ korean ] = "ÇÁ·Î½ÃÀú À§ÀÇ °³º° ´Ü°è(~N)";
+            TEXT[ korean ] = "ÇÁ·Î½ÃÀúÀÇ °¢ ´Ü°è(~N)";
             TEXT[ chinese_simplified ] = "Si~ngle Step over Procedure";
             TEXT[ chinese_traditional ] = "Si~ngle Step over Procedure";
             TEXT[ arabic ] = "Si~ngle Step over Procedure";
@@ -2503,7 +2503,7 @@ Menu RID_RUN {
             TEXT[ polish ] = "Set / Delete Break Point";
             TEXT[ portuguese_brazilian ] = "Brechpunkt setzen/löschen";
             TEXT[ japanese ] = "Set / Delete Break Point";
-            TEXT[ korean ] = "Break Æ÷ÀÎÆ® ¼³Á¤/»èÁ¦";
+            TEXT[ korean ] = "Áß´ÜÁ¡ ¼³Á¤/»èÁ¦";
             TEXT[ chinese_simplified ] = "Set / Delete Break Point";
             TEXT[ chinese_traditional ] = "Set / Delete Break Point";
             TEXT[ arabic ] = "Set / Delete Break Point";
@@ -2687,7 +2687,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ chinese_simplified ] = "~Include Dialogs";
             TEXT[ chinese_traditional ] = "~Include Dialogs";
             TEXT[ arabic ] = "~Include Dialogs";
-            TEXT[ turkish ] = "~Diyalogları ekle";
+            TEXT[ turkish ] = "~Pencereleri ekle";
         };
     };
 };
@@ -2711,7 +2711,7 @@ Menu RID_WINDOW {
             TEXT[ polish ] = "~Overlapping";
             TEXT[ portuguese_brazilian ] = "~Überlappend";
             TEXT[ japanese ] = "d‚Ë‚Ä•\\¦";
-            TEXT[ korean ] = "°ãÄ¡±â(~O)";
+            TEXT[ korean ] = "°ãÄ§(~O)";
             TEXT[ chinese_simplified ] = "~Overlapping";
             TEXT[ chinese_traditional ] = "~Overlapping";
             TEXT[ arabic ] = "~Overlapping";
@@ -2759,7 +2759,7 @@ Menu RID_WINDOW {
             TEXT[ polish ] = "~Arrange Horizontally";
             TEXT[ portuguese_brazilian ] = "~Horizontal anordnen";
             TEXT[ japanese ] = "¶‰E‚É•À‚×‚Ä•\\¦";
-            TEXT[ korean ] = "¼öÆò ³ª´©±â(~A)";
+            TEXT[ korean ] = "¼öÆò Á¤·Ä(~A)";
             TEXT[ chinese_simplified ] = "~Arrange Horizontally";
             TEXT[ chinese_traditional ] = "~Arrange Horizontally";
             TEXT[ arabic ] = "~Arrange Horizontally";
@@ -2783,7 +2783,7 @@ Menu RID_WINDOW {
             TEXT[ polish ] = "~Arrange Vertically";
             TEXT[ portuguese_brazilian ] = "~Vertikal anordnen";
             TEXT[ japanese ] = "ã‰º‚É•À‚×‚Ä•\\¦";
-            TEXT[ korean ] = "¼öÁ÷ ³ª´©±â(~A)";
+            TEXT[ korean ] = "¼öÁ÷ Á¤·Ä(~A)";
             TEXT[ chinese_simplified ] = "~Arrange Vertically";
             TEXT[ chinese_traditional ] = "~Arrange Vertically";
             TEXT[ arabic ] = "~Arrange Vertically";
@@ -2923,7 +2923,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ polish ] = "StarBasic: Print File";
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei drucken";
     TEXT[ japanese ] = "StarBasic: Ì§²Ù‚Ìˆóü";
-    TEXT[ korean ] = "StarBasic: ÇÁ¸°Æ® ÆÄÀÏ";
+    TEXT[ korean ] = "StarBasic: ÆÄÀÏ¡¡ÀÎ¼â";
     TEXT[ chinese_simplified ] = "StarBasic: Print File";
     TEXT[ chinese_traditional ] = "StarOffcie Basic: Print File";
     TEXT[ arabic ] = "StarBasic: Print File";
@@ -3597,7 +3597,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ polish ] = "Name";
         Text[ portuguese_brazilian ] = "Benennen";
         Text[ japanese ] = "Name";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§ºÙÀÌ±â";
         Text[ chinese_simplified ] = "Name";
         Text[ chinese_traditional ] = "Name";
         Text[ arabic ] = "Name";
@@ -3621,7 +3621,7 @@ FloatingWindow IDD_DISPLAY_HID {
         Text[ polish ] = "Select all";
         Text[ portuguese_brazilian ] = "Alle Markieren";
         Text[ japanese ] = "Select all";
-        Text[ korean ] = "ÀüÃ¼ ¼±ÅÃ";
+        Text[ korean ] = "¸ğµÎ ¸¶Å·";
         Text[ chinese_simplified ] = "Select all";
         Text[ chinese_traditional ] = "Select all";
         Text[ arabic ] = "Select all";
@@ -3819,7 +3819,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "Content";
         Text[ portuguese_brazilian ] = "Inhalt";
         Text[ japanese ] = "Content";
-        Text[ korean ] = "¸ñÂ÷";
+        Text[ korean ] = "³»¿ë";
         Text[ chinese_simplified ] = "Content";
         Text[ chinese_traditional ] = "Content";
         Text[ arabic ] = "Content";
@@ -3842,7 +3842,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "New content";
         Text[ portuguese_brazilian ] = "Neuer Inhalt";
         Text[ japanese ] = "New content";
-        Text[ korean ] = "»õ·Î¿î ¸ñÂ÷";
+        Text[ korean ] = "»õ·Î¿î ³»¿ë";
         Text[ chinese_simplified ] = "New content";
         Text[ chinese_traditional ] = "New content";
         Text[ arabic ] = "New content";
@@ -3888,7 +3888,7 @@ ModelessDialog IDD_EDIT_VAR {
         Text[ polish ] = "Previous contents";
         Text[ portuguese_brazilian ] = "Alter Inhalt";
         Text[ japanese ] = "Previous contents";
-        Text[ korean ] = "ÀÌÀü ¸ñÂ÷";
+        Text[ korean ] = "ÀÌÀü ³»¿ë";
         Text[ chinese_simplified ] = "Previous contents";
         Text[ chinese_traditional ] = "Previous content";
         Text[ arabic ] = "Previous contents";
