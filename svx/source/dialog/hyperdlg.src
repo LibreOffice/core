@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:55:03 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <svtools/controldims.hrc>
 #include "dialogs.hrc"
 #include "helpid.hrc"
 #include "hyperdlg.hrc"
@@ -156,8 +157,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ImageButton BTN_BROWSE
     {
-        Pos = MAP_APPFONT ( 235, 25 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 24 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "WWW-Browser" ;
         Text [ en-US ] = "WWW Browser";
@@ -178,7 +179,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     ImageButton BTN_TARGET
     {
         Pos = MAP_APPFONT ( 235, 40 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Sprungziel im Dokument" ;
         Text [ en-US ] = "Target in Document";
@@ -279,8 +280,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     };
     ImageButton BTN_SCRIPT
     {
-        Pos = MAP_APPFONT ( 235, 104 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 103 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Ereignisse" ;
 
@@ -361,8 +362,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     ImageButton BTN_ADRESSBOOK
     {
-        Pos = MAP_APPFONT ( 235, 25 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 24 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
 
         ButtonImage = Image
@@ -465,8 +466,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     };
     ImageButton BTN_SCRIPT
     {
-        Pos = MAP_APPFONT ( 235, 104 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 103 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Ereignisse" ;
         QuickHelpText [ de ] = "Ereignisse" ;
@@ -519,7 +520,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     ImageButton BTN_FILEOPEN
     {
         Pos = MAP_APPFONT ( 235, 14 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Datei öffnen" ;
         QuickHelpText [ de ] = "Datei öffnen" ;
@@ -577,7 +578,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     ImageButton BTN_BROWSE
     {
         Pos = MAP_APPFONT ( 235, 51 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Sprungziel im Dokument" ;
         QuickHelpText [ de ] = "Sprungziel im Dokument" ;
@@ -678,8 +679,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     };
     ImageButton BTN_SCRIPT
     {
-        Pos = MAP_APPFONT ( 235, 104 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 103 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Ereignisse" ;
         QuickHelpText [ de ] = "Ereignisse" ;
@@ -767,8 +768,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ImageButton BTN_CREATE
     {
-        Pos = MAP_APPFONT ( 235, 25 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 24 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Pfad auswählen" ;
 
@@ -870,8 +871,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     };
     ImageButton BTN_SCRIPT
     {
-        Pos = MAP_APPFONT ( 235, 104 ) ;
-        Size = MAP_APPFONT( 13, 13 );
+        Pos = MAP_APPFONT ( 235, 103 ) ;
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, RSC_CD_PUSHBUTTON_HEIGHT );
         TabStop = TRUE ;
         Text [ de ] = "Ereignisse" ;
         QuickHelpText [ de ] = "Ereignisse" ;
