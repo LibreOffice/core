@@ -2,9 +2,9 @@
  *
  *  $RCSfile: esdll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-04-10 14:55:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,20 @@ END_OBJECT_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
 
+
+#include "syswinwrapper.hxx"
+#include "docholder.hxx"
+
+
+HINSTANCE DocumentHolder::m_hInstance;
+
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 {
+    DocumentHolder::m_hInstance = hInstance;
+    if (!winwrap::HatchWindowRegister(hInstance))
+        return FALSE;
+
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         _Module.Init(ObjectMap, hInstance, NULL);
