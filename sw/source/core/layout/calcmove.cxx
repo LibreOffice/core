@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-20 07:00:56 $
+ *  last change: $Author: fme $ $Date: 2002-09-24 08:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1560,7 +1560,7 @@ void SwCntntFrm::MakeAll()
                 long nDiff = Frm().Top()+Frm().Height() -GetUpper()->Prt().Top()
                         -GetUpper()->Prt().Height()-GetUpper()->Frm().Top();
 #endif
-                long nReal = Grow( nDiff PHEIGHT );
+                long nReal = GetUpper()->Grow( nDiff PHEIGHT );
                 if( nReal )
                     continue;
             }
