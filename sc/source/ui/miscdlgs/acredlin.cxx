@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:03:51 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,9 @@
 
 #include <svtools/undo.hxx>
 #include <unotools/textsearch.hxx>
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 #include <unotools/collatorwrapper.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
@@ -547,9 +549,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         aString+=aUser;
         aString+='\t';
 
-        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
+        const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
+        aString+=rLocaleData.getDate(aDateTime);
         aString+=' ';
-        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
+        aString+=rLocaleData.getTime(aDateTime);
         aString+='\t';
         bIsGenerated=FALSE;
     }
@@ -726,9 +729,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
         {
             aString+=aUser;
             aString+='\t';
-            aString+=ScGlobal::pLocaleData->getDate(aDateTime);
+            const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
+            aString+=rLocaleData.getDate(aDateTime);
             aString+=' ';
-            aString+=ScGlobal::pLocaleData->getTime(aDateTime);
+            aString+=rLocaleData.getTime(aDateTime);
             aString+='\t';
         }
         else
@@ -840,9 +844,10 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
         aString+=aUser;
         aString+='\t';
 
-        aString+=ScGlobal::pLocaleData->getDate(aDateTime);
+        const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
+        aString+=rLocaleData.getDate(aDateTime);
         aString+=' ';
-        aString+=ScGlobal::pLocaleData->getTime(aDateTime);
+        aString+=rLocaleData.getTime(aDateTime);
         aString+='\t';
     }
     else

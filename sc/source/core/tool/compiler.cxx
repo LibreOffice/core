@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-20 14:21:36 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <tools/solar.h>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -981,7 +984,7 @@ BOOL ScCompiler::IsReference( const String& rName )
     // englisches 1.E2 oder 1.E+2 ist wiederum Zahl 100, 1.E-2 ist 0,01
     sal_Unicode ch1 = rName.GetChar(0);
     sal_Unicode cDecSep = ( pSymbolTable == pSymbolTableEnglish ? '.' :
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0) );
+        ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0) );
     if ( ch1 == cDecSep )
         return FALSE;
     BOOL bMyAlpha;
@@ -3488,7 +3491,7 @@ ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
             else
             {
                 SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                    ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0),
                     TRUE );
             }
             rFormula += aStr;
@@ -3658,7 +3661,7 @@ ScToken* ScCompiler::CreateStringFromToken( rtl::OUStringBuffer& rBuffer, ScToke
             else
             {
                 SolarMath::DoubleToString( aStr, t->GetDouble(), 'A', INT_MAX,
-                    ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+                    ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0),
                     TRUE );
             }
             rBuffer.append(aStr);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 
 #include <svx/svdtrans.hxx>
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include "colrowba.hxx"
@@ -97,7 +97,7 @@ String lcl_MetricString( long nTwips, const String& rText )
 
         String aStr = rText;
         aStr += ' ';
-        aStr += ScGlobal::pLocaleData->getNum( nUserVal, 2 );
+        aStr += ScGlobal::pSysLocale->GetLocaleData().getNum( nUserVal, 2 );
         aStr += ' ';
         aStr += SdrFormatter::GetUnitStr(eUserMet);
 

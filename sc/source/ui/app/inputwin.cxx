@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 16:19:38 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 
 __EXPORT ScInputWindow::~ScInputWindow()
 {
-    BOOL bDown = ( ScGlobal::pLocaleData == NULL );    // schon nach Clear?
+    BOOL bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
     //  (may be several ones, #74522#)

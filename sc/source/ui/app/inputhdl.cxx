@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-28 17:11:52 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #include <offmgr/app.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -2043,27 +2046,28 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
             SvxAutoCorrect* pAuto = OFF_APP()->GetAutoCorrect();
             if ( pAuto )
             {
+                const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
                 sal_Unicode cReplace = pAuto->GetStartDoubleQuote();
                 if( !cReplace )
-                    cReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkStart().GetChar(0);
+                    cReplace = rLocaleData.getDoubleQuotationMarkStart().GetChar(0);
                 if ( cReplace != '"' )
                     aString.SearchAndReplaceAll( cReplace, '"' );
 
                 cReplace = pAuto->GetEndDoubleQuote();
                 if( !cReplace )
-                    cReplace = ScGlobal::pLocaleData->getDoubleQuotationMarkEnd().GetChar(0);
+                    cReplace = rLocaleData.getDoubleQuotationMarkEnd().GetChar(0);
                 if ( cReplace != '"' )
                     aString.SearchAndReplaceAll( cReplace, '"' );
 
                 cReplace = pAuto->GetStartSingleQuote();
                 if( !cReplace )
-                    cReplace = ScGlobal::pLocaleData->getQuotationMarkStart().GetChar(0);
+                    cReplace = rLocaleData.getQuotationMarkStart().GetChar(0);
                 if ( cReplace != '\'' )
                     aString.SearchAndReplaceAll( cReplace, '\'' );
 
                 cReplace = pAuto->GetEndSingleQuote();
                 if( !cReplace )
-                    cReplace = ScGlobal::pLocaleData->getQuotationMarkEnd().GetChar(0);
+                    cReplace = rLocaleData.getQuotationMarkEnd().GetChar(0);
                 if ( cReplace != '\'' )
                     aString.SearchAndReplaceAll( cReplace, '\'' );
             }

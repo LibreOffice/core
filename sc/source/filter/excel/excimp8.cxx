@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:49:33 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,9 @@
 #include <tools/urlobj.hxx>
 #include <tools/solmath.hxx>
 
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 #include <unotools/charclass.hxx>
 
 #ifndef SC_DRWLAYER_HXX
@@ -3414,7 +3416,7 @@ XclImpAutoFilterData::XclImpAutoFilterData( RootData* pRoot, const ScRange& rRan
 void XclImpAutoFilterData::CreateFromDouble( String& rStr, double fVal )
 {
     SolarMath::DoubleToString( rStr, fVal, 'A', INT_MAX,
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
+        ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0), TRUE );
 }
 
 void XclImpAutoFilterData::SetCellAttribs()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:09:50 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include "docsh.hxx"
@@ -562,9 +562,9 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pP
     String aAuthor = pAction->GetUser();
 
     DateTime aDT = pAction->GetDateTime();
-    String aDate = ScGlobal::pLocaleData->getDate( aDT );
+    String aDate = ScGlobal::pSysLocale->GetLocaleData().getDate( aDT );
     aDate += ' ';
-    aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
+    aDate += ScGlobal::pSysLocale->GetLocaleData().getTime( aDT, FALSE, FALSE );
 
     SfxItemSet aSet( GetPool(),
                       SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_AUTHOR,

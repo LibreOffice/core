@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 15:17:23 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #include <svx/msoleexp.hxx>
 
 #include <svtools/useroptions.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #include <stdio.h>
 
@@ -2501,7 +2504,7 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
                     rDoc.GetValue( nCol, nRow, nTab, fVal );
                     sText.Erase();
                     SolarMath::DoubleToString( sText, fVal, 'A', INT_MAX,
-                        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0), TRUE );
+                        ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep().GetChar(0), TRUE );
                 }
                 else
                     rDoc.GetString( nCol, nRow, nTab, sText );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-05-16 10:52:53 $
+ *  last change: $Author: er $ $Date: 2001-07-02 10:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
 #include <tools/solmath.hxx>
 #endif
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #include "global.hxx"
 #include "globstr.hrc"
@@ -129,7 +131,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aEdPrec         ( this, ScResId( ED_PREC ) ),
         aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
         aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
-        aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
+        aDecSep         ( ScGlobal::pSysLocale->GetLocaleData().getNumDecimalSep() ),
         nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
@@ -267,9 +269,10 @@ BOOL ScTpCalcOptions::GetEps( double& rEps )
     aStr.EraseTrailingChars( ' ' );
     int nErrno;
     const sal_Unicode* pEnd;
+    const LocaleDataWrapper& rLocaleData = ScGlobal::pSysLocale->GetLocaleData();
     rEps = SolarMath::StringToDouble( aStr.GetBuffer(),
-        ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+        rLocaleData.getNumThousandSep().GetChar(0),
+        rLocaleData.getNumDecimalSep().GetChar(0),
         nErrno, &pEnd );
     BOOL bOk = ( nErrno == 0 && *pEnd == '\0' && rEps > 0.0 );
 
