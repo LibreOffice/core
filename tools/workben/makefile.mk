@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2002-01-15 09:36:14 $
+#   last change: $Author: mwu $ $Date: 2002-07-04 08:43:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,26 +69,36 @@ TARGETTYPE = CUI
 .INCLUDE: settings.mk
 
 OBJFILES = \
-    $(OBJ)$/solar.obj \
-    $(OBJ)$/urltest.obj
+    $(OBJ)$/helloworld.obj	 
+#	$(OBJ)$/solar.obj \
+#	$(OBJ)$/urltest.obj	\
 #	$(OBJ)$/demostor.obj \
 #	$(OBJ)$/fstest.obj \
 #	$(OBJ)$/tldem.obj \
 
-APP1TARGET = solar
-APP1OBJS = $(OBJ)$/solar.obj
-.IF "$(GUI)" == "UNX"
-APP1STDLIBS = $(TOOLSLIB)
-.ELSE
-APP1LIBS = $(LB)$/itools.lib
-.ENDIF
+#APP1TARGET = solar
+#APP1OBJS = $(OBJ)$/solar.obj
+#.IF "$(GUI)" == "UNX"
+#APP1STDLIBS = $(TOOLSLIB)
+#.ELSE
+#APP1LIBS = $(LB)$/itools.lib
+#.ENDIF
 
-APP2TARGET = urltest
-APP2OBJS = $(OBJ)$/urltest.obj
+#APP2TARGET = urltest
+#APP2OBJS = $(OBJ)$/urltest.obj
+#.IF "$(GUI)" == "UNX"
+#APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
+
+#.ELSE
+#APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
+#.ENDIF
+
+APP3TARGET = helloworld
+APP3OBJS = $(OBJ)$/helloworld.obj
 .IF "$(GUI)" == "UNX"
-APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
+APP3STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
 .ELSE
-APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
+APP3STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
 .ENDIF
 
 # APP3TARGET = tldem
