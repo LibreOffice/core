@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:24:21 $
+ *  last change: $Author: kz $ $Date: 2004-12-08 17:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,10 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
     nZoom(100),
     bIsCursorVisible(FALSE)
 {
+    // docking windows are usually hidden (often already done in the
+    // resource) and will be shown by the sfx framework.
     Hide();
+
     const Fraction aFraction (1,1);
     SetMapMode( MapMode(MAP_100TH_MM, Point(), aFraction, aFraction));
 
