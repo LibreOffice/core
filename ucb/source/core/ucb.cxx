@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: sb $ $Date: 2000-11-09 13:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ UniversalContentBroker::UniversalContentBroker(
   m_pDisposeEventListeners( NULL ),
   m_nInitCount( 0 ) //@@@ see initialize() method
 {
+    VOS_ENSURE( m_xSMgr.is(),
+                "UniversalContentBroker ctor: No service manager" );
 }
 
 //=========================================================================
@@ -261,27 +263,15 @@ void SAL_CALL UniversalContentBroker::initialize(
     throw( com::sun::star::uno::Exception,
            com::sun::star::uno::RuntimeException )
 {
-    // If exactly one boolean argument of value 'true' is supplied, the UCB is
-    // configured:
-    sal_Bool bConfigure;
-    if (aArguments.getLength() == 1
-        && (aArguments[0] >>= bConfigure)
-        && bConfigure)
-    {
-        //@@@ At the moment, there's a problem when one (non-one-instance)
-        // factory 'wraps' another (one-instance) factory, causing this method
-        // to be called several times:
-        oslInterlockedCount nCount
-            = osl_incrementInterlockedCount(&m_nInitCount);
-        if (nCount == 1)
-            ucb::configureUcb(this,
-                              m_xSMgr,
-                              OUString::createFromAscii(
-                                  UCBHELPER_CONFIGURATION_KEY_STANDARD));
-        else
-            osl_decrementInterlockedCount(&m_nInitCount);
+    //@@@ At the moment, there's a problem when one (non-one-instance) factory
+    // 'wraps' another (one-instance) factory, causing this method to be
+    // called several times:
+    oslInterlockedCount nCount = osl_incrementInterlockedCount(&m_nInitCount);
+    if (nCount == 1)
+        ::ucb::configureUcb(this, m_xSMgr, aArguments, 0);
+    else
+        osl_decrementInterlockedCount(&m_nInitCount);
             // make the possibility of overflow less likely...
-    }
 }
 
 //=========================================================================
