@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:40:19 $
+ *  last change: $Author: rt $ $Date: 2002-09-17 13:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ russian ] = "Assigned macro";
         Text[ greek ] = "Assigned macro";
         Text[ dutch ] = "Assigned macro";
-        Text[ french ] = "Assigned macro";
+        Text[ french ] = "Macro assignée";
         Text[ spanish ] = "Macro asignada";
         Text[ finnish ] = "Assigned macro";
-        Text[ italian ] = "Assigned macro";
+        Text[ italian ] = "Macro assegnata";
         Text[ danish ] = "Assigned macro";
         Text[ swedish ] = "Tilldelat makro";
         Text[ polish ] = "Assigned macro";
@@ -171,10 +171,10 @@ TabPage RID_SFX_TP_MACROASSIGN
         Text[ russian ] = "~Existing macros in:\n";
         Text[ greek ] = "~Existing macros in:\n";
         Text[ dutch ] = "~Existing macros in:\n";
-        Text[ french ] = "~Existing macros in:\n";
+        Text[ french ] = "Macros existantes dans :";
         Text[ spanish ] = "~Macros existentes en:\n";
         Text[ finnish ] = "~Existing macros in:\n";
-        Text[ italian ] = "~Existing macros in:\n";
+        Text[ italian ] = "~Macro presenti in:";
         Text[ danish ] = "~Existing macros in:\n";
         Text[ swedish ] = "~Existerande makron i:\n";
         Text[ polish ] = "~Existing macros in:\n";
