@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:00:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ french ] = "Original";
         Text[ swedish ] = "~Original";
         Text[ dutch ] = "~Origineel";
-        Text[ spanish ] = "Original";
+        Text[ spanish ] = "~Original";
         Text[ english_us ] = "Origi~nal";
         Text[ chinese_simplified ] = "εζ¥η„(~N)";
         Text[ russian ] = "Ξπθγθνΰλ";
@@ -90,7 +90,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "εδΎ†η„(~N)";
         Text[ arabic ] = "ΗαΓΥα";
         Text[ greek ] = "Αρχικό";
-        Text[ korean ] = "μ›λλ€λ΅(~N)";
+        Text[ korean ] = "μ°Ύλ” λ‹¨μ–΄(~N)";
         Text[ turkish ] = "Sφzcόk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Origi~nal";
@@ -166,7 +166,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "ε»Ίθ­°(~S)";
         Text[ arabic ] = "ΗήΚΡΗΝΗΚ";
         Text[ greek ] = "~Προτάσεις";
-        Text[ korean ] = "μ μ•(~S)";
+        Text[ korean ] = "μ¶”μ² λ‹¨μ–΄(~S)";
         Text[ turkish ] = "Φneriler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suggeriments";
@@ -186,10 +186,10 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ portuguese ] = "~Ignorar" ;
         Text [ finnish ] = "Oh~ita" ;
         Text [ danish ] = "Ignorer" ;
-        Text [ french ] = "~Ignorer" ;
+        Text [ french ] = "Ignorer" ;
         Text [ swedish ] = "~Ignorera" ;
         Text [ dutch ] = "~Negeren" ;
-        Text [ spanish ] = "Ignorar" ;
+        Text [ spanish ] = "~Ignorar" ;
         Text [ english_us ] = "~Ignore" ;
         Text[ chinese_simplified ] = "εΏ½η•¥(~I)";
         Text[ russian ] = "Οπξοσρςθςό";
@@ -198,7 +198,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "εΏ½η•¥(~I)";
         Text[ arabic ] = "ΚΜΗεα";
         Text[ greek ] = "Παράβλεψη";
-        Text[ korean ] = "λ¬΄μ‹(~I)";
+        Text[ korean ] = "κ±΄λ„λ›°κΈ°(~I)";
         Text[ turkish ] = "Yok say";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ignora";
@@ -229,7 +229,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ chinese_traditional ] = "θ‡ªε‹•εΏ½η•¥(~G)";
         Text[ arabic ] = "ΚΜΗεα Ηαία";
         Text[ greek ] = "Πάντα παράβλεψη";
-        Text[ korean ] = "λª¨λ‘ λ¬΄μ‹(~G)";
+        Text[ korean ] = "λª¨λ‘ κ±΄λ„λ›°κΈ°(~G)";
         Text[ turkish ] = "Her zaman yok say";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~gnora-ho tot";
@@ -258,10 +258,10 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ russian ] = "Ηΰμενθςό";
         Text[ polish ] = "Zamieρ";
         Text[ japanese ] = "η½®ζ›(~R)";
-        Text[ chinese_traditional ] = "δ»£ζ›Ώ(~R)";
+        Text[ chinese_traditional ] = "ζ›Ώδ»£(~R)";
         Text[ arabic ] = "ΚΫννΡ";
         Text[ greek ] = "Αντικατάσταση";
-        Text[ korean ] = "λ°”κΎΈκΈ°(~R)";
+        Text[ korean ] = "λ°”κΏ€ λ‹¨μ–΄(~R)";
         Text[ turkish ] = "Deπiώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reemplaηa";
@@ -283,16 +283,16 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ french ] = "Toujours remplacer" ;
         Text [ swedish ] = "Ers~δtt alltid" ;
         Text [ dutch ] = "~Altijd vervangen" ;
-        Text [ spanish ] = "Reemplazar siempre" ;
+        Text [ spanish ] = "~Reemplazar siempre" ;
         Text [ english_us ] = "Always R~eplace" ;
         Text[ chinese_simplified ] = "θ‡ªε¨ζ›ΏζΆ(~E)";
         Text[ russian ] = "Ηΰμενÿςό βρεγδΰ";
         Text[ polish ] = "Zamieρ wszyst.";
         Text[ japanese ] = "εΈΈγ«η½®ζ›γ™γ‚‹(~E)";
-        Text[ chinese_traditional ] = "θ‡ªε‹•δ»£ζ›Ώ(~E)";
+        Text[ chinese_traditional ] = "θ‡ªε‹•ζ›Ώδ»£(~E)";
         Text[ arabic ] = "ΚΫννΡ Ηαία";
         Text[ greek ] = "Πάντα αντικατάσταση";
-        Text[ korean ] = "ν•­μƒ λ°”κΎΈκΈ°(~E)";
+        Text[ korean ] = "λª¨λ‘ λ³€κ²½(~E)";
         Text[ turkish ] = "Her zaman deπiώtir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaηa ~sempre";
@@ -350,4 +350,5 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ thai ] = "~ΰΈ›ΰΈ΄ΰΈ”";
     };
 };
+
 
