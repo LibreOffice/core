@@ -2,9 +2,9 @@
  *
  *  $RCSfile: omark.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:21:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 #include <string.h>
 
