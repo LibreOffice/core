@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:12 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ Resource RID_ERRCTX
         Text [ dutch ] = "Fout" ;
         Text [ swedish ] = "Fel" ;
         Text [ danish ] = "Fejl" ;
-        Text [ portuguese_brazilian ] = "Fehler" ;
+        Text [ portuguese_brazilian ] = "Erro" ;
         Text [ portuguese ] = "Erro" ;
         Text[ chinese_simplified ] = "é”™è¯¯";
         Text[ russian ] = "Îøèáêà";
@@ -93,6 +93,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "S'ha produït un error";
         Text[ finnish ] = "Virhe";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "Chyba";
+        Text[ hebrew ] = "â€®×©×’×™××”â€¬";
+        Text[ hindi ] = "à¤—à¤²à¤¤à¥€";
     };
     String ERRCTX_WARNING
     {
@@ -106,7 +109,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "Varning" ;
         Text [ danish ] = "Advarsel" ;
         Text [ portuguese ] = "Advertência" ;
-        Text [ portuguese_brazilian ] = "Warnung" ;
+        Text [ portuguese_brazilian ] = "Aviso" ;
         Text[ chinese_simplified ] = "è­¦å‘Š";
         Text[ russian ] = "Ïğåäóïğåæäåíèå";
         Text[ polish ] = "Ostrze¿enie";
@@ -121,6 +124,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "Advertència";
         Text[ finnish ] = "Varoitus";
         Text[ thai ] = "à¸„à¸³à¹€à¸•à¸·à¸­à¸™";
+        Text[ czech ] = "UpozornÄ›nÃ­";
+        Text[ hebrew ] = "â€®××–×”×¨×”â€¬";
+        Text[ hindi ] = "à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€";
     };
     String ERRCTX_SFX_LOADTEMPLATE
     {
@@ -134,7 +140,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) vid laddning av mallen $(ARG1)" ;
         Text [ danish ] = "$(ERR) under indlæsning af skabelonen $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o modelo $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Laden der Vorlage $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao carregar o modelo $(ARG1)" ;
         Text[ chinese_simplified ] = "$(ERR)å‘ç”Ÿåœ¨è£…å…¥æ ·å¼$(ARG1)æ—¶";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå øàáëîíà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu szablonu $(ARG1)";
@@ -150,12 +156,15 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en carregar la plantilla $(ARG1)";
         Text[ finnish ] = "$(ERR) ladattaessa mallia $(ARG1)";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸”à¹à¸¡à¹ˆà¹à¸šà¸š $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i nahrÃ¡vÃ¡nÃ­ Å¡ablony $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×˜×¢×™× ×ª ×ª×‘× ×™×ª $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_SAVEDOC
     {
         Text = "$(ERR) beim Speichern des Dokumentes $(ARG1)" ;
         Text [ italian ] = "$(ERR) nel salvare il documento $(ARG1)";
-        Text [ portuguese_brazilian ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
+        Text [ portuguese_brazilian ] = "$(ERR) ao salvar o documento $(ARG1)";
         Text [ portuguese ] = "$(ERR) ao guardar o documento $(ARG1)";
         Text [ danish ] = "$(ERR) under forsøg på at gemme dokumentet $(ARG1)";
         Text [ french ] = "$(ERR) lors de l'enregistrement du document $(ARG1)";
@@ -178,12 +187,15 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en desar el document $(ARG1)";
         Text[ finnish ] = "$(ERR) tallennettaessa asiakirjaa $(ARG1)";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i uklÃ¡dÃ¡nÃ­ dokumentu $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×©××™×¨×ª ××¡××š $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR)";
     };
     String ERRCTX_SFX_SAVEASDOC
     {
         Text = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
         Text [ italian ] = "$(ERR) nel salvare il documento $(ARG1)";
-        Text [ portuguese_brazilian ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
+        Text [ portuguese_brazilian ] = "$(ERR) ao salvar o documento $(ARG1)";
         Text [ portuguese ] = "$(ERR) ao guardar o documento $(ARG1)";
         Text [ danish ] = "$(ERR) under forsøg på at gemme dokumentet $(ARG1)";
         Text [ french ] = "$(ERR) lors de l'enregistrement du document $(ARG1)";
@@ -206,6 +218,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en desar el document $(ARG1)";
         Text[ finnish ] = "$(ERR) tallennettaessa asiakirjaa $(ARG1)";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i uklÃ¡dÃ¡nÃ­ dokumentu $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×©××™×¨×ª ××¡××š $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR)";
     };
     String ERRCTX_SFX_DOCINFO
     {
@@ -219,10 +234,10 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) vid visning av dokumentinfo för $(ARG1)" ;
         Text [ danish ] = "$(ERR) ved visning af dokumentinfo for dokumentet $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao mostrar informações sobre o documento $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Anzeigen der Docinfo des Dokumentes $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao exibir informações sobre o documento $(ARG1)" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºæ–‡æ¡£ $(ARG1) æ–‡æ¡£ä¿¡æ¯æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ïîêàçå èíôîğìàöèè ê äîêóìåíòó $(ARG1)";
-        Text[ polish ] = "$(ERR) przy wyœwietlaniu informacji o dokumencie dla dokumentu $(ARG1)";
+        Text[ polish ] = "$(ERR) przy wyœwietlaniu informacji o dokumencie $(ARG1)";
         Text[ japanese ] = "$(ERR)ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ$(ARG1)ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆæƒ…å ±ã®è¡¨ç¤ºã®éš›";
         Text[ chinese_traditional ] = "é¡¯ç¤ºæ–‡ä»¶ $(ARG1) çš„æ–‡ä»¶è³‡è¨Šæ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅÙåÇÑ ãÚáæãÇÊ ÇáãÓÊäÏ ÇáÎÇÕÉ ÈÇáãÓÊäÏ $(ARG1)";
@@ -234,6 +249,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en mostrar la informació del document $(ARG1)";
         Text[ finnish ] = "$(ERR) näytettäessä asiakirjan $(ARG1) tietoja";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹à¸ªà¸”à¸‡à¸œà¸¥à¹€à¸­à¸à¸ªà¸²à¸£ à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i zobrazovÃ¡nÃ­ informacÃ­ o dokumentu $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×ª×¦×•×’×ª ×¤×¨×˜×™ ××¡××š $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‡à¤²à¤¿à¤ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¸à¥‚à¤šà¤¨à¤¾ à¤¦à¤¿à¤–à¤¾à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR)";
     };
     String ERRCTX_SFX_DOCTEMPLATE
     {
@@ -247,7 +265,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) när dokumentet $(ARG1) skrevs som mall" ;
         Text [ danish ] = "$(ERR) under skrivning af dokumentet $(ARG1) som skabelon" ;
         Text [ portuguese ] = "$(ERR) ao escrever o documento $(ARG1) como modelo" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Schreiben des Dokumentes $(ARG1) als Vorlage" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao gravar o documento $(ARG1) como modelo" ;
         Text[ chinese_simplified ] = "åœ¨æ”¹å†™æ ·å¼æ–‡æ¡£ $(ARG1) æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàïèñè äîêóìåíòà $(ARG1) êàê øàáëîíà";
         Text[ polish ] = "$(ERR) przy zapisywaniu dokumentu $(ARG1) jako szablonu";
@@ -263,6 +281,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en escriure el document $(ARG1) com a plantilla";
         Text[ finnish ] = "$(ERR) kirjoitettaessa asiakirjaa $(ARG1) malliksi";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹€à¸‚à¸µà¸¢à¸™à¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1) à¹€à¸›à¹‡à¸™à¹à¸¡à¹ˆà¹à¸šà¸š";
+        Text[ czech ] = "$(ERR) pÅ™i zÃ¡pisu dokumentu $(ARG1) jako Å¡ablony";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×›×ª×™×‘×ª ××¡××š $(ARG1) ×‘×ª×•×¨ ×ª×‘× ×™×ªâ€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‡ à¤œà¥ˆà¤¸à¥‡ à¤²à¤¿à¤–à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR)   ";
     };
     String ERRCTX_SFX_MOVEORCOPYCONTENTS
     {
@@ -270,7 +291,7 @@ Resource RID_ERRCTX
         Text [ ENGLISH ] = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
         Text [ portuguese ] = "$(ERR) ao copiar ou mover conteúdos do documento" ;
         Text [ english_us ] = "$(ERR) copying or moving document contents" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao copiar ou mover o conteúdo do documento." ;
         Text [ swedish ] = "$(ERR) vid kopiering eller förflyttning av dokumentinnehåll" ;
         Text [ danish ] = "$(ERR) under kopiering eller flytning af dokumentindhold" ;
         Text [ italian ] = "$(ERR) nel copiare o spostare i contenuti dei documenti" ;
@@ -279,7 +300,7 @@ Resource RID_ERRCTX
         Text [ dutch ] = "$(ERR) bij kopiëren of verplaatsen van documentinhoud" ;
         Text[ chinese_simplified ] = "å¤åˆ¶æˆ–ç§»åŠ¨æ–‡æ¡£å†…å®¹æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè êîïèğîâàíèè èëè ïåğåìåùåíèè ñîäåğæèìîãî äîêóìåíòà";
-        Text[ polish ] = "$(ERR) przy kopiowaniu lub przenoszeniu zawartoœci wiadomoœci";
+        Text[ polish ] = "$(ERR) przy kopiowaniu lub przenoszeniu zawartoœci dokumentu";
         Text[ japanese ] = "$(ERR)ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®å†…å®¹ã‚’ã‚³ãƒ”ãƒ¼ã¾ãŸã¯ç§»å‹•ã™ã‚‹éš›";
         Text[ chinese_traditional ] = "è¤‡è£½å’Œç§»å‹•æ–‡ä»¶å…§å®¹æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ äÓÎ Ãæ ÅÒÇÍÉ ãÍÊæíÇÊ ÇáãÓÊäÏ";
@@ -291,6 +312,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en copiar o moure el contingut del document";
         Text[ finnish ] = "$(ERR) kopioitaessa tai siirrettäessä asiakirjan sisältöä";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸„à¸±à¸”à¸¥à¸­à¸à¸«à¸£à¸·à¸­à¸¢à¹‰à¸²à¸¢à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸­à¸à¸ªà¸²à¸£";
+        Text[ czech ] = "$(ERR) pÅ™i kopÃ­rovÃ¡nÃ­ nebo pÅ™esunu obsahu dokumentu";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×¢×ª×§×” ××• ×‘×”×¢×‘×¨×ª ×ª×•×›×Ÿ ×”××¡××šâ€¬";
+        Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤µà¤¿à¤·à¤¯à¥‹à¤‚ à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤…à¤¥à¤µà¤¾ à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_DOCMANAGER
     {
@@ -304,10 +328,10 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) vid start av dokumenthanteraren" ;
         Text [ danish ] = "$(ERR) ved start af dokumentmanageren" ;
         Text [ portuguese ] = "$(ERR) ao iniciar o Gestor de Documentos" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Starten des Docmanagers" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao iniciar o Gerenciador de Documentos" ;
         Text[ chinese_simplified ] = "å¯åŠ¨æ–‡æ¡£ç®¡ç†ç¨‹åºæ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàïóñêå Óïğàâëåíèÿ äîêóìåíòàìè";
-        Text[ polish ] = "$(ERR) przy w³¹czaniu mened¿era dokumentów";
+        Text[ polish ] = "$(ERR) przy uruchamianiu mened¿era dokumentów";
         Text[ japanese ] = "$(ERR)ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚’é–‹å§‹ã™ã‚‹éš›";
         Text[ chinese_traditional ] = "å•Ÿå‹•æ–‡ä»¶ç¸½ç®¡æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÈÏÁ ãÏíÑ ÇáãÓÊäÏ";
@@ -319,6 +343,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en inicialitzar l'administrador de documents";
         Text[ finnish ] = "$(ERR) aloitettaessa asiakirjan hallintaa";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹€à¸£à¸´à¹ˆà¸¡à¸•à¸±à¸§à¸ˆà¸±à¸”à¸à¸²à¸£à¹€à¸­à¸à¸ªà¸²à¸£";
+        Text[ czech ] = "$(ERR) pÅ™i spuÅ¡tÄ›nÃ­ sprÃ¡vce dokumentÅ¯";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×¢×ª ×”×¤×¢×œ×ª ×× ×”×œ ×”××¡××›×™×â€¬";
+        Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤ªà¥à¤°à¤¬à¤¨à¥à¤§à¤• à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_OPENDOC
     {
@@ -332,7 +359,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) vid laddning av dokumentet $(ARG1)" ;
         Text [ danish ] = "$(ERR) under indlæsning af dokumentet $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o documento $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Laden des Dokumentes $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao carregar o documento $(ARG1)" ;
         Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£ $(ARG1) æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå äîêóìåíòà $(ARG1)";
         Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu $(ARG1)";
@@ -348,6 +375,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en carregar el document $(ARG1)";
         Text[ finnish ] = "$(ERR) ladattaessa asiakirjaa $(ARG1)";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i nahrÃ¡vÃ¡nÃ­ dokumentu $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×˜×¢×™× ×ª ××¡××š $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_NEWDOCDIRECT
     {
@@ -361,7 +391,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) när ett nytt dokument skapades" ;
         Text [ danish ] = "$(ERR) under oprettelsen af et nyt dokument" ;
         Text [ portuguese ] = "$(ERR) ao criar o novo documento" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao criar um novo documento" ;
         Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ñîçäàíèè íîâîãî äîêóìåíòà";
         Text[ polish ] = "$(ERR) przy tworzeniu nowego dokumentu";
@@ -377,6 +407,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en crear un document nou";
         Text[ finnish ] = "$(ERR) luotaessa uutta asiakirjaa";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆ";
+        Text[ czech ] = "$(ERR) pÅ™i vytvÃ¡Å™enÃ­ dokumentu";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×™×¦×•×¨ ××¡××š ×—×“×©â€¬";
+        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR)  ";
     };
     String ERRCTX_SFX_NEWDOC
     {
@@ -390,7 +423,7 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) när ett nytt dokument skapades" ;
         Text [ danish ] = "$(ERR) under oprettelsen af et nyt dokument" ;
         Text [ portuguese ] = "$(ERR) ao criar o novo documento" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao criar um novo documento" ;
         Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ñîçäàíèè íîâîãî äîêóìåíòà";
         Text[ polish ] = "$(ERR) przy tworzeniu nowego dokumentu";
@@ -406,6 +439,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en crear un document nou";
         Text[ finnish ] = "$(ERR) luotaessa uutta asiakirjaa";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆ";
+        Text[ czech ] = "$(ERR) pÅ™i vytvÃ¡Å™enÃ­ dokumentu";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×™×¦×•×¨ ××¡××š ×—×“×©â€¬";
+        Text[ hindi ] = "$(ERR) creating a new document";
     };
     String ERRCTX_SFX_CREATEOBJSH
     {
@@ -419,10 +455,10 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) när en rubrik öppnades" ;
         Text [ danish ] = "$(ERR) under åbning af en rubrik" ;
         Text [ portuguese ] = "$(ERR) ao abrir rubrica" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Aufklappen einer Rubrik" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao expandir a entrada" ;
         Text[ chinese_simplified ] = "æ‰©å±•åˆ†ç±»æ¡ç›®æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ğàñêğûòèè ğóáğèêè";
-        Text[ polish ] = "$(ERR) przy otwieraniu rubryki";
+        Text[ polish ] = "$(ERR) przy rozwijaniu wpisu";
         Text[ japanese ] = "$(ERR)ãƒ„ãƒªãƒ¼è¡¨ç¤ºã‚’é–‹ãéš›";
         Text[ chinese_traditional ] = "æ“´å±•é¡¯ç¤ºä¸€å€‹åˆ†æ¬„æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ İÊÍ ÃÍÏ ÇáÃÚãÏÉ";
@@ -434,6 +470,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en expandir una rúbrica";
         Text[ finnish ] = "$(ERR) laajennettaessa merkintää";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸‚à¸¢à¸²à¸¢à¸£à¸²à¸¢à¸à¸²à¸£";
+        Text[ czech ] = "Chyba $(ERR) pÅ™i expanzi poloÅ¾ky";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×¢×ª ×¤×™× ×•×— ×¢×¨×šâ€¬";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤µà¤¿à¤¸à¥à¤¤à¤¾à¤° à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_LOADBASIC
     {
@@ -447,10 +486,10 @@ Resource RID_ERRCTX
         Text [ swedish ] = "$(ERR) vid laddning av BASIC i dokumentet $(ARG1)" ;
         Text [ danish ] = "$(ERR) under indlæsning af BASIC fra dokumentet $(ARG1)" ;
         Text [ portuguese ] = "$(ERR) ao carregar o BASIC do documento $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "$(ERR) beim Laden des BASIC des Dokuments $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "$(ERR) ao carregar o BASIC do documento  $(ARG1)" ;
         Text[ chinese_simplified ] = "è£…å…¥æ–‡æ¡£ $(ARG1) BASIC æ—¶å‘ç”Ÿ $(ERR)";
         Text[ russian ] = "$(ERR) ïğè çàãğóçêå BASIC äîêóìåíòà $(ARG1)";
-        Text[ polish ] = "$(ERR) przy ³adowaniu dokumentu BASIC $(ARG1)";
+        Text[ polish ] = "$(ERR) przy ³adowaniu kodu BASIC dokumentu $(ARG1)";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ $(ARG1) ã® BASIC ã‚’èª­ã¿è¾¼ã‚€éš›ã® $(ERR)";
         Text[ chinese_traditional ] = "è¼‰å…¥æ–‡ä»¶ $(ARG1)  BASIC æ™‚ç™¼ç”Ÿ $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá BASIC ÇáãÓÊäÏ $(ARG1)";
@@ -462,6 +501,9 @@ Resource RID_ERRCTX
         Text[ catalan ] = "$(ERR) en carregar el BASIC del document $(ARG1)";
         Text[ finnish ] = "$(ERR) ladattaessa asiakirjan $(ARG1) BASIC-tietoja";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¹‚à¸«à¸¥à¸” BASIC à¸‚à¸­à¸‡à¹€à¸­à¸à¸ªà¸²à¸£ $(ARG1)";
+        Text[ czech ] = "$(ERR) pÅ™i nahrÃ¡vÃ¡nÃ­ BASICu z dokumentu $(ARG1)";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×¢×ª ×”×¤×¢×œ×ª ×§×•×“ ×”×‘×™×™×¡×™×§ ×©×œ ××¡××š $(ARG1)â€¬";
+        Text[ hindi ] = "$(ARG1) à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¤¾ BASIC à¤²à¥‹à¤¡à¤¼ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ $(ERR) ";
     };
     String ERRCTX_SFX_SEARCHADDRESS
     {
@@ -477,17 +519,20 @@ Resource RID_ERRCTX
         Text[ italian ] = "$(ERR) nella ricerca d'indirizzo";
         Text[ danish ] = "$(ERR) under adressesøgningen";
         Text[ swedish ] = "$(ERR) vid adressökning";
-        Text[ polish ] = "$(ERR) w trakcie wyszukiwania adresu";
-        Text[ portuguese_brazilian ] = "$(ERR) searching for an address";
+        Text[ polish ] = "$(ERR) przy wyszukiwaniu adresu";
+        Text[ portuguese_brazilian ] = "$(ERR) ao procurar por um endereço";
         Text[ japanese ] = "$(ERR) ã‚¢ãƒ‰ãƒ¬ã‚¹æ¤œç´¢ä¸­ã«ç™ºç”Ÿã—ã¾ã—ãŸ";
         Text[ korean ] = "ì£¼ì†Œ ê²€ìƒ‰ì‹œì— $(ERR)";
         Text[ chinese_simplified ] = "åœ¨æœå¯»åœ°å€æ—¶å‡ºç°$(ERR)";
         Text[ chinese_traditional ] = "åœ¨æœå°‹åœ°å€æ™‚å‡ºç¾ $(ERR)";
-        Text[ turkish ] = "$(ERR) searching for an address";
+        Text[ turkish ] = "$(ERR) adres için aranıyor";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÇáÈÍË Úä ÇáÚäæÇä";
         Text[ catalan ] = "$(ERR) en cercar una direcció";
         Text[ finnish ] = "$(ERR) osoitetta etsittäessä";
         Text[ thai ] = "$(ERR) à¸à¸³à¸¥à¸±à¸‡à¸„à¹‰à¸™à¸«à¸²à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "$(ERR) pÅ™i hledÃ¡nÃ­ adresy";
+        Text[ hebrew ] = "â€®$(ERR) ×‘×—×™×¤×•×© ×›×ª×•×‘×ªâ€¬";
+        Text[ hindi ] = "$(ERR) searching for an address";
     };
 };
 Resource RID_ERRHDL
@@ -509,7 +554,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Icke-existerande objekt" ;
         Text [ danish ] = "Ikke-eksisterende objekt" ;
         Text [ portuguese ] = "Objecto inexistente" ;
-        Text [ portuguese_brazilian ] = "Nichtexistentes Objekt" ;
+        Text [ portuguese_brazilian ] = "O objeto não existe" ;
         Text[ chinese_simplified ] = "ä¸å­˜åœ¨çš„å¯¹è±¡";
         Text[ russian ] = "Íåñóùåñòâóşùèé îáúåêò";
         Text[ polish ] = "Nieistniej¹cy obiekt";
@@ -524,6 +569,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Objecte no existent";
         Text[ finnish ] = "Objektia ei ole.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸§à¸±à¸•à¸–à¸¸à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "NeexistujÃ­cÃ­ objekt";
+        Text[ hebrew ] = "â€®×¢×¦× ×œ× ×§×™×™×â€¬";
+        Text[ hindi ] = "à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ-à¤¹à¥€à¤¨ à¤µà¤¸à¥à¤¤à¥";
     };
     String ERRCODE_CLASS_ALREADYEXISTS
     {
@@ -537,7 +585,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Objekt existerar redan" ;
         Text [ danish ] = "Objektet eksisterer allerede" ;
         Text [ portuguese ] = "Objecto já existe" ;
-        Text [ portuguese_brazilian ] = "Objekt existiert bereits" ;
+        Text [ portuguese_brazilian ] = "O objeto já existe" ;
         Text[ chinese_simplified ] = "å¯¹è±¡å·²ç»å­˜åœ¨";
         Text[ russian ] = "Îáúåêò óæå ñóùåñòâóåò";
         Text[ polish ] = "Obiekt ju¿ istnieje";
@@ -552,6 +600,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'objecte ja existeix";
         Text[ finnish ] = "Objekti on jo olemassa.";
         Text[ thai ] = "à¸¡à¸µà¸§à¸±à¸•à¸–à¸¸à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "Objekt jiÅ¾ existuje";
+        Text[ hebrew ] = "â€®×¢×¦× ×–×” ×›×‘×¨ ×§×™×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ";
     };
     String ERRCODE_CLASS_ACCESS
     {
@@ -565,7 +616,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ingen åtkomst till objekt" ;
         Text [ danish ] = "Ingen adgang til objekt" ;
         Text [ portuguese ] = "Objecto inacessível" ;
-        Text [ portuguese_brazilian ] = "Kein Zugriff auf Objekt" ;
+        Text [ portuguese_brazilian ] = "O objeto é inacessível" ;
         Text[ chinese_simplified ] = "ä¸èƒ½å¤Ÿè¯»å–å¯¹è±¡";
         Text[ russian ] = "Îáúåêò íåäîñòóïåí";
         Text[ polish ] = "Obiekt niedostêpny";
@@ -580,6 +631,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No hi ha accés a l'objecte";
         Text[ finnish ] = "Objekti ei ole käytettävissä.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸§à¸±à¸•à¸–à¸¸";
+        Text[ czech ] = "Objekt je nedostupnÃ½";
+        Text[ hebrew ] = "â€®×¢×¦× ×œ× × ×’×™×©â€¬";
+        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¯ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
     };
     String ERRCODE_CLASS_PATH
     {
@@ -593,7 +647,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Otillåten sökväg" ;
         Text [ danish ] = "Ugyldig sti" ;
         Text [ portuguese ] = "Atalho não autorizado" ;
-        Text [ portuguese_brazilian ] = "Unzul?ssiger Pfad" ;
+        Text [ portuguese_brazilian ] = "Caminho não autorizado" ;
         Text[ chinese_simplified ] = "è·¯å¾„æ— æ•ˆ";
         Text[ russian ] = "Íåäîïóñòèìûé ïóòü";
         Text[ polish ] = "Niedopuszczalna œcie¿ka";
@@ -608,6 +662,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Camí no autortizat";
         Text[ finnish ] = "Polun käyttäminen ei onnistu.";
         Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸­à¸™à¸¸à¸à¸²à¸•";
+        Text[ czech ] = "NepÅ™Ã­pustnÃ¡ cesta";
+        Text[ hebrew ] = "â€®××¡×œ×•×œ ×¡×¤×¨×™×•×ª ×‘×œ×ª×™ ×—×•×§×™â€¬";
+        Text[ hindi ] = "Inadmissable path";
     };
     String ERRCODE_CLASS_LOCKING
     {
@@ -621,7 +678,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Låsproblem" ;
         Text [ danish ] = "Låseproblem" ;
         Text [ portuguese ] = "Problema de bloqueio" ;
-        Text [ portuguese_brazilian ] = "Lockingproblem" ;
+        Text [ portuguese_brazilian ] = "Problema de bloqueio" ;
         Text[ chinese_simplified ] = "é”å®šå†²çª";
         Text[ russian ] = "Ïğîáëåìà áëîêèğîâêè";
         Text[ polish ] = "Problem blokady";
@@ -637,6 +694,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Problema de blocatge";
         Text[ finnish ] = "Lukitusongelma";
         Text[ thai ] = "à¸›à¸±à¸à¸«à¸²à¸à¸²à¸£à¸¥à¹‡à¸­à¸„";
+        Text[ czech ] = "ProblÃ©m s uzamÄenÃ­m";
+        Text[ hebrew ] = "â€®×©×’×™××ª × ×¢×™×œ×”â€¬";
+        Text[ hindi ] = "Locking problem";
     };
     String ERRCODE_CLASS_PARAMETER
     {
@@ -650,7 +710,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Felaktig parameter" ;
         Text [ danish ] = "Forkert parameter" ;
         Text [ portuguese ] = "Parâmetro incorrecto" ;
-        Text [ portuguese_brazilian ] = "Falscher Parameter" ;
+        Text [ portuguese_brazilian ] = "Parâmetro incorreto" ;
         Text[ chinese_simplified ] = "æ— æ•ˆçš„å‚æ•°";
         Text[ russian ] = "Íåïğàâèëüíûé ïàğàìåòğ";
         Text[ polish ] = "Nieprawid³owy parametr";
@@ -665,6 +725,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Paràmetre fals";
         Text[ finnish ] = "Väärä parametri";
         Text[ thai ] = "à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œà¸œà¸´à¸”";
+        Text[ czech ] = "ChybnÃ½ parametr";
+        Text[ hebrew ] = "â€®×¤×¨××˜×¨ ×œ× × ×›×•×Ÿâ€¬";
+        Text[ hindi ] = "Wrong parameter";
     };
     String ERRCODE_CLASS_SPACE
     {
@@ -678,7 +741,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Inga resurser kvar" ;
         Text [ danish ] = "Ressource opbrugt" ;
         Text [ portuguese ] = "Recursos esgotados" ;
-        Text [ portuguese_brazilian ] = "Resource ersch?ft" ;
+        Text [ portuguese_brazilian ] = "Recurso esgotado" ;
         Text[ chinese_simplified ] = "èµ„æºå·²ç»ç”¨å®Œ";
         Text[ russian ] = "Ğåñóğñû èñ÷åğïàíû";
         Text[ polish ] = "Wyczerpany zasób";
@@ -693,6 +756,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Els recursos s'han exhaurit";
         Text[ finnish ] = "Resurssi käytetty loppuun.";
         Text[ thai ] = "à¸—à¸£à¸±à¸à¸¢à¸²à¸à¸£à¸«à¸¡à¸”";
+        Text[ czech ] = "Zdroj vyÄerpÃ¡n";
+        Text[ hebrew ] = "â€®×”××©××‘ ××–×œâ€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤§à¤¨ à¤–à¤¤à¤® à¤¹à¥à¤†";
     };
     String ERRCODE_CLASS_NOTSUPPORTED
     {
@@ -706,7 +772,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Åtgärd inte understödd" ;
         Text [ danish ] = "Handlingen understøttes ikke" ;
         Text [ portuguese ] = "Acção sem suporte" ;
-        Text [ portuguese_brazilian ] = "Aktion nicht unterst?zt" ;
+        Text [ portuguese_brazilian ] = "Esta ação não é suportada" ;
         Text[ chinese_simplified ] = "æ“ä½œä¸å—æ”¯æŒ";
         Text[ russian ] = "Äåéñòâèå íå ïîääåğæèâàåòñÿ";
         Text[ polish ] = "Akcja nie jest obs³ugiwana";
@@ -721,6 +787,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'operació no se suporta";
         Text[ finnish ] = "Toimintoa ei tueta.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
+        Text[ czech ] = "ÄŒinnost nepodporovÃ¡na";
+        Text[ hebrew ] = "â€®×¤×¢×•×œ×” ×œ× × ×ª××›×ªâ€¬";
+        Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯ à¤…à¤¸à¤®à¤°à¥à¤¥à¤¿à¤¤";
     };
     String ERRCODE_CLASS_READ
     {
@@ -734,7 +803,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Läsproblem" ;
         Text [ danish ] = "Læsefejl" ;
         Text [ portuguese ] = "Erro de leitura" ;
-        Text [ portuguese_brazilian ] = "Leseproblem" ;
+        Text [ portuguese_brazilian ] = "Erro de Leitura" ;
         Text[ chinese_simplified ] = "è¯»å–é”™è¯¯";
         Text[ russian ] = "Îøèáêà ñ÷èòûâàíèÿ";
         Text[ polish ] = "B³¹d odczytu";
@@ -749,6 +818,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error de lectura";
         Text[ finnish ] = "Lukuvirhe";
         Text[ thai ] = "à¸­à¹ˆà¸²à¸™à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "Chyba pÅ™i ÄtenÃ­";
+        Text[ hebrew ] = "â€®×©×’×™××” ×ª×•×š ×›×“×™ ×§×¨×™××”â€¬";
+        Text[ hindi ] = "à¤ªà¤¢à¤¼à¤¨à¥‡ à¤®à¥‡à¤‚ à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_CLASS_WRITE
     {
@@ -762,7 +834,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Skrivproblem" ;
         Text [ danish ] = "Skrivefejl" ;
         Text [ portuguese ] = "Erro de escrita" ;
-        Text [ portuguese_brazilian ] = "Schreibproblem" ;
+        Text [ portuguese_brazilian ] = "Erro de Gravação" ;
         Text[ chinese_simplified ] = "å†™å…¥é”™è¯¯";
         Text[ russian ] = "Îøèáêà çàïèñè";
         Text[ polish ] = "B³¹d zapisu";
@@ -777,6 +849,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error d'escriptura";
         Text[ finnish ] = "Kirjoitusvirhe";
         Text[ thai ] = "à¹€à¸‚à¸µà¸¢à¸™à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "Chyba pÅ™i zÃ¡pisu";
+        Text[ hebrew ] = "â€®×©×’×™××” ×ª×•×š ×›×“×™ ×›×ª×™×‘×”â€¬";
+        Text[ hindi ] = "à¤²à¤¿à¤–à¤¨à¥‡ à¤®à¥‡à¤‚ à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_CLASS_UNKNOWN
     {
@@ -790,7 +865,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Obekant" ;
         Text [ danish ] = "Ukendt" ;
         Text [ portuguese ] = "Desconhecido" ;
-        Text [ portuguese_brazilian ] = "Unbekannt" ;
+        Text [ portuguese_brazilian ] = "desconhecido" ;
         Text[ chinese_simplified ] = "ä¸æ˜çš„";
         Text[ russian ] = "íåèçâåñòíî";
         Text[ polish ] = "Nieznany";
@@ -805,6 +880,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "desconegut";
         Text[ finnish ] = "tuntematon";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸";
+        Text[ czech ] = "neznÃ¡mÃ½";
+        Text[ hebrew ] = "â€®×œ× ××•×›×¨â€¬";
+        Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤";
     };
     String ERRCODE_CLASS_VERSION
     {
@@ -818,10 +896,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Versionskonflikt" ;
         Text [ danish ] = "Versionskonflikt" ;
         Text [ portuguese ] = "Incompatibilidade entre versões" ;
-        Text [ portuguese_brazilian ] = "Versionskonflikt" ;
+        Text [ portuguese_brazilian ] = "Incompatibilidade de Versão" ;
         Text[ chinese_simplified ] = "ç‰ˆæœ¬å†²çª";
         Text[ russian ] = "Íåñîâìåñòèìîñòü âåğñèé";
-        Text[ polish ] = "Niezgodna wersja";
+        Text[ polish ] = "Niezgodnoœæ wersji";
         Text[ japanese ] = "ãƒãƒ¼ã‚¸ãƒ§ãƒ³é•å";
         Text[ chinese_traditional ] = "ç‰ˆæœ¬è¡çª";
         Text[ arabic ] = "ÅÕÏÇÑÇÊ ÛíÑ ãÊæÇİŞÉ";
@@ -833,6 +911,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Incompatibilitat de versions";
         Text[ finnish ] = "Versioiden yhteensopimattomuus";
         Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸‚à¹‰à¸²à¸à¸±à¸™à¹„à¸”à¹‰";
+        Text[ czech ] = "Nekompatibilita verze";
+        Text[ hebrew ] = "â€®××™ ×”×ª×××” ×‘×’×¨×¡××•×ªâ€¬";
+        Text[ hindi ] = "à¤†à¤µà¥ƒà¤¤à¥à¤¤à¤¿ à¤µà¤¿à¤­à¤¿à¤¨à¥à¤¨à¤¤à¤¾";
     };
     String ERRCODE_CLASS_GENERAL
     {
@@ -846,7 +927,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Allmänt fel" ;
         Text [ danish ] = "Generel fejl" ;
         Text [ portuguese ] = "Erro geral" ;
-        Text [ portuguese_brazilian ] = "Allgemeiner Fehler" ;
+        Text [ portuguese_brazilian ] = "Erro Geral" ;
         Text[ chinese_simplified ] = "ä¸€èˆ¬é”™è¯¯";
         Text[ russian ] = "Îáùàÿ îøèáêà";
         Text[ polish ] = "B³¹d ogólny";
@@ -862,6 +943,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error general";
         Text[ finnish ] = "Yleinen virhe";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸±à¹ˆà¸§à¹„à¸›";
+        Text[ czech ] = "ObecnÃ¡ chyba";
+        Text[ hebrew ] = "â€®×©×’×™××” ×œ×œ× ×¤×™×¨×•×˜â€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯ à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_CLASS_FORMAT
     {
@@ -875,7 +959,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Felaktigt format" ;
         Text [ danish ] = "Forkert format" ;
         Text [ portuguese ] = "Formato incorrecto" ;
-        Text [ portuguese_brazilian ] = "Falsches Format" ;
+        Text [ portuguese_brazilian ] = "Formato incorreto" ;
         Text[ chinese_simplified ] = "é”™è¯¯çš„æ ¼å¼";
         Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò";
         Text[ polish ] = "Nieprawid³owy format";
@@ -890,6 +974,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Format incorrecte";
         Text[ finnish ] = "Väärä muoto";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NesprÃ¡vnÃ½ formÃ¡t";
+        Text[ hebrew ] = "â€®×¦×•×¨×ª ×ª×•×›×Ÿ ×œ× × ×›×•× ×”â€¬";
+        Text[ hindi ] = "à¤—à¤²à¤¤ à¤°à¤šà¤¨à¤¾";
     };
     String ERRCODE_CLASS_CREATE
     {
@@ -903,7 +990,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Fel vid uppläggning" ;
         Text [ danish ] = "Fejl under oprettelsen" ;
         Text [ portuguese ] = "Erro ao criar" ;
-        Text [ portuguese_brazilian ] = "Fehler beim Anlegen" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro ao criar o objeto" ;
         Text[ chinese_simplified ] = "å»ºç«‹å¯¹è±¡æ—¶å‘ç”Ÿé”™è¯¯";
         Text[ russian ] = "Îøèáêà ñîçäàíèÿ îáúåêòà";
         Text[ polish ] = "B³¹d przy tworzeniu obiektu";
@@ -918,6 +1005,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error al crear";
         Text[ finnish ] = "Virhe objektia luotaessa";
         Text[ thai ] = "à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "Chyba ve vytvoÅ™enÃ­ objektu";
+        Text[ hebrew ] = "â€®×©×’×™××” ×‘×™×¦×™×¨×ª ×¢×¦×â€¬";
+        Text[ hindi ] = "Error creating object";
     };
     String ERRCODE_CLASS_SBX
     {
@@ -931,10 +1021,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Otillåtet värde eller datatyp" ;
         Text [ danish ] = "Ikke-tilladt værdi eller datatype" ;
         Text [ portuguese ] = "Valor ou tipo de dados não autorizados" ;
-        Text [ portuguese_brazilian ] = "Unzul?ssiger Wert oder Datentyp" ;
+        Text [ portuguese_brazilian ] = "Valor ou tipo de dados não autorizados" ;
         Text[ chinese_simplified ] = "æ— æ•ˆçš„æ•°å€¼æˆ–æ•°æ®ç±»å‹";
         Text[ russian ] = "Íåäîïóñòèìîå çíà÷åíèå èëè òèï äàííûõ";
-        Text[ polish ] = "Niedopuszczalna wartoœæ lub typ pliku";
+        Text[ polish ] = "Niedopuszczalna wartoœæ lub typ danych";
         Text[ japanese ] = "ä¸è¨±å¯ã®å€¤ã¾ãŸã¯ãƒ‡ãƒ¼ã‚¿ã‚¿ã‚¤ãƒ—";
         Text[ chinese_traditional ] = "æ•¸å€¼æˆ–è³‡æ–™é¡å‹ç„¡æ•ˆ";
         Text[ arabic ] = "ŞãíÉ ãÍÙæÑÉ¡ Ãæ äæÚ ÈíÇäÇÊ ãÍÙæÑ";
@@ -946,6 +1036,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Valor o tipus de dades inadmissible";
         Text[ finnish ] = "Arvon tai tietotyypin käyttäminen ei onnistu.";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¸„à¹ˆà¸²à¸«à¸£à¸·à¸­à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸­à¸™à¸¸à¸à¸²à¸•";
+        Text[ czech ] = "NepÅ™Ã­pustnÃ¡ hodnota Äi datovÃ½ typ";
+        Text[ hebrew ] = "â€®×¢×¨×š ××• ×˜×™×¤×•×¡ ×‘×œ×ª×™ ×—×•×§×™â€¬";
+        Text[ hindi ] = "Inadmissable value or data type";
     };
     String ERRCODE_CLASS_RUNTIME
     {
@@ -959,10 +1052,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "BASIC-runtimefel" ;
         Text [ danish ] = "BASIC-runtimefejl" ;
         Text [ portuguese ] = "Erro de rotina BASIC" ;
-        Text [ portuguese_brazilian ] = "Basic-Laufzeitfehler" ;
+        Text [ portuguese_brazilian ] = "Erro de execução do BASIC" ;
         Text[ chinese_simplified ] = "BASIC è¿è¡Œæ—¶é—´é”™è¯¯";
         Text[ russian ] = "Îøèáêà âğåìåíè âûïîëíåíèÿ BASIC";
-        Text[ polish ] = "B³¹d czasu przebiegu BASIC";
+        Text[ polish ] = "B³¹d uruchomieniowy jêzyka BASIC";
         Text[ japanese ] = "BASIC ãƒ©ãƒ³ã‚¿ã‚¤ãƒ ã‚¨ãƒ©ãƒ¼";
         Text[ chinese_traditional ] = "BASIC é‹è¡Œæ™‚é–“éŒ¯èª¤";
         Text[ arabic ] = "ÎØÃ İí æŞÊ ÊÔÛíá BASIC";
@@ -970,10 +1063,13 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "BASIC è¿è¡Œæ—¶é—´é”™è¯¯";
         Text[ greek ] = "ÓöÜëìá ÷ñüíïõ åêôİëåóçò BASIC";
         Text[ korean ] = "BASIC ì‹¤í–‰ì‹œê°„ ì˜¤ë¥˜";
-        Text[ turkish ] = "BASIC yürütüm süresi hatası";
+        Text[ turkish ] = "BASIC çalışma zamanı hatası";
         Text[ catalan ] = "Error d'execusió de BASIC";
         Text[ finnish ] = "BASIC-suoritusvirhe";
         Text[ thai ] = "à¸à¸²à¸£à¹ƒà¸Šà¹‰à¸‡à¸²à¸™ BASIC à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "BASIC - chyba pÅ™i bÄ›hu";
+        Text[ hebrew ] = "â€®×©×’×™××” ×‘×–××Ÿ ×”×¤×¢×œ×ª ×”×‘×™×™×¡×™×§â€¬";
+        Text[ hindi ] = "BASIC à¤°à¤¨-à¤Ÿà¤‡à¤® à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_CLASS_COMPILER
     {
@@ -981,7 +1077,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "BASIC syntax error" ;
         Text [ portuguese ] = "Erro de sintaxe BASIC" ;
         Text [ english_us ] = "BASIC syntax error" ;
-        Text [ portuguese_brazilian ] = "Basic-Compilerfehler" ;
+        Text [ portuguese_brazilian ] = "Erro de sintaxe do BASIC" ;
         Text [ swedish ] = "BASIC-syntaxfel" ;
         Text [ danish ] = "BASIC-syntaksfejl" ;
         Text [ italian ] = "Errore di sintassi BASIC" ;
@@ -990,7 +1086,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "BASIC-syntaxisfout" ;
         Text[ chinese_simplified ] = "BASIC è¯­æ³•é”™è¯¯";
         Text[ russian ] = "Ñèíòàêñè÷åñêàÿ îøèáêà BASIC";
-        Text[ polish ] = "B³¹d sk³adni BASIC";
+        Text[ polish ] = "B³¹d sk³adni jêzyka BASIC";
         Text[ japanese ] = "BASICã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã‚¨ãƒ©ãƒ¼";
         Text[ chinese_traditional ] = "BASIC èªæ³•éŒ¯èª¤";
         Text[ arabic ] = "ÎØÃ İí ÈäÇÁ ÌãáÉ BASIC";
@@ -1002,6 +1098,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error de sintaxi del BASIC";
         Text[ finnish ] = "BASIC-syntaksivirhe";
         Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œ BASIC à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "BASIC - chyba v syntaxi";
+        Text[ hebrew ] = "â€®×©×’×™××ª ×ª×—×‘×™×¨ ×‘×™×™×¡×™×§â€¬";
+        Text[ hindi ] = "BASIC à¤¸à¤¿à¤¨à¥à¤Ÿà¤¾à¤•à¥à¤¸ à¤—à¤²à¤¤à¥€";
     };
     String 1
     {
@@ -1015,7 +1114,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Allmänt fel" ;
         Text [ danish ] = "Generel fejl" ;
         Text [ portuguese ] = "Erro geral" ;
-        Text [ portuguese_brazilian ] = "Allgemeiner Fehler" ;
+        Text [ portuguese_brazilian ] = "Erro Geral" ;
         Text[ chinese_simplified ] = "ä¸€èˆ¬é”™è¯¯";
         Text[ russian ] = "Îáùàÿ îøèáêà";
         Text[ polish ] = "B³¹d ogólny";
@@ -1031,6 +1130,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error general";
         Text[ finnish ] = "Yleinen virhe";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸±à¹ˆà¸§à¹„à¸›";
+        Text[ czech ] = "ObecnÃ¡ chyba";
+        Text[ hebrew ] = "â€®×©×’×™××” ×œ×œ× ×¤×™×¨×•×˜â€¬";
+        Text[ hindi ] = "General Error";
     };
     String ERRCODE_IO_GENERAL
     {
@@ -1044,10 +1146,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Allmänt input-/outputfel" ;
         Text [ danish ] = "Generel input-/outputfejl" ;
         Text [ portuguese ] = "Erro geral de entrada/saída." ;
-        Text [ portuguese_brazilian ] = "Allgemeiner Ein-/Ausgabefehler" ;
+        Text [ portuguese_brazilian ] = "Erro geral de entrada/saída." ;
         Text[ chinese_simplified ] = "ä¸€èˆ¬çš„è¾“å…¥ä¸è¾“å‡ºé”™è¯¯";
         Text[ russian ] = "Îáùàÿ îøèáêà ââîäà-âûâîäà";
-        Text[ polish ] = "Ogólny b³¹d wejœcia/wyjœcia";
+        Text[ polish ] = "B³¹d ogólny wejœcia/wyjœcia";
         Text[ japanese ] = "ä¸€èˆ¬çš„ãª I/O ã‚¨ãƒ©ãƒ¼";
         Text[ chinese_traditional ] = "ä¸€èˆ¬çš„è¼¸å…¥/è¼¸å‡ºéŒ¯èª¤";
         Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá/ÅÎÑÇÌ ÚÇã";
@@ -1059,6 +1161,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error general d'entrada/sortida";
         Text[ finnish ] = "Yleinen I/O-virhe";
         Text[ thai ] = "à¸à¸²à¸£à¸›à¹‰à¸­à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¥à¸°à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¸—à¸±à¹ˆà¸§à¹„à¸›à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
+        Text[ czech ] = "ObecnÃ¡ chyba vstupu/vÃ½stupu";
+        Text[ hebrew ] = "â€®×©×’×™××ª ×§×œ×˜\\×¤×œ×˜ ×œ×œ× ×¤×™×¨×•×˜â€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯ à¤‡à¤¨à¤ªà¥à¤Ÿà¥/à¤”à¤Ÿà¤ªà¥à¤Ÿà¥ à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_IO_MISPLACEDCHAR
     {
@@ -1072,10 +1177,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Namnet på filen är ogiltigt" ;
         Text [ danish ] = "Filnavnet er ugyldigt" ;
         Text [ portuguese ] = "O nome do ficheiro não é válido." ;
-        Text [ portuguese_brazilian ] = "Der Name der Datei ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "Nome de arquivo inválido" ;
         Text[ chinese_simplified ] = "æ— æ•ˆçš„æ–‡ä»¶å";
         Text[ russian ] = "Íåïğàâèëüíîå èìÿ ôàéëà";
-        Text[ polish ] = "Nazwa pliku jest nieprawid³owa";
+        Text[ polish ] = "Nieprawid³owa nazwa pliku";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«åã¯ç„¡åŠ¹ã§ã™";
         Text[ chinese_traditional ] = "æª”æ¡ˆåç„¡æ•ˆ";
         Text[ arabic ] = "ÇÓã Çáãáİ ÛíÑ ÕÇáÍ";
@@ -1088,6 +1193,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El nom del fitxer no és vàlid.";
         Text[ finnish ] = "Virheellinen tiedoston nimi";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NeplatnÃ½ nÃ¡zev souboru";
+        Text[ hebrew ] = "â€®×©× ×§×•×‘×¥ ×‘×œ×ª×™ ×—×•×§×™â€¬";
+        Text[ hindi ] = "à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤«à¤¾à¤‡à¤² à¤¨à¤¾à¤®";
     };
     String ERRCODE_IO_NOTEXISTS
     {
@@ -1101,7 +1209,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen existerar inte" ;
         Text [ danish ] = "Filen eksisterer ikke" ;
         Text [ portuguese ] = "O ficheiro não existe." ;
-        Text [ portuguese_brazilian ] = "Die Datei existiert nicht" ;
+        Text [ portuguese_brazilian ] = "Arquivo inexistente" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶ä¸å­˜åœ¨";
         Text[ russian ] = "Ôàéë íå ñóùåñòâóåò";
         Text[ polish ] = "Plik nie istnieje";
@@ -1116,6 +1224,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Fitxer inexistent";
         Text[ finnish ] = "Tiedostoa ei ole.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "NeexistujÃ­cÃ­ soubor";
+        Text[ hebrew ] = "â€®×§×•×‘×¥ ×œ× ×§×™×™×â€¬";
+        Text[ hindi ] = "à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ-à¤¹à¥€à¤¨ à¤«à¤¾à¤‡à¤²";
     };
     String ERRCODE_IO_ALREADYEXISTS
     {
@@ -1129,7 +1240,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen existerar redan" ;
         Text [ danish ] = "Filen eksisterer allerede" ;
         Text [ portuguese ] = "O ficheiro já existe." ;
-        Text [ portuguese_brazilian ] = "Die Datei existiert bereits" ;
+        Text [ portuguese_brazilian ] = "O arquivo já existe." ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶å·²ç»å­˜åœ¨";
         Text[ russian ] = "Ôàéë óæå ñóùåñòâóåò";
         Text[ polish ] = "Plik ju¿ istnieje";
@@ -1145,6 +1256,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El fitxer ja existeix";
         Text[ finnish ] = "Tiedosto on jo olemassa.";
         Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "Soubor jiÅ¾ existuje";
+        Text[ hebrew ] = "â€®×”×§×•×‘×¥ ×›×‘×¨ ×§×™×™×â€¬";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_NOTADIRECTORY
     {
@@ -1158,7 +1272,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Objektet är ingen katalog" ;
         Text [ danish ] = "Objektet er ikke et bibliotek" ;
         Text [ portuguese ] = "O objecto não é um directório." ;
-        Text [ portuguese_brazilian ] = "Bei dem Objekt handelt es sich nicht um ein Verzeichnis" ;
+        Text [ portuguese_brazilian ] = "O objeto não é um diretório" ;
         Text[ chinese_simplified ] = "å¯¹è±¡ä¸æ˜¯ä¸€ä¸ªç›®å½•";
         Text[ russian ] = "Îáúåêò íå ÿâëÿåòñÿ êàòàëîãîì";
         Text[ polish ] = "Ten obiekt nie jest katalogiem";
@@ -1173,6 +1287,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'objecte no és un directori.";
         Text[ finnish ] = "Objekti ei ole hakemisto.";
         Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¹„à¸¡à¹ˆà¹€à¸›à¹‡à¸™à¸ªà¸²à¸£à¸šà¸š";
+        Text[ czech ] = "Objekt nenÃ­ adresÃ¡Å™em";
+        Text[ hebrew ] = "â€®×”×¢×¦× ××™× ×• ×¡×¤×¨×™×”â€¬";
+        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤¨à¤¹à¥€ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_NOTAFILE
     {
@@ -1186,7 +1303,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Objektet är ingen fil" ;
         Text [ danish ] = "Objektet er ikke en fil" ;
         Text [ portuguese ] = "O objecto não é um ficheiro." ;
-        Text [ portuguese_brazilian ] = "Bei dem Objekt handelt es sich nicht um eine Datei" ;
+        Text [ portuguese_brazilian ] = "O objeto não é um arquivo" ;
         Text[ chinese_simplified ] = "å¯¹è±¡ä¸æ˜¯ä¸€ä¸ªæ–‡ä»¶";
         Text[ russian ] = "Îáúåêò íå ÿâëÿåòñÿ ôàéëîì";
         Text[ polish ] = "Ten obiekt nie jest plikiem";
@@ -1201,6 +1318,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'objecte no és cap fitxer.";
         Text[ finnish ] = "Objekti ei ole tiedosto.";
         Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¹„à¸¡à¹ˆà¹€à¸›à¹‡à¸™à¹à¸Ÿà¹‰à¸¡";
+        Text[ czech ] = "Objekt nenÃ­ souborem";
+        Text[ hebrew ] = "â€®×”×¢×¦× ××™× ×• ×§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤«à¤¾à¤‡à¤² à¤¨à¤¹à¥€ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_INVALIDDEVICE
     {
@@ -1214,7 +1334,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Den angivna enheten är ogiltig" ;
         Text [ danish ] = "Den angivne enhed er ugyldig" ;
         Text [ portuguese ] = "O periférico indicado não é válido." ;
-        Text [ portuguese_brazilian ] = "Das angebene Ger?t ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "O dispositivo indicado não é válido." ;
         Text[ chinese_simplified ] = "æŒ‡å®šçš„è®¾å¤‡æ— æ•ˆ";
         Text[ russian ] = "Óêàçàííîå óñòğîéñòâî íåäîñòóïíî";
         Text[ polish ] = "Podane urz¹dzenie jest nieprawid³owe";
@@ -1229,6 +1349,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El dispositiu especificat no és vàlid.";
         Text[ finnish ] = "Määritetty laite ei ole kelvollinen.";
         Text[ thai ] = "à¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¸—à¸µà¹ˆà¸£à¸°à¸šà¸¸à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "ZadanÃ© zaÅ™Ã­zenÃ­ je neplatnÃ©";
+        Text[ hebrew ] = "â€®×”×”×ª×§×Ÿ ×©×¦×•×™×Ÿ ××™× ×• ×—×•×§×™â€¬";
+        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤¦à¤¿à¤·à¥à¤Ÿ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¸à¤¾à¤§à¤¨ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_ACCESSDENIED
     {
@@ -1242,10 +1365,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Åtkomst till objektet kan inte medges\neftersom rättigheter saknas" ;
         Text [ danish ] = "Det er ikke muligt at få adgang til objektet,\nfordi de krævede adgangsrettigheder mangler" ;
         Text [ portuguese ] = "Impossível o acesso ao objecto\npor falta de direitos." ;
-        Text [ portuguese_brazilian ] = "Aufgrund fehlender Rechte kann auf das Objekt\nnicht zugegriffen werden" ;
+        Text [ portuguese_brazilian ] = "O objeto não pode ser acessado\ndevido a falta de direitos de acesso do usuário." ;
         Text[ chinese_simplified ] = "ç¼ºå°‘è¯»å–æƒåˆ©ï¼Œ\næ— æ³•è¯»å–è¿™ä¸ªå¯¹è±¡";
         Text[ russian ] = "Íå ğàçğåøåí äîñòóï ê îáúåêòó\nèç-çà îãğàíè÷åíèÿ ïğàâ ïîëüçîâàòåëÿ";
-        Text[ polish ] = "Brak dostêpu do obiektu \n z powodu brakuj¹cych praw dostêpu";
+        Text[ polish ] = "Nie mo¿na uzyskaæ dostêpu do obiektu \nz powodu niewystarczaj¹cych uprawnieñ.";
         Text[ japanese ] = "æ¨©åˆ©ãŒãªã„ã®ã§\nã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç¼ºå°‘ç›¸é—œæ¬Šåˆ©ï¹\nç„¡æ³•å­˜å–é€™å€‹ç‰©ä»¶";
         Text[ arabic ] = "áÇ íãßä ÇáæÕæá Åáì ÇáßÇÆä¡\náÚÏã ÊæİÑ ÇáÍŞæŞ ÇááÇÒãÉ";
@@ -1257,6 +1380,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot accedir a l'objecte\nper falta de drets.";
         Text[ finnish ] = "Objektin käyttäminen ei onnistu,\nkoska käyttäjäoikeudet eivät riitä.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸§à¸±à¸•à¸–à¸¸à¹„à¸”à¹‰\nà¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¸ªà¸´à¸—à¸˜à¸´à¸‚à¸­à¸‡à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹€à¸«à¸¡à¸²à¸°à¸ªà¸¡";
+        Text[ czech ] = "Nelze pÅ™istupovat k objektu kvÅ¯li\nnedostateÄnÃ½m uÅ¾ivatelskÃ½m oprÃ¡vnÄ›nÃ­m";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×’×©×ª ×œ×¢×¦× ×¢×§×‘ ×—×•×¡×¨ ×”×¨×©××•×ªâ€¬";
+        Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤ªà¤°à¥à¤¯à¤¾à¤ªà¥à¤¤ à¤…à¤§à¤¿à¤•à¤¾à¤° à¤•à¥‡ à¤•à¤¾à¤°à¤£\nà¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¯ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_LOCKVIOLATION
     {
@@ -1270,7 +1396,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Fel vid gemensam åtkomst till objektet" ;
         Text [ danish ] = "Fejl under fælles adgang til objektet" ;
         Text [ portuguese ] = "Erro ao tentar acesso partilhado ao objecto." ;
-        Text [ portuguese_brazilian ] = "Fehler beim gemeinsamen Zugriff auf das Objekt" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro de violação de compartilhamento ao acessar o objeto." ;
         Text[ chinese_simplified ] = "åœ¨åŒæ—¶è¯»å–è¿™ä¸ªå¯¹è±¡æ—¶å‘ç”Ÿé”™è¯¯";
         Text[ russian ] = "Îøèáêà îáùåãî äîñòóïà ê îáúåêòó";
         Text[ polish ] = "Nast¹pi³o naruszenie zasad wspó³u¿ytkowania podczas dostêpu do obiektu";
@@ -1285,6 +1411,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha produït un error en accedir conjuntament a l'objecte.";
         Text[ finnish ] = "Objektin yhteiskäyttövirhe";
         Text[ thai ] = "à¸à¸²à¸£à¸£à¹ˆà¸§à¸¡à¸à¹ˆà¸²à¸à¸·à¸™à¸‚à¸“à¸°à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¸§à¸±à¸•à¸–à¸¸";
+        Text[ czech ] = "PoruÅ¡enÃ­ sdÃ­lenÃ­ pÅ™i pÅ™Ã­stupu k objektu";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×’×©×ª ×œ×¢×¦× ×¢×§×‘ ×©×™××•×© ×‘×• ×¢×œ ×™×“×™ ×ª×•×›× ×™×ª ××—×¨×ªâ€¬";
+        Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥ à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¯ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤¹à¤¿à¤¸à¥à¤¸à¥‡ à¤•à¥€ à¤‰à¤²à¥à¤²à¤‚à¤˜à¤¨ ";
     };
     String ERRCODE_IO_OUTOFSPACE
     {
@@ -1298,10 +1427,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det finns ingen plats kvar på enheten" ;
         Text [ danish ] = "Der er ikke mere tilgængelig plads på enheden" ;
         Text [ portuguese ] = "Não há mais espaço no periférico." ;
-        Text [ portuguese_brazilian ] = "Auf dem Ger?t ist kein Platz mehr verf?bar" ;
+        Text [ portuguese_brazilian ] = "Não há mais espaço no dispositivo." ;
         Text[ chinese_simplified ] = "è®¾å¤‡ä¸Šçš„å¯ç”¨ç©ºé—´å·²ç»ç”¨å®Œ";
         Text[ russian ] = "Íà ıòîì óñòğîéñòâå íåò áîëüøå ñâîáîäíîãî ìåñòà";
-        Text[ polish ] = "Nie ma wiêcej miejsca na tym urz¹dzeniu";
+        Text[ polish ] = "Na tym urz¹dzeniu nie ma ju¿ miejsca";
         Text[ japanese ] = "ãƒ‡ãƒã‚¤ã‚¹ä¸Šã«ç©ºãå®¹é‡ãŒã‚ã‚Šã¾ã›ã‚“";
         Text[ chinese_traditional ] = "è¨­å‚™çš„å¯ç”¨ç©ºé–“å·²ç¶“ç”¨ç›¡";
         Text[ arabic ] = "áã íÚÏ åäÇß ãßÇä İí ÇáÌåÇÒ";
@@ -1313,6 +1442,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Ja no hi ha espai en el dispositiu";
         Text[ finnish ] = "Laitteen tila ei riitä.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸—à¸µà¹ˆà¸§à¹ˆà¸²à¸‡à¸šà¸™à¸­à¸¸à¸›à¸à¸£à¸“à¹Œà¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸™à¸µà¹‰";
+        Text[ czech ] = "Na zaÅ™Ã­zenÃ­ jiÅ¾ nenÃ­ mÃ­sto";
+        Text[ hebrew ] = "â€®××™×Ÿ ××§×•× ×¤× ×•×™ ×¢×œ ×”×›×•× ×Ÿâ€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤§à¤¨ à¤®à¥‡à¤‚ à¤œà¤—à¤¹ à¤•à¥€ à¤•à¤®à¥€";
     };
     String ERRCODE_IO_ISWILDCARD
     {
@@ -1326,10 +1458,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen kan inte utföras på filer som\ninnehåller jokertecken" ;
         Text [ danish ] = "Det er ikke muligt at udføre processen på filer,\nsom indeholder jokertegn" ;
         Text [ portuguese ] = "A operação não pode ser executada em\nficheiros que contenham caracteres universais." ;
-        Text [ portuguese_brazilian ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgef?rt werden" ;
+        Text [ portuguese_brazilian ] = "Esta operação não pode ser executada em\narquivos que contenham caracteres curinga." ;
         Text[ chinese_simplified ] = "æ— æ³•åœ¨å«æœ‰é€šé…ç¬¦çš„\næ–‡ä»¶ä¸­æ‰§è¡Œè¿™ä¸ªæ“ä½œ";
         Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü îïåğàöèş ñ ôàéëàìè, \nñîäåğæàùèìè ñèìâîëû øàáëîíà";
-        Text[ polish ] = "Operacja nie mo¿e byæ wykonana na plikach, które \nzawieraj¹ symbole wieloznaczne (Wildcarts)";
+        Text[ polish ] = "Operacja nie mo¿e byæ wykonana na plikach, które \nw których wystêpuj¹ symbole wieloznaczne";
         Text[ japanese ] = "ãƒ¯ã‚¤ãƒ«ãƒ‰ã‚«ãƒ¼ãƒ‰ã‚’å«ã‚€ãƒ•ã‚¡ã‚¤ãƒ«ã§\næ“ä½œã¯å®Ÿè¡Œã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "é€™äº›æª”æ¡ˆå«æœ‰è¬ç”¨å­—å…ƒï¹\nè€Œç„¡æ³•åŸ·è¡Œéç¨‹";
         Text[ arabic ] = "áÇ íãßä ÊäİíĞ åĞå ÇáÚãáíÉ Úáì ãáİÇÊ\nÊÍÊæí Úáì ÃÍÑİ ÈÏá.";
@@ -1341,6 +1473,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'operació no es pot executar en\nfitxers que tinguin Wildcards.";
         Text[ finnish ] = "Tätä toimintoa ei voi suorittaa,\njos tiedostot sisältävät yleismerkkejä.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸£à¸±à¸™à¸à¸²à¸£à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸™à¸µà¹‰à¸šà¸™\nà¹à¸Ÿà¹‰à¸¡à¸—à¸µà¹ˆà¸¡à¸µà¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¸•à¸±à¸§à¹à¸—à¸™";
+        Text[ czech ] = "Tuto operaci nelze spustit nad\nsoubory, kterÃ© obsahujÃ­ zÃ¡stupnÃ© znaky";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ×¤×¢×•×œ×” ×–×• ×¢×œ ×©××•×ª ×§×‘×¦×™× ×¢× ×›×•×›×‘×™×•×ªâ€¬";
+        Text[ hindi ] = "This operation cannot be run on\nfiles containing wildcards";
     };
     String ERRCODE_IO_NOTSUPPORTED
     {
@@ -1354,7 +1489,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen stöds inte av detta operativsystem" ;
         Text [ danish ] = "Processen understøttes ikke af dette operativsystem" ;
         Text [ portuguese ] = "A operação não tem suporte neste sistema operativo." ;
-        Text [ portuguese_brazilian ] = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterst?zt" ;
+        Text [ portuguese_brazilian ] = "Esta operação não tem suporte neste sistema operacional." ;
         Text[ chinese_simplified ] = "å½“å‰çš„æ“ä½œå¹³å°ä¸æ”¯æŒè¿™ä¸ªæ“ä½œ";
         Text[ russian ] = "Îïåğàöèÿ íå ïîääåğæèâàåòñÿ îïåğàöèîííîé ñèñòåìîé";
         Text[ polish ] = "Ta operacja nie jest obs³ugiwana w tym systemie operacyjnym.";
@@ -1369,6 +1504,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Aquesta operació no és suportada per aquest sistema operatiu.";
         Text[ finnish ] = "Käyttöjärjestelmä ei tue toimintoa.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸™à¸µà¹‰à¸šà¸™à¸£à¸°à¸šà¸šà¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£";
+        Text[ czech ] = "Tato Äinnost nenÃ­ v tomto operaÄnÃ­m systÃ©mu podporovÃ¡na";
+        Text[ hebrew ] = "â€®×¤×¢×•×œ×” ×–×• ××™× ×” × ×ª××›×ª ×¢×œ ××¢×¨×›×ª ×”×¤×¢×œ×” ×”×–×•â€¬";
+        Text[ hindi ] = "This operation is not supported on this operating system";
     };
     String ERRCODE_IO_TOOMANYOPENFILES
     {
@@ -1382,10 +1520,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "För många filer är redan öppnade" ;
         Text [ danish ] = "Der er for mange åbne filer allerede" ;
         Text [ portuguese ] = "Demasiados ficheiros abertos." ;
-        Text [ portuguese_brazilian ] = "Es sind bereits zu viele Dateien ge?fnet" ;
+        Text [ portuguese_brazilian ] = "Há excesso de arquivos abertos." ;
         Text[ chinese_simplified ] = "å·²ç»æ‰“å¼€çš„æ–‡ä»¶å¤ªå¤š";
         Text[ russian ] = "Îòêğûòî ñëèøêîì ìíîãî ôàéëîâ";
-        Text[ polish ] = "Jest otworzonych za du¿o plików";
+        Text[ polish ] = "Otwarto zbyt wiele plików";
         Text[ japanese ] = "ã™ã§ã«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãŸãã•ã‚“é–‹ãã™ãã¦ã„ã¾ã™";
         Text[ chinese_traditional ] = "é–‹å•Ÿäº†å¤ªå¤šæª”æ¡ˆ";
         Text[ arabic ] = "ÚÏÏ ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ ßÈíÑ ÌÏÇğ";
@@ -1397,6 +1535,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Hi ha massa fitxers oberts";
         Text[ finnish ] = "Avonaisia tiedostoja on liikaa.";
         Text[ thai ] = "à¸¡à¸µà¹à¸Ÿà¹‰à¸¡à¸—à¸µà¹ˆà¹€à¸›à¸´à¸”à¸­à¸¢à¸¹à¹ˆà¸¡à¸²à¸à¹€à¸à¸´à¸™à¹„à¸›";
+        Text[ czech ] = "Existuje pÅ™Ã­liÅ¡ mnoho otevÅ™enÃ½ch souborÅ¯";
+        Text[ hebrew ] = "â€®×™×© ×™×•×ª×¨ ××™×“×™ ×§×‘×¦×™× ×¤×ª×•×—×™×â€¬";
+        Text[ hindi ] = "There are too many files open";
     };
     String ERRCODE_IO_CANTREAD
     {
@@ -1410,10 +1551,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att läsa från filen" ;
         Text [ danish ] = "Det var ikke muligt at læse filen" ;
         Text [ portuguese ] = "Foi impossível ler o ficheiro." ;
-        Text [ portuguese_brazilian ] = "Von der Datei konnte nicht gelesen werden" ;
+        Text [ portuguese_brazilian ] = "Os dados não puderam ser lidos do arquivo." ;
         Text[ chinese_simplified ] = "æ— æ³•è¯»å–è¿™ä¸ªæ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî ñ÷èòàòü ôàéë";
-        Text[ polish ] = "Ten plik nie mog³ zostaæ odczytany";
+        Text[ polish ] = "Nie mo¿na odczytaæ danych z tego pliku";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•è®€å–é€™å€‹æª”æ¡ˆ";
         Text[ arabic ] = "ÊÚĞÑÊ ŞÑÇÁÉ Çáãáİ";
@@ -1425,6 +1566,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'han pogut llegir les dades des del fitxer";
         Text[ finnish ] = "Tietojen lukeminen tiedostosta ei onnistu.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ˆà¸²à¸à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
+        Text[ czech ] = "Data nelze pÅ™eÄÃ­st ze souboru";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×§×¨×•× × ×ª×•× ×™× ××”×§×•×‘×¥â€¬";
+        Text[ hindi ] = "Data could not be read from the file";
     };
     String ERRCODE_IO_CANTWRITE
     {
@@ -1438,10 +1582,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att skriva filen" ;
         Text [ danish ] = "Det var ikke muligt at skrive filen" ;
         Text [ portuguese ] = "Foi impossível escrever o ficheiro." ;
-        Text [ portuguese_brazilian ] = "Auf die Datei konnte nicht gespeicherwerden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível gravar o arquivo" ;
         Text[ chinese_simplified ] = "æ— æ³•å†™å…¥è¿™ä¸ªæ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî çàïèñàòü ôàéë";
-        Text[ polish ] = "Pliku nie mo¿na by³o zapisaæ";
+        Text[ polish ] = "Plik nie móg³ zostaæ zapisany";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã¿ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•å¯«å…¥é€™å€‹æª”æ¡ˆ";
         Text[ arabic ] = "ÊÚĞÑÊ ßÊÇÈÉ Çáãáİ";
@@ -1454,6 +1598,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut escriure el fitxer";
         Text[ finnish ] = "Tiedoston kirjoittaminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸‚à¸µà¸¢à¸™à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
+        Text[ czech ] = "Soubor nelze zapsat";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×›×ª×•×‘ ××ª ×”×§×•×‘×¥â€¬";
+        Text[ hindi ] = "The file could not be written";
     };
     String ERRCODE_IO_OUTOFMEMORY
     {
@@ -1467,7 +1614,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen kunde inte utföras på grund av för lite minne." ;
         Text [ danish ] = "Det var ikke muligt at udføre operationen, fordi der ikke er tilstrækkelig hukommelse" ;
         Text [ portuguese ] = "Foi impossível executar a operação por não existir memória suficiente." ;
-        Text [ portuguese_brazilian ] = "Die Operation konnte wegen Speichermangels nicht ausgef?rt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível executar a operação devido a insuficiência de memória." ;
         Text[ chinese_simplified ] = "å› ä¸ºå†…å­˜ä¸è¶³è€Œæ— æ³•æ‰§è¡Œè¿™ä¸ªæ“ä½œ";
         Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü îïåğàöèş èç-çà íåõâàòêè ïàìÿòè";
         Text[ polish ] = "Operacja nie mog³a zostaæ wykonana z powodu braku pamiêci";
@@ -1482,6 +1629,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'operació no s'ha pogut executar per falta de memòria.";
         Text[ finnish ] = "Toiminnon suorittaminen ei onnistunut muistin loppumisen takia.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸£à¸±à¸™à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¹„à¸”à¹‰à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³à¹„à¸¡à¹ˆà¹€à¸à¸µà¸¢à¸‡à¸à¸­";
+        Text[ czech ] = "Operaci nelze spustit kvÅ¯li nedostatku pamÄ›ti.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ××ª ×”×¤×¢×•×œ×” ×¢×§×‘ ×—×•×¡×¨ ×‘×–×™×›×¨×•×Ÿ ×“×™× ××™ ×¤× ×•×™â€¬";
+        Text[ hindi ] = "The operation could not be run due to insufficient memory.";
     };
     String ERRCODE_IO_CANTSEEK
     {
@@ -1495,10 +1645,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Seekoperationen kunde inte utföras" ;
         Text [ danish ] = "Det var ikke muligt at udføre seek-operationen" ;
         Text [ portuguese ] = "Foi impossível executar a operação de localização." ;
-        Text [ portuguese_brazilian ] = "Die Seekoperation konnte nicht ausgef?rt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível executar a operação de busca" ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œæœå¯»æ“ä½œ";
         Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü îïåğàöèş seek";
-        Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Seek)";
+        Text[ polish ] = "Nie mo¿na przeprowadziæ operacji ustawienia wskaŸnika";
         Text[ japanese ] = "Seekæ“ä½œãŒå®Ÿè¡Œã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œæœå°‹æŒ‡ä»¤";
         Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Seek\"";
@@ -1510,6 +1660,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut executar l'operació Seek.";
         Text[ finnish ] = "Hakutoimintoa ei voitu suorittaa.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸„à¹‰à¸™à¸«à¸²à¹„à¸”à¹‰";
+        Text[ czech ] = "Operace seek nemÅ¯Å¾e bÃ½t spuÅ¡tÄ›na";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ×¤×¢×•×œ×ª ×”×ª××§××•×ª (seek) ×‘×§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤¸à¥€à¤• à¤•à¤¾à¤°à¥à¤¯ à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤šà¤²à¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_IO_CANTTELL
     {
@@ -1523,10 +1676,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Telloperationen kunde inte utföras" ;
         Text [ danish ] = "Det var ikke muligt at udføre tell-operationen" ;
         Text [ portuguese ] = "Foi impossível executar a operação Tell" ;
-        Text [ portuguese_brazilian ] = "Die Telloperation konnte nicht ausgef?rt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível executar a operação de 'tell'" ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œ tell å‘½ä»¤";
         Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü îïåğàöèş tell";
-        Text[ polish ] = "Nie mo¿na by³o wykonaæ operacji pliku (Tell)";
+        Text[ polish ] = "Nie mo¿na przeprowadziæ operacji pobrania wskaŸnika";
         Text[ japanese ] = "Tellæ“ä½œãŒå®Ÿè¡Œã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡Œ Tell æŒ‡ä»¤";
         Text[ arabic ] = "ÊÚĞÑ ÊäİíĞ ÇáÚãáíÉ \"Tell\"";
@@ -1534,10 +1687,13 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡Œ tell å‘½ä»¤";
         Text[ greek ] = "Äåí Şôáí äõíáôüí íá åêôåëåóôåß ç ëåéôïõñãßá \"Tell\"";
         Text[ korean ] = "Tell ì‘ì—…ì„ ì‹¤í–‰í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤";
-        Text[ turkish ] = "Tell işlemi yürütülemedi";
+        Text[ turkish ] = "Küme (Yığma) işlemi yürütülemedi";
         Text[ catalan ] = "No s'ha pogut executar l'operació Tell";
         Text[ finnish ] = "Vastaustoimintoa ei voitu suorittaa.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸šà¸­à¸à¹„à¸”à¹‰";
+        Text[ czech ] = "Operace tell nemÅ¯Å¾e bÃ½t spuÅ¡tÄ›na";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ×§×¨×™××ª ×”×¡××Ÿ (tell) ×‘×§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤Ÿà¥‡à¤² à¤•à¤¾à¤°à¥à¤¯ à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤šà¤²à¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_IO_WRONGVERSION
     {
@@ -1551,10 +1707,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen föreligger i en felaktig version" ;
         Text [ danish ] = "Filen foreligger i en forkert version" ;
         Text [ portuguese ] = "Versão incorrecta do ficheiro." ;
-        Text [ portuguese_brazilian ] = "Die Datei liegt in einer falschen Version vor" ;
+        Text [ portuguese_brazilian ] = "Versão incorreta do arquivo" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶çš„ç‰ˆæœ¬æ— æ•ˆ";
         Text[ russian ] = "Íåïğàâèëüíàÿ âåğñèÿ ôàéëà";
-        Text[ polish ] = "Wersja pliku jest nieprawid³owa";
+        Text[ polish ] = "Nieprawid³owa wersja pliku";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“";
         Text[ chinese_traditional ] = "æª”æ¡ˆç‰ˆæœ¬ç„¡æ•ˆ";
         Text[ arabic ] = "ÅÕÏÇÑ Çáãáİ ÛíÑ ÕÍíÍ";
@@ -1566,6 +1722,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Versió incorrecta del fitxer.";
         Text[ finnish ] = "Väärä tiedostoversio";
         Text[ thai ] = "à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NesprÃ¡vnÃ¡ verze souboru";
+        Text[ hebrew ] = "â€®×’×¨×¡××ª ×”×§×•×‘×¥ ××™× ×” × ×›×•× ×”â€¬";
+        Text[ hindi ] = "à¤—à¤²à¤¤ à¤«à¤¾à¤‡à¤² à¤†à¤µà¥ƒà¤¤à¥à¤¤à¤¿";
     };
     String ERRCODE_IO_WRONGFORMAT
     {
@@ -1579,21 +1738,24 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen föreligger i ett felaktigt format" ;
         Text [ danish ] = "Filen foreligger i et forkert format" ;
         Text [ portuguese ] = "Formato de ficheiro incorrecto." ;
-        Text [ portuguese_brazilian ] = "Die Datei liegt in einem falschen Format vor" ;
+        Text [ portuguese_brazilian ] = "Formato de arquivo incorreto" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶çš„æ ¼å¼é”™è¯¯";
         Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò ôàéëà";
-        Text[ polish ] = "Format pliku jest nieprawid³owy";
+        Text[ polish ] = "Nieprawid³owy format pliku";
         Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“";
         Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼éŒ¯èª¤";
         Text[ arabic ] = "ÊäÓíŞ Çáãáİ ÛíÑ ÕÍíÍ";
         Text[ dutch ] = "Bestand heeft foutieve indeling";
         Text[ chinese_simplified ] = "æ–‡ä»¶çš„æ ¼å¼é”™è¯¯";
         Text[ greek ] = "Ìç İãêõñç ìïñöŞ áñ÷åßïõ";
-        Text[ korean ] = "íŒŒì¼ ì„œì‹ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.";
+        Text[ korean ] = "íŒŒì¼ í˜•ì‹ì´ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.";
         Text[ turkish ] = "Yanlış dosya sürümü";
         Text[ catalan ] = "Format del fitxer incorrecte";
         Text[ finnish ] = "Väärä tiedostomuoto";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NesprÃ¡vnÃ½ formÃ¡t souboru";
+        Text[ hebrew ] = "â€®×¦×•×¨×ª ×ª×•×›×Ÿ ×”×§×•×‘×¥ ××™× ×” × ×›×•× ×”â€¬";
+        Text[ hindi ] = "à¤—à¤²à¤¤ à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾";
     };
     String ERRCODE_IO_INVALIDCHAR
     {
@@ -1607,7 +1769,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filnamnet innehåller otillåtna tecken" ;
         Text [ danish ] = "Filnavnet indeholder ugyldige tegn" ;
         Text [ portuguese ] = "O nome do ficheiro contém caracteres incorrectos." ;
-        Text [ portuguese_brazilian ] = "Der Dateiname enth?lt unzul?ssige Zeichen" ;
+        Text [ portuguese_brazilian ] = "O nome do arquivo contém caracteres inválidos" ;
         Text[ chinese_simplified ] = "æ–‡ä»¶åä¸­å«æœ‰æ— æ•ˆçš„å­—ç¬¦";
         Text[ russian ] = "Èìÿ ôàéëà ñîäåğæèò íåäîïóñòèìûå ñèìâîëû";
         Text[ polish ] = "Nazwa pliku zawiera nieprawid³owe znaki";
@@ -1622,6 +1784,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El nom del fitxer conté paràmetres no permesos.";
         Text[ finnish ] = "Tiedoston nimessä on virheellisiä merkkejä.";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¸¡à¸µà¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NÃ¡zev souboru obsahuje neplatnÃ© znaky";
+        Text[ hebrew ] = "â€®×”×§×•×‘×¥ ××›×™×œ ×ª×•×•×™× ×‘×œ×ª×™ ×—×•×§×™×™×â€¬";
+        Text[ hindi ] = "The file name contains invalid characters";
     };
     String ERRCODE_IO_UNKNOWN
     {
@@ -1635,7 +1800,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ett okänt input-/outputfel uppstod" ;
         Text [ danish ] = "Der opstod en ukendt input-/outputfejl" ;
         Text [ portuguese ] = "Surgiu um erro de entrada/saída desconhecido." ;
-        Text [ portuguese_brazilian ] = "Es trat ein unbekannter Ein-/Ausgabefehler auf" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro desconhecido de entrada/saída" ;
         Text[ chinese_simplified ] = "å‡ºç°ä¸€ä¸ªä¸æ˜çš„è¾“å…¥/è¾“å‡ºé”™è¯¯";
         Text[ russian ] = "Íåèçâåñòíàÿ îøèáêà ââîäà-âûâîäà";
         Text[ polish ] = "Wyst¹pi³ nieznany b³¹d wejœcia/wyjœcia";
@@ -1650,6 +1815,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha produït un error desconegut d'entrada/sortida.";
         Text[ finnish ] = "On ilmennyt tuntematon I/O-virhe.";
         Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸” I/O à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸";
+        Text[ czech ] = "Nastala neznÃ¡mÃ¡ I/O chyba";
+        Text[ hebrew ] = "â€® ××¨×¢×” ×©×’×™××ª ×§×œ×˜\\×¤×œ×˜ ×‘×œ×ª×™ ××•×›×¨×ªâ€¬";
+        Text[ hindi ] = "An unknown I/O error has occurred";
     };
     String ERRCODE_IO_INVALIDACCESS
     {
@@ -1663,10 +1831,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ogiltigt försök att få åtkomst till filen" ;
         Text [ danish ] = "Ugyldigt forsøg på at få adgang til filen" ;
         Text [ portuguese ] = "Tentativa incorrecta de acesso ao ficheiro." ;
-        Text [ portuguese_brazilian ] = "Es wurde versucht, in ung?tiger Weise auf die Datei zuzugreifen" ;
+        Text [ portuguese_brazilian ] = "Ocorreu uma tentativa inválida de acessar o arquivo" ;
         Text[ chinese_simplified ] = "è¯»å–æ–‡ä»¶çš„æ–¹å¼æ— æ•ˆ";
         Text[ russian ] = "Íåäîïóñòèìàÿ ïîïûòêà ïîëó÷åíèÿ äîñòóïà ê ôàéëó";
-        Text[ polish ] = "Nast¹pi³a próba uzyskania nieprawid³owego dostêpu do pliku";
+        Text[ polish ] = "Nast¹pi³a nieprawid³owa próba uzyskania dostêpu do pliku";
         Text[ japanese ] = "ç„¡åŠ¹ãªã‚„ã‚Šæ–¹ã§ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ãŒè©¦ã¿ã‚‰ã‚Œã¾ã—ãŸ";
         Text[ chinese_traditional ] = "å­˜å–æª”æ¡ˆçš„æ–¹å¼ç„¡æ•ˆ";
         Text[ arabic ] = "ÊãÊ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ÈÔßá ÛíÑ ÕÍíÍ";
@@ -1678,6 +1846,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha provat d'accedir al fitxer de manera incorrecta.";
         Text[ finnish ] = "Tiedostoja yritettiin käyttää virheellisesti.";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸à¸¢à¸²à¸¢à¸²à¸¡à¹€à¸‚à¹‰à¸²à¸–à¸¶à¸‡à¹à¸Ÿà¹‰à¸¡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Byl proveden neplatnÃ½ pokus o pÅ™Ã­stup k souboru";
+        Text[ hebrew ] = "â€®× ×¡×™×•×Ÿ ×‘×œ×ª×™ ×—×•×§×™ ×œ×’×©×ª ×œ×§×•×‘×¥â€¬";
+        Text[ hindi ] = "An invalid attempt was made to access the file";
     };
     String ERRCODE_IO_CANTCREATE
     {
@@ -1691,7 +1862,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen kunde inte skapas" ;
         Text [ danish ] = "Det var ikke muligt at oprette filen" ;
         Text [ portuguese ] = "Foi impossível criar o ficheiro." ;
-        Text [ portuguese_brazilian ] = "Die Datei konnte nicht angelegt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível criar o arquivo" ;
         Text[ chinese_simplified ] = "æ— æ³•å»ºç«‹è¿™ä¸ªæ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî ñîçäàòü ôàéë";
         Text[ polish ] = "Plik nie móg³ zostaæ utworzony";
@@ -1706,6 +1877,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut crear el fitxer";
         Text[ finnish ] = "Tiedoston luominen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹à¸Ÿà¹‰à¸¡à¹„à¸”à¹‰";
+        Text[ czech ] = "Soubor nelze vytvoÅ™it";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×™×¦×•×¨ ××ª ×”×§×•×‘×¥â€¬";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_INVALIDPARAMETER
     {
@@ -1719,10 +1893,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen startades med en ogiltig parameter" ;
         Text [ danish ] = "Processen blev startet med en ugyldig parameter" ;
         Text [ portuguese ] = "A operação foi iniciada com um parâmetro incorrecto." ;
-        Text [ portuguese_brazilian ] = "Die Operation wurde mit einem ung?tigen Parameter gestartet" ;
+        Text [ portuguese_brazilian ] = "A operação foi iniciada sob um parâmetro inválido" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨ä¸€ä¸ªæ— æ•ˆçš„å‚æ•°å¯åŠ¨äº†è¿™ä¸ªæ“ä½œ";
         Text[ russian ] = "Îïåğàöèÿ çàïóùåíà ñ èñïîëüçîâàíèåì íåïğàâèëüíîãî ïàğàìåòğà";
-        Text[ polish ] = "Przy rozpoczêciu operacji u¿yto nieprawid³owego parametru";
+        Text[ polish ] = "Rozpoczynaj¹c operacjê, u¿yto nieprawid³owego parametru";
         Text[ japanese ] = "ã“ã®æ“ä½œã¯ç„¡åŠ¹ãªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã§é–‹å§‹ã—ã¾ã—ãŸ";
         Text[ chinese_traditional ] = "ä½¿ç”¨ä¸€å€‹ç„¡æ•ˆçš„åƒæ•¸ä¾†åŸ·è¡Œé€™å€‹éç¨‹ã€‚";
         Text[ arabic ] = "Êã ÈÏÁ ÇáÚãáíÉ ÈãÚáãÉ ÛíÑ ÕÇáÍÉ";
@@ -1734,6 +1908,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'operació s'ha iniciat amb un paràmetre no vàlid.";
         Text[ finnish ] = "Toiminto aloitettiin väärällä parametrillä.";
         Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸ à¸²à¸¢à¹ƒà¸•à¹‰à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œà¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Operace byla spuÅ¡tÄ›na s neplatnÃ½m parametrem";
+        Text[ hebrew ] = "â€®×”×¤×¢×•×œ×” ×”×•×¤×¢×œ×” ×¢× ×¤×¨××˜×¨ ×œ× × ×›×•×Ÿâ€¬";
+        Text[ hindi ] = "The operation was started under an invalid parameter";
     };
     String ERRCODE_IO_ABORT
     {
@@ -1747,7 +1924,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Operationen på filen avbröts" ;
         Text [ danish ] = "Processen på filen blev afbrudt" ;
         Text [ portuguese ] = "Cancelada a operação no ficheiro." ;
-        Text [ portuguese_brazilian ] = "Die Operation auf der Datei wurde abgebrochen" ;
+        Text [ portuguese_brazilian ] = "A operação no arquivo foi interrompida" ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶çš„æ“ä½œå·²ç»ä¸­æ–­";
         Text[ russian ] = "Îïåğàöèÿ ñ ôàéëîì ïğåğâàíà";
         Text[ polish ] = "Operacja na pliku zosta³a przerwana";
@@ -1762,6 +1939,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha interromput la operació en el fitxer.";
         Text[ finnish ] = "Tiedoston toiminto keskeytettiin.";
         Text[ thai ] = "à¸›à¸à¸´à¸šà¸±à¸•à¸´à¸à¸²à¸£à¸šà¸™à¹à¸Ÿà¹‰à¸¡à¸–à¸¹à¸à¹€à¸¥à¸´à¸";
+        Text[ czech ] = "Operace se souborem byla pÅ™eruÅ¡ena";
+        Text[ hebrew ] = "â€®×”×¤×¢×•×œ×” ×¢×œ ×”×§×•×‘×¥ ×‘×•×˜×œ×”â€¬";
+        Text[ hindi ] = "The operation on the file was aborted";
     };
     String ERRCODE_IO_NOTEXISTSPATH
     {
@@ -1775,7 +1955,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Sökvägen till filen existerar inte" ;
         Text [ danish ] = "Stien til filen eksisterer ikke" ;
         Text [ portuguese ] = "O atalho para o ficheiro não existe." ;
-        Text [ portuguese_brazilian ] = "Der Pfad zu der Datei existiert nicht" ;
+        Text [ portuguese_brazilian ] = "O caminho para o arquivo não existe" ;
         Text[ chinese_simplified ] = "æŒ‡å‘æ–‡ä»¶çš„è·¯å¾„ä¸å­˜åœ¨";
         Text[ russian ] = "Ïóòü ê ôàéëó íå ñóùåñòâóåò";
         Text[ polish ] = "Œcie¿ka do pliku nie istnieje";
@@ -1790,6 +1970,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No existeix el camí d'accés al fitxer.";
         Text[ finnish ] = "Tiedostopolkua ei ole.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¹„à¸›à¸¢à¸±à¸‡à¹à¸Ÿà¹‰à¸¡à¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "Cesta k souboru neexistuje";
+        Text[ hebrew ] = "â€®××¡×œ×•×œ ×”×¡×¤×¨×™×•×ª ××œ ×”×§×•×‘×¥ ×œ× ×§×™×™×â€¬";
+        Text[ hindi ] = "Path to the file does not exist";
     };
     String ERRCODE_IO_RECURSIVE
     {
@@ -1797,7 +1980,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "Cannot copy object into itself." ;
         Text [ portuguese ] = "É impossível copiar um objecto em si próprio." ;
         Text [ english_us ] = "An object cannot be copied into itself." ;
-        Text [ portuguese_brazilian ] = "Ein Objekt kann nicht in sich selbt kopiert werden." ;
+        Text [ portuguese_brazilian ] = "Não é possível copiar um objeto em si mesmo." ;
         Text [ swedish ] = "Ett objekt kan inte kopieras till sig självt." ;
         Text [ danish ] = "Det er ikke muligt at kopiere et objekt over i sig selv." ;
         Text [ italian ] = "Un oggetto non può essere copiato su se stesso." ;
@@ -1806,7 +1989,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Een object kan niet worden gekopieerd naar zichzelf." ;
         Text[ chinese_simplified ] = "å¯¹è±¡æ— æ³•è¢«å¤åˆ¶åˆ°è‡ªèº«å†…ã€‚";
         Text[ russian ] = "Íåâîçìîæíî ñêîïèğîâàòü îáúåêò â ñåáÿ.";
-        Text[ polish ] = "Obiekt nie mo¿e zostaæ skopiowany sam w sobie.";
+        Text[ polish ] = "Nie mo¿na kopiowaæ obiektu na niego samego.";
         Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ãã®ã‚‚ã®è‡ªä½“ã«ã‚³ãƒ”ãƒ¼ã§ãã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "ç‰©ä»¶ç„¡æ³•è¢«è¤‡è£½åˆ°è‡ªèº«ã€‚";
         Text[ arabic ] = "áÇ íãßä äÓÎ ßÇÆä Åáì äİÓå.";
@@ -1818,6 +2001,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot copiar un objecte en ell mateix.";
         Text[ finnish ] = "Objektia ei voi kopioida itseensä.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸„à¸±à¸”à¸¥à¸­à¸à¸§à¸±à¸•à¸–à¸¸à¹ƒà¸™à¸•à¸±à¸§à¸¡à¸±à¸™à¹€à¸­à¸‡à¹„à¸”à¹‰";
+        Text[ czech ] = "Objekt nelze kopÃ­rovat do sebe sama.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×¢×ª×™×§ ×¢×¦× ×œ×ª×•×š ×¢×¦××•.â€¬";
+        Text[ hindi ] = "An object cannot be copied into itself.";
     };
     String ERRCODE_SFX_NOSTDTEMPLATE
     {
@@ -1831,10 +2017,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att öppna standardmallen" ;
         Text [ danish ] = "Det var ikke muligt at åbne standardskabelonen" ;
         Text [ portuguese ] = "Foi impossível abrir o modelo padrão." ;
-        Text [ portuguese_brazilian ] = "Die Standardvorlage konnte nicht ge?fnet werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível abrir o modelo padrão" ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€æ ‡å‡†æ ·å¼";
         Text[ russian ] = "Íåâîçìîæíî îòêğûòü ñòàíäàğòíûé øàáëîí";
-        Text[ polish ] = "Nie mo¿na otworzyæ standardowego szablonu";
+        Text[ polish ] = "Nie uda³o siê otworzyæ szablonu domyœlnego";
         Text[ japanese ] = "æ¨™æº–ã‚¹ã‚¿ã‚¤ãƒ«ã¯é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿæ¨™æº–æ¨£å¼";
         Text[ arabic ] = "ÊÚĞÑ İÊÍ ÇáŞÇáÈ ÇáÇİÊÑÇÖí";
@@ -1846,6 +2032,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut obrir la plantilla per defecte";
         Text[ finnish ] = "Oletusmallin avaaminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze otevÅ™Ã­t vÃ½chozÃ­ Å¡ablonu.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×¤×ª×•×— ××ª ×ª×‘× ×™×ª ×‘×¨×™×¨×ª ×”××—×“×œâ€¬";
+        Text[ hindi ] = "The default template could not be opened";
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
     {
@@ -1859,7 +2048,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Den angivna mallen kunde inte hittas" ;
         Text [ danish ] = "Den angivne skabelon blev ikke fundet" ;
         Text [ portuguese ] = "Foi impossível encontrar o modelo indicado." ;
-        Text [ portuguese_brazilian ] = "Die angegebene Vorlage wurde nicht gefunden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível encontrar o modelo indicado" ;
         Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°æŒ‡å®šçš„æ ·å¼";
         Text[ russian ] = "Çàäàííûé øàáëîí íå íàéäåí";
         Text[ polish ] = "Podanego szablonu nie znaleziono";
@@ -1874,6 +2063,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut trobar la plantilla especificada";
         Text[ finnish ] = "Määritettyä mallia ei löytynyt.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸«à¸²à¹à¸¡à¹ˆà¹à¸šà¸šà¸—à¸µà¹ˆà¸£à¸°à¸šà¸¸à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze nalÃ©zt zadanou Å¡ablonu.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ××ª×¨ ××ª ×”×ª×‘× ×™×ª ×”××‘×•×§×©×ªâ€¬";
+        Text[ hindi ] = "The specified template could not be found";
     };
     String ERRCODE_SFX_NOTATEMPLATE
     {
@@ -1887,7 +2079,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Filen kan inte användas som mall" ;
         Text [ danish ] = "Det er ikke muligt at bruge filen som skabelon" ;
         Text [ portuguese ] = "Impossível utilizar o ficheiro como modelo." ;
-        Text [ portuguese_brazilian ] = "Die Datei kann nicht als Vorlage verwendet werden" ;
+        Text [ portuguese_brazilian ] = "Não é possível utilizar o arquivo como modelo." ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶æ— æ³•å½“ä½œæ ·å¼ä½¿ç”¨";
         Text[ russian ] = "Íåâîçìîæíî èñïîëüçîâàòü ôàéë â êà÷åñòâå øàáëîíà";
         Text[ polish ] = "Pliku nie mo¿na u¿yæ jako szablonu";
@@ -1902,6 +2094,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot usar el fitxer com a plantilla";
         Text[ finnish ] = "Tiedostoa ei voi käyttää mallina.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹ƒà¸Šà¹‰à¹à¸Ÿà¹‰à¸¡à¹€à¸›à¹‡à¸™à¹à¸¡à¹ˆà¹à¸šà¸šà¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze pouÅ¾Ã­t danÃ½ soubor jako Å¡ablonu.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×©×ª××© ×‘×§×•×‘×¥ ×›×ª×‘× ×™×ªâ€¬";
+        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¤¿ à¤¤à¤°à¤¹ à¤‰à¤ªà¤¯à¥‹à¤— à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String ERRCODE_SFX_CANTREADDOCINFO
     {
@@ -1915,10 +2110,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att läsa dokumentinformationen från\nfilen eftersom dokumentinformationsformatet är\nobekant eller ingen dokumentinformation existerar" ;
         Text [ danish ] = "Det var ikke muligt at læse dokumentinformationen\nfra filen, fordi dokumentinformationens format er ukendt\neller der ikke er nogen tilgængelig dokumentinformation." ;
         Text [ portuguese ] = "Impossível ler as informações sobre o documento no ficheiro\n por terem um formato desconhecido ou \npor não existirem." ;
-        Text [ portuguese_brazilian ] = "Die Dokumentinformation konnte nicht aus der Datei\ngelesen werden, da das Dokumentinformationsformat\nunbekannt ist oder da keine Dokumentinformation vorhanden\nist" ;
+        Text [ portuguese_brazilian ] = "Não foi possível ler as informações sobre o documento no arquivo\nporque o documento tem um formato desconhecido ou \nporque as informações não existem." ;
         Text[ chinese_simplified ] = "æ— æ³•è¯»å‡ºè¿™ä¸ªæ–‡ä»¶çš„æ–‡æ¡£ä¿¡æ¯ï¼Œ\nå› ä¸ºè¿™ä¸ªæ–‡æ¡£ä¿¡æ¯çš„æ ¼å¼ä¸æ˜æˆ–æ–‡æ¡£ä¿¡æ¯ä¸å­˜åœ¨\n";
         Text[ russian ] = "Íåâîçìîæíî ïğî÷åñòü èíôîğìàöèş î äîêóìåíòå èç ôàéëà\n, òàê êàê ôîğìàò äîêóìåíòà\níåèçâåñòåí èëè èíôîğìàöèè î äîêóìåíòå\níå ñóùåñòâóåò";
-        Text[ polish ] = "Informacji o dokumencie nie mo¿na by³o odczytaæ z pliku\n, poniewa¿ format informacji o dokumencie \njest nieznany lub nie istniej¹ informacje o dokumencie\n.";
+        Text[ polish ] = "Nie mo¿na odczytaæ informacji o dokumencie z pliku,\nponiewa¿ format tych informacji jest nieznany albo informacje te nie istniej¹.";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆæƒ…å ±ã®æ›¸å¼ãŒä¸æ˜ã‹\nãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆæƒ…å ±ãŒãªã„ã‹ã§\nãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆæƒ…å ±ã¯èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•è®€å‡ºé€™å€‹æª”æ¡ˆçš„æ–‡ä»¶è³‡è¨Šï¹\nå› ç‚ºé€™å€‹æ–‡ä»¶è³‡è¨Šä¸æ˜æˆ–æ–‡ä»¶è³‡è¨Šä¸å­˜åœ¨\n";
         Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ãÚáæãÇÊ ÇáãÓÊäÏ ãä Çáãáİ¡\náÃä ÊäÓíŞ ãÚáæãÇÊ ÇáãÓÊäÏ\nÛíÑ ãÚÑæİ¡ Ãæ áÃä ãÚáæãÇÊ ÇáãÓÊäÏ \nÛíÑ ãæÌæÏÉ";
@@ -1930,6 +2125,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La informació del document no s'ha pogut llegir del\nfitxer ja que el seu format és desconegut o bé no\nexisteix cap informació sobre el document.";
         Text[ finnish ] = "Tiedoston asiakirjatietojen lukeminen ei onnistunut,\nkoska asiakirjan muoto on tuntematon\ntai koska asiakirjan tietoja ei ole.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸”à¹‰à¸ˆà¸²à¸à¹à¸Ÿà¹‰à¸¡à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸\nà¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸£à¸¹à¸›à¹à¸šà¸šà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸­à¸à¸ªà¸²à¸£à¸«à¸£à¸·à¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡à¸ˆà¸²à¸à¹„à¸¡à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸­à¸à¸ªà¸²à¸£à¸­à¸¢à¸¹à¹ˆ\n";
+        Text[ czech ] = "Nelze naÄÃ­st informaci o dokumentu, protoÅ¾e\nneexistuje nebo jejÃ­ formÃ¡t je neznÃ¡mÃ½.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×§×¨××• ×¤×¨×˜×™ ×”××¡××š ××”×§×•×‘×¥ ×›×™\n×¦×•×¨×ª ×ª×•×›×Ÿ ×”××¡××š ×œ× ××•×›×¨×ª ××• ××™×“×¢ ××•×“×•×ª ×”××¡××š ×œ× ×§×™×™×.â€¬";
+        Text[ hindi ] = "Document information could not be read from the file because\nthe document information format is unknown or because document information does not\nexist";
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
@@ -1943,10 +2141,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Dokumentet har redan öppnats för redigering" ;
         Text [ danish ] = "Dokumentet er allerede åbnet til redigering" ;
         Text [ portuguese ] = "O documento já se encontra aberto para edição." ;
-        Text [ portuguese_brazilian ] = "Das Dokument ist bereits zur Bearbeitung ge?fnet" ;
+        Text [ portuguese_brazilian ] = "O documento já se encontra aberto para edição" ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡æ¡£å·²ç»å¤„äºç¼–è¾‘çŠ¶æ€";
         Text[ russian ] = "Äîêóìåíò óæå îòêğûò äëÿ ğåäàêòèğîâàíèÿ";
-        Text[ polish ] = "Dokument jest otwarty do edycji";
+        Text[ polish ] = "Dokument jest ju¿ otwarty do edytowania";
         Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ã™ã§ã«ç·¨é›†ç”¨ã«é–‹ã‹ã‚Œã¦ã„ã¾ã™";
         Text[ chinese_traditional ] = "é€™å€‹æ–‡ä»¶å·²ç¶“è™•æ–¼ç·¨è¼¯ç‹€æ…‹";
         Text[ arabic ] = "ÇáãÓÊäÏ ãİÊæÍ ÈÔßá ãÓÈŞ ááÊÍÑíÑ.";
@@ -1958,6 +2156,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Aquest document ja ha estat obert per editar";
         Text[ finnish ] = "Asiakirja on jo muokattavana.";
         Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸™à¸µà¹‰à¹„à¸”à¹‰à¸–à¸¹à¸à¹€à¸›à¸´à¸”à¹€à¸à¸·à¹ˆà¸­à¹à¸à¹‰à¹„à¸‚à¹à¸¥à¹‰à¸§";
+        Text[ czech ] = "Tento dokument jiÅ¾ byl otevÅ™en k ÃºpravÃ¡m";
+        Text[ hebrew ] = "â€®××¡××š ×–×” ×›×‘×¨ × ×¤×ª×— ×œ×¢×¨×™×›×”.â€¬";
+        Text[ hindi ] = "This document has already been opened for editing";
     };
     String ERRCODE_SFX_WRONGPASSWORD
     {
@@ -1971,10 +2172,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ett felaktigt lösenord har definierats" ;
         Text [ danish ] = "Der blev angivet en forkert adgangskode" ;
         Text [ portuguese ] = "A senha especificada está errada." ;
-        Text [ portuguese_brazilian ] = "Es wurde ein falsches Passwort gesetzt" ;
+        Text [ portuguese_brazilian ] = "A senha especificada está incorreta" ;
         Text[ chinese_simplified ] = "è¾“å…¥äº†ä¸€ä¸ªé”™è¯¯çš„å¯†ç ";
         Text[ russian ] = "Ââåäåí íåïğàâèëüíûé ïàğîëü";
-        Text[ polish ] = "Zosta³o u¿yte nieprawid³owe has³o";
+        Text[ polish ] = "Podano nieprawid³owe has³o";
         Text[ japanese ] = "å…¥åŠ›ã—ãŸãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯é–“é•ã£ã¦ã„ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "è¼¸å…¥äº†ä¸€å€‹éŒ¯èª¤çš„å¯†ç¢¼";
         Text[ arabic ] = "Êã ÊÚííä ßáãÉ ÓÑ ÛíÑ ÕÍíÍÉ";
@@ -1982,11 +2183,14 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "è¾“å…¥äº†ä¸€ä¸ªé”™è¯¯çš„å¯†ç ";
         Text[ greek ] = "Ïñßóôçêå åóöáëìİíïò êùäéêüò ğñüóâáóçò";
         Text[ korean ] = "ì˜³ì§€ ì•Šì€ ì•”í˜¸ê°€ ì…ë ¥ë˜ì—ˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Girilen şifre yanlış";
+        Text[ turkish ] = "Hatalı bir parola girildi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "La contrasenya no és correcta";
         Text[ finnish ] = "Väärä salasana annettiin.";
         Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Bylo zadÃ¡no chybnÃ© heslo";
+        Text[ hebrew ] = "â€®×”×¡×™×¡××” ×©×’×•×™×”.â€¬";
+        Text[ hindi ] = "The wrong password has been entered";
     };
     String ERRCODE_SFX_DOLOADFAILED
     {
@@ -1994,7 +2198,7 @@ Resource RID_ERRHDL
         TEXT [ English ] = "Error in reading file " ;
         TEXT [ norwegian ] = "Feil ved lesing av fil " ;
         TEXT [ italian ] = "Errore durante la lettura del file " ;
-        TEXT [ portuguese_brazilian ] = "Erro na leitura de arquivo" ;
+        TEXT [ portuguese_brazilian ] = "Ocorreu um erro na leitura do arquivo " ;
         TEXT [ portuguese ] = "Erro na leitura do ficheiro" ;
         TEXT [ finnish ] = "Virhe luettaessa tiedostoa " ;
         TEXT [ danish ] = "Fejl ved læsning af filen " ;
@@ -2005,16 +2209,19 @@ Resource RID_ERRHDL
         TEXT [ english_us ] = "Error reading file " ;
         TEXT[ chinese_simplified ] = "åœ¨è¯»æ–‡ä»¶æ—¶å‘ç”Ÿé”™è¯¯ ";
         TEXT[ russian ] = "Îøèáêà ÷òåíèÿ ôàéëà";
-        TEXT[ polish ] = "B³¹d w odczytywaniu pliku ";
+        TEXT[ polish ] = "B³¹d odczytu pliku";
         TEXT[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚‹éš›ã®ã‚¨ãƒ©ãƒ¼ ";
         TEXT[ chinese_traditional ] = "å­˜å–æª”æ¡ˆæ™‚ç™¼ç”ŸéŒ¯èª¤ ";
         TEXT[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ Çáãáİ";
         TEXT[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç ôïõ áñ÷åßïõ";
         TEXT[ korean ] = "íŒŒì¼ ì½ê¸° ì˜¤ë¥˜";
-        TEXT[ turkish ] = "Dosya okuma hatası";
+        TEXT[ turkish ] = "Dosyayı okurken bir hata oluştu";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "S'ha produït un error en llegir el fitxer";
         TEXT[ thai ] = "à¹€à¸à¸´à¸”à¸„à¸§à¸²à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸­à¹ˆà¸²à¸™à¹à¸Ÿà¹‰à¸¡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ ";
+        TEXT[ czech ] = "Chyba pÅ™i ÄtenÃ­ souboru ";
+        TEXT[ hebrew ] = "â€®×©×’×™××” ×‘×§×¨×™××ª ×”×§×•×‘×¥ â€¬";
+        TEXT[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤ªà¤¢à¤¼à¤¨à¥‡ à¤®à¥‡à¤‚ à¤—à¤²à¤¤à¥€ ";
     };
     String ERRCODE_SFX_DOCUMENTREADONLY
     {
@@ -2028,7 +2235,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Dokumentet öppnades för läsning" ;
         Text [ danish ] = "Dokumentet er blevet åbnet til læsning" ;
         Text [ portuguese ] = "O documento foi aberto para leitura." ;
-        Text [ portuguese_brazilian ] = "Das Dokument wurde zum Lesen ge?fnet" ;
+        Text [ portuguese_brazilian ] = "O documento foi aberto somente para leitura" ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ‰“å¼€çš„æ–‡æ¡£æ˜¯é˜²æ”¹å†™çš„ã€‚";
         Text[ russian ] = "Äîêóìåíò îòêğûò òîëüêî äëÿ ÷òåíèÿ";
         Text[ polish ] = "Dokument zosta³ otwarty tylko do odczytu";
@@ -2043,6 +2250,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha obert el document en mode de lectura.";
         Text[ finnish ] = "Asiakirja avattiin vain luku -tilassa.";
         Text[ thai ] = "à¹€à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸›à¹‡à¸™à¹à¸šà¸šà¸­à¹ˆà¸²à¸™à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
+        Text[ czech ] = "Dokument byl otevÅ™en pouze pro ÄtenÃ­";
+        Text[ hebrew ] = "â€®×”××¡××š × ×¤×ª×— ×œ×§×¨×™××” ×‘×œ×‘×“â€¬";
+        Text[ hindi ] = "The document was opened as read-only";
     };
     String ERRCODE_SFX_OLEGENERAL
     {
@@ -2056,7 +2266,7 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Allmänt OLE-fel" ;
         Text [ danish ] = "Generel OLE-fejl" ;
         Text [ portuguese ] = "Erro OLE geral" ;
-        Text [ portuguese_brazilian ] = "Allgemeiner OLE Fehler" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro Geral de OLE" ;
         Text[ chinese_simplified ] = "ä¸€èˆ¬çš„ OLE é”™è¯¯";
         Text[ russian ] = "Îáùàÿ îøèáêà OLE";
         Text[ polish ] = "B³¹d ogólny OLE";
@@ -2072,6 +2282,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Error general d'OLE";
         Text[ finnish ] = "Yleinen OLE-virhe";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸” OLE à¸—à¸±à¹ˆà¸§à¹„à¸›";
+        Text[ czech ] = "ObecnÃ¡ chyba OLE";
+        Text[ hebrew ] = "â€®×©×’×™××ª OLE ×œ× ××–×•×”×”â€¬";
+        Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯ OLE à¤—à¤²à¤¤à¥€";
     };
     String ERRCODE_INET_NAME_RESOLVE
     {
@@ -2085,10 +2298,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att lösa upp datornamnet $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at fortolke computernavnet $(ARG1)" ;
         Text [ portuguese ] = "Impossível resolver o nome do computador $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "Der Rechnername $(ARG1) konnte nicht aufgel?t werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível resolver o nome do computador $(ARG1)" ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰¾åˆ°è®¡ç®—æœºåœ°å€ $(ARG1)";
         Text[ russian ] = "Íåâîçìîæíî îïğåäåëèòü èìÿ êîìïüşòåğà $(ARG1)";
-        Text[ polish ] = "Nazwa komputera $(ARG1) nie mog³a zostaæ przetworzona";
+        Text[ polish ] = "Nie uda³o siê rozpoznaæ nazwy komputera $(ARG1)";
         Text[ japanese ] = "ãƒ›ã‚¹ãƒˆå$(ARG1)ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•æ‰¾åˆ°ä¸»æ©Ÿåœ°å€ $(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ Íá ÇÓã ÇáãÖíİ $(ARG1)";
@@ -2100,6 +2313,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut determinar el nom del servidor $(ARG1)";
         Text[ finnish ] = "Pääkoneen $(ARG1) nimen selvittäminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸à¹‰à¸Šà¸·à¹ˆà¸­à¹‚à¸®à¸ªà¸•à¹Œ $(ARG1) à¹„à¸”à¹‰";
+        Text[ czech ] = "JmÃ©no poÄÃ­taÄe $(ARG1) nenÃ­ moÅ¾nÃ© rozklÃ­Äovat";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×ª×¨×’× ×©× ××—×©×‘ $(ARG1) ×œ×›×ª×•×‘×ª ××™× ×˜×¨× ×˜â€¬";
+        Text[ hindi ] = "The host name $(ARG1) could not be resolved";
     };
     String ERRCODE_INET_CONNECT
     {
@@ -2113,10 +2329,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att upprätta Internetförbindelsen till $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at oprette en Internetforbindelse til $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível estabelecer a ligação à Internet com $(ARG1)." ;
-        Text [ portuguese_brazilian ] = "Die Internetverbindung zu $(ARG1) konnte nicht hergestellt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível estabelecer a conexão Internet para $(ARG1)" ;
         Text[ chinese_simplified ] = "æ— æ³•å’Œ $(ARG1) å»ºç«‹å›½é™…äº’è”ç½‘è¿æ¥";
         Text[ russian ] = "Íåâîçìîæíî óñòàíîâèòü èíòåğíåò-ñîåäèíåíèå ñ $(ARG1)";
-        Text[ polish ] = "Ustanowienie po³¹czenia internetowego z $(ARG1) by³o niemo¿liwe";
+        Text[ polish ] = "Nie mo¿na nawi¹zaæ po³¹czenia internetowego z $(ARG1)";
         Text[ japanese ] = "$(ARG1)ã¸ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆæ¥ç¶šãŒã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         Text[ chinese_traditional ] = "ç„¡æ³•é€£ç·šåˆ° $(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ Úãá ÇÊÕÇá ÅäÊÑäÊ ãÚ $(ARG1)";
@@ -2128,6 +2344,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut establir la connexió a Internet a $(ARG1)";
         Text[ finnish ] = "Internet-yhteyden muodostaminen kohteeseen $(ARG1) ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¹„à¸›à¸¢à¸±à¸‡ $(ARG1) à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze vytvoÅ™it internetovÃ© spojenÃ­ s $(ARG1)";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×ª×—×‘×¨ ×œ $(ARG1)â€¬";
+        Text[ hindi ] = "Could not establish Internet connection to $(ARG1)";
     };
     String ERRCODE_INET_READ
     {
@@ -2141,10 +2360,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att läsa data via Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at læses dataene over Internettet\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "Daten konnten nicht ?er das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro ao ler os dados da Internet.\nMensagem de erro do servidor: $(ARG1)" ;
         Text[ chinese_simplified ] = "æ— æ³•é€šè¿‡å›½é™…äº’è”ç½‘è¯»å–æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
         Text[ russian ] = "Íåâîçìîæíî ïğî÷èòàòü èíòåğíåò-äàííûå.\nÑîîáùåíèå îøèáêè ñåğâåğà: $(ARG1)";
-        Text[ polish ] = "B³¹d odczytu plików z Internetu.\nKomunikat o b³êdzie serwera: $(ARG1)";
+        Text[ polish ] = "B³¹d odczytu danych z Internetu.\nKomunikat o b³êdzie serwera: $(ARG1)";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã§èª­ã¿å–ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚\nã‚µãƒ¼ãƒãƒ¼ ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸: $(ARG1)";
         Text[ chinese_traditional ] = "ç„¡æ³•é€é Internet è®€å–è³‡æ–™ã€‚\nä¼ºæœå™¨å ±å‘Šï¼š$(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ ŞÑÇÁÉ ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
@@ -2152,11 +2371,14 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "æ— æ³•é€šè¿‡å›½é™…äº’è”ç½‘è¯»å–æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
         Text[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç äåäïìİíùí áğü ôï Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
         Text[ korean ] = "ë°ì´í„°ë¥¼ ì¸í„°ë„·ì—ì„œ ì½ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\nì„œë²„ ì˜¤ë¥˜ ë©”ì‹œì§€: $(ARG1)";
-        Text[ turkish ] = "Internet üzerinden veri okunamadı.\nSunucu hata iletisi: $(ARG1)";
+        Text[ turkish ] = "İnternet üzerinden veri okunamadı.\nSunucu hata iletisi: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en llegir les dades d'Internet\n.Missatge d'error del servidor: $(ARG1)";
         Text[ finnish ] = "On ilmennyt virhe luettaessa tietoja Internetistä.\nPalvelimen virhesanoma: $(ARG1)";
         Text[ thai ] = "à¸à¸²à¸£à¸­à¹ˆà¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸ˆà¸²à¸à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•\n.à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œà¸¡à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”: $(ARG1)";
+        Text[ czech ] = "Chyba pÅ™i ÄtenÃ­ dat z Internetu.\nChybovÃ¡ zprÃ¡va ze serveru: $(ARG1)";
+        Text[ hebrew ] = "â€®××¨×¢×” ×©×’×™××” ×‘×¢×ª ×§×¨×™××ª × ×ª×•× ×™× ××”××™× ×˜×¨× ×˜\n×”×•×“×¢×ª ×”×©×’×™××” ××”×©×¨×ª ×”×™×: $(ARG1)â€¬";
+        Text[ hindi ] = "Error reading data from the Internet\n.Server error message: $(ARG1)";
     };
     String ERRCODE_INET_WRITE
     {
@@ -2170,10 +2392,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Det gick inte att överföra data till Internet.\nServerfelmeddelande: $(ARG1)" ;
         Text [ danish ] = "Det var ikke muligt at overføre dataene til Internettet.\nServerfejlmelding: $(ARG1)" ;
         Text [ portuguese ] = "Foi impossível transferir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
-        Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet ?ertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro ao transferir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
         Text[ chinese_simplified ] = "æ— æ³•å‘å›½é™…äº’è”ç½‘ä¼ é€’æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
         Text[ russian ] = "Íåâîçìîæíî ïåğåäàòü èíòåğíåò-äàííûå.\nÑîîáùåíèå îøèáêè ñåğâåğà: $(ARG1)";
-        Text[ polish ] = "Danych nie mo¿na przenieœæ do sieci Internetu.\nKomunikat o b³êdzie z serwera: $(ARG1)";
+        Text[ polish ] = "B³¹d przesy³ania danych do Internetu.\nKomunikat o b³êdzie serwera: $(ARG1)";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã«è»¢é€ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\nã‚µãƒ¼ãƒãƒ¼ ã‚¨ãƒ©ãƒ¼ ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸: $(ARG1)";
         Text[ chinese_traditional ] = "ç„¡æ³•å‘ Internet ç™¼é€è³‡æ–™ã€‚\nä¼ºæœå™¨å ±å‘Šï¼š$(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ äŞá ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
@@ -2181,11 +2403,14 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "æ— æ³•å‘å›½é™…äº’è”ç½‘ä¼ é€’æ•°æ®ã€‚\næœåŠ¡å™¨æŠ¥å‘Šé”™è¯¯ï¼š$(ARG1)";
         Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ìåôÜäïóç äåäïìİíùí ìİóù ôïõ Internet.\nÌŞíõìá óöÜëìáôïò ôïõ äéáêïìéóôŞ: $(ARG1)";
         Text[ korean ] = "ë°ì´í„°ë¥¼ ì¸í„°ë„·ìœ¼ë¡œ ë³´ë‚´ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\nì„œë²„ ì˜¤ë¥˜ ë©”ì‹œì§€: $(ARG1)";
-        Text[ turkish ] = "Internet üzerinden veri aktarılamadı.\nSunucu hata iletisi: $(ARG1)";
+        Text[ turkish ] = "İnternet üzerinden veri aktarılamadı.\nSunucu hata iletisi: $(ARG1)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en transferir les dades a Internet.\nMissatge d'error del servidor: $(ARG1)";
         Text[ finnish ] = "On ilmennyt virhe siirrettäessä tietoja Internetiin.\nPalvelimen virhesanoma: $(ARG1)";
         Text[ thai ] = "à¸–à¹ˆà¸²à¸¢à¹‚à¸­à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ˆà¸²à¸à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸œà¸´à¸”à¸à¸¥à¸²à¸”\nà¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œà¸¡à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸œà¸´à¸”à¸à¸¥à¸²à¸”: $(ARG1)";
+        Text[ czech ] = "Chyba pÅ™i pÅ™enosu dat na Internet.\nChybovÃ¡ zprÃ¡va ze serveru: $(ARG1)";
+        Text[ hebrew ] = "â€®××¨×¢×” ×©×’×™××” ×‘×¢×ª ×”×¢×‘×¨×ª × ×ª×•× ×™× ×“×¨×š ×”××™× ×˜×¨× ×˜\n×”×•×“×¢×ª ×”×©×’×™××” ××”×©×¨×ª ×”×™×: $(ARG1)â€¬";
+        Text[ hindi ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)";
     };
     String ERRCODE_INET_GENERAL
     {
@@ -2199,10 +2424,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ett allmänt Internet-fel uppstod" ;
         Text [ danish ] = "Der opstod en generel Internetfejl" ;
         Text [ portuguese ] = "Erro geral na Internet" ;
-        Text [ portuguese_brazilian ] = "Ein allgemeiner Fehler im Internetbereich trat auf" ;
+        Text [ portuguese_brazilian ] = "Ocorreu um erro geral na Internet" ;
         Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…å‘ç”Ÿäº†ä¸€ä¸ªä¸€èˆ¬é”™è¯¯";
         Text[ russian ] = "Îáùàÿ îøèáêà Èíòåğíåòà";
-        Text[ polish ] = "Wyst¹pi³ ogólny b³¹d w Internecie";
+        Text[ polish ] = "Wyst¹pi³ ogólny b³¹d Internetu";
         Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆé ˜åŸŸã«ä¸€èˆ¬çš„ãªã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿ";
         Text[ chinese_traditional ] = "Internet å…§ç™¼ç”Ÿä¸€å€‹ä¸€èˆ¬éŒ¯èª¤";
         Text[ arabic ] = "ÍÏË ÎØÃ ÚÇã İí äØÇŞ ÇáÅäÊÑäÊ";
@@ -2210,10 +2435,13 @@ Resource RID_ERRHDL
         Text[ chinese_simplified ] = "åœ¨å›½é™…äº’è”ç½‘å†…å‘ç”Ÿäº†ä¸€ä¸ªä¸€èˆ¬é”™è¯¯";
         Text[ greek ] = "ĞáñïõóéÜóôçêå ãåíéêü óöÜëìá ôïõ Internet";
         Text[ korean ] = "ì¸í„°ë„· ì˜ì—­ì— ì¼ë°˜ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
-        Text[ turkish ] = "Genel Internet hatası";
+        Text[ turkish ] = "Genel İnternet hatası";
         Text[ catalan ] = "Error general d'Internet";
         Text[ finnish ] = "On ilmennyt yleinen Internet-virhe.";
         Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸­à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸—à¸±à¹ˆà¸§à¹„à¸›";
+        Text[ czech ] = "Nastala obecnÃ¡ chyba Internetu";
+        Text[ hebrew ] = "â€®×©×’×™××ª ××™× ×˜×¨× ×˜ ×œ×œ× ×¤×™×¨×•×˜â€¬";
+        Text[ hindi ] = "Gereral Internet error has occurred";
     };
     String ERRCODE_INET_OFFLINE
     {
@@ -2221,7 +2449,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "The requestet internet data is not available in the cache and cannot be transfered since the online mode is not active" ;
         Text [ portuguese ] = "Os dados da Internet necessários não se encontram em Cache e não podem ser carregados porque o modo online não está activo." ;
         Text [ english_us ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated" ;
-        Text [ portuguese_brazilian ] = "Die angeforderten Internetdaten liegen nicht im Cache und k?nen nicht ?ertragen werden, da der Onlinemodus nicht aktiv ist" ;
+        Text [ portuguese_brazilian ] = "Os dados pedidos da Internet não estão disponíveis no cache e não podem ser transmitidos porque o modo online não foi ativado." ;
         Text [ swedish ] = "De begärda Internetdata ligger inte i cachen och kan därför inte överföras eftersom onlineläget inte är aktivt" ;
         Text [ danish ] = "De anmodede Internetdata er ikke tilgængelige i cachen og kan ikke overføres, fordi onlinetilstanden ikke er aktiveret" ;
         Text [ italian ] = "I dati di Internet richiesti non si trovano nella cache e non possono essere trasmessi poiché il modo online non è attivo" ;
@@ -2230,7 +2458,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "De opgevraagde internetgegevens zijn niet beschikbaar in het cachegeheugen en kunnen niet worden overgedragen omdat de onlinemodus niet actief is" ;
         Text[ chinese_simplified ] = "å› ä¸ºæ‚¨çš„è®¡ç®—æœºå’Œè¿˜æ²¡æœ‰å’Œå›½é™…äº’è”ç½‘è¿æ¥ï¼Œè€Œä¸”è®¡ç®—æœºç¼“å†²åŒºä¹Ÿæ²¡æœ‰æ‚¨è¯·æ±‚çš„å›½é™…äº’è”ç½‘çš„èµ„æ–™ï¼Œå› æ­¤æ— æ³•ä¼ é€’ä»»ä½•æ•°æ®ã€‚";
         Text[ russian ] = "Òğåáóåìûå èíòåğíåò-äàííûå íå íàõîäÿòñÿ â êıø è ïåğåäàòü èõ íåâîçìîæíî, òàê êàê íå àêòèâèğîâàí ğåæèì îíëàéí.";
-        Text[ polish ] = "Wymaganych danych z sieci Internet nie ma w pamiêci podrêcznej i nie mo¿na ich za³adowaæ, poniewa¿ tryb online nie jest uaktywniony.";
+        Text[ polish ] = "Wymaganych danych internetowych nie ma w pamiêci podrêcznej i nie mo¿na ich przes³aæ, poniewa¿ nie uaktywniono trybu online.";
         Text[ japanese ] = "æŒ‡å®šã—ãŸã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã®ãƒ‡ãƒ¼ã‚¿ã¯ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ãªãã¦ã€ã‚ªãƒ³ãƒ©ã‚¤ãƒ³ ãƒ¢ãƒ¼ãƒ‰ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã§ã¯ãªã„ãŸã‚ã«è»¢é€ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "é‚„æ²’æœ‰é€£ç·šåˆ° Internet ï¹è€Œä¸”ç·©è¡å€ä¹Ÿæ²’æœ‰æš«å­˜è«‹æ±‚çš„ Internet è³‡æ–™è€Œç„¡æ³•å‚³éè³‡æ–™";
         Text[ arabic ] = "ãÚáæãÇÊ ÇáÅäÊÑäÊ ÇáãØáæÈÉ ÛíÑ ãæÌæÏÉ İí æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊÉ¡ æáÇ íãßä äŞáåÇ¡ ÅĞ Ãä æÖÚ ÇáÇÊÕÇá ÛíÑ äÔØ";
@@ -2242,6 +2470,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Les dades d'Internet que heu demanat no es troben a la memòria cau i no poden ser transmeses ja que el mode en línia està desactivat.";
         Text[ finnish ] = "Pyydettyjä Internet-tietoja ei ole käytettävissä välimuistissa eikä niitä voi siirtää, koska online-tila ei ole käytössä.";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¹ƒà¸™à¹à¸„à¸Šà¹à¸¥à¸°à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸–à¸¹à¸à¸–à¹ˆà¸²à¸¢à¸—à¸­à¸”à¹€à¸›à¹‡à¸™à¹‚à¸«à¸¡à¸”à¹à¸šà¸šà¸­à¸­à¸™à¹„à¸¥à¸™à¹Œà¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¹ƒà¸Šà¹‰à¸‡à¸²à¸™";
+        Text[ czech ] = "PoÅ¾adovanÃ¡ data z Internetu nejsou dostupnÃ¡ v cache a nelze je pÅ™enÃ©st, jelikoÅ¾ se nenachÃ¡zÃ­te v online reÅ¾imu.";
+        Text[ hebrew ] = "â€®×”××™×“×¢ ×”××‘×•×§×© ××”××™× ×˜×¨× ×˜ ××™× ×• × ××¦× ×‘×–×›×¨×•×Ÿ ×”××˜××•×Ÿ ×•×’× ×œ× × ×™×ª×Ÿ ×œ×”×©×™×’ ××”××™× ×˜×¨× ×˜ ×›×™×•×•×Ÿ ×©×—×™×‘×•×¨ ×œ×¨×©×ª ×œ× ××•×¤×¢×œ.â€¬";
+        Text[ hindi ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated";
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {
@@ -2256,10 +2487,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Ska formatet $(ARG1) ersättas?" ;
         Text [ danish ] = "Skal typografien $(ARG1) erstattes?" ;
         Text [ portuguese ] = "Substituir o estilo $(ARG1)?" ;
-        Text [ portuguese_brazilian ] = "Soll der Style $(ARG1) ersetzt werden?" ;
+        Text [ portuguese_brazilian ] = "Deve o estilo $(ARG1) ser substituído?" ;
         Text[ chinese_simplified ] = "è¦æ›¿æ¢æ ·å¼ $(ARG1) ï¼Ÿ";
         Text[ russian ] = "Çàìåíèòü ñòèëü $(ARG1)?";
-        Text[ polish ] = "Zamieniæ styl $(ARG1)?";
+        Text[ polish ] = "Czy zast¹piæ styl $(ARG1)?";
         Text[ japanese ] = "ã‚¹ã‚¿ã‚¤ãƒ« $(ARG1) ã‚’ç½®æ›ã—ã¾ã™ã‹";
         Text[ chinese_traditional ] = "è¦æ›´æ›¿é€™å€‹æ¨£å¼ $(ARG1)ï¼Ÿ";
         Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ÇáäãØ $(ARG1)¿";
@@ -2272,6 +2503,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "S'ha de substituir l'estil de $(ARG1)?";
         Text[ finnish ] = "Korvataanko tyyli $(ARG1)?";
         Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸—à¸™à¸—à¸µà¹ˆà¸¥à¸±à¸à¸©à¸“à¸° $(ARG1) à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
+        Text[ czech ] = "MÃ¡ bÃ½t styl $(ARG1) nahrazen?";
+        Text[ hebrew ] = "â€®×”×× ×œ×”×—×œ×™×£ ××ª ×”×¡×’× ×•×Ÿ ×©×œ $(ARG1) ?â€¬";
+        Text[ hindi ] = "Should the $(ARG1) Style be replaced?";
     };
     String ERRCODE_SFX_NOFILTER
     {
@@ -2285,10 +2519,10 @@ Resource RID_ERRHDL
         Text [ swedish ] = "Inget filter kunde hittas" ;
         Text [ danish ] = "Der blev ikke fundet et filter" ;
         Text [ portuguese ] = "O filtro não foi encontrado." ;
-        Text [ portuguese_brazilian ] = "Ein Filter wurde nicht gefunden" ;
+        Text [ portuguese_brazilian ] = "Não foi encontrado um filtro" ;
         Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°è½¬æ¢å™¨";
         Text[ russian ] = "Ôèëüòğ íå íàéäåí";
-        Text[ polish ] = "Filtru nie znaleziono";
+        Text[ polish ] = "Nie znaleziono filtru";
         Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“";
         Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°è½‰æ›å™¨";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ";
@@ -2301,6 +2535,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha trobat un filtre";
         Text[ finnish ] = "Suodatinta ei löytynyt.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+        Text[ czech ] = "Filtr nebyl nalezen";
+        Text[ hebrew ] = "â€®××¡× ×Ÿ ×œ× × ××¦×â€¬";
+        Text[ hindi ] = "A filter has not been found";
     };
     String ERRCODE_SFX_NODOCRELOAD
     {
@@ -2318,10 +2555,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo determinar el original." ;
         Text [ french ] = "Impossible de déterminer l'original" ;
         Text [ portuguese ] = "Foi impossível determinar o original." ;
-        Text [ portuguese_brazilian ] = "Das Original konnte nicht bestimmt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível determinar o original." ;
         Text[ chinese_simplified ] = "æ— æ³•ç¡®å®šåŸä»¶";
         Text[ russian ] = "Íåâîçìîæíî îïğåäåëèòü îğèãèíàë.";
-        Text[ polish ] = "Orygina³u nie mo¿na by³o okreœliæ.";
+        Text[ polish ] = "Nie uda³o siê ustaliæ orygina³u.";
         Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«ã¯æ±ºå®šã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•ç¢ºå®šåŸä»¶";
         Text[ arabic ] = "ÊÚĞÑ ÊÍÏíÏ ÇáÃÕá";
@@ -2333,6 +2570,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut determinar l'original.";
         Text[ finnish ] = "Alkuperän selvittäminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸à¸³à¸«à¸™à¸”à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze urÄit originÃ¡l.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×–×”×•×ª ××ª ×”××§×•×¨×™.â€¬";
+        Text[ hindi ] = "The original could not be determined.";
     };
     String ERRCODE_SFX_CANTCREATECONTENT
     {
@@ -2346,10 +2586,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo crear el contenido." ;
         Text [ french ] = "Impossible de créer le contenu" ;
         Text [ portuguese ] = "Foi impossível criar o conteúdo." ;
-        Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht erzeugt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível criar o conteúdo." ;
         Text[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆå†…å®¹";
         Text[ russian ] = "Íåâîçìîæíî ñîçäàòü ñîäåğæàíèå.";
-        Text[ polish ] = "Zawartoœæ nie mog³a zostaæ utworzona";
+        Text[ polish ] = "Nie uda³o siê utworzyæ zawartoœci";
         Text[ japanese ] = "å†…å®¹ã¯ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•ç”¢ç”Ÿé€™å€‹å…§å®¹";
         Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÍÊæì";
@@ -2361,6 +2601,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut crear el contingut.";
         Text[ finnish ] = "Sisällön luominen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze vytvoÅ™it obsah.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×™×¦×•×¨ ××ª ×”×ª×›× ×™×.â€¬";
+        Text[ hindi ] = "The contents could not be created.";
     };
     String ERRCODE_SFX_CANTCREATELINK
     {
@@ -2374,7 +2617,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo crear el vínculo." ;
         Text [ french ] = "Impossible de créer le lien !" ;
         Text [ portuguese ] = "Foi impossível criar a ligação." ;
-        Text [ portuguese_brazilian ] = "Die Verkn?fung konnte nicht erzeugt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível criar o vínculo." ;
         Text[ chinese_simplified ] = "æ— æ³•ç”Ÿæˆé“¾æ¥";
         Text[ russian ] = "Íåâîçìîæíî ñîçäàòü ññûëêó.";
         Text[ polish ] = "£¹cze nie mog³o zostaæ utworzone";
@@ -2389,6 +2632,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut crear l'enllaç.";
         Text[ finnish ] = "Linkin luominen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze vytvoÅ™it odkaz.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×™×¦×•×¨ ××ª ×”×§×©×¨.â€¬";
+        Text[ hindi ] = "à¤²à¤¿à¤‚à¤• à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
     {
@@ -2402,7 +2648,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "El formato del vínculo no es válido" ;
         Text [ french ] = "Le format du lien est incorrect" ;
         Text [ portuguese ] = "O formato da ligação não é válido." ;
-        Text [ portuguese_brazilian ] = "Das Format der Verkn?fung ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "O formato do vínculo não é válido." ;
         Text[ chinese_simplified ] = "æ— æ•ˆçš„é“¾æ¥æ ¼å¼";
         Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò ññûëêè.";
         Text[ polish ] = "Format ³¹cza jest nieprawid³owy";
@@ -2417,6 +2663,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El format de l'enllaç no és vàlid";
         Text[ finnish ] = "Linkkimuoto on virheellinen.";
         Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "FormÃ¡t odkazu je neplatnÃ½.";
+        Text[ hebrew ] = "â€®×¦×•×¨×ª ×”×§×©×¨ ××™× ×” ×—×•×§×™×ª.â€¬";
+        Text[ hindi ] = "The link format is invalid.";
     };
     String ERRCODE_SFX_WRONGICONFILE
     {
@@ -2430,10 +2679,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "La configuración del panel de símbolos no es válida" ;
         Text [ french ] = "La configuration de l'affichage des icônes est incorrecte" ;
         Text [ portuguese ] = "A configuração do painel de ícones não é válida." ;
-        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "A configuração do painel de ícones não é válida." ;
         Text[ chinese_simplified ] = "å›¾æ ‡æ˜¾ç¤ºçš„é…ç½®æ–‡ä»¶æ— æ•ˆ";
         Text[ russian ] = "Íåïğàâèëüíàÿ êîíôèãóğàöèÿ ïîêàçà çíà÷êà.";
-        Text[ polish ] = "Konfiguracja wyœwietlania symboli jest nieprawid³owa.";
+        Text[ polish ] = "Konfiguracja wyœwietlania ikon jest nieprawid³owa.";
         Text[ japanese ] = "ã‚·ãƒ³ãƒœãƒ«è¡¨ç¤ºã®è¨­å®šãŒç„¡åŠ¹ã§ã™";
         Text[ chinese_traditional ] = "ç”¨æ–¼åœ–ç¤ºé¡¯ç¤ºçš„é…ç½®æª”æ¡ˆç„¡æ•ˆ";
         Text[ arabic ] = "Êßæíä ÚÑÖ ÇáÑãæÒ ÛíÑ ÕÇáÍ";
@@ -2445,6 +2694,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La configuració del quadre de símbols no és vàlida";
         Text[ finnish ] = "Kuvakenäytön kokoonpano on virheellinen.";
         Text[ thai ] = "à¸à¸²à¸£à¹à¸ªà¸”à¸‡à¸œà¸¥à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹„à¸­à¸„à¸­à¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Konfigurace pohledu s ikonami je neplatnÃ¡.";
+        Text[ hebrew ] = "â€®×”×ª×¦×•×¨×” ×©×œ ×ª×¦×•×’×ª ×”×¡××œ×™× ××™× ×” ×—×•×§×™×ª.â€¬";
+        Text[ hindi ] = "The configuration of the icon display is invalid.";
     };
     String ERRCODE_SFX_CANTWRITEICONFILE
     {
@@ -2458,10 +2710,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se puede guardar la configuración del panel de símbolos" ;
         Text [ french ] = "Impossible d'enregistrer les paramètres d'affichage de l'icône" ;
         Text [ portuguese ] = "É impossível guardar a configuração do painel de ícones." ;
-        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige kann nicht gespeichert werden" ;
+        Text [ portuguese_brazilian ] = "Não é possível salvar a configuração do painel de ícones." ;
         Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜å›¾æ ‡æ˜¾ç¤ºçš„é…ç½®æ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî ñîõğàíèòü êîíôèãóğàöèş ïîêàçà çíà÷êà.";
-        Text[ polish ] = "Konfiguracji wyœwietlania symboli nie mo¿na by³o zapisaæ.";
+        Text[ polish ] = "Nie mo¿na zapisaæ konfiguracji wyœwietlania ikon.";
         Text[ japanese ] = "ã‚·ãƒ³ãƒœãƒ«è¡¨ç¤ºã®è¨­å®šã¯ä¿å­˜ã§ãã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç„¡æ³•å„²å­˜åœ–ç¤ºé¡¯ç¤ºçš„é…ç½®æª”æ¡ˆ";
         Text[ arabic ] = "ÊÚĞÑÍİÙ Êßæíä ÚÑÖ ÇáÑãæÒ";
@@ -2473,6 +2725,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot desar la configuració del quadre de símbols.";
         Text[ finnish ] = "Kuvakenäytön kokoonpanon tallentaminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹à¸ªà¸”à¸‡à¸œà¸¥à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹„à¸­à¸„à¸­à¸™à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze uloÅ¾it konfiguraci pohledu s ikonami.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×©××•×¨ ××ª ×”×ª×¦×•×¨×” ×©×œ ×ª×¦×•×’×ª ×”×¡××œ×™×.â€¬";
+        Text[ hindi ] = "The configuration of the icon display can not be saved.";
     };
     String ERRCODE_SFX_CANTDELICONFILE
     {
@@ -2486,10 +2741,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo borrar la configuración del panel de símbolos." ;
         Text [ french ] = "Impossible de supprimer les paramètres d'affichage de l'icône" ;
         Text [ portuguese ] = "Foi impossível eliminar a configuração do painel de ícones." ;
-        Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige konnte nicht gel?cht werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível excluir a configuração do painel de ícones." ;
         Text[ chinese_simplified ] = "æ— æ³•åˆ é™¤å›¾æ ‡æ˜¾ç¤ºçš„é…ç½®æ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî óäàëèòü êîíôèãóğàöèş ïîêàçà çíà÷êà.";
-        Text[ polish ] = "Konfiguracja wyœwietlania symboli nie mo¿e zostaæ usuniêta.";
+        Text[ polish ] = "Nie mo¿na usun¹æ konfiguracji wyœwietlania ikon.";
         Text[ japanese ] = "ã‚·ãƒ³ãƒœãƒ«è¡¨ç¤ºã®è¨­å®šã¯å‰Šé™¤ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•åˆªé™¤åœ–ç¤ºé¡¯ç¤ºçš„é…ç½®æª”æ¡ˆ";
         Text[ arabic ] = "ÊÚĞÑ ÍĞİ Êßæíä ÚÑÖ ÇáÑãæÒ.";
@@ -2501,6 +2756,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot eliminar la configuració del qaudre de símbols.";
         Text[ finnish ] = "Kuvakenäytön kokoonpanon poistaminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸¥à¸šà¸à¸²à¸£à¹à¸ªà¸”à¸‡à¸œà¸¥à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹„à¸­à¸„à¸­à¸™à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze smazat konfiguraci pohledu s ikonami.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ××—×•×§ ××ª ×”×ª×¦×•×¨×” ×©×œ ×ª×¦×•×’×ª ×”×¡××œ×™× ×”×’×¨×¤×™×™×.â€¬";
+        Text[ hindi ] = "à¤…à¤‡à¤•à¥‰à¤¨à¥ à¤¦à¤¿à¤–à¤¾à¤¨à¥‡ à¤•à¤¾ à¤°à¥‚à¤ª-à¤°à¥‡à¤–à¤¾ à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤Ÿà¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
     {
@@ -2514,10 +2772,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se puede cambiar el nombre al contenido." ;
         Text [ french ] = "Impossible de renommer le contenu" ;
         Text [ portuguese ] = "Foi impossível mudar o nome do conteúdo." ;
-        Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht umbenannt werden" ;
+        Text [ portuguese_brazilian ] = "Não é possível renomear o conteúdo." ;
         Text[ chinese_simplified ] = "æ— æ³•é‡å‘½åå†…å®¹";
         Text[ russian ] = "Íåâîçìîæíî ïåğåèìåíîâàòü ñîäåğæèìîå";
-        Text[ polish ] = "Nazwa zawartoœci nie mog³a zostaæ zmieniona.";
+        Text[ polish ] = "Nie mo¿na zmieniæ nazwy zawartoœci";
         Text[ japanese ] = "å†…å®¹ã®åå‰ã®å¤‰æ›´ã¯ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•é‡æ–°å‘½åå…§å®¹";
         Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÅÚÇÏÉ ÊÓãíÉ ÇáãÍÊæíÇÊ";
@@ -2529,6 +2787,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot reanomenar el contingut";
         Text[ finnish ] = "Sisältöä ei voi nimetä uudelleen.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹„à¸”à¹‰";
+        Text[ czech ] = "Obsah nelze pÅ™ejmenovat";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×©× ×•×ª ××ª ×©× ×”×ª×›× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤·à¤¯à¥‹à¤‚ à¤•à¥‹ à¤¨à¤¯à¤¾ à¤¨à¤¾à¤® à¤¨à¤¹à¥€à¤‚ à¤¦à¥‡ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ ";
     };
     String ERRCODE_SFX_INVALIDBMKPATH
     {
@@ -2540,9 +2801,9 @@ Resource RID_ERRHDL
         Text [ danish ] = "Bogmærkemappen er ugyldig" ;
         Text [ italian ] = "Cartella bookmark non valida" ;
         Text [ spanish ] = "Carpeta de marcadores no válida" ;
-        Text [ french ] = "Le dossier de Bookmarks indiqué est incorrect" ;
+        Text [ french ] = "Le dossier de marque-pages est incorrect." ;
         Text [ portuguese ] = "A pasta de bookmarks não é válida." ;
-        Text [ portuguese_brazilian ] = "Der Bookmarkordner ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "A pasta de marcadores é inválida." ;
         Text[ chinese_simplified ] = "ä¹¦ç­¾æ–‡ä»¶å¤¹æ— æ•ˆ";
         Text[ russian ] = "Íåïğàâèëüíàÿ ïàïêà çàêëàäîê";
         Text[ polish ] = "Folder z zak³adkami jest nieprawid³owy";
@@ -2557,6 +2818,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La carpeta de marcadors no és vàlida.";
         Text[ finnish ] = "Kirjanmerkkikansio on virheellinen.";
         Text[ thai ] = "à¹‚à¸Ÿà¸¥à¹€à¸”à¸­à¸£à¹Œà¸—à¸µà¹ˆà¸„à¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "SloÅ¾ka zÃ¡loÅ¾ek je neplatnÃ¡.";
+        Text[ hebrew ] = "â€®×ª×™×§×™×ª ×”×¡×× ×™×•×ª ××™× ×” ×—×•×§×™×ªâ€¬";
+        Text[ hindi ] = "The bookmark folder is invalid.";
     };
     String ERRCODE_SFX_CANTWRITEURLCFGFILE
     {
@@ -2570,10 +2834,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No se pudo guardar la configuración de las URLs a guardar localmente." ;
         Text [ french ] = "Impossible d'enregistrer la configuration des URL à enregistrer localement !" ;
         Text [ portuguese ] = "Foi impossível guardar a configuração dos URLs a serem guardados localmente." ;
-        Text [ portuguese_brazilian ] = "Die Konfiguration der lokal zu speichernden URLs konnte nicht gespeichert werden" ;
+        Text [ portuguese_brazilian ] = "As configurações das URLs a serem salvas localmente não puderam ser salvas" ;
         Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜è¿™ä¸ªæœ¬æœºå‚¨å­˜ URL åœ°å€çš„é…ç½®æ–‡ä»¶";
         Text[ russian ] = "Íåâîçìîæíî ñîõğàíèòü êîíôèãóğàöèş ëîêàëüíî ñîõğàíÿåìîãî URL";
-        Text[ polish ] = "Nie mo¿na by³o zapisaæ konfiguracji adresu URL, który mia³ zostaæ lokalnie zapisany.";
+        Text[ polish ] = "Nie mo¿na zapisaæ konfiguracji adresów URL, które mia³y zostaæ zapisane lokalnie.";
         Text[ japanese ] = "ãƒ­ãƒ¼ã‚«ãƒ«ã§ä¿å­˜ã™ã‚‹URLã®è¨­å®šã¯ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•ä¿å­˜æœ¬æ©Ÿå„²å­˜çš„ URL é…ç½®æª”æ¡ˆ";
         Text[ arabic ] = "ÊÚĞÑ ÍİÙ Êßæíä ÇáÚäÇæíä (URLs) ÇáæÇÌÈ ÍİÙåÇ ãÍáíÇğ";
@@ -2585,6 +2849,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot desar la configuració de les URLs que es volen desar localment.";
         Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanon tallentaminen ei onnistunut.";
         Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹‚à¸„à¸£à¸‡à¹à¸šà¸š URL  à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸‰à¸à¸²à¸°à¹à¸«à¹ˆà¸‡à¹„à¸”à¹‰";
+        Text[ czech ] = "Konfiguraci lokÃ¡lnÄ› uklÃ¡danÃ½ch URL nebylo moÅ¾nÃ© uloÅ¾it";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×©××•×¨ ××ª ×ª×¦×•×¨×ª ×”-URL×™× ×œ×©××™×¨×” ××§×•××™×ªâ€¬";
+        Text[ hindi ] = "The configuration of the URLs to be saved locally could not be saved";
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
     {
@@ -2598,10 +2865,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No es válido el formato de la configuración de las URLs a guardar localmente." ;
         Text [ french ] = "Le format de la configuration des URL à enregistrer localement est incorrect." ;
         Text [ portuguese ] = "O formato da configuração dos URLs a serem guardados localmente não é válido." ;
-        Text [ portuguese_brazilian ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "O formato das configurações das URLs a serem salvas localmente não é válido." ;
         Text[ chinese_simplified ] = "æœ¬æœºå‚¨å­˜ URL åœ°å€çš„é…ç½®æ–‡ä»¶æ ¼å¼æ— æ•ˆ";
         Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò êîíôèãóğàöèè ëîêàëüíî ñîõğàíÿåìîãî URL";
-        Text[ polish ] = "Format konfiguracji adresu URL, który ma zostaæ lokalnie zapisany, jest nieprawid³owy.";
+        Text[ polish ] = "Format konfiguracji adresów URL, które maj¹ zostaæ zapisane lokalnie, jest nieprawid³owy.";
         Text[ japanese ] = "ãƒ­ãƒ¼ã‚«ãƒ«ã§ä¿å­˜ã™ã‚‹URLã‚’è¨­å®šã™ã‚‹æ›¸å¼ãŒç„¡åŠ¹ã§ã™";
         Text[ chinese_traditional ] = "æœ¬æ©Ÿå„²å­˜ URL é…ç½®æª”æ¡ˆæ ¼å¼ç„¡æ•ˆ";
         Text[ arabic ] = "ÊäÓíŞ Êßæíä ÇáÚäÇæíä (URLs) ¡ÇáæÇÌÈ ÍİÙåÇ ãÍáíÇğ¡ ÛíÑ ÕÇáÍ";
@@ -2613,6 +2880,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El format de la configuració de les URLs que es volen desar localment no és vàlid.";
         Text[ finnish ] = "Paikallisiksi tallennettavien URL-osoitteiden kokoonpanomuoto on virheellinen.";
         Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸£à¸¹à¸›à¹à¸šà¸šà¸à¸²à¸£à¸à¸³à¸«à¸™à¸”à¸„à¹ˆà¸² URL à¹€à¸‰à¸à¸²à¸°à¹à¸«à¹ˆà¸‡à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "KonfiguraÄnÃ­ formÃ¡t lokÃ¡lnÄ› uklÃ¡danÃ½ch URL je neplatnÃ½";
+        Text[ hebrew ] = "â€®×”×ª×¦×•×¨×” ×©×œ ×” URL ×™× ×œ×©××™×¨×” ××§×•××™×ª ××™× ×” ×—×•×§×™×ª.â€¬";
+        Text[ hindi ] = "The configuration format of the URLs to be saved locally is invalid";
     };
     String ERRCODE_SFX_NODOCUMENT
     {
@@ -2626,10 +2896,10 @@ Resource RID_ERRHDL
         Text [ spanish ] = "No existe ningún documento al que se le pueda aplicar la acción" ;
         Text [ french ] = "Il n'existe aucun document auquel l'action peut être appliquée" ;
         Text [ portuguese ] = "Não existe nenhum documento ao qual possa ser aplicada a acção." ;
-        Text [ portuguese_brazilian ] = "Es existiert kein Dokument, auf das die Aktion angewendet werden kann" ;
+        Text [ portuguese_brazilian ] = "Esta ação não pode ser aplicada num documento que não existe." ;
         Text[ chinese_simplified ] = "æ‰§è¡Œæ“ä½œæ‰€éœ€çš„æ–‡æ¡£ä¸å­˜åœ¨";
         Text[ russian ] = "Íå ñóùåñòâóåò äîêóìåíòà, ê êîòîğîìó äîëæíî áûòü ïğèìåíåíî ıòî äåéñòâèå";
-        Text[ polish ] = "Nie istnieje ¿aden dokument, do którego mo¿na by zastosowaæ tê akcjê.";
+        Text[ polish ] = "Tej akcji nie mo¿na zastosowaæ do dokumentu, który nie istnieje.";
         Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®é©ç”¨ã§ãã‚‹ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯ã‚ã‚Šã¾ã›ã‚“";
         Text[ chinese_traditional ] = "ç”¨æ–¼åŸ·è¡Œçš„æ–‡ä»¶ä¸å­˜åœ¨";
         Text[ arabic ] = "áÇ íæÌÏ ãÓÊäÏ íãßä ÊØÈíŞ ÇáÅÌÑÇÁ Úáíå";
@@ -2642,6 +2912,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No existeix cap document al qual es pugui aplicar l'acció.";
         Text[ finnish ] = "Tätä toimintoa ei voi suorittaa asiakirjalle, jota ei ole olemassa.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œà¸à¸²à¸£à¸à¸£à¸°à¸—à¸³à¸™à¸µà¹‰à¸à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
+        Text[ czech ] = "Tuto akci nelze pouÅ¾Ã­t na dokument, kterÃ½ neexistuje";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×”×¤×¢×™×œ ×¤×¢×•×œ×” ×–×• ×¢×œ ××¡××š ×©×œ× ×§×™×™×.â€¬";
+        Text[ hindi ] = "This action cannot be applied to a document that does not exist";
     };
     String ERRCODE_SFX_INVALIDLINK
     {
@@ -2655,7 +2928,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "El vínculo se refiere a un destino no válido" ;
         Text [ french ] = "Le lien renvoit à une cible incorrecte" ;
         Text [ portuguese ] = "A ligação remete a um destino não válido." ;
-        Text [ portuguese_brazilian ] = "Die Verkn?fung verweist auf ein ung?tiges Ziel" ;
+        Text [ portuguese_brazilian ] = "O vínculo remete a um destino inválido" ;
         Text[ chinese_simplified ] = "é“¾æ¥æŒ‡å‘ä¸€ä¸ªæ— æ•ˆçš„ç›®æ ‡";
         Text[ russian ] = "Ññûëêà óêàçûâàåò íåïğàâèëüíóş öåëü";
         Text[ polish ] = "£¹cze odnosi siê do nieprawid³owego celu.";
@@ -2670,6 +2943,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "L'enllaç es refereix a un destí no vàlid";
         Text[ finnish ] = "Linkki viittaa virheelliseen kohteeseen.";
         Text[ thai ] = "à¸à¸²à¸£à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¸­à¹‰à¸²à¸‡à¸–à¸¶à¸‡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Odkaz ukazuje na neplatnÃ½ cÃ­l";
+        Text[ hebrew ] = "â€®×”×§×™×©×•×¨ ××ª×™×—×¡ ×œ×¢×¦× ×œ× ×—×•×§×™â€¬";
+        Text[ hindi ] = "The link refers to an invalid target";
     };
     String ERRCODE_SFX_INVALIDTRASHPATH
     {
@@ -2677,7 +2953,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The path of the trash is invalid" ;
         Text [ portuguese ] = "O atalho para Reciclagem não é válido" ;
         Text [ english_us ] = "The Recycle Bin path is invalid" ;
-        Text [ portuguese_brazilian ] = "Der Pfad f? den Papierkorb ist ung?tig" ;
+        Text [ portuguese_brazilian ] = "O caminho para a Lixeira é inválido" ;
         Text [ swedish ] = "Sökvägen till papperskorgen är ogiltig" ;
         Text [ danish ] = "Stien til papirkurven er ugyldig" ;
         Text [ italian ] = "Il percorso per il cestino non è valido" ;
@@ -2686,7 +2962,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Het pad naar de prullenbak is ongeldig" ;
         Text[ chinese_simplified ] = "å›æ”¶ç«™è·¯å¾„æ— æ•ˆ";
         Text[ russian ] = "Íåïğàâèëüíûé ïóòü äëÿ Êîğçèíû";
-        Text[ polish ] = "Œcie¿ka dla kosza jest nieprawid³owa.";
+        Text[ polish ] = "Œcie¿ka do Kosza jest nieprawid³owa.";
         Text[ japanese ] = "ã”ã¿ç®±ã®ãƒ‘ã‚¹ãŒç„¡åŠ¹ã§ã™";
         Text[ chinese_traditional ] = "è³‡æºå›æ”¶ç­’çš„è·¯å¾‘ç„¡æ•ˆ";
         Text[ arabic ] = "ãÓÇÑ ÓáÉ ÇáãÍĞæİÇÊ ÛíÑ ÕÇáÍ";
@@ -2698,6 +2974,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El camí cap a la paperera no és vàlid.";
         Text[ finnish ] = "Roskakorin polku on virheellinen.";
         Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¸–à¸±à¸‡à¸‚à¸¢à¸°à¸£à¸µà¹„à¸‹à¹€à¸„à¸´à¸¥à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Cesta k odpadkovÃ©mu koÅ¡i je neplatnÃ¡";
+        Text[ hebrew ] = "â€®×”××¡×œ×•×œ ×œ×¡×œ ×”××—×–×•×¨ ××™× ×• ×—×•×§×™â€¬";
+        Text[ hindi ] = "The Recycle Bin path is invalid";
     };
     String ERRCODE_SFX_NOTRESTORABLE
     {
@@ -2705,7 +2984,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The entry could not be restored" ;
         Text [ portuguese ] = "Foi impossível restaurar a entrada." ;
         Text [ english_us ] = "The entry could not be restored" ;
-        Text [ portuguese_brazilian ] = "Der Eintrag konnte nicht wiederhergestellt werden" ;
+        Text [ portuguese_brazilian ] = "Não foi possível restaurar a entrada." ;
         Text [ swedish ] = "Posten kunde inte återställas" ;
         Text [ danish ] = "Det var ikke muligt at gendanne elementet" ;
         Text [ italian ] = "Non è stato possibile ripristinare la voce" ;
@@ -2714,7 +2993,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Item kan niet worden hersteld" ;
         Text[ chinese_simplified ] = "æ— æ³•ä¿®å¤è¿™ä¸ªæ¡ç›®";
         Text[ russian ] = "Âîññòàíîâèòü ıëåìåíò íåâîçìîæíî";
-        Text[ polish ] = "Wpis nie móg³ zostaæ przywrócony";
+        Text[ polish ] = "Wpisu nie uda³o siê przywróciæ";
         Text[ japanese ] = "é …ç›®ã¯å¾©å…ƒã§ãã¾ã›ã‚“ã§ã—ãŸ";
         Text[ chinese_traditional ] = "ç„¡æ³•ä¿®å¾©é€™å€‹æ¢ç›®";
         Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÇÓÊÚÇÏÉ ÇáÅÏÎÇá";
@@ -2726,6 +3005,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No s'ha pogut restaurar l'entrada";
         Text[ finnish ] = "Merkinnän palauttaminen ei onnistunut.";
         Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸„à¸·à¸™à¸ªà¸ à¸²à¸à¸£à¸²à¸¢à¸à¸²à¸£à¹„à¸”à¹‰";
+        Text[ czech ] = "Nelze obnovit poloÅ¾ku";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×©×—×–×¨ ××ª ×”×¢×¨×š.â€¬";
+        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤•à¥‹ à¤ªà¥‚à¤°à¥à¤µ à¤…à¤µà¤¸à¥à¤¥à¤¾ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤ªà¤¹à¥à¤à¤šà¤¾ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
     };
     String ERRCODE_IO_NAMETOOLONG
     {
@@ -2733,7 +3015,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "Filename too long for target filesystem." ;
         Text [ portuguese ] = "O nome do ficheiro é demasiado extenso para o sistema de ficheiros pretendido." ;
         Text [ english_us ] = "The file name is too long for the target file system." ;
-        Text [ portuguese_brazilian ] = "Der Dateiname ist f? das Ziel-Dateisystem zu lang." ;
+        Text [ portuguese_brazilian ] = "O nome do arquivo é longo demais para o sistema de arquivo do destino." ;
         Text [ swedish ] = "Filnamnet är för långt för mål-filsystemet." ;
         Text [ danish ] = "Filnavnet er for langt til mål-filsystemet." ;
         Text [ italian ] = "Il nome del file è troppo lungo per il file system di destinazione." ;
@@ -2742,7 +3024,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Bestandsnaam te lang voor het doelbestandssysteem." ;
         Text[ chinese_simplified ] = "è¿™ä¸ªæ–‡ä»¶åçš„é•¿åº¦ä¸é€‚äºç›®æ ‡æ–‡ä»¶ç³»ç»Ÿã€‚";
         Text[ russian ] = "Ñëèøêîì äëèííîå èìÿ ôàéëà äëÿ ôàéëîâîé ñèñòåìû íàçíà÷åíèÿ.";
-        Text[ polish ] = "Nazwa pliku jest za d³uga dla docelowego systemu plików.";
+        Text[ polish ] = "Nazwa pliku jest zbyt d³uga dla docelowego systemu plików.";
         Text[ japanese ] = "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ« ã‚·ã‚¹ãƒ†ãƒ ã®ãƒ•ã‚¡ã‚¤ãƒ«åãŒé•·ã™ãã¾ã™";
         Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆåçš„é•·åº¦ä¸é©ç”¨æ–¼ç›®æ¨™æª”æ¡ˆç³»çµ±ã€‚";
         Text[ arabic ] = "ÇÓã Çáãáİ Øæíá ÌÏÇğ ÈÇáäÓÈÉ áäÙÇã ÇáãáİÇÊ ÇáåÏİ.";
@@ -2754,6 +3036,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El nom del fitxer és massa llarg pel sistema de fitxers de destinació.";
         Text[ finnish ] = "Tiedoston nimi on liian pitkä kohdejärjestelmän tiedostojärjestelmälle.";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹à¸Ÿà¹‰à¸¡à¸¢à¸²à¸§à¹€à¸à¸´à¸™à¹„à¸›à¸ªà¸³à¸«à¸£à¸±à¸šà¸£à¸°à¸šà¸šà¹à¸Ÿà¹‰à¸¡à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢";
+        Text[ czech ] = "NÃ¡zev souboru je neplatnÃ½ pro cÃ­lovÃ½ souborovÃ½ systÃ©m.";
+        Text[ hebrew ] = "â€®×©× ×”×§×•×‘×¥ ××¨×•×š ××™×“×™ ×œ××¢×¨×›×ª ×”×™×¢×“.â€¬";
+        Text[ hindi ] = "The file name is too long for the target file system.";
     };
     String ERRCODE_SFX_CONSULTUSER
     {
@@ -2761,7 +3046,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "Can't execute function due to incomplete arguments." ;
         Text [ english_us ] = "The details for running the function are incomplete." ;
         Text [ portuguese ] = "Os dados para a execução da função estão incompletos." ;
-        Text [ portuguese_brazilian ] = "Zum Angaben zum Ausf?ren der Funktion sind unvollst?ndig." ;
+        Text [ portuguese_brazilian ] = "Os detalhes para a execução da função estão incompletos." ;
         Text [ swedish ] = "Funktionen kan inte utföras på grund av ofullständiga uppgifter." ;
         Text [ danish ] = "Angivelserne til udførelse af funktionen er ufuldstændige." ;
         Text [ italian ] = "I dati sono insufficienti per l'esecuzione della funzione." ;
@@ -2770,7 +3055,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "De gegevens voor het uitvoeren van de functie zijn niet compleet." ;
         Text[ chinese_simplified ] = "æ‰§è¡ŒåŠŸèƒ½çš„å‘½ä»¤ä¸å®Œæ•´ã€‚";
         Text[ russian ] = "Íåïîëíûå äàííûå äëÿ âûïîëíåíèÿ ıòîé ôóíêöèè.";
-        Text[ polish ] = "Dane do wykonania funkcji s¹ nie kompletne.";
+        Text[ polish ] = "Dane potrzebne do uruchomienia funkcji s¹ niekompletne.";
         Text[ japanese ] = "æ©Ÿèƒ½ã‚’å®Ÿè¡Œã•ã›ã‚‹ãŸã‚ã®æŒ‡ç¤ºãŒæœªå®Œäº†ã§ã™ã€‚";
         Text[ chinese_traditional ] = "æŒ‡å®šåŸ·è¡ŒåŠŸèƒ½çš„æŒ‡ä»¤ä¸å®Œæ•´ã€‚";
         Text[ arabic ] = "ÇáÈíÇäÇÊ ÇááÇÒãÉ áÊäİíĞ ÇáãåãÉ ÛíÑ ãßÊãáÉ.";
@@ -2782,6 +3067,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "No es pot executar la funció per falta d'arguments.";
         Text[ finnish ] = "Tiedot eivät riitä toiminnon toteuttamiseen.";
         Text[ thai ] = "à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸ªà¸³à¸«à¸£à¸±à¸šà¸à¸²à¸£à¸£à¸±à¸™à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹„à¸¡à¹ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ";
+        Text[ czech ] = "Detaily pro spuÅ¡tÄ›nÃ­ funkce jsou nekompletnÃ­.";
+        Text[ hebrew ] = "â€®×—×¡×¨×™× ×¤×¨×˜×™× ×œ×”×¤×¢×œ×ª ×¤×¢×•×œ×” ×–×•.â€¬";
+        Text[ hindi ] = "à¤«à¤‚à¤•à¥à¤¶à¤¨à¥ à¤šà¤²à¤¾à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤µà¤¿à¤µà¤°à¤£ à¤…à¤ªà¥‚à¤°à¥à¤£ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
@@ -2789,7 +3077,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The syntax of the input is invalid." ;
         Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
         Text [ english_us ] = "The input syntax is invalid." ;
-        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist ung?tig." ;
+        Text [ portuguese_brazilian ] = "A sintaxe da entrada está incorreta." ;
         Text [ swedish ] = "Inmatningens syntax är ogiltig." ;
         Text [ danish ] = "Inputsyntaksen er ugyldig." ;
         Text [ italian ] = "La sintassi della digitazione è errata." ;
@@ -2798,7 +3086,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Onjuiste schrijfwijze." ;
         Text[ chinese_simplified ] = "è¾“å…¥çš„è¯­æ³•æ— æ•ˆã€‚";
         Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà.";
-        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ polish ] = "Sk³adnia wejœciowa jest niepoprawna.";
         Text[ japanese ] = "ã“ã®å…¥åŠ›ã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ã¯ç„¡åŠ¹ã§ã™ã€‚";
         Text[ chinese_traditional ] = "è¼¸å…¥å…§å®¹èªæ³•ç„¡æ•ˆã€‚";
         Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÇáÍ.";
@@ -2810,6 +3098,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La sintaxi de l'entrada no és vàlida";
         Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
         Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œà¸—à¸µà¹ˆà¸›à¹‰à¸­à¸™à¹€à¸‚à¹‰à¸²à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NeplatnÃ¡ vstupnÃ­ syntaxe.";
+        Text[ hebrew ] = "â€®×ª×—×‘×™×¨ ×œ× ×—×•×§×™.â€¬";
+        Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¿à¤¨à¥à¤Ÿà¤¾à¤•à¥à¤¸ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_CANTCREATEFOLDER
     {
@@ -2817,7 +3108,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The syntax of the input is invalid." ;
         Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
         Text [ english_us ] = "The input syntax is invalid." ;
-        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist falsch." ;
+        Text [ portuguese_brazilian ] = "A sintaxe da entrada está incorreta." ;
         Text [ swedish ] = "Inmatningens syntax är felaktig." ;
         Text [ danish ] = "Inputsyntaksen er forkert" ;
         Text [ italian ] = "La sintassi della digitazione è errata." ;
@@ -2826,7 +3117,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Onjuiste schrijfwijze." ;
         Text[ chinese_simplified ] = "è¾“å…¥çš„è¯­æ³•é”™è¯¯ã€‚";
         Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà.";
-        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ polish ] = "Sk³adnia wejœciowa jest niepoprawna.";
         Text[ japanese ] = "é …ç›®ã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "è¼¸å…¥å…§å®¹èªæ³•éŒ¯èª¤ã€‚";
         Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÍíÍ.";
@@ -2838,6 +3129,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La sintaxi de l'entrada és incorrecta.";
         Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
         Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œà¸—à¸µà¹ˆà¸›à¹‰à¸­à¸™à¹€à¸‚à¹‰à¸²à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NeplatnÃ¡ vstupnÃ­ syntaxe.";
+        Text[ hebrew ] = "â€®×ª×—×‘×™×¨ ×œ× ×—×•×§×™.â€¬";
+        Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¿à¤¨à¥à¤Ÿà¤¾à¤•à¥à¤¸ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_CANTRENAMEFOLDER
     {
@@ -2845,7 +3139,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The syntax of the input is invalid." ;
         Text [ portuguese ] = "A sintaxe da entrada está incorrecta." ;
         Text [ english_us ] = "The input syntax is invalid." ;
-        Text [ portuguese_brazilian ] = "Die Syntax der Eingabe ist falsch." ;
+        Text [ portuguese_brazilian ] = "A sintaxe da entrada está incorreta." ;
         Text [ swedish ] = "Inmatningens syntax är felaktig." ;
         Text [ danish ] = "Inputsyntaksen er forkert." ;
         Text [ italian ] = "La sintassi della digitazione è errata." ;
@@ -2854,7 +3148,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Onjuiste schrijfwijze." ;
         Text[ chinese_simplified ] = "è¾“å…¥çš„è¯­æ³•é”™è¯¯ã€‚";
         Text[ russian ] = "Íåïğàâèëüíûé ñèíòàêñèñ ââîäà.";
-        Text[ polish ] = "Sk³adnia wpisu jest niepoprawna.";
+        Text[ polish ] = "Sk³adnia wejœciowa jest niepoprawna.";
         Text[ japanese ] = "é …ç›®ã®ã‚·ãƒ³ã‚¿ãƒƒã‚¯ã‚¹ãŒæ­£ã—ãã‚ã‚Šã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "è¼¸å…¥çš„èªæ³•éŒ¯èª¤ã€‚";
         Text[ arabic ] = "ÈäÇÁ ÌãáÉ ÇáÅÏÎÇá ÛíÑ ÕÍíÍ.";
@@ -2867,6 +3161,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La sintaxi d'entrada és incorrecta.";
         Text[ finnish ] = "Syöttösyntaksi on virheellinen.";
         Text[ thai ] = "à¹„à¸§à¸¢à¸à¸£à¸“à¹Œà¸—à¸µà¹ˆà¸›à¹‰à¸­à¸™à¹€à¸‚à¹‰à¸²à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NeplatnÃ¡ vstupnÃ­ syntaxe.";
+        Text[ hebrew ] = "â€®×ª×—×‘×™×¨ ×œ× ×—×•×§×™.â€¬";
+        Text[ hindi ] = "à¤‡à¤¨à¤ªà¥à¤Ÿà¥ à¤¸à¤¿à¤¨à¥à¤Ÿà¤¾à¤•à¥à¤¸ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_WRONG_CDF_FORMAT
     {
@@ -2874,7 +3171,7 @@ Resource RID_ERRHDL
         Text [ ENGLISH ] = "Das Channeldokument hat kein gültiges Format." ;
         Text [ portuguese ] = "O formato do documento do canal não é válido." ;
         Text [ english_us ] = "The channel document has an invalid format." ;
-        Text [ portuguese_brazilian ] = "Das Channeldokument hat kein g?tiges Format." ;
+        Text [ portuguese_brazilian ] = "O documento do canal tem um formato inválido." ;
         Text [ swedish ] = "Channeldokumentet har inget giltigt format." ;
         Text [ danish ] = "Channel-dokumentet har ikke et gyldigt format." ;
         Text [ italian ] = "Il documento di canale non ha un formato valido." ;
@@ -2883,7 +3180,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Het channel-document heeft een foutieve indeling." ;
         Text[ chinese_simplified ] = "é¢‘é“æ–‡æ¡£çš„æ ¼å¼æ— æ•ˆã€‚";
         Text[ russian ] = "Íåïğàâèëüíûé ôîğìàò äîêóìåíòà êàíàëà.";
-        Text[ polish ] = "Dokument kana³u nie posiada prawid³owego formatu.";
+        Text[ polish ] = "Dokument kana³u ma nieprawid³owy format.";
         Text[ japanese ] = "ãƒãƒ£ãƒ³ãƒãƒ« ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®æ›¸å¼ã¯ç„¡åŠ¹ã§ã™ã€‚";
         Text[ chinese_traditional ] = "é »é“æ–‡ä»¶æ ¼å¼ç„¡æ•ˆ";
         Text[ arabic ] = "ÊäÓíŞ ãÓÊäÏ ÇáŞäÇÉ ÛíÑ ÕÇáÍ.";
@@ -2895,6 +3192,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El format del document del canal no és vàlid.";
         Text[ finnish ] = "Kanava-asiakirjan muoto on virheellinen.";
         Text[ thai ] = "à¸Šà¹ˆà¸­à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¸¡à¸µà¸£à¸¹à¸›à¹à¸šà¸šà¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "Dokument kanÃ¡lu mÃ¡ neplatnÃ½ formÃ¡t.";
+        Text[ hebrew ] = "â€®×¦×•×¨×ª ×ª×•×›×Ÿ ××¡××š ×”×¢×¨×•×¥ ××™× ×” ×—×•×§×™×ª.â€¬";
+        Text[ hindi ] = "à¤šà¥ˆà¤¨à¤² à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¤¾ à¤°à¤šà¤¨à¤¾ à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¹à¥ˆ à¥¤";
     };
     String ERRCODE_SFX_EMPTY_SERVER
     {
@@ -2902,7 +3202,7 @@ Resource RID_ERRHDL
         Text [ English ] = "The server may not be empty" ;
         Text [ portuguese ] = "O servidor não pode estar vazio." ;
         Text [ english_us ] = "The server must not be empty" ;
-        Text [ portuguese_brazilian ] = "Der Server darf nicht leer sein" ;
+        Text [ portuguese_brazilian ] = "O servidor não pode estar vazio." ;
         Text [ swedish ] = "Servern får ej vara tom" ;
         Text [ danish ] = "Serveren må ikke være tom" ;
         Text [ italian ] = "Il server non può essere vuoto" ;
@@ -2923,13 +3223,16 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El servidor no ha d'estar buit";
         Text[ finnish ] = "Palvelin ei saa olla tyhjä.";
         Text[ thai ] = "à¹€à¸‹à¸´à¸£à¹Œà¸Ÿà¹€à¸§à¸­à¸£à¹Œà¸•à¹‰à¸­à¸‡à¹„à¸¡à¹ˆà¸§à¹ˆà¸²à¸‡";
+        Text[ czech ] = "NÃ¡zev serveru nesmÃ­ bÃ½t prÃ¡zdnÃ½";
+        Text[ hebrew ] = "â€®××¡×•×¨ ×œ×©×¨×ª ×œ×”×™×•×ª ×¨×™×§ ××ª×•×›×Ÿâ€¬";
+        Text[ hindi ] = "à¤¸à¤°à¥à¤µà¤° à¤–à¤¾à¤²à¥€ à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹à¤¨à¤¾ à¤šà¤¾à¤¹à¤¿à¤";
     };
     String ERRCODE_SFX_NO_ABOBOX
     {
         Text = "Sie benötigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen." ;
         Text [ english_us ] = "A subscription folder is required to install a Channel." ;
             Text [ italian ] = "È necessaria una cartella di sottoscrizione se volete installare un channel.";
-        Text [ portuguese_brazilian ] = "Sie ben?igen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen.";
+        Text [ portuguese_brazilian ] = "É necessário uma pasta de subscrições para poder instalar um canal.";
         Text [ portuguese ] = "Para poder instalar um Channel, necessita de uma pasta para subscrições.";
         Text [ danish ] = "Du har brug for en abonnement-mappe, hvis du vil installere en channel.";
         Text [ french ] = "Vous avez besoin d'un dossier d'abonnements pour installer un Channel.";
@@ -2938,7 +3241,7 @@ Resource RID_ERRHDL
         Text [ spanish ] = "Para instalar un canal necesita una carpeta de suscripciones.";
     Text[ chinese_simplified ] = "å¦‚æœè¦å®‰è£…é¢‘é“ï¼Œæ‚¨å°±éœ€è¦å…ˆåˆ›å»ºä¸€ä¸ªè®¢é˜…æ–‡ä»¶å¤¹ã€‚";
         Text[ russian ] = "Äëÿ óñòàíîâêè êàíàëîâ òğåáóåòñÿ ïàïêà ïîäïèñêè.";
-        Text[ polish ] = "Instalacja kana³u wymaga utworzenia folderu subkrypcji.";
+        Text[ polish ] = "Instalacja kana³u wymaga utworzenia folderu subskrypcji.";
         Text[ japanese ] = "ãƒãƒ£ãƒ³ãƒãƒ«ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã«ã¯è³¼èª­ãƒ•ã‚©ãƒ«ãƒ€ãŒå¿…è¦ã§ã™ã€‚";
         Text[ chinese_traditional ] = "å¦‚æœè¦å®‰è£é »é“ï¹æ‚¨å°±éœ€è¦å»ºç«‹ä¸€å€‹è¨‚é–±è³‡æ–™å¤¾";
         Text[ arabic ] = "áßí ÊÊãßä ãä ÊËÈíÊ ŞäÇÉ ÃäÊ ÈÍÇÌÉ Åáì ãÌáÏ ÇÔÊÑÇßÇÊ.";
@@ -2950,20 +3253,38 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Per instal.lar un canal es necessita una carpeta de subscripcions.";
         Text[ finnish ] = "Kanavan asentaminen edellyttää tilauskansiota.";
         Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹‚à¸Ÿà¸¥à¹€à¸”à¸­à¸£à¹Œà¸à¸²à¸£à¸ªà¸¡à¸±à¸„à¸£à¸ªà¸¡à¸²à¸Šà¸´à¸à¹€à¸à¸·à¹ˆà¸­à¸•à¸´à¸”à¸•à¸±à¹‰à¸‡à¸Šà¹ˆà¸­à¸‡";
+        Text[ czech ] = "Pro instalaci kanÃ¡lu je vyÅ¾adovÃ¡na sloÅ¾ka k odebÃ­rÃ¡nÃ­.";
+        Text[ hebrew ] = "â€®× ×“×¨×© ×§×•×‘×¥ ×× ×•×™ ×¢×œ ×× ×ª ×œ×”×ª×§×™×Ÿ ×¢×¨×•×¥.â€¬";
+        Text[ hindi ] = "A subscription folder is required to install a Channel.";
     };
     String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
     {
         Text = "Dieses Dokument enthält Attribute die nicht im gewählten Format gespeichert werden können.\nBitte speichern Sie das Dokument in einem %PRODUCTNAME 6.0 Dateiformat.";
         Text [ english ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
         Text[ english_us ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ french ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ spanish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ italian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ swedish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ japanese ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ korean ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ chinese_simplified ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
-        Text[ chinese_traditional ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ french ] = "Ce document contient des attributs qui ne peuvent pas être enregistrés au format sélectionné.\nEnregistrez le document dans un format de fichier %PRODUCTNAME 6.0.";
+        Text[ spanish ] = "Este documento contiene atributos que no se pueden guardar con el formato seleccionado.\nGuarde el documento con un formato de archivo de %PRODUCTNAME 6.0.";
+        Text[ italian ] = "Questo documento contiene attributi che non possono essere salvati nel formato selezionato.\nSalvate il documento in un formato di file %PRODUCTNAME 6.0.";
+        Text[ swedish ] = "Det här dokumentet innehåller attribut som inte går att spara i det valda formatet.\nSpara dokumentet i ett %PRODUCTNAME 6.0-filformat.";
+        Text[ japanese ] = "ã“ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã¯é¸æŠã—ãŸæ›¸å¼ã§ä¿å­˜ã§ããªã„å±æ€§ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚\nãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ %PRODUCTNAME 6.0 ãƒ•ã‚¡ã‚¤ãƒ«æ›¸å¼ã§ä¿å­˜ã—ã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "ì´ ë¬¸ì„œëŠ” ì„ íƒëœ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•  ìˆ˜ ì—†ëŠ” ì†ì„±ì„ ê°–ê³  ìˆìŠµë‹ˆë‹¤.\n%PRODUCTNAME 6.0 íŒŒì¼ í˜•ì‹ìœ¼ë¡œ ì €ì¥í•˜ì‹­ì‹œì˜¤.";
+        Text[ chinese_simplified ] = "æ­¤æ–‡æ¡£å«æœ‰æ— æ³•å­˜æˆæ‰€é€‰æ‹©æ ¼å¼çš„å±æ€§ã€‚\nè¯·å°†æ–‡æ¡£å­˜ä¸º %PRODUCTNAME 6.0 æ ¼å¼ã€‚";
+        Text[ chinese_traditional ] = "æ­¤æ–‡ä»¶å«æœ‰ç„¡æ³•å„²å­˜æ–¼æ‰€é¸æ“‡æ ¼å¼çš„å±¬æ€§ã€‚\nè«‹å°‡æ–‡ä»¶å„²å­˜ç‚º %PRODUCTNAME 6.0 æ ¼å¼ã€‚";
+        Text[ turkish ] = "Bu belge seçilen biçimde kaydedilemeyen özellikler içeriyor.\nLütfen belge biçimi olarak %PRODUCTNAME 6.0 dosya biçimini seçiniz.";
+        Text[ greek ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ dutch ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ finnish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ czech ] = "Tento dokument obsahuje atributy, kterÃ© nemohou bÃ½t uloÅ¾eny ve vybranÃ©m formÃ¡tu.\nProsÃ­m uloÅ¾te dokument ve formÃ¡tu %PRODUCTNAME 6.0.";
+        Text[ danish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ arabic ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ hebrew ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ catalan ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ portuguese ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ russian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ polish ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ portuguese_brazilian ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ thai ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
+        Text[ hindi ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME 6.0 file format.";
     };
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
@@ -2972,7 +3293,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Invalid data length." ;
         Text [ portuguese ] = "Extensão de dados incorrecta." ;
         Text [ english_us ] = "Invalid data length." ;
-        Text [ portuguese_brazilian ] = "Ung?tige Datenl?nge." ;
+        Text [ portuguese_brazilian ] = "O comprimento dos dados é inválido." ;
         Text [ swedish ] = "Ogiltig datalängd." ;
         Text [ danish ] = "Ugyldig datalængde." ;
         Text [ italian ] = "Lunghezza dati non valida." ;
@@ -2993,6 +3314,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "La llargada de les dades no és vàlida.";
         Text[ finnish ] = "Virheellinen tietojen pituus";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸¢à¸²à¸§à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹„à¸¡à¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+        Text[ czech ] = "NeplatnÃ¡ dÃ©lka dat.";
+        Text[ hebrew ] = "â€®××•×¨×š ×”× ×ª×•× ×™× ××™× ×• ×—×•×§×™.â€¬";
+        Text[ hindi ] = "à¤…à¤®à¤¾à¤¨à¥à¤¯ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤µà¤¿à¤¸à¥à¤¤à¤¾à¤° à¥¤";
     };
     String ERRCODE_IO_CURRENTDIR
     {
@@ -3000,7 +3324,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Funcion impossible: path contains current directory." ;
         Text [ portuguese ] = "Função impossível: o atalho contém o directório activo." ;
         Text [ english_us ] = "Function not possible: path contains current directory." ;
-        Text [ portuguese_brazilian ] = "Funktion unm?lich: Pfad enth?lt aktuelles Verzeichnis" ;
+        Text [ portuguese_brazilian ] = "Não é possível esta função: o caminho contém o diretório atual." ;
         Text [ swedish ] = "Funktion omöjlig: Sökväg innehåller aktuell katalog" ;
         Text [ danish ] = "Funktion ikke mulig: stien indeholder aktuelt bibliotek" ;
         Text [ italian ] = "Funzione impossibile: il percorso contiene la cartella corrente" ;
@@ -3009,7 +3333,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Functie niet mogelijk. Pad bevat huidige directory" ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡ŒåŠŸèƒ½ï¼šè·¯å¾„å«æœ‰å½“å‰çš„ç›®å½•";
         Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: ïóòü ñîäåğæèò òåêóùèé êàòàëîã";
-        Text[ polish ] = "Funkcja niemo¿liwa:Œcie¿ka zawiera aktualny katalog";
+        Text[ polish ] = "Nie mo¿na wykonaæ funkcji: œcie¿ka zawiera katalog bie¿¹cy.";
         Text[ japanese ] = "æ©Ÿèƒ½ä¸å¯èƒ½ï¼šãƒ‘ã‚¹ãŒç¾åœ¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’å«ã‚“ã§ã„ã¾ã™";
         Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡ŒåŠŸèƒ½ï¼šè·¯å¾‘å«æœ‰ç›®å‰çš„ç›®éŒ„";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: íÍÊæí ÇáãÓÇÑ Úáì ÇáÏáíá ÇáÍÇáí.";
@@ -3021,6 +3345,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Funció impossible: El camí conté el directori actual.";
         Text[ finnish ] = "Toiminnon toteutus ei ole mahdollista: polku sisältää nykyisen hakemiston.";
         Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¸—à¸µà¹ˆà¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸¡à¹ˆà¹„à¸”à¹‰: à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡à¸¡à¸µà¸ªà¸²à¸£à¸šà¸šà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
+        Text[ czech ] = "Funkce nenÃ­ moÅ¾nÃ¡: cesta obsahuje souÄasnÃ½ adresÃ¡Å™.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ××ª ×”×¤×¢×•×œ×” ×›×™ ×”××¡×œ×•×œ ×›×•×œ×œ ××ª ×”×¡×¤×¨×™×” ×”× ×•×›×—×™×ª.â€¬";
+        Text[ hindi ] = "à¤«à¤¼à¤‚à¤•à¥à¤¶à¤¨à¥ à¤¸à¤‚à¤­à¤µ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ: à¤®à¤¾à¤°à¥à¤— à¤®à¥‡à¤‚ à¤µà¤°à¥à¤¤à¤®à¤¾à¤¨ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¹à¥ˆ à¥¤ ";
     };
     String ERRCODE_IO_NOTSAMEDEVICE
     {
@@ -3028,7 +3355,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Function impossible: not same device (drive)." ;
         Text [ portuguese ] = "Função impossível: periférico não é o mesmo (unidade)." ;
         Text [ english_us ] = "Function not possible: device (drive) not identical." ;
-        Text [ portuguese_brazilian ] = "Funktion unm?lich: Nicht dasselbe Ger?t (Laufwerk)." ;
+        Text [ portuguese_brazilian ] = "Não é possível esta função: os dispositivos (unidades) não são idênticos." ;
         Text [ swedish ] = "Funktion omöjlig: Inte samma enhet." ;
         Text [ danish ] = "Funktion ikke mulig: ikke samme enhed (drev)." ;
         Text [ italian ] = "Funzione impossibile: apparecchio (drive) diverso." ;
@@ -3037,7 +3364,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Functie niet mogelijk: niet hetzelfde apparaat (station)." ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡ŒåŠŸèƒ½ï¼šä¸æ˜¯åŒä¸€ä¸ªè®¾å¤‡(é©±åŠ¨ç›˜)ã€‚";
         Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: äğóãîå óñòğîéñòâî (äèñê).";
-        Text[ polish ] = "Funkcja niemo¿liwa: nie to samo urz¹dzenie (napêd).";
+        Text[ polish ] = "Nie mo¿na wykonaæ funkcji: urz¹dzenie (napêd) nie jest takie samo.";
         Text[ japanese ] = "æ©Ÿèƒ½ä¸å¯èƒ½ï¼šåŒã˜ãƒ‡ãƒã‚¤ã‚¹(ãƒ‰ãƒ©ã‚¤ãƒ–)ã§ã¯ã‚ã‚Šã¾ã›ã‚“ï½¡";
         Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡ŒåŠŸèƒ½ï¼šä¸æ˜¯åŒä¸€å€‹è¨­å‚™(é©…å‹•ç›¤)ã€‚";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ÇáÌåÇÒ (ãÍÑß ÇáÃŞÑÇÕ( ÛíÑ ããÇËá.";
@@ -3049,6 +3376,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Funció impossible: No és el mateix dispositiu (unitat).";
         Text[ finnish ] = "Toiminnon toteutus ei ole mahdollista: laite (asema) ei ole identtinen.";
         Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸¡à¹ˆà¹„à¸”à¹‰: à¸­à¸¸à¸›à¸à¸£à¸“à¹Œ (à¹„à¸”à¸£à¹‰à¸Ÿà¹Œ) à¹„à¸¡à¹ˆà¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
+        Text[ czech ] = "Funkce nenÃ­ moÅ¾nÃ¡: zaÅ™Ã­zenÃ­ (mechanika) nenÃ­ identickÃ¡.";
+        Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×‘×¦×¢ ××ª ×”×¤×¢×•×œ×” ×›×™ ×”×›×•× × ×™× ×©×•× ×™×.â€¬";
+        Text[ hindi ] = "Function not possible: device (drive) not identical.";
     };
     String ERRCODE_IO_DEVICENOTREADY
     {
@@ -3056,7 +3386,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Device (drive) not ready." ;
         Text [ portuguese ] = "Periférico (unidade) não está pronto." ;
         Text [ english_us ] = "Device (drive) not ready." ;
-        Text [ portuguese_brazilian ] = "Ger?t (Laufwerk) nicht bereit." ;
+        Text [ portuguese_brazilian ] = "O dispositivo (unidade) não está pronto." ;
         Text [ swedish ] = "Enhet ej redo." ;
         Text [ danish ] = "Enheden (drevet) er ikke klar." ;
         Text [ italian ] = "Apparecchio (drive) non pronto." ;
@@ -3065,7 +3395,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Apparaat (station) niet gereed." ;
         Text[ chinese_simplified ] = "è®¾å¤‡(é©±åŠ¨ç›˜)è¿˜æ²¡æœ‰å‡†å¤‡å°±ç»ªã€‚";
         Text[ russian ] = "Óñòğîéñòâî (äèñê) íå ãîòîâî.";
-        Text[ polish ] = "Urz¹dzenie (napêd) nie gotowe.";
+        Text[ polish ] = "Urz¹dzenie (napêd) nie jest gotowe.";
         Text[ japanese ] = "ãƒ‡ãƒã‚¤ã‚¹(ãƒ‰ãƒ©ã‚¤ãƒ–)ã®æº–å‚™ãŒã§ãã¦ã„ã¾ã›ã‚“ã€‚";
         Text[ chinese_traditional ] = "è¨­å‚™(é©…å‹•ç›¤)é‚„æ²’æœ‰æº–å‚™å°±ç·’";
         Text[ arabic ] = "ÇáÌåÇÒ (ãÍÑß ÇáÃŞÑÇÕ) ÛíÑ ÌÇåÒ.";
@@ -3077,6 +3407,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "El dispositiu (unitat) no està disponible.";
         Text[ finnish ] = "Laite (asema) ei ole valmis.";
         Text[ thai ] = "à¸­à¸¸à¸›à¸à¸£à¸“à¹Œ (à¹„à¸”à¸£à¹‰à¸Ÿà¹Œ) à¹„à¸¡à¹ˆà¸à¸£à¹‰à¸­à¸¡";
+        Text[ czech ] = "ZaÅ™Ã­zenÃ­ (mechanika) nenÃ­ pÅ™ipravenÃ©.";
+        Text[ hebrew ] = "â€®×›×•× ×Ÿ ×œ× ××•×›×Ÿ.â€¬";
+        Text[ hindi ] = "Device (drive) not ready.";
     };
     String ERRCODE_IO_BADCRC
     {
@@ -3084,7 +3417,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Bad checksum" ;
         Text [ portuguese ] = "Soma de revisão errada." ;
         Text [ english_us ] = "Wrong check amount." ;
-        Text [ portuguese_brazilian ] = "Falsche Pr?summe." ;
+        Text [ portuguese_brazilian ] = "A soma de revisão está errada." ;
         Text [ swedish ] = "Fel kontrollsumma." ;
         Text [ danish ] = "Forkert kontrolsum" ;
         Text [ italian ] = "Somma da esaminare errata." ;
@@ -3105,6 +3438,9 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Suma de revisió incorrecta.";
         Text[ finnish ] = "Väärä tarkistussumma";
         Text[ thai ] = "à¸•à¸£à¸§à¸ˆà¸ªà¸­à¸šà¸ˆà¸³à¸™à¸§à¸™à¸œà¸´à¸”";
+        Text[ czech ] = "ChybnÃ½ kontrolnÃ­ souÄet.";
+        Text[ hebrew ] = "â€®×¡×¤×¨×ª ×‘×™×§×•×¨×ª ×©×’×•×™×”â€¬";
+        Text[ hindi ] = "Wrong check amount.";
     };
     String ERRCODE_IO_WRITEPROTECTED
     {
@@ -3112,7 +3448,7 @@ Resource RID_ERRHDL
         Text [ english ] = "Function impossible: write protected." ;
         Text [ portuguese ] = "Função impossível: só de leitura." ;
         Text [ english_us ] = "Function not possible: write protected." ;
-        Text [ portuguese_brazilian ] = "Funktion unm?lich: Schreibgesch?zt." ;
+        Text [ portuguese_brazilian ] = "Não é possível esta função: Há proteção contra escrita." ;
         Text [ swedish ] = "Funktion omöjlig: Skrivskyddad." ;
         Text [ danish ] = "Funktion ikke mulig: skrivebeskyttet" ;
         Text [ italian ] = "Funzione impossibile: solo lettura." ;
@@ -3121,7 +3457,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Functie niet mogelijk: alleen-lezen." ;
         Text[ chinese_simplified ] = "æ— æ³•æ‰§è¡ŒåŠŸèƒ½ï¼šé˜²æ”¹å†™";
         Text[ russian ] = "Íåâîçìîæíî âûïîëíèòü îïåğàöèş: çàùèòà îò çàïèñè.";
-        Text[ polish ] = "Wykonanie funkcji niemo¿liwe: Tylko do odczytu.";
+        Text[ polish ] = "Nie mo¿na wykonaæ funkcji: ochrona przed zapisem.";
         Text[ japanese ] = "æ©Ÿèƒ½ä¸å¯èƒ½ï¼šæ›¸ãè¾¼ã¿ä¿è­·ã€‚";
         Text[ chinese_traditional ] = "ç„¡æ³•åŸ·è¡ŒåŠŸèƒ½ï¼šå”¯è®€";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: ãÍãí ÖÏ ÇáßÊÇÈÉ.";
@@ -3133,11 +3469,31 @@ Resource RID_ERRHDL
         Text[ catalan ] = "Funció impossible: Només lectura.";
         Text[ finnish ] = "Toiminnon toteutus ei ole mahdollista: objekti on kirjoitussuojattu.";
         Text[ thai ] = "à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™à¹€à¸›à¹‡à¸™à¹„à¸›à¹„à¸¡à¹ˆà¹„à¸”à¹‰: à¹€à¸‚à¸µà¸¢à¸™à¸›à¹‰à¸­à¸‡à¸à¸±à¸™";
+        Text[ czech ] = "Funkce nemoÅ¾nÃ¡: zÃ¡pis chrÃ¡nÄ›n.";
+        Text[ hebrew ] = "â€®×”×¤×¢×•×œ×” ××™× ×” ××¤×©×¨×™×ª ×¢×§×‘ ×”×’× ×” ××¤× ×™ ×›×ª×™×‘×”.â€¬";
+        Text[ hindi ] = "Function not possible: write protected.";
     };
 #endif
 };
 
 // eof ------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
