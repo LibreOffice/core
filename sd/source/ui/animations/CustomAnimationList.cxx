@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 17:31:54 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,9 +1003,12 @@ PopupMenu* CustomAnimationList::CreateContextMenu()
     PopupMenu* pMenu = new PopupMenu(SdResId( RID_EFFECT_CONTEXTMENU ));
 
     sal_Int16 nNodeType = -1;
+    sal_Int16 nEntries = 0;
+
     CustomAnimationListEntry* pEntry = static_cast< CustomAnimationListEntry* >(FirstSelected());
     while( pEntry )
     {
+        nEntries++;
         CustomAnimationEffectPtr pEffect( pEntry->getEffect() );
         if( pEffect.get() )
         {
@@ -1023,12 +1026,14 @@ PopupMenu* CustomAnimationList::CreateContextMenu()
             }
         }
 
-        pEntry = static_cast< CustomAnimationListEntry* >(Next( pEntry ));
+        pEntry = static_cast< CustomAnimationListEntry* >(NextSelected( pEntry ));
     }
 
     pMenu->CheckItem( CM_WITH_CLICK, nNodeType == EffectNodeType::ON_CLICK );
     pMenu->CheckItem( CM_WITH_PREVIOUS, nNodeType == EffectNodeType::WITH_PREVIOUS );
     pMenu->CheckItem( CM_AFTER_PREVIOUS, nNodeType == EffectNodeType::AFTER_PREVIOUS );
+    pMenu->EnableItem( CM_OPTIONS, nEntries == 1 );
+    pMenu->EnableItem( CM_DURATION, nEntries == 1 );
 
     return pMenu;
 }
