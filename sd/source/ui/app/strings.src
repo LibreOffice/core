@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-12 21:30:50 $
+ *  last change: $Author: aw $ $Date: 2001-10-15 16:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5727,6 +5727,11 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Size = MAP_APPFONT( 175 + 39 + (3 * 6), (7 * 12) + 6 );
     Moveable = TRUE;
     Closeable = TRUE;
+
+    HelpID = RID_UNDO_DELETE_WARNING;
+    Text = "Hinweis" ;
+    Text [ ENGLISH ] = "Hint" ;
+
     FixedImage IMG_UNDO_DELETE_WARNING
     {
         Pos = MAP_APPFONT( 6, 6 );
