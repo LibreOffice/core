@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-05 13:13:24 $
+ *  last change: $Author: jp $ $Date: 2001-03-06 14:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2312,7 +2312,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
             aFontItem.SetWhich(GetWhichOfScript(RES_CHRATR_FONT,nScript));
             pCharFmt->SetAttr(aHeightItem);
             pCharFmt->SetAttr(aFontItem);
-            aRubyCharFmts.Insert(pCharFmt,aRubyCharFmts.Count());
+            aRubyCharFmts.C40_INSERT( SwCharFmt, pCharFmt, aRubyCharFmts.Count() );
         }
 
         //Set the charstyle and justification
@@ -3091,12 +3091,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.13 2001-03-05 13:13:24 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.14 2001-03-06 14:38:27 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.13  2001/03/05 13:13:24  cmc
+      One too many field handlers, my 1st dublin test checkin
+
       Revision 1.12  2001/02/27 16:25:05  cmc
       #81314#,#81326# Index fixes
 
