@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:13:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,8 @@ SwRewriter SwUndoReplace::GetRewriter() const
 
         String aTmpStr;
         aTmpStr += String(SW_RES(STR_START_QUOTE));
-        aTmpStr += aArr[0]->GetOld();
+        aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+                                 SW_RES(STR_LDOTS));
         aTmpStr += String(SW_RES(STR_END_QUOTE));
         aResult.AddRule(UNDO_ARG3, aTmpStr);
     }
@@ -667,7 +668,9 @@ SwRewriter SwUndoReplace::GetRewriter() const
             String aTmpStr;
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
-            aTmpStr += aArr[0]->GetOld();
+            // #i33488 #
+            aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+                                     SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG1, aTmpStr);
         }
@@ -678,7 +681,9 @@ SwRewriter SwUndoReplace::GetRewriter() const
             String aTmpStr;
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
-            aTmpStr += aArr[0]->GetIns();
+            // #i33488 #
+            aTmpStr += ShortenString(aArr[0]->GetIns(), nUndoStringLength,
+                                     SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG3, aTmpStr);
         }
