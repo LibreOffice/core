@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-04-18 10:10:17 $
+ *  last change: $Author: os $ $Date: 2002-04-26 16:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,7 +896,14 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
         // add the ViewShell to the ring of the other ViewShell(s)
         if(bOldShellWasPagePreView)
         {
-            pWrtShell->MoveTo(&((SwPagePreView*)pOldSh)->GetViewShell());
+            ViewShell& rPreviewViewShell = ((SwPagePreView*)pOldSh)->GetViewShell();
+            pWrtShell->MoveTo(&rPreviewViewShell);
+            //#95521# to update the field command et.al. if necessary
+            const SwViewOption* pPreViewOpt = rPreviewViewShell.GetViewOptions();
+            if( pPreViewOpt->IsFldName() != aUsrPref.IsFldName() ||
+                    pPreViewOpt->IsHidden() != aUsrPref.IsHidden() ||
+                    pPreViewOpt->IsShowHiddenPara() != aUsrPref.IsShowHiddenPara() )
+                rPreviewViewShell.ApplyViewOptions(aUsrPref);
         }
     }
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create WrtShell" );
