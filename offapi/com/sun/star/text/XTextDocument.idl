@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextDocument.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 15:18:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 // DocMerge from xml: interface com::sun::star::text::XTextDocument
 /** is the main interface of a text document.@see com::sun::star::text::TextDocument
  */
-interface XTextDocument: com::sun::star::frame::XModel
+published interface XTextDocument: com::sun::star::frame::XModel
 {
     //-------------------------------------------------------------------------
 
