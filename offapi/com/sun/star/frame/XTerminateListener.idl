@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTerminateListener.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@
     @see XDesktop::addTerminateListener()
     @see XDesktop::removeTerminateListener()
  */
-interface XTerminateListener: com::sun::star::lang::XEventListener
+published interface XTerminateListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
     /** is called when the master environment (e.g., desktop) is about to terminate.
