@@ -1538,10 +1538,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Jfregcadll2", "65", "jfregca.dll", "uninstall_jf", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "jfregca.dll",  "Jfregcadll2", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
-            # adding the custom action for the existence check of dot net framework into the product (CustomAc.idt and InstallU.idt)
-            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Netframeworkdll", "65", "netframework.dll", "IsFrameworkInstalled", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
-            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installuitable, "netframework.dll",  "Netframeworkdll", "Not REMOVE=\"ALL\"", "InstallWelcome", $filesinproductlanguageresolvedarrayref, $installuitablename); }
-
             # adding the custom action for shutting down the quickstarter in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "sdqsmsidll", "65", "sdqsmsi.dll", "ShutDownQuickstarter", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "sdqsmsi.dll", "sdqsmsidll", "REMOVE=\"ALL\"", "InstallInitialize", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
