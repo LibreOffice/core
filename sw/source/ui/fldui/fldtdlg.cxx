@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:28:17 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,8 +492,11 @@ void SwFldDlg::EnableInsert(BOOL bEnable)
 {
     if( bEnable )
     {
-        const SwWrtShell& rSh = ::GetActiveView()->GetWrtShell();
-        if( rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() )
+        SwView* pView = ::GetActiveView();
+        DBG_ASSERT(pView, "no view found");
+        if( !pView ||
+                (pView->GetWrtShell().IsReadOnlyAvailable() &&
+                    pView->GetWrtShell().HasReadonlySel()) )
             bEnable = FALSE;
     }
     GetOKButton().Enable(bEnable);
