@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 07:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ void OViewContainer::construct(const Reference< XNameAccess >& _rxMasterContaine
         sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
         sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
+        connectivity::TStringVector aViewNames;
         if(!bNoTableFilters)
         {
             Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
@@ -230,15 +231,15 @@ void OViewContainer::construct(const Reference< XNameAccess >& _rxMasterContaine
             aTableFilter.realloc(nShiftPos);
             nTableFilterLen = nShiftPos;
 
+            aViewNames.reserve(nShiftPos);
+
             Sequence< ::rtl::OUString> aNames = m_xMasterViews->getElementNames();
             const ::rtl::OUString* pBegin   = aNames.getConstArray();
             const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
             for(;pBegin != pEnd;++pBegin)
             {
                 if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
-                {
-                    m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pBegin, NULL)).first);
-                }
+                    aViewNames.push_back(*pBegin);
             }
         }
         else
@@ -247,9 +248,10 @@ void OViewContainer::construct(const Reference< XNameAccess >& _rxMasterContaine
             Sequence< ::rtl::OUString> aNames = m_xMasterViews->getElementNames();
             const ::rtl::OUString* pBegin   = aNames.getConstArray();
             const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-                m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pBegin, NULL)).first);
+            aViewNames = connectivity::TStringVector(pBegin,pEnd);
+
         }
+        reFill(aViewNames);
         m_bConstructed = sal_True;
     }
 }

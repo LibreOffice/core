@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-19 11:43:15 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,13 +550,9 @@ void OColumns::append(const ::rtl::OUString& rName, OColumn* pCol)
     MutexGuard aGuard(m_rMutex);
     pCol->acquire();
     pCol->m_sName = rName;
-    ObjectIter aIter = m_aNameMap.find(rName);
-    OSL_ENSURE(aIter == m_aNameMap.end(),"OColumns::append: Column already exists");
+    OSL_ENSURE(m_aNameMap.find(rName) == m_aNameMap.end(),"OColumns::append: Column already exists");
 
-    m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(rName,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >(pCol))));
-
-    //  (*m_pColMap)[rName] = pCol;
-    //  m_aColArray.push_back(pCol);
+    insertElement(rName,pCol);
 }
 
 //------------------------------------------------------------------

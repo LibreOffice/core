@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:45:27 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 14:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
             xCont->addContainerListener(this);
         sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
+        connectivity::TStringVector aTableNames;
         sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
         if(!bNoTableFilters)
         {
@@ -237,6 +238,7 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
             // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
             aTableFilter.realloc(nShiftPos);
             nTableFilterLen = nShiftPos;
+            aTableNames.reserve(nShiftPos);
 
             Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
             const ::rtl::OUString* pBegin   = aNames.getConstArray();
@@ -244,9 +246,7 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
             for(;pBegin != pEnd;++pBegin)
             {
                 if(isNameValid(*pBegin,aTableFilter,aTableTypeFilter,aWCSearch))
-                {
-                    m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pBegin, NULL)).first);
-                }
+                    aTableNames.push_back(*pBegin);
             }
         }
         else
@@ -255,9 +255,9 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
             Sequence< ::rtl::OUString> aNames = m_xMasterTables->getElementNames();
             const ::rtl::OUString* pBegin   = aNames.getConstArray();
             const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
-            for(;pBegin != pEnd;++pBegin)
-                m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(*pBegin, NULL)).first);
+            aTableNames = connectivity::TStringVector(pBegin,pEnd);
         }
+        reFill(aTableNames);
         m_bConstructed = sal_True;
     }
     else
@@ -349,7 +349,7 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 
                     if (bFilterMatch)
                     {   // the table name is allowed (not filtered out)
-                        m_aElements.push_back(m_aNameMap.insert(ObjectMap::value_type(sComposedName, NULL)).first);
+                        insertElement(sComposedName,NULL);
                     }
                 }
 
