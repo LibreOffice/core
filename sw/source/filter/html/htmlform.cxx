@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlform.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:26:11 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
 
     ViewShell *pVSh;
     pDoc->GetEditShell( &pVSh );
-    if( !pVSh && !aLoadEnv.Is() )
+    if( !pVSh && !nEventId )
     {
         // If there is no view shell by now and the doc shell is an internal
         // one, no view shell will be created. That for, we have to do that of
@@ -866,9 +866,9 @@ void SwHTMLParser::SetControlSize( const Reference< drawing::XShape >& rShape,
         // is the case we wait until another call to our DataAvailable
         // link, because the SFX calls it if it creates the view.
         ASSERT( bDocInitalized, "DocumentDetected nocht nicht augerufen" );
-        ASSERT( !IsParserWorking() || bDataAvailableLinkSet,
+        ASSERT( !IsParserWorking() || nEventId,
                 "Keine ViewShell bei nicht gesetztem DataAvailable-Link" );
-        if( IsParserWorking() && bDocInitalized && bDataAvailableLinkSet )
+        if( IsParserWorking() && bDocInitalized && nEventId )
         {
             pPendStack = new SwPendingStack( nToken, pPendStack );
             pPendStack->pData =
