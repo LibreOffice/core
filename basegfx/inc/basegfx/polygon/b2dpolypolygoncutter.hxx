@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,6 @@
 #include <basegfx/point/b2dpoint.hxx>
 #endif
 
-#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
-#include <basegfx/vector/b2dvector.hxx>
-#endif
-
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
 #endif
@@ -83,168 +79,39 @@
 #endif
 
 #include <vector>
-#include <algorithm>
-
-//////////////////////////////////////////////////////////////////////////////
-// B2DPolygonNode class
-//
-// This class is a pure tooling class used to hold a polygon in double linked
-// list form for faster manipulation. It is used from the polygon clipper.
-
-namespace basegfx
-{
-    class B2DPolygonNode
-    {
-        ::basegfx::B2DPoint             maPosition;
-        B2DPolygonNode*                         mpPrevious;
-        B2DPolygonNode*                         mpNext;
-
-        B2DPolygonNode*                         mpListPrevious;
-        B2DPolygonNode*                         mpListNext;
-
-    public:
-        B2DPolygonNode(const ::basegfx::B2DPoint& rPosition, B2DPolygonNode* pPrevious);
-        ~B2DPolygonNode();
-
-        B2DPolygonNode* getPrevious() const { return mpPrevious; }
-        B2DPolygonNode* getNext() const { return mpNext; }
-        const ::basegfx::B2DPoint& getPosition() const { return maPosition; }
-
-        void calcMinMaxX(double& fMaxAX, double& fMinAX) const;
-        void calcMinMaxY(double& fMaxAY, double& fMinAY) const;
-
-        void swapPreviousNext() { B2DPolygonNode* pZwi = mpPrevious; mpPrevious = mpNext; mpNext = pZwi; }
-        void swapNextPointers(B2DPolygonNode* pCand);
-
-        void addToList(B2DPolygonNode*& rpList);
-        void remFromList(B2DPolygonNode*& rpList);
-
-        bool getOrientation() const;
-        void swapOrientation();
-        ::basegfx::B2DRange getRange() const;
-
-        // isInside tests for B2dPoint and other B2DPolygonNode Polygon. On border is not inside as long as
-        // not true is given in bWithBorder flag.
-        bool isInside(const ::basegfx::B2DPoint& rPnt, bool bWithBorder = false) const;
-        bool isPolygonInside(B2DPolygonNode* pPoly, bool bWithBorder = false) const;
-    };
-
-    // a type definition to have a vector of pointers to B2DPolygonNodes
-    typedef ::std::vector< B2DPolygonNode* > B2DPolygonNodeVector;
-
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-// B2DSimpleCut class
-
-namespace basegfx
-{
-    class B2DSimpleCut
-    {
-        B2DPolygonNode*                         mpLeft;
-        B2DPolygonNode*                         mpRight;
-
-        // bitfield
-        unsigned                                mbCorrectOrientation : 1;
-        unsigned                                mbOrientation : 1;
-
-    public:
-        B2DSimpleCut(B2DPolygonNode* pL, B2DPolygonNode* pR, bool bCoOr = false, bool bOr = true)
-        :   mpLeft(pL),
-            mpRight(pR),
-            mbCorrectOrientation(bCoOr),
-            mbOrientation(bOr)
-        {
-        }
-
-        void solve();
-        B2DPolygonNode* getLeft() const { return mpLeft; }
-        B2DPolygonNode* getRight() const { return mpRight; }
-
-        bool isSameCut(B2DPolygonNode* pA, B2DPolygonNode* pB) const
-        {
-            return ((pA == mpLeft && pB == mpRight) || (pB == mpLeft && pA == mpRight));
-        }
-    };
-
-    // a type definition to have a vector of pointers to B2DSimpleCuts
-    typedef ::std::vector< B2DSimpleCut* > B2DSimpleCutVector;
-
-} // end of namespace basegfx
-
-//////////////////////////////////////////////////////////////////////////////
-// B2DClipExtraPolygonInfo class
-
-namespace basegfx
-{
-    class B2DClipExtraPolygonInfo
-    {
-        ::basegfx::B2DRange             maRange;
-        sal_Int32                               mnDepth;
-
-        // bitfield
-        unsigned                                mbOrientation : 1;
-
-    public:
-        B2DClipExtraPolygonInfo() {}
-
-        void init(B2DPolygonNode* pNew);
-        const ::basegfx::B2DRange& getRange() const { return maRange; }
-        bool getOrientation() const { return mbOrientation; }
-
-        sal_Int32 getDepth() const { return mnDepth; }
-        void changeDepth(bool bOrientation);
-    };
-} // end of namespace basegfx
 
 //////////////////////////////////////////////////////////////////////////////
 // class B2DPolyPolygonCutter
 
 namespace basegfx
 {
+    // predeclarations
+    class B2DPolygonNode;
+    class B2DSimpleCut;
+
+    // a type definition to have a vector of pointers to B2DPolygonNodes
+    typedef ::std::vector< B2DPolygonNode* > B2DPolygonNodeVector;
+
+    // a type definition to have a vector of pointers to B2DSimpleCuts
+    typedef ::std::vector< B2DSimpleCut* > B2DSimpleCutVector;
+
     class B2DPolyPolygonCutter
     {
         // list of polys
         B2DPolygonNodeVector                    maPolygonList;
-        B2DPolyPolygon                          maNotClosedPolygons;
 
         // help routines
-        bool isSamePos(const ::basegfx::B2DPoint& rPntA, const ::basegfx::B2DPoint& rPntB)
-        {
-            return rPntA.equal(rPntB);
-        }
-
         B2DSimpleCut* getExistingCut(B2DSimpleCutVector& rTmpCuts, B2DPolygonNode* pA, B2DPolygonNode* pB);
         B2DPolygonNode* extractNextPolygon(B2DPolygonNode*& rpList);
         bool isCrossover(B2DPolygonNode* pA, B2DPolygonNode* pB);
         bool isCrossover(B2DSimpleCut* pEnter, B2DSimpleCut* pLeave);
-
-        bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
-        {
-            return isSamePos(pA->getNext()->getPosition(), pB->getNext()->getPosition());
-        }
-
-        bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB)
-        {
-            return isSamePos(pA->getPrevious()->getPosition(), pB->getPrevious()->getPosition());
-        }
-
+        bool isNextSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB);
+        bool isPrevSamePos(B2DPolygonNode* pA, B2DPolygonNode* pB);
         void addAllNodes(B2DPolygonNode* pPolygon, B2DPolygonNode*& rpList);
-        B2DPolygonNode* createNewPolygon(const B2DPolygon& rPolygon);
+        B2DPolygonNode* createNewPolygon(const ::basegfx::B2DPolygon& rPolygon);
         void deletePolygon(B2DPolygonNode* pCand);
         void polysToList(B2DPolygonNode*& rpList);
         void listToPolys(B2DPolygonNode*& rpList);
-
-        bool doRangesIntersect(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
-        {
-            return rRange1.overlaps(rRange2);
-        }
-
-        bool doRangesInclude(const ::basegfx::B2DRange& rRange1, const ::basegfx::B2DRange& rRange2) const
-        {
-            return rRange1.isInside(rRange2);
-        }
-
         void solveAllCuts(B2DSimpleCutVector& rCuts);
 
     public:
@@ -252,15 +119,13 @@ namespace basegfx
         ~B2DPolyPolygonCutter();
 
         // put/get poly
-        void addPolyPolygon(const B2DPolyPolygon& rPolyPolygon, bool bForceOrientation = false);
-        void getPolyPolygon(B2DPolyPolygon& rPolyPolygon);
+        void addPolygon(const ::basegfx::B2DPolygon& rPolygon);
+        void addPolyPolygon(const ::basegfx::B2DPolyPolygon& rPolyPolygon);
+        ::basegfx::B2DPolyPolygon getPolyPolygon();
 
         // transformations
         void removeSelfIntersections();
         void removeDoubleIntersections();
-
-        // remove included
-        void removeIncludedPolygons(bool bUseOr = true);
     };
 } // end of namespace basegfx
 
