@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Returns the maximum value from all of the cells of a data range which correspond to the search criteria." ;
             Text[ chinese_simplified ] = "ÕÒ³öÊı¾İÇøÓòÖĞ·ûºÏËÑÑ°Ìõ¼şµÄµ¥Ôª¸ñµÄ×î´óÊıÖµ¡£";
             Text[ russian ] = "Îïğåäåëÿåò ìàêñèìàëüíîå çíà÷åíèå âñåõ ÿ÷ååê äèàïàçîíà äàííûõ, ñîäåğæèìîå êîòîğûõ ñîîòâåòñòâóåò êğèòåğèÿì ïîèñêà.";
-            Text[ polish ] = "Okreœla minimum wszystkich komórek obszaru danych, których zawartoœci odpowiadaj¹ kryteriom wyszukiwania.";
+            Text[ polish ] = "Okreœla maksimum wszystkich komórek obszaru danych, których zawartoœci odpowiadaj¹ kryteriom wyszukiwania.";
             Text[ japanese ] = "ÃŞ°À”ÍˆÍ“à‚ÅAŒŸõğŒ‚É‡‚Á‚½¾Ù‚ÌÅ‚’l‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "§ä¥X¼Æ¾Ú°Ï°ì¤¤²Å¦X´M§ä±ø¥óªºÀx¦s®æªº³Ì¤j¼Æ­È¡C";
             Text[ arabic ] = "ÊÍÏÏ ÇáÍÏ ÇáÃŞÕì áßá ÎáÇíÇ äØÇŞ ÈíÇäÇÊ ãÇ Êİí ãÍÊæíÇÊåÇ ÈãÚÇííÑ ÇáÈÍË.";
@@ -3459,12 +3459,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Date la plus ancienne pour la différence en jours." ;
             Text [ swedish ] = "Tidigare datum för dagsdifferensen." ;
             Text [ dutch ] = "Oudere datum ter bepaling van het aantal dagen." ;
-            Text [ spanish ] = "Es la fecha más vieja para calcular la diferencia de días." ;
+            Text [ spanish ] = "Fecha más vieja para calcular la diferencia de días." ;
             Text [ english_us ] = "The start date for calculating the difference in days." ;
             Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÈÕÆÚÏà²îÌìÊıÊ±½ÏÔçµÄÄÇ¸öÈÕÆÚ¡£";
             Text[ russian ] = "Íà÷àëüíàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå äíåé.";
             Text[ polish ] = "PóŸniejsza data dla okreœlania ró¿nicy w liczbie dni.";
-            Text[ japanese ] = "“ú”ŒvZ‚Ì‚½‚ß‚Ìn‚ß“ú•t";
+            Text[ japanese ] = "“ú”ŒvZ‚Ì‚½‚ß‚Ì‰‚ß“ú•t";
             Text[ chinese_traditional ] = "­pºâ¬Û®t¤Ñ¼Æªº¤@­Ó¸û¦­ªº¤é´Á¡C";
             Text[ arabic ] = "ÇáÊÇÑíÎ ÇáÃŞÏã ááİÇÑŞ Èíä ÚÏÏ ÇáÃíÇã.";
             Text[ dutch ] = "Oudere datum ter bepaling van het aantal dagen.";
@@ -3523,7 +3523,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Date la plus récente pour la différence en jours." ;
             Text [ swedish ] = "Senare datum för dagsdifferensen." ;
             Text [ dutch ] = "Jongere datum ter bepaling van het aantal dagen." ;
-            Text [ spanish ] = "Es la fecha más reciente para calcular la diferencia de días." ;
+            Text [ spanish ] = "Fecha más reciente para calcular la diferencia de días." ;
             Text [ english_us ] = "The end date for calculating the difference in days." ;
             Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÈÕÆÚÏà²îÌìÊıÊ±½ÏÍíµÄÄÇ¸öÈÕÆÚ¡£";
             Text[ russian ] = "Êîíå÷íàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå äíåé.";
@@ -3585,9 +3585,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ finnish ] = "Art der Differenzbildung. Art = 0 heißt US-Methode (NASD), Art = 1 heißt europäische Methode." ;
             Text [ danish ] = "Differensdannelsestype. Type=0 betyder US-metode (NASD), Type=1 betyder europæisk metode." ;
             Text [ french ] = "Le mode de calcul de la différence. Mode = 0 pour la méthode américaine (NASD), Mode = 1 pour la méthode européenne." ;
-            Text [ swedish ] = "Typ av differensbildning. Typ = 1 betyder den nordamerikanska metoden (NASD), typ = 0 betyder den europeiska metoden." ;
+            Text [ swedish ] = "Typ av differensbildning. Typ = 0 betyder den amerikanska metoden (NASD), typ = 1 betyder den europeiska metoden." ;
             Text [ dutch ] = "Wijze van bepaling van het aantal dagen. Methode = 0 betekent VS-methode (NASD), Methode = 1 betekent Europese methode." ;
-            Text [ spanish ] = "Es un valor lógico que especifica el método de cálculo europeo (0) o americano (1)." ;
+            Text [ spanish ] = "Método de cálculo de diferencia. Modo = 0 para el americano (NASD) y = 1 para el europeo." ;
             Text [ english_us ] = "Method used to form differences: Type = 0 denotes US method (NASD), Type = 1 denotes the European method." ;
             Text[ chinese_simplified ] = "¹¹³É²îÊıµÄ·½Ê½¡£type = 0 ±íÊ¾ÃÀ¹ú·½Ê½(NASD)£¬ \ntype = 1 ±íÊ¾Å·ÖŞ·½Ê½¡£";
             Text[ russian ] = "Îïğåäåëÿåò, êàêîé ìåòîä äîëæåí èñïîëüçîâàòüñÿ ïğè âû÷èñëåíèÿõ: Àìåğèêàíñêèé (1) èëè Åâğîïåéñêèé (0).";
@@ -4823,7 +4823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Date la plus récente pour la différence en jours." ;
             Text [ swedish ] = "Senare datum för dagsdifferensen." ;
             Text [ dutch ] = "Jongere datum ter bepaling van het aantal dagen." ;
-            Text [ spanish ] = "Es la fecha más reciente para calcular la diferencia de días." ;
+            Text [ spanish ] = "Fecha más reciente para calcular la diferencia de días." ;
             Text [ english_us ] = "The end date for calculating the difference in days." ;
             Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÈÕÆÚÏà²îÌìÊıÊ±½ÏÍíµÄÄÇ¸öÈÕÆÚ¡£";
             Text[ russian ] = "Êîíå÷íàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå äíåé.";
@@ -4887,7 +4887,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Date la plus ancienne pour la différence en jours." ;
             Text [ swedish ] = "Tidigare datum för dagsdifferensen." ;
             Text [ dutch ] = "Oudere datum ter bepaling van het aantal dagen." ;
-            Text [ spanish ] = "Es la fecha más vieja para calcular la diferencia de días." ;
+            Text [ spanish ] = "Fecha más vieja para calcular la diferencia de días." ;
             Text [ english_us ] = "The start date for calculating the difference in days." ;
             Text[ chinese_simplified ] = "¼ÆËãÁ½¸öÈÕÆÚÏà²îÌìÊıÊ±½ÏÔçµÄÄÇ¸öÈÕÆÚ¡£";
             Text[ russian ] = "Íà÷àëüíàÿ äàòà äëÿ îïğåäåëåíèÿ ğàçíèöû â êîëè÷åñòâå äíåé.";
@@ -5416,7 +5416,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "ÁÇ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "fv";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -6152,7 +6152,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "Áñ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "FV";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -6520,7 +6520,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "ÁÇ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "FV";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -6889,7 +6889,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "Áñ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "fv";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -7323,7 +7323,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "va" ;
             Text [ english_us ] = "pv" ;
             Text[ chinese_simplified ] = "pv";
-            Text[ russian ] = "Òñ";
+            Text[ russian ] = "Òç";
             Text[ polish ] = "PV";
             Text[ japanese ] = "Œ»İ‰¿’l";
             Text[ chinese_traditional ] = "pv";
@@ -7387,7 +7387,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "Áñ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "fv";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -7820,7 +7820,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "Vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "ÁÇ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "fv";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -11410,7 +11410,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "Vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "fv";
-            Text[ russian ] = "ÁÇ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "FV";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "fv";
@@ -11642,7 +11642,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "vf" ;
             Text [ english_us ] = "fv" ;
             Text[ chinese_simplified ] = "FV";
-            Text[ russian ] = "Áñ";
+            Text[ russian ] = "Áç";
             Text[ polish ] = "FV";
             Text[ japanese ] = "«—ˆ‰¿’l";
             Text[ chinese_traditional ] = "FV";
@@ -13319,7 +13319,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Returns the logical value TRUE." ;
             Text[ chinese_simplified ] = "Éè¶¨Âß¼­Öµ TRUE ¡£";
             Text[ russian ] = "Âîçâğàùàåò ëîãè÷åñêîå çíà÷åíèå ÈÑÒÈÍÀ.";
-            Text[ polish ] = "Zwraca wartoœæ logiczn¹ FA£SZ.";
+            Text[ polish ] = "Zwraca wartoœæ logiczn¹ PRAWDA.";
             Text[ japanese ] = "˜_—’l TRUE ‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "ªğ¦^ÅŞ¿è¼Æ­È TRUE ¡C";
             Text[ arabic ] = "ÊÚíä ÇáŞíãÉ ÇáãäØŞíÉ TRUE.";
@@ -14988,7 +14988,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -16667,7 +16667,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -16885,7 +16885,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -17102,7 +17102,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -17318,7 +17318,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -17817,7 +17817,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -17924,7 +17924,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18099,7 +18099,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18208,7 +18208,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18317,7 +18317,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18595,7 +18595,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18874,7 +18874,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -18980,7 +18980,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -19150,7 +19150,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -19320,7 +19320,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -19490,7 +19490,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -19661,7 +19661,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -19768,7 +19768,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -20098,7 +20098,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -20848,7 +20848,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese ] = "é uma matriz numérica com um número igual de linhas e colunas." ;
             Text [ finnish ] = "Die Matrix, deren Determinante bestimmt wird." ;
             Text [ danish ] = "Den matrix determinanten skal bestemmes for." ;
-            Text [ french ] = "La matrice dont vous souhaitez calculer la déterminante." ;
+            Text [ french ] = "La matrice dont vous souhaitez calculer le déterminant." ;
             Text [ swedish ] = "Matris vars determinant bestäms." ;
             Text [ dutch ] = "De matrix waarvan de determinant wordt berekend." ;
             Text [ spanish ] = "Es una matriz numérica con el mismo número de filas y columnas." ;
@@ -20954,7 +20954,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ portuguese ] = "é a matriz que será invertida." ;
             Text [ finnish ] = "Die Matrix, die invertiert wird." ;
             Text [ danish ] = "Den matrix som skal inverteres." ;
-            Text [ french ] = "La matrice à invertir." ;
+            Text [ french ] = "La matrice à inverser." ;
             Text [ swedish ] = "Matrisen som inverteras." ;
             Text [ dutch ] = "De matrix waarvan de inverse wordt berekend." ;
             Text [ spanish ] = "La matriz que será invertida." ;
@@ -21924,7 +21924,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -21988,7 +21988,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -22052,7 +22052,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Geraden" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Geraden" ;
-            Text [ italian ] = "tipo_rette" ;
+            Text [ italian ] = "Tipo_rette" ;
             Text [ portuguese_brazilian ] = "Art der Geraden" ;
             Text [ portuguese ] = "Tipo_de_rectas" ;
             Text [ finnish ] = "Art der Geraden" ;
@@ -22089,7 +22089,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese ] = "é um valor lógico que determina se a constante b deve ser igual a 0." ;
             Text [ finnish ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ danish ] = "Er Konstant=0 går konstanten gennem nulpunktet, ellers beregnes konstanten på normal vis." ;
-            Text [ french ] = "Calcule les droites par le point zéro si Type = 0 ; sinon droites déplacées." ;
+            Text [ french ] = "Calcule les droites par le point zéro si Type = 0 ; sinon droites décalées." ;
             Text [ swedish ] = "Om typ=0 beräknas linjer genom nollpunkten, annars även förflyttade linjer." ;
             Text [ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend; verschoven lijnen zijn ook mogelijk." ;
             Text [ spanish ] = "es un valor lógico que especifica si la constante b debe ser igual a 0." ;
@@ -22225,7 +22225,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -22289,7 +22289,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -22487,7 +22487,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Berechnet Punkte auf der Regressiongeraden." ;
             Text [ english ] = "Returns values along a linear trend." ;
             Text [ norwegian ] = "Berechnet Punkte auf der Regressiongeraden." ;
-            Text [ italian ] = "Restituisce i valori di una tendenza lineare." ;
+            Text [ italian ] = "Calcola i punti di una retta di regressione." ;
             Text [ portuguese_brazilian ] = "Berechnet Punkte auf der Regressiongeraden." ;
             Text [ portuguese ] = "Devolve os valores de uma tendência linear." ;
             Text [ finnish ] = "Berechnet Punkte auf der Regressiongeraden." ;
@@ -22525,7 +22525,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -22557,7 +22557,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der Y-Daten." ;
             Text [ english ] = "is the set of y-values you already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der Y-Daten." ;
-            Text [ italian ] = "La matrice dei dati X" ;
+            Text [ italian ] = "È la matrice dei dati y." ;
             Text [ portuguese_brazilian ] = "Die Matrix der Y-Daten." ;
             Text [ portuguese ] = "é o conjunto de valores já conhecidos na relação y = mx + b." ;
             Text [ finnish ] = "Die Matrix der Y-Daten." ;
@@ -22589,7 +22589,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -22621,7 +22621,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ english ] = "is an optional set of x-values that you may already know in the relationship y = mx + b." ;
             Text [ norwegian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
-            Text [ italian ] = "è un insieme facoltativo di valori x che possono essere già noti dalla relazione y = mx + b." ;
+            Text [ italian ] = "È la matrice dei dati x come base per la regressione." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
             Text [ portuguese ] = "é um conjunto facultativo de valores x  já conhecidos na relação y = mx + b." ;
             Text [ finnish ] = "Die Matrix der X-Daten als Grundlage zur Regression." ;
@@ -22653,7 +22653,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Neue_Daten_X" ;
             Text [ english ] = "new_x's" ;
             Text [ norwegian ] = "Neue Daten X" ;
-            Text [ italian ] = "nuovi_dati_x" ;
+            Text [ italian ] = "Nuovi_dati_x" ;
             Text [ portuguese_brazilian ] = "Neue Daten X" ;
             Text [ portuguese ] = "Novos_dados_X" ;
             Text [ finnish ] = "Neue Daten X" ;
@@ -22685,7 +22685,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ english ] = "are new x-values for which you want TREND to return corresponding y-values." ;
             Text [ norwegian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
-            Text [ italian ] = "La matrice dei dati X per il ricalcolo di valori." ;
+            Text [ italian ] = "È la matrice dei dati x per il ricalcolo dei valori." ;
             Text [ portuguese_brazilian ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
             Text [ portuguese ] = "são novos valores de x para os quais deseja que TENDÊNCIA devolva valores de y correspondentes." ;
             Text [ finnish ] = "Die Matrix der X-Daten zur Neuberechnung von Werten." ;
@@ -22717,7 +22717,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Art_der_Geraden" ;
             Text [ english ] = "const" ;
             Text [ norwegian ] = "Art der Geraden" ;
-            Text [ italian ] = "tipo_rette" ;
+            Text [ italian ] = "Tipo_rette" ;
             Text [ portuguese_brazilian ] = "Art der Geraden" ;
             Text [ portuguese ] = "Tipo_de_rectas" ;
             Text [ finnish ] = "Art der Geraden" ;
@@ -22749,12 +22749,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ english ] = "is a logical value specifying whether to force the constant b to equal 0." ;
             Text [ norwegian ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
-            Text [ italian ] = "è un valore logico che specifica se la costante b deve essere uguale a 0." ;
+            Text [ italian ] = "Se Tipo =0 le rette vengono calcolate attraverso lo zero; altrimenti anche le rette spostate." ;
             Text [ portuguese_brazilian ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ portuguese ] = "é um valor lógico que determina se a constante b deve ser igual a 0 ou não." ;
             Text [ finnish ] = "Ist Art=0, so werden Geraden durch den Nullpunkt berechnet, sonst auch verschobene Geraden." ;
             Text [ danish ] = "Er Konstant=0 går konstanten gennem nulpunktet, ellers beregnes konstanten på normal vis." ;
-            Text [ french ] = "Calcule les droites par le point zéro si Type = 0 ; sinon droites déplacées." ;
+            Text [ french ] = "Calcule les droites par le point zéro si Type = 0 ; sinon droites décalées." ;
             Text [ swedish ] = "Om typ=0 beräknas linjer genom nollpunkten, annars även flyttade linjer." ;
             Text [ dutch ] = "Indien type=0 dan worden de lijnen door het nulpunt berekend. Ook verschoven lijnen zijn mogelijk." ;
             Text [ spanish ] = "es un valor lógico qque especifica si la constante debe ser igual a 0." ;
@@ -22790,7 +22790,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese ] = "Devolve os valores de Y em função de uma curva exponencial." ;
             Text [ finnish ] = "Berechnet Punkte auf der exponentiellen Regressionsfunktion." ;
             Text [ danish ] = "Beregner prognosticeret eksponentiel vækst og returnerer tilsvarende værdier." ;
-            Text [ french ] = "Calcule des points sur la fonction de regression exponentielle." ;
+            Text [ french ] = "Calcule des points de la fonction de regression exponentielle." ;
             Text [ swedish ] = "Beräknar punkter på den exponentiella regressionsfunktionen." ;
             Text [ dutch ] = "Berekent de waarden voor een exponentiële trend." ;
             Text [ spanish ] = "Devuelve los valores a lo largo de una curva exponencial." ;
@@ -22823,7 +22823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -22887,7 +22887,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -22951,7 +22951,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Neue_Daten_X" ;
             Text [ english ] = "new_x's" ;
             Text [ norwegian ] = "Neue Daten X" ;
-            Text [ italian ] = "nuovi_dati_x" ;
+            Text [ italian ] = "Nuovi_dati_x" ;
             Text [ portuguese_brazilian ] = "Neue Daten X" ;
             Text [ portuguese ] = "Novos_valores_X" ;
             Text [ finnish ] = "Neue Daten X" ;
@@ -25205,7 +25205,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "Returns the harmonic mean of a sample." ;
             Text[ chinese_simplified ] = "¼ÆËãÒ»¸ö³éÑùµÄµ÷ºÍÆ½¾ùÖµ¡£";
             Text[ russian ] = "Âîçâğàùàåò ãàğìîíè÷åñêîå ñğåäíåå íàáîğà äàííûõ.";
-            Text[ polish ] = "Oblicz¹ œredni¹ harmoniczn¹ zbioru danych.";
+            Text[ polish ] = "Oblicza wyrywczo œredni¹ harmoniczn¹.";
             Text[ japanese ] = "1‘g‚Ì”’l‚Ì’²˜a•½‹Ï‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "­pºâ¤@­Ó©â¼Ëªº½Õ©M¥­§¡­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÇáãÚÏá ÇáÊæÇİŞí áÚíäÉ.";
@@ -26405,7 +26405,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Wert" ;
@@ -28339,7 +28339,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "Border arguments of the binomial distribution." ;
             Text[ chinese_simplified ] = "¶şÏîÊ½·Ö²¼µÄ×îĞ¡Öµ¡£";
             Text[ russian ] = "Âîçâğàùàåò íàèìåíüøåå çíà÷åíèå, äëÿ êîòîğîãî áèíîìèàëüíàÿ ôóíêöèÿ ğàñïğåäåëíèÿ áîëüøå èëè ğàâíà çàäàííãî çíà÷åíèÿ.";
-            Text[ polish ] = "Podaje najmniejsz¹ wartoœæ, dla której ³¹czny rozk³ad dwumianowy jest wiêkszy lub równy wartoœci kryterialnej.";
+            Text[ polish ] = "Podaje najmniejsz¹ wartoœæ, dla której ³¹czny rozk³ad dwumianowy jest wiêkszy lub równy progowej.";
             Text[ japanese ] = "“ñ€•ª•z‚Ì’l‚ªŠî€’lˆÈã‚É‚È‚é‚æ‚¤‚ÈÅ¬‚Ì’l‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "¤G¶µ¦¡¤À§Gªº³Ì¤p­È¡C";
             Text[ arabic ] = "ÇáæÓÇÆØ ÇáÍÏæÏíÉ ááÊæÒíÚ Ğí ÇáÍÏíä.";
@@ -34682,7 +34682,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "dati_1" ;
+            Text [ italian ] = "Dati_1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Daten 1" ;
@@ -34726,7 +34726,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "The first record array." ;
             Text[ chinese_simplified ] = "µÚÒ»¸öÊı¾İ×é¡£";
             Text[ russian ] = "Ïåğâûé ìàññèâ èëè äèàïàçîí äàííûõ.";
-            Text[ polish ] = "Macierz pierwszego zbioru danych.";
+            Text[ polish ] = "Macierz pierwszego rekordu.";
             Text[ japanese ] = "•ªÍ‚·‚é1‚Â–Ú‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤@­Ó¼Æ¾Ú²Õ¡C";
             Text[ arabic ] = "ÇáÕİíİ Ãæ ÇáäØÇŞ ÇáÃæá ãä ÇáÈíÇäÇÊ.";
@@ -34746,7 +34746,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "dati_2" ;
+            Text [ italian ] = "Dati_2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Daten 2" ;
@@ -34852,7 +34852,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "dati_1" ;
+            Text [ italian ] = "Dati_1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Daten 1" ;
@@ -34896,7 +34896,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "The first record array." ;
             Text[ chinese_simplified ] = "µÚÒ»¸öÊı¾İ×é¡£";
             Text[ russian ] = "Ìàññèâ ïåğâîãî ìíîæåñòâà äàííûõ.";
-            Text[ polish ] = "Macierz pierwszego zbioru danych.";
+            Text[ polish ] = "Macierz pierwszego rekordu.";
             Text[ japanese ] = "ˆê•û‚Ì‘g‚ÌÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍ¡";
             Text[ chinese_traditional ] = "²Ä¤@­Ó¼Æ¾Ú²Õ¡C";
             Text[ arabic ] = "ãÌãæÚÉ ÇáÈíÇäÇÊ ÇáÃæáì.";
@@ -34916,7 +34916,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "dati_2" ;
+            Text [ italian ] = "Dati_2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Daten 2" ;
@@ -35150,7 +35150,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -35214,7 +35214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -35320,7 +35320,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -35384,7 +35384,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -35490,7 +35490,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -35554,7 +35554,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -35660,7 +35660,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -35724,7 +35724,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -35830,7 +35830,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "dati_1" ;
+            Text [ italian ] = "Dati_1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Daten 1" ;
@@ -35894,7 +35894,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "dati_2" ;
+            Text [ italian ] = "Dati_2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Daten 2" ;
@@ -36000,7 +36000,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "dati_1" ;
+            Text [ italian ] = "Dati_1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Daten 1" ;
@@ -36044,7 +36044,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "The first record array." ;
             Text[ chinese_simplified ] = "µÚÒ»×éÊı¾İµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Ïåğâûé äèàïàçîí çíà÷åíèé.";
-            Text[ polish ] = "Macierz pierwszego zbioru danych.";
+            Text[ polish ] = "Macierz pierwszego rekordu.";
             Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚½1‚Â–Ú‚Ì”z—ñB";
             Text[ chinese_traditional ] = "²Ä¤@²Õ¼Æ¾ÚÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáÃæá.";
@@ -36064,7 +36064,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "dati_2" ;
+            Text [ italian ] = "Dati_2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Daten 2" ;
@@ -36170,7 +36170,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_1" ;
             Text [ english ] = "array 1" ;
             Text [ norwegian ] = "Daten 1" ;
-            Text [ italian ] = "dati_1" ;
+            Text [ italian ] = "Dati_1" ;
             Text [ portuguese_brazilian ] = "Daten 1" ;
             Text [ portuguese ] = "Dados_1" ;
             Text [ finnish ] = "Daten 1" ;
@@ -36214,7 +36214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "The first record array." ;
             Text[ chinese_simplified ] = "µÚÒ»¸öÊı¾İ×éµÄµ¥Ôª¸ñÇøÓò¡£";
             Text[ russian ] = "Ïåğâûé äèàïàçîí ÿ÷ååê öåëûõ ÷èñåë.";
-            Text[ polish ] = "Macierz pierwszego zbioru danych.";
+            Text[ polish ] = "Macierz pierwszego rekordu.";
             Text[ japanese ] = "ÃŞ°À‚ª“ü—Í‚³‚ê‚Ä‚¢‚é1‚Â–Ú‚Ì¾Ù”ÍˆÍB";
             Text[ chinese_traditional ] = "²Ä¤@­Ó¼Æ¾Ú²ÕªºÀx¦s®æ°Ï°ì¡C";
             Text[ arabic ] = "ãÕİæİÉ ÇáÓÌá ÇáÃæá.";
@@ -36234,7 +36234,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_2" ;
             Text [ english ] = "array 2" ;
             Text [ norwegian ] = "Daten 2" ;
-            Text [ italian ] = "dati_2" ;
+            Text [ italian ] = "Dati_2" ;
             Text [ portuguese_brazilian ] = "Daten 2" ;
             Text [ portuguese ] = "Dados_2" ;
             Text [ finnish ] = "Daten 2" ;
@@ -36340,7 +36340,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "x" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor_X" ;
             Text [ finnish ] = "Wert" ;
@@ -36404,7 +36404,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_Y" ;
             Text [ english ] = "known_y's" ;
             Text [ norwegian ] = "Daten Y" ;
-            Text [ italian ] = "dati_y" ;
+            Text [ italian ] = "Dati_y" ;
             Text [ portuguese_brazilian ] = "Daten Y" ;
             Text [ portuguese ] = "Dados_Y" ;
             Text [ finnish ] = "Daten Y" ;
@@ -36468,7 +36468,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Daten_X" ;
             Text [ english ] = "known_x's" ;
             Text [ norwegian ] = "Daten X" ;
-            Text [ italian ] = "dati_x" ;
+            Text [ italian ] = "Dati_x" ;
             Text [ portuguese_brazilian ] = "Daten X" ;
             Text [ portuguese ] = "Dados_X" ;
             Text [ finnish ] = "Daten X" ;
@@ -36990,14 +36990,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Index" ;
             Text [ spanish ] = "índice" ;
             Text [ english_us ] = "Index" ;
-            Text[ chinese_simplified ] = "index_num";
+            Text[ chinese_simplified ] = "index";
             Text[ russian ] = "Íîìåğ_èíäåêñà";
             Text[ polish ] = "Indeks";
             Text[ japanese ] = "²İÃŞ¯¸½";
-            Text[ chinese_traditional ] = "index_num";
+            Text[ chinese_traditional ] = "index";
             Text[ arabic ] = "Index_num";
             Text[ dutch ] = "Index";
-            Text[ chinese_simplified ] = "index_num";
+            Text[ chinese_simplified ] = "index";
             Text[ greek ] = "ÅõñåôŞñéï";
             Text[ korean ] = "»öÀÎ";
             Text[ turkish ] = "İndis";
@@ -37023,16 +37023,16 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "De index van de gekozen waarde (1..30)." ;
             Text [ spanish ] = "especifica el argumento de valor que se selecciona." ;
             Text [ english_us ] = "The index of the value (1..30) selected." ;
-            Text[ chinese_simplified ] = "Ñ¡ÔñµÄÊı¾İ (1..30) µÄË÷Òı¡£";
+            Text[ chinese_simplified ] = "ÒªÑ¡ÔñÊıÖµ1ÖÁ30¸öµÄË÷Òı¡£";
             Text[ russian ] = "Çàäàíèå âûáèğàåìîãî çíà÷åíèÿ-àğãóìåíòà â äèàïàçîíå îò 1 äî 30.";
             Text[ polish ] = "Okreœla, które wartoœci argumentu (1..30) zostan¹ wybrane.";
             Text[ japanese ] = "‘I‘ğ‚µ‚½’l(1`30)‚Ì²İÃŞ¯¸½B";
-            Text[ chinese_traditional ] = "¿ï¾Üªº¼Æ¾Ú (1..30) ªº¯Á¤Ş¡C";
+            Text[ chinese_traditional ] = "­n¿ï¾Üªº¼Æ­È1¦Ü30ªº¯Á¤Ş¡C";
             Text[ arabic ] = "ÊÍÏíÏ æÓíØÉ ÇáŞíãÉ ÇáãÑÇÏ ÇÎÊíÇÑåÇ.";
             Text[ dutch ] = "De index van de gekozen waarde (1..30).";
-            Text[ chinese_simplified ] = "Ñ¡ÔñµÄÊı¾İ (1..30) µÄË÷Òı¡£";
+            Text[ chinese_simplified ] = "ÒªÑ¡ÔñÊıÖµ1ÖÁ30¸öµÄË÷Òı¡£";
             Text[ greek ] = "Ôï åõñåôŞñéï ôçò ôéìŞò (1..30) ôï ïğïßï åğéëİ÷èçêå.";
-            Text[ korean ] = "°ªÀÇ »öÀÎ (1..30)ÀÌ ¼±ÅÃµÇ¾ú½À´Ï´Ù.";
+            Text[ korean ] = "The index of the value (1..30) selected.";
             Text[ turkish ] = "Seçilen değerin (1..30) indisi.";
             Text[ language_user1 ] = " ";
         };
@@ -37725,14 +37725,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Horizontaal zoeken en verwijzen naar de zich daaronder bevindende cellen." ;
             Text [ spanish ] = "Busca por filas y devuelve el valor de la celda indicada." ;
             Text [ english_us ] = "Horizontal search and reference to the cells located below." ;
-            Text[ chinese_simplified ] = "Ë®Æ½ËÑÑ°¸÷¸öµ¥Ôª¸ñ²¢²ÎÔÄÆäÏÂ·½µÄµ¥Ôª¸ñ¡£";
+            Text[ chinese_simplified ] = "Ë®Æ½·½ÏòËÑÑ°Ä³¸öµ¥Ôª¸ñ²¢ÒıÓÃÆäÏÂ·½µÄµ¥Ôª¸ñ¡£";
             Text[ russian ] = "Ïîèñê ïî ñòğîêàì è ññûëêà íà ÿ÷åéêè, íàõîäÿùèåñÿ ñíèçó.";
             Text[ polish ] = "Wyszukiwanie poziome i odsy³acz do komórek powy¿ej i poni¿ej.";
             Text[ japanese ] = "s‚²‚Æ‚ÉŒŸõ‚µAw’è‚µ‚½s‚Ì¾ÙQÆ‚ğã’[‚Æ‚µ‚Ä‰º‚ğŒŸõ‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "¤ô¥­¤W¤U´M§ä¦U­ÓÀx¦s®æ¨Ã¶Ç¦^­n¬d§äªºÀx¦s®æ¡C";
+            Text[ chinese_traditional ] = "¤ô¥­¤è¦V´M§ä¬Y¤@Àx¦s®æ¨Ã¤Ş¥Î¨ä¤U¤èªºÀx¦s®æ¡C";
             Text[ arabic ] = "ÈÍË ÃİŞí æÅÔÇÑÉ Åáì ÇáÎáÇíÇ ÇáãæÌæÏÉ ÈÇáÃÓİá.";
             Text[ dutch ] = "Horizontaal zoeken en verwijzen naar de zich daaronder bevindende cellen.";
-            Text[ chinese_simplified ] = "Ë®Æ½ËÑÑ°¸÷¸öµ¥Ôª¸ñ²¢²ÎÔÄÆäÏÂ·½µÄµ¥Ôª¸ñ¡£";
+            Text[ chinese_simplified ] = "Ë®Æ½·½ÏòËÑÑ°Ä³¸öµ¥Ôª¸ñ²¢ÒıÓÃÆäÏÂ·½µÄµ¥Ôª¸ñ¡£";
             Text[ greek ] = "Ïñéæüíôéá áíáæŞôçóç êáé áíáöïñÜ óå ğáñáêÜôù ôïğïèåôçìİíá êåëéÜ.";
             Text[ korean ] = "±× ¾Æ·¡ À§Ä¡ÇÑ ¼¿¿¡ ´ëÇÑ ¼öÆò °Ë»ö°ú  ÂüÁ¶ÀÔ´Ï´Ù.";
             Text[ turkish ] = "Altında bulunan hücrelere yatay referans ve arama.";
@@ -37892,14 +37892,14 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ dutch ] = "Index" ;
             Text [ spanish ] = "Índice" ;
             Text [ english_us ] = "Index" ;
-            Text[ chinese_simplified ] = "row_index_num";
+            Text[ chinese_simplified ] = "Index";
             Text[ russian ] = "Íîìåğ_ñòğîêè";
             Text[ polish ] = "Indeks";
             Text[ japanese ] = "s”Ô†";
-            Text[ chinese_traditional ] = "row_index_num";
+            Text[ chinese_traditional ] = "Index";
             Text[ arabic ] = "Row_index_num";
             Text[ dutch ] = "Index";
-            Text[ chinese_simplified ] = "row_index_num";
+            Text[ chinese_simplified ] = "Index";
             Text[ greek ] = "ÅõñåôŞñéï";
             Text[ korean ] = "»öÀÎ";
             Text[ turkish ] = "İndis";
@@ -38219,7 +38219,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese ] = "é o número da coluna numa matriz_tabela da qual se devolve o valor correspondente." ;
             Text [ finnish ] = "Spaltenindex in der Matrix." ;
             Text [ danish ] = "Kolonneindeks i matrixen." ;
-            Text [ french ] = "L'indice de colonnes dans la matrice." ;
+            Text [ french ] = "L'indice de la colonne dans la matrice." ;
             Text [ swedish ] = "Kolumnindex i matrisen." ;
             Text [ dutch ] = "Kolommenindex in de matrix" ;
             Text [ spanish ] = "es el número de columna de matriz_buscar_en desde la cual debe devolverse el valor coincidente." ;
@@ -38320,7 +38320,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese ] = "Utiliza um índice para seleccionar um valor de uma referência ou matriz." ;
             Text [ finnish ] = "Bestimmt einen Bezug auf eine Zelle aus einem angegebenen Bereich." ;
             Text [ danish ] = "Bestemmer en reference til en celle fra et angivet område." ;
-            Text [ french ] = "Détermine une référence à une cellule de la plage indiquée." ;
+            Text [ french ] = "Détermine la référence à une cellule de la plage indiquée." ;
             Text [ swedish ] = "Bestämmer en referens till en cell från ett angivet område." ;
             Text [ dutch ] = "Definieert een verwijzing naar een cel uit een aangegeven bereik." ;
             Text [ spanish ] = "Devuelve una referencia a una celda o a varias celdas determinada dentro del argumento ref." ;
@@ -38688,7 +38688,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ portuguese ] = "é a referência a uma célula que contém uma referência ou um nome definido como referência (por ex. \"A1\")." ;
             Text [ finnish ] = "Die Zelle, deren Inhalt ausgewertet werden soll als Bezug in Textform (z.B. \"A1\")." ;
             Text [ danish ] = "Den celle hvis indhold skal fortolkes som reference i tekstform (fx \"A1\")." ;
-            Text [ french ] = "Une cellule dont le contenu doit être interprété comme référence sous forme de texte (par ex. \"A1\")." ;
+            Text [ french ] = "Une cellule indiquée comme référence sous forme de texte (par ex. \"A1\") et dont le contenu doit être interprété." ;
             Text [ swedish ] = "Cellen vars innehåll skall utvärderas som referens i textform ( t. ex. \"A1\")." ;
             Text [ dutch ] = "De cel waarvan de inhoud moet worden geïnterpreteerd als een verwijzing in de vorm van tekst (bijv. \"A1\")." ;
             Text [ spanish ] = "es una referencia a una celda, cuyo contenido se desea comprobar y que contiene una referencia en forma de texto (por ej. \"A1\")." ;
@@ -38965,7 +38965,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "Defines a position in a matrix after a comparison of values." ;
             Text[ chinese_simplified ] = "Í¨¹ıÊıÖµ±È½ÏÀ´È·¶¨Êı¾İÔÚÊı¾İ×éÖĞµÄÎ»ÖÃ¡£";
             Text[ russian ] = "Îïğåäåëÿåò ïóòåì ñğàâíåíèÿ çíà÷åíèé ïîçèöèş â ìàññèâå.";
-            Text[ polish ] = "Okreœla pozycjê w matrycy bazuj¹c na porównaniu wartoœci.";
+            Text[ polish ] = "Okreœla pozycjê w macierzy porównuj¹c wartoœæ";
             Text[ japanese ] = "w’è‚³‚ê‚½Æ‡‚ÌŒ^‚É]‚Á‚Ä ŒŸ¸”ÍˆÍ“à‚ğŒŸõ‚µAŒŸ¸’l‚Æˆê’v‚·‚é—v‘f‚Ì‘Š‘Î“I‚ÈˆÊ’u‚ğ•\\‚·”’l‚ğ•Ô‚µ‚Ü‚·B";
             Text[ chinese_traditional ] = "³q¹L¼Æ­È¤ñ¸û¨Ó½T©w¼Æ¾Ú¦b¼Æ¾Ú²Õ¤¤ªº¦ì¸m¡C";
             Text[ arabic ] = "ÊÍÏÏ ãæÖÚ ãÇ İí ÇáãÕİæİÉ Úáì ÃÓÇÓ ãŞÇÑäÉ ÇáŞíã.";
@@ -40327,7 +40327,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "Wert" ;
@@ -40498,7 +40498,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -41999,7 +41999,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -42169,7 +42169,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Wert" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Wert" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Wert" ;
             Text [ portuguese ] = "Valor" ;
             Text [ finnish ] = "Wert" ;
@@ -42574,7 +42574,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text = "Zahl" ;
             Text [ english ] = "number" ;
             Text [ norwegian ] = "Zahl" ;
-            Text [ italian ] = "num" ;
+            Text [ italian ] = "Num" ;
             Text [ portuguese_brazilian ] = "Zahl" ;
             Text [ portuguese ] = "Número" ;
             Text [ finnish ] = "Zahl" ;
@@ -42708,7 +42708,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "T" ;
             Text [ danish ] = "T" ;
             Text [ french ] = "S" ;
-            Text [ swedish ] = "tusentalsavgränsare" ;
+            Text [ swedish ] = "T" ;
             Text [ dutch ] = "D" ;
             Text [ spanish ] = "no_separar_millares" ;
             Text [ english_us ] = "T" ;
@@ -42960,7 +42960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "The text where the initial partial words are to be determined." ;
             Text[ chinese_simplified ] = "ÒªÈ·¶¨Æä¿ª¶Ë²¿·ÖµÄ×Ö´®¡£";
             Text[ russian ] = "Òåêñòîâàÿ ñòğîêà, èç êîòîğîé ñëåäóåò èçâëå÷ü ñîäåğæàùèåñÿ â íåé ñèìâîëû íåïîëíîãî ñëîâà.";
-            Text[ polish ] = "Tekst, w którego okreœlany bêdzie pocz¹tkowy znak.";
+            Text[ polish ] = "Tekst, w którym okreœlany bêdzie pocz¹tkowy znak.";
             Text[ japanese ] = "æ‚èo‚·•¶š‚ğŠÜ‚Ş•¶š—ñB";
             Text[ chinese_traditional ] = "­n½T©w¨ä¶}ºİ³¡¥÷ªº¦r¦ê¡C";
             Text[ arabic ] = "ÇáÓáÓáÉ ÇáäÕíÉ ÇáÊí ÊÍÊæí Úáì ÇáÃÍÑİ ÇáãÑÇÏ ÇÓÊÎÑÇÌåÇ.";
