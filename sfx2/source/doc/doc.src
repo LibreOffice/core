@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-12 20:48:27 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1605,7 +1605,7 @@ String RID_OFFICEFILTER
     Text [ portuguese_brazilian ] = "%PRODUCTNAME Dokumente" ;
     Text [ portuguese ] = "Documentos %PRODUCTNAME" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME ж–‡жЎЈ";
-    Text[ russian ] = "%PRODUCTNAME - Документы";
+    Text[ russian ] = "Документы %PRODUCTNAME";
     Text[ polish ] = "%PRODUCTNAME - Dokumenty";
     Text[ japanese ] = "%PRODUCTNAMEпѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„";
     Text[ chinese_traditional ] = "%PRODUCTNAME ж–‡д»¶";
@@ -1702,7 +1702,7 @@ String STR_FSET_FILTERNAME1
     Text [ dutch ] = "%PRODUCTNAME Frame-document" ;
     Text [ portuguese ] = "Documento %PRODUCTNAME Frame" ;
     Text[ chinese_simplified ] = "%PRODUCTNAME жЎ†еЇ№и±Ўж–‡жЎЈ";
-    Text[ russian ] = "%PRODUCTNAME Frame - Документ";
+    Text[ russian ] = "Документ %PRODUCTNAME Frame";
     Text[ polish ] = "%PRODUCTNAME Frame - Dokument";
     Text[ japanese ] = "%PRODUCTNAME Frame пѕ„пѕћпЅ·пЅ­пѕ’пѕќпѕ„";
     Text[ chinese_traditional ] = "%PRODUCTNAME иЁЉжЎ†ж–‡д»¶";
@@ -2152,6 +2152,7 @@ String STR_OPENOBJECT
 };
 
 // ******************************************************************* EOF
+
 
 
 
