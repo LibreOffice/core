@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:22:59 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2471,7 +2471,7 @@ TabPage RID_PRINTOPTIONPAGE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Text = "Optionen Formel:Einstellungen" ;
     Text[ english_us ] = "Formula Options:Settings";
     Text[ portuguese ] = "Opções de fórmulas: configuração";
@@ -2492,10 +2492,10 @@ TabPage RID_PRINTOPTIONPAGE
     Text[ korean ] = "¼ö½Ä ¿É¼Ç: ¼³Á¤";
     Text[ turkish ] = "Formül seçenekleri: Ayarlar";
     Text[ language_user1 ] = " ";
-    GroupBox GB_PRINTOPTIONS
+    FixedLine GB_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 53 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Druck Optionen" ;
         Text[ english_us ] = "Print options";
         Text[ portuguese ] = "Opções de impressão";
@@ -2598,10 +2598,10 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ turkish ] = "Çerçeve";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GB_PRINT_FORMAT
+    FixedLine GB_PRINT_FORMAT
     {
-        Pos = MAP_APPFONT ( 92 , 3 ) ;
-        Size = MAP_APPFONT ( 162 , 53 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Druckformat" ;
         Text [ ENGLISH ] = "Print format" ;
         Text [ norwegian ] = "Print format" ;
@@ -2629,9 +2629,8 @@ TabPage RID_PRINTOPTIONPAGE
     RadioButton RB_ORIGINAL_SIZE
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 98 , 14 ) ;
+        Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Originalgröße : ~Originalgröße */
         Text = "~Originalgröße" ;
         Text [ ENGLISH ] = "~Originale size" ;
         Text [ norwegian ] = "~Originale size" ;
@@ -2659,7 +2658,7 @@ TabPage RID_PRINTOPTIONPAGE
     RadioButton RB_FIT_TO_PAGE
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 98 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "~Seite anpassen" ;
         Text [ ENGLISH ] = "~Fit to Page" ;
@@ -2687,7 +2686,7 @@ TabPage RID_PRINTOPTIONPAGE
     };
     RadioButton RB_ZOOM
     {
-        Pos = MAP_APPFONT ( 98 , 42 ) ;
+        Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "S~kalierung" ;
         Text [ ENGLISH ] = "~Scaling" ;
@@ -2717,7 +2716,7 @@ TabPage RID_PRINTOPTIONPAGE
     MetricField MF_ZOOM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 218 , 41 ) ;
+        Pos = MAP_APPFONT ( 18 , 111 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -2728,10 +2727,10 @@ TabPage RID_PRINTOPTIONPAGE
         Unit = FUNIT_CUSTOM ;
         CustomUnitText = "%" ;
     };
-    GroupBox GB_MISC_OPTIONS
+    FixedLine GB_MISC_OPTIONS
     {
-        Pos = MAP_APPFONT ( 6 , 59 ) ;
-        Size = MAP_APPFONT ( 248 , 24 ) ;
+        Pos = MAP_APPFONT ( 6 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Sonstige Optionen" ;
         Text [ ENGLISH ] = "Misc Options" ;
         Text[ english_us ] = "Miscellaneous options";
@@ -2757,7 +2756,7 @@ TabPage RID_PRINTOPTIONPAGE
     CheckBox CB_IGNORE_SPACING
     {
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 70 ) ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text = "~~ und ` am ~Zeilenende ignorieren" ;
         Text [ ENGLISH ] = "~Ignore ~~ and ` at ~lineend" ;
