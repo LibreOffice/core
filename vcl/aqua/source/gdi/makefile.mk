@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-27 11:38:24 $
+#   last change: $Author: vg $ $Date: 2004-01-06 12:45:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,22 +94,6 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salprn.obj            \
             $(SLO)$/salbmp.obj            \
             $(SLO)$/salogl.obj
-
-.IF "$(UPDATER)"=="YES"
-OBJFILES=   $(OBJ)$/salmathutils.obj      \
-            $(OBJ)$/salrectangleutils.obj \
-            $(OBJ)$/salcolorutils.obj     \
-            $(OBJ)$/salpixmaputils.obj    \
-            $(OBJ)$/salgdiutils.obj       \
-            $(OBJ)$/salatsuifontutils.obj \
-            $(OBJ)$/salfontutils.obj      \
-            $(OBJ)$/salgdi.obj            \
-            $(OBJ)$/VCLGraphics.obj	  \
-            $(OBJ)$/salvd.obj		  \
-            $(OBJ)$/salprn.obj		  \
-            $(OBJ)$/salbmp.obj		  \
-            $(OBJ)$/salogl.obj
-.ENDIF
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
 
