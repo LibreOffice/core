@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-11 17:28:20 $
+ *  last change: $Author: tbe $ $Date: 2001-12-13 18:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,8 @@
 #define RID_STR_LIBISREADONLY           ( RID_BASICIDE_START + 63 )
 #define RID_STR_REPLACELIB              ( RID_BASICIDE_START + 64 )
 #define RID_STR_IMPORTNOTPOSSIBLE       ( RID_BASICIDE_START + 67 )
+#define RID_STR_NOIMPORT                ( RID_BASICIDE_START + 68 )
+#define RID_STR_ENTERPASSWORD           ( RID_BASICIDE_START + 69 )
 
 #define RID_IMGLST_LAYOUT               ( RID_BASICIDE_START + 49 )
 
