@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2003-09-05 11:23:45 $
+#   last change: $Author: obo $ $Date: 2004-04-27 16:08:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,8 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 UNOTYPES=\
+    com.sun.star.linguistic2.ConversionDictionaryType\
+    com.sun.star.linguistic2.ConversionDirection\
     com.sun.star.linguistic2.DictionaryEvent\
     com.sun.star.linguistic2.DictionaryEventFlags\
     com.sun.star.linguistic2.DictionaryListEvent\
@@ -81,6 +83,8 @@ UNOTYPES=\
     com.sun.star.linguistic2.DictionaryType\
     com.sun.star.linguistic2.LinguServiceEventFlags\
     com.sun.star.linguistic2.SpellFailure\
+    com.sun.star.linguistic2.XConversionDictionary\
+    com.sun.star.linguistic2.XConversionDictionaryList\
     com.sun.star.linguistic2.XDictionary\
     com.sun.star.linguistic2.XDictionary1\
     com.sun.star.linguistic2.XDictionaryEntry\
@@ -103,9 +107,13 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-EXCEPTIONSFILES=\
+EXCEPTIONSFILES= \
+        $(SLO)$/convdic.obj\
+        $(SLO)$/convdiclist.obj\
+        $(SLO)$/convdicxml.obj\
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
+        $(SLO)$/hhconvdic.obj\
         $(SLO)$/hyphdsp.obj\
         $(SLO)$/lngopt.obj\
         $(SLO)$/lngreg.obj\
@@ -115,8 +123,12 @@ EXCEPTIONSFILES=\
         $(SLO)$/thesdsp.obj
 
 SLOFILES = \
+        $(SLO)$/convdic.obj\
+        $(SLO)$/convdiclist.obj\
+        $(SLO)$/convdicxml.obj\
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
+        $(SLO)$/hhconvdic.obj\
         $(SLO)$/hyphdsp.obj\
         $(SLO)$/hyphdta.obj\
         $(SLO)$/iprcache.obj\
@@ -133,6 +145,7 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
+        $(I18NUTILLIB)  \
         $(UNOLIB)		\
         $(VOSLIB)		\
         $(TOOLSLIB)		\
@@ -142,8 +155,9 @@ SHL1STDLIBS= \
         $(SFXLIB)		\
         $(SALLIB)		\
         $(UCBHELPERLIB)	\
-        $(UNOTOOLSLIB)
-
+        $(UNOTOOLSLIB) \
+        $(XMLOFFLIB)
+        
 # build DLL
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEPN=		$(SLB)$/$(TARGET).lib
@@ -186,5 +200,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo Making: $@
     @echo lcl > $@
     @echo component > $@
-    @echo __CT >> $@
+    @echo __CT > $@
 
