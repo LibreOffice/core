@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-24 08:25:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ struct SearchDlg_Impl
         bFocusOnSearch( TRUE ),
         pRanges( NULL )
         {}
-    ~SearchDlg_Impl() { delete pRanges; }
+    ~SearchDlg_Impl() { delete[] pRanges; }
 };
 
 // -----------------------------------------------------------------------
@@ -1874,7 +1874,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
         PaintAttrText_Impl(); // AttributText in GroupBox setzen
     }
     delete pDlg;
-    delete pWhRanges;
+    delete[] pWhRanges;
     return 0;
 }
 
