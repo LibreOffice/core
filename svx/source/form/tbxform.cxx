@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:22:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:58:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,17 +186,7 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
         aArgs[0].Value = a;
         m_pController->Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:AbsoluteRecord" )),
                                  aArgs );
-//        m_pController->GetBindings().GetDispatcher()->Execute( SID_FM_RECORD_ABSOLUTE, SFX_CALLMODE_RECORD, &aPositionParam, 0L );
-
-        // to update our content we explicitly call StateChanged : a simple Invalidate(m_nId) is insufficient
-        // as our StateChanged won't be called if entered a invalid position which didn't cause the cursor
-        // to be moved.
-
-//      SfxPoolItem* pState = NULL;
-//      SfxItemState eState = m_pController->GetBindings().QueryState(m_pController->GetId(), pState);
-//      ((SfxControllerItem*)m_pController)->StateChanged(m_pController->GetSlotId(), eState, pState);
         m_pController->updateStatus();
-//      delete pState;
 
         SaveValue();
     }
@@ -350,7 +340,6 @@ void SvxFmTbxCtlConfig::Select( USHORT nModifier )
             Sequence< PropertyValue > aArgs;
             Dispatch( rtl::OUString::createFromAscii( SlotToCommands[n].pCommand ),
                       aArgs );
-            //      GetBindings().GetDispatcher()->Execute( nLastSlot );
         }
     }
 }
