@@ -2,9 +2,6 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.59 $
-#
-#   last change: $Author: pjunck $ $Date: 2004-11-02 16:02:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
