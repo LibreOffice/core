@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedFieldWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:01:16 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 16:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ OFormattedFieldWrapper::OFormattedFieldWrapper( const OFormattedFieldWrapper* _p
             m_xAggregate = Reference< XAggregation >( xClone, UNO_QUERY );
             DBG_ASSERT(m_xAggregate.is(), "OFormattedFieldWrapper::OFormattedFieldWrapper : invalid aggregate clone!");
 
-            query_interface( xClone, m_xFormattedPart );
+            query_interface( Reference< XInterface >( xClone.get() ), m_xFormattedPart );
 
             if ( _pCloneSource->m_pEditPart )
                 m_pEditPart = new OEditModel( _pCloneSource->m_pEditPart, _pCloneSource->m_xServiceFactory );
