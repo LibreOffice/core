@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTypeWizDlgSetup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 11:57:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
 #ifndef DBAUI_DBTYPEWIZDLGSETUP_HXX
 #include "DBTypeWizDlgSetup.hxx"
 #endif
@@ -76,6 +79,7 @@
 #endif
 
 using namespace dbaui;
+namespace css = ::com::sun::star;
 
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup()
 {
@@ -129,17 +133,16 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialogSetup::Create(const Reference< 
 
     try
     {
-        Reference< ::com::sun::star::document::XEventListener > xDocEventBroadcaster(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
-            UNO_QUERY);
-        if ( xDocEventBroadcaster.is() )
-        {
-            ::com::sun::star::document::EventObject aEvent(xDBContext, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")) );
-            xDocEventBroadcaster->notifyEvent(aEvent);
-        }
+        Reference< css::container::XSet > xModelCollection(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
+        xModelCollection->insert(css::uno::makeAny(xDBContext));
+
+        Reference< css::document::XEventListener > xDocEventBroadcaster(xDBContext,UNO_QUERY_THROW);
+        ::com::sun::star::document::EventObject aEvent(xDBContext, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew")));
+        xDocEventBroadcaster->notifyEvent(aEvent);
     }
     catch(Exception)
     {
-        OSL_ENSURE(0,"Could not create GlobalEventBroadcaster!");
+        OSL_ENSURE(0,"Could not create append model to global model collectiona and broadcaste document events for it!");
     }
     Reference <com::sun::star::ui::dialogs::XExecutableDialog> xDBWizardExecute( xDBWizard, UNO_QUERY );
     xDBWizardExecute->execute();
