@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flagitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:25:56 $
+ *  last change: $Author: mhu $ $Date: 2001-07-24 10:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,11 +136,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     DBG_CHKTHIS(SfxFlagItem, 0);
     rText.Erase();
     for ( int nFlag = 0; nFlag < GetFlagCount(); ++nFlag )
-#ifndef ENABLEUNICODE
-        rText += String( GetFlag(nFlag) );
-#else
-        rText += UniString::CreateFromInt32( GetFlag(nFlag) );
-#endif
+        rText += XubString::CreateFromInt32( GetFlag(nFlag) );
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
@@ -154,7 +150,6 @@ XubString SfxFlagItem::GetFlagText( BYTE nV ) const
 }
 
 // -----------------------------------------------------------------------
-
 
 BYTE SfxFlagItem::GetFlagCount() const
 {
