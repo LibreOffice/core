@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-06 10:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ OControl::OControl(const Reference<com::sun::star::lang::XMultiServiceFactory>& 
     {
                 m_xAggregate = Reference<XAggregation>(
                         _rxFactory->createInstance(_sService), UNO_QUERY);
-                m_xControl = Reference<starawt::XControl>(m_xAggregate, UNO_QUERY);
+                m_xControl = Reference<XControl>(m_xAggregate, UNO_QUERY);
     }
 
     if (m_xAggregate.is())
@@ -276,34 +276,34 @@ InterfaceRef SAL_CALL OControl::getContext() throw (RuntimeException)
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OControl::createPeer(const Reference<starawt::XToolkit>& Toolkit, const Reference<starawt::XWindowPeer>& Parent) throw (RuntimeException)
+void SAL_CALL OControl::createPeer(const Reference<XToolkit>& Toolkit, const Reference<XWindowPeer>& Parent) throw (RuntimeException)
 {
     if (m_xControl.is())
         m_xControl->createPeer(Toolkit, Parent);
 }
 
 //------------------------------------------------------------------------------
-Reference<starawt::XWindowPeer> SAL_CALL OControl::getPeer()
+Reference<XWindowPeer> SAL_CALL OControl::getPeer()
 {
-        return m_xControl.is() ? m_xControl->getPeer() : Reference<starawt::XWindowPeer>();
+        return m_xControl.is() ? m_xControl->getPeer() : Reference<XWindowPeer>();
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SAL_CALL OControl::setModel(const Reference<starawt::XControlModel>& Model)
+sal_Bool SAL_CALL OControl::setModel(const Reference<XControlModel>& Model)
 {
     return m_xControl.is() ? m_xControl->setModel( Model ) : sal_False;
 }
 
 //------------------------------------------------------------------------------
-Reference<starawt::XControlModel> SAL_CALL OControl::getModel()
+Reference<XControlModel> SAL_CALL OControl::getModel()
 {
-        return m_xControl.is() ? m_xControl->getModel() : Reference<starawt::XControlModel>();
+        return m_xControl.is() ? m_xControl->getModel() : Reference<XControlModel>();
 }
 
 //------------------------------------------------------------------------------
-Reference<starawt::XView> SAL_CALL OControl::getView()
+Reference<XView> SAL_CALL OControl::getView()
 {
-        return m_xControl.is() ? m_xControl->getView() : Reference<starawt::XView>();
+        return m_xControl.is() ? m_xControl->getView() : Reference<XView>();
 }
 
 //------------------------------------------------------------------------------
@@ -383,7 +383,7 @@ void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException)
 void OBoundControl::_setLock(sal_Bool _bLock)
 {
     // try to set the text component to readonly
-        Reference<starawt::XWindowPeer> xPeer = getPeer();
+        Reference<XWindowPeer> xPeer = getPeer();
         Reference<com::sun::star::awt::XTextComponent> xText(xPeer, UNO_QUERY);
 
     if (xText.is())
@@ -391,7 +391,7 @@ void OBoundControl::_setLock(sal_Bool _bLock)
     else
     {
         // disable the window
-                Reference<starawt::XWindow> xComp(xPeer, UNO_QUERY);
+                Reference<XWindow> xComp(xPeer, UNO_QUERY);
         if (xComp.is())
             xComp->setEnable(!_bLock);
     }
@@ -1074,7 +1074,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
             InterfaceRef xNewValue;
             rValue >>= xNewValue;
 
-            Reference<starawt::XControlModel> xAsModel(xNewValue, UNO_QUERY);
+            Reference<XControlModel> xAsModel(xNewValue, UNO_QUERY);
             Reference<com::sun::star::lang::XServiceInfo> xAsServiceInfo(xNewValue, UNO_QUERY);
             Reference<XPropertySet> xAsPropSet(xNewValue, UNO_QUERY);
             Reference<XChild> xAsChild(xNewValue, UNO_QUERY);
@@ -1325,6 +1325,7 @@ void SAL_CALL OBoundControlModel::reloaded(const com::sun::star::lang::EventObje
     }
 
     m_bForwardValueChanges = sal_True;
+    _loaded(aEvent);
 
     // do we have a field, than get the new value
     if (m_xField.is())
