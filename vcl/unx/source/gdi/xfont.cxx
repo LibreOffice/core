@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-16 09:23:27 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,12 @@
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
 #endif
+#ifndef _SV_SALGDI_HXX
+#include <salgdi.hxx>
+#endif
 
 #ifdef DEBUG
-#include <stdio.h>
+#include <cstdio>
 #endif
 
 #include <algorithm>
@@ -645,44 +648,64 @@ GetVerticalClass( sal_Unicode nChar )
     return VCLASS_ROTATE;
 }
 
-#ifdef ENABLE_CTL
-#include <salgdi.hxx>
+// =======================================================================
 
-X11FontLayout* ExtendedFontStruct::LayoutText( const ImplLayoutArgs& rArgs )
+X11FontLayout::X11FontLayout( const ImplLayoutArgs& rArgs, ExtendedFontStruct& rFont )
+: GenericSalLayout( rArgs )
 {
-    int nGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+    int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
 
     bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
 
-    long nWidth = 0;
     Point aNewPos( 0, 0);
     for( int i = 0; i < nGlyphCount; ++i )
     {
-        int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
+        int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharPos-1-i) : (rArgs.mnMinCharPos+i);
         sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
 
         long nGlyphWidth;
-        GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
-        long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
-        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
-            nGlyphFlags, nGlyphWidth );
+        rFont.GetCharWidth( cChar, cChar, &nGlyphWidth, NULL );
+        int nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+        if( bRightToLeft )
+            nGlyphFlags = GlyphItem::IS_RTL_GLYPH;
+        int nGlyphIndex = cChar | GF_ISCHAR;
+        pGlyphBuffer[i] = GlyphItem( nLogicalIndex, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
 
         aNewPos.X() += nGlyphWidth;
     }
 
-    X11FontLayout* pLayout = new X11FontLayout( rArgs );
-    pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
-    pLayout->SetOrientation( 0 ); //### TODO
-    pLayout->SetWantFallback( false );
+    SetGlyphItems( pGlyphBuffer, nGlyphCount );
+    SetOrientation( 0 ); // X11 fonts are to be rotated in upper layers
+    SetWantFallback( false );
 
     if( rArgs.mpDXArray )
-        pLayout->ApplyDXArray( rArgs.mpDXArray );
+        ApplyDXArray( rArgs.mpDXArray );
     else if( rArgs.mnLayoutWidth )
-        pLayout->Justify( rArgs.mnLayoutWidth );
-
-    return pLayout;
+        Justify( rArgs.mnLayoutWidth );
 }
 
-#endif // ENABLE_CTL
+// -----------------------------------------------------------------------
 
+void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
+{
+    static const int MAXGLYPHS = 160;
+    int nMaxGlyphs = GetOrientation() ? 1 : MAXGLYPHS;
+
+    Point aPos;
+    long aGlyphAry[ MAXGLYPHS ];
+    sal_Unicode pStr[ MAXGLYPHS ];
+    for( int nStart=0;;)
+    {
+        int nGlyphCount = GetNextGlyphs( nMaxGlyphs, aGlyphAry, aPos, nStart );
+        if( !nGlyphCount )
+            break;
+
+        for( int i = 0; i < nGlyphCount; ++i )
+            pStr[ i ] = aGlyphAry[ i ] & GF_IDXMASK;
+
+        rSalGraphics.maGraphicsData.DrawStringUCS2MB( aPos, pStr, nGlyphCount );
+    }
+}
+
+// =======================================================================
