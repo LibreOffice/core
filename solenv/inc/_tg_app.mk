@@ -34,6 +34,7 @@ USE_APP1DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP1STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP1TARGETN)"!=""
@@ -201,6 +202,7 @@ USE_APP2DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP2STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP2TARGETN)"!=""
@@ -368,6 +370,7 @@ USE_APP3DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP3STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP3TARGETN)"!=""
@@ -535,6 +538,7 @@ USE_APP4DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP4STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP4TARGETN)"!=""
@@ -702,6 +706,7 @@ USE_APP5DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP5STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP5TARGETN)"!=""
@@ -869,6 +874,7 @@ USE_APP6DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP6STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP6TARGETN)"!=""
@@ -1036,6 +1042,7 @@ USE_APP7DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP7STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP7TARGETN)"!=""
@@ -1203,6 +1210,7 @@ USE_APP8DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP8STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP8TARGETN)"!=""
@@ -1370,6 +1378,7 @@ USE_APP9DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP9STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP9TARGETN)"!=""
@@ -1537,6 +1546,7 @@ USE_APP10DEF=
 # Link in static data members for template classes
 .IF "$(OS)"=="MACOSX"
 APP10STDLIBS+=$(STATICLIB)
+LINKFLAGS+=-dylib_file @executable_path$/$(DLLPRE)$(STATICLIBNAME)$(DLLPOST):$(MISC)$/$(DLLPRE)$(PRJNAME)$(STATICLIBNAME)$(DLLPOST) -L$(MISC)
 .ENDIF
 
 .IF "$(APP10TARGETN)"!=""
