@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-28 16:27:14 $
+ *  last change: $Author: pl $ $Date: 2002-05-29 15:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2273,35 +2273,32 @@ void ToolBox::ImplFormat( BOOL bResize )
             while ( pItem )
             {
                 // Doppelte Separatoren hiden
-                if ( mbCustomize )
+                if ( pItem->meType == TOOLBOXITEM_SEPARATOR )
                 {
-                    if ( pItem->meType == TOOLBOXITEM_SEPARATOR )
+                    pItem->mbVisible = FALSE;
+                    if ( !bLastSep )
                     {
-                        pItem->mbVisible = FALSE;
-                        if ( !bLastSep )
+                        // Feststellen ob dahinter ueberhaupt noch
+                        // ein Item sichtbar ist
+                        ULONG nTempPos = mpItemList->GetCurPos()+1;
+                        ULONG nCount = mpItemList->Count();
+                        while ( nTempPos < nCount )
                         {
-                            // Feststellen ob dahinter ueberhaupt noch
-                            // ein Item sichtbar ist
-                            ULONG nTempPos = mpItemList->GetCurPos()+1;
-                            ULONG nCount = mpItemList->Count();
-                            while ( nTempPos < nCount )
+                            pTempItem = mpItemList->GetObject( nTempPos );
+                            if ( (pTempItem->meType == TOOLBOXITEM_SEPARATOR) ||
+                                 ((pTempItem->meType == TOOLBOXITEM_BUTTON) &&
+                                  pTempItem->mbVisible) )
                             {
-                                pTempItem = mpItemList->GetObject( nTempPos );
-                                if ( (pTempItem->meType == TOOLBOXITEM_SEPARATOR) ||
-                                     ((pTempItem->meType == TOOLBOXITEM_BUTTON) &&
-                                      pTempItem->mbVisible) )
-                                {
-                                    pItem->mbVisible = TRUE;
-                                    break;
-                                }
-                                nTempPos++;
+                                pItem->mbVisible = TRUE;
+                                break;
                             }
+                            nTempPos++;
                         }
-                        bLastSep = TRUE;
                     }
-                    else if ( pItem->mbVisible )
-                        bLastSep = FALSE;
+                    bLastSep = TRUE;
                 }
+                else if ( pItem->mbVisible )
+                    bLastSep = FALSE;
 
                 pItem->mbShowWindow = FALSE;
 
