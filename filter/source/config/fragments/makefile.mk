@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Date: 2004-11-17 12:46:49 $
+#   last change: $Date: 2005-02-02 13:51:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,29 +62,13 @@
 
 PRJ     = ..$/..$/..
 TARGET  = FCFGPkg
-PRJNAME = $(TARGET)
+PRJNAME = filter
 
 # -----------------------------------------------------------------------------
 # include all package definition files
 # -----------------------------------------------------------------------------
 
-.INCLUDE: fcfg_base.mk
-.INCLUDE: fcfg_writer.mk
-.INCLUDE: fcfg_web.mk
-.INCLUDE: fcfg_global.mk
-.INCLUDE: fcfg_w4w.mk
-.INCLUDE: fcfg_calc.mk
-.INCLUDE: fcfg_draw.mk
-.INCLUDE: fcfg_impress.mk
-.INCLUDE: fcfg_chart.mk
-.INCLUDE: fcfg_math.mk
-.INCLUDE: fcfg_xslt.mk
-.INCLUDE: fcfg_palm.mk
-.INCLUDE: fcfg_pocketword.mk
-.INCLUDE: fcfg_pocketexcel.mk
-.INCLUDE: fcfg_internalgraphics.mk
-.INCLUDE: fcfg_drawgraphics.mk
-.INCLUDE: fcfg_impressgraphics.mk
+.INCLUDE: packagedef.mk
 
 # -----------------------------------------------------------------------------
 # include global settings
@@ -96,26 +80,65 @@ PRJNAME = $(TARGET)
 # list of all required destination files
 # -----------------------------------------------------------------------------
 
-REALFILTERPACKAGES  =   \
-    $(BIN)$/fcfg_base.zip               \
-    $(BIN)$/fcfg_writer.zip             \
-    $(BIN)$/fcfg_web.zip                \
-    $(BIN)$/fcfg_global.zip             \
-    $(BIN)$/fcfg_w4w.zip                \
-    $(BIN)$/fcfg_calc.zip               \
-    $(BIN)$/fcfg_draw.zip               \
-    $(BIN)$/fcfg_impress.zip            \
-    $(BIN)$/fcfg_chart.zip              \
-    $(BIN)$/fcfg_math.zip               \
-    $(BIN)$/fcfg_xslt.zip               \
-    $(BIN)$/fcfg_palm.zip               \
-    $(BIN)$/fcfg_pocketexcel.zip        \
-    $(BIN)$/fcfg_pocketword.zip         \
-    $(BIN)$/fcfg_drawgraphics.zip       \
-    $(BIN)$/fcfg_impressgraphics.zip
+REALFILTERPACKAGES_TYPES_FLAG = \
+    $(MISC)$/fcfg_base.types_flag               \
+    $(MISC)$/fcfg_writer.types_flag             \
+    $(MISC)$/fcfg_web.types_flag                \
+    $(MISC)$/fcfg_global.types_flag             \
+    $(MISC)$/fcfg_w4w.types_flag                \
+    $(MISC)$/fcfg_calc.types_flag               \
+    $(MISC)$/fcfg_draw.types_flag               \
+    $(MISC)$/fcfg_impress.types_flag            \
+    $(MISC)$/fcfg_chart.types_flag              \
+    $(MISC)$/fcfg_math.types_flag               \
+    $(MISC)$/fcfg_xslt.types_flag               \
+    $(MISC)$/fcfg_palm.types_flag               \
+    $(MISC)$/fcfg_pocketexcel.types_flag        \
+    $(MISC)$/fcfg_pocketword.types_flag         \
+    $(MISC)$/fcfg_drawgraphics.types_flag       \
+    $(MISC)$/fcfg_impressgraphics.types_flag
+    
+REALFILTERPACKAGES_FILTERS_FLAG = \
+    $(MISC)$/fcfg_base.filters_flag               \
+    $(MISC)$/fcfg_writer.filters_flag             \
+    $(MISC)$/fcfg_web.filters_flag                \
+    $(MISC)$/fcfg_global.filters_flag             \
+    $(MISC)$/fcfg_w4w.filters_flag                \
+    $(MISC)$/fcfg_calc.filters_flag               \
+    $(MISC)$/fcfg_draw.filters_flag               \
+    $(MISC)$/fcfg_impress.filters_flag            \
+    $(MISC)$/fcfg_chart.filters_flag              \
+    $(MISC)$/fcfg_math.filters_flag               \
+    $(MISC)$/fcfg_xslt.filters_flag               \
+    $(MISC)$/fcfg_palm.filters_flag               \
+    $(MISC)$/fcfg_pocketexcel.filters_flag        \
+    $(MISC)$/fcfg_pocketword.filters_flag         \
+    $(MISC)$/fcfg_drawgraphics.filters_flag       \
+    $(MISC)$/fcfg_impressgraphics.filters_flag
+    
+REALFILTERPACKAGES_OTHERS_FLAG = \
+    $(MISC)$/fcfg_base.others_flag               \
+    $(MISC)$/fcfg_writer.others_flag             \
+    $(MISC)$/fcfg_web.others_flag                \
+    $(MISC)$/fcfg_global.others_flag             \
+    $(MISC)$/fcfg_w4w.others_flag                \
+    $(MISC)$/fcfg_calc.others_flag               \
+    $(MISC)$/fcfg_draw.others_flag               \
+    $(MISC)$/fcfg_impress.others_flag            \
+    $(MISC)$/fcfg_chart.others_flag              \
+    $(MISC)$/fcfg_math.others_flag               \
+    $(MISC)$/fcfg_xslt.others_flag               \
+    $(MISC)$/fcfg_palm.others_flag               \
+    $(MISC)$/fcfg_pocketexcel.others_flag        \
+    $(MISC)$/fcfg_pocketword.others_flag         \
+    $(MISC)$/fcfg_drawgraphics.others_flag       \
+    $(MISC)$/fcfg_impressgraphics.others_flag
 
-INTERNALFILTERPACKAGES  =   \
-    $(BIN)$/fcfg_internalgraphics.zip
+INTERNALFILTERPACKAGES_FILTERS_FLAG = \
+    $(MISC)$/fcfg_internalgraphics.filters_flag
+
+INTERNALFILTERPACKAGES_TYPES_FLAG = \
+    $(MISC)$/fcfg_internalgraphics.types_flag
 
 # -----------------------------------------------------------------------------
 # build all
@@ -123,7 +146,12 @@ INTERNALFILTERPACKAGES  =   \
 
 .INCLUDE: target.mk
 
-ALLTAR: $(REALFILTERPACKAGES) $(INTERNALFILTERPACKAGES)
+ALLTAR: \
+    $(REALFILTERPACKAGES_TYPES_FLAG)        \
+    $(REALFILTERPACKAGES_FILTERS_FLAG)      \
+    $(REALFILTERPACKAGES_OTHERS_FLAG)       \
+    $(INTERNALFILTERPACKAGES_TYPES_FLAG)    \
+    $(INTERNALFILTERPACKAGES_FILTERS_FLAG)
 
 .IF "$(SOLAR_JAVA)"==""
 #cmc, hack to workaround the java build requirement
@@ -136,36 +164,28 @@ MERGE:=$(JAVA) -jar $(CLASSDIR)$/FCFGMerge.jar
 # build every module seperated
 # -----------------------------------------------------------------------------
 
-$(REALFILTERPACKAGES) : $$(ALL_4$$(@:b))
+$(REALFILTERPACKAGES_TYPES_FLAG) : $$(TYPES_4$$(@:b))
      +@echo -------------------------------------------------------------------
-     +@echo Building package $@ with $(MERGE)
-     +@echo TEMP is $(TEMP)
-     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
-     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/))
-     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_others.xcu  xmlpackage=Misc   lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu/)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu/))
-     +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
-     +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
-     +-@$(RM) $@
-     +@$(RENAME) $(BIN)$/$(@:b)_$(INPATH).zip $@
-
-$(INTERNALFILTERPACKAGES) : $$(ALL_4$$(@:b))
-     +@echo -------------------------------------------------------------------
-     +@echo Building special packages $@
-     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu/))
-     $(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu/)) subdir_filters=internalgraphicfilters
-     +-@$(RM) $(BIN)$/$(@:b)_$(INPATH).zip
-     +@zip -j $(BIN)$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
-     +-@$(RM) $@
-     +@$(RENAME) $(BIN)$/$(@:b)_$(INPATH).zip $@
-
-# -----------------------------------------------------------------------------
-# TODO move files to the common tree ... 
-#      but dont forget to patch targets and scp module!
-# -----------------------------------------------------------------------------
-#    +@$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(@:b)_$(INPATH).zip
-#    +@zip -j $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(@:b)_$(INPATH).zip $(MISC)$/$(@:b)_*.xcu
-#    +@$(RM) $(MISC)$/$(@:b)_*.xcu
-#    +@$(RM) $@
-#    +@$(RENAME) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(@:b)_$(INPATH).zip $@
-#    +@$(RM) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/$(@:b)_$(INPATH).zip
+     +@echo Building packages types $@
+     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu xmlpackage=Types tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
      
+$(REALFILTERPACKAGES_FILTERS_FLAG) : $$(FILTERS_4$$(@:b))
+     +@echo -------------------------------------------------------------------
+     +@echo Building localized packages filter $@
+     +$(MERGE) fragmentsdir=$(MISC) tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=Filter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+     
+$(REALFILTERPACKAGES_OTHERS_FLAG) : $$(ALL_4$$(@:b))
+     +@echo -------------------------------------------------------------------
+     +@echo Building packages others $@
+     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_others.xcu xmlpackage=Misc lcfg=$(mktmp items=$(FRAMELOADERS_4$(@:b):b:t",":s/.xcu//)) ccfg=$(mktmp items=$(CONTENTHANDLERS_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+
+$(INTERNALFILTERPACKAGES_TYPES_FLAG) : $$(TYPES_4$$(@:b))
+     +@echo -------------------------------------------------------------------
+     +@echo Building special packages types $@
+     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_types.xcu   xmlpackage=Types  tcfg=$(mktmp items=$(TYPES_4$(@:b):b:t",":s/.xcu//)) && $(TOUCH) $@
+
+$(INTERNALFILTERPACKAGES_FILTERS_FLAG) : $$(FILTERS_4$$(@:b))
+     +@echo -------------------------------------------------------------------
+     +@echo Building special packages filter $@
+     +$(MERGE) fragmentsdir=. tempdir=$(TEMP) outdir=$(MISC) pkg=$(MISC)$/$(@:b)_filters.xcu xmlpackage=GraphicFilter fcfg=$(mktmp items=$(FILTERS_4$(@:b):b:t",":s/.xcu//)) subdir_filters=internalgraphicfilters && $(TOUCH) $@
+
