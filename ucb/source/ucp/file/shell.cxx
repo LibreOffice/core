@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:03:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ shell::MyProperty::~MyProperty()
 {
     // empty for now
 }
+
 
 
 #ifndef _FILINL_HXX_
