@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,8 @@ public:
         ,m_nAvailable(_nAvailable){}
 
 // staruno::XInterface
-    virtual void SAL_CALL acquire() throw (staruno::RuntimeException);
-    virtual void SAL_CALL release() throw (staruno::RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
 
 // stario::XInputStream
     virtual sal_Int32 SAL_CALL readBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
@@ -147,8 +147,8 @@ public:
         ,m_nActPos(_nPos){}
 
 // staruno::XInterface
-    virtual void SAL_CALL acquire() throw (staruno::RuntimeException);
-    virtual void SAL_CALL release() throw (staruno::RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes( const staruno::Sequence< sal_Int8 >& aData ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-01-12 11:23:11 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 11:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@ namespace utl
 {
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInputStreamHelper::acquire() throw (staruno::RuntimeException)
+void SAL_CALL OInputStreamHelper::acquire() throw ()
 {
     InputStreamHelper_Base::acquire();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OInputStreamHelper::release() throw (staruno::RuntimeException)
+void SAL_CALL OInputStreamHelper::release() throw ()
 {
     InputStreamHelper_Base::release();
 }
@@ -174,13 +174,13 @@ void SAL_CALL OInputStreamHelper::closeInput()
 
 /*************************************************************************/
 //------------------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::acquire() throw (staruno::RuntimeException)
+void SAL_CALL OOutputStreamHelper::acquire() throw ()
 {
     OutputStreamHelper_Base::acquire();
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL OOutputStreamHelper::release() throw (staruno::RuntimeException)
+void SAL_CALL OOutputStreamHelper::release() throw ()
 {
     OutputStreamHelper_Base::release();
 }
