@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-13 06:23:08 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ protected:
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr, sal_Bool& bHandled);
 
-    HRESULT convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
+    void convertDispparamsArgs( DISPID id, unsigned short wFlags, DISPPARAMS* pdispparams,
                             Sequence<Any>& rSeq);
 
     sal_Bool getInvocationInfoForCall(DISPID id, InvocationInfo& info);
