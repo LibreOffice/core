@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgraph.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-19 12:59:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,6 +643,11 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
         break;
 
         case( GRAPHIC_BITMAP ):
+            // #108077# Push through pref size to animation object,
+            // will be lost on copy otherwise
+            if( ImplIsAnimated() )
+                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefSize( rPrefSize );
+
             maEx.SetPrefSize( rPrefSize );
         break;
 
@@ -703,6 +708,11 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
         break;
 
         case( GRAPHIC_BITMAP ):
+            // #108077# Push through pref mapmode to animation object,
+            // will be lost on copy otherwise
+            if( ImplIsAnimated() )
+                const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
+
             maEx.SetPrefMapMode( rPrefMapMode );
         break;
 
@@ -1552,6 +1562,10 @@ SvStream& operator>>( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     delete rImpGraphic.mpAnimation;
                     rImpGraphic.mpAnimation = new Animation;
                     rIStm >> *rImpGraphic.mpAnimation;
+
+                    // #108077# manually set loaded BmpEx to Animation
+                    // (which skips loading its BmpEx if already done)
+                    rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
                 }
             }
             else
