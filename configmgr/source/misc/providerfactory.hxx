@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:54:21 $
+ *  last change: $Author: dg $ $Date: 2001-01-29 08:51:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ namespace configmgr
     protected:
         ::osl::Mutex                        m_aMutex;
         ::cppu::ComponentInstantiation      m_pObjectCreator;
-        ::com::sun::star::uno::Reference<::com::sun::star::lang::XEventListener> m_xEventListener; // must be the first uno::object
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > m_xEventListener; // must be the first uno::object
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                             m_xORB;
@@ -163,6 +163,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/26 07:54:21  lla
+ *  #82734# disposing with lasy writing necessary
+ *
  *  Revision 1.1  2000/12/01 13:53:17  fs
  *  initial checkin - afctory for configuration provider(s)
  *
