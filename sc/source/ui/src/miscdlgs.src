@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-16 20:18:11 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3217,7 +3217,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ chinese_simplified ] = "ε…ζ‹¬";
         Text[ russian ] = "Βκλώχΰςό";
         Text[ polish ] = "Uaktywnij dla";
-        Text[ japanese ] = "ο½±ο½ΈοΎƒο½¨οΎοΎγ«γ™γ‚‹ε―Ύθ±΅";
+        Text[ japanese ] = "ο½ΈοΎοΎ™ο½°οΎοΎε–γ™γ‚‹ε―Ύθ±΅";
         Text[ chinese_traditional ] = "ε•ε‹•η”¨ζ–Ό";
         Text[ arabic ] = "ΚδΤνΨ γδ ΓΜα";
         Text[ greek ] = "Ενεργοποίηση για";
@@ -3245,7 +3245,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ chinese_simplified ] = "ε–ζ¶ε†η»„";
         Text[ russian ] = "Ρνÿςό δλÿ";
         Text[ polish ] = "Dezaktywuj dla";
-        Text[ japanese ] = "ιο½±ο½ΈοΎƒο½¨οΎοΎγ«γ™γ‚‹ε―Ύθ±΅";
+        Text[ japanese ] = "ο½ΈοΎοΎ™ο½°οΎοΎθ§£ι™¤γ™γ‚‹ε―Ύθ±΅";
         Text[ chinese_traditional ] = "ε–ζ¶ηΎ¤ηµ„";
         Text[ arabic ] = "ΕαΫΗΑ ΗαΚδΤνΨ γδ ΓΜα";
         Text[ greek ] = "Απενεργοποίηση για";
@@ -3813,6 +3813,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ catalan ] = "Modificar datos fuente";
     Text[ finnish ] = "Vaihda lδhdetietoalue";
 };
+
 
 
 
