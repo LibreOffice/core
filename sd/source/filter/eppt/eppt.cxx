@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:28 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,8 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) ) )
                     {
                         ::rtl::OUString aSlideName( *(::rtl::OUString*)mAny.getValue() );
-                        for ( ::rtl::OUString* pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
+                        ::rtl::OUString* pStr;
+                        for ( pStr = (::rtl::OUString*)maSlideNameList.First(); pStr;
                                     pStr = (::rtl::OUString*)maSlideNameList.Next(), nStartSlide++ )
                         {
                             if ( *pStr == aSlideName )
@@ -1080,9 +1081,11 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
             break;
             case 2 :
             {
+                sal_uInt32 i;
+
                 rStrm   << (sal_uInt32)0x1f
                         << (sal_uInt32)( nUrlLen + 1 );
-                for ( sal_uInt32 i = 0; i < nUrlLen; i++ )
+                for ( i = 0; i < nUrlLen; i++ )
                 {
                     rStrm << pUrl[ i ];
                 }
