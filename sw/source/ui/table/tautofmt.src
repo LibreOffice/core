@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:26:05 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text [ norwegian ] = "For~mats" ;
         Text [ italian ] = "Formattazione" ;
         Text [ portuguese_brazilian ] = "Formatos" ;
-        Text [ portuguese ] = "Formato" ;
+        Text [ portuguese ] = "Formatar" ;
         Text [ finnish ] = "Muotoilu" ;
         Text [ danish ] = "Formatering" ;
         Text [ french ] = "Formatage" ;
@@ -821,7 +821,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "±z¿é¤J¤F¤@­ÓµL®Äªº¦WºÙ¡C\nµLªk«Ø¥ß¦Û°Ê®æ¦¡¡C\n½Ğ¿é¤J¤@­Ó¦³®Ä¦WºÙ¡C";
         Text[ arabic ] = "áŞÏ ŞãÊ ÈÅÏÎÇá ÇÓã ÛíÑ ÕÇáÍ.\náåĞÇ ÊÚĞÑ ÅäÔÇÁ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÃÎÑ.";
         Text[ greek ] = "¸÷åôå åéóÜãåé İíá ìç İãêõñï üíïìá.\nÇ ÁõôïÌïñöŞ äåí Şôáí äõíáôüí íá äçìéïõñãçèåß.\nÅğéëİîôå êÜğïéï Üëëï üíïìá.";
-        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§À» ÀÔ·ÂÇß½À´Ï´Ù.\n¿ä±¸µÈ ÀÚµ¿¼­½ÄÀº¡¡¸¸µé ¼ö ¾ø½À´Ï´Ù. \n´Ù¸¥ ÀÌ¸§À¸·Î ´Ù½Ã ½ÃµµÇÏ½Ê½Ã¿À..";
+        Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ÀÌ¸§À» ÀÔ·ÂÇß½À´Ï´Ù.\n¿ä±¸µÈ ÀÚµ¿¼­½ÄÀº¡¡¸¸µé ¼ö ¾ø½À´Ï´Ù.\n´Ù¸¥ ÀÌ¸§À¸·Î ´Ù½Ã ½ÃµµÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "Geçersiz bir ad girdiniz.\nOtomatik formatlama oluşturulamadı.\nBaşka bir ad seçiniz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ha indicado un nombre no válido, \npor lo que no se pudo crear el AutoFormato.\nSeleccione otro nombre.";
@@ -873,4 +873,5 @@ ModalDialog DLG_SWDLG_STRINPUT
         TabStop = TRUE ;
     };
 };
+
 
