@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-06-12 15:06:00 $
+ *  last change: $Author: tl $ $Date: 2001-06-13 12:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,18 +356,22 @@ USHORT SvxLanguageBox::InsertLanguage( const LanguageType nLangType, USHORT nPos
     USHORT nAt = 0;
     if ( m_bWithCheckmark )
     {
-        const USHORT nLanguageCount = SvxGetSelectableLanguages().getLength();
-        const Language* pLangList = SvxGetSelectableLanguages().getConstArray();
         sal_Bool bFound = sal_False;
-        for ( USHORT i = 0; i < nLanguageCount; ++i )
+        Reference< XSpellChecker1 > xSpell( SvxGetSpellChecker(), UNO_QUERY );
+        if (xSpell.is())
         {
-            if ( nLangType == pLangList[i] )
+            Sequence< INT16 > aLang( xSpell->getLanguages() );
+            const USHORT nLanguageCount = aLang.getLength();
+            const Language* pLangList = aLang.getConstArray();
+            for ( USHORT i = 0; i < nLanguageCount; ++i )
             {
-                bFound = sal_True;
-                break;
+                if ( nLangType == pLangList[i] )
+                {
+                    bFound = sal_True;
+                    break;
+                }
             }
         }
-
         if ( !bFound )
             nAt = InsertEntry( aStrEntry, m_aNotCheckedImage, nPos );
         else
