@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 12:16:57 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 14:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ static __FAR_DATA SvXMLTokenMapEntry aPolygonShapeAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_POLYGONSHAPE_WIDTH          },
     { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_POLYGONSHAPE_HEIGHT         },
     { XML_NAMESPACE_SVG,    sXML_viewBox,           XML_TOK_POLYGONSHAPE_VIEWBOX        },
-    { XML_NAMESPACE_SVG,    sXML_points,            XML_TOK_POLYGONSHAPE_POINTS         },
+    { XML_NAMESPACE_DRAW,   sXML_points,            XML_TOK_POLYGONSHAPE_POINTS         },
     XML_TOKEN_MAP_END
 };
 

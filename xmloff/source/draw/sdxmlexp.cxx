@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-06 12:58:31 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 14:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2155,7 +2155,7 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
                         SdXMLImExPointsElement aPoints(pSequence, aViewBox, aPoint, aSize, rExp.GetMM100UnitConverter());
 
                         // write point array
-                        rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_points, aPoints.GetExportString());
+                        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_points, aPoints.GetExportString());
                     }
 
                     // write object now
