@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 09:15:06 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 15:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_NUMERICFIELD, "com.sun.star.form.
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_CURRENCYFIELD, "com.sun.star.form.component.CurrencyField");
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_PATTERNFIELD, "com.sun.star.form.component.PatternField");
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_HIDDENCONTROL, "com.sun.star.form.component.HiddenControl");
-IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_IMAGECONTROL, "com.sun.star.form.component.ImageControl");
+IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_IMAGECONTROL, "com.sun.star.form.component.DatabaseImageControl");
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_COMPONENT_FORMATTEDFIELD, "com.sun.star.form.component.FormattedField");
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_CONTROL_TEXTFIELD, "com.sun.star.form.control.TextField");
