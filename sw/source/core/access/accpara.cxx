@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-13 13:13:12 $
+ *  last change: $Author: mib $ $Date: 2002-06-28 07:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,6 +1014,41 @@ sal_Int32 SwAccessibleParagraph::getCaretPosition()
     }
 
     return nRet;
+}
+
+sal_Bool SAL_CALL SwAccessibleParagraph::setCaretPosition( sal_Int32 nIndex )
+    throw (IndexOutOfBoundsException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    CHECK_FOR_DEFUNC( XAccessibleText );
+
+    // parameter checking
+    sal_Int32 nLength = GetString().getLength();
+    if ( ! IsValidPosition( nIndex, nLength ) )
+    {
+        throw IndexOutOfBoundsException();
+    }
+
+    sal_Bool bRet = sal_False;
+
+    // get cursor shell
+    SwCrsrShell* pCrsrShell = GetCrsrShell();
+    if( pCrsrShell != NULL )
+    {
+        // create pam for selection
+        SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
+        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nIndex));
+        SwPosition aStartPos( *pNode, aIndex );
+        SwPaM aPaM( aStartPos );
+
+        // set PaM at cursor shell
+        pCrsrShell->KillPams();
+        pCrsrShell->SetSelection( aPaM );
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
