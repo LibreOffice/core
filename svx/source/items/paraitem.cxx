@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:03:53 $
+ *  last change: $Author: os $ $Date: 2001-04-26 07:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2003,9 +2003,13 @@ sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
                                          BYTE nMemberId )
 {
     sal_Int16 nVal;
-    rVal >>= nVal;
-    SetValue( (USHORT)nVal );
-    return sal_True;
+    if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
+    {
+        SetValue( (USHORT)nVal );
+        return sal_True;
+    }
+    else
+        return sal_False;
 }
 
 int SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
