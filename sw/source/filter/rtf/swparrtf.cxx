@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:31:14 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-
-#pragma hdrstop
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -304,15 +301,15 @@ ULONG RtfReader::Read( SwDoc &rDoc,SwPaM &rPam, const String &)
     return nRet;
 }
 
-SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
+SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     int bReadNewDoc)
     : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
     maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
-    pDoc(pD), pTableNode(0), pOldTblNd(0), nAktBox(0),
-    nNewNumSectDef(USHRT_MAX), nAktPageDesc(0), nAktFirstPageDesc(0),
-    pGrfAttrSet(0), aMergeBoxes(0, 5), nInsTblRow( USHRT_MAX ), pSttNdIdx(0),
-    pRegionEndIdx(0), pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)),
-    aTblFmts(0, 10), mpBookmarkStart(0)
+    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), pGrfAttrSet(0),
+    pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
+    pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
+    nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
+    nNewNumSectDef(USHRT_MAX)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
@@ -913,7 +910,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     mySegrIter aEnd = maSegments.rend();
     for (mySegrIter aIter = maSegments.rbegin(); aIter != aEnd; ++aIter)
     {
-        if (pPage = aIter->mpPage)
+        if ((pPage = aIter->mpPage))
             break;
     }
 
@@ -1747,13 +1744,11 @@ DocPageInformation::DocPageInformation()
 }
 
 SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
-    :
-    mpTitlePageHdFt(0), mpPageHdFt(0), maBox(rDoc.maBox),
-    mnPgwsxn(rDoc.mnPaperw), mnPghsxn(rDoc.mnPaperh),
-    mnMarglsxn(rDoc.mnMargl), mnMargrsxn(rDoc.mnMargr),
-    mnMargtsxn(rDoc.mnMargt), mnMargbsxn(rDoc.mnMargb),
-    mnGutterxsn(rDoc.mnGutter), mnHeadery(720), mnFootery(720),
-    mnPgnStarts(rDoc.mnPgnStart), mnCols(1), mnColsx(720),
+    : maBox(rDoc.maBox), mpTitlePageHdFt(0), mpPageHdFt(0),
+    mnPgwsxn(rDoc.mnPaperw), mnPghsxn(rDoc.mnPaperh), mnMarglsxn(rDoc.mnMargl),
+    mnMargrsxn(rDoc.mnMargr), mnMargtsxn(rDoc.mnMargt),
+    mnMargbsxn(rDoc.mnMargb), mnGutterxsn(rDoc.mnGutter), mnHeadery(720),
+    mnFootery(720), mnPgnStarts(rDoc.mnPgnStart), mnCols(1), mnColsx(720),
     mnStextflow(rDoc.mbRTLdoc ? 3 : 0), mnBkc(2), mbLndscpsxn(rDoc.mbLandscape),
     mbTitlepg(false), mbFacpgsxn(rDoc.mbFacingp), mbRTLsection(rDoc.mbRTLdoc),
     mbPgnrestart(false), mbTitlePageHdFtUsed(false), mbPageHdFtUsed(false)
@@ -1761,15 +1756,15 @@ SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
 };
 
 SectPageInformation::SectPageInformation(const SectPageInformation &rSect)
-    : maColumns(rSect.maColumns), maBox(rSect.maBox), maNumType(rSect.maNumType),
-    mpTitlePageHdFt(rSect.mpTitlePageHdFt), mpPageHdFt(rSect.mpPageHdFt),
-    mnPgwsxn(rSect.mnPgwsxn), mnPghsxn(rSect.mnPghsxn),
-    mnMarglsxn(rSect.mnMarglsxn), mnMargrsxn(rSect.mnMargrsxn),
-    mnMargtsxn(rSect.mnMargtsxn), mnMargbsxn(rSect.mnMargbsxn),
-    mnGutterxsn(rSect.mnGutterxsn), mnHeadery(rSect.mnHeadery),
-    mnFootery(rSect.mnFootery), mnPgnStarts(rSect.mnPgnStarts),
-    mnCols(rSect.mnCols), mnColsx(rSect.mnColsx),
-    mnStextflow(rSect.mnStextflow), mnBkc(rSect.mnBkc),
+    : maColumns(rSect.maColumns), maBox(rSect.maBox),
+    maNumType(rSect.maNumType), mpTitlePageHdFt(rSect.mpTitlePageHdFt),
+    mpPageHdFt(rSect.mpPageHdFt), mnPgwsxn(rSect.mnPgwsxn),
+    mnPghsxn(rSect.mnPghsxn), mnMarglsxn(rSect.mnMarglsxn),
+    mnMargrsxn(rSect.mnMargrsxn), mnMargtsxn(rSect.mnMargtsxn),
+    mnMargbsxn(rSect.mnMargbsxn), mnGutterxsn(rSect.mnGutterxsn),
+    mnHeadery(rSect.mnHeadery), mnFootery(rSect.mnFootery),
+    mnPgnStarts(rSect.mnPgnStarts), mnCols(rSect.mnCols),
+    mnColsx(rSect.mnColsx), mnStextflow(rSect.mnStextflow), mnBkc(rSect.mnBkc),
     mbLndscpsxn(rSect.mbLndscpsxn), mbTitlepg(rSect.mbTitlepg),
     mbFacpgsxn(rSect.mbFacpgsxn), mbRTLsection(rSect.mbRTLsection),
     mbPgnrestart(rSect.mbPgnrestart),
@@ -1846,7 +1841,6 @@ void SwRTFParser::SetPageInformationAsDefault(const DocPageInformation &rInfo)
 void SwRTFParser::SetBorderLine(SvxBoxItem& rBox, sal_uInt16 nLine)
 {
     int bWeiter = true;
-    int nDistance = 0;
     int nPageDistance = 0;
     int nCol = 0;
     int nIdx = 0;
@@ -2557,7 +2551,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                 break;
             case RTF_COLNO:
                 {
-                    long nAktCol = nValue;
+                    unsigned long nAktCol = nValue;
                     if (RTF_COLW == GetNextToken())
                     {
                         long nWidth = nTokenValue, nSpace = 0;
@@ -2566,7 +2560,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                         else
                             SkipToken( -1 );        // wieder zurueck
 
-                        if (--nAktCol == (aNewSection.maColumns.size() / 2 ))
+                        if (--nAktCol == (aNewSection.maColumns.size() / 2))
                         {
                             aNewSection.maColumns.push_back(nWidth);
                             aNewSection.maColumns.push_back(nSpace);
@@ -2681,8 +2675,8 @@ void SwRTFParser::ReadPageDescTbl()
 
     bInPgDscTbl = true;
     USHORT nPos = 0;
-    SwPageDesc* pPg;
-    SwFrmFmt* pPgFmt;
+    SwPageDesc* pPg = 0;
+    SwFrmFmt* pPgFmt = 0;
 
     SvxULSpaceItem aUL, aHUL, aFUL;
     SvxLRSpaceItem aLR, aHLR, aFLR;
@@ -2701,34 +2695,38 @@ void SwRTFParser::ReadPageDescTbl()
         case '{':
             ++nOpenBrakets;
             break;
-
         case '}':
-            if( 1 == --nOpenBrakets )
+            if (1 == --nOpenBrakets)
             {
-                // PageDesc ist fertig, setze am Doc
-                pPgFmt->SetAttr( aFrmDir );
-                pPgFmt->SetAttr( aLR );
-                pPgFmt->SetAttr( aUL );
-                pPgFmt->SetAttr( aSz );
-                ::lcl_SetFmtCol( *pPgFmt, nCols, nColSpace, aColumns );
-                if( pPgFmt->GetHeader().GetHeaderFmt() )
+                ASSERT(pPgFmt && pPg, "Serious problem here");
+                if (pPgFmt && pPg)
                 {
-                    SwFrmFmt* pHFmt = (SwFrmFmt*)pPgFmt->GetHeader().GetHeaderFmt();
-                    pHFmt->SetAttr( aHUL );
-                    pHFmt->SetAttr( aHLR );
-                    pHFmt->SetAttr( aHSz );
+                    // PageDesc ist fertig, setze am Doc
+                    pPgFmt->SetAttr(aFrmDir);
+                    pPgFmt->SetAttr(aLR);
+                    pPgFmt->SetAttr(aUL);
+                    pPgFmt->SetAttr(aSz);
+                    ::lcl_SetFmtCol(*pPgFmt, nCols, nColSpace, aColumns);
+                    if (pPgFmt->GetHeader().GetHeaderFmt())
+                    {
+                        SwFrmFmt* pHFmt =
+                            (SwFrmFmt*)pPgFmt->GetHeader().GetHeaderFmt();
+                        pHFmt->SetAttr(aHUL);
+                        pHFmt->SetAttr(aHLR);
+                        pHFmt->SetAttr(aHSz);
+                    }
+                    if (pPgFmt->GetFooter().GetFooterFmt())
+                    {
+                        SwFrmFmt* pFFmt =
+                            (SwFrmFmt*)pPgFmt->GetFooter().GetFooterFmt();
+                        pFFmt->SetAttr(aHUL);
+                        pFFmt->SetAttr(aHLR);
+                        pFFmt->SetAttr(aHSz);
+                    }
+                    pDoc->ChgPageDesc(nPos++, *pPg);
                 }
-                if( pPgFmt->GetFooter().GetFooterFmt() )
-                {
-                    SwFrmFmt* pFFmt = (SwFrmFmt*)pPgFmt->GetFooter().GetFooterFmt();
-                    pFFmt->SetAttr( aHUL );
-                    pFFmt->SetAttr( aHLR );
-                    pFFmt->SetAttr( aHSz );
-                }
-                pDoc->ChgPageDesc( nPos++, *pPg );
             }
             break;
-
         case RTF_PGDSC:
             if (nPos)   // kein && wg MAC
             {
@@ -2738,8 +2736,7 @@ void SwRTFParser::ReadPageDescTbl()
                     ASSERT( FALSE, "PageDesc an falscher Position" );
                 }
             }
-
-            pPg = &pDoc->_GetPageDesc( nPos );
+            pPg = &pDoc->_GetPageDesc(nPos);
             pPg->SetLandscape( FALSE );
             pPgFmt = &pPg->GetMaster();
 #ifndef CFRONT
@@ -2894,34 +2891,35 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_FOOTERR:
         case RTF_FOOTERF:
         case RTF_HEADERF:
-            ReadHeaderFooter( nToken, pPg );
-
+            ReadHeaderFooter(nToken, pPg);
             --nOpenBrakets;     // Klammer wird im ReadAttr ueberlesen!
             break;
-
-
         case RTF_TEXTTOKEN:
-            if( !DelCharAtEnd( aToken, ';' ).Len() )
+            if (!DelCharAtEnd(aToken, ';' ).Len())
                 break;
-            pPg->SetName( aToken );
-
+            ASSERT(pPg, "Unexpected missing pPg");
+            if (pPg)
             {
+                pPg->SetName(aToken);
+
                 // sollte es eine Vorlage aus dem Pool sein ??
-                USHORT n = SwStyleNameMapper::GetPoolIdFromUIName( aToken, GET_POOLID_PAGEDESC );
-                if( USHRT_MAX != n )
+                USHORT n = SwStyleNameMapper::GetPoolIdFromUIName(aToken,
+                    GET_POOLID_PAGEDESC);
+                if (USHRT_MAX != n)
+                {
                     // dann setze bei der Neuen die entsp. PoolId
-                    pPg->SetPoolFmtId( n );
+                    pPg->SetPoolFmtId(n);
+                }
             }
             break;
-
         case RTF_BRDBOX:
-            if( 3 == nOpenBrakets )
+            if (3 == nOpenBrakets)
             {
-                ReadBorderAttr( SkipToken( -2 ), (SfxItemSet&)pPgFmt->GetAttrSet() );
+                ReadBorderAttr(SkipToken(-2),
+                    (SfxItemSet&)pPgFmt->GetAttrSet());
                 --nOpenBrakets;     // Klammer wird im ReadAttr ueberlesen!
             }
             break;
-
         case RTF_SHADOW:
             if( 3 == nOpenBrakets )
             {
