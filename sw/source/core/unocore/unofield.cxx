@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2000-11-22 16:49:53 $
+ *  last change: $Author: os $ $Date: 2000-12-01 09:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2133,6 +2133,13 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY:
             {
                 SwFieldType* pFldType = pDoc->GetFldType(RES_AUTHORITY, aEmptyStr);
+                if(!pFldType)
+                {
+                    pFldType =
+                        (SwAuthorityFieldType*)pDoc->InsertFldType(
+                                        SwAuthorityFieldType(pDoc));
+                }
+
                 pFld = new SwAuthorityField((SwAuthorityFieldType*)pFldType, aEmptyStr);
                 if(m_pProps->aPropSeq.getLength())
                 {
