@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:44:21 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,9 +654,8 @@ inline bool IsNotAM(String& rParams, xub_StrLen nPos)
            );
 }
 
-
 static ULONG MSDateTimeFormatToSwFormat(String& rParams,
-    SvNumberFormatter *pFormatter, USHORT nLang, bool &rbForceJapanese)
+    SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri)
 {
     // tell the Formatter about the new entry
     UINT16 nCheckPos = 0;
@@ -665,8 +664,8 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
 
     SwapQuotesInField(rParams);
 
-    //#102782#, #102815# & #108341# have to work at the same time :-)
-    rbForceJapanese = false;
+    //#102782#, #102815#, #108341# & #111944# have to work at the same time :-)
+    bool bForceJapanese(false);
     bool bForceNatNum(false);
     xub_StrLen nLen = rParams.Len();
     xub_StrLen nI = 0;
@@ -700,9 +699,9 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
                 bForceNatNum = true;
             }
             else if ((nChar == 'g') || (nChar == 'G'))
-                rbForceJapanese = true;
+                bForceJapanese = true;
             else if ((nChar == 'a') && IsNotAM(rParams, nI))
-                rbForceJapanese = true;
+                bForceJapanese = true;
             else if (nChar == 'E')
             {
                 if ((nI != nLen-1) && (rParams.GetChar(nI+1) == 'E'))
@@ -711,7 +710,7 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
                     nLen+=2;
                     nI+=3;
                 }
-                rbForceJapanese = true;
+                bForceJapanese = true;
             }
             else if (nChar == 'e')
             {
@@ -721,26 +720,63 @@ static ULONG MSDateTimeFormatToSwFormat(String& rParams,
                     nLen+=2;
                     nI+=3;
                 }
-                rbForceJapanese = true;
+                bForceJapanese = true;
             }
             ++nI;
         }
     }
 
     if (bForceNatNum)
-        rbForceJapanese = true;
+        bForceJapanese = true;
+
+    if (bForceJapanese)
+        rLang = LANGUAGE_JAPANESE;
 
     if (bForceNatNum)
         rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
 
-    pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, nLang);
+    if (bHijri)
+        rParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
+
+    pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, rLang);
 
     return nKey;
 }
 
-short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
-    bool &rbForceJapanese)
+bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
 {
+    bool bRet(false);
+
+    const SvxLanguageItem *pLang =
+        (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+    ASSERT(pLang, "impossible");
+    USHORT nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
+
+    if (nLang != nDefault)
+    {
+        rFld.SetAutomaticLanguage(false);
+        rFld.SetLanguage(nLang);
+        bRet = true;
+    }
+
+    return bRet;
+}
+
+short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
+    USHORT &rLang, bool bHijri)
+{
+    bool bRTL = false;
+    if (pPlcxMan && !bVer67)
+    {
+        const BYTE *pResult = pPlcxMan->HasCharSprm(0x85A);
+        if (pResult && *pResult)
+            bRTL = true;
+    }
+    RES_CHRATR eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
+    const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr(eLang);
+    ASSERT(pLang, "impossible");
+    rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
+
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
     String sParams( FindPara( rStr, '@', '@' ) );// Date/Time
     if (!sParams.Len())
@@ -748,38 +784,31 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
         //Get the system date in the correct final language layout, convert to
         //a known language and modify the 2 digit year part to be 4 digit, and
         //convert back to the correct language layout.
-        LanguageType nLang = LANGUAGE_ENGLISH_US;
-        if (const SvxLanguageItem *pLang =
-            (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE))
-        {
-            nLang = pLang->GetValue();
-        }
-
-        ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
+        ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, rLang);
 
         SvNumberformat aFormat = const_cast<SvNumberformat &>
             (*(pFormatter->GetEntry(nIndex)));
-        aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
+        aFormat.ConvertLanguage(*pFormatter, rLang, LANGUAGE_ENGLISH_US);
 
         sParams = aFormat.GetFormatstring();
         sParams.SearchAndReplace(CREATE_CONST_ASC("YY"),
             CREATE_CONST_ASC("YYYY"));
+
+        if (bHijri)
+            sParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
 
         UINT16 nCheckPos = 0;
         INT16 nType = NUMBERFORMAT_DEFINED;
         rFormat = 0;
 
         pFormatter->PutandConvertEntry(sParams, nCheckPos, nType, rFormat,
-            LANGUAGE_ENGLISH_US, nLang);
+            LANGUAGE_ENGLISH_US, rLang);
 
         return NUMBERFORMAT_DATE;
     }
 
-    const SvxLanguageItem& rLang =
-        DefaultItemGet<SvxLanguageItem>(rDoc,RES_CHRATR_LANGUAGE);
-
-    ULONG nFmtIdx = MSDateTimeFormatToSwFormat(sParams, pFormatter,
-        rLang.GetValue(), rbForceJapanese);
+    ULONG nFmtIdx =
+        MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
@@ -818,18 +847,60 @@ sal_uInt16 SwWW8ImplReader::End_Field()
         cases we have inserted a field not an attribute with an unknown end
         point
         */
-        nRet = maFieldStack.back();
+        nRet = maFieldStack.back().mnFieldId;
         switch (nRet)
         {
             case 88:
                 pCtrlStck->SetAttr(*pPaM->GetPoint(),RES_TXTATR_INETFMT);
             break;
+            case 36:
+            case 68:
+                //Move outside the section associated with this type of field
+                *pPaM->GetPoint() = maFieldStack.back().maStartPos;
+                break;
             default:
-            break;
+                break;
         }
         maFieldStack.pop_back();
     }
     return nRet;
+}
+
+bool AcceptableNestedField(sal_uInt16 nFieldCode)
+{
+    switch (nFieldCode)
+    {
+        case 36:
+        case 68:
+        case 79:
+        case 88:
+            return true;
+        default:
+            return false;
+    }
+}
+
+FieldEntry::FieldEntry(SwPosition &rPos, sal_uInt16 nFieldId) throw()
+    : maStartPos(rPos), mnFieldId(nFieldId)
+{
+}
+
+FieldEntry::FieldEntry(const FieldEntry &rOther) throw()
+    : maStartPos(rOther.maStartPos), mnFieldId(rOther.mnFieldId)
+{
+}
+
+void FieldEntry::Swap(FieldEntry &rOther) throw()
+{
+    std::swap(maStartPos, rOther.maStartPos);
+    std::swap(mnFieldId, rOther.mnFieldId);
+}
+
+FieldEntry &FieldEntry::operator=(const FieldEntry &rOther) throw()
+{
+    FieldEntry aTemp(rOther);
+    Swap(aTemp);
+    return *this;
 }
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
@@ -944,7 +1015,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         0                                           // eMax - Dummy leer Methode
     };
     ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
-             "FeldFunc-Tabelle stimmt nicht" );
+            "FeldFunc-Tabelle stimmt nicht" );
 
 
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
@@ -959,11 +1030,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         mycFieldIter aEnd = maFieldStack.end();
         for(mycFieldIter aIter = maFieldStack.begin(); aIter != aEnd; ++aIter)
         {
-            if (*aIter != 88)
-            {
-                bNested = true;
+            if (bNested = !AcceptableNestedField(aIter->mnFieldId))
                 break;
-            }
         }
     }
 
@@ -972,7 +1040,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
 
     ASSERT(bOk, "WW8: Bad Field!\n");
 
-    maFieldStack.push_back(aF.nId);
+    maFieldStack.push_back(FieldEntry(*pPaM->GetPoint(), aF.nId));
 
     if (bNested)
         return 0;
@@ -1005,7 +1073,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if( nFieldTagBad[nI] & nMask )      // Flag: Tag it when bad
             return Read_F_Tag( &aF );       // Resultat nicht als Text
                                             // Lese nur Resultat
-        if( aF.bResNest )
+        if (aF.bResNest && !AcceptableNestedField(aF.nId))
             return aF.nLen;                 // Result nested -> nicht brauchbar
 
         return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
@@ -1683,11 +1751,11 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     ULONG nFormat = 0;
 
-    bool bForceJapanese = false;
-    if( bDateTime )
+    USHORT nLang(0);
+    if (bDateTime)
     {
-        short nDT = GetTimeDatePara(rStr, nFormat, bForceJapanese);
-        switch( nDT )
+        short nDT = GetTimeDatePara(rStr, nFormat, nLang);
+        switch (nDT)
         {
             case NUMBERFORMAT_DATE:
                 nReg = DI_SUB_DATE;
@@ -1706,20 +1774,10 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     SwDocInfoField aFld( (SwDocInfoFieldType*)
         rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, nFormat );
-
-    if (bForceJapanese)
-    {
-        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_LANGUAGE));
-        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE));
-    }
-
+    if (bDateTime)
+        ForceFieldLanguage(aFld, nLang);
     rDoc.Insert(*pPaM, SwFmtFld(aFld));
 
-    if (bForceJapanese)
-    {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_LANGUAGE);
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_LANGUAGE);
-    }
     return FLD_OK;
 }
 
@@ -1746,15 +1804,36 @@ eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, String& )
 // Sowohl das Datum- wie auch das Uhrzeit-Feld kann fuer Datum, fuer Uhrzeit
 // oder fuer beides benutzt werden.
 eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
-{                                               // Datum/Uhrzeit - Feld
+{
+    bool bHijri = false;
+    bool bSaka = false;
+    _ReadFieldParams aReadParam(rStr);
+    long nTok;
+    while (-1 != (nTok = aReadParam.SkipToNextToken()))
+    {
+        switch (nTok)
+        {
+            default:
+            case 'l':
+            case -2:
+                break;
+            case 'h':
+                bHijri = true;
+                break;
+            case 's':
+                bSaka = true;
+                break;
+        }
+    }
+
     ULONG nFormat = 0;
 
-    bool bForceJapanese;
-    short nDT = GetTimeDatePara(rStr, nFormat, bForceJapanese);
+    USHORT nLang(0);
+    short nDT = GetTimeDatePara(rStr, nFormat, nLang, bHijri);
 
     if( NUMBERFORMAT_UNDEFINED == nDT )             // no D/T-Formatstring
     {
-        if( 32 == pF->nId )
+        if (32 == pF->nId)
         {
             nDT     = NUMBERFORMAT_TIME;
             nFormat = rDoc.GetNumberFormatter()->GetFormatIndex(
@@ -1768,28 +1847,19 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
         }
     }
 
-    if (bForceJapanese)
-    {
-        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_LANGUAGE));
-        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE));
-    }
     if (nDT & NUMBERFORMAT_DATE)
     {
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD ), DATEFLD, nFormat);
+        ForceFieldLanguage(aFld, nLang);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     }
     else if (nDT == NUMBERFORMAT_TIME)
     {
         SwDateTimeField aFld((SwDateTimeFieldType*)
             rDoc.GetSysFldType(RES_DATETIMEFLD), TIMEFLD, nFormat);
+        ForceFieldLanguage(aFld, nLang);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
-    }
-
-    if (bForceJapanese)
-    {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_LANGUAGE);
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_LANGUAGE);
     }
 
     return FLD_OK;
@@ -1981,7 +2051,7 @@ eF_ResT SwWW8ImplReader::Read_F_Set( WW8FieldDesc* pF, String& rStr )
 
     SwFieldType* pFT = rDoc.InsertFldType( SwSetExpFieldType( &rDoc, sOrigName,
         GSE_STRING ) );
-    SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal );
+    SwSetExpField aFld( (SwSetExpFieldType*)pFT, sVal, ULONG_MAX );
     aFld.SetSubType(SUB_INVISIBLE|GSE_STRING);
 
     rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
@@ -2339,7 +2409,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     case the file is not available we will fill in the section with the stored
     content of this winword field as a fallback.
     */
-    WW8ReaderSave aSave( this );
+    SwPosition aTmpPos(*pPaM->GetPoint());
 
     SwSection aSection(FILE_LINK_SECTION, maSectionNameGenerator.UniqueName());
     aSection.SetLinkFileName( aPara );
@@ -2348,27 +2418,20 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* pF, String& rStr )
     SwSection* pSection = rDoc.Insert(*pPaM, aSection, 0 ,false);
     ASSERT(pSection, "no section inserted");
     if (!pSection)
-        return FLD_OK;
+        return FLD_TEXT;
     const SwSectionNode* pSectionNode = pSection->GetFmt()->GetSectionNode();
     ASSERT(pSectionNode, "no section node!");
     if (!pSectionNode)
-        return FLD_OK;
+        return FLD_TEXT;
 
     pPaM->GetPoint()->nNode = pSectionNode->GetIndex()+1;
     pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0 );
 
     //we have inserted a section before this point, so adjust pos
     //for future page/section segment insertion
-    maSectionManager.PrependedInlineNode(aSave.GetStartPos(), *pPaM->GetNode());
+    maSectionManager.PrependedInlineNode(aTmpPos, *pPaM->GetNode());
 
-    bTxbxFlySection = true;
-    ReadText(pF->nSRes, pF->nLRes, pPlcxMan->GetManType());
-
-    aSave.Restore( this );
-
-    if (!maApos.back()) //a para end in apo doesn't count
-        bWasParaEnd = true;
-    return FLD_OK;
+    return FLD_TEXT;
 }
 
 // "SERIENDRUCKFELD"
@@ -3127,7 +3190,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 */
                 }
-             }
+            }
             if( !nMaxLevel )
                 nMaxLevel = MAXLEVEL;
             pBase->SetLevel( nMaxLevel );
@@ -3331,16 +3394,15 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
 
 void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
 {
-    TOXTypes eTox = (!bIdx) ? TOX_CONTENT : TOX_INDEX;  // Default
+    TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
 
     USHORT nLevel = 1;
 
     xub_StrLen n;
     String sFldTxt;
     long nRet;
-    _ReadFieldParams aReadParam( rStr );
+    _ReadFieldParams aReadParam(rStr);
     while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
-    {
         switch( nRet )
         {
         case -2:
@@ -3375,7 +3437,6 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
             }
             break;
         }
-    }
 
     ASSERT( rDoc.GetTOXTypeCount( eTox ), "Doc.GetTOXTypeCount() == 0  :-(" );
 
@@ -3499,7 +3560,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
         USHORT nNameLen = *pName++;
         if( sFieldName.EqualsIgnoreCaseAscii( pName, nC, nNameLen ) )
         {
-            ImportTox(aFldId[i], sFieldName.Copy( nC + nNameLen ));
+            ImportTox( aFldId[i], sFieldName.Copy( nC + nNameLen ) );
             break;                  // keine Mehrfachnennungen moeglich
         }
     }
