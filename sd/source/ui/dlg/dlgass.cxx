@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-30 15:45:02 $
+ *  last change: $Author: af $ $Date: 2001-04-06 12:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,33 +90,6 @@
 #include <svtools/lstner.hxx>
 #endif
 
-/* no chaos, no fun
-#ifndef _CNTAPI_HXX // class CntAnchor
-#include <chaos/cntapi.hxx>
-#endif
-
-#ifndef _CNTRULES_HXX // Cnt Rules
-#define ITEMID_RULESET WID_RULES
-#include <chaos/cntrules.hxx>
-#endif
-
-#ifndef _SVTOOLS_CTYPEITM_HXX // CntContentTypeItem
-#include <svtools/ctypeitm.hxx>
-#endif
-
-#ifndef _CNTSYS_HXX //!!!TEMP
-#include <chaos/cntsys.hxx>
-#endif
-
-#ifndef _CNTCCITM_HXX // class CntCmpCommandItem
-#include <chaos/cntccitm.hxx>
-#endif
-
-#ifndef _CSTRITEM_HXX // class CntStringItem
-#include <chaos/cstritem.hxx>
-#endif
-*/
-
 #ifndef _SFXDOCINF_HXX // SfxDocumentInfo
 #include <sfx2/docinf.hxx>
 #endif
@@ -177,6 +150,23 @@
 #include <sfx2/dispatch.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_HISTORYOPTIONS_HXX
+#include <svtools/historyoptions.hxx>
+#endif
+
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+
 #include "sdpage.hxx"
 #include "helpids.h"
 #include "assclass.hxx"
@@ -185,8 +175,15 @@
 #include "dlgctrls.hxx"
 #include "strings.hrc"
 #include "dlgassim.hxx"
+#include "TemplateThread.hxx"
 
 using namespace ::com::sun::star;
+
+
+//  This prefix is used to find impress files in the file history.
+//  Should probably be determined dynamically.
+const rtl::OUString IMPRESS_PREFIX  = rtl::OUString::createFromAscii ("simpress:");
+
 
 void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 {
@@ -211,31 +208,6 @@ UINT32 PageHelpIds[] =
 
 // ====================================================================
 
-class TemplateEntry
-{
-public:
-    TemplateEntry( const String& rTitle, const String& rPath ) { m_aTitle = rTitle; m_aPath = rPath; }
-
-    String m_aTitle;
-    String m_aPath;
-};
-
-DECLARE_LIST( TemplateEntryList, TemplateEntry * );
-
-
-class TemplateDir
-{
-public:
-    TemplateDir( const String& rRegion, const String& rUrl ) { m_aRegion = rRegion; m_aUrl = rUrl; }
-
-    String m_aRegion;
-    String m_aUrl;
-    TemplateEntryList m_aEntrys;
-};
-
-DECLARE_LIST( TemplateDirList, TemplateDir * );
-DECLARE_LIST( StringPtrList, String * );
-
 class PasswordEntry
 {
 public:
@@ -253,18 +225,30 @@ public:
     AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot  );
     ~AssistentDlgImpl();
 
-    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-
     SfxObjectShellLock GetDocument();
 
 
-    void TemplateScanDone();
-//  void AddTemplateDir( CntAnchorRef xRoot );
-//  void ScanTemplateDir( CntAnchorRef xDir );
-    void ScanTemplates();
-    void DocmenuScanDone();
-    void ScanDocmenu();
+    /** @descr  Extract form the history list of recently used files the
+            impress files and insert them into a listbox.
+    */
+    void    ScanDocmenu         (void);
+
+    /** @descr  Extract from the list of template files the impress templates
+            and layouts and store them for later use in m_aPresentList.
+    */
+    void    ScanTemplates       (void);
+
+    /** @desrc  This callback is called from the thread that scans the
+            template files to update the dialog in order to display the
+            found impress templates.  This sets the flag m_bTemplatesReady
+            to TRUE.
+    */
+    void    TemplateScanDone    (void);
+
+    /** @descr  Flag that is set to TRUE after the impress templates have been
+            scanned.
+    */
+    BOOL m_bTemplatesReady;
 
     Window* m_pWindow;
 
@@ -273,24 +257,25 @@ public:
     String GetPassword( const String rPath );
     void DeletePassords();
 
-    // chaos
+    PasswordEntryList m_aPasswordList;
+
     String m_aDocFile;
     String m_aLayoutFile;
 
     String GetDocFileName();
     String GetLayoutFileName();
 
-    StringPtrList m_aOpenFilesList;
+    /// @descr  List of URLs of recently used impress files.
+    std::vector<String*>    m_aOpenFilesList;
+
+    /// @descr  The thread that scans the template files for impress templates
+    TemplateThread * m_aThread;
+    /// @descr  List of folders containing data about impress templates.
+    std::vector<TemplateDir*>   m_aPresentList;
+    /// @descr  Currently selected template folder.
     TemplateDir* m_pTemplateRegion;
+    /// @descr  Currently selected layout folder.
     TemplateDir* m_pLayoutRegion;
-//  CntAnchorRef m_xRoot;
-//  CntAnchor* m_pTemplateDir;
-
-    TemplateDirList m_aPresentList;
-    PasswordEntryList m_aPasswordList;
-
-    BOOL m_bTemplatesReady;
-//  BOOL m_bOpenReady;
 
     // preview
     BOOL m_bUserDataDirty;
@@ -305,7 +290,6 @@ public:
     USHORT m_nShowPage;
     BOOL m_bDocPreview;
 
-//  CntAnchorRef m_xDocmenu;
     ULONG m_nTemplate;
 
     String m_aPageListFile;
@@ -313,9 +297,6 @@ public:
     void UpdatePreview( BOOL bDocPreview );
     void UpdatePageList();
     void UpdateUserData();
-
-    // templates
-    TemplateCache   m_aCache;
 
     BOOL IsOwnFormat( const String& rPath );
 
@@ -415,6 +396,8 @@ public:
     CheckBox*           m_pPage5SummaryCB;
 };
 
+
+
 // ====================================================================
 
 AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BOOL bAutoPilot ) :
@@ -434,11 +417,11 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_nShowPage(0),
 //  m_aPageListFile('?'),
     m_bUserDataDirty(FALSE),
-    m_aAssistentFunc(5)
+    m_aAssistentFunc(5),
+    m_aThread (NULL)
 {
     m_aPageListFile += sal_Unicode('?'),
     m_bTemplatesReady = FALSE;
-//  m_bOpenReady      = FALSE;
 
     m_pWindow = pWindow;
 
@@ -647,41 +630,32 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     ChangePage();
 }
 
+
+
+
 AssistentDlgImpl::~AssistentDlgImpl()
 {
     DeletePassords();
-/*
-    if(m_pTemplateDir)
-        EndListening(*m_pTemplateDir);
-*/
-    TemplateDir* pDir = m_aPresentList.First();
-    while(pDir)
-    {
-        TemplateEntry* pEntry = pDir->m_aEntrys.First();
-        while(pEntry)
-        {
-            delete pEntry;
-            pEntry = pDir->m_aEntrys.Next();
-        }
 
-        pDir = m_aPresentList.Next();
+    //  Delete the template file infos.
+    std::vector<TemplateDir*>::iterator I;
+    std::vector<TemplateEntry*>::iterator   J;
+    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
+    {
+        for (J=(*I)->m_aEntries.begin(); J!=(*I)->m_aEntries.end(); J++)
+            delete (*J);
+        delete (*I);
     }
 
-/*
-    if(m_xRoot)
+    //  Terminate or join the thread for scanning the template files.
+    if (m_aThread != NULL)
     {
-        m_xRoot->Collapse();
-        EndListening(*(CntAnchor*)m_xRoot);
-        m_xRoot = NULL;
+        if (m_aThread->isRunning())
+            m_aThread->terminate ();
+        else
+            m_aThread->join ();
+        delete m_aThread;
     }
-*/
-/*
-    if(m_xDocmenu)
-    {
-        EndListening( *(CntAnchor*)m_xDocmenu );
-        m_xDocmenu = NULL;
-    }
-*/
 
     // Seite 1
     delete m_pPage1FB;
@@ -737,11 +711,10 @@ AssistentDlgImpl::~AssistentDlgImpl()
     delete m_pPage5PageListCT;
     delete m_pPage5SummaryCB;
 
-    for( ULONG nIdx = 0; nIdx < m_aOpenFilesList.Count(); nIdx++ )
-        delete m_aOpenFilesList.GetObject(nIdx);
-
-    if( m_bTemplatesReady && m_aCache.ClearInvalidEntrys() )
-        m_aCache.Save();
+    //  Delete the file history list.
+    std::vector<String*>::iterator  I2;
+    for (I2=m_aOpenFilesList.begin(); I2!=m_aOpenFilesList.end(); I2++)
+        delete *I2;
 }
 
 void AssistentDlgImpl::EndDialog( long nResult )
@@ -749,311 +722,116 @@ void AssistentDlgImpl::EndDialog( long nResult )
     m_pWindow = NULL;
 }
 
-// ********************************************************************
-// I/O Chaos
-// ********************************************************************
 
-void AssistentDlgImpl::ScanTemplates()
+
+
+void    TemplateScanDoneCallback    (void * pObject)
 {
-/*
-    m_pTemplateDir = NULL;
-    m_nTemplate = 0;
-    m_xRoot = new CntAnchor( NULL, ".component:Template/" );
-
-    StartListening( *m_xRoot );
-    m_xRoot->MakeVisible( TRUE );
-    m_xRoot->MarkAsRoot();
-    m_xRoot->DontThread();
-
-    CntOpenModeItem aItem( WID_OPEN, CNT_OPEN_FOLDERS );
-    m_xRoot->Put( aItem );
-*/
+    reinterpret_cast<AssistentDlgImpl*>(pObject)->TemplateScanDone ();
 }
 
-/*
-void AssistentDlgImpl::ScanTemplateDir( CntAnchorRef xDir )
+
+
+
+void    AssistentDlgImpl::ScanDocmenu   (void)
 {
-    StartListening( *xDir );
-    xDir->MakeVisible( TRUE );
-    xDir->MarkAsRoot();
-    xDir->DontThread();
+    uno::Sequence<uno::Sequence<beans::PropertyValue> > aHistory =
+        SvtHistoryOptions().GetList (eHISTORY);
 
-    xDir->Put(CntOpenModeItem( WID_OPEN, CNT_OPEN_ALL ));
-}
-*/
-
-/*
-void AssistentDlgImpl::AddTemplateDir( CntAnchorRef xRoot )
-{
-    const ULONG nCount = xRoot->SubAnchorCount();
-
-    if( nCount == 0 )
-        return;
-
-    TemplateDir* pPresntDir = NULL;
-    TemplateDir* pLayoutDir = NULL;
-
-    INetURLObject aRootUrl( xRoot->GetViewURL() );
-
-    CntContentTypeItem aImpressType1( 0, CONTENT_TYPE_APP_STARIMPRESS );
-    CntContentTypeItem aImpressType2( 0, CONTENT_TYPE_APP_VND_IMPRESS );
-
-    for( ULONG i = 0; i < nCount; i++ )
+    sal_uInt32 nCount = aHistory.getLength();
+    for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)
     {
-        CntAnchor* pSubAnchor = xRoot->GetSubAnchor( i );
+        //  Get the current history item's properties.
+        uno::Sequence<beans::PropertyValue> aPropertySet = aHistory[nItem];
+        rtl::OUString   sURL;
+        rtl::OUString   sFilter;
+        rtl::OUString   sTitle;
+        rtl::OUString   sPassword;
+        sal_uInt32 nPropertyCount = aPropertySet.getLength();
+        for (sal_uInt32 nProperty=0; nProperty<nPropertyCount; ++nProperty)
+            if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_URL)
+                aPropertySet[nProperty].Value >>= sURL;
+            else if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_FILTER)
+                aPropertySet[nProperty].Value >>= sFilter;
+            else if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_TITLE)
+                aPropertySet[nProperty].Value >>= sTitle;
+            else if (aPropertySet[nProperty].Name == HISTORY_PROPERTYNAME_PASSWORD)
+                aPropertySet[nProperty].Value >>= sPassword;
 
-        DateTime aTime;
-
-        if((pSubAnchor->GetItemState(WID_DATE_MODIFIED) & SFX_ITEM_SET) == SFX_ITEM_SET)
-            aTime = ((SfxDateTimeItem&)pSubAnchor->Get(WID_DATE_MODIFIED)).GetDateTime();
-
-        TemplateCacheInfo* pEntry = m_aCache.GetFileInfo( pSubAnchor->GetViewURL() );
-        if(pEntry && pEntry->GetDateTime() >= aTime)
+        //  If the entry is an impress file then insert it into the
+        //  history list and the list box.
+        if (sFilter.indexOf (IMPRESS_PREFIX) == 0)
         {
-            pEntry->SetValid( TRUE );
-
-            if(!pEntry->IsImpress())
-                continue;
+            INetURLObject aURL;
+            aURL.SetSmartURL (sURL);
+            aURL.SetPass (sPassword);
+            m_aOpenFilesList.push_back (new String (aURL.GetMainURL()));
+            m_pPage1OpenLB->InsertEntry (aURL.GetName());
         }
-        else
-        {
-            if(pEntry == NULL)
-                pEntry = m_aCache.AddFileInfo( pSubAnchor->GetViewURL() );
-
-            pEntry->SetDateTime( aTime );
-            pEntry->SetValid( TRUE );
-            pEntry->SetModified(TRUE);
-
-            pSubAnchor->Put(SfxVoidItem(WID_GETDATA));
-
-            const CntContentTypeItem& rContentType = (const CntContentTypeItem&)pSubAnchor->Get(WID_CONTENT_TYPE);
-
-            if( rContentType != aImpressType1 && rContentType != aImpressType2 )
-            {
-                pEntry->SetImpress(FALSE);
-                continue;
-            }
-            else
-            {
-                pEntry->SetImpress(TRUE);
-            }
-        }
-
-        String aTitle;
-        const SfxPoolItem* pItem;
-        if ( pSubAnchor->GetItemState( WID_TITLE, TRUE, &pItem ) == SFX_ITEM_SET )
-            aTitle = ( (CntStringItem*)pItem )->GetValue();
-        else
-        {
-            INetURLObject aUrl( pSubAnchor->GetViewURL() );
-            aTitle = aUrl.GetName();
-        }
-
-        if( pPresntDir == NULL )
-        {
-            String aRootTitle;
-            const SfxPoolItem* pItem;
-            if ( xRoot->GetItemState( WID_TITLE, TRUE, &pItem ) == SFX_ITEM_SET )
-                aRootTitle = ( (CntStringItem*)pItem )->GetValue();
-            else
-                aRootTitle = aRootUrl.GetName();
-
-            pPresntDir = new TemplateDir( aRootTitle, aRootUrl.GetLastName() );
-        }
-
-        pPresntDir->m_aEntrys.Insert( new TemplateEntry( aTitle, pSubAnchor->GetViewURL() ), CONTAINER_APPEND);
     }
-
-    if(pPresntDir != NULL)
-        m_aPresentList.Insert( pPresntDir, CONTAINER_APPEND );
-
 }
-*/
 
-void AssistentDlgImpl::TemplateScanDone()
+
+
+void    AssistentDlgImpl::ScanTemplates (void)
 {
-/*
-    if(m_pTemplateDir)
-    {
-        EndListening(*m_pTemplateDir);
-        m_pTemplateDir = NULL;
-    }
+    m_aThread = new TemplateThread (
+        m_aPresentList,
+        TemplateScanDoneCallback,
+        this);
+    //  This starts the thread.  It exists until it is, depending on wether
+    //  it has finished by then, either joined or terminated in the destructor.
+    m_aThread->create ();
+}
 
-    EndListening( *m_xRoot );
-    m_xRoot = NULL;
 
+void    AssistentDlgImpl::TemplateScanDone  (void)
+{
+    //  This method is called from a thread.  Therefore we get the solar mutex.
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    //  Fill in the list box on the first page.
     int nFirstEntry = 0;
     m_pPage1RegionLB->Clear();
-    const ULONG nCount = m_aPresentList.Count();
-    for( ULONG i = 0; i < nCount; i++ )
+    std::vector<TemplateDir*>::iterator I;
+    int i;
+    for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
     {
-        TemplateDir* pDir = m_aPresentList.GetObject(i);
-        if(pDir->m_aUrl == "presnt") //HACK! presnt Verzeichnis immer als erste Zeigen
+        TemplateDir * pDir = *I;
+        //HACK! presnt directory is always initially selected.
+        if (pDir->m_aUrl.SearchAscii ("presnt") != STRING_NOTFOUND)
             nFirstEntry = i;
 
-        m_pPage1RegionLB->InsertEntry( pDir->m_aRegion );
+        m_pPage1RegionLB->InsertEntry (pDir->m_aRegion);
     }
-    m_pPage1RegionLB->SelectEntryPos(nFirstEntry);
+    m_pPage1RegionLB->SelectEntryPos (nFirstEntry);
     m_pPage1RegionLB->Update();
-    SelectTemplateRegion( m_pPage1RegionLB->GetSelectEntry() );
+    SelectTemplateRegion (m_pPage1RegionLB->GetSelectEntry());
 
+    //  Fill in the list box on the second page.
     nFirstEntry = 0;
     m_pPage2RegionLB->Clear();
-    for( i = 0; i < nCount; i++ )
+    for (i=0,I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++,i++)
     {
-        TemplateDir* pDir = m_aPresentList.GetObject(i);
-        if(pDir->m_aUrl == "layout")
+        TemplateDir * pDir = *I;
+        //HACK! layout directory is always initially selected.
+        if (pDir->m_aUrl.SearchAscii ("layout") != STRING_NOTFOUND)
             nFirstEntry = i;
 
-        m_pPage2RegionLB->InsertEntry( pDir->m_aRegion );
+        m_pPage2RegionLB->InsertEntry (pDir->m_aRegion);
     }
-    m_pPage2RegionLB->SelectEntryPos(nFirstEntry);
+    m_pPage2RegionLB->SelectEntryPos (nFirstEntry);
     m_pPage2RegionLB->Update();
-    SelectLayoutRegion( m_pPage2RegionLB->GetSelectEntry() );
+    SelectLayoutRegion (m_pPage2RegionLB->GetSelectEntry());
 
-    m_bTemplatesReady = nCount != 0;
-
-    if( m_pWindow )
+    //  Make the changes visible.
+    m_bTemplatesReady = TRUE;
+    if (m_pWindow)
         UpdatePage();
-*/
 }
 
-void AssistentDlgImpl::ScanDocmenu()
-{
-/*
-    m_xDocmenu = new CntAnchor(NULL, ".component:Docmenu/");
-    m_xDocmenu->MakeVisible( TRUE );
-    m_xDocmenu->MarkAsRoot();
-    m_xDocmenu->DontThread();
 
-    StartListening( *m_xDocmenu );
-    m_xDocmenu->Put(CntOpenModeItem( WID_OPEN, CNT_OPEN_ALL ));
-*/
-}
 
-void AssistentDlgImpl::DocmenuScanDone()
-{
-/*
-    EndListening( *m_xDocmenu );
-
-    const ULONG nCount = m_xDocmenu->SubAnchorCount();
-    CntContentTypeItem aImpressType1( 0, CONTENT_TYPE_APP_STARIMPRESS );
-    CntContentTypeItem aImpressType2( 0, CONTENT_TYPE_APP_VND_IMPRESS );
-
-    for( ULONG i = 0; i < nCount; i++ )
-    {
-        CntAnchor* pSubAnchor = m_xDocmenu->GetSubAnchor( i );
-
-        String aCommand;
-        const CntCmpCommandItem& rCmdItem = (const CntCmpCommandItem&)pSubAnchor->Get(WID_COMPONENT_COMMAND);
-        String aCmpCommand( OUStringToString( rCmdItem.GetCommand(), CHARSET_SYSTEM) );
-//#endif
-        INetURLObject aUrl( aCmpCommand );
-
-        if( INET_PROT_FILE != aUrl.GetProtocol())
-            continue;
-
-        String aExt = aUrl.GetExtension().Lower();
-
-        BOOL bImpress = FALSE;
-
-        if(aExt.Compare( "sdd" ) == COMPARE_EQUAL)
-        {
-            bImpress = TRUE;
-        }
-        else if( aExt.Compare( "ppt" ) == COMPARE_EQUAL )
-        {
-            bImpress = TRUE;
-        }
-        else if( aExt.Compare( "vor" ) == COMPARE_EQUAL )
-        {
-            CntAnchorRef xAnchor = new CntAnchor( 0, aUrl.GetMainURL() );
-            xAnchor->Put(SfxVoidItem(WID_GETDATA));
-            const CntContentTypeItem& rContentType = (const CntContentTypeItem&)xAnchor->Get(WID_CONTENT_TYPE);
-
-            bImpress = rContentType == aImpressType1 || rContentType == aImpressType2;
-        }
-
-        if( bImpress)
-        {
-            m_aOpenFilesList.Insert( new String( aUrl.GetMainURL() ), CONTAINER_APPEND);
-            m_pPage1OpenLB->InsertEntry( aUrl.GetName() );
-//          m_bOpenReady = TRUE;
-        }
-
-    }
-
-    m_xDocmenu = NULL;
-
-    UpdatePage();
-*/
-}
-
-void AssistentDlgImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
-{
-/*
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
-
-    if( rHint.ISA(CntStatusHint) )
-    {
-        const CntStatusHint& rStatusHint = (const CntStatusHint&)rHint;
-        USHORT nWhich = rStatusHint.GetRequest() ?
-            rStatusHint.GetRequest()->Which() : 0;
-
-        switch( rStatusHint.GetStatus() )
-        {
-            case CNT_STATUS_DONE:
-            {
-                if( nWhich != WID_OPEN )
-                    break;
-
-                CntAnchor* pBC = PTR_CAST( CntAnchor, &rBC );
-
-                if(pBC == m_xDocmenu )
-                {
-                    DocmenuScanDone();
-                }
-                else
-                {
-                    if( pBC == m_xRoot )
-                    {
-                        // das Template Root Verzeichnis wurde komplett eingelesen
-                        // jetzt beginnen diese Verzeichnisse einzulesen
-                        m_nTemplate = (ULONG)0;
-                    }
-                    else if( pBC == m_pTemplateDir )
-                    {
-                        // aktuell eingelessenes Template Verzeichnis speichern
-                        AddTemplateDir( m_pTemplateDir );
-                        EndListening( *m_pTemplateDir );
-                        m_pTemplateDir = NULL;
-                        m_nTemplate += 1;
-                    }
-                    else
-                        DBG_ERROR("CNT_STATUS_DONE from unknown CntAnchor!");
-
-                    if( m_nTemplate < m_xRoot->SubAnchorCount() )
-                    {
-                        // nächstes Template Verzeichniss einlesen
-                        m_pTemplateDir = m_xRoot->GetSubAnchor( m_nTemplate );
-                        ScanTemplateDir( m_pTemplateDir );
-                    }
-                    else
-                    {
-                        // alle Template Verzeichnisse fertig eingelesen
-                        TemplateScanDone();
-                    }
-
-                }
-                break;
-            }
-            case CNT_STATUS_ERROR:
-                // Fehlermeldung ausgeben
-                break;
-        }
-    }
-*/
-}
 
 // ********************************************************************
 // Status Methoden
@@ -1098,7 +876,7 @@ String AssistentDlgImpl::GetDocFileName()
         const USHORT nEntry = m_pPage1TemplateLB->GetSelectEntryPos();
         TemplateEntry* pEntry = NULL;
         if(nEntry != (USHORT)-1)
-            pEntry = m_pTemplateRegion->m_aEntrys.GetObject(nEntry);
+            pEntry = m_pTemplateRegion->m_aEntries[nEntry];
 
         if(pEntry)
         {
@@ -1113,7 +891,7 @@ String AssistentDlgImpl::GetDocFileName()
     {
         const USHORT nEntry = m_pPage1OpenLB->GetSelectEntryPos();
         if(nEntry != (USHORT)-1 && nEntry > 0)
-            aDocFile = *m_aOpenFilesList.GetObject(nEntry-1);
+            aDocFile = *m_aOpenFilesList[nEntry-1];
     }
 
     if(m_pWindow)
@@ -1128,7 +906,7 @@ String AssistentDlgImpl::GetLayoutFileName()
     const USHORT nEntry = m_pPage2LayoutLB->GetSelectEntryPos();
     TemplateEntry* pEntry = NULL;
     if(nEntry != (USHORT)-1 && nEntry > 0)
-        pEntry = m_pLayoutRegion->m_aEntrys.GetObject(nEntry-1);
+        pEntry = m_pLayoutRegion->m_aEntries[nEntry-1];
 
     if(pEntry)
         aFile = pEntry->m_aPath;
@@ -1279,10 +1057,8 @@ void AssistentDlgImpl::UpdatePage()
 
 IMPL_LINK( AssistentDlgImpl, StartScanHdl, void *, EMPTYARG )
 {
-    m_aCache.Load();
-
-    ScanDocmenu();
-    ScanTemplates();
+    ScanDocmenu ();
+    ScanTemplates ();
 
     UpdatePreview(TRUE);
 
@@ -1319,6 +1095,7 @@ IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
 }
 
 IMPL_LINK( AssistentDlgImpl, PreviewFlagHdl, CheckBox *, EMPTYARG )
+
 {
     if( m_aPreviewFlag.IsChecked() != m_bPreview )
     {
@@ -1441,19 +1218,16 @@ IMPL_LINK( AssistentDlgImpl, UpdateUserDataHdl, Edit*, EMPTYARG )
 void AssistentDlgImpl::SelectTemplateRegion( const String& rRegion )
 {
     m_pPage1TemplateLB->Clear();
-    ULONG i = m_aPresentList.Count();
-    while( i > 0 )
+    std::vector<TemplateDir*>::iterator I;
+    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
     {
-        i--;
-        TemplateDir* pDir = m_aPresentList.GetObject(i);
-        m_pTemplateRegion = pDir;
-        if( pDir->m_aRegion.Equals( rRegion ) )
+        TemplateDir * pDir = *I;
+        m_pTemplateRegion = *I;
+        if (pDir->m_aRegion.Equals( rRegion ) )
         {
-            for( i = 0; i < pDir->m_aEntrys.Count(); i++ )
-            {
-                TemplateEntry* pEntry = pDir->m_aEntrys.GetObject(i);
-                m_pPage1TemplateLB->InsertEntry( pEntry->m_aTitle );
-            }
+            std::vector<TemplateEntry*>::iterator   J;
+            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
+                m_pPage1TemplateLB->InsertEntry ((*J)->m_aTitle);
             m_pPage1TemplateLB->Update();
             if(GetStartType() == ST_TEMPLATE)
             {
@@ -1469,20 +1243,17 @@ void AssistentDlgImpl::SelectLayoutRegion( const String& rRegion )
 {
     m_pPage2LayoutLB->Clear();
     m_pPage2LayoutLB->InsertEntry(String(SdResId(STR_WIZARD_ORIGINAL)));
-    ULONG i = m_aPresentList.Count();
-    while( i > 0 )
+    std::vector<TemplateDir*>::iterator I;
+    for (I=m_aPresentList.begin(); I!=m_aPresentList.end(); I++)
     {
-        i--;
-        TemplateDir* pDir = m_aPresentList.GetObject(i);
-        m_pLayoutRegion = pDir;
+        TemplateDir * pDir = *I;
+        m_pLayoutRegion = *I;
 
-        if( pDir->m_aRegion.Equals( rRegion ) )
+        if (pDir->m_aRegion.Equals (rRegion))
         {
-            for( i = 0; i < pDir->m_aEntrys.Count(); i++ )
-            {
-                TemplateEntry* pEntry = pDir->m_aEntrys.GetObject(i);
-                m_pPage2LayoutLB->InsertEntry( pEntry->m_aTitle );
-            }
+            std::vector<TemplateEntry*>::iterator   J;
+            for (J=pDir->m_aEntries.begin(); J!=pDir->m_aEntries.end(); J++)
+                m_pPage2LayoutLB->InsertEntry ((*J)->m_aTitle);
             m_pPage2LayoutLB->Update();
             break;
         }

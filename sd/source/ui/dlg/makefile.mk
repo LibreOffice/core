@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2001-04-04 06:56:19 $
+#   last change: $Author: af $ $Date: 2001-04-06 12:17:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,7 +125,8 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         htmlattr.cxx	\
         vectdlg.cxx		\
         docprev.cxx     \
-        packgdlg.cxx
+        packgdlg.cxx	\
+        TemplateThread.cxx
 
 SRCFILES =\
     ins_page.src\
@@ -210,7 +211,11 @@ SLOFILES =  \
         $(SLO)$/htmlattr.obj	\
         $(SLO)$/vectdlg.obj		\
         $(SLO)$/docprev.obj     \
-        $(SLO)$/packgdlg.obj
+        $(SLO)$/packgdlg.obj	\
+        $(SLO)$/TemplateThread.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/TemplateThread.obj
 
 .IF "$(GUI)" == "WIN"
 
