@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:59:47 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,14 +116,13 @@ const sal_uInt16 EXC_MAXTAB8                = EXC_MAXTAB5;
 const SCTAB  SCNOTAB                        = SCTAB_MAX;  /// An invalid Calc sheet index, for common use.
 const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel sheet index, for common use.
 
+// Storage/stream names -------------------------------------------------------
 
-// In/out stream --------------------------------------------------------------
+#define EXC_STORAGE_VBA_PROJECT             CREATE_STRING( "_VBA_PROJECT_CUR" )
+#define EXC_STORAGE_VBA                     CREATE_STRING( "VBA" )
 
-const sal_uInt32 RECORD_SEEK_TO_BEGIN       = 0;
-const sal_uInt32 RECORD_SEEK_TO_END         = ~RECORD_SEEK_TO_BEGIN;
-
-const sal_uInt16 EXC_MAXRECSIZE_BIFF5       = 2080;
-const sal_uInt16 EXC_MAXRECSIZE_BIFF8       = 8224;
+#define EXC_STREAM_BOOK                     CREATE_STRING( "Book" )
+#define EXC_STREAM_WORKBOOK                 CREATE_STRING( "Workbook" )
 
 // String import/export -------------------------------------------------------
 
@@ -145,7 +144,6 @@ const sal_uInt16 EXC_LF                     = EXC_LF_C;     /// LF character (un
 const sal_uInt8 EXC_NUL_C                   = '\x00';       /// NUL chararcter.
 const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (unicode).
 
-
 // Encoded URLs ---------------------------------------------------------------
 
 const sal_Unicode EXC_URLSTART_ENCODED      = '\x01';   /// Encoded URL.
@@ -161,7 +159,6 @@ const sal_Unicode EXC_URL_SHEETNAME         = '\x09';   /// Sheet name starts he
 
 const sal_Unicode EXC_DDE_DELIM             = '\x03';   /// DDE application-topic delimiter
 
-
 // Error codes ----------------------------------------------------------------
 
 const sal_uInt8 EXC_ERR_NULL                = 0x00;
@@ -172,7 +169,6 @@ const sal_uInt8 EXC_ERR_NAME                = 0x1D;
 const sal_uInt8 EXC_ERR_NUM                 = 0x24;
 const sal_uInt8 EXC_ERR_NA                  = 0x2A;
 
-
 // Cached values list (EXTERNNAME, ptgArray, ...) -----------------------------
 
 const sal_uInt8 EXC_CACHEDVAL_EMPTY         = 0x00;
@@ -180,7 +176,6 @@ const sal_uInt8 EXC_CACHEDVAL_DOUBLE        = 0x01;
 const sal_uInt8 EXC_CACHEDVAL_STRING        = 0x02;
 const sal_uInt8 EXC_CACHEDVAL_BOOL          = 0x04;
 const sal_uInt8 EXC_CACHEDVAL_ERROR         = 0x10;
-
 
 // Measures -------------------------------------------------------------------
 
@@ -190,7 +185,6 @@ const sal_Int32 EXC_TWIPS_PER_INCH          = EXC_POINTS_PER_INCH * 20;
 const sal_uInt8 EXC_ROT_BOTTOM_TOP          = 90;       /// Vertical rotation bottom->top.
 const sal_uInt8 EXC_ROT_TOP_BOTTOM          = 180;      /// Vertical rotation top->bottom.
 const sal_uInt8 EXC_ROT_STACKED             = 0xFF;     /// Characters vertically stacked.
-
 
 // Records (ordered by lowest record ID) ======================================
 
@@ -217,15 +211,10 @@ const sal_uInt16 EXC_ID_EOF                 = 0x000A;
 const sal_uInt16 EXC_ID_NOTE                = 0x001C;
 const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
 
-
 // (0x0012, 0x0019) PROTECT and WINDOWPROTECT --------------------
 
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
-
-// (0x003C) CONTINUE ----------------------------------------------------------
-
-const sal_uInt16 EXC_ID_CONT                = 0x003C;
 
 // (0x003D) WINDOW1 -----------------------------------------------------------
 
@@ -237,14 +226,12 @@ const sal_uInt16 EXC_WIN1_TABBARRATIO       = 600;      /// Sheet tab bar takes 
 
 const sal_uInt16 EXC_ID_DEFCOLWIDTH         = 0x0055;
 
-
 // (0x007D) COLINFO -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COLINFO             = 0x007D;
 
 const sal_uInt16 EXC_COLINFO_HIDDEN         = 0x0001;
 const sal_uInt16 EXC_COLINFO_COLLAPSED      = 0x1000;
-
 
 // (0x007E) RK ----------------------------------------------------------------
 
@@ -257,7 +244,6 @@ const sal_Int32 EXC_RK_DBL100               = EXC_RK_100FLAG;
 const sal_Int32 EXC_RK_INT                  = EXC_RK_INTFLAG;
 const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
 
-
 // (0x0081) WSBOOL ------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_WSBOOL              = 0x0081;
@@ -268,14 +254,9 @@ const sal_uInt16 EXC_WSBOOL_FITTOPAGE       = 0x0100;
 
 const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 
-
 // (0x008C) COUNTRY -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
-
-// (0xFFFF) unknown record - special ID ---------------------------------------
-
-const sal_uInt16 EXC_ID_UNKNOWN             = 0xFFFF;
 
 // ============================================================================
 
