@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-26 14:09:00 $
+ *  last change: $Author: pl $ $Date: 2002-03-06 12:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -906,8 +906,11 @@ void SalFrame::Show( BOOL bVisible )
         }
 
         XSync( _GetXDisplay(), False );
+
+        static const char* pDisableGrab = getenv( "SAL_DISABLE_FLOATGRAB" );
+
         if( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT
-            && _GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii( "Sawfish" )
+            && ! ( pDisableGrab && *pDisableGrab )
             )
         {
             /*
