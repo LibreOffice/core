@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 13:15:55 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace dbaccess
 
     class IWarningsContainer;
 //==========================================================================
-//= OQuery_LINUX - an object implementing the sdb.Query service
+//= OQuery - an object implementing the sdb.Query service
 //==========================================================================
 typedef ::cppu::ImplHelper2 <   ::com::sun::star::sdbcx::XDataDescriptorFactory,
                                 ::com::sun::star::beans::XPropertyChangeListener
@@ -103,15 +103,18 @@ class OColumn;
 typedef ::comphelper::OPropertyArrayUsageHelper< OQuery >   OQuery_ArrayHelperBase;
 
 
-class OQuery_LINUX  :public OQueryDescriptor
+class OQuery    :public OQueryDescriptor
                 ,public OQuery_Base
                 ,public OConfigurationFlushable
+                ,public OQuery_ArrayHelperBase
 {
     friend struct TRelease;
+
 public:
     typedef ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess> TNameColumnMap;
+
 protected:
-    TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
+//  TNameColumnMap      m_aColumnMap; // contains all columnnames to columns
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         m_xCommandDefinition;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
@@ -119,7 +122,6 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xCommandPropInfo;
     IWarningsContainer* m_pWarnings;
     sal_Bool            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
-    sal_Bool            m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
 
     // possible actions on our "aggregate"
     enum AGGREGATE_ACTION { NONE, SETTING_PROPERTIES, FLUSHING };
@@ -132,37 +134,39 @@ protected:
     friend class OAutoActionReset;
     class OAutoActionReset
     {
-        OQuery_LINUX*               m_pActor;
+        OQuery*             m_pActor;
     public:
-        OAutoActionReset(OQuery_LINUX* _pActor) : m_pActor(_pActor) { }
+        OAutoActionReset(OQuery* _pActor) : m_pActor(_pActor) { }
         ~OAutoActionReset() { m_pActor->m_eDoingCurrently = NONE; }
     };
 
 protected:
-    ~OQuery_LINUX();
+    ~OQuery();
 
 public:
-    OQuery_LINUX(
+    OQuery(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
         );
 
-// ::com::sun::star::uno::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
-
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException) { OQueryDescriptor::acquire(); }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException) { OQueryDescriptor::release(); }
+    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+// OPropertyArrayUsageHelper
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+    using OQuery_ArrayHelperBase::getArrayHelper;
+
+// ::com::sun::star::uno::XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-// ::com::sun::star::sdbcx::XColumnsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
@@ -182,6 +186,7 @@ public:
                     const ::com::sun::star::uno::Any& rValue )
             throw (::com::sun::star::uno::Exception);
 
+public:
     // the caller is responsible for the lifetime!
     void                setWarningsContainer( IWarningsContainer* _pWarnings )  { m_pWarnings = _pWarnings; }
     IWarningsContainer* getWarningsContainer( ) const                           { return m_pWarnings; }
@@ -193,26 +198,24 @@ public:
     virtual void SAL_CALL dispose();
 
 // OQueryDescriptor
-    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
+    void    storeTo( const ::utl::OConfigurationNode& _rConfigLocation );
+    void    loadFrom( const ::utl::OConfigurationNode& _rConfigLocation );
 
 protected:
 // OConfigurationFlushable
     virtual void flush_NoBroadcast_NoCommit();
     virtual OColumn* createColumn(const ::rtl::OUString& _rName) const;
 
-    virtual void readColumnSettings(const ::utl::OConfigurationNode& _rConfigLocation);
+    virtual ::utl::OConfigurationNode getObjectLocation() const;
 
-};
-class OQuery : public OQuery_LINUX
-        ,public OQuery_ArrayHelperBase
-{
-public:
-    OQuery( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn)
-    : OQuery_LINUX(_rxCommandDefinition,_rxConn){}
-// OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-    using OQuery_ArrayHelperBase::getArrayHelper;
+    virtual void rebuildColumns( );
+
+private:
+    /** creates column objects for all columns which are necessary when executing our command
+    @param _bOnlyTemporary
+        if <TRUE/>, the resulting columns are inserted into m_aColumnMap only, else they're really appended to m_pColumns
+    */
+    void implCollectColumns( );
 };
 
 //........................................................................

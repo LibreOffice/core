@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,45 +105,6 @@ namespace dbaccess
 //........................................................................
 
 //==========================================================================
-//= ODescriptorColumn - a single column of an OQueryDescriptor
-//==========================================================================
-class ODescriptorColumn :public OColumn
-                        ,public OColumnSettings
-                        ,public ::comphelper::OPropertyArrayUsageHelper< ODescriptorColumn >
-{
-protected:
-    virtual ~ODescriptorColumn();
-public:
-    ODescriptorColumn(const ::rtl::OUString& _rName);
-
-// com::sun::star::lang::XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
-
-// OPropertySetHelper
-    sal_Bool SAL_CALL convertFastPropertyValue(
-                            ::com::sun::star::uno::Any & rConvertedValue,
-                            ::com::sun::star::uno::Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const ::com::sun::star::uno::Any& rValue )
-                                throw (::com::sun::star::lang::IllegalArgumentException);
-    void SAL_CALL setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const ::com::sun::star::uno::Any& rValue
-                                                 )
-                                                 throw (::com::sun::star::uno::Exception);
-    void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
-
-    virtual OColumnSettings*    getSettings() { return static_cast<OColumnSettings*>(this); }
-
-protected:
-    // OPropertySetHelper
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() { return *getArrayHelper(); }
-
-    // OPropertyArrayUsageHelper
-    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
-};
-
-//==========================================================================
 //= OQueryDescriptor - a query descriptor (as the name suggests :)
 //==========================================================================
 typedef ::cppu::WeakImplHelper3<
@@ -160,11 +121,20 @@ class OQueryDescriptor
         ,public IColumnFactory
         ,public ::connectivity::sdbcx::IRefreshableColumns
 {
-protected:
-    OColumns*       m_pColumns;             // our column descriptions
+private:
+    sal_Bool        m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
+    OColumns*       m_pColumns;                 // our column descriptions
 
 protected:
     ~OQueryDescriptor();
+
+    void        setColumnsOutOfDate( sal_Bool _bOutOfDate = sal_True );
+    sal_Bool    isColumnsOutOfDate() const { return m_bColumnsOutOfDate; }
+
+    sal_Int32   getColumnCount() const { return m_pColumns ? m_pColumns->getCount() : 0; }
+    void        clearColumns( );
+
+    void        implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn );
 
 public:
     OQueryDescriptor();
@@ -179,8 +149,8 @@ public:
 
 // ::com::sun::star::uno::XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException) { OQueryDescriptor_Base::acquire(); }
-    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException) { OQueryDescriptor_Base::release(); }
+    virtual void SAL_CALL acquire(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL release(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -202,14 +172,22 @@ public:
 
 // persistence
     /** store all configuration relevant informations under the given configuration node
-        @param      _rxConfigLocation       the configuration node. must not be readonly
+        @param _rxConfigLocation
+            the configuration node. must not be readonly
     */
-    virtual void    storeTo(const ::utl::OConfigurationTreeRoot& _rConfigLocation);
+    void    storeTo(
+        const ::utl::OConfigurationNode& _rConfigLocation,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats
+    );
 
     /** initialize with the informations stored under the given configuration node
-        @param      _rxConfigLocation       the configuration node.
+        @param _rxConfigLocation
+            the configuration node.
     */
-    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
+    void    loadFrom(
+        const ::utl::OConfigurationNode& _rConfigLocation,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats
+    );
 
 // pseudo-XComponent
     virtual void SAL_CALL dispose();
@@ -220,15 +198,16 @@ protected:
 
 // IColumnFactory
     virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject()
-    {
-        return NULL;
-    }
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
+
+    // called (after some preparations) from inside refreshColumns. Never overload refreshColumns directly!
+    virtual void rebuildColumns( );
+
+    virtual ::utl::OConfigurationNode getObjectLocation() const;
+
+private:
     virtual void refreshColumns();
 
-    virtual void readColumnSettings(const ::utl::OConfigurationNode& _rConfigLocation);
-
-protected:
     // helper
     void registerProperties();
 };

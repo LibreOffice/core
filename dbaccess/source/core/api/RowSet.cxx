@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:20:07 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,6 @@
 #endif
 #ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
-#endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
 #endif
 #ifndef _DBA_REGHELPER_HXX_
 #include "dba_reghelper.hxx"
@@ -1410,7 +1407,6 @@ void SAL_CALL ORowSet::execute(  ) throw(SQLException, RuntimeException)
 
 }
 // -----------------------------------------------------------------------------
-using namespace rtl;
 // XRowSet
 void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotification)
 {
@@ -2127,7 +2123,7 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetValue& _rOldValue)
 {
-    OSL_ENSURE(_nPos < m_aDataColumns.size(),"nPos is invalid!");
+    OSL_ENSURE(_nPos < (sal_Int32)m_aDataColumns.size(),"nPos is invalid!");
     m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
 }
 // -------------------------------------------------------------------------

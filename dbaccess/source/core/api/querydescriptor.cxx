@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydescriptor.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:04:23 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
-#endif
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
 #endif
@@ -98,8 +95,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::util;
 using namespace ::comphelper;
 using namespace ::osl;
 using namespace ::cppu;
@@ -116,8 +113,6 @@ namespace dbaccess
 //--------------------------------------------------------------------------
 void OQueryDescriptor::registerProperties()
 {
-    m_pColumns = new OColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
-
     // the properties which OCommandBase supplies (it has no own registration, as it's not derived from
     // a OPropertyContainer)
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND,
@@ -145,16 +140,20 @@ DBG_NAME(OQueryDescriptor);
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor()
     :ODataSettings(m_aBHelper)
+    ,m_bColumnsOutOfDate(sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
     registerProperties();
 }
 
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XPropertySet >& _rxCommandDefinition)
     :ODataSettings(m_aBHelper)
+    ,m_bColumnsOutOfDate(sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
     registerProperties();
 
     OSL_ENSURE(_rxCommandDefinition.is(), "OQueryDescriptor::OQueryDescriptor : invalid source property set !");
@@ -178,8 +177,10 @@ OQueryDescriptor::OQueryDescriptor(const ::com::sun::star::uno::Reference< XProp
 //--------------------------------------------------------------------------
 OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     :ODataSettings(_rSource, m_aBHelper)
+    ,m_bColumnsOutOfDate(sal_True)
 {
     DBG_CTOR(OQueryDescriptor,NULL);
+    m_pColumns = new OColumns(*this, m_aMutex, sal_True,::std::vector< ::rtl::OUString>(), this,this);
     registerProperties();
 
     m_sCommand = _rSource.m_sCommand;
@@ -193,7 +194,7 @@ OQueryDescriptor::OQueryDescriptor(const OQueryDescriptor& _rSource)
     // so we can't just remember this node and read when needed, we have to do it here and now
 //  OConfigurationNode aColumnUINode = _rSource.m_pColumns.getUILocation();
 //  if (aColumnUINode.isValid())
-//      m_pColumns.loadSettings(aColumnUINode, this);
+//      m_pColumns.loadSettings(aColumnUINode);
     // TODO: cloning of the column information. Since a column container does not know anything about it's columns
     // config location anymore, we probably need to clone the columns explicitly (instead of re-reading them)
 }
@@ -242,6 +243,18 @@ Sequence< sal_Int8 > OQueryDescriptor::getUnoTunnelImplementationId()
 }
 
 //--------------------------------------------------------------------------
+void SAL_CALL OQueryDescriptor::acquire(  ) throw(RuntimeException)
+{
+    OQueryDescriptor_Base::acquire();
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL OQueryDescriptor::release(  ) throw(RuntimeException)
+{
+    OQueryDescriptor_Base::release();
+}
+
+//--------------------------------------------------------------------------
 Any SAL_CALL OQueryDescriptor::queryInterface( const Type& _rType ) throw(RuntimeException)
 {
     Any aReturn = ::cppu::queryInterface(_rType,
@@ -257,10 +270,46 @@ Any SAL_CALL OQueryDescriptor::queryInterface( const Type& _rType ) throw(Runtim
 }
 
 //--------------------------------------------------------------------------
+OConfigurationNode OQueryDescriptor::getObjectLocation() const
+{
+    return OConfigurationNode();
+}
+
+//--------------------------------------------------------------------------
+void OQueryDescriptor::setColumnsOutOfDate( sal_Bool _bOutOfDate )
+{
+    m_bColumnsOutOfDate = _bOutOfDate;
+    if ( !m_bColumnsOutOfDate )
+        m_pColumns->setInitialized();
+}
+
+//--------------------------------------------------------------------------
+void OQueryDescriptor::implAppendColumn( const ::rtl::OUString& _rName, OColumn* _pColumn )
+{
+    m_pColumns->append( _rName, _pColumn );
+}
+
+//--------------------------------------------------------------------------
+void OQueryDescriptor::clearColumns( )
+{
+    m_pColumns->clearColumns();
+
+    setColumnsOutOfDate();
+}
+
+//--------------------------------------------------------------------------
 Reference< XNameAccess > SAL_CALL OQueryDescriptor::getColumns( ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
-    // TODO : if we have any kind of late initialisation for the columns : do it here
+
+    if ( isColumnsOutOfDate() )
+    {
+        // load the columns
+        refreshColumns();
+
+        setColumnsOutOfDate( sal_False );
+        m_pColumns->setInitialized();
+    }
     return m_pColumns;
 }
 
@@ -313,7 +362,7 @@ void SAL_CALL OQueryDescriptor::dispose()
 }
 
 //--------------------------------------------------------------------------
-void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
+void OQueryDescriptor::storeTo( const OConfigurationNode& _rConfigLocation, const Reference< XNumberFormatsSupplier >& _rxFormats )
 {
     MutexGuard aGuard(m_aMutex);
     if (!_rConfigLocation.isValid() || _rConfigLocation.isReadonly())
@@ -330,31 +379,30 @@ void OQueryDescriptor::storeTo(const OConfigurationTreeRoot& _rConfigLocation)
         OSL_ENSURE(sal_False, "OQueryDescriptor::storeTo: could not open the sub key for the data settings!");
         return;
     }
-    ODataSettings::storeTo(aSettingsNode);
+    ODataSettings::storeTo( aSettingsNode );
 
     // ---------------------
     // the command base stuff
-    OCommandBase::storeTo(_rConfigLocation);
+    OCommandBase::storeTo( _rConfigLocation );
 
     // --------------------------
     // the columns UI information
-    OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
+    OConfigurationNode aColumnsNode = _rConfigLocation.openNode( CONFIGKEY_QRYDESCR_COLUMNS );
     if (aColumnsNode.isValid())
     {
-        m_pColumns->storeSettings(aColumnsNode);
-        _rConfigLocation.commit();
+        m_pColumns->storeSettings( aColumnsNode, _rxFormats );
     }
     else
         OSL_ENSURE(sal_False, "OQueryDescriptor::storeTo : could not open the node for the columns UI information !");
 }
 
 //--------------------------------------------------------------------------
-void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation)
+void OQueryDescriptor::loadFrom( const OConfigurationNode& _rConfigLocation, const Reference< XNumberFormatsSupplier >& _rxFormats )
 {
     MutexGuard aGuard(m_aMutex);
     if (!_rConfigLocation.isValid())
     {
-        OSL_ENSURE(sal_False, "OQueryDescriptor::initializeFrom : invalid config key (NULL or readonly) !");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::loadFrom: invalid config key (NULL or readonly) !");
         return;
     }
 
@@ -363,123 +411,52 @@ void OQueryDescriptor::initializeFrom(const OConfigurationNode& _rConfigLocation
     OConfigurationNode aSettingsNode = _rConfigLocation.openNode(CONFIGKEY_SETTINGS);
     if (!aSettingsNode.isValid())
     {
-        OSL_ENSURE(sal_False, "OQueryDescriptor::initializeFrom: could not open the sub key for the data settings!");
+        OSL_ENSURE(sal_False, "OQueryDescriptor::loadFrom: could not open the sub key for the data settings!");
         return;
     }
     ODataSettings::loadFrom(aSettingsNode);
 
     // ---------------------
     // the command base stuff
-    OCommandBase::initializeFrom(_rConfigLocation);
+    OCommandBase::loadFrom( _rConfigLocation );
 
-    readColumnSettings(_rConfigLocation);
+    // --------------------------
+    // the columns UI information
+    m_pColumns->clearColumns();
+    OConfigurationNode aColumnsNode = _rConfigLocation.openNode( CONFIGKEY_QRYDESCR_COLUMNS );
+    if ( aColumnsNode.isValid() )
+        m_pColumns->loadSettings( aColumnsNode, _rxFormats );
 }
+
+// -----------------------------------------------------------------------------
+Reference< XPropertySet > OQueryDescriptor::createEmptyObject()
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------------
+void OQueryDescriptor::rebuildColumns( )
+{
+}
+
 // -----------------------------------------------------------------------------
 void OQueryDescriptor::refreshColumns()
 {
+    MutexGuard aGuard(m_aMutex);
+
+    // clear the current columns
+    clearColumns();
+
+    // do the real rebuild
+    rebuildColumns();
 }
+
 //------------------------------------------------------------------------------
 OColumn* OQueryDescriptor::createColumn(const ::rtl::OUString& _rName) const
 {
     return new OTableColumn(_rName);
 }
 // -----------------------------------------------------------------------------
-void OQueryDescriptor::readColumnSettings(const OConfigurationNode& _rConfigLocation)
-{
-    // --------------------------
-    // the columns UI information
-    OConfigurationNode aColumnsNode = _rConfigLocation.openNode(CONFIGKEY_QRYDESCR_COLUMNS);
-    m_pColumns->clearColumns();
-    if (aColumnsNode.isValid())
-        m_pColumns->loadSettings(aColumnsNode);
-}
-// -----------------------------------------------------------------------------
-//==========================================================================
-//= ODescriptorColumn
-//==========================================================================
-DBG_NAME(ODescriptorColumn);
-ODescriptorColumn::ODescriptorColumn(const ::rtl::OUString& _rName)
-{
-    DBG_CTOR(ODescriptorColumn,NULL);
-    m_sName = _rName;
-}
-// -----------------------------------------------------------------------------
-ODescriptorColumn::~ODescriptorColumn()
-{
-    DBG_DTOR(ODescriptorColumn,NULL);
-}
-
-// com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > ODescriptorColumn::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* ODescriptorColumn::createArrayHelper( ) const
-{
-    BEGIN_PROPERTY_HELPER(7)
-        DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1_IFACE(CONTROLMODEL,  XPropertySet,       BOUND);
-        DECL_PROP2(NUMBERFORMAT,        sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1_BOOL(HIDDEN,                             BOUND);
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP2(RELATIVEPOSITION,    sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
-    END_PROPERTY_HELPER();
-}
-
-//------------------------------------------------------------------------------
-sal_Bool SAL_CALL ODescriptorColumn::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue) throw (IllegalArgumentException)
-{
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_NAME:
-            return OColumn::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
-        default:
-            return OColumnSettings::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL ODescriptorColumn::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue ) throw (Exception)
-{
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_NAME:
-            OColumn::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
-            break;
-        default:
-            OColumnSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
-            break;
-    }
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL ODescriptorColumn::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
-{
-    switch (_nHandle)
-    {
-        case PROPERTY_ID_NAME:
-            OColumn::getFastPropertyValue(_rValue, _nHandle);
-            break;
-        default:
-            OColumnSettings::getFastPropertyValue(_rValue, _nHandle);
-            break;
-    }
-}
-
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
