@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-20 15:50:13 $
+ *  last change: $Author: aw $ $Date: 2001-02-07 10:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,7 +429,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
                 aTempAttr.Put(aAutoGrowHeight);
             }
 
-//-/            pSdrObj->NbcSetAttributes(aTempAttr, FALSE);
             pSdrObj->SetItemSet(aTempAttr);
         }
 
@@ -500,7 +499,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, const Rectangle& rRect,
             aSet.Put( SdrTextContourFrameItem( TRUE ) );
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
-//-/            pSdrObj->NbcSetAttributes( aSet, FALSE );
             pSdrObj->SetItemSet(aSet);
         }
 
@@ -1913,7 +1911,6 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
     Fraction aFractX = Fraction(aNewPageSize.Width(), nOldWidth);
     Fraction aFractY = Fraction(aNewPageSize.Height(), nOldHeight);
 
-//    ULONG nObjCnt = (bScaleObjects ? GetObjCount() : aPresObjList.Count());
     ULONG nObjCnt = (bScaleObjects ? GetObjCount() : 0);
 
     for (ULONG nObj = 0; nObj < nObjCnt; nObj++)
@@ -2110,7 +2107,6 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
                         SfxItemSet aSet( ((SdDrawDocument*) pModel)->GetPool(), nWhich, nWhich, 0 );
-//-/                        pObj->TakeAttributes(aSet, TRUE, FALSE);
                         aSet.Put(pObj->GetItemSet());
 
                         pObj->GetOutlinerParaObject()->RemoveCharAttribs( nWhich );
@@ -2119,7 +2115,6 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                         nFontHeight = long(nFontHeight * (double) aFractY);
                         aSet.Put(SvxFontHeightItem(nFontHeight, 100, nWhich ));
 
-//-/                      pObj->NbcSetAttributes(aSet, FALSE);
                         pObj->SetItemSet(aSet);
                     }
                 }
@@ -2132,15 +2127,11 @@ void __EXPORT SdPage::ScaleObjects(const Size& rNewPageSize,
                 **************************************************************/
                 Rectangle aBoundRect(pObj->GetBoundRect());
                 Point aOldPos(aBoundRect.TopLeft());
-                Point aNewPos(aOldPos);
+                Point aNewPos; //(aOldPos);
 
-                // Position skalieren
-                aNewPos.X() = long(aNewPos.X() * (double) aFractX);
-                aNewPos.Y() = long(aNewPos.Y() * (double) aFractY);
-
-                // Offset beruecksichtigen
-                aNewPos.X() += nLeft  - GetLftBorder();
-                aNewPos.Y() += nUpper - GetUppBorder();
+                // #76447# corrected scaling; only distances may be scaled
+                aNewPos.X() = long((aOldPos.X() - GetLftBorder()) * (double)aFractX) + nLeft;
+                aNewPos.Y() = long((aOldPos.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
 
                 Size aVec(aNewPos.X() - aOldPos.X(), aNewPos.Y() - aOldPos.Y());
 
@@ -2227,7 +2218,6 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
             SdrTextAutoGrowHeightItem aAutoGrowHeight(FALSE);
             aTempAttr.Put(aAutoGrowHeight);
 
-//-/            pObj->NbcSetAttributes(aTempAttr, FALSE);
             pObj->SetItemSet(aTempAttr);
 
             pObj->SetLogicRect(aRect);
@@ -2237,7 +2227,6 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
             SdrTextAutoGrowHeightItem aAutoGrowHeightOn(TRUE);
             aAttr.Put(aAutoGrowHeightOn);
 
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetItemSet(aAttr);
         }
     }
@@ -2298,12 +2287,10 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
                     // LRSpace-Item loeschen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-//-/                    pObj->TakeAttributes(aSet, TRUE, FALSE);
                     aSet.Put(pObj->GetItemSet());
 
                     aSet.ClearItem(EE_PARA_LRSPACE);
 
-//-/                    pObj->NbcSetAttributes(aSet, FALSE);
                     pObj->SetItemSet(aSet);
 
                     // Untertitel loeschen
@@ -2343,7 +2330,6 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
                     // Linken Einzug zuruecksetzen
                     SfxItemSet aSet(((SdDrawDocument*) pModel)->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
-//-/                    pObj->TakeAttributes(aSet, TRUE, FALSE);
                     aSet.Put(pObj->GetItemSet());
 
                     const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&) aSet.Get(EE_PARA_LRSPACE);
@@ -2351,7 +2337,6 @@ BOOL __EXPORT SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind,
                     aNewLRItem.SetTxtLeft(0);
                     aSet.Put(aNewLRItem);
 
-//-/                    pObj->NbcSetAttributes(aSet, FALSE);
                     pObj->SetItemSet(aSet);
 
                     SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TEXT);
