@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-29 11:32:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
 #endif
+#ifndef SC_XMLANNOI_HXX
+#include "xmlannoi.hxx"
+#endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
@@ -89,6 +92,9 @@
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
 #endif
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
 #include <com/sun/star/drawing/XShape.hpp>
@@ -104,7 +110,9 @@ using namespace xmloff::token;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
-    XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper )
+    XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper ),
+    bOnTable(sal_False),
+    pAnnotationContext(NULL)
 {
 }
 
@@ -133,66 +141,73 @@ void XMLTableShapeImportHelper::finishShape(
     static_cast<ScXMLImport&>(mrImporter).LockSolarMutex();
     if (rShapes == static_cast<ScXMLImport&>(mrImporter).GetTables().GetCurrentXShapes())
     {
-        Rectangle* pRect = NULL;
-        sal_Int32 nEndX(-1);
-        sal_Int32 nEndY(-1);
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        table::CellAddress aEndCell;
-        rtl::OUString* pRangeList = NULL;
-        sal_Int16 nLayerID(-1);
-        for( sal_Int16 i=0; i < nAttrCount; i++ )
+        if (!pAnnotationContext)
         {
-            const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
-            const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
-
-            rtl::OUString aLocalName;
-            sal_uInt16 nPrefix =
-                static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
-                                                                &aLocalName );
-            if(nPrefix == XML_NAMESPACE_TABLE)
+            Rectangle* pRect = NULL;
+            sal_Int32 nEndX(-1);
+            sal_Int32 nEndY(-1);
+            sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+            table::CellAddress aEndCell;
+            rtl::OUString* pRangeList = NULL;
+            sal_Int16 nLayerID(-1);
+            for( sal_Int16 i=0; i < nAttrCount; i++ )
             {
-                if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
+                const rtl::OUString& rAttrName = xAttrList->getNameByIndex( i );
+                const rtl::OUString& rValue = xAttrList->getValueByIndex( i );
+
+                rtl::OUString aLocalName;
+                sal_uInt16 nPrefix =
+                    static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                    &aLocalName );
+                if(nPrefix == XML_NAMESPACE_TABLE)
                 {
-                    sal_Int32 nOffset(0);
-                    ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
+                    if (IsXMLToken(aLocalName, XML_END_CELL_ADDRESS))
+                    {
+                        sal_Int32 nOffset(0);
+                        ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
+                    }
+                    else if (IsXMLToken(aLocalName, XML_END_X))
+                        static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
+                    else if (IsXMLToken(aLocalName, XML_END_Y))
+                        static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
+                    else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
+                        if (IsXMLToken(rValue, XML_TRUE))
+                            nLayerID = SC_LAYER_BACK;
                 }
-                else if (IsXMLToken(aLocalName, XML_END_X))
-                    static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndX, rValue);
-                else if (IsXMLToken(aLocalName, XML_END_Y))
-                    static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(nEndY, rValue);
-                else if (IsXMLToken(aLocalName, XML_TABLE_BACKGROUND))
-                    if (IsXMLToken(rValue, XML_TRUE))
-                        nLayerID = SC_LAYER_BACK;
+                else if(nPrefix == XML_NAMESPACE_DRAW)
+                {
+                    if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
+                        pRangeList = new rtl::OUString(rValue);
+                }
             }
-            else if(nPrefix == XML_NAMESPACE_DRAW)
-            {
-                if (IsXMLToken(aLocalName, XML_NOTIFY_ON_UPDATE_OF_RANGES))
-                    pRangeList = new rtl::OUString(rValue);
-            }
-        }
-        SetLayer(rShape, nLayerID, rShape->getShapeType());
+            SetLayer(rShape, nLayerID, rShape->getShapeType());
 
-        if (!bOnTable)
-        {
-            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
-                pRangeList, aStartCell, aEndCell, nEndX, nEndY);
-            SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-            if (pShapeImp)
+            if (!bOnTable)
             {
-                SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                if (pSdrObj)
-                    ScDrawLayer::SetAnchor(pSdrObj, SCA_CELL);
+                static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape,
+                    pRangeList, aStartCell, aEndCell, nEndX, nEndY);
+                SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
+                if (pShapeImp)
+                {
+                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                    if (pSdrObj)
+                        ScDrawLayer::SetAnchor(pSdrObj, SCA_CELL);
+                }
+            }
+            else
+            {
+                SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
+                if (pShapeImp)
+                {
+                    SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+                    if (pSdrObj)
+                        ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
+                }
             }
         }
-        else
+        else // shape is annotation
         {
-            SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
-            if (pShapeImp)
-            {
-                SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-                if (pSdrObj)
-                    ScDrawLayer::SetAnchor(pSdrObj, SCA_PAGE);
-            }
+            pAnnotationContext->SetShape(rShape, rShapes);
         }
     }
     else //#99532# this are grouped shapes which should also get the layerid
