@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:07:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ uno::Any SwXAutoTextContainer::getByIndex(sal_Int32 nIndex)
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     sal_uInt16 nCount = pGlossaries->GetGroupCnt();
-    if ( nIndex >= 0 && nIndex <= nCount )
+    if ( 0 <= nIndex && nIndex < nCount )
         aRet = getByName(pGlossaries->GetGroupName(nIndex));
     else
         throw lang::IndexOutOfBoundsException();
@@ -723,7 +723,7 @@ uno::Any SwXAutoTextGroup::getByIndex(sal_Int32 nIndex)
         nCount = pGlosGroup->GetCount();
     else
         throw uno::RuntimeException();
-    if(nCount > nIndex)
+    if(0 <= nIndex && nIndex < nCount)
         aRet = getByName(pGlosGroup->GetShortName((sal_uInt16) nIndex));
     else
         throw lang::IndexOutOfBoundsException();
