@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-06 12:34:57 $
+#   last change: $Author: hjs $ $Date: 2002-07-09 12:24:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,23 +82,9 @@ CONFIGURE_ACTION=
 BUILD_DIR=
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
-
-.IF "$(GUI)"=="UNX" || "$(BUILD_SOSL)"!="true"
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-
-TG_DELIVER : $(PACKAGE_DIR)$/so_predeliver
-        $(DELIVER)
-.ELIF "$(BUILD_SOSL)"!=""			# "$(GUI)"=="UNX" || "$(BUILD_SOSL)"!="true"
-
-TG_DELIVER : 
-        $(DELIVER)
-
-ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_SOSL)"!=""
 
