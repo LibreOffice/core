@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #ifndef _SVX_ADRITEM_HXX //autogen
 #include <svx/adritem.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
 #endif
@@ -186,6 +183,7 @@
 #include <shells.hrc>
 #endif
 
+#include <sfx2/app.hxx>
 
 extern BOOL bNoInterrupt;       // in mainwn.cxx
 
@@ -210,7 +208,7 @@ String& lcl_AppendRedlineStr( String& rStr, USHORT nRedlId )
 void SwTextShell::ExecField(SfxRequest &rReq)
 {
     SwWrtShell& rSh = GetShell();
-    OfficeApplication* pOffApp = OFF_APP();
+    SfxApplication* pOffApp = OFF_APP();
     const SfxPoolItem* pItem = 0;
 
     USHORT nSlot = rReq.GetSlot();
