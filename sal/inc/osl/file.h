@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 07:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,8 +363,8 @@ typedef enum {
 #define osl_FileStatus_Mask_ModifyTime          0x00000040
 #define osl_FileStatus_Mask_FileSize            0x00000080
 #define osl_FileStatus_Mask_FileName            0x00000100
-#define osl_FileStatus_Mask_FilePath            0x00000200
-#define osl_FileStatus_Mask_NativePath          0x00000400
+#define osl_FileStatus_Mask_FileURL             0x00000200
+#define osl_FileStatus_Mask_LinkTargetURL       0x00000400
 #define osl_FileStatus_Mask_All                 0x7FFFFFFF
 #define osl_FileStatus_Mask_Validate            0x80000000
 
@@ -399,13 +399,13 @@ struct _oslFileStatus {
 /** Case correct name of the file. Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
     rtl_uString *strFileName;
-/** Full path of the file in UNC notation. Should be set to zero before calling <code>osl_getFileStatus</code>
+/** Full URL of the file. Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
-    rtl_uString **pstrFilePath;
-/** Full path of the file in platform depending notation. This is for displaying the path in the UI.
+    rtl_uString **pstrFileURL;
+/** Full URL of the target file if the file itself is a link.
     Should be set to zero before calling <code>osl_getFileStatus</code>
     and released after usage. */
-    rtl_uString **pstrNativePath;
+    rtl_uString **pstrLinkTargetURL;
 } oslFileStatus;
 
 /** Retrieves information about a single file or directory
@@ -968,51 +968,22 @@ oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *strRequested, rtl_uStri
 oslFileError SAL_CALL osl_getAbsolutePath( rtl_uString* strDirBase, rtl_uString *strRelative, rtl_uString **strAbsolute );
 
 
-/** Converts a system dependent path into a full qualified UNC path
-
-    @param strSysPath[in] System dependent path of a file or a directory
-    @param strPath[out] On success it receives the full qualified UNC path
-
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-
-    @see    osl_getCanonicalName
-
-*/
-
-oslFileError SAL_CALL osl_normalizePath( rtl_uString *strSysPath, rtl_uString **strPath );
+oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* strDirBase, rtl_uString *strRelative, rtl_uString **strAbsolute );
 
 
-/** Converts a File URL into a full qualified UNC path
+/** Converts a system dependend path into a FileURL
 
-    @param urlPath[in] System dependent path of a file or a directory
-    @param strPath[out] On success it receives the full qualified UNC path
+    @param dir[in] System dependent path of a file or directory
+    @param strPath[out] On success it receives the file URL
 
     @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
     osl_File_E_INVAL        the format of the parameters was not valid<br>
 
-    @see    osl_normalizePath
+    @see    osl_getSystemPathFromFileURL
 
 */
 
-oslFileError SAL_CALL osl_getNormalizedPathFromFileURL( rtl_uString *urlPath, rtl_uString **strPath );
-
-
-/** Converts a full qualified UNC path into a FileURL
-
-    @param dir[in] System dependent path of a file or a directory
-    @param strPath[out] On success it receives the full qualified UNC path
-
-    @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
-    osl_File_E_INVAL        the format of the parameters was not valid<br>
-
-    @see    osl_normalizePath
-    @see    osl_getNormalizedPathFromFileURL
-
-*/
-
-oslFileError SAL_CALL osl_getFileURLFromNormalizedPath( rtl_uString *normPath, rtl_uString **strPath);
-
+oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath, rtl_uString **pustrFileURL);
 
 /** Searches a full qualified UNC-Path/File
 
@@ -1031,24 +1002,21 @@ oslFileError SAL_CALL osl_getFileURLFromNormalizedPath( rtl_uString *normPath, r
 
 */
 
-oslFileError SAL_CALL osl_searchNormalizedPath( rtl_uString *filePath, rtl_uString *searchPath, rtl_uString **strPath );
+oslFileError SAL_CALL osl_searchFileURL( rtl_uString *ustrFileName, rtl_uString *ustrSearchPath, rtl_uString **pustrFileURL );
 
+/** Converts a file URL in a system dependend path
 
-/** Converts a full qualified UNC path into a system dependend path
-
-    @param dir[in] Full qualified UNC path
+    @param dir[in] File URL
     @param strPath[out] On success it receives the system dependent path of a file or a directory
 
     @return osl_File_E_None on success otherwise one of the following errorcodes:<p>
     osl_File_E_INVAL        the format of the parameters was not valid<br>
 
-    @see    osl_normalizePath
-    @see    osl_getNormalizedPathFromFileURL
+    @see    osl_getFileURLFromSystemPath
 
 */
 
-oslFileError SAL_CALL osl_getSystemPathFromNormalizedPath( rtl_uString *normPath, rtl_uString **strPath);
-
+oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath);
 
 /** Sets file-attributes
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
+ *  last change: $Author: hro $ $Date: 2001-05-10 07:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,25 +201,9 @@ public:
      @see   getStatus
     */
 
-    static inline RC getAbsolutePath( const ::rtl::OUString& strDirBase, const ::rtl::OUString& strRelative, ::rtl::OUString& strAbsolute )
+    static inline RC getAbsoluteFileURL( const ::rtl::OUString& strDirBase, const ::rtl::OUString& strRelative, ::rtl::OUString& strAbsolute )
     {
-        return (RC) osl_getAbsolutePath( strDirBase.pData, strRelative.pData, &strAbsolute.pData );
-    }
-
-    /** Converts a system dependent path into a full qualified UNC path
-
-     @param strSysPath[in] System dependent path of a file or a directory
-     @param strPath[out] On success it receives the full qualified UNC path
-
-     @return E_None on success otherwise one of the following errorcodes:<p>
-     E_INVAL        the format of the parameters was not valid<br>
-
-     @see   getCanonicalName
-    */
-
-    static inline RC normalizePath( const ::rtl::OUString& strSysPath, ::rtl::OUString& strPath )
-    {
-        return (RC) osl_normalizePath( strSysPath.pData, &strPath.pData );
+        return (RC) osl_getAbsoluteFileURL( strDirBase.pData, strRelative.pData, &strAbsolute.pData );
     }
 
     /** Converts a File URL into a full qualified UNC path
@@ -233,9 +217,9 @@ public:
      @see   normalizePath
     */
 
-    static inline RC getNormalizedPathFromFileURL( const ::rtl::OUString& strPath, ::rtl::OUString& normPath )
+    static inline RC getSystemPathFromFileURL( const ::rtl::OUString& strFileURL, ::rtl::OUString& strSystemPath )
     {
-        return (RC) osl_getNormalizedPathFromFileURL( strPath.pData, &normPath.pData );
+        return (RC) osl_getSystemPathFromFileURL( strFileURL.pData, &strSystemPath.pData );
     }
 
     /** Converts a full qualified UNC path into a FileURL
@@ -250,26 +234,9 @@ public:
      @see   getNormalizedPathFromFileURL
     */
 
-    static inline RC getFileURLFromNormalizedPath( const ::rtl::OUString& normPath, ::rtl::OUString& strPath )
+    static inline RC getFileURLFromSystemPath( const ::rtl::OUString& strSystemPath, ::rtl::OUString& strFileURL )
     {
-        return (RC) osl_getFileURLFromNormalizedPath( normPath.pData, &strPath.pData );
-    }
-
-    /** Converts a full qualified UNC path into a system depended path
-
-     @param dir[in] Full qualified UNC path
-     @param strPath[out] On success it receives the System dependent path of a file or a directory
-
-     @return E_None on success otherwise one of the following errorcodes:<p>
-     E_INVAL        the format of the parameters was not valid<br>
-
-     @see   normalizePath
-     @see   getNormalizedPathFromFileURL
-    */
-
-    static inline RC getSystemPathFromNormalizedPath( const ::rtl::OUString& normPath, ::rtl::OUString& strPath )
-    {
-        return (RC)osl_getSystemPathFromNormalizedPath( normPath.pData, &strPath.pData );
+        return (RC) osl_getFileURLFromSystemPath( strSystemPath.pData, &strFileURL.pData );
     }
 
     /** Searches a full qualified UNC-Path/File
@@ -288,9 +255,9 @@ public:
      @see   normalizePath
     */
 
-    static inline RC searchNormalizedPath( const ::rtl::OUString& filePath, const ::rtl::OUString& searchPath, ::rtl::OUString& strPath )
+    static inline RC searchFileURL( const ::rtl::OUString& strFileName, const ::rtl::OUString& strSystemSearchPath, ::rtl::OUString& strFileURL )
     {
-        return (RC) osl_searchNormalizedPath( filePath.pData, searchPath.pData, &strPath.pData );
+        return (RC) osl_searchFileURL( strFileName.pData, strSystemSearchPath.pData, &strFileURL.pData );
     }
 };
 
@@ -517,17 +484,17 @@ public:
     @see DirectoryItem::getFileStatus
 */
 
-#define FileStatusMask_Type         osl_FileStatus_Mask_Type
-#define FileStatusMask_Attributes   osl_FileStatus_Mask_Attributes
-#define FileStatusMask_CreationTime osl_FileStatus_Mask_CreationTime
-#define FileStatusMask_AccessTime   osl_FileStatus_Mask_AccessTime
-#define FileStatusMask_ModifyTime   osl_FileStatus_Mask_ModifyTime
-#define FileStatusMask_FileSize     osl_FileStatus_Mask_FileSize
-#define FileStatusMask_FileName     osl_FileStatus_Mask_FileName
-#define FileStatusMask_FilePath     osl_FileStatus_Mask_FilePath
-#define FileStatusMask_NativePath   osl_FileStatus_Mask_NativePath
-#define FileStatusMask_All          osl_FileStatus_Mask_All
-#define FileStatusMask_Validate     osl_FileStatus_Mask_Validate
+#define FileStatusMask_Type             osl_FileStatus_Mask_Type
+#define FileStatusMask_Attributes       osl_FileStatus_Mask_Attributes
+#define FileStatusMask_CreationTime     osl_FileStatus_Mask_CreationTime
+#define FileStatusMask_AccessTime       osl_FileStatus_Mask_AccessTime
+#define FileStatusMask_ModifyTime       osl_FileStatus_Mask_ModifyTime
+#define FileStatusMask_FileSize         osl_FileStatus_Mask_FileSize
+#define FileStatusMask_FileName         osl_FileStatus_Mask_FileName
+#define FileStatusMask_FileURL          osl_FileStatus_Mask_FileURL
+#define FileStatusMask_LinkTargetURL    osl_FileStatus_Mask_LinkTargetURL
+#define FileStatusMask_All              osl_FileStatus_Mask_All
+#define FileStatusMask_Validate         osl_FileStatus_Mask_Validate
 
 #define Attribute_ReadOnly     osl_File_Attribute_ReadOnly
 #define Attribute_Hidden       osl_File_Attribute_Hidden
@@ -548,8 +515,8 @@ class FileStatus
 {
     oslFileStatus   _aStatus;
     sal_uInt32      _nMask;
-    rtl_uString     *_strNativePath;
-    rtl_uString     *_strFilePath;
+    rtl_uString     *_strLinkTargetURL;
+    rtl_uString     *_strFileURL;
 
     /** define copy c'tor and assginment operator privat
      */
@@ -575,12 +542,12 @@ public:
      @param nMask set of flaggs decribing the demanded information.
     */
 
-    FileStatus( sal_uInt32 nMask ): _nMask( nMask ), _strNativePath( NULL ), _strFilePath( NULL )
+    FileStatus( sal_uInt32 nMask ): _nMask( nMask ), _strLinkTargetURL( NULL ), _strFileURL( NULL )
     {
         _aStatus.uStructSize = sizeof( oslFileStatus );
         rtl_fillMemory( &_aStatus.uValidFields, sizeof( oslFileStatus ) - sizeof( sal_uInt32 ), 0 );
-        _aStatus.pstrNativePath = &_strNativePath;
-        _aStatus.pstrFilePath = &_strFilePath;
+        _aStatus.pstrLinkTargetURL = &_strLinkTargetURL;
+        _aStatus.pstrFileURL = &_strFileURL;
     }
 
     /** D'tor
@@ -588,10 +555,10 @@ public:
 
     ~FileStatus()
     {
-        if ( _strFilePath )
-            rtl_uString_release( _strFilePath );
-        if ( _strNativePath )
-            rtl_uString_release( _strNativePath );
+        if ( _strFileURL )
+            rtl_uString_release( _strFileURL );
+        if ( _strLinkTargetURL )
+            rtl_uString_release( _strLinkTargetURL );
         if ( _aStatus.strFileName )
             rtl_uString_release( _aStatus.strFileName );
     }
@@ -671,18 +638,18 @@ public:
      an empty string otherwise.
     */
 
-    inline ::rtl::OUString getFilePath() const
+    inline ::rtl::OUString getFileURL() const
     {
-        return _strFilePath ? ::rtl::OUString(_strFilePath) : ::rtl::OUString();
+        return _strFileURL ? ::rtl::OUString(_strFileURL) : ::rtl::OUString();
     }
 
     /** @return the file path in host notation if this information is valid,
      an empty string otherwise.
     */
 
-    inline ::rtl::OUString getNativePath() const
+    inline ::rtl::OUString getLinkTargetURL() const
     {
-        return _strNativePath ? ::rtl::OUString(_strNativePath) : ::rtl::OUString();
+        return _strLinkTargetURL ? ::rtl::OUString(_strLinkTargetURL) : ::rtl::OUString();
     }
 
     friend class DirectoryItem;
