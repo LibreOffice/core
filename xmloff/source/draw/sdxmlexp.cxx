@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:31:58 $
+ *  last change: $Author: aw $ $Date: 2001-10-01 11:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,6 +664,21 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
     // is initialized to 0.
     if(!mnObjectCount)
     {
+        // #91587# add handout master count
+        uno::Reference<presentation::XHandoutMasterSupplier> xHandoutSupp(GetModel(), uno::UNO_QUERY);
+        if(xHandoutSupp.is())
+        {
+            uno::Reference<drawing::XDrawPage> xHandoutPage(xHandoutSupp->getHandoutMasterPage());
+            if(xHandoutPage.is())
+            {
+                uno::Reference<drawing::XShapes> xShapes(xHandoutPage, uno::UNO_QUERY);
+                if(xShapes.is() && xShapes->getCount())
+                {
+                    mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                }
+            }
+        }
+
         if(mxDocMasterPages.is())
         {
             for(sal_Int32 a(0); a < mnDocMasterPageCount; a++)
@@ -674,6 +689,21 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 if((aAny >>= xMasterPage) && xMasterPage.is())
                 {
                     mnObjectCount += ImpRecursiveObjectCount(xMasterPage);
+                }
+
+                // #91587# take notes pages from master pages into account
+                uno::Reference<presentation::XPresentationPage> xPresPage;
+                if((aAny >>= xPresPage) && xPresPage.is())
+                {
+                    uno::Reference<drawing::XDrawPage> xNotesPage(xPresPage->getNotesPage());
+                    if(xNotesPage.is())
+                    {
+                        uno::Reference<drawing::XShapes> xShapes(xNotesPage, uno::UNO_QUERY);
+                        if(xShapes.is() && xShapes->getCount())
+                        {
+                            mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                        }
+                    }
                 }
             }
         }
@@ -688,6 +718,21 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
                 if((aAny >>= xPage) && xPage.is())
                 {
                     mnObjectCount += ImpRecursiveObjectCount(xPage);
+                }
+
+                // #91587# take notes pages from draw pages into account
+                uno::Reference<presentation::XPresentationPage> xPresPage;
+                if((aAny >>= xPresPage) && xPresPage.is())
+                {
+                    uno::Reference<drawing::XDrawPage> xNotesPage(xPresPage->getNotesPage());
+                    if(xNotesPage.is())
+                    {
+                        uno::Reference<drawing::XShapes> xShapes(xNotesPage, uno::UNO_QUERY);
+                        if(xShapes.is() && xShapes->getCount())
+                        {
+                            mnObjectCount += ImpRecursiveObjectCount(xShapes);
+                        }
+                    }
                 }
             }
         }
