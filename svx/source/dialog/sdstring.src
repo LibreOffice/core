@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:23:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4819,7 +4819,7 @@ String RID_SVXSTR_TRASNGR0
     Text[ spanish ] = "Transparencia";
     Text[ italian ] = "Trasparenza";
     Text[ danish ] = "Fladetransparens";
-    Text[ swedish ] = "Ytans genomskinlighet";
+    Text[ swedish ] = "Yttransparens";
     Text[ polish ] = "PrzezroczystoúÊ powierzchni";
     Text[ portuguese_brazilian ] = "Transparence";
     Text[ japanese ] = "ï\\ñ ÇÃìßâªê´";
