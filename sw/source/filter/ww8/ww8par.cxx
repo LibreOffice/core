@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 15:43:22 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,9 +693,63 @@ void SwWW8ImplReader::ImportDop( BOOL bNewDoc )
         // set default language (from FIB)
         rDoc.GetAttrPool().SetPoolDefaultItem(
             SvxLanguageItem( (const LanguageType)pWwFib->lid )  );
+
+        //import magic doptypography information, if its there
+        if (pWwFib->nFib > 105)
+            ImportDopTypography(pWDop->doptypography);
     }
 }
 
+void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
+{
+    switch (rTypo.iLevelOfKinsoku)
+    {
+#if 0   /*
+        Do the defaults differ between Microsoft versions ?, do we do
+        something about it if so ?
+        */
+        case 0:
+            if (pWwFib->nFib < 2000)
+                //use old defaults ??
+            else
+                //use new defaults ??
+            break;
+        case 1:
+            if (pWwFib->nFib < 2000)
+                //use old defaults ??
+            else
+                //use new defaults ??
+            break;
+#endif
+        case 2: //custom
+            {
+            i18n::ForbiddenCharacters aForbidden(rTypo.rgxchFPunct,
+                rTypo.rgxchLPunct);
+            rDoc.SetForbiddenCharacters(rTypo.GetConvertedLang(),aForbidden);
+            //Obviously cannot set the standard level 1 for japanese, so bail out
+            //now while we can.
+            if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
+                return;
+            }
+            break;
+        default:
+            break;
+    }
+
+    /*
+    This MS hack means that level 2 of japanese is not in operation, so we put
+    in what we know are the MS defaults, there is a complementary reverse
+    hack in the writer. Its our default as well, but we can set it anyway
+    as a flag for later.
+    */
+    if (!rTypo.reserved2)
+    {
+        i18n::ForbiddenCharacters aForbidden(
+            WW8DopTypography::aJapanEndLevel1,
+            WW8DopTypography::aJapanBeginLevel1);
+        rDoc.SetForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
+    }
+}
 
 
 //-----------------------------------------
@@ -2981,11 +3035,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.8 2001-01-26 15:43:22 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.9 2001-01-30 20:11:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2001/01/26 15:43:22  jp
+      Bug #77951#: MakePageDesc - create I18N names
+
       Revision 1.7  2001/01/22 09:05:58  os
       update of filter configuration
 

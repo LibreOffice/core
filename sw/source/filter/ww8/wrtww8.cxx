@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 10:14:33 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,186 @@ static void WriteDop( SwWW8Writer& rWrt )
     rDop.Write( *rWrt.pTableStrm, *rWrt.pFib );
 }
 
+static sal_Unicode __READONLY_DATA aLangNotBegin[4][101] = {
+//Japanese Level 1
+{
+0x0021, 0x0025, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d,
+0x00a2, 0x00b0, 0x2019, 0x201d, 0x2030, 0x2032, 0x2033, 0x2103, 0x3001, 0x3002,
+0x3005, 0x3009, 0x300b, 0x300d, 0x300f, 0x3011, 0x3015, 0x3041, 0x3043, 0x3045,
+0x3047, 0x3049, 0x3063, 0x3083, 0x3085, 0x3087, 0x308e, 0x309b, 0x309c, 0x309d,
+0x309e, 0x30a1, 0x30a3, 0x30a5, 0x30a7, 0x30a9, 0x30c3, 0x30e3, 0x30e5, 0x30e7,
+0x30ee, 0x30f5, 0x30f6, 0x30fb, 0x30fc, 0x30fd, 0x30fe, 0xff01, 0xff05, 0xff09,
+0xff0c, 0xff0e, 0xff1a, 0xff1b, 0xff1f, 0xff3d, 0xff5d, 0xff61, 0xff63, 0xff64,
+0xff65, 0xff67, 0xff68, 0xff69, 0xff6a, 0xff6b, 0xff6c, 0xff6d, 0xff6e, 0xff6f,
+0xff70, 0xff9e, 0xff9f, 0xffe0
+
+},
+//Simplified Chinese
+{
+0x0021, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d, 0x00a8,
+0x00b7, 0x02c7, 0x02c9, 0x2015, 0x2016, 0x2019, 0x201d, 0x2026, 0x2236, 0x3001,
+0x3002, 0x3003, 0x3005, 0x3009, 0x300b, 0x300d, 0x300f, 0x3011, 0x3015, 0x3017,
+0xff01, 0xff02, 0xff07, 0xff09, 0xff0c, 0xff0e, 0xff1a, 0xff1b, 0xff1f, 0xff3d,
+0xff40, 0xff5c, 0xff5d, 0xff5e, 0xffe0
+},
+//Korean
+{
+0x0021, 0x0025, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d,
+0x00a2, 0x00b0, 0x2019, 0x201d, 0x2032, 0x2033, 0x2103, 0x3009, 0x300b, 0x300d,
+0x300f, 0x3011, 0x3015, 0xff01, 0xff05, 0xff09, 0xff0c, 0xff0e, 0xff1a, 0xff1b,
+0xff1f, 0xff3d, 0xff5d, 0xffe0
+},
+//Traditional Chinese
+{
+0x0021, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d, 0x00a2,
+0x00b7, 0x2013, 0x2014, 0x2019, 0x201d, 0x2022, 0x2025, 0x2026, 0x2027, 0x2032,
+0x2574, 0x3001, 0x3002, 0x3009, 0x300b, 0x300d, 0x300f, 0x3011, 0x3015, 0x301e,
+0xfe30, 0xfe31, 0xfe33, 0xfe34, 0xfe36, 0xfe38, 0xfe3a, 0xfe3c, 0xfe3e, 0xfe40,
+0xfe42, 0xfe44, 0xfe4f, 0xfe50, 0xfe51, 0xfe52, 0xfe54, 0xfe55, 0xfe56, 0xfe57,
+0xfe5a, 0xfe5c, 0xfe5e, 0xff01, 0xff09, 0xff0c, 0xff0e, 0xff1a, 0xff1b, 0xff1f,
+0xff5c, 0xff5d, 0xff64
+},
+};
+
+static sal_Unicode __READONLY_DATA aLangNotEnd[4][51] = {
+//Japanese Level 1
+{
+0x0024, 0x0028, 0x005b, 0x005c, 0x007b, 0x00a3, 0x00a5, 0x2018, 0x201c, 0x3008,
+0x300a, 0x300c, 0x300e, 0x3010, 0x3014, 0xff04, 0xff08, 0xff3b, 0xff5b, 0xff62,
+0xffe1, 0xffe5
+
+},
+//Simplified Chinese
+{
+0x0028, 0x005b, 0x007b, 0x00b7, 0x2018, 0x201c, 0x3008, 0x300a, 0x300c, 0x300e,
+0x3010, 0x3014, 0x3016, 0xff08, 0xff0e, 0xff3b, 0xff5b, 0xffe1, 0xffe5
+},
+//Korean
+{
+0x0028, 0x005b, 0x005c, 0x007b, 0x00a3, 0x00a5, 0x2018, 0x201c, 0x3008, 0x300a,
+0x300c, 0x300e, 0x3010, 0x3014, 0xff04, 0xff08, 0xff3b, 0xff5b, 0xffe6
+},
+//Traditional Chinese
+{
+0x0028, 0x005b, 0x007b, 0x00a3, 0x00a5, 0x2018, 0x201c, 0x2035, 0x3008, 0x300a,
+0x300c, 0x300e, 0x3010, 0x3014, 0x301d, 0xfe35, 0xfe37, 0xfe39, 0xfe3b, 0xfe3d,
+0xfe3f, 0xfe41, 0xfe43, 0xfe59, 0xfe5b, 0xfe5d, 0xff08, 0xff5b
+},
+};
+
+sal_Unicode WW8DopTypography::aJapanBeginLevel1[101] =
+//Japanese Level 1
+{
+0x0021, 0x0025, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d,
+0x00a2, 0x00b0, 0x2019, 0x201d, 0x2030, 0x2032, 0x2033, 0x2103, 0x3001, 0x3002,
+0x3005, 0x3009, 0x300b, 0x300d, 0x300f, 0x3011, 0x3015, 0x309b, 0x309c, 0x309d,
+0x309e, 0x30fb, 0x30fd, 0x30fe, 0xff01, 0xff05, 0xff09, 0xff0c, 0xff0e, 0xff1a,
+0xff1b, 0xff1f, 0xff3d, 0xff5d, 0xff61, 0xff63, 0xff64, 0xff65, 0xff9e, 0xff9f,
+0xffe0
+};
+
+sal_Unicode WW8DopTypography::aJapanEndLevel1[51] =
+//Japanese Level 1
+{
+0x0024, 0x0028, 0x005b, 0x005c, 0x007b, 0x00a3, 0x00a5, 0x2018, 0x201c, 0x3008,
+0x300a, 0x300c, 0x300e, 0x3010, 0x3014, 0xff04, 0xff08, 0xff3b, 0xff5b, 0xff62,
+0xffe1, 0xffe5
+};
+
+
+/*
+Converts the OOo Asian Typography into a best fit match for Microsoft
+Asian typography. This structure is actually dumped to disk within the
+Dop Writer. Assumption is that rTypo is cleared to 0 on entry
+*/
+void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
+{
+    const com::sun::star::i18n::ForbiddenCharacters *pForbidden = 0;
+    const com::sun::star::i18n::ForbiddenCharacters *pUseMe = 0;
+    BYTE nUseReserved=0;
+    int nNoNeeded=0;
+    /*Now we have some minor difficult issues, to wit...
+    a. MicroSoft Office can only store one set of begin and end characters in
+    a given document, not one per language.
+    b. StarOffice has only a concept of one set of begin and end characters for
+    a given language, i.e. not the two levels of kinsoku in japanese
+
+    What is unknown as yet is if our default begin and end chars for
+    japanese, chinese tradition, chinese simplified and korean are different
+    in Word and Writer. I already suspect that they are different between
+    different version of word itself.
+
+    So what have come up with is to simply see if any of the four languages
+    in OOo have been changed away from OUR defaults, and if one has then
+    export that. If more than one has in the future we may hack in something
+    which examines our document properties to see which language is used the
+    most and choose that, for now we choose the first and throw an ASSERT.
+    */
+
+    /*Our default Japanese Level is 2, this is a special MS hack to set this*/
+    rTypo.reserved2 = 1;
+
+    for (rTypo.reserved1=8;rTypo.reserved1>0;rTypo.reserved1-=2)
+    {
+        if (pForbidden = pDoc->GetForbiddenCharacters(rTypo.GetConvertedLang(),
+            FALSE))
+
+        {
+            if ((memcmp(pForbidden->endLine.getStr(),
+                aLangNotEnd[(rTypo.reserved1-2)/2],
+                sizeof(aLangNotEnd[(rTypo.reserved1-2)/2])))
+            || (memcmp(pForbidden->beginLine.getStr(),
+                aLangNotBegin[(rTypo.reserved1-2)/2],
+                sizeof(aLangNotBegin[(rTypo.reserved1-2)/2]))))
+            {
+                //One exception for Japanese, if it matches a level 1 we
+                //can use one extra flag for that, rather than use a custom
+                if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
+                {
+                    if ((!memcmp(pForbidden->endLine.getStr(),
+                            WW8DopTypography::aJapanEndLevel1,
+                            sizeof(WW8DopTypography::aJapanEndLevel1)))
+                        && (!memcmp(pForbidden->beginLine.getStr(),
+                            WW8DopTypography::aJapanBeginLevel1,
+                            sizeof(WW8DopTypography::aJapanEndLevel1))))
+                    {
+                        rTypo.reserved2 = 0;
+                        continue;
+                    }
+                }
+
+                if (!pUseMe)
+                {
+                    pUseMe = pForbidden;
+                    nUseReserved = rTypo.reserved1;
+                    rTypo.iLevelOfKinsoku = 2;
+                }
+                nNoNeeded++;
+            }
+        }
+    }
+
+    ASSERT( nNoNeeded<=1, "Example of unexportable forbidden chars" );
+    rTypo.reserved1=nUseReserved;
+    if (rTypo.iLevelOfKinsoku)
+    {
+        rTypo.cchFollowingPunct = static_cast<INT16>
+            (pUseMe->beginLine.getLength());
+        if (rTypo.cchFollowingPunct > WW8DopTypography::MaxFollowing)
+            rTypo.cchFollowingPunct = WW8DopTypography::MaxFollowing;
+
+        rTypo.cchLeadingPunct = static_cast<INT16>
+            (pUseMe->endLine.getLength());
+        if (rTypo.cchLeadingPunct > WW8DopTypography::MaxLeading)
+            rTypo.cchLeadingPunct = WW8DopTypography::MaxLeading;
+
+        memcpy(rTypo.rgxchFPunct,pUseMe->beginLine.getStr(),
+            (rTypo.cchFollowingPunct+1)*2);
+
+        memcpy(rTypo.rgxchLPunct,pUseMe->endLine.getStr(),
+            (rTypo.cchLeadingPunct+1)*2);
+    }
+}
 
 // HasItem ist fuer die Zusammenfassung der Doppel-Attribute
 // Underline / WordLineMode und Box / Shadow.
@@ -1674,6 +1854,10 @@ void SwWW8Writer::WriteFkpPlcUsw()
 
         pPiece->WritePc( *this );               // Piece-Table
         OutFontTab( *pFib );                    // FFNs
+
+        //Convert OOo asian typography into MS typography structure
+        ExportDopTypography(pDop->doptypography);
+
         WriteDop( *this );                      // Document-Properties
     }
     Strm().Seek( 0 );
@@ -2066,11 +2250,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.5 2001-01-23 10:14:33 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.6 2001-01-30 20:11:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/01/23 10:14:33  os
+      update of filter configuration
+
       Revision 1.4  2000/11/20 14:12:26  jp
       ReadFilterFlags removed, use new class SwFilterOptions
 

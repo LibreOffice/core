@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,48 +312,57 @@ struct WW8_BordersSO            // fuer StarOffice-Border Code
 
 
 
-
-struct WW8_XCHAR    // Hilfs-Konstrukt fuer WW8_DOPTYPOGRAPHY
+/*
+Document Typography Info (DOPTYPOGRAPHY) These options are Far East only,
+and are accessible through the Typography tab of the Tools/Options dialog.
+*/
+class WW8DopTypography
 {
-    sal_Char A;
-    sal_Char B;
-};
+public:
+    void ReadFromMem(BYTE *&pData);
+    void WriteToMem(BYTE *&pData) const;
 
-struct WW8_DOPTYPOGRAPHY
-{   /*
-        Document Typography Info (DOPTYPOGRAPHY)
-        These options are Far East only, and are accessible
-        through the Typography tab of the Tools/Options dialog.
-    */
+    //ULONG Read(SvStream &rSt);
+    //ULONG Write(SvStream &rSt);
+
+    //Maps what I think is the language this is to affect to the OOo language
+    ULONG GetConvertedLang() const;
+
+    UINT16 fKerningPunct  : 1;  // true if we're kerning punctuation
+    UINT16 iJustification : 2;  // Kinsoku method of justification:
+                                //  0 = always expand
+                                //  1 = compress punctuation
+                                //  2 = compress punctuation and kana.
+    UINT16 iLevelOfKinsoku : 2; // Level of Kinsoku:
+                                //  0 = Level 1
+                                //  1 = Level 2
+                                //  2 = Custom
+    UINT16 f2on1          : 1;  // 2-page-on-1 feature is turned on.
+    UINT16 reserved1      : 4;  // in 97 its marked as reserved BUT
+    UINT16 reserved2      : 6;  // reserved ?
+    //we find that the following applies,
+    //2 == Japanese
+    //4 == Chinese (VR...
+    //6 == Korean
+    //8 == Chinese (Ta...
+    //perhaps a bit field where the DOP can possibly relate to more than
+    //one language at a time, nevertheless MS seems to have painted
+    //themselves into a small corner with one DopTypography for the
+    //full document, might not matter all that much though ?
 
 
+    INT16 cchFollowingPunct;    // length of rgxchFPunct
+    INT16 cchLeadingPunct;      // length of rgxchLPunct
 
-    /* a c h t u n g :     es duerfen keine solchen Bitfelder ueber einen eingelesenes Byte-Array
-                            gelegt werden!!
-                            stattdessen ist ein aBits1 darueber zu legen, das mit & auszulesen ist
-    GRUND: Compiler auf Intel und Sparc sortieren die Bits unterschiedlich
-    */
-
-
-
-    short fKerningPunct  : 1;       // true if we're kerning punctuation
-    short iJustification : 2;       // Kinsoku method of justification:
-                                                                //  0 = always expand
-                                                                //  1 = compress punctuation
-                                                                //  2 = compress punctuation and kana.
-    short iLevelOfKinsoku: 2;       // Level of Kinsoku:
-                                                                //  0 = Level 1
-                                                                //  1 = Level 2
-                                                                //  2 = Custom
-    short f2on1          : 1;       // 2-page-on-1 feature is turned on.
-    short                :10;       // reserved
-    short cchFollowingPunct;        // length of rgxchFPunct
-    short cchLeadingPunct;          // length of rgxchLPunct
-
-    WW8_XCHAR rgxchFPunct[101]; // array of characters that should
-                                                            // never appear at the start of a line
-    WW8_XCHAR rgxchLPunct[51];  // array of characters that should
-                                                            // never appear at the end of a line
+    sal_Unicode rgxchFPunct[101];   // array of characters that should
+                                    // never appear at the start of a line
+    sal_Unicode rgxchLPunct[51];    // array of characters that should
+                                    // never appear at the end of a line
+public:
+    static const INT16 MaxFollowing;
+    static const INT16 MaxLeading;
+    static sal_Unicode aJapanBeginLevel1[101];
+    static sal_Unicode aJapanEndLevel1[51];
 };
 
 struct WW8_DOGRID
@@ -850,11 +859,14 @@ struct WW67_ATRD                // fuer die 6/7-Version
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.2 2001-01-30 20:11:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.20  2000/09/18 16:05:02  willem.vandorp
       OpenOffice header added.
 

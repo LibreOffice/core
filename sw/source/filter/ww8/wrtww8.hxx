@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-11-13 10:11:28 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,8 +396,11 @@ public:
     BOOL bEndAtTxtEnd : 1;      // TRUE: all END at Textend
 
 
+
+
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
+    void ExportDopTypography(WW8DopTypography &rTypo);
 
     static USHORT TranslateToEditEngineId( USHORT nWhich );
     static USHORT TranslateFromEditEngineId( USHORT nWhich );

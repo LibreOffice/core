@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-15 15:33:06 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,6 +838,10 @@ friend class WW8FormulaControl;
         SwWw8ControlType nWhich);
 
     void ImportDop( BOOL bNewDoc );
+
+    //This converts MS Asian Typography information into OOo's
+    void ImportDopTypography(const WW8DopTypography &rTypo);
+
     void SetImplicitTab();
     ULONG LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss);
 
@@ -1137,11 +1141,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.9 2000-12-15 15:33:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.10 2001-01-30 20:11:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2000/12/15 15:33:06  cmc
+      #79055# OCX FormControls changes
+
       Revision 1.8  2000/12/04 14:08:08  khz
       #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
 

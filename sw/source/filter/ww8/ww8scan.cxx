@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-24 16:06:35 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3306,7 +3306,9 @@ WW8PLCFMan::~WW8PLCFMan()
 // 2. CP, wo ist naechste Attr.-Aenderung
 short WW8PLCFMan::WhereIdx( BOOL* pbStart, long* pPos )
 {
+#ifdef USE_6AM_CHECKIN
     BOOL bIgnore;
+#endif
     long next = LONG_MAX;   // SuchReihenfolge:
     short nextIdx = -1;     // erst Enden finden ( CHP, PAP, ( SEP ) ),
     BOOL bStart = TRUE;     // dann Anfaenge finden ( ( SEP ), PAP, CHP )
@@ -5035,8 +5037,7 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
         {
             adt = Get_Short( pData );
 
-            memcpy( &doptypography, pData, sizeof( WW8_DOPTYPOGRAPHY ));
-            pData += sizeof( WW8_DOPTYPOGRAPHY );
+            doptypography.ReadFromMem(pData);
 
             memcpy( &dogrid, pData, sizeof( WW8_DOGRID ));
             pData += sizeof( WW8_DOGRID );
@@ -5078,7 +5079,7 @@ WW8Dop::WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize )
 
 WW8Dop::WW8Dop()
 {
-    // erstmal alles auf 0 defaulten
+    // first set everything to a default of 0
     memset( &nDataStart, 0, (&nDataEnd - &nDataStart) );
 
     fWidowControl = 1;
@@ -5271,8 +5272,9 @@ BOOL WW8Dop::Write( SvStream& rStrm, WW8Fib& rFib )
 
         Set_UInt16( pData, adt );
 
-        memcpy( pData, &doptypography, sizeof( WW8_DOPTYPOGRAPHY ));
-        pData += sizeof( WW8_DOPTYPOGRAPHY );
+        //memcpy( pData, &doptypography, sizeof( WW8_DOPTYPOGRAPHY ));
+        //pData += sizeof( WW8_DOPTYPOGRAPHY );
+        doptypography.WriteToMem(pData);
 
         memcpy( pData, &dogrid, sizeof( WW8_DOGRID ));
         pData += sizeof( WW8_DOGRID );
@@ -5311,6 +5313,86 @@ BOOL WW8Dop::Write( SvStream& rStrm, WW8Fib& rFib )
     }
     rStrm.Write( aData, nLen );
     return 0 == rStrm.GetError();
+}
+
+const INT16 WW8DopTypography::MaxFollowing = 100;
+const INT16 WW8DopTypography::MaxLeading = 50;
+
+void WW8DopTypography::ReadFromMem(BYTE *&pData)
+{
+    USHORT a16Bit = Get_UShort(pData);
+    fKerningPunct = (a16Bit & 0x0001);
+    iJustification = (a16Bit & 0x0006) >>  1;
+    iLevelOfKinsoku = (a16Bit & 0x0018) >>  3;
+    f2on1 = (a16Bit & 0x0020) >>  5;
+    reserved1 = (a16Bit & 0x03C0) >>  6;
+    reserved2 = (a16Bit & 0xFC00) >>  10;
+
+    cchFollowingPunct = Get_Short(pData);
+    cchLeadingPunct = Get_Short(pData);
+
+    INT16 i;
+    for (i=0;i<MaxFollowing+1;i++)
+        rgxchFPunct[i] = Get_Short(pData);
+    for (i=0;i<MaxLeading+1;i++)
+        rgxchLPunct[i] = Get_Short(pData);
+
+    rgxchFPunct[cchFollowingPunct]=0;
+    rgxchLPunct[cchLeadingPunct]=0;
+}
+
+void WW8DopTypography::WriteToMem(BYTE *&pData) const
+{
+    USHORT a16Bit = fKerningPunct;
+    a16Bit |= (iJustification << 1) & 0x0006;
+    a16Bit |= (iLevelOfKinsoku << 3) & 0x0018;
+    a16Bit |= (f2on1 << 5) & 0x002;
+    a16Bit |= (reserved1 << 6) & 0x03C0;
+    a16Bit |= (reserved2 << 10) & 0xFC00;
+    Set_UInt16(pData,a16Bit);
+
+    Set_UInt16(pData,cchFollowingPunct);
+    Set_UInt16(pData,cchLeadingPunct);
+
+    INT16 i;
+    for (i=0;i<MaxFollowing+1;i++)
+        Set_UInt16(pData,rgxchFPunct[i]);
+    for (i=0;i<MaxLeading+1;i++)
+        Set_UInt16(pData,rgxchLPunct[i]);
+}
+
+ULONG WW8DopTypography::GetConvertedLang() const
+{
+    ULONG nLang;
+    //This isn't a documented issue, so we might have it all wrong,
+    //i.e. i.e. whats with the powers of two ?
+    //
+    //I have assumed peoples republic/taiwan == simplified/traditional
+    switch(reserved1)
+    {
+        case 2:     //Japan
+            nLang = LANGUAGE_JAPANESE;
+            break;
+        case 4:     //Chinese (Peoples Republic)
+            nLang = LANGUAGE_CHINESE_SIMPLIFIED;
+            break;
+        case 6:     //Korean
+            nLang = LANGUAGE_KOREAN;
+            break;
+        case 8:     //Chinese (Taiwan)
+            nLang = LANGUAGE_CHINESE_TRADITIONAL;
+            break;
+        default:
+            ASSERT(0, "Unknown MS Asian Typography language, please report");
+            nLang = LANGUAGE_CHINESE;
+            break;
+        case 0:
+                //And here we have the possibility that it says 2, but
+                //its really a bug and only japanese level 2 has been selected
+                //after a custom version was chosen on last save!
+            break;
+    }
+    return nLang;
 }
 
 /***************************************************************************
@@ -6010,11 +6092,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.6 2001-01-24 16:06:35 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.7 2001-01-30 20:11:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/01/24 16:06:35  cmc
+      #79464# Bad Table Row End Search
+
       Revision 1.5  2000/12/01 11:22:52  jp
       Task #81077#: im-/export of CJK documents
 

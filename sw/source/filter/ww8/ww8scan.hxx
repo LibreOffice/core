@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
+ *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1458,10 +1458,12 @@ public:
     /*
         bei nFib > 105 gehts weiter:
     */
-    INT16   adt;                            // Autoformat Document Type:
-                                                    // 0 for normal. 1 for letter, and 2 for email.
-    WW8_DOPTYPOGRAPHY doptypography;    // siehe WW8STRUC.HXX
-    WW8_DOGRID        dogrid;                   // siehe WW8STRUC.HXX
+    INT16   adt;                // Autoformat Document Type:
+                                    // 0 for normal.
+                                    // 1 for letter, and
+                                    // 2 for email.
+    WW8DopTypography doptypography; // see WW8STRUC.HXX
+    WW8_DOGRID        dogrid;       // see WW8STRUC.HXX
     UINT16                      :1; // reserved
     UINT16 lvl                  :4; // Which outline levels are showing in outline view
     UINT16                      :4; // reserved
@@ -1542,12 +1544,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.5 2000-12-04 14:08:08 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.6 2001-01-30 20:11:06 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/12/04 14:08:08  khz
+      #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
+
       Revision 1.4  2000/12/01 11:22:53  jp
       Task #81077#: im-/export of CJK documents
 
