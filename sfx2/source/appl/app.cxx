@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:39:53 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,6 @@
 #endif
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _DRAG_HXX //autogen
-#include <vcl/drag.hxx>
-#endif
 #endif
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
@@ -1266,190 +1261,6 @@ short SfxApplication::QuerySave_Impl( SfxObjectShell& rDoc, sal_Bool bAutoSave )
     return aBox.Execute();
 }
 
-//--------------------------------------------------------------------
-#ifndef TF_SVDATA
-sal_Bool Drop1_Impl( sal_uInt16 nSID, const String &rFile, sal_Bool bHidden,
-                 SfxExecuteItem *&rpExecItem, SfxExecuteItem *&rpPrintItem )
-{
-    // Parameter bestimmen
-    SfxStringItem aFileNameItem(SID_FILE_NAME, rFile);
-    SfxBoolItem aHiddenItem(SID_HIDDEN, bHidden);
-    SfxStringItem aRefererItem(SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-    SfxExecuteItem* pOld = rpExecItem;
-    if( !rpPrintItem )
-        rpExecItem = new SfxExecuteItem(
-            SID_SUBREQUEST, nSID, SFX_CALLMODE_SYNCHRON,
-            &aFileNameItem, &aHiddenItem, &aRefererItem,
-            (SfxPoolItem*)rpExecItem, 0L );
-    else
-        rpExecItem = new SfxExecuteItem(
-            SID_SUBREQUEST, nSID, SFX_CALLMODE_SYNCHRON,
-                &aFileNameItem, &aHiddenItem, &aRefererItem, rpPrintItem,
-            (SfxPoolItem*)rpExecItem, 0L );
-    delete pOld;
-    return sal_True;
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::Drop_Impl( sal_uInt16 nSID, DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    F"uhrt 'nSID' mit den Files aus, die im DragServer stehen.
-*/
-
-{
-    // Actions bestimmen
-    sal_uInt16 n2ndSID = 0;     // nach SID_OPENDOC auszuf"uhren
-    sal_Bool bHidden = sal_False;   // unsichtbar "offnen
-    switch ( nSID )
-    {
-        case SID_OPENDOC:
-        case SID_OPENURL:
-            break;
-
-        case SID_PRINTDOC:
-        case SID_PRINTDOCDIRECT:
-            n2ndSID = SID_PRINTDOCDIRECT;
-            bHidden = sal_True;
-            break;
-
-        case SID_NEWDOC:
-        case SID_NEWDOCDIRECT:
-            nSID = SID_NEWDOC;
-            break;
-
-        default:
-            // unbekannte SID
-            return sal_False;
-    }
-
-    // "uber die Items im DragServer iterieren
-    const sal_uInt16 nCount = DragServer::GetItemCount();
-    sal_Bool bSuccess = sal_False;
-
-    SfxExecuteItem* pExecItem = 0;
-    SfxExecuteItem* pPrintItem = n2ndSID ? new SfxExecuteItem(
-        SID_AFTEROPENEVENT, n2ndSID, SFX_CALLMODE_SYNCHRON ) : 0;
-
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        // Format erkennen
-        String aFile;
-        INetBookmark aBmk;
-        if ( DragServer::HasFormat(i, FORMAT_FILE_LIST) )
-        {
-            // SvData basteln
-            SvData aData( FORMAT_FILE_LIST );
-            SvDataObjectRef xDataObj = SvDataObject::PasteDragServer( rEvt );
-            xDataObj->GetData( &aData );
-
-            // Daten holen
-            FileList aFileList;
-            FileList* pFileList = &aFileList;
-            aData.GetData( (SvDataCopyStream**)&pFileList, pFileList->Type() );
-            for ( sal_uInt16 n = (sal_uInt16)aFileList.Count(); n--; )
-                Drop1_Impl( nSID, aFileList.GetFile(n), bHidden,
-                            pExecItem, pPrintItem );
-        }
-        else if ( DragServer::HasFormat(i, FORMAT_FILE) )
-        {
-               String aFile = DragServer::PasteFile(i);
-            Drop1_Impl( nSID, aFile, bHidden, pExecItem, pPrintItem );
-        }
-        else if ( aBmk.PasteDragServer(i) )
-        {
-            // Format via ::com::sun::star::text::Bookmark rausholen
-            Drop1_Impl( nSID, aBmk.GetURL(), bHidden, pExecItem, pPrintItem );
-        }
-    }
-
-    if( pExecItem )
-    {
-        // Fuer Mac muss erstes Execute Asyncron kommen
-        pExecItem->SetCallMode( SFX_CALLMODE_ASYNCHRON );
-        pViewFrame->GetDispatcher()->Execute( *pExecItem );
-        delete pExecItem;
-    }
-
-
-    // scheinbar annehmen, sonst kommt zweites Drop im falschen Window
-    return DROP_COPY == rEvt.GetAction();
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::QueryDrop_Impl( sal_uInt16 nSID, DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    QueryDrop-Handler; wird in der Regel aus dem QueryDrop() an den
-    Windows gerufen;
-    er returned sal_True, wenn FORMAT_FILE im DragServer vorliegt.
-*/
-{
-    if ( nSID == SID_OPENDOC || nSID == SID_OPENURL ||
-         nSID == SID_PRINTDOC || nSID == SID_PRINTDOCDIRECT ||
-         nSID == SID_NEWDOC || nSID == SID_NEWDOCDIRECT )
-    {
-        const sal_uInt16 nCount = DragServer::GetItemCount();
-        for ( sal_uInt16 i = 0; i < nCount; ++i )
-        {
-            if ( INetBookmark::DragServerHasFormat( i ) ||
-                 DragServer::HasFormat(i, FORMAT_FILE) ||
-                 DragServer::HasFormat(i, FORMAT_FILE_LIST) )
-            {
-                // if ( rEvt.IsDefaultAction() )
-                {
-                    rEvt.SetAction( DROP_COPY );
-                    return sal_True;
-                }
-                if ( rEvt.GetAction() == DROP_COPY )
-                    return sal_True;
-            }
-        }
-    }
-    return sal_False;
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::Drop( DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    Dieser Drop-Handler kann von den Applikationen, die i.d.R. keine
-    Ableitug vom SfxApplicationWindow haben, "uberladen werden. Er wird in
-    der Regel aus dem Drop() an den Windows gerufen.
-
-    In der Basisimplementierung wird versucht, alle Elemente im DragServer
-    als Datei zu oeffnen, indem sie als Event ueber den Dispatcher verschickt
-    werden.
-*/
-
-{
-    return Drop_Impl( SID_OPENDOC, rEvt );
-}
-
-//--------------------------------------------------------------------
-
-sal_Bool SfxApplication::QueryDrop( DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    Dieser QueryDrop-Handler kann von den Applikationen, die i.d.R. keine
-    Ableitug vom SfxApplicationWindow haben, "uberladen werden. Er wird in
-    der Regel aus dem QueryDrop() an den Windows gerufen.
-
-    Die Basisimplementierung returned sal_True, wenn FORMAT_FILE im DragServer
-    vorliegt.
-*/
-
-{
-    return QueryDrop_Impl( SID_OPENDOC, rEvt );
-}
-#endif
 //--------------------------------------------------------------------
 
 sal_Bool SfxApplication::IsInException() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:05:33 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #include <tools/cachestr.hxx>
 #endif
 
-#ifndef _SV_EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
-#endif
-
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -87,26 +83,6 @@ MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
 {
     delete pStrm;
 }
-
-#ifndef TF_SVDATA
-BOOL MSE40HTMLClipFormatObj::GetData( SotDataObject& rObj )
-{
-    SvData aData( SOT_FORMATSTR_ID_HTML_SIMPLE );
-    if( rObj.GetData( &aData ) )
-        return GetData( aData );
-    return FALSE;
-}
-
-BOOL MSE40HTMLClipFormatObj::GetData( SvData& rData )
-{
-    BOOL bRet = FALSE;
-    SvStorageStreamRef xStrm;
-    rData.GetData( (SvStorageStreamRef&)xStrm );
-    if( xStrm.Is() )
-        IsValid( *xStrm );
-    return 0 != pStrm;
-}
-#endif
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
@@ -159,47 +135,4 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 
     return pStrm;
 }
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
-/* $Log: not supported by cvs2svn $
-/* Revision 1.2  2001/02/02 13:41:23  jp
-/* new: IsValid - checks if the stream contains the correct headerdata
-/*
-/* Revision 1.1.1.1  2000/09/18 16:52:28  hr
-/* initial import
-/*
-/* Revision 1.9  2000/09/17 16:47:18  willem.vandorp
-/* OpenOffice header added.
-/*
-/* Revision 1.8  2000/09/06 14:49:46  willem.vandorp
-/* Header and footer replaced.
-/*
-/* Revision 1.7  2000/05/02 09:16:06  as
-/* unicode changes
-/*
-/* Revision 1.6  2000/03/02 19:08:47  jp
-/* Bug #73756#: GetData - Base URL may not be exist
-/*
-/* Revision 1.5  1999/12/16 19:33:27  er
-/* #60614# add: GetData with SvData
-/*
-/* Revision 1.4  1999/01/18 13:36:12  JP
-/* Task #59398#: unnoetiges RegisterClipb... gegen IDS ausgetauscht
-/*
-
-      Rev 1.3   18 Jan 1999 14:36:12   JP
-   Task #59398#: unnoetiges RegisterClipb... gegen IDS ausgetauscht
-
-      Rev 1.2   23 Nov 1998 12:14:26   MBA
-   Fix #56371#: Umstellung TF_ONE51
-
-      Rev 1.1   22 Jun 1998 21:20:44   JP
-   SvDataObject gegen SorDataObject ausgetauscht
-
-      Rev 1.0   18 Feb 1998 17:28:08   OK
-   NEW: MSE40HTMLClipFormatObj
-
-*/
 

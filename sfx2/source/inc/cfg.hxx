@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 13:47:56 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,9 +218,6 @@ public :
                                                 SvLBoxItem* pItem, const Point& rMousePos );
     virtual BOOL                EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
     virtual void                MouseMove( const MouseEvent& rMEvt );
-#ifndef TF_SVDATA
-    virtual BOOL                QueryDrop( DropEvent& );
-#endif
     virtual sal_Int8            AcceptDrop( const AcceptDropEvent& rEvt );
     virtual BOOL                NotifyMoving(SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, ULONG& );
     void                        Apply( SfxMenuManager* pMgr, SvLBoxEntry *pParent = NULL );
@@ -394,11 +391,7 @@ public:
                                 SfxStatusBarConfigListBox( Window* pParent,
                                         const ResId& );
 
-#ifndef TF_SVDATA
-    virtual BOOL                NotifyQueryDrop( SvLBoxEntry* pEntry );
-#else
     virtual BOOL                NotifyAcceptDrop( SvLBoxEntry* pEntry );
-#endif
     virtual BOOL                NotifyMoving(SvLBoxEntry*,
                                     SvLBoxEntry*,SvLBoxEntry*&,ULONG&);
     virtual void                CheckButtonHdl();

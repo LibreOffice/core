@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:31:56 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,7 @@
  ************************************************************************/
 
 #include <string>           // prevent conflict with STL includes
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
-#endif
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -249,49 +245,6 @@ void SfxToolBoxControl::StateChanged
 
     pBox->SetItemState( GetId(), eTri );
 }
-
-//------------------------------------------------------------------------
-#ifndef TF_SVDATA
-BOOL SfxToolBoxControl::Drop( DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    Diese virtuelle Methode kann "uberladen werden, um ein Drop auf ein
-    Toolbox-Control auszuf"uhren. Die Basisimplementierung braucht
-    i.d.R. nicht gerufen zu werden, da sie das Drop nur f"ur einige
-    spezielle SIDs implementiert, f"ur die es i.d.R. eigene Instanzen
-    von <SfxToolBoxControl> gibt.
-
-    Die Semantik ist wie in StarView, Positionen sind relativ zur
-    Toolbox.
-*/
-
-{
-//    return SFX_APP()->Drop_Impl( GetId(), rEvt );
-    return FALSE;
-}
-
-//------------------------------------------------------------------------
-
-BOOL SfxToolBoxControl::QueryDrop( DropEvent& rEvt )
-
-/*  [Beschreibung]
-
-    Diese virtuelle Methode kann "uberladen werden, um ein auf QueryDrop
-    auf ein Toolbox-Control auszuwerten. Die Basisimplementierung braucht
-    i.d.R. nicht gerufen zu werden, da sie das QueryDrop nur f"ur einige
-    spezielle SIDs implementiert, f"ur die es i.d.R. eigene Instanzen
-    von <SfxToolBoxControl> gibt.
-
-    Die Semantik ist wie in StarView, Positionen sind relativ zur
-    Toolbox.
-*/
-
-{
-//    return SFX_APP()->QueryDrop_Impl( GetId(), rEvt );
-    return FALSE;
-}
-#endif
 
 //--------------------------------------------------------------------
 

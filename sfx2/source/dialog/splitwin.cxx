@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:14:17 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 12:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,9 +146,6 @@ friend class SfxSplitWindow;
                         }
 
     virtual void        MouseMove( const MouseEvent& );
-#ifndef TF_SVDATA
-    virtual BOOL        QueryDrop( DropEvent& rEvt );
-#endif
     virtual void        AutoHide();
     virtual void        FadeIn();
     void                Actualize();
@@ -195,24 +192,6 @@ void SfxEmptySplitWin_Impl::FadeIn()
         aTimer.Start();
     }
 }
-
-#ifndef TF_SVDATA
-BOOL SfxEmptySplitWin_Impl::QueryDrop( DropEvent& rEvt )
-{
-    bAutoHide = TRUE;
-    FadeIn();
-    return FALSE;
-}
-
-BOOL SfxSplitWindow::QueryDrop( DropEvent& rEvt )
-{
-    Point aMousePos( rEvt.GetPosPixel() );
-    Rectangle aRect( GetFadeOutRect() );
-    if ( aRect.IsInside( aMousePos ) && !bPinned )
-        FadeOut();
-    return FALSE;
-}
-#endif
 
 //-------------------------------------------------------------------------
 
