@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:53:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star::presentation;
 using namespace ::com::sun::star::drawing;
 
+
+extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 namespace sd
 {
 ///////////////////////////////////////////////////////////////////////
@@ -1117,9 +1119,11 @@ void SlideshowImpl::registerShapeEvents(sal_Int32 nPageNumber)
                         xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
                     if( getPageNumberForBookmark( pEvent->maStrBookmark ) == -1 )
                         continue;
+                    break;
                 case ClickAction_DOCUMENT:
                 case ClickAction_SOUND:
                 case ClickAction_PROGRAM:
+                case ClickAction_MACRO:
                     if( xSetInfo->hasPropertyByName( msBookmark ) )
                         xSet->getPropertyValue( msBookmark ) >>= pEvent->maStrBookmark;
                     break;
@@ -1326,7 +1330,18 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
 
     case ClickAction_DOCUMENT:
     {
-        mpDocSh->OpenBookmark( pEvent->maStrBookmark );
+        OUString aBookmark( pEvent->maStrBookmark );
+
+        sal_Int32 nPos = aBookmark.lastIndexOf( sal_Unicode('#') );
+        if( nPos >= 0 )
+        {
+            OUString aURL( aBookmark.copy( 0, nPos+1 ) );
+            OUString aName( aBookmark.copy( nPos+1 ) );
+            aURL += getUiNameFromPageApiNameImpl( aName );
+            aBookmark = aURL;
+        }
+
+        mpDocSh->OpenBookmark( aBookmark );
     }
     break;
 
@@ -1397,13 +1412,15 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, sal_Int32
 sal_Int32 SlideshowImpl::getPageNumberForBookmark( const OUString& rStrBookmark )
 {
     BOOL bIsMasterPage;
-    USHORT nPgNum = mpDoc->GetPageByName( rStrBookmark, bIsMasterPage );
+    OUString aBookmark( rStrBookmark );
+    aBookmark = getUiNameFromPageApiNameImpl( aBookmark );
+    USHORT nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
     SdrObject* pObj = NULL;
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
         // Ist das Bookmark ein Objekt?
-        SdrObject* pObj = mpDoc->GetObj( rStrBookmark );
+        SdrObject* pObj = mpDoc->GetObj( aBookmark );
 
         if( pObj )
         {
