@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:51:09 $
+ *  last change: $Author: jp $ $Date: 2002-01-09 16:51:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,8 @@ SwModule::SwModule( SvFactory* pFact,
     pDragDrop(0),
     pXSelection(0),
     pAttrPool(0),
-    bAuthorInitialised(sal_False)
+    bAuthorInitialised(sal_False),
+    bEmbeddedLoadSave( sal_False )
 {
     SetName( String::CreateFromAscii("StarWriter") );
     pSwResMgr = GetResMgr();
