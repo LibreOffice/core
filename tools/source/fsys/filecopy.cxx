@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecopy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:06 $
+ *  last change: $Author: ok $ $Date: 2001-08-28 09:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@
 #endif
 #include "stream.hxx"
 #endif
+
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
+using namespace ::osl;
 
 EA_Copier* EA_Copier::_pCopier = NULL;
 
@@ -415,7 +421,8 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
         nBytesCopied = 0;
         nBytesTotal = FileStat( rSource ).GetSize();
 
-        String aFileName( GUI2FSYS( rSource.GetFull() ).GetBuffer() );
+        ::rtl::OUString aFileName;
+        FileBase::getFileURLFromSystemPath( ::rtl::OUString(rSource.GetFull()), aFileName );
         SvFileStream aSource( aFileName, STREAM_READ|STREAM_NOCREATE|STREAM_SHARE_DENYNONE );
 
         if ( !aSource.GetError() )
@@ -425,8 +432,10 @@ FSysError FileCopier::DoCopy_Impl( const DirEntry &rSource, const DirEntry &rTar
             if ( fstat( aSource.GetFileHandle(), &buf ) == -1 )
                 eRet = Error( FSYS_ERR_ACCESSDENIED, 0, &aTarget );
 #endif
-            SvFileStream aTargetStream( GUI2FSYS( aTarget.GetFull() ),
-                                        STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYWRITE );
+            ::rtl::OUString aTargetFileName;
+            FileBase::getFileURLFromSystemPath( ::rtl::OUString(aTarget.GetFull()), aTargetFileName );
+
+            SvFileStream aTargetStream( aTargetFileName, STREAM_WRITE | STREAM_TRUNC | STREAM_SHARE_DENYWRITE );
             if ( !aTargetStream.GetError() )
             {
 #ifdef UNX
