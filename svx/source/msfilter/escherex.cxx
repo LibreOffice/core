@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-08 18:22:44 $
+ *  last change: $Author: obo $ $Date: 2001-01-16 11:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -762,7 +762,8 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
 
                     if( aVDev.SetOutputSize( aOutSize ) )
                     {
-                        const PolyPolygon   aPolyPoly( Rectangle( Point(), aOutSize ) );
+                        Rectangle aRectangle = Rectangle( Point(), aOutSize );
+                        const PolyPolygon   aPolyPoly( aRectangle );
                         Hatch               aVclHatch( (HatchStyle) aHatch.Style, Color( aHatch.Color ), aHatch.Distance, (sal_uInt16)aHatch.Angle );
 
                         if ( bBackground )
