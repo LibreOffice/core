@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 11:30:22 $
+#   last change: $Author: vg $ $Date: 2003-06-12 11:07:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,16 @@ DEF1DES         =TestToolServer
 # --- TESTTOOL IDE ------------------------------------------------------
 
 APP1TARGET=testtool
+
+.IF "$(GUI)" == "UNX"
+APP1STDLIBS= -lapp -lsample
+.ELSE
 APP1STDLIBS= \
+        app.lib \
+        sample.lib
+.ENDIF
+    
+APP1STDLIBS+= \
             $(CPPUHELPERLIB) \
             $(TOOLSLIB) \
             $(UNOTOOLSLIB) \
@@ -166,14 +175,6 @@ APP1STDLIBS+= -lXext -lX11 -lSM -lICE
 APP1LIBS=\
         $(LIBPRE) $(LB)$/testtool.lib
 
-.IF "$(GUI)" == "UNX"
-APP1STDLIBS+= -lapp -lsample
-.ELSE
-APP1STDLIBS+= \
-        app.lib \
-        sample.lib
-.ENDIF
-    
 APP1DEPN=\
         $(LB)$/testtool.lib
 
