@@ -14,6 +14,7 @@ import com.sun.star.io.IOException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Properties;
@@ -93,9 +94,16 @@ public abstract class AbstractExporter implements Exporter {
     }
 
     protected void closeDocument(Object doc,XMultiServiceFactory xmsf) {
-        OfficeDocument.dispose(
+        /*OfficeDocument.dispose(
             xmsf,
-            (XComponent) UnoRuntime.queryInterface(XComponent.class, doc));
+            (XComponent) UnoRuntime.queryInterface(XComponent.class, doc));*/
+        try {
+            XCloseable xc = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, doc);
+            xc.close(false);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void pageCount(CGDocument doc, Object document) {
