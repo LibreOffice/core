@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneChildWindows.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:49:38 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,16 @@
 #include "PaneChildWindows.hxx"
 #include "PaneDockingWindow.hrc"
 #include "app.hrc"
-#include "strings.hrc"
 #include "sdresid.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
 
 namespace sd
 {
-    SFX_IMPL_DOCKINGWINDOW(LeftPaneChildWindow, SID_LEFT_PANE)
+    // We use SID_LEFT_PANE_IMPRESS and SID_LEFT_PANE_IMPRESS_DRAW to have
+    // separate strings.  Internally we use SID_LEFT_PANE_IMPESS for
+    // controlling the visibility of the left pane.
+    SFX_IMPL_DOCKINGWINDOW(LeftPaneChildWindow, SID_LEFT_PANE_IMPRESS)
     SFX_IMPL_DOCKINGWINDOW(RightPaneChildWindow, SID_RIGHT_PANE)
 }
 
@@ -92,8 +94,7 @@ LeftPaneChildWindow::LeftPaneChildWindow (
         this,
         pParentWindow,
         SdResId(FLT_LEFT_PANE_DOCKING_WINDOW),
-        PaneManager::PT_LEFT,
-        SdResId(STR_LEFT_PANE_TITLE));
+        PaneManager::PT_LEFT);
     eChildAlignment = SFX_ALIGN_LEFT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
     SetHideNotDelete (TRUE);
@@ -124,8 +125,7 @@ RightPaneChildWindow::RightPaneChildWindow (
         this,
         pParentWindow,
         SdResId(FLT_RIGHT_PANE_DOCKING_WINDOW),
-        PaneManager::PT_RIGHT,
-        SdResId(STR_RIGHT_PANE_TITLE));
+        PaneManager::PT_RIGHT);
     eChildAlignment = SFX_ALIGN_RIGHT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
     SetHideNotDelete (TRUE);
