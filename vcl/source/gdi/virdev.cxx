@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:57:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,14 +208,14 @@ VirtualDevice::~VirtualDevice()
 {
     DBG_TRACE( "VirtualDevice::~VirtualDevice()" );
 
-   ImplSVData* pSVData = ImplGetSVData();
+    ImplSVData* pSVData = ImplGetSVData();
 
     ImplReleaseGraphics();
 
     if ( mpVirDev )
         pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
 
-    // VirDev aus der Liste eintragen
+    // remove this VirtualDevice from the double-linked global list
     if( mpPrev )
         mpPrev->mpNext = mpNext;
     else
@@ -376,7 +376,7 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
         mnDPIX = mnDPIY = 4800;
         break;
     case REFDEV_MODE96:
-        mnDPIX = mnDPIY = 9600;
+        mnDPIX = mnDPIY = 1440; // as agreed with FME and AMA
         break;
     }
 
@@ -420,26 +420,10 @@ void VirtualDevice::SetReferenceDevice( RefDevMode eRefDevMode )
 
     // get font list with scalable fonts only
     ImplGetGraphics();
-    ImplDevFontList* pScalableDevFonts = new ImplDevFontList();
-    ImplDevFontListData* pData = pSVData->maGDIData.mpScreenFontList->First();
-    for(; pData; pData = pSVData->maGDIData.mpScreenFontList->Next() )
-    {
-        ImplFontData* pEntry = pData->mpFirst;
-        for(; pEntry; pEntry = pEntry->mpNext )
-        {
-            if( (pEntry->meType != TYPE_VECTOR)
-            && (pEntry->meType != TYPE_SCALABLE) )
-                continue;
-            ImplFontData* pNewData = new ImplFontData();
-            *pNewData = *pEntry;
-            pScalableDevFonts->Add( pNewData );
-        }
-    }
+    mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, false );
 
     // prepare to use new font lists
-    mpFontList = pScalableDevFonts;
-    mpFontCache = new ImplFontCache( FALSE );
+    mpFontCache = new ImplFontCache( false );
 }
 
 // -----------------------------------------------------------------------
-// eof
