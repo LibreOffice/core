@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-15 10:31:39 $
+ *  last change: $Author: mt $ $Date: 2002-02-27 09:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/window.hxx>
+#include <tools/debug.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
 
@@ -85,15 +86,47 @@ VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
 {
     mpVCLXindow = pVCLXindow;
     mxWindow = pVCLXindow;
+
+   DBG_ASSERT( pVCLXindow->GetWindow(), "VCLXAccessibleComponent - no window!" );
+   if ( pVCLXindow->GetWindow() )
+      pVCLXindow->GetWindow()->AddEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
 }
 
 VCLXAccessibleComponent::~VCLXAccessibleComponent()
 {
+   if ( mpVCLXindow && mpVCLXindow->GetWindow() )
+      mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+}
+
+IMPL_LINK( VCLXAccessibleComponent, WindowEventListener, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow() && GetWindow(), "Window???" );
+        ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+    }
+    return 0;
+}
+
+void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+//        case XXX:
+//        {
+//        }
+//        break;
+   }
 }
 
 void VCLXAccessibleComponent::disposing()
 {
+   if ( mpVCLXindow && mpVCLXindow->GetWindow() )
+      mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+
     mxWindow.clear();
+    mpVCLXindow = NULL;
 }
 
 Window* VCLXAccessibleComponent::GetWindow() const

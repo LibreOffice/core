@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-02-21 08:55:19 $
+ *  last change: $Author: mt $ $Date: 2002-02-27 09:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,12 @@
 #endif
 
 #include <tools/gen.hxx>    // Size
+#include <tools/link.hxx>   // Size
 
 class Window;
 class VCLXWindow;
+class VclSimpleEvent;
+class VclWindowEvent;
 
 namespace utl {
 class AccessibleStateSetHelper;
@@ -118,7 +121,9 @@ private:
 
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
+     DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
+     /* virtual */ void  ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
 public:
