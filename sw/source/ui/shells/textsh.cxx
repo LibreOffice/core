@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:44:14 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,8 +1198,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         // Zeichen einfuegen
         rSh.Insert( aChars );
 
-        // Muss der Font geaendert werden
-        if( aNewFont.GetName().Len() && aNewFont.GetName() != aFont.GetFamilyName() )
+        // #108876# a font attribute has to be set always due to a guessed script type
+        if( aNewFont.GetName().Len() )
         {
             bFontChanged = TRUE;
             SvxFontItem aNewFontItem( aFont );
