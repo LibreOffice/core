@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 19:29:48 $
+#   last change: $Author: vg $ $Date: 2003-04-17 15:53:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,10 +66,6 @@ PRJNAME=sw
 TARGET=unoidl
 
 AUTOSEG=true
-
-PROJECTPCH=ui_pch
-PDBTARGET=ui_pch
-PROJECTPCHSOURCE=..$/ui_1st$/ui_pch
 
 # --- Settings -----------------------------------------------------
 
