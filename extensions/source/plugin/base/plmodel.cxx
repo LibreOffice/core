@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plmodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 11:35:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ static ::osl::Mutex aPropertyMutex;
 static ::com::sun::star::beans::Property aProps[] =
 {
     ::com::sun::star::beans::Property(
-        ::rtl::OUString::createFromAscii( aCreationURL ),
+        ::rtl::OUString::createFromAscii( aMime ),
         1,
         ::getCppuType((const ::rtl::OUString*)0),
         ::com::sun::star::beans::PropertyAttribute::BOUND ),
     ::com::sun::star::beans::Property(
-        ::rtl::OUString::createFromAscii( aMime ),
+        ::rtl::OUString::createFromAscii( aCreationURL ),
         2,
         ::getCppuType((const ::rtl::OUString*)0),
         ::com::sun::star::beans::PropertyAttribute::BOUND )
@@ -142,14 +142,14 @@ static ::com::sun::star::beans::Property aProps[] =
 PluginModel::PluginModel() :
         BroadcasterHelperHolder( aPropertyMutex ),
         OPropertySetHelper( m_aHelper ),
-        OPropertyArrayHelper( aProps, 1 )
+        OPropertyArrayHelper( aProps, 2 )
 {
 }
 
 PluginModel::PluginModel(const ::rtl::OUString& rURL, const rtl::OUString& rMimeType ) :
         BroadcasterHelperHolder( aPropertyMutex ),
         OPropertySetHelper( m_aHelper ),
-        OPropertyArrayHelper( aProps, 1 ),
+        OPropertyArrayHelper( aProps, 2 ),
         m_aCreationURL( rURL ),
         m_aMimeType( rMimeType )
 {
@@ -181,9 +181,9 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
         if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
         {
             rConvertedValue = rValue;
-            if( nHandle = 1 )
+            if( nHandle = 2 )
                 rOldValue <<= m_aCreationURL;
-            else if( nHandle == 2 )
+            else if( nHandle == 1 )
                 rOldValue <<= m_aMimeType;
             return sal_True;
         }
@@ -198,9 +198,9 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
     if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
 
     {
-        if( nHandle == 1 )
+        if( nHandle == 2 )
             rValue >>= m_aCreationURL;
-        else if( nHandle == 2 )
+        else if( nHandle == 1 )
             rValue >>= m_aMimeType;
     }
     else
@@ -209,9 +209,9 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
 
 void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw()
 {
-    if( nHandle == 1 )
+    if( nHandle == 2 )
         rValue <<= m_aCreationURL;
-    else if( nHandle == 2 )
+    else if( nHandle == 1 )
         rValue <<= m_aMimeType;
 }
 
