@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 07:16:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-15 12:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,9 +586,13 @@ FileProvider::compareContentIds(
         if ( error != osl::FileBase::E_None )
             return iComp;
 
+#ifdef TF_FILEURL
         osl::FileStatus aStatus1( FileStatusMask_FileURL );
         osl::FileStatus aStatus2( FileStatusMask_FileURL );
-
+#else
+        osl::FileStatus aStatus1( FileStatusMask_FilePath );
+        osl::FileStatus aStatus2( FileStatusMask_FilePath );
+#endif
         error = aItem1.getFileStatus( aStatus1 );
         if ( error == osl::FileBase::E_None )
             error = aItem2.getFileStatus( aStatus2 );
