@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refvaluecomponent.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:31:59 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ namespace frm
 {
 //........................................................................
 
-    enum { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
+    enum state { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 
     //====================================================================
     //= OReferenceValueComponent
