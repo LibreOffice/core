@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-01-24 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ void OStatement_Base::assignRecordSet( ADORecordset* _pRS )
         aOldRS.PutRefDataSource( NULL );
 
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource( (IDispatch*)&m_Command );
+        m_RecordSet.PutRefDataSource( (IDispatch*)m_Command );
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OStatement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
@@ -424,7 +424,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  ) throw(SQLException, 
 
     CHECK_RETURN(m_Command.put_CommandText(aBatchSql))
     if ( m_RecordSet.IsValid() )
-        m_RecordSet.PutRefDataSource((IDispatch*)&m_Command);
+        m_RecordSet.PutRefDataSource((IDispatch*)m_Command);
 
     CHECK_RETURN(m_RecordSet.UpdateBatch(adAffectAll))
 
