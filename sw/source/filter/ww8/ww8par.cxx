@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-14 10:08:06 $
+ *  last change: $Author: cmc $ $Date: 2002-08-19 10:56:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2163,12 +2163,14 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
 
         bStartLine = bWasParaEnd = ReadChars(l, nNext, nStartCp+nTextLen, nCpOfs);
 
-        if( bStartLine ) // Zeilenende
-        {
-            AppendTxtNode( *pPaM->GetPoint() );
+        if (bStartLine) // Zeilenende
+            AppendTxtNode(*pPaM->GetPoint());
 
-            if( ( nCrCount++ & 0x40 ) == 0          // alle 64 CRs aufrufen
-                && nType == MAN_MAINTEXT ){         // nicht fuer Header u. ae.
+        if (bStartLine || bWasTabRowEnd)
+        {
+            // alle 64 CRs aufrufen not for Header u. ae.
+            if ((nCrCount++ & 0x40) == 0 && nType == MAN_MAINTEXT)
+            {
                 nProgress = (USHORT)( l * 100 / nTextLen );
                 ::SetProgressState( nProgress, rDoc.GetDocShell() ); // Update
             }
