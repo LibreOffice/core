@@ -1,4 +1,4 @@
-ul	unoil	:	offapi jurt NULL
+ul	unoil	::	offapi jurt NULL
 ul	unoil						usr1	-	all	ul_mkout NULL
 ul	unoil						nmake	-	all	ul_genall NULL
 ul	unoil\com\sun\star\awt				nmake	-	all	ul_awt ul_dattrans_clip ul_dattrans_dnd NULL
