@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:34:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ GEOMETRY lcl_convert( const MapMode& _rSource, const MapMode& _rDest, OutputDevi
 }
 }
 
-void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg )
+void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rBuffer, bool bNeg, Point* pOutPoint )
 {
     Point aPoint( lcl_convert(
                         m_pWriter->m_aGraphicsStack.front().m_aMapMode,
@@ -490,6 +490,8 @@ void PDFWriterImpl::PDFPage::appendPoint( const Point& rPoint, OStringBuffer& rB
                         m_pWriter->getReferenceDevice(),
                         rPoint
                     ) );
+    if( pOutPoint )
+        *pOutPoint = aPoint;
 
     sal_Int32 nValue    = aPoint.X();
     if( bNeg )
@@ -580,20 +582,24 @@ void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OS
         appendPolygon( rPolyPoly[n], rBuffer, bClose );
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical )
+void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength )
 {
+    sal_Int32 nValue = nLength;
     if ( nLength < 0 )
     {
         rBuffer.append( '-' );
-        nLength = -nLength;
+        nValue = -nLength;
     }
 
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
                              m_pWriter->getReferenceDevice(),
-                             Size( nLength, nLength ) ) );
-    sal_Int32 nInt      = ( bVertical ? aSize.Height() : aSize.Width() ) / 10;
-    sal_Int32 nDecimal  = ( bVertical ? aSize.Height() : aSize.Width() ) % 10;
+                             Size( nValue, nValue ) ) );
+    nValue = bVertical ? aSize.Height() : aSize.Width();
+    if( pOutLength )
+        *pOutLength = (nLength < 0 ) ? -nValue : nValue;
+    sal_Int32 nInt      = nValue / 10;
+    sal_Int32 nDecimal  = nValue % 10;
 
     rBuffer.append( nInt );
     if( nDecimal )
@@ -603,12 +609,14 @@ void PDFWriterImpl::PDFPage::appendMappedLength( sal_Int32 nLength, OStringBuffe
     }
 }
 
-void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical )
+void PDFWriterImpl::PDFPage::appendMappedLength( double fLength, OStringBuffer& rBuffer, bool bVertical, sal_Int32* pOutLength )
 {
     Size aSize( lcl_convert( m_pWriter->m_aGraphicsStack.front().m_aMapMode,
                              m_pWriter->m_aMapMode,
                              m_pWriter->getReferenceDevice(),
                              Size( 1000, 1000 ) ) );
+    if( pOutLength )
+        *pOutLength = (sal_Int32)(fLength*(double)(bVertical ? aSize.Height() : aSize.Width())/1000.0);
     fLength *= (double)(bVertical ? aSize.Height() : aSize.Width()) / 10000.0;
     appendDouble( fLength, rBuffer );
 }
@@ -1265,12 +1273,32 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
+    // prepare font encoding
+    const std::map< sal_Unicode, sal_Int32 >* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
+    sal_Int32 nToUnicodeStream = 0;
+    sal_uInt8 nEncoding[256];
+    sal_Unicode nEncodedCodes[256];
+    if( pEncoding )
+    {
+        memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
+        memset( nEncoding, 0, sizeof(nEncoding) );
+        for( std::map< sal_Unicode, sal_Int32 >::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
+        {
+            if( it->second != -1 )
+            {
+                sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
+                nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
+                nEncodedCodes[ nCode ] = it->first;
+            }
+        }
+    }
+
     FontSubsetInfo aInfo;
     sal_Int32 pWidths[256];
     const unsigned char* pFontData = NULL;
     long nFontLen = 0;
     sal_Int32 nLength1, nLength2;
-    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, pWidths, aInfo, &nFontLen )) )
+    if( (pFontData = (const unsigned char*)m_pReferenceDevice->mpGraphics->GetEmbedFontData( pFont, nEncodedCodes, pWidths, aInfo, &nFontLen )) )
     {
         if( aInfo.m_nFontType != SAL_FONTSUBSETINFO_TYPE_TYPE1 )
             goto streamend;
@@ -1587,25 +1615,8 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
 
     if( nFontDescriptor )
     {
-        const std::map< sal_Unicode, sal_Int32 >* pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pFont, NULL );
-        sal_Int32 nToUnicodeStream = 0;
-        sal_uInt8 nEncoding[256];
-        sal_Unicode nEncodedCodes[256];
         if( pEncoding )
-        {
-            memset( nEncodedCodes, 0, sizeof(nEncodedCodes) );
-            memset( nEncoding, 0, sizeof(nEncoding) );
-            for( std::map< sal_Unicode, sal_Int32 >::const_iterator it = pEncoding->begin(); it != pEncoding->end(); ++it )
-            {
-                if( it->second != -1 )
-                {
-                    sal_Int32 nCode = (sal_Int32)(it->second & 0x000000ff);
-                    nEncoding[ nCode ] = static_cast<sal_uInt8>( nCode );
-                    nEncodedCodes[ nCode ] = it->first;
-                }
-            }
             nToUnicodeStream = createToUnicodeCMap( nEncoding, nEncodedCodes, sizeof(nEncoding)/sizeof(nEncoding[0]) );
-        }
 
         // write font object
         sal_Int32 nObject = createObject();
@@ -2753,7 +2764,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     long nGlyphFlags[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
-    Point aPos, aLastPos(0, 0);
+    Point aPos, aLastPos(0, 0), aCumulativePos(0,0);
     bool bFirst = true;
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
@@ -2977,18 +2988,25 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             {
                 if( bFirst )
                 {
-                    m_aPages.back().appendPoint( aPos, aLine );
+                    m_aPages.back().appendPoint( aPos, aLine, false, &aCumulativePos );
                     bFirst = false;
                 }
                 else
                 {
+                    sal_Int32 nDiffL = 0;
                     Point aDiff = aPos - aLastPos;
-                    m_aPages.back().appendMappedLength( aDiff.X(), aLine, false );
+                    m_aPages.back().appendMappedLength( aDiff.X(), aLine, false, &nDiffL );
+                    aCumulativePos.X() += nDiffL;
                     aLine.append( ' ' );
-                    m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true );
+                    m_aPages.back().appendMappedLength( aDiff.Y(), aLine, true, &nDiffL );
+                    aCumulativePos.Y() += nDiffL;
                 }
                 aLine.append( " Td " );
-                aLastPos = aPos;
+                // back project last position to catch rounding errors
+                aLastPos = lcl_convert( m_aMapMode,
+                                        m_aGraphicsStack.front().m_aMapMode,
+                                        getReferenceDevice(),
+                                        aCumulativePos );
             }
             else
             {
