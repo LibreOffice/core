@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:31:28 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ζ‰“ε°ζΊ";
         Text[ russian ] = "Οπθνςεπ";
         Text[ polish ] = "Drukarka";
-        Text[ japanese ] = "οΎοΎοΎοΎοΎ€";
+        Text[ japanese ] = "γƒ—γƒªγƒ³γ‚Ώ";
         Text[ chinese_traditional ] = "ε°θ΅¨ζ©";
         Text[ arabic ] = "ΗαΨΗΘΪΙ";
         Text[ greek ] = "Εκτυπωτής";
@@ -164,7 +164,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ε±ζ€§(~I)...";
         Text[ russian ] = "~Ρβξιρςβΰ...";
         Text[ polish ] = "W³aciwoci...";
-        Text[ japanese ] = "οΎοΎοΎ›οΎοΎοΎƒο½¨(~I)...";
+        Text[ japanese ] = "γƒ—γƒ­γƒ‘γƒ†γ‚£(~I)...";
         Text[ chinese_traditional ] = "ε±¬ζ€§(~I)...";
         Text[ arabic ] = "ΞΥΗΖΥ...";
         Text[ greek ] = "Ιδιότητες...";
@@ -192,7 +192,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "η¶ζ€";
         Text[ russian ] = "Ρξρςξÿνθε";
         Text[ polish ] = "Stan";
-        Text[ japanese ] = "ο½½οΎƒο½°οΎ€ο½½";
+        Text[ japanese ] = "γ‚Ήγƒ†γƒΌγ‚Ώγ‚Ή";
         Text[ chinese_traditional ] = "η‹€ζ…‹";
         Text[ arabic ] = "ΗαΝΗαΙ";
         Text[ greek ] = "Κατάσταση";
@@ -291,7 +291,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ζ³¨θ§£";
         Text[ russian ] = "Κξμμενςΰπθι";
         Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ο½ΊοΎ’οΎοΎ„";
+        Text[ japanese ] = "γ‚³γƒ΅γƒ³γƒ";
         Text[ chinese_traditional ] = "θ¨»θ§£";
         Text[ arabic ] = "ΚΪανή";
         Text[ greek ] = "Σχόλιο";
@@ -357,7 +357,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ζ‰“ε°ζζ–‡δ»¶";
         Text[ russian ] = "Οεχΰςό β τΰιλ";
         Text[ polish ] = "Drukuj do pliku";
-        Text[ japanese ] = "οΎο½§ο½²οΎ™γΈε‡Ίε›";
+        Text[ japanese ] = "γƒ•γ‚΅γ‚¤γƒ«γΈε‡Ίε›";
         Text[ chinese_traditional ] = "ε—ε°ζζª”ζ΅";
         Text[ arabic ] = "ΨΘΗΪΙ Εαμ γαέ";
         Text[ greek ] = "Εκτύπωση σε αρχείο";
@@ -452,7 +452,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ι΅µ";
         Text[ russian ] = "~Ρςπΰνθφϋ";
         Text[ polish ] = "Strony";
-        Text[ japanese ] = "οΎοΎο½°ο½ΌοΎζ‡ε®";
+        Text[ japanese ] = "γƒγƒΌγ‚Έζ‡ε®";
         Text[ chinese_traditional ] = "ι ";
         Text[ arabic ] = "ΥέΝΗΚ";
         Text[ greek ] = "Σελίδες";
@@ -647,7 +647,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_simplified ] = "ε…¶δ»–(~O)...";
         Text[ russian ] = "Οΰπΰμεςπϋ...";
         Text[ polish ] = "Dodatki...";
-        Text[ japanese ] = "ο½µοΎοΎο½Όο½®οΎ(~O)...";
+        Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³(~O)...";
         Text[ chinese_traditional ] = "ε…¶δ»–(~O)...";
         Text[ arabic ] = "ΞνΗΡΗΚ...";
         Text[ greek ] = "Πρόσθετα...";
@@ -711,6 +711,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
