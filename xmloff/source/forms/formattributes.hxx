@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 13:52:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ namespace xmloff
     #define CCA_TITLE                   0x00100000
     #define CCA_VALUE                   0x00200000
     #define CCA_ORIENTATION             0x00400000
+    #define CCA_VISUAL_EFFECT           0x00800000
 
     // flags for database control atttributes
     #define DA_BOUND_COLUMN             0x00000001
@@ -169,6 +170,9 @@ namespace xmloff
     #define SCA_STEP_SIZE               0x00004000
     #define SCA_PAGE_STEP_SIZE          0x00008000
     #define SCA_REPEAT_DELAY            0x00010000
+    #define SCA_TOGGLE                  0x00020000
+    #define SCA_FOCUS_ON_CLICK          0x00040000
+    #define SCA_IMAGE_POSITION          0x00080000
 
     // attributes of the office:forms element
     enum OfficeFormsAttributes
