@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 15:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,4 +83,5 @@
 #define RB_ARG3             18
 #define RB_ARG4             19
 #define WND_SLIDER          20
+#define IMG_FX_H            30
 

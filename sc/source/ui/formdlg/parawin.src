@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 22:48:37 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 15:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,6 @@
  *
  *
  ************************************************************************/
- //============================================================================
- // StarView Resource file for StarCalc Para- Window
- //
- // (C) 1994-98 StarDivision GmbH, Hamburg, Germany
- //
- // $Workfile:   parawin.src  $
- //   $Author: vg $
- //     $Date: 2001-11-16 22:48:37 $
- // $Revision: 1.15 $
- //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
- //----------------------------------------------------------------------------
-
-
 
 #include "parawin.hrc"
 
@@ -91,12 +78,7 @@
         {\
             File = "fx.bmp" ; \
         };\
-        MaskColor = Color\
-        {\
-            Red = 0xC000 ; \
-            Green = 0xC000 ; \
-            Blue = 0xC000 ; \
-        };\
+        MaskColor = STD_MASKCOLOR;\
     };
 
 #define ED_ARGBLOCK( y )                \
@@ -131,7 +113,8 @@
     QuickHelpText[ language_user1 ] = " ";  \
     QuickHelpText[ turkish ] = "Verkleinern";   \
     QuickHelpText[ catalan ] = "Reducir";   \
-    QuickHelpText[ finnish ] = "Kutista!";
+    QuickHelpText[ finnish ] = "Kutista";   \
+    QuickHelpText[ thai ] = "Shrink";
 
  //---------------------------------------------------------------------------
 
@@ -169,8 +152,9 @@ TabPage RID_SCTAB_PARAMETER
         Text[ chinese_traditional ] = "‰∏çÊòéÁöÑÂáΩÊï∏";
         Text[ arabic ] = "œ«·… €Ì— „⁄—Ê›…";
         Text[ turkish ] = "Bilinmeyen i˛lev";
-        Text[ catalan ] = "FunciÛn desconocida";
+        Text[ catalan ] = "FunciÛ desconeguda";
         Text[ finnish ] = "Tuntematon toiminto";
+        Text[ thai ] = "‡πÑ‡∏°‡πà‡∏£‡∏π‡πâ‡∏à‡∏±‡∏Å‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
     };
 
     FixedText FT_PARNAME
@@ -244,14 +228,11 @@ TabPage RID_SCTAB_PARAMETER
         Size = MAP_APPFONT ( 8 , 59 ) ;
         VScroll = TRUE ;
     };
+
+    Image IMG_FX_H
+    {
+        ImageBitmap = Bitmap { File = "fx_h.bmp" ; };
+        MaskColor = SC_HC_MASKCOLOR;
+    };
 };
-
-
-
-
-
-
-
-
-
 

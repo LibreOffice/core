@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 09:20:17 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 15:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ ScParaWin::ScParaWin(ScAnyRefDlg* pParent,Point aPos):
     bRefMode        (FALSE),
     pFuncDesc       ( NULL)
 {
+    Image aFxHC( ScResId( IMG_FX_H ) );
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();
     pMyParent=pParent;
@@ -130,6 +131,11 @@ ScParaWin::ScParaWin(ScAnyRefDlg* pParent,Point aPos):
     aSlider.SetSizePixel( aSize );
     aSlider.SetEndScrollHdl( LINK( this, ScParaWin, ScrollHdl ) );
     aSlider.SetScrollHdl( LINK( this, ScParaWin, ScrollHdl ) );
+
+    aBtnFx1.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
+    aBtnFx2.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
+    aBtnFx3.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
+    aBtnFx4.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
 
     InitArgInput( 0, aFtArg1, aBtnFx1, aEdArg1, aRefBtn1);
     InitArgInput( 1, aFtArg2, aBtnFx2, aEdArg2, aRefBtn2);
