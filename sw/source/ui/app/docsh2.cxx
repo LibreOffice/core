@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:22:19 $
+ *  last change: $Author: os $ $Date: 2002-10-25 10:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,10 +296,15 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
 
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#include <sw3io.hxx>
 
 using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
@@ -894,7 +899,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     nRet = pNewFileDlg->Execute();
                     if(RET_TEMPLATE_LOAD == nRet)
                     {
-                        FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
+                        FileDialogHelper aDlgHelper( TemplateDescription::FILEOPEN_SIMPLE, 0 );
                         Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                         xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
@@ -981,7 +986,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!bHasName)
                     {
-                        FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION, 0 );
+                        FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
                         aDlgHelper.AddFilter( pHtmlFlt->GetFilterName(), pHtmlFlt->GetDefaultExtension() );
                         aDlgHelper.SetCurrentFilter( pHtmlFlt->GetFilterName() );
                         if( ERRCODE_NONE != aDlgHelper.Execute())
@@ -1271,7 +1276,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if ( !aFileName.Len() )
                 {
-                    FileDialogHelper aDlgHelper( FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
+                    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE, 0 );
                     //set HelpIds
                     const sal_Int16 nControlIds[] = {
                         CommonFilePickerElementIds::PUSHBUTTON_OK,
@@ -1353,7 +1358,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if(!sStartTemplate.getLength() && pAny)
                         sStartTemplate = pAny->GetName();
-
                     aListBoxEntries.realloc(nIdx);
 
                     try
@@ -1658,7 +1662,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                     "Loschen des Basics hat nicht geklappt" );
         }
     }
-
     sal_Bool bWasBrowseMode = pDoc->IsBrowseMode();
     RemoveLink();
 
