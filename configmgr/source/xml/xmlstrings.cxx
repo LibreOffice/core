@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstrings.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:52 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 11:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@ namespace configmgr
 
         // tag names
         IMPLEMENT_CONSTASCII_USTRING(TAG_SCHEMA,    OOR_ROOTTAG_PREFIX_"component-schema");
-        IMPLEMENT_CONSTASCII_USTRING(TAG_LAYER,     OOR_ROOTTAG_PREFIX_"node");
+        IMPLEMENT_CONSTASCII_USTRING(TAG_LAYER,     OOR_ROOTTAG_PREFIX_"component-data");
+        IMPLEMENT_CONSTASCII_USTRING(DEPRECATED_TAG_LAYER, OOR_ROOTTAG_PREFIX_"node");
 
         IMPLEMENT_CONSTASCII_USTRING(TAG_COMPONENT, OOR_TAG_PREFIX_"component");
         IMPLEMENT_CONSTASCII_USTRING(TAG_TEMPLATES, OOR_TAG_PREFIX_"templates");
