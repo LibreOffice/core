@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2002-05-27 10:35:00 $
+#   last change: $Author: jb $ $Date: 2002-06-07 14:16:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=\
     $(SLO)$/layerupdatebuilder.obj \
     $(SLO)$/layerupdate.obj \
     $(SLO)$/updatedata.obj \
+    $(SLO)$/updatedispatch.obj \
 
 # --- Targets ---
 
