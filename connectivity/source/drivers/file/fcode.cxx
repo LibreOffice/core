@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:26:20 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #ifndef CONNECTIVITY_CONNECTION_HXX
 #include "TConnection.hxx"
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -94,6 +96,7 @@ using namespace connectivity::file;
 //using namespace ::com::sun::star::uno;
 //using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 //using namespace ::com::sun::star::container;
 //using namespace ::com::sun::star::beans;
 //using namespace ::com::sun::star::sdbcx;
@@ -177,7 +180,7 @@ sal_Bool OOperandAttr::isIndexed() const
 }
 //------------------------------------------------------------------
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
-    : OOperandRow(_nPos, DataType::VARCHAR)      // Standard-Typ
+    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Typ
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
@@ -374,12 +377,12 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
 #endif
             switch(aPredicateType)
             {
-                case SQL_PRED_EQUAL:            bResult = (nRes == 0); break;
-                case SQL_PRED_NOTEQUAL:         bResult = (nRes != 0); break;
-                case SQL_PRED_LESS:             bResult = (nRes <  0); break;
-                case SQL_PRED_LESSOREQUAL:      bResult = (nRes <= 0); break;
-                case SQL_PRED_GREATER:          bResult = (nRes >  0); break;
-                case SQL_PRED_GREATEROREQUAL:   bResult = (nRes >= 0); break;
+                case SQLFilterOperator::EQUAL:          bResult = (nRes == 0); break;
+                case SQLFilterOperator::NOT_EQUAL:          bResult = (nRes != 0); break;
+                case SQLFilterOperator::LESS:               bResult = (nRes <  0); break;
+                case SQLFilterOperator::LESS_EQUAL:     bResult = (nRes <= 0); break;
+                case SQLFilterOperator::GREATER:            bResult = (nRes >  0); break;
+                case SQLFilterOperator::GREATER_EQUAL:  bResult = (nRes >= 0); break;
                 default:                        bResult = sal_False;
             }
         } break;
@@ -399,14 +402,14 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
 
             switch (aPredicateType)
             {
-                case SQL_PRED_EQUAL:            bResult = (n == m); break;
-                case SQL_PRED_LIKE:             bResult = (n == m); break;
-                case SQL_PRED_NOTEQUAL:         bResult = (n != m); break;
-                case SQL_PRED_NOTLIKE:          bResult = (n != m); break;
-                case SQL_PRED_LESS:             bResult = (n < m); break;
-                case SQL_PRED_LESSOREQUAL:      bResult = (n <= m); break;
-                case SQL_PRED_GREATER:          bResult = (n > m); break;
-                case SQL_PRED_GREATEROREQUAL:   bResult = (n >= m); break;
+                case SQLFilterOperator::EQUAL:          bResult = (n == m); break;
+                case SQLFilterOperator::LIKE:               bResult = (n == m); break;
+                case SQLFilterOperator::NOT_EQUAL:          bResult = (n != m); break;
+                case SQLFilterOperator::NOT_LIKE:           bResult = (n != m); break;
+                case SQLFilterOperator::LESS:               bResult = (n < m); break;
+                case SQLFilterOperator::LESS_EQUAL:     bResult = (n <= m); break;
+                case SQLFilterOperator::GREATER:            bResult = (n > m); break;
+                case SQLFilterOperator::GREATER_EQUAL:  bResult = (n >= m); break;
                 default:                        bResult = sal_False;
             }
         } break;
