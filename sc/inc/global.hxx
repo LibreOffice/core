@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:42:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_SCGLOB_HXX
 #define SC_SCGLOB_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
 #endif
@@ -73,28 +77,6 @@ class ImageList;
 class Bitmap;
 class SfxItemSet;
 class Color;
-
-// USHORT typedefs
-// Use in all new code instead of USHORT nCol, USHORT nRow, USHORT nTab
-// until integration of cws_src680_rowlimit, upon which they must be removed.
-typedef USHORT SCROW;
-typedef USHORT SCCOL;
-typedef USHORT SCTAB;
-typedef USHORT SCCOLROW;
-
-// short typedefs
-// Use in all new code instead of short nCol, short nRow, short nTab
-// until integration of cws_src680_rowlimit, upon which they must be removed.
-typedef short SCsROW;
-typedef short SCsCOL;
-typedef short SCsTAB;
-
-
-#ifdef WIN
-//  auf Windows 16 muessen die Zeilen weiter auf 8192 begrenzt werden
-//  (zum Testen per Hand definieren)
-#define SC_LIMIT_ROWS
-#endif
 
 // Macro fuer den Call-Profiler unter WinNT
 // mit S_CAP kann eine Messung gestarted, mit E_CAP wieder gestoppt werden
@@ -157,44 +139,24 @@ struct LabelData;
 #define MINDOUBLE   1.7e-307
 #define MAXDOUBLE   1.7e307
 
-#define MAXROW_30   8191
-#define MAXROW_40   31999
-#ifdef SC_LIMIT_ROWS
-#define MAXROW      8191
-#else
-#define MAXROW      31999
-#endif
-
-#define MAXCOL      255
-#define MAXTAB      255
-
 #define MINZOOM     20
 #define MAXZOOM     400
 
-#define MAXSUBTOTAL 3
-#define MAXQUERY    8
-#define PIVOT_MAXFIELD      8
-#define PIVOT_MAXPAGEFIELD  10
+#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
+const size_t MAXSUBTOTAL        = 3;
+const size_t MAXQUERY           = 8;
+const size_t PIVOT_MAXFIELD     = 8;
+const size_t PIVOT_MAXPAGEFIELD = 10;
+#else
+const SCSIZE MAXSUBTOTAL        = 3;
+const SCSIZE MAXQUERY           = 8;
+const SCSIZE PIVOT_MAXFIELD     = 8;
+const SCSIZE PIVOT_MAXPAGEFIELD = 10;
+#endif
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Oberhalb dieser Grenze liegen
                                         // die Indizes fuer DBBereiche
-
-#define VALIDROW(nRow)                  (nRow>=0 && nRow<=MAXROW)
-#define VALIDCOL(nCol)                  (nCol>=0 && nCol<=MAXCOL)
-#define VALIDTAB(nTab)                  (nTab>=0 && nTab<=MAXTAB)
-#define VALIDCOLROW(nCol,nRow)          (VALIDCOL(nCol) && VALIDROW(nRow))
-#define VALIDCOLROWTAB(nCol,nRow,nTab)  (VALIDCOL(nCol) && VALIDROW(nRow) && VALIDTAB(nTab))
-
-inline BOOL ValidColRow(USHORT nCol, USHORT nRow)
-{
-    return nCol <= MAXCOL && nRow <= MAXROW;
-}
-
-inline BOOL ValidColRowTab(USHORT nCol, USHORT nRow, USHORT nTab)
-{
-    return nCol <= MAXCOL && nRow <= MAXROW && nTab <= MAXTAB;
-}
 
 /*
 #ifdef OS2
@@ -505,10 +467,10 @@ enum ScDBObject
 
 struct ScImportParam
 {
-    USHORT          nCol1;
-    USHORT          nRow1;
-    USHORT          nCol2;
-    USHORT          nRow2;
+    SCCOL           nCol1;
+    SCROW           nRow1;
+    SCCOL           nCol2;
+    SCROW           nRow2;
     BOOL            bImport;
     String          aDBName;                    // Alias der Datenbank
     String          aStatement;
@@ -718,466 +680,7 @@ public:
 };
 #endif
 
-class ScTripel
-{
-public:
-        USHORT  nCol;
-        USHORT  nRow;
-        USHORT  nTab;
-
-public:
-        ScTripel();
-        ScTripel( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab );
-        ScTripel( const ScTripel& rRef );
-        ~ScTripel();
-
-        USHORT  GetCol() const          { return nCol; }
-        USHORT  GetRow() const          { return nRow; }
-        USHORT  GetTab() const          { return nTab; }
-
-        void    SetCol(USHORT nNewCol)  { nCol = nNewCol; }
-        void    SetRow(USHORT nNewRow)  { nRow = nNewRow; }
-        void    SetTab(USHORT nNewTab)  { nTab = nNewTab; }
-
-        void    Put(USHORT nNewCol, USHORT nNewRow, USHORT nNewTab)
-                { nCol=nNewCol; nRow=nNewRow; nTab=nNewTab; }
-
-        inline  int operator == ( const ScTripel& rTripel ) const;
-                int operator != ( const ScTripel& rTripel ) const { return !(operator==(rTripel)); }
-
-        String  GetText() const;                                // "(1,2,3)"
-        String  GetColRowString( BOOL bAbolute = FALSE ) const; // "A1"||"$A$1"
-};
-
-inline ScTripel::ScTripel() :
-    nCol(0), nRow(0), nTab(0)
-{}
-
-inline ScTripel::ScTripel( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab ) :
-    nCol(nNewCol), nRow(nNewRow), nTab(nNewTab)
-{}
-
-inline ScTripel::ScTripel( const ScTripel& rRef ) :
-    nCol(rRef.nCol), nRow(rRef.nRow), nTab(rRef.nTab)
-{}
-
-inline ScTripel::~ScTripel()
-{}
-
-inline int ScTripel::operator==( const ScTripel& rTripel ) const
-{
-    return nCol==rTripel.nCol && nRow==rTripel.nRow && nTab==rTripel.nTab;
-}
-
-class ScRefTripel : public ScTripel
-{
-    BOOL bRelCol;
-    BOOL bRelRow;
-    BOOL bRelTab;
-public:
-        ScRefTripel() :
-            ScTripel(), bRelCol(FALSE), bRelRow(FALSE), bRelTab(FALSE)  {}
-        ScRefTripel( USHORT nNewCol, USHORT nNewRow, USHORT nNewTab, BOOL bNewRelCol, BOOL bNewRelRow, BOOL bNewRelTab ) :
-            ScTripel(nNewCol, nNewRow, nNewTab), bRelCol(bNewRelCol), bRelRow(bNewRelRow), bRelTab(bNewRelTab) {}
-        ScRefTripel( const ScRefTripel& rRef ) :
-            ScTripel(rRef.nCol, rRef.nRow, rRef.nTab), bRelCol(rRef.bRelCol), bRelRow(rRef.bRelRow), bRelTab(rRef.bRelTab) {}
-
-        BOOL    GetRelCol() const { return bRelCol; }
-        BOOL    GetRelRow() const { return bRelRow; }
-        BOOL    GetRelTab() const { return bRelTab; }
-
-        void    SetRelCol(BOOL bNewRelCol) { bRelCol = bNewRelCol; }
-        void    SetRelRow(BOOL bNewRelRow) { bRelRow = bNewRelRow; }
-        void    SetRelTab(BOOL bNewRelTab) { bRelTab = bNewRelTab; }
-
-        void    Put(USHORT nNewCol, USHORT nNewRow, USHORT nNewTab, BOOL bNewRelCol, BOOL bNewRelRow, BOOL bNewRelTab )
-                {   nCol = nNewCol; nRow = nNewRow; nTab = nNewTab;
-                    bRelCol = bNewRelCol; bRelRow = bNewRelRow; bRelTab = bNewRelTab;}
-
-        inline  int operator == ( const ScRefTripel& rRefTripel ) const;
-                int operator != ( const ScRefTripel& rRefTripel ) const { return !(operator==(rRefTripel)); }
-
-        String GetRefString(ScDocument* pDoc, USHORT nActTab) const;
-};
-
-
-inline int ScRefTripel::operator==( const ScRefTripel& rRefTripel ) const
-{
-    return nCol == rRefTripel.nCol && nRow==rRefTripel.nRow && nTab==rRefTripel.nTab &&
-            bRelCol == rRefTripel.bRelCol && bRelRow == rRefTripel.bRelRow && bRelTab == rRefTripel.bRelTab;
-}
-
 //==================================================================
-
-// Die neue Zelladressierung ist in einem UINT32 untergebracht:
-// +---+---+-------+
-// |Tab|Col|  Row  |
-// +---+---+-------+
-// Der Schnelligkeit halber wird beim Zugriff nicht geshiftet,
-// sondern plattformabhaengig gecastet.
-
-// Das Ergebnis von ConvertRef() ist eine Bitgruppe folgender Bits:
-
-#define SCA_COL_ABSOLUTE    0x01
-#define SCA_ROW_ABSOLUTE    0x02
-#define SCA_TAB_ABSOLUTE    0x04
-#define SCA_TAB_3D          0x08
-#define SCA_COL2_ABSOLUTE   0x10
-#define SCA_ROW2_ABSOLUTE   0x20
-#define SCA_TAB2_ABSOLUTE   0x40
-#define SCA_TAB2_3D         0x80
-#define SCA_VALID_ROW       0x0100
-#define SCA_VALID_COL       0x0200
-#define SCA_VALID_TAB       0x0400
-#define SCA_VALID_ROW2      0x1000
-#define SCA_VALID_COL2      0x2000
-#define SCA_VALID_TAB2      0x4000
-#define SCA_VALID           0x8000
-
-#define SCA_ABS               SCA_VALID \
-                            | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
-#define SCR_ABS               SCA_ABS \
-                            | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
-#define SCA_ABS_3D          SCA_ABS | SCA_TAB_3D
-#define SCR_ABS_3D          SCR_ABS | SCA_TAB_3D
-
-class ScAddress
-{
-private:
-    UINT32 nAddress;
-    inline UINT16* RowPos();
-    inline BYTE* ColPos();
-    inline BYTE* TabPos();
-    inline const UINT16* RowPos() const;
-    inline const BYTE* ColPos() const;
-    inline const BYTE* TabPos() const;
-
-public:
-    inline ScAddress() { nAddress = 0; }
-    inline ScAddress( USHORT nCol, USHORT nRow, USHORT nTab )
-    { Set( nCol, nRow, nTab ); }
-    inline ScAddress( const ScAddress& r ) { nAddress = r.nAddress; }
-    inline explicit ScAddress( UINT32 nNewAddress ) { nAddress = nNewAddress; }
-    // TO BE REMOVED
-    inline ScAddress( const ScTripel& r ) { Set( r.nCol, r.nRow, r.nTab ); }
-    inline ScAddress& operator=( const ScAddress& r )
-    { nAddress = r.nAddress; return *this; }
-    inline void Set( USHORT nCol, USHORT nRow, USHORT nTab );
-    inline USHORT Row() const { return *RowPos(); }
-    inline USHORT Col() const { return *ColPos(); }
-    inline USHORT Tab() const { return *TabPos(); }
-    inline USHORT SetRow( USHORT nRow ) { return *RowPos() = nRow; }
-    inline USHORT SetCol( USHORT nCol ) { return *ColPos() = (BYTE) nCol; }
-    inline USHORT SetTab( USHORT nTab ) { return *TabPos() = (BYTE) nTab; }
-    inline operator UINT32() const { return nAddress; }
-    inline void PutInOrder( ScAddress& r );
-    inline USHORT IncRow( short n=1 ) { return *RowPos() = (*RowPos() + n ) % (MAXROW+1); }
-    inline USHORT IncCol( short n=1 ) { return *ColPos() = (BYTE) (*ColPos() + n ); }
-    inline USHORT IncTab( short n=1 ) { return *TabPos() = (BYTE) (*TabPos() + n ); }
-    inline void GetVars( USHORT& nCol, USHORT& nRow, USHORT& nTab ) const;
-    USHORT Parse( const String&, ScDocument* = NULL );
-    void Format( String&, USHORT = 0, ScDocument* = NULL ) const;
-    // Das Doc fuer die maximal defineirte Tabelle
-    BOOL Move( short dx, short dy, short dz, ScDocument* =NULL );
-    inline int operator==( const ScAddress& r ) const;
-    inline int operator!=( const ScAddress& r ) const;
-    inline int operator<( const ScAddress& r ) const;
-    inline int operator<=( const ScAddress& r ) const;
-    inline int operator>( const ScAddress& r ) const;
-    inline int operator>=( const ScAddress& r ) const;
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScAddress& rAdr );
-    friend inline SvStream& operator>> ( SvStream& rStream, ScAddress& rAdr );
-};
-
-inline void ScAddress::Set( USHORT nCol, USHORT nRow, USHORT nTab )
-{
-//  nAddress = ((UINT32) ((((BYTE) nTab) << 8 ) + (BYTE) nCol ) << 16 )
-//           | (UINT32) (UINT16) nRow;
-// Shifterei: 5 mov, 2 xor, 2 shl, 1 add, 1 and, 1 or
-// Casterei: 7 mov, ist weniger Code und schneller
-    *ColPos() = (BYTE) nCol;
-    *RowPos() = (UINT16) nRow;
-    *TabPos() = (BYTE) nTab;
-}
-
-inline void ScAddress::PutInOrder( ScAddress& r )
-{
-    if( r.nAddress < nAddress )
-    {
-        UINT32 nTemp;
-        nTemp = nAddress;
-        nAddress = r.nAddress;
-        r.nAddress = nTemp;
-    }
-    USHORT nTmp;
-    if ( (nTmp = r.Col()) < Col() )
-    {
-        r.SetCol( Col() );
-        SetCol( nTmp );
-    }
-    if ( (nTmp = r.Row()) < Row() )
-    {
-        r.SetRow( Row() );
-        SetRow( nTmp );
-    }
-}
-
-inline void ScAddress::GetVars( USHORT& nCol, USHORT& nRow, USHORT& nTab ) const
-{
-    nCol = Col();
-    nRow = Row();
-    nTab = Tab();
-}
-
-inline int ScAddress::operator==( const ScAddress& r ) const
-{
-    return ( nAddress == r.nAddress );
-}
-
-inline int ScAddress::operator!=( const ScAddress& r ) const
-{
-    return !operator==( r );
-}
-
-inline int ScAddress::operator<( const ScAddress& r ) const
-{
-    return ( nAddress < r.nAddress );
-}
-
-inline int ScAddress::operator<=( const ScAddress& r ) const
-{
-    return operator<( r ) || operator==( r );
-}
-
-inline int ScAddress::operator>( const ScAddress& r ) const
-{
-    return !operator<=( r );
-}
-
-inline int ScAddress::operator>=( const ScAddress& r ) const
-{
-    return !operator<( r );
-}
-
-#ifdef __LITTLEENDIAN
-
-inline USHORT* ScAddress::RowPos() { return (USHORT*) &nAddress; }
-inline BYTE*   ScAddress::ColPos() { return (BYTE*) &nAddress + 2; }
-inline BYTE*   ScAddress::TabPos() { return (BYTE*) &nAddress + 3; }
-inline const USHORT* ScAddress::RowPos() const { return (USHORT*) &nAddress; }
-inline const BYTE*   ScAddress::ColPos() const { return (BYTE*) &nAddress + 2; }
-inline const BYTE*   ScAddress::TabPos() const { return (BYTE*) &nAddress + 3; }
-
-#else
-
-inline USHORT* ScAddress::RowPos() { return (USHORT*) ((BYTE*) &nAddress + 2 ); }
-inline BYTE*   ScAddress::ColPos() { return (BYTE*) &nAddress + 1; }
-inline BYTE*   ScAddress::TabPos() { return (BYTE*) &nAddress; }
-inline const USHORT* ScAddress::RowPos() const { return (USHORT*) ((BYTE*) &nAddress + 2 ); }
-inline const BYTE*   ScAddress::ColPos() const { return (BYTE*) &nAddress + 1; }
-inline const BYTE*   ScAddress::TabPos() const { return (BYTE*) &nAddress; }
-
-#endif
-
-inline SvStream& operator<< ( SvStream& rStream, const ScAddress& rAdr )
-{
-    rStream << rAdr.nAddress;
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScAddress& rAdr )
-{
-    rStream >> rAdr.nAddress;
-    return rStream;
-}
-
-class ScRange
-{
-public:
-    ScAddress aStart, aEnd;
-    ScRange() : aStart(), aEnd() {}
-    ScRange( const ScAddress& s, const ScAddress& e )
-        : aStart( s ), aEnd( e ) { aStart.PutInOrder( aEnd ); }
-    ScRange( const ScRange& r ) : aStart( r.aStart ), aEnd( r.aEnd ) {}
-    ScRange( const ScAddress& r ) : aStart( r ), aEnd( r ) {}
-    ScRange( USHORT nCol, USHORT nRow, USHORT nTab )
-        : aStart( nCol, nRow, nTab ), aEnd( aStart ) {}
-    ScRange( USHORT nCol1, USHORT nRow1, USHORT nTab1,
-             USHORT nCol2, USHORT nRow2, USHORT nTab2 )
-        : aStart( nCol1, nRow1, nTab1 ), aEnd( nCol2, nRow2, nTab2 ) {}
-    // TO BE REMOVED
-    ScRange( const ScTripel& r )
-        : aStart( r.nCol, r.nRow, r.nTab ), aEnd( aStart ) {}
-    ScRange( const ScTripel& r1, const ScTripel& r2 )
-        : aStart( r1.nCol, r1.nRow, r1.nTab ),
-          aEnd( r2.nCol, r2.nRow, r2.nTab ) {}
-
-    ScRange& operator=( const ScRange& r )
-    { aStart = r.aStart; aEnd = r.aEnd; return *this; }
-    inline BOOL In( const ScAddress& ) const;   // ist Address& in Range?
-    inline BOOL In( const ScRange& ) const;     // ist Range& in Range?
-    USHORT Parse( const String&, ScDocument* = NULL );
-    USHORT ParseAny( const String&, ScDocument* = NULL );
-    inline void GetVars( USHORT& nCol1, USHORT& nRow1, USHORT& nTab1,
-        USHORT& nCol2, USHORT& nRow2, USHORT& nTab2 ) const;
-    void Format( String&, USHORT = 0, ScDocument* = NULL ) const;
-    // Das Doc fuer die maximal definierte Tabelle
-    BOOL Move( short dx, short dy, short dz, ScDocument* =NULL );
-    void Justify();
-    void ExtendOne();
-    BOOL Intersects( const ScRange& ) const;    // ueberschneiden sich zwei Ranges?
-    inline int operator==( const ScRange& r ) const;
-    inline int operator!=( const ScRange& r ) const;
-    inline int operator<( const ScRange& r ) const;
-    inline int operator<=( const ScRange& r ) const;
-    inline int operator>( const ScRange& r ) const;
-    inline int operator>=( const ScRange& r ) const;
-    friend inline SvStream& operator<< ( SvStream& rStream, const ScRange& rRange );
-    friend inline SvStream& operator>> ( SvStream& rStream, ScRange& rRange );
-};
-
-inline void ScRange::GetVars( USHORT& nCol1, USHORT& nRow1, USHORT& nTab1,
-        USHORT& nCol2, USHORT& nRow2, USHORT& nTab2 ) const
-{
-    aStart.GetVars( nCol1, nRow1, nTab1 );
-    aEnd.GetVars( nCol2, nRow2, nTab2 );
-}
-
-inline int ScRange::operator==( const ScRange& r ) const
-{
-    return ( (aStart == r.aStart) && (aEnd == r.aEnd) );
-}
-
-inline int ScRange::operator!=( const ScRange& r ) const
-{
-    return !operator==( r );
-}
-
-// Sortierung auf linke obere Ecke, wenn die gleich dann auch rechte untere
-inline int ScRange::operator<( const ScRange& r ) const
-{
-    return aStart < r.aStart || (aStart == r.aStart && aEnd < r.aEnd) ;
-}
-
-inline int ScRange::operator<=( const ScRange& r ) const
-{
-    return operator<( r ) || operator==( r );
-}
-
-inline int ScRange::operator>( const ScRange& r ) const
-{
-    return !operator<=( r );
-}
-
-inline int ScRange::operator>=( const ScRange& r ) const
-{
-    return !operator<( r );
-}
-
-// damit das inlinig funkt die Address reference lassen!
-inline BOOL ScRange::In( const ScAddress& rAddr ) const
-{
-    return
-        aStart.Col() <= rAddr.Col() && rAddr.Col() <= aEnd.Col() &&
-        aStart.Row() <= rAddr.Row() && rAddr.Row() <= aEnd.Row() &&
-        aStart.Tab() <= rAddr.Tab() && rAddr.Tab() <= aEnd.Tab();
-}
-
-inline BOOL ScRange::In( const ScRange& r ) const
-{
-    return
-        aStart.Col() <= r.aStart.Col() && r.aEnd.Col() <= aEnd.Col() &&
-        aStart.Row() <= r.aStart.Row() && r.aEnd.Row() <= aEnd.Row() &&
-        aStart.Tab() <= r.aStart.Tab() && r.aEnd.Tab() <= aEnd.Tab();
-}
-
-inline SvStream& operator<< ( SvStream& rStream, const ScRange& rRange )
-{
-    rStream << rRange.aStart;
-    rStream << rRange.aEnd;
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScRange& rRange )
-{
-    rStream >> rRange.aStart;
-    rStream >> rRange.aEnd;
-    return rStream;
-}
-
-
-class ScRangePair
-{
-private:
-    ScRange aRange[2];
-
-public:
-    ScRangePair() {}
-    ScRangePair( const ScRangePair& r )
-        { aRange[0] = r.aRange[0]; aRange[1] = r.aRange[1]; }
-    ScRangePair( const ScRange& r1, const ScRange& r2 )
-        {  aRange[0] = r1; aRange[1] = r2; }
-
-    inline ScRangePair& operator= ( const ScRangePair& r );
-    const ScRange&      GetRange( USHORT n ) const { return aRange[n]; }
-    ScRange&            GetRange( USHORT n ) { return aRange[n]; }
-    inline int operator==( const ScRangePair& ) const;
-    inline int operator!=( const ScRangePair& ) const;
-    friend inline SvStream& operator<< ( SvStream&, const ScRangePair& );
-    friend inline SvStream& operator>> ( SvStream&, ScRange& );
-};
-
-inline ScRangePair& ScRangePair::operator= ( const ScRangePair& r )
-{
-    aRange[0] = r.aRange[0];
-    aRange[1] = r.aRange[1];
-    return *this;
-}
-
-inline int ScRangePair::operator==( const ScRangePair& r ) const
-{
-    return ( (aRange[0] == r.aRange[0]) && (aRange[1] == r.aRange[1]) );
-}
-
-inline int ScRangePair::operator!=( const ScRangePair& r ) const
-{
-    return !operator==( r );
-}
-
-inline SvStream& operator<< ( SvStream& rStream, const ScRangePair& rPair )
-{
-    rStream << rPair.GetRange(0);
-    rStream << rPair.GetRange(1);
-    return rStream;
-}
-
-inline SvStream& operator>> ( SvStream& rStream, ScRangePair& rPair )
-{
-    rStream >> rPair.GetRange(0);
-    rStream >> rPair.GetRange(1);
-    return rStream;
-}
-
-//==================================================================
-
-inline void PutInOrder( USHORT& nStart, USHORT& nEnd )
-{
-    if (nEnd < nStart)
-    {
-        USHORT nTemp;
-        nTemp = nEnd;
-        nEnd = nStart;
-        nStart = nTemp;
-    }
-}
-
-//===================================================================
-// Globale Funktionen
-//===================================================================
-
-BOOL    ConvertSingleRef(ScDocument* pDoc, const String& rRefString, USHORT nDefTab, ScRefTripel& rRefTripel);
-BOOL    ConvertDoubleRef(ScDocument* pDoc, const String& rRefString, USHORT nDefTab, ScRefTripel& rStartRefTripel, ScRefTripel& rEndRefTripel);
-String  ColToAlpha( const USHORT nCol );
 
 //===================================================================
 // Funktionsautopilot: Klassen zur Verwaltung der StarCalc-Funktionen
@@ -1452,7 +955,7 @@ struct ScQueryEntry
 {
     BOOL            bDoQuery;
     BOOL            bQueryByString;
-    USHORT          nField;
+    SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
     String*         pStr;
@@ -1477,11 +980,11 @@ struct ScQueryEntry
 
 struct ScQueryParam
 {
-    USHORT          nCol1;
-    USHORT          nRow1;
-    USHORT          nCol2;
-    USHORT          nRow2;
-    USHORT          nTab;
+    SCCOL           nCol1;
+    SCROW           nRow1;
+    SCCOL           nCol2;
+    SCROW           nRow2;
+    SCTAB           nTab;
     BOOL            bHasHeader;
     BOOL            bByRow;
     BOOL            bInplace;
@@ -1489,12 +992,12 @@ struct ScQueryParam
     BOOL            bRegExp;
     BOOL            bDuplicate;
     BOOL            bDestPers;          // nicht gespeichert
-    USHORT          nDestTab;
-    USHORT          nDestCol;
-    USHORT          nDestRow;
+    SCTAB           nDestTab;
+    SCCOL           nDestCol;
+    SCROW           nDestRow;
 
 private:
-    USHORT          nEntryCount;
+    SCSIZE          nEntryCount;
     ScQueryEntry*   pEntries;
 
 public:
@@ -1502,17 +1005,17 @@ public:
     ScQueryParam( const ScQueryParam& r );
     ~ScQueryParam();
 
-    USHORT          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(USHORT n) const        { return pEntries[n]; }
-    void            Resize(USHORT nNew);
+    SCSIZE          GetEntryCount() const           { return nEntryCount; }
+    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
+    void            Resize(SCSIZE nNew);
 
     ScQueryParam&   operator=   ( const ScQueryParam& r );
     BOOL            operator==  ( const ScQueryParam& rOther ) const;
     void            Clear       ();
-    void            DeleteQuery( USHORT nPos );
+    void            DeleteQuery( SCSIZE nPos );
 
     void            MoveToDest();
-    void            FillInExcelSyntax(String& aCellStr, USHORT nIndex);
+    void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 
     void            Load(SvStream& rStream);
     void            Store(SvStream& rStream) const;
@@ -1522,10 +1025,10 @@ public:
 
 struct ScSubTotalParam
 {
-    USHORT          nCol1;          // Selektierter Bereich
-    USHORT          nRow1;
-    USHORT          nCol2;
-    USHORT          nRow2;
+    SCCOL           nCol1;          // Selektierter Bereich
+    SCROW           nRow1;
+    SCCOL           nCol2;
+    SCROW           nRow2;
     BOOL            bRemoveOnly;
     BOOL            bReplace;                   // vorhandene Ergebnisse ersetzen
     BOOL            bPagebreak;                 // Seitenumbruch bei Gruppenwechsel
@@ -1536,9 +1039,9 @@ struct ScSubTotalParam
     USHORT          nUserIndex;                 // Index auf Liste
     BOOL            bIncludePattern;            // Formate mit sortieren
     BOOL            bGroupActive[MAXSUBTOTAL];  // aktive Gruppen
-    USHORT          nField[MAXSUBTOTAL];        // zugehoeriges Feld
-    USHORT          nSubTotals[MAXSUBTOTAL];    // Anzahl der SubTotals
-    USHORT*         pSubTotals[MAXSUBTOTAL];    // Array der zu berechnenden Spalten
+    SCCOL           nField[MAXSUBTOTAL];        // zugehoeriges Feld
+    SCCOL           nSubTotals[MAXSUBTOTAL];    // Anzahl der SubTotals
+    SCCOL*          pSubTotals[MAXSUBTOTAL];    // Array der zu berechnenden Spalten
     ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    // Array der zugehoerige Funktionen
 
     ScSubTotalParam();
@@ -1548,7 +1051,7 @@ struct ScSubTotalParam
     BOOL                operator==      ( const ScSubTotalParam& r ) const;
     void                Clear           ();
     void                SetSubTotals    ( USHORT                nGroup,
-                                          const USHORT*         ptrSubTotals,
+                                          const SCCOL*          ptrSubTotals,
                                           const ScSubTotalFunc* ptrFuncions,
                                           USHORT                nCount );
 };
@@ -1558,9 +1061,9 @@ class ScArea;
 
 struct ScConsolidateParam
 {
-    USHORT          nCol;                   // Cursor Position /
-    USHORT          nRow;                   // bzw. Anfang des Zielbereiches
-    USHORT          nTab;
+    SCCOL           nCol;                   // Cursor Position /
+    SCROW           nRow;                   // bzw. Anfang des Zielbereiches
+    SCTAB           nTab;
     ScSubTotalFunc  eFunction;              // Berechnungsvorschrift
     USHORT          nDataAreaCount;         // Anzahl der Datenbereiche
     ScArea**        ppDataAreas;            // Zeiger-Array auf Datenbereiche
@@ -1585,7 +1088,7 @@ struct ScConsolidateParam
 // -----------------------------------------------------------------------
 struct PivotField
 {
-    short   nCol;
+    SCsCOL  nCol;
     USHORT  nFuncMask;
     USHORT  nFuncCount;
 
@@ -1595,7 +1098,7 @@ struct PivotField
     PivotField( const PivotField& rCpy ) :
         nCol(rCpy.nCol),nFuncMask(rCpy.nFuncMask),nFuncCount(rCpy.nFuncCount) {}
 
-    PivotField(short nNewCol, USHORT nNewFuncMask = 0) :
+    PivotField(SCsCOL nNewCol, USHORT nNewFuncMask = 0) :
         nCol(nNewCol),nFuncMask(nNewFuncMask),nFuncCount(0) {}
 
     PivotField  operator = (const PivotField& r)
@@ -1617,19 +1120,19 @@ struct PivotField
 // -----------------------------------------------------------------------
 struct ScPivotParam
 {
-    USHORT          nCol;           // Cursor Position /
-    USHORT          nRow;           // bzw. Anfang des Zielbereiches
-    USHORT          nTab;
+    SCCOL           nCol;           // Cursor Position /
+    SCROW           nRow;           // bzw. Anfang des Zielbereiches
+    SCTAB           nTab;
     LabelData**     ppLabelArr;
-    USHORT          nLabels;
+    SCSIZE          nLabels;
     PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
     PivotField      aColArr[PIVOT_MAXFIELD];
     PivotField      aRowArr[PIVOT_MAXFIELD];
     PivotField      aDataArr[PIVOT_MAXFIELD];
-    USHORT          nPageCount;
-    USHORT          nColCount;
-    USHORT          nRowCount;
-    USHORT          nDataCount;
+    SCSIZE          nPageCount;
+    SCSIZE          nColCount;
+    SCSIZE          nRowCount;
+    SCSIZE          nDataCount;
     BOOL            bIgnoreEmptyRows;
     BOOL            bDetectCategories;
     BOOL            bMakeTotalCol;
@@ -1645,57 +1148,19 @@ struct ScPivotParam
     void            ClearLabelData  ();
     void            ClearPivotArrays();
     void            SetLabelData    ( LabelData**   ppLabArr,
-                                      USHORT        nLab );
+                                      SCSIZE        nLab );
     void            SetPivotArrays  ( const PivotField* pPageArr,
                                       const PivotField* pColArr,
                                       const PivotField* pRowArr,
                                       const PivotField* pDataArr,
-                                      USHORT            nPageCnt,
-                                      USHORT            nColCnt,
-                                      USHORT            nRowCnt,
-                                      USHORT            nDataCnt );
+                                      SCSIZE            nPageCnt,
+                                      SCSIZE            nColCnt,
+                                      SCSIZE            nRowCnt,
+                                      SCSIZE            nDataCnt );
 };
 
 
-//-----------------------------------------------------------------------
-
-struct ScSolveParam
-{
-    ScAddress   aRefFormulaCell;
-    ScAddress   aRefVariableCell;
-    String*     pStrTargetVal;
-
-    ScSolveParam();
-    ScSolveParam( const ScSolveParam& r );
-    ScSolveParam( const ScAddress&  rFormulaCell,
-                  const ScAddress&  rVariableCell,
-                  const String& rTargetValStr );
-    ~ScSolveParam();
-
-    ScSolveParam&   operator=   ( const ScSolveParam& r );
-    BOOL            operator==  ( const ScSolveParam& r ) const;
-};
-
-struct ScTabOpParam
-{
-    ScRefTripel     aRefFormulaCell;
-    ScRefTripel     aRefFormulaEnd;
-    ScRefTripel     aRefRowCell;
-    ScRefTripel     aRefColCell;
-    BYTE            nMode;
-
-    ScTabOpParam() {};
-    ScTabOpParam( const ScTabOpParam& r );
-    ScTabOpParam( const ScRefTripel& rFormulaCell,
-                  const ScRefTripel& rFormulaEnd,
-                  const ScRefTripel& rRowCell,
-                  const ScRefTripel& rColCell,
-                        BYTE         nMd);
-    ~ScTabOpParam() {};
-
-    ScTabOpParam&   operator=       ( const ScTabOpParam& r );
-    BOOL            operator==      ( const ScTabOpParam& r ) const;
-};
 extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
 extern const LocaleDataWrapper* GetScGlobalpLocaleData();
+
 #endif
