@@ -37917,3 +37917,13 @@ _TI1?AVException@uno@star@sun@com@@
 ?getDbtoolsClientMutex@?A0x0ba72e37@@YAAAVMutex@osl@@XZ
 ?lcl_NeedAdditionalDataSource@?A0xad669c6c@@YAEABV?$Reference@VXNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z
 ?DbgName_DelayedFileDeletion@?A0xf5b2a320@@YAPAUDbgDataType@@XZ
+?lcl_NeedAdditionalDataSource@?A0x7c767979@@YAEABV?$Reference@VXNameAccess@container@star@sun@com@@@uno@star@sun@com@@@Z
+??0DelayedFileDeletion@?A0x181194b6@@QAE@ABV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABVString@@@Z
+??1DelayedFileDeletion@?A0x181194b6@@MAE@XZ
+?DbgName_DelayedFileDeletion@?A0x181194b6@@YAPAUDbgDataType@@XZ
+?LinkStubOnTryDeleteFile@DelayedFileDeletion@?A0x181194b6@@CAJPAX0@Z
+?OnTryDeleteFile@DelayedFileDeletion@?A0x181194b6@@AAEJPAX@Z
+?disposing@DelayedFileDeletion@?A0x181194b6@@MAAXABUEventObject@lang@star@sun@com@@@Z
+?implTakeOwnership@DelayedFileDeletion@?A0x181194b6@@AAEXXZ
+?notifyClosing@DelayedFileDeletion@?A0x181194b6@@MAAXABUEventObject@lang@star@sun@com@@@Z
+?queryClosing@DelayedFileDeletion@?A0x181194b6@@MAAXABUEventObject@lang@star@sun@com@@E@Z
