@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 22:46:18 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 23:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText[ chinese_traditional ] = "εΊι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗδΨαΗή";
         QuickHelpText[ greek ] = "Σημείο βάσης";
-        QuickHelpText[ korean ] = "κΈ°μ¤€μ ";
+        QuickHelpText[ korean ] = "κΈ°μ¤€μ !";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
@@ -1053,7 +1053,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText[ chinese_traditional ] = "εΊι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗδΨαΗή";
         QuickHelpText[ greek ] = "Σημείο βάσης";
-        QuickHelpText[ korean ] = "κΈ°μ¤€μ ";
+        QuickHelpText[ korean ] = "κΈ°μ¤€μ !";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Basispunkt";
@@ -1406,7 +1406,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText[ chinese_traditional ] = "ζ—‹θ½‰ι»";
         QuickHelpText[ arabic ] = "δήΨΙ ΗαΗΣΚΟΗΡΙ";
         QuickHelpText[ greek ] = "Σημείο περιστροφής";
-        QuickHelpText[ korean ] = "νμ „μ ";
+        QuickHelpText[ korean ] = "νμ „μ !";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Rotationspunkt";
@@ -1932,6 +1932,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text[ catalan ] = "Posiciσn y tamaρo";
 };
  // ********************************************************************** EOF
+
 
 
 
