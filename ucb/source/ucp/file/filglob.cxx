@@ -330,6 +330,7 @@ namespace fileaccess {
             }
 
             case TASKHANDLING_OPEN_FOR_DIRECTORYLISTING:
+            case TASKHANDLING_OPENDIRECTORY_FOR_REMOVE:
             {
                 switch( minorCode )
                 {
@@ -468,6 +469,103 @@ namespace fileaccess {
             case TASKHANDLING_CREATEDIRECTORY_MKDIR:
                 ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
                 cancelCommandExecution( ioErrorCode,getParentName( aUncPath ),xEnv );
+                break;
+
+            case TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE:
+            case TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE:
+            case TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE:
+            {
+                switch( minorCode )
+                {
+                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                        break;
+                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                        break;
+                    case FileBase::E_ACCES:         // permission denied<br>
+                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                        break;
+                    case FileBase::E_MFILE:         // too many open files used by the process<br>
+                    case FileBase::E_NFILE:         // too many open files in the system<br>
+                        ioErrorCode = IOErrorCode_OUT_OF_FILE_HANDLES;
+                        break;
+                    case FileBase::E_NOLINK:        // Link has been severed<br>
+                    case FileBase::E_NOENT:         // No such file or directory<br>
+                        ioErrorCode = IOErrorCode_NOT_EXISTING;
+                        break;
+                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                        break;
+                    case FileBase::E_NOTDIR:     // A component of the path prefix of path is not a directory
+                        ioErrorCode = IOErrorCode_NOT_EXISTING_PATH;
+                        break;
+                    case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
+                    case FileBase::E_IO:            // I/O error<br>
+                    case FileBase::E_MULTIHOP:      // Multihop attempted<br>
+                    case FileBase::E_FAULT:         // Bad address<br>
+                    case FileBase::E_INTR:          // function call was interrupted<p>
+                    case FileBase::E_NOSYS:         // Function not implemented<p>
+                    case FileBase::E_NOSPC:         // No space left on device<br>
+                    case FileBase::E_NXIO:          // No such device or address<br>
+                    case FileBase::E_OVERFLOW:      // Value too large for defined data type<br>
+                    case FileBase::E_BADF:          // Invalid oslDirectoryItem parameter<br>
+                    default:
+                        ioErrorCode = IOErrorCode_GENERAL;
+                        break;
+                }
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+            }
+
+            case TASKHANDLING_DELETEFILE_FOR_REMOVE:
+            case TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE:
+            {
+                switch( minorCode )
+                {
+                    case FileBase::E_INVAL:         // the format of the parameters was not valid<br>
+                        ioErrorCode = IOErrorCode_INVALID_PARAMETER;
+                        break;
+                    case FileBase::E_NOMEM:         // not enough memory for allocating structures <br>
+                        ioErrorCode = IOErrorCode_OUT_OF_MEMORY;
+                        break;
+                    case FileBase::E_ACCES:         // Permission denied<br>
+                        ioErrorCode = IOErrorCode_ACCESS_DENIED;
+                        break;
+                    case FileBase::E_PERM:          // Operation not permitted<br>
+                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                        break;
+                    case FileBase::E_NAMETOOLONG:   // File name too long<br>
+                        ioErrorCode = IOErrorCode_NAME_TOO_LONG;
+                        break;
+                    case FileBase::E_NOLINK:        // Link has been severed<br>
+                    case FileBase::E_NOENT:         // No such file or directory<br>
+                        ioErrorCode = IOErrorCode_NOT_EXISTING;
+                        break;
+                    case FileBase::E_ISDIR:         // Is a directory<br>
+                    case FileBase::E_ROFS:          // Read-only file system<p>
+                        ioErrorCode = IOErrorCode_NOT_SUPPORTED;
+                        break;
+                    case FileBase::E_BUSY:          // Device or resource busy<br>
+                        ioErrorCode = IOErrorCode_LOCKING_VIOLATION;
+                        break;
+                    case FileBase::E_FAULT:         // Bad address<br>
+                    case FileBase::E_LOOP:          // Too many symbolic links encountered<br>
+                    case FileBase::E_IO:            // I/O error<br>
+                    case FileBase::E_INTR:          // function call was interrupted<br>
+                    case FileBase::E_MULTIHOP:      // Multihop attempted<br>
+                    default:
+                        ioErrorCode = IOErrorCode_GENERAL;
+                        break;
+                }
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
+                break;
+            }
+
+            case TASKHANDLING_FILETYPE_FOR_REMOVE:
+            case TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE:
+                ioErrorCode = IOErrorCode_GENERAL;
+                cancelCommandExecution( ioErrorCode,aUncPath,xEnv );
                 break;
 
             case TASKHANDLER_NO_ERROR:

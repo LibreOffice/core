@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,11 +1055,11 @@ BaseContent::deleteContent( sal_Int32 nMyCommandIdentifier,
     if( m_nState & Deleted )
         return;
 
-    m_pMyShell->remove( nMyCommandIdentifier,
-                        m_aUncPath );
-
-    vos::OGuard aGuard( m_aMutex );
-    m_nState |= Deleted;
+    if( m_pMyShell->remove( nMyCommandIdentifier,m_aUncPath ) )
+    {
+        vos::OGuard aGuard( m_aMutex );
+        m_nState |= Deleted;
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,10 +1236,11 @@ shell::copy(
 /********************************************************************************/
 //
 //  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
+//  Return: success of operation
 //
 
 
-void SAL_CALL
+sal_Bool SAL_CALL
 shell::remove( sal_Int32 CommandId,
                const rtl::OUString& aUnqPath,
                sal_Int32 IsWhat )
@@ -1250,125 +1251,144 @@ shell::remove( sal_Int32 CommandId,
 #else
     sal_Int32 nMask = FileStatusMask_Type | FileStatusMask_FilePath;
 #endif
+
     osl::DirectoryItem aItem;
     osl::FileStatus aStatus( nMask );
+    osl::FileBase::RC nError;
 
-    if( IsWhat == 0 )
+    if( IsWhat == 0 )     // Determine whether we are removing a diretory or a file
     {
-        osl::DirectoryItem::get( aUnqPath, aItem );
-        aItem.getFileStatus( aStatus );
-        if(  aStatus.isValid( nMask ) &&
-             ( aStatus.getFileType() == osl::FileStatus::Regular ||
-               aStatus.getFileType() == osl::FileStatus::Link ) )
-            IsWhat = -1;
-        else if( aStatus.isValid( nMask ) &&
-                 ( aStatus.getFileType() == osl::FileStatus::Directory ||
-                   aStatus.getFileType() == osl::FileStatus::Volume ) )
-            IsWhat = +1;
-    }
+        nError = osl::DirectoryItem::get( aUnqPath, aItem );
 
-
-    if( IsWhat == -1 )
-    {
-        osl::File::remove( aUnqPath );
-
-        notifyContentDeleted( getContentDeletedEventListeners(aUnqPath) );
-        erasePersistentSet( aUnqPath );   // Removes from XPersistentPropertySet
-    }
-    else if( IsWhat == +1 )
-    {
-        sal_Int32 recurse;
-        rtl::OUString name;
-
-//          osl::Directory aFolder( aUnqPath );
-
-        oslDirectory pDir=0;
-
-        oslFileError tErr;
-        oslDirectoryItem pItem=0;
-
-        tErr = osl_openDirectory(aUnqPath.pData,&pDir);
-
-//        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
-//      aFolder.open();
-
-//        fprintf(stderr,"RefCount == '%i'\n",aUnqPath.pData->refCount);
-
-
-//          osl::FileBase::RC rcError = aFolder.getNextItem( aItem );
-//          while( osl::FileBase::E_None == rcError )
-        tErr = osl_getNextDirectoryItem(pDir,&pItem,0);
-        while ( tErr == osl_File_E_None )
+        if( nError != osl::FileBase::E_None )
         {
-            oslFileStatus aStat;
-
-            memset(&aStat,0,sizeof(aStat));
-
-            aStat.uStructSize=sizeof(aStat);
-#ifdef TF_FILEURL
-#else
-            rtl::OUString sFilePath;
-            rtl::OUString sNativePath;
-
-            aStat.pstrFilePath=&sFilePath.pData;
-            aStat.pstrNativePath=&sNativePath.pData;
-#endif
-
-//              aItem.getFileStatus( aStatus );
-
-#ifdef TF_FILEURL
-            osl_getFileStatus(pItem,&aStat,FileStatusMask_Type | FileStatusMask_FileURL);
-#else
-            osl_getFileStatus(pItem,&aStat,FileStatusMask_Type | FileStatusMask_FilePath);
-#endif
-
-
-//              if(  aStatus.isValid( nMask ) &&
-//                   aStatus.getFileType() == osl::FileStatus::Regular ||
-//                   aStatus.getFileType() == osl::FileStatus::Link )
-//                  recurse = -1;
-//              else if( aStatus.isValid( nMask ) &&
-//                       ( aStatus.getFileType() == osl::FileStatus::Directory ||
-//                         aStatus.getFileType() == osl::FileStatus::Volume ) )
-//                  recurse = +1;
-
-            if ( aStat.uValidFields & osl_FileStatus_Mask_Type && ( aStat.eType == osl_File_Type_Regular || aStat.eType == osl_File_Type_Link ) )
-            {
-                recurse = -1;
-            }
-            else if ( aStat.uValidFields & osl_FileStatus_Mask_Type && ( aStat.eType == osl_File_Type_Directory || aStat.eType == osl_File_Type_Volume ) )
-            {
-                recurse = +1;
-            }
-
-//              name = aStatus.getFilePath();
-#ifdef TF_FILEURL
-            name = rtl::OUString(aStat.ustrFileURL);
-#else
-            name = rtl::OUString(*aStat.pstrFilePath);
-#endif
-
-            remove( CommandId,
-                    name,
-                    recurse );
-
-//              rcError = aFolder.getNextItem( aItem );
-            osl_releaseDirectoryItem(pItem);
-            pItem=0;
-
-            tErr = osl_getNextDirectoryItem(pDir,&pItem,0);
+            installError( CommandId,
+                          TASKHANDLING_NOSUCHFILEORDIR_FOR_REMOVE,
+                          nError );
+            return false;
         }
 
-//          aFolder.close();
-        osl_closeDirectory(pDir);
+        nError = aItem.getFileStatus( aStatus );
+        if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
+        {
+            installError( CommandId,
+                          TASKHANDLING_VALIDFILESTATUS_FOR_REMOVE,
+                          nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
+            return false;
+        }
 
-        osl::FileBase::RC err = osl::Directory::remove( aUnqPath );
-        if( ! err )
+        if( aStatus.getFileType() == osl::FileStatus::Regular ||
+            aStatus.getFileType() == osl::FileStatus::Link )
+            IsWhat = -1;  // RemoveFile
+        else if(  aStatus.getFileType() == osl::FileStatus::Directory ||
+                  aStatus.getFileType() == osl::FileStatus::Volume )
+            IsWhat = +1;  // RemoveDirectory
+    }
+
+
+    if( IsWhat == -1 )    // Removing a file
+    {
+        nError = osl::File::remove( aUnqPath );
+
+        if( nError != osl::FileBase::E_None )
+        {
+            installError( CommandId,
+                          TASKHANDLING_DELETEFILE_FOR_REMOVE,
+                          nError );
+            return false;
+        }
+        else
+        {
+            notifyContentDeleted( getContentDeletedEventListeners(aUnqPath) );
+            erasePersistentSet( aUnqPath );      // Removes from XPersistentPropertySet
+        }
+    }
+    else if( IsWhat == +1 )    // Removing a directory
+    {
+        osl::Directory aDirectory( aUnqPath );
+        if( ( nError = aDirectory.open() ) != osl::FileBase::E_None )
+        {
+            installError( CommandId,
+                          TASKHANDLING_OPENDIRECTORY_FOR_REMOVE,
+                          nError );
+            return false;
+        }
+
+        sal_Bool whileSuccess = true;
+        sal_Int32 recurse;
+        rtl::OUString name;
+        nError = aDirectory.getNextItem( aItem );
+
+        while( nError == osl::FileBase::E_None )
+        {
+              nError = aItem.getFileStatus( aStatus );
+            if( nError != osl::FileBase::E_None || ! aStatus.isValid( nMask ) )
+            {
+                installError( CommandId,
+                              TASKHANDLING_VALIDFILESTATUSWHILE_FOR_REMOVE,
+                              nError != osl::FileBase::E_None ? nError : TASKHANDLER_NO_ERROR );
+                whileSuccess = false;
+                break;
+            }
+
+            if( aStatus.getFileType() == osl::FileStatus::Regular ||
+                aStatus.getFileType() == osl::FileStatus::Link )
+                recurse = -1;
+            else if( aStatus.getFileType() == osl::FileStatus::Directory ||
+                     aStatus.getFileType() == osl::FileStatus::Volume )
+                recurse = +1;
+
+#ifdef TF_FILEURL
+            name = aStatus.getFileURL();
+#else
+            name = aStatus.getFilePath();
+#endif
+
+            if( ! ( whileSuccess = remove( CommandId,
+                                           name,
+                                           recurse ) ) )
+                break;
+
+
+            nError = aDirectory.getNextItem( aItem );
+        }
+
+          aDirectory.close();
+
+        if( ! whileSuccess )
+            return false;     // error code is installed
+
+        if( nError != osl::FileBase::E_NOENT )
+        {
+            installError( CommandId,
+                          TASKHANDLING_DIRECTORYEXHAUSTED_FOR_REMOVE,
+                          nError );
+            return false;
+        }
+
+        nError = osl::Directory::remove( aUnqPath );
+
+        if( nError != osl::FileBase::E_None )
+        {
+            installError( CommandId,
+                          TASKHANDLING_DELETEDIRECTORY_FOR_REMOVE,
+                          nError );
+            return false;
+        }
+        else
         {
             notifyContentDeleted( getContentDeletedEventListeners(aUnqPath) );
             erasePersistentSet( aUnqPath );
         }
     }
+    else   // Don't know what to remove
+    {
+        installError( CommandId,
+                      TASKHANDLING_FILETYPE_FOR_REMOVE );
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -1455,7 +1475,7 @@ shell::mkfil( sal_Int32 CommandId,
 //
 //  writes to the file with given URL.
 //  The content of aInputStream becomes the content of the file
-//  Return:: success of operation
+//  Return::
 //
 
 void SAL_CALL

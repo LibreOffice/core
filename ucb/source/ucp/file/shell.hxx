@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-03 13:59:41 $
+ *  last change: $Author: abi $ $Date: 2001-07-04 11:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ namespace fileaccess {
          *  Deletes the content belonging to fileURL aUnqPath( recursively in case of directory )
          */
 
-        void SAL_CALL
+        sal_Bool SAL_CALL
         remove( sal_Int32 CommandId,
                 const rtl::OUString& aUnqPath,
                 sal_Int32 TypeToMove = RemoveUnknown )
@@ -479,7 +479,7 @@ namespace fileaccess {
         /**
          *  writes to the file with given URL.
          *  The content of aInputStream becomes the content of the file
-         *  Return:: success of operation
+         *  Return::
          */
 
         void SAL_CALL
