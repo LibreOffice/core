@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:02:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,279 +75,279 @@
 
 static const sal_Char pStrFix[] = "FIX";
 
-//========================================================================
-// ScDelimiterTable
-//========================================================================
-
-class ScDelimiterTable
-{
-public:
-        ScDelimiterTable( const String& rDelTab )
-            :   theDelTab ( rDelTab ),
-                cSep      ( '\t' ),
-                nCount    ( rDelTab.GetTokenCount('\t') ),
-                nIter     ( 0 )
-            {}
-
-    USHORT  GetCode( const String& rDelimiter ) const;
-    String  GetDelimiter( sal_Unicode nCode ) const;
-
-    String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
-    String  NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
-
-private:
-    const String        theDelTab;
-    const sal_Unicode   cSep;
-    const xub_StrLen    nCount;
-    xub_StrLen          nIter;
-};
-
-//------------------------------------------------------------------------
-
-USHORT ScDelimiterTable::GetCode( const String& rDel ) const
-{
-    sal_Unicode nCode = 0;
-    xub_StrLen i = 0;
-
-    if ( nCount >= 2 )
-    {
-        while ( i<nCount )
-        {
-            if ( rDel == theDelTab.GetToken( i, cSep ) )
-            {
-                nCode = (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32();
-                i     = nCount;
-            }
-            else
-                i += 2;
-        }
-    }
-
-    return nCode;
-}
-
-//------------------------------------------------------------------------
-
-String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
-{
-    String aStrDel;
-    xub_StrLen i = 0;
-
-    if ( nCount >= 2 )
-    {
-        while ( i<nCount )
-        {
-            if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
-            {
-                aStrDel = theDelTab.GetToken( i, cSep );
-                i       = nCount;
-            }
-            else
-                i += 2;
-        }
-    }
-
-    return aStrDel;
-}
-
-//========================================================================
-// ScImportOptionsDlg
-//========================================================================
-
-ScImportOptionsDlg::ScImportOptionsDlg(
-        Window*                 pParent,
-        BOOL                    bAscii,
-        const ScImportOptions*  pOptions,
-        const String*           pStrTitle,
-        BOOL                    bMultiByte,
-        BOOL                    bOnlyDbtoolsEncodings,
-        BOOL                    bImport )
-
-    :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
-        aBtnOk      ( this, ScResId( BTN_OK ) ),
-        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
-        aFtFieldSep ( this, ScResId( FT_FIELDSEP ) ),
-        aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
-        aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
-        aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
-        aFtFont     ( this, ScResId( FT_FONT ) ),
-        aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
-        aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) )
-{
-    // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
-    pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
-    pTextSepTab  = new ScDelimiterTable( String(ScResId(SCSTR_TEXTSEP)) );
-
-    String aStr = pFieldSepTab->FirstDel();
-    sal_Unicode nCode;
-
-    while ( aStr.Len() > 0 )
-    {
-        aEdFieldSep.InsertEntry( aStr );
-        aStr = pFieldSepTab->NextDel();
-    }
-
-    aStr = pTextSepTab->FirstDel();
-
-    while ( aStr.Len() > 0 )
-    {
-        aEdTextSep.InsertEntry( aStr );
-        aStr = pTextSepTab->NextDel();
-    }
-
-    aEdFieldSep.SetText( aEdFieldSep.GetEntry(0) );
-    aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
-
-    if ( bOnlyDbtoolsEncodings )
-    {   //!TODO: Unicode and MultiByte would need work in each filter
-        // Think of field lengths in dBase export
-        if ( bMultiByte )
-            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE );
-        else
-            aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE |
-                RTL_TEXTENCODING_INFO_MULTIBYTE );
-    }
-    else if ( !bAscii )
-    {   //!TODO: Unicode would need work in each filter
-        if ( bMultiByte )
-            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
-        else
-            aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
-                RTL_TEXTENCODING_INFO_MULTIBYTE );
-    }
-    else
-    {
-        if ( pOptions )
-        {
-            nCode = pOptions->nFieldSepCode;
-            aStr  = pFieldSepTab->GetDelimiter( nCode );
-
-            if ( !aStr.Len() )
-                aEdFieldSep.SetText( String((sal_Unicode)nCode) );
-            else
-                aEdFieldSep.SetText( aStr );
-
-            nCode = pOptions->nTextSepCode;
-            aStr  = pTextSepTab->GetDelimiter( nCode );
-
-            if ( !aStr.Len() )
-                aEdTextSep.SetText( String((sal_Unicode)nCode) );
-            else
-                aEdTextSep.SetText( aStr );
-        }
-        // all encodings allowed, even Unicode
-        aLbFont.FillFromTextEncodingTable( bImport );
-    }
-
-    if( bAscii )
-    {
-        Size aWinSize( GetSizePixel() );
-        aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
-        Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
-        aWinSize.Height() += aDiffSize.Height();
-        SetSizePixel( aWinSize );
-        aCbFixed.Show();
-        aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( FALSE );
-    }
-    else
-    {
-        aFlFieldOpt.SetText( aFtFont.GetText() );
-        aFtFieldSep.Hide();
-        aFtTextSep.Hide();
-        aFtFont.Hide();
-        aEdFieldSep.Hide();
-        aEdTextSep.Hide();
-        aCbFixed.Hide();
-        aLbFont.GrabFocus();
-        aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
-    }
-
-    aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
-        gsl_getSystemTextEncoding() );
-
-    // optionaler Titel:
-    if ( pStrTitle )
-        SetText( *pStrTitle );
-
-    FreeResource();
-}
-
-//------------------------------------------------------------------------
-
-__EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
-{
-    delete pFieldSepTab;
-    delete pTextSepTab;
-}
-
-//------------------------------------------------------------------------
-
-void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
-{
-    rOptions.SetTextEncoding( aLbFont.GetSelectTextEncoding() );
-
-    if ( aCbFixed.IsVisible() )
-    {
-        rOptions.nFieldSepCode = GetCodeFromCombo( aEdFieldSep );
-        rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
-        rOptions.bFixedWidth = aCbFixed.IsChecked();
-    }
-}
-
-//------------------------------------------------------------------------
-
-USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
-{
-    ScDelimiterTable* pTab;
-    String  aStr( rEd.GetText() );
-    USHORT  nCode;
-
-    if ( &rEd == &aEdTextSep )
-        pTab = pTextSepTab;
-    else
-        pTab = pFieldSepTab;
-
-    if ( !aStr.Len() )
-    {
-        nCode = 0;          // kein Trennzeichen
-    }
-    else
-    {
-        nCode = pTab->GetCode( aStr );
-
-        if ( nCode == 0 )
-            nCode = (USHORT)aStr.GetChar(0);
-    }
-
-    return nCode;
-}
-
-//------------------------------------------------------------------------
-
-IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
-{
-    if( pCheckBox == &aCbFixed )
-    {
-        BOOL bEnable = !aCbFixed.IsChecked();
-        aFtFieldSep.Enable( bEnable );
-        aEdFieldSep.Enable( bEnable );
-        aFtTextSep.Enable( bEnable );
-        aEdTextSep.Enable( bEnable );
-    }
-    return 0;
-}
-
- IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
-{
-    if ( pLb == &aLbFont )
-    {
-        aBtnOk.Click();
-    }
-    return 0;
-}
+//CHINA001 //========================================================================
+//CHINA001 // ScDelimiterTable
+//CHINA001 //========================================================================
+//CHINA001
+//CHINA001 class ScDelimiterTable
+//CHINA001 {
+//CHINA001 public:
+//CHINA001 ScDelimiterTable( const String& rDelTab )
+//CHINA001 :    theDelTab ( rDelTab ),
+//CHINA001 cSep   ( '\t' ),
+//CHINA001 nCount     ( rDelTab.GetTokenCount('\t') ),
+//CHINA001 nIter      ( 0 )
+//CHINA001 {}
+//CHINA001
+//CHINA001 USHORT   GetCode( const String& rDelimiter ) const;
+//CHINA001 String   GetDelimiter( sal_Unicode nCode ) const;
+//CHINA001
+//CHINA001 String   FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
+//CHINA001 String   NextDel()   { nIter +=2; return theDelTab.GetToken( nIter, cSep ); }
+//CHINA001
+//CHINA001 private:
+//CHINA001 const String     theDelTab;
+//CHINA001 const sal_Unicode    cSep;
+//CHINA001 const xub_StrLen nCount;
+//CHINA001 xub_StrLen           nIter;
+//CHINA001 };
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 USHORT ScDelimiterTable::GetCode( const String& rDel ) const
+//CHINA001 {
+//CHINA001 sal_Unicode nCode = 0;
+//CHINA001 xub_StrLen i = 0;
+//CHINA001
+//CHINA001 if ( nCount >= 2 )
+//CHINA001 {
+//CHINA001 while ( i<nCount )
+//CHINA001 {
+//CHINA001 if ( rDel == theDelTab.GetToken( i, cSep ) )
+//CHINA001 {
+//CHINA001 nCode = (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32();
+//CHINA001 i     = nCount;
+//CHINA001          }
+//CHINA001          else
+//CHINA001 i += 2;
+//CHINA001      }
+//CHINA001  }
+//CHINA001
+//CHINA001 return nCode;
+//CHINA001 }
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
+//CHINA001 {
+//CHINA001 String aStrDel;
+//CHINA001 xub_StrLen i = 0;
+//CHINA001
+//CHINA001 if ( nCount >= 2 )
+//CHINA001 {
+//CHINA001 while ( i<nCount )
+//CHINA001 {
+//CHINA001 if ( nCode == (sal_Unicode) theDelTab.GetToken( i+1, cSep ).ToInt32() )
+//CHINA001 {
+//CHINA001 aStrDel = theDelTab.GetToken( i, cSep );
+//CHINA001 i       = nCount;
+//CHINA001          }
+//CHINA001          else
+//CHINA001 i += 2;
+//CHINA001      }
+//CHINA001  }
+//CHINA001
+//CHINA001 return aStrDel;
+//CHINA001 }
+//CHINA001
+//CHINA001 //========================================================================
+//CHINA001 // ScImportOptionsDlg
+//CHINA001 //========================================================================
+//CHINA001
+//CHINA001 ScImportOptionsDlg::ScImportOptionsDlg(
+//CHINA001 Window*                 pParent,
+//CHINA001 BOOL                    bAscii,
+//CHINA001 const ScImportOptions*  pOptions,
+//CHINA001 const String*           pStrTitle,
+//CHINA001 BOOL                    bMultiByte,
+//CHINA001 BOOL                    bOnlyDbtoolsEncodings,
+//CHINA001 BOOL                    bImport )
+//CHINA001
+//CHINA001 :    ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
+//CHINA001 aBtnOk       ( this, ScResId( BTN_OK ) ),
+//CHINA001 aBtnCancel   ( this, ScResId( BTN_CANCEL ) ),
+//CHINA001 aBtnHelp ( this, ScResId( BTN_HELP ) ),
+//CHINA001 aFtFieldSep  ( this, ScResId( FT_FIELDSEP ) ),
+//CHINA001 aEdFieldSep  ( this, ScResId( ED_FIELDSEP ) ),
+//CHINA001 aFtTextSep   ( this, ScResId( FT_TEXTSEP ) ),
+//CHINA001 aEdTextSep   ( this, ScResId( ED_TEXTSEP ) ),
+//CHINA001 aFtFont      ( this, ScResId( FT_FONT ) ),
+//CHINA001 aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
+//CHINA001 aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
+//CHINA001 aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) )
+//CHINA001 {
+//CHINA001 // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
+//CHINA001 pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
+//CHINA001 pTextSepTab  = new ScDelimiterTable( String(ScResId(SCSTR_TEXTSEP)) );
+//CHINA001
+//CHINA001 String aStr = pFieldSepTab->FirstDel();
+//CHINA001 sal_Unicode nCode;
+//CHINA001
+//CHINA001 while ( aStr.Len() > 0 )
+//CHINA001  {
+//CHINA001 aEdFieldSep.InsertEntry( aStr );
+//CHINA001 aStr = pFieldSepTab->NextDel();
+//CHINA001  }
+//CHINA001
+//CHINA001 aStr = pTextSepTab->FirstDel();
+//CHINA001
+//CHINA001 while ( aStr.Len() > 0 )
+//CHINA001  {
+//CHINA001 aEdTextSep.InsertEntry( aStr );
+//CHINA001 aStr = pTextSepTab->NextDel();
+//CHINA001  }
+//CHINA001
+//CHINA001 aEdFieldSep.SetText( aEdFieldSep.GetEntry(0) );
+//CHINA001 aEdTextSep.SetText( aEdTextSep.GetEntry(0) );
+//CHINA001
+//CHINA001 if ( bOnlyDbtoolsEncodings )
+//CHINA001  {   //!TODO: Unicode and MultiByte would need work in each filter
+//CHINA001 // Think of field lengths in dBase export
+//CHINA001 if ( bMultiByte )
+//CHINA001 aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE );
+//CHINA001      else
+//CHINA001 aLbFont.FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_UNICODE |
+//CHINA001 RTL_TEXTENCODING_INFO_MULTIBYTE );
+//CHINA001  }
+//CHINA001  else if ( !bAscii )
+//CHINA001  {   //!TODO: Unicode would need work in each filter
+//CHINA001 if ( bMultiByte )
+//CHINA001 aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
+//CHINA001      else
+//CHINA001 aLbFont.FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE |
+//CHINA001 RTL_TEXTENCODING_INFO_MULTIBYTE );
+//CHINA001  }
+//CHINA001  else
+//CHINA001  {
+//CHINA001 if ( pOptions )
+//CHINA001      {
+//CHINA001 nCode = pOptions->nFieldSepCode;
+//CHINA001 aStr  = pFieldSepTab->GetDelimiter( nCode );
+//CHINA001
+//CHINA001 if ( !aStr.Len() )
+//CHINA001 aEdFieldSep.SetText( String((sal_Unicode)nCode) );
+//CHINA001          else
+//CHINA001 aEdFieldSep.SetText( aStr );
+//CHINA001
+//CHINA001 nCode = pOptions->nTextSepCode;
+//CHINA001 aStr  = pTextSepTab->GetDelimiter( nCode );
+//CHINA001
+//CHINA001 if ( !aStr.Len() )
+//CHINA001 aEdTextSep.SetText( String((sal_Unicode)nCode) );
+//CHINA001          else
+//CHINA001 aEdTextSep.SetText( aStr );
+//CHINA001      }
+//CHINA001 // all encodings allowed, even Unicode
+//CHINA001 aLbFont.FillFromTextEncodingTable( bImport );
+//CHINA001  }
+//CHINA001
+//CHINA001 if( bAscii )
+//CHINA001  {
+//CHINA001 Size aWinSize( GetSizePixel() );
+//CHINA001 aWinSize.Height() = aCbFixed.GetPosPixel().Y() + aCbFixed.GetSizePixel().Height();
+//CHINA001 Size aDiffSize( LogicToPixel( Size( 0, 6 ), MapMode( MAP_APPFONT ) ) );
+//CHINA001 aWinSize.Height() += aDiffSize.Height();
+//CHINA001 SetSizePixel( aWinSize );
+//CHINA001 aCbFixed.Show();
+//CHINA001 aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
+//CHINA001 aCbFixed.Check( FALSE );
+//CHINA001  }
+//CHINA001  else
+//CHINA001  {
+//CHINA001 aFlFieldOpt.SetText( aFtFont.GetText() );
+//CHINA001 aFtFieldSep.Hide();
+//CHINA001 aFtTextSep.Hide();
+//CHINA001 aFtFont.Hide();
+//CHINA001 aEdFieldSep.Hide();
+//CHINA001 aEdTextSep.Hide();
+//CHINA001 aCbFixed.Hide();
+//CHINA001 aLbFont.GrabFocus();
+//CHINA001 aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
+//CHINA001  }
+//CHINA001
+//CHINA001 aLbFont.SelectTextEncoding( pOptions ? pOptions->eCharSet :
+//CHINA001 gsl_getSystemTextEncoding() );
+//CHINA001
+//CHINA001 // optionaler Titel:
+//CHINA001 if ( pStrTitle )
+//CHINA001 SetText( *pStrTitle );
+//CHINA001
+//CHINA001 FreeResource();
+//CHINA001 }
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 __EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
+//CHINA001 {
+//CHINA001 delete pFieldSepTab;
+//CHINA001 delete pTextSepTab;
+//CHINA001 }
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
+//CHINA001 {
+//CHINA001 rOptions.SetTextEncoding( aLbFont.GetSelectTextEncoding() );
+//CHINA001
+//CHINA001 if ( aCbFixed.IsVisible() )
+//CHINA001  {
+//CHINA001 rOptions.nFieldSepCode = GetCodeFromCombo( aEdFieldSep );
+//CHINA001 rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
+//CHINA001 rOptions.bFixedWidth = aCbFixed.IsChecked();
+//CHINA001  }
+//CHINA001 }
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
+//CHINA001 {
+//CHINA001 ScDelimiterTable* pTab;
+//CHINA001 String  aStr( rEd.GetText() );
+//CHINA001 USHORT  nCode;
+//CHINA001
+//CHINA001 if ( &rEd == &aEdTextSep )
+//CHINA001 pTab = pTextSepTab;
+//CHINA001  else
+//CHINA001 pTab = pFieldSepTab;
+//CHINA001
+//CHINA001 if ( !aStr.Len() )
+//CHINA001  {
+//CHINA001 nCode = 0;           // kein Trennzeichen
+//CHINA001  }
+//CHINA001  else
+//CHINA001  {
+//CHINA001 nCode = pTab->GetCode( aStr );
+//CHINA001
+//CHINA001 if ( nCode == 0 )
+//CHINA001 nCode = (USHORT)aStr.GetChar(0);
+//CHINA001  }
+//CHINA001
+//CHINA001 return nCode;
+//CHINA001 }
+//CHINA001
+//CHINA001 //------------------------------------------------------------------------
+//CHINA001
+//CHINA001 IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
+//CHINA001 {
+//CHINA001 if( pCheckBox == &aCbFixed )
+//CHINA001  {
+//CHINA001 BOOL bEnable = !aCbFixed.IsChecked();
+//CHINA001 aFtFieldSep.Enable( bEnable );
+//CHINA001 aEdFieldSep.Enable( bEnable );
+//CHINA001 aFtTextSep.Enable( bEnable );
+//CHINA001 aEdTextSep.Enable( bEnable );
+//CHINA001  }
+//CHINA001 return 0;
+//CHINA001 }
+//CHINA001
+//CHINA001 IMPL_LINK( ScImportOptionsDlg, DoubleClickHdl, ListBox*, pLb )
+//CHINA001 {
+//CHINA001 if ( pLb == &aLbFont )
+//CHINA001  {
+//CHINA001 aBtnOk.Click();
+//CHINA001  }
+//CHINA001 return 0;
+//CHINA001 }
 
 //------------------------------------------------------------------------
 //  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
