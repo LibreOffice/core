@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2001-12-11 10:57:44 $
+ *  last change: $Author: obo $ $Date: 2001-12-14 17:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar serienumret f�r datumet som ligger f�re eller efter ett visst antal arbetsdagar.";
             Text[ polish ] = "Podaje warto�� liczby seryjnej daty przed lub po okre�lonej liczbie dni roboczych.";
             Text[ portuguese_brazilian ] = "Returns the serial number of the date before or after a specified number of workdays";
-            Text[ japanese ] = "開始日から起算して指定された週日の数だけ前または後の日付を表すｼﾘｱﾙ値を返します。";
+            Text[ japanese ] = "開始日から起算して指定された週日の数だけ前または後の日付を表すシリアル値を返します。";
             Text[ korean ] = "지정된 업무일의 수보다 이전 또는 이후에 있는 날짜의 연속 날짜값을 반환합니다";
             Text[ chinese_simplified ] = "返回某一指定工作日日期之前或之后相隔的日期数值。";
             Text[ chinese_traditional ] = "傳回日期(起始日期)之前幾天或後幾天之工作日的日期。";
@@ -247,7 +247,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Lista med datumv�rden f�r lediga dagar (semester, helgdagar o.s.v.).";
             Text[ polish ] = "Wykaz dni wolnych (urlop�w, �wi�t pa�stwowych lub ko�cielnych itp.).";
             Text[ portuguese_brazilian ] = "holidays";
-            Text[ japanese ] = "国民の祝日や有給休暇など、除外する日付のﾘｽﾄ。";
+            Text[ japanese ] = "国民の祝日や有給休暇など、除外する日付のリスト。";
             Text[ korean ] = "휴일";
             Text[ chinese_simplified ] = "一个包含休假和法定节假日等的日期数据列单。";
             Text[ chinese_traditional ] = "為一份包含國定假日或其它假日等的清單。";
@@ -469,7 +469,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar serienumret f�r det datum som ligger ett visst antal m�nader f�re resp. efter startdatumet.";
             Text[ polish ] = "Podaje warto�� liczby seryjnej daty, przypadaj�cej na podan� liczb� miesi�cy przed lub po dacie pocz�tkowej.";
             Text[ portuguese_brazilian ] = "Returns the serial number of the date that is the indicated number of months before or after the start date";
-            Text[ japanese ] = "開始日から起算して指定された月数だけ前または後の日付に対応するｼﾘｱﾙ値を返します。";
+            Text[ japanese ] = "開始日から起算して指定された月数だけ前または後の日付に対応するシリアル値を返します。";
             Text[ korean ] = "시작 날짜보다 이전 또는 이후에 지정된 개월 수를 나타내는 날짜의 연속 날짜값을 반환합니다.";
             Text[ chinese_simplified ] = "返回某一指定日期之前或之后指定月份数的日期系列数。";
             Text[ chinese_traditional ] = "傳回某個開始日期之前幾個月或後幾個月的某一天的日期時間序列編號。";
@@ -658,7 +658,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Datum";
             Text[ polish ] = "Liczba okre�laj�ca dat�.";
             Text[ portuguese_brazilian ] = "Datum";
-            Text[ japanese ] = "ｼﾘｱﾙ値";
+            Text[ japanese ] = "シリアル値";
             Text[ korean ] = "날짜";
             Text[ chinese_simplified ] = "日期";
             Text[ chinese_traditional ] = "日期";
@@ -740,7 +740,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar ett serienummer f�r det datum som representerar den sista dagen i m�naden som ligger ett visst antal m�nader f�re eller efter startdatumet.";
             Text[ polish ] = "Podaje warto�� liczby seryjnej daty ostatniego dnia miesi�ca przed lub po podanej liczbie miesi�cy.";
             Text[ portuguese_brazilian ] = "Returns the serial number of the last day of the month before or after a specified number of months";
-            Text[ japanese ] = "開始日から起算して指定された月数だけ前または後の月の最終日に対応するｼﾘｱﾙ値を返します。";
+            Text[ japanese ] = "開始日から起算して指定された月数だけ前または後の月の最終日に対応するシリアル値を返します。";
             Text[ korean ] = "지정된 개월 수보다 이전 또는 이후에 있는 달의 마지막 일을 연속 날짜값으로 반환합니다.";
             Text[ chinese_simplified ] = "计算某一指定开始日期之前或之后的月份中最后一天的序列数。";
             Text[ chinese_traditional ] = "傳回在起始日期之前或之後指定月數的這一個月最後一天的序列號碼。";
@@ -1040,7 +1040,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Lista med datumv�rden som representerar lediga dagar (semester, helgdagar o.s.v.).";
             Text[ polish ] = "Wykaz dni wolnych (urlop�w, �wi�t pa�stwowych, ko�cielnych itp.).";
             Text[ portuguese_brazilian ] = "holidays";
-            Text[ japanese ] = "国民の祝日や有給休暇など、稼動日数の計算から除外する日付のﾘｽﾄ。";
+            Text[ japanese ] = "国民の祝日や有給休暇など、稼動日数の計算から除外する日付のリスト。";
             Text[ korean ] = "휴일";
             Text[ chinese_simplified ] = "一个包含休假和法定节假日等的日期数据列单。";
             Text[ chinese_traditional ] = "一個包含國定假日和不定期假日的日期清單。";
@@ -1286,7 +1286,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Tal eller lista med tal vars multinomialkoefficienter ska best�mmas.";
             Text[ polish ] = "Warto�� lub spis warto�ci do wyznaczenia wielomianu.";
             Text[ portuguese_brazilian ] = "numbers";
-            Text[ japanese ] = "数値、または多項係数の計算の対象となる数値のﾘｽﾄ。";
+            Text[ japanese ] = "数値、または多項係数の計算の対象となる数値のリスト。";
             Text[ korean ] = "수들";
             Text[ chinese_simplified ] = "要计算其阶乘的比值的数据或数据列单。";
             Text[ chinese_traditional ] = "為一組要求出函數 multinomial 的數值。";
@@ -1979,7 +1979,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ japanese ] = "返される整数の乱数の最小値。";
             Text[ korean ] = "하한";
             Text[ chinese_simplified ] = "要返回的一个最小的整数。";
-            Text[ chinese_traditional ] = "要傳回的最小的整數。";
+            Text[ chinese_traditional ] = "一個要傳回的最小的整數。";
             Text[ turkish ] = "bottom";
             Text[ arabic ] = "bottom";
             Text[ catalan ] = "inferior";
@@ -2222,7 +2222,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar den modifierade Bessel-funktionen In(x).";
             Text[ polish ] = "Podaje warto�� zmodyfikowanej funkcji Bessela In(x).";
             Text[ portuguese_brazilian ] = "Returns the modified Bessel function In(x)";
-            Text[ japanese ] = "修正ﾍﾞｯｾﾙ関数 In(x)を返します。";
+            Text[ japanese ] = "修正ベッセル関数 In(x)を返します。";
             Text[ korean ] = "변경된 베셀 함수 In(X)를 계산합니다";
             Text[ chinese_simplified ] = "计算修正的 Bessel 函数值 In(x)。";
             Text[ chinese_traditional ] = "傳回修正的 Bessel 函數值 In(x) 。";
@@ -2330,7 +2330,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ordningstalet f�r Bessel-funktionen";
             Text[ polish ] = "Rz�d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数の次数";
+            Text[ japanese ] = "ベッセル関数の次数";
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "是 Bessel 函数的阶数。";
             Text[ chinese_traditional ] = "爲 Bessel 函數的順序。";
@@ -2360,7 +2360,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar Bessel-funktionen Jn(x).";
             Text[ polish ] = "Podaje warto�� funkcji Bessela Jn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Jn(x)";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数 Jn(x)を返します。";
+            Text[ japanese ] = "ベッセル関数 Jn(x)を返します。";
             Text[ korean ] = "베셀 함수 Jn(X)를 계산합니다";
             Text[ chinese_simplified ] = "计算修正的 Bessel 函数值 Jn(x) 。";
             Text[ chinese_traditional ] = "傳回 Bessel 函數 Jn(x) 。";
@@ -2468,7 +2468,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ordningstalet f�r Bessel-funktionen";
             Text[ polish ] = "Rz�d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数の次数";
+            Text[ japanese ] = "ベッセル関数の次数";
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "一个 BesselJ 函数的阶数。";
             Text[ chinese_traditional ] = "爲 BesselJ 函數的順序。";
@@ -2498,7 +2498,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar den modifierade Bessel-funktionen Kn(x).";
             Text[ polish ] = "Podaje warto�� zmodyfikowanej funkcji Bessela Kn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Kn(x)";
-            Text[ japanese ] = "修正ﾍﾞｯｾﾙ関数 Kn(x)を返します。";
+            Text[ japanese ] = "修正ベッセル関数 Kn(x)を返します。";
             Text[ korean ] = "베셀 함수 Kn(X)를 계산합니다";
             Text[ chinese_simplified ] = "计算一个修改的 Bessel 函数 Kn(x) 。";
             Text[ chinese_traditional ] = "傳回修改過的 Bessel 函數 Kn(x) 。";
@@ -2606,7 +2606,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ordningstalet f�r Bessel-funktionen";
             Text[ polish ] = "Rz�d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数の次数";
+            Text[ japanese ] = "ベッセル関数の次数";
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "一个 BesselK 函数的阶数。";
             Text[ chinese_traditional ] = "爲 BesselK 函數的順序。";
@@ -2636,7 +2636,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ber�knar Bessel-funktionen Yn(x).";
             Text[ polish ] = "Podaje warto�� funkcji Bessela Yn(x).";
             Text[ portuguese_brazilian ] = "Returns the Bessel function Yn(x)";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数 Yn(x)を返します。";
+            Text[ japanese ] = "ベッセル関数 Yn(x)を返します。";
             Text[ korean ] = "베셀 함수 Yn(X)를 계산합니다";
             Text[ chinese_simplified ] = "计算一个 Bessel 函数 Yn(x) 。";
             Text[ chinese_traditional ] = "傳回 Bessel 函數 Yn(x) 。";
@@ -2744,7 +2744,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Ordningstalet f�r Bessel-funktionen";
             Text[ polish ] = "Rz�d funkcji Bessela.";
             Text[ portuguese_brazilian ] = "n";
-            Text[ japanese ] = "ﾍﾞｯｾﾙ関数の次数";
+            Text[ japanese ] = "ベッセル関数の次数";
             Text[ korean ] = "n";
             Text[ chinese_simplified ] = "一个 BesselY 函数的阶数。";
             Text[ chinese_traditional ] = "爲 BesselY 函數的順序。";
@@ -5151,7 +5151,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar en vinkel uttryckt i radianer f�r visning av ett komplext tal med trigonometriskt skrivs�tt.";
             Text[ polish ] = "Podaje warto�� argumentu liczby zespolonej, k�ta wyra�onego w radianach.";
             Text[ portuguese_brazilian ] = "Returns the argument q, an angle expressed in radians";
-            Text[ japanese ] = "複素数を極形式で表現した場合の偏角θ(ｼｰﾀ)を返します。";
+            Text[ japanese ] = "複素数を極形式で表現した場合の偏角θ(シータ)を返します。";
             Text[ korean ] = "호도로 표현되는 각도를 나타태는 인수 q를 반환합니다";
             Text[ chinese_simplified ] = "计算某一参数以弧度表示的角度数值。";
             Text[ chinese_traditional ] = "傳回一個以徑度量表示的角度數值。";
@@ -5235,7 +5235,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar cosinus av ett komplext tal.";
             Text[ polish ] = "Podaje warto�� cosinusa liczby zespolonej.";
             Text[ portuguese_brazilian ] = "Returns the cosine of a complex number";
-            Text[ japanese ] = "複素数のｺｻｲﾝを返します。";
+            Text[ japanese ] = "複素数のコサインを返します。";
             Text[ korean ] = "복소수의 코사인 값을 반환합니다";
             Text[ chinese_simplified ] = "计算某一复数的余弦值。";
             Text[ chinese_traditional ] = "傳回某一個複數的餘弦值。";
@@ -6099,7 +6099,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar sinus av ett komplext tal.";
             Text[ polish ] = "Podaje warto�� sinusa liczby zespolonej.";
             Text[ portuguese_brazilian ] = "Returns the sine of a complex number";
-            Text[ japanese ] = "複素数のｻｲﾝを返します。";
+            Text[ japanese ] = "複素数のサインを返します。";
             Text[ korean ] = "복소수의 사인값을 반환합니다";
             Text[ chinese_simplified ] = "计算某一复数的正弦值。";
             Text[ chinese_traditional ] = "傳回某一個複數的正弦值。";
@@ -6867,7 +6867,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar avskrivningsbeloppet f�r en redovisningsperiod enligt det franska bokf�ringssystemet.";
             Text[ polish ] = "Podaje warto�� amortyzacji dla ka�dego okresu rozliczeniowego. Funkcja ta dotyczy francuskiego systemu ksi�gowego.";
             Text[ portuguese_brazilian ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-            Text[ japanese ] = "ﾌﾗﾝｽの会計ｼｽﾃﾑを基準とした各会計期における減価償却費を返します。";
+            Text[ japanese ] = "フランスの会計システムを基準とした各会計期における減価償却費を返します。";
             Text[ korean ] = "각 회계 기간에 대한 할당된 선형 감가 상각을 반환합니다";
             Text[ chinese_simplified ] = "计算一个会计周期内按比例分配的线性折旧金额。";
             Text[ chinese_traditional ] = "傳回某一項固定資產按比列線性計算的會計週期的折舊金額。";
@@ -7275,7 +7275,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar avskrivningsbeloppet f�r en redovisningsperiod enligt det franska bokf�ringssystemet.";
             Text[ polish ] = "Podaje warto�� amortyzacji dla ka�dego okresu rozliczeniowego. Funkcja ta dotyczy francuskiego systemu ksi�gowego.";
             Text[ portuguese_brazilian ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-            Text[ japanese ] = "ﾌﾗﾝｽの会計ｼｽﾃﾑを基準とした各会計期における減価償却費を返します。";
+            Text[ japanese ] = "フランスの会計システムを基準とした各会計期における減価償却費を返します。";
             Text[ korean ] = "각 회계 기간에 대한 자산의 할당된 선형 감가 상각을 반환합니다";
             Text[ chinese_simplified ] = "计算一个会计周期内按比例分配的线性折旧金额。";
             Text[ chinese_traditional ] = "傳回某一項固定資產按比列線性計算的會計週期的折舊金額。";
@@ -7689,7 +7689,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ chinese_traditional ] = "傳回某一個定期付息的有價債券所累積的利息。";
             Text[ turkish ] = "Return the accrued interest for a security that pays periodic interest";
             Text[ arabic ] = "Return the accrued interest for a security that pays periodic interest";
-            Text[ catalan ] = "Torna l'inter�s acumulat per a un valor amb pagament peri�dics d'interessos";
+            Text[ catalan ] = "Torna l'inter�s acumulat per a un valor amb pagament peri�dics d'interessos" ; } ";
         };
 
         String 2 // name of parameter 1         Accrint
@@ -8991,7 +8991,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar den �rliga Macauley-l�ptiden f�r ett v�rdepapper med periodisk r�ntebetalning.";
             Text[ polish ] = "Podaje warto�� rocznego okresu Macauley'a w przypadku papieru warto�ciowego o okresowych wyp�atach odsetek.";
             Text[ portuguese_brazilian ] = "Returns the annual duration of a security with periodic interest payments";
-            Text[ japanese ] = "定期的に利子が支払われる証券の年間のﾏｺｰﾚｰ係数を返します。";
+            Text[ japanese ] = "定期的に利子が支払われる証券の年間のマコーレー係数を返します。";
             Text[ korean ] = "주기적으로 이자를 지불하여 유가 증권의 매해 매컬리(Macauley) 런 타임을 제공합니다";
             Text[ chinese_simplified ] = "计算某一定期付息的有价证券的 Macaulay 期限。";
             Text[ chinese_traditional ] = "傳回某一按週期付息的有價證券的年期數。";
@@ -10153,7 +10153,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "���������� ���� �� 100 ������ ������������� ��������� ������ �����, �� ������� ������������� ������������� �������.";
             Text[ greek ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ dutch ] = "Returns the price per $100 face value of a security that pays periodic interest";
-            Text[ french ] = "Renvoie le prix par valeur nominale de 100 F d'un titre rapportant des int�r�ts p�riodiques.";
+            Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unit�s mon�taires, d'un titre rapportant des int�r�ts p�riodiques.";
             Text[ spanish ] = "Devuelve el precio por 100 unidades monetarias de un valor que paga intereses peri�dicos.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (s��nn�llinen korko) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unit� monetarie che paga interessi periodici.";
@@ -10561,7 +10561,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "���������� ���� �� 100 ������ ����������� ��������� ������ �����, �� ������� ������� ������.";
             Text[ greek ] = "Returns the price per $100 face value of a discounted security";
             Text[ dutch ] = "Returns the price per $100 face value of a discounted security";
-            Text[ french ] = "Renvoie le prix par valeur nominale de 100 F d'un titre escompt�.";
+            Text[ french ] = "Renvoie le prix d'un titre escompt� pour une valeur nominale de 100 unit�s mon�taires.";
             Text[ spanish ] = "Devuelve la cotizaci�n por 100 unidades monetarias de un valor con descuento.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (reaaliarvo nimellisarvoa pienempi) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo senza interessi del valore nominale di 100 unit� monetarie.";
@@ -10861,7 +10861,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "���������� ���� �� 100 ������ ������������� ��������� ������ �����, �� ������� ����� ������������� � ���� ���������.";
             Text[ greek ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ dutch ] = "Returns the price per $100 face value of a security that pays interest at maturity";
-            Text[ french ] = "Renvoie le prix par valeur nominale de 100 F d'un titre rapportant des int�r�ts au terme de l'�ch�ance.";
+            Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unit�s mon�taires, d'un titre rapportant des int�r�ts au terme de l'�ch�ance.";
             Text[ spanish ] = "Devuelve la cotizaci�n por 100 unidades monetarias de un valor que paga intereses al vencer.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (korko maksetaan lainan er��ntyess�) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unit� monetarie che paga gli interessi alla scadenza.";
@@ -11215,7 +11215,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "���������� ���������������� ������������ ������� ��� ������ ����� � �������������� ����������� ���������� 100 ���.";
             Text[ greek ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ dutch ] = "Geeft als resultaat de aangepaste Macauley-duur van een waardepapier met een nominale waarde van fl 100.";
-            Text[ french ] = "Renvoie la dur�e de Macaulay modifi�e d'un titre pour une valeur nominale de 100 F.";
+            Text[ french ] = "Renvoie la dur�e de Macaulay modifi�e d'un titre pour une valeur nominale de 100 unit�s mon�taires.";
             Text[ spanish ] = "Devuelve la duraci�n modificada de Macaulay para un valor de 100 unidades monetarias.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (nimellisarvo 100) Macauley-muokkauksen mukaisen  keston";
             Text[ italian ] = "Restituisce la durata Macauley modificata di un titolo con un valore nominale di 100 unit� monetarie.";
@@ -11223,7 +11223,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar den modifierade Macauley-l�ptiden f�r ett v�rdepapper med ett nominellt v�rde p� 100 kr.";
             Text[ polish ] = "Podaje warto�� zmodyfikowanego okresu Macauley'a w przypadku papieru warto�ciowego o za�o�onej warto�ci 100 jednostek.";
             Text[ portuguese_brazilian ] = "Returns the Macauley modified duration for a security with an assumed par ";
-            Text[ japanese ] = "額面価格 $100 と仮定して、証券に対する修正ﾏｺｰﾚｰ係数を返します。";
+            Text[ japanese ] = "額面価格 $100 と仮定して、証券に対する修正マコーレー係数を返します。";
             Text[ korean ] = "액면가 100 DM 의 유가 증권의 수정  매컬리(Macauley) 기간을 제공합니다.";
             Text[ chinese_simplified ] = "计算某一面额为100元的有价证券的 Macauley 修正期限。";
             Text[ chinese_traditional ] = "傳回某一面額為100元的有價證券的 Macauley 修正期限。";
@@ -11710,7 +11710,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Konverterar en notering uttryckt som ett decimaltal till en notering uttryckt som ett br�k.";
             Text[ polish ] = "Zamienia cen� w postaci dziesi�tnej na cen� w postaci u�amkowej.";
             Text[ portuguese_brazilian ] = "Converts a dollar price, expressed as a decimal number, into a dollar price, expressed as a fraction";
-            Text[ japanese ] = "小数で表されたﾄﾞﾙ価格を分数表示に変換します。";
+            Text[ japanese ] = "小数で表されたドル価格を分数表示に変換します。";
             Text[ korean ] = "십진수 달러 가격을 분수 달러 가격으로 변환합니다";
             Text[ chinese_simplified ] = "将某一用小数表示的价格转换成混合式的分数表示的价格。";
             Text[ chinese_traditional ] = "將某一價格的小數表達式轉換成混合分數表達式。";
@@ -11848,7 +11848,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Konverterar en notering uttryckt som ett br�k till ett decimaltal.";
             Text[ polish ] = "Zamienia cen� w postaci u�amkowej na cen� w postaci dziesi�tnej.";
             Text[ portuguese_brazilian ] = "Converts a dollar price, expressed as a fraction, into a dollar price, expressed as a decimal number";
-            Text[ japanese ] = "分数で表されたﾄﾞﾙ価格を小数表示に変換します。";
+            Text[ japanese ] = "分数で表されたドル価格を小数表示に変換します。";
             Text[ korean ] = "분수 달러 가격을 십진수 달러 가격으로 변환합니다";
             Text[ chinese_simplified ] = "将某一按分数表示的价格转换成小数表示的价格。";
             Text[ chinese_traditional ] = "將某一價格的混合分數表達式轉換成小數表達式。";
@@ -13232,7 +13232,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ russian ] = "���������� ���� �� 100 ���. ����������� ��������� ��� ������������� ����.";
             Text[ greek ] = "Returns the price of $100 face value for a treasury bill";
             Text[ dutch ] = "Geeft als resultaat de koers per fl 100 nominale waarde voor een schatkistpapier.";
-            Text[ french ] = "Renvoie le prix d'un bon du Tr�sor d'une valeur nominale de 100 F.";
+            Text[ french ] = "Renvoie le prix d'un bon du Tr�sor pour une valeur nominale de 100 unit�s mon�taires.";
             Text[ spanish ] = "Devuelve el precio por 100 (unidad monetaria) del valor nominal de una letra.";
             Text[ finnish ] = "Palauttaa valtion obligaation nimellisarvon (100) hinnan";
             Text[ italian ] = "Restituisce il prezzo di un buono del tesoro dal valore nominale di 100 unit� monetarie.";
@@ -15580,7 +15580,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar internr�ntan f�r en serie betalningar som inte �r periodiska.";
             Text[ polish ] = "Podaje warto�� wewn�trznej stopy zwrotu dla serii przep�yw�w �rodk�w pieni�nych niekoniecznie okresowych.";
             Text[ portuguese_brazilian ] = "Returns the internal rate of return for a schedule of cash flows";
-            Text[ japanese ] = "定期的でないｷｬｯｼｭﾌﾛｰに対する内部利益率を返します。";
+            Text[ japanese ] = "定期的でないキャッシュフローに対する内部利益率を返します。";
             Text[ korean ] = "현금 유출입 계획에 대한 반납 내부율을 반환합니다";
             Text[ chinese_simplified ] = "计算某一不定期的现金流的内部收益率。";
             Text[ chinese_traditional ] = "傳回不定期的現金流量表的內部收益率。";
@@ -15634,7 +15634,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "V�rden";
             Text[ polish ] = "Seria przep�yw�w got�wki.";
             Text[ portuguese_brazilian ] = "Values";
-            Text[ japanese ] = "収支明細表の日付に対応する一連のｷｬｯｼｭﾌﾛｰ";
+            Text[ japanese ] = "収支明細表の日付に対応する一連のキャッシュフロー";
             Text[ korean ] = "가격";
             Text[ chinese_simplified ] = "是和付款时间相应的一系列现金流。";
             Text[ chinese_traditional ] = "為付款時間對應的一筆現金流。";
@@ -15772,7 +15772,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Returnerar nettonuv�rdet (kapitalv�rde) f�r en rad betalningar som inte �r periodiska.";
             Text[ polish ] = "Podaje warto�� bie��c� netto serii przep�yw�w �rodk�w pieni�nych niekoniecznie okresowych.";
             Text[ portuguese_brazilian ] = "Returns the net present value for a schedule of cash flows";
-            Text[ japanese ] = "定期的でないｷｬｯｼｭﾌﾛｰに対する正味現在価値を返します。";
+            Text[ japanese ] = "定期的でないキャッシュフローに対する正味現在価値を返します。";
             Text[ korean ] = "현금 유출입 계획에 대한 순수 현가를 반환합니다";
             Text[ chinese_simplified ] = "计算某一组不定期的现金流的净现值(资本)。";
             Text[ chinese_traditional ] = "傳回某一不定期的現金流的淨現值。";
@@ -15826,7 +15826,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "R�nta";
             Text[ polish ] = "Stopa dyskontowa stosowana dla przep�yw�w got�wki.";
             Text[ portuguese_brazilian ] = "Rate";
-            Text[ japanese ] = "対象となるｷｬｯｼｭﾌﾛｰに適用する割引率";
+            Text[ japanese ] = "対象となるキャッシュフローに適用する割引率";
             Text[ korean ] = "비율";
             Text[ chinese_simplified ] = "一组现金流的贴现率。";
             Text[ chinese_traditional ] = "為現金流的貼現率。";
@@ -15853,7 +15853,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "V�rden";
             Text[ polish ] = "Warto�ci";
             Text[ portuguese_brazilian ] = "Values";
-            Text[ japanese ] = "ｷｬｯｼｭﾌﾛｰ";
+            Text[ japanese ] = "キャッシュフロー";
             Text[ korean ] = "가격";
             Text[ chinese_simplified ] = "values";
             Text[ chinese_traditional ] = "values";
@@ -15880,7 +15880,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "V�rden";
             Text[ polish ] = "Seria przep�yw�w got�wki.";
             Text[ portuguese_brazilian ] = "Values";
-            Text[ japanese ] = "収支明細表の 日付 に対応する一連のｷｬｯｼｭﾌﾛｰ";
+            Text[ japanese ] = "収支明細表の 日付 に対応する一連のキャッシュフロー";
             Text[ korean ] = "가격";
             Text[ chinese_simplified ] = "是和付款时间相应的一系列现金流。";
             Text[ chinese_traditional ] = "為與付款日期相對應的現金流。";
@@ -15934,7 +15934,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ swedish ] = "Tidpunkter";
             Text[ polish ] = "Zestawienie dat p�atno�ci odpowiadaj�cych przep�ywom got�wki.";
             Text[ portuguese_brazilian ] = "Dates";
-            Text[ japanese ] = "ｷｬｯｼｭﾌﾛｰに対応する一連の支払日";
+            Text[ japanese ] = "キャッシュフローに対応する一連の支払日";
             Text[ korean ] = "날짜";
             Text[ chinese_simplified ] = "是和现金流对应的付款时间。";
             Text[ chinese_traditional ] = "為與現金流相對應的付款日期。";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
