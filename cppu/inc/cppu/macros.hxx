@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-07 15:43:30 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 14:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,10 @@
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
 #   elif ( __GNUC__ == 2 && __GNUC_MINOR__ == 95 )
+#       define  CPPU_CLBN_TMP   UNO_LB_GCC2
+#       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
+#       define  CPPU_DLL_POSTFIX "GCC"
+#   elif ( __GNUC__ == 3 && __GNUC_MINOR__ == 0 )
 #       define  CPPU_CLBN_TMP   UNO_LB_GCC2
 #       define  CPPU_CLBN_NS_TMP UNO_LB_GCC2_NAMESPACE
 #       define  CPPU_DLL_POSTFIX "GCC"
