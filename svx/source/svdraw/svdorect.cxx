@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-31 12:52:41 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,18 @@
 #include "svdoimp.hxx"
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+#ifndef _SDR_PROPERTIES_RECTANGLEPROPERTIES_HXX
+#include <svx/sdr/properties/rectangleproperties.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+sdr::properties::BaseProperties* SdrRectObj::CreateObjectSpecificProperties()
+{
+    return new sdr::properties::RectangleProperties(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 TYPEINIT1(SdrRectObj,SdrTextObj);
 
@@ -221,7 +232,7 @@ void SdrRectObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bTransparenceAllowed = TRUE;
 
     // gradient depends on fillstyle
-    XFillStyle eFillStyle = ((XFillStyleItem&)(GetItem(XATTR_FILLSTYLE))).GetValue();
+    XFillStyle eFillStyle = ((XFillStyleItem&)(GetObjectItem(XATTR_FILLSTYLE))).GetValue();
     rInfo.bGradientAllowed = (eFillStyle == XFILL_GRADIENT);
 
     rInfo.bShearAllowed     =bNoTextFrame;
@@ -279,53 +290,54 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     }
 }
 
-FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrRectObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
-    // Hidden objects on masterpages, draw nothing
-    if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
-        return TRUE;
+    // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
+    //// Hidden objects on masterpages, draw nothing
+    //if((rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) && bNotVisibleAsMaster)
+    //  return TRUE;
 
-    // Im Graustufenmodus/Kontrastmodus soll die Hintergrundseite NICHT angezeigt werden
-    ULONG nMode = rXOut.GetOutDev()->GetDrawMode();
-    FASTBOOL bGrayscaleMode = ( nMode == (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
-    FASTBOOL bSettingsMode = ( nMode == (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) );
-
-    if( ( bGrayscaleMode || bSettingsMode ) && pPage && pPage->IsMasterPage() )
-    {
-        Size aPageSize = pPage->GetSize();
-        long aRectWidth = aRect.GetSize().Width() - 1;
-        long aRectHeight = aRect.GetSize().Height() - 1;
-
-        // Objekt so gross wie Seite ? -> Hintergrund
-        if( aRectWidth == aPageSize.Width() &&
-            aRectHeight == aPageSize.Height()  )
-        {
-            return TRUE;
-        }
-        // oder so gross wie Seite abzueglich der Raender
-        if( aRectWidth == aPageSize.Width() -
-                pPage->GetLftBorder() - pPage->GetRgtBorder() &&
-            aRectHeight == aPageSize.Height() -
-                pPage->GetUppBorder() - pPage->GetLwrBorder() )
-        {
-            return TRUE;
-        }
-
-    }
+    // #110094#-16 Moved to ViewContactOfMasterPage::ShouldPaintObject(..)
+    //// Im Graustufenmodus/Kontrastmodus soll die Hintergrundseite NICHT angezeigt werden
+    //ULONG nMode = rXOut.GetOutDev()->GetDrawMode();
+    //FASTBOOL bGrayscaleMode = ( nMode == (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
+    //FASTBOOL bSettingsMode = ( nMode == (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) );
+    //
+    //if( ( bGrayscaleMode || bSettingsMode ) && pPage && pPage->IsMasterPage() )
+    //{
+    //  Size aPageSize = pPage->GetSize();
+    //  long aRectWidth = aRect.GetSize().Width() - 1;
+    //  long aRectHeight = aRect.GetSize().Height() - 1;
+    //
+    //  // Objekt so gross wie Seite ? -> Hintergrund
+    //  if( aRectWidth == aPageSize.Width() &&
+    //      aRectHeight == aPageSize.Height()  )
+    //  {
+    //      return TRUE;
+    //  }
+    //  // oder so gross wie Seite abzueglich der Raender
+    //  if( aRectWidth == aPageSize.Width() -
+    //          pPage->GetLftBorder() - pPage->GetRgtBorder() &&
+    //      aRectHeight == aPageSize.Height() -
+    //          pPage->GetUppBorder() - pPage->GetLwrBorder() )
+    //  {
+    //      return TRUE;
+    //  }
+    //}
 
     if (bTextFrame && aGeo.nShearWink!=0) {
-        DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::Paint() auf 0 gesetzt");
+        DBG_WARNING("Shearwinkel vom TextFrame innerhalb von SdrRectObj::DoPaintObject() auf 0 gesetzt");
         ((SdrRectObj*)this)->ImpCheckShear();
         ((SdrRectObj*)this)->SetRectsDirty();
     }
-    FASTBOOL bOk=TRUE;
+    sal_Bool bOk(sal_True);
     BOOL bHideContour(IsHideContour());
     sal_Int32 nEckRad(GetEckenradius());
     BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
     BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
-    const SfxItemSet& rSet = GetItemSet();
+    const SfxItemSet& rSet = GetObjectItemSet();
 
     // perepare ItemSet to avoid old XOut line drawing
     SfxItemSet aEmptySet(*rSet.GetPool());
@@ -387,12 +399,12 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if (PaintNeedsXPoly(nEckRad)) {
             rXOut.DrawXPolygon(GetXPoly());
         } else {
-            DBG_ASSERT(nEckRad==0,"SdrRectObj::Paint(): XOut.DrawRect() unterstuetz kein Eckenradius!");
+            DBG_ASSERT(nEckRad==0,"SdrRectObj::DoPaintObject(): XOut.DrawRect() unterstuetz kein Eckenradius!");
             rXOut.DrawRect(aRect/*,USHORT(2*nEckRad),USHORT(2*nEckRad)*/);
         }
     }
 
-    DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::Paint(): Rect hat Nullgroesse (oder negativ)!");
+    DBG_ASSERT(aRect.GetWidth()>1 && aRect.GetHeight()>1,"SdrRectObj::DoPaintObject(): Rect hat Nullgroesse (oder negativ)!");
 
     // Own line drawing
     if( !bHideContour && pLineGeometry.get() )
@@ -402,11 +414,13 @@ FASTBOOL SdrRectObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     }
 
     if (HasText()) {
-        bOk=SdrTextObj::Paint(rXOut,rInfoRec);
+        bOk = SdrTextObj::DoPaintObject(rXOut,rInfoRec);
     }
-    if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
-        bOk=PaintGluePoints(rXOut,rInfoRec);
-    }
+
+    // #110094#-13
+    //if (bOk && (rInfoRec.nPaintMode & SDRPAINTMODE_GLUEPOINTS) !=0) {
+    //  bOk=PaintGluePoints(rXOut,rInfoRec);
+    //}
 
     return bOk;
 }
@@ -535,9 +549,10 @@ void SdrRectObj::TakeContour(XPolyPolygon& rPoly) const
     SdrTextObj::TakeContour(rPoly);
 }
 
-void SdrRectObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
-{
-}
+//#110094#-12
+//void SdrRectObj::TakeContour(XPolyPolygon& rXPoly, SdrContourType eType) const
+//{
+//}
 
 void SdrRectObj::RecalcSnapRect()
 {
@@ -630,8 +645,8 @@ FASTBOOL SdrRectObj::EndDrag(SdrDragStat& rDrag)
 {
     FASTBOOL bRad=rDrag.GetHdl()!=NULL && rDrag.GetHdl()->GetKind()==HDL_CIRC;
     if (bRad) {
-        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetBoundRect();
-        SendRepaintBroadcast();
+        Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
+        // #110094#-14 SendRepaintBroadcast();
         Point aPt(rDrag.GetNow());
         if (aGeo.nDrehWink!=0) RotatePoint(aPt,aRect.TopLeft(),-aGeo.nSin,aGeo.nCos); // -sin fuer Umkehrung
         // Shear nicht noetig, da Pt auf einer Linie mit dem RefPt (LiOb Ecke des Rect)
@@ -642,7 +657,7 @@ FASTBOOL SdrRectObj::EndDrag(SdrDragStat& rDrag)
         SetChanged();
         SetRectsDirty();
         SetXPolyDirty();
-        SendRepaintBroadcast();
+        BroadcastObjectChange();
         SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
         return TRUE;
     } else {
@@ -767,7 +782,7 @@ XubString SdrRectObj::GetMacroPopupComment(const SdrObjMacroHitRec& rRec) const
 
 SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+    INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
     nWdt++;
     nWdt /= 2;
 
@@ -788,7 +803,7 @@ SdrGluePoint SdrRectObj::GetVertexGluePoint(USHORT nPosNum) const
 
 SdrGluePoint SdrRectObj::GetCornerGluePoint(USHORT nPosNum) const
 {
-    INT32 nWdt = ((XLineWidthItem&)(GetItem(XATTR_LINEWIDTH))).GetValue();
+    INT32 nWdt = ((XLineWidthItem&)(GetObjectItem(XATTR_LINEWIDTH))).GetValue();
     nWdt++;
     nWdt /= 2;
 
@@ -825,25 +840,6 @@ SdrObject* SdrRectObj::DoConvertToPolyObj(BOOL bBezier) const
 void SdrRectObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
     SdrTextObj::SFX_NOTIFY(rBC,rBCType,rHint,rHintType);
-    SetXPolyDirty(); // wg. Eckenradius
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// private support routines for ItemSet access
-void SdrRectObj::ItemSetChanged(const SfxItemSet& rSet)
-{
-    // call parent
-    SdrTextObj::ItemSetChanged(rSet);
-
-    // local changes
-    SetXPolyDirty();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void SdrRectObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontRemoveHardAttr)
-{
-    SdrTextObj::NbcSetStyleSheet(pNewStyleSheet,bDontRemoveHardAttr);
     SetXPolyDirty(); // wg. Eckenradius
 }
 
@@ -893,7 +889,7 @@ void SdrRectObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             aSet.Put(XLineColorItem(String(),Color(COL_BLACK))); // Falls einer auf Solid umschaltet
             aSet.Put(XLineStyleItem(XLINE_NONE));
 
-            SetItemSet(aSet);
+            SetObjectItemSet(aSet);
         }
     } else {
         SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
