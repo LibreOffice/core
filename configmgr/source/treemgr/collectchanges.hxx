@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,12 @@ namespace configmgr
             void collectFrom(Change const& aChange_)
             {
                 this->applyToChange( aChange_ );
+            }
+
+            /// Appends the descendants of the given Change to the target list, possibly with a depth limit
+            void collectFromChildren(SubtreeChange const& aParent_)
+            {
+                this->applyToChildren( aParent_ );
             }
 
         protected:
