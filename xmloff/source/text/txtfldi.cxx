@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:02:52 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:18:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ using namespace ::xmloff::token;
 // service prefix and service anems
 const sal_Char sAPI_textfield_prefix[]  = "com.sun.star.text.TextField.";
 const sal_Char sAPI_fieldmaster_prefix[] = "com.sun.star.text.FieldMaster.";
+const sal_Char sAPI_presentation_prefix[] = "com.sun.star.presentation.TextField.";
 
 const sal_Char sAPI_extended_user[]             = "ExtendedUser";
 const sal_Char sAPI_user_data_type[]            = "UserDataType";
@@ -300,7 +301,9 @@ const sal_Char sAPI_annotation[]                = "Annotation";
 const sal_Char sAPI_script[]                    = "Script";
 const sal_Char sAPI_measure[]                   = "Measure";
 const sal_Char sAPI_drop_down[]                 = "DropDown";
-
+const sal_Char sAPI_header[]                    = "Header";
+const sal_Char sAPI_footer[]                    = "Footer";
+const sal_Char sAPI_datetime[]                  = "DateTime";
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -815,6 +818,18 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
             break;
         case XML_TOK_TEXT_DROPDOWN:
             pContext = new XMLDropDownFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
+            break;
+        case XML_TOK_DRAW_HEADER:
+            pContext = new XMLHeaderFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
+            break;
+        case XML_TOK_DRAW_FOOTER:
+            pContext = new XMLFooterFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
+            break;
+        case XML_TOK_DRAW_DATE_TIME:
+            pContext = new XMLDateTimeFieldImportContext( rImport, rHlp,
                                                           nPrefix, rName );
             break;
 
@@ -4091,4 +4106,82 @@ void XMLDropDownFieldImportContext::PrepareField(
         aAny <<= sName;
         xPropertySet->setPropertyValue( sPropertyName, aAny );
     }
+}
+
+/** import header fields (<draw:header>) */
+TYPEINIT1( XMLHeaderFieldImportContext, XMLTextFieldImportContext );
+
+XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_header, nPrfx, sLocalName )
+{
+    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    bValid = sal_True;
+}
+
+/// process attribute values
+void XMLHeaderFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken, const ::rtl::OUString& sAttrValue )
+{
+}
+
+/// prepare XTextField for insertion into document
+void XMLHeaderFieldImportContext::PrepareField(
+        const Reference<XPropertySet> & xPropertySet)
+{
+}
+
+/** import footer fields (<draw:footer>) */
+TYPEINIT1( XMLFooterFieldImportContext, XMLTextFieldImportContext );
+
+XMLFooterFieldImportContext::XMLFooterFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, nPrfx, sLocalName )
+{
+    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    bValid = sal_True;
+}
+
+/// process attribute values
+void XMLFooterFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken, const ::rtl::OUString& sAttrValue )
+{
+}
+
+/// prepare XTextField for insertion into document
+void XMLFooterFieldImportContext::PrepareField(
+        const Reference<XPropertySet> & xPropertySet)
+{
+}
+
+
+/** import footer fields (<draw:date-and-time>) */
+TYPEINIT1( XMLDateTimeFieldImportContext, XMLTextFieldImportContext );
+
+XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName)      /// element name w/o prefix
+: XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
+{
+    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    bValid = sal_True;
+}
+
+/// process attribute values
+void XMLDateTimeFieldImportContext::ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue )
+{
+}
+
+/// prepare XTextField for insertion into document
+void XMLDateTimeFieldImportContext::PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet)
+{
 }
