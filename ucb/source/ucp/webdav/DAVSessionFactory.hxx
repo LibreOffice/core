@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-10-28 16:20:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,24 +62,24 @@
 #define _DAVSESSIONFACTORY_HXX_
 
 #include <map>
+#include <memory>
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include "salhelper/simplereferenceobject.hxx"
-#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
-
-#ifndef _PROXYCONFIG_HXX_
-#include "proxyconfig.hxx"
+#ifndef _UCBHELPER_PROXYDECIDER_HXX
+#include <ucbhelper/proxydecider.hxx>
 #endif
+
 #ifndef _DAVEXCEPTION_HXX_
 #include "DAVException.hxx"
 #endif
@@ -109,7 +109,7 @@ private:
 
     Map m_aMap;
     osl::Mutex m_aMutex;
-    rtl::Reference< ProxySettings > m_xProxySettings;
+    std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
 
     void releaseElement( DAVSession * pElement ) SAL_THROW(());
 

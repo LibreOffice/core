@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-24 11:59:14 $
+ *  last change: $Author: kso $ $Date: 2002-10-28 16:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class NeonSession : public DAVSession
     public:
         NeonSession( rtl::Reference< DAVSessionFactory > const & rSessionFactory,
                      const rtl::OUString& inUri,
-                     const ProxyConfig& rProxyCfg )
+                     const ucbhelper::InternetProxyServer & rProxyCfg )
             throw ( DAVException );
 
         // DAVSession methods

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-24 11:59:14 $
+ *  last change: $Author: kso $ $Date: 2002-10-28 16:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,7 @@ extern "C" void NeonSession_ResponseHeaderCatcher( void * userdata,
 NeonSession::NeonSession(
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
             const rtl::OUString& inUri,
-            const ProxyConfig& rProxyCfg )
+            const ucbhelper::InternetProxyServer& rProxyCfg )
     throw ( DAVException )
 : DAVSession( rSessionFactory ),
   m_pRequestData( new RequestDataMap )

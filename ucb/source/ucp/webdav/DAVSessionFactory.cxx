@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVSessionFactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-11-26 09:45:37 $
+ *  last change: $Author: kso $ $Date: 2002-10-28 16:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _NEONSESSION_HXX_
 #include "NeonSession.hxx"
 #endif
+#ifndef _NEONURI_HXX_
+#include "NeonUri.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -75,11 +78,6 @@ using namespace com::sun::star;
 
 DAVSessionFactory::~DAVSessionFactory()
 {
-    if ( m_xProxySettings.is() )
-    {
-        m_xProxySettings->dispose();
-        m_xProxySettings = 0;
-    }
 }
 
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
@@ -89,8 +87,8 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    if ( !m_xProxySettings.is() )
-        m_xProxySettings = new ProxySettings( rxSMgr );
+    if ( !m_xProxyDecider.get() )
+        m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxSMgr ) );
 
     Map::iterator aIt( m_aMap.begin() );
     Map::iterator aEnd( m_aMap.end() );
@@ -105,9 +103,21 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == aEnd )
     {
+        NeonUri aURI( inUri );
+
         std::auto_ptr< DAVSession > xElement(
-            new NeonSession(
-                this, inUri, m_xProxySettings->getProxy( inUri ) ) );
+            ( aURI.GetScheme().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
+             aURI.GetScheme().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
+            ? new NeonSession(
+                this, inUri, m_xProxyDecider->getProxy( aURI.GetScheme(),
+                                                        aURI.GetHost(),
+                                                        aURI.GetPort() ) )
+            : new NeonSession(
+                this, inUri, m_xProxyDecider->getProxy( aURI.GetScheme(),
+                                                        rtl::OUString() /* not used */,
+                                                        -1 /* not used */ ) ) );
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;
         aIt->second->m_aContainerIt = aIt;
         xElement.release();
@@ -123,9 +133,29 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     {
         osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
-        aIt->second = new NeonSession( this,
-                                       inUri,
-                                       m_xProxySettings->getProxy( inUri ) );
+
+        // If URL scheme is different from http or https we definitely
+        // have to use a proxy and therefore can optimize the getProxy
+        // call a little:
+        NeonUri aURI( inUri );
+
+        if ( aURI.GetScheme().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "http" ) ) ||
+             aURI.GetScheme().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( "https" ) ) )
+            aIt->second = new NeonSession( this,
+                                           inUri,
+                                           m_xProxyDecider->getProxy(
+                                            aURI.GetScheme(),
+                                            aURI.GetHost(),
+                                            aURI.GetPort() ) );
+        else
+            aIt->second = new NeonSession( this,
+                                           inUri,
+                                           m_xProxyDecider->getProxy(
+                                            aURI.GetScheme(),
+                                            rtl::OUString() /* not used */,
+                                            -1 /* not used */ ) );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }
