@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:23:32 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:09:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ String RID_STR_SOURCETOBIG
     Text[ chinese_simplified ] = "‘іќƒ±ЊћЂіу£ђќёЈ®іж≈ћЇЌ±а“л°£\n«лƒъ…Њ≥э“ї–©„Ґљвїт’яљЂЉЄЄцЈљЈ®„™“∆µљ“їЄц∆дЋыµƒƒ£њй÷Ѓ÷–°£";
     Text[ russian ] = "»сходный текст слишком большой и его невозможно ни сохранить, ни компилировать.\n”далите некоторые комментарии или перенесите некоторые методы в другой модуль.";
     Text[ polish ] = "Tekst Яrуd≥owy jest za duњy. Nie moњna go zapisaж ani skompilowaж.\nNaleњy usunєж kilka komentarzy lub przenieЬж kilka metod do innego modu≥u.";
-    Text[ japanese ] = "њ∞љВ™ТЈВЈВђВƒБAХџСґВаЇЁ я≤ўВрНsВ§В±В∆ВаВ≈ВЂВ№ВєВсБB\nЇ“ЁƒВрВҐВ≠В¬В©НнПЬВЈВйВ©БA“њѓƒёВћВҐВ≠В¬В©ВрХ Вћ”Љё≠∞ўВ…У]СЧВµВ№ВЈБB";
+    Text[ japanese ] = "њ∞љ√ЈљƒВ™ТЈВЈВђВƒБAХџСґВаЇЁ я≤ўВрНsВ§В±В∆ВаВ≈ВЂВ№ВєВсБB\nЇ“ЁƒВрВҐВ≠В¬В©НнПЬВЈВйВ©БA“њѓƒёВћВҐВ≠В¬В©ВрХ Вћ”Љё≠∞ўВ…У]СЧВµВ№ВЈБB";
     Text[ chinese_traditional ] = "≠м©lј…§”§j°MµL™kјx¶sљsƒґ°C\nљ–±zІR∞£§@®«µщЄ—©ќ™ћ±NіX≠”§и™k¬а≤Њ®м§@≠”®д•L™ЇЉ“ґф§І§§°C";
     Text[ arabic ] = "д’ «бг’ѕ— я»н— бѕ—ћ… н Џ–— гЏе« ЌЁўе° √ж  —ћг е.\nёг »Ќ–Ё »Џ÷ «б Џбнё« ° √ж «дёб »Џ÷ «б√”«бн» ≈бм жЌѕ… дгЎн… √ќ—м.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
@@ -711,7 +711,7 @@ String RID_STR_GENERATESOURCE
     Text[ chinese_simplified ] = "…ъ≥…‘іќƒ±Њ";
     Text[ russian ] = "—оздать исходный текст";
     Text[ polish ] = "Utwуrz tekst Яrуd≥owy";
-    Text[ japanese ] = "њ∞љВћРґРђ";
+    Text[ japanese ] = "њ∞љ√ЈљƒВћРґРђ";
     Text[ chinese_traditional ] = "ЂЎ•я≠м©lј…";
     Text[ arabic ] = "≈д‘«Ѕ д’ г’ѕ—";
     Text[ dutch ] = "Brontekst maken";
@@ -2185,7 +2185,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ chinese_simplified ] = "≤е»л‘іќƒ±Њ";
             Text[ russian ] = "¬ставить исходный текст";
             Text[ polish ] = "Wstaw tekst Яrуd≥owy";
-            Text[ japanese ] = "њ∞љВћС}Уь";
+            Text[ japanese ] = "њ∞љ√ЈљƒВћС}Уь";
             Text[ chinese_traditional ] = "і°§J≠м©lј…";
             Text[ arabic ] = "≈ѕ—«ћ д’ г’ѕ—";
             Text[ dutch ] = "Brontekst invoegen";
@@ -2214,7 +2214,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ dutch ] = "Brontekst opslaan als...";
             Text[ russian ] = "»сходный текст сохранить как...";
             Text[ polish ] = "Zapisz tekst Яrуd≥owy jako...";
-            Text[ japanese ] = "њ∞љВ…ЦЉСOВрВ¬ВѓВƒХџСґ...";
+            Text[ japanese ] = "њ∞љ√ЈљƒВ…ЦЉСOВрВ¬ВѓВƒХџСґ...";
             Text[ korean ] = "Љ“љЇ≈ЎљЇ∆ЃЄ¶ іўЄ• јћЄІјЄЈќ јъје...";
             Text[ chinese_simplified ] = "‘іќƒ±ЊЅніжќ™...";
             Text[ chinese_traditional ] = "•t¶s≠м©lј…...";
