@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:00:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:37:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,7 +501,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                                 pSVMenu->GetHelpText(nId), *pBindings);
 
                 if (  aOptions.IsMenuIconsEnabled() )
-                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast ) );
+                {
+                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                    Image aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
+                    pSVMenu->SetItemImage( nId, aImage );
+                }
             }
             else
             {
@@ -594,10 +599,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                     if ( aOptions.IsMenuIconsEnabled() )
                     {
-                        // try to get image via URL
-//                        Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bWasHighContrast );
-//                        if ( !aImage )
-                            // try to get image via Id
                         Image aImage;
                         if ( bIsAddonPopupMenu || framework::AddonMenuManager::IsAddonMenuId( nId ))
                         {
@@ -613,7 +614,11 @@ void SfxVirtualMenu::CreateFromSVMenu()
                             aImage = RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bWasHighContrast );
                         }
                         else
-                            aImage = pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast );
+                        {
+                            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                            aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                            aImage = GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast );
+                        }
 
                         if ( !!aImage )
                             pSVMenu->SetItemImage( nId, aImage );
@@ -695,7 +700,11 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
                     pSVMenu->SetItemImage( nId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
                 }
                 else
-                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
+                {
+                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                    pSVMenu->SetItemImage( nId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                }
             }
             else if( nType == MENUITEM_STRINGIMAGE && !bIcons )
             {
@@ -762,7 +771,11 @@ void SfxVirtualMenu::UpdateImages()
                     pSVMenu->SetItemImage( nId, RetrieveAddOnImage( xFrame, aImageId, aCmd, FALSE, bIsHiContrastMode ));
                 }
                 else
-                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
+                {
+                    rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                    aSlotURL += rtl::OUString::valueOf( sal_Int32( nId ));
+                    pSVMenu->SetItemImage( nId, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
+                }
             }
         }
 
@@ -983,7 +996,9 @@ void SfxVirtualMenu::InsertAddOnsMenuItem( Menu* pMenu )
         if ( SvtMenuOptions().IsMenuIconsEnabled() )
         {
             SfxModule* pModule = pBindings->GetDispatcher()->GetFrame()->GetObjectShell()->GetModule();
-            pMenu->SetItemImage( SID_ADDONS, pBindings->GetImageManager()->GetImage( SID_ADDONS, pModule, FALSE, IsHiContrastMode() ) );
+            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+            aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_ADDONS ));
+            pMenu->SetItemImage( SID_ADDONS, GetImage( xFrame, aSlotURL, FALSE, bWasHighContrast ));
         }
     }
     else
