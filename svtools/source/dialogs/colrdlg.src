@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ ModalDialog DLG_COLOR
     Text = "Farbe" ;
     Text [ ENGLISH ] = "Color" ;
     Text [ english_us ] = "Color" ;
-    Text [ portuguese_brazilian ] = "Farbe" ;
+    Text [ portuguese_brazilian ] = "Cor" ;
     Text [ swedish ] = "Färg" ;
     Text [ danish ] = "Farve" ;
     Text [ italian ] = "Colore" ;
@@ -118,7 +118,7 @@ ModalDialog DLG_COLOR
         Text = "~Cyan" ;
         Text [ ENGLISH ] = "~Cyan" ;
         Text [ english_us ] = "~Cyan" ;
-        Text [ portuguese_brazilian ] = "~Cyan" ;
+        Text [ portuguese_brazilian ] = "~Ciano" ;
         Text [ swedish ] = "~Cyan" ;
         Text [ danish ] = "Cyan" ;
         Text [ italian ] = "Ciano" ;
@@ -128,7 +128,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Ciano" ;
         Text[ chinese_simplified ] = "è“ç»¿è‰²(~C)";
         Text[ russian ] = "Ãîëóáîé";
-        Text[ polish ] = "Nieb.-ziel.";
+        Text[ polish ] = "~Seledynowy";
         Text[ japanese ] = "ã‚·ã‚¢ãƒ³(~C)";
         Text[ chinese_traditional ] = "è—ç¶ è‰²(~C)";
         Text[ arabic ] = "ÃÒÑŞ ÓãÇæí";
@@ -141,6 +141,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Cian";
         Text[ finnish ] = "S~yaani";
         Text[ thai ] = "~à¸Ÿà¹‰à¸²";
+        Text[ czech ] = "AzurovÃ¡";
+        Text[ hebrew ] = "â€®×¦×‘×¢ ×§×™×™×Ÿ (×›×—×•×œ ×¢××•×§)â€¬";
+        Text[ hindi ] = "~à¤¸à¤¿à¤¯à¤¾à¤¨";
     };
     FixedText FT_MAGENTA
     {
@@ -159,7 +162,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Magenta" ;
         Text[ chinese_simplified ] = "ç´«çº¢è‰²(~M)";
         Text[ russian ] = "Ïóğïóğíûé";
-        Text[ polish ] = "Purpurowy";
+        Text[ polish ] = "~Purpurowy";
         Text[ japanese ] = "ãƒã‚¼ãƒ³ã‚¿(~M)";
         Text[ chinese_traditional ] = "ç´«ç´…è‰²(~M)";
         Text[ arabic ] = "ÃÑÌæÇäí";
@@ -172,6 +175,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Magenta";
         Text[ finnish ] = "~Magenta";
         Text[ thai ] = "~à¸¡à¹ˆà¸§à¸‡";
+        Text[ czech ] = "PurpurovÃ¡";
+        Text[ hebrew ] = "â€®×¦×‘×¢ ××’'× ×˜×”â€¬";
+        Text[ hindi ] = "~à¤®à¥‡à¤œà¤¼à¤¨à¥à¤Ÿà¤¾";
     };
     FixedText FT_YELLOW
     {
@@ -180,7 +186,7 @@ ModalDialog DLG_COLOR
         Text = "~Yellow" ;
         Text [ ENGLISH ] = "~Yellow" ;
         Text [ english_us ] = "~Yellow" ;
-        Text [ portuguese_brazilian ] = "~Yellow" ;
+        Text [ portuguese_brazilian ] = "~Amarelo" ;
         Text [ swedish ] = "~Yellow" ;
         Text [ danish ] = "Gul" ;
         Text [ italian ] = "~Giallo" ;
@@ -190,7 +196,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Amarelo" ;
         Text[ chinese_simplified ] = "é»„è‰²(~Y)";
         Text[ russian ] = "Æåëòûé";
-        Text[ polish ] = "¯ó³ty";
+        Text[ polish ] = "¯ó³~ty";
         Text[ japanese ] = "é»„(~Y)";
         Text[ chinese_traditional ] = "é»ƒè‰²(~Y)";
         Text[ arabic ] = "ÃÕİÑ";
@@ -203,6 +209,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Groc";
         Text[ finnish ] = "K~eltainen";
         Text[ thai ] = "à¹€~à¸«à¸¥à¸·à¸­à¸‡";
+        Text[ czech ] = "Å½lutÃ¡";
+        Text[ hebrew ] = "â€®×¦×”×•×‘â€¬";
+        Text[ hindi ] = "~à¤ªà¥€à¤²à¤¾";
     };
     FixedText FT_KEY
     {
@@ -211,7 +220,7 @@ ModalDialog DLG_COLOR
         Text = "~Key" ;
         Text [ ENGLISH ] = "~Key" ;
         Text [ english_us ] = "~Key" ;
-        Text [ portuguese_brazilian ] = "~Key" ;
+        Text [ portuguese_brazilian ] = "~Chave" ;
         Text [ swedish ] = "~Nyckel" ;
         Text [ danish ] = "Nøgle" ;
         Text [ italian ] = "Chiave" ;
@@ -221,7 +230,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Chave" ;
         Text[ chinese_simplified ] = "é”®ç (~K)";
         Text[ russian ] = "Êëş÷";
-        Text[ polish ] = "Klucz";
+        Text[ polish ] = "~Klucz";
         Text[ japanese ] = "é»’(~K)";
         Text[ chinese_traditional ] = "éµç¢¼(~K)";
         Text[ arabic ] = "ãİÊÇÍ";
@@ -229,11 +238,14 @@ ModalDialog DLG_COLOR
         Text[ chinese_simplified ] = "é”®ç (~K)";
         Text[ greek ] = "~Êëåéäß";
         Text[ korean ] = "í‚¤(~K)";
-        Text[ turkish ] = "~Key";
+        Text[ turkish ] = "~Anahtar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Clau";
         Text[ finnish ] = "~Musta";
         Text[ thai ] = "~à¸à¸¸à¸à¹à¸ˆ";
+        Text[ czech ] = "KlÃ­Ä";
+        Text[ hebrew ] = "â€®××¤×ª×—â€¬";
+        Text[ hindi ] = "~à¤šà¤¾à¤­à¥€";
     };
     MetricField NUM_CYAN
     {
@@ -294,7 +306,7 @@ ModalDialog DLG_COLOR
         Text = "~Rot" ;
         Text [ ENGLISH ] = "~Red" ;
         Text [ english_us ] = "~Red" ;
-        Text [ portuguese_brazilian ] = "~Rot" ;
+        Text [ portuguese_brazilian ] = "~Vermelho" ;
         Text [ swedish ] = "~Rött" ;
         Text [ danish ] = "Rød" ;
         Text [ italian ] = "~Rosso" ;
@@ -304,7 +316,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Vermelho" ;
         Text[ chinese_simplified ] = "çº¢è‰²(~R)";
         Text[ russian ] = "Êğàñíûé";
-        Text[ polish ] = "Czerwony";
+        Text[ polish ] = "~Czerwony";
         Text[ japanese ] = "èµ¤(~R)";
         Text[ chinese_traditional ] = "ç´…è‰²(~R)";
         Text[ arabic ] = "ÃÍãÑ";
@@ -317,6 +329,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Vermell";
         Text[ finnish ] = "~Punainen";
         Text[ thai ] = "à¹~à¸”à¸‡";
+        Text[ czech ] = "ÄŒervenÃ¡";
+        Text[ hebrew ] = "â€®××“×•×â€¬";
+        Text[ hindi ] = "~à¤²à¤¾à¤²";
     };
     FixedText FT_GREEN
     {
@@ -325,7 +340,7 @@ ModalDialog DLG_COLOR
         Text = "~Grün" ;
         Text [ ENGLISH ] = "~Green" ;
         Text [ english_us ] = "~Green" ;
-        Text [ portuguese_brazilian ] = "~Gr?" ;
+        Text [ portuguese_brazilian ] = "~Verde" ;
         Text [ swedish ] = "~Grönt" ;
         Text [ danish ] = "Grøn" ;
         Text [ italian ] = "~Verde" ;
@@ -335,7 +350,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Verde" ;
         Text[ chinese_simplified ] = "ç»¿è‰²(~G)";
         Text[ russian ] = "Çåëåíûé";
-        Text[ polish ] = "Zielony";
+        Text[ polish ] = "~Zielony";
         Text[ japanese ] = "ç·‘(~G)";
         Text[ chinese_traditional ] = "ç¶ è‰²(~G)";
         Text[ arabic ] = "ÃÎÖÑ";
@@ -348,6 +363,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Verd";
         Text[ finnish ] = "~Vihreä";
         Text[ thai ] = "à¹€~à¸‚à¸µà¸¢à¸§";
+        Text[ czech ] = "ZelenÃ¡";
+        Text[ hebrew ] = "â€®×™×¨×•×§â€¬";
+        Text[ hindi ] = "~à¤¹à¤°à¤¾";
     };
     FixedText FT_BLUE
     {
@@ -356,7 +374,7 @@ ModalDialog DLG_COLOR
         Text = "~Blau" ;
         Text [ ENGLISH ] = "~Blue" ;
         Text [ english_us ] = "~Blue" ;
-        Text [ portuguese_brazilian ] = "~Blau" ;
+        Text [ portuguese_brazilian ] = "~Azul" ;
         Text [ swedish ] = "~Blått" ;
         Text [ danish ] = "Blå" ;
         Text [ italian ] = "~Blu" ;
@@ -366,7 +384,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Azul" ;
         Text[ chinese_simplified ] = "è“è‰²(~B)";
         Text[ russian ] = "Ñèíèé";
-        Text[ polish ] = "Niebieski";
+        Text[ polish ] = "~Niebieski";
         Text[ japanese ] = "é’(~B)";
         Text[ chinese_traditional ] = "è—è‰²(~B)";
         Text[ arabic ] = "ÃÒÑŞ";
@@ -379,6 +397,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Blau";
         Text[ finnish ] = "~Sininen";
         Text[ thai ] = "~à¸™à¹‰à¸³à¹€à¸‡à¸´à¸™";
+        Text[ czech ] = "ModrÃ¡";
+        Text[ hebrew ] = "â€®×›×—×•×œâ€¬";
+        Text[ hindi ] = "~à¤¨à¥€à¤²à¤¾";
     };
     NumericField NUM_RED
     {
@@ -420,7 +441,7 @@ ModalDialog DLG_COLOR
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "H~ue" ;
         Text [ english_us ] = "H~ue" ;
-        Text [ portuguese_brazilian ] = "~Farbe" ;
+        Text [ portuguese_brazilian ] = "~Matiz" ;
         Text [ swedish ] = "~Färg" ;
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
@@ -430,7 +451,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Cor" ;
         Text[ chinese_simplified ] = "é¢œè‰²(~U)";
         Text[ russian ] = "Îòòåíîê";
-        Text[ polish ] = "Kolor";
+        Text[ polish ] = "~Odcieñ";
         Text[ japanese ] = "è‰²åˆã„(~U)";
         Text[ chinese_traditional ] = "é¡è‰²(~U)";
         Text[ arabic ] = "Çááæä";
@@ -443,6 +464,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~To de color";
         Text[ finnish ] = "S~ävy";
         Text[ thai ] = "~à¸ªà¸µ";
+        Text[ czech ] = "TÃ³n";
+        Text[ hebrew ] = "â€®×’×•×•×Ÿâ€¬";
+        Text[ hindi ] = "à¤¹~à¤¯à¥‚";
     };
     NumericField NUM_HUE
     {
@@ -462,7 +486,7 @@ ModalDialog DLG_COLOR
         Text = "~Sättigung" ;
         Text [ ENGLISH ] = "~Saturation" ;
         Text [ english_us ] = "~Saturation" ;
-        Text [ portuguese_brazilian ] = "~S?ttigung" ;
+        Text [ portuguese_brazilian ] = "~Saturação" ;
         Text [ swedish ] = "Mä~ttnad" ;
         Text [ danish ] = "Mætning" ;
         Text [ italian ] = "~Saturazione" ;
@@ -472,7 +496,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Saturação" ;
         Text[ chinese_simplified ] = "é¥±å’Œåº¦(~S)";
         Text[ russian ] = "~Íàñûùåíèå";
-        Text[ polish ] = "Nasycenie";
+        Text[ polish ] = "N~asycenie";
         Text[ japanese ] = "å½©åº¦(~S)";
         Text[ chinese_traditional ] = "é£½å’Œåº¦(~S)";
         Text[ arabic ] = "ÇáÅÔÈÇÚ";
@@ -485,6 +509,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Saturació";
         Text[ finnish ] = "K~ylläisyys";
         Text[ thai ] = "~à¸­à¸´à¹ˆà¸¡à¸•à¸±à¸§";
+        Text[ czech ] = "NasycenÃ­";
+        Text[ hebrew ] = "â€®×¨×•×•×™×ª ×”×¦×‘×¢â€¬";
+        Text[ hindi ] = "à¤ª~à¤°à¤¿à¤ªà¥‚à¤°à¥à¤£à¤¤à¤¾";
     };
     NumericField NUM_SATURATION
     {
@@ -504,7 +531,7 @@ ModalDialog DLG_COLOR
         Text = "He~lligkeit" ;
         Text [ ENGLISH ] = "~Luminance" ;
         Text [ english_us ] = "Bright~ness" ;
-        Text [ portuguese_brazilian ] = "He~lligkeit" ;
+        Text [ portuguese_brazilian ] = "~Brilho" ;
         Text [ swedish ] = "~Ljusstyrka" ;
         Text [ danish ] = "Lysstyrke" ;
         Text [ italian ] = "~Luminosità" ;
@@ -514,7 +541,7 @@ ModalDialog DLG_COLOR
         Text [ portuguese ] = "~Brilho" ;
         Text[ chinese_simplified ] = "äº®åº¦(~N)";
         Text[ russian ] = "ßğêîñòü";
-        Text[ polish ] = "Jasnoœæ";
+        Text[ polish ] = "~Jasnoœæ";
         Text[ japanese ] = "æ˜åº¦(~N)";
         Text[ chinese_traditional ] = "äº®åº¦(~N)";
         Text[ arabic ] = "ÇáÅÖÇÁÉ";
@@ -527,6 +554,9 @@ ModalDialog DLG_COLOR
         Text[ catalan ] = "~Brillantor";
         Text[ finnish ] = "Kirk~kaus";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸§à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Jas";
+        Text[ hebrew ] = "â€®×‘×”×™×¨×•×ªâ€¬";
+        Text[ hindi ] = "Bright~ness";
     };
     NumericField NUM_LUMINANCE
     {
@@ -582,7 +612,19 @@ ModalDialog DLG_COLOR
     Text[ catalan ] = "Color";
     Text[ finnish ] = "Väri";
     Text[ thai ] = "à¸ªà¸µ";
+    Text[ czech ] = "Barva";
+    Text[ hebrew ] = "â€®×¦×‘×¢â€¬";
+    Text[ hindi ] = "à¤°à¤‚à¤—";
 };
+
+
+
+
+
+
+
+
+
 
 
 
