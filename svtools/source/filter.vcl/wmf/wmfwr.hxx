@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 13:50:15 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ struct WMFWriterAttrStackMember
     Color aLineColor;
     Color aFillColor;
     Color aTextColor;
+    LineInfo aLineInfo;
     TextAlign eTextAlign;
     RasterOp eRasterOp;
     Font aFont;
@@ -120,6 +121,7 @@ private:
     Color     aSrcLineColor;
     Color     aSrcFillColor;
     Color     aSrcTextColor;
+    LineInfo  aSrcLineInfo;
     RasterOp  eSrcRasterOp;
     FontAlign eSrcTextAlign;
     Font      aSrcFont;
@@ -132,6 +134,7 @@ private:
     Color     aDstLineColor;
     Color     aDstFillColor;
     Color     aDstTextColor;
+    LineInfo  aDstLineInfo;
     RasterOp  eDstROP2;
     FontAlign eDstTextAlign;
     Font      aDstFont;
@@ -181,7 +184,6 @@ private:
     void WMFRecord_Chord(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
     void WMFRecord_CreateBrushIndirect(const Color& rColor);
     void WMFRecord_CreateFontIndirect(const Font & rFont);
-    void WMFRecord_CreatePenIndirect(const Color& rColor);
     void WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo );
     void WMFRecord_DeleteObject(USHORT nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle & rRect);
@@ -219,7 +221,7 @@ private:
 
     USHORT AllocHandle();
     void FreeHandle(USHORT nObjectHandle);
-    void CreateSelectDeletePen(const Color& rColor);
+    void CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo );
     void CreateSelectDeleteFont(const Font & rFont);
     void CreateSelectDeleteBrush(const Color& rColor);
 
