@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text [ ENGLISH ] = "[All]" ;
     Text [ norwegian ] = "Alle" ;
     Text [ italian ] = "[Tutte]" ;
-    Text [ portuguese_brazilian ] = "[Tudo]" ;
+    Text [ portuguese_brazilian ] = "[Todos]" ;
     Text [ portuguese ] = "[Todas]" ;
     Text [ finnish ] = "[Kaikki]" ;
     Text [ danish ] = "[Alle]" ;
@@ -88,12 +88,24 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text[ korean ] = "모두";
     Text[ chinese_traditional ] = "[全部]";
     Text[ arabic ] = "[����]";
-    Text[ turkish ] = "[T�m�]";
+    Text[ turkish ] = "[Hepsi]";
     Text[ catalan ] = "[Tots]";
     Text[ thai ] = "[ทั้งหมด]";
+    Text[ czech ] = "[vše]";
+    Text[ hebrew ] = "‮[הכל]‬";
+    Text[ hindi ] = "[सब]";
 };
 
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
