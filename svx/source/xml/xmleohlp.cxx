@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
  *  last change: $Author: mib $
  *
@@ -510,7 +510,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 
         if( pTempStor )
         {
-            SvStorageRef xDstStor = xDocStor->OpenStorage( rObjName );
+            SvStorageRef xDstStor = xDocStor->OpenOLEStorage( rObjName );
             if( !pTempStor->CopyTo( xDstStor ) )
                 return sal_False;
             xDstStor->Commit();

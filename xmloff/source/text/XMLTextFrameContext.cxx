@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
+ *  last change: $Author: mib $ $Date: 2001-06-20 08:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,11 +998,12 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             }
         }
     }
-    else if( XML_TEXT_FRAME_OBJECT == nType &&
+    if( !pContext &&
+            ( XML_TEXT_FRAME_OBJECT == nType &&
              (XML_NAMESPACE_OFFICE == nPrefix &&
              rLocalName.equalsAsciiL(sXML_document, sizeof(sXML_document)-1)) ||
              (XML_NAMESPACE_MATH == nPrefix &&
-             rLocalName.equalsAsciiL(sXML_math, sizeof(sXML_math)-1)) )
+             rLocalName.equalsAsciiL(sXML_math, sizeof(sXML_math)-1)) ) )
     {
         if( !xPropSet.is() )
         {
