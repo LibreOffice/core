@@ -96,7 +96,6 @@ public class XSLTransformer
 
     private XInputStream xistream;
     private XOutputStream xostream;
-    private BufferedInputStream istream;
     private BufferedOutputStream ostream;
 
     // private static HashMap templatecache;
@@ -175,8 +174,6 @@ public class XSLTransformer
     public void setInputStream(XInputStream aStream)
     {
         xistream = aStream;
-        istream = new BufferedInputStream(
-            new XInputStreamToInputStreamAdapter(xistream), STREAM_BUFFER_SIZE);
     }
 
     public com.sun.star.io.XInputStream getInputStream()
@@ -230,9 +227,19 @@ public class XSLTransformer
                     // buffer input and modify doctype declaration
                     // remove any dtd references but keep localy defined
                     // entities
+
                     ByteArrayOutputStream bufstream = new ByteArrayOutputStream();
-                    for ( int b=0; (b=istream.read())!=-1;)
-                        bufstream.write(b);
+                    final int bsize = 2000;
+                    int rbytes = 0;
+                    byte[][] byteBuffer = new byte[1][bsize];
+                    // rewind
+                    XSeekable xseek = (XSeekable)UnoRuntime.queryInterface(XSeekable.class, xistream);
+                    if (xseek != null) {
+                        xseek.seek(0);
+                    }
+                    while ((rbytes = xistream.readSomeBytes(byteBuffer, bsize)) != 0)
+                        bufstream.write(byteBuffer[0], 0, rbytes);
+
                     String xmlFile = bufstream.toString("UTF-8");
                     if (xmlFile.indexOf("<!DOCTYPE")!=-1){
                         String tag = xmlFile.substring(xmlFile.lastIndexOf("/")+1,
@@ -257,7 +264,6 @@ public class XSLTransformer
                     StreamSource xmlsource = new StreamSource(
                         new ByteArrayInputStream(xmlFile.getBytes("UTF-8")));
 
-                    // StreamSource xmlsource = new StreamSource(istream);
                     ByteArrayOutputStream resultbuf = new ByteArrayOutputStream();
                     StreamResult xmlresult = new StreamResult(resultbuf);
                     TransformerFactory tfactory = TransformerFactory.newInstance();
