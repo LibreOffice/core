@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase_ex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-05 08:46:40 $
+ *  last change: $Author: vg $ $Date: 2001-09-17 12:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #else
 #include <malloc.h>
 #endif
-#include <memory.h>
+#include <string.h>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
