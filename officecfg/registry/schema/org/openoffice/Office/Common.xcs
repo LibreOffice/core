@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-05-24 11:00:07 $
+ *  last change: $Author: os $ $Date: 2002-05-27 08:39:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2837,6 +2837,9 @@
           <value>true</value>
         </prop>
       </group>
+      <prop oor:name="HelpStyleSheet" oor:type="xs:string">
+        <value>Default</value>
+      </prop>
     </group>
     <group oor:name="Java">
       <group oor:name="Applet">
