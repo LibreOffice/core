@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:44:34 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUILEMENT_HPP_
 #include <drafts/com/sun/star/ui/XUIElement.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -118,16 +121,12 @@ struct SfxObjectBar_Impl
     USHORT              nPos;
     USHORT              nIndex;
     sal_Bool            bDestroy;
-//  SfxToolBoxManager*  pTbx;
     String              aName;
-//  ResMgr*             pResMgr;
     SfxInterface*       pIFace;
 
     SfxObjectBar_Impl() :
         nId(0),
         nMode(0),
-//      pTbx(0),
-//      pResMgr(0),
         pIFace(0),
         bDestroy(sal_False)
     {}
@@ -137,20 +136,12 @@ struct SfxObjectBar_Impl
 // Dieser struct h"alt alle relevanten Informationen "uber die Statuszeile bereit.
 struct SfxStatBar_Impl
 {
-    ResMgr*                 pResMgr;
-    SfxShell*               pShell;
-    SfxBindings*            pBindings;
     USHORT                  nId;
-    SfxStatusBarManager*    pStatusBar;
     BOOL                    bOn;
     BOOL                    bTemp;
 
     SfxStatBar_Impl() :
-        pResMgr(0),
-        pShell(0),
-        pBindings(0),
         nId(0),
-        pStatusBar(0),
         bOn(TRUE),
         bTemp(FALSE)
     {}
@@ -277,8 +268,6 @@ protected:
     SvUShorts               aSortedList;
     SfxStatBar_Impl         aStatBar;
     std::vector< SfxObjectBar_Impl > aObjBarList;
-//  SfxObjectBar_Impl       aObjBars[SFX_OBJECTBAR_MAX];
-//  SfxObjectBarList_Impl   aObjBarLists[SFX_OBJECTBAR_MAX];
     Rectangle               aClientArea;
     Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
@@ -394,6 +383,8 @@ public:
     void                    UpdateStatusBar_Impl();
     SfxStatusBarManager*    GetStatusBarManager_Impl();
     SfxStatusBarManager*    MakeStatusBarManager_Impl( BOOL bCreate );
+    SfxStatBar_Impl*        GetStatusBar_Impl();
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator();
 };
 
 class SfxPIWorkWin_Impl : public SfxWorkWindow
