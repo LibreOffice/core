@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-06 13:49:02 $
+ *  last change: $Author: vg $ $Date: 2002-05-08 09:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ namespace dbaccess
             BOOL_COMPARISON_DEFAULT = 0, // column = 0, column = 1
             BOOL_COMPARISON_SQL     = 1, // column Is true, column Is false
             BOOL_COMPARISON_MISC    = 2, // column = false, column = true
-            BOOL_COMPARISON_ACCESS  = 3, // column = 0, column = -1
+            BOOL_COMPARISON_ACCESS  = 3  // column = 0, column = -1
         };
 
         void SAL_CALL disposing(void);
