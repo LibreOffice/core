@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-19 18:05:53 $
+ *  last change: $Author: mtg $ $Date: 2001-07-20 12:25:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,7 +966,7 @@ SvStringsDtor* SwStyleNameMapper::NewProgNameArray( SvStringsDtor*& pProgNameArr
         pProgNameArray = new SvStringsDtor( nCount, 1 );
         while (pTable->nLength)
         {
-            String* pStr = new String( pTable->pChar, pTable->nLength );
+            String* pStr = new String( pTable->pChar, RTL_TEXTENCODING_ASCII_US, pTable->nLength );
             pProgNameArray->Insert( pStr, pProgNameArray->Count() );
             pTable++;
         }
