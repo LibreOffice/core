@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:55:17 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabDialog TAB_PAGE
     Text [ finnish ] = "Sivun asetukset" ;
     Text [ danish ] = "Sideopsætning" ;
     Text [ french ] = "Mise en page" ;
-    Text [ swedish ] = "Inrätta sida" ;
+    Text [ swedish ] = "Ställ in sida" ;
     Text [ dutch ] = "Pagina-instelling" ;
     Text [ spanish ] = "Preparar página" ;
     Text [ english_us ] = "Page Setup" ;
@@ -97,7 +97,7 @@ TabDialog TAB_PAGE
                 Text [ italian ] = "Pagina" ;
                 Text [ portuguese_brazilian ] = "Página" ;
                 Text [ portuguese ] = "Página" ;
-                Text [ finnish ] = "Sivu" ;
+                Text [ finnish ] = "Sivu " ;
                 Text [ danish ] = "Side" ;
                 Text [ french ] = "Page" ;
                 Text [ swedish ] = "Sida" ;
@@ -144,6 +144,7 @@ TabDialog TAB_PAGE
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fondo";
+                Text[ finnish ] = "Tausta";
             };
         };
     };
@@ -176,7 +177,7 @@ TabDialog TAB_PAGE
         Text [ italian ] = "Indietro" ;
         Text [ portuguese_brazilian ] = "Devolver" ;
         Text [ portuguese ] = "Anterior" ;
-        Text [ finnish ] = "Palaa" ;
+        Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
         Text [ french ] = "Précédent" ;
         Text [ swedish ] = "Tillbaka" ;
