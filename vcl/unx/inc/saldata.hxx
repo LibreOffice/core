@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 14:46:35 $
+ *  last change: $Author: svesik $ $Date: 2002-03-18 01:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ typedef SIG_FUNC_TYP *SIG_TYP;
 
 DECLARE_LIST( SalDisplays, SalDisplay* )
 
-#if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD
+#if defined SCO || defined LINUX || defined NETBSD || defined AIX || defined HPUX || defined FREEBSD || defined IRIX
 #include <pthread.h>
 #else
 typedef unsigned int pthread_t;
