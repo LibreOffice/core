@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,11 +191,11 @@ void SwFlyFreeFrm::MakeAll()
         return;
     }
 
-    if ( !GetAnchor() || IsLocked() || IsColLocked() )
+    if ( !GetAnchorFrm() || IsLocked() || IsColLocked() )
         return;
-    if( !GetPage() && GetAnchor() && GetAnchor()->IsInFly() )
+    if( !GetPage() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
     {
-        SwFlyFrm* pFly = GetAnchor()->FindFlyFrm();
+        SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
         SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
         if( pPage )
             pPage->SwPageFrm::AppendFly( this );
@@ -213,8 +213,8 @@ void SwFlyFreeFrm::MakeAll()
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
-        SWRECTFN( this )
-        const SwFmtFrmSize *pSz;
+            SWRECTFN( this )
+            const SwFmtFrmSize *pSz;
         {   //Zusaetzlicher Scope, damit aAccess vor dem Check zerstoert wird!
 
             SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
@@ -255,11 +255,12 @@ void SwFlyFreeFrm::MakeAll()
             if ( !bValidPos )
             {
                 const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
-                MakeFlyPos();
+                // OD 2004-03-23 #i26791# - use new method <MakeObjPos()>
+                MakeObjPos();
                 if( aOldPos == (Frm().*fnRect->fnGetPos)() )
                 {
-                    if( !bValidPos && GetAnchor()->IsInSct() &&
-                        !GetAnchor()->FindSctFrm()->IsValid() )
+                    if( !bValidPos && GetAnchorFrm()->IsInSct() &&
+                        !GetAnchorFrm()->FindSctFrm()->IsValid() )
                         bValidPos = TRUE;
                 }
                 else
@@ -296,7 +297,7 @@ bool SwFlyFreeFrm::HasEnvironmentAutoSize() const
 {
     bool bRetVal = false;
 
-    const SwFrm* pToBeCheckedFrm = GetAnchor();
+    const SwFrm* pToBeCheckedFrm = GetAnchorFrm();
     while ( pToBeCheckedFrm &&
             !pToBeCheckedFrm->IsPageFrm() )
     {
@@ -352,7 +353,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     if ( bBot || bRig )
     {
         FASTBOOL bAgain = FALSE;
-        if ( bBot && !GetDrawObjs() && !GetAnchor()->IsInTab() )
+        if ( bBot && !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
         {
             SwFrm* pHeader = FindFooterOrHeader();
             // In a header, correction of the position is no good idea.
@@ -567,7 +568,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         //haengen.
         SwRect aOld( AddSpacesToFrm() );
         SwPageFrm *pOldPage = GetPage();
-        GetAnchor()->RemoveFly( this );
+        AnchorFrm()->RemoveFly( this );
 
         if( FLY_PAGE == pAnch->GetAnchorId() )
         {
@@ -634,8 +635,8 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
     }
 
     const SdrObjectPtr pObj = pNew->GetVirtDrawObj();
-    ASSERT( pNew->GetAnchor(), "Fly without Anchor" );
-    SwFlyFrm *pFly = pNew->GetAnchor()->FindFlyFrm();
+    ASSERT( pNew->GetAnchorFrm(), "Fly without Anchor" );
+    const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
         UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
@@ -660,7 +661,6 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
         ((SwFlyFreeFrm*)pNew)->SetPage( this );
         pNew->InvalidatePage( this );
 
-#ifdef ACCESSIBLE_LAYOUT
         // Notify accessible layout. That's required at this place for
         // frames only where the anchor is moved. Creation of new frames
         // is additionally handled by the SwFrmNotify class.
@@ -671,8 +671,6 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
             static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
                                       ->AddAccessibleFrm( pNew );
         }
-#endif
-
     }
 
     if( pNew->GetDrawObjs() )
@@ -689,9 +687,6 @@ void SwPageFrm::AppendFly( SwFlyFrm *pNew )
             }
         }
     }
-
-    //fix(3018): Kein pNew->Calc() oder sonstiges hier.
-    //Code enfernt in flylay.cxx Rev 1.51
 }
 
 /*************************************************************************
@@ -720,7 +715,6 @@ void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
     if ( pToRemove->IsFlyInCntFrm() )
         return;
 
-#ifdef ACCESSIBLE_LAYOUT
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
@@ -731,7 +725,6 @@ void SwPageFrm::RemoveFly( SwFlyFrm *pToRemove )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
                                   ->DisposeAccessibleFrm( pToRemove, sal_True );
     }
-#endif
 
     //Collections noch nicht loeschen. Das passiert am Ende
     //der Action im RemoveSuperfluous der Seite - angestossen von gleich-
@@ -775,7 +768,6 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         return;
     }
 
-#ifdef ACCESSIBLE_LAYOUT
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
@@ -786,7 +778,6 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
                                   ->DisposeAccessibleFrm( pToMove, sal_True );
     }
-#endif
 
     //Die FlyColl kann bereits weg sein, weil der DTor der Seite
     //gerade 'laeuft'
@@ -810,7 +801,6 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     pToMove->SetNotifyBack();
     pDest->InvalidateFlyCntnt();
 
-#ifdef ACCESSIBLE_LAYOUT
     // Notify accessible layout. That's required at this place for
     // frames only where the anchor is moved. Creation of new frames
     // is additionally handled by the SwFrmNotify class.
@@ -821,7 +811,6 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
         static_cast< SwRootFrm * >( GetUpper() )->GetCurrShell()->Imp()
                                   ->AddAccessibleFrm( pToMove );
     }
-#endif
 }
 
 /*************************************************************************
@@ -839,8 +828,8 @@ void SwPageFrm::AppendDrawObj( SwDrawContact *pNew )
         ((SwRootFrm*)GetUpper())->InvalidateBrowseWidth();
 
     const SdrObjectPtr pObj = pNew->GetMaster();
-    ASSERT( pNew->GetAnchor(), "Contact without Anchor" );
-    SwFlyFrm *pFly = pNew->GetAnchor()->FindFlyFrm();
+    ASSERT( pNew->GetAnchorFrm(), "Contact without Anchor" );
+    SwFlyFrm *pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
         UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
@@ -864,6 +853,10 @@ void SwPageFrm::AppendDrawObj( SwDrawContact *pNew )
 #endif
     }
     pNew->ChgPage( this );
+
+    // OD 2004-03-31 #i26791# - invalidate page in order to force a reformat of
+    // object layout of the page.
+    InvalidateFlyLayout();
 }
 
 // OD 20.05.2003 #108784# - adding 'virtual' drawing object to page frame
@@ -876,7 +869,7 @@ void SwPageFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
     }
 
     ASSERT( _pDrawVirtObj->GetAnchorFrm(), "virtual draw contact without anchor" );
-    SwFlyFrm *pFly = _pDrawVirtObj->GetAnchorFrm()->FindFlyFrm();
+    const SwFlyFrm* pFly = _pDrawVirtObj->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && _pDrawVirtObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
         UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
@@ -904,6 +897,10 @@ void SwPageFrm::AppendVirtDrawObj( SwDrawContact* _pDrawContact,
 #endif
     }
     _pDrawVirtObj->SetPageFrm( this );
+
+    // OD 2004-04-05 #i26791# - invalidate page in order to force a reformat of
+    // object layout of the page.
+    InvalidateFlyLayout();
 }
 
 void SwPageFrm::RemoveDrawObj( SwDrawContact *pToRemove )
@@ -1017,11 +1014,11 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             // OD 06.11.2003 #i22305#
             if ( !bFollowTextFlow )
             {
-                pClip = pFly->GetAnchor()->FindPageFrm();
+                pClip = pFly->GetAnchorFrm()->FindPageFrm();
             }
             else
             {
-                pClip = pFly->GetAnchor();
+                pClip = pFly->GetAnchorFrm();
             }
 
             rRect = pClip->Frm();
@@ -1053,7 +1050,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             {
                 ASSERT( false,
                         "::CalcClipRect(..) - frame, vertical position is oriented at, is missing .");
-                pVertPosOrientFrm = pFly->GetAnchor();
+                pVertPosOrientFrm = pFly->GetAnchorFrm();
             }
 
             if ( !bFollowTextFlow )
@@ -1086,14 +1083,14 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     }
                 }
                 const SwLayoutFrm* pHoriClipFrm =
-                        pFly->GetAnchor()->FindPageFrm()->GetUpper();
-                SWRECTFN( pFly->GetAnchor() )
+                        pFly->GetAnchorFrm()->FindPageFrm()->GetUpper();
+                SWRECTFN( pFly->GetAnchorFrm() )
                 (rRect.*fnRect->fnSetLeft)( (pHoriClipFrm->Frm().*fnRect->fnGetLeft)() );
                 (rRect.*fnRect->fnSetRight)((pHoriClipFrm->Frm().*fnRect->fnGetRight)());
             }
             else
             {
-                const SwFrm *pClip = pFly->GetAnchor();
+                const SwFrm *pClip = pFly->GetAnchorFrm();
                 SWRECTFN( pClip )
                 const SwLayoutFrm *pUp = pClip->GetUpper();
                 const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
@@ -1187,8 +1184,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         }
         else
         {
-            const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
-            SWRECTFN( pFly->GetAnchor() )
+            const SwFrm *pUp = pFly->GetAnchorFrm()->GetUpper();
+            SWRECTFN( pFly->GetAnchorFrm() )
             while( pUp->IsColumnFrm() || pUp->IsSctFrm() || pUp->IsColBodyFrm())
                 pUp = pUp->GetUpper();
             rRect = pUp->Frm();
@@ -1241,16 +1238,17 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
         if ( FLY_IN_CNTNT == rAnch.GetAnchorId() )
         {
-            const SwFrm *pFrm = pC->GetAnchor();
-            if( !pFrm )
+            const SwFrm* pAnchorFrm = pC->GetAnchorFrm( pSdrObj );
+            if( !pAnchorFrm )
             {
+                ASSERT( false, "<::CalcClipRect(..)> - missing anchor frame." );
                 ((SwDrawContact*)pC)->ConnectToLayout();
-                pFrm = pC->GetAnchor();
+                pAnchorFrm = pC->GetAnchorFrm();
             }
-            const SwFrm *pUp = pFrm->GetUpper();
+            const SwFrm* pUp = pAnchorFrm->GetUpper();
             rRect = pUp->Prt();
             rRect += pUp->Frm().Pos();
-            SWRECTFN( pFrm )
+            SWRECTFN( pAnchorFrm )
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
             const SvxULSpaceItem &rUL = pFmt->GetULSpace();
@@ -1267,10 +1265,12 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             else
             {
-                nTop = (*fnRect->fnYInc)( (aSnapRect.*fnRect->fnGetTop)(),
-                                          rUL.GetLower() + nTmpH - nHeight );
+                // OD 2004-04-13 #i26791# - value of <nTmpH> is needed to
+                // calculate value of <nTop>.
                 nTmpH = bVert ? pSdrObj->GetCurrentBoundRect().GetWidth() :
                                 pSdrObj->GetCurrentBoundRect().GetHeight();
+                nTop = (*fnRect->fnYInc)( (aSnapRect.*fnRect->fnGetTop)(),
+                                          rUL.GetLower() + nTmpH - nHeight );
             }
             nHeight = 2*nHeight - nTmpH - rUL.GetLower() - rUL.GetUpper();
             (rRect.*fnRect->fnSetTopAndHeight)( nTop, nHeight );
@@ -1279,15 +1279,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         {
             // OD 23.06.2003 #108784# - restrict clip rectangle for drawing
             // objects in header/footer to the page frame.
-            const SwFrm* pAnchorFrm = 0L;
-            if ( pSdrObj->ISA(SwDrawVirtObj) )
-            {
-                pAnchorFrm = static_cast<const SwDrawVirtObj*>(pSdrObj)->GetAnchorFrm();
-            }
-            else
-            {
-                pAnchorFrm = pC->GetAnchor();
-            }
+            // OD 2004-03-29 #i26791#
+            const SwFrm* pAnchorFrm = pC->GetAnchorFrm( pSdrObj );
             if ( pAnchorFrm && pAnchorFrm->FindFooterOrHeader() )
             {
                 // clip frame is the page frame the header/footer is on.
