@@ -23456,3 +23456,9 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx185913207@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
 ?GetUILightState@Svx3DWin@@ABE_NAAVImageButton@@@Z
 ?SetUILightState@Svx3DWin@@AAEXAAVImageButton@@_N@Z
+??1NotifyList@@QAE@XZ
+?DataChanged@SvxAlignmentTabPage@@EAEXABVDataChangedEvent@@@Z
+?DataChanged@SvxBorderTabPage@@MAEXABVDataChangedEvent@@@Z
+??1SvxWinOrientation@@QAE@XZ
+?HandleUpdatedSystemsettings@SvxWinOrientation@@QAEXXZ
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABG@Z
