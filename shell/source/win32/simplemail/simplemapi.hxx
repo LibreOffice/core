@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplemapi.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-14 08:09:21 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,27 +59,25 @@
  *
  ************************************************************************/
 
-#ifndef _SIMPLEMAPI_HXX_
-#define _SIMPLEMAPI_HXX_
+#ifndef INCLUDED_SIMPLEMAPI_HXX
+#define INCLUDED_SIMPLEMAPI_HXX
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-
-#include <memory>
-
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <mapi.h>
 #include <mapix.h>
 
-//----------------------------------------------------------
-// class declaration
-//----------------------------------------------------------
-
 class CSimpleMapi
 {
 public:
-    static CSimpleMapi* create( );
+    /**
+        @throws std::runtime_error
+        if either the mapi32.dll could not be loaded at all
+        or necessary function exports are missing
+    */
+    CSimpleMapi(); // throws std::runtime_error;
+
+    ~CSimpleMapi();
 
     ULONG MAPILogon(
         ULONG ulUIParam,
@@ -103,23 +101,10 @@ public:
         ULONG ulReserved );
 
 private:
-    CSimpleMapi( );
-    ~CSimpleMapi( );
-
-    typedef std::auto_ptr< CSimpleMapi > SIMPLEMAPI_SINGLETON_DESTROYER_T;
-
-private:
     HMODULE         m_hMapiDll;
     LPMAPILOGON     m_lpfnMapiLogon;
     LPMAPILOGOFF    m_lpfnMapiLogoff;
     LPMAPISENDMAIL  m_lpfnMapiSendMail;
-
-    static CSimpleMapi*                     s_Instance;
-    static osl::Mutex                       s_aMutex;
-    static SIMPLEMAPI_SINGLETON_DESTROYER_T s_SingletonDestroyer;
-
-    friend SIMPLEMAPI_SINGLETON_DESTROYER_T;
 };
-
 
 #endif
