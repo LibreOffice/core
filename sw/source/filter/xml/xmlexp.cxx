@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-22 12:31:45 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
 #include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
@@ -135,6 +141,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::drawing;
 
 #ifdef XML_CORE_API
 void SwXMLExport::SetCurPaM( SwPaM& rPaM, sal_Bool bWhole, sal_Bool bTabOnly )
@@ -376,6 +383,23 @@ void SwXMLExport::_ExportContent()
 
     } while( bContinue );
 #else
+
+    // export forms
+    Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
+    if (xDrawPageSupplier.is())
+    {
+        // export only if we actually have elements
+        Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
+        if (xPage.is())
+        {
+            SvXMLElementExport aForms(*this, XML_NAMESPACE_OFFICE,
+                                      sXML_forms, sal_True, sal_True);
+
+            GetFormExport()->seekPage(xPage);
+            GetFormExport()->exportForms(xPage);
+        }
+    }
+
     GetTextParagraphExport()->exportTrackedChanges( sal_False );
     GetTextParagraphExport()->exportTextDeclarations();
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );

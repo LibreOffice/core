@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-18 17:57:47 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
@@ -595,9 +601,48 @@ void SwXMLImport::endDocument( void )
     pSttNdIdx = 0;
 }
 
+
+// Locally derive XMLTextShapeImportHelper, so we can take care of the
+// form import This is Writer, but not text specific, so it should go
+// here!
+class SvTextShapeImportHelper : public XMLTextShapeImportHelper
+{
+    // hold own reference form import helper, because the SvxImport
+    // stored in the superclass, from whom we originally got the
+    // reference, is already destroyed when we want to use it in the
+    // destructor
+    UniReference< ::xmloff::OFormLayerXMLImport > rFormImport;
+
+public:
+
+    SvTextShapeImportHelper(SvXMLImport& rImp);
+    virtual ~SvTextShapeImportHelper();
+};
+
+SvTextShapeImportHelper::SvTextShapeImportHelper(SvXMLImport& rImp) :
+    XMLTextShapeImportHelper(rImp)
+{
+    if (rImp.GetFormImport().is())
+    {
+        Reference<drawing::XDrawPageSupplier> xSupplier(rImp.GetModel(),
+                                                        UNO_QUERY);
+        if (xSupplier.is())
+        {
+            rImp.GetFormImport()->startPage(xSupplier->getDrawPage());
+            rFormImport = rImp.GetFormImport();
+        }
+    }
+}
+
+SvTextShapeImportHelper::~SvTextShapeImportHelper()
+{
+    rFormImport->endPage();
+}
+
+
 XMLShapeImportHelper* SwXMLImport::CreateShapeImport()
 {
-    return new XMLTextShapeImportHelper( *this );
+    return new SvTextShapeImportHelper( *this );
 }
 
 SvXMLImportContext *SwXMLImport::CreateFontDeclsContext(

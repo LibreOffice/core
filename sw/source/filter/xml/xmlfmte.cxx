@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:58:53 $
+ *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,13 @@
 #include <cellatr.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#endif
+
 #ifndef _XMLEXP_HXX
 #include "xmlexp.hxx"
 #endif
@@ -127,6 +134,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
+using namespace ::com::sun::star::drawing;
 
 void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 {
@@ -251,8 +259,18 @@ void SwXMLExport::_ExportAutoStyles()
     GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
     GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
 
+    // collect form autostyle
+    Reference<XDrawPageSupplier> xDrawPageSupplier( GetModel(), UNO_QUERY );
+    if (xDrawPageSupplier.is() && GetFormExport().is())
+    {
+        Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
+        if (xPage.is())
+            GetFormExport()->examineForms(xPage);
+    }
+
     GetTextParagraphExport()->exportTextAutoStyles();
     GetPageExport()->exportAutoStyles();
+    GetFormExport()->exportAutoStyles();
 
     // we rely on data styles being written after cell styles in the
     // ExportFmt() method; so be careful when changing order.
