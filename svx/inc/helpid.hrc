@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:44:12 $
+ *  last change: $Author: ka $ $Date: 2001-06-27 09:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,13 +486,16 @@
 
 #define HID_GALLERY_MN_COPYCLIPBOARD            (HID_SVX_START + 402)
 #define HID_GALLERY_MN_PASTECLIPBOARD           (HID_SVX_START + 403)
+#define HID_GALLERY_PREVIEW                     (HID_SVX_START + 404)
+#define HID_GALLERY_ICONVIEW                    (HID_SVX_START + 405)
+#define HID_GALLERY_LISTVIEW                    (HID_SVX_START + 406)
 
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END         HID_GALLERY_MN_PASTECLIPBOARD
+#define ACT_SVX_HID_END HID_GALLERY_LISTVIEW
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
