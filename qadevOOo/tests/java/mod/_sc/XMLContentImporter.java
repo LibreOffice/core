@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLContentImporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:15:58 $
+ *  last change:$Date: 2003-09-08 12:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,21 @@
 
 package mod._sc;
 
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.document.XImporter;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.document.XImporter;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by service
@@ -186,7 +186,6 @@ public class XMLContentImporter extends TestCase {
         // adding relations
         tEnv.addObjRelation("TargetDocument", comp) ;
 
-        final String impCellContent = "XMLContentImporter_Test";
         final String impValue = "XMLContentImporter_test" ;
         // adding relation for XDocumentHandler
         String[][] xml = new String[][] {
@@ -208,9 +207,6 @@ public class XMLContentImporter extends TestCase {
         //save to log content before import
         final PrintWriter fLog = log;
         final XSpreadsheets xSheets = xSheetDoc.getSheets();
-        XIndexAccess xSheetsIndexArray = (XIndexAccess)
-            UnoRuntime.queryInterface(XIndexAccess.class, xSheets);
-        XSpreadsheet xSheet = null;
 
         log.println("Sheets before importing :") ;
         String[] names = xSheets.getElementNames() ;
