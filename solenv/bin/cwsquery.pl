@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsquery.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-06-26 00:23:20 $
+#   last change: $Author: rt $ $Date: 2004-08-12 15:10:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,11 +72,16 @@ use Getopt::Long;
 use Cwd;
 
 #### module lookup
+my @lib_dirs;
+BEGIN {
+    if ( !defined($ENV{SOLARENV}) ) {
+        die "No environment found (environment variable SOLARENV is undefined)";
+    }
+    push(@lib_dirs, "$ENV{SOLARENV}/bin/modules");
+    push(@lib_dirs, "$ENV{COMMON_ENV_TOOLS}/modules") if defined($ENV{COMMON_ENV_TOOLS});
+}
+use lib (@lib_dirs);
 
-use lib ("$ENV{SOLARENV}/bin/modules");
-if (defined $ENV{COMMON_ENV_TOOLS}) {
-    unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
-};
 use Cws;
 
 #### script id #####
@@ -84,7 +89,7 @@ use Cws;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.2 $ ';
+my $id_str = ' $Revision: 1.3 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
