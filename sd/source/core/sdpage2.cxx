@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:09:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,34 +511,7 @@ SdPage::SdPage(const SdPage& rSrcPage) :
 
 SdrPage* SdPage::Clone() const
 {
-    SdPage* pPage = new SdPage(*this);
-
-    if( (PK_STANDARD == ePageKind) && !IsMasterPage() )
-    {
-        // preserve presentation order on slide duplications
-        SdrObjListIter aSrcIter( *this, IM_DEEPWITHGROUPS );
-        SdrObjListIter aDstIter( *pPage, IM_DEEPWITHGROUPS );
-
-        while( aSrcIter.IsMore() && aDstIter.IsMore() )
-        {
-            SdrObject* pSrc = aSrcIter.Next();
-            SdrObject* pDst = aDstIter.Next();
-
-            SdAnimationInfo* pSrcInfo = ((SdDrawDocument*)pModel)->GetAnimationInfo(pSrc);
-            if( pSrcInfo && (pSrcInfo->nPresOrder != LIST_APPEND) )
-            {
-                SdAnimationInfo* pDstInfo = ((SdDrawDocument*)pModel)->GetAnimationInfo(pDst);
-                DBG_ASSERT( pDstInfo, "shape should have an animation info after clone!" );
-
-                if( pDstInfo )
-                    pDstInfo->nPresOrder = pSrcInfo->nPresOrder;
-            }
-        }
-
-        DBG_ASSERT( !aSrcIter.IsMore() && !aDstIter.IsMore(), "unequal shape numbers after a page clone?" );
-    }
-
-    return(pPage);
+    return new SdPage(*this);
 }
 
 /*************************************************************************
