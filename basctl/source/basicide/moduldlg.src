@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ spanish ] = "Administrar";
     TEXT[ english_us ] = "Macro Organizer";
     TEXT[ chinese_simplified ] = "¹ÜÀíºê";
-    TEXT[ russian ] = "Îğãàíèçàòîğ ìàêğîñîâ";
+    TEXT[ russian ] = "Îğãàíèçîâàòü ìàêğîñû";
     TEXT[ polish ] = "Zarz¹dzaj makrami";
     TEXT[ japanese ] = "Ï¸Û‚ÌŠÇ—";
     TEXT[ chinese_traditional ] = "ºŞ²z¥¨¶°";
@@ -134,7 +134,7 @@ TabDialog RID_TD_ORGANIZE
                 Text [ danish ] = "Biblioteker" ;
                 Text [ portuguese ] = "Bibliotecas" ;
                 Text [ portuguese_brazilian ] = "Bibliotheken" ;
-                Text[ chinese_simplified ] = "¿â";
+                Text[ chinese_simplified ] = "³ÌĞò¿â";
                 Text[ russian ] = "Áèáëèîòåêè";
                 Text[ polish ] = "Biblioteki";
                 Text[ japanese ] = "×²ÌŞ×Ø";
@@ -334,7 +334,7 @@ TabPage RID_TP_MODULS
         Text [ english_us ] = "~New Dialog..." ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ĞÂ½¨¶Ô»°¿ò(~N)...";
-        Text[ russian ] = "Ñîçäàòü äèàëîã...";
+        Text[ russian ] = "Íîâûé äèàëîã...";
         Text[ polish ] = "Nowy dialog...";
         Text[ japanese ] = "V‚µ‚¢ÀŞ²±Û¸Ş(~N)...";
         Text[ chinese_traditional ] = "·s«Ø¹ï¸ÜÄæ(~N)...";
@@ -394,7 +394,7 @@ TabPage RID_TP_LIBS
         Text [ danish ] = "Bibliotek" ;
         Text [ portuguese ] = "Bibliote~ca" ;
         Text [ portuguese_brazilian ] = "Bibliothe~k" ;
-        Text[ chinese_simplified ] = "¿â(~L)";
+        Text[ chinese_simplified ] = "³ÌĞò¿â(~L)";
         Text[ russian ] = "Áèáëèîòåêà";
         Text[ polish ] = "Biblioteka";
         Text[ japanese ] = "×²ÌŞ×Ø(~L)";
@@ -509,7 +509,7 @@ TabPage RID_TP_LIBS
         Text [ spanish ] = "~Contraseña..." ;
         Text [ english_us ] = "~Password..." ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ russian ] = "Ïàğîëü...";
         Text[ polish ] = "Has³o...";
         Text[ japanese ] = "Êß½Ü°ÄŞ(~P)";
@@ -687,9 +687,9 @@ ModalDialog RID_DLG_LIBS
         /* ### ACHTUNG: Neuer Text in Resource? Als Referenz einfügen (nur lesen) : Als Referenz einf³gen (nur lesen) */
         Text = "Als Referenz einfügen (nur lesen)" ;
         Text [ English ] = "Insert as reference (read only)" ;
-        Text [ english_us ] = "Insert as reference (read only)" ;
+        Text [ english_us ] = "Insert as reference (read-only)" ;
         Text [ portuguese_brazilian ] = "Referenzen (nur lesen)" ;
-        Text [ swedish ] = "Infoga som referens (endast läsning)" ;
+        Text [ swedish ] = "Infoga som referens (bara läsning)" ;
         Text [ danish ] = "Indsæt som reference (skrivebeskyttet)" ;
         Text [ italian ] = "Inserisci come riferimento (sola lettura)" ;
         Text [ spanish ] = "Insertar como referencia (solo leer)" ;
@@ -746,7 +746,7 @@ ModalDialog RID_DLG_LIBS
         Text [ spanish ] = "Reemplazar bibliotecas existentes" ;
         Text [ french ] = "Remplacer bibliothèques existantes" ;
         Text [ dutch ] = "Bestaande bibliotheken vervangen" ;
-        Text[ chinese_simplified ] = "¸üÌæÏÖ´æµÄ¿â";
+        Text[ chinese_simplified ] = "¸üÌæÏÖ´æµÄ³ÌĞò¿â";
         Text[ russian ] = "Çàìåíèòü ñóùåñòâóşùèå áèáëèîòåêè";
         Text[ polish ] = "Zamieñ istniej¹ce biblioteki";
         Text[ japanese ] = "Šù‘¶‚·‚é×²ÌŞ×Ø‚ğ’uŠ·‚¦‚é";
@@ -792,7 +792,7 @@ ModalDialog RID_DLG_NEWLIB
         Text [ french ] = "~Nom :" ;
         Text [ dutch ] = "~Naam:" ;
         Text [ portuguese ] = "~Nome:" ;
-        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)£º";
         Text[ russian ] = "Èìÿ:";
         Text[ polish ] = "Nazwa:";
         Text[ japanese ] = "–¼‘O:(~N)";
@@ -817,9 +817,9 @@ ModalDialog RID_DLG_NEWLIB
         Text = "~Separate Datei anlegen" ;
         Text [ English ] = "~Separate Datei anlegen" ;
         Text [ portuguese ] = "~Criar ficheiro separado" ;
-        Text [ english_us ] = "~Attach file" ;
+        Text [ english_us ] = "~Create separate file" ;
         Text [ portuguese_brazilian ] = "~Separate Datei anlegen" ;
-        Text [ swedish ] = "~Skapa separat fil" ;
+        Text [ swedish ] = "Skapa ~separat fil" ;
         Text [ danish ] = "Opret separat fil" ;
         Text [ italian ] = "~Crea file distinto" ;
         Text [ spanish ] = "Crear archivo ~separado" ;
@@ -827,7 +827,7 @@ ModalDialog RID_DLG_NEWLIB
         Text [ dutch ] = "~Apart bestand maken" ;
         Hide = TRUE ;
         Text[ chinese_simplified ] = "½¨Á¢Ò»¸öÁíÍâµÄÎÄ¼ş(~A)";
-        Text[ russian ] = "Ñîçäàòü êàê îòäåëüíûé ôàéë";
+        Text[ russian ] = "Ñîçäàòü îòäåëüíûé ôàéë";
         Text[ polish ] = "Utwórz oddzielny plik";
         Text[ japanese ] = "‚Ù‚©‚ÌÌ§²Ù‚ğ“Y•t(~A)";
         Text[ chinese_traditional ] = "¥t¥~¶}±Ò·sÀÉ(~A)";
