@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-20 07:46:29 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String ERR_INET_NAME_RESOLVE
     Text[ russian ] = "Ξοπεδελθςό θμÿ κξμοώςεπΰ νε σδΰεςρÿ\n";
     Text[ polish ] = "Nazwy komputera nie moΏna by³o przetworzyζ\n";
     Text[ japanese ] = "Ξ½Δ–Ό‚Ν©‚Β‚©‚θ‚ά‚Ή‚ρ‚Ε‚µ‚½\n";
-    Text[ chinese_traditional ] = "µLªk§δ¨μ¥DΉqΈ£¦μ§}΅C\n";
+    Text[ chinese_traditional ] = "µLªk§δ¨μ¥DΎχ¦a§}΅C\n";
     Text[ arabic ] = "ΚΪΠΡ ΚΝανα ΗΣγ ΗαΝΗΣΘ\n";
     Text[ greek ] = "Δεν ήταν δυνατόν γίνει ανάλυση του ονόματος του υπολογιστή $(ARG1)";
     Text[ korean ] = "ΔΔΗ»ΕΝ ΐΜΈ§ΐ» Θ®ΐΞΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω \n";
@@ -107,7 +107,7 @@ String ERR_INET_CONNECT
     Text[ chinese_traditional ] = "µLªk©M Internet «Ψ¥ί³sµ²΅C";
     Text[ arabic ] = "ΚΪΠΡ Ϊγα ΗΚΥΗα ΕδΚΡδΚ";
     Text[ greek ] = "Δεν ήταν δυνατόν να πραγματοποιηθεί η σύνδεση με το Internet";
-    Text[ korean ] = "ΐΞΕΝ³έ ΑΆΌΣΐΜ ΏΟΌΊµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΐΞΕΝ³έ ΑΆΌΣΐ»΅΅±ΈΓΰΗΟΑφ ΈψΗί½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Internet baπlantύsύ gerηekleώtirilemedi.";
 };
 String ERR_INET_READ
@@ -130,7 +130,7 @@ String ERR_INET_READ
     Text[ chinese_traditional ] = "µLªk³zΉL Internet Εª¨ϊΈκ®Ζ΅C\n¦ψªAΎΉ³ψ§iΏω»~΅G$(ARG1)";
     Text[ arabic ] = "ΚΪΠΡ ήΡΗΑΙ ΗαΘνΗδΗΚ ΪΘΡ ΗαΕδΚΡδΚ.\nΡΣΗαΙ ΞΨΓ γδ ΗαγÒζψΟ: $(ARG1)";
     Text[ greek ] = "Σφάλμα κατά την ανάγνωση δεδομένων από το Internet.\nΜήνυμα σφάλματος του διακομιστή: $(ARG1)";
-    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­ µ¥ΐΜΕΝ ΐΠ±β Ώΐ·ω\n.Ό­Ήφ Ώΐ·ω ΈήΌΌΑφ: $(ARG1)";
+    Text[ korean ] = "ΐΞΕΝ³έΐ»΅΅ΕλΗΡ µ¥ΐΜΕΝ ΐΠ±β Ώΐ·ω\n.Ό­Ήφ Ώΐ·ω Έή½ΓΑφ: $(ARG1)";
     Text[ turkish ] = "Internet όzerinden veri okunurken hata oluώtu.\nSunucu hata iletisi: $(ARG1)";
 };
 String ERR_INET_WRITE
@@ -153,7 +153,7 @@ String ERR_INET_WRITE
     Text[ chinese_traditional ] = "µLªk¦V Internet ¶Η»ΌΈκ®Ζ΅C\n¦ψªAΎΉ³ψ§iΏω»~΅G$(ARG1)";
     Text[ arabic ] = "ΚΪΠΡ δήα ΗαΘνΗδΗΚ Εαμ ΗαΕδΚΡδΚ.\nΡΣΗαΙ ΞΨΓ γδ ΗαγÒζψΟ: $(ARG1)";
     Text[ greek ] = "Σφάλμα κατά την μετάδοση δεδομένων μέσω του Internet.\nΜήνυμα σφάλματος του διακομιστή: $(ARG1)";
-    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­ µ¥ΐΜΕΝ Ί―Θ― Ώΐ·ω.\nΌ­Ήφ Ώΐ·ω ΈήΌΌΑφ: $(ARG1)";
+    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­ µ¥ΐΜΕΝ  ΐόΌΫ Ώΐ·ω.\nΌ­Ήφ Ώΐ·ω Έή½ΓΑφ: $(ARG1)";
     Text[ turkish ] = "Veriler Internet όzerinden aktarύlamadύ.\nSunucu hata iletisi: $(ARG1)";
 };
 String ERR_INET_GENERAL
@@ -176,7 +176,7 @@ String ERR_INET_GENERAL
     Text[ chinese_traditional ] = "¦b Internet ³sµ²­S³ς¤Ίµo¥Ν¤@­Σ¤@―λΏω»~΅C";
     Text[ arabic ] = "ΝΟΛ ΞΨΓ ΪΗγ έν δΨΗή ΗαΕδΚΡδΚ";
     Text[ greek ] = "Γενικό σφάλμα του Internet";
-    Text[ korean ] = "ΐΟΉέΐϋ ΐΞΕΝ³έ Ώΐ·ω";
+    Text[ korean ] = "ΐΞΕΝ³έΏ΅Ό­΅΅ΐΟΉέΐϋΐΞ Ώΐ·ω΅΅Ήί»ύ";
     Text[ turkish ] = "Genel Internet hatasύ";
 };
 String ERR_WRONG_URL
@@ -216,12 +216,12 @@ String ERR_ACTIVEDOWNLOADS
     Text[ spanish ] = "Todavνa existen descargas activas.\nΏDesea realmente cancelar?\n";
     Text[ chinese_simplified ] = "»ΉΥύΤΪΟΒΤΨΞΔΌώ΅£\nΔϊΥζÒªΦΠ¶ΟΒπ£Ώ\n";
     Text[ russian ] = "Ηΰγπσηκΰ εωε θδες.\nΒϋ δειρςβθςελόνξ υξςθςε εε οπεπβΰςό?\n";
-    Text[ polish ] = "Trwa jeszcze pobieranie.\nCzy chcesz je przerwaζ?\n";
+    Text[ polish ] = "Trwa jeszcze pobieranie.\nCzy je przerwaζ?\n";
     Text[ japanese ] = "‚ά‚Ύΐή³έΫ°Δή’†‚Ε‚·B\n’†~‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?\n";
     Text[ chinese_traditional ] = "ΑΩ¥Ώ¦b¤UΈόΐΙ®Χ΅C\n―u­n¤¤Β_΅H\n";
     Text[ arabic ] = "γΗÒΗαΚ εδΗί ΪγανΗΚ ΚδÒνα δΤΨΙ.\nεα ΚΡνΟ ΗαΕδεΗΑ έΪαΗπΏ\n";
     Text[ greek ] = "Εκτελούνται ακόμη λήψεις δεδομένων.\nΘέλετε πραγματικά να τερματίσετε τη διαδικασία;\n";
-    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑίΑφ ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΓλΌÒΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "ήu an devam eden veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
 };
 String ERR_QUEUEDDOWNLOADS
@@ -239,12 +239,12 @@ String ERR_QUEUEDDOWNLOADS
     Text [ dutch ] = "Er staan nog downloads op de wachtlijst.\nWilt u werkelijk beλindigen?\n" ;
     Text[ chinese_simplified ] = "»ΉΣΠΟΒΤΨΓόΑξµΘΊς΄¦ΐν΅£\nΔϊΥζÒª½αΚψΒπ£Ώ\n";
     Text[ russian ] = "Νΰ ξχεπεδθ εωε ρςξÿς ηΰγπσηκθ.\nΒϋ δειρςβθςελόνξ υξςθςε ηΰκξνχθςό?\n";
-    Text[ polish ] = "Dokumenty czekajΉ jeszcze na za³adowanie.\nCzy chcesz na pewno zakoρczyζ?\n";
+    Text[ polish ] = "Nie zakoρczono jeszcze pobierania.\nCzy na pewno zakoρczyζ?\n";
     Text[ japanese ] = "ΐή³έΫ°Δή‚Ν‚ά‚Ύ‘Ò‹@’†‚Ε‚·B\nI—Ή‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?\n";
     Text[ chinese_traditional ] = "ΑΩ¥Ώ¦b¤UΈόΐΙ®Χ΅C\n―u­nµ²§τ΅H\n";
     Text[ arabic ] = "γΗÒΗαΚ εδΗί ΪγανΗΚ ΚδÒνα Ϊαμ ήΗΖγΙ ΗαΗδΚΩΗΡ.\nεα ΚΡνΟ ΗαΕδεΗΑ έΪαΗυΏ\n";
     Text[ greek ] = "Υπάρχουν ακόμη λήψεις δεδομένων στη σειρά αναμονής.\nΘέλετε σίγουρα να τερματίσετε τη διαδικασία;\n";
-    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰ ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑίΑφΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "΄ΩΏξ·Ξµε°΅ ΑψΗΰ ΑίΐΤ΄Ο΄Ω.\n±Χ·΅µµ ΑΎ·αΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "Bekleme sύrasύnda veri indirme iώleri var.\nGerηekten ηύkmak istiyor musunuz?\n";
 };
 String ERR_FILEISLOCAL
@@ -267,7 +267,7 @@ String ERR_FILEISLOCAL
     Text[ chinese_traditional ] = "³o­ΣΐΙ®Χ¤wΈgΐx¦s¦bΊΟΊΠ¤W΅C\nΑΩ¬O­n½Ζ»s¥¦΅H";
     Text[ arabic ] = "εΠΗ Ηαγαέ γζΜζΟ ΘΗαέΪα έν ίγΘνζΚΡί.\nεα ΚΡνΟ δΣΞε Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
     Text[ greek ] = "Το αρχείο υπάρχει ήδη τοπικά στον υπολογιστή σας.\nΘέλετε να την αντιγράψετε παρ' όλα αυτά;";
-    Text[ korean ] = "ΖΔΐΟΐΜ ΐΜΉΜ ΑΈΐηΗΥ΄Ο΄Ω.\n±Χ·΅µµ ΊΉ»ηΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΖΔΐΟΐΊ ΐΜΉΜ »ηΏλΐΪΐΗ΅΅ΔΔΗ»ΕΝΏ΅΅΅ΑφΏªΐϋΐΈ·Ξ΅΅ΑΈΐηΗΥ΄Ο΄Ω.\n±Χ·΅µµ ΊΉ»ηΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Dosya bilgisayarύnύzda zaten mevcut.\nYine de kopyalansύn mύ?";
 };
 String ERR_FILENAMECHECK83
@@ -285,12 +285,12 @@ String ERR_FILENAMECHECK83
     Text [ dutch ] = "De aangegeven bestandsnaam is ongeldig.\nWij wijzen u erop dat de bestandsnaam maximaal 8 tekens\nen de extensie maximaal 3 tekens lang mag zijn." ;
     Text[ chinese_simplified ] = "Έψ¶¨µΔΞΔΌώΓϋ³ΖΞήΠ§΅£\nΗλΧΆÒβ£ΊΞΔΌώΓϋ²»µΓ³¬Ήύ8ΈφΧΦ·ϋ΅£\nΞΔΌώµΔΐ©ΥΉΓϋ²»µΓ³¬Ήύ 3 ΈφΧΦ·ϋ΅£";
     Text[ russian ] = "Ηΰδΰννξε θμÿ τΰιλΰ νεοπΰβθλόνξ.\nΟξζΰλσιρςΰ, σχςθςε, χςξ θμÿ τΰιλΰ μξζες ρξδεπζΰςό νε αξλεε 8 ηνΰκξβ\n, ΰ πΰρψθπενθε τΰιλΰ νε αξλεε 3 ηνΰκξβ.";
-    Text[ polish ] = "Podana nazwa pliku jest nieprawid³owa.\nProszκ uwzglκdniζ, Ώe nazwa pliku moΏe zawieraζ maksym. 8 znakσw\n,a rozszerzenie pliku maksym. 3 znaki.";
+    Text[ polish ] = "Podana nazwa pliku jest nieprawid³owa.\nNaleΏy uwzglκdniζ, Ώe nazwa pliku moΏe zawieraζ maksym. 8 znakσw\n,a rozszerzenie pliku maksym. 3 znaki.";
     Text[ japanese ] = "w’θ‚µ‚½Μ§²Ω–Ό‚ª–³ψ‚Ε‚·B\nΜ§²Ω–Ό‚ΝΕ‚8•¶‚ά‚Ε\nΜ§²Ωg’£q‚ΝΕ‚3•¶‚ά‚Ε‚Ε‚Θ‚­‚Δ‚Ν‚Ά‚―‚Θ‚Ά‚±‚Ζ‚Ι’Σ‚µ‚Δ‰Ί‚³‚ΆB";
     Text[ chinese_traditional ] = "Ώι¤JªΊΐΙ®Χ¦WµL®Δ΅C\n½Π±z―d·NΐΙ®Χ¦W¤£±o¶WΉL8­Σ¦r¤Έ΅C\n°ΖΐΙ¦W¤£±o¶WΉL 3 ­Σ¦r¤Έ΅C";
     Text[ arabic ] = "ΗΣγ Ηαγαέ ΗαγυΟΞα ΫνΡ ΥΗαΝ.\n ΗαΡΜΗΑ γαΗΝΩΙ Γδ ΗΣγ Ηαγαέ νΜΘ ΓαΗ νÒνΟ Ϊδ\nΛγΗδνΙ ΝΡζέ ζΗγΚΟΗΟε Ϊδ ΛαΗΛΙ.";
     Text[ greek ] = "Το επιλεγμένο όνομα αρχείου δεν είναι έγκυρο.\nΠαρακαλώ προσέξτε ότι δεν επιτρέπεται το όνομα του αρχείου να υπερβαίνει τους 8 χαρακτήρες\n και η επέκταση να περιέχει πάνω από 3 χαρακτήρες.";
-    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄Β°Ν°ϊ   \n Θ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄Β°Νΐ» ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
+    Text[ korean ] = "ΑφΑ¤µΘ ΖΔΐΟ ΐΜΈ§ΐΜ ΐ―ΘΏΗΟΑφ ΎΚ½ΐ΄Ο΄Ω.\nΖΔΐΟΐΗ ΐΜΈ§ΐΜ 8Ή®ΐΪΈ¦ ΓΚ°ϊΗÒ Όφ Ύψ΄Ω΄ΒΑ΅°ϊ   \n Θ®ΐεΐΪ°΅3Ή®ΐΪΈ¦ ΓΚ°ϊ ΗÒΌφ Ύψ΄Ω΄ΒΑ΅Ώ΅ ΐ―ΐΗΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Girilen dosya adύ geηerli deπil.\nDosya adύ en fazla 8 ve dosyan\\uzantύsύ en fazla 3 karakter uzunluπunda olabilir.";
 };
 String ERR_INSUFFICIENTDISKSPACE
@@ -312,7 +312,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ chinese_traditional ] = "ΐΙ®Χ %1 ©Ò»έªΕ¶΅¤j©σ²{¦sªΊ¥i¥ΞªΕ¶΅΅C\n­nΔ~Δς΅S\n";
     Text[ arabic ] = "Σζέ νΥΘΝ Ηαγαέ %1 ΓίΘΡ γδ ΗαγΣΗΝΙ ΗαγΚΗΝΙ Ϊαμ ΗαήΡΥ.\nεα ΚΡνΟ ΗαγΚΗΘΪΙΏ\n";
     Text[ greek ] = "Το αρχείο %1 υπερβαίνει τον διαθέσιμο χώρο αποθήκευσης.\nΘέλετε να συνεχίσετε;\n";
-    Text[ korean ] = "ΖΔΐΟ %1°΅ °΅΄ΙΗΡ µπ½ΊΕ©ΐΗ °ψ°£ΐ» ΓΚ°ϊΗί½ΐ΄Ο΄Ω.\n±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
+    Text[ korean ] = "ΖΔΐΟ %1ΐΜ£¨°΅ £©»ηΏλ°΅΄ΙΗΡ µπ½ΊΕ© °ψ°£ΊΈ΄Ω΅΅Ε®΄Ο΄Ω.\n±Χ·΅µµ °θΌΣΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?\n";
     Text[ turkish ] = "%1 dosyasύ mevcut disk alanύnύ aώύyor.\nDevam etmek istiyor musunuz ?\n";
 };
 //= Texte "downloadcontroller" =================================================================
@@ -333,7 +333,7 @@ String STR_DOWNLOAD_SOURCE
     Text [ russian ] = "Θρςξχνθκ";
     Text [ polish ] = "rσd³o";
     Text [ japanese ] = "Ώ°½";
-    Text [ chinese_traditional ] = "¨Σ·½";
+    Text [ chinese_traditional ] = "Έκ®Ζ¨Σ·½";
     Text [ arabic ] = "ΗαγΥΟΡ";
     Text[ greek ] = "Προέλευση";
     Text[ korean ] = "ΌÒ½Ί";
@@ -359,7 +359,7 @@ String STR_DOWNLOAD_DESTINATION
     Text [ chinese_traditional ] = "¥ΨΌΠ";
     Text [ arabic ] = "ΗαεΟέ";
     Text[ greek ] = "Προορισμός";
-    Text[ korean ] = "ΈρΗ¥";
+    Text[ korean ] = "ΕΈ°Ω";
     Text[ turkish ] = "Hedef";
 };
 String STR_DOWNLOAD_STATE
