@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 18:05:56 $
+ *  last change: $Author: mt $ $Date: 2001-10-23 12:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2314,7 +2314,10 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
                 EndTracking();  // Vor D&D Tracking ausschalten
 
             TextDataObject* pDataObj = new TextDataObject( GetSelected() );
-            rDGE.DragSource->startDrag( rDGE, datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
+            sal_Int8 nActions = datatransfer::dnd::DNDConstants::ACTION_COPY;
+            if ( !IsReadOnly() )
+                nActions |= datatransfer::dnd::DNDConstants::ACTION_MOVE;
+            rDGE.DragSource->startDrag( rDGE, nActions, 0 /*cursor*/, 0 /*image*/, pDataObj, mxDnDListener );
         }
     }
 }
@@ -2324,7 +2327,7 @@ void Edit::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDro
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    if ( rDSDE.DropSuccess && ( rDSDE.DropAction == datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
+    if ( rDSDE.DropSuccess && ( rDSDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) )
     {
         Selection aSel( mpDDInfo->aDndStartSel );
         if ( mpDDInfo->bDroppedInMe )
@@ -2418,24 +2421,25 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    BOOL bDrop = FALSE;
-
     Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
     xub_StrLen nPrevDropPos = mpDDInfo->nDropPos;
     mpDDInfo->nDropPos = ImplGetCharPos( aMousePos );
 
+    /*
     Size aOutSize = GetOutputSizePixel();
     if ( ( aMousePos.X() < 0 ) || ( aMousePos.X() > aOutSize.Width() ) )
     {
-        // Scrollen ?
+        // Scroll?
+        // No, I will not receive events in this case....
     }
+    */
 
     Selection aSel( maSelection );
     aSel.Justify();
 
-    // Nicht in Selektion droppen:
-    if ( aSel.IsInside( mpDDInfo->nDropPos ) )
+    // Don't accept drop in selection or read-only field...
+    if ( IsReadOnly() || aSel.IsInside( mpDDInfo->nDropPos ) )
     {
         ImplHideDDCursor();
         rDTDE.Context->rejectDrag();
