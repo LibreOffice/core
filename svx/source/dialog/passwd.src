@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:44:17 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 21:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,11 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Gammel" ;
         Text [ portuguese_brazilian ] = "Alt" ;
         Text [ portuguese ] = "Antigo" ;
-        Text[ chinese_simplified ] = "¾ÉµÄ";
+        Text[ chinese_simplified ] = "¾ÉÃÜÂë";
         Text[ russian ] = "Ñòàğûé";
         Text[ polish ] = "Stare";
         Text[ japanese ] = "ŒÃ‚¢";
-        Text[ chinese_traditional ] = "ÂÂªº";
+        Text[ chinese_traditional ] = "ÂÂ±K½X";
         Text[ arabic ] = "ŞÏíãÉ";
         Text[ greek ] = "Ğáëéü";
         Text[ korean ] = "ÀÌÀü";
@@ -223,11 +223,11 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ danish ] = "Ny" ;
         Text [ portuguese_brazilian ] = "Neu" ;
         Text [ portuguese ] = "Novo" ;
-        Text[ chinese_simplified ] = "ĞÂ½¨";
+        Text[ chinese_simplified ] = "ĞÂÃÜÂë";
         Text[ russian ] = "Íîâûé";
         Text[ polish ] = "Nowe";
         Text[ japanese ] = "V‚µ‚¢";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ";
+        Text[ chinese_traditional ] = "·s±K½X";
         Text[ arabic ] = "ÌÏíÏÉ";
         Text[ greek ] = "Íİïò";
         Text[ korean ] = "»õ·Î";
