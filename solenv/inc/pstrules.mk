@@ -231,7 +231,7 @@ $(PAR)$/%.par :
 .IF "$(common_build_srs)"!=""
     +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$(@:b).$(LANGFILEEXT)} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 .ELSE          # "$(common_build_srs)"!=""
-    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(MISC)$/$(@:b).$(LANGFILEEXT)} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(MISC)$/$(TARGET)$/$(@:b).$(LANGFILEEXT)} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 .ENDIF          # "$(common_build_srs)"!=""
 # hacked version    
 #    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l $(@:b).$(LANGFILEEXT) -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
