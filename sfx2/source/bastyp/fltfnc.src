@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 10:52:38 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ String STR_FILTER_COMPONENT
     Text[ polish ] = "Sk³adnik %PRODUCTNAME ";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Component";
     Text[ japanese ] = "%PRODUCTNAME ºÝÎß°ÈÝÄ";
-    Text[ korean ] = "%PRODUCTNAME ÄÞÆ÷³ÍÆ®";
+    Text[ korean ] = "%PRODUCTNAME ÄÄÆ÷³ÍÆ®";
     Text[ chinese_simplified ] = "%PRODUCTNAME ²¿¼þ";
     Text[ chinese_traditional ] = "%PRODUCTNAME ³¡¥ó";
     Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  %PRODUCTNAME";
