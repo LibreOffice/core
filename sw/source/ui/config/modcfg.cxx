@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:18:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,8 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     bIsWeb(bWeb),
     pCapOptions(0),
-    pOLEMiscOpt(0)
+    pOLEMiscOpt(0),
+    aInsTblOpts(0,0)
 {
     aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
     aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
@@ -652,22 +653,22 @@ void SwInsertConfig::Commit()
         {
             case  0:
             {
-                sal_Bool bVal = 0 !=(nInsTblFlags&HEADLINE); pValues[nProp].setValue(&bVal, rType);
+                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::HEADLINE); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Header",
             case  1:
             {
-                sal_Bool bVal = 0 !=(nInsTblFlags&REPEAT); pValues[nProp].setValue(&bVal, rType);
+                sal_Bool bVal = (aInsTblOpts.mnRowsToRepeat>0); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/RepeatHeader",
             case  2:
             {
-                sal_Bool bVal = 0 !=(nInsTblFlags&DEFAULT_BORDER ); pValues[nProp].setValue(&bVal, rType);
+                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER ); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Border",
             case  3:
             {
-                sal_Bool bVal = 0 !=(nInsTblFlags&SPLIT_LAYOUT); pValues[nProp].setValue(&bVal, rType);
+                sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Split",
             case  4: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
@@ -792,7 +793,7 @@ void SwInsertConfig::Load()
         else if(!bIsWeb)
             return;
 
-        nInsTblFlags = 0;
+        USHORT nInsTblFlags = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
@@ -803,25 +804,25 @@ void SwInsertConfig::Load()
                     case  0:
                     {
                         if(bBool)
-                            nInsTblFlags|= HEADLINE;
+                            nInsTblFlags|= tabopts::HEADLINE;
                     }
                     break;//"Table/Header",
                     case  1:
                     {
-                        if(bBool)
-                            nInsTblFlags|= REPEAT;
+                        aInsTblOpts.mnRowsToRepeat = bBool? 1 : 0;
+
                     }
                     break;//"Table/RepeatHeader",
                     case  2:
                     {
                         if(bBool)
-                            nInsTblFlags|= DEFAULT_BORDER;
+                            nInsTblFlags|= tabopts::DEFAULT_BORDER;
                     }
                     break;//"Table/Border",
                     case  3:
                     {
                         if(bBool)
-                            nInsTblFlags|= SPLIT_LAYOUT;
+                            nInsTblFlags|= tabopts::SPLIT_LAYOUT;
                     }
                     break;//"Table/Split",
                     case 4:
@@ -901,6 +902,7 @@ void SwInsertConfig::Load()
                 }
             }
         }
+        aInsTblOpts.mnInsMode = nInsTblFlags;
     }
 }
 /* -----------------------------10.10.00 16:22--------------------------------
