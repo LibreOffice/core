@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
+        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG),
         sFieldMaster_Bibliography(
             RTL_CONSTASCII_USTRINGPARAM(sAPI_FieldMaster_Bibliography)),
         sBracketBefore(RTL_CONSTASCII_USTRINGPARAM("BracketBefore")),
@@ -147,7 +147,6 @@ XMLIndexBibliographyConfigurationContext::XMLIndexBibliographyConfigurationConte
         bNumberedEntries(sal_False),
         bSortByPosition(sal_True)
 {
-    SetFamily(XML_STYLE_FAMILY_TEXT_BIBLIOGRAPHYCONFIG);
 }
 
 XMLIndexBibliographyConfigurationContext::~XMLIndexBibliographyConfigurationContext()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:26 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
+        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG),
         sStyleName(),
         sNumFormat(RTL_CONSTASCII_USTRINGPARAM(sXML_1)),
         sNumLetterSync(RTL_CONSTASCII_USTRINGPARAM(sXML_false)),
@@ -145,7 +145,6 @@ XMLLineNumberingImportContext::XMLLineNumberingImportContext(
         sRestartAtEachPage(RTL_CONSTASCII_USTRINGPARAM("RestartAtEachPage")),
         sSeparatorInterval(RTL_CONSTASCII_USTRINGPARAM("SeparatorInterval"))
 {
-    SetFamily(XML_STYLE_FAMILY_TEXT_LINENUMBERINGCONFIG);
 }
 
 XMLLineNumberingImportContext::~XMLLineNumberingImportContext()

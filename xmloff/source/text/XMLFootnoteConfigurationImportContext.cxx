@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLFootnoteConfigurationImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:37 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 22:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,9 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList,
     sal_Bool bEnd) :
-        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList),
+        SvXMLStyleContext(rImport, nPrfx, rLocalName, xAttrList, bEnd ?
+               XML_STYLE_FAMILY_TEXT_ENDNOTECONFIG :
+               XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG),
         bIsEndnote(bEnd),
         pAttrTokenMap(NULL),
         sCitationStyle(),
@@ -243,9 +245,6 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
         sPropertyEndNotice(RTL_CONSTASCII_USTRINGPARAM("EndNotice")),
         sPropertyBeginNotice(RTL_CONSTASCII_USTRINGPARAM("BeginNotice"))
 {
-    SetFamily( bEnd ?
-               XML_STYLE_FAMILY_TEXT_ENDNOTECONFIG :
-               XML_STYLE_FAMILY_TEXT_FOOTNOTECONFIG );
 }
 
 enum XMLFtnConfigToken
