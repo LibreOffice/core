@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hdu $ $Date: 2002-10-29 13:20:28 $
+ *  last change: $Author: hdu $ $Date: 2002-11-06 16:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@
 // - Defines -
 // -----------
 
+//#ifdef FORCE_VERTICAL_NAME
+
 #ifdef WIN
 #define GDI_ERROR   (0xFFFFFFFFUL)
 #endif
@@ -149,22 +151,9 @@ inline int IntFromFixed(FIXED f)
     return( ( f.fract >= 0x8000 ) ? ( f.value + 1 ) : f.value );
 }
 
-// -----------------------------------------------------------------------
-
-inline FIXED fxDiv2( FIXED fxVal1, FIXED fxVal2 )
-{
-    const long l = (*((long far *)&(fxVal1)) + *((long far *)&(fxVal2))) >> 1;
-    return *(FIXED*) &l;
-}
-
 // =======================================================================
 
-#define SAL_DRAWTEXT_STACKBUF           128
-
-// =======================================================================
-
-// Diese Variablen koennen static sein, da systemweite Einstellungen
-// gemerkt werden
+// these variables can be static because they store system wide settings
 static BOOL bImplSalCourierScalable = FALSE;
 static BOOL bImplSalCourierNew = FALSE;
 
@@ -183,6 +172,29 @@ struct ImplEnumInfo
     BOOL                mbImplSalCourierNew;
     BOOL                mbPrinter;
 };
+
+// =======================================================================
+
+class TempFontList
+{
+public:
+    TempFontList() : mpFirstItem( NULL ) {}
+    ~TempFontList();
+    bool AddFont( const String& rFontFilePath );
+
+private:
+    struct TempFontItem
+    {
+        ::rtl::OUString maFontFilePath;
+        ::rtl::OString maResourcePath;
+        TempFontItem* mpNextItem;
+    };
+
+    TempFontItem*   mpFirstItem;
+};
+
+// this gets cleaned up at program exit
+static TempFontList aTempFontList;
 
 // =======================================================================
 
@@ -571,6 +583,11 @@ static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName,
     if (rName.Len() == 0 || rName.GetChar(0) == '@')
         return;
 
+#ifdef FORCE_VERTICAL_NAME
+    rName.Insert( (sal_Unicode)'@', 0 );
+    return;
+#endif // FORCE_VERTICAL_NAME
+
     // Vertical fonts starts with a @
     UniString aTemp = rName;
     aTemp.Insert( (sal_Unicode)'@', 0 );
@@ -738,9 +755,9 @@ static HFONT ImplSelectFontW( HDC hDC, LOGFONTW& rLogFont, HFONT* pNewFont )
     HFONT hOldFont = SelectFont( hDC, hNewFont );
 
     TEXTMETRICW aWinMetric;
-    // Font doesn't work, try a replacement
     if ( !GetTextMetricsW( hDC, &aWinMetric ) )
     {
+        // font doesn't work => try a replacement
         lstrcpyW( rLogFont.lfFaceName, L"Courier New" );
         rLogFont.lfPitchAndFamily = FIXED_PITCH;
         HFONT hNewFont2 = CreateFontIndirectW( &rLogFont );
@@ -889,53 +906,6 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         return SAL_SETFONT_USEDRAWTEXTARRAY;
     else
         return 0;
-}
-
-// -----------------------------------------------------------------------
-
-//TODO: replace for ENABLE_CTL, because only needed to get font width factor
-long SalGraphics::GetCharWidth( sal_Unicode nChar1, sal_Unicode nChar2, long* pWidthAry )
-{
-    SIZE        aExtent;
-    SIZE        aExtent2;
-    sal_Unicode nCharCount = nChar2-nChar1+1;
-    sal_Unicode i;
-    int*        pWinWidthAry = (int*)pWidthAry;
-    DBG_ASSERT( sizeof( int ) == sizeof( long ), "SalGraphics::GetCharWidth(): int != long" );
-
-    // Da nicht bei allen Treibern diese Funktion funktioniert
-    if ( !GetCharWidthW( maGraphicsData.mhDC, nChar1, nChar2, pWinWidthAry ) )
-    {
-        for ( i = 0; i < nCharCount; i++ )
-        {
-            WCHAR c =i+nChar1;
-            if ( !GetTextExtentPointW( maGraphicsData.mhDC, &c, 1, &aExtent ) )
-                pWinWidthAry[i] = 0;
-            else
-                pWinWidthAry[i] = aExtent.cx;
-        }
-    }
-
-    // Ueberhang abziehen
-    if ( maGraphicsData.mbCalcOverhang )
-    {
-        WCHAR aAA[2] = { 'A', 'A' };
-        if ( GetTextExtentPointW( maGraphicsData.mhDC, aAA, 2, &aExtent ) &&
-             GetTextExtentPointW( maGraphicsData.mhDC, aAA, 1, &aExtent2 ) )
-        {
-            maGraphicsData.mbCalcOverhang = FALSE;
-            maGraphicsData.mnFontOverhang = (aExtent2.cx*2)-aExtent.cx;
-        }
-
-        int nOverhang = maGraphicsData.mnFontOverhang;
-        if ( nOverhang )
-        {
-            for ( i = 0; i < nCharCount; i++ )
-                pWinWidthAry[i] -= nOverhang;
-        }
-    }
-
-    return 1;
 }
 
 // -----------------------------------------------------------------------
@@ -1466,6 +1436,130 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
 
 // -----------------------------------------------------------------------
 
+bool TempFontList::AddFont( const String& rFontFileURL )
+{
+    TempFontItem *pNewItem = new TempFontItem;
+    pNewItem->mpNextItem = mpFirstItem;
+
+    int nRet = 0;
+    ::rtl::OUString aUSytemPath;
+    OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
+
+#ifdef FR_PRIVATE
+    OSVERSIONINFO aVersion;
+    aVersion.dwOSVersionInfoSize = sizeof(aVersion);
+    if( ::GetVersionEx( &aVersion ) && (aVersion.dwMajorVersion >= 5) )
+    {
+        nRet = AddFontResourceExW( aUSytemPath.getStr(), FR_PRIVATE, NULL );
+    }
+    else
+#endif // FR_PRIVATE
+    {
+        static int nCounter = 0;
+        char aFileName[] = "soAA.fot";
+        aFileName[2] = 'A' + (15 & (nCounter>>4));
+        aFileName[3] = 'A' + (15 & nCounter);
+        char aResourceName[512];
+        int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
+        int nLen = ::GetTempPathA( nMaxLen, aResourceName );
+        ::strcpy( aResourceName + nLen, aFileName );
+        ::DeleteFileA( aResourceName );
+
+        rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
+        ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
+        // TODO: font should be private => need to investigate why it doesn't work then
+        if( !::CreateScalableFontResourceA( 0, aResourceName, aCFileName.getStr(), NULL ) )
+            return false;
+        ++nCounter;
+        pNewItem->maResourcePath = rtl::OString( aResourceName );
+        nRet = ::AddFontResourceA( aResourceName );
+#if 0       // TODO: improve ImplFontData using "FONTRES:" from *.fot file
+        pFontData->maSearchName = // using "FONTRES:" from file
+        if( rFontName != pFontData->maName )
+            pFontData->maMapName = rFontName;
+#endif
+    }
+
+    if( nRet > 0 )
+    {
+        pNewItem->maFontFilePath = aUSytemPath.getStr();
+        mpFirstItem = pNewItem;
+        return true;
+    }
+
+    delete pNewItem;
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+TempFontList::~TempFontList()
+{
+    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
+
+    int nCount = 0;
+    while( TempFontItem* p = mpFirstItem )
+    {
+        ++nCount;
+        if( p->maResourcePath.getLength() )
+        {
+            const char* pResourcePath = p->maResourcePath.getStr();
+            ::RemoveFontResourceA( pResourcePath );
+            ::DeleteFileA( pResourcePath );
+        }
+        else
+        {
+            if( aSalShlData.mbWNT )
+                ::RemoveFontResourceW( p->maFontFilePath.getStr() );
+            else
+            {
+                ::rtl::OString aCFileName = rtl::OUStringToOString( p->maFontFilePath, theEncoding );
+                ::RemoveFontResourceA( aCFileName.getStr() );
+            }
+        }
+
+        mpFirstItem = p->mpNextItem;
+        delete p;
+    }
+
+    // notify everybody
+    if( nCount )
+        ::SendMessage( HWND_BROADCAST, WM_FONTCHANGE ,0 ,NULL );
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const String& rFontName )
+{
+    if( ::ImplIsFontAvailable( maGraphicsData.mhDC, rFontName ) )
+        return false;
+    if( !aTempFontList.AddFont( rFontFileURL ) )
+        return NULL;
+
+    if( !rFontName.Len() )
+        return NULL;
+    ImplFontData* pFontData = new ImplFontData;
+    pFontData->maName       = rFontName;
+    pFontData->mnQuality    = 1000;
+    pFontData->mbDevice     = TRUE;
+    pFontData->mpSysData    = (void*)DEFAULT_CHARSET;
+    pFontData->meCharSet    = DEFAULT_CHARSET;
+    pFontData->meFamily     = FAMILY_DONTKNOW;
+    pFontData->meWidthType  = WIDTH_DONTKNOW;
+    pFontData->meWeight     = WEIGHT_DONTKNOW;
+    pFontData->meItalic     = ITALIC_NONE;
+    pFontData->mePitch      = PITCH_DONTKNOW;;
+    pFontData->meType       = TYPE_SCALABLE;
+    pFontData->mnWidth      = 0;
+    pFontData->mnHeight     = 0;
+    pFontData->mbSubsettable= FALSE;
+    pFontData->mbEmbeddable = FALSE;
+
+    return pFontData;
+}
+
+// -----------------------------------------------------------------------
+
 void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
     // make sure all fonts are registered at least temporarily
@@ -1490,22 +1584,12 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         if( rcOSL == osl::FileBase::E_None )
         {
             osl::DirectoryItem aDirItem;
+            String aEmptyString;
             while( aFontDir.getNextItem( aDirItem, 10 ) == osl::FileBase::E_None )
             {
                 osl::FileStatus aFileStatus( FileStatusMask_FileURL );
                 rcOSL = aDirItem.getFileStatus( aFileStatus );
-
-                ::rtl::OUString aUSytemPath;
-                OSL_VERIFY( osl_File_E_None
-                    == ::osl::FileBase::getSystemPathFromFileURL( aFileStatus.getFileURL(), aUSytemPath ));
-                if( aSalShlData.mbWNT )
-                    ::AddFontResourceW( aUSytemPath.getStr() );
-                else
-                {
-                    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
-                    ::rtl::OString aCFileName = rtl::OUStringToOString( aUSytemPath, theEncoding );
-                    ::AddFontResourceA( aCFileName.getStr() );
-                }
+                AddTempDevFont( aFileStatus.getFileURL(), aEmptyString );
             }
         }
     }
@@ -1542,8 +1626,8 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         memset( &aLogFont, 0, sizeof( aLogFont ) );
         aLogFont.lfCharSet = DEFAULT_CHARSET;
         aInfo.mpLogFontW = &aLogFont;
-        EnumFontFamiliesExW( maGraphicsData.mhDC, &aLogFont, (FONTENUMPROCW)SalEnumFontsProcExW,
-                             (LPARAM)(void*)&aInfo, 0 );
+        EnumFontFamiliesExW( maGraphicsData.mhDC, &aLogFont,
+            (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
     }
     else
     {
@@ -1551,8 +1635,8 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         memset( &aLogFont, 0, sizeof( aLogFont ) );
         aLogFont.lfCharSet = DEFAULT_CHARSET;
         aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( maGraphicsData.mhDC, &aLogFont, (FONTENUMPROCA)SalEnumFontsProcExA,
-                             (LPARAM)(void*)&aInfo, 0 );
+        EnumFontFamiliesExA( maGraphicsData.mhDC, &aLogFont,
+            (FONTENUMPROCA)SalEnumFontsProcExA, (LPARAM)(void*)&aInfo, 0 );
     }
 
     // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
@@ -1563,63 +1647,6 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
     }
 }
-
-// -----------------------------------------------------------------------
-
-#ifndef ENABLE_CTL
-void SalGraphics::DrawText( long nX, long nY,
-                            const xub_Unicode* pStr, xub_StrLen nLen )
-{
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "SalGraphics::DrawText(): WCHAR != sal_Unicode" );
-
-    ::ExtTextOutW( maGraphicsData.mhDC, (int)nX, (int)nY,
-                   0, NULL, pStr, nLen, NULL );
-}
-#endif // ENABLE_CTL
-
-// -----------------------------------------------------------------------
-
-#ifndef ENABLE_CTL
-void SalGraphics::DrawTextArray( long nX, long nY,
-                                 const xub_Unicode* pStr, xub_StrLen nLen,
-                                 const long* pDXAry )
-{
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "SalGraphics::DrawText(): WCHAR != sal_Unicode" );
-
-    if ( nLen < 2 )
-        ::ExtTextOutW( maGraphicsData.mhDC, (int)nX, (int)nY, 0, NULL, pStr, nLen, NULL );
-    else
-    {
-        int  aStackAry[SAL_DRAWTEXT_STACKBUF];
-        int* pWinDXAry;
-
-        if ( nLen <= SAL_DRAWTEXT_STACKBUF )
-            pWinDXAry = aStackAry;
-        else
-            pWinDXAry = new int[nLen];
-
-        pWinDXAry[0] = (int)pDXAry[0];
-        for ( xub_StrLen i = 1; i < nLen-1; i++ )
-            pWinDXAry[i] = (int)pDXAry[i]-pDXAry[i-1];
-
-        // Breite vom letzten Zeichen ermitteln, da wir dieses auch
-        // beim Windows-XArray in der richtigen Breite reingeben
-        // muessen, um nicht auf Probleme bei einigen
-        // Grafikkarten oder Druckertreibern zu stossen ###
-        SIZE aExtent;
-        if ( GetTextExtentPointW( maGraphicsData.mhDC, pStr+nLen-1, 1, &aExtent ) )
-            pWinDXAry[nLen-1] = aExtent.cx;
-        else
-            pWinDXAry[nLen-1] = 4095;
-
-        // Text ausgeben
-        ::ExtTextOutW( maGraphicsData.mhDC, (int)nX, (int)nY, 0, NULL, pStr, nLen, pWinDXAry );
-
-        if ( pWinDXAry != aStackAry )
-            delete pWinDXAry;
-    }
-}
-#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
