@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astexpression.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:23:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,6 +1491,10 @@ AstExprValue* AstExpression::eval_symbol(EvalKind ek)
         pDecl->getNodeType() != NT_enum_val)
     {
         idlc()->error()->constantExpected(pDecl, *m_pSymbolicName);
+        return NULL;
+    }
+    if (!idlc()->error()->checkPublished(pDecl))
+    {
         return NULL;
     }
     /*
