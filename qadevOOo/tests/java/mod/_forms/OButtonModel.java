@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OButtonModel.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:14 $
+ *  last change:$Date: 2003-05-27 12:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.drawing.XControlShape;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.drawing.XShape;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.XInterface;
@@ -134,7 +135,7 @@ public class OButtonModel extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
 
         log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc(tParam.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
     }
 
     /**
