@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxwiz.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:18:30 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 09:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ namespace dbp
         // OWizardPage overridables
         virtual void        initializePage();
         virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    determineNextButtonState();
 
         DECL_LINK( OnMoveEntry, PushButton* );
         DECL_LINK( OnEntrySelected, ListBox* );
@@ -256,6 +257,7 @@ namespace dbp
         // OWizardPage overridables
         virtual void        initializePage();
         virtual sal_Bool    commitPage(COMMIT_REASON _eReason);
+        virtual sal_Bool    determineNextButtonState();
     };
 
 //.........................................................................
@@ -267,6 +269,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/02/28 09:18:30  fs
+ *  finalized the list/combo wizard
+ *
  *  Revision 1.2  2001/02/23 15:19:08  fs
  *  some changes / centralizations - added the list-/combobox wizard
  *
