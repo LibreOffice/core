@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-28 19:02:21 $
+#   last change: $Date: 2004-02-05 14:27:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,15 +78,17 @@ JARFILES        =   \
                     jurt.jar        \
                     juh.jar         \
                     jut.jar         \
-                    java_uno.jar
+                    java_uno.jar    \
+                    jaxp.jar        \
+                    parser.jar
 
 JAVACLASSFILES  =   \
                     $(CLASSDIR)$/$(PACKAGE)$/AnalyzeStartupLog.class              \
-                    $(CLASSDIR)$/$(PACKAGE)$/Cache.class                          \
                     $(CLASSDIR)$/$(PACKAGE)$/ConfigHelper.class                   \
                     $(CLASSDIR)$/$(PACKAGE)$/Logger.class                         \
                     $(CLASSDIR)$/$(PACKAGE)$/FileHelper.class                     \
                     $(CLASSDIR)$/$(PACKAGE)$/MalformedCommandLineException.class  \
+                    $(CLASSDIR)$/$(PACKAGE)$/Cache.class                          \
                     $(CLASSDIR)$/$(PACKAGE)$/XMLHelper.class
 
 MAXLINELENGTH   =   100000

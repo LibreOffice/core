@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:02:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 14:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,7 +563,10 @@ public class XMLHelper
         }
 
         // replace default separator with right one
-        java.lang.String sListVal = sValBuff.toString().replaceAll("\n", DELIMS[d]);
+        System.out.println("TODO: must be adapted to java 1.3 :-(");
+        System.exit(-1);
+//TODO_JAVA        java.lang.String sListVal = sValBuff.toString().replaceAll("\n", DELIMS[d]);
+        java.lang.String sListVal = null;
 
         sXML.append("<prop "+XMLATTRIB_OOR_NAME+"=\""+sName+"\">");
         if (d == DEFAULT_SEPARATOR)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cache.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:00:07 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 14:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ public class Cache
     private static final java.lang.String FLAGNAME_USESOPTIONS      = "USESOPTIONS";
 
     private static final java.lang.String FLAGNAME_COMBINED         = "COMBINED";
+    private static final java.lang.String FLAGNAME_SUPPORTSSELECTION= "SUPPORTSSELECTION";
 
     // values for filter flags
     private static final int FLAGVAL_3RDPARTYFILTER    = 0x00080000; // 524288
@@ -225,6 +226,7 @@ public class Cache
     private static final int FLAGVAL_USESOPTIONS       = 0x00000080; // 128
 
     private static final int FLAGVAL_COMBINED          = 0x00800000; // ...
+    private static final int FLAGVAL_SUPPORTSSELECTION = 0x00000400; // 1024
 
     //___________________________________________
     // member
@@ -405,7 +407,10 @@ public class Cache
          *          <li>...</li>
          *      </ul>
          */
-        aFactory.setExpandEntityReferences(false);
+
+        System.out.println("TODO: must be adapted to java 1.3 :-(");
+        System.exit(-1);
+//TODO_JAVA        aFactory.setExpandEntityReferences(false);
 
         javax.xml.parsers.DocumentBuilder aBuilder = aFactory.newDocumentBuilder();
         org.w3c.dom.Document              aDOM     = aBuilder.parse(aXML);
@@ -713,7 +718,7 @@ public class Cache
             sXML.append("</node>\n");
         }
 
-        java.io.FileOutputStream   aStream = new java.io.FileOutputStream(aXML, false);
+        java.io.FileOutputStream   aStream = new java.io.FileOutputStream(aXML.getAbsolutePath(), false);
         java.io.OutputStreamWriter aWriter = new java.io.OutputStreamWriter(aStream, sEncoding);
         java.lang.String           sOut    = sXML.toString();
         aWriter.write(sOut, 0, sOut.length());
@@ -806,9 +811,8 @@ public class Cache
                 aResultMap.put(PROPNAME_PREFERREDFILTER, aMap.get(PROPNAME_PREFERREDFILTER));
                 aResultMap.put(PROPNAME_DETECTSERVICE  , aMap.get(PROPNAME_DETECTSERVICE  ));
                 aResultMap.put(PROPNAME_CLIPBOARDFORMAT, aMap.get(PROPNAME_CLIPBOARDFORMAT));
-
-                /* REMOVED!
                 aResultMap.put(PROPNAME_UIORDER        , aMap.get(PROPNAME_UIORDER        ));
+                /* REMOVED!
                 aResultMap.put(PROPNAME_DOCUMENTICONID , aMap.get(PROPNAME_DOCUMENTICONID ));
                  */
             }
@@ -1498,6 +1502,9 @@ public class Cache
         if((field & FLAGVAL_COMBINED) == FLAGVAL_COMBINED)
             lFlags.add(FLAGNAME_COMBINED);
 
+        if((field & FLAGVAL_COMBINED) == FLAGVAL_SUPPORTSSELECTION)
+            lFlags.add(FLAGNAME_SUPPORTSSELECTION);
+
         return lFlags;
     }
 
@@ -2168,6 +2175,28 @@ public class Cache
             java.lang.String  sTypeReg = (java.lang.String)aFilter.get(PROPNAME_TYPE);
             java.util.HashMap aType    = (java.util.HashMap)m_lTypes.get(sTypeReg);
 
+            // move UINames of filters to types
+            java.util.HashMap  lFilterUINames = (java.util.HashMap)aFilter.get(PROPNAME_UINAME);
+            java.util.HashMap  lTypeUINames   = (java.util.HashMap)aType.get(PROPNAME_UINAME);
+            java.util.HashMap  lPatchUINames  = new java.util.HashMap();
+
+            java.util.Iterator pUINames = lTypeUINames.keySet().iterator();
+            while(pUINames.hasNext())
+            {
+                java.lang.String sLocale = (java.lang.String)pUINames.next();
+                java.lang.String sValue  = (java.lang.String)lTypeUINames.get(sLocale);
+                lPatchUINames.put(sLocale, sValue);
+            }
+
+            pUINames = lFilterUINames.keySet().iterator();
+            while(pUINames.hasNext())
+            {
+                java.lang.String sLocale = (java.lang.String)pUINames.next();
+                java.lang.String sValue  = (java.lang.String)lFilterUINames.get(sLocale);
+                lPatchUINames.put(sFilter+":"+sLocale, sValue);
+            }
+            aType.put(PROPNAME_UINAME, lPatchUINames);
+
             // set generic filter service wrapper for our own native filters!
             // By the way: The format types of such filters can be detected by our
             // generic detector too.
@@ -2194,35 +2223,40 @@ public class Cache
              * Add filter to a temp. list, which can be used later to remove the preferred
              * flag ...
              */
+
             int     flags1     = ((java.lang.Integer)aFilter.get(PROPNAME_FLAGS)).intValue();
-            boolean preferred1 = ((flags1 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
-            if (preferred1)
-                lPreferredFilters.add(aFilter);
-
-            java.lang.String sAlreadyRegisteredFilter = (java.lang.String)aType.get(PROPNAME_PREFERREDFILTER);
-            // no registration => set this filter as "any possible one"!
-            if (sAlreadyRegisteredFilter.length() < 1)
-                aType.put(PROPNAME_PREFERREDFILTER, sFilter);
-            else
+            java.lang.String sDocSrv = (java.lang.String)aFilter.get(PROPNAME_DOCUMENTSERVICE);
+            if (sDocSrv.length()>0)// without a doc service its not a real filter - its a graphic filter!
             {
-                java.util.HashMap aAlreadyRegisteredFilter = (java.util.HashMap)m_lFilters.get(sAlreadyRegisteredFilter);
-                int               flags2                   = ((java.lang.Integer)aAlreadyRegisteredFilter.get(PROPNAME_FLAGS)).intValue();
-                boolean           preferred2               = ((flags2 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
+                boolean preferred1 = ((flags1 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
+                if (preferred1)
+                    lPreferredFilters.add(aFilter);
 
-                // two preferred filters for the same type! => error
-                if (preferred1 && preferred2)
-                {
-                    java.lang.StringBuffer sMsg = new java.lang.StringBuffer(256);
-                    sMsg.append("More the one preferred filter detected for the same type.\n");
-                    sMsg.append("\ttype      = \""+sTypeReg+"\"\n");
-                    sMsg.append("\tfilter[1] = \""+sAlreadyRegisteredFilter+"\"\n");
-                    sMsg.append("\tfilter[2] = \""+sFilter+"\"\n");
-                    throw new java.lang.Exception(sMsg.toString());
-                }
-                else
-                // overwrite the "any possible" filter with a real preferred one
-                if (preferred1 && !preferred2)
+                java.lang.String sAlreadyRegisteredFilter = (java.lang.String)aType.get(PROPNAME_PREFERREDFILTER);
+                // no registration => set this filter as "any possible one"!
+                if (sAlreadyRegisteredFilter.length() < 1)
                     aType.put(PROPNAME_PREFERREDFILTER, sFilter);
+                else
+                {
+                    java.util.HashMap aAlreadyRegisteredFilter = (java.util.HashMap)m_lFilters.get(sAlreadyRegisteredFilter);
+                    int               flags2                   = ((java.lang.Integer)aAlreadyRegisteredFilter.get(PROPNAME_FLAGS)).intValue();
+                    boolean           preferred2               = ((flags2 & FLAGVAL_PREFERRED) == FLAGVAL_PREFERRED);
+
+                    // two preferred filters for the same type! => error
+                    if (preferred1 && preferred2)
+                    {
+                        java.lang.StringBuffer sMsg = new java.lang.StringBuffer(256);
+                        sMsg.append("More the one preferred filter detected for the same type.\n");
+                        sMsg.append("\ttype      = \""+sTypeReg+"\"\n");
+                        sMsg.append("\tfilter[1] = \""+sAlreadyRegisteredFilter+"\"\n");
+                        sMsg.append("\tfilter[2] = \""+sFilter+"\"\n");
+                        throw new java.lang.Exception(sMsg.toString());
+                    }
+                    else
+                    // overwrite the "any possible" filter with a real preferred one
+                    if (preferred1 && !preferred2)
+                        aType.put(PROPNAME_PREFERREDFILTER, sFilter);
+                }
             }
 
             // create the new combined filter flag if required

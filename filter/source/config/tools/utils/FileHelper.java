@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 10:46:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 14:27:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,10 @@ public class FileHelper
                                       java.io.File aDestination)
         throws java.io.IOException
     {
-        /*
+        System.out.println("TODO: must be adapted to java 1.3 and support cygwin shells :-(");
+        System,.exit(-1);
+
+        /*TODO_JAVA
         Solution I : using nio.channel locks doesnt exists for java 1.3  :-(
         Solution II: using system call "cp" cant work with cygwin shells :-(
 
@@ -148,7 +151,9 @@ public class FileHelper
      */
     public static java.lang.String getFileURLFromSystemPath(java.io.File aSystemPath)
     {
-        java.lang.String sFileURL = null;
+        System.out.println("TODO: must be adapted to java 1.3 :-(");
+        System.exit(-1);
+/*TODO_JAVA
         try
         {
             sFileURL = aSystemPath.toURI().toURL().toString();
@@ -157,6 +162,8 @@ public class FileHelper
         {
             sFileURL = null;
         }
+*/
+        java.lang.String sFileURL = null;
 
         // problem of java: file URL's are coded with 1 slash instead of 2 or 3 ones!
         // => correct this problem first, otherwise office can't use these URL's
@@ -223,6 +230,9 @@ public class FileHelper
                                                                     java.io.File     aBasePath  ,
                                                                     java.lang.String sServerURL )
     {
+        System.out.println("TODO: must be adapted to java 1.3 :-(");
+        System.exit(-1);
+
         java.lang.String sFileURL = FileHelper.getFileURLFromSystemPath(aSystemPath);
         java.lang.String sBaseURL = FileHelper.getFileURLFromSystemPath(aBasePath  );
 
@@ -234,7 +244,8 @@ public class FileHelper
         if (sServerURL.lastIndexOf('/')==(sServerURL.length()-1))
             sServerURL = sServerURL.substring(0,sServerURL.length()-1);
 
-        java.lang.String sURL = sFileURL.replaceFirst(sBaseURL,sServerURL);
+//TODO_JAVA        java.lang.String sURL = sFileURL.replaceFirst(sBaseURL,sServerURL);
+        java.lang.String sURL = null;
         return sURL;
     }
 
@@ -482,7 +493,7 @@ public class FileHelper
                                        java.lang.String sText    )
         throws java.io.IOException
     {
-        java.io.FileOutputStream   aStream = new java.io.FileOutputStream(aFile, bAppend);
+        java.io.FileOutputStream   aStream = new java.io.FileOutputStream(aFile.getAbsolutePath(), bAppend);
         java.io.OutputStreamWriter aWriter = new java.io.OutputStreamWriter(aStream, sEncoding);
         aWriter.write(sText, 0, sText.length());
         aWriter.flush();
