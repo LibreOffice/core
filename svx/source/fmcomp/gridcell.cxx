@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 16:08:54 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 13:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,7 +1559,7 @@ void DbDateField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
         static_cast<DateField*>(m_pPainter)->SetShowDateCentury(bShowDateCentury);
     }
 
-    pField->SetExtFormat( (ExtDateFieldFormat)nFormat);
+    pField->SetExtDateFormat( (ExtDateFieldFormat)nFormat);
     pField->SetMin(nMin);
     pField->SetMax(nMax);
     pField->SetStrictFormat(bStrict);
@@ -1570,7 +1570,7 @@ void DbDateField::Init(Window* pParent, const Reference< XRowSet >& xCursor)
     static_cast<DateField*>(m_pPainter)->SetMin(nMin);
     static_cast<DateField*>(m_pPainter)->SetMax(nMax);
 
-    static_cast<DateField*>(m_pPainter)->SetExtFormat( (ExtDateFieldFormat)nFormat);
+    static_cast<DateField*>(m_pPainter)->SetExtDateFormat( (ExtDateFieldFormat)nFormat);
 
     DbCellControl::Init(pParent, xCursor);
 }
