@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-24 10:56:29 $
+ *  last change: $Author: sj $ $Date: 2001-10-15 14:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2728,36 +2728,53 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
 
             if( nCropTop || nCropBottom || nCropLeft || nCropRight )
             {
-                double  fFactor;
-                Size aCropSize;
-                MapMode aPrefMapMode( aGraf.GetPrefMapMode() );
-                if ( aPrefMapMode == MAP_PIXEL )
-                    aCropSize = Application::GetDefaultDevice()->PixelToLogic( aGraf.GetPrefSize(), MAP_100TH_MM );
-                else
-                    aCropSize = Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM );
-                UINT32 nTop( 0 ), nBottom( 0 ), nLeft( 0 ), nRight( 0 );
+                double      fFactor;
+                Size        aCropSize;
+                BitmapEx    aCropBitmap;
+                sal_uInt32  nTop( 0 ),  nBottom( 0 ), nLeft( 0 ), nRight( 0 );
+                sal_Bool    bUseCropAttributes = ( rObjData.nSpFlags & SP_FOLESHAPE ) == 0; // we do not support cropping attributes on ole objects
 
+                if ( bUseCropAttributes )
+                {
+                    MapMode aPrefMapMode( aGraf.GetPrefMapMode() );
+                    if ( aPrefMapMode == MAP_PIXEL )
+                        aCropSize = Application::GetDefaultDevice()->PixelToLogic( aGraf.GetPrefSize(), MAP_100TH_MM );
+                    else
+                        aCropSize = Application::GetDefaultDevice()->LogicToLogic( aGraf.GetPrefSize(), aGraf.GetPrefMapMode(), MAP_100TH_MM );
+                }
+                else
+                {
+                    aCropBitmap = aGraf.GetBitmapEx();
+                    aCropSize = aCropBitmap.GetSizePixel();
+                }
                 if ( nCropTop )
                 {
                     fFactor = (double)nCropTop / 65536.0;
-                    nTop = (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    nTop = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropBottom )
                 {
                     fFactor = (double)nCropBottom / 65536.0;
-                    nBottom = (UINT32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
+                    nBottom = (sal_uInt32)( ( (double)( aCropSize.Height() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropLeft )
                 {
                     fFactor = (double)nCropLeft / 65536.0;
-                    nLeft = (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    nLeft = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
                 }
                 if ( nCropRight )
                 {
                     fFactor = (double)nCropRight / 65536.0;
-                    nRight = (UINT32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
+                    nRight = (sal_uInt32)( ( (double)( aCropSize.Width() + 1 ) * fFactor ) + 0.5 );
                 }
-                rSet.Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
+                if ( bUseCropAttributes )
+                    rSet.Put( SdrGrafCropItem( nLeft, nTop, nRight, nBottom ) );
+                else
+                {
+                    Rectangle aCropRect( nLeft, nTop, aCropSize.Width() - nRight, aCropSize.Height() - nBottom );
+                    aCropBitmap.Crop( aCropRect );
+                    aGraf = aCropBitmap;
+                }
             }
         }
         if ( IsProperty( DFF_Prop_pictureTransparent ) )
