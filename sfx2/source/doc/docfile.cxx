@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-19 15:20:57 $
+ *  last change: $Author: mba $ $Date: 2001-01-16 12:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,6 +1077,10 @@ SvStorage* SfxMedium::GetOutputStorage()
 
 SvStorage* SfxMedium::GetOutputStorage( BOOL bUCBStorage )
 {
+    // if the medium was constructed with a SvStorage: use this one, not a temp. storage
+    if ( aStorage.Is() && !aLogicName.Len() )
+        return aStorage;
+
     if ( !pImp->pTempFile )
         CreateTempFile();
     return GetStorage_Impl( bUCBStorage );
