@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: dr $ $Date: 2001-06-14 16:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,14 +270,14 @@ public:
 class ObjectPage: public TabPage
 {
 protected:
+    FixedText           aLibText;
+//  Edit                aEdit;
+    ExtBasicTreeListBox aBasicBox;
     PushButton          aEditButton;
     CancelButton        aCloseButton;
     PushButton          aNewModButton;
     PushButton          aNewDlgButton;
     PushButton          aDelButton;
-    FixedText           aLibText;
-//  Edit                aEdit;
-    ExtBasicTreeListBox aBasicBox;
 
     String              aCurEntryDescr;
 
@@ -309,15 +309,15 @@ public:
 class LibPage: public TabPage
 {
 protected:
-    PushButton          aEditButton;
-    CancelButton        aCloseButton;
-    PushButton          aNewLibButton;
-    PushButton          aPasswordButton;
-    PushButton          aInsertLibButton;
-    PushButton          aDelButton;
     FixedText           aLibText;
     ListBox             aBasicsBox;
     BasicCheckBox       aLibBox;
+    PushButton          aEditButton;
+    CancelButton        aCloseButton;
+    PushButton          aPasswordButton;
+    PushButton          aNewLibButton;
+    PushButton          aInsertLibButton;
+    PushButton          aDelButton;
 
     String              aCurBasMgr;
 
