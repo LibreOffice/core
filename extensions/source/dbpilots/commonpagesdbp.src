@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:27:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -658,6 +658,13 @@ String RID_STR_TYPE_COMMAND
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32.6.1  2003/07/16 17:08:00  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.32  2003/07/03 17:27:50  hr
+ *  INTEGRATION: CWS rc2merge (1.31.8); FILE MERGED
+ *  2003/07/03 14:40:42 ihi 1.31.8.1: rc-2 merge all languages
+ *
  *  Revision 1.31.8.1  2003/07/03 14:40:42  ihi
  *  rc-2 merge all languages
  *
@@ -796,6 +803,8 @@ String RID_STR_TYPE_COMMAND
  *
  *  Revision 1.0 14.02.01 11:05:25  fs
  ************************************************************************/
+
+
 
 
 
