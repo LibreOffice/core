@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:38:03 $
+ *  last change: $Author: kz $ $Date: 2001-03-02 20:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ TabDialog DLG_PARA
                 Text [ norwegian ] = "Drop caps" ;
                 Text [ italian ] = "Capolettera" ;
                 Text [ portuguese_brazilian ] = "Capitulares descidas" ;
-                Text [ portuguese ] = "Iniciais" ;
+                Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
                 Text [ danish ] = "Initialer" ;
                 Text [ french ] = "Lettrines" ;
