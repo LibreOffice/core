@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:35:51 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,7 +1376,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 rSh.GetRowHeight( pSz );
                 if ( pSz )
                 {
-                    if ( ATT_VAR_SIZE == pSz->GetSizeType() )
+                    if ( ATT_VAR_SIZE == pSz->GetHeightSizeType() )
                         rSet.DisableItem( nSlot );
                     delete pSz;
                 }
