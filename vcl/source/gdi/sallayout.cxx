@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:29:18 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,7 +1218,7 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
     int nCount = 0;
     long nYPos = pG->maLinearPos.Y();
     long nOldFlags = pG->mnGlyphIndex;
-    while( nCount < nLen )
+    for(;;)
     {
         // update return data with glyph info
         ++nCount;
@@ -1230,6 +1230,9 @@ int GenericSalLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos,
 
         // break at end of glyph list
         if( ++nStart >= mnGlyphCount )
+            break;
+        // break when enough glyphs
+        if( nCount >= nLen )
             break;
 
         long nGlyphAdvance = pG[1].maLinearPos.X() - pG->maLinearPos.X();
@@ -1359,7 +1362,7 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     if( mnLevel <= 1 )
         return false;
-    maFallbackRuns[ mnLevel - 1 ] = rArgs.maRuns;
+    maFallbackRuns[ mnLevel-1 ] = rArgs.maRuns;
     return true;
 }
 
@@ -1404,7 +1407,6 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         // now adjust the individual components
         if( n > 0 )
             aMultiArgs.maRuns = maFallbackRuns[ n-1 ];
-
         mpLayouts[n]->AdjustLayout( aMultiArgs );
 
         // remove unused parts of component
@@ -1425,9 +1427,9 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
             // reshuffle used fallbacks if needed
             if( nLevel != n )
             {
+                mpLayouts[ nLevel ]         = mpLayouts[ n ];
                 mpFallbackFonts[ nLevel ]   = mpFallbackFonts[ n ];
                 maFallbackRuns[ nLevel ]    = maFallbackRuns[ n ];
-                mpLayouts[ nLevel ]         = mpLayouts[ n ];
             }
             ++nLevel;
         }
@@ -1498,8 +1500,8 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
             // advance runs if necessary
             if( n < 0 )
-                n = nLevel - 1;
-            for(; n >= 0; --n )
+                n = nLevel;
+            while( --n >= 0 )
             {
                 // if no more overlap with base level get next run
                 if( !maFallbackRuns[n].PosIsInRun( nCharPos[0] ) )
