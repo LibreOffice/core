@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontentcaps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 10:10:06 $
+ *  last change: $Author: kso $ $Date: 2001-08-30 12:28:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -366,16 +366,25 @@ uno::Sequence< beans::Property > Content::getProperties(
     {
     }
 
-    sal_Int32 nTotal = aProps.size() + 4; // number of mandatory props
+    sal_Int32 nTotal = aProps.size();
     uno::Sequence< beans::Property > aProperties( nTotal );
 
     sal_Int32 nPos = 0;
 
     // Add DAV properties, map DAV properties to UCB properties.
-    sal_Bool bHasCreationDate  = sal_False; // creationdate     <-> DateCreated
-    sal_Bool bHasLastModified  = sal_False; // getlastmodified  <-> DateModified
-    sal_Bool bHasContentType   = sal_False; // getcontenttype   <-> MediaType
-    sal_Bool bHasContentLength = sal_False; // getcontentlength <-> Size
+    sal_Bool bHasCreationDate     = sal_False; // creationdate     <-> DateCreated
+    sal_Bool bHasGetLastModified  = sal_False; // getlastmodified  <-> DateModified
+    sal_Bool bHasGetContentType   = sal_False; // getcontenttype   <-> MediaType
+    sal_Bool bHasGetContentLength = sal_False; // getcontentlength <-> Size
+
+    sal_Bool bHasContentType      = sal_False;
+    sal_Bool bHasIsDocument       = sal_False;
+    sal_Bool bHasIsFolder         = sal_False;
+    sal_Bool bHasTitle            = sal_False;
+    sal_Bool bHasDateCreated      = sal_False;
+    sal_Bool bHasDateModified     = sal_False;
+    sal_Bool bHasMediaType        = sal_False;
+    sal_Bool bHasSize             = sal_False;
 
     beans::Property aProp;
 
@@ -391,52 +400,136 @@ uno::Sequence< beans::Property > Content::getProperties(
                 ( aProp.Name == DAVProperties::CREATIONDATE ) )
         {
             bHasCreationDate = sal_True;
-            nTotal++;
         }
-        else if ( !bHasLastModified &&
+        else if ( !bHasGetLastModified &&
                      ( aProp.Name == DAVProperties::GETLASTMODIFIED ) )
         {
-            bHasLastModified = sal_True;
-            nTotal++;
+            bHasGetLastModified = sal_True;
         }
-        else if ( !bHasContentType &&
+        else if ( !bHasGetContentType &&
                      ( aProp.Name == DAVProperties::GETCONTENTTYPE ) )
         {
-            bHasContentType = sal_True;
-            nTotal++;
+            bHasGetContentType = sal_True;
         }
-        else if ( !bHasContentLength &&
+        else if ( !bHasGetContentLength &&
                      ( aProp.Name == DAVProperties::GETCONTENTLENGTH ) )
         {
-            bHasContentLength = sal_True;
-            nTotal++;
+            bHasGetContentLength = sal_True;
+        }
+        else if ( !bHasContentType &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
+        {
+            bHasContentType = sal_True;
+        }
+        else if ( !bHasIsDocument &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
+        {
+            bHasIsDocument = sal_True;
+        }
+        else if ( !bHasIsFolder &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
+        {
+            bHasIsFolder = sal_True;
+        }
+        else if ( !bHasTitle &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
+        {
+            bHasTitle = sal_True;
+        }
+        else if ( !bHasDateCreated &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
+        {
+            bHasDateCreated = sal_True;
+        }
+        else if ( !bHasDateModified &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
+        {
+            bHasDateModified = sal_True;
+        }
+        else if ( !bHasMediaType &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
+        {
+            bHasMediaType = sal_True;
+        }
+        else if ( !bHasSize &&
+                  aProp.Name.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
+        {
+            bHasSize = sal_True;
         }
 
         it++;
         nPos++;
     }
 
+    if ( !bHasContentType )
+        nTotal++;
+
+    if ( !bHasIsDocument )
+        nTotal++;
+
+    if ( !bHasIsFolder )
+        nTotal++;
+
+    if ( !bHasTitle )
+        nTotal++;
+
+    if ( !bHasDateCreated && bHasCreationDate )
+        nTotal++;
+
+    if ( !bHasDateModified && bHasGetLastModified )
+        nTotal++;
+
+    if ( !bHasMediaType && bHasGetContentType )
+        nTotal++;
+
+    if ( !bHasSize && bHasGetContentLength )
+        nTotal++;
+
     aProperties.realloc( nTotal );
 
     // Add mandatory properties.
-    m_pProvider->getProperty(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ), aProp );
-    aProperties[ nPos++ ] = aProp;
+    if ( !bHasContentType )
+    {
+        m_pProvider->getProperty(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
+            aProp );
+        aProperties[ nPos++ ] = aProp;
+    }
 
-    m_pProvider->getProperty(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ), aProp );
-    aProperties[ nPos++ ] = aProp;
+    if ( !bHasIsDocument )
+    {
+        m_pProvider->getProperty(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
+            aProp );
+        aProperties[ nPos++ ] = aProp;
+    }
 
-    m_pProvider->getProperty(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ), aProp );
-    aProperties[ nPos++ ] = aProp;
+    if ( !bHasIsFolder )
+    {
+        m_pProvider->getProperty(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
+            aProp );
+        aProperties[ nPos++ ] = aProp;
+    }
 
-    m_pProvider->getProperty(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ), aProp );
-    aProperties[ nPos++ ] = aProp;
+    if ( !bHasTitle )
+    {
+        m_pProvider->getProperty(
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
+            aProp );
+        aProperties[ nPos++ ] = aProp;
+    }
 
     // Add optional properties.
-    if ( bHasCreationDate )
+    if ( !bHasDateCreated && bHasCreationDate )
     {
         m_pProvider->getProperty(
             rtl::OUString(
@@ -444,7 +537,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         aProperties[ nPos++ ] = aProp;
     }
 
-    if ( bHasLastModified )
+    if ( !bHasDateModified && bHasGetLastModified )
     {
         m_pProvider->getProperty(
             rtl::OUString(
@@ -452,7 +545,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         aProperties[ nPos++ ] = aProp;
     }
 
-    if ( bHasContentType )
+    if ( !bHasMediaType && bHasGetContentType )
     {
         m_pProvider->getProperty(
             rtl::OUString(
@@ -460,7 +553,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         aProperties[ nPos++ ] = aProp;
     }
 
-    if ( bHasContentLength )
+    if ( !bHasSize && bHasGetContentLength )
     {
         m_pProvider->getProperty(
             rtl::OUString(
