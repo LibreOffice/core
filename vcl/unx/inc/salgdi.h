@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:34:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,9 +116,6 @@ protected:
 
     XLIB_Region     pPaintRegion_;
     XLIB_Region     pClipRegion_;
-
-    int             numClipRects_;
-    Rectangle       boundingClipRect_;
 
     GC              pPenGC_;        // Pen attributes
     SalColor        nPenColor_;
@@ -234,10 +231,6 @@ public:
     inline  void            SetDrawable( Drawable d ) { hDrawable_ = d; }
     inline  SalColormap    &GetColormap() const { return *m_pColormap; }
     inline  Pixel           GetPixel( SalColor nSalColor ) const;
-
-    inline  int            GetNumCliprects() const { return numClipRects_; }
-    inline  const Rectangle& GetBoundingCliprect() const { return boundingClipRect_; }
-
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY );
