@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:27:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 16:28:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1728,6 +1728,11 @@ void ScInputHandler::DataChanged( BOOL bFromTopNotify )
         //  table EditEngine is formatted below, input line needs formatting after paste
         //  #i20282# not when called from the input line's modify handler
         pTopView->GetEditEngine()->QuickFormatDoc( TRUE );
+
+        //  #i23720# QuickFormatDoc hides the cursor, but can't show it again because it
+        //  can't safely access the EditEngine's current view, so the cursor has to be
+        //  shown again here.
+        pTopView->ShowCursor();
     }
 
     bModified = TRUE;
