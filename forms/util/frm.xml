@@ -454,6 +454,26 @@
         <supported-service>com.sun.star.form.control.ImageControl</supported-service>
         <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
     </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.forms.OScrollBarModel</name>
+        <description>specifies the model of a scroll bar control which can exist in a form layer.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.form.component.ScrollBar</supported-service>
+        <supported-service>com.sun.star.awt.UnoControlScrollBarModel</supported-service>
+    </component-description>
+    <component-description>
+        <author>Frank Schönheit</author>
+        <name>com.sun.star.comp.forms.OSpinButtonModel</name>
+        <description>specifies the model of a spin button control which can exist in a form layer.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.form.component.SpinButton</supported-service>
+        <supported-service>com.sun.star.awt.UnoControlSpinButtonModel</supported-service>
+    </component-description>
     <project-build-dependency>sal</project-build-dependency>
     <project-build-dependency>osl</project-build-dependency>
     <project-build-dependency>one</project-build-dependency>
