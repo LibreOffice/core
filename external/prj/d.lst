@@ -3,6 +3,9 @@ mkdir: %_DEST%\inc%_EXT%\external\ado
 mkdir: %_DEST%\inc%_EXT%\external\atl
 mkdir: %_DEST%\inc%_EXT%\external\dt
 mkdir: %_DEST%\inc%_EXT%\external\expat
+mkdir: %_DEST%\inc%_EXT%\external\freetype
+mkdir: %_DEST%\inc%_EXT%\external\freetype\config
+mkdir: %_DEST%\inc%_EXT%\external\freetype\internal
 mkdir: %_DEST%\inc%_EXT%\external\glibc
 mkdir: %_DEST%\inc%_EXT%\external\gpc
 mkdir: %_DEST%\inc%_EXT%\external\jpeg
@@ -22,6 +25,9 @@ mkdir: %_DEST%\inc%_EXT%\X11\extensions
 mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\common\xt.jar %_DEST%\bin%_EXT%\xt.jar
+..\common\jaxp.jar %_DEST%\bin%_EXT%\jaxp.jar
+..\common\parser.jar %_DEST%\bin%_EXT%\parser.jar
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
 ..\audio\rtufiles\lib\audio\*.h %_DEST%\inc%_EXT%\audio\*
@@ -53,6 +59,7 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\lib\libgnu_getopt.a %_DEST%\lib%_EXT%\libgnu_getopt.a
 ..\%__SRC%\slb\zlib.lib %_DEST%\lib%_EXT%\zlib.lib
 ..\%__SRC%\lib\libzlib.a %_DEST%\lib%_EXT%\libzlib.a
+..\%__SRC%\lib\libfreetype.a %_DEST%\lib%_EXT%\libfreetype.a
 
 ..\jpeg\rtufiles\jpeg.h %_DEST%\inc%_EXT%\external\jpeg\jpeg.h
 ..\jpeg\rtufiles\jpeglib.h %_DEST%\inc%_EXT%\external\jpeg\jpeglib.h
@@ -77,12 +84,14 @@ mkdir: %_DEST%\pck%_EXT%
 ..\neon\rtufiles\dav_locks.h %_DEST%\inc%_EXT%\external\neon\dav_locks.h
 ..\neon\rtufiles\dav_props.h %_DEST%\inc%_EXT%\external\neon\dav_props.h
 ..\neon\rtufiles\hip_xml.h %_DEST%\inc%_EXT%\external\neon\hip_xml.h
+..\neon\rtufiles\http_auth.h %_DEST%\inc%_EXT%\external\neon\http_auth.h
 ..\neon\rtufiles\http_basic.h %_DEST%\inc%_EXT%\external\neon\http_basic.h
 ..\neon\rtufiles\http_cookies.h %_DEST%\inc%_EXT%\external\neon\http_cookies.h
 ..\neon\rtufiles\http_redirect.h %_DEST%\inc%_EXT%\external\neon\http_redirect.h
 ..\neon\rtufiles\http_request.h %_DEST%\inc%_EXT%\external\neon\http_request.h
 ..\neon\rtufiles\http_utils.h %_DEST%\inc%_EXT%\external\neon\http_utils.h
 ..\neon\rtufiles\neon_config.h %_DEST%\inc%_EXT%\external\neon\neon_config.h
+..\neon\rtufiles\ne_alloc.h %_DEST%\inc%_EXT%\external\neon\ne_alloc.h
 ..\neon\rtufiles\neon_defs.h %_DEST%\inc%_EXT%\external\neon\neon_defs.h
 ..\neon\rtufiles\nsocket.h %_DEST%\inc%_EXT%\external\neon\nsocket.h
 ..\neon\rtufiles\socket.h %_DEST%\inc%_EXT%\external\neon\socket.h
@@ -90,6 +99,11 @@ mkdir: %_DEST%\pck%_EXT%
 ..\neon\rtufiles\uri.h %_DEST%\inc%_EXT%\external\neon\uri.h
 ..\%__SRC%\slb\neon.lib %_DEST%\lib%_EXT%\neon.lib
 ..\%__SRC%\lib\libneon.a %_DEST%\lib%_EXT%\libneon.a
+
+..\freetype\freetype-2.0.2\include\ft2build.h %_DEST%\inc%_EXT%\external\ft2build.h
+..\freetype\freetype-2.0.2\include\freetype\* %_DEST%\inc%_EXT%\external\freetype\*
+..\freetype\freetype-2.0.2\include\freetype\config\* %_DEST%\inc%_EXT%\external\freetype\config\*
+..\freetype\freetype-2.0.2\include\freetype\internal\* %_DEST%\inc%_EXT%\external\freetype\internal\*
 
 ..\X11\extensions\*.h %_DEST%\inc%_EXT%\X11\extensions\*.h
 
