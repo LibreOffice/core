@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:59:36 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,13 +546,12 @@ struct SwSectItemSet_Impl
 /* -----------------------------12.02.01 10:45--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwXTextSection::setPropertyValues(
-    const Sequence< ::rtl::OUString >& rPropertyNames,
-    const Sequence< Any >& rValues )
-        throw(PropertyVetoException, lang::IllegalArgumentException,
-                        lang::WrappedTargetException, RuntimeException)
+void SAL_CALL SwXTextSection::SetPropertyValues_Impl(
+    const uno::Sequence< OUString >& rPropertyNames,
+    const uno::Sequence< Any >& rValues )
+    throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException,
+            WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     SwSectionFmt*   pFmt = GetFmt();
     if(rPropertyNames.getLength() != rValues.getLength())
         throw IllegalArgumentException();
@@ -572,7 +571,9 @@ void SwXTextSection::setPropertyValues(
         {
             const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
                                     aPropSet.getPropertyMap(), pPropertyNames[nProperty]);
-            if(pMap)
+            if(!pMap)
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
+            else
             {
                 if ( pMap->nFlags & PropertyAttribute::READONLY)
                     throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
@@ -794,12 +795,8 @@ void SwXTextSection::setPropertyValues(
                             if(pPutItem)
                                 pPutItem->PutValue(pValues[nProperty], pMap->nMemberId);
                         }
-
                 }
             }
-            else
-                throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
-
         }
         if(pFmt)
         {
@@ -836,7 +833,29 @@ void SwXTextSection::setPropertyValues(
     }
     else
         throw uno::RuntimeException();
+}
 
+void SwXTextSection::setPropertyValues(
+    const Sequence< ::rtl::OUString >& rPropertyNames,
+    const Sequence< Any >& rValues )
+        throw(PropertyVetoException, lang::IllegalArgumentException,
+                        lang::WrappedTargetException, RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // workaround for bad designed API
+    try
+    {
+        SetPropertyValues_Impl( rPropertyNames, rValues );
+    }
+    catch (UnknownPropertyException &rException)
+    {
+        // wrap the original (here not allowed) exception in
+        // a WrappedTargetException that gets thrown instead.
+        WrappedTargetException aWExc;
+        aWExc.TargetException <<= rException;
+        throw aWExc;
+    }
 }
 /*-- 10.12.98 14:47:11---------------------------------------------------
 
@@ -852,16 +871,15 @@ void SwXTextSection::setPropertyValue(
     aPropertyNames.getArray()[0] = rPropertyName;
     Sequence< Any > aValues(1);
     aValues.getArray()[0] = aValue;
-    setPropertyValues(aPropertyNames, aValues);
+    SetPropertyValues_Impl( aPropertyNames, aValues );
 }
 /* -----------------------------12.02.01 10:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence< Any > SwXTextSection::getPropertyValues(
-    const Sequence< ::rtl::OUString >& rPropertyNames )
-        throw(RuntimeException)
+uno::Sequence< Any > SAL_CALL SwXTextSection::GetPropertyValues_Impl(
+        const uno::Sequence< OUString > & rPropertyNames )
+    throw( UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< Any > aRet(rPropertyNames.getLength());
     Any* pRet = aRet.getArray();
     SwSectionFmt*   pFmt = GetFmt();
@@ -1093,12 +1111,38 @@ Sequence< Any > SwXTextSection::getPropertyValues(
                 }
             }
             else
-                throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
+                throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + pPropertyNames[nProperty], static_cast < cppu::OWeakObject * > ( this ) );
         }
     }
     else
         throw uno::RuntimeException();
     return aRet;
+}
+/* -----------------------------04.11.03 10:43--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Sequence< Any > SwXTextSection::getPropertyValues(
+    const Sequence< ::rtl::OUString >& rPropertyNames )
+        throw(RuntimeException)
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    Sequence< Any > aValues;
+
+    // workaround for bad designed API
+    try
+    {
+        aValues = GetPropertyValues_Impl( rPropertyNames );
+    }
+    catch (UnknownPropertyException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property exception caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+    catch (WrappedTargetException &)
+    {
+        throw RuntimeException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "WrappedTargetException caught" ) ), static_cast < cppu::OWeakObject * > ( this ) );
+    }
+
+    return aValues;
 }
 /*-- 10.12.98 14:47:12---------------------------------------------------
 
@@ -1109,7 +1153,7 @@ uno::Any SwXTextSection::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard aGuard(Application::GetSolarMutex());
     Sequence< ::rtl::OUString > aPropertyNames(1);
     aPropertyNames.getArray()[0] = rPropertyName;
-    return getPropertyValues(aPropertyNames).getConstArray()[0];
+    return GetPropertyValues_Impl(aPropertyNames).getConstArray()[0];
 }
 /* -----------------------------12.02.01 10:30--------------------------------
 
