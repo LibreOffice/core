@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.167 $
+ *  $Revision: 1.168 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
 
 // =======================================================================
 
-static void ImplInitAppFontData( Window* pWindow )
+void Window::ImplInitAppFontData( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     long nTextHeight = pWindow->GetTextHeight();
@@ -329,6 +329,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     String aUserInterfaceFont;
     if ( !rSettings.GetStyleSettings().GetUseSystemUIFonts() )
     {
+        ImplInitFontList();
+
         String aConfigFont = vcl::DefaultFontConfigItem::get()->getUserInterfaceFont();
         xub_StrLen nIndex = 0;
         while( nIndex != STRING_NOTFOUND )
@@ -752,6 +754,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
         if( nStyle & WB_INTROWIN )
             nFrameStyle |= SAL_FRAME_STYLE_INTRO;
+        if( nStyle & WB_TOOLTIPWIN )
+            nFrameStyle |= SAL_FRAME_STYLE_TOOLTIP;
 
         if( nStyle & WB_NOSHADOW )
             nFrameStyle |= SAL_FRAME_STYLE_NOSHADOW;
@@ -863,8 +867,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             {
                 mpGraphics->GetResolution( mpFrameData->mnDPIX, mpFrameData->mnDPIY );
                 mpGraphics->GetScreenFontResolution( mpFrameData->mnFontDPIX, mpFrameData->mnFontDPIY );
-                if ( !mpFrameData->mpFontList->Count() )
-                    mpGraphics->GetDevFontList( mpFrameData->mpFontList );
             }
         }
 #else
@@ -898,8 +900,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 #endif
 
 #ifndef REMOTE_APPSERVER
-        // Muessen Application-Settings noch upgedatet werden
-        if ( !pSVData->maAppData.mbSettingsInit )
+        // delay settings initialization until first "real" frame
+        // this relies on the IntroWindow not needing any system settings
+        if ( !pSVData->maAppData.mbSettingsInit &&
+             ! (nStyle & WB_INTROWIN)
+             )
         {
             mpFrame->UpdateSettings( *pSVData->maAppData.mpSettings );
             ImplUpdateGlobalSettings( *pSVData->maAppData.mpSettings );
@@ -949,8 +954,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
     ImplUpdatePos();
 
-    // AppFont-Aufloesung berechnen
-    if ( mbFrame && !pSVData->maGDIData.mnAppFontX )
+    // calculate app font res
+    if ( mbFrame && !pSVData->maGDIData.mnAppFontX && ! (nStyle & WB_INTROWIN) )
         ImplInitAppFontData( this );
 
     if ( GetAccessibleParentWindow()  && GetParent() != Application::GetDefDialogParent() )
@@ -1640,9 +1645,6 @@ void Window::ImplInitResolutionSettings()
         mnDPIX = (mpFrameData->mnDPIX*nScreenZoom)/100;
         mnDPIY = (mpFrameData->mnDPIY*nScreenZoom)/100;
         SetPointFont( rStyleSettings.GetAppFont() );
-
-        if ( !ImplGetSVData()->maGDIData.mnAppFontX )
-            ImplInitAppFontData( this );
     }
     else if ( mpParent )
     {
@@ -4514,6 +4516,10 @@ Window::~Window()
     if ( pOverlapWindow->mpLastFocusWindow == this )
         pOverlapWindow->mpLastFocusWindow = NULL;
 
+    // reset hint for DefModalDialogParent
+    if( pSVData->maWinData.mpActiveApplicationFrame == this )
+        pSVData->maWinData.mpActiveApplicationFrame = NULL;
+
     // gemerkte Fenster zuruecksetzen
     if ( mpFrameData->mpFocusWin == this )
         mpFrameData->mpFocusWin = NULL;
@@ -6113,37 +6119,6 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             if( pSVData->mpIntroWindow && !ImplIsWindowOrChild( pSVData->mpIntroWindow ) )
                 pSVData->mpIntroWindow->Hide();
 
-#ifndef REMOTE_APPSERVER
-            // HACK: this code belongs IMHO at the end of InitVCL, but because there is no
-            // configuration service available at this time, we need to delay it until the
-            // first (accessible) window is shown ..
-            if( ImplIsAccessibleNativeFrame() )
-            {
-                ImplSVData* pSVData = ImplGetSVData();
-
-                if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
-                {
-                    if( !pSVData->mxAccessBridge.is() )
-                    {
-                        // instanciate access bridge service
-                        if( !ImplInitAccessBridge(true) )
-                        {
-                            AllSettings aSettings = Application::GetSettings();
-                            MiscSettings aMisc = aSettings.GetMiscSettings();
-                            aMisc.SetEnableATToolSupport( FALSE );
-                            aSettings.SetMiscSettings( aMisc );
-                            Application::SetSettings( aSettings );
-                        }
-                        // if the user chose to quit the app, do not show this frame ..
-                        else if( pSVData->maAppData.mbAppQuit == TRUE )
-                        {
-                            return;
-                        }
-                    }
-                }
-            }
-#endif
-
             //DBG_ASSERT( !mbSuppressAccessibilityEvents, "Window::Show() - Frame reactivated");
             mbSuppressAccessibilityEvents = FALSE;
 
@@ -6202,6 +6177,30 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             pData = NULL;
     }
     ImplCallEventListeners( mbVisible ? VCLEVENT_WINDOW_SHOW : VCLEVENT_WINDOW_HIDE, pData );
+
+    // #107575#, if a floating windows is shown that grabs the focus, we have to notify the toolkit about it
+    // ImplGrabFocus() is not called in this case
+    // Because this might lead to problems the task will be shifted to 6.y
+    // Note: top-level context menues are registered at the access bridge after being shown,
+    // so this will probably not help here....
+    /*
+    if( mbFloatWin && ((FloatingWindow*) this )->GrabsFocus() )
+    {
+        ImplSVData* pSVData = ImplGetSVData();
+        if( !mbVisible )
+        {
+            ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
+            if( pSVData->maWinData.mpFocusWin )
+                pSVData->maWinData.mpFocusWin->ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
+        }
+        else
+        {
+            if( pSVData->maWinData.mpFocusWin )
+                pSVData->maWinData.mpFocusWin->ImplCallEventListeners( VCLEVENT_WINDOW_LOSEFOCUS );
+            ImplCallEventListeners( VCLEVENT_WINDOW_GETFOCUS );
+        }
+    }
+    */
 }
 
 // -----------------------------------------------------------------------
@@ -7197,6 +7196,18 @@ BOOL Window::HasFocus() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
+    // #107575# the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
+    //  task was shifted to 6.y, so its commented out
+    /*
+    Window* pFocusWin = ImplGetSVData()->maWinData.mpFirstFloat;
+    if( pFocusWin && pFocusWin->mbFloatWin && ((FloatingWindow *)pFocusWin)->GrabsFocus() )
+        pFocusWin = pFocusWin->GetPreferredKeyInputWindow();
+    else
+        pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+
+    return (this == pFocusWin);
+    */
+
     return (this == ImplGetSVData()->maWinData.mpFocusWin);
 }
 
@@ -7222,9 +7233,18 @@ BOOL Window::HasChildPathFocus( BOOL bSystemWindow ) const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    Window* pWindow = ImplGetSVData()->maWinData.mpFocusWin;
-    if ( pWindow )
-        return ImplIsWindowOrChild( pWindow, bSystemWindow );
+    // #107575#, the first floating window always has the keyboard focus, see also winproc.cxx: ImplGetKeyInputWindow()
+    //  task was shifted to 6.y, so its commented out
+    /*
+    Window* pFocusWin = ImplGetSVData()->maWinData.mpFirstFloat;
+    if( pFocusWin && pFocusWin->mbFloatWin && ((FloatingWindow *)pFocusWin)->GrabsFocus() )
+        pFocusWin = pFocusWin->GetPreferredKeyInputWindow();
+    else
+        pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+    */
+    Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+    if ( pFocusWin )
+        return ImplIsWindowOrChild( pFocusWin, bSystemWindow );
     return FALSE;
 }
 
@@ -7738,8 +7758,36 @@ void Window::ImplCallActivateListeners( Window *pOld )
             //           additionally the gallery is not dockable anymore, so 100759 canot occur
             if ( ImplGetParent() ) /* && mpFrameWindow == ImplGetParent()->mpFrameWindow ) */
                 ImplGetParent()->ImplCallActivateListeners( pOld );
+            else
+            {
+                // top level frame reached: store hint for DefModalDialogParent
+                ImplGetSVData()->maWinData.mpActiveApplicationFrame = mpFrameWindow;
+            }
         //}
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool Window::ImplStopDnd()
+{
+    bool bRet = false;
+    if( mpFrameData && mpFrameData->mxDropTargetListener.is() )
+    {
+        bRet = true;
+        mpFrameData->mxDropTarget.clear();
+        mpFrameData->mxDragSource.clear();
+        mpFrameData->mxDropTargetListener.clear();
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+void Window::ImplStartDnd()
+{
+    GetDropTarget();
 }
 
 // -----------------------------------------------------------------------
@@ -8302,7 +8350,8 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_INFOBOX:
             case WINDOW_WARNINGBOX:
             case WINDOW_ERRORBOX:
-            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::OPTIONPANE; break;
+            case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::DIALOG; break; // #i12331, DIALOG must be used to
+                                                                                        // to allow activation, those are frames!
 
             case WINDOW_MODELESSDIALOG:
             case WINDOW_MODALDIALOG:
@@ -8748,3 +8797,28 @@ void Window::ImplNotifyIconifiedState( BOOL bIconified )
 {
     mpFrameWindow->ImplCallEventListeners( bIconified ? VCLEVENT_WINDOW_ICONIFIED : VCLEVENT_WINDOW_RESTORED );
 }
+
+BOOL Window::HasActiveChildFrame()
+{
+    BOOL bRet = FALSE;
+    Window *pFrameWin = ImplGetSVData()->maWinData.mpFirstFrame;
+    while( pFrameWin )
+    {
+        if( pFrameWin != mpFrameWindow )
+        {
+            Window *pChildFrame = pFrameWin->ImplGetWindow();
+            if( pFrameWin->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) )
+                if( pChildFrame && pChildFrame->IsVisible() && pChildFrame->IsActive() )
+                {
+                    if( ImplIsChild( pChildFrame, TRUE ) )
+                    {
+                        bRet = TRUE;
+                        break;
+                    }
+                }
+        }
+        pFrameWin = pFrameWin->mpFrameData->mpNextFrame;
+    }
+    return bRet;
+}
+
