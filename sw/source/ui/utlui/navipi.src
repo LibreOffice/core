@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:52:34 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1345,7 +1345,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "§R°£(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦";
+        Text[ korean ] = "»èÁ¦(~D)";
         Text[ turkish ] = "~Sil";
     };
     String ST_UPDATE_SEL
@@ -1486,7 +1486,7 @@ Window DLG_NAVIGATION_PI
         Text[ chinese_traditional ] = "¨ú®ø«OÅ@(~U)";
         Text[ arabic ] = "ÅáÛÇÁ ÇáÍãÇíÉ";
         Text[ greek ] = "¢ñóç ğñïóôáóßáò";
-        Text[ korean ] = "º¸È£ ÇØÁ¦";
+        Text[ korean ] = "º¸È£ ÇØÁ¦(~U)";
         Text[ turkish ] = "Korumayı ~kaldır";
     };
     String ST_INVISIBLE
