@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:18:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Dokument";
                 Text[ hebrew ] = "Dokument";
                 Text[ hindi ] = "लेखपत्र";
+                Text[ slovak ] = "Dokument";
             };
             PageItem
             {
@@ -139,6 +140,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Odkazy";
                 Text[ hebrew ] = "Referenzen";
                 Text[ hindi ] = "रेफरेन्स";
+                Text[ slovak ] = "Odkazy";
             };
             PageItem
             {
@@ -171,6 +173,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Funkce";
                 Text[ hebrew ] = "Funktionen";
                 Text[ hindi ] = "फंक्शन्स";
+                Text[ slovak ] = "Funkcie";
             };
             PageItem
             {
@@ -203,6 +206,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Informace o dokumentu";
                 Text[ hebrew ] = "Dokumentinfo";
                 Text[ hindi ] = "DocInformation";
+                Text[ slovak ] = "Informácie o dokumente";
             };
             PageItem
             {
@@ -223,7 +227,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ russian ] = "����������";
                 Text[ polish ] = "Zmienne";
                 Text[ japanese ] = "変数";
-                Text[ chinese_traditional ] = "變量";
+                Text[ chinese_traditional ] = "變數";
                 Text[ arabic ] = "�������";
                 Text[ greek ] = "����������";
                 Text[ korean ] = "변수";
@@ -235,6 +239,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Proměnné";
                 Text[ hebrew ] = "Variablen";
                 Text[ hindi ] = "वेरिऐबल";
+                Text[ slovak ] = "Premenné";
             };
             PageItem
             {
@@ -267,6 +272,7 @@ TabDialog DLG_FLD_INSERT
                 Text[ czech ] = "Databáze";
                 Text[ hebrew ] = "Datenbank";
                 Text[ hindi ] = "लेखासंचय";
+                Text[ slovak ] = "Databáza";
             };
         };
     };
@@ -300,6 +306,7 @@ TabDialog DLG_FLD_INSERT
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
+        Text[ slovak ] = "~Vložiť";
     };
     String STR_FLD_CLOSE
     {
@@ -330,6 +337,7 @@ TabDialog DLG_FLD_INSERT
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     Text [ english_us ] = "Fields" ;
     Text [ portuguese_brazilian ] = "Campos" ;
@@ -356,7 +364,10 @@ TabDialog DLG_FLD_INSERT
     Text[ czech ] = "Pole";
     Text[ hebrew ] = "‮שדות‬";
     Text[ hindi ] = "क्षेत्र";
+    Text[ slovak ] = "Polia";
 };
+
+
 
 
 
