@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:24 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 14:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ void VLegend::changePosition(
         // determine position and alignment depending on default position
         chart2::LegendPosition ePos = chart2::LegendPosition_CUSTOM;
         uno::Reference< beans::XPropertySet > xLegendProp( m_xLegend, uno::UNO_QUERY_THROW );
-        xLegendProp->getPropertyValue( C2U( "AutoPosition" )) >>= ePos;
+        xLegendProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
 
         layout::AnchorPoint aAnchor = lcl_getAnchorByAutoPos( ePos );
         // shift legend about 2% into the primary direction

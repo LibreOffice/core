@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 16:32:12 $
+ *  last change: $Author: bm $ $Date: 2003-11-27 14:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,10 +221,10 @@ bool LegendItemConverter::ApplySpecialItem(
             if( bShow )
             {
 
-                if( ! ( GetPropertySet()->getPropertyValue( C2U( "AutoPosition" )) >>= eOldPos ) ||
+                if( ! ( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= eOldPos ) ||
                     ( eOldPos != eNewPos ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "AutoPosition" ), uno::makeAny( eNewPos ));
+                    GetPropertySet()->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
                     chart2::LegendExpansion eExp = bIsWide
                         ? chart2::LegendExpansion_WIDE
                         : chart2::LegendExpansion_HIGH;
@@ -257,7 +257,7 @@ void LegendItemConverter::FillSpecialItem(
             {
                 eItemPos = CHLEGEND_NONE;
             }
-            else if( GetPropertySet()->getPropertyValue( C2U( "AutoPosition" )) >>= ePos )
+            else if( GetPropertySet()->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos )
             {
                 switch( ePos )
                 {
