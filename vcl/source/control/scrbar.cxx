@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,6 @@ static long ImplMulDiv( long nNumber, long nNumerator, long nDenominator )
 #define SCRBAR_STATE_PAGE1_DOWN     ((USHORT)0x0010)
 #define SCRBAR_STATE_PAGE2_DOWN     ((USHORT)0x0020)
 #define SCRBAR_STATE_THUMB_DOWN     ((USHORT)0x0040)
-
-#define SCRBAR_MIN_THUMB            8
 
 #define SCRBAR_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
@@ -279,6 +277,32 @@ void ScrollBar::ImplUpdateRects( BOOL bUpdate )
             }
         }
     }
+    else
+    {
+        Size aScrBarSize = GetOutputSizePixel();
+        if ( GetStyle() & WB_HORZ )
+        {
+            if ( aScrBarSize.Width() > maBtn1Rect.getWidth() + maBtn2Rect.getWidth() )
+            {
+                long nSpace = aScrBarSize.Width() - maBtn1Rect.getWidth() - maBtn2Rect.getWidth();
+                maPage1Rect.Left()   = maBtn1Rect.Right()+1;
+                maPage2Rect.Right()  = maBtn1Rect.Right()+(nSpace/2);
+                maPage2Rect.Left()   = maBtn1Rect.Right()+1+(nSpace/2);
+                maPage2Rect.Right()  = maBtn2Rect.Left()-1;
+            }
+        }
+        else
+        {
+            if ( aScrBarSize.Height() > maBtn1Rect.getHeight() + maBtn2Rect.getHeight() )
+            {
+                long nSpace = aScrBarSize.Height() - maBtn1Rect.getHeight() - maBtn2Rect.getHeight();
+                maPage1Rect.Top()    = maBtn1Rect.Bottom()+1;
+                maPage1Rect.Bottom() = maBtn1Rect.Bottom()+(nSpace/2);
+                maPage2Rect.Top()    = maBtn1Rect.Bottom()+1+(nSpace/2);
+                maPage2Rect.Bottom() = maBtn2Rect.Top()-1;
+            }
+        }
+    }
 
     if( !IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL) )
     {
@@ -350,92 +374,92 @@ long ScrollBar::ImplCalcThumbPosPix( long nPos )
 
 void ScrollBar::ImplCalc( BOOL bUpdate )
 {
+    Size aSize = GetOutputSizePixel();
+    long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();;
+
     if ( mbCalcSize )
     {
-        Size    aSize = GetOutputSizePixel();
-        Size    aBtnSize;
-
+        Size aBtnSize;
         Point aPoint( 0, 0 );
         Region aControlRegion( Rectangle( aPoint, aSize ) );
         Region aBtn1Region, aBtn2Region, aBoundingRegion;
 
         if ( GetStyle() & WB_HORZ )
         {
-            if ( aSize.Height()*2 > aSize.Width()-SCRBAR_MIN_THUMB )
+            if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_LEFT,
+                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
+                 GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_RIGHT,
+                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
             {
-                mnThumbPixRange         = 0;
-                maBtn1Rect.Bottom()     = aSize.Height()-1;
-                maBtn1Rect.Right()      = aSize.Width()/2;
-                maBtn2Rect.Bottom()     = maBtn1Rect.Bottom();
-                maBtn2Rect.Left()       = maBtn1Rect.Right()+1;
-                maBtn2Rect.Right()      = aSize.Width()-1;
+                maBtn1Rect = aBtn1Region.GetBoundRect();
+                maBtn2Rect = aBtn2Region.GetBoundRect();
             }
             else
             {
-                if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_LEFT,
-                            aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
-                     GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_RIGHT,
-                            aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
-                {
-                    maBtn1Rect = aBtn1Region.GetBoundRect();
-                    maBtn2Rect = aBtn2Region.GetBoundRect();
-                }
-                else
-                {
-                    aBtnSize                = Size( aSize.Height(), aSize.Height() );
-                    maBtn2Rect.Left()       = aSize.Width()-aSize.Height();
-                    maBtn1Rect.SetSize( aBtnSize );
-                    maBtn2Rect.SetSize( aBtnSize );
-                }
-                mnThumbPixRange         = aSize.Width() - maBtn1Rect.GetWidth() - maBtn2Rect.GetWidth();
+                aBtnSize            = Size( aSize.Height(), aSize.Height() );
+                maBtn2Rect.Left()   = aSize.Width()-aSize.Height();
+                maBtn1Rect.SetSize( aBtnSize );
+                maBtn2Rect.SetSize( aBtnSize );
+            }
+            // Check if available space is big enough for thumb ( min thumb size = ScrBar width/height )
+            if ( aSize.Width() > maBtn1Rect.getWidth() + maBtn2Rect.getWidth() + nMinThumbSize )
+                mnThumbPixRange = aSize.Width() - maBtn1Rect.getWidth() - maBtn2Rect.getWidth() - 1;
+            else
+                mnThumbPixRange = 0;
+
+            if ( aSize.Width() > maBtn1Rect.getWidth() + maBtn2Rect.getWidth() )
+            {
                 maPage1Rect.Left()      = maBtn1Rect.Right()+1;
                 maPage1Rect.Bottom()    = maBtn1Rect.Bottom();
                 maPage2Rect.Bottom()    = maBtn1Rect.Bottom();
                 maThumbRect.Bottom()    = maBtn1Rect.Bottom();
             }
+            else
+            {
+                maPage1Rect.SetEmpty();
+                maPage2Rect.SetEmpty();
+            }
         }
         else
         {
-            if ( aSize.Width()*2 > aSize.Height()-SCRBAR_MIN_THUMB )
+            if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_UP,
+                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
+                 GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_DOWN,
+                        aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
             {
-                mnThumbPixRange         = 0;
-                maBtn1Rect.Right()      = aSize.Width()-1;
-                maBtn1Rect.Bottom()     = aSize.Height()/2;
-                maBtn2Rect.Right()      = maBtn1Rect.Right();
-                maBtn2Rect.Top()        = maBtn1Rect.Bottom()+1;
-                maBtn2Rect.Bottom()     = aSize.Height()-1;
+                maBtn1Rect = aBtn1Region.GetBoundRect();
+                maBtn2Rect = aBtn2Region.GetBoundRect();
             }
             else
             {
-                if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_UP,
-                            aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn1Region ) &&
-                     GetNativeControlRegion( CTRL_SCROLLBAR, PART_BUTTON_DOWN,
-                            aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aBtn2Region ) )
-                {
-                    maBtn1Rect = aBtn1Region.GetBoundRect();
-                    maBtn2Rect = aBtn2Region.GetBoundRect();
-                }
-                else
-                {
-                    aBtnSize                = Size( aSize.Width(), aSize.Width() );
-                    maBtn2Rect.Top()        = aSize.Height()-aSize.Width();
-                    maBtn1Rect.SetSize( aBtnSize );
-                    maBtn2Rect.SetSize( aBtnSize );
-                }
-                mnThumbPixRange         = aSize.Height() - maBtn1Rect.GetHeight() - maBtn2Rect.GetHeight();
+                aBtnSize            = Size( aSize.Width(), aSize.Width() );
+                maBtn2Rect.Top()    = aSize.Height()-aSize.Width();
+                maBtn1Rect.SetSize( aBtnSize );
+                maBtn2Rect.SetSize( aBtnSize );
+            }
+
+            // Check if available space is big enough for thumb
+            if ( aSize.Height() > maBtn1Rect.getHeight() + maBtn2Rect.getHeight() + nMinThumbSize )
+                mnThumbPixRange = aSize.Height() - maBtn1Rect.getHeight() - maBtn2Rect.getHeight() - 1;
+            else
+                mnThumbPixRange = 0;
+
+            if ( aSize.Height() > maBtn1Rect.getHeight() + maBtn2Rect.getHeight() )
+            {
                 maPage1Rect.Top()       = maBtn1Rect.Bottom()+1;
                 maPage1Rect.Right()     = maBtn1Rect.Right();
                 maPage2Rect.Right()     = maBtn1Rect.Right();
                 maThumbRect.Right()     = maBtn1Rect.Right();
             }
+            else
+            {
+                maPage1Rect.SetEmpty();
+                maPage2Rect.SetEmpty();
+            }
         }
 
         if ( !mnThumbPixRange )
-        {
-            maPage1Rect.SetEmpty();
-            maPage2Rect.SetEmpty();
             maThumbRect.SetEmpty();
-        }
 
         mbCalcSize = FALSE;
     }
@@ -457,12 +481,12 @@ void ScrollBar::ImplCalc( BOOL bUpdate )
             else
             {
                 if ( GetStyle() & WB_HORZ )
-                    mnThumbPixSize = maThumbRect.GetHeight();
-                else
                     mnThumbPixSize = maThumbRect.GetWidth();
+                else
+                    mnThumbPixSize = maThumbRect.GetHeight();
             }
-            if ( mnThumbPixSize < SCRBAR_MIN_THUMB )
-                mnThumbPixSize = SCRBAR_MIN_THUMB;
+            if ( mnThumbPixSize < nMinThumbSize )
+                mnThumbPixSize = nMinThumbSize;
             if ( mnThumbPixSize > mnThumbPixRange )
                 mnThumbPixSize = mnThumbPixRange;
             mnThumbPixPos = ImplCalcThumbPosPix( mnThumbPos );
@@ -1335,7 +1359,11 @@ void ScrollBar::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        mbCalcSize = TRUE;
+        ImplCalc( FALSE );
         Invalidate();
+    }
 }
 
 // -----------------------------------------------------------------------
