@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:23:47 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 14:51:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,49 @@
 #ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #define _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 class ScDocument;
+class ScChangeAction;
+class ScChangeTrack;
+class ScXMLExport;
+class ScBaseCell;
 
 class ScChangeTrackingExportHelper
 {
+    ScXMLExport&    rExport;
+
+    ScChangeTrack*  pChangeTrack;
+    rtl::OUString   sTrackedChanges;
+    rtl::OUString   sChangeIDPrefix;
+
+    rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
+
+    void WriteChangeInfo(ScChangeAction* pAction);
+
+    void WriteEmptyCell();
+    void WriteValueCell(const ScBaseCell* pCell);
+    void WriteStringEditCell(const rtl::OUString& rString);
+    void WriteStringCell(const ScBaseCell* pCell);
+    void WriteEditCell(const ScBaseCell* pCell);
+    void WriteFormulaCell(const ScBaseCell* pCell);
+    void WriteCell(const ScBaseCell* pCell);
+
+    void WriteContentChange(ScChangeAction* pAction);
+    void WriteInsertion(ScChangeAction* pAction);
+    void WriteDeletion(ScChangeAction* pAction);
+    void WriteMovement(ScChangeAction* pAction);
+
+    void WorkWithChangeAction(ScChangeAction* pAction);
+    void StartChangeActionList();
+    void EndChangeActionList();
 public:
-    ScChangeTrackingExportHelper();
+    ScChangeTrackingExportHelper(ScXMLExport& rExport);
     ~ScChangeTrackingExportHelper();
 
-    void CollectAndWriteChanges(ScDocument* pDoc);
+    void CollectAndWriteChanges();
 };
 
 #endif
