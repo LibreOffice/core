@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 16:31:29 $
+ *  last change: $Author: dbo $ $Date: 2001-11-26 17:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BRIDGE_XCONNECTIONBROKER_HPP_
-#include <com/sun/star/bridge/XConnectionBroker.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
@@ -1378,9 +1375,6 @@ void Desktop::Main()
         {
             Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
-            Reference< XConnectionBroker >  xServiceManagerBroker;
-            Reference< XConnectionBroker >  xPalmPilotManagerBroker;
-
             InitTestToolLib();
 
             if ( !bTerminateRequested )
@@ -1470,11 +1464,6 @@ void Desktop::Main()
 
             // remove temp directory
             removeTemporaryDirectory();
-
-            if( xPalmPilotManagerBroker.is() )
-                xPalmPilotManagerBroker->stopAccepting();
-            if( xServiceManagerBroker.is() )
-                xServiceManagerBroker->stopAccepting();
 
             if( pOfficeAcceptThread )
             {
