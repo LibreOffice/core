@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-13 09:39:57 $
+ *  last change: $Author: as $ $Date: 2002-05-24 11:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XTASKSSUPPLIER_HPP_
-#include <com/sun/star/frame/XTasksSupplier.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
@@ -1086,14 +1086,17 @@ USHORT Desktop::Exception(USHORT nError)
         SvtInternalOptions aOpt;
 
         // iterate tasks
-        Reference< ::com::sun::star::frame::XTasksSupplier >
+        Reference< ::com::sun::star::frame::XFramesSupplier >
                 xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 UNO_QUERY );
-        Reference< ::com::sun::star::frame::XTask > xTask;
-        Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-        while( xList->hasMoreElements() )
+        Reference< ::com::sun::star::frame::XFrame > xTask;
+        Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+        sal_Int32 nCount = xList->getCount();
+        for( sal_Int32 i=0; i<nCount; ++i )
         {
-            xList->nextElement() >>= xTask;
+            ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
+            if ( !(aVal>>=xTask) || ! xTask.is() )
+                continue;
 
             // ask for controller
             Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
@@ -2016,10 +2019,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 if ( !xDoc.is() )
                 {
                     // error case
-                    Reference< XTasksSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
-                    Reference< XEnumeration > xList = xTasksSupplier->getTasks()->createEnumeration();
+                    Reference< XFramesSupplier > xTasksSupplier( xDesktop, UNO_QUERY );
+                    Reference< XElementAccess > xList( xTasksSupplier->getFrames(), UNO_QUERY );
 
-                    if ( !xList->hasMoreElements() )
+                    if ( !xList->hasElements() )
                     {
                         // We don't have any task open so we have to shutdown ourself!!
                         Reference< XDesktop > xDesktop( xTasksSupplier, UNO_QUERY );
@@ -2071,16 +2074,16 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     else if ( rAppEvent.GetEvent() == "APPEAR" )
     {
         // find active task - the active task is always a visible task
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTasksSupplier >
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFramesSupplier >
                 xDesktop( ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
                 ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XTask > xTask = xDesktop->getActiveTask();
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xTask = xDesktop->getActiveFrame();
         if ( !xTask.is() )
         {
             // get any task if there is no active one
-            ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > xList = xDesktop->getTasks()->createEnumeration();
-            if ( xList->hasMoreElements() )
-                xList->nextElement() >>= xTask;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > xList( xDesktop->getFrames(), ::com::sun::star::uno::UNO_QUERY );
+            if ( xList->getCount()>0 )
+                xList->getByIndex(0) >>= xTask;
         }
 
         if ( xTask.is() )
