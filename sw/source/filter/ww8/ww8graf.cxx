@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: cmc $ $Date: 2002-12-05 17:53:19 $
+ *  last change: $Author: cmc $ $Date: 2002-12-12 13:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2639,11 +2639,40 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             else
                 pObject->SetLayer(nDrawHeaven);
 
+            //#106167# The differences in anchoring between drawing
+            //objects and nondrawing objects is totally annoying. A pox
+            //on the stuipd things. Can't be in headers, don't work
+            //the same as graphics/frames, but almost can but then don't
+            //do what you expect. Cursed things.
+            const SwFmtHoriOrient *pHori =
+                (const SwFmtHoriOrient *)aFlySet.GetItem(RES_HORI_ORIENT);
+            if (pHori && pHori->GetHoriOrient() == HORI_NONE)
+            {
+                SwFmtHoriOrient aHori(*pHori);
+                Point aPoint(pObject->GetAnchorPos());
+                aPoint.X() = aHori.GetPos();
+                aHori.SetPos(0);
+                aFlySet.ClearItem(RES_HORI_ORIENT);
+                pObject->SetAnchorPos(aPoint);
+            }
+
+            const SwFmtVertOrient *pVert =
+                (const SwFmtVertOrient *)aFlySet.GetItem(RES_VERT_ORIENT);
+            if (pVert && pVert->GetVertOrient() == VERT_NONE)
+            {
+                SwFmtVertOrient aVert(*pVert);
+                Point aPoint(pObject->GetAnchorPos());
+                aPoint.Y() = aVert.GetPos();
+                aVert.SetPos(0);
+                aFlySet.ClearItem(RES_VERT_ORIENT);
+                pObject->SetAnchorPos(aPoint);
+            }
+
             /*
             #97824#  Need to make sure that the correct layer ordering is
             applied.
             */
-            pWWZOrder->InsertEscherObject(pObject,pF->nSpId);
+            pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
             pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
 
             /*
