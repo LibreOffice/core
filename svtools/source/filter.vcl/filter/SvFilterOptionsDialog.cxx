@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvFilterOptionsDialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:38:10 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:11:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include "fltcall.hxx"
 #include "dlgexpor.hxx"
 #include "dlgejpg.hxx"
+#include "dlgepng.hxx"
 #include <uno/mapping.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
@@ -286,7 +287,8 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     ( aFilterName.EqualsIgnoreCaseAscii( EXP_SVMETAFILE ) ) ||
                     ( aFilterName.EqualsIgnoreCaseAscii( EXP_WMF ) ) ||
                     ( aFilterName.EqualsIgnoreCaseAscii( EXP_EMF ) ) ||
-                    ( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) ) )
+                    ( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )||
+                    ( aFilterName.EqualsIgnoreCaseAscii( EXP_PNG ) ) )
                 {
                     ByteString  aResMgrName( "svt", 3 );
                     ResMgr*     pResMgr;
@@ -298,6 +300,11 @@ sal_Int16 SvFilterOptionsDialog::execute()
                     if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
                     {
                         if ( DlgExportEJPG( aFltCallDlgPara ).Execute() == RET_OK )
+                            nRet = ui::dialogs::ExecutableDialogResults::OK;
+                    }
+                    else if ( aFilterName.EqualsIgnoreCaseAscii( EXP_PNG ) )
+                    {
+                        if ( DlgExportEPNG( aFltCallDlgPara ).Execute() == RET_OK )
                             nRet = ui::dialogs::ExecutableDialogResults::OK;
                     }
                     else if( aFilterName.EqualsIgnoreCaseAscii( EXP_BMP ) )
