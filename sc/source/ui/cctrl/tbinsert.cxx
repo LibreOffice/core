@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-29 18:10:31 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:53:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <svtools/intitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dispatch.hxx>
+#include <sfx2/viewsh.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/imagemgr.hxx>
 
 #include "tbinsert.hxx"
 #include "tbinsert.hrc"
@@ -93,10 +96,11 @@ SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 //
 //------------------------------------------------------------------
 
-ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-        SfxToolBoxControl( nId, rTbx, rBind ),
+ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx  ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx ),
         nLastSlotId(0)
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
 __EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
@@ -110,14 +114,23 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
 
     if( eState == SFX_ITEM_AVAILABLE )
     {
+
         const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();
-            USHORT nImageId = nLastSlotId ? nLastSlotId : GetId();
+            USHORT nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
+            rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+            aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
+            Image aImage = GetImage( m_xFrame,
+                                     aSlotURL,
+                                     hasBigImages(),
+                                     GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+/*
             Image aImage = GetBindings().GetImageManager()->GetImage( nImageId,
                            GetToolBox().GetDisplayBackground().GetColor().IsDark(),
                            SC_MOD() );
+*/
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
@@ -126,23 +139,29 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
 SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
 {
     USHORT nWinResId, nTbxResId;
-    USHORT nSlotId = GetId();
+    USHORT nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
-        nWinResId = RID_TBXCTL_INSERT;
-        nTbxResId = RID_TOOLBOX_INSERT;
+        rtl::OUString aInsertBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
+        createAndPositionSubToolBar( aInsertBarResStr );
+//      nWinResId = RID_TBXCTL_INSERT;
+//      nTbxResId = RID_TOOLBOX_INSERT;
     }
     else if (nSlotId == SID_TBXCTL_INSCELLS)
     {
-        nWinResId = RID_TBXCTL_INSCELLS;
-        nTbxResId = RID_TOOLBOX_INSCELLS;
+        rtl::OUString aInsertCellsBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcellsbar" ));
+        createAndPositionSubToolBar( aInsertCellsBarResStr );
+//      nWinResId = RID_TBXCTL_INSCELLS;
+//      nTbxResId = RID_TOOLBOX_INSCELLS;
     }
     else /* SID_TBXCTL_INSOBJ */
     {
-        nWinResId = RID_TBXCTL_INSOBJ;
-        nTbxResId = RID_TOOLBOX_INSOBJ;
+        rtl::OUString aInsertObjectBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertobjectbar" ));
+        createAndPositionSubToolBar( aInsertObjectBarResStr );
+//      nWinResId = RID_TBXCTL_INSOBJ;
+//      nTbxResId = RID_TOOLBOX_INSOBJ;
     }
-
+/*
     WindowAlign eNewAlign = ( GetToolBox().IsHorizontal() ) ? WINDOWALIGN_LEFT : WINDOWALIGN_TOP;
     ScTbxInsertPopup *pWin = new ScTbxInsertPopup( nSlotId, eNewAlign,
                                     ScResId(nWinResId), ScResId(nTbxResId), GetBindings() );
@@ -150,6 +169,8 @@ SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
     pWin->StartSelection();
     pWin->Show();
     return pWin;
+*/
+    return NULL;
 }
 
 SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
@@ -159,10 +180,20 @@ SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
 
 void __EXPORT ScTbxInsertCtrl::Select( BOOL bMod1 )
 {
-    if (nLastSlotId)
-        GetBindings().GetDispatcher()->Execute(nLastSlotId);
-}
+    SfxViewShell*   pCurSh( SfxViewShell::Current() );
+    SfxDispatcher*  pDispatch( 0 );
 
+    if ( pCurSh )
+    {
+        SfxViewFrame*   pViewFrame = pCurSh->GetViewFrame();
+        if ( pViewFrame )
+            pDispatch = pViewFrame->GetDispatcher();
+    }
+
+    if ( pDispatch )
+        pDispatch->Execute(nLastSlotId);
+}
+/*
 //------------------------------------------------------------------
 //
 //  Popup - Window
@@ -235,6 +266,6 @@ void __EXPORT ScTbxInsertPopup::PopupModeEnd()
     aTbx.GetToolBox().EndSelection();
     SfxPopupWindow::PopupModeEnd();
 }
-
+*/
 
 
