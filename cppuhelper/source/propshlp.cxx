@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:15:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ OPropertySetHelper::~OPropertySetHelper() SAL_THROW( () )
  */
 // XAggregation
 Any OPropertySetHelper::queryInterface( const ::com::sun::star::uno::Type & rType )
+    throw (RuntimeException)
 {
     return ::cppu::queryInterface(
         rType,
