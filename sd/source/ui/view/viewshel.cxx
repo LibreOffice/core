@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-01 11:15:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 12:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,13 @@ SO2_DECL_REF(SvInPlaceObject)
 #endif
 
 #define DELTA_ZOOM  10
+
+// Use magenta as transparency color instead of the standard gray that is
+// imported from vcl/image.hxx
+#undef IMAGE_STDBTN_COLOR
+#undef IMAGE_STDBTN_COLOR_HC
+#define IMAGE_STDBTN_COLOR Color(0xff,0x00,0xff)
+#define IMAGE_STDBTN_COLOR_HC Color(0xff,0x00,0xff)
 
 /*************************************************************************
 |*
