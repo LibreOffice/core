@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:29:04 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3548,9 +3548,9 @@ void SelectionManager::run( void* pThis )
         if( (aNow.tv_sec - aLast.tv_sec) > 0 )
         {
             ClearableMutexGuard aGuard(This->m_aMutex);
-            ::std::list< SelectionAdaptor* > aChangeList;
+            std::list< std::pair< SelectionAdaptor*, Reference< XInterface > > > aChangeList;
 
-            for( ::std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
+            for( std::hash_map< Atom, Selection* >::iterator it = This->m_aSelections.begin(); it != This->m_aSelections.end(); ++it )
             {
                 if( it->first != This->m_nXdndSelection && ! it->second->m_bOwner )
                 {
@@ -3558,14 +3558,16 @@ void SelectionManager::run( void* pThis )
                     if( aOwner != it->second->m_aLastOwner )
                     {
                         it->second->m_aLastOwner = aOwner;
-                        aChangeList.push_back( it->second->m_pAdaptor );
+                        std::pair< SelectionAdaptor*, Reference< XInterface > >
+                            aKeep( it->second->m_pAdaptor, it->second->m_pAdaptor->getReference() );
+                        aChangeList.push_back( aKeep );
                     }
                 }
             }
             aGuard.clear();
             while( aChangeList.begin() != aChangeList.end() )
             {
-                aChangeList.front()->fireContentsChanged();
+                aChangeList.front().first->fireContentsChanged();
                 aChangeList.pop_front();
             }
             aLast = aNow;
@@ -3715,6 +3717,13 @@ void SelectionManager::clearTransferable() throw()
 
 void SelectionManager::fireContentsChanged() throw()
 {
+}
+
+// ------------------------------------------------------------------------
+
+Reference< XInterface > SelectionManager::getReference() throw()
+{
+    return Reference< XInterface >( static_cast<OWeakObject*>(this) );
 }
 
 // ------------------------------------------------------------------------
