@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:43:30 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
         rSh.MoveCreate(aStartPos + aEndPos);
         rSh.EndCreate(SDRCREATE_FORCEEND);
 
-        const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+        const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
         if (rMarkList.GetMark(0))
         {
             SdrUnoObj* pUnoCtrl = PTR_CAST(SdrUnoObj, rMarkList.GetMark(0)->GetObj());
