@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:01:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@
 #ifndef DBAUI_QUERYORDER_HXX
 #include "queryorder.hxx"
 #endif
+
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/fmresids.hrc> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -1802,13 +1805,18 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
 
-    FmSearchDialog dlg(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),
-        FmSearchDialog::SM_ALLOWSCHEDULE);
-    dlg.SetActiveField(sActiveField);
+    //CHINA001 FmSearchDialog dlg(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),
+//CHINA001      SM_ALLOWSCHEDULE);//CHINA001 FmSearchDialog::SM_ALLOWSCHEDULE);
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+    AbstractFmSearchDialog* dlg = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),ResId(RID_SVXDLG_SEARCHFORM),SM_ALLOWSCHEDULE);
+    DBG_ASSERT(dlg, "Dialogdiet fail!");//CHINA001
+    dlg->SetActiveField(sActiveField); //CHINA001 dlg.SetActiveField(sActiveField);
 
-    dlg.SetFoundHandler(LINK(this, SbaXDataBrowserController, OnFoundData));
-    dlg.SetCanceledNotFoundHdl(LINK(this, SbaXDataBrowserController, OnCanceledNotFound));
-    dlg.Execute();
+    dlg->SetFoundHandler(LINK(this, SbaXDataBrowserController, OnFoundData));//CHINA001 dlg.SetFoundHandler(LINK(this, SbaXDataBrowserController, OnFoundData));
+    dlg->SetCanceledNotFoundHdl(LINK(this, SbaXDataBrowserController, OnCanceledNotFound));//CHINA001 dlg.SetCanceledNotFoundHdl(LINK(this, SbaXDataBrowserController, OnCanceledNotFound));
+    dlg->Execute();//CHINA001 dlg.Execute();
+    delete dlg; //add CHINA001
 
     // restore the grid's normal operating state
     xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
