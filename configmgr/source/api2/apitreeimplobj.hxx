@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-27 15:47:31 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,6 @@ namespace configmgr
 //-------------------------------------------------------------------------
         class ApiProvider : NotCopyable
         {
-            typedef configuration::TemplateProvider TemplateProvider;
-
             Factory&                    m_rFactory;
             OProviderImpl&              m_rProviderImpl;
         public:
@@ -127,7 +125,6 @@ namespace configmgr
             Factory&                    getFactory()        { return m_rFactory; }
             OProviderImpl&              getProviderImpl()   { return m_rProviderImpl; }
             ISynchronizedData*          getSourceLock() const;
-            TemplateProvider            getTemplateProvider() const;
         };
 
     //-----------------------------------------------------------------------------
@@ -140,6 +137,7 @@ namespace configmgr
             typedef uno::Reference<com::sun::star::lang::XComponent> UnoComponent;
 
             typedef configuration::Tree Tree;
+
             Tree                m_aTree;
             NotifierImplHolder  m_aNotifier;
             ComponentRef        m_xProvider;
@@ -175,6 +173,7 @@ namespace configmgr
             uno::XInterface*            getUnoInstance() const  { return m_pInstance; }
             ApiProvider&                getProvider()           { return m_rProvider; }
             UnoInterfaceRef             getUnoProviderInstance() const; //  { return m_xProvider; }
+
         // locking support
             ISynchronizedData*          getProviderLock() const { return m_rProvider.getSourceLock(); }
             ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
@@ -195,13 +194,7 @@ namespace configmgr
             UnoComponent getProviderComponent();
             UnoComponent getParentComponent();
 
-/*          // XEventListener
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
-            virtual uno::Any SAL_CALL queryInterface(uno::Type const& rType) throw();
-            virtual void SAL_CALL disposing(com::sun::star::lang::EventObject const& rEvt) throw();
-            // ---------------------------------------------------------------------------------------------------
-*/      };
+        };
 
     //-----------------------------------------------------------------------------
         class ApiRootTreeImpl

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-27 15:47:31 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,12 +336,6 @@ ApiProvider::ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
     : m_rFactory(rFactory)
     , m_rProviderImpl(rProviderImpl)
 {}
-//-------------------------------------------------------------------------
-
-configuration::TemplateProvider ApiProvider::getTemplateProvider() const
-{
-    return m_rProviderImpl.getTemplateProvider();
-}
 //-------------------------------------------------------------------------
 
 UnoTypeConverter ApiProvider::getTypeConverter() const
@@ -907,11 +901,9 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
                 OSL_ENSURE( aChange.getNodeName() == aNode.getName().toString(),
                             "Change's node-name does not match found node's name - erratic notification");
 
-                configuration::TemplateProvider aProviderForNewSets = m_aTreeImpl.getProvider().getTemplateProvider();
-
                 configuration::NodeChangesInformation aChanges;
 
-                if (configuration::adjustToChanges(aChanges, aTree,aNode, aChange,aProviderForNewSets))
+                if (configuration::adjustToChanges(aChanges, aTree,aNode, aChange))
                 {
                     OSL_ASSERT(aChanges.size() > 0);
 

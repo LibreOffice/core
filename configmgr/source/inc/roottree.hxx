@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:09:23 $
+ *  last change: $Author: jb $ $Date: 2001-04-19 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,8 +126,7 @@ namespace configmgr
         */
         bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
                                 Tree const& aBaseTree, NodeRef const& aBaseNode,
-                                Change const& aExternalChange,
-                                TemplateProvider const& aTemplateProvider) ;
+                                Change const& aExternalChange) ;
 
 
 //-----------------------------------------------------------------------------
