@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:46:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@ namespace pcr
 
     class IBrowserControl;
     class IPropertyLineListener;
+    class OBrowserPage;
     struct OLineDescriptor;
 
     //========================================================================
@@ -86,11 +87,7 @@ namespace pcr
     class OPropertyEditor : public Control
     {
     private:
-                TabControl                  m_aTabControl;
-                IPropertyLineListener*      m_pListener;
-                sal_uInt16                  m_nNextId;
-                Link                        m_aPageActivationHandler;
-
+                typedef ::std::map< ::rtl::OUString, sal_uInt16 >   MapStringToPageId;
                 struct HiddenPage
                 {
                     sal_uInt16  nPos;
@@ -98,56 +95,72 @@ namespace pcr
                     HiddenPage() : nPos( 0 ), pPage( NULL ) { }
                     HiddenPage( sal_uInt16 _nPos, TabPage* _pPage ) : nPos( _nPos ), pPage( _pPage ) { }
                 };
-                ::std::map< sal_uInt16, HiddenPage >
-                                            m_aHiddenPages;
+
+    private:
+                TabControl                  m_aTabControl;
+                IPropertyLineListener*      m_pListener;
+                sal_uInt16                  m_nNextId;
+                Link                        m_aPageActivationHandler;
+
+                MapStringToPageId                       m_aPropertyPageIds;
+                ::std::map< sal_uInt16, HiddenPage >    m_aHiddenPages;
 
     protected:
-                virtual void                Resize();
-                virtual void                GetFocus();
+                void                        Resize();
+                void                        GetFocus();
 
     public:
                                             OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
 
                                             ~OPropertyEditor();
 
-                virtual sal_uInt16          CalcVisibleLines();
-                virtual void                EnableUpdate();
-                virtual void                DisableUpdate();
+                sal_uInt16                  CalcVisibleLines();
+                void                        EnableUpdate();
+                void                        DisableUpdate();
 
-                virtual void                SetLineListener(IPropertyLineListener *);
+                void                        SetLineListener(IPropertyLineListener *);
 
-                virtual void                SetHelpId( sal_uInt32 nHelpId );
-                virtual sal_uInt16          AppendPage( const String& r,sal_uInt32 nHelpId=0);
-                virtual void                SetPage( sal_uInt16 );
-                virtual void                RemovePage(sal_uInt16 nID);
-                virtual sal_uInt16          GetCurPage();
-                virtual void                ClearAll();
+                void                        SetHelpId( sal_uInt32 nHelpId );
+                sal_uInt16                  AppendPage( const String& r,sal_uInt32 nHelpId=0);
+                void                        SetPage( sal_uInt16 );
+                void                        RemovePage(sal_uInt16 nID);
+                sal_uInt16                  GetCurPage();
+                void                        ClearAll();
 
-                virtual void                SetPropertyValue(const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
-                virtual ::rtl::OUString     GetPropertyValue(const ::rtl::OUString & rEntryName ) const;
-                virtual sal_uInt16          GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
-                virtual void                SetPropertyData(const ::rtl::OUString& rEntryName, void* pData);
-                virtual IBrowserControl*    GetPropertyControl( const ::rtl::OUString& rEntryName );
-                        void                EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
-                        void                EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton );
+                void                        SetPropertyValue(const ::rtl::OUString & rEntryName, const ::rtl::OUString & rValue );
+                ::rtl::OUString             GetPropertyValue(const ::rtl::OUString & rEntryName ) const;
+                sal_uInt16                  GetPropertyPos(const ::rtl::OUString& rEntryName ) const;
+                IBrowserControl*            GetPropertyControl( const ::rtl::OUString& rEntryName );
+                void                        EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable );
+                void                        EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton = false );
+                sal_Bool                    IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const;
 
-                        void                ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
+                void                        ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow );
 
-                virtual sal_uInt16          InsertEntry(const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND);
-                virtual void                ChangeEntry(const OLineDescriptor&, sal_uInt16 nPos);
+                sal_uInt16                  InsertEntry( const OLineDescriptor&, sal_uInt16 nPos = EDITOR_LIST_APPEND, sal_uInt16 _nPageId = EDITOR_PAGE_CURRENT );
+                void                        RemoveEntry( const ::rtl::OUString& _rName );
+                void                        ChangeEntry( const OLineDescriptor& );
 
-                virtual void                SetFirstVisibleEntry(sal_uInt16 nPos);
-                virtual sal_uInt16          GetFirstVisibleEntry();
+                void                        SetFirstVisibleEntry(sal_uInt16 nPos);
+                sal_uInt16                  GetFirstVisibleEntry();
 
-                virtual void                SetSelectedEntry(sal_uInt16 nPos);
-                virtual sal_uInt16          GetSelectedEntry();
+                void                        SetSelectedEntry(sal_uInt16 nPos);
+                sal_uInt16                  GetSelectedEntry();
 
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
         Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
+
         // #95343# -------------------------------
         sal_Int32 getMinimumWidth();
 
-        void    CommitModified();
+                void                        CommitModified();
+
+    private:
+        OBrowserPage* getPage( sal_uInt16& _rPageId );
+        const OBrowserPage* getPage( sal_uInt16& _rPageId ) const;
+
+        OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName );
+        const OBrowserPage* getPage( const ::rtl::OUString& _rPropertyName ) const;
 
     protected:
         DECL_LINK(OnPageDeactivate, TabControl*);
