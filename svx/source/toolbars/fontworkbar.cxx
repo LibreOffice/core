@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontworkbar.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:12:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,11 +665,6 @@ void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_SAME_LETTER_HEIGHTS );
-    }
-    if ( rSet.GetItemState( SID_FONTWORK_SHAPE_TYPES ) != SFX_ITEM_UNKNOWN )
-    {
-        if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
-            rSet.DisableItem( SID_FONTWORK_SHAPE_TYPES );
     }
     if ( rSet.GetItemState( SID_FONTWORK_SHAPE_TYPE ) != SFX_ITEM_UNKNOWN )
     {
