@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:40:15 $
+ *  last change: $Author: svesik $ $Date: 2004-04-20 13:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,14 +444,28 @@ BitmapEx Graphic::GetBitmapEx() const
 
 Bitmap Graphic::GetBitmap( const Size* pSizePixel ) const
 {
-    return mpImpGraphic->ImplGetBitmap( pSizePixel );
+    return mpImpGraphic->ImplGetBitmap( pSizePixel, FALSE );
 }
 
 // ------------------------------------------------------------------------
 
 BitmapEx Graphic::GetBitmapEx( const Size* pSizePixel ) const
 {
-    return mpImpGraphic->ImplGetBitmapEx( pSizePixel );
+    return mpImpGraphic->ImplGetBitmapEx( pSizePixel, FALSE );
+}
+
+// ------------------------------------------------------------------------
+
+Bitmap Graphic::GetUnlimitedBitmap( const Size* pSizePixel ) const
+{
+    return mpImpGraphic->ImplGetBitmap( pSizePixel, TRUE ) ;
+}
+
+// ------------------------------------------------------------------------
+
+BitmapEx Graphic::GetUnlimitedBitmapEx( const Size* pSizePixel ) const
+{
+    return mpImpGraphic->ImplGetBitmapEx( pSizePixel, TRUE ) ;
 }
 
 // ------------------------------------------------------------------------
@@ -505,7 +519,7 @@ Size Graphic::GetSizePixel( const OutputDevice* pRefDevice ) const
     Size aRet;
 
     if( GRAPHIC_BITMAP == mpImpGraphic->ImplGetType() )
-        aRet = mpImpGraphic->ImplGetBitmapEx( NULL ).GetSizePixel();
+        aRet = mpImpGraphic->ImplGetBitmapEx( NULL, FALSE ).GetSizePixel();
     else
         aRet = ( pRefDevice ? pRefDevice : Application::GetDefaultDevice() )->LogicToPixel( GetPrefSize(), GetPrefMapMode() );
 
