@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:23:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,34 +1203,13 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     String aNotesPageName;
     AutoLayout eStandardLayout;
     AutoLayout eNotesLayout;
-    BOOL bIsPageBack;
-    BOOL bIsPageObj;
+    BOOL bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
+    BOOL bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
     // 1. Process the arguments.
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
-        SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
-        String aStr;
-        aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aStr ) );
-        aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
-                aVisibleLayers.IsSet(aBckgrnd) ) );
-        aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
-                aVisibleLayers.IsSet(aBckgrndObj) ) );
-
-        AutoLayout eAutoLayout = AUTOLAYOUT_NONE;
-        if (pTemplatePage != NULL)
-            eAutoLayout = pTemplatePage->GetAutoLayout();
-
-        if (eAutoLayout == AUTOLAYOUT_TITLE && pPage->GetPageNum() == 1)
-        {
-            // 1.Seite ist TitelDia
-            eAutoLayout = AUTOLAYOUT_ENUM;
-        }
-
-        aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT,
-                eAutoLayout ) );
-
         // Make the layout menu visible in the tool pane.
         SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
         SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
