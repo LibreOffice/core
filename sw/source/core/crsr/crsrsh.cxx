@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:15:12 $
+ *  last change: $Author: ama $ $Date: 2001-05-09 08:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2413,6 +2413,11 @@ void SwCrsrShell::MakeSelVisible()
         {
             aTmp.Top( aCrsrHeight.X() + aCharRect.Top() );
             aTmp.Height( aCrsrHeight.Y() );
+        }
+        if( !aTmp.HasArea() )
+        {
+            aTmp.SSize().Height() += 1;
+            aTmp.SSize().Width() += 1;
         }
         MakeVisible( aTmp );
     }
