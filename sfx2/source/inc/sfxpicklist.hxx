@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-09 14:16:30 $
+ *  last change: $Author: cd $ $Date: 2001-11-20 16:56:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ class SfxPickList : public SfxListener
 
     static osl::Mutex*      GetOrCreateMutex();
 
-    String                  CreatePicklistMenuTitle( const String& aURL, sal_uInt32 nNo );
+    void                    CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURL, sal_uInt32 nNo );
     PickListEntry*          GetPickListEntry( sal_uInt32 nIndex );
     void                    CreatePickListEntries();
     void                    RemovePickListEntries();

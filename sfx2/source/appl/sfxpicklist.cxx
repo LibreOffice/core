@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-09 14:16:06 $
+ *  last change: $Author: cd $ $Date: 2001-11-20 16:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ osl::Mutex* SfxPickList::GetOrCreateMutex()
     return pMutex;
 }
 
-String  SfxPickList::CreatePicklistMenuTitle( const String& aURLString, sal_uInt32 nNo )
+void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const String& aURLString, sal_uInt32 nNo )
 {
 #ifdef MAC
     String aPickEntry;
@@ -181,6 +181,8 @@ String  SfxPickList::CreatePicklistMenuTitle( const String& aURLString, sal_uInt
 #endif
 
     INetURLObject   aURL( aURLString );
+    rtl::OUString   aTipHelpText;
+
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         // Do handle file URL differently => convert it to a system
@@ -191,6 +193,7 @@ String  SfxPickList::CreatePicklistMenuTitle( const String& aURLString, sal_uInt
         ::rtl::OUString aSystemPath( aPhysicalName );
         ::rtl::OUString aCompactedSystemPath;
 
+        aTipHelpText = aSystemPath;
         oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
         if ( !nError )
             aPickEntry += String( aCompactedSystemPath );
@@ -209,9 +212,12 @@ String  SfxPickList::CreatePicklistMenuTitle( const String& aURLString, sal_uInt
         String  aShortURL;
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         aPickEntry += aShortURL;
+        aTipHelpText = aURLString;
     }
 
-    return aPickEntry;
+    // Set menu item text and tip help
+    pMenu->SetItemText( nItemId, aPickEntry );
+    pMenu->SetTipHelpText( nItemId, aTipHelpText );
 }
 
 void SfxPickList::RemovePickListEntries()
@@ -341,14 +347,13 @@ void SfxPickList::CreateMenuEntries( Menu* pMenu )
             != MENUITEM_SEPARATOR && m_nAllowedMenuSize )
         pMenu->InsertSeparator();
 
+    rtl::OUString aEmptyString;
     for ( sal_uInt32 i = 0; i < m_aPicklistVector.size(); i++ )
     {
         PickListEntry* pEntry = GetPickListEntry( i );
 
-        pMenu->InsertItem(
-                (USHORT)(START_ITEMID_PICKLIST + i),
-//              CreatePicklistMenuTitle( pEntry->aTitle, i ) );
-                CreatePicklistMenuTitle( pEntry->aName, i ) );
+        pMenu->InsertItem( (USHORT)(START_ITEMID_PICKLIST + i), aEmptyString );
+        CreatePicklistMenuTitle( pMenu, (USHORT)(START_ITEMID_PICKLIST + i), pEntry->aName, i );
     }
 
     bPickListMenuInitializing = sal_False;
