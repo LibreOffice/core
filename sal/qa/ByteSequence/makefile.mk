@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 14:46:08 $
+#   last change: $Author: rt $ $Date: 2004-05-03 08:54:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 SHL1OBJS= \
     $(SLO)$/ByteSequence.obj 
 
-SHL1TARGET= ByteSequence
+SHL1TARGET= rtl_ByteSequence
 SHL1STDLIBS=\
    $(SALLIB) 
 .IF "$(GUI)" == "WNT"
@@ -93,6 +93,20 @@ SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
+
+# --- BEGIN --------------------------------------------------------
+SHL2OBJS=  \
+    $(SLO)$/rtl_old_testbyteseq.obj
+SHL2TARGET= rtl_old_testbyteseq
+SHL2STDLIBS=\
+    $(SALLIB) \
+    $(CPPUNITLIB)
+
+SHL2IMPLIB= i$(SHL2TARGET)
+
+DEF2NAME    =$(SHL2TARGET)
+SHL2VERSIONMAP = export.map
+# END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
