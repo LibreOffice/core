@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:29:41 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #include "frmload.hxx"
 
 #include <framework/interaction.hxx>
+
+#ifndef _COM_SUN_STAR_FRAME_XLOADABLE_HPP_
+#include <com/sun/star/frame/XLoadable.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -149,22 +153,17 @@ namespace css = ::com::sun::star;
 #include "frame.hxx"
 #include "docfac.hxx"
 #include "fcontnr.hxx"
-#include "loadenv.hxx"
 #include "docfile.hxx"
 #include "docfilt.hxx"
 #include "brokenpackageint.hxx"
+#include "objshimp.hxx"
 
 SfxFrameLoader_Impl::SfxFrameLoader_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-    : pMatcher( 0 )
-    , pLoader( 0 )
-    , bLoadDone( sal_False )
-    , bLoadState( sal_False )
 {
 }
 
 SfxFrameLoader_Impl::~SfxFrameLoader_Impl()
 {
-    delete pMatcher;
 }
 
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::beans::PropertyValue >& rArgs  ,
@@ -180,6 +179,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     static ::rtl::OUString PROP_READONLY           = ::rtl::OUString::createFromAscii("ReadOnly"          );
     static ::rtl::OUString PROP_ASTEMPLATE         = ::rtl::OUString::createFromAscii("AsTemplate"        );
     static ::rtl::OUString PROP_INTERACTIONHANDLER = ::rtl::OUString::createFromAscii("InteractionHandler");
+
+    sal_Bool bLoadState = sal_False;
 
     // this methods assumes that the filter is detected before, usually by calling the detect() method below
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -442,115 +443,55 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
     aSet.Put( SfxFrameItem( SID_DOCFRAME, pFrame ) );
     aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilterName ) );
 
-    SfxAllItemSet aResSet( aSet );
-
-    // create LoadEnvironment and set link for callback when it is finished
-       pLoader = LoadEnvironment_Impl::Create( aSet );
-       pLoader->AddRef();
-       pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
-
-    bLoadDone = sal_False;
-    pMatcher = new SfxFilterMatcher;
-    pLoader->SetFilterMatcher( pMatcher );
-    pLoader->Start();
-
-    // wait for callback
-    while( bLoadDone == sal_False )
-        Application::Yield();
-
-    if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE && xInteraction.is() )
+    // !TODO: replace by direct construction of model (needs view factory)
+    SfxObjectShell* pDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
+    if ( pDoc )
     {
-        ::rtl::OUString aDocName = INetURLObject(rURL).getName( INetURLObject::LAST_SEGMENT, true,
-                                                  INetURLObject::DECODE_WITH_CHARSET );
-
-        SFX_ITEMSET_ARG( &aSet, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
-        if ( !pRepairItem || !pRepairItem->GetValue() )
+        css::uno::Reference< css::frame::XLoadable > xLoadable = css::uno::Reference< css::frame::XLoadable >( pDoc->GetModel(), css::uno::UNO_QUERY );
+        css::uno::Sequence < css::beans::PropertyValue > aLoadArgs;
+        TransformItems( SID_OPENDOC, aSet, aLoadArgs );
+        try
         {
-            RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
-            css::uno::Reference< css::task::XInteractionRequest > xRequest ( pRequest );
-            xInteraction->handle( xRequest );
-            if( pRequest->isApproved() )
+            xLoadable->load( aLoadArgs );
+
+            SfxMedium* pMedium = pDoc->GetMedium();
+            BOOL bHidden = FALSE;
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
+            if ( pHidItem )
+                bHidden = pHidItem->GetValue();
+
+            // !TODO: will be done by Framework!
+            pMedium->SetUpdatePickList( !bHidden );
+
+            // !TODO: replace by ViewFactory
+            if( pFrame->InsertDocument( pDoc ) )
             {
-                aResSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
-                aResSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
-                aResSet.Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
-                pLoader->ReleaseRef();
-                pLoader = LoadEnvironment_Impl::Create( aResSet );
-                pLoader->AddRef();
-                pLoader->SetDoneLink( LINK( this, SfxFrameLoader_Impl, LoadDone_Impl ) );
-
-                bLoadDone = sal_False;
-                pLoader->SetFilterMatcher( pMatcher );
-                pLoader->Start();
-
-                // wait for callback
-                while( bLoadDone == sal_False )
-                    Application::Yield();
-
-                if ( pLoader->GetError() == ERRCODE_IO_BROKENPACKAGE )
-                {
-                       NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-                    xRequest = css::uno::Reference< css::task::XInteractionRequest >( pNotifyRequest );
-                       xInteraction->handle( xRequest );
-                }
+                pFrame->GetCurrentViewFrame()->UpdateDocument_Impl();
+                String aURL = pDoc->GetMedium()->GetName();
+                SFX_APP()->Broadcast( SfxStringHint( SID_OPENURL, aURL ) );
+                bLoadState = sal_True;
             }
         }
-        else
+        catch ( css::uno::Exception& )
         {
-            NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-            css::uno::Reference< css::task::XInteractionRequest > xRequest ( pNotifyRequest );
-               xInteraction->handle( xRequest );
-        }
-    }
-
-    if ( pLoader->GetError() )
-    {
-        SfxFrame* pFrame = pLoader->GetFrame();
-        if ( pFrame && !pFrame->GetCurrentDocument() )
-        {
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
-            css::uno::Reference< css::frame::XFrame > axFrame;
-            pFrame->SetFrameInterface_Impl( axFrame );
-            pFrame->DoClose();
+            if ( pFrame && !pFrame->GetCurrentDocument() )
+            {
+                // document loading was not successful; close SfxFrame (but not XFrame!)
+                ::vos::OGuard aGuard( Application::GetSolarMutex() );
+                css::uno::Reference< css::frame::XFrame > axFrame;
+                pFrame->SetFrameInterface_Impl( axFrame );
+                pFrame->DoClose();
+            }
         }
     }
 
     xFrame.clear();
     xListener.clear();
-
-    if ( pLoader )
-    {
-        pLoader->ReleaseRef();
-        pLoader = 0;
-    }
-
     return bLoadState;
 }
 
 void SfxFrameLoader_Impl::cancel() throw( RUNTIME_EXCEPTION )
 {
-    ::vos::OGuard aGuard( Application::GetSolarMutex() );
-    if ( pLoader )
-        pLoader->CancelTransfers();
-    bLoadDone = sal_True;
-}
-
-IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
-{
-    DBG_ASSERT( pLoader, "No Loader created, but LoadDone ?!" );
-
-    if ( pLoader->GetError() )
-    {
-        bLoadDone  = sal_True ;
-        bLoadState = sal_False;
-    }
-    else
-    {
-        bLoadDone  = sal_True;
-        bLoadState = sal_True;
-    }
-
-    return 0 ;
 }
 
 SFX_IMPL_SINGLEFACTORY( SfxFrameLoader_Impl )
