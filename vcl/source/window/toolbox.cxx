@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:31:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,7 +820,7 @@ static const ImplToolItem *ImplGetFirstClippedItem( const ToolBox* pThis )
     while ( it != pThis->mpData->m_aItems.end() )
     {
         if( it->IsClipped() )
-            return it;
+            return &(*it);
         ++it;
     }
     return NULL;
@@ -2838,23 +2838,23 @@ void ToolBox::ImplFormat( BOOL bResize )
         if( IsMenuEnabled() && ImplIsFloatingMode() && !ImplHasExternalMenubutton() && !bIsInPopupMode )
         {
             // custom menu will be the last button in floating mode
-            it = &mpData->maMenubuttonItem;
+            ImplToolItem &rIt = mpData->maMenubuttonItem;
 
             if ( mbHorz )
             {
-                it->maRect.Left()     = nX+TB_MENUBUTTON_OFFSET;
-                it->maRect.Top()      = nY;
-                it->maRect.Right()    = it->maRect.Left() + mpData->mnMenuButtonWidth;
-                it->maRect.Bottom()   = nY+nLineSize-1;
-                nX += it->maItemSize.Width();
+                rIt.maRect.Left()     = nX+TB_MENUBUTTON_OFFSET;
+                rIt.maRect.Top()      = nY;
+                rIt.maRect.Right()    = rIt.maRect.Left() + mpData->mnMenuButtonWidth;
+                rIt.maRect.Bottom()   = nY+nLineSize-1;
+                nX += rIt.maItemSize.Width();
             }
             else
             {
-                it->maRect.Left()     = nX;
-                it->maRect.Top()      = nY+TB_MENUBUTTON_OFFSET;
-                it->maRect.Right()    = nX+nLineSize-1;
-                it->maRect.Bottom()   = it->maRect.Top() + mpData->mnMenuButtonWidth;
-                nY += it->maItemSize.Height();
+                rIt.maRect.Left()     = nX;
+                rIt.maRect.Top()      = nY+TB_MENUBUTTON_OFFSET;
+                rIt.maRect.Right()    = nX+nLineSize-1;
+                rIt.maRect.Bottom()   = rIt.maRect.Top() + mpData->mnMenuButtonWidth;
+                nY += rIt.maItemSize.Height();
             }
         }
 
@@ -6161,7 +6161,7 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             }
 
             // select the menu button if a clipped item would be selected
-            if( it == ImplGetFirstClippedItem( this ) && IsMenuEnabled() )
+            if( &(*it) == ImplGetFirstClippedItem( this ) && IsMenuEnabled() )
             {
                 ImplChangeHighlight( NULL );
                 ImplDrawMenubutton( this, TRUE );
