@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-17 10:28:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,4 +184,45 @@ int TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
                 ( maURL == ((const TextAttribHyperLink&)rAttr).maURL ) &&
                 ( maDescription == ((const TextAttribHyperLink&)rAttr).maDescription ) &&
                 ( maColor == ((const TextAttribHyperLink&)rAttr).maColor ) );
+}
+
+/*-- 24.06.2004 14:49:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TextAttribProtect::TextAttribProtect() :
+    TextAttrib( TEXTATTR_PROTECTED )
+{
+}
+/*-- 24.06.2004 14:49:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TextAttribProtect::TextAttribProtect( const TextAttribProtect& rAttr ) :
+    TextAttrib( TEXTATTR_PROTECTED )
+{
+}
+/*-- 24.06.2004 14:49:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TextAttribProtect::~TextAttribProtect()
+{
+}
+/*-- 24.06.2004 14:49:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void TextAttribProtect::SetFont( Font& rFont ) const
+{
+}
+/*-- 24.06.2004 14:49:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+TextAttrib*     TextAttribProtect::Clone() const
+{
+    return new TextAttribProtect();
+}
+/*-- 24.06.2004 14:49:45---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+int TextAttribProtect::operator==( const TextAttrib& rAttr ) const
+{
+    return ( TextAttrib::operator==(rAttr ) );
 }
