@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 07:23:40 $
+ *  last change: $Author: obr $ $Date: 2001-06-18 08:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,9 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         mpFrameData->mbInSysObjToTopHdl = FALSE;
         mpFrameData->mbSysObjFocus      = FALSE;
 
+#ifndef TF_SVDATA
         mpFrameData->mpDragTimer        = NULL;
+#endif
         mpFrameData->maPaintTimer.SetTimeout( 30 );
         mpFrameData->maPaintTimer.SetTimeoutHdl( LINK( this, Window, ImplHandlePaintHdl ) );
 
@@ -4194,8 +4196,10 @@ Window::~Window()
         mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
         delete mpFrame;
 #endif
+#ifndef TF_SVDATA
         if ( mpFrameData->mpDragTimer )
             delete mpFrameData->mpDragTimer;
+#endif
         delete mpFrameData;
 #ifdef REMOTE_APPSERVER
         delete mpGraphics;
