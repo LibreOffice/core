@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-10 14:45:13 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 14:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,13 +560,16 @@ namespace dbaui
             m_lmbRightTable.InsertEntry(aIter->first);
 
             if (!pInitialLeft)
+            {
                 pInitialLeft = aIter->second;
+                m_strCurrentLeft = aIter->first;
+            }
             else if (!pInitialRight)
+            {
                 pInitialRight = aIter->second;
+                m_strCurrentRight = aIter->first;
+            }
         }
-
-        m_strCurrentLeft = pInitialLeft->GetWinName();
-        m_strCurrentRight = pInitialRight->GetWinName();
 
         // links das erste, rechts das zweite selektieren
         m_lmbLeftTable.SelectEntry(m_strCurrentLeft);
@@ -607,7 +610,7 @@ namespace dbaui
             ++aIter;
             OTableWindow* pSecond = aIter->second;
 
-            if (m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetWinName()))
+            if ( m_lmbLeftTable.GetSelectEntry() == String(pFirst->GetComposedName()) )
             {
                 pLeft   = pFirst;
                 pRight  = pSecond;

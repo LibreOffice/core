@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RTableConnectionData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 14:05:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,27 +410,27 @@ BOOL ORelationTableConnectionData::Update()
     {
         Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
         Reference< XIndexAccess> xKeys;
-        if(xSup.is() )
+        if ( xSup.is() )
             xKeys = xSup->getKeys();
         else
             return FALSE;
 
-        if( m_aConnName.Len() && xKeys.is() )
+        if ( m_aConnName.Len() && xKeys.is() )
         {
             for(sal_Int32 i=0;i<xKeys->getCount();++i)
             {
                 Reference< XPropertySet> xKey;
                 xKeys->getByIndex(i) >>= xKey;
                 OSL_ENSURE(xKey.is(),"Key is not valid!");
-                if(xKey.is())
+                if ( xKey.is() )
                 {
                     ::rtl::OUString sName;;
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
-                    if(sName == ::rtl::OUString(m_aConnName))
+                    if ( sName == ::rtl::OUString(m_aConnName) )
                     {
                         Reference< XDrop> xDrop(xKeys,UNO_QUERY);
                         OSL_ENSURE(xDrop.is(),"can't drop key because we haven't a drop interface!");
-                        if(xDrop.is())
+                        if ( xDrop.is() )
                             xDrop->dropByIndex(i);
                         break;
                     }
@@ -445,7 +445,7 @@ BOOL ORelationTableConnectionData::Update()
     // reassign the keys because the orientaion could be changed
     Reference<XKeysSupplier> xSup(m_xSource,UNO_QUERY);
     Reference< XIndexAccess> xKeys;
-    if(xSup.is() )
+    if ( xSup.is() )
         xKeys = xSup->getKeys();
     ////////////////////////////////////////////////////////////
     // Neue Relation erzeugen
@@ -456,10 +456,13 @@ BOOL ORelationTableConnectionData::Update()
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
+
+    // build a foreign key name
     ::rtl::OUString sSourceName;
     m_xSource->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
     ::rtl::OUString sKeyName = sSourceName;
     sKeyName += m_aDestWinName;
+
     xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
     xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
     xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(::rtl::OUString(m_aDestWinName)));
@@ -467,7 +470,7 @@ BOOL ORelationTableConnectionData::Update()
     xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
 
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
-    if(xColSup.is())
+    if ( xColSup.is() )
     {
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Reference<XDataDescriptorFactory> xColumnFactory(xColumns,UNO_QUERY);
@@ -506,7 +509,7 @@ BOOL ORelationTableConnectionData::Update()
             {
                 ::rtl::OUString sName;
                 xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sName;
-                if(sName == ::rtl::OUString(m_aDestWinName))
+                if ( sName == ::rtl::OUString(m_aDestWinName) )
                 {
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
                     m_aConnName = sName;
