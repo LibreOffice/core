@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoatxt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:44:37 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,10 +558,10 @@ Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const OUStr
     String sLongName(aTitle);
     if(pGlosGroup && !pGlosGroup->GetError())
     {
-        if( pGlosGroup->IsOld() && pGlosGroup->ConvertToNew())
+        /*if( pGlosGroup->IsOld() && pGlosGroup->ConvertToNew())
         {
             throw uno::RuntimeException();
-        }
+        } */
         Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pxRange = 0;
         OTextCursorHelper* pxCursor = 0;
