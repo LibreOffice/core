@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rdbtdp_tdenumeration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:23:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,8 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
-#ifndef _REGISTRY_REFLREAD_HXX_
-#include <registry/reflread.hxx>
-#endif
+#include "registry/reader.hxx"
+#include "registry/version.h"
 
 #ifndef _STOC_RDBTDP_BASE_HXX
 #include "base.hxx"
@@ -104,7 +103,6 @@ TypeDescriptionEnumerationImpl::createInstance(
         const rtl::OUString & rModuleName,
         const uno::Sequence< uno::TypeClass > & rTypes,
         reflection::TypeDescriptionSearchDepth eDepth,
-        const RegistryTypeReaderLoader & rLoader,
         const RegistryKeyList & rBaseKeys )
     throw ( reflection::NoSuchTypeNameException,
             reflection::InvalidTypeNameException,
@@ -115,90 +113,86 @@ TypeDescriptionEnumerationImpl::createInstance(
         // Enumeration for root requested.
         return rtl::Reference< TypeDescriptionEnumerationImpl >(
             new TypeDescriptionEnumerationImpl(
-                xContext, rBaseKeys, rTypes, eDepth, rLoader ) );
+                xContext, rBaseKeys, rTypes, eDepth ) );
     }
 
     RegistryKeyList aModuleKeys;
 
-    if ( rLoader.isLoaded() )
+    rtl::OUString aKey( rModuleName.replace( '.', '/' ) );
+
+    bool bOpenKeySucceeded = false;
+
+    const RegistryKeyList::const_iterator end = rBaseKeys.end();
+    RegistryKeyList::const_iterator it = rBaseKeys.begin();
+
+    while ( it != end )
     {
-        rtl::OUString aKey( rModuleName.replace( '.', '/' ) );
-
-        bool bOpenKeySucceeded = false;
-
-        const RegistryKeyList::const_iterator end = rBaseKeys.end();
-        RegistryKeyList::const_iterator it = rBaseKeys.begin();
-
-        while ( it != end )
+        uno::Reference< registry::XRegistryKey > xKey;
+        try
         {
-            uno::Reference< registry::XRegistryKey > xKey;
-            try
+            xKey = (*it)->openKey( aKey );
+            if ( xKey.is() )
             {
-                xKey = (*it)->openKey( aKey );
-                if ( xKey.is() )
+                // closes key in it's dtor (which is
+                // called even in case of exceptions).
+                RegistryKeyCloser aCloser( xKey );
+
+                if ( xKey->isValid() )
                 {
-                    // closes key in it's dtor (which is
-                    // called even in case of exceptions).
-                    RegistryKeyCloser aCloser( xKey );
+                    bOpenKeySucceeded = true;
 
-                    if ( xKey->isValid() )
+                    if ( xKey->getValueType()
+                         == registry::RegistryValueType_BINARY )
                     {
-                        bOpenKeySucceeded = true;
+                        uno::Sequence< sal_Int8 > aBytes(
+                            xKey->getBinaryValue() );
 
-                        if ( xKey->getValueType()
-                                == registry::RegistryValueType_BINARY )
+                        typereg::Reader aReader(
+                            aBytes.getConstArray(), aBytes.getLength(), false,
+                            TYPEREG_VERSION_1);
+
+                        rtl::OUString aName(
+                            aReader.getTypeName().replace( '/', '.' ) );
+
+                        if ( aReader.getTypeClass() == RT_TYPE_MODULE )
                         {
-                            uno::Sequence< sal_Int8 > aBytes(
-                                xKey->getBinaryValue() );
+                            // Do not close xKey!
+                            aCloser.reset();
 
-                            RegistryTypeReader aReader(
-                                rLoader,
-                                (const sal_uInt8 *)aBytes.getConstArray(),
-                                aBytes.getLength(),
-                                sal_False );
-
-                            rtl::OUString aName(
-                                aReader.getTypeName().replace( '/', '.' ) );
-
-                            if ( aReader.getTypeClass() == RT_TYPE_MODULE )
-                            {
-                                // Do not close xKey!
-                                aCloser.reset();
-
-                                aModuleKeys.push_back( xKey );
-                            }
+                            aModuleKeys.push_back( xKey );
                         }
                     }
-                    else
-                    {
-                        OSL_ENSURE( sal_False,
-                            "TypeDescriptionEnumerationImpl::createInstance "
-                            "- Invalid registry key!" );
-                    }
+                }
+                else
+                {
+                    OSL_ENSURE(
+                        sal_False,
+                        "TypeDescriptionEnumerationImpl::createInstance "
+                        "- Invalid registry key!" );
                 }
             }
-            catch ( registry::InvalidRegistryException const & )
-            {
-                // openKey, getValueType, getBinaryValue
+        }
+        catch ( registry::InvalidRegistryException const & )
+        {
+            // openKey, getValueType, getBinaryValue
 
-                OSL_ENSURE( sal_False,
-                            "TypeDescriptionEnumerationImpl::createInstance "
-                            "- Caught InvalidRegistryException!" );
-            }
-
-            it++;
+            OSL_ENSURE( sal_False,
+                        "TypeDescriptionEnumerationImpl::createInstance "
+                        "- Caught InvalidRegistryException!" );
         }
 
-        if ( !bOpenKeySucceeded )
-            throw reflection::NoSuchTypeNameException();
-
-        if ( aModuleKeys.size() == 0 )
-            throw reflection::InvalidTypeNameException();
+        it++;
     }
+
+    if ( !bOpenKeySucceeded )
+        throw reflection::NoSuchTypeNameException();
+
+    if ( aModuleKeys.size() == 0 )
+        throw reflection::InvalidTypeNameException();
 
     return rtl::Reference< TypeDescriptionEnumerationImpl >(
         new TypeDescriptionEnumerationImpl(
-                xContext, aModuleKeys, rTypes, eDepth, rLoader ) );
+                xContext, aModuleKeys, rTypes, eDepth ) );
 }
 
 //=========================================================================
@@ -207,12 +201,10 @@ TypeDescriptionEnumerationImpl::TypeDescriptionEnumerationImpl(
                                 uno::XComponentContext > & xContext,
                             const RegistryKeyList & rModuleKeys,
                             const uno::Sequence< uno::TypeClass > & rTypes,
-                            reflection::TypeDescriptionSearchDepth eDepth,
-                            const RegistryTypeReaderLoader & rLoader )
+                            reflection::TypeDescriptionSearchDepth eDepth )
 : m_aModuleKeys( rModuleKeys ),
   m_aTypes( rTypes ),
   m_eDepth( eDepth ),
-  m_aLoader( rLoader ),
   m_xContext( xContext )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -409,11 +401,9 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                                 uno::Sequence< sal_Int8 > aBytes(
                                     xKey->getBinaryValue() );
 
-                                RegistryTypeReader aReader(
-                                    m_aLoader,
-                                    (const sal_uInt8 *)aBytes.getConstArray(),
-                                    aBytes.getLength(),
-                                    sal_False );
+                                typereg::Reader aReader(
+                                    aBytes.getConstArray(), aBytes.getLength(),
+                                    false, TYPEREG_VERSION_1);
 
                                 RTTypeClass eTypeClass = aReader.getTypeClass();
 
@@ -524,14 +514,13 @@ bool TypeDescriptionEnumerationImpl::queryMore()
                     uno::Sequence< sal_Int8 > aBytes(
                         m_aModuleKeys.front()->getBinaryValue() );
 
-                    RegistryTypeReader aReader(
-                        m_aLoader, (const sal_uInt8 *)aBytes.getConstArray(),
-                        aBytes.getLength(), sal_False );
+                    typereg::Reader aReader(
+                        aBytes.getConstArray(), aBytes.getLength(), false,
+                        TYPEREG_VERSION_1);
 
                     if ( aReader.getTypeClass() == RT_TYPE_MODULE )
                     {
-                        sal_uInt16 nFields
-                            = (sal_uInt16)aReader.getFieldCount();
+                        sal_uInt16 nFields = aReader.getFieldCount();
                         while ( nFields-- )
                         {
                             rtl::OUStringBuffer aName(
@@ -541,7 +530,7 @@ bool TypeDescriptionEnumerationImpl::queryMore()
 
                             uno::Any aValue(
                                 getRTValue(
-                                    aReader.getFieldConstValue( nFields ) ) );
+                                    aReader.getFieldValue( nFields ) ) );
 
                             m_aTypeDescs.push_back(
                                 new ConstantTypeDescriptionImpl(
@@ -625,8 +614,7 @@ TypeDescriptionEnumerationImpl::queryNext()
                         uno::Sequence< sal_Int8 > aBytes(
                             xKey->getBinaryValue() );
 
-                        xTD = createTypeDescription( m_aLoader,
-                                                     aBytes,
+                        xTD = createTypeDescription( aBytes,
                                                      getTDMgr(),
                                                      false );
                         OSL_ENSURE( xTD.is(),
