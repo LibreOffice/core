@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:09:40 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,12 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
+#endif
+#ifndef _SV_SVDATA_HXX
+#include <svdata.hxx>
+#endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
 #endif
 
 
@@ -419,9 +425,9 @@ void OpenGL::ImplInit()
 #ifndef REMOTE_APPSERVER
     if( ( PGRAPHICS || mpOutDev->ImplGetGraphics() ) && ! mbNoOGL )
     {
-        mpOGL = new SalOpenGL( PGRAPHICS );
+        mpOGL = ImplGetSVData()->mpDefInst->CreateSalOpenGL( PGRAPHICS );
 
-        if ( !mpOGL->Create() || (!bImplOpenGLFncPtrInitialized && !ImplInitFncPointers()) )
+        if ( !mpOGL->IsValid() || (!bImplOpenGLFncPtrInitialized && !ImplInitFncPointers()) )
         {
             delete mpOGL;
             mpOGL = NULL;
@@ -625,7 +631,7 @@ void OpenGL::Viewport( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         {
             long lx = nX + mpOutDev->mnOutOffX;
             long lwidth = nWidth;
-            ((SalGraphicsLayout*)mpOutDev->mpGraphics)->mirror( lx, lwidth, mpOutDev );
+            mpOutDev->mpGraphics->mirror( lx, lwidth, mpOutDev );
             nX = lx - mpOutDev->mnOutOffX;
         }
         pImplOpenGLFncViewport( nX + mpOutDev->mnOutOffX,
@@ -1523,7 +1529,7 @@ void OpenGL::Scissor( GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight )
         {
             long lx = nX + mpOutDev->mnOutOffX;
             long lwidth = nWidth;
-            ((SalGraphicsLayout*)mpOutDev->mpGraphics)->mirror( lx, lwidth, mpOutDev );
+            mpOutDev->mpGraphics->mirror( lx, lwidth, mpOutDev );
             nX = lx - mpOutDev->mnOutOffX;
         }
         pImplOpenGLFncScissor( nX + mpOutDev->mnOutOffX,
