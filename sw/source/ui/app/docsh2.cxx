@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2001-10-10 11:44:45 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 16:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,43 +362,48 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         return ;
     }
 
+    USHORT nAction = 0;
     if( rHint.ISA(SfxDocumentInfoHint) )
+        nAction = 1;
+    else if( rHint.ISA(SfxSimpleHint) )
     {
-        if( pWrtShell )
-        {
-            pWrtShell->LockView( TRUE );    //Sichtbaren bereich Locken.
-            pWrtShell->StartAllAction();
-        }
-        pDoc->DocInfoChgd( *((SfxDocumentInfoHint&)rHint).GetObject() );
-        if( pWrtShell )
-        {
-            pWrtShell->EndAllAction();
-            pWrtShell->LockView( FALSE );
-        }
-    }
-    else if ( rHint.ISA(SfxSimpleHint) )
-    {
+        // swithc for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
         {
-            case SFX_HINT_TITLECHANGED:
-                if ( GetMedium() )
-                {
-                    if( pWrtShell )
-                    {
-                        pWrtShell->LockView( TRUE );
-                        pWrtShell->StartAllAction();
-                    }
-                    pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
-                    if( pWrtShell )
-                    {
-                        pWrtShell->EndAllAction();
-                        pWrtShell->LockView( FALSE );
-                    }
-                }
-                break;
+        case SFX_HINT_TITLECHANGED:
+            if( GetMedium() )
+                nAction = 2;
+            break;
         }
     }
 
+    if( nAction )
+    {
+        BOOL bUnlockView;
+        if( pWrtShell )
+        {
+            bUnlockView = !pWrtShell->IsViewLocked();
+            pWrtShell->LockView( TRUE );    //lock visible section
+            pWrtShell->StartAllAction();
+        }
+        switch( nAction )
+        {
+        case 1:
+            pDoc->DocInfoChgd( *((SfxDocumentInfoHint&)rHint).GetObject() );
+            break;
+
+        case 2:
+            pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
+            break;
+        }
+
+        if( pWrtShell )
+        {
+            pWrtShell->EndAllAction();
+            if( bUnlockView )
+                pWrtShell->LockView( FALSE );
+        }
+    }
 }
 
 /*--------------------------------------------------------------------
