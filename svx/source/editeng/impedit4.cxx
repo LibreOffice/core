@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-01 13:45:10 $
+ *  last change: $Author: mt $ $Date: 2002-11-06 09:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         rOutput.WriteNumber( rtl_getBestWindowsCharsetFromTextEncoding( eChrSet ) );
 
         rOutput << ' ';
-        rOutput << ByteString( pFontItem->GetFamilyName(), eDestEnc ).GetBuffer();
+        RTFOutFuncs::Out_String( rOutput, pFontItem->GetFamilyName(), eDestEnc );
         rOutput << ";}";
     }
     rOutput << '}';
