@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-09-04 13:17:23 $
+ *  last change: $Author: fme $ $Date: 2002-09-24 08:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,14 +216,21 @@ struct _CmpLPt
 {
     const Point* pPos;
     const SwTableBox* pSelBox;
+    bool bVertical;
 
-    _CmpLPt( const Point& rPt, const SwTableBox* pBox );
+    _CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVert );
 
     BOOL operator==( const _CmpLPt& rCmp ) const
     {   return X() == rCmp.X() && Y() == rCmp.Y() ? TRUE : FALSE; }
     BOOL operator<( const _CmpLPt& rCmp ) const
-    {   return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() )
-                ? TRUE : FALSE; }
+    {
+        if ( bVertical )
+            return X() > rCmp.X() || ( X() == rCmp.X() && Y() < rCmp.Y() )
+                    ? TRUE : FALSE;
+        else
+            return Y() < rCmp.Y() || ( Y() == rCmp.Y() && X() < rCmp.X() )
+                    ? TRUE : FALSE;
+    }
 
     long X() const { return pPos->X(); }
     long Y() const { return pPos->Y(); }
@@ -912,8 +919,8 @@ BOOL HasProtectedCells( const SwSelBoxes& rBoxes )
 }
 
 
-_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox )
-    : pPos( &rPt ), pSelBox( pBox )
+_CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, bool bVert )
+    : pPos( &rPt ), pSelBox( pBox ), bVertical( bVert )
 {}
 
 void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
@@ -1005,6 +1012,8 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
     long nWidth;
     SwTableBox* pLastBox = 0;
 
+    const bool bVertical = ( 0 != pStart->IsVertical() );
+
     for ( USHORT i = 0; i < aUnions.Count(); ++i )
     {
         const SwTabFrm *pTabFrm = aUnions[i]->GetTable();
@@ -1051,7 +1060,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 // diese Box ist selektiert
                                 pLastBox = pBox;
                                 rBoxes.Insert( pBox );
-                                aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox ));
+                                aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox, bVertical ));
 
                                 pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos ];
                                 aNew.SetWidth( nTmpWidth );
@@ -1066,7 +1075,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                                 // diese Box ist selektiert
                                 pLastBox = pBox;
                                 rBoxes.Insert( pBox );
-                                aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox ));
+                                aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox, bVertical ));
                             }
                         }
                         // oder rechts und links ueberlappend
@@ -1112,7 +1121,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             // diese Box ist selektiert
                             pLastBox = pBox;
                             rBoxes.Insert( pBox );
-                            aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox ));
+                            aPosArr.Insert( _CmpLPt( pCell->Frm().Pos(), pBox, bVertical ));
 
                             pBox = pBox->GetUpper()->GetTabBoxes()[ nInsPos+1 ];
                             aNew.SetWidth( nRight );
@@ -1155,7 +1164,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                             pLastBox = pBox;
                             rBoxes.Insert( pBox );
                             aPosArr.Insert( _CmpLPt( Point( rUnion.Left(),
-                                                pCell->Frm().Top()), pBox ));
+                                                pCell->Frm().Top()), pBox, bVertical ));
 
                             if( pUndo )
                                 pUndo->AddNewBox( pBox->GetSttIdx() );
@@ -1333,13 +1342,18 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 // DEL_ALL_EMPTY_BOXES
 
         nWidth = 0;
-        long nY = aPosArr.Count() ? aPosArr[ 0 ].Y() : 0;
+        long nY = aPosArr.Count() ?
+                    ( bVertical ?
+                      aPosArr[ 0 ].X() :
+                      aPosArr[ 0 ].Y() ) :
+                  0;
+
         for( USHORT n = 0; n < aPosArr.Count(); ++n )
         {
             const _CmpLPt& rPt = aPosArr[ n ];
             if( bCalcWidth )
             {
-                if( nY == rPt.Y() )         // gleiche Ebene ?
+                if( nY == ( bVertical ? rPt.X() : rPt.Y() ) )           // gleiche Ebene ?
                     nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
                 else
                     bCalcWidth = FALSE;     // eine Zeile fertig
@@ -1403,8 +1417,11 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
 
-            if( n && aPosArr[n-1].Y() == rPt.Y() && pTxtNd &&   // gleiche Ebene ?
-                aSttNdIdx.GetNode().IsTxtNode() )
+            const bool bSameLevel = n && ( bVertical ?
+                                           aPosArr[n-1].Y() == rPt.Y() :
+                                           aPosArr[n-1].X() == rPt.X() );
+
+            if( bSameLevel && pTxtNd && aSttNdIdx.GetNode().IsTxtNode() )
             {
                 pTxtNd->Insert( '\x20', aInsPos.nContent );
                 aPam.SetMark();
