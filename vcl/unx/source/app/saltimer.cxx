@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:57:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,20 +96,20 @@ void SalData::Timeout() const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalXLib::StopTimer()
 {
-    Timeout_.tv_sec     = 0;
-    Timeout_.tv_usec    = 0;
-    nTimeoutMS_         = 0;
+    m_aTimeout.tv_sec   = 0;
+    m_aTimeout.tv_usec  = 0;
+    m_nTimeoutMS        = 0;
 }
 
 void SalXLib::StartTimer( ULONG nMS )
 {
-    timeval Timeout (Timeout_); // previous timeout.
-    gettimeofday (&Timeout_, 0);
+    timeval Timeout (m_aTimeout); // previous timeout.
+    gettimeofday (&m_aTimeout, 0);
 
-    nTimeoutMS_  = nMS;
-    Timeout_    += nTimeoutMS_;
+    m_nTimeoutMS  = nMS;
+    m_aTimeout    += m_nTimeoutMS;
 
-    if ((Timeout > Timeout_) || (Timeout.tv_sec == 0))
+    if ((Timeout > m_aTimeout) || (Timeout.tv_sec == 0))
     {
         // Wakeup from previous timeout (or stopped timer).
         Wakeup();
