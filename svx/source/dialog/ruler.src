@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:37:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Milimetr";
             Text[ hebrew ] = "‮מילימטר‬";
             Text[ hindi ] = "मिल्लीमीटर";
+            Text[ slovak ] = "Milimeter";
         };
         MenuItem
         {
@@ -129,6 +130,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Centimetr";
             Text[ hebrew ] = "‮סנטימטר‬";
             Text[ hindi ] = "सेंटिमीटर";
+            Text[ slovak ] = "Centimeter";
         };
         MenuItem
         {
@@ -161,6 +163,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Metr";
             Text[ hebrew ] = "‮מטר‬";
             Text[ hindi ] = "मीटर";
+            Text[ slovak ] = "Meter";
         };
         MenuItem
         {
@@ -193,6 +196,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Kilometr";
             Text[ hebrew ] = "‮קילומטר‬";
             Text[ hindi ] = "किलोमीटर";
+            Text[ slovak ] = "Kilometer";
         };
         MenuItem
         {
@@ -225,6 +229,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Palec";
             Text[ hebrew ] = "‮אינצ'‬";
             Text[ hindi ] = "इंच";
+            Text[ slovak ] = "Palec";
         };
         MenuItem
         {
@@ -259,6 +264,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Stopa";
             Text[ hebrew ] = "‮רגל‬";
             Text[ hindi ] = "फ़ूट्";
+            Text[ slovak ] = "Stopa";
         };
         MenuItem
         {
@@ -291,6 +297,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Míle";
             Text[ hebrew ] = "‮מילים‬";
             Text[ hindi ] = "मइल्स्";
+            Text[ slovak ] = "Míle";
         };
         MenuItem
         {
@@ -324,6 +331,7 @@ Menu RID_SVXMN_RULER
             Text[ czech ] = "Bod";
             Text[ hebrew ] = "‮נקודה‬";
             Text[ hindi ] = "बिन्दु";
+            Text[ slovak ] = "Bod";
         };
         MenuItem
         {
@@ -363,6 +371,7 @@ String RID_SVXSTR_RULER_TAB_LEFT
     TEXT[ czech ] = "Vlevo";
     TEXT[ hebrew ] = "‮שמאל‬";
     TEXT[ hindi ] = "बायाँ";
+    TEXT[ slovak ] = "Vľavo";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
@@ -394,6 +403,7 @@ String RID_SVXSTR_RULER_TAB_RIGHT
     TEXT[ czech ] = "Vpravo";
     TEXT[ hebrew ] = "‮ימין‬";
     TEXT[ hindi ] = "दाहिना";
+    TEXT[ slovak ] = "Vpravo";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
@@ -425,6 +435,7 @@ String RID_SVXSTR_RULER_TAB_DECIMAL
     TEXT[ czech ] = "Desítkově";
     TEXT[ hebrew ] = "‮עשרוני‬";
     TEXT[ hindi ] = "दशांश";
+    TEXT[ slovak ] = "Desatinné";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
@@ -456,7 +467,10 @@ String RID_SVXSTR_RULER_TAB_CENTER
     TEXT[ czech ] = "Na střed";
     TEXT[ hebrew ] = "‮מרכז‬";
     TEXT[ hindi ] = "मध्यभाग";
+    TEXT[ slovak ] = "Na stred";
 };
+
+
 
 
 
