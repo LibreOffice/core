@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:58:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1653,6 +1653,12 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
         tag = GetUInt32(t->ptr + tdoffset + 12, 16 * i, 1);
         offset = t->ptr + GetUInt32(t->ptr + tdoffset + 12, 16 * i + 8, 1);
         length = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 12, 1);
+        /* sanity check: table must lay completely within the file
+         * at this point one could check the checksum of all contained
+         *  tables, but this would be quite time intensive
+         */
+        if( (offset < t->ptr) || (offset+length > t->ptr+t->fsize) )
+            continue;
 
         if (tag == T_maxp) { t->tables[O_maxp] = offset; t->tlens[O_maxp] = length; continue; }
         if (tag == T_glyf) { t->tables[O_glyf] = offset; t->tlens[O_glyf] = length; continue; }
@@ -2622,10 +2628,12 @@ GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
 {
     sal_uInt8 *table = getTable(ttf, O_name);
+    int nTableSize = getTableSize(ttf, O_name );
     sal_uInt16 n = GetUInt16(table, 2, 1);
     sal_uInt8* rec_string = NULL;
+    int nStrBase = GetUInt16(table, 4, 1);
     NameRecord *rec;
-    sal_uInt16 i;
+    int i;
 
     *nr = 0;
     if (n == 0) return 0;
@@ -2633,13 +2641,20 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
     rec = calloc(n, sizeof(NameRecord));
 
     for (i = 0; i < n; i++) {
+        int nStrOffset = GetUInt16(table + 6, 10 + 12 * i, 1);
         rec[i].platformID = GetUInt16(table + 6, 12 * i, 1);
         rec[i].encodingID = GetUInt16(table + 6, 2 + 12 * i, 1);
         rec[i].languageID = GetUInt16(table + 6, 4 + 12 * i, 1);
         rec[i].nameID = GetUInt16(table + 6, 6 + 12 * i, 1);
         rec[i].slen = GetUInt16(table + 6, 8 + 12 * i, 1);
         if (rec[i].slen) {
-            rec_string = table + GetUInt16(table, 4, 1) + GetUInt16(table + 6, 10 + 12 * i, 1);
+            if( nStrBase+nStrOffset+rec[i].slen >= nTableSize ) {
+                rec[i].sptr = 0;
+                rec[i].slen = 0;
+                continue;
+            }
+
+            rec_string = table + nStrBase + nStrOffset;
             // sanity check
             if( rec_string > (sal_uInt8*)ttf->ptr && rec_string < ((sal_uInt8*)ttf->ptr + ttf->fsize - rec[i].slen ) )
             {
