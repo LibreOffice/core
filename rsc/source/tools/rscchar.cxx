@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscchar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:50:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,8 +223,9 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
 
     rtl_destroyTextToUnicodeConverter( hConv );
 
-    delete pUniCode;
-    delete pOrgStr;
+    delete[] pUniCode;
+    delete[] pOrgStr;
+
     return pUtf8;
 };
 
@@ -338,6 +339,7 @@ char * RscChar::MakeUTF8FromL( char * pStr )
     sal_Size nMaxUtf8Len = nUniPos * 6;
     if( nUniPos * 6 > 0xFFFF )
         RscExit( 10 );
+
     char * pUtf8 = (char *)RscMem::Malloc( (USHORT)nMaxUtf8Len );
     rtl_TextToUnicodeConverter hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
 
@@ -354,7 +356,8 @@ char * RscChar::MakeUTF8FromL( char * pStr )
 
     rtl_destroyUnicodeToTextConverter( hConv );
 
-    delete pUniCode;
+    delete[] pUniCode;
+
     return pUtf8;
 };
 

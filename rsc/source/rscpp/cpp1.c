@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-04-18 10:31:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,8 @@
 #include        "cppdef.h"
 #include        "cpp.h"
 
-/*#ifdef S390*/
 FILE *pCppOut = NULL;
 FILE *pCppIn  = NULL;
-/* #else
-FILE *pCppOut = stdout;*/  /* BP */ /* in cpp1.c: file-pointer auf stdout oder file */
-/*FILE *pCppIn  = stdin;
-#endif*/
 
 #ifdef DEBUG
 FILE *pDefOut = stdout;     /* ER  evtl. #define's dump */

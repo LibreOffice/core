@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsclex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,70 +58,6 @@
  *
  *
  ************************************************************************/
-/************************************************************************
-
-    Source Code Control System - Update
-
-    $Log: not supported by cvs2svn $
-    Revision 1.18  2000/09/17 12:51:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.17  2000/07/26 17:13:21  willem.vandorp
-    Headers/footers replaced
-
-    Revision 1.16  1999/09/24 13:15:07  hr
-    forward decl.
-
-    Revision 1.15  1998/09/24 17:51:52  HR
-    GCC braucht richtige Vorwaertsdeklaration
-
-
-      Rev 1.14   24 Sep 1998 17:51:52   HR
-   GCC braucht richtige Vorwaertsdeklaration
-
-      Rev 1.13   27 Aug 1997 18:17:16   MM
-   neue Headerstruktur
-
-      Rev 1.12   18 Oct 1996 16:27:12   MM
-   dynamische Member
-
-      Rev 1.11   24 Jul 1996 12:49:02   mda
-   IRIX
-
-      Rev 1.10   18 Jun 1996 13:38:14   MM
-   Header Anpassungen
-
-      Rev 1.9   05 Jun 1996 19:22:40   PL
-   Deklarationen fuer SCO
-
-      Rev 1.8   21 Nov 1995 19:49:50   TLX
-   Neuer Link
-
-      Rev 1.7   10 Jan 1995 11:23:04   eg
-   HP9000 yyerror( const char* )
-
-      Rev 1.6   09 Sep 1994 12:08:06   MH
-   Watcom
-
-      Rev 1.5   25 Apr 1994 15:02:20   sv
-   HP9000 needs different declarations for yyerror and yylex (extern C)
-
-      Rev 1.4   12 Jan 1994 15:20:44   mm
-   Alignementprobleme und Warnings fuer DEC-Alpha beseitigt
-
-      Rev 1.3   21 Sep 1993 10:03:44   mm
-   RS6000  needs different prototyps (extern "C")
-
-      Rev 1.2   25 Aug 1993 15:25:02   mm
-   Fehler und Warnings beseitigt
-
-      Rev 1.1   23 Dec 1992 14:05:44   mm
-   Sprachaenderung
-
-      Rev 1.0   10 Aug 1992 07:22:46   MM
-   Initial revision.
-
-**************************************************************************/
 #include <tools/stack.hxx>
 
 #define MINBUF          256

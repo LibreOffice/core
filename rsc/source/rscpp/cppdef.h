@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdef.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-01 12:31:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,11 +260,7 @@
  * (Or is it the other way around?) -- Warning: BIG_ENDIAN code is untested.
  */
 #ifndef BIG_ENDIAN
-#ifdef S390
-#define BIG_ENDIAN              TRUE
-#else
 #define BIG_ENDIAN              FALSE
-#endif
 #endif
 
 /*

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 10:33:29 $
+#   last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ OBJFILES=   \
             $(OBJ)$/cpp6.obj	\
 
 .IF "$(cpp)" == ""
+LIBSALCPPRT=$(0)
 APP1TARGET= $(TARGET)
 APP1LIBS=$(LB)$/$(TARGET).lib
 APP1STACK=  32768

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-02 14:41:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 15:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2218,14 +2218,20 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
     pClassToolBox->SetVariable( nId, pClassImageList, NULL, 0,
                                 RSC_TOOLBOX_ITEMIMAGELIST );
     {
+        RscLangArray* pLA;
         RscCont * pCont;
 
         aBaseLst.Insert( pCont = new RscCont( pHS->Insert( "ContToolBoxItem" ),
                                               RSC_NOTYPE ),
                          LIST_APPEND );
         pCont->SetTypeClass( pClassToolBoxItem );
+        aBaseLst.Insert( pLA = new RscLangArray( pHS->Insert( "LangContToolBoxItem" ),
+                                                 RSC_NOTYPE,
+                                                 pCont,
+                                                 &aLangType, &nLangTypeId, &nDfltLangTypeId ),
+                         LIST_APPEND );
         nId = aNmTb.Put( "ItemList", VARNAME );
-        pClassToolBox->SetVariable( nId, pCont, NULL, 0,
+        pClassToolBox->SetVariable( nId, pLA, NULL, 0,
                                     RSC_TOOLBOX_ITEMLIST );
     }
     INS_WINBIT(pClassToolBox,Scroll)
