@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:02:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,9 @@ namespace dbaui
         TOTypeInfoSP convertType(const TOTypeInfoSP&_pType,sal_Bool& _bNotConvert);
 
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _sName);
+
+        // displays a error message that a column type is not supported
+        void showColumnTypeNotSupported(const ::rtl::OUString& _rColumnName);
     };
 }
 
