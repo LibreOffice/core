@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-28 13:57:45 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 18:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,13 +705,15 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
         return true;
 
     //------------ create legend
-    awt::Rectangle aSpaceLeft( 0, nYOffset+nYDistance, rPageSize.Width, rPageSize.Height - nYOffset - 2*nYDistance );
+    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height - nYOffset );
     createLegend( LegendHelper::getLegend( m_xChartModel )
                   , aSpaceLeft, rPageSize, xPageShapes, m_xShapeFactory );
 
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
     awt::Size  aSizeDia;
+    aSpaceLeft.Y += nYDistance;
+    aSpaceLeft.Height -= nYDistance;//@todo substract 2*nYOffset if the diagram size is calculated dependent on axis labels
     if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft ) )
         initializeDiagramAndGetCooSys( m_aVCooSysList
                     , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
