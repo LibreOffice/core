@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:48:46 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ portuguese ] = "Parâmetros de filtros";
         Text[ russian ] = "Íàñòğîéêè ôèëüòğà";
         Text[ greek ] = "Ñõèìßóåéò ößëôñùí";
-        Text[ dutch ] = "Filter options";
+        Text[ dutch ] = "Filterinstellingen";
         Text[ french ] = "Paramètres de filtre";
         Text[ spanish ] = "Configuración de filtros";
         Text[ finnish ] = "Filter options";
@@ -266,5 +266,6 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ catalan ] = "Mostrar modificaciones";
     Text[ finnish ] = "Näytä muutokset";
 };
+
 
 
