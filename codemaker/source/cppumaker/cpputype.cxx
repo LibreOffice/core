@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 14:16:40 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,18 +575,18 @@ void CppuType::dumpNameSpace(FileStream& o, sal_Bool bOpen, sal_Bool bFull, cons
         } while( nIndex != -1 );
     } else
     {
+        sal_Int32 nPos = 0;
         do
         {
-            sal_Int32 nPos = typeName.lastIndexOf( '/' );
-            if( nPos != -1 )
-                typeName = typeName.copy( 0, nPos );
             nPos = typeName.lastIndexOf( '/' );
             o << "}";
             if( bOneLine )
                 o << " ";
             else
-                o << " // " << typeName.copy( nPos != -1 ? nPos+1 : 0 ) << "\n";
-        } while( typeName.getLength() );
+                o << " // " << typeName.copy( nPos+1 ) << "\n";
+            if( nPos != -1 )
+                typeName = typeName.copy( 0, nPos );
+        } while( nPos != -1 );
     }
 }
 

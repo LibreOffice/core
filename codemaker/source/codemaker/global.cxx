@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 14:16:39 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 20:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,15 +209,14 @@ OString createFileNameFromType( const OString& destination,
     token = '\\';
 #endif
 
-//  sal_Int32 count = fileName.getTokenCount(token) - 1;
-
     nameBuffer = OStringBuffer(length);
 
     sal_Int32 nIndex = 0;
-//  for (int i=0; i < count; i++)
     do
     {
         nameBuffer.append(fileName.getToken(0, token, nIndex).getStr());
+        if( nIndex == -1 )
+            break;
 
         if (nameBuffer.getLength() == 0 || OString(".") == nameBuffer.getStr())
         {
