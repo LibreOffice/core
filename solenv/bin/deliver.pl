@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2001-08-02 13:17:56 $
+#   last change: $Author: hr $ $Date: 2001-09-14 13:26:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.13 $ ';
+$id_str = ' $Revision: 1.14 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -168,7 +168,7 @@ sub do_dos {
     else {
         # HACK: remove MACOSX stuff which is wrongly labled with dos
         # better: fix broken d.lst
-        return if ( $line =~ /MACOSX/ && $^O ne 'darwin' );
+        return if ( $line =~ /MACOSX/ );
         $line =~ s#/#\\#g if $^O eq 'MSWin32';
         system($line);
     }
@@ -431,6 +431,8 @@ sub walk_action_data {
     for (my $i=0; $i <= $#action_data; $i++) {
             &{"do_".$action_data[$i][0]}($action_data[$i][1]);
     }
+    # special actions for Mac OS X
+    system("create-libstatic-link", expand_macros("%_DEST%/lib%_EXT%")) if ( $^O eq 'darwin' );
 }
 
 sub glob_line {
@@ -504,7 +506,17 @@ sub copy_if_newer {
         if ( $rc) {
             utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
             fix_file_permissions($$from_stat_ref[2], $to);
+<<<<<<< deliver.pl
             push_on_ziplist($to) if $opt_zip;
+=======
+            # handle special packaging of *.dylib files for Mac OS X
+            if ( $^O eq 'darwin' )
+            {
+                system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+            }
+            push_on_ziplist($to) if $opt_zip;
+>>>>>>> 1.11.6.3
             return 1;
         }
         else {
@@ -609,10 +621,25 @@ sub push_default_actions {
     foreach $subdir (@subdirs) {
         push(@action_data, ['mkdir', "%_DEST%/$subdir"]);
     }
+<<<<<<< deliver.pl
 
     # deliver build.lst to $dest/inc/$module
     push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
     push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+=======
+
+    # deliver build.lst to $dest/inc/$module
+    push(@action_data, ['mkdir', "%_DEST%/inc/$module"]); # might be necessary
+    push(@action_data, ['copy', "build.lst %_DEST%/inc%_EXT%/$module/build.lst"]);
+
+    # need to copy libstaticmxp.dylib for Mac OS X
+    if ( $^O eq 'darwin' )
+    {
+        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.cxx %_DEST%/inc%_EXT%/*staticdatamembers.cxx"]);
+        push(@action_data, ['copy', "../%__SRC%/misc/*staticdatamembers.h* %_DEST%/inc%_EXT%/*staticdatamembers.H*"]);
+        push(@action_data, ['copy', "../%__SRC%/lib/lib*static*.dylib %_DEST%/lib%_EXT%/lib*static*.dylib"]);
+    }
+>>>>>>> 1.11.6.3
 }
 
 sub walk_hedabu_list {
@@ -653,11 +680,6 @@ sub hedabu_if_newer {
 
         # strip any carriage returns
         $content =~ tr/\r//d;
-$^W=0;  # Win32 perl issues undefined warning on next regexp ($2)
-        # strip C and C++ comments, to bad I didn't invent this regexp :-)
-        # see perlfaq6 "How do I use a regular expression to strip C style comments from a file?"
-        $content =~ s#/\*[^*]*\*+([^/*][^*]*\*+)*/|//[^\n]*|("(\\.|[^"\\])*"|'(\\.|[^'\\])*'|.[^/"'\\]*)#$2#gs;
-$^W=1;
         # squeeze lines with white space only
         $content =~ s/\n\s+\n/\n\n/sg;
         # squeeze multiple blank lines
