@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:11:17 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,8 @@
  *
  ************************************************************************/
 
-#define _SV_EDIT_CXX
-
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -2517,7 +2515,6 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
     if ( !mbReadOnly && mpDDInfo )
     {
         ImplHideDDCursor();
-        Point aMousePos( rDTDE.LocationX, rDTDE.LocationY );
 
         Selection aSel( maSelection );
         aSel.Justify();
@@ -2563,7 +2560,7 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     {
         mpDDInfo = new DDInfo;
     }
-    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
+//    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
 //    if ( bTextContent )
 //        rDTDEE.Context->acceptDrop(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
 //    else
