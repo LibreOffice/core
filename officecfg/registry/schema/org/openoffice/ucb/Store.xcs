@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Store.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-07-02 11:56:09 $
+ *  last change: $Author: kso $ $Date: 2002-07-31 10:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Store" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+    <info>
+        <desc xml:lang="en-US">Components and templates used for storing UCB related data </desc>
+    </info>
     <!--Responsible: KSO -->
     <templates>
         <group oor:name="PropertyValue">
@@ -84,19 +87,28 @@
                     <desc xml:lang="en-US">Property state</desc>
                 </info>
             </prop>
+            <info>
+                <desc xml:lang="en-US">A property value</desc>
+            </info>
         </group>
         <group oor:name="Properties">
+            <info>
+                <desc xml:lang="en-US">A set of property values</desc>
+            </info>
             <set oor:name="Values" oor:node-type="PropertyValue">
                 <info>
-                    <desc xml:lang="en-US">A set of property values.</desc>
+                    <desc xml:lang="en-US">A set of property values</desc>
                 </info>
             </set>
         </group>
     </templates>
     <component>
+        <info>
+            <desc xml:lang="en-US">Root entries for UCB related data</desc>
+        </info>
         <set oor:name="ContentProperties" oor:node-type="Properties">
             <info>
-                <desc xml:lang="en-US">Stores properties for UCB contents.</desc>
+                <desc xml:lang="en-US">Root entry for stored content properties</desc>
             </info>
         </set>
     </component>

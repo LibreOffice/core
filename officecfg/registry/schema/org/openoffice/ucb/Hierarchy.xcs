@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Hierarchy.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-07-02 11:56:08 $
+ *  last change: $Author: kso $ $Date: 2002-07-31 10:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,44 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Hierarchy" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+    <info>
+        <desc xml:lang="en-US">Components and templates used by UCB's Hirarchy Content Provider (HCP) </desc>
+    </info>
     <!--Responsible: KSO -->
     <templates>
         <group oor:name="Entry">
             <prop oor:name="Title" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">The title of an entry of the hierarchy.</desc>
+                    <desc xml:lang="en-US">The title of an entry of the hierarchy</desc>
                 </info>
             </prop>
             <prop oor:name="TargetURL" oor:type="xs:string">
                 <info>
-                    <desc xml:lang="en-US">The target URL of the entry.</desc>
+                    <desc xml:lang="en-US">The target URL of the entry of the hierarchy</desc>
                 </info>
             </prop>
+            <prop oor:name="Type" oor:type="xs:int">
+                <info>
+                    <desc xml:lang="en-US">The type of the hirarchy entry. Currently supported: Link (0) and Folder (1)</desc>
+                </info>
+            </prop>
+            <info>
+                <desc xml:lang="en-US">An entry of the hierarchy. There are two types of entries: folders and links. Folders are container for other hierarchy elements. Links are pointers to any other resource. </desc>
+            </info>
             <set oor:name="Children" oor:node-type="Entry">
                 <info>
-                    <desc xml:lang="en-US">Contains the children (other entries) of the item.</desc>
+                    <desc xml:lang="en-US">The children (other hierarchy entries) of the item</desc>
                 </info>
             </set>
         </group>
     </templates>
     <component>
+        <info>
+            <desc xml:lang="en-US">Root entries for HCP data</desc>
+        </info>
         <set oor:name="Root" oor:node-type="Entry">
             <info>
-                <desc xml:lang="en-US">Contains all top-level entries of the hierarchy.</desc>
+                <desc xml:lang="en-US">A set of top-level entries of the hierarchy</desc>
             </info>
         </set>
     </component>

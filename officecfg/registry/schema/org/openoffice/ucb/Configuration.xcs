@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Configuration.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-07-02 11:56:08 $
+ *  last change: $Author: kso $ $Date: 2002-07-31 10:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema oor:name="Configuration" oor:package="org.openoffice.ucb" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
+    <info>
+        <desc xml:lang="en-US">Components and templates used for UCB configuration related data </desc>
+    </info>
     <!--Responsible: KSO -->
     <templates>
         <group oor:name="ContentProviderData">
@@ -79,26 +82,38 @@
                     <desc xml:lang="en-US">Additional arguments for UCP creation</desc>
                 </info>
             </prop>
+            <info>
+                <desc xml:lang="en-US">Data describing the configuartion parameters of a Content Provider</desc>
+            </info>
         </group>
         <group oor:name="ContentProvidersDataSecondaryKeys">
+            <info>
+                <desc xml:lang="en-US">Secondary keys for Content Provider configuration data</desc>
+            </info>
             <set oor:name="ProviderData" oor:node-type="ContentProviderData">
                 <info>
-                    <desc xml:lang="en-US">Contains Content Provider configuration data for the UCB</desc>
+                    <desc xml:lang="en-US">A set of Content Provider configuration data for the UCB</desc>
                 </info>
             </set>
         </group>
         <group oor:name="ContentProvidersDataPrimaryKeys">
+            <info>
+                <desc xml:lang="en-US">Primary keys for Content Provider configuration data</desc>
+            </info>
             <set oor:name="SecondaryKeys" oor:node-type="ContentProvidersDataSecondaryKeys">
                 <info>
-                    <desc xml:lang="en-US">Contains secondary keys for Content Provider configuration for the UCB</desc>
+                    <desc xml:lang="en-US">A set of secondary keys for Content Provider configuration for the UCB</desc>
                 </info>
             </set>
         </group>
     </templates>
     <component>
+        <info>
+            <desc xml:lang="en-US">Root entries for UCB configuration related data</desc>
+        </info>
         <set oor:name="ContentProviders" oor:node-type="ContentProvidersDataPrimaryKeys">
             <info>
-                <desc xml:lang="en-US">Contains Content Provider configuration for the UCB</desc>
+                <desc xml:lang="en-US">Root entry for Content Provider configurations</desc>
             </info>
         </set>
     </component>
