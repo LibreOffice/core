@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_imexp.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-07 18:24:39 $
+ *  last change: $Author: ab $ $Date: 2002-04-18 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ struct LibDescriptorArray
     LibDescriptor* mpLibs;
     sal_Int32 mnLibCount;
 
-    LibDescriptorArray( void ) { mpLibs = NULL; }
+    LibDescriptorArray( void ) { mpLibs = NULL; mnLibCount = 0; }
     LibDescriptorArray( sal_Int32 nLibCount );
 
     ~LibDescriptorArray();
