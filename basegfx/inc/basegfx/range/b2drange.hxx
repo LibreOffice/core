@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2drange.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:07 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:39:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
 #define _BGFX_RANGE_B2DRANGE_HXX
 
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
+#endif
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
 #include <basegfx/tuple/b2dtuple.hxx>
 #endif
@@ -177,33 +183,33 @@ namespace basegfx
             return maRangeY.getRange();
         }
 
-        B2DTuple getMinimum() const
+        B2DPoint getMinimum() const
         {
-            return B2DTuple(
+            return B2DPoint(
                 maRangeX.getMinimum(),
                 maRangeY.getMinimum()
                 );
         }
 
-        B2DTuple getMaximum() const
+        B2DPoint getMaximum() const
         {
-            return B2DTuple(
+            return B2DPoint(
                 maRangeX.getMaximum(),
                 maRangeY.getMaximum()
                 );
         }
 
-        B2DTuple getRange() const
+        B2DVector getRange() const
         {
-            return B2DTuple(
+            return B2DVector(
                 maRangeX.getRange(),
                 maRangeY.getRange()
                 );
         }
 
-        B2DTuple getCenter() const
+        B2DPoint getCenter() const
         {
-            return B2DTuple(
+            return B2DPoint(
                 maRangeX.getCenter(),
                 maRangeY.getCenter()
                 );
