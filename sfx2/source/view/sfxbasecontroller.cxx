@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:58 $
+ *  last change: $Author: as $ $Date: 2000-12-06 13:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
 
 SfxBaseController::~SfxBaseController()
 {
+    delete m_pData;
 }
 
 //________________________________________________________________________________________________________
