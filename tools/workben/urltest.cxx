@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:02:34 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1430,9 +1430,20 @@ main()
 
         url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C:\\bla"));
         urlobj = INetURLObject(url);
+        bSuccess &= assertEqual(url, true, urlobj.HasError());
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C:\\bla"));
+        urlobj = INetURLObject(url, INET_PROT_FILE);
+        bSuccess &= assertEqual(url, INET_PROT_FILE, urlobj.GetProtocol());
+        bSuccess &= assertEqual(
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///C:/bla")),
+            rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
+
+        url = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LPR:\\bla"));
+        urlobj = INetURLObject(url);
         bSuccess &= assertEqual(url, INET_PROT_GENERIC, urlobj.GetProtocol());
         bSuccess &= assertEqual(
-            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c:%5Cbla")),
+            url, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lpr:%5Cbla")),
             rtl::OUString(urlobj.GetMainURL(INetURLObject::NO_DECODE)));
 
         url = rtl::OUString(
