@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-20 10:52:16 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,11 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+
+
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
@@ -641,7 +646,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
     // Suchen in allen anderen Bereichen
     if( nFound == (USHORT) -1 )
     {
-        const International& rAppInt = Application::GetAppInternational();
+        CollatorWrapper& rColl = ::GetAppCaseCollator();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         USHORT nGroupCount = pGlossaryList->GetGroupCount();
         for(USHORT i = 1; i <= nGroupCount; i++)
@@ -658,7 +663,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 {
                     String sEntry;
                     String sLongName(pGlossaryList->GetBlockName(i - 1, j, sEntry));
-                    if(COMPARE_EQUAL == rAppInt.Compare(rShortName, sEntry, INTN_COMPARE_IGNORECASE))
+                    if( 0 == rColl.compareString( rShortName, sEntry ))
                     {
                         TextBlockInfo_Impl* pData = new TextBlockInfo_Impl;
                         pData->sTitle = sTitle;
@@ -1021,6 +1026,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/20 10:52:16  os
+    #85103# enable rename and delete for old text blocks
+
     Revision 1.4  2001/03/08 15:38:59  os
     #84732# skip invalid auto text groups
 

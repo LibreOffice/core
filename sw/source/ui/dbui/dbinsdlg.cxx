@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 12:03:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:18:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,13 +135,13 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
 
 #include <float.h>
 
 
-#ifndef _TOOLS_INTN_HXX //autogen
-#include <tools/intn.hxx>
-#endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -378,8 +378,7 @@ private:
 
 int SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
 {
-    return COMPARE_LESS == Application::GetAppInternational().Compare(
-                                                sColumn, rCmp.sColumn );
+    return 0 > GetAppCollator().compareString( sColumn, rCmp.sColumn );
 }
 /* ---------------------------------------------------------------------------
 

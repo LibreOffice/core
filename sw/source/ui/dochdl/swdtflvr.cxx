@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-10 12:26:03 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 17:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
 #endif
-#ifndef _INTN_HXX
-#include <tools/intn.hxx>
-#endif
 #ifndef _CLIP_HXX
 #include <vcl/clip.hxx>
 #endif
@@ -116,7 +113,6 @@
 #ifndef _SVX_CLIPFMTITEM_HXX
 #include <svx/clipfmtitem.hxx>
 #endif
-
 #ifndef _MIECLIP_HXX
 #include <sfx2/mieclip.hxx>
 #endif
@@ -165,7 +161,9 @@
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
-
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
 
 #ifndef _FMTURL_HXX
 #include <fmturl.hxx>
@@ -1884,7 +1882,7 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
     String aName;
     BOOL bAlreadyThere = FALSE, bDoublePaste = FALSE;
     USHORT nSize = rWrtShell.GetFldTypeCount();
-    const International& rInt = Application::GetAppInternational();
+    CollatorWrapper& rColl = ::GetAppCaseCollator();
 
     do {
         aName = aApp;
@@ -1895,15 +1893,14 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
             if( RES_DDEFLD == pTyp->Which() )
             {
                 String sTmp( ((SwDDEFieldType*)pTyp)->GetCmd() );
-                if( rInt.CompareEqual( sTmp, aCmd, INTN_COMPARE_IGNORECASE ) &&
+                if( 0 == rColl.compareString( sTmp, aCmd ) &&
                     LINKUPDATE_ALWAYS == ((SwDDEFieldType*)pTyp)->GetType() )
                 {
                     aName = pTyp->GetName();
                     bDoublePaste = TRUE;
                     break;
                 }
-                else if( rInt.CompareEqual( aName, pTyp->GetName(),
-                                            INTN_COMPARE_IGNORECASE ) )
+                else if( 0 == rColl.compareString( aName, pTyp->GetName() ) )
                     break;
             }
         }
