@@ -1,6 +1,6 @@
 i pkginfo=pkginfo
 d none share/gnome/application-registry 0755 root other
-f none share/gnome/application-registry/%PREFIX.applications=%SOURCE/usr/share/application-registry/%PREFIX.applications 0644 root other
+f none share/gnome/application-registry/%PREFIX.applications=%SOURCE/usr/share/gnome/application-registry/%PREFIX.applications 0644 root other
 d none share/applications 0755 root other
 f none share/applications/%PREFIX-writer.desktop=%SOURCE/usr/share/applications/%PREFIX-writer.desktop 0644 root other
 f none share/applications/%PREFIX-calc.desktop=%SOURCE/usr/share/applications/%PREFIX-calc.desktop 0644 root other
@@ -9,7 +9,7 @@ f none share/applications/%PREFIX-impress.desktop=%SOURCE/usr/share/applications
 f none share/applications/%PREFIX-math.desktop=%SOURCE/usr/share/applications/%PREFIX-math.desktop 0644 root other
 f none share/applications/%PREFIX-printeradmin.desktop=%SOURCE/usr/share/applications/%PREFIX-printeradmin.desktop 0644 root other
 d none share/gnome/mime-info 0755 root other
-f none share/gnome/mime-info/%PREFIX.keys=%SOURCE/usr/share/mime-info/%PREFIX.keys 0644 root other
+f none share/gnome/mime-info/%PREFIX.keys=%SOURCE/usr/share/gnome/mime-info/%PREFIX.keys 0644 root other
 d none share/pixmaps 0755 root other
 f none share/pixmaps/%PREFIX-writer.png=../icons/hicolor/48x48/apps/writer.png 0644 root other
 f none share/pixmaps/%PREFIX-calc.png=../icons/hicolor/48x48/apps/calc.png 0644 root other
