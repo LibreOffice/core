@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 19:07:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,18 +135,13 @@
 
 #include "unoctitm.hxx"
 #include "appimp.hxx"
-#include "accmgr.hxx"
 #include "app.hrc"
 #include "sfxlocal.hrc"
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "cfgmgr.hxx"
 #include "dispatch.hxx"
 #include "docfac.hxx"
 #include "evntconf.hxx"
-//#include "frameobj.hxx"
-#include "imgmgr.hxx"
-//#include "interno.hxx"
 #include "intro.hxx"
 #include "macrconf.hxx"
 #include "mnumgr.hxx"
@@ -156,8 +151,6 @@
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
-#include "stbmgr.hxx"
-#include "tbxconf.hxx"
 #include "viewsh.hxx"
 #include "eacopier.hxx"
 #include "nochaos.hxx"
@@ -338,8 +331,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     nInterfaces = SFX_INTERFACE_APP+8;
     pInterfaces = new SfxInterface*[nInterfaces];
     memset( pInterfaces, 0, sizeof(SfxInterface*) * nInterfaces );
-
-    pAcceleratorMgr = new SfxAcceleratorManager( pCfgMgr );
 
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
 
