@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:46:38 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,19 +391,9 @@
             SID_HYPHENATION;\
             SID_THESAURUS;\
             SID_AUTOSPELL_CHECK;\
-            SID_EXTRUSION_TOOGLE;\
-            SID_EXTRUSION_TILT_DOWN;\
-            SID_EXTRUSION_TILT_UP;\
-            SID_EXTRUSION_TILT_LEFT;\
-            SID_EXTRUSION_TILT_RIGHT;\
-            SID_EXTRUSION_DEPTH_FLOATER;\
-            SID_EXTRUSION_DIRECTION_FLOATER;\
-            SID_EXTRUSION_LIGHTING_FLOATER;\
-            SID_EXTRUSION_SURFACE_FLOATER;\
-            SID_EXTRUSION_3D_COLOR;\
     };\
     IdCount = {\
-        296;\
+        283;\
     };
 
 
