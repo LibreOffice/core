@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-24 15:35:47 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 13:03:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -369,6 +369,7 @@ CFLAGSDBGUTIL=
 CFLAGSOPT=-Ox
 CFLAGSNOOPT=-Od
 CFLAGSOUTOBJ=-Fo
+CFLAGSWALL=/W4
 
 .IF "$(syntax)"!=""
 CFLAGS=-v -fsyntax-only -Wall $(INCLUDE) 

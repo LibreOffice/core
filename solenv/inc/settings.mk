@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-18 12:58:06 $
+#   last change: $Author: hjs $ $Date: 2001-10-19 13:03:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -394,6 +394,10 @@ SOLARLANG:=$(solarlang)
 vcl=$(VCL)
 DONT_USE_OLE2=TRUE
 .ENDIF
+
+.IF "$(wall)"!=""
+COMPILER_WARN_ALL=TRUE
+.ENDIF          # "$(wall)"!=""
 
 # --- env flags nicht case sensitiv --------------------------------
 
@@ -1393,6 +1397,10 @@ CDEFS+=-D$(WORK_STAMP)
 .ENDIF
 
 .INCLUDE .IGNORE: $(UPD)$(LAST_MINOR).mk
+
+.IF "$(COMPILER_WARN_ALL)"!=""
+CFLAGSAPPEND+=$(CFLAGSWALL)
+.ENDIF          # "$(WARN_ALL)"!=""
 
 CDEFS+= $(ENVCDEFS)
 CFLAGS+= $(CFLAGSCALL) $(ENVCFLAGS)
