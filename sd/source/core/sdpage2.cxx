@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:44:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,7 @@ void SdPage::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
             break;
         case OBJ_OUTLINETEXT:
             ePresKind = PRESOBJ_OUTLINE;
+            break;
         case OBJ_TEXT:
             if( ePageKind == PK_NOTES )
                 ePresKind = PRESOBJ_NOTES;
