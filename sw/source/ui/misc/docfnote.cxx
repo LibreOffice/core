@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
+ *  last change: $Author: os $ $Date: 2001-10-10 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
     aContFromEdit   (this, ResId( ED_CONT_FROM )),
     aContFL        (this, ResId( FL_CONT       )),
 
+    aNumDoc(aNumCountBox.GetEntry(FTNNUM_DOC)),
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
     aNumChapter(aNumCountBox.GetEntry(FTNNUM_CHAPTER)),
     pSh( 0 ),
@@ -356,9 +357,26 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
                 fuer das Setzen und Erfragen der gemeinten Art
                 der Numerierung.
 ------------------------------------------------------------------------*/
-inline void SwEndNoteOptionPage::SelectNumbering(int eNum)
+void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
-    aNumCountBox.SelectEntryPos(bPosDoc? (USHORT)eNum - 1: eNum);
+    String sSelect;
+    switch(eNum)
+    {
+        case FTNNUM_DOC:
+            sSelect = aNumDoc;
+        break;
+        case FTNNUM_PAGE:
+            sSelect = aNumPage;
+        break;
+        case FTNNUM_CHAPTER:
+            sSelect = aNumChapter;
+        break;
+#ifdef DBG_UTIL
+        default:
+            DBG_ERROR("Which numbering type?")
+#endif
+    }
+    aNumCountBox.SelectEntry(sSelect);
     NumCountHdl( &aNumCountBox );
 }
 
@@ -541,6 +559,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/07/31 16:04:55  jp
+    Bug #90441#: change GetUIName to FillUIName or use GetUIName in the correct way
+
     Revision 1.7  2001/07/19 16:55:14  mtg
     #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impfnote.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-07-02 11:52:55 $
+ *  last change: $Author: os $ $Date: 2001-10-10 11:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     Edit aContFromEdit;
     FixedLine aContFL;
 
+    String aNumDoc;
     String aNumPage;
     String aNumChapter;
     SwWrtShell *pSh;
