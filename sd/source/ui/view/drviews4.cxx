@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:31:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,39 +175,22 @@ void DrawViewShell::DeleteActualPage()
 {
     USHORT          nPage = aTabControl.GetCurPageId() - 1;
     SdPage*         pPage = GetDoc()->GetSdPage(nPage,PK_STANDARD);
-    String          aString(SdResId(STR_ASK_DELETE_PAGE));
-    String          aPageName(pPage->GetName());
 
-    // dynamische Seitentitel beachten
-    if (aPageName.Len() == 0)
-    {
-        aPageName += String(SdResId(STR_PAGE));
-        aPageName += String::CreateFromInt32( (sal_Int32)nPage + 1 );           // an der UI beginnen Seiten bei 1
-    }
+    USHORT nPageCount = GetDoc()->GetPageCount();
+    DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
 
-    // Platzhalter ersetzen
-    USHORT nPos = aString.Search(sal_Unicode('$'));
-    aString.Erase(nPos, 1);
-    aString.Insert(aPageName, nPos);
+    pDrView->EndTextEdit();
 
-    if (QueryBox(GetActiveWindow(), WB_YES_NO, aString).Execute() == RET_YES)
-    {
-        USHORT nPageCount = GetDoc()->GetPageCount();
-        DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
+    pDrView->BegUndo();
 
-        pDrView->EndTextEdit();
+    pDrView->AddUndo(new SdrUndoDelPage(*pPage));
+    GetDoc()->RemovePage(pPage->GetPageNum());
 
-        pDrView->BegUndo();
+    pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
+    pDrView->AddUndo(new SdrUndoDelPage(*pPage));
+    GetDoc()->RemovePage(pPage->GetPageNum());
 
-        pDrView->AddUndo(new SdrUndoDelPage(*pPage));
-        GetDoc()->RemovePage(pPage->GetPageNum());
-
-        pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-        pDrView->AddUndo(new SdrUndoDelPage(*pPage));
-        GetDoc()->RemovePage(pPage->GetPageNum());
-
-        pDrView->EndUndo();
-    }
+    pDrView->EndUndo();
 }
 
 /*************************************************************************
