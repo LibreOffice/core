@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: bm $ $Date: 2000-12-20 15:37:36 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:43:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/chart
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleChartElement.idl\
+    AccessibleChartDocumentView.idl\
     AreaDiagram.idl\
     BarDiagram.idl\
     Chart3DBarProperties.idl\
