@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-25 16:36:55 $
+ *  last change: $Author: bm $ $Date: 2001-05-02 11:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,6 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
                 xProp->setPropertyValue(
                     rtl::OUString::createFromAscii( "HasZAxisDescription" ), aFalseBool );
             }
-            // data from now on only comes out of columns
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;
@@ -330,7 +329,6 @@ void SchXMLPlotAreaContext::EndElement()
 {
     sal_Int32 i;
     sal_Bool bIsThreeDim = sal_False;
-    sal_Bool bRowSourceColumns = sal_True;
 
     // set properties
     uno::Reference< beans::XPropertySet > xProp( mxDiagram, uno::UNO_QUERY );
@@ -347,10 +345,6 @@ void SchXMLPlotAreaContext::EndElement()
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
             }
-            chart::ChartDataRowSource eRowSource;
-            xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "Dim3D" )) >>= bIsThreeDim;
-            xProp->getPropertyValue( ::rtl::OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
-            bRowSourceColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
         }
     }
 
@@ -448,10 +442,7 @@ void SchXMLPlotAreaContext::EndElement()
                 {
                     try
                     {
-                        if( bRowSourceColumns )
-                            xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
-                        else
-                            xProp = mxDiagram->getDataPointProperties( iStyle->mnSeries, iStyle->mnIndex + i );
+                        xProp = mxDiagram->getDataPointProperties( iStyle->mnIndex + i, iStyle->mnSeries );
 
                         if( xProp.is())
                         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 19:30:09 $
+ *  last change: $Author: bm $ $Date: 2001-05-02 11:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
 #include <com/sun/star/chart/XChartDataArray.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #endif
 
 using namespace rtl;
@@ -432,10 +435,16 @@ void SchXMLImportHelper::ResizeChartData( sal_Int32 nSeries, sal_Int32 nDataPoin
     {
         sal_Bool bWasChanged = sal_False;
 
-        // chart data is an array of rows,
-        // a series represents always a column
-        sal_Int32 nColCount = nSeries;
-        sal_Int32 nRowCount = nDataPoints;
+        sal_Bool bDataInColumns = sal_True;
+        uno::Reference< beans::XPropertySet > xDiaProp( mxChartDoc->getDiagram(), uno::UNO_QUERY );
+        if( xDiaProp.is())
+        {
+            chart::ChartDataRowSource eRowSource;
+            xDiaProp->getPropertyValue( ::rtl::OUString::createFromAscii( "DataRowSource" )) >>= eRowSource;
+            bDataInColumns = ( eRowSource == chart::ChartDataRowSource_COLUMNS );
+        }
+        sal_Int32 nColCount = bDataInColumns ? nSeries : nDataPoints;
+        sal_Int32 nRowCount = bDataInColumns ? nDataPoints : nSeries;
 
         uno::Reference< chart::XChartDataArray > xData( mxChartDoc->getData(), uno::UNO_QUERY );
         if( xData.is())
