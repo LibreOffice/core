@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:23:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _SD_APP_HRC_
+#define _SD_APP_HRC_
+
 #ifndef _SFX_HRC
 #include <sfx2/sfx.hrc>
 #endif
@@ -68,13 +72,11 @@
 #define SID_PASTE2                          (SID_SD_START+3)
 #define SID_COPYOBJECTS                     (SID_SD_START+4)
 #define SID_MANAGE_LINKS                    (SID_SD_START+5)
-//#define SID_CONVERT_TO_3D                   (SID_SD_START+6)
 #define SID_CHOOSE                          (SID_SD_START+7)
 #define SID_CONVERT_TO_3D_LATHE             (SID_SD_START+8)
 #define SID_DRAWINGMODE                     (SID_SD_START+9)
 #define SID_OUTLINEMODE                     (SID_SD_START+10)
 #define SID_DIAMODE                         (SID_SD_START+11)
-// #define                            (SID_SD_START+12)
 #define SID_VIEWS                           (SID_SD_START+13)
 #define SID_INSERTPAGE                      (SID_SD_START+14)
 #define SID_INSERTFILE                      (SID_SD_START+15)
@@ -95,7 +97,6 @@
 #define SID_BEZIER_ELIMINATE_POINTS         (SID_SD_START+30)
 #define SID_MOREFRONT                       (SID_SD_START+31)
 #define SID_MOREBACK                        (SID_SD_START+32)
-#define SID_LIVE_PRESENTATION               (SID_SD_START+33)
 #define SID_VERTICAL                        (SID_SD_START+34)
 #define SID_HORIZONTAL                      (SID_SD_START+35)
 #define SID_CHANGEBEZIER                    (SID_SD_START+36)
@@ -103,9 +104,6 @@
 #define SID_CAPTUREPOINT                    (SID_SD_START+38)
 #define SID_EXECUTE_MACRO                   (SID_SD_START+39)
 #define SID_RULER                           (SID_SD_START+40)
-
-#define SID_WORKINGAREA                     (SID_SD_START+41) // Soll raus !!!
-
 #define SID_HELPKEYBOARD                    (SID_SD_START+42)
 #define SID_INSERTLAYER                     (SID_SD_START+43)
 #define SID_EDIT_OUTLINER                   (SID_SD_START+44)
@@ -118,12 +116,7 @@
 #define SID_DRAW_MEASURELINE                (SID_SD_START+51)
 #define SID_STARTAPP                        (SID_SD_START+52)
 #define SID_MASTERPAGE                      (SID_SD_START+53)
-#define SID_DIA_EFFECT                      (SID_SD_START+54)
-#define SID_DIA_SPEED                       (SID_SD_START+55)
-#define SID_DIA_AUTO                        (SID_SD_START+56)
-#define SID_DIA_TIME                        (SID_SD_START+57)
 #define SID_TOOL_CONNECTOR                  (SID_SD_START+58)
-#define SID_ANIMATIONMODE                   (SID_SD_START+59)
 #define SID_ACTIONMODE                      (SID_SD_START+60)
 #define SID_ANIMATION                       (SID_SD_START+61)
 #define SID_ANIMATION_OBJECTS               (SID_SD_START+62)
@@ -301,6 +294,7 @@
 #define ID_VAL_INDEX                        (SID_SD_START+246)
 #define ID_VAL_WIDTH                        (SID_SD_START+247)
 #define ID_VAL_HEIGHT                       (SID_SD_START+248)
+#define ID_VAL_PANEL_INDEX                  (SID_SD_START+249)
 
 // nur zum austesten, um nicht jedesmal APP:HRC ff. durchbuilden zu  muessen
 #define ID_VAL_DUMMY0                       (SID_SD_START+230)
@@ -353,7 +347,6 @@
 #define SID_NAVIGATOR_PAGENAME              (SID_SD_START+287)
 #define SID_NAVIGATOR_STATE                 (SID_SD_START+288)
 #define SID_NAVIGATOR_INIT                  (SID_SD_START+289)
-#define SID_NAVIGATOR_LIVE                  (SID_SD_START+290)
 #define SID_NAVIGATOR_PEN                   (SID_SD_START+291)
 #define SID_NAVIGATOR_PAGE                  (SID_SD_START+292)
 #define SID_NAVIGATOR_OBJECT                (SID_SD_START+293)
@@ -391,15 +384,10 @@
 #define SID_HELPLINES_FRONT                 (SID_SD_START+325)
 #define SID_BEFORE_OBJ                      (SID_SD_START+326)
 #define SID_PREVIEW_WIN                     (SID_SD_START+327)
-#define SID_EFFECT_WIN                      (SID_SD_START+328)
+#define SID_CUSTOM_ANIMATION_PANEL          (SID_SD_START+328)
 #define SID_PREVIEW_STATE                   (SID_SD_START+329)
-#define SID_EFFECT_STATE                    (SID_SD_START+330)
-#define SID_EFFECT_INIT                     (SID_SD_START+331)
-#define SID_EFFECT_ASSIGN                   (SID_SD_START+332)
-//                                              (SID_SD_START+333)
-#define SID_SLIDE_CHANGE_WIN                (SID_SD_START+334)
-#define SID_SLIDE_CHANGE_STATE              (SID_SD_START+335)
-#define SID_SLIDE_CHANGE_ASSIGN             (SID_SD_START+336)
+#define SID_CUSTOM_ANIMATION_SCHEMES_PANEL  (SID_SD_START+333)
+#define SID_SLIDE_TRANSITIONS_PANEL         (SID_SD_START+334)
 //#define SID_CONVERT_TO_3D_LATHE_FAST        (SID_SD_START+337)
 #define SID_CONNECTION_DLG                  (SID_SD_START+338)
 #define SID_PRESENTATION_DLG                (SID_SD_START+339)
@@ -492,8 +480,11 @@
 #define SID_TP_USE_FOR_NEW_PRESENTATIONS    (SID_SD_START+427)
 #define SID_TP_SHOW_LARGE_PREVIEW           (SID_SD_START+428)
 #define SID_TP_SHOW_SMALL_PREVIEW           (SID_SD_START+429)
+#define SID_TASK_PANE                       (SID_SD_START+430)
 
-#define SID_INSERT_MASTER_PAGE              (SID_SD_START+430)
-#define SID_DELETE_MASTER_PAGE              (SID_SD_START+431)
-#define SID_RENAME_MASTER_PAGE              (SID_SD_START+432)
-#define SID_CLOSE_MASTER_VIEW               (SID_SD_START+433)
+#define SID_INSERT_MASTER_PAGE              (SID_SD_START+431)
+#define SID_DELETE_MASTER_PAGE              (SID_SD_START+432)
+#define SID_RENAME_MASTER_PAGE              (SID_SD_START+433)
+#define SID_CLOSE_MASTER_VIEW               (SID_SD_START+434)
+
+#endif
