@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrlist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #include "attrlist.hxx"
