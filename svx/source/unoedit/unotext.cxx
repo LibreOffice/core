@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-16 14:03:08 $
+ *  last change: $Author: cl $ $Date: 2001-08-28 13:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifndef _SV_SVAPP_HXX //autogen
+#include <vcl/svapp.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_STYLE_LINESPACING_HPP_
 #include <com/sun/star/style/LineSpacing.hpp>
 #endif
@@ -78,9 +82,6 @@
 #include <com/sun/star/text/XTextField.hdl>
 #endif
 
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
@@ -129,6 +130,7 @@
 #include "flditem.hxx"
 #include "unoshprp.hxx"
 #include "numitem.hxx"
+#include "editeng.hxx"
 
 using namespace ::rtl;
 using namespace ::vos;
@@ -1064,31 +1066,36 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     uno::Sequence< beans::PropertyState > aRet( nCount );
     beans::PropertyState* pState = aRet.getArray();
 
-    ESelection aSel;
 
-    if( nPara != -1 )
-    {
-        aSel.nStartPara = (USHORT)nPara;
-        aSel.nStartPos = 0;
-        aSel.nEndPara = (USHORT)nPara;
-        aSel.nEndPos = 0xffff;
-    }
-    else
-    {
-        aSel = GetSelection();
-    }
+
+    const sal_Bool bPara = nPara != -1;
 
     SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
     if( pForwarder )
     {
-        CheckSelection( aSel, pForwarder );
-        SfxItemSet aSet( pForwarder->GetAttribs( aSel, sal_True ) );
+        SfxItemSet* pSet = NULL;
+        if( nPara != -1 )
+        {
+            const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
+            pSet = new SfxItemSet( aSet );
+        }
+        else
+        {
+            ESelection aSel( GetSelection() );
+            CheckSelection( aSel, pForwarder );
+            const SfxItemSet aSet(pForwarder->GetAttribs( aSel, EditEngineAttribs_OnlyHard ) );
+            pSet = new SfxItemSet( aSet );
+        }
 
+        sal_Bool bUnknownPropertyFound = sal_False;
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
             const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pNames++ );
             if( NULL == pMap )
-                throw beans::UnknownPropertyException();
+            {
+                bUnknownPropertyFound = sal_True;
+                break;
+            }
 
             SfxItemState eItemState = SFX_ITEM_UNKNOWN;
             sal_uInt16 nWID = 0;
@@ -1101,7 +1108,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                         SfxItemState eTempItemState;
                         while( *pWhichId )
                         {
-                            eTempItemState = aSet.GetItemState( *pWhichId );
+                            eTempItemState = pSet->GetItemState( *pWhichId );
 
                             switch( eTempItemState )
                             {
@@ -1127,7 +1134,8 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                                 }
                                 break;
                             default:
-                                throw beans::UnknownPropertyException();
+                                bUnknownPropertyFound = sal_True;
+                                break;
                             }
 
                             pWhichId++;
@@ -1143,8 +1151,11 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                     nWID = pMap->nWID;
             }
 
+            if( bUnknownPropertyFound )
+                break;
+
             if( nWID != 0 )
-                eItemState = aSet.GetItemState( nWID, sal_False );
+                eItemState = pSet->GetItemState( nWID, sal_False );
 
             switch( eItemState )
             {
@@ -1162,6 +1173,11 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                         *pState++ = beans::PropertyState_AMBIGUOUS_VALUE;
             }
         }
+
+        delete pSet;
+
+        if( bUnknownPropertyFound )
+            throw beans::UnknownPropertyException();
     }
 
     return aRet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-28 12:55:43 $
+ *  last change: $Author: cl $ $Date: 2001-08-28 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,10 +404,6 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib )
 
     USHORT nStartNode = aEditDoc.GetPos( aSel.Min().GetNode() );
     USHORT nEndNode = aEditDoc.GetPos( aSel.Max().GetNode() );
-
-const sal_uInt8 EditEngineAttribs_All   = 0;        /// returns all attributes even when theire not set
-const sal_uInt8 EditEngineAttribs_HardAndPara = 1;  /// returns all attributes set on paragraph and on portions
-const sal_uInt8 EditEngineAttribs_OnlyHard = 2;     /// returns only attributes hard set on portions
 
     // ueber die Absaetze iterieren...
     for ( USHORT nNode = nStartNode; nNode <= nEndNode; nNode++ )
