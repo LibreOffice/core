@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-01-04 17:03:38 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 12:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,24 +132,3 @@ namespace osl
 
 #endif  /* __cplusplus */
 #endif  /* _OSL_SEMAPHORE_HXX_  */
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
-*    initial import
-*
-*    Revision 1.4  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.3  2000/05/17 14:50:15  mfe
-*    comments upgraded
-*
-*    Revision 1.2  1999/10/27 15:02:08  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/09/23 12:09:17  kr
-*    inline header wrapper for mutex semaphore guard
-*
-*************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:24 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 12:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,22 +73,3 @@ extern sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pAddr )
     return sal_False;
 }
 
-
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.3  2000/09/18 14:29:03  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.2  1999/12/06 15:01:58  jbu
-*    #70413#
-*
-*    Revision 1.1  1999/10/25 09:47:15  mfe
-*    added getEtherAddr
-*
-*    Revision 1.1  1999/10/25 09:45:54  mfe
-*    added getEtherAddr
-*
-*
-*************************************************************************/

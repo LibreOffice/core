@@ -2,9 +2,9 @@
  *
  *  $RCSfile: libutil.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:23 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 12:54:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,15 +80,3 @@ DWORD GetPlatformId()
 
     return g_dwPlatformId;
 }
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.2  2000/09/18 14:29:01  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.1  2000/05/22 15:29:08  obr
-*    unicode changes channel/pipe
-*
-*
-*************************************************************************/

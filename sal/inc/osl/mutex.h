@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-27 15:26:40 $
+ *  last change: $Author: mfe $ $Date: 2001-02-28 12:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,41 +111,3 @@ oslMutex * SAL_CALL osl_getGlobalMutex();
 #endif
 
 #endif  /* _OSL_MUTEX_H_ */
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
-*    initial import
-*
-*    Revision 1.6  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.5  2000/05/17 14:30:14  mfe
-*    comments upgraded
-*
-*    Revision 1.4  1999/12/08 10:40:52  jbu
-*    #70413# changed oslMutex forward struct
-*
-*    Revision 1.3  1999/10/27 15:02:07  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.2  1999/09/28 13:04:31  kr
-*    new: getGlobalMutex
-*
-*    Revision 1.1  1999/08/05 10:18:19  jsc
-*    verschoben aus osl
-*
-*    Revision 1.4  1999/08/05 11:14:36  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.3  1999/01/20 18:53:40  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.2  1998/07/04 14:56:57  rh
-*    Prototype for OS/2
-*
-*    Revision 1.1  1998/02/16 19:34:51  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*************************************************************************/
