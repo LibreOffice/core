@@ -160,17 +160,6 @@ public class XmlUpdater extends Thread {
             return;
     }
 
-    // Check for OpenOffice Scxripting Security Resource
-    // Check for OpenOffice Scxripting Security Resource
-        if (!zd.extractEntry("sframework/scripting64301.res",progpath+"resource"+File.separator, statusLabel))
-        {
-        // No OpenOffice Scxripting Security Resource - check for Star Office one
-        if (!zd.extractEntry("sframework/scripting64401.res",progpath+"resource"+File.separator, statusLabel))
-        {
-            onInstallComplete();
-            return;
-        }
-    }
 
 //--------------------------------
 // Robert Kinsella test 2
