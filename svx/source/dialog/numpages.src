@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-15 11:46:06 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,16 +729,16 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     StringList [ finnish ] =
     {
-            < "1, 2, 3, ... " ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, B, C, ... " ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, b, c, ..." ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "I, II, III, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "i, ii, iii, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "A, .., AA, .., AAA, ... " ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "a, .., aa, .., aaa, ..." ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Luettelomerkki" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Kuvat" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-        < "Linkitetyt kuvat" ;                      5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ... " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ... " ;          2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ... " ;          3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ... " ;  9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Luettelomerkki" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Kuvat" ;                     8/*SVX_NUM_BITMAP              */; > ;
+        < "Linkitetyt kuvat" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
         < "Ei mit‰‰n" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
     };
@@ -789,7 +789,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
         Text [ italian ] = "~Dietro" ;
-        Text [ portuguese_brazilian ] = "Atr·s" ;
+        Text [ portuguese_brazilian ] = "Atr?s" ;
         Text [ portuguese ] = "A~tr·s" ;
         Text [ finnish ] = "J‰lkeen" ;
         Text [ danish ] = "Efter" ;
@@ -956,7 +956,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "Show sublevels" ;
         Text[ chinese_simplified ] = "∞¸∫¨…œ“ªº∂±";
         Text[ russian ] = "œÓÎÌÓÒÚ¸˛";
-        Text[ polish ] = "Kompletny";
+        Text[ polish ] = "Pokaø wszystkie poziomy";
         Text[ japanese ] = "ëç⁄ÕﬁŸêî";
         Text[ chinese_traditional ] = "ßπæ„";
         Text[ arabic ] = "ﬂ«„·";
@@ -989,7 +989,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "~Start at" ;
         Text [ norwegian ] = "~Start pÂ" ;
         Text [ italian ] = "~Comincia con" ;
-        Text [ portuguese_brazilian ] = "~ComeÁar em" ;
+        Text [ portuguese_brazilian ] = "~Come?ar em" ;
         Text [ portuguese ] = "~ComeÁar em" ;
         Text [ finnish ] = "Aloita kohdasta" ;
         Text [ danish ] = "Begynd med" ;
@@ -1180,7 +1180,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     StringList [ polish ] =
     {
             < "Z lewej strony" ; > ;
-        < "Wyúrodkuj" ; > ;
+        < "Wy?rodkuj" ; > ;
         < "Z prawej strony" ; > ;
     };
     StringList [ japanese ] =
@@ -1422,7 +1422,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text = "~Hˆhe" ;
         Text [ English ] = "Height" ;
         Text [ english_us ] = "Height" ;
-        Text [ portuguese_brazilian ] = "~Hˆhe" ;
+        Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "~Hˆjd" ;
         Text [ danish ] = "H¯jde" ;
         Text [ italian ] = "~Altezza" ;
@@ -1699,13 +1699,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     StringList [ polish ] =
     {
             < "Linia odniesienia w gÛrze" ; > ;
-        < "Wyúrodkowana linia odniesienia" ; > ;
+        < "Wy?rodkowana linia odniesienia" ; > ;
         < "Linia odniesienia w dole" ; > ;
         < "Znak w gÛrze" ; > ;
-        < "Wyúrodkuj znaki" ; > ;
+        < "Wy?rodkuj znaki" ; > ;
         < "Znak w dole" ; > ;
         < "Wiersz w gÛrze" ; > ;
-        < "Wyúrodkuj wiersz" ; > ;
+        < "Wy?rodkuj wiersz" ; > ;
         < "Wiersz w dole" ; > ;
     };
     StringList [ japanese ] =
@@ -2060,7 +2060,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ spanish ] = "~Distancia al texto" ;
         Text [ french ] = "…cart du texte" ;
         Text [ dutch ] = "Afstand tot de ~tekst" ;
-        Text [ portuguese_brazilian ] = "Einr~¸ckung" ;
+        Text [ portuguese_brazilian ] = "Einr~?kung" ;
         Text [ portuguese ] = "Dist‚ncia do ~texto" ;
         Text[ chinese_simplified ] = "÷¡’˝Œƒµƒæ‡¿Î";
         Text[ russian ] = "–‡ÒÒÚÓˇÌËÂ ÓÚ ÚÂÍÒÚ‡";
@@ -2261,7 +2261,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej strony" ; > ;
-        < "Wyúrodkuj" ; > ;
+        < "Wy?rodkuj" ; > ;
         < "Do prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -2330,7 +2330,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese ] = "~Padr„o" ;
         Text[ chinese_simplified ] = "±Í◊º";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "Domyúlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "ïWèÄ";
         Text[ chinese_traditional ] = "º–∑«";
         Text[ arabic ] = "ﬁÌ«”Ì";
@@ -2354,7 +2354,7 @@ String RID_STR_EDIT_GRAPHIC
     Text [ English ] = "Link to" ;
     Text [ norwegian ] = "Link to" ;
     Text [ italian ] = "Collega" ;
-    Text [ portuguese_brazilian ] = "LigaÁ„o com" ;
+    Text [ portuguese_brazilian ] = "Liga??o com" ;
     Text [ portuguese ] = "Ligar" ;
     Text [ finnish ] = "Linkki" ;
     Text [ danish ] = "KÊd" ;
