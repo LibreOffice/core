@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 12:52:47 $
+ *  last change: $Author: dr $ $Date: 2002-10-15 13:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,14 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 
     //----------------------------------------------------------
 
+    // #79058# first we have to clear the listboxes...
+    for ( USHORT nLbEntry = 0; nLbEntry < aLbColumns.GetEntryCount(); ++nLbEntry )
+    {
+        aLbColumns.CheckEntryPos( nLbEntry, FALSE );
+        *((USHORT*)aLbColumns.GetEntryData( nLbEntry )) = 0;
+    }
+    aLbFunctions.SelectEntryPos( 0 );
+
     ScSubTotalParam theSubTotalData( ((const ScSubTotalItem&)
                                       rArgSet.Get( nWhichSubTotals )).
                                             GetSubTotalData() );
@@ -213,8 +221,8 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 
             aLbColumns.CheckEntryPos( nCheckPos );
             *pFunction = FuncToLbPos( pFunctions[i] );
-            aLbFunctions.SelectEntryPos( *pFunction );
         }
+        aLbColumns.SelectEntryPos( 0 );
     }
     else
     {
@@ -336,15 +344,9 @@ void ScTpSubTotalGroup::FillListBoxes()
             pDoc->GetString( col, nFirstRow, nTab, aFieldName );
             if ( aFieldName.Len() == 0 )
             {
-                aFieldName  = aStrColumn;
+                aFieldName = aStrColumn;
                 aFieldName += ' ';
-                if ( col < 26 )
-                    aFieldName += (sal_Unicode)( 'A' + col );
-                else
-                {
-                    aFieldName += (sal_Unicode)( 'A' + ( col / 26 ) - 1 );
-                    aFieldName += (sal_Unicode)( 'A' + ( col % 26 ) );
-                }
+                aFieldName += ::ColToAlpha( col );  // from global.hxx
             }
             nFieldArr[i] = col;
             aLbGroup.InsertEntry( aFieldName, i+1 );
