@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 05:39:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ String RID_STR_TRIED_OPEN_TABLE
     Text[ polish ] = "Próbowano otworzyæ tabelê $name$.";
     Text[ portuguese_brazilian ] = "Tried to open the table $name$";
     Text[ japanese ] = "$name$ Ã°ÌŞÙ‚ğŠJ‚±‚¤‚Æ‚µ‚Ü‚µ‚½B";
-    Text[ korean ] = "Tried to open the table $name$";
+    Text[ korean ] = "$name$½ÃÆ®¸¦ ¿­±â À§ÇØ ½ÃµµÇÔ";
     Text[ chinese_simplified ] = "ÒÑ¾­³¢ÊÔ¹ı´ò¿ª±í¸ñ $name$ ¡£";
     Text[ chinese_traditional ] = "¤w¸g¹Á¸Õ¹L¶}±Òªí®æ $name$ ¡C";
     Text[ turkish ] = "Tried to open the table $name$";
@@ -131,7 +131,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·BÌ¨ÙÀ‚³‚ê‚Ä‚¢‚Ü‚·B";
     Text[ korean ] = "the table $name$ already exists. She is only filtered!";
     Text[ chinese_simplified ] = "Õâ¸ö±í¸ñ $name$ ÒÑ¾­´æÔÚ¡£ÒÑ¾­É¸Ñ¡Õâ¸ö±í¸ñ!";
-    Text[ chinese_traditional ] = "³o­Óªí®æ $name$ ¤w¸g¦s¦b¡C¤w¸g¿z¿ï³o­Óªí®æ!";
+    Text[ chinese_traditional ] = "³o­Óªí®æ $name$ ¤w¸g¦s¦b¡C¤w¿z¿ï¥X³o­Óªí®æ!";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
     Text[ arabic ] = "the table $name$ already exists. She is only filtered!";
     Text[ finnish ] = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
