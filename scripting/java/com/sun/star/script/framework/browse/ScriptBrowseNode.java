@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 13:56:30 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package com.sun.star.script.framework.browse;
 
 import com.sun.star.script.browse.XBrowseNode;
@@ -74,12 +73,15 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.lang.XMultiComponentFactory;
-
 import com.sun.star.ucb.XSimpleFileAccess;
-
-
 import com.sun.star.beans.XIntrospectionAccess;
 import com.sun.star.script.XInvocation;
+
+import com.sun.star.lang.NoSupportException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.reflection.InvocationTargetException;
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.ElementExistException;
 
 import java.io.File;
 import java.util.*;
@@ -224,10 +226,11 @@ public class ScriptBrowseNode extends PropertySet
         {
             if (!editable)
             {
-                com.sun.star.lang.NoSupportException nse =
-                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not editable " );
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework error editing script", null, nse );
+                NoSupportException nse = new NoSupportException(
+                    aFunctionName + " is not editable " );
+
+                throw new InvocationTargetException(
+                    "Scripting framework error editing script", null, nse );
             }
 
             XScriptContext ctxt =  provider.getScriptingContext();
@@ -236,16 +239,17 @@ public class ScriptBrowseNode extends PropertySet
             {
                 data = (ScriptMetaData)parent.getByName( name );
             }
-            catch (  com.sun.star.container.NoSuchElementException nse )
+            catch ( NoSuchElementException nse )
             {
-                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
+                throw new com.sun.star.lang.IllegalArgumentException(
+                    name + " does not exist or can't be found " );
             }
             catch (  com.sun.star.lang.WrappedTargetException wte )
             {
                 // rethrow
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework editing script ",
-                       null, wte.TargetException );
+                throw new InvocationTargetException(
+                    "Scripting framework editing script ",
+                        null, wte.TargetException );
             }
 
             provider.getScriptEditor().edit(ctxt, data);
@@ -254,9 +258,10 @@ public class ScriptBrowseNode extends PropertySet
         {
             if (!deletable)
             {
-                com.sun.star.lang.NoSupportException nse =
-                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not deletable " );
-                throw new com.sun.star.reflection.InvocationTargetException(
+                NoSupportException nse = new NoSupportException(
+                    aFunctionName + " is not supported for this node" );
+
+                throw new InvocationTargetException(
                       "Scripting framework error deleting script", null, nse );
             }
             try
@@ -264,16 +269,17 @@ public class ScriptBrowseNode extends PropertySet
                 parent.removeByName( name );
                 result = new Any(new Type(Boolean.class), Boolean.TRUE);
             }
-            catch (  com.sun.star.container.NoSuchElementException nse )
+            catch ( NoSuchElementException nse )
             {
-                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
+                throw new com.sun.star.lang.IllegalArgumentException(
+                    name + " does not exist or can't be found " );
             }
-            catch (  com.sun.star.lang.WrappedTargetException wte )
+            catch ( WrappedTargetException wte )
             {
                 // rethrow
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework deleting script ",
-                       null, wte.TargetException );
+                throw new InvocationTargetException(
+                    "Scripting framework deleting script ",
+                        null, wte.TargetException );
             }
 
         }
@@ -282,51 +288,60 @@ public class ScriptBrowseNode extends PropertySet
             result = new Any(new Type(XBrowseNode.class), new XBrowseNode[0]);
             if (!renamable)
             {
-                com.sun.star.lang.NoSupportException nse =
-                    new com.sun.star.lang.NoSupportException( aFunctionName + " is not editable " );
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework error renaming script", null, nse );
+                NoSupportException nse = new NoSupportException(
+                    aFunctionName + " is not supported for this node" );
+
+                throw new InvocationTargetException(
+                    "Scripting framework error renaming script", null, nse );
             }
 
             try
             {
                 String newName = (String) AnyConverter.toString(aParams[0]);
                 ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
+                oldData.loadSource();
                 String oldSource = oldData.getSource();
-                LogUtils.DEBUG("remove old script");
-                parent.removeByName( name );
-                LogUtils.DEBUG("now create renamed script");
-                String languageName = newName + "." + provider.getScriptEditor().getExtension();
+
+                LogUtils.DEBUG("Create renamed script");
+                String languageName =
+                    newName + "." + provider.getScriptEditor().getExtension();
                 String language = provider.getName();
 
-                ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
+                ScriptEntry entry = new ScriptEntry(
+                    language, languageName, languageName, "", new HashMap() );
 
-                ScriptMetaData data = new ScriptMetaData( parent, entry, oldSource );
+                ScriptMetaData data = new ScriptMetaData(
+                    parent, entry, oldSource );
+
                 parent.insertByName( languageName, data );
+
+                LogUtils.DEBUG("Now remove old script");
+                parent.removeByName( name );
+
                 uri = data.getShortFormScriptURL();
                 name = languageName;
                 result = new Any(new Type(XBrowseNode.class), this);
             }
-            catch (  com.sun.star.container.NoSuchElementException nse )
+            catch ( NoSuchElementException nse )
             {
-                throw new com.sun.star.lang.IllegalArgumentException( aFunctionName + " does not exist or can't be found " );
+                throw new com.sun.star.lang.IllegalArgumentException(
+                    name + " does not exist or can't be found " );
             }
-            catch (  com.sun.star.container.ElementExistException eee )
+            catch ( ElementExistException eee )
             {
                 // rethrow
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework error renaming script ",
-                       null, eee );
+                throw new InvocationTargetException(
+                    "Scripting framework error renaming script ",
+                        null, eee );
             }
-            catch (  com.sun.star.lang.WrappedTargetException wte )
+            catch ( WrappedTargetException wte )
             {
                 // rethrow
-                throw new com.sun.star.reflection.InvocationTargetException(
-                      "Scripting framework rename script ",
-                       null, wte.TargetException );
+                throw new InvocationTargetException(
+                    "Scripting framework rename script ",
+                        null, wte.TargetException );
             }
         }
-
         else {
             throw new com.sun.star.lang.IllegalArgumentException(
                 "Function " + aFunctionName + " not supported.");
