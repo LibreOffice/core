@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ void ImpEditView::SetEditSelection( const EditSelection& rEditSelection )
         EENotify aNotify( EE_NOTIFY_TEXTVIEWSELECTIONCHANGED );
         aNotify.pEditEngine = pEditEngine;
         aNotify.pEditView = GetEditViewPtr();
-        pEditEngine->pImpEditEngine->GetNotifyHdl().Call( &aNotify );
+        pEditEngine->pImpEditEngine->CallNotify( aNotify );
     }
 
     aEditSelection = rEditSelection;
@@ -978,7 +978,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, BYTE nRangeCheck )
             EENotify aNotify( EE_NOTIFY_TEXTVIEWSCROLLED );
             aNotify.pEditEngine = pEditEngine;
             aNotify.pEditView = GetEditViewPtr();
-            pEditEngine->pImpEditEngine->GetNotifyHdl().Call( &aNotify );
+            pEditEngine->pImpEditEngine->CallNotify( aNotify );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 15:41:08 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,8 @@ void ImpEditEngine::FormatDoc()
     if ( !GetUpdateMode() || IsFormatting() )
         return;
 
+    EnterBlockNotifications();
+
     bIsFormatting = sal_True;
 
     // Dann kann ich auch den Spell-Timer starten...
@@ -492,6 +494,8 @@ void ImpEditEngine::FormatDoc()
         GetRefDevice()->Pop();
 
     CallStatusHdl();    // Falls Modified...
+
+    LeaveBlockNotifications();
 }
 
 sal_Bool ImpEditEngine::ImpCheckRefMapMode()

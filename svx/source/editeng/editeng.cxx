@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 14:13:49 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,8 +1203,10 @@ EditTextObject* EditEngine::CreateTextObject( const ESelection& rESelection )
 void EditEngine::SetText( const EditTextObject& rTextObject )
 {
     DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->EnterBlockNotifications();
     pImpEditEngine->SetText( rTextObject );
     pImpEditEngine->FormatAndUpdate();
+    pImpEditEngine->LeaveBlockNotifications();
 }
 
 void EditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
@@ -2226,7 +2228,7 @@ void __EXPORT EditEngine::ParagraphInserted( sal_uInt16 nPara )
         EENotify aNotify( EE_NOTIFY_PARAGRAPHINSERTED );
         aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
-        GetNotifyHdl().Call( &aNotify );
+        pImpEditEngine->CallNotify( aNotify );
     }
 }
 
@@ -2239,7 +2241,7 @@ void __EXPORT EditEngine::ParagraphDeleted( sal_uInt16 nPara )
         EENotify aNotify( EE_NOTIFY_PARAGRAPHREMOVED );
         aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
-        GetNotifyHdl().Call( &aNotify );
+        pImpEditEngine->CallNotify( aNotify );
     }
 }
 
@@ -2269,7 +2271,7 @@ void __EXPORT EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
         EENotify aNotify( EE_NOTIFY_TEXTHEIGHTCHANGED );
         aNotify.pEditEngine = this;
         aNotify.nParagraph = nPara;
-        GetNotifyHdl().Call( &aNotify );
+        pImpEditEngine->CallNotify( aNotify );
     }
 }
 

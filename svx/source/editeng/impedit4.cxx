@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-17 13:00:20 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1251,10 +1251,13 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
 
 EditSelection ImpEditEngine::InsertText( const EditTextObject& rTextObject, EditSelection aSel )
 {
+    EnterBlockNotifications();
     aSel.Adjust( aEditDoc );
     if ( aSel.HasRange() )
         aSel = ImpDeleteSelection( aSel );
-    return InsertBinTextObject( (BinTextObject&)rTextObject, aSel.Max() );
+    EditSelection aNewSel = InsertBinTextObject( (BinTextObject&)rTextObject, aSel.Max() );
+    LeaveBlockNotifications();
+    return aNewSel;
 
     // MT 05/00: InsertBinTextObject direkt hier machen...
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 09:37:10 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@ DBG_NAMEEX( EditEngine );
 
 #define LINE_SEP    0x0A
 
+typedef EENotify* EENotifyPtr;
+SV_DECL_PTRARR_DEL( NotifyList, EENotifyPtr, 1, 1 );    // IMPL is in outliner.cxx, move to EE later and share declaration, or use BlockNotifications from EE directly
+
 
 class EditView;
 class EditEngine;
@@ -257,6 +260,7 @@ private:
     DragAndDropInfo*    pDragAndDropInfo;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+
 
     sal_uInt32          nControl;
     sal_uInt32          nTravelXPos;
@@ -453,6 +457,8 @@ private:
 
     ImplIMEInfos*       mpIMEInfos;
 
+    NotifyList          aNotifyCache;
+
     XubString           aWordDelimiters;
     XubString           aGroupChars;
 
@@ -461,6 +467,7 @@ private:
 
     Color               maBackgroundColor;
 
+    sal_uInt32          nBlockNotifications;
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
@@ -838,6 +845,11 @@ public:
     InternalEditStatus& GetStatus() { return aStatus; }
     void                CallStatusHdl();
     void                DelayedCallStatusHdl()  { aStatusTimer.Start(); }
+
+    void                CallNotify( EENotify& rNotify );
+    void                EnterBlockNotifications();
+    void                LeaveBlockNotifications();
+
 
     EditSelection       MatchGroup( const EditSelection& rSel );
 

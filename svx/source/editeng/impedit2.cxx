@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-27 15:41:08 $
+ *  last change: $Author: mt $ $Date: 2002-06-03 13:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include <eeng_pch.hxx>
 
@@ -193,6 +192,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     pColorConfig        = NULL;
 
     nCurTextHeight      = 0;
+    nBlockNotifications = 0;
     nBigTextObjectStart = 20;
 
     nStretchX           = 100;
@@ -814,7 +814,7 @@ void ImpEditEngine::TextModified()
     {
         EENotify aNotify( EE_NOTIFY_TEXTMODIFIED );
         aNotify.pEditEngine = GetEditEnginePtr();
-        GetNotifyHdl().Call( &aNotify );
+        CallNotify( aNotify );
     }
 }
 
@@ -1554,7 +1554,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, USHORT nNew
         aNotify.nParagraph = nNewPos;
         aNotify.nParam1 = aOldPositions.Min();
         aNotify.nParam2 = aOldPositions.Max();
-        GetNotifyHdl().Call( &aNotify );
+        CallNotify( aNotify );
     }
 
     aEditDoc.SetModified( TRUE );
@@ -3387,4 +3387,41 @@ svx::ColorConfig& ImpEditEngine::GetColorConfig()
     return *pColorConfig;
 }
 
+void ImpEditEngine::CallNotify( EENotify& rNotify )
+{
+    if ( !nBlockNotifications )
+    {
+        GetNotifyHdl().Call( &rNotify );
+    }
+    else
+    {
+        EENotify* pNewNotify = new EENotify( rNotify );
+        aNotifyCache.Insert( pNewNotify, aNotifyCache.Count() );
+    }
+}
 
+void ImpEditEngine::EnterBlockNotifications()
+{
+    nBlockNotifications++;
+}
+
+void ImpEditEngine::LeaveBlockNotifications()
+{
+    DBG_ASSERT( nBlockNotifications, "LeaveBlockNotifications - Why?" );
+
+    nBlockNotifications--;
+    if ( !nBlockNotifications )
+    {
+        // Call blocked notify events...
+        USHORT nCount = aNotifyCache.Count();
+        if ( nCount )
+        {
+            for ( USHORT n = 0; n < nCount; n++ )
+            {
+                EENotify* pNotify = aNotifyCache[n];
+                GetNotifyHdl().Call( pNotify );
+            }
+            aNotifyCache.DeleteAndDestroy( 0, nCount );
+        }
+    }
+}
