@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCommandProcessor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:29:23 $
+ *  last change:$Date: 2003-09-08 11:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.Command;
 import com.sun.star.ucb.CommandAbortedException;
@@ -73,8 +76,6 @@ import com.sun.star.ucb.XCommandInfo;
 import com.sun.star.ucb.XCommandProcessor;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
 * Tests <code>XCommandProcessor</code>. The TestCase can pass (but doesn't have
@@ -254,7 +255,7 @@ public class _XCommandProcessor extends MultiMethodTest {
         aborter.start();
 
         try {
-            Thread.currentThread().sleep(15);
+            Thread.sleep(15);
         } catch (InterruptedException e) {
         }
 
