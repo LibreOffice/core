@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-08 16:44:57 $
+#   last change: $Author: hr $ $Date: 2002-08-15 14:43:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,8 +112,8 @@ SHL1STDLIBS= \
         $(ONELIB)		\
         $(GOODIESLIB)
 
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+# SCO: the linker does know about weak symbols, but we can't ignore multiple defined symbols
+.IF "(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC"
 SHL1STDLIBS+=-licg617mxp
 .ENDIF
 
