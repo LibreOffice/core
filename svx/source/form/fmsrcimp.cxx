@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATS_HPP_
 #include <com/sun/star/util/XNumberFormats.hpp>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SVX_FMPROP_HRC
@@ -150,13 +150,13 @@
 #include "fmsearch.hrc"
 #endif
 
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
 
 
 //#define COMPARE_BOOKMARKS(a, b) compareUsrAny(a, b)
-#define COMPARE_BOOKMARKS(a, b) ::utl::compare(a, b)
+#define COMPARE_BOOKMARKS(a, b) ::comphelper::compare(a, b)
 
 // damit ich waehrend des Debuggings keine inline-Methoden habe ...
 #if DEBUG || DBG_UTIL
@@ -201,7 +201,7 @@ FmRecordCountListener::FmRecordCountListener(const ::com::sun::star::uno::Refere
     if (!m_xListening.is())
         return;
 
-    if (::utl::getBOOL(m_xListening->getPropertyValue(FM_PROP_ROWCOUNTFINAL)))
+    if (::comphelper::getBOOL(m_xListening->getPropertyValue(FM_PROP_ROWCOUNTFINAL)))
     {
         m_xListening = NULL;
         // there's nothing to do as the record count is already known
@@ -251,7 +251,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = (void*)::utl::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        void* pTheCount = (void*)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
         m_lnkWhoWantsToKnow.Call(pTheCount);
     }
 }
@@ -413,13 +413,13 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const ::com::sun::star::uno::Refere
     // die FieldInfo dazu aufbauen
     FieldInfo fiCurrent;
     fiCurrent.xContents = ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn > (xCurrentField, ::com::sun::star::uno::UNO_QUERY);
-    fiCurrent.nFormatKey = ::utl::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
+    fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
     fiCurrent.bDoubleHandling = sal_False;
     if (m_xFormatSupplier.is())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats(m_xFormatSupplier->getNumberFormats());
 
-        sal_Int16 nFormatType = ::utl::getNumberFormatType(xNumberFormats, fiCurrent.nFormatKey) & ~((sal_Int16)::com::sun::star::util::NumberFormat::DEFINED);
+        sal_Int16 nFormatType = ::comphelper::getNumberFormatType(xNumberFormats, fiCurrent.nFormatKey) & ~((sal_Int16)::com::sun::star::util::NumberFormat::DEFINED);
         fiCurrent.bDoubleHandling = (nFormatType != ::com::sun::star::util::NumberFormat::TEXT);
     }
 
@@ -757,7 +757,7 @@ FmSearchEngine::FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::su
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
-    m_xFormatter = ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > (::utl::getProcessServiceFactory()
+    m_xFormatter = ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > (::comphelper::getProcessServiceFactory()
                     ->createInstance(FM_NUMBER_FORMATTER), ::com::sun::star::uno::UNO_QUERY);
     if (m_xFormatter.is())
         m_xFormatter->attachNumberFormatsSupplier(m_xFormatSupplier);

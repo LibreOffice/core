@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,11 @@
 #include "svdpagv.hxx"
 #endif
 
-#ifndef _UTL_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 //  SMART_UNO_IMPLEMENTATION(FmXPageViewWinRec, UsrObject);
@@ -208,7 +208,7 @@ sal_Bool SAL_CALL FmXPageViewWinRec::hasElements(void) throw( ::com::sun::star::
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >  SAL_CALL FmXPageViewWinRec::createEnumeration(void) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return new ::utl::OEnumerationByIndex(this);
+    return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // ::com::sun::star::container::XIndexAccess
@@ -357,7 +357,7 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
             {
                 pFormController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
             }
-            //  ::utl::getImplementation(pFormController, xTunnel);
+            //  ::comphelper::getImplementation(pFormController, xTunnel);
         }
 
         // Es gibt noch keinen TabController fuer das Formular, also muss
@@ -578,13 +578,13 @@ IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
                 {
                     // Nur bei Datenbankformularen erfolgt eine aktivierung
                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xController->getModel(), ::com::sun::star::uno::UNO_QUERY);
-                    if (xForm.is() && ::utl::getConnection(xForm).is())
+                    if (xForm.is() && ::dbtools::getConnection(xForm).is())
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(xForm, ::com::sun::star::uno::UNO_QUERY);
                         if (xFormSet.is())
                         {
                             // wenn es eine Datenquelle gibt, dann als aktive ::com::sun::star::form setzen
-                            ::rtl::OUString aSource = ::utl::getString(xFormSet->getPropertyValue(FM_PROP_COMMAND));
+                            ::rtl::OUString aSource = ::comphelper::getString(xFormSet->getPropertyValue(FM_PROP_COMMAND));
                             if (aSource.len())
                             {
                                 // benachrichtigung der Shell

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,23 +160,23 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _SVX_FMFILTER_HXX
 #include "fmfilter.hxx"
@@ -468,7 +468,7 @@ void FmFilterAdapter::InsertElements(const Reference< ::com::sun::star::containe
 
         // store the filter controls
         FmXFormController* pController = NULL;
-        //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(xElement, UNO_QUERY));
+        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(xElement, UNO_QUERY));
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel(xElement,::com::sun::star::uno::UNO_QUERY);
         DBG_ASSERT(xTunnel.is(), "FmFilterAdapter::InsertElements : xTunnel is invalid!");
         if(xTunnel.is())
@@ -526,7 +526,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
     {
         pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
     }
-    //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+    //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
     FmFilterRows& rRows = pController->getFilterRows();
 
     DBG_ASSERT(nRowPos < rRows.size(), "wrong row pos");
@@ -700,7 +700,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
     {
         Reference< ::com::sun::star::form::XFormController >  xController(*(Reference< ::com::sun::star::form::XFormController > *)xControllers->getByIndex(i).getValue());
         Reference< ::com::sun::star::beans::XPropertySet >  xModelAsSet(xController->getModel(), UNO_QUERY);
-        ::rtl::OUString aName = ::utl::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
+        ::rtl::OUString aName = ::comphelper::getString(xModelAsSet->getPropertyValue(FM_PROP_NAME));
 
         // Insert a new ::com::sun::star::form
         FmFormItem* pFormItem = new FmFormItem(pParent, xController, aName);
@@ -714,7 +714,7 @@ void FmFilterModel::Update(const Reference< ::com::sun::star::container::XIndexA
         {
             pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
         }
-        //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
 
         INT32 nPos = pController->getCurrentFilterPosition();
         pFormItem->SetCurrentPosition(nPos);
@@ -831,7 +831,7 @@ void FmFilterModel::AppendFilterItems(FmFormItem* pFormItem)
     {
         pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
     }
-    //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+    //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
     FmFilterRows& rRows = pController->getFilterRows();
 
     // determine the filter position
@@ -872,7 +872,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
         {
             pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
         }
-        //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+        //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
         FmFilterRows& rRows = pController->getFilterRows();
 
         // how many entries do we have
@@ -987,9 +987,9 @@ sal_Bool FmFilterModel::ValidateText(FmFilterItem* pItem, UniString& rText, UniS
 {
     // check the input
     Reference< ::com::sun::star::beans::XPropertySet >  xField(m_pAdapter->getField(pItem->GetTextComponent()));
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::utl::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xController->getModel(), UNO_QUERY)));
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::utl::getNumberFormats(xConnection, sal_True);
-    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(::utl::getProcessServiceFactory()
+    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xController->getModel(), UNO_QUERY)));
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(::comphelper::getProcessServiceFactory()
                         ->createInstance(FM_NUMBER_FORMATTER), UNO_QUERY);
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -1067,7 +1067,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
             {
                 pController = (FmXFormController*)xTunnel->getSomething(FmXFormController::getUnoTunnelImplementationId());
             }
-            //  ::utl::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
+            //  ::comphelper::getImplementation(pController, Reference<XUnoTunnel>(pFormItem->GetController(),UNO_QUERY));
             pController->setCurrentFilterPosition(nPos);
             pFormItem->SetCurrentPosition(nPos);
 

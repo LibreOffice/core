@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-22 09:45:07 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,23 +221,23 @@
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
 #endif
-#ifndef _UTL_TYPES_HXX_
-#include <unotools/types.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_CONTAINER_HXX_
-#include <unotools/container.hxx>
+#ifndef _COMPHELPER_CONTAINER_HXX_
+#include <comphelper/container.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _FM_STATIC_HXX_
 #include "fmstatic.hxx"
@@ -245,11 +245,11 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#ifndef _UTL_DB_EXCEPTION_HXX_
-#include <unotools/dbexception.hxx>
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
 #endif
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
@@ -285,10 +285,10 @@ SdbSqlParser& getSQLParser()
 
 //==============================================================================
 //------------------------------------------------------------------------------
-void displayException(const ::utl::SQLExceptionInfo& _rError)
+void displayException(const ::dbtools::SQLExceptionInfo& _rError)
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    if (_rError.isKindOf(::utl::SQLExceptionInfo::SQL_EXCEPTION))
+    if (_rError.isKindOf(::dbtools::SQLExceptionInfo::SQL_EXCEPTION))
     {
         SvxDBMsgBox aSvxDBMsgBox(GetpApp()->GetAppWindow(), *(const ::com::sun::star::sdbc::SQLException*)_rError, WB_OK);
         aSvxDBMsgBox.Execute();
@@ -306,14 +306,14 @@ void displayException(const ::utl::SQLExceptionInfo& _rError)
 //  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, WinBits nStyle)
 {
-    ::utl::SQLExceptionInfo aInfo(_rExcept);
+    ::dbtools::SQLExceptionInfo aInfo(_rExcept);
     displayException(aInfo);
 }
 
 //  ------------------------------------------------------------------------------
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, WinBits nStyle)
 {
-    ::utl::SQLExceptionInfo aInfo(_rEvent);
+    ::dbtools::SQLExceptionInfo aInfo(_rEvent);
     displayException(aInfo);
 }
 
@@ -346,24 +346,24 @@ _Optlink
     // ::std::copy it by streaming
 
     // creating a pipe
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xOutPipe(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xOutPipe(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), ::com::sun::star::uno::UNO_QUERY);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> xInPipe(xOutPipe, ::com::sun::star::uno::UNO_QUERY);
 
     // creating the mark streams
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> xMarkIn(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream> xMarkIn(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), ::com::sun::star::uno::UNO_QUERY);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink> xMarkSink(xMarkIn, ::com::sun::star::uno::UNO_QUERY);
     xMarkSink->setInputStream(xInPipe);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xMarkOut(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream> xMarkOut(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), ::com::sun::star::uno::UNO_QUERY);
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource> xMarkSource(xMarkOut, ::com::sun::star::uno::UNO_QUERY);
     xMarkSource->setOutputStream(xOutPipe);
 
     // connect mark and sink
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink> xSink(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSink> xSink(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), ::com::sun::star::uno::UNO_QUERY);
     xSink->setInputStream(xMarkIn);
 
     // connect mark and source
-    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource> xSource(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource> xSource(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), ::com::sun::star::uno::UNO_QUERY);
     xSource->setOutputStream(xMarkOut);
 
     // write the string to source
@@ -386,7 +386,7 @@ _Optlink
 
     // create a new object
     ::rtl::OUString aObjectService = _xObj->getServiceName();
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xDestSet(::utl::getProcessServiceFactory()->createInstance(aObjectService), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xDestSet(::comphelper::getProcessServiceFactory()->createInstance(aObjectService), ::com::sun::star::uno::UNO_QUERY);
     if (!xDestSet.is())
     {
         DBG_ERROR("cloneUsingProperties : could not instantiate an object of the given type !");
@@ -455,7 +455,7 @@ void CloneForms(const ::com::sun::star::uno::Reference< ::com::sun::star::contai
         if (!xNew.is())
         {
             DBG_ERROR("CloneForms : could not clone a form object !");
-            ::utl::disposeComponent(xNewObject);
+            ::comphelper::disposeComponent(xNewObject);
             continue;
         }
         _xDest->insertByIndex(0, ::com::sun::star::uno::makeAny(xNew));
@@ -484,7 +484,7 @@ sal_Bool searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star:
             if (aRet.hasValue())
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xIface(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aRet.getValue());
-                ::utl::query_interface(xIface, xComp);
+                ::comphelper::query_interface(xIface, xComp);
                 if (((::com::sun::star::uno::XInterface *)xElement.get()) == (::com::sun::star::uno::XInterface*)xComp.get())
                     return sal_True;
                 else
@@ -512,11 +512,11 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xToFind;
     ::com::sun::star::uno::Type xRequestedElementClass( xCont->getElementType());
 
-    if (::utl::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>*)0))
+    if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>*)0))
         xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>(xElement, ::com::sun::star::uno::UNO_QUERY);
-    else if (::utl::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>*)0))
+    else if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>*)0))
         xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>(xElement, ::com::sun::star::uno::UNO_QUERY);
-    else if (::utl::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)0))
+    else if (::comphelper::isA(xRequestedElementClass,(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)0))
         xToFind = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(xElement, ::com::sun::star::uno::UNO_QUERY);
 
     DBG_ASSERT(xToFind.is(), "Unknown Element");
@@ -569,7 +569,7 @@ String getFormComponentAccessPath(const ::com::sun::star::uno::Reference< ::com:
         sReturn = sCurrentIndex;
 
         // travel up
-        if (::utl::query_interface((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)xParent,xChild))
+        if (::comphelper::query_interface((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >)xParent,xChild))
             xParent = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
     }
 
@@ -685,7 +685,7 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
     if (pResult)
     {
         DBG_ASSERT(pResult->Name == ustrPropName, "::RemoveProperty Properties nicht sortiert");
-        ::utl::removeElementAt(seqProps, pResult - pProperties);
+        ::comphelper::removeElementAt(seqProps, pResult - pProperties);
     }
 }
 
@@ -714,22 +714,22 @@ void RemoveProperty(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Pr
     if (!xControlModel.is())
         return ::rtl::OUString();
 
-    if (::utl::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
+    if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlModel))
     {
         ::com::sun::star::uno::Any aLabelModel( xControlModel->getPropertyValue(FM_PROP_CONTROLLABEL) );
         if (aLabelModel.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE)
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xLabelSet(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aLabelModel.getValue(), ::com::sun::star::uno::UNO_QUERY);
-            if (xLabelSet.is() && ::utl::hasProperty(FM_PROP_LABEL, xLabelSet))
+            if (xLabelSet.is() && ::comphelper::hasProperty(FM_PROP_LABEL, xLabelSet))
             {
                 ::com::sun::star::uno::Any aLabel( xLabelSet->getPropertyValue(FM_PROP_LABEL) );
-                if ((aLabel.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) && ::utl::getString(aLabel).getLength())
-                    return ::utl::getString(aLabel);
+                if ((aLabel.getValueTypeClass() == ::com::sun::star::uno::TypeClass_STRING) && ::comphelper::getString(aLabel).getLength())
+                    return ::comphelper::getString(aLabel);
             }
         }
     }
 
-    return ::utl::getString(xControlModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
+    return ::comphelper::getString(xControlModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
 }
 
 
@@ -784,7 +784,7 @@ sal_uInt32 findValue(const ::com::sun::star::uno::Sequence< ::com::sun::star::un
     sal_uInt32 i;
     for (i = 0; i < nLen; i++)
     {
-        if (::utl::compare(rValue, pArray[i]))
+        if (::comphelper::compare(rValue, pArray[i]))
             break;
     }
     return (i < nLen) ? i : LIST_ENTRY_NOTFOUND;
@@ -951,23 +951,23 @@ sal_uInt32 findValue1(const ::com::sun::star::uno::Sequence< ::rtl::OUString>& r
         case ::com::sun::star::uno::TypeClass_VOID:             aRetStr.AssignAscii("");                        break;
         case ::com::sun::star::uno::TypeClass_ANY:              aRetStr.AssignAscii("TYPE any");                break;
         case ::com::sun::star::uno::TypeClass_UNKNOWN:          aRetStr.AssignAscii("TYPE unknown");            break;
-        case ::com::sun::star::uno::TypeClass_BOOLEAN:          aRetStr = ::utl::getBOOL(aValue) ? '1' : '0';   break;
-        case ::com::sun::star::uno::TypeClass_CHAR:             aRetStr = String::CreateFromInt32(::utl::getINT16(aValue));         break;
-        case ::com::sun::star::uno::TypeClass_STRING:           aRetStr = (const sal_Unicode*)::utl::getString(aValue); break;
-        //  case ::com::sun::star::uno::TypeClass_FLOAT:            SolarMath::DoubleToString( aRetStr, ::utl::getFloat(aValue), 'F', 40, '.', sal_True); break;
-        //  case ::com::sun::star::uno::TypeClass_DOUBLE:           SolarMath::DoubleToString( aRetStr, ::utl::getDouble(aValue), 'F', 400, '.', sal_True); break;
-        case ::com::sun::star::uno::TypeClass_FLOAT:            aRetStr = String::CreateFromFloat( ::utl::getFloat(aValue));break;
-        case ::com::sun::star::uno::TypeClass_DOUBLE:           aRetStr = String::CreateFromDouble( ::utl::getDouble(aValue));break;
+        case ::com::sun::star::uno::TypeClass_BOOLEAN:          aRetStr = ::comphelper::getBOOL(aValue) ? '1' : '0';    break;
+        case ::com::sun::star::uno::TypeClass_CHAR:             aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));          break;
+        case ::com::sun::star::uno::TypeClass_STRING:           aRetStr = (const sal_Unicode*)::comphelper::getString(aValue);  break;
+        //  case ::com::sun::star::uno::TypeClass_FLOAT:            SolarMath::DoubleToString( aRetStr, ::comphelper::getFloat(aValue), 'F', 40, '.', sal_True); break;
+        //  case ::com::sun::star::uno::TypeClass_DOUBLE:           SolarMath::DoubleToString( aRetStr, ::comphelper::getDouble(aValue), 'F', 400, '.', sal_True); break;
+        case ::com::sun::star::uno::TypeClass_FLOAT:            aRetStr = String::CreateFromFloat( ::comphelper::getFloat(aValue));break;
+        case ::com::sun::star::uno::TypeClass_DOUBLE:           aRetStr = String::CreateFromDouble( ::comphelper::getDouble(aValue));break;
                 // use SolarMath::DoubleToString instead of sprintf as it is more flexible
                 // with respect to the decimal digits (sprintf uses a default value for the number
                 // of dec digits and isn't able to cut trailing zeros)
                 // 67901 - 27.07.99 - FS
-        case ::com::sun::star::uno::TypeClass_BYTE:             aRetStr = String::CreateFromInt32(::utl::getINT16(aValue));     break;
-        case ::com::sun::star::uno::TypeClass_SHORT:            aRetStr = String::CreateFromInt32(::utl::getINT16(aValue));     break;
-        case ::com::sun::star::uno::TypeClass_LONG:             aRetStr = String::CreateFromInt32(::utl::getINT32(aValue));     break;
+        case ::com::sun::star::uno::TypeClass_BYTE:             aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case ::com::sun::star::uno::TypeClass_SHORT:            aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case ::com::sun::star::uno::TypeClass_LONG:             aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
         case ::com::sun::star::uno::TypeClass_HYPER:            aRetStr.AssignAscii("TYPE HYPER");          break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:   aRetStr = String::CreateFromInt32(::utl::getINT16(aValue));     break;
-        case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:    aRetStr = String::CreateFromInt32(::utl::getINT32(aValue));     break;
+        case ::com::sun::star::uno::TypeClass_UNSIGNED_SHORT:   aRetStr = String::CreateFromInt32(::comphelper::getINT16(aValue));      break;
+        case ::com::sun::star::uno::TypeClass_UNSIGNED_LONG:    aRetStr = String::CreateFromInt32(::comphelper::getINT32(aValue));      break;
         case ::com::sun::star::uno::TypeClass_UNSIGNED_HYPER:   aRetStr.AssignAscii("TYPE UNSIGNED_HYPER"); break;
     }
 
@@ -1456,8 +1456,8 @@ void TransferEventScripts(const ::com::sun::star::uno::Reference< ::com::sun::st
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   aModelListeners;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   aControlListeners;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xModelIntrospection(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xControlIntrospection(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.beans.Introspection")), ::com::sun::star::uno::UNO_QUERY);
 
     if (xModelIntrospection.is() && xModel.is())
     {
@@ -1537,7 +1537,7 @@ sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun
 
         // the column itself shouldn't be hidden
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xAskedFor( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(nModelPos).getValue());
-        if (::utl::getBOOL(xAskedFor->getPropertyValue(FM_PROP_HIDDEN)))
+        if (::comphelper::getBOOL(xAskedFor->getPropertyValue(FM_PROP_HIDDEN)))
         {
             DBG_ERROR("GridModel2ViewPos : invalid argument !");
             return (sal_Int16)-1;
@@ -1547,7 +1547,7 @@ sal_Int16   GridModel2ViewPos(const ::com::sun::star::uno::Reference< ::com::sun
         for (sal_Int16 i=0; i<nModelPos; ++i)
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (::utl::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+            if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 --nViewPos;
         }
         return nViewPos;
@@ -1565,7 +1565,7 @@ sal_Int16   GridView2ModelPos(const ::com::sun::star::uno::Reference< ::com::sun
         for (i=0; i<rColumns->getCount(); ++i)
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (!::utl::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+            if (!::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 // for every visible col : if nViewPos is greater zero, decrement it, else we
                 // have found the model position
                 if (!nViewPos)
@@ -1589,7 +1589,7 @@ sal_Int16   GridViewColumnCount(const ::com::sun::star::uno::Reference< ::com::s
         for (sal_Int16 i=0; i<rColumns->getCount(); ++i)
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCur( *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>*)rColumns->getByIndex(i).getValue());
-            if (::utl::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
+            if (::comphelper::getBOOL(xCur->getPropertyValue(FM_PROP_HIDDEN)))
                 --nCount;
         }
         return nCount;
@@ -1799,7 +1799,7 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const ::com::sun::star::u
 
     ::osl::MutexGuard aGuard(getAccessSafety());
     if (m_xIntercepted.is())
-    ::utl::increment(m_refCount);
+    ::comphelper::increment(m_refCount);
     {
         m_xIntercepted->registerDispatchProviderInterceptor((::com::sun::star::frame::XDispatchProviderInterceptor*)this);
         // this should make us the top-level dispatch-provider for the component, via a call to our
@@ -1808,7 +1808,7 @@ FmXDispatchInterceptorImpl::FmXDispatchInterceptorImpl(const ::com::sun::star::u
         if (xInterceptedComponent.is())
             xInterceptedComponent->addEventListener((::com::sun::star::lang::XEventListener*)this);
     }
-    ::utl::decrement(m_refCount);
+    ::comphelper::decrement(m_refCount);
 }
 
 //------------------------------------------------------------------------
@@ -1971,8 +1971,8 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
             if (aConn.getValueTypeClass() == ::com::sun::star::uno::TypeClass_INTERFACE &&
                 ((::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aConn.getValue())->is())
                 return sal_True;
-            else if (::utl::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
-                     ::utl::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
+            else if (::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).len() ||
+                     ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).len() ||
                      ::findConnection(xLoad).is())
                 return sal_True;
         }
@@ -2014,7 +2014,7 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>  xReturn;
 
     // is it a file url ?
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xNamingContext(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> xNamingContext(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
     if (xNamingContext.is() && xNamingContext->hasByName(_rsTitleOrPath))
     {
         DBG_ASSERT(::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService>(xNamingContext, ::com::sun::star::uno::UNO_QUERY).is(), "::getDataSource : no NamingService interface on the DatabaseAccessContext !");
@@ -2022,7 +2022,7 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
     }
     else
     {   // is it a favorite title ?
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnvironment(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment> xEnvironment(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
         if (xEnvironment.is())
         {
             try
@@ -2078,13 +2078,13 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
             ::cppu::extractInterface(xConn, aConn);
 
             // which escapeProcessing we use?
-            bEscapeProcessing = ::utl::getBOOL(xRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
+            bEscapeProcessing = ::comphelper::getBOOL(xRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
 
             // get the command
-            ::rtl::OUString aCommand(::utl::getString( xRowSetProps->getPropertyValue(FM_PROP_COMMAND) ));
+            ::rtl::OUString aCommand(::comphelper::getString( xRowSetProps->getPropertyValue(FM_PROP_COMMAND) ));
 
             // and the command type
-            sal_Int32 nType = ::utl::getINT32(xRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
+            sal_Int32 nType = ::comphelper::getINT32(xRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
             switch (nType)
             {
                 case ::com::sun::star::sdb::CommandType::TABLE:
@@ -2105,8 +2105,8 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                         {
                             ::com::sun::star::uno::Any aElement(xQueries->getByName(aCommand));
                             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xQuery(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*)aElement.getValue(), ::com::sun::star::uno::UNO_QUERY);
-                            aReturn= ::utl::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
-                            bEscapeProcessing = ::utl::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
+                            aReturn= ::comphelper::getString(xQuery->getPropertyValue(FM_PROP_COMMAND));
+                            bEscapeProcessing = ::comphelper::getBOOL(xQuery->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                         }
                     }
                 }   break;
@@ -2129,7 +2129,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer> xReturn;
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet> xRowSet(_rxRowSetProps, ::com::sun::star::uno::UNO_QUERY);
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConn( ::utl::calcConnection(xRowSet,::utl::getProcessServiceFactory()));
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConn( ::dbtools::calcConnection(xRowSet,::comphelper::getProcessServiceFactory()));
     try
     {
         if (xConn.is())     // implies xRowSet.is() implies _rxRowSetProps.is()
@@ -2139,13 +2139,13 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 
             ::rtl::OUString sStatement;
             // first ensure we have all properties needed
-            if (::utl::hasProperty(FM_PROP_COMMAND, _rxRowSetProps) && ::utl::hasProperty(FM_PROP_COMMANDTYPE, _rxRowSetProps)
-                && ::utl::hasProperty(FM_PROP_FILTER_CRITERIA, _rxRowSetProps) && ::utl::hasProperty(FM_PROP_SORT, _rxRowSetProps)
-                && ::utl::hasProperty(FM_PROP_ESCAPE_PROCESSING, _rxRowSetProps) && ::utl::hasProperty(FM_PROP_APPLYFILTER, _rxRowSetProps))
+            if (::comphelper::hasProperty(FM_PROP_COMMAND, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_COMMANDTYPE, _rxRowSetProps)
+                && ::comphelper::hasProperty(FM_PROP_FILTER_CRITERIA, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_SORT, _rxRowSetProps)
+                && ::comphelper::hasProperty(FM_PROP_ESCAPE_PROCESSING, _rxRowSetProps) && ::comphelper::hasProperty(FM_PROP_APPLYFILTER, _rxRowSetProps))
             {
-                sal_Int32 nCommandType = ::utl::getINT32(_rxRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
-                ::rtl::OUString sCommand = ::utl::getString(_rxRowSetProps->getPropertyValue(FM_PROP_COMMAND));
-                sal_Bool bEscapeProcessing = ::utl::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
+                sal_Int32 nCommandType = ::comphelper::getINT32(_rxRowSetProps->getPropertyValue(FM_PROP_COMMANDTYPE));
+                ::rtl::OUString sCommand = ::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_COMMAND));
+                sal_Bool bEscapeProcessing = ::comphelper::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING));
                 switch (nCommandType)
                 {
                     case ::com::sun::star::sdb::CommandType::COMMAND:
@@ -2184,16 +2184,16 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                             break;
 
                         //  a native query ?
-                        if (!::utl::hasProperty(FM_PROP_ESCAPE_PROCESSING, xQueryProps))
+                        if (!::comphelper::hasProperty(FM_PROP_ESCAPE_PROCESSING, xQueryProps))
                             break;
-                        if (!::utl::getBOOL(xQueryProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING)))
+                        if (!::comphelper::getBOOL(xQueryProps->getPropertyValue(FM_PROP_ESCAPE_PROCESSING)))
                             break;
 
-                        if (!::utl::hasProperty(FM_PROP_COMMAND, xQueryProps))
+                        if (!::comphelper::hasProperty(FM_PROP_COMMAND, xQueryProps))
                             break;
 
                         // the command used by the query
-                        sStatement = ::utl::getString(xQueryProps->getPropertyValue(FM_PROP_COMMAND));
+                        sStatement = ::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_COMMAND));
 
                         // use an additional composer to build a statement from the query filter/order props
                         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory> xFactory(xConn, ::com::sun::star::uno::UNO_QUERY);
@@ -2205,17 +2205,17 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 
                         xLocalComposer->setQuery(sStatement);
                         // the sort order
-                        if (::utl::hasProperty(FM_PROP_SORT, xQueryProps))
-                            xLocalComposer->setOrder(::utl::getString(xQueryProps->getPropertyValue(FM_PROP_SORT)));
+                        if (::comphelper::hasProperty(FM_PROP_SORT, xQueryProps))
+                            xLocalComposer->setOrder(::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_SORT)));
 
                         sal_Bool bApplyFilter = sal_False;
-                        if (::utl::hasProperty(FM_PROP_APPLYFILTER, xQueryProps))
-                            bApplyFilter = ::utl::getBOOL(xQueryProps->getPropertyValue(FM_PROP_APPLYFILTER));
+                        if (::comphelper::hasProperty(FM_PROP_APPLYFILTER, xQueryProps))
+                            bApplyFilter = ::comphelper::getBOOL(xQueryProps->getPropertyValue(FM_PROP_APPLYFILTER));
 
                         if (bApplyFilter)
                         {
-                            if (::utl::hasProperty(FM_PROP_FILTER_CRITERIA, xQueryProps))
-                                xLocalComposer->setFilter(::utl::getString(xQueryProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
+                            if (::comphelper::hasProperty(FM_PROP_FILTER_CRITERIA, xQueryProps))
+                                xLocalComposer->setFilter(::comphelper::getString(xQueryProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
                         }
                         sStatement = xLocalComposer->getComposedQuery();
                     }
@@ -2236,10 +2236,10 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
                 {
                     xReturn->setQuery(sStatement);
                     // append filter/sort
-                    xReturn->setOrder(::utl::getString(_rxRowSetProps->getPropertyValue(FM_PROP_SORT)));
-                    sal_Bool bApplyFilter = ::utl::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_APPLYFILTER));
+                    xReturn->setOrder(::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_SORT)));
+                    sal_Bool bApplyFilter = ::comphelper::getBOOL(_rxRowSetProps->getPropertyValue(FM_PROP_APPLYFILTER));
                     if (bApplyFilter)
-                        xReturn->setFilter(::utl::getString(_rxRowSetProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
+                        xReturn->setFilter(::comphelper::getString(_rxRowSetProps->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
                 }
             }
         }

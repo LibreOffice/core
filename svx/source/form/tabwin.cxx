@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,18 +90,15 @@
 #include <com/sun/star/util/XLocalizedAliases.hpp>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
-#ifndef _UTL_STLTYPES_HXX_
-#include "unotools/stl_types.hxx"
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include "unotools/dbtools.hxx"
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include "unotools/processfactory.hxx"
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 
 #ifndef _SVX_FMHELP_HRC
@@ -163,8 +160,8 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 const long STD_WIN_POS_X = 50;
@@ -261,7 +258,7 @@ DBG_NAME(FmFieldWin);
 FmFieldWin::FmFieldWin(SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent)
             :SfxFloatingWindow(pBindings, pMgr, pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
             ,SfxControllerItem(SID_FM_FIELDS_CONTROL, *pBindings)
-            ,::utl::OPropertyChangeListener(m_aMutex)
+            ,::comphelper::OPropertyChangeListener(m_aMutex)
             ,pData(new FmFieldWinData)
             ,m_nObjectType(0)
             ,m_pChangeListener(NULL)
@@ -355,9 +352,9 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement >  xStatement;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, ::com::sun::star::uno::UNO_QUERY);
 
-    m_aObjectName   = ::utl::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
-    m_aDatabaseName = ::utl::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
-    m_nObjectType   = ::utl::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
+    m_aObjectName   = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_COMMAND));
+    m_aDatabaseName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE));
+    m_nObjectType   = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_COMMANDTYPE));
 
     // maybe the database name is empty. this is allowed by the service definition
     // (the form will use a connection it finds in it's parent hierarchy as it's datasource,
@@ -374,19 +371,19 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
             {
                 // first find somebody who can give us an URL the connection is build upon
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTitleSupplier(xConnection, ::com::sun::star::uno::UNO_QUERY);
-                if (!xTitleSupplier.is() || !::utl::hasProperty(FM_PROP_URL, xTitleSupplier))
+                if (!xTitleSupplier.is() || !::comphelper::hasProperty(FM_PROP_URL, xTitleSupplier))
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xConnAsChild(xConnection, ::com::sun::star::uno::UNO_QUERY);
                     if (xConnAsChild.is())
                         xTitleSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >::query(xConnAsChild->getParent());
                 }
 
-                if (xTitleSupplier.is() && ::utl::hasProperty(FM_PROP_URL, xTitleSupplier))
+                if (xTitleSupplier.is() && ::comphelper::hasProperty(FM_PROP_URL, xTitleSupplier))
                 {
                     xTitleSupplier->getPropertyValue(FM_PROP_URL) >>= sDisplayName;
                     // then check if we have an alias for the URL
                             ::com::sun::star::uno::Reference< ::com::sun::star::util::XLocalizedAliases >
-                                xAliases(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+                                xAliases(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
                     if (xAliases.is())
                     {
                         // get the application language
@@ -408,7 +405,7 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >   xConnection = ::utl::calcConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (xForm, ::com::sun::star::uno::UNO_QUERY),::utl::getProcessServiceFactory());
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >   xConnection = ::dbtools::calcConnection(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > (xForm, ::com::sun::star::uno::UNO_QUERY),::comphelper::getProcessServiceFactory());
         if (!xConnection.is())
             return sal_True;
 
@@ -484,7 +481,7 @@ sal_Bool FmFieldWin::Update(const ::com::sun::star::uno::Reference< ::com::sun::
         m_pChangeListener->dispose();
         m_pChangeListener->release();
     }
-    m_pChangeListener = new ::utl::OPropertyChangeMultiplexer(this, xSet);
+    m_pChangeListener = new ::comphelper::OPropertyChangeMultiplexer(this, xSet);
     m_pChangeListener->acquire();
     m_pChangeListener->addProperty(FM_PROP_DATASOURCE);
     m_pChangeListener->addProperty(FM_PROP_COMMAND);

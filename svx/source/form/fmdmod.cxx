@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmdmod.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 #ifndef _SVX_UNOSHAPE_HXX
 #include <unoshape.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 //-----------------------------------------------------------------------------
@@ -83,7 +83,7 @@
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
     if ( ServiceSpecifier.search( ::rtl::OUString::createFromAscii("com.sun.star.form.component.") ) == 0 )
     {
-        xRet = ::utl::getProcessServiceFactory()->createInstance(ServiceSpecifier);
+        xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceSpecifier);
     }
     else if ( ServiceSpecifier == ::rtl::OUString( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ControlShape") ) )
     {
@@ -137,7 +137,7 @@
         ServiceName.getToken( 2, '.' ) == ::rtl::OUString::createFromAscii("form") &&
         ServiceName.getToken( 3, '.' ) == ::rtl::OUString::createFromAscii("component"))
     {
-        xRet = ::utl::getProcessServiceFactory()->createInstance(ServiceName);
+        xRet = ::comphelper::getProcessServiceFactory()->createInstance(ServiceName);
     }
     else
     if (nTokenCount == 4 &&

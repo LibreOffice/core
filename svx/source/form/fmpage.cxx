@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@
 #endif
 #endif
 
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 TYPEINIT1(FmFormPage, SdrPage);
@@ -332,12 +332,12 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(((FmFormObj*)pObj)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
                 if (xSet.is())
                 {
-                    if (::utl::hasProperty(FM_PROP_HELPTEXT, xSet))
-                        aHelpText = ::utl::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
+                    if (::comphelper::hasProperty(FM_PROP_HELPTEXT, xSet))
+                        aHelpText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_HELPTEXT)).getStr();
 
-                    if (!aHelpText.Len() && ::utl::hasProperty(FM_PROP_TARGET_URL, xSet))
+                    if (!aHelpText.Len() && ::comphelper::hasProperty(FM_PROP_TARGET_URL, xSet))
                     {
-                        ::rtl::OUString aText = ::utl::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
+                        ::rtl::OUString aText = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_TARGET_URL));
                         INetURLObject aUrl(aText);
 
                         // testen, ob es ein Protokoll-Typ ist, den ich anzeigen will

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,17 @@
  ************************************************************************/
 #pragma hdrstop
 
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
-#ifndef _UTL_NUMBERS_HXX_
-#include <unotools/numbers.hxx>
+#ifndef _COMPHELPER_NUMBERS_HXX_
+#include <comphelper/numbers.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
@@ -212,8 +212,8 @@
 #include "fmresids.hrc"
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_XLOCALIZEDALIASES_HXX_
@@ -232,22 +232,22 @@
 void getConnectionSpecs(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, ::rtl::OUString& rURL, ::rtl::OUString& _rRegisteredTitle)
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xURLSupplier(_rxConn, ::com::sun::star::uno::UNO_QUERY);
-    if (!::utl::hasProperty(FM_PROP_URL, xURLSupplier))
+    if (!::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > xChild(_rxConn, ::com::sun::star::uno::UNO_QUERY);
         if (xChild.is())
             xURLSupplier = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >(xChild->getParent(), ::com::sun::star::uno::UNO_QUERY);
     }
-    if (::utl::hasProperty(FM_PROP_URL, xURLSupplier))
+    if (::comphelper::hasProperty(FM_PROP_URL, xURLSupplier))
     {
-        try { rURL = ::utl::getString(xURLSupplier->getPropertyValue(FM_PROP_URL)); } catch(...) { }
+        try { rURL = ::comphelper::getString(xURLSupplier->getPropertyValue(FM_PROP_URL)); } catch(...) { }
     }
 
     if (rURL.getLength())
     {
         try
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::util::XLocalizedAliases > xAliases(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XLocalizedAliases > xAliases(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
             if (xAliases.is())
             {
                 // get the application language
@@ -565,7 +565,7 @@ void FmFormView::ObjectCreated(FmFormObj* pObj)
             sal_Bool bDataForm = sal_False;
             try
             {
-                bDataForm = xForm.is() && ::utl::calcConnection(xForm, ::utl::getProcessServiceFactory()).is();
+                bDataForm = xForm.is() && ::dbtools::calcConnection(xForm, ::comphelper::getProcessServiceFactory()).is();
             }
             catch(...)
             {
@@ -629,8 +629,8 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >  xNumberFormats, sal_uInt16 nObjID, const ::rtl::OUString& rFieldPostfix,
     FmFormObj*& pLabel, FmFormObj*& pControl) const
 {
-    sal_Int32 nDataType = ::utl::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
-    sal_Int32 nFormatKey = ::utl::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
+    sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
+    sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
 
     ::com::sun::star::uno::Any aFieldName(xField->getPropertyValue(FM_PROP_NAME));
     ::rtl::OUString sFieldName;
@@ -693,13 +693,13 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
     if (xControlSet.is())
     {
         // ein paar numersiche Eigenschaften durchschleifen
-        if (::utl::hasProperty(FM_PROP_DECIMAL_ACCURACY, xControlSet))
+        if (::comphelper::hasProperty(FM_PROP_DECIMAL_ACCURACY, xControlSet))
         {
             // Number braucht eine Scale
-            ::com::sun::star::uno::Any aScaleVal(::utl::getNumberFormatDecimals(xNumberFormats, nFormatKey));
+            ::com::sun::star::uno::Any aScaleVal(::comphelper::getNumberFormatDecimals(xNumberFormats, nFormatKey));
             xControlSet->setPropertyValue(FM_PROP_DECIMAL_ACCURACY, aScaleVal);
         }
-        if (::utl::hasProperty(FM_PROP_VALUEMIN, xControlSet) && ::utl::hasProperty(FM_PROP_VALUEMAX, xControlSet))
+        if (::comphelper::hasProperty(FM_PROP_VALUEMIN, xControlSet) && ::comphelper::hasProperty(FM_PROP_VALUEMAX, xControlSet))
         {
             // die minimale/maximale Zahl in diesem Feld
             sal_Int32 nMinValue = -1000000000, nMaxValue = 1000000000;
@@ -717,7 +717,7 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
             xControlSet->setPropertyValue(FM_PROP_VALUEMAX,aVal);
         }
 
-        if (::utl::hasProperty(FM_PROP_STRICTFORMAT, xControlSet))
+        if (::comphelper::hasProperty(FM_PROP_STRICTFORMAT, xControlSet))
         {   // Formatueberpruefung fue numeric fields standardmaessig sal_True
             sal_Bool bB(sal_True);
             ::com::sun::star::uno::Any aVal(&bB,getBooleanCppuType());
@@ -740,7 +740,7 @@ void FmFormView::CreateControlWithLabel(OutputDevice* pOutDev, sal_Int32 nYOffse
     }
 
     // announce the label to the control
-    if (::utl::hasProperty(FM_PROP_CONTROLLABEL, xControlSet))
+    if (::comphelper::hasProperty(FM_PROP_CONTROLLABEL, xControlSet))
     {
         // (try-catch as the control may refuse a model without the right service name - which we don't know
         // usually a fixed text we use as label should be accepted, but to be sure ....)
@@ -776,7 +776,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
 
     // Datenbank, Tabelle/Abfrage und Feld bestimmen
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment >  xEnv(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XDatabaseEnvironment >  xEnv(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ENVIRONMENT), ::com::sun::star::uno::UNO_QUERY);
     if (!xEnv.is())
         return NULL;
 
@@ -799,7 +799,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 
         if (!xDatabase.is())
         {   // aDatabaseName isn't a database path. maybe a favorite name ?
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(::utl::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XNamingService >  xDatabaseAccesses(::comphelper::getProcessServiceFactory()->createInstance(SRV_SDB_DATABASE_ACCESS_CONTEXT), ::com::sun::star::uno::UNO_QUERY);
             if (xDatabaseAccesses.is())
             {
                 try
@@ -899,7 +899,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         if (xFields.is() && xFields->hasByName(aFieldName))
             xField = *(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > *)xFields->getByName(aFieldName).getValue();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::utl::getNumberFormats(xConnection, sal_False);
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = ::dbtools::getNumberFormats(xConnection, sal_False);
         if (!xSupplier.is())
             return NULL;
 
@@ -910,8 +910,8 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         // Vom Feld werden nun zwei Informationen benoetigt:
         // a.) Name des Feldes fuer Label und ControlSource
         // b.) FormatKey, um festzustellen, welches Feld erzeugt werden soll
-        sal_Int32 nDataType = ::utl::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
-        sal_Int32 nFormatKey = ::utl::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
+        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FIELDTYPE));
+        sal_Int32 nFormatKey = ::comphelper::getINT32(xField->getPropertyValue(FM_PROP_FORMATKEY));
 
         ::rtl::OUString sLabelPostfix;
 
@@ -948,8 +948,8 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
         sal_Bool bDateNTimeField = sal_False;
 
         sal_Bool bIsCurrency = sal_False;
-        if (::utl::hasProperty(FM_PROP_ISCURRENCY, xField))
-            bIsCurrency = ::utl::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
+        if (::comphelper::hasProperty(FM_PROP_ISCURRENCY, xField))
+            bIsCurrency = ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_ISCURRENCY));
 
         if (bIsCurrency)
             nOBJID = OBJ_FM_CURRENCYFIELD;
@@ -1054,7 +1054,7 @@ SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
     catch(...)
     {
         DBG_ERROR("FmFormView::CreateFieldControl : catched an exception while creating the control !");
-        ::utl::disposeComponent(xStatement);
+        ::comphelper::disposeComponent(xStatement);
     }
 
 

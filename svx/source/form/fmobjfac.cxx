@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobjfac.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,8 @@
  ************************************************************************/
 #pragma hdrstop
 
-#ifndef _UTL_STLTYPES_HXX_
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
 #endif
 
 #ifndef _SVDOBJ_HXX

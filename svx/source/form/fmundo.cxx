@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,13 +168,15 @@
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#include <unotools/stl_types.hxx>
+#ifndef _COMPHELPER_STLTYPES_HXX_
+#include <comphelper/stl_types.hxx>
+#endif
 
 #ifndef _SVX_FMSTL_HXX
 #include "fmstl.hxx"
@@ -498,7 +500,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
             if (aSetPos == pCache->end())
             {
                 PropertySetInfo aNewEntry;
-                if (!::utl::hasProperty(FM_PROP_CONTROLSOURCE, xSet))
+                if (!::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xSet))
                 {
                     aNewEntry.bHasEmptyControlSource = sal_False;
                 }
@@ -507,7 +509,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
                     try
                     {
                         ::com::sun::star::uno::Any aCurrentControlSource = xSet->getPropertyValue(FM_PROP_CONTROLSOURCE);
-                        aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::utl::getString(aCurrentControlSource).getLength() == 0);
+                        aNewEntry.bHasEmptyControlSource = !aCurrentControlSource.hasValue() || (::comphelper::getString(aCurrentControlSource).getLength() == 0);
                     }
                     catch(...)
                     {
@@ -521,7 +523,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
             {   // is it the DataField property ?
                 if (evt.PropertyName.equals(FM_PROP_CONTROLSOURCE))
                 {
-                    aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::utl::getString(evt.NewValue).getLength() == 0);
+                    aSetPos->second.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
                 }
             }
 
@@ -541,7 +543,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
                 aNewEntry.bIsControlSourceProperty = sal_False;
                 try
                 {
-                    if (::utl::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
+                    if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCEPROPERTY, xSet))
                     {
                         ::com::sun::star::uno::Any aControlSourceProperty = xSet->getPropertyValue(FM_PROP_CONTROLSOURCEPROPERTY);
                         ::rtl::OUString sControlSourceProperty;
@@ -581,7 +583,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const ::com::sun::star::beans::
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(evt.Source, ::com::sun::star::uno::UNO_QUERY);
             PropertySetInfoCache* pCache = static_cast<PropertySetInfoCache*>(m_pPropertySetCache);
             PropertySetInfo& rSetInfo = (*pCache)[xSet];
-            rSetInfo.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::utl::getString(evt.NewValue).getLength() == 0);
+            rSetInfo.bHasEmptyControlSource = !evt.NewValue.hasValue() || (::comphelper::getString(evt.NewValue).getLength() == 0);
         }
     }
 }
@@ -917,7 +919,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& rMod,
     if (xCont.is() && xElem.is())
     {
         // den Richtigen IFacePointer
-        ::utl::query_interface(xElem, xElement);
+        ::comphelper::query_interface(xElem, xElement);
         if (eAction == Removed)
         {
             if (nIndex < 0)
@@ -974,7 +976,7 @@ void FmUndoContainerAction::Undo()
                 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObj(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xContainer->getByIndex(nIndex).getValue()),
                         xIface;
 
-                ::utl::query_interface(xObj, xIface);
+                ::comphelper::query_interface(xObj, xIface);
                 if ((::com::sun::star::uno::XInterface *)xElement.get() == (::com::sun::star::uno::XInterface *)xIface.get())
                 {
                     ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager >  xManager(xContainer, ::com::sun::star::uno::UNO_QUERY);
@@ -1103,9 +1105,9 @@ void FmUndoModelReplaceAction::Undo()
             try
             {
                 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCurrentSet(xCurrentModel, ::com::sun::star::uno::UNO_QUERY);
-                DBG_ASSERT(::utl::hasProperty(FM_PROP_NAME, xCurrentSet),
+                DBG_ASSERT(::comphelper::hasProperty(FM_PROP_NAME, xCurrentSet),
                     "FmUndoModelReplaceAction::Undo : one of the models is invalid !");
-                xParent->replaceByName(::utl::getString(xCurrentSet->getPropertyValue(FM_PROP_NAME)), ::com::sun::star::uno::makeAny(xComponent));
+                xParent->replaceByName(::comphelper::getString(xCurrentSet->getPropertyValue(FM_PROP_NAME)), ::com::sun::star::uno::makeAny(xComponent));
             }
             catch(...)
             {

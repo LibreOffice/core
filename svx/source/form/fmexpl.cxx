@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-21 12:31:31 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,13 +240,13 @@
 
 #ifndef _SVX_FMPROP_HXX
 #include "fmprop.hxx"
-#endif // _SVX_FMPROP_HXX
-
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 //========================================================================
@@ -485,7 +485,7 @@ FmFormData::FmFormData( ::com::sun::star::uno::Reference< ::com::sun::star::form
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(m_xForm, ::com::sun::star::uno::UNO_QUERY);
         if (xSet.is())
         {
-            ::rtl::OUString aEntryName(::utl::getString(xSet->getPropertyValue( FM_PROP_NAME )));
+            ::rtl::OUString aEntryName(::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
             SetText(aEntryName);
         }
     }
@@ -550,9 +550,9 @@ FmControlData::FmControlData( ::com::sun::star::uno::Reference< ::com::sun::star
     if( xSet.is() )
     {
 #if DBG_UTIL
-        ::rtl::OUString aEntryName = ::utl::getString(xSet->getPropertyValue( FM_PROP_NAME ));
+        ::rtl::OUString aEntryName = ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME ));
 #endif
-        SetText( ::utl::getString(xSet->getPropertyValue( FM_PROP_NAME )));
+        SetText( ::comphelper::getString(xSet->getPropertyValue( FM_PROP_NAME )));
     }
 }
 
@@ -733,7 +733,7 @@ void SAL_CALL FmXExplPropertyChangeList::propertyChange(const ::com::sun::star::
 
     if( pEntryData )
     {
-        ::rtl::OUString aNewName =  ::utl::getString(evt.NewValue);
+        ::rtl::OUString aNewName =  ::comphelper::getString(evt.NewValue);
         pEntryData->SetText( aNewName );
         FmExplNameChangedHint aNameChangedHint( pEntryData, aNewName );
         m_pExplModel->Broadcast( aNameChangedHint );
@@ -750,7 +750,7 @@ void SAL_CALL FmXExplPropertyChangeList::elementInserted(const ::com::sun::star:
     // keine Undoaction einfuegen
     m_bCanUndo = sal_False;
 
-    Insert(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue(), ::utl::getINT32(evt.Accessor));
+    Insert(*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)evt.Element.getValue(), ::comphelper::getINT32(evt.Accessor));
 
     m_bCanUndo = sal_True;
 }
@@ -2436,7 +2436,7 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCurrent(pControls[i], ::com::sun::star::uno::UNO_QUERY);
 #if DEBUG || DBG_UTIL
             // nur mal eben sehen, ob das Ding tatsaechlich ein hidden control ist
-            sal_Int16 nClassId = ::utl::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
+            sal_Int16 nClassId = ::comphelper::getINT16(xCurrent->getPropertyValue(FM_PROP_CLASSID));
             DBG_ASSERT(nClassId == ::com::sun::star::form::FormComponentType::HIDDENCONTROL, "FmExplorer::Drop : invalid control in drop list !");
                 // wenn das SVX_FM_HIDDEN_CONTROLS-Format vorhanden ist, dann sollten wirklich nur hidden controls in der Sequenz
                 // stecken
@@ -2633,7 +2633,7 @@ void FmExplorer::NewForm( SvLBoxEntry* pParentEntry )
 
     //////////////////////////////////////////////////////////////////////
     // Neue ::com::sun::star::form::Form erzeugen
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xNewForm(::utl::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xNewForm(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), ::com::sun::star::uno::UNO_QUERY);
     if (!xNewForm.is())
         return;
 
@@ -2696,7 +2696,7 @@ FmControlData* FmExplorer::NewControl( const ::rtl::OUString& rServiceName, SvLB
 
     //////////////////////////////////////////////////////////////////////
     // Neue Component erzeugen
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xNewComponent(::utl::getProcessServiceFactory()->createInstance(rServiceName), ::com::sun::star::uno::UNO_QUERY);
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xNewComponent(::comphelper::getProcessServiceFactory()->createInstance(rServiceName), ::com::sun::star::uno::UNO_QUERY);
     if (!xNewComponent.is())
         return NULL;
 
@@ -3275,7 +3275,7 @@ void FmExplorer::SynchronizeMarkList()
                 if (!xSet.is())
                     continue;
 
-                sal_uInt16 nClassId = ::utl::getINT16(xSet->getPropertyValue(FM_PROP_CLASSID));
+                sal_uInt16 nClassId = ::comphelper::getINT16(xSet->getPropertyValue(FM_PROP_CLASSID));
                 if (nClassId != ::com::sun::star::form::FormComponentType::HIDDENCONTROL)
                     MarkViewObj(pControlData, sal_True, sal_True);
             }
@@ -3307,10 +3307,10 @@ sal_Bool FmExplorer::IsHiddenControl(FmEntryData* pEntryData)
     if (pEntryData == NULL) return sal_False;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xProperties(pEntryData->GetElement(), ::com::sun::star::uno::UNO_QUERY);
-    if (::utl::hasProperty(FM_PROP_CLASSID, xProperties))
+    if (::comphelper::hasProperty(FM_PROP_CLASSID, xProperties))
     {
         ::com::sun::star::uno::Any aClassID = xProperties->getPropertyValue( FM_PROP_CLASSID );
-        return (::utl::getINT16(aClassID) == ::com::sun::star::form::FormComponentType::HIDDENCONTROL);
+        return (::comphelper::getINT16(aClassID) == ::com::sun::star::form::FormComponentType::HIDDENCONTROL);
     }
     return sal_False;
 }

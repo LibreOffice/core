@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 14:07:06 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,29 +194,29 @@
 #include "fmprop.hxx"
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UTL_UNO3_HXX_
-#include <unotools/uno3.hxx>
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <unotools/dbtools.hxx>
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
 #endif
-#ifndef _UTL_PROPERTY_AGGREGATION_HXX_
-#include <unotools/propagg.hxx>
+#ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
+#include <comphelper/propagg.hxx>
 #endif
-#ifndef _UTL_ENUMHELPER_HXX_
-#include <unotools/enumhelper.hxx>
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
 #endif
-#ifndef _UTL_DB_CONVERSION_HXX_
-#include <unotools/dbconversion.hxx>
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -229,9 +229,6 @@
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -347,16 +344,16 @@ FmXFormController::FmXFormController(FmFormView* _pView, Window* _pWindow, const
                   ,m_nUpdateDispatcherEvent(0)
                   ,m_nToggleEvent(0)
 {
-    ::utl::increment(m_refCount);
+    ::comphelper::increment(m_refCount);
     {
-        m_xAggregate = Reference< XAggregation > (::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.awt.TabController")), UNO_QUERY);
+        m_xAggregate = Reference< XAggregation > (::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.awt.TabController")), UNO_QUERY);
         DBG_ASSERT(m_xAggregate.is(), "FmXFormController::FmXFormController : could not create my aggregate !");
         m_xTabController = Reference< ::com::sun::star::awt::XTabController > (m_xAggregate, UNO_QUERY);
     }
     if ( m_xAggregate.is() )
         m_xAggregate->setDelegator(*this);
 
-    ::utl::decrement(m_refCount);
+    ::comphelper::decrement(m_refCount);
 
     m_aInsertTimer.SetTimeout(500);
     m_aInsertTimer.SetTimeoutHdl(LINK(this,FmXFormController,OnTimeout));
@@ -589,12 +586,12 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
         case FM_ATTR_FILTER_CRITERIA:
         {
             String aFilter;
-            Reference< ::com::sun::star::sdbc::XConnection> xConnection(::utl::getConnection(Reference< ::com::sun::star::sdbc::XRowSet>(m_xModelAsIndex, UNO_QUERY)));
+            Reference< ::com::sun::star::sdbc::XConnection> xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
             {
                 Reference< ::com::sun::star::sdbc::XDatabaseMetaData> xMetaData(xConnection->getMetaData());
-                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( ::utl::getNumberFormats(xConnection, sal_True));
-                Reference< ::com::sun::star::util::XNumberFormatter> xFormatter(::utl::getProcessServiceFactory()
+                Reference< ::com::sun::star::util::XNumberFormatsSupplier> xFormatSupplier( ::dbtools::getNumberFormats(xConnection, sal_True));
+                Reference< ::com::sun::star::util::XNumberFormatter> xFormatter(::comphelper::getProcessServiceFactory()
                                 ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -700,7 +697,7 @@ Type SAL_CALL  FmXFormController::getElementType(void) throw( RuntimeException )
 Reference< ::com::sun::star::container::XEnumeration > SAL_CALL  FmXFormController::createEnumeration(void) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    return new ::utl::OEnumerationByIndex(this);
+    return new ::comphelper::OEnumerationByIndex(this);
 }
 
 // ::com::sun::star::container::XIndexAccess
@@ -819,7 +816,7 @@ void FmXFormController::disposing(void)
     setModel(Reference< ::com::sun::star::awt::XTabControllerModel > ());
     setParent(Reference< XInterface > ());
 
-    ::utl::disposeComponent(m_xComposer);
+    ::comphelper::disposeComponent(m_xComposer);
 
     m_bDBConnection = sal_False;
 }
@@ -833,9 +830,9 @@ void SAL_CALL FmXFormController::propertyChange(const ::com::sun::star::beans::P
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if (bModifiedChanged)
-            m_bCurrentRecordModified = ::utl::getBOOL(evt.NewValue);
+            m_bCurrentRecordModified = ::comphelper::getBOOL(evt.NewValue);
         else
-            m_bCurrentRecordNew = ::utl::getBOOL(evt.NewValue);
+            m_bCurrentRecordNew = ::comphelper::getBOOL(evt.NewValue);
 
         // toggle the locking
         if (m_bLocked != determineLockState())
@@ -893,15 +890,15 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
             if (xControl.is())
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                 {
                     // does the model use a bound field ?
                     Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
                     Reference< ::com::sun::star::beans::XPropertySet >  xField = *(Reference< ::com::sun::star::beans::XPropertySet > *)aVal.getValue();
 
                     // is it a autofield?
-                    if (xField.is() && ::utl::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
-                        ::utl::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
+                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
+                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
                     {
                         const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
                         const SdrUnoControlList& rControlList = rWR.GetControlList();
@@ -940,15 +937,15 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
             if (xControl.is())
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                 {
                     // does the model use a bound field ?
                     Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
                     Reference< ::com::sun::star::beans::XPropertySet >  xField = *(Reference< ::com::sun::star::beans::XPropertySet > *)aVal.getValue();
 
                     // is it a autofield?
-                    if (xField.is() && ::utl::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
-                        ::utl::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
+                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_AUTOINCREMENT, xField) &&
+                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_AUTOINCREMENT)))
                     {
                         const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
                         const SdrUnoControlList& rControlList = rWR.GetControlList();
@@ -957,8 +954,8 @@ void FmXFormController::toggleAutoFields(sal_Bool bAutoFields)
                         {
                             // Zuruecksetzen des Controls auf das Defaultcontrol
                             SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            ::rtl::OUString aServiceName = ::utl::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
-                            Reference< ::com::sun::star::awt::XControl >  xNewControl(::utl::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY);
+                            ::rtl::OUString aServiceName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
+                            Reference< ::com::sun::star::awt::XControl >  xNewControl(::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY);
 
                             // setting the focus if the current control
                             // is the active one
@@ -1546,14 +1543,14 @@ void FmXFormController::setControlLock(const Reference< ::com::sun::star::awt::X
     {
         // gibt es eine Datenquelle
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-        if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         {
             // wie sieht mit den Properties ReadOnly und Enable aus
             sal_Bool bTouch = sal_True;
-            if (::utl::hasProperty(FM_PROP_ENABLED, xSet))
-                bTouch = ::utl::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
-            if (::utl::hasProperty(FM_PROP_READONLY, xSet))
-                bTouch = !::utl::getBOOL(xSet->getPropertyValue(FM_PROP_READONLY));
+            if (::comphelper::hasProperty(FM_PROP_ENABLED, xSet))
+                bTouch = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ENABLED));
+            if (::comphelper::hasProperty(FM_PROP_READONLY, xSet))
+                bTouch = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_READONLY));
 
             if (bTouch)
             {
@@ -1568,7 +1565,7 @@ void FmXFormController::setControlLock(const Reference< ::com::sun::star::awt::X
                         try
                         {
                             Any aVal = xField->getPropertyValue(FM_PROP_ISREADONLY);
-                            if (aVal.hasValue() && ::utl::getBOOL(aVal))
+                            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
                                 xBound->setLock(sal_True);
                             else
                                 xBound->setLock(bLocked);
@@ -1608,7 +1605,7 @@ void FmXFormController::startControlListening(const Reference< ::com::sun::star:
 
         // gibt es eine Datenquelle
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(xBound, UNO_QUERY);
-        if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         {
             Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
             Reference< ::com::sun::star::beans::XPropertySet >  xField = *(Reference< ::com::sun::star::beans::XPropertySet > *)aVal.getValue();
@@ -1672,7 +1669,7 @@ void FmXFormController::stopControlListening(const Reference< ::com::sun::star::
         xBound = Reference< ::com::sun::star::form::XBoundComponent > (xControl->getModel(), UNO_QUERY);
         // gibt es eine Datenquelle
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(xBound, UNO_QUERY);
-        if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+        if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
         {
             Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
             Reference< ::com::sun::star::beans::XPropertySet >  xField = *(Reference< ::com::sun::star::beans::XPropertySet > *)aVal.getValue();
@@ -1762,7 +1759,7 @@ Reference< ::com::sun::star::awt::XControl >  FmXFormController::findControl(Seq
             if ((::com::sun::star::awt::XControlModel*)xModel.get() == (::com::sun::star::awt::XControlModel*)xCtrlModel.get())
             {
                 Reference< ::com::sun::star::awt::XControl >  xCtrl( pCtrls[i] );
-                ::utl::removeElementAt(rCtrls, i);
+                ::comphelper::removeElementAt(rCtrls, i);
                 return xCtrl;
             }
         }
@@ -1815,7 +1812,7 @@ void FmXFormController::removeControl(const Reference< ::com::sun::star::awt::XC
     {
         if ((::com::sun::star::awt::XControl*)xControl.get() == (::com::sun::star::awt::XControl*)pCtrls[i].get())
         {
-            ::utl::removeElementAt(m_aControls, i);
+            ::comphelper::removeElementAt(m_aControls, i);
             break;
         }
     }
@@ -1893,7 +1890,7 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
     ::osl::MutexGuard aGuard( m_aMutex );
     Reference< ::com::sun::star::sdbc::XRowSet >  xForm(rEvent.Source, UNO_QUERY);
     // do we have a connected data source
-    if (xForm.is() && ::utl::getConnection(xForm).is())
+    if (xForm.is() && ::dbtools::getConnection(xForm).is())
     {
         Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
         if (xSet.is())
@@ -1902,10 +1899,10 @@ void FmXFormController::loaded(const ::com::sun::star::lang::EventObject& rEvent
             sal_Int32 aVal2;
             ::cppu::enum2int(aVal2,aVal);
             m_bCycle        = !aVal.hasValue() || aVal2 == ::com::sun::star::form::TabulatorCycle_RECORDS;
-            m_bCanUpdate    = ::utl::canUpdate(xSet);
-            m_bCanInsert    = ::utl::canInsert(xSet);
-            m_bCurrentRecordModified = ::utl::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
-            m_bCurrentRecordNew      = ::utl::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
+            m_bCanUpdate    = ::dbtools::canUpdate(xSet);
+            m_bCanInsert    = ::dbtools::canInsert(xSet);
+            m_bCurrentRecordModified = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISMODIFIED));
+            m_bCurrentRecordNew      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             if (m_bCanInsert || m_bCanUpdate)   // modificationen sind moeglich
             {
                 xSet->addPropertyChangeListener(FM_PROP_ISNEW, this);
@@ -2085,7 +2082,7 @@ void SAL_CALL FmXFormController::elementInserted(const ::com::sun::star::contain
         if (xModel.is() && m_xModelAsIndex == xModel->getParent())
         {
             Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-            if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+            if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
             {
                 // does the model use a bound field ?
                 Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
@@ -2093,8 +2090,8 @@ void SAL_CALL FmXFormController::elementInserted(const ::com::sun::star::contain
 
                 Reference< ::com::sun::star::awt::XTextComponent >  xText(xControl, UNO_QUERY);
                 // may we filter the field?
-                if (xText.is() && xField.is() && ::utl::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                    ::utl::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
+                    ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                 {
                     m_aFilterControls[xText] = xField;
                     xText->addTextListener(this);
@@ -2203,7 +2200,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
 {
     // create the composer
     Reference< ::com::sun::star::sdbc::XRowSet >  xForm(m_xModelAsIndex, UNO_QUERY);
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::utl::getConnection(xForm));
+    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(xForm));
     if (xForm.is())
     {
         Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
@@ -2213,8 +2210,8 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
             try
             {
                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
-                ::rtl::OUString aStatement  = ::utl::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
-                ::rtl::OUString aFilter     = ::utl::getString(xSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
+                ::rtl::OUString aStatement  = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
+                ::rtl::OUString aFilter     = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
                 m_xComposer->setQuery(aStatement);
                 m_xComposer->setFilter(aFilter);
             }
@@ -2251,7 +2248,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
         }
 
         // now transfer the filters into Value/TextComponent pairs
-        ::utl::UStringMixEqual aCompare(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+        ::comphelper::UStringMixEqual aCompare(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
         // retrieving the filter
         const Sequence < ::com::sun::star::beans::PropertyValue >* pRow = aFilterRows.getConstArray();
@@ -2320,11 +2317,11 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                             aCompText += ' ';
                             aCompText += SdbSqlParser::GetInternationalKeywordString(SDB_TOKEN_AND);
                             aCompText += ' ';
-                            aCompText += (const sal_Unicode*)::utl::getString(pRefValues[j].Value);
+                            aCompText += (const sal_Unicode*)::comphelper::getString(pRefValues[j].Value);
                             aRow[(*iter).xText] = aCompText;
                         }
                         else
-                            aRow[(*iter).xText] = ::utl::getString(pRefValues[j].Value);
+                            aRow[(*iter).xText] = ::comphelper::getString(pRefValues[j].Value);
                         break;
                     }
                 }
@@ -2374,10 +2371,10 @@ void FmXFormController::startFiltering()
 
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::utl::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xModelAsIndex, UNO_QUERY)));
+    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(::dbtools::getConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xModelAsIndex, UNO_QUERY)));
     Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::utl::getNumberFormats(xConnection, sal_True);
-    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(::utl::getProcessServiceFactory()
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = ::dbtools::getNumberFormats(xConnection, sal_True);
+    Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(::comphelper::getProcessServiceFactory()
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
@@ -2416,7 +2413,7 @@ void FmXFormController::startFiltering()
                             if (xControl.is())
                             {
                                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                                if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                                 {
                                     // does the model use a bound field ?
                                     Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
@@ -2424,8 +2421,8 @@ void FmXFormController::startFiltering()
 
                                     Reference< ::com::sun::star::awt::XTextComponent >  xText(xControl, UNO_QUERY);
                                     // may we filter the field?
-                                    if (xText.is() && xField.is() && ::utl::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                                        ::utl::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                                    if (xText.is() && xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
+                                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                                     {
                                         aFieldInfos.push_back(FmFieldInfo(xField, xText));
                                         xText->addTextListener(this);
@@ -2438,7 +2435,7 @@ void FmXFormController::startFiltering()
                 }
 
                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                 {
                     // does the model use a bound field ?
                     Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
@@ -2446,8 +2443,8 @@ void FmXFormController::startFiltering()
 
                     // may we filter the field?
 
-                    if (xField.is() && ::utl::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                        ::utl::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
+                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                     {
                         const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
                         const SdrUnoControlList& rControlList = rWR.GetControlList();
@@ -2528,7 +2525,7 @@ void FmXFormController::stopFiltering()
     m_bFiltering = sal_False;
     m_bDetachEvents = sal_False;
 
-    ::utl::disposeComponent(m_xComposer);
+    ::comphelper::disposeComponent(m_xComposer);
 
     // Austauschen der Kontrols fuer das aktuelle Formular
     Sequence < Reference< ::com::sun::star::awt::XControl >  > aControls(m_aControls);
@@ -2569,15 +2566,15 @@ void FmXFormController::stopFiltering()
                 }
 
                 Reference< ::com::sun::star::beans::XPropertySet >  xSet(xControl->getModel(), UNO_QUERY);
-                if (xSet.is() && ::utl::hasProperty(FM_PROP_BOUNDFIELD, xSet))
+                if (xSet.is() && ::comphelper::hasProperty(FM_PROP_BOUNDFIELD, xSet))
                 {
                     // does the model use a bound field ?
                     Any aVal = xSet->getPropertyValue(FM_PROP_BOUNDFIELD);
                     Reference< ::com::sun::star::beans::XPropertySet >  xField = *(Reference< ::com::sun::star::beans::XPropertySet > *)aVal.getValue();
 
                     // may we filter the field?
-                    if (xField.is() && ::utl::hasProperty(FM_PROP_SEARCHABLE, xField) &&
-                        ::utl::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
+                    if (xField.is() && ::comphelper::hasProperty(FM_PROP_SEARCHABLE, xField) &&
+                        ::comphelper::getBOOL(xField->getPropertyValue(FM_PROP_SEARCHABLE)))
                     {
                         const SdrPageViewWinRec& rWR = pCurPageView->GetWinList()[nPos];
                         const SdrUnoControlList& rControlList = rWR.GetControlList();
@@ -2586,8 +2583,8 @@ void FmXFormController::stopFiltering()
                         {
                             // Zuruecksetzen des Controls auf das Defaultcontrol
                             SdrUnoControlRec& rControlRec = (SdrUnoControlRec&)rControlList[nCtrlNum];
-                            ::rtl::OUString aServiceName = ::utl::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
-                            Reference< ::com::sun::star::awt::XControl >  xNewControl(::utl::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY);
+                            ::rtl::OUString aServiceName = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DEFAULTCONTROL));
+                            Reference< ::com::sun::star::awt::XControl >  xNewControl(::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY);
 
                             // setting the focus if the current control
                             // is the active one
@@ -2758,15 +2755,15 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                 continue;
             }
 
-            sal_Bool bRequired = ::utl::getINT32(xFieldSet->getPropertyValue(FM_PROP_ISNULLABLE)) == ::com::sun::star::sdbc::ColumnValue::NO_NULLS;
+            sal_Bool bRequired = ::comphelper::getINT32(xFieldSet->getPropertyValue(FM_PROP_ISNULLABLE)) == ::com::sun::star::sdbc::ColumnValue::NO_NULLS;
             if (!bRequired)
                 continue;
 
-            sal_Bool bAutoIncrement = ::utl::getBOOL(xFieldSet->getPropertyValue(FM_PROP_AUTOINCREMENT));
+            sal_Bool bAutoIncrement = ::comphelper::getBOOL(xFieldSet->getPropertyValue(FM_PROP_AUTOINCREMENT));
             if (bAutoIncrement)
                 continue;
 
-            ::rtl::OUString aFieldName(::utl::getString(xFieldSet->getPropertyValue(FM_PROP_NAME)));
+            ::rtl::OUString aFieldName(::comphelper::getString(xFieldSet->getPropertyValue(FM_PROP_NAME)));
 
             if (!xColumn->getString().len() && xColumn->wasNull())
             {
@@ -2781,9 +2778,9 @@ sal_Bool SAL_CALL FmXFormController::approveRowChange(const ::com::sun::star::sd
                         Reference< ::com::sun::star::beans::XPropertySet >  xModel(pControls[i]->getModel(), UNO_QUERY);
                         if (xModel.is())
                         {
-                            if (::utl::hasProperty(FM_PROP_CONTROLSOURCE, xModel))
+                            if (::comphelper::hasProperty(FM_PROP_CONTROLSOURCE, xModel))
                             {
-                                ::rtl::OUString aName = ::utl::getString(xModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
+                                ::rtl::OUString aName = ::comphelper::getString(xModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
                                 if (aName == aFieldName)    // Control gefunden
                                     break;
                             }
@@ -2932,7 +2929,7 @@ sal_Bool SAL_CALL FmXFormController::approveParameter(const ::com::sun::star::fo
         Reference< ::com::sun::star::sdbc::XConnection >  xConn;
         Reference< ::com::sun::star::sdbc::XRowSet >  xForm(aEvent.Source, UNO_QUERY);
         if (xForm.is())
-            xConn = ::utl::getConnection(xForm);
+            xConn = ::dbtools::getConnection(xForm);
         FmEnterParamDlg aDlg(getDialogParentWindow(), xParams, xConn);
         if (aDlg.Execute() != RET_OK)
             return sal_False;
@@ -3030,7 +3027,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
             Reference< ::com::sun::star::container::XChild >  xChild(getModel(), UNO_QUERY);
             Reference< ::com::sun::star::container::XIndexAccess >  xParent;
             if (xChild.is())
-                ::utl::query_interface(xChild->getParent(), xParent);
+                ::comphelper::query_interface(xChild->getParent(), xParent);
 
 
             while (xChild.is() && xParent.is())
@@ -3046,10 +3043,10 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
                 else
                     sNewMark = sCurrentPath;
 
-                ::utl::query_interface((Reference<XInterface>)xParent, xChild);
+                ::comphelper::query_interface((Reference<XInterface>)xParent, xChild);
 
                 if (xChild.is())
-                    ::utl::query_interface(xChild->getParent(), xParent);
+                    ::comphelper::query_interface(xChild->getParent(), xParent);
 
             }
 
@@ -3060,7 +3057,7 @@ FmXFormController::interceptedQueryDispatch(sal_uInt16 _nId, const ::com::sun::s
             aMark += sNewMark;
 
             // assemble the new url
-            Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY);
+            Reference< ::com::sun::star::util::XURLTransformer >  xTransformer(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer") ), UNO_QUERY);
             if (xTransformer.is())
             {
                 xTransformer->parseStrict(aNewUrl);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,11 @@
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
 #endif
-#ifndef _UTL_PROPERTY_HXX_
-#include <unotools/property.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 TYPEINIT1(FmFormObj, SdrUnoObj);
@@ -356,7 +356,7 @@ void FmFormObj::clonedFrom(const FmFormObj* _pSource)
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xSourceContainer = xSourceAsChild->getParent();
 
     m_xEnvironmentHistory = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >(
-        ::utl::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")),
+        ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.FormsCollection")),
         ::com::sun::star::uno::UNO_QUERY);
     DBG_ASSERT(m_xEnvironmentHistory.is(), "FmFormObj::clonedFrom : could not create a forms collection !");
 
@@ -497,8 +497,8 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         DBG_ASSERT(xSourceForm.is(), "FmFormObj::ensureModelEnv : invalid source form !");
 
         ::com::sun::star::uno::Any aSrcCursorSource, aSrcCursorSourceType, aSrcDataSource;
-        DBG_ASSERT(::utl::hasProperty(FM_PROP_COMMAND, xSourceForm) && ::utl::hasProperty(FM_PROP_COMMANDTYPE, xSourceForm)
-            && ::utl::hasProperty(FM_PROP_DATASOURCE, xSourceForm), "FmFormObj::ensureModelEnv : invalid access path or invalid form (missing props) !");
+        DBG_ASSERT(::comphelper::hasProperty(FM_PROP_COMMAND, xSourceForm) && ::comphelper::hasProperty(FM_PROP_COMMANDTYPE, xSourceForm)
+            && ::comphelper::hasProperty(FM_PROP_DATASOURCE, xSourceForm), "FmFormObj::ensureModelEnv : invalid access path or invalid form (missing props) !");
             // the parent access path should refer to a row set
         try
         {
@@ -523,13 +523,13 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 xCurrentSourceForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xSourceContainer->getByIndex(nCurrentSourceIndex).getValue(), ::com::sun::star::uno::UNO_QUERY);
                 DBG_ASSERT(xCurrentSourceForm.is(), "FmFormObj::ensureModelEnv : invalid form ancestor (2) !");
                 bEqualDSS = sal_False;
-                if (::utl::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
+                if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentSourceForm))
                 {   // it is a form
                     try
                     {
-                        if  (   ::utl::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::utl::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::utl::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if  (   ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
+                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
+                            &&  ::comphelper::compare(xCurrentSourceForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
                             bEqualDSS = sal_True;
@@ -554,13 +554,13 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                 xCurrentDestForm = ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (*(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > *)xDestContainer->getByIndex(nCurrentDestIndex).getValue(), ::com::sun::star::uno::UNO_QUERY);
                 DBG_ASSERT(xCurrentDestForm.is(), "FmFormObj::ensureModelEnv : invalid destination form !");
                 bEqualDSS = sal_False;
-                if (::utl::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))
+                if (::comphelper::hasProperty(FM_PROP_DATASOURCE, xCurrentDestForm))
                 {   // it is a form
                     try
                     {
-                        if  (   ::utl::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
-                            &&  ::utl::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
-                            &&  ::utl::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
+                        if  (   ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMAND), aSrcCursorSource)
+                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_COMMANDTYPE), aSrcCursorSourceType)
+                            &&  ::comphelper::compare(xCurrentDestForm->getPropertyValue(FM_PROP_DATASOURCE), aSrcDataSource)
                             )
                         {
                             bEqualDSS = sal_True;
