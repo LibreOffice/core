@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
     namespace memory { class Accessor; }
-    namespace data { class NodeAccess; }
+    namespace data { class NodeAccessRef; }
     namespace view { class ViewStrategy; }
 //-----------------------------------------------------------------------------
     namespace configuration
@@ -123,7 +123,7 @@ namespace configmgr
             { return m_aNodeRef_; }
 
             /// provide access to the data of the underlying node
-            data::NodeAccess getOriginalNodeAccess(memory::Accessor const& _aAccessor) const;
+            data::NodeAccessRef getOriginalNodeAccessRef(memory::Accessor const * _pAccessor) const;
         };
 
 //-----------------------------------------------------------------------------
