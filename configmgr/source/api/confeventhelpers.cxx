@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 15:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ void ConfigChangesBroadcasterImpl::dispatchInner
 {
     ConfigurationName aContext(sChangeContext);
 
-    OSL_ASSERT(pTarget);
+    OSL_ASSERT(pTarget.isValid());
     OSL_ASSERT( ConfigurationName(sTargetPath).isNestedIn( aContext ) );
 
     ConfigurationName aLocalPath = ConfigurationName(sTargetPath).relativeTo( aContext );
@@ -308,7 +308,7 @@ void ConfigChangesBroadcasterImpl::dispatchOuter
 {
     ConfigurationName sChangesRoot(sChangeContext,rBaseChange.getNodeName());
 
-    OSL_ASSERT(pTarget);
+    OSL_ASSERT(pTarget.isValid());
     OSL_ASSERT( sChangesRoot.isNestedIn( sTargetPath ) );
 
     pTarget->nodeChanged(rBaseChange, sChangesRoot.fullName(), pSource);
