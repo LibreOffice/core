@@ -135,19 +135,19 @@
 
 
 <xsl:template match="text:p">
-		<para>
+		<xsl:element name="para">
 			  <xsl:apply-templates/>
-		</para>
+		</xsl:element>
 </xsl:template>
 
 
 
 <xsl:template match="/office:document">
-	<article>
+	<xsl:element name="article">
 		<xsl:attribute name="lang"><xsl:value-of select="/office:document/office:meta/dc:language"/>
 		</xsl:attribute>
 		<xsl:apply-templates />
-	</article>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="office:meta">
@@ -155,9 +155,9 @@
 </xsl:template>
 
 <xsl:template match="text:ordered-list">
-	<orderedlist>
+	<xsl:element name="orderedlist">
 		<xsl:apply-templates/>
-	</orderedlist>
+	</xsl:element>
 </xsl:template>
 
 
@@ -414,19 +414,19 @@
 
 
 <xsl:template match="text:p[@text:style-name='Section Title']">
-	<title>
+	<xsl:element name="title">
 		<xsl:apply-templates/>
-	</title>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="text:p[@text:style-name='Appendix Title']">
-	<title>
+	<xsl:element name="title">
 		<xsl:apply-templates/>
-	</title>
+	</xsl:element>
 </xsl:template>
 
 
-<xsl:template match="text:p[@text:style-name='VarList Item']">
+<!--<xsl:template match="text:p[@text:style-name='VarList Item']">
 	<xsl:if test="not(preceding-sibling::text:p[@text:style-name='VarList Item'])">
 		<xsl:text disable-output-escaping="yes">&lt;listitem&gt;</xsl:text>
 	</xsl:if>
@@ -436,32 +436,40 @@
 	<xsl:if test="not(following-sibling::text:p[@text:style-name='VarList Item'])">
 		<xsl:text disable-output-escaping="yes">&lt;/listitem&gt;</xsl:text>
 	</xsl:if>
-</xsl:template>
+</xsl:template>-->
 
 <xsl:template match="text:p[@text:style-name='VarList Term']">
-	<term>
+	<xsl:element name="term">
 			<xsl:apply-templates/>
-	</term>
+	</xsl:element>
+</xsl:template>
+
+<xsl:template match="text:p[@text:style-name='VarList Item']">
+	<xsl:element name="listitem">
+		<xsl:element name="para">
+			<xsl:apply-templates/>
+		</xsl:element>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="text:p[@text:style-name='Section1 Title']">
-	<title>
+	<xsl:element name="title">
 		<xsl:apply-templates/>
-	</title>
+	</xsl:element>
 </xsl:template>
 
 
 <xsl:template match="text:p[@text:style-name='Section2 Title']">
-	<title>
+	<xsl:element name="title">
 		<xsl:apply-templates/>
-	</title>
+	</xsl:element >
 </xsl:template>
 
 
 <xsl:template match="text:p[@text:style-name='Section3 Title']">
-	<title>
+	<xsl:element name="title">
 		<xsl:apply-templates/>
-	</title>
+	</xsl:element>
 </xsl:template>
 
 <xsl:template match="text:footnote-citation">
@@ -619,18 +627,31 @@
 </xsl:template>
 
 <xsl:template match="text:list-item">
-	<xsl:if test="parent::text:unordered-list/@text:style-name='Var List'">
-		<varlistentry>
-			<xsl:for-each select="text:p[@text:style-name='VarList Term']">
-						<xsl:apply-templates select="."/>
-			</xsl:for-each>
-		</varlistentry>
+<!--	<xsl:if test="parent::text:unordered-list/@text:style-name='Var List'">
+		
 	</xsl:if>
 	<xsl:if test="not(parent::text:unordered-list/@text:style-name='Var List')">
 		<listitem>
 			<xsl:apply-templates/>
 		</listitem>
-	</xsl:if>
+	</xsl:if>-->
+	<xsl:choose>
+		<xsl:when test="parent::text:unordered-list/@text:style-name='Var List' ">
+			<xsl:if test="child::text:p[@text:style-name='VarList Term']">
+			<xsl:element name="varlistentry">
+					<xsl:apply-templates select="child::text:p[@text:style-name='VarList Term']"/>
+						<xsl:if test="following-sibling::text:list-item[1]/text:p[@text:style-name='VarList Item']">
+							<xsl:apply-templates select="following-sibling::text:list-item[1]/text:p"/>
+						</xsl:if>
+	  			</xsl:element>
+			</xsl:if>
+		</xsl:when>
+		<xsl:otherwise>
+			<xsl:element name="listitem">
+				<xsl:apply-templates/>
+			</xsl:element>
+		</xsl:otherwise>
+	</xsl:choose>	
 </xsl:template>
 
 
