@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:52:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "pam.hxx"
@@ -2268,6 +2267,9 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
 
     // --> OD 2004-06-23 #i27801# - no move backward of 'master' text frame,
     // if - due to its object positioning - it isn't allowed to be on the new page frame
+    // --> OD 2005-03-07 #i44049# - add another condition for not moving backward:
+    // If one of its objects has restarted the layout process, moving backward
+    // isn't sensible either.
     if ( pNewUpper &&
          rThis.IsTxtFrm() && !IsFollow() )
     {
@@ -2281,6 +2283,22 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
         {
             pNewUpper = 0;
         }
+        // --> OD 2005-03-07 #i44049# - check, if one of its anchored objects
+        // has restarted the layout process.
+        else if ( rThis.GetDrawObjs() )
+        {
+            sal_uInt32 i = 0;
+            for ( ; i < rThis.GetDrawObjs()->Count(); ++i )
+            {
+                SwAnchoredObject* pAnchoredObj = (*rThis.GetDrawObjs())[i];
+                if ( pAnchoredObj->RestartLayoutProcess() )
+                {
+                    pNewUpper = 0;
+                    break;
+                }
+            }
+        }
+        // <--
     }
     // <--
 
