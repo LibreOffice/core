@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:50:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-22 13:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
 //________________________________________________________________________________________________________
 //  include of other projects
 //________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_VIEW_XPRINTJOB_HPP_
 #include <com/sun/star/view/XPrintJob.hpp>
@@ -260,6 +268,7 @@
 #include "sfx.hrc"
 #endif
 
+#include <framework/interaction.hxx>
 
 #include "topfrm.hxx"
 #include "appdata.hxx"
@@ -267,6 +276,8 @@
 #include "docfac.hxx"
 #include "fcontnr.hxx"
 #include "commitlistener.hxx"
+#include "openflag.hxx"
+#include "brokenpackageint.hxx"
 
 //________________________________________________________________________________________________________
 //  defines
@@ -277,7 +288,7 @@
 #define XFRAME                                  ::com::sun::star::frame::XFrame
 #define XINTERFACE                              ::com::sun::star::uno::XInterface
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
-#define UNO_QUERY                               ::com::sun::star::uno::UNO_QUERY
+#define UNOQUERY                                ::com::sun::star::uno::UNO_QUERY
 #define DISPOSEDEXCEPTION                       ::com::sun::star::lang::DisposedException
 #define MAPPING                                 ::com::sun::star::uno::Mapping
 #define XSELECTIONSUPPLIER                      ::com::sun::star::view::XSelectionSupplier
@@ -424,7 +435,7 @@ Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::ge
 
 Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter() throw (RuntimeException)
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNOQUERY );
     if ( xPrintable.is() )
         return xPrintable->getPrinter();
     return Sequence< ::com::sun::star::beans::PropertyValue >();
@@ -432,7 +443,7 @@ Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::ge
 
 Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable() throw (RuntimeException)
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNOQUERY );
     return xPrintable;
 }
 
@@ -725,7 +736,7 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getParent() throw( RUNTIMEEXCEPTI
     if ( !m_pData->m_xParent.is() && m_pData->m_xCurrent.is() )
     {
         // If no parent is set get the parent by view hierarchy
-        REFERENCE< XFRAME >  xParentFrame( m_pData->m_xCurrent->getFrame()->getCreator(), UNO_QUERY );
+        REFERENCE< XFRAME >  xParentFrame( m_pData->m_xCurrent->getFrame()->getCreator(), UNOQUERY );
         if ( xParentFrame.is() )
         {
             REFERENCE< XCONTROLLER >  xCtrl( xParentFrame->getController() );
@@ -898,8 +909,8 @@ void SAL_CALL SfxBaseModel::disposing( const EVENTOBJECT& aObject )
     if ( impl_isDisposed() )
         return;
 
-    REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNO_QUERY );
-    REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNO_QUERY );
+    REFERENCE< XMODIFYLISTENER >  xMod( aObject.Source, UNOQUERY );
+    REFERENCE< XEVENTLISTENER >  xListener( aObject.Source, UNOQUERY );
     REFERENCE< XDOCEVENTLISTENER >  xDocListener( aObject.Source, UNO_QUERY );
 
     if ( xMod.is() )
@@ -1212,7 +1223,7 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com
 
     if ( xController.is() )
     {
-        REFERENCE< XSELECTIONSUPPLIER >  xDocView( xController, UNO_QUERY );
+        REFERENCE< XSELECTIONSUPPLIER >  xDocView( xController, UNOQUERY );
         if ( xDocView.is() )
         {
             ANY xSel = xDocView->getSelection();
@@ -1984,6 +1995,9 @@ void SAL_CALL SfxBaseModel::initNew()
 //________________________________________________________________________________________________________
 // XLoadable
 //________________________________________________________________________________________________________
+extern void SetTemplate_Impl( SvStorage*, const String&, const String&, SfxObjectShell* );
+
+#include <unotools/ucbstreamhelper.hxx>
 
 void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
@@ -2002,6 +2016,7 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
     if ( m_pData->m_pObjectShell.Is() )
     {
         if( m_pData->m_pObjectShell->GetMedium() )
+            // if a Medium is present, the document is already initialized
             throw DOUBLEINITIALIZATIONEXCEPTION();
 
         SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
@@ -2011,33 +2026,210 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
         SFX_ITEMSET_ARG( pParams, pFilterNameItem, SfxStringItem, SID_FILTER_NAME, sal_False );
         if( pFilterNameItem )
             aFilterName = pFilterNameItem->GetValue();
-
+        const SfxFilter* pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
         if( !m_pData->m_pObjectShell->GetFactory().GetFilterContainer()->GetFilter4FilterName( aFilterName ) )
+        {
+            // filtername is not valid
+            delete pParams;
             throw ILLEGALARGUMENTIOEXCEPTION();
+        }
 
-        pParams->Put( SfxBoolItem( SID_VIEW, sal_False ) );
-        pParams->Put( SfxObjectShellItem( SID_OBJECTSHELL, m_pData->m_pObjectShell ) );
+        BOOL bReadOnly = FALSE;
+        SFX_ITEMSET_ARG( pParams, pReadOnlyItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+        if ( pReadOnlyItem && pReadOnlyItem->GetValue() )
+            bReadOnly = TRUE;
 
-           // create LoadEnvironment and set link for callback when it is finished
-        sal_Bool bLoadSucceeded = sal_False;
-           LoadEnvironment_Impl* pLoader = LoadEnvironment_Impl::Create( *pParams, TRUE );
-           pLoader->AddRef();
+        SFX_ITEMSET_ARG( pParams, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+        SfxMedium* pMedium = new SfxMedium( pFileNameItem->GetValue(), bReadOnly ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE, FALSE, pFilter, pParams );
 
-        pLoader->Start();
+        // allow to use an interactionhandler (if there is one)
+        pMedium->UseInteractionHandler( TRUE );
 
-           // wait until loading is done
-        while( pLoader->GetState() != LoadEnvironment_Impl::DONE  )
-               Application::Yield();
+        // !TODO: currently not working
+        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        //if( pFrameItem && pFrameItem->GetFrame() )
+        //{
+        //  SfxFrame* pFrame = pFrameItem->GetFrame();
+        //  pMedium->SetLoadTargetFrame( pFrame );
+        //}
 
-        sal_uInt32 nLoaderError = pLoader->GetError();
+        SFX_ITEMSET_ARG( pParams, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
+        m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
-        // the document can be closed in case loading failed
-        pLoader->ReleaseRef();
-        pLoader = NULL;
-        DELETEZ( pParams );
+        // load document
+        sal_uInt32 nError = ERRCODE_NONE;
+        if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
+            nError=ERRCODE_IO_GENERAL;
 
-        if ( nLoaderError )
-            throw SfxIOException_Impl( nLoaderError ? nLoaderError : ERRCODE_IO_CANTREAD );
+        ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xHandler = pMedium->GetInteractionHandler();
+        if( m_pData->m_pObjectShell->GetErrorCode() )
+        {
+            nError = m_pData->m_pObjectShell->GetErrorCode();
+            if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
+            {
+                ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                SFX_ITEMSET_ARG( pParams, pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+                if ( !pRepairItem || !pRepairItem->GetValue() )
+                {
+                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
+                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pRequest );
+                    xHandler->handle( xRequest );
+                    if( pRequest->isApproved() )
+                    {
+                        // broken package: try second loading and allow repair
+                        pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
+                        pMedium->GetItemSet()->Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                        pMedium->GetItemSet()->Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
+                        if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
+                            nError=ERRCODE_IO_GENERAL;
+                        nError = m_pData->m_pObjectShell->GetErrorCode();
+                    }
+                }
+
+                if ( nError == ERRCODE_IO_BROKENPACKAGE )
+                {
+                    // repair either not allowed or not successful
+                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
+                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pNotifyRequest );
+                       xHandler->handle( xRequest );
+                }
+            }
+        }
+
+        if( m_pData->m_pObjectShell->IsAbortingImport() )
+            nError = ERRCODE_ABORT;
+
+        if ( !nError )
+        {
+            BOOL bSalvage = FALSE;
+            SFX_ITEMSET_ARG( pParams, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+            if( pSalvageItem )
+                bSalvage = TRUE;
+
+            if( bTemplate )
+            {
+                // document is created from a template
+                String aName( pMedium->GetName() );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
+                String aTemplateName;
+                if ( pTemplNamItem )
+                    aTemplateName = pTemplNamItem->GetValue();
+                else
+                {
+                    // !TODO: what's this?!
+                    // Interaktiv ( DClick, Contextmenu ) kommt kein Langname mit
+                    aTemplateName = m_pData->m_pObjectShell->GetDocInfo().GetTitle();
+                    if ( !aTemplateName.Len() )
+                    {
+                        INetURLObject aURL( aName );
+                        aURL.CutExtension();
+                        aTemplateName = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+                    }
+                }
+
+                // set medium to noname
+                pMedium->SetName( String(), sal_True );
+                pMedium->Init_Impl();
+
+                if( pMedium->GetFilter()->IsOwnFormat() )
+                {
+                    // untitled document must be based on temporary storage
+                    SvStorageRef xTmpStor = new SvStorage( ( m_pData->m_pObjectShell->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60), String() );
+                    m_pData->m_pObjectShell->GetStorage()->CopyTo( &xTmpStor );
+                    m_pData->m_pObjectShell->DoHandsOff();
+                    pMedium->SetStorage_Impl( xTmpStor );
+                    m_pData->m_pObjectShell->ForgetMedium();
+                    if( !m_pData->m_pObjectShell->DoSaveCompleted( pMedium ) )
+                        nError = xTmpStor->GetErrorCode();
+                    else if ( !bSalvage )
+                        // some further initializations for templates
+                        SetTemplate_Impl( xTmpStor, aName, aTemplateName, m_pData->m_pObjectShell );
+                }
+                else
+                {
+                    // some further initializations for templates
+                    SetTemplate_Impl( m_pData->m_pObjectShell->GetStorage(), aName, aTemplateName, m_pData->m_pObjectShell );
+                }
+
+                // templates are never readonly
+                pMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
+                pMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
+
+                // notifications about possible changes in readonly state and document info
+                m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+                m_pData->m_pObjectShell->Broadcast( SfxDocumentInfoHint( &m_pData->m_pObjectShell->GetDocInfo() ) );
+
+                // drop resource
+                m_pData->m_pObjectShell->SetNoName();
+                m_pData->m_pObjectShell->InvalidateName();
+
+                // created untitled document can't be modified
+                m_pData->m_pObjectShell->SetModified( sal_False );
+            }
+
+            if( bSalvage )
+            {
+                // file recovery: restore original filter
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+                SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+                const SfxFilter* pFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
+                pMedium->SetFilter( pFilter );
+                m_pData->m_pObjectShell->SetModified(sal_True);
+            }
+        }
+        else
+            m_pData->m_pObjectShell->ResetError();
+
+        if ( !nError )
+            nError = pMedium->GetError();
+
+        if ( nError )
+        {
+            BOOL bSilent = FALSE;
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
+            if( pSilentItem )
+                bSilent = pSilentItem->GetValue();
+
+            if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
+            {
+                // broken package was handled already
+                BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+                if ( xHandler.is() )
+                {
+                    ::com::sun::star::uno::Any aInteraction;
+                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(2);
+                    ::framework::ContinuationAbort* pAbort = new ::framework::ContinuationAbort();
+                    ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+                    lContinuations[0] = ::com::sun::star::uno::Reference<
+                            ::com::sun::star::task::XInteractionContinuation >(static_cast<
+                            ::com::sun::star::task::XInteractionContinuation* >(pAbort),
+                            UNOQUERY);
+                    lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), UNOQUERY);
+
+                    ::com::sun::star::task::ErrorCodeRequest aErrorCode;
+                    aErrorCode.ErrCode = nError;
+                    aInteraction <<= aErrorCode;
+
+                    ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
+                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), UNOQUERY);
+
+                    xHandler->handle(xRequest);
+                    if ( pAbort->isSelected() && !bWarning )
+                        // abort loading (except for warnings)
+                        nError = ERRCODE_IO_ABORT;
+                }
+            }
+
+            if ( m_pData->m_pObjectShell->GetMedium() != pMedium )
+            {
+                // for whatever reason document now has another medium
+                DBG_ERROR("Document has rejected the medium?!");
+                delete pMedium;
+            }
+
+            throw SfxIOException_Impl( nError ? nError : ERRCODE_IO_CANTREAD );
+        }
     }
 }
 
@@ -2356,7 +2548,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 // Temporary solution for storage problem
                 if ( m_pData->m_xUIConfigurationManager.is() )
                 {
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
                 }
             }
@@ -2365,7 +2557,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                 // Temporary solution for storage problem
                 if ( m_pData->m_xUIConfigurationManager.is() )
                 {
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( REFERENCE< XSTORAGE >() );
                 }
             }
@@ -2381,7 +2573,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     if ( !xConfigStorage.is() )
                         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
 
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
                 }
             }
@@ -2405,7 +2597,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
                     if ( !xConfigStorage.is() )
                         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, com::sun::star::embed::ElementModes::ELEMENT_READ );
 
-                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+                    Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
                     xUIConfigStorage->setStorage( xConfigStorage );
                 }
             }
@@ -2672,7 +2864,7 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
         m_pData->m_contViewData = Reference < XINDEXACCESS >(
                 ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.IndexedPropertyValues") ),
-                UNO_QUERY );
+                UNOQUERY );
 
         if ( !m_pData->m_contViewData.is() )
         {
@@ -2680,7 +2872,7 @@ REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData() throw(::com::sun
             return REFERENCE < XINDEXACCESS >();
         }
 
-        REFERENCE < XINDEXCONTAINER > xCont( m_pData->m_contViewData, UNO_QUERY );
+        REFERENCE < XINDEXCONTAINER > xCont( m_pData->m_contViewData, UNOQUERY );
         sal_Int32 nCount = 0;
         SEQUENCE < PROPERTYVALUE > aSeq;
         ::com::sun::star::uno::Any aAny;
@@ -2801,7 +2993,7 @@ REFERENCE< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentSubStorage( const ::rtl:
         {
             xResult = rStorage->GetUNOAPIDuplicate( aStorageName, nMode );
             rStorage->ResetError();
-            uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNO_QUERY );
+            uno::Reference< embed::XTransactionBroadcaster > xBroadcaster( xResult, UNOQUERY );
             if ( xBroadcaster.is() )
             {
                 if ( m_pData->m_pChildCommitListen == NULL )
@@ -2870,7 +3062,7 @@ REFERENCE< XSCRIPTPROVIDER > SAL_CALL SfxBaseModel::getScriptProvider()
                 ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii( "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
                     aArgs ),
-                 UNO_QUERY );
+                 UNOQUERY );
     }
 
     return m_pData->m_xScriptProvider;
@@ -2895,9 +3087,9 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
         m_pData->m_xUIConfigurationManager = REFERENCE< XUICONFIGURATIONMANAGER >(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii( "drafts.com.sun.star.ui.UIConfigurationManager" )),
-                UNO_QUERY );
+                UNOQUERY );
 
-        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNO_QUERY );
+        Reference< XUICONFIGURATIONSTORAGE > xUIConfigStorage( m_pData->m_xUIConfigurationManager, UNOQUERY );
         if ( xUIConfigStorage.is() )
         {
             rtl::OUString aUIConfigFolderName( RTL_CONSTASCII_USTRINGPARAM( "Configurations2" ));
@@ -2910,7 +3102,7 @@ REFERENCE< XUICONFIGURATIONMANAGER > SAL_CALL SfxBaseModel::getUIConfigurationMa
                 rtl::OUString aMediaTypeProp( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ));
                 rtl::OUString aUIConfigMediaType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.ui.configuration" ));
                 rtl::OUString aMediaType;
-                REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNO_QUERY );
+                REFERENCE< XPROPERTYSET > xPropSet( xConfigStorage, UNOQUERY );
                 Any a = xPropSet->getPropertyValue( aMediaTypeProp );
                 if ( !( a >>= aMediaType ) || ( aMediaType.getLength() == 0 ))
                 {
