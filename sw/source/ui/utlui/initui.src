@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:13:08 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 21:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1033,18 +1033,18 @@ Resource RID_SW_SHELLRES
         Text[ greek ] = "Μετατροπή του $(ARG1)";
         Text[ dutch ] = "Convert $(ARG1)";
         Text[ french ] = "Convert $(ARG1)";
-        Text[ spanish ] = "Convert $(ARG1)";
+        Text[ spanish ] = "Convertir $(ARG1)";
         Text[ italian ] = "Convert $(ARG1)";
         Text[ danish ] = "Convert $(ARG1)";
-        Text[ swedish ] = "Convert $(ARG1)";
-        Text[ polish ] = "Convert $(ARG1)";
+        Text[ swedish ] = "Konvertera $(ARG1)";
+        Text[ polish ] = "Konwersja $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert $(ARG1)";
-        Text[ japanese ] = "Convert $(ARG1)";
+        Text[ japanese ] = "$(ARG1) ‚π•Ο·";
         Text[ korean ] = "Convert $(ARG1)";
-        Text[ chinese_simplified ] = "Convert $(ARG1)";
+        Text[ chinese_simplified ] = "Χª»» $(ARG1)";
         Text[ chinese_traditional ] = "Βΰ΄« $(ARG1)";
         Text[ turkish ] = "Convert $(ARG1)";
-        Text[ arabic ] = "Convert $(ARG1)";
+        Text[ arabic ] = "ΚΝζνα $(ARG1)";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
@@ -1056,15 +1056,15 @@ Resource RID_SW_SHELLRES
         Text[ greek ] = "Πρώτη μετατροπή $(ARG1)";
         Text[ dutch ] = "First convert $(ARG1)";
         Text[ french ] = "First convert $(ARG1)";
-        Text[ spanish ] = "First convert $(ARG1)";
+        Text[ spanish ] = "Primera conversiσn $(ARG1)";
         Text[ italian ] = "First convert $(ARG1)";
         Text[ danish ] = "First convert $(ARG1)";
-        Text[ swedish ] = "First convert $(ARG1)";
-        Text[ polish ] = "First convert $(ARG1)";
+        Text[ swedish ] = "Fφrsta konvertering $(ARG1)";
+        Text[ polish ] = "Pierwsza konwersja $(ARG1)";
         Text[ portuguese_brazilian ] = "First convert $(ARG1)";
-        Text[ japanese ] = "First convert $(ARG1)";
+        Text[ japanese ] = "Ε‰‚Ι $(ARG1) ‚π•Ο·";
         Text[ korean ] = "First convert $(ARG1)";
-        Text[ chinese_simplified ] = "First convert $(ARG1)";
+        Text[ chinese_simplified ] = "µΪÒ»ΈφΧª»» $(ARG1)";
         Text[ chinese_traditional ] = "²Δ¤@­ΣΒΰ΄« $(ARG1)";
         Text[ turkish ] = "First convert $(ARG1)";
         Text[ arabic ] = "First convert $(ARG1)";
@@ -1079,15 +1079,15 @@ Resource RID_SW_SHELLRES
         Text[ greek ] = "Μετατροπή συνέχεια $(ARG1)";
         Text[ dutch ] = "Convert follow $(ARG1)";
         Text[ french ] = "Convert follow $(ARG1)";
-        Text[ spanish ] = "Convert follow $(ARG1)";
+        Text[ spanish ] = "Convertir serie $(ARG1)";
         Text[ italian ] = "Convert follow $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
-        Text[ swedish ] = "Convert follow $(ARG1)";
-        Text[ polish ] = "Convert follow $(ARG1)";
+        Text[ swedish ] = "Konvertering fφljd $(ARG1)";
+        Text[ polish ] = "Kolejnoζ konwersji $(ARG1)";
         Text[ portuguese_brazilian ] = "Convert follow $(ARG1)";
-        Text[ japanese ] = "Convert follow $(ARG1)";
+        Text[ japanese ] = "‘±‚―‚Δ $(ARG1) ‚π•Ο·";
         Text[ korean ] = "Convert follow $(ARG1)";
-        Text[ chinese_simplified ] = "Convert follow $(ARG1)";
+        Text[ chinese_simplified ] = "Χª»»Χι $(ARG1)";
         Text[ chinese_traditional ] = "Βΰ΄«²Υ $(ARG1)";
         Text[ turkish ] = "Convert follow $(ARG1)";
         Text[ arabic ] = "Convert follow $(ARG1)";
