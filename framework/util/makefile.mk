@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 09:42:52 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:33:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,7 @@
 #
 #*************************************************************************
 PRJ=..
+
 PRJNAME=			framework
 TARGET=				framework
 
@@ -248,8 +249,8 @@ SHL4OBJS=       \
                 $(SLO)$/targetfinder.obj		  	\
                 $(SLO)$/taskcreator.obj		  		\
                 $(SLO)$/timerhelper.obj				\
-          $(SLO)$/urltransformer.obj			\
-          $(SLO)$/documentlist.obj            \
+                $(SLO)$/urltransformer.obj			\
+                $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
                 $(SLO)$/configaccess.obj            \
                 $(SLO)$/job.obj                     \
@@ -315,9 +316,11 @@ SHL4OBJS=       \
                 $(SLO)$/addonstoolbarmanager.obj    \
                 $(SLO)$/toolbarsmenucontroller.obj  \
                 $(SLO)$/toolbarcontrollerfactory.obj\
+                $(SLO)$/loaddispatchlistener.obj    \
+                $(SLO)$/autorecovery.obj			\
                 $(SLO)$/statusbarcontrollerfactory.obj\
-          $(SLO)$/moduleimagemanager.obj      \
-          $(SLO)$/imagemanager.obj            \
+                $(SLO)$/moduleimagemanager.obj      \
+                $(SLO)$/imagemanager.obj            \
                 $(SLO)$/graphicnameaccess.obj       \
                 $(SLO)$/statusbarwrapper.obj        \
                 $(SLO)$/statusbar.obj               \
@@ -326,7 +329,8 @@ SHL4OBJS=       \
                 $(SLO)$/recentfilesmenucontroller.obj   \
                 $(SLO)$/progressbarwrapper.obj          \
                 $(SLO)$/statusindicatorinterfacewrapper.obj \
-                $(SLO)$/uicategorydescription.obj
+                $(SLO)$/uicategorydescription.obj       \
+                $(SLO)$/vclstatusindicator.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
@@ -342,7 +346,8 @@ SHL4STDLIBS=	\
                 $(CPPUHELPERLIB)					\
                 $(CPPULIB)							\
                 $(VOSLIB)							\
-                $(SALLIB)
+                $(SALLIB)					        \
+                $(UCBHELPERLIB)
 
 SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
 SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
