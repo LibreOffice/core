@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-07 13:19:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,15 @@ void SAL_CALL ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const An
     //  (*(*m_aMatrixIter))[columnIndex] = x;
 }
 // -------------------------------------------------------------------------
-
+//void ORowSetCache::readForward()
+//{
+//  // we have to read one row before to enshure that we know when we are on last row
+//  ++m_nPosition;
+//  moveWindow();
+//  --m_nPosition;
+//  moveWindow();
+//}
+// -----------------------------------------------------------------------------
 // XResultSet
 sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
 {
@@ -752,6 +760,8 @@ sal_Bool SAL_CALL ORowSetCache::next(  ) throw(SQLException, RuntimeException)
 
     ++m_nPosition;
     moveWindow();
+    //  readForward();
+
     m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1; // -1 because rows start at zero
     if(!m_bNew)
         m_aInsertRow = m_aMatrixIter;
@@ -830,8 +840,9 @@ void SAL_CALL ORowSetCache::afterLast(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
+    // fill the whole window with new data
     ORowSetMatrix::iterator aIter = m_pMatrix->begin();
-    sal_Bool bCheck = m_pCacheSet->absolute(_nNewStartPos); // -1
+    sal_Bool bCheck = m_pCacheSet->absolute(_nNewStartPos); // -1 no need to
     for(sal_Int32 i=_nNewStartPos;i<_nNewEndPos;++i,++aIter)
     {
         if(bCheck)
@@ -865,10 +876,20 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
             ::std::rotate(m_pMatrix->begin(),aEnd,m_pMatrix->end());
             break;
         }
-        //  *aIter =  NULL;
         bCheck = m_pCacheSet->next();
     }
     m_nStartPos = _nNewStartPos;
+    // we have to read one row forward to enshure that we know when we are on last row
+    // but only when we don't know it already
+    if(!m_bRowCountFinal)
+    {
+        if(!m_pCacheSet->next())
+        {
+            if(m_pCacheSet->previous()) // because we stand after the last row
+                m_nRowCount = m_pCacheSet->getRow(); // here we have the row count
+            m_bRowCountFinal = sal_True;
+        }
+    }
     return bCheck;
 }
 // -------------------------------------------------------------------------
@@ -954,19 +975,24 @@ sal_Bool ORowSetCache::moveWindow()
         }
     }
     else if(m_nPosition > m_nStartPos)
-    {   // the new start pos is above the the window start pos
+    {   // the new start pos is above the startpos of the window
 
         if(m_nPosition <= (m_nStartPos+m_nFetchSize))
         {   // position in window
             m_aMatrixIter = m_pMatrix->begin() + m_nPosition - m_nStartPos -1;
             if(!m_aMatrixIter->isValid())
             {
-                if(m_pCacheSet->absolute(m_nPosition))
+                sal_Bool bOk;
+                if(bOk = m_pCacheSet->absolute(m_nPosition))
                 {
                     *m_aMatrixIter = new connectivity::ORowVector< ORowSetValue >(m_xMetaData->getColumnCount());
                     m_pCacheSet->fillValueRow(*m_aMatrixIter);
+                    // we have to read one row forward to enshure that we know when we are on last row
+                    // but only when we don't know it already
+                    if(!m_bRowCountFinal)
+                        bOk = m_pCacheSet->absolute(m_nPosition+1);
                 }
-                else
+                if(!bOk)
                 {
                     if(!m_bRowCountFinal)
                     {
@@ -995,11 +1021,23 @@ sal_Bool ORowSetCache::moveWindow()
                     m_pCacheSet->fillValueRow(*aIter++);
                 }
             }
+            // we have to read one row forward to enshure that we know when we are on last row
+            // but only when we don't know it already
+            sal_Bool bOk = sal_True;
+            if(bCheck && !m_bRowCountFinal)
+                bOk = m_pCacheSet->next();
             // bind end to front
             if(bCheck)
             {   // rotate the end to the front
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 m_nStartPos = nNewStartPos - 1; // must be -1
+                // now I can say how many rows we have
+                if(!bOk)
+                {
+                    m_pCacheSet->previous(); // because we stand after the last row
+                    m_nRowCount = m_pCacheSet->getRow() ; // here we have the row count
+                    m_bRowCountFinal = sal_True;
+                }
             }
             else
             {   // the end was reached before end() so we can set the start before nNewStartPos
@@ -1427,6 +1465,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/03 14:40:45  oj
+    some problems with refcount resolved
+
     Revision 1.7  2000/10/25 07:30:24  oj
     make strings unique for lib's
 
