@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-09-11 15:57:18 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,8 @@
  *
  *
  ************************************************************************/
+
 package com.sun.star.lib.uno.typedesc;
-
-
-import java.lang.reflect.Method;
-import java.util.Vector;
-
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.IFieldDescription;
@@ -72,300 +68,243 @@ import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.XNamingService;
+import complexlib.ComplexTestCase;
 
-
-public class TypeDescription_Test {
-//      static public TypeDescription getTypeDescription(String typeName) throws ClassNotFoundException {
-//      static public ITypeDescription getTypeDescription(Type type) throws ClassNotFoundException {
-//      static public TypeDescription getTypeDescription(TypeClass typeClass) {
-//      static public TypeDescription getTypeDescription(TypeInfo typeInfo, Class zClass) {
-//          TypeDescription.isTypeClassSimple(TypeClass typeClass) {
-
-    static class MethodSignature {
-        boolean _oneway;
-        boolean _buildIn;
-        ITypeDescription _inSig[];
-        ITypeDescription _outSig[];
-        ITypeDescription _retSig;
-
-        MethodSignature(boolean oneway, boolean buildin, ITypeDescription inSig[], ITypeDescription outSig[], ITypeDescription retSig) {
-            _oneway = oneway;
-            _buildIn = buildin;
-            _inSig = inSig;
-            _outSig = outSig;
-            _retSig = retSig;
-        }
-
-        boolean test(Vector notpassed, int index, IMethodDescription iMethodDescription) {
-            boolean passed = true;
-
-            boolean tmp_passed = iMethodDescription.isOneway() == _oneway;
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement("isOneway");
-
-            int mindex = iMethodDescription.getIndex();
-            tmp_passed = mindex == index;
-            passed = passed && tmp_passed;
-            if(!tmp_passed) {
-                notpassed.addElement("getIndex - " + mindex);
-//                  throw new RuntimeException("blabla");
-            }
-
-            ITypeDescription inSig[] = iMethodDescription.getInSignature();
-            tmp_passed = inSig.length == _inSig.length;
-            if(tmp_passed)
-                for(int i = 0; i < inSig.length; ++ i)
-                    tmp_passed = tmp_passed && inSig[i].equals(_inSig[i]);
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement("getInSignature - ");
-
-            ITypeDescription outSig[] = iMethodDescription.getOutSignature();
-            tmp_passed = outSig.length == _outSig.length;
-            if(tmp_passed)
-                for(int i = 0; i < outSig.length; ++ i)
-                    tmp_passed = tmp_passed && (outSig[i] == _outSig[i] || outSig[i].equals(_outSig[i]));
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement("getOutSignature - ");
-
-            ITypeDescription retSig = iMethodDescription.getReturnSignature();
-            tmp_passed = retSig.equals(_retSig);
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement("getReturnSignature - ");
-
-            Method method = iMethodDescription.getMethod();
-            tmp_passed = (method != null) ^ _buildIn;
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement("getMethod - " + method);
-
-            return passed;
-        }
+public final class TypeDescription_Test extends ComplexTestCase {
+    public String getTestObjectName() {
+        return getClass().getName();
     }
 
+    public String[] getTestMethodNames() {
+        return new String[] { "test", "testUnsigned" };
+    }
 
-    static class TypeSignature {
-        TypeSignature _superType;
-        MethodSignature _methodSignatures[];
-        String _method_names[];
-        int _method_offset;
+    public void test() throws Exception {
+        ITypeDescription voidTD = TypeDescription.getTypeDescription(
+            void.class);
+        ITypeDescription stringTD = TypeDescription.getTypeDescription(
+            String.class);
+        ITypeDescription typeTD = TypeDescription.getTypeDescription(
+            Type.class);
+        ITypeDescription anyTD = TypeDescription.getTypeDescription(Any.class);
+        ITypeDescription interfaceTD = TypeDescription.getTypeDescription(
+            XInterface.class);
 
-        TypeSignature _fieldSignatures[];
-        String _field_names[];
-        int _field_offset;
+        MethodSignature sigBuildinSyncTypeToAny = new MethodSignature(
+            true, false, new ITypeDescription[] { typeTD },
+            new ITypeDescription[1], anyTD);
+        MethodSignature sigBuildinAsyncToVoid = new MethodSignature(
+            true, true, new ITypeDescription[0], new ITypeDescription[0],
+            voidTD);
+        MethodSignature sigAddonSyncStringToVoid = new MethodSignature(
+            false, false, new ITypeDescription[] { stringTD },
+            new ITypeDescription[1], voidTD);
+        MethodSignature sigAddonSyncStringInterfaceToVoid = new MethodSignature(
+            false, false, new ITypeDescription[] { stringTD, interfaceTD },
+            new ITypeDescription[2], voidTD);
+        MethodSignature sigAddonSyncStringToInterface = new MethodSignature(
+            false, false, new ITypeDescription[] { stringTD },
+            new ITypeDescription[1], interfaceTD);
 
-        TypeSignature(TypeSignature superType, String names[], MethodSignature methodSignatures[], String field_names[], TypeSignature fieldSignatures[]) {
-            _superType = superType;
-            _method_names = names;
-            _methodSignatures = methodSignatures;
+        TypeSignature emptyTypeSig = new TypeSignature(
+            null, new String[0], new MethodSignature[0], new String[0],
+            new TypeSignature[0]);
+        TypeSignature interfaceTypeSig = new TypeSignature(
+            null, new String[] { "queryInterface", "acquire", "release" },
+            new MethodSignature[] { sigBuildinSyncTypeToAny,
+                                    sigBuildinAsyncToVoid,
+                                    sigBuildinAsyncToVoid },
+            new String[0], new TypeSignature[0]);
+        TypeSignature exceptionTypeSig = new TypeSignature(
+            null, new String[0], new MethodSignature[0],
+            new String[]{"Context"}, new TypeSignature[] { interfaceTypeSig });
+            // com.sun.star.uno.Exception.idl says that Exception (a) has no
+            // base exception, and (b) has two fields, Message and Context; the
+            // generated com.sun.star.uno.Exception.java, however, (a) is
+            // inherited from java.lang.Exception, and (b) has only one field,
+            // Context, as Message is inherited from java.lang.Exception
+        TypeSignature namingServiceTypeSig = new TypeSignature(
+            interfaceTypeSig,
+            new String[] { "getRegisteredObject", "registerObject",
+                           "revokeObject" },
+            new MethodSignature[] { sigAddonSyncStringToInterface,
+                                    sigAddonSyncStringInterfaceToVoid,
+                                    sigAddonSyncStringToVoid },
+            new String[0], new TypeSignature[0]);
 
-            _fieldSignatures = fieldSignatures;
-            _field_names = field_names;
+        Object[] byteData = new Object[] {
+            "byte", "[B", byte.class, TypeClass.BYTE };
+        Object[] stringData = new Object[] {
+            "string", "[Ljava.lang.String;", java.lang.String.class,
+            TypeClass.STRING };
+        Object[] typeClassData = new Object[] {
+            "com.sun.star.uno.TypeClass", "[Lcom.sun.star.uno.TypeClass;",
+            TypeClass.class, TypeClass.ENUM };
+        Object[] interfaceData = new Object[] {
+            "com.sun.star.uno.XInterface", "[Lcom.sun.star.uno.XInterface;",
+            XInterface.class, TypeClass.INTERFACE };
+        Object[] exceptionData = new Object [] {
+            "com.sun.star.uno.Exception", "[Lcom.sun.star.uno.Exception;",
+            com.sun.star.uno.Exception.class, TypeClass.EXCEPTION,
+            new Object[] { interfaceData }, null };
+        Object[] namingServiceData = new Object[] {
+            "com.sun.star.uno.XNamingService",
+            "[Lcom.sun.star.uno.XNamingService;", XNamingService.class,
+            TypeClass.INTERFACE, null, interfaceData };
 
-            if(_superType != null) {
-                _method_offset = _superType._method_offset + _superType._method_names.length;
-                _field_offset = _superType._field_offset + _superType._field_names.length;
+        emptyTypeSig.test("TypeSignature.test(byte)", byteData,
+                          TypeDescription.getTypeDescription("byte"));
+        emptyTypeSig.test("TypeSignature.test(string)", stringData,
+                          TypeDescription.getTypeDescription("string"));
+        emptyTypeSig.test("TypeSignature.test(TypeClass)", typeClassData,
+                          TypeDescription.getTypeDescription(
+                              "com.sun.star.uno.TypeClass"));
+        exceptionTypeSig.test("TypeSignature.test(com.sun.star.uno.Exception)",
+                              exceptionData,
+                              TypeDescription.getTypeDescription(
+                                  "com.sun.star.uno.Exception"));
+        interfaceTypeSig.test("TypeSignature.test(XInterface)", interfaceData,
+                              TypeDescription.getTypeDescription(
+                                  "com.sun.star.uno.XInterface"));
+        namingServiceTypeSig.test("TypeSignature.test(XNamingService)",
+                                  namingServiceData,
+                                  TypeDescription.getTypeDescription(
+                                      "com.sun.star.uno.XNamingService"));
+    }
+
+    public void testUnsigned() throws ClassNotFoundException {
+        assure("TypeDescription for UNSIGNED LONG",
+               TypeDescription.getTypeDescription(Type.UNSIGNED_LONG).getTypeName().equals("unsigned long"));
+    }
+
+    private final class MethodSignature {
+        public MethodSignature(
+            boolean buildIn, boolean oneWay, ITypeDescription[] inParameters,
+            ITypeDescription[] outParameters, ITypeDescription returnValue)
+        {
+            this.buildIn = buildIn;
+            this.oneWay = oneWay;
+            this.inParameters = inParameters;
+            this.outParameters = outParameters;
+            this.returnValue = returnValue;
+        }
+
+        public void test(String prefix, int index,
+                         IMethodDescription description) {
+            assure(prefix + "; getIndex", description.getIndex() == index);
+            assure(prefix + "; getMethod",
+                   (description.getMethod() == null) == buildIn);
+            assure(prefix + "; isOneway", description.isOneway() == oneWay);
+            ITypeDescription[] in = description.getInSignature();
+            assure(prefix + "; getInSignature",
+                   in.length == inParameters.length);
+            for (int i = 0; i < in.length; ++i) {
+                assure(prefix + "; getInSignature " + i,
+                       in[i].equals(inParameters[i]));
+            }
+            ITypeDescription[] out = description.getOutSignature();
+            assure(prefix + "; getOutSignature",
+                   out.length == outParameters.length);
+            for (int i = 0; i < out.length; ++i) {
+                assure(prefix + "; getOutSignature " + i,
+                       out[i] == null ? outParameters[i] == null
+                       : out[i].equals(outParameters[i]));
+            }
+            assure(prefix + "; getReturnSignature",
+                   description.getReturnSignature().equals(returnValue));
+        }
+
+        private final boolean buildIn;
+        private final boolean oneWay;
+        private final ITypeDescription[] inParameters;
+        private final ITypeDescription[] outParameters;
+        private final ITypeDescription returnValue;
+    }
+
+    private final class TypeSignature {
+        public TypeSignature(TypeSignature superType, String[] methodNames,
+                             MethodSignature[] methodSignatures,
+                             String[] fieldNames,
+                             TypeSignature[] fieldSignatures) {
+            this._superType = superType;
+            this.methodNames = methodNames;
+            this.methodSignatures = methodSignatures;
+            methodOffset = superType == null ? 0
+                : superType.methodOffset + superType.methodNames.length;
+            this.fieldSignatures = fieldSignatures;
+            this.fieldNames = fieldNames;
+            fieldOffset = superType == null ? 0
+                : superType.fieldOffset + superType.fieldNames.length;
+        }
+
+        public void test(String prefix, Object[] data,
+                         ITypeDescription description) throws Exception {
+            assure(prefix + "; getTypeName",
+                   description.getTypeName().equals(data[0]));
+            assure(prefix + "; equals",
+                   description.equals(TypeDescription.getTypeDescription(
+                                          (String)data[0])));
+            assure(prefix + "; getArrayTypeName",
+                   description.getArrayTypeName().equals(data[1]));
+            assure(prefix + "; getZClass", description.getZClass() == data[2]);
+            assure(prefix + "; getTypeClass",
+                   description.getTypeClass() == data[3]);
+            assure(prefix + "; getComponentType",
+                   description.getComponentType() == null);
+
+            IMethodDescription[] mds = description.getMethodDescriptions();
+            assure(prefix + "; getMethodDescriptions",
+                   mds.length == methodSignatures.length);
+            for (int i = 0; i < methodSignatures.length; ++i) {
+                methodSignatures[i].test(
+                    prefix + "; getMethodDescriptions " + i,
+                    i + methodOffset, mds[i]);
+            }
+            for (int i = 0; i < methodNames.length; ++i) {
+                IMethodDescription md = description.getMethodDescription(
+                    i + methodOffset);
+                assure(prefix + "; getMethodDescription " + (i + methodOffset),
+                       md != null);
+                methodSignatures[i].test(
+                    prefix + "; getMethodDescription " + (i + methodOffset),
+                    i + methodOffset, md);
+            }
+            for (int i = 0; i < methodNames.length; ++i) {
+                IMethodDescription md = description.getMethodDescription(
+                    methodNames[i]);
+                assure(prefix + "; getMethodDescription " + methodNames[i],
+                       md != null);
+                methodSignatures[i].test(
+                    prefix + "; getMethodDescription " + methodNames[i],
+                    i + methodOffset, md);
+            }
+
+            IFieldDescription[] fds = description.getFieldDescriptions();
+            assure(prefix + "; getFieldDescriptions",
+                   fds.length == fieldSignatures.length);
+            for (int i = 0; i < fieldSignatures.length; ++i) {
+                fieldSignatures[i].test(
+                    prefix + "; getFieldDescriptions " + i,
+                    (Object[]) ((Object[]) data[4])[i],
+                    fds[i].getTypeDescription());
+            }
+
+            ITypeDescription supert = description.getSuperType();
+            assure(prefix + "; getSuperType",
+                   (supert == null) == (data.length < 6));
+            if (supert != null && data[5] != null) {
+                _superType.test(prefix + "; getSuperType", (Object[]) data[5],
+                                supert);
             }
         }
 
-        public boolean test(Vector notpassed, Object names[], ITypeDescription iTypeDescription) throws Exception {
-            boolean passed = true;
-
-            String comment = "TypeSignature.test(" + iTypeDescription + ") ";
-            System.err.println("TypeDescription_Test.test_TypeSignature - doing tests...");
-
-            ITypeDescription superType = iTypeDescription.getSuperType();
-            boolean tmp_passed = superType == null || (names.length == 6 && _superType.test(notpassed, (Object [])names[5], superType));
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getSuperType - " + superType);
-
-            IMethodDescription iMethodDescriptions[] = iTypeDescription.getMethodDescriptions();
-            tmp_passed = iMethodDescriptions != null;
-            tmp_passed = tmp_passed && _methodSignatures.length == iMethodDescriptions.length;
-            if(tmp_passed)
-                for(int i = 0; i < _methodSignatures.length; ++ i) {
-                    boolean tmp_tmp_passed = _methodSignatures[i].test(notpassed, i + _method_offset, iMethodDescriptions[i]);
-
-                    tmp_passed = tmp_passed && tmp_tmp_passed;
-                    if(!tmp_tmp_passed)
-                        notpassed.addElement(comment + "- getMethodDescriptions - index:" + i);
-                }
-            else
-                notpassed.addElement(comment + "- getMethodDescriptions - size:" + iMethodDescriptions.length);
-            passed = passed && tmp_passed;
-
-
-            for(int i = 0; i < _method_names.length; ++ i) {
-                IMethodDescription iMethodDescription = iTypeDescription.getMethodDescription(i + _method_offset);
-                tmp_passed = iMethodDescription != null && _methodSignatures[i].test(notpassed, i + _method_offset, iMethodDescription);
-                passed = passed && tmp_passed;
-                if(!tmp_passed)
-                    notpassed.addElement(comment + "- getMethodDescription(int " + (i + _method_offset) + ") - " + iMethodDescription);
-            }
-
-            for(int i = 0; i < _method_names.length; ++ i) {
-                IMethodDescription iMethodDescription  = iTypeDescription.getMethodDescription(_method_names[i]);
-                tmp_passed = iMethodDescription != null && _methodSignatures[i].test(notpassed, i + _method_offset, iMethodDescription);
-                passed = passed && tmp_passed;
-                if(!tmp_passed)
-                    notpassed.addElement(comment + "- getMethodDescription(String " + _method_names[i] + ")");
-            }
-
-            IFieldDescription iFieldDescriptions[] = iTypeDescription.getFieldDescriptions();
-            tmp_passed = iFieldDescriptions != null && iFieldDescriptions.length == _fieldSignatures.length;
-            if(tmp_passed)
-                for(int i = 0; i < _fieldSignatures.length; ++ i) {
-                    boolean tmp_tmp_passed = _fieldSignatures[i].test(notpassed, ((Object [][])names[4])[i], iFieldDescriptions[i].getTypeDescription());
-
-                    tmp_passed = tmp_passed && tmp_tmp_passed;
-                    if(!tmp_tmp_passed)
-                        notpassed.addElement(comment + "- getFieldDescriptions - index:" + i);
-                }
-            else
-                notpassed.addElement(comment + "- getFieldDescriptions - size:" + iFieldDescriptions.length);
-            passed = passed && tmp_passed;
-
-
-            TypeClass typeClass = iTypeDescription.getTypeClass();
-            tmp_passed = typeClass == names[3];
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getTypeClass");
-
-            ITypeDescription componentType = iTypeDescription.getComponentType();
-            tmp_passed = componentType == null;
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getComponentType");
-
-            String typeName = iTypeDescription.getTypeName();
-            tmp_passed = typeName.equals(names[0]);
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getTypeName");
-
-            String arrayTypeName = iTypeDescription.getArrayTypeName();
-            tmp_passed = arrayTypeName.equals(names[1]);
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getArrayTypeName - " + names[1]);
-
-            Class xzClass = iTypeDescription.getZClass();
-            tmp_passed = xzClass == names[2];
-                passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- getZClass");
-
-            tmp_passed = iTypeDescription.equals(TypeDescription.getTypeDescription((String)names[0]));
-            passed = passed && tmp_passed;
-            if(!tmp_passed)
-                notpassed.addElement(comment + "- equals");
-
-
-            return passed;
-        }
-    }
-
-    static ITypeDescription __stringTD = TypeDescription.getTypeDescription(String.class);
-    static ITypeDescription __xinterfaceTD = TypeDescription.getTypeDescription(XInterface.class);
-    static ITypeDescription __voidTD = TypeDescription.getTypeDescription(Void.class);
-    static ITypeDescription __typeTD = TypeDescription.getTypeDescription(Type.class);
-    static ITypeDescription __anyTD = TypeDescription.getTypeDescription(Any.class);
-
-
-    static MethodSignature __sig_sync_buildin_itype__any = new MethodSignature(false, true, new ITypeDescription[]{__typeTD}, new ITypeDescription[1], __anyTD);
-    static MethodSignature __sig_async_buildin__void = new MethodSignature(true, true, new ITypeDescription[]{}, new ITypeDescription[0], __voidTD);
-
-    static TypeSignature __itf_xinterface = new TypeSignature(null,
-                                                              new String[]{"queryInterface", "acquire", "release"},
-                                                              new MethodSignature[]{__sig_sync_buildin_itype__any, __sig_async_buildin__void, __sig_async_buildin__void},
-                                                              new String[0],
-                                                              new TypeSignature[0]);
-
-
-    static MethodSignature __sig_sync_addon_istr__xifc = new MethodSignature(false, false, new ITypeDescription[]{__stringTD}, new ITypeDescription[1], __xinterfaceTD);
-    static MethodSignature __sig_sync_addon_istr_ixifc__void = new MethodSignature(false, false, new ITypeDescription[]{__stringTD, __xinterfaceTD}, new ITypeDescription[2], __voidTD);
-    static MethodSignature __sig_sync_addon_istr__void = new MethodSignature(false, false, new ITypeDescription[]{__stringTD}, new ITypeDescription[1], __voidTD);
-
-    static TypeSignature __itf_xnaming_service = new TypeSignature(__itf_xinterface,
-                                                                   new String[]{"getRegisteredObject", "registerObject", "revokeObject"},
-                                                                   new MethodSignature[]{__sig_sync_addon_istr__xifc, __sig_sync_addon_istr_ixifc__void, __sig_sync_addon_istr__void},
-                                                                   new String[0],
-                                                                   new TypeSignature[0]);
-
-
-
-    static TypeSignature __emptySig = new TypeSignature(null,
-                                                        new String[0],
-                                                        new MethodSignature[0],
-                                                        new String[0],
-                                                        new TypeSignature[0]);
-
-
-    static TypeSignature __exception = new TypeSignature(null,
-                                                         new String[0],
-                                                         new MethodSignature[0],
-                                                         new String[]{"Message", "Context"},
-                                                         new TypeSignature[] {__emptySig, __itf_xinterface});
-
-
-
-    public static boolean test(Vector notpassed) throws Exception {
-        boolean passed = true;
-
-        boolean tmp_passed = true;
-
-        Object string_cc[] = new Object[]{"string", "[Ljava.lang.String;", java.lang.String.class, TypeClass.STRING};
-        Object byte_cc[] = new Object[]{"byte", "[B", byte.class, TypeClass.BYTE};
-
-        Object xinterface_cc[] = new Object[]{"com.sun.star.uno.XInterface", "[Lcom.sun.star.uno.XInterface;", com.sun.star.uno.XInterface.class, TypeClass.INTERFACE};
-
-        tmp_passed = __emptySig.test(notpassed, byte_cc, TypeDescription.getTypeDescription("byte"));
-        passed = passed && tmp_passed;
-
-        tmp_passed = __emptySig.test(notpassed, string_cc, TypeDescription.getTypeDescription("string"));
-        passed = passed && tmp_passed;
-
-
-        tmp_passed = __exception.test(notpassed, new Object[]{"com.sun.star.uno.Exception",
-                                                              "[Lcom.sun.star.uno.Exception;",
-                                                              com.sun.star.uno.Exception.class,
-                                                              TypeClass.EXCEPTION,
-                                                              new Object[]{string_cc, xinterface_cc}}, TypeDescription.getTypeDescription("com.sun.star.uno.Exception"));
-        passed = passed && tmp_passed;
-
-        tmp_passed = __emptySig.test(notpassed, new Object[]{"com.sun.star.uno.TypeClass",
-                                                             "[Lcom.sun.star.uno.TypeClass;",
-                                                             com.sun.star.uno.TypeClass.class,
-                                                             TypeClass.ENUM}, TypeDescription.getTypeDescription("com.sun.star.uno.TypeClass"));
-        passed = passed && tmp_passed;
-
-        tmp_passed = __itf_xinterface.test(notpassed, xinterface_cc, TypeDescription.getTypeDescription(XInterface.class));
-        passed = passed && tmp_passed;
-
-        tmp_passed = __itf_xnaming_service.test(notpassed, new Object[]{"com.sun.star.uno.XNamingService",
-                                                                        "[Lcom.sun.star.uno.XNamingService;",
-                                                                        com.sun.star.uno.XNamingService.class,
-                                                                        TypeClass.INTERFACE,
-                                                                        null,
-                                                                        xinterface_cc}, TypeDescription.getTypeDescription(com.sun.star.uno.XNamingService.class));
-        passed = passed && tmp_passed;
-
-        return passed;
-    }
-
-    static public void main(String args[]) throws Exception {
-        Vector notpassed = new Vector();
-
-        boolean passed = test(notpassed);
-
-        System.err.println("tests passed? " + passed);
-
-        for(int i = 0; i < notpassed.size(); ++ i)
-            System.err.println("not passed:" + notpassed.elementAt(i));
+        private final TypeSignature _superType;
+        private final MethodSignature[] methodSignatures;
+        private final String[] methodNames;
+        private final int methodOffset;
+        private final TypeSignature[] fieldSignatures;
+        private final String[] fieldNames;
+        private final int fieldOffset;
     }
 }
