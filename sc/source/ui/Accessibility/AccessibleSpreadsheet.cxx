@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-02 11:07:12 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 11:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,8 +464,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleSpreadsheet::getAccessibleAt(
     if (mpViewShell)
     {
         sal_Int16 nX, nY;
-        mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY);
-        xAccessible = getAccessibleCellAt(nY, nX);
+        if (mpViewShell->GetViewData()->GetPosFromPixel( rPoint.X, rPoint.Y, meSplitPos, nX, nY))
+            xAccessible = getAccessibleCellAt(nY, nX);
     }
     return xAccessible;
 }
