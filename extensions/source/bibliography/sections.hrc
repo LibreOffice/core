@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #define FT_CUSTOM4          31
 #define FT_CUSTOM5          32
 #define ST_ERROR_PREFIX     33
+#define FL_1                34
+#define FL_2                35
+#define FL_3                36
 
 //Business Address
 #define FT_OFFICE       1
