@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-07 09:34:53 $
+ *  last change: $Author: ka $ $Date: 2002-05-08 14:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,10 @@ void SdDrawViewShell::OuterResizePixel(const Point &rPos, const Size &rSize)
         }
     }
 
-    if (pFuSlideShow && !pFuSlideShow->IsFullScreen())
-    {
-        pFuSlideShow->Resize(rSize);
-    }
+    FuSlideShow* pSlideShow = ( pFuSlideShow ? pFuSlideShow : ( pDrView ? pDrView->GetSlideShow() : NULL ) );
+
+    if( pSlideShow && !pSlideShow->IsFullScreen())
+        pSlideShow->Resize( rSize );
 }
 
 /*************************************************************************
