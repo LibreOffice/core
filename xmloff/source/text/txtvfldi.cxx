@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-19 12:47:03 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,7 +1272,7 @@ void XMLValueImportHelper::ProcessAttribute(
         case XML_TOK_TEXTFIELD_VALUE:
         {
             double fTmp;
-            sal_Bool bRet = SvXMLUnitConverter::convertNumber(fTmp,sAttrValue);
+            sal_Bool bRet = SvXMLUnitConverter::convertDouble(fTmp,sAttrValue);
             if (bRet) {
                 bFloatValueOK = sal_True;
                 fValue = fTmp;

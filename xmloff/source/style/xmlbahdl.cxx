@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-13 09:56:53 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 10:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ XMLDoublePropHdl::~XMLDoublePropHdl()
 sal_Bool XMLDoublePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     double fDblValue;
-    sal_Bool bRet = rUnitConverter.convertNumber( fDblValue, rStrImpValue );
+    sal_Bool bRet = rUnitConverter.convertDouble( fDblValue, rStrImpValue );
     rValue <<= fDblValue;
     return bRet;
 }
@@ -486,7 +486,7 @@ sal_Bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     if( rValue >>= fValue )
     {
         OUStringBuffer aOut;
-        rUnitConverter.convertNumber( aOut, fValue );
+        rUnitConverter.convertDouble( aOut, fValue );
         rStrExpValue = aOut.makeStringAndClear();
         bRet = sal_True;
     }
