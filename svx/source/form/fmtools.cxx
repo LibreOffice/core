@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 11:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,7 @@
 #include <cppuhelper/extract.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
 
 IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
 IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
@@ -495,7 +496,7 @@ sal_Bool searchElement(const ::com::sun::star::uno::Reference< ::com::sun::star:
                 }
             }
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
@@ -533,7 +534,7 @@ sal_Int32 getElementPos(const ::com::sun::star::uno::Reference< ::com::sun::star
                 if (xToFind == xCurrent)
                     break;
             }
-            catch(...)
+            catch(Exception&)
             {
             }
 
@@ -1044,7 +1045,7 @@ void CursorWrapper::ImplConstruct(const ::com::sun::star::uno::Reference< ::com:
         {
             m_xMoveOperations = xAccess.is() ? xAccess->createResultSet() : ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>();
         }
-        catch(...)
+        catch(Exception&)
         {
         }
     }
@@ -1060,6 +1061,8 @@ void CursorWrapper::ImplConstruct(const ::com::sun::star::uno::Reference< ::com:
         m_xBookmarkOperations = NULL;
         m_xColumnsSupplier = NULL;
     }
+    else
+        m_xGeneric = m_xMoveOperations.get();
 }
 
 //------------------------------------------------------------------------
@@ -1976,7 +1979,7 @@ sal_Bool isLoadable(const ::com::sun::star::uno::Reference< ::com::sun::star::un
                      ::findConnection(xLoad).is())
                 return sal_True;
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -2053,7 +2056,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
             ::com::sun::star::uno::Any aConn(::com::sun::star::uno::makeAny(_rxConn));
             xRowSetProps->setPropertyValue(FM_PROP_ACTIVE_CONNECTION, aConn);
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("::setConnection : could not set the connection !");
         }
@@ -2116,7 +2119,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
 
 
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -2244,7 +2247,7 @@ void setConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb
             }
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         DBG_ERROR("::getCurrentSettingsComposer : catched an exception !");
         xReturn = NULL;
