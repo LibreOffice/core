@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:35:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 #pragma hdrstop
 
+#include "paramisc.hxx"
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
 #endif
@@ -273,8 +274,10 @@ void ImportExcel::Dimensions( void )
     aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
     if( aIn.IsValid() )
-        pColRowBuff->SetDimension(
-            ScRange( nColFirst, nRowFirst, GetCurrScTab(), nColLast, nRowLast, GetCurrScTab() ) );
+        pColRowBuff->SetDimension( ScRange( static_cast<SCCOL>(nColFirst),
+                    static_cast<SCROW>(nRowFirst), GetCurrScTab(),
+                    static_cast<SCCOL>(nColLast), static_cast<SCROW>(nRowLast),
+                    GetCurrScTab() ) );
 }
 
 
@@ -323,7 +326,8 @@ void ImportExcel::Integer( void )
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( nInt );
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
@@ -359,7 +363,8 @@ void ImportExcel::Number25( void )
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( fValue );
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
@@ -433,10 +438,10 @@ void ImportExcel::Boolerr25( void )
 
         // Simulation ueber Formelzelle!
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
-        ScFormulaCell* pCell = new ScFormulaCell(
-            pD, ScAddress( nCol, nRow, GetCurrScTab() ), pErgebnis );
+        ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), GetCurrScTab());
+        ScFormulaCell* pCell = new ScFormulaCell( pD, aPos, pErgebnis );
         pCell->SetDouble( fVal );
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+        GetDoc().PutCell( aPos, pCell );
 
         pColRowBuff->Used( nCol, nRow );
 
@@ -563,7 +568,8 @@ void ImportExcel::Note( void )
     aIn >> nRow >> nCol;
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
-        pD->SetNote( nCol, nRow, GetCurrScTab(), aIn.ReadByteString( TRUE ) );
+        pD->SetNote( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab(), aIn.ReadByteString( TRUE ) );
     else
         {
         bTabTruncated = TRUE;
@@ -588,8 +594,9 @@ void ImportExcel::Selection( void )
         nNumRefs--;
         aIn.Ignore( nNumRefs * 6 );     // nur letzte Selektion interessiert
         aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-        pColRowBuff->SetSelection( ScRange( ( UINT16 ) nFirstCol, nFirstRow, GetCurrScTab(),
-                                            ( UINT16 ) nLastCol, nLastRow, GetCurrScTab() ) );
+        pColRowBuff->SetSelection( ScRange(
+            static_cast<SCCOL>(nFirstCol), static_cast<SCROW>(nFirstRow), GetCurrScTab(),
+            static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow), GetCurrScTab()));
     }
 }
 
@@ -607,7 +614,7 @@ void ImportExcel::Columndefault( void )
     nColMac--;
 
     if( nColMac > MAXCOL )
-        nColMac = MAXCOL;
+        nColMac = static_cast<UINT16>(MAXCOL);
 
     for( UINT16 nCol = nColMic ; nCol <= nColMac ; nCol++ )
     {
@@ -643,16 +650,18 @@ void ImportExcel::Array25( void )
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
 
-        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, GetCurrScTab() ) );
+        pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
+                    static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, nFormLen );
 
         DBG_ASSERT( pErgebnis, "*ImportExcel::Array25(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
-        pD->InsertMatrixFormula(
-            nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData,
-            EMPTY_STRING, pErgebnis );
+        pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
+                static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
+                static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
+                pErgebnis );
 
 /*      UINT16              nRowCnt, nColCnt;
 
@@ -716,7 +725,7 @@ void ImportExcel::Colwidth( void )
     aIn >> nColFirst >> nColLast >> nColWidth;
 
     if( nColLast > MAXCOL )
-        nColLast = MAXCOL;
+        nColLast = static_cast<UINT16>(MAXCOL);
 
     sal_uInt16 nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
@@ -841,7 +850,7 @@ void ImportExcel::Colinfo( void )
         return;
 
     if( nColLast > MAXCOL )
-        nColLast = MAXCOL;
+        nColLast = static_cast<UINT16>(MAXCOL);
 
     bool bHidden = ::get_flag( nOpt, EXC_COLINFO_HIDDEN );
     bool bCollapsed = ::get_flag( nOpt, EXC_COLINFO_COLLAPSED );
@@ -870,7 +879,8 @@ void ImportExcel::Rk( void )
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
@@ -913,19 +923,20 @@ void ImportExcel::Boundsheet( void )
 
     *pExcRoot->pTabNameBuff << aName;
 
-    if( nBdshtTab > 0 )
+    const SCTAB nTab = static_cast<SCTAB>(nBdshtTab);
+    if( nTab > 0 )
     {
-        DBG_ASSERT( !pD->HasTable( nBdshtTab ), "*ImportExcel::Boundsheet(): Tabelle schon vorhanden!" );
+        DBG_ASSERT( !pD->HasTable( nTab ), "*ImportExcel::Boundsheet(): Tabelle schon vorhanden!" );
 
-        pD->MakeTable( nBdshtTab );
+        pD->MakeTable( nTab );
     }
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
-        pD->SetVisible( nBdshtTab, FALSE );
+        pD->SetVisible( nTab, FALSE );
     else if( nFirstVisTab == 0xFFFF )
         nFirstVisTab = nBdshtTab;       // first visible for WINDOW2 import
 
-    pD->RenameTab( nBdshtTab, aName );
+    pD->RenameTab( nTab, aName );
     nBdshtTab++;
 }
 
@@ -1030,9 +1041,10 @@ void ImportExcel::Shrfmla( void )
 
     DBG_ASSERT( pErgebnis, "+ImportExcel::Shrfmla(): ScTokenArray ist NULL!" );
 
-    pExcRoot->pShrfmlaBuff->Store(
-            ScRange( nFirstCol, nFirstRow, GetCurrScTab(), nLastCol, nLastRow, GetCurrScTab() ),
-            *pErgebnis );
+    pExcRoot->pShrfmlaBuff->Store( ScRange( static_cast<SCCOL>(nFirstCol),
+                static_cast<SCROW>(nFirstRow), GetCurrScTab(),
+                static_cast<SCCOL>(nLastCol), static_cast<SCROW>(nLastRow),
+                GetCurrScTab()), *pErgebnis );
 
     pLastFormCell = NULL;
 }
@@ -1056,7 +1068,8 @@ void ImportExcel::Mulrk( void )
                 GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
                 ScBaseCell* pCell = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
-                GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+                GetDoc().PutCell( static_cast<SCCOL>(nCol),
+                        static_cast<SCROW>(nRow), GetCurrScTab(), pCell );
 
                 pColRowBuff->Used( nCol, nRow );
             }
@@ -1124,7 +1137,8 @@ void ImportExcel::Rstring( void )
 
             delete pTextObj;
 
-            GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pZelle );
+            GetDoc().PutCell( static_cast<SCCOL>(nCol),
+                    static_cast<SCROW>(nRow), GetCurrScTab(), pZelle );
         }
         pColRowBuff->Used( nCol, nRow );
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
@@ -1145,7 +1159,9 @@ void ImportExcel::Olesize( void )
     UINT16  nFirstRow, nLastRow;
     UINT8   nFirstCol, nLastCol;
     aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
-    GetExtDocOptions().SetOleSize( nFirstCol, nFirstRow, nLastCol, nLastRow );
+    GetExtDocOptions().SetOleSize( static_cast<SCCOL>(nFirstCol),
+            static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
+            static_cast<SCROW>(nLastRow) );
 }
 
 
@@ -1182,7 +1198,8 @@ void ImportExcel::Number34( void )
         GetXFIndexBuffer().SetXF( nCol, nRow, nXF );
 
         ScBaseCell* pCell = new ScValueCell( fValue );
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pCell );
+        GetDoc().PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab(), pCell );
 
         pColRowBuff->Used( nCol, nRow );
     }
@@ -1226,12 +1243,14 @@ void ImportExcel::Boolerr34( void )
         // Simulation ueber Formelzelle!
         pErgebnis = ErrorToFormula( bErrOrVal, nError, fVal );
 
-        ScFormulaCell*      pZelle = new ScFormulaCell(
-            pD, ScAddress( nCol, nRow, GetCurrScTab() ), pErgebnis );
+        ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow),
+                GetCurrScTab() );
+
+        ScFormulaCell*      pZelle = new ScFormulaCell( pD, aPos, pErgebnis );
 
         pZelle->SetDouble( fVal );
 
-        GetDoc().PutCell( nCol, nRow, GetCurrScTab(), pZelle );
+        GetDoc().PutCell( aPos, pZelle );
         pColRowBuff->Used( nCol, nRow );
 
         if( bErrOrVal )     // !=0 -> Error
@@ -1319,14 +1338,18 @@ void ImportExcel::Array34( void )
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
         const ScTokenArray* pErgebnis;
 
-        pFormConv->Reset( ScAddress( nFirstCol, nFirstRow, GetCurrScTab() ) );
+        pFormConv->Reset( ScAddress( static_cast<SCCOL>(nFirstCol),
+                    static_cast<SCROW>(nFirstRow), GetCurrScTab() ) );
         pFormConv->Convert( pErgebnis, nFormLen );
 
         DBG_ASSERT( pErgebnis, "+ImportExcel::Array34(): ScTokenArray ist NULL!" );
 
         ScMarkData          aMarkData;
         aMarkData.SelectOneTable( GetCurrScTab() );
-        pD->InsertMatrixFormula( nFirstCol, nFirstRow, nLastCol, nLastRow, aMarkData, EMPTY_STRING, pErgebnis);
+        pD->InsertMatrixFormula( static_cast<SCCOL>(nFirstCol),
+                static_cast<SCROW>(nFirstRow), static_cast<SCCOL>(nLastCol),
+                static_cast<SCROW>(nLastRow), aMarkData, EMPTY_STRING,
+                pErgebnis);
 
 /*      UINT16              nRowCnt, nColCnt;
 
@@ -1380,31 +1403,56 @@ void ImportExcel::TableOp( void )
             aTabOpParam.nMode = (nGrbit & EXC_TABOP_BOTH) ? 2 : ((nGrbit & EXC_TABOP_ROW) ? 1 : 0 );
             USHORT nCol = nFirstCol - 1;
             USHORT nRow = nFirstRow - 1;
-            sal_uInt16 nTab = GetCurrScTab();
+            SCTAB nTab = GetCurrScTab();
             switch( aTabOpParam.nMode )
             {
                 case 0:     // COL
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefFormulaEnd.Put( nLastCol, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefColCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
+                    aTabOpParam.aRefFormulaCell.Set(
+                            static_cast<SCCOL>(nFirstCol),
+                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
+                            FALSE, FALSE );
+                    aTabOpParam.aRefFormulaEnd.Set(
+                            static_cast<SCCOL>(nLastCol),
+                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
+                            FALSE, FALSE );
+                    aTabOpParam.aRefColCell.Set( static_cast<SCCOL>(nInpCol),
+                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
+                            FALSE );
                     nRow++;
                 break;
                 case 1:     // ROW
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol - 1, nFirstRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefFormulaEnd.Put( nFirstCol - 1, nLastRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefRowCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
+                    aTabOpParam.aRefFormulaCell.Set(
+                            static_cast<SCCOL>(nFirstCol - 1),
+                            static_cast<SCROW>(nFirstRow), nTab, FALSE, FALSE,
+                            FALSE );
+                    aTabOpParam.aRefFormulaEnd.Set(
+                            static_cast<SCCOL>(nFirstCol - 1),
+                            static_cast<SCROW>(nLastRow), nTab, FALSE, FALSE,
+                            FALSE );
+                    aTabOpParam.aRefRowCell.Set( static_cast<SCCOL>(nInpCol),
+                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
+                            FALSE );
                     nCol++;
                 break;
                 case 2:     // TWO-INPUT
-                    aTabOpParam.aRefFormulaCell.Put( nFirstCol - 1, nFirstRow - 1, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefRowCell.Put( nInpCol, nInpRow, nTab, FALSE, FALSE, FALSE );
-                    aTabOpParam.aRefColCell.Put( nInpCol2, nInpRow2, nTab, FALSE, FALSE, FALSE );
+                    aTabOpParam.aRefFormulaCell.Set(
+                            static_cast<SCCOL>(nFirstCol - 1),
+                            static_cast<SCROW>(nFirstRow - 1), nTab, FALSE,
+                            FALSE, FALSE );
+                    aTabOpParam.aRefRowCell.Set( static_cast<SCCOL>(nInpCol),
+                            static_cast<SCROW>(nInpRow), nTab, FALSE, FALSE,
+                            FALSE );
+                    aTabOpParam.aRefColCell.Set( static_cast<SCCOL>(nInpCol2),
+                            static_cast<SCROW>(nInpRow2), nTab, FALSE, FALSE,
+                            FALSE );
                 break;
             }
 
             ScMarkData aMarkData;
             aMarkData.SelectOneTable( nTab );
-            pD->InsertTableOp( aTabOpParam, nCol, nRow, nLastCol, nLastRow, aMarkData );
+            pD->InsertTableOp( aTabOpParam, static_cast<SCCOL>(nCol),
+                    static_cast<SCROW>(nRow), static_cast<SCCOL>(nLastCol),
+                    static_cast<SCROW>(nLastRow), aMarkData );
         }
     }
     else
@@ -1430,11 +1478,11 @@ void ImportExcel::Window2_5( void )
     pColRowBuff->SetVisCorner( nCol, nRow );
 
     if( nOpt & EXC_WIN2_DISPLAYED )
-        rExtOpt.SetActTab( GetCurrScTab() );
+        rExtOpt.SetActTab( static_cast<sal_uInt16>(GetCurrScTab()) );
     pColRowBuff->SetTabSelected( TRUEBOOL( nOpt & EXC_WIN2_SELECTED ) );
     pColRowBuff->SetFrozen( TRUEBOOL( nOpt & EXC_WIN2_FROZEN ) );
 
-    if( GetCurrScTab() == nFirstVisTab )     // import from first visible sheet
+    if( static_cast<sal_uInt16>(GetCurrScTab()) == nFirstVisTab )     // import from first visible sheet
     {
         if( !( nOpt & EXC_WIN2_DEFAULTCOLOR ) )
             rExtOpt.SetGridCol( GetPalette().GetColor( static_cast< sal_Int16 >( nColorIndex ) ) );
@@ -1554,7 +1602,7 @@ void ImportExcel::EndSheet( void )
 
 void ImportExcel::NeueTabelle( void )
 {
-    sal_uInt16 nTab = GetCurrScTab();
+    SCTAB nTab = GetCurrScTab();
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
 
@@ -1649,7 +1697,7 @@ void ImportExcel::AdjustRowHeight()
     ScModelObj* pDocObj = GetDocModelObj();
     if( pDocObj )
     {
-        for( sal_uInt16 nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
+        for( SCTAB nTab = 0; nTab < GetDoc().GetTableCount(); ++nTab )
             pDocObj->AdjustRowHeight( 0, MAXROW, nTab );
     }
 }
@@ -1679,8 +1727,9 @@ void ImportExcel::PostDocLoad( void )
         {
             pEmbObj->SetVisArea( GetDoc().GetMMRect(
                 pOleSize->aStart.Col(), pOleSize->aStart.Row(),
-                pOleSize->aEnd.Col(), pOleSize->aEnd.Row(), rExtDocOpt.nActTab ) );
-            GetDoc().SetVisibleTab( rExtDocOpt.nActTab );
+                pOleSize->aEnd.Col(), pOleSize->aEnd.Row(),
+                static_cast<SCTAB>(rExtDocOpt.nActTab) ) );
+            GetDoc().SetVisibleTab( static_cast<SCTAB>(rExtDocOpt.nActTab) );
         }
 
         // #111099# open forms in alive mode (has no effect, if no controls in document)
@@ -1694,14 +1743,14 @@ void ImportExcel::PostDocLoad( void )
 
     GetDoc().UpdateAllCharts();
 
-    const UINT16        nLast = pD->GetTableCount();
+    const SCTAB     nLast = pD->GetTableCount();
     const ScRange*      p;
 
     if( pExcRoot->pPrintRanges->HasRanges() )
     {
-        for( UINT16 n = 0 ; n < nLast ; n++ )
+        for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintRanges->First( n );
+            p = pExcRoot->pPrintRanges->First( static_cast<UINT16>(n) );
             if( p )
             {
                 DBG_ASSERT( pExcRoot->pPrintRanges->GetActList(),
@@ -1725,9 +1774,9 @@ void ImportExcel::PostDocLoad( void )
 
     if( pExcRoot->pPrintTitles->HasRanges() )
     {
-        for( UINT16 n = 0 ; n < nLast ; n++ )
+        for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintTitles->First( n );
+            p = pExcRoot->pPrintTitles->First( static_cast<UINT16>(n) );
             if( p )
             {
                 DBG_ASSERT( pExcRoot->pPrintTitles->GetActList(),
@@ -1777,7 +1826,8 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
             else
                 pZelle = ScBaseCell::CreateTextCell( r, pD );
 
-            GetDoc().PutCell( nC, nR, GetCurrScTab(), pZelle );
+            GetDoc().PutCell( static_cast<SCCOL>(nC), static_cast<SCROW>(nR),
+                    GetCurrScTab(), pZelle );
         }
         pColRowBuff->Used( nC, nR );
         GetXFIndexBuffer().SetXF( nC, nR, nXF );
@@ -1790,11 +1840,11 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
 }
 
 
-OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, UINT16 nTabNo) :
+OutlineDataBuffer::OutlineDataBuffer(RootData& rRootData, SCTAB nTabNo) :
     nTab (nTabNo)
 {
-    pColOutlineBuff = new OutlineBuffer (MAXCOL + 1);
-    pRowOutlineBuff = new OutlineBuffer (MAXROW + 1);
+    pColOutlineBuff = new OutlineBuffer (MAXCOLCOUNT);
+    pRowOutlineBuff = new OutlineBuffer (MAXROWCOUNT);
     pColRowBuff = new ColRowSettings( rRootData );
 
     pColRowBuff->SetDefWidth( STD_COL_WIDTH );
