@@ -318,6 +318,8 @@ if ( $installer::globals::globallogging ) { installer::files::save_file($logging
 installer::setupscript::add_installationobject_to_variables($allvariableshashref, $allscriptvariablesref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables4.log", $allvariableshashref); }
 
+installer::logger::log_hashref($allvariableshashref);
+
 print "... analyzing directories ... \n";
 
 # Collect all directories in the script to get the destination dirs
@@ -1008,6 +1010,20 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             $dirsinpackage = installer::packagelist::find_dirs_for_package($dirsinpackage, $filesinpackage, $linksinpackage, $onepackagename);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "dirs3_" . $packagename . ".log", $dirsinpackage); }
 
+            ###############################################
+            # nothing to do, if $filesinpackage is empty
+            ###############################################
+
+            if ( ! ( $#{$filesinpackage} > -1 ))
+            {
+                push(@installer::globals::emptypackages, $packagename);
+                $infoline = "No file in package: $packagename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+                # Attention: No next allowed for the last package
+                if ( $k == $#{$packages} ) { installer::exiter::exit_program("ERROR: Empty package $packagename. The last package in packagelist must not be empty, please reorder!", "Main"); }
+                next;
+            }
+
             ###########################################
             # Stripping libraries
             ###########################################
@@ -1023,7 +1039,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Simple installation mechanism
             ###########################################
 
-            if ( $installer::globals::simple ) { installer::worker::install_simple($onepackagename, $dirsinpackage, $filesinpackage, $linksinpackage); }
+            if ( $installer::globals::simple ) { installer::worker::install_simple($onepackagename, $$languagestringref, $dirsinpackage, $filesinpackage, $linksinpackage); }
 
             ###########################################
             # Creating epm list file
@@ -1206,9 +1222,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
         if ( $$downloadname ne "" ) { $create_download = 1; }
+        if ( $installer::globals::languagepack ) { $create_download = 0; }  # no download sets for Unix language packs
         if (( $is_success ) && ( $create_download ))
         {
-            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref);
+            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
             installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
         }
 
@@ -1413,6 +1430,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # my $licensefilesource = installer::windows::idtglobal::get_licensefilesource($onelanguage, $filesinproductlanguageresolvedarrayref);
             my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
             my $licensefile = installer::files::read_file($licensefilesource);
+            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
             my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
             my $controltable = installer::files::read_file($controltablename);
             installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
@@ -1524,6 +1542,14 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # adding the custom action for restarting the indexing service, necessary for the installation of ooofilt.dll in executesequence table into the product (CustomAc.idt and InstallE.idt)
             $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Instooofiltmsidll", "1", "instooofiltmsi.dll", "RestartIndexingService", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
             if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "instooofiltmsi.dll",  "Instooofiltmsidll", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for adding the icon to the office folder in start menu (CustomAc.idt and InstallE.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll3", "1", "shlxtmsi.dll", "InstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll", "Shellextensionsdll3", "Not REMOVE=\"ALL\"", "end", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
+
+            # adding the custom action for removing the icon from the office folder in start menu (CustomAc.idt and InstallE.idt)
+            $added_customaction = installer::windows::idtglobal::set_custom_action($customactionidttable, $binarytable, "Shellextensionsdll4", "1", "shlxtmsi.dll", "DeinstallStartmenuFolderIcon", 1, $filesinproductlanguageresolvedarrayref, $customactionidttablename);
+            if ( $added_customaction ) { installer::windows::idtglobal::add_custom_action_to_install_table($installexecutetable, "shlxtmsi.dll",  "Shellextensionsdll4", "REMOVE=\"ALL\"", "qslnkmsidll", $filesinproductlanguageresolvedarrayref, $installexecutetablename); }
 
             # custom actions for language packs
 
@@ -1678,10 +1704,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
+
         if ( $$downloadname ne "" ) { $create_download = 1; }
         if (( $is_success ) && ( $create_download ))
         {
-            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref);
+            $downloaddir = installer::download::create_download_sets($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref);
             installer::worker::analyze_and_save_logfile($loggingdir, $downloaddir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
         }
 
