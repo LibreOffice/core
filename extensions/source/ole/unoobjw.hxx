@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:09:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,11 @@
 #define GET_STRUCT_FUNC     L"_GetStruct"
 #define BRIDGE_VALUE_FUNC L"Bridge_GetValueObject"
 #define BRIDGE_GET_STRUCT_FUNC L"Bridge_GetStruct"
+#define BRIDGE_CREATE_TYPE_FUNC L"Bridge_CreateType"
 
 #define DISPID_JSCRIPT_VALUE_FUNC   -10l
 #define DISPID_GET_STRUCT_FUNC      -102
+#define DISPID_CREATE_TYPE_FUNC     -103
 
 using namespace std;
 using namespace cppu;
