@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 08:51:19 $
+ *  last change: $Author: mt $ $Date: 2002-04-26 10:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,4 +725,14 @@ void Outliner::RemoveAttribs( const ESelection& rSelection, sal_Bool bRemovePara
     pEditEngine->RemoveAttribs( rSelection, bRemoveParaAttribs, nWhich );
 }
 
+void Outliner::EnableAutoColor( BOOL b )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->EnableAutoColor( b );
+}
 
+BOOL Outliner::IsAutoColorEnabled() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsAutoColorEnabled();
+}
