@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parhtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-31 08:30:08 $
+ *  last change: $Author: mib $ $Date: 2001-11-22 10:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,6 +568,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                             ((nPos-i)*GetCharSize()) );
                                     nlLinePos -= sal_uInt32(nPos-i);
                                     nPos = i;
+                                    ClearTxtConvContext();
                                     break;
                                 }
                             }
@@ -590,6 +591,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                         "Falsche Zeilen-Position" );
                             rInput.Seek( nStreamPos );
                             nlLinePos = nLinePos;
+                            ClearTxtConvContext();
                             break;
                         }
 
@@ -634,6 +636,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                                     "Falsche Zeilen-Position" );
                                         rInput.Seek( nStreamPos );
                                         nlLinePos = nLinePos;
+                                        ClearTxtConvContext();
                                         return HTML_TEXTTOKEN;
                                     }
 
@@ -697,6 +700,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         nNextCh = 0U;
                         rInput.Seek( nStreamPos-(sal_uInt32)GetCharSize() );
                         nlLinePos = nLinePos-1UL;
+                        ClearTxtConvContext();
                         bReadNextChar = TRUE;
                     }
                     bNextCh = FALSE;
@@ -1009,6 +1013,7 @@ int HTMLParser::_GetNextRawToken()
                     rInput.Seek( nStreamPos );
                     SetLineNr( nLineNr );
                     SetLinePos( nLinePos );
+                    ClearTxtConvContext();
                     nNextCh = '<';
 
                     // den String wollen wir nicht an das Token haengen
@@ -1240,6 +1245,7 @@ int __EXPORT HTMLParser::_GetNextToken()
                             rInput.Seek( nCStreamPos );
                             SetLineNr( nCLineNr );
                             SetLinePos( nCLinePos );
+                            ClearTxtConvContext();
                             aToken.Erase( nCStrLen );
                             nNextCh = '>';
                         }
@@ -1261,6 +1267,7 @@ int __EXPORT HTMLParser::_GetNextToken()
                             rInput.Seek( nStreamPos );
                             SetLineNr( nLineNr );
                             SetLinePos( nLinePos );
+                            ClearTxtConvContext();
 
                             aToken = '<';
                             nRet = HTML_TEXTTOKEN;
@@ -1285,6 +1292,7 @@ int __EXPORT HTMLParser::_GetNextToken()
                             rInput.Seek( nStreamPos );
                             SetLineNr( nLineNr );
                             SetLinePos( nLinePos );
+                            ClearTxtConvContext();
 
                             aToken = '<';
                             nRet = HTML_TEXTTOKEN;
@@ -1321,6 +1329,7 @@ int __EXPORT HTMLParser::_GetNextToken()
                             rInput.Seek( nCStreamPos );
                             SetLineNr( nCLineNr );
                             SetLinePos( nCLinePos );
+                            ClearTxtConvContext();
                             aToken.AssignAscii( "<%", 2UL );
                             nRet = HTML_TEXTTOKEN;
                             break;
