@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:52:46 $
+ *  last change: $Author: hdu $ $Date: 2002-09-10 14:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,8 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     }
 
     DWORD nRC;
-    if( aSalShlData.mbWNT )
+    // if( aSalShlData.mbWNT )  // TODO: remove when unicode layer successful
+    if( true )
     {
         if( mpGlyphOrigAdvs )
         {
@@ -253,6 +254,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnMinCharPos,
                     nMaxGlyphCount, 0, &aGCP, nGcpOption );
     }
+/* TODO: remove when unicode layer successful
     else
     {
         // convert into ANSI code page
@@ -281,6 +283,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
     }
+*/
 
     // cache essential layout properties
     mnGlyphCount = (mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING) ? aGCP.nMaxFit : aGCP.nGlyphs;
@@ -346,8 +349,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     // adjust positions if requested
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
-
-    if( rArgs.mnLayoutWidth )
+    else if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
 
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
@@ -454,7 +456,7 @@ void SimpleWinLayout::DrawText( SalGraphics& ) const
             (char*)mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
     }
 #else // DEBUG_GETNEXTGLYPHS
-    #define MAXGLYPHCOUNT 12
+    #define MAXGLYPHCOUNT 8
     long pLGlyphs[ MAXGLYPHCOUNT ];
     long pWidths[ MAXGLYPHCOUNT ];
     int  pCharPosAry[ MAXGLYPHCOUNT ];
@@ -718,6 +720,7 @@ private:
     int             mnCharCapacity;
     WORD*           mpLogClusters;
     int*            mpCharWidths;
+    int             mnSubStringMin;
 
     // glyph specific info
     // everything is in visual order
@@ -837,6 +840,7 @@ UniscribeLayout::UniscribeLayout( HDC hDC, const ImplLayoutArgs& rArgs )
     mpLogClusters( NULL ),
     mpCharWidths( NULL ),
     mnCharCapacity( 0 ),
+    mnSubStringMin( 0 ),
     mnGlyphCapacity(0),
     mnGlyphCount( 0 ),
     mpOutGlyphs( NULL ),
@@ -871,7 +875,6 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // determine script items from string
     // TODO: try to avoid itemization since it costs a lot of performance
-    // TODO: determine relevant substring and work only on it
     SCRIPT_STATE aScriptState = {0,false,false,false,false,false,false,false,false,0,0};
     aScriptState.uBidiLevel         = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
     aScriptState.fOverrideDirection = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG));
@@ -880,10 +883,20 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
     DWORD nLangId = 0;  // TODO: get language from font
     SCRIPT_CONTROL aScriptControl = {nLangId,false,false,false,false,false,false,false,false,0};
     aScriptControl.fContextDigits   = (0 != (rArgs.mnFlags & SAL_LAYOUT_SUBSTITUTE_DIGITS));
+    // determine relevant substring and work only on it
+    // when Bidi status is unknown we need to look at the whole string though
+    mnSubStringMin = 0;
+    int nSubStringEnd = rArgs.mnLength;
+    if( aScriptState.fOverrideDirection )
+    {
+        mnSubStringMin = std::max( rArgs.mnMinCharPos - 8, 0 );
+        nSubStringEnd = std::min( rArgs.mnEndCharPos + 8, rArgs.mnLength );
+    }
     for( int nItemCapacity = 8; /*FOREVER*/; nItemCapacity *= 2 )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
-        HRESULT nRC = (*pScriptItemize)( rArgs.mpStr, rArgs.mnLength,
+        HRESULT nRC = (*pScriptItemize)(
+            rArgs.mpStr + mnSubStringMin, nSubStringEnd - mnSubStringMin,
             nItemCapacity, &aScriptControl, &aScriptState, mpScriptItems, &mnItemCount );
         if( !nRC )  // break loop when everything is correctly itemized
             break;
@@ -893,25 +906,17 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             return false;
     }
 
-    // allocate arrays
-    // TODO: when reusing object reuse old allocations or delete them
-    mnCharCapacity  = rArgs.mnLength;
-    mpLogClusters   = new WORD[ mnCharCapacity ];
-    mpCharWidths    = new int[ mnCharCapacity ];
+    // calculate visual items order
+    mpVisualItems = new VisualItem[ mnItemCount ];
 
-    mnGlyphCount    = 0;
-    mnGlyphCapacity = 16 + 2 * rArgs.mnLength;  // worst case assumption
-    mpGlyphAdvances = new int[ mnGlyphCapacity ];
-    mpOutGlyphs     = new WORD[ mnGlyphCapacity ];
-    mpGlyphOffsets  = new GOFFSET[ mnGlyphCapacity ];
-    mpVisualAttrs   = new SCRIPT_VISATTR[ mnGlyphCapacity ];
-
-    mpVisualItems   = new VisualItem[ mnItemCount ];
-
-    // default item ordering
+    // default item ordering and adding substring offset
     int nItem;
     for( nItem = 0; nItem < mnItemCount; ++nItem )
+    {
+        mpScriptItems[ nItem ].iCharPos += mnSubStringMin;
         mpVisualItems[ nItem ].mpScriptItem = &mpScriptItems[ nItem ];
+    }
+    mpScriptItems[ mnItemCount ].iCharPos += mnSubStringMin;
 
     // calculate visual item order
     if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
@@ -919,9 +924,10 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
         // override item ordering if requested
         if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
         {
-            for( nItem = 0; nItem < mnItemCount; ++nItem )
-                mpVisualItems[ nItem ].mpScriptItem
-                    = &mpScriptItems[ mnItemCount - 1 - nItem ];
+            VisualItem*  pVI = &mpVisualItems[0];
+            SCRIPT_ITEM* pSI = &mpScriptItems[mnItemCount];
+            for( nItem = mnItemCount; --nItem >= 0;)
+                (pVI++)->mpScriptItem = --pSI;
         }
     }
     else if( mnItemCount > 1 )
@@ -959,6 +965,20 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             }
         }
     }
+
+    // allocate arrays
+    // TODO: when reusing object reuse old allocations or delete them
+    // TODO: use only [nSubStringMin..nSubStringEnd) instead of [0..nSubStringEnd)
+    mnCharCapacity  = nSubStringEnd;
+    mpLogClusters   = new WORD[ mnCharCapacity ];
+    mpCharWidths    = new int[ mnCharCapacity ];
+
+    mnGlyphCount    = 0;
+    mnGlyphCapacity = 16 + 2 * rArgs.mnLength;  // worst case assumption
+    mpGlyphAdvances = new int[ mnGlyphCapacity ];
+    mpOutGlyphs     = new WORD[ mnGlyphCapacity ];
+    mpGlyphOffsets  = new GOFFSET[ mnGlyphCapacity ];
+    mpVisualAttrs   = new SCRIPT_VISATTR[ mnGlyphCapacity ];
 
     // layout script items
     for( nItem = 0; nItem < mnItemCount; ++nItem )
@@ -1048,13 +1068,11 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
         rVisualItem.mnEndGlyphPos = mnGlyphCount;
     }
 
-    // justify if requested
-    if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
-
     // adjust positions if requested
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
+    else if( rArgs.mnLayoutWidth )
+        Justify( rArgs.mnLayoutWidth );
 
     return true;
 }
@@ -1064,47 +1082,52 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
 bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
     int& rMinGlyphPos, int& rEndGlyphPos ) const
 {
-    if( (rVisualItem.mnMinCharPos >= mnEndCharPos) || (rVisualItem.mnEndCharPos <= mnMinCharPos) )
+    // return early when nothing of interst in this item
+    if( (rVisualItem.mnEndCharPos <= mnMinCharPos) || (mnEndCharPos <= rVisualItem.mnMinCharPos) )
         return false;
 
     // default: subrange is complete range
     rMinGlyphPos = rVisualItem.mnMinGlyphPos;
     rEndGlyphPos = rVisualItem.mnEndGlyphPos;
 
-    // find glyph subrange if the script item is not used in tuto
-    if( (rVisualItem.mnMinCharPos < mnMinCharPos) || (mnEndCharPos < rVisualItem.mnEndCharPos) )
-    {
-        // get glyph range from char range by looking at cluster boundries
-        rMinGlyphPos = rVisualItem.mnEndGlyphPos;
-        int nMaxGlyphPos = 0;
+    // return early when the whole item is of interest
+    if( (mnMinCharPos <= rVisualItem.mnMinCharPos) && (rVisualItem.mnEndCharPos <= mnEndCharPos ) )
+        return true;
 
+    // get glyph range from char range by looking at cluster boundries
+    // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
+    rMinGlyphPos = rVisualItem.mnEndGlyphPos;
+    int nMaxGlyphPos = 0;
+
+    int i = mnMinCharPos;
+    if( i < rVisualItem.mnMinCharPos )
+        i = rVisualItem.mnMinCharPos;
+    int nCharPosLimit = rVisualItem.mnEndCharPos;
+    if( nCharPosLimit > mnEndCharPos )
+        nCharPosLimit = mnEndCharPos;
+    for(; i < nCharPosLimit; ++i )
+    {
+        int n = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
+        if( rMinGlyphPos > n )
+            rMinGlyphPos = n;
+        if( nMaxGlyphPos < n )
+            nMaxGlyphPos = n;
+    }
+
+    // account for multiple glyphs at rightmost character
+    // test only needed when rightmost glyph isn't referenced
+    if( rEndGlyphPos > nMaxGlyphPos + 1 )
+    {
+        // find cluster end
         // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
-        int i = mnMinCharPos;
-        if( i < rVisualItem.mnMinCharPos )
-            i = rVisualItem.mnMinCharPos;
-        int nCharPosLimit = rVisualItem.mnEndCharPos;
-        if( nCharPosLimit > mnEndCharPos )
-            nCharPosLimit = mnEndCharPos;
-        for(; i < nCharPosLimit; ++i )
+        for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
         {
             int n = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
-            if( rMinGlyphPos > n )
-                rMinGlyphPos = n;
-            if( nMaxGlyphPos < n )
-                nMaxGlyphPos = n;
-        }
-
-        // account for multiple glyphs at rightmost character
-        // test only needed when rightmost glyph isn't referenced
-        if( rEndGlyphPos > nMaxGlyphPos + 1 )
-        {
-            // find cluster end
-            // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
-            for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
+            if( (rEndGlyphPos > n) && (n > nMaxGlyphPos) )
             {
-                int n = mpLogClusters[ i ] + rVisualItem.mnMinGlyphPos;
-                if( (n < rEndGlyphPos) && (n > nMaxGlyphPos) )
-                    rEndGlyphPos = n;
+                rEndGlyphPos = n;
+                if( n-1 <= nMaxGlyphPos )
+                    break;
             }
         }
     }
@@ -1238,7 +1261,7 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
         }
         else
         {
-            int nTmpIndex = mpLogClusters[ rVisualItem.mnEndCharPos - 1 ];
+            int nTmpIndex = nEndGlyphPos - 1;
             while( (--i >= rVisualItem.mnMinCharPos) && (nTmpIndex == mpLogClusters[i]) )
                 aRelPos.X() += mpCharWidths[i];
         }
@@ -1452,10 +1475,12 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
     int nOldWidth = 0;
     for( int i = mnMinCharPos, j = 0; i < mnEndCharPos; ++i, ++j )
     {
-        int nNewCharWidth = pDXArray[j] - nOldWidth;
+        int nNewCharWidth = (pDXArray[j] - nOldWidth);
+        // TODO: nNewCharWidth *= mnUnitsPerPixel;
+        DBG_ASSERT( mnUnitsPerPixel==1, "UniscribeLayout.mnUnitsPerPixel != 1" );
         if( mpCharWidths[i] != nNewCharWidth )
         {
-            mpCharWidths[i] = nNewCharWidth * mnUnitsPerPixel;
+            mpCharWidths[i] = nNewCharWidth;
             bModified = true;
         }
         nOldWidth = pDXArray[j];
@@ -1466,7 +1491,7 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
 
     // initialize justifications array
     mpJustifications = new int[ mnGlyphCapacity ];
-    for( i = 0; i < mnGlyphCapacity; ++i )
+    for( i = 0; i < mnGlyphCount; ++i )
         mpJustifications[ i ] = mpGlyphAdvances[ i ];
 
     // apply new widths to script items
@@ -1479,6 +1504,15 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
         if( (rVisualItem.mnMinCharPos < mnEndCharPos)
          && (rVisualItem.mnEndCharPos > mnMinCharPos) )
         {
+            if( rVisualItem.mpScriptItem->a.fRTL )
+            {
+                // HACK: make sure kashida justification is used when possible
+                // TODO: make sure this works on all usp versions
+                for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
+                    if( (1U << mpVisualAttrs[i].uJustification) & 0x7F89 )
+                        mpVisualAttrs[i].uJustification = SCRIPT_JUSTIFY_ARABIC_KASHIDA;
+            }
+
             HRESULT nRC = (*pScriptApplyLogicalWidth)(
                 mpCharWidths + rVisualItem.mnMinCharPos,
                 rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos,
@@ -1490,8 +1524,28 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
                 &rVisualItem.maABCWidths,
                 mpJustifications + rVisualItem.mnMinGlyphPos );
 
+            if( nRC != 0 )
+            {
+                delete[] mpJustifications;
+                mpJustifications = NULL;
+                break;
+            }
+
             const ABC& rABC = rVisualItem.maABCWidths;
             rVisualItem.mnPixelWidth = rABC.abcA + rABC.abcB + rABC.abcC;
+
+            if( rVisualItem.mpScriptItem->a.fRTL )
+            {
+                // right align adjusted glyph positions for RTL item
+                // exception: kashida aligned glyphs
+                // TODO: make sure this works on all usp versions
+                for( i = rVisualItem.mnMinGlyphPos+1; i < rVisualItem.mnEndGlyphPos; ++i )
+                    if( mpVisualAttrs[i].uJustification != SCRIPT_JUSTIFY_ARABIC_KASHIDA )
+                    {
+                        mpJustifications[i-1] += mpJustifications[ i ] - mpGlyphAdvances[ i ];
+                        mpJustifications[ i ] = mpGlyphAdvances[ i ];
+                    }
+            }
         }
     }
 }
