@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:27:35 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 10:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,10 @@ public:
     // Calculates the coordinates of a point when switching from
     // vertical to horizontal layout.
     void SwitchVerticalToHorizontal( Point& rPoint ) const;
+    // Calculates the a limit value when switching from
+    // vertical to horizontal layout.
+    long SwitchVerticalToHorizontal( long nLimit ) const;
+
 #endif
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-06 09:15:58 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 10:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,14 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
     rPoint.Y() = Frm().Top() + nOfstX;
 }
 
+// Calculates the a limit value when switching from
+// vertical to horizontal layout.
+long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
+{
+    Point aTmp( nLimit, 0 );
+    SwitchVerticalToHorizontal( aTmp );
+    return aTmp.Y();
+}
 #endif
 
 /*************************************************************************
