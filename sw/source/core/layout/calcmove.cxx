@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: od $ $Date: 2002-10-17 14:10:00 $
+ *  last change: $Author: od $ $Date: 2002-11-01 11:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,22 @@ void SwPageFrm::MakeAll()
                                     nTmp += ((SwSectionFrm*)pCnt)->Undersize();
                                 pCnt = pCnt->FindNext();
                             }
-                            nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
+                            // OD 29.10.2002 #97265# - consider invalid body frame properties
+                            if ( pFrm->IsBodyFrm() &&
+                                 ( !pFrm->GetValidSizeFlag() ||
+                                   !pFrm->GetValidPrtAreaFlag() ) &&
+                                 ( pFrm->Frm().Height() < pFrm->Prt().Height() )
+                               )
+                            {
+                                nTmp = Min( nTmp, pFrm->Frm().Height() );
+                            }
+                            else
+                            {
+                                // OD 30.10.2002 #97265# - assert invalid lower property
+                                ASSERT( !(pFrm->Frm().Height() < pFrm->Prt().Height()),
+                                        "SwPageFrm::MakeAll(): Lower with frame height < printing height" );
+                                nTmp += pFrm->Frm().Height() - pFrm->Prt().Height();
+                            }
                             if ( !pFrm->IsBodyFrm() )
                                 nTmp = Min( nTmp, pFrm->Frm().Height() );
                             nBot += nTmp;
@@ -797,12 +812,8 @@ void SwLayoutFrm::MakeAll()
 
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
-#ifdef VERTICAL_LAYOUT
     BOOL bVert = IsVertical();
     SwRectFn fnRect = ( IsNeighbourFrm() == bVert )? fnRectHori : fnRectVert;
-#else
-    const SzPtr pFix = pFIXSIZE;
-#endif
 
     SwBorderAttrAccess *pAccess = 0;
     const SwBorderAttrs*pAttrs = 0;
