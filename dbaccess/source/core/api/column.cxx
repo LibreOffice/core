@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:10:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:02:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,12 +116,20 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include <connectivity/sdbcx/VColumn.hxx>
 #endif
+#ifndef CONNECTIVITY_TABLEHELPER_HXX
 #include <connectivity/TTableHelper.hxx>
+#endif
 #ifndef _DBACORE_DEFINITIONCOLUMN_HXX_
 #include "definitioncolumn.hxx"
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef DBA_CONTAINERMEDIATOR_HXX
+#include "ContainerMediator.hxx"
+#endif
+#ifndef DBACORE_SDBCORETOOLS_HXX
+#include "sdbcoretools.hxx"
 #endif
 
 #include <algorithm>
@@ -140,11 +148,8 @@ using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 DBG_NAME(OColumn);
-
-#define COLUMN_STREAM_SIGNATURE ::rtl::OUString::createFromAscii("Columns")
 
 //============================================================
 //= OColumn
@@ -316,11 +321,6 @@ void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun
     m_sName = _rName;
 }
 // -----------------------------------------------------------------------------
-OColumnSettings*    OColumn::getSettings()
-{
-    return NULL;
-}
-// -----------------------------------------------------------------------------
 void OColumn::fireValueChange(const ::connectivity::ORowSetValue& _rOldValue)
 {
 }
@@ -386,8 +386,16 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlignment,
-                ::getCppuType(static_cast< sal_Int32* >(NULL)));
+            bModified = !uno_type_equalData(
+                                const_cast< void* >( m_aAlignment.getValue() ), m_aAlignment.getValueType().getTypeLibType(),
+                                const_cast< void* >( rValue.getValue() ), rValue.getValueType().getTypeLibType(),
+                                cpp_queryInterface, cpp_release
+                            );
+            if ( bModified )
+            {
+                rConvertedValue = rValue;
+                rOldValue = m_aAlignment;
+            }
             break;
         case PROPERTY_ID_WIDTH:
             bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth,
@@ -442,9 +450,27 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
     switch (nHandle)
     {
         case PROPERTY_ID_ALIGN:
-            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OColumnSettings::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
-            m_aAlignment = rValue;
+            {
+                if ( rValue.hasValue() )
+                {
+                    sal_Int32 nAlign = 0;
+                    sal_Bool bSuccess =
+                    // copy the data from the to-be-set value
+                    uno_type_assignData(
+                        static_cast< void* >( &nAlign ),    ::getCppuType(static_cast< sal_Int32* >(NULL)).getTypeLibType(),
+                        const_cast< void* >( rValue.getValue() ),   rValue.getValueType().getTypeLibType(),
+                        cpp_queryInterface,
+                        cpp_acquire, cpp_release );
+
+                    OSL_ENSURE( bSuccess,
+                        "OPropertyStateContainer::setFastPropertyValue_NoBroadcast : ooops .... the value could not be assigned!");
+                    if ( bSuccess )
+                        m_aAlignment <<= nAlign;
+                }
+                else
+                    m_aAlignment = rValue;
+            }
+
             break;
         case PROPERTY_ID_WIDTH:
             OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
@@ -459,7 +485,7 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
         case PROPERTY_ID_RELATIVEPOSITION:
             OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
-            m_aWidth = rValue;
+            m_aRelativePosition = rValue;
             break;
         case PROPERTY_ID_HIDDEN:
             OSL_ENSURE(rValue.getValueType().equals(::getBooleanCppuType()),
@@ -490,165 +516,6 @@ sal_Bool OColumnSettings::isDefaulted() const
         &&  !m_bHidden;
 }
 
-//------------------------------------------------------------------------------
-sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, const Reference< XNumberFormatsSupplier >& _rxFormats)
-{
-    OSL_ENSURE( _rxFormats.is(), "OColumnSettings::writeUITo: invalid (insufficient) context!" );
-
-    // the plain  stuff
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, m_aAlignment);
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, m_aWidth);
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_RELPOSITION, m_aRelativePosition);
-    _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_HIDDEN, ::cppu::bool2any(m_bHidden));
-
-    // for the format key:
-    Any aPersistentFormatKey = m_aFormatKey;
-    Any aPersistentFormatString;
-    Any aPersistentFomatLocale;
-    // first, check if our format is a standard one
-    try
-    {
-        if ( m_aFormatKey.hasValue() && _rxFormats.is() )
-        {
-            // we have a non-NULL format
-
-            // extract it
-            sal_Int32 nFormatKey = 0;
-#if OSL_DEBUG_LEVEL > 0
-            sal_Bool bSuccess =
-#endif
-            m_aFormatKey >>= nFormatKey;
-            OSL_ENSURE( bSuccess, "OColumnSettings::writeUITo: could not extract the format key!" );
-
-            // get the UNO descriptor for the format
-            Reference< XNumberFormats > xFormats = _rxFormats->getNumberFormats();
-            Reference< XPropertySet > xKeyDescriptor;
-            if ( xFormats.is() )
-                xKeyDescriptor = xFormats->getByKey( nFormatKey );
-            OSL_ENSURE( xKeyDescriptor.is(), "OColumnSettings::writeUITo: invalid format key!" );
-
-            // is this a user-defined format?
-            sal_Bool bUserDefinedFormat = sal_False;
-            if ( xKeyDescriptor.is() )
-                bUserDefinedFormat = ::cppu::any2bool( xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "UserDefined" ) ) );
-
-            if ( bUserDefinedFormat )
-            {   // yest
-                // -> obtain format string and locale
-                ::rtl::OUString sFormatString;
-                Locale aFormatLocale;
-                xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "FormatString" ) ) >>= sFormatString;
-                xKeyDescriptor->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aFormatLocale;
-
-                OSL_ENSURE( sFormatString.getLength(), "OColumnSettings::writeUITo: invalid format string!" );
-                OSL_ENSURE( aFormatLocale.Language.getLength(), "OColumnSettings::writeUITo: invalid locale!" );
-
-                // concat the language/Country of the locale
-                ::rtl::OUString sLocaleString = aFormatLocale.Language;
-                if ( aFormatLocale.Country.getLength() )
-                {
-                    sal_Unicode cSeparator = '-';
-                    sLocaleString += ::rtl::OUString( &cSeparator, 1 );
-                    sLocaleString += aFormatLocale.Country;
-                }
-
-                aPersistentFormatString <<= sFormatString;
-                aPersistentFomatLocale <<= sLocaleString;
-                // now that we know that we save the format as descriptor (string/language), reset the key
-                aPersistentFormatKey.clear();
-            }
-        }
-    }
-    catch( const Exception& )
-    {
-        OSL_ENSURE( sal_False, "OColumnSettings::writeUITo: caught an exception while examining the format!" );
-    }
-
-    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT, aPersistentFormatKey );
-    _rConfigNode.setNodeValue( CONFIGKEY_FORMATSTRING, aPersistentFormatString );
-    _rConfigNode.setNodeValue( CONFIGKEY_FORMATLOCALE, aPersistentFomatLocale );
-
-    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_HELPTEXT,       m_aHelpText );
-    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_CONTROLDEFAULT, m_aControlDefault );
-
-    return sal_True;
-}
-
-//------------------------------------------------------------------------------
-void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode, const Reference< XNumberFormatsSupplier >& _rxFormats)
-{
-    OSL_ENSURE( _rxFormats.is(), "OColumnSettings::readUIFrom: invalid (insufficient) context!" );
-
-    // some defaults
-    m_bHidden = sal_False;
-    m_aRelativePosition.clear();
-    m_aFormatKey.clear();
-    m_aWidth.clear();
-    m_aAlignment.clear();
-    m_aHelpText.clear();
-    m_aControlDefault.clear();
-
-    m_aAlignment        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
-    m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
-    m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
-    m_bHidden           = ::cppu::any2bool(_rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN));
-    m_aHelpText         = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HELPTEXT);
-    m_aControlDefault   = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_CONTROLDEFAULT);
-
-    // the format key is somewhat more complicated
-    m_aFormatKey        = _rConfigNode.getNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT );
-    if ( !m_aFormatKey.hasValue() && _rxFormats.is() )
-    {
-        Any aPersistentFormatString = _rConfigNode.getNodeValue( CONFIGKEY_FORMATSTRING );
-        Any aPersistentFormatLocale = _rConfigNode.getNodeValue( CONFIGKEY_FORMATLOCALE );
-
-        if ( aPersistentFormatString.hasValue() && aPersistentFormatLocale.hasValue() )
-        {   // okay, the format key is void because the format was user defined, and a format descriptor
-            // (string/locale) has been stored.
-
-            OSL_ENSURE( aPersistentFormatString.getValueTypeClass() == TypeClass_STRING
-                    &&  aPersistentFormatLocale.getValueTypeClass() == TypeClass_STRING,
-                    "OColumnSettings::readUIFrom: invalid format descriptor!" );
-            // the string
-            ::rtl::OUString sFormatString; aPersistentFormatString >>= sFormatString;
-            // the locale
-            ::rtl::OUString sLocale; aPersistentFormatLocale >>= sLocale;
-            // split the parts of the locale
-            Locale aLocale;
-            sal_Int32 nSeparatorPos = sLocale.indexOf( '-' );
-            if ( 0 <= nSeparatorPos )
-            {
-                aLocale.Language = sLocale.copy( 0, nSeparatorPos );
-                aLocale.Country = sLocale.copy( nSeparatorPos + 1 );
-            }
-            else
-                aLocale.Language = sLocale;
-
-            try
-            {
-                // check if the number formatter already knows this format
-                Reference< XNumberFormats > xFormats( _rxFormats->getNumberFormats() );
-                OSL_ENSURE( xFormats.is(), "OColumnSettings::readUIFrom: invalid number formats supplier!" );
-                sal_Int32 nFormatKey = 0;
-                if ( xFormats.is() )
-                {
-                    nFormatKey = xFormats->queryKey( sFormatString, aLocale, sal_False );
-                    if ( -1 == nFormatKey )
-                        nFormatKey = xFormats->addNew( sFormatString, aLocale );
-                    OSL_ENSURE( -1 != nFormatKey, "OColumnSettings::readUIFrom: could not add the format!" );
-                    // normalize in case something went wrong
-                    if ( -1 == nFormatKey )
-                        nFormatKey = 0;
-                }
-                m_aFormatKey <<= nFormatKey;
-            }
-            catch( const Exception& )
-            {
-                OSL_ENSURE( sal_False, "OColumnSettings::readUIFrom: caught an exception while creating the user defined format!" );
-            }
-        }
-    }
-}
 
 //============================================================
 //= OColumns
@@ -661,14 +528,17 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
                    IColumnFactory* _pColFactory,
                    ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-                   sal_Bool _bAddColumn,sal_Bool _bDropColumn)
-                   : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector)
+                   sal_Bool _bAddColumn,
+                   sal_Bool _bDropColumn,
+                   sal_Bool _bUseHardRef)
+                   : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(NULL)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
+    ,m_pMediator(NULL)
 {
     DBG_CTOR(OColumns, NULL);
 }
@@ -678,22 +548,23 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         sal_Bool _bCaseSensitive,const ::std::vector< ::rtl::OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
-        sal_Bool _bAddColumn,sal_Bool _bDropColumn)
-       : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector)
+        sal_Bool _bAddColumn,
+        sal_Bool _bDropColumn,
+        sal_Bool _bUseHardRef)
+       : OColumns_BASE(_rParent,_bCaseSensitive,_rMutex,_rVector,_bUseHardRef)
     ,m_bInitialized(sal_False)
     ,m_bAddColumn(_bAddColumn)
     ,m_bDropColumn(_bDropColumn)
     ,m_xDrvColumns(_rxDrvColumns)
     ,m_pColFactoryImpl(_pColFactory)
     ,m_pRefreshColumns(_pRefresh)
+    ,m_pMediator(NULL)
 {
     DBG_CTOR(OColumns, NULL);
 }
 //--------------------------------------------------------------------------
 OColumns::~OColumns()
 {
-    clearColumnSettings();
-
     DBG_DTOR(OColumns, NULL);
 }
 
@@ -719,37 +590,14 @@ Sequence< ::rtl::OUString > OColumns::getSupportedServiceNames(  ) throw (Runtim
 }
 
 //------------------------------------------------------------------
-struct DeleteColumnSettings : ::std::unary_function< MapName2Settings::value_type, void >
-{
-    void operator()( const MapName2Settings::value_type& _rMapElement ) const
-    {
-        delete _rMapElement.second;
-    }
-};
-
-//------------------------------------------------------------------
 void OColumns::append( const ::rtl::OUString& _rName, OColumn* _pColumn )
 {
     MutexGuard aGuard(m_rMutex);
 
     OSL_ENSURE( _pColumn, "OColumns::append: invalid column!" );
-    OSL_ENSURE( 0 == m_aNameMap.count( _rName ),"OColumns::append: Column already exists");
+    OSL_ENSURE( !m_pElements->exists( _rName ),"OColumns::append: Column already exists");
 
     _pColumn->m_sName = _rName;
-
-    // do we have settings for this column?
-    MapName2Settings::iterator aExistentSettings = m_aSettings.find( _rName );
-    if ( m_aSettings.end() != aExistentSettings )
-    {   // yes, we do
-        // merge the settings into the columns
-        OColumnSettings* pColSettings = _pColumn->getSettings();
-        if ( pColSettings )
-            *pColSettings = *aExistentSettings->second;
-
-        // and remove the settings
-        DeleteColumnSettings()( *aExistentSettings );
-        m_aSettings.erase( aExistentSettings );
-    }
 
     // now really insert the column
     insertElement( _rName, _pColumn );
@@ -767,157 +615,9 @@ void SAL_CALL OColumns::disposing(void)
 {
     MutexGuard aGuard(m_rMutex);
     m_xDrvColumns = NULL;
+    m_pMediator = NULL;
+    m_pColFactoryImpl = NULL;
     OColumns_BASE::disposing();
-}
-
-//------------------------------------------------------------------------------
-void OColumns::clearColumnSettings()
-{
-    ::std::for_each( m_aSettings.begin(), m_aSettings.end(), DeleteColumnSettings() );
-    m_aSettings.clear();
-    MapName2Settings(m_aSettings).swap(m_aSettings);
-}
-
-//------------------------------------------------------------------------------
-void OColumns::loadSettings( const OConfigurationNode& _rLocation, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
-{
-    MutexGuard aGuard(m_rMutex);
-
-    OConfigurationNode aLocation(_rLocation);
-    aLocation.setEscape(aLocation.isSetNode());
-
-    OSL_ENSURE(m_pColFactoryImpl, "OColumns::loadSettings: need a factory to create columns!");
-
-    // empty our remembered settings
-    clearColumnSettings();
-
-    Sequence< ::rtl::OUString > aColumNames = aLocation.getNodeNames();
-    const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
-    for (sal_Int32 i=0; i<aColumNames.getLength(); ++i, ++pColumNames)
-    {
-        OColumnSettings* pSettings = NULL;
-
-        // do we already have a column with that name ?
-        // create the column if neccessary
-        if ( !hasByName( *pColumNames ) )
-        {
-            // create a new object to hold the settings
-            // later on, they will be merged into the real column if it get's inserted
-            pSettings = new OColumnSettings;
-            OSL_ENSURE( m_aSettings.end() == m_aSettings.find( *pColumNames ),
-                "OColumns::loadSettings: already have settings for this name!" );
-            m_aSettings.insert( MapName2Settings::value_type( *pColumNames, pSettings ) );
-        }
-        else
-        {
-            Reference< XUnoTunnel > xTunnel;
-            getByName( *pColumNames ) >>= xTunnel;
-            if ( xTunnel.is() )
-            {
-                OColumn* pExistent = reinterpret_cast< OColumn* >( xTunnel->getSomething( OColumn::getUnoTunnelImplementationId() ) );
-                if ( pExistent )
-                    pSettings = pExistent->getSettings();
-            }
-        }
-
-        OSL_ENSURE( pSettings, "OColumns::loadSettings: no object which is able to hold the settings!" );
-        if ( pSettings )
-        {
-            OConfigurationNode aCurrent = aLocation.openNode( *pColumNames );
-            pSettings->readUIFrom( aCurrent, _rxNumberFormats );
-        }
-    }
-}
-
-//------------------------------------------------------------------------------
-void OColumns::storeSettings( const OConfigurationNode& _rLocation, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
-{
-    MutexGuard aGuard(m_rMutex);
-    if (!_rLocation.isValid())
-    {
-        OSL_ENSURE(sal_False, "OColumns::storeSettings: have no location !");
-        return;
-    }
-    if (_rLocation.isReadonly())
-    {
-        OSL_ENSURE(sal_False, "OColumns::storeSettings: the location is read-only !");
-        return;
-    }
-
-    DECLARE_STL_USTRINGACCESS_MAP(OConfigurationNode, MapName2Node);
-    MapName2Node aObjectKeys;
-
-    // collect the sub keys of existent column descriptions
-    Sequence< ::rtl::OUString > aColumNames = _rLocation.getNodeNames();
-    const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
-    for (sal_Int32 i=0; i<aColumNames.getLength(); ++i, ++pColumNames)
-        aObjectKeys[*pColumNames] = _rLocation.openNode(*pColumNames);
-
-    // now write all descriptions of my columns
-    OColumn* pCurrent = NULL;
-    ::rtl::OUString sCurrent;
-    for (   ::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin();
-            aIter != m_aElements.end();
-            ++aIter
-        )
-    {
-        // set the name
-        Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel((*aIter)->second.get(),UNO_QUERY);
-        if(xTunnel.is())
-        {
-            pCurrent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
-
-            OSL_ENSURE(pCurrent,"OColumns::storeSettings: No column from unotunnelhelper!");
-
-            OColumnSettings* pCurrentSettings = pCurrent->getSettings();
-            if (!pCurrentSettings)
-            {
-                OSL_ENSURE(sal_False, "OColumns::storeSettings: can't write column without settings!");
-                continue;
-            }
-            sCurrent = pCurrent->m_sName;
-
-            OConfigurationNode aColumnNode;
-            // do we we have an existent key for that column ?
-            ConstMapName2NodeIterator aExistentObjectKey = aObjectKeys.find(sCurrent);
-            if (aExistentObjectKey != aObjectKeys.end())
-            {
-                aColumnNode = aExistentObjectKey->second;
-                // these sub key is used (and must not be deleted afterwards)
-                // -> remove from the key maps
-                aObjectKeys.erase(sCurrent);
-            }
-            else
-            {   // no -> create one
-
-                if (pCurrentSettings->isDefaulted())
-                    // no need to write the configuration data: it's all in it's default state
-                    continue;
-
-                aColumnNode = _rLocation.createNode(sCurrent);
-                if (!aColumnNode.isValid())
-                {
-                    OSL_ENSURE(sal_False, "OColumns::storeSettings: could not create the structures for writing a column !");
-                    continue;
-                }
-            }
-
-            // let the column write itself
-            pCurrentSettings->writeUITo( aColumnNode, _rxNumberFormats );
-        }
-    }
-
-    // delete all description keys where we have no columns for
-    for (   ConstMapName2NodeIterator   aRemove = aObjectKeys.begin();
-            aRemove != aObjectKeys.end();
-            ++aRemove
-        )
-    {
-        // the configuration does not support different types of operations in one transaction, so we must commit
-        // before and after we create the new node, to ensure, that every transaction we ever do contains only
-        // one type of operation (insert, remove, update)
-        _rLocation.removeNode(aRemove->first);
-    }
 }
 
 // -------------------------------------------------------------------------
@@ -932,16 +632,32 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::createObject: no column factory!");
 
-    if (m_pColFactoryImpl)
-        return m_pColFactoryImpl->createColumn(_rName);
-    else
-        return Reference< XNamed >();
+    Reference< XNamed > xRet;
+    if ( m_pColFactoryImpl )
+    {
+        xRet = m_pColFactoryImpl->createColumn(_rName);
+        Reference<XChild> xChild(xRet,UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(*this);
+    }
+
+    Reference<XPropertySet> xDest(xRet,UNO_QUERY);
+    if ( m_pMediator )
+        m_pMediator->notifyElementCreated(_rName,xDest);
+
+    return xRet;
 }
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OColumns::createEmptyObject()
 {
-    if (m_pColFactoryImpl)
-        return m_pColFactoryImpl->createEmptyObject();
+    if ( m_pColFactoryImpl )
+    {
+        Reference<XPropertySet> xRet = m_pColFactoryImpl->createEmptyObject();
+        Reference<XChild> xChild(xRet,UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(*this);
+        return xRet;
+    }
     else
         return Reference< XPropertySet >();
 }
@@ -952,8 +668,11 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     if(m_xDrvColumns.is())
     {
         aRet = m_xDrvColumns->queryInterface(rType);
-        if(aRet.hasValue())
+        if ( aRet.hasValue() )
             aRet = OColumns_BASE::queryInterface( rType);
+        if ( !aRet.hasValue() )
+            aRet = TXChild::queryInterface( rType);
+        return aRet;
     }
     else if(!m_pTable || (m_pTable && !m_pTable->isNew()))
     {
@@ -1000,7 +719,7 @@ Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException)
         bDropFound      = (m_pTable && m_pTable->isNew()) || m_bDropColumn;
         bAppendFound    = (m_pTable && m_pTable->isNew()) || m_bAddColumn;
     }
-    Sequence< Type > aTypes(OColumns_BASE::getTypes());
+    Sequence< Type > aTypes(::comphelper::concatSequences(OColumns_BASE::getTypes(),TXChild::getTypes()));
     Sequence< Type > aRet(aTypes.getLength() - nSize);
 
     const Type* pBegin = aTypes.getConstArray();
@@ -1031,6 +750,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bAddColumn)
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_ADD),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -1047,6 +767,9 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
     }
     else if(m_pTable && !m_pTable->isNew() && !m_bDropColumn)
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_COLUMN_DROP),*this,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY000")),1000,Any());
+    if ( m_pColFactoryImpl )
+        m_pColFactoryImpl->columnDropped(_sElementName);
+    ::dbaccess::notifyDataSourceModified(m_xParent,sal_True);
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDescriptor)
@@ -1056,8 +779,21 @@ Reference< XNamed > OColumns::cloneObject(const Reference< XPropertySet >& _xDes
     OSL_ENSURE(xName.is(),"Must be a XName interface here !");
     if(xProp.is())
         ::comphelper::copyProperties(_xDescriptor,xProp);
+    if ( m_pColFactoryImpl )
+        m_pColFactoryImpl->columnCloned(xProp);
     return xName;
 }
 // -----------------------------------------------------------------------------
 
-
+Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    return m_xParent;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    m_xParent = _xParent;
+}
+// -----------------------------------------------------------------------------
