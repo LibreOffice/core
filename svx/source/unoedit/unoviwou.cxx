@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoviwou.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-31 09:39:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:05:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
