@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-25 11:22:30 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 15:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,21 +736,20 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     nMode, pMedium->IsDirect(), sal_True,
                     bUseFilter ? pMedium->GetFilter() : 0, pNewSet );
 
+                pNewSet = pNewMedium->GetItemSet();
                 if ( pURLItem )
                 {
-                    pNewSet = pNewMedium->GetItemSet();
                     pNewSet->Put( SfxStringItem( SID_REFERER, pMedium->GetName() ) );
                 }
+                else
+                    pNewSet->Put( SfxStringItem( SID_REFERER, String() ) );
 
                 SFX_REQUEST_ARG( rReq, pBindingItem, SfxRefItem, SID_BINDING, sal_False);
                 if( pBindingItem )
-                {
                     DBG_ERROR( "Not implemented!" );
-                }
 
                 xOldObj->CancelTransfers();
-                pNewMedium->GetItemSet()->Put(
-                    SfxUInt32Item( SID_FLAGS,
+                pNewSet->Put( SfxUInt32Item( SID_FLAGS,
                                    xOldObj->GetFlags() & (
                                        SFXOBJECTSHELL_DONTREPLACE |
                                        SFXOBJECTSHELL_DONTCLOSE ) ) );
@@ -760,11 +759,10 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
 
                 // eigentliches Reload
                 if ( pDesc )
-                    pNewMedium->GetItemSet()->Put(
-                        SfxFrameDescriptorItem( pDesc, SID_FRAMEDESCRIPTOR ) );
-                pNewMedium->GetItemSet()->Put( SfxUInt16Item( SID_BROWSEMODE, NO_BROWSE ) );
-                pNewMedium->GetItemSet()->Put( SfxBoolItem( SID_RELOAD, sal_True ) );
-                pNewMedium->GetItemSet()->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
+                    pNewSet->Put( SfxFrameDescriptorItem( pDesc, SID_FRAMEDESCRIPTOR ) );
+                pNewSet->Put( SfxUInt16Item( SID_BROWSEMODE, NO_BROWSE ) );
+                pNewSet->Put( SfxBoolItem( SID_RELOAD, sal_True ) );
+                pNewSet->Put( SfxFrameItem ( SID_DOCFRAME, GetFrame() ) );
 
                 LoadEnvironment_ImplRef xLoader =
                     new LoadEnvironment_Impl(
