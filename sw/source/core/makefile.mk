@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 13:34:13 $
+#   last change: $Author: hr $ $Date: 2004-03-08 13:56:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,8 @@ SUBLIBS2= \
         $(SLB)$/txtnode.lib \
         $(SLB)$/doc.lib \
         $(SLB)$/docnode.lib \
-        $(SLB)$/unocore.lib
+                $(SLB)$/unocore.lib \
+                $(SLB)$/objectpositioning.lib
 
 .IF "$(PRODUCT)" == ""
 SUBLIBS2+= \
