@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:05:02 $
+ *  last change: $Author: thb $ $Date: 2001-06-29 14:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,7 @@ DockingWindow RID_SVXFLOAT_3D
     MetricField MTR_SLANT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 54 ) ;
+        Pos = MAP_APPFONT ( 99 , 54 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1492,7 +1492,7 @@ DockingWindow RID_SVXFLOAT_3D
     MetricField MTR_DISTANCE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 79 ) ;
+        Pos = MAP_APPFONT ( 99 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -1538,7 +1538,7 @@ DockingWindow RID_SVXFLOAT_3D
     MetricField MTR_FOCAL_LENGTH
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 95 ) ;
+        Pos = MAP_APPFONT ( 99 , 95 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
