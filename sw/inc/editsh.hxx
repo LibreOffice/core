@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-24 16:10:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _EDITSH_HXX
 #define _EDITSH_HXX
 
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#endif
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -91,6 +95,8 @@
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #endif
 #include <vector>
+
+#include <svtools/embedhlp.hxx>
 
 class PolyPolygon;
 class SwDoc;
@@ -131,8 +137,6 @@ class SwRootFrm;        // fuer CTOR
 class Graphic;          // fuer GetGraphic
 class GraphicObject;    // fuer GetGraphicObj
 class SwFmtINetFmt;     // InsertURL
-class SvInPlaceObjectRef;
-class SvInPlaceObject;
 class SwTable;
 class SwTextBlocks;     // fuer GlossaryRW
 class SwBlockExceptList;
@@ -643,7 +647,7 @@ public:
     //SwOLENode zeigt (und Mark nicht gesetzt ist oder auf das
     //gleiche ClientObject zeigt), sonst gibt's was auf die
     //Finger.
-    SvInPlaceObjectRef GetOLEObj() const;
+    svt::EmbeddedObjectRef&  GetOLEObject() const;
     //Gibt es ein OleObject mit diesem Namen (SwFmt)?
     BOOL HasOLEObj( const String &rName ) const;
 
@@ -652,7 +656,8 @@ public:
     void SetChartName( const String &rName );
     // returne den ChartNamen - vom Crsr oder vom uebergebenen OLE-Object
     // reurnt aEmptyStr wenn nicht gefunden wurde
-    const String& GetChartName( SvInPlaceObject* pObj = 0 );
+    const String& GetChartName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj
+            = ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() );
     //Sucht die Tabelle und liefert ein mit den Daten der Tabelle gefuelltes
     //pData. Wenn pData 0 ist wird eines angelegt.
     void UpdateChartData( const String &rName, SchMemChart *&pData );
