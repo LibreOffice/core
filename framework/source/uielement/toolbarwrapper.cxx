@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:12:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,12 @@ ToolBarWrapper::~ToolBarWrapper()
 void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
+
+    {
+        ResetableGuard aLock( m_aLock );
+        if ( m_bDisposed )
+            return;
+    }
 
     com::sun::star::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
