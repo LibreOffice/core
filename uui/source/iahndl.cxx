@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-05 10:57:38 $
+ *  last change: $Author: sb $ $Date: 2001-06-11 07:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifndef _EHDL_HXX
-#include <svtools/ehdl.hxx>
-#endif
-#ifndef _SVTOOLS_HRC
-#include <svtools/svtools.hrc>
-#endif
 
 #ifndef _COM_SUN_STAR_TASK_CLASSIFIEDINTERACTIONREQUEST_HPP_
 #include <com/sun/star/task/ClassifiedInteractionRequest.hpp>
@@ -132,11 +125,17 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#ifndef _EHDL_HXX
+#include <svtools/ehdl.hxx>
+#endif
 #ifndef SVTOOLS_HTTPCOOK_HXX
 #include <svtools/httpcook.hxx>
 #endif
 #ifndef _LOGINERR_HXX
 #include <svtools/loginerr.hxx>
+#endif
+#ifndef _SVTOOLS_HRC
+#include <svtools/svtools.hrc>
 #endif
 #ifndef _EINF_HXX
 #include <tools/errinf.hxx>
@@ -623,11 +622,14 @@ UUIInteractionHandler::handle(
     if (aTheRequest >>= aClassifiedInteractionRequest)
         eClassification = aClassifiedInteractionRequest.Classification;
 
+    enum Execute { EXECUTE_NO, EXECUTE_YES, EXECUTE_IGNORE_RESULT };
+
     sal_uInt32 nErrorID = ERRCODE_NONE;
-    bool bErrorFlags = false;
+    sal_uInt16 nErrorFlags = USHRT_MAX;
     SimpleErrorContext * pContext = 0;
-    bool bExecuted = false;
-    USHORT nButton;
+    Execute eExecute = EXECUTE_YES;
+    USHORT nButton = ERRCODE_BUTTON_CANCEL;
+
     ucb::InteractiveIOException aIOException;
     ucb::InteractiveNetworkException aNetworkException;
     ucb::InteractiveCHAOSException aCHAOSException;
@@ -635,6 +637,22 @@ UUIInteractionHandler::handle(
     ucb::InteractiveWrongMediumException aWrongMediumException;
     if (aTheRequest >>= aIOException)
     {
+        // Due to the implementation of ErrorHandler::HandleError, IO errors
+        // only display an OK button, and that button is (per definition)
+        // mapped to the XInteractionAbort continuation.  So, if that
+        // continuation is missing, do not handle the request:
+        bool bAbort = false;
+        for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
+            if (uno::Reference< task::XInteractionAbort >::query(
+                        aContinuations[i]).
+                    is())
+            {
+                bAbort = true;
+                break;
+            }
+        if (!bAbort)
+            return;
+
         static sal_uInt32 const aID[ucb::IOErrorCode_WRONG_VERSION + 1]
             = { ERRCODE_IO_ABORT, // ABORT
                 ERRCODE_IO_ACCESSDENIED, // ACCESS_DENIED
@@ -673,7 +691,26 @@ UUIInteractionHandler::handle(
                 ERRCODE_IO_WRONGFORMAT, // WRONG_FORMAT
                 ERRCODE_IO_WRONGVERSION }; // WRONG_VERSION
         nErrorID = aID[aIOException.Code];
-        bErrorFlags = true;
+
+        nErrorFlags = ERRCODE_BUTTON_OK;
+        switch (eClassification)
+        {
+            case task::InteractionClassification_ERROR:
+                nErrorFlags |= ERRCODE_MSG_ERROR;
+                break;
+
+            case task::InteractionClassification_WARNING:
+                nErrorFlags |= ERRCODE_MSG_WARNING;
+                break;
+
+            case task::InteractionClassification_INFO:
+                nErrorFlags |= ERRCODE_MSG_INFO;
+                break;
+
+            case task::InteractionClassification_QUERY:
+                nErrorFlags |= ERRCODE_MSG_QUERY;
+                break;
+        }
 
         ucb::InteractiveFileIOException aFileIOException;
         if (aTheRequest >>= aFileIOException)
@@ -689,6 +726,8 @@ UUIInteractionHandler::handle(
                                               aFileIOException.FileName);
             pContext = new SimpleErrorContext(aTheContext);
         }
+
+        eExecute = EXECUTE_IGNORE_RESULT;
     }
     else if (aTheRequest >>= aNetworkException)
     {
@@ -727,8 +766,7 @@ UUIInteractionHandler::handle(
     {
         DBG_ERROR("UUIInteractionHandler::handle():"
                       " Can't handle TransferException");
-        nButton = ERRCODE_BUTTON_CANCEL;
-        bExecuted = true;
+        eExecute = EXECUTE_NO;
     }
     else if (aTheRequest >>= aWrongMediumException)
     {
@@ -746,73 +784,15 @@ UUIInteractionHandler::handle(
 
         ErrorBox aErrorBox(0, WB_OK_CANCEL, aText);
         nButton = aErrorBox.Execute();
-        bExecuted = true;
+        eExecute = EXECUTE_NO;
     }
 
-    sal_uInt16 nFlags = 0;
-    if (bErrorFlags)
+    if (eExecute != EXECUTE_NO)
     {
-        bool bCanApprove = false;
-        bool bDefault = true;
-        for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-        {
-            if (uno::Reference< task::XInteractionApprove >::query(
-                        aContinuations[i]).
-                    is())
-            {
-                bCanApprove = true;
-                bDefault = false;
-            }
-            else if (uno::Reference< task::XInteractionDisapprove >::query(
-                             aContinuations[i]).
-                         is())
-            {
-                nFlags |= ERRCODE_BUTTON_NO;
-                bDefault = false;
-            }
-            else if (uno::Reference< task::XInteractionAbort >::query(
-                             aContinuations[i]).
-                         is())
-            {
-                nFlags |= ERRCODE_BUTTON_CANCEL;
-                bDefault = false;
-            }
-            else if (uno::Reference< task::XInteractionRetry >::query(
-                             aContinuations[i]).
-                         is())
-            {
-                nFlags |= ERRCODE_BUTTON_RETRY;
-                bDefault = false;
-            }
-        }
-        if (bCanApprove)
-            nFlags |= nFlags & ERRCODE_BUTTON_NO ? ERRCODE_BUTTON_YES :
-                                                   ERRCODE_BUTTON_NO;
-        if (bDefault)
-            nFlags |= ERRCODE_BUTTON_OK;
-        switch (eClassification)
-        {
-            case task::InteractionClassification_ERROR:
-                nFlags |= ERRCODE_MSG_ERROR;
-                break;
-
-            case task::InteractionClassification_WARNING:
-                nFlags |= ERRCODE_MSG_WARNING;
-                break;
-
-            case task::InteractionClassification_INFO:
-                nFlags |= ERRCODE_MSG_INFO;
-                break;
-
-            case task::InteractionClassification_QUERY:
-                nFlags |= ERRCODE_MSG_QUERY;
-                break;
-        }
+        USHORT nResult = executeErrorDialog(nErrorID, nErrorFlags);
+        if (eExecute != EXECUTE_IGNORE_RESULT)
+            nButton = nResult;
     }
-
-    if (!bExecuted)
-        nButton
-            = executeErrorDialog(nErrorID, bErrorFlags ? nFlags : USHRT_MAX);
 
     if (pContext)
     {
@@ -937,7 +917,7 @@ USHORT executeErrorDialog(ULONG nID, USHORT nMask)
         // cf. chaos/source/inc/cntrids.hrc, where
         // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
 
-    // Needed because within ErrorHandler::HanldeError() ResIds are created
+    // Needed because within ErrorHandler::HandleError() ResIds are created
     // without a ResMgr---they require a default ResMgr:
     ResMgr * pDefaultManager = Resource::GetResManager();
     Resource::SetResManager(pManager1);
