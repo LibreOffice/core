@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: ka $ $Date: 2004-08-23 11:01:24 $
+#  last change: $Author: vg $ $Date: 2005-03-23 12:29:45 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -40,9 +40,9 @@
 
 # Builds the Java Canvas implementation.
 
-PRJNAME	= avmedia
-PRJ		= ..$/..
-TARGET	= avmedia
+PRJNAME = avmedia
+PRJ     = ..$/..
+TARGET  = avmedia
 PACKAGE = avmedia
 
 # --- Settings -----------------------------------------------------
@@ -52,21 +52,22 @@ PACKAGE = avmedia
 .IF "$(GUIBASE)"=="javamedia"
 
 JAVAFILES  = \
-    Manager.java        	\
-    Player.java         	\
-    PlayerWindow.java   	\
-    WindowAdapter.java		\
-    MediaUno.java			\
-    x11$/SystemWindowAdapter.java	
+    Manager.java            \
+    Player.java             \
+    PlayerWindow.java       \
+    WindowAdapter.java      \
+    MediaUno.java           \
+    FrameGrabber.java       \
+    x11$/SystemWindowAdapter.java   
 
-JARFILES 		= sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JARFILES        = sandbox.jar jurt.jar unoil.jar ridl.jar juh.jar java_uno.jar jmf.jar
+JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 CUSTOMMANIFESTFILE      = manifest
 
-.ENDIF		# "$(GUIBASE)"=="javamedia" 
+.ENDIF     # "$(GUIBASE)"=="javamedia" 
 
 # --- Targets ------------------------------------------------------
 
