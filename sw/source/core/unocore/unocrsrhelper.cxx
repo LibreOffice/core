@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:42:10 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,11 +783,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
         return;
 
     SfxObjectFactory& rFact = pDocSh->GetFactory();
-    const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter( rFilterName );
+    const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
     if ( !pFilter )
     {
         pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, 0, 0 );
-        SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+        SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
         ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, sal_False );
         if ( nErr || !pFilter)
             DELETEZ(pMed);
