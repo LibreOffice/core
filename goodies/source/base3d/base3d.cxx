@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-06-26 14:01:48 $
+ *  last change: $Author: aw $ $Date: 2001-07-03 13:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@
 \************************************************************************/
 
 B3dGlobalData::B3dGlobalData()
+:   maTextureStore(64, 16, 16) // init Container
 {
     // init timer
     maTimer.SetTimeout(10000); // ten seconds
@@ -145,7 +146,7 @@ IMPL_LINK(B3dGlobalData, TimerHdl, AutoTimer*, pTimer)
         Time aTimeNow;
         for(sal_uInt16 a(0); a < maTextureStore.Count();)
         {
-            B3dTexture* pRetval = maTextureStore[a];
+            B3dTexture* pRetval = (B3dTexture*)maTextureStore.GetObject(a);
             if(pRetval->GetTimeStamp() < aTimeNow)
             {
                 maTextureStore.Remove(a);
@@ -164,7 +165,7 @@ B3dTexture* B3dGlobalData::ObtainTexture(TextureAttributes& rAtt)
     maMutex.acquire();
     for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
     {
-        B3dTexture* pRetval = maTextureStore[a];
+        B3dTexture* pRetval = (B3dTexture*)maTextureStore.GetObject(a);
         if(pRetval->GetAttributes() == rAtt)
         {
             pRetval->Touch();
@@ -183,7 +184,7 @@ void B3dGlobalData::InsertTexture(B3dTexture* pNew)
         maMutex.acquire();
         for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
         {
-            B3dTexture* pRetval = maTextureStore[a];
+            B3dTexture* pRetval = (B3dTexture*)maTextureStore.GetObject(a);
             if(pRetval == pNew)
             {
                 maMutex.release();
@@ -192,7 +193,7 @@ void B3dGlobalData::InsertTexture(B3dTexture* pNew)
         }
 
         pNew->Touch();
-        maTextureStore.Insert(pNew, maTextureStore.Count());
+        maTextureStore.Insert(pNew, CONTAINER_APPEND);
         maMutex.release();
     }
 }
@@ -204,7 +205,7 @@ void B3dGlobalData::DeleteTexture(B3dTexture* pOld)
         maMutex.acquire();
         for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
         {
-            B3dTexture* pRetval = maTextureStore[a];
+            B3dTexture* pRetval = (B3dTexture*)maTextureStore.GetObject(a);
             if(pRetval == pOld)
             {
                 maTextureStore.Remove(a);
@@ -222,12 +223,12 @@ void B3dGlobalData::DeleteAllTextures()
     if(maTextureStore.Count())
     {
         maMutex.acquire();
-        while(maTextureStore.Count())
+        for(sal_uInt16 a(0); a < maTextureStore.Count(); a++)
         {
-            B3dTexture* pRetval = maTextureStore[0];
-            maTextureStore.Remove(0);
+            B3dTexture* pRetval = (B3dTexture*)maTextureStore.GetObject(a);
             delete pRetval;
         }
+        maTextureStore.Clear();
         maMutex.release();
     }
 }
