@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+#   last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -204,7 +204,9 @@ IDLFILES=\
     ColorMode.idl\
     GluePoint2.idl\
     XGluePointsSupplier.idl\
-    EscapeDirection.idl
+    EscapeDirection.idl\
+    TextVerticalAdjust.idl\
+    TextHorizontalAdjust.idl
 
 # ------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: TextAdjust.idl,v $
+ *  $RCSfile: TextHorizontalAdjust.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
  *
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_TextAdjust_idl__
-#define __com_sun_star_drawing_TextAdjust_idl__
+#ifndef __com_sun_star_drawing_TextHorizontalAdjust_idl__
+#define __com_sun_star_drawing_TextHorizontalAdjust_idl__
 
 
 //=============================================================================
@@ -68,22 +68,18 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::drawing::TextAdjust
-/** This enumeration specifies the position of a text inside a shape in
+/** This enumeration specifies the horizontal position of a text inside a shape in
     relation to the shape.
-
-    @deprecated
-
     <p>This counts for the complete text, not individual lines. </p>
  */
-enum TextAdjust
+enum TextHorizontalAdjust
 {
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::LEFT
     /** The left edge of the text is adjusted to the left edge of the shape.
      */
-    LEFT,
+    TOP,
 
     //-------------------------------------------------------------------------
 
@@ -97,23 +93,7 @@ enum TextAdjust
     // DocMerge from xml: value com::sun::star::drawing::TextAdjust::RIGHT
     /** The right edge of the text is adjusted to the right edge of the shape.
      */
-    RIGHT,
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: value com::sun::star::drawing::TextAdjust::BLOCK
-    /** The text extends from the left to the right edge of the shape.
-     */
-    BLOCK,
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: value com::sun::star::drawing::TextAdjust::STRETCH
-    /** The text is stretched so that the longest line goes from the left
-        to the right edge of the shape.
-     */
-    STRETCH
-
+    BOTTOM
 };
 
 //=============================================================================
@@ -123,18 +103,6 @@ enum TextAdjust
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:14  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:22  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
 
 =============================================================================*/
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 16:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,13 @@
 #include <com/sun/star/drawing/TextAnimationKind.idl>
 #endif
 
+#ifndef __com_sun_star_drawing_TextVerticalAdjust_idl__
+#include <com/sun/star/drawing/TextVerticalAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextHorizontalAdjust_idl__
+#include <com/sun/star/drawing/TextHorizontalAdjust.idl>
+#endif
 
 //=============================================================================
 
@@ -186,28 +193,22 @@ service Text
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextHorizontalAdjust
     /** adjusts the horizontal position of the text inside of
         the <type>Shape</type>.
      */
-    [property] com::sun::star::drawing::TextAdjust TextHorizontalAdjust;
+    [property] com::sun::star::drawing::TextHorizontalAdjust HorizontalAdjust;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextVerticalAdjust
     /** adjusts the vertical position of the text inside of
         the <type>Shape</type>.
      */
-    [property] com::sun::star::drawing::TextAdjust TextVerticalAdjust;
+    [property] com::sun::star::drawing::TextVerticalAdjust VerticalAdjust;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextLeftDistance
     /** This is the distance from the left edge of the <type>Shape</type>
         to the left edge of the text.
-
-
-
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
         <const>BLOCK</const> or <const>STRETCH</const> or if
         <member>Text::TextFitSize</member> is <true></true>.</p>
@@ -216,11 +217,8 @@ service Text
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextRightDistance
     /** This is the distance from the right edge of the <type>Shape</type>
         to the right edge of the text.
-
-
 
         <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
         <const>BLOCK</const> or <const>STRETCH</const>
@@ -230,10 +228,8 @@ service Text
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::drawing::Text::TextUpperDistance
     /** This is the distance from the upper edge of the <type>Shape</type> to
         the upper edge of the text.
-
 
         <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
         <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
@@ -344,6 +340,9 @@ service Text
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:42:42  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:15  hjs
     initial import
 
