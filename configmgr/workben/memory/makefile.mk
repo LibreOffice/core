@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2001-06-20 15:03:39 $
+#   last change: $Author: jb $ $Date: 2001-06-20 20:56:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -237,9 +237,9 @@ APP2OBJS=	\
     $(SLO)$/xmlformater.obj \
     $(SLO)$/xmltreebuilder.obj \
     $(SLO)$/valuemembernode.obj \
+    $(SLO)$/anypair.obj \
 
 #	$(SLO)$/memory.obj \
-#	$(SLO)$/anypair.obj \
 
 
 # 	  $(SLO)$/strimpl.obj \
