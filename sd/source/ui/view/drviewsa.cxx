@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:14:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,10 @@ DrawViewShell::~DrawViewShell()
 
 void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 {
+    // Disable the switching of objects bars. It is enabled in Init() when
+    // there is a fully functional view shell.
+    GetObjectBarManager().DisableObjectBarSwitching();
+
     pFrameView->Connect();
 
     SfxViewShell* pViewShell = GetViewShell();
@@ -586,11 +590,14 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
 
 
+
 void DrawViewShell::Init (void)
 {
     ViewShell::Init ();
 
     StartListening (*GetDocSh());
+
+    GetViewShellBase().UpdateController (GetController());
 
     // Now that the controller that is used by at least the FormShell we can
     // allow the switching of object bars and switch to the default object
