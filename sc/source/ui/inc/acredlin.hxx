@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acredlin.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,6 @@ private:
     Size                    MinSize;
     ScRangeList             aRangeList;
     ScChangeViewSettings    aChangeViewSet;
-    International           aInter;
     String                  aStrInsertCols;
     String                  aStrInsertRows;
     String                  aStrInsertTabs;
