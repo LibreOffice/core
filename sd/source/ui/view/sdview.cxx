@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-24 12:08:29 $
+ *  last change: $Author: bm $ $Date: 2002-10-24 13:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,21 @@ VirtualDevice* SdView::CreatePageVDev(USHORT nSdPage, PageKind ePageKind,
     pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
     pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
 
-    Point aPoint( pPage->GetLftBorder(), pPage->GetUppBorder() );
+    /* #103186# following change undone:
+
+      revision 1.168 (old cvs)
+      date: 1996/02/27 17:57:10;  author: SB;  state: Exp;  lines: +14 -5
+      CreatePageVDev(): Einschraenkung auf Seitengrenzen
+
+      reason:
+
+      > SdrPageView:
+      > // rReg bezieht sich auf's OutDev, nicht auf die Page
+      > void InitRedraw( ... );
+    */
+
+    // temporary for gcc
+    Point aPoint( 0, 0 );
     Region aRegion (Rectangle( aPoint, aPageSize ) );
     pView->InitRedraw(pVDev, aRegion);
     delete pView;

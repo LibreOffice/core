@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2002-07-16 09:29:28 $
+ *  last change: $Author: bm $ $Date: 2002-10-24 13:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,16 @@ sal_Bool SdGRFFilter::Export()
                 aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
                 aVDev.SetRelativeMapMode( aVMap );
                 aVDev.IntersectClipRegion( aClipRect );
-                pView->InitRedraw( &aVDev, Region( Rectangle( Point(), aNewSize ) ) );
+                /* #103186# because of:
+
+                  > SdrPageView:
+                  > // rReg bezieht sich auf's OutDev, nicht auf die Page
+                  > void InitRedraw( ... );
+
+                  and setting the origin to -aNewOrg we have to use aNewOrg
+                  instead of (0,0) for the Clip-Region to InitRedraw
+                */
+                pView->InitRedraw( &aVDev, Region( Rectangle( aNewOrg, aNewSize ) ) );
                 aVDev.Pop();
 
                 aMtf.Stop();
