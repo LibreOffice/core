@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontbuff.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-13 10:53:10 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,10 +213,6 @@ static const ColBuffEntry   pDefArrayBiff8[] = {
     };
 
 
-#ifndef VCL
-const UINT16    ColorBuffer::nColCorrect = 257;
-#endif
-
 const UINT16    ColorBuffer::nIndCorrect = 8;
 
 const UINT16    LotusFontBuffer::nSize = 8;
@@ -269,14 +265,7 @@ BOOL ColorBuffer::NewColor( UINT16 nR, UINT16 nG, UINT16 nB )
 {
     if( nCount < nMax )
     {
-#ifdef VCL
         pArray[ nCount ] = new SvxColorItem( Color( ( UINT8 ) nR, ( UINT8 ) nG, ( UINT8 ) nB) );
-#else
-        pArray[ nCount ] = new SvxColorItem( Color(
-            nR * nColCorrect,
-            nG * nColCorrect,
-            nB * nColCorrect ) );
-#endif
         nCount++;
         return TRUE;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:53:18 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,11 +352,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 {
     if ( !pView->IsAction() )
     {
-#ifdef VCL
         Point aPosPixel = pWindow->GetPointerPosPixel();
-#else
-        Point aPosPixel = pWindow->ScreenToOutputPixel( Pointer::GetPosPixel() );
-#endif
         BOOL bAlt       = pMEvt && pMEvt->IsMod2();
         Point aPnt      = pWindow->PixelToLogic( aPosPixel );
         SdrHdl* pHdl    = pView->HitHandle(aPnt, *pWindow);
@@ -389,11 +385,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             pViewShell->SetActivePointer( pObj->GetMacroPointer(aHitRec) );
         }
         else if ( IsDetectiveHit( aPnt ) )
-#ifdef VCL
             pViewShell->SetActivePointer( Pointer( POINTER_DETECTIVE ) );
-#else
-            pViewShell->SetActivePointer( ScResId( RID_SCPTR_DETECTIVE ) );
-#endif
         else
             pViewShell->SetActivePointer( aNewPointer );            //! in Gridwin?
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:53:18 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,11 +382,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 
 IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, pTimer )
 {
-#ifdef VCL
     Point aPosPixel = pWindow->GetPointerPosPixel();
-#else
-    Point aPosPixel = pWindow->ScreenToOutputPixel( Pointer::GetPosPixel() );
-#endif
     MouseMove(MouseEvent(aPosPixel));
     return 0;
 }

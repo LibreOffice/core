@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-03 15:50:05 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,12 +1272,8 @@ void ScPosWnd::DoEnter()
     ReleaseFocus_Impl();
 }
 
-#ifdef VCL
-
 long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
-    //  VCL geht ohne Acceleratoren - AccelSelectHdl kann demnaechst raus
-
     ComboBox::Notify( rNEvt );
     long nHandled = 0;
 
@@ -1301,52 +1297,6 @@ long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
         }
     }
     return nHandled;
-}
-
-#else
-
-void __EXPORT ScPosWnd::GetFocus()
-{
-    DBG_ASSERT( !pAccel, "Accelerator not deleted!" );
-    pAccel = new Accelerator;
-    pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
-    pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
-    pAccel->PushSelectHdl( LINK( this, ScPosWnd, AccelSelectHdl ) );
-
-    Application::InsertAccel( pAccel, ACCEL_ALWAYS );
-}
-
-void __EXPORT ScPosWnd::LoseFocus()
-{
-    DBG_ASSERT( pAccel, "Accelerator not found!" );
-    Application::RemoveAccel( pAccel );
-    delete pAccel;
-    pAccel = NULL;
-}
-
-#endif
-
-IMPL_LINK( ScPosWnd, AccelSelectHdl, Accelerator *, pAccel )
-{
-    if ( !pAccel )
-        return 0;
-
-    switch ( pAccel->GetCurKeyCode().GetCode() )
-    {
-        case KEY_RETURN:
-            DoEnter();
-            break;
-
-        case KEY_ESCAPE:
-            if (!bFormulaMode)
-                SetText( aPosStr );
-            ReleaseFocus_Impl();
-            break;
-
-        default:
-        break;
-    }
-    return TRUE;
 }
 
 void ScPosWnd::ReleaseFocus_Impl()

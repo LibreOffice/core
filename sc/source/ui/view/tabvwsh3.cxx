@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-07-04 17:17:52 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,13 +77,8 @@
 #include <svtools/ptitem.hxx>
 #include <svtools/stritem.hxx>
 
-#ifdef VCL /* Comp.- Mode */
 #include <vcl/msgbox.hxx>
 #include <vcl/fonttype.hxx>
-#else
-#include <vcl/msgbox.hxx>
-#include <vcl/gdiobj.hxx>
-#endif
 
 #include "globstr.hrc"
 #include "scmod.hxx"

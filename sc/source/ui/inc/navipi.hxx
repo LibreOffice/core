@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-02 14:09:10 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,11 +178,7 @@ public:
     void    SetCol( USHORT nColNo );
 
 protected:
-#ifdef VCL
     virtual long    Notify( NotifyEvent& rNEvt );
-#else
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-#endif
     virtual void    LoseFocus();
     virtual void    Up();
     virtual void    Down();
@@ -215,11 +211,7 @@ public:
     void    SetRow( USHORT nRow ){ SetValue( nRow ); }
 
 protected:
-#ifdef VCL
     virtual long    Notify( NotifyEvent& rNEvt );
-#else
-    virtual void    KeyInput( const KeyEvent& rKEvt );
-#endif
     virtual void    LoseFocus();
 
 private:

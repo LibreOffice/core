@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 12:24:52 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1044,12 +1044,7 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     SfxPrinter* pPrinter = GetPrinter();
 
     String          aStrRange;
-#ifndef VCL
-    PrintDialog*    pDlg        = new PrintDialog( pParent,
-                                                   WinBits(WB_SVLOOK|WB_STDMODAL) );
-#else
     PrintDialog*    pDlg        = new PrintDialog( pParent);
-#endif
     USHORT          i;
     USHORT          nTabCount   = pDoc->GetTableCount();
     long            nDocPageMax = 0;

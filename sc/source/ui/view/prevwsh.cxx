@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-08 12:44:08 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,12 +424,7 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
 
     const long   nCurPage    = pPreview->GetPageNo()+1;
     const long   nDocPageMax = pPreview->GetTotalPages();
-#ifndef VCL
-    PrintDialog* pDlg        = new PrintDialog( pParent,
-                                                WinBits(WB_SVLOOK|WB_STDMODAL) );
-#else
     PrintDialog* pDlg        = new PrintDialog( pParent );
-#endif
 // wenn zu langsam wieder einbauen
 //  if ( pPreview->AllTested() )
 //      nPageMax = pPreview->GetTotalPages();

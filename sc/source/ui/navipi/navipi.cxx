@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-02 14:08:13 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,6 @@ __EXPORT ColumnEdit::~ColumnEdit()
 
 //------------------------------------------------------------------------
 
-#ifdef VCL
-
 long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
     SpinField::Notify( rNEvt );
@@ -173,53 +171,6 @@ long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
 
     return nHandled;
 }
-
-#else
-
-void __EXPORT ColumnEdit::KeyInput( const KeyEvent& rKEvt )
-{
-    KeyCode aCode   = rKEvt.GetKeyCode();
-    USHORT  nGroup  = aCode.GetGroup();
-    USHORT  nLen    = GetText().Len();
-    BOOL    bSel    = (GetSelection().Len() > 0);
-
-    if ( aCode.IsMod1() || aCode.IsMod2() )
-    {
-        SpinField::KeyInput( rKEvt );
-    }
-    else if ( aCode == KEY_RETURN )
-    {
-        ScNavigatorDlg::ReleaseFocus();
-        ExecuteCol();
-    }
-    else if ( nGroup == KEYGROUP_NUM || nGroup ==  KEYGROUP_ALPHA )
-    {
-        if ( nLen == 0 || bSel ) // neue Eingabe: nur KeyGroup merken
-        {
-            nKeyGroup = nGroup;
-            ReplaceSelected( rKEvt.GetCharCode() );
-        }
-        else
-        {
-            // Abhaengig von aktueller Gruppe und Laenge Eingabe zulassen
-
-            if ( nKeyGroup == KEYGROUP_NUM && nGroup == KEYGROUP_NUM )
-            {
-                if ( nLen < 3 )
-                    SpinField::KeyInput( rKEvt );
-            }
-            else if ( nKeyGroup == KEYGROUP_ALPHA && nGroup == KEYGROUP_ALPHA )
-            {
-                if ( nLen < 2 )
-                    SpinField::KeyInput( rKEvt );
-            }
-        }
-    }
-    else
-        SpinField::KeyInput( rKEvt );
-}
-
-#endif
 
 //------------------------------------------------------------------------
 
@@ -423,8 +374,6 @@ __EXPORT RowEdit::~RowEdit()
 
 //------------------------------------------------------------------------
 
-#ifdef VCL
-
 long __EXPORT RowEdit::Notify( NotifyEvent& rNEvt )
 {
     NumericField::Notify( rNEvt );
@@ -444,25 +393,6 @@ long __EXPORT RowEdit::Notify( NotifyEvent& rNEvt )
 
     return nHandled;
 }
-
-#else
-
-void __EXPORT RowEdit::KeyInput( const KeyEvent& rKEvt )
-{
-    KeyCode aCode = rKEvt.GetKeyCode();
-
-    if ( aCode.IsMod1() || aCode.IsMod2() || aCode != KEY_RETURN )
-    {
-        NumericField::KeyInput( rKEvt );
-    }
-    else // if ( rKEvt.GetKeyCode() == KEY_RETURN )
-    {
-        ScNavigatorDlg::ReleaseFocus();
-        ExecuteRow();
-    }
-}
-
-#endif
 
 //------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 09:22:55 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #ifndef SC_FILTDLG_HXX
 #define SC_FILTDLG_HXX
-
-#ifndef VCL
-#endif
 
 #ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,16 +823,10 @@ void ScAnyRefDlg::RefInputStart( ScRefEdit* pEdit, ScRefButton* pButton )
         {
             pHiddenMarks[i] = FALSE;
             Window* pWin = GetChild(i);
-#ifdef VCL
             pWin = pWin->GetWindow( WINDOW_CLIENT );
-#endif
             if (pWin == (Window*)pRefEdit)
             {
-#ifdef VCL
                 sNewDialogText += GetChild(i-1)->GetWindow( WINDOW_CLIENT )->GetText();
-#else
-                sNewDialogText += GetChild(i-1)->GetText();
-#endif
             }
             else if (pWin == (Window*)pRefBtn)
                 ;   // do nothing
@@ -914,11 +908,7 @@ void ScAnyRefDlg::RefInputDone( BOOL bForced )
         for ( USHORT i = 0; i < nChildren; i++ )
             if (pHiddenMarks[i])
             {
-#ifdef VCL
                 GetChild(i)->GetWindow( WINDOW_CLIENT )->Show();
-#else
-                GetChild(i)->Show();
-#endif
             }
         delete [] pHiddenMarks;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-11 13:33:00 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #ifndef SC_HIGHRED_HXX
 #define SC_HIGHRED_HXX
-
-#ifndef VCL
-#endif
 
 #ifndef _MOREBTN_HXX //autogen
 #include <vcl/morebtn.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 10:42:15 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,11 +744,7 @@ void ScHeaderControl::ShowDragHelp()
         Point aPos = OutputToScreenPixel( Point(0,0) );
         Size aSize = GetSizePixel();
 
-#ifdef VCL
         Point aMousePos = OutputToScreenPixel(GetPointerPosPixel());
-#else
-        Point aMousePos = Pointer::GetPosPixel();
-#endif
 
         Rectangle aRect;
         USHORT nAlign;

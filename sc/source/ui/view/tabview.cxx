@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-24 12:35:14 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,18 +1019,7 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
 
 void ScTabView::SetActivePointer( const ResId& rId )
 {
-#ifdef VCL
     DBG_ERRORFILE( "keine Pointer mit ResId!" );
-#else
-    for (USHORT i=0; i<4; i++)
-        if (pGridWin[i])
-            pGridWin[i]->SetPointer( rId );
-
-/*  ScSplitPos ePos = aViewData.GetActivePart();
-    if (pGridWin[ePos])
-        pGridWin[ePos]->SetPointer( rId );
-*/
-#endif
 }
 
 void ScTabView::ActiveGrabFocus()
@@ -1213,11 +1202,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
         if (Help::IsQuickHelpEnabled())
         {
-#ifdef VCL
             Point aMousePos = pScroll->OutputToScreenPixel(pScroll->GetPointerPosPixel());
-#else
-            Point aMousePos = Pointer::GetPosPixel();
-#endif
             long nScrollMin = 0;        // RangeMin simulieren
             if ( aViewData.GetHSplitMode()==SC_SPLIT_FIX && pScroll == &aHScrollRight )
                 nScrollMin = aViewData.GetFixPosX();
@@ -1381,10 +1366,9 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
             //  nach dem Scrollen des GridWindow's wuerde darum der Col-/RowBar evtl.
             //  mit schon geaenderter Pos. gepainted werden -
             //  darum vorher einmal Update am Col-/RowBar
-#ifdef VCL
+
         if (pColBar[eWhich])
             pColBar[eWhich]->Update();
-#endif
 
         long nOldPos = aViewData.GetScrPos( nTrackX, 0, eWhich ).X();
         aViewData.SetPosX( eWhich, (USHORT) nNewX );
@@ -1476,10 +1460,9 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars )
 #ifdef MAC
         pGridWin[SC_SPLIT_BOTTOMLEFT]->Update();
 #endif
-#ifdef VCL
+
         if (pRowBar[eWhich])
             pRowBar[eWhich]->Update();
-#endif
 
         long nOldPos = aViewData.GetScrPos( 0, nTrackY, eWhich ).Y();
         aViewData.SetPosY( eWhich, (USHORT) nNewY );
@@ -1593,9 +1576,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const USHORT* pPos
         RepeatResize();
 
         // auf VCL gibt's Update ohne Ende (jedes Update gilt fuer alle Fenster)
-#ifndef VCL
-        aCornerButton.Update();     // der bekommt sonst nie ein Update
-#endif
+        //aCornerButton.Update();       // der bekommt sonst nie ein Update
 
         bInUpdateHeader = FALSE;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-02 21:09:53 $
+ *  last change: $Author: nn $ $Date: 2001-09-24 17:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,7 @@ ScCommentData::ScCommentData( ScDocument* pDoc, SdrModel* pModel ) :
     aCaptionSet.Put( XLineStartWidthItem( 200 ) );
     aCaptionSet.Put( XLineStartCenterItem( FALSE ) );
     aCaptionSet.Put( XFillStyleItem( XFILL_SOLID ) );
-#ifdef VCL
     Color aYellow( 255,255,192 );           // hellgelb
-#else
-    Color aYellow( 65535,65535,49152 );     // hellgelb
-#endif
     aCaptionSet.Put( XFillColorItem( String(), aYellow ) );
 
     //  shadow
