@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:12:29 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
     uno::Reference < embed::XEmbeddedObject > xRet = GetEmbeddedObject( rNewName );
     try
     {
-        if ( xRet.is() )
+        if ( !xRet.is() )
             // no object could be created, so withdraw insertion
             pImpl->mxStorage->removeElement( rNewName );
         else
