@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 15:31:03 $
+ *  last change: $Author: dr $ $Date: 2000-12-08 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2622,7 +2622,7 @@ void ScInterpreter::ScCalcTeam()
     if( !bShown )
     {
         ShowTheTeam();
-        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Nebel, Krebs, Timm, Rathke" ) );
+        String aTeam( RTL_CONSTASCII_USTRINGPARAM( "Timm, Ballach, Rathke, Rentz, Nebel" ) );
         if ( (GetByte() == 1) && SolarMath::ApproxEqual( GetDouble(), 1996) )
             aTeam.AppendAscii( "   (a word with 'B': -Olk, -Nietsch, -Daeumling)" );
         PushStringObject( aTeam );
