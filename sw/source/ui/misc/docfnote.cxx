@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: os $ $Date: 2001-07-02 11:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,15 +206,16 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
     aContFL        (this, ResId( FL_CONT       )),
 
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
+    aNumChapter(aNumCountBox.GetEntry(FTNNUM_CHAPTER)),
     pSh( 0 ),
     bPosDoc(FALSE),
     bEndNote( bEN )
 {
     FreeResource();
 
-    aPosPageBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosPage));
-    aPosChapterBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapter));
-    aNumCountBox.SetSelectHdl(LINK(this, SwEndNoteOptionPage, NumCount));
+    aPosPageBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosPageHdl));
+    aPosChapterBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
+    aNumCountBox.SetSelectHdl(LINK(this, SwEndNoteOptionPage, NumCountHdl));
 
 }
 
@@ -262,6 +263,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
         {
             aPosChapterBox.Check();
             aNumCountBox.RemoveEntry(aNumPage);
+            aNumCountBox.RemoveEntry(aNumChapter);
             bPosDoc = TRUE;
         }
             // Verweistexte
@@ -355,7 +357,7 @@ SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet
 inline void SwEndNoteOptionPage::SelectNumbering(int eNum)
 {
     aNumCountBox.SelectEntryPos(bPosDoc? (USHORT)eNum - 1: eNum);
-    NumCount( &aNumCountBox );
+    NumCountHdl( &aNumCountBox );
 }
 
 
@@ -390,12 +392,14 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwEndNoteOptionPage, PosPage, Button *, EMPTYARG )
+IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
 {
     const SwFtnNum eNum = (const SwFtnNum)GetNumbering();
     bPosDoc = FALSE;
-    if(LISTBOX_ENTRY_NOTFOUND == aNumCountBox.GetEntryPos(aNumPage)) {
+    if(LISTBOX_ENTRY_NOTFOUND == aNumCountBox.GetEntryPos(aNumPage))
+    {
         aNumCountBox.InsertEntry(aNumPage, FTNNUM_PAGE);
+        aNumCountBox.InsertEntry(aNumChapter, FTNNUM_CHAPTER);
         SelectNumbering(eNum);
     }
     aPageTemplLbl.Enable(FALSE);
@@ -409,7 +413,7 @@ IMPL_LINK( SwEndNoteOptionPage, PosPage, Button *, EMPTYARG )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwEndNoteOptionPage, NumCount, ListBox*, EMPTYARG )
+IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 {
     BOOL bEnable = TRUE;
     if( aNumCountBox.GetEntryCount() - 1 != aNumCountBox.GetSelectEntryPos() )
@@ -430,18 +434,19 @@ IMPL_LINK( SwEndNoteOptionPage, NumCount, ListBox*, EMPTYARG )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK_INLINE_START( SwEndNoteOptionPage, PosChapter, Button *, EMPTYARG )
+IMPL_LINK_INLINE_START( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
 {
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
 
     bPosDoc = TRUE;
     aNumCountBox.RemoveEntry(aNumPage);
+    aNumCountBox.RemoveEntry(aNumChapter);
     aPageTemplLbl.Enable();
     aPageTemplBox.Enable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwEndNoteOptionPage, PosChapter, Button *, EMPTYARG )
+IMPL_LINK_INLINE_END( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
 
 SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
 {
@@ -534,6 +539,9 @@ SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/06/01 11:04:53  fme
+    Fix #86988#: Redesign of dialogs
+
     Revision 1.4  2001/03/02 14:08:37  os
     extended numbering types available
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impfnote.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: os $ $Date: 2001-07-02 11:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ class SwEndNoteOptionPage : public SfxTabPage
     FixedLine aContFL;
 
     String aNumPage;
+    String aNumChapter;
     SwWrtShell *pSh;
     BOOL    bPosDoc;
     BOOL    bEndNote;
@@ -125,9 +126,9 @@ class SwEndNoteOptionPage : public SfxTabPage
     inline void SelectNumbering(int eNum);
     int GetNumbering() const;
 
-    DECL_LINK( PosPage, Button * );
-    DECL_LINK( PosChapter, Button * );
-    DECL_LINK( NumCount, ListBox * );
+    DECL_LINK( PosPageHdl, Button * );
+    DECL_LINK( PosChapterHdl, Button * );
+    DECL_LINK( NumCountHdl, ListBox * );
 
 
 public:
