@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:51:18 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#include "futext.hxx"
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -153,16 +155,30 @@
 #include "sdresid.hxx"
 #include "app.hrc"
 #include "res_bmp.hrc"
-#include "futext.hxx"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdoutl.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "sdmod.hxx"
-#include "frmview.hxx"
-#include "docshell.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
 #include "glob.hrc"
 #include "pres.hxx"
 #include "optsitem.hxx"
@@ -172,6 +188,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
+
+namespace sd {
 
 static USHORT SidArray[] = {
     SID_STYLE_FAMILY2,                //    5542
@@ -213,7 +231,6 @@ static USHORT SidArray[] = {
 
 TYPEINIT1( FuText, FuConstruct );
 
-#include <stdio.h>
 
 static BOOL bTestText = 0;
 
@@ -223,12 +240,16 @@ static BOOL bTestText = 0;
 |*
 \************************************************************************/
 
-FuText::FuText(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-               SdDrawDocument* pDoc, SfxRequest& rReq) :
-    FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
-    pTextObj(NULL),
-    bFirstObjCreated(FALSE),
-    rRequest (rReq)
+FuText::FuText (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
+      pTextObj(NULL),
+      bFirstObjCreated(FALSE),
+      rRequest (rReq)
 {}
 
 /*************************************************************************
@@ -246,7 +267,7 @@ FuText::~FuText()
 
     // die RequestHandler der benutzten Outliner zuruecksetzen auf den
     // Handler am Dokument
-    Outliner* pOutliner = pView->GetTextEditOutliner();
+    ::Outliner* pOutliner = pView->GetTextEditOutliner();
 
     if (pOutliner)
     {
@@ -272,7 +293,8 @@ FuText::~FuText()
 \************************************************************************/
 void FuText::DoExecute ()
 {
-    pViewShell->SwitchObjectBar(RID_DRAW_TEXT_TOOLBOX);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (RID_DRAW_TEXT_TOOLBOX);
+
     pView->SetCurrentObj(OBJ_TEXT);
     pView->SetEditMode(SDREDITMODE_EDIT);
 
@@ -482,7 +504,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                                 aDragTimer.Start();
                             }
 
-                            Outliner* pOutl = pView->GetTextEditOutliner();
+                            ::Outliner* pOutl = pView->GetTextEditOutliner();
 
                             if (pTextObj && (pTextObj->GetOutlinerParaObject() ||
                                 (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
@@ -1144,7 +1166,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 
         if (!pTextObj->GetOutlinerParaObject() && pView->GetTextEditOutliner())
         {
-            Outliner* pOutl = pView->GetTextEditOutliner();
+            ::Outliner* pOutl = pView->GetTextEditOutliner();
             ULONG nParaAnz = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
@@ -1300,7 +1322,7 @@ BOOL FuText::RestoreDefaultText()
 
                     if (aString.Len())
                     {
-                        SdOutliner* pInternalOutl = pDoc->GetInternalOutliner();
+                        ::sd::Outliner* pInternalOutl = pDoc->GetInternalOutliner();
                         pInternalOutl->SetMinDepth(0);
 
                         BOOL bVertical = FALSE;
@@ -1375,7 +1397,7 @@ BOOL FuText::DeleteDefaultText()
                   ePresObjKind == PRESOBJ_TEXT) &&
                   !pPage->IsMasterPage() )
             {
-                Outliner* pOutliner = pView->GetTextEditOutliner();
+                ::Outliner* pOutliner = pView->GetTextEditOutliner();
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
                 pOutliner->SetText( String(), pOutliner->GetParagraph( 0 ) );
 
@@ -1627,6 +1649,9 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
     return pObj;
 }
 
+
+
+
 /** is called when the currenct function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
@@ -1660,3 +1685,7 @@ void FuText::TextEditingHasEnded (const SdrTextObj* pTextObject)
     if (pTextObj == pTextObject)
         pTextObj = NULL;
 }
+
+
+} // end of namespace sd
+
