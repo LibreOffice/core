@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pliao $ $Date: 2000-11-14 17:49:15 $
+ *  last change: $Author: pliao $ $Date: 2000-11-17 00:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,7 +904,7 @@ static uno_Environment * initDefaultEnvironment( const OUString & rEnvTypeName, 
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         aLibName.append( rEnvTypeName );
 #ifdef MACOSX
-        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dylib") );
+        aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.dylib.framework") );
 #else
         aLibName.appendAscii( RTL_CONSTASCII_STRINGPARAM("_uno.so") );
 #endif
