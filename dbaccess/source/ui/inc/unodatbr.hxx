@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:37:05 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _SOT_STORAGE_HXX
 #include <sot/storage.hxx>
 #endif
+#ifndef DBUI_TABLECOPYHELPER_HXX
+#include "TableCopyHelper.hxx"
+#endif
 
 // =========================================================================
 class SvLBoxEntry;
@@ -131,19 +134,6 @@ namespace dbaui
                 ,public IControlActionListener
     {
     protected:
-        // ---------------------------
-        struct DropDescriptor
-        {
-            ::svx::ODataAccessDescriptor    aDroppedData;
-            String                          aUrl;
-            SotStorageStreamRef             aHtmlRtfStorage;
-            SvLBoxEntry*                    pDroppedAt;
-            sal_Bool                        bTable;
-            sal_Bool                        bHtml;
-            sal_Bool                        bError;
-
-            DropDescriptor() : pDroppedAt(NULL), bTable(sal_True) { }
-        };
 
         // ---------------------------
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
@@ -172,7 +162,8 @@ namespace dbaui
 
         ::cppu::OInterfaceContainerHelper   m_aSelectionListeners;
 
-        DropDescriptor          m_aAsyncDrop;
+        OTableCopyHelper::DropDescriptor            m_aAsyncDrop;
+        OTableCopyHelper        m_aTableCopyHelper;
 
         ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
 
@@ -180,6 +171,7 @@ namespace dbaui
         Splitter*               m_pSplitter;
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
+        sal_Int32               m_nAsyncDrop;
 
         sal_Int16               m_nBorder;              // TRUE when border should be shown
 
@@ -376,6 +368,15 @@ namespace dbaui
         TransferableHelper*
                 implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
+        /** copies a table which was constructed by tags like HTML or RTF
+            @param  _rDesc
+                The Drop descriptor
+            @param  _bCheck
+                If set to <TRUE/> than the controller checks only if a copy is possible.
+        */
+        sal_Bool copyTagTable(  OTableCopyHelper::DropDescriptor& _rDesc
+                                , sal_Bool _bCheck);
+
         EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
         EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
         sal_Bool    isObject( EntryType _eType ) const { return (etTable == _eType) || (etView == _eType) || (etQuery == _eType);}
@@ -396,6 +397,8 @@ namespace dbaui
         DECL_LINK( OnCopyEntry, SvLBoxEntry* );
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
+
+        DECL_LINK( OnAsyncDrop, void* );
 
         void implRemoveStatusListeners();
 
