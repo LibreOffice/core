@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:13 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,8 @@ const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
 const sal_uInt16 EXC_ID_FONT                = 0x0031;
 
+const sal_uInt16 EXC_FONT_APP               = 0;        /// Application font index.
+
 const sal_uInt32 EXC_FONT_MAXCOUNT4         = 0x00FF;
 const sal_uInt32 EXC_FONT_MAXCOUNT5         = 0x00FF;
 const sal_uInt32 EXC_FONT_MAXCOUNT8         = 0xFFFF;
@@ -328,16 +330,22 @@ const sal_uInt16 EXC_ID3_XF                 = 0x0243;
 const sal_uInt16 EXC_ID4_XF                 = 0x0443;
 const sal_uInt16 EXC_ID_XF                  = 0x00E0;
 
-const sal_uInt16 EXC_XF_OFFSET              = 21;       /// Index to first user defined record.
-const sal_uInt32 EXC_XF_MAXCOUNT            = 4029;     /// Maximum number of user defined records.
+const sal_uInt32 EXC_XF_MAXCOUNT            = 4050;     /// Maximum number of all XF records.
+const sal_uInt32 EXC_XF_MAXSTYLECOUNT       = 1536;     /// Arbitrary maximum number of style XFs.
+const sal_uInt16 EXC_XF_USEROFFSET          = 21;       /// Index to first user defined record.
 const sal_uInt16 EXC_XF_DEFAULTSTYLE        = 0;        /// Excel index to cefault style XF.
 const sal_uInt16 EXC_XF_DEFAULTCELL         = 15;       /// Excel index to cefault cell XF.
+
+const sal_uInt16 EXC_XF_NOCOLOR             = 0;
+const sal_uInt16 EXC_XF_AUTOCOLOR           = 64;
+const sal_uInt16 EXC_XF_TRANSPCOLOR         = 65;
 
 const sal_uInt16 EXC_XF_LOCKED              = 0x0001;
 const sal_uInt16 EXC_XF_HIDDEN              = 0x0002;
 const sal_uInt16 EXC_XF_STYLE               = 0x0004;
 const sal_uInt16 EXC_XF_STYLEPARENT         = 0x0FFF;   /// Syles don't have a parent.
 const sal_uInt16 EXC_XF_WRAPPED             = 0x0008;   /// Automatic line break.
+const sal_uInt16 EXC_XF_SHRINK              = 0x0010;   /// Shrink to fit into cell.
 
 const sal_uInt8 EXC_XF_DIFF_VALFMT          = 0x01;
 const sal_uInt8 EXC_XF_DIFF_FONT            = 0x02;
@@ -357,6 +365,7 @@ const sal_uInt8 EXC_XF2_BACKGROUND          = 0x80;
 
 const sal_uInt16 EXC_XF8_SHRINKTOFIT        = 0x0010;
 const sal_uInt16 EXC_XF8_MERGE              = 0x0020;
+
 const sal_uInt8 EXC_XF8_STACKED             = 0xFF;     /// Special rotation angle.
 
 
@@ -494,8 +503,22 @@ const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
 // (0x0293) STYLE -------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_STYLE               = 0x0293;
+
 const sal_uInt16 EXC_STYLE_BUILTIN          = 0x8000;
-const sal_uInt16 EXC_STYLE_MASK             = 0x0FFF;
+const sal_uInt16 EXC_STYLE_XFMASK           = 0x0FFF;
+
+const sal_uInt8 EXC_STYLE_NORMAL            = 0x00;         /// "Normal" style.
+const sal_uInt8 EXC_STYLE_ROWLEVEL          = 0x01;         /// "RowLevel_*" styles.
+const sal_uInt8 EXC_STYLE_COLLEVEL          = 0x02;         /// "ColLevel_*" styles.
+const sal_uInt8 EXC_STYLE_COMMA             = 0x03;         /// "Comma" style.
+const sal_uInt8 EXC_STYLE_CURRENCY          = 0x04;         /// "Currency" style.
+const sal_uInt8 EXC_STYLE_PERCENT           = 0x05;         /// "Percent" style.
+const sal_uInt8 EXC_STYLE_COMMA_0           = 0x06;         /// "Comma [0]" style.
+const sal_uInt8 EXC_STYLE_CURRENCY_0        = 0x07;         /// "Currency [0]" style.
+const sal_uInt8 EXC_STYLE_USERDEF           = 0xFF;         /// No built-in style.
+
+const sal_uInt8 EXC_STYLE_LEVELCOUNT        = 7;            /// Number of outline level styles.
+const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value for unused level.
 
 
 // web queries ================================================================
