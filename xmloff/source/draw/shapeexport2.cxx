@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: bm $ $Date: 2001-07-02 13:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
             OUString aStr;
 
             xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aStr;
-            aStr = GetExport().GetRelativeReference( rExport.AddEmbeddedGraphicObject( aStr ) );
+            aStr = rExport.AddEmbeddedGraphicObject( aStr );
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
             if( aStr.getLength() && aStr[ 0 ] == '#' )
@@ -1355,7 +1355,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             sURL = rExport.AddEmbeddedObject( sURL );
 
-            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(sURL) );
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
             rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
             rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
             rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
@@ -1369,7 +1369,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ThumbnailGraphicURL")) ) >>= aStr;
         if( aStr.getLength() )
         {
-            aStr = rExport.AddEmbeddedGraphicObject( GetExport().GetRelativeReference(aStr) );
+            aStr = rExport.AddEmbeddedGraphicObject( aStr );
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
 
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:13 $
+ *  last change: $Author: bm $ $Date: 2001-07-02 13:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
             {
                 if( IsXMLToken( aLocalName, XML_HREF ) )
                 {
-                    maThumbnailURL = GetImport().GetAbsoluteReference(xAttrList->getValueByIndex( i ));
+                    maThumbnailURL = xAttrList->getValueByIndex( i );
                     break;
                 }
             }
@@ -1952,7 +1952,7 @@ void SdXMLGraphicObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const
     {
         if( IsXMLToken( rLocalName, XML_HREF ) )
         {
-            maURL = GetImport().GetAbsoluteReference(rValue);
+            maURL = rValue;
             return;
         }
     }
@@ -2270,7 +2270,7 @@ void SdXMLObjectShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl:
     case XML_NAMESPACE_XLINK:
         if( IsXMLToken( rLocalName, XML_HREF ) )
         {
-            maHref = GetImport().GetAbsoluteReference(rValue);
+            maHref = rValue;
             return;
         }
         break;
