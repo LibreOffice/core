@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textglos.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,17 +100,66 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
     // SwGlossaryList updaten?
     BOOL bUpdateList = FALSE;
 
+    const SfxItemSet *pArgs = rReq.GetArgs();
+    const SfxPoolItem* pItem = 0;
+    if(pArgs)
+       pArgs->GetItemState(nSlot, FALSE, &pItem );
+
     switch( nSlot )
     {
         case FN_GLOSSARY_DLG:
             pGlosHdl->GlossaryDlg();
             bUpdateList = TRUE;
+            rReq.Ignore();
             break;
         case FN_EXPAND_GLOSSARY:
         {
             BOOL bReturn;
             bReturn = pGlosHdl->ExpandGlossary( TRUE );
             rReq.SetReturnValue( SfxBoolItem( nSlot, bReturn ) );
+            rReq.Done();
+        }
+        break;
+        case FN_NEW_GLOSSARY:
+            if(pItem && pArgs->Count() == 3 )
+            {
+                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                String aName;
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
+                    aName = (( const SfxStringItem *)pItem)->GetValue();
+                String aShortName;
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_2, FALSE, &pItem ))
+                    aShortName = (( const SfxStringItem *)pItem)->GetValue();
+
+                SwGlossaryDlg::SetActGroup(aGroup);
+                pGlosHdl->SetCurGroup(aGroup, TRUE);
+                //eingestellte Gruppe muss in NewGlossary ggf. erzeugt werden!
+                pGlosHdl->NewGlossary( aName, aShortName, TRUE );
+                rReq.Done();
+            }
+            bUpdateList = TRUE;
+        break;
+        case FN_SET_ACT_GLOSSARY:
+            if(pItem)
+            {
+                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                SwGlossaryDlg::SetActGroup(aGroup);
+                rReq.Done();
+            }
+        break;
+        case FN_INSERT_GLOSSARY:
+        {
+            if(pItem && pArgs->Count() > 1)
+            {
+                String aGroup = (( const SfxStringItem *)pItem)->GetValue();
+                String aName;
+                if(SFX_ITEM_SET ==  pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem ))
+                    aName = (( const SfxStringItem *)pItem)->GetValue();
+                SwGlossaryDlg::SetActGroup(aGroup);
+                pGlosHdl->SetCurGroup(aGroup, TRUE);
+                rReq.SetReturnValue(SfxBoolItem(nSlot, pGlosHdl->InsertGlossary( aName )));
+                rReq.Done();
+            }
         }
         break;
         default:
@@ -128,6 +177,9 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:47  hr
+    initial import
+
     Revision 1.24  2000/09/18 16:06:06  willem.vandorp
     OpenOffice header added.
 

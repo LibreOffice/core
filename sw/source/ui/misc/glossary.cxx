@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 14:48:02 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,16 @@ IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
         ShowAutoText(aEmptyStr, aEmptyStr);
     //Controls aktualisieren
     NameModify(&aShortNameEdit);
+    if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
+    {
+        SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_SET_ACT_GLOSSARY );
+        String sTemp(*pCurrGlosGroup);
+        // der nullte Pfad wird nicht aufgezeichnet!
+        if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
+            sTemp = sTemp.GetToken(0, GLOS_DELIM);
+        aReq.AppendItem(SfxStringItem(FN_SET_ACT_GLOSSARY, sTemp));
+        aReq.Done();
+    }
     return 0;
 }
 /*--------------------------------------------------------------------
@@ -456,6 +466,17 @@ void SwGlossaryDlg::Apply()
 {
     const String aGlosName(aShortNameEdit.GetText());
     if(aGlosName.Len()) pGlossaryHdl->InsertGlossary(aGlosName);
+    if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
+    {
+        SfxRequest aReq( pSh->GetView().GetViewFrame(), FN_INSERT_GLOSSARY );
+        String sTemp(*pCurrGlosGroup);
+        // der nullte Pfad wird nicht aufgezeichnet!
+        if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
+            sTemp = sTemp.GetToken(0, GLOS_DELIM);
+        aReq.AppendItem(SfxStringItem(FN_INSERT_GLOSSARY, sTemp));
+        aReq.AppendItem(SfxStringItem(FN_PARAM_1, aGlosName));
+        aReq.Done();
+    }
 }
 /*--------------------------------------------------------------------
      Beschreibung:
@@ -635,6 +656,18 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 aShortNameEdit.SetText(aShortName);
                 NameModify(&aNameED);       // fuer Schalten der Buttons
 
+                if( SfxRequest::HasMacroRecorder( pSh->GetView().GetViewFrame() ) )
+                {
+                    SfxRequest aReq(pSh->GetView().GetViewFrame(), FN_NEW_GLOSSARY);
+                    String sTemp(*pCurrGlosGroup);
+                    // der nullte Pfad wird nicht aufgezeichnet!
+                    if('0' == sTemp.GetToken(1, GLOS_DELIM).GetChar(0))
+                        sTemp = sTemp.GetToken(0, GLOS_DELIM);
+                    aReq.AppendItem(SfxStringItem(FN_NEW_GLOSSARY, sTemp));
+                    aReq.AppendItem(SfxStringItem(FN_PARAM_1, aShortName));
+                    aReq.AppendItem(SfxStringItem(FN_PARAM_2, aStr));
+                    aReq.Done();
+                }
             }
         }
         break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-19 17:28:49 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,15 +405,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
             {
                 case RET_OK:
+                {
                     aDlg.AcceptAll(TRUE);
+                    SfxRequest aReq( pVFrame, FN_AUTOFORMAT_APPLY );
+                    aReq.Done();
+                    rReq.Ignore();
                     break;
+                }
 
                 case RET_CANCEL:
                     aDlg.AcceptAll(FALSE);
+                    rReq.Ignore();
                     break;
 
                 case 2:
                     aDlg.Execute();
+                    rReq.Done();
                     break;
             }
         }
@@ -425,17 +432,20 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // das muss fuer die Nachbearbeitung immer FALSE sein
             aFlags.bAFmtByInput = FALSE;
             rWrtSh.AutoFormat( &aFlags );
+            rReq.Done();
         }
         break;
         case FN_AUTOFORMAT_AUTO:
         {
             OfaAutoCorrCfg* pACfg = OFF_APP()->GetAutoCorrConfig();
-            BOOL bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue()
-                              : !pACfg->IsAutoFmtByInput();
+            BOOL bSet = pItem ? ((const SfxBoolItem*)pItem)->GetValue() : !pACfg->IsAutoFmtByInput();
             if( bSet != pACfg->IsAutoFmtByInput() )
             {
                 pACfg->SetAutoFmtByInput( bSet );
                 GetView().GetViewFrame()->GetBindings().Invalidate( nSlot );
+                if ( !pItem )
+                    rReq.AppendItem( SfxBoolItem( GetPool().GetWhich(nSlot), bSet ) );
+                rReq.Done();
             }
         }
         break;
@@ -503,6 +513,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_EDIT_HYPERLINK:
             GetView().GetViewFrame()->ToggleChildWindow(SID_HYPERLINK_DIALOG);
         break;
+        case SID_ATTR_BRUSH_CHAR :
+        case SID_ATTR_CHAR_SCALEWIDTH :
+        case SID_ATTR_CHAR_ROTATED :
+        case FN_TXTATR_INET :
+        {
+            USHORT nWhich = GetPool().GetWhich( nSlot );
+            if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
+                bUseDialog = FALSE;
+            // intentionally no break
+        }
         case FN_INSERT_HYPERLINK:
         case SID_CHAR_DLG:
         {
@@ -546,36 +566,47 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
                 // ein RES_BACKGROUND verwandelt und wieder zurueck ...
                 const SfxPoolItem *pTmpBrush;
-                if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND,
-                    TRUE, &pTmpBrush ) )
+                if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, TRUE, &pTmpBrush ) )
                 {
                     SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
                     aTmpBrush.SetWhich( RES_BACKGROUND );
                     aCoreSet.Put( aTmpBrush );
                 }
 
-                aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
-                                ::GetHtmlMode(GetView().GetDocShell())));
-                SwCharDlg* pDlg = new SwCharDlg(GetView().GetWindow(), GetView(), aCoreSet);
-                if(FN_INSERT_HYPERLINK == nSlot)
-                    pDlg->SetCurPageId(TP_CHAR_URL);
-                if (RET_OK == pDlg->Execute())
+                aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+                SwCharDlg* pDlg = NULL;
+                if ( bUseDialog )
                 {
-                    SfxItemSet aTmpSet( *pDlg->GetOutputItemSet() );
-                    if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND,
-                        FALSE, &pTmpBrush ) )
+                    pDlg = new SwCharDlg(GetView().GetWindow(), GetView(), aCoreSet);
+                    if( FN_INSERT_HYPERLINK == nSlot )
+                        pDlg->SetCurPageId(TP_CHAR_URL);
+                }
+
+                const SfxItemSet* pSet = NULL;
+                if ( !bUseDialog )
+                    pSet = pArgs;
+                else if ( pDlg->Execute() == RET_OK )
+                {
+                    pSet = pDlg->GetOutputItemSet();
+                }
+
+                if ( pSet)
+                {
+                    SfxItemSet aTmpSet( *pSet );
+                    if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, FALSE, &pTmpBrush ) )
                     {
                         SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
                         aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
                         aTmpSet.Put( aTmpBrush );
                     }
+
                     aTmpSet.ClearItem( RES_BACKGROUND );
 
                     const SfxPoolItem* pItem;
                     BOOL bInsert = FALSE;
 
                     // aus ungeklaerter Ursache ist das alte Item wieder im Set
-                    if(!bSelectionPutted && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem))
+                    if( !bSelectionPutted && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pItem) )
                     {
                         String sInsert = ((const SfxStringItem*)pItem)->GetValue();
                         bInsert = sInsert.Len() != 0;
@@ -587,10 +618,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             rWrtSh.ExtendSelection(FALSE, sInsert.Len());
                         }
                     }
+
                     SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-                    if(bSel &&
-                            rWrtSh.IsSelFullPara() &&
-                                pColl && pColl->IsAutoUpdateFmt())
+                    if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
                     {
                         rWrtSh.AutoUpdatePara(pColl, aTmpSet);
                     }
@@ -605,25 +635,22 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         rWrtSh.EndAction();
                     }
                 }
+
                 delete pDlg;
             }
         }
         break;
-        case SID_PARA_VERTALIGN :
         case SID_ATTR_LRSPACE :
         case SID_ATTR_ULSPACE :
+        case SID_ATTR_BRUSH :
+        case SID_PARA_VERTALIGN :
         case SID_ATTR_PARA_NUMRULE :
         case SID_ATTR_PARA_REGISTER :
         case SID_ATTR_PARA_PAGENUM :
-        case SID_ATTR_BRUSH :
         case FN_FORMAT_LINENUMBER :
         case FN_NUMBER_NEWSTART :
         case FN_NUMBER_NEWSTART_AT :
         case FN_FORMAT_DROPCAPS :
-        case SID_ATTR_BORDER_INNER :
-        case SID_ATTR_BORDER_OUTER :
-        case SID_ATTR_BORDER_SHADOW :
-        case SID_ATTR_TABSTOP :
         {
             USHORT nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )

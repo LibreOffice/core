@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 10:38:06 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:47:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,8 +509,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 const SfxPoolItem* pFmt;
-                if( pArgs && SFX_ITEM_SET ==
-                    pArgs->GetItemState( nId, FALSE, &pFmt ))
+                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pFmt ) )
                 {
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -528,6 +527,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         if( rSh.IsFrmSelected() || rSh.IsObjSelected())
                             rSh.EnterSelFrmMode();
                         pView->AttrChangedNotify( &rSh );
+                        rReq.Done();
                     }
                 }
             }
@@ -544,9 +544,15 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     // temp. Variablen, da die Shell nach dem Paste schon
                     // zerstoert sein kann
                     SwView* pView = &rView;
-
-                    rReq.SetReturnValue( SfxInt16Item( nId,
-                            SwTransferable::PasteSpecial( rSh, aDataHelper )));
+                    sal_Int16 nFormatId = SwTransferable::PasteSpecial( rSh, aDataHelper );
+                    rReq.SetReturnValue( SfxInt16Item( nId, nFormatId ) );
+                    if ( rReq.IsRecording() )
+                    {
+                        rReq.Ignore();
+                        SfxRequest aReq( rView.GetViewFrame(), SID_CLIPBOARD_FORMAT_ITEMS );
+                        aReq.AppendItem( SfxUInt32Item( SID_CLIPBOARD_FORMAT_ITEMS, nFormatId ) );
+                        aReq.Done();
+                    }
 
                     if (rSh.IsFrmSelected() || rSh.IsObjSelected())
                         rSh.EnterSelFrmMode();
@@ -1181,12 +1187,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         if(pItem)
         switch(nSlot)
         {
+        case SID_ATTR_BRUSH:
         case SID_ATTR_BORDER_SHADOW:
         case RES_SHADOW:
         {
             rSh.StartAllAction();
             SfxItemSet   aSet( rSh.GetAttrPool(),
-                                RES_SHADOW, RES_SHADOW );
+                                RES_SHADOW, RES_SHADOW,
+                                RES_BACKGROUND, RES_BACKGROUND, 0 );
 
             aSet.Put(*pItem);
             // Tabellenzelle(n) selektiert?

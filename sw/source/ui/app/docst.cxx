@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 11:18:20 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,11 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         SfxNewStyleDlg *pDlg = new SfxNewStyleDlg( 0,
                                                     *GetStyleSheetPool());
                         if(RET_OK == pDlg->Execute())
+                        {
                             aParam = pDlg->GetName();
+                            rReq.AppendItem(SfxStringItem(nSlot, aParam));
+                        }
+
                         delete pDlg;
                     }
                     break;
@@ -470,8 +474,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         break;
                     case SID_STYLE_APPLY:
                         // Shellwechsel in ApplyStyles
-                        nRet = ApplyStyles(aParam, nFamily, pActShell,
-                               rReq.GetModifier() );
+                        nRet = ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() );
                         break;
                     case SID_STYLE_WATERCAN:
                         nRet = DoWaterCan(aParam, nFamily);
@@ -492,7 +495,10 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                     default:
                         DBG_ERROR( "Falsche Slot-Id");
                 }
+
+                rReq.Done();
             }
+
             break;
         }
     }

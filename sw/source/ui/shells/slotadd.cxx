@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-14 07:56:03 $
+ *  last change: $Author: mba $ $Date: 2002-06-27 08:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,8 @@
 #include <svtools/slstitm.hxx>
 #include <svx/paravertalignitem.hxx>
 #include <svx/charreliefitem.hxx>
+#include <svx/charrotateitem.hxx>
+#include <svx/charscaleitem.hxx>
 
 #ifndef PROFILE
 // Code zum Initialisieren von Statics im eigenen Code-Segment
@@ -323,6 +325,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11  2002/06/14 07:56:03  mba
+    #100081#: some new slots for attributes
+
     Revision 1.10  2002/06/10 17:07:37  mba
     #100118#: new items used for recording
 
