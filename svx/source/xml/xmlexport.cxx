@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 16:21:39 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,11 @@ using namespace ::com::sun::star::uno;
 
 sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent )
 {
+    return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLExporter" );
+}
+
+sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent, const char* pExportService )
+{
     sal_Bool bDocRet = xOut.is();
 
     Reference< document::XGraphicObjectResolver > xGraphicResolver;
@@ -195,7 +200,7 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
                 if( xObjectResolver.is() )
                     aArgs[2] <<= xObjectResolver;
 
-                uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.comp.DrawingLayer.XMLExporter" ), aArgs ), uno::UNO_QUERY );
+                uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pExportService ), aArgs ), uno::UNO_QUERY );
                 if( !xFilter.is() )
                 {
                     DBG_ERROR( "com.sun.star.comp.Draw.XMLExporter service missing" );
@@ -246,6 +251,11 @@ sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStre
 //-////////////////////////////////////////////////////////////////////
 
 sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent )
+{
+    return SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Draw.XMLImporter" );
+}
+
+sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStream> xInputStream, Reference< lang::XComponent > xComponent, const char* pImportService  )
 {
     sal_uInt32  nRet = 0;
 
@@ -312,7 +322,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, uno::Reference<io::XInputStrea
             *pArgs++ <<= xObjectResolver;
 
             // get filter
-            Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii("com.sun.star.comp.Draw.XMLImporter"), aFilterArgs), UNO_QUERY );
+            Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pImportService ), aFilterArgs), UNO_QUERY );
             DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
 
             if( !xParser.is() || !xFilter.is() )
