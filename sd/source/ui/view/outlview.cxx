@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-15 12:20:28 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 18:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SVX_LSPCITEM_HXX
 #include <svx/lspcitem.hxx>
+#endif
+#ifndef _SVX_NUMITEM_HXX
+#include <svx/numitem.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX //autogen
 #include <svx/outlobj.hxx>
@@ -835,11 +838,13 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
             SfxStyleSheet* pStyleSheet = NULL;
             ULONG nPara = pOutliner->GetAbsPos( pPara );
             ULONG nDepth = pOutliner->GetDepth( nPara );
+            BOOL bSubTitle = pPage->GetPresObj(PRESOBJ_TEXT) != NULL;
+
             if( nDepth == 0 )
             {
                 pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             }
-            else if( pPage->GetPresObj(PRESOBJ_TEXT) )
+            else if( bSubTitle )
             {
                 pStyleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             }
@@ -857,7 +862,21 @@ IMPL_LINK( SdOutlineView, DepthChangedHdl, Outliner *, pOutliner )
                 }
             }
 
+            // before we set the style sheet we need to preserve the bullet item
+            // since all items will be deleted while setting a new style sheet
+             SfxItemSet aOldAttrs( pOutliner->GetParaAttribs( nPara ) );
+
             pOutliner->SetStyleSheet( nPara, pStyleSheet );
+
+            // restore the old bullet item but not if the style changed
+            if ( pOutliner->GetPrevDepth() != 0 &&
+                 nDepth != 0 &&
+                 aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+            {
+                SfxItemSet aAttrs( pOutliner->GetParaAttribs( nPara ) );
+                aAttrs.Put( *aOldAttrs.GetItem( EE_PARA_NUMBULLET ) );
+                pOutliner->SetParaAttribs( nPara, aAttrs );
+            }
         }
     }
 
