@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: packimages.pl,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 16:05:32 $
+#   last change: $Author: vg $ $Date: 2005-02-25 09:47:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,7 @@ my @custom_list;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.10 $ ';
+my $id_str = ' $Revision: 1.11 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -243,7 +243,7 @@ sub find_custom
     for my $path (@custom_path) {
     find({ wanted => \&wanted, no_chdir => 0 }, $path);
     foreach ( @custom_list ) {
-        if ( /^\Q$path\E\/(.*)$/o ) {
+        if ( /^\Q$path\E\/(.*)$/ ) {
         $keep_back=$1;
         if (!defined $custom_hash_ref->{$keep_back}) {
             $custom_hash_ref->{$keep_back} = $path;
