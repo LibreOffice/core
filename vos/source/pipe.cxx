@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-27 10:47:08 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,14 +255,15 @@ void OPipe::close()
 /*****************************************************************************/
 OPipe::TPipeError OPipe::accept(OStreamPipe& Connection)
 {
-    VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
+    if ( isValid() )
+    {
+        Connection = osl_acceptPipe((*m_pPipeRef)());
 
-    Connection= osl_acceptPipe((*m_pPipeRef)());
+        if(Connection.isValid())
+            return E_None;
+    }
 
-    if(Connection.isValid())
-        return E_None;
-    else
-        return getError();
+    return getError();
 }
 
 /*****************************************************************************/
@@ -270,11 +271,12 @@ OPipe::TPipeError OPipe::accept(OStreamPipe& Connection)
 /*****************************************************************************/
 sal_Int32 OPipe::recv(void* pBuffer, sal_uInt32 BytesToRead)
 {
-    VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
-
-    return osl_receivePipe((*m_pPipeRef)(),
-                            pBuffer,
-                           BytesToRead);
+    if ( isValid() )
+        return osl_receivePipe((*m_pPipeRef)(),
+                             pBuffer,
+                            BytesToRead);
+    else
+        return -1;
 
 }
 
@@ -283,12 +285,12 @@ sal_Int32 OPipe::recv(void* pBuffer, sal_uInt32 BytesToRead)
 /*****************************************************************************/
 sal_Int32 OPipe::send(const void* pBuffer, sal_uInt32 BytesToSend)
 {
-    VOS_ASSERT(m_pPipeRef && (*m_pPipeRef)());
-
-    return osl_sendPipe((*m_pPipeRef)(),
-                          pBuffer,
-                          BytesToSend);
-
+    if ( isValid() )
+        return osl_sendPipe((*m_pPipeRef)(),
+                            pBuffer,
+                            BytesToSend);
+    else
+        return -1;
 }
 
 /*****************************************************************************/
