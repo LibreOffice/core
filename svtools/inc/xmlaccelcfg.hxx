@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaccelcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 17:45:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:04:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,11 @@ class OReadAccelatorDocumentHandler : public ::com::sun::star::xml::sax::XDocume
 {
     public:
         OReadAccelatorDocumentHandler( SvtAcceleratorItemList& aNewAcceleratorItemList ) :
-            m_aReadAcceleratorList( aNewAcceleratorItemList ),
-            m_xLocator( 0 ),
-            m_bAcceleratorMode( sal_False ),
             m_nElementDepth( 0 ),
-            m_bItemCloseExpected( sal_False ) {}
+            m_bAcceleratorMode( sal_False ),
+            m_bItemCloseExpected( sal_False ),
+            m_xLocator( 0 ),
+            m_aReadAcceleratorList( aNewAcceleratorItemList ) {}
         virtual ~OReadAccelatorDocumentHandler() {}
 
         // XInterface
