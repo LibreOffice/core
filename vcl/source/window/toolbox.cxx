@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:49:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-30 16:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4691,6 +4691,31 @@ void ToolBox::Resize()
             }
         }
     }
+}
+
+// -----------------------------------------------------------------------
+const XubString& ToolBox::ImplGetHelpText( USHORT nItemId ) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if ( pItem )
+    {
+        if ( !pItem->maHelpText.Len() && ( pItem->mnHelpId || pItem->maCommandStr.Len() ))
+        {
+            Help* pHelp = Application::GetHelp();
+            if ( pHelp )
+            {
+                if ( pItem->maCommandStr.Len() )
+                    pItem->maHelpText = pHelp->GetHelpText( pItem->maCommandStr, this );
+                if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+                    pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+            }
+        }
+
+        return pItem->maHelpText;
+    }
+    else
+        return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
