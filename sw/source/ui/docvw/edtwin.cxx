@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2002-08-16 12:27:07 $
+ *  last change: $Author: os $ $Date: 2002-09-05 10:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4112,7 +4112,22 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         else
         {
             bCallBase = FALSE;
-            rSh.DeleteExtTextInput();
+            String sRecord = rSh.DeleteExtTextInput();
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                    rView.GetViewFrame()->GetBindings().GetRecorder();
+            if ( sRecord.Len() && xRecorder.is() )
+            {
+                //Shell ermitteln
+                SfxShell *pSfxShell = lcl_GetShellFromDispatcher( rView, TYPE(SwTextShell) );
+                // Request generieren und recorden
+                if (pSfxShell)
+                {
+                    SfxRequest aReq( rView.GetViewFrame(), FN_INSERT_STRING );
+                    aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sRecord ) );
+                    aReq.Done();
+                }
+            }
+
         }
         break;
 
