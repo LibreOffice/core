@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:24:05 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,11 @@ StringList [ catalan ] = \
     {\
          < "AND" ; Default ; > ;\
         < "OR" ; Default ; > ;\
+    };\
+    StringList [ slovak ] = \
+    {\
+         < "AND" ; Default ; > ;\
+        < "OR" ; Default ; > ;\
     };
 
 ModalDialog DLG_FILTERCRIT
@@ -371,6 +376,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "Název pole";
         Text[ hebrew ] = "Feldname";
         Text[ hindi ] = "क्षेत्र नाम";
+        Text[ slovak ] = "Názov poľa";
     };
     FixedText FT_WHERECOMP
     {
@@ -405,6 +411,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "Podmínka";
         Text[ hebrew ] = "Bedingung";
         Text[ hindi ] = "शर्त लगाना";
+        Text[ slovak ] = "Podmienka";
     };
     FixedText FT_WHEREVALUE
     {
@@ -439,6 +446,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "Hodnota";
         Text[ hebrew ] = "Wert";
         Text[ hindi ] = "मूल्य";
+        Text[ slovak ] = "Hodnota";
     };
     FixedText FT_WHEREOPER
     {
@@ -474,6 +482,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "Operátor";
         Text[ hebrew ] = "Verknüpfung";
         Text[ hindi ] = "प्रवर्तक";
+        Text[ slovak ] = "Operátor";
     };
     FixedLine FL_FIELDS
     {
@@ -507,6 +516,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "Kritérium";
         Text[ hebrew ] = "Kriterien";
         Text[ hindi ] = "सिद्धान्त";
+        Text[ slovak ] = "Kritérium";
     };
     OKButton BT_OK
     {
@@ -556,6 +566,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "- žádné -";
         Text[ hebrew ] = "- keiner -";
         Text[ hindi ] = "- कोई नहीं -";
+        Text[ slovak ] = "- nič -";
     };
     String STR_COMPARE_OPERATORS
     {
@@ -586,11 +597,15 @@ ModalDialog DLG_FILTERCRIT
         Text[ czech ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
         Text[ hebrew ] = "=;<>;<;<=;>;>=;wie;nicht wie;leer;nicht leer";
         Text[ hindi ] = "=;<>;<;<=;>;>=;समान;समान नहीं;null;null नहीं";
+        Text[ slovak ] = "=;<>;<;<=;>;>=;ako;nie ako;nula;nie nula";
     };
     Text[ czech ] = "Filtr";
     Text[ hebrew ] = "Standardfilter";
     Text[ hindi ] = "फिल्टर";
+    Text[ slovak ] = "Filter";
 };
+
+
 
 
 
