@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:44:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@
 #include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "conditio.hxx"
-#include "bclist.hxx"
 
 #ifndef _SHL_HXX //autogen
 #include <tools/shl.hxx>
@@ -110,7 +109,7 @@ ULONG erCountBCAFinds = 0;
 // -----------------------------------------------------------------------
 
 void ScDocument::StartListeningArea( const ScRange& rRange,
-        SfxListener* pListener
+        SvtListener* pListener
     )
 {
     if ( pBASM )
@@ -119,7 +118,7 @@ void ScDocument::StartListeningArea( const ScRange& rRange,
 
 
 void ScDocument::EndListeningArea( const ScRange& rRange,
-        SfxListener* pListener
+        SvtListener* pListener
     )
 {
     if ( pBASM )
@@ -148,7 +147,7 @@ void ScDocument::Broadcast( const ScHint& rHint )
         ScBaseCell* pCell = rHint.GetCell();
         if ( pCell )
         {
-            ScBroadcasterList* pBC = pCell->GetBroadcaster();
+            SvtBroadcaster* pBC = pCell->GetBroadcaster();
             if ( pBC )
             {
                 pBC->Broadcast( rHint );
@@ -195,7 +194,15 @@ void ScDocument::AreaBroadcastInRange( const ScRange& rRange, const ScHint& rHin
     //! This is _THE_ bottle neck!
     if ( pCondFormList )
     {
-        USHORT nCol, nRow, nTab, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol;
+        SCROW nRow;
+        SCTAB nTab;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         rRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         ScAddress aAddress( rRange.aStart );
         for ( nTab = nTab1; nTab <= nTab2; ++nTab )
@@ -222,19 +229,19 @@ void ScDocument::DelBroadcastAreasInRange( const ScRange& rRange )
 }
 
 void ScDocument::StartListeningCell( const ScAddress& rAddress,
-                                            SfxListener* pListener )
+                                            SvtListener* pListener )
 {
     DBG_ASSERT(pListener, "StartListeningCell: pListener Null");
-    USHORT nTab = rAddress.Tab();
+    SCTAB nTab = rAddress.Tab();
     if (pTab[nTab])
         pTab[nTab]->StartListening( rAddress, pListener );
 }
 
 void ScDocument::EndListeningCell( const ScAddress& rAddress,
-                                            SfxListener* pListener )
+                                            SvtListener* pListener )
 {
     DBG_ASSERT(pListener, "EndListeningCell: pListener Null");
-    USHORT nTab = rAddress.Tab();
+    SCTAB nTab = rAddress.Tab();
     if (pTab[nTab])
         pTab[nTab]->EndListening( rAddress, pListener );
 }
@@ -494,7 +501,7 @@ void ScDocument::TrackFormulas( ULONG nHintId )
     if ( pFormulaTrack )
     {
         erBEEPER();
-        ScBroadcasterList* pBC;
+        SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
         BOOL bIsChanged = TRUE;
@@ -537,13 +544,13 @@ void ScDocument::TrackFormulas( ULONG nHintId )
 
 void ScDocument::StartAllListeners()
 {
-    for ( USHORT i = 0; i <= MAXTAB; ++i )
+    for ( SCTAB i = 0; i <= MAXTAB; ++i )
         if ( pTab[i] )
             pTab[i]->StartAllListeners();
 }
 
 void ScDocument::UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
-        const ScRange& rRange, short nDx, short nDy, short nDz
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz
     )
 {
     BOOL bExpandRefsOld = IsExpandRefs();
