@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:11:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,9 +133,6 @@
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
-#endif
-#ifndef _SCRRECT_HXX
-#include <scrrect.hxx>      // SwScrollRect, SwScrollRects
 #endif
 #ifndef _FNTCACHE_HXX
 #include <fntcache.hxx>
@@ -413,8 +410,8 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     ++nStartAction;
 
 #ifndef PRODUCT
-    // No Scroll starts the timer to repair the scrolled area automatically
-    if( GetViewOptions()->IsTest8() )
+    // test option 'No Scroll' suppresses the automatic repair of the scrolled area
+    if ( !GetViewOptions()->IsTest8() )
 #endif
     if ( Imp()->IsScrolled() )
         Imp()->RestartScrollTimer();
