@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:14:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ czech ] = "Vlastnosti";
         Text[ hebrew ] = "‮מאפינים‬";
         Text[ hindi ] = "विशेषतायें";
+        Text[ slovak ] = "Vlastnosti";
     };
     FixedText FT_LEVEL
     {
@@ -140,6 +141,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ czech ] = "Úrovně vnoření kapitol";
         Text[ hebrew ] = "Einbezogene Kapitelebenen";
         Text[ hindi ] = "बाहरी रूपरेखा स्तरों को सम्मिलित किया";
+        Text[ slovak ] = "Úrovne ponorenia kapitol";
     };
     NumericField NF_LEVEL
     {
@@ -189,6 +191,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ czech ] = "Podbody v jednotlivých úrovních";
         Text[ hebrew ] = "Absätze je Kapitel";
         Text[ hindi ] = "एक स्तर में अधीनविषयें";
+        Text[ slovak ] = "Podbody v jednotlivých úrovniach";
     };
     NumericField NF_PARA
     {
@@ -239,6 +242,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ czech ] = "Abstrakt obsahuje zvolený počet odstavců z vybraných úrovní kapitol.";
         Text[ hebrew ] = "Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen.";
         Text[ hindi ] = "सारांश में सम्मिलित बाहरी रूपरेखा स्तर से चुने हुए परिच्छेद है ।";
+        Text[ slovak ] = "Abstrakt obsahuje zvolený počet odstavcov z vybraných úrovní kapitol.";
     };
     OKButton PB_OK
     {
@@ -285,7 +289,10 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ czech ] = "Vytvořit automatický konspekt";
     Text[ hebrew ] = "AutoAbstract erzeugen";
     Text[ hindi ] = "स्वचालित ढंग से सारांश उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť automatický konspekt";
 };
+
+
 
 
 
