@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:57:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Kategorie";
         Text[ hebrew ] = "‮סיווגים‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Kategórie";
     };
     FixedText FT_TEMPLATE
     {
@@ -175,6 +176,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Šablony";
         Text[ hebrew ] = "‮תבניות‬";
         Text[ hindi ] = "न~मूनें";
+        Text[ slovak ] = "Š~ablóny";
     };
     ListBox LB_TEMPLATE
     {
@@ -217,6 +219,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Více";
         Text[ hebrew ] = "‮עוד‬";
         Text[ hindi ] = "~अधिक";
+        Text[ slovak ] = "V~iac";
     };
     Window WIN_PREVIEW
     {
@@ -259,6 +262,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "पूर्व~दृश्य";
+        Text[ slovak ] = "~Náhľad";
     };
     FixedLine GB_DOCINFO
     {
@@ -292,6 +296,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Popis";
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "विवरण";
+        Text[ slovak ] = "Popis";
     };
     CheckBox CB_TEXT_STYLE
     {
@@ -324,6 +329,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टे~क्स्ट्";
+        Text[ slovak ] = "Te~xt";
     };
     CheckBox CB_FRAME_STYLE
     {
@@ -356,6 +362,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Rámec";
         Text[ hebrew ] = "‮מסגרת‬";
         Text[ hindi ] = "~फ्रेम्";
+        Text[ slovak ] = "Rám~ec";
     };
     CheckBox CB_PAGE_STYLE
     {
@@ -388,6 +395,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Stránky";
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "~पृष्ठ";
+        Text[ slovak ] = "~Stránky";
     };
     CheckBox CB_NUM_STYLE
     {
@@ -420,6 +428,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Číslování";
         Text[ hebrew ] = "‮מיספור‬";
         Text[ hindi ] = "सं~ख्या देना";
+        Text[ slovak ] = "Čí~slovanie";
     };
     CheckBox CB_MERGE_STYLE
     {
@@ -452,6 +461,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Přepsat";
         Text[ hebrew ] = "‮כתיבה על‬";
         Text[ hindi ] = "~ओवररइट्";
+        Text[ slovak ] = "~Prepísať";
     };
     PushButton PB_LOAD_FILE
     {
@@ -484,6 +494,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Ze souboru...";
         Text[ hebrew ] = "‮מקובץ...‬";
         Text[ hindi ] = "फाइल से...";
+        Text[ slovak ] = "Zo súboru...";
     };
     String STR_LOAD_TEMPLATE
     {
@@ -513,6 +524,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Načíst styly";
         Text[ hebrew ] = "‮טעינת סגנונות‬";
         Text[ hindi ] = "शैलियों को लोड़ करो";
+        Text[ slovak ] = "Načítať štýly";
     };
     FixedText FT_TITLE
     {
@@ -547,6 +559,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Titulek";
         Text[ hebrew ] = "‮כותרת‬";
         Text[ hindi ] = "~उपाधि";
+        Text[ slovak ] = "~Titulok";
     };
     Edit ED_TITLE
     {
@@ -589,6 +602,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Předmět";
         Text[ hebrew ] = "‮נושא‬";
         Text[ hindi ] = "विषय";
+        Text[ slovak ] = "Predmet";
     };
     Edit ED_THEMA
     {
@@ -631,6 +645,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Klíčová slova";
         Text[ hebrew ] = "‮מילות מפתח‬";
         Text[ hindi ] = "~प्रधान शब्द";
+        Text[ slovak ] = "~Kľúčové slová";
     };
     Edit ED_KEYWORDS
     {
@@ -673,6 +688,7 @@ ModalDialog DLG_NEW_FILE
         Text[ czech ] = "Popis";
         Text[ hebrew ] = "‮תאור‬";
         Text[ hindi ] = "~विवरण";
+        Text[ slovak ] = "~Popis";
     };
     MultiLineEdit ED_DESC
     {
@@ -703,7 +719,10 @@ ModalDialog DLG_NEW_FILE
     Text[ czech ] = "Nový";
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "नया";
+    Text[ slovak ] = "Nový";
 };
+
+
 
 
 
