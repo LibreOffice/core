@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:34:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ class ExtendedXlfd {
 
         int                 GetFontCodeRanges( sal_uInt32* pCodePairs ) const;
 
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         void                Dump() const;
         #endif
 
@@ -251,7 +251,7 @@ class XlfdStorage {
         unsigned short      GetCount() const
                                     { return mnCount; }
         const ExtendedXlfd* Get(int nIdx) const;
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         void                Dump() const ;
         #endif
 
