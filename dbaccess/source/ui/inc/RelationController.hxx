@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:44:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace dbaui
         sal_Bool    m_bRelationsPossible;
     protected:
         // all the features which should be handled by this class
-        virtual void            AddSupportedFeatures();
+        virtual void            describeSupportedFeatures();
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
         virtual FeatureState    GetState(sal_uInt16 nId) const;
         // execute a feature
