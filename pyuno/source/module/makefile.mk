@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mh $ $Date: 2003-06-13 07:51:54 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:00:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ ENABLE_EXCEPTIONS=TRUE
 #-------------------------------------------------------------------
 
 CFLAGS+=-I$(SOLARINCDIR)$/python
+.IF "$(OS)$(CPU)$(COMEX)" == "SOLARISS4"
+# no -Bdirect for SunWS CC
+DIRECT = $(LINKFLAGSDEFS)
+.ENDIF
 
 .IF "$(GUI)" == "UNX"
 # python expects modules without the lib prefix 
@@ -78,7 +82,7 @@ PYUNO_MODULE=$(DLLDEST)$/pyuno$(DLLPOST)
 # so this library cannot be checked
 SHL1NOCHECK=yes
 PYUNORC=pyunorc
-.IF "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
 PYTHONLIB=-lpython
 .ENDIF
 .ELSE
@@ -120,7 +124,7 @@ DEFLIB1NAME=$(TARGET)
 
 # --- Targets ------------------------------------------------------
 
-ALL : ALLTAR \
+ALLTAR : \
     $(DLLDEST)$/uno.py 		\
     $(DLLDEST)$/unohelper.py	\
     $(PYUNO_MODULE)			\
@@ -134,12 +138,17 @@ $(DLLDEST)$/%.py: %.py
 
 .IF "$(GUI)" == "UNX"
 $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
-.IF "$(OS)" != "SOLARIS"
+.IF "$(OS)" == "LINUX"
     ld -shared -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
-.ELSE
+.ELIF "$(OS)" == "SOLARIS"
     ld -G -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+.ELIF "$(OS)" == "FREEBSD"
+    ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o
+.ELIF "$(OS)" == "MACOSX"
+    $(CC) -dynamiclib -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o
 .ENDIF
 .ENDIF
+
 
 $(MISC)$/$(PYUNORC) : pyuno
     -rm -f $@
