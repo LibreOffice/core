@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:30:48 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,9 @@
 #ifndef _SV_FILEDLG_HXX //autogen
 #include <svtools/filedlg.hxx>
 #endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
-
-#include <vcl/system.hxx>
 
 #include <vcl/font.hxx>
 
