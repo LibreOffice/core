@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:33:26 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 08:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #ifndef _SVDOTEXT_HXX //autogen wg. SdrTextObj
 #include <svx/svdotext.hxx>
 #endif
-#ifndef _OUTLOBJ_HXX //autogen wg. OutlinerParaObject
-#include <svx/outlobj.hxx>
-#endif
 #ifndef _EDITOBJ_HXX //autogen wg. EditTextObject
 #include <svx/editobj.hxx>
 #endif
@@ -106,6 +103,9 @@
 #ifndef SC_CELL_HXX             // ScFormulaCell
 #include "cell.hxx"
 #endif
+#ifndef SC_DRWLAYER_HXX
+#include "drwlayer.hxx"
+#endif
 
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
@@ -129,6 +129,9 @@
 #include <svx/boxitem.hxx>
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SVX_ADJITEM_HX
+#include <svx/adjitem.hxx>
 #endif
 
 #include <svx/eeitem.hxx>
@@ -455,7 +458,7 @@ void XclObj::SetText( RootData& rRoot, const SdrTextObj& rObj )
         pClientTextbox = new XclMsodrawing( rRoot );
         pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
-        pTxo = new XclTxo( rObj );
+        pTxo = new XclTxo( *rRoot.pER, rObj );
     }
 }
 
@@ -652,129 +655,100 @@ ULONG XclObjDropDown::GetLen() const
 
 // --- class XclTxo --------------------------------------------------
 
-XclTxo::XclTxo( const String& rStr ) :
-    aText( rStr ),
-    nGrbit(0),
-    nRot(0)
+XclTxo::XclTxo( const String& rString ) :
+    mpString( new XclExpString( rString ) ),
+    meHorAlign( xlTxoHAlign_Default ),
+    meVerAlign( xlTxoVAlign_Default ),
+    meRotation( xlTxoRot_Default )
 {
-}
-
-
-XclTxo::XclTxo( const SdrTextObj& rTextObj ) :
-    nGrbit(0),
-    nRot(0)
-{
-    String aStr;
-    const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject();
-    DBG_ASSERT( pParaObj, "XclTxo: no ParaObject" );
-    if( pParaObj )
+    if( mpString->Len() )
     {
-        // alignment in graphic
-//-/        SfxItemSet aItemSet( *rTextObj.GetItemPool(), SDRATTR_START, SDRATTR_END );
-        const SfxItemSet& rItemSet = rTextObj.GetItemSet();
-//-/        rTextObj.TakeAttributes( aItemSet, FALSE, FALSE );
-
-        switch ( ((const SdrTextHorzAdjustItem&) (rItemSet.Get( SDRATTR_TEXT_HORZADJUST ))).GetValue() )
-        {
-            case SDRTEXTHORZADJUST_LEFT :
-                nGrbit |= (1 << 1);
-            break;
-            case SDRTEXTHORZADJUST_CENTER :
-                nGrbit |= (2 << 1);
-            break;
-            case SDRTEXTHORZADJUST_RIGHT :
-                nGrbit |= (3 << 1);
-            break;
-            case SDRTEXTHORZADJUST_BLOCK :
-                nGrbit |= (4 << 1);
-            break;
-        }
-
-        switch ( ((const SdrTextVertAdjustItem&) (rItemSet.Get( SDRATTR_TEXT_VERTADJUST ))).GetValue() )
-        {
-            case SDRTEXTVERTADJUST_TOP :
-                nGrbit |= (1 << 4);
-            break;
-            case SDRTEXTVERTADJUST_CENTER :
-                nGrbit |= (2 << 4);
-            break;
-            case SDRTEXTVERTADJUST_BOTTOM :
-                nGrbit |= (3 << 4);
-            break;
-            case SDRTEXTVERTADJUST_BLOCK :
-                nGrbit |= (4 << 4);
-            break;
-        }
-        // the text
-        const EditTextObject& rEditObj = pParaObj->GetTextObject();
-        USHORT nPara = rEditObj.GetParagraphCount();
-        for( USHORT j = 0; j < nPara; j++ )
-        {
-            aStr += rEditObj.GetText( j );
-            if ( j < nPara-1 )
-                aStr += ( sal_Char ) 0x0a;
-        }
-//2do: formatting runs
+        // If there is text, Excel *needs* the 2nd CONTINUE record with at least two format runs
+        mpString->AppendFormat( 0, EXC_FONT_APP );
+        mpString->AppendFormat( mpString->Len(), EXC_FONT_APP );
     }
-    aText.Assign( aStr );
 }
 
-
-XclTxo::~XclTxo()
+XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
+    meHorAlign( xlTxoHAlign_Default ),
+    meVerAlign( xlTxoVAlign_Default ),
+    meRotation( xlTxoRot_Default )
 {
-}
+    mpString.reset( XclExpStringHelper::CreateString( rRoot, rTextObj ) );
 
+    // additional alignment and orientation items
+    const SfxItemSet& rItemSet = rTextObj.GetItemSet();
+
+    // horizontal alignment
+    switch( static_cast< const SvxAdjustItem& >( rItemSet.Get( EE_PARA_JUST ) ).GetAdjust() )
+    {
+        case SVX_ADJUST_LEFT:           meHorAlign = xlTxoHAlignLeft;       break;
+        case SVX_ADJUST_CENTER:         meHorAlign = xlTxoHAlignCenter;     break;
+        case SVX_ADJUST_RIGHT:          meHorAlign = xlTxoHAlignRight;      break;
+        case SVX_ADJUST_BLOCK:          meHorAlign = xlTxoHAlignJustify;    break;
+    }
+
+    // vertical alignment
+    switch( static_cast< const SdrTextVertAdjustItem& >( rItemSet.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue() )
+    {
+        case SDRTEXTVERTADJUST_TOP:     meVerAlign = xlTxoVAlignTop;        break;
+        case SDRTEXTVERTADJUST_CENTER:  meVerAlign = xlTxoVAlignCenter;     break;
+        case SDRTEXTVERTADJUST_BOTTOM:  meVerAlign = xlTxoVAlignBottom;     break;
+        case SDRTEXTVERTADJUST_BLOCK:   meVerAlign = xlTxoVAlignJustify;    break;
+    }
+
+    // rotation
+    long nAngle = rTextObj.GetRotateAngle();
+    if( (4500 < nAngle) && (nAngle < 13500) )
+        meRotation = xlTxoRot90ccw;
+    else if( (22500 < nAngle) && (nAngle < 31500) )
+        meRotation = xlTxoRot90cw;
+    else
+        meRotation = xlTxoNoRot;
+}
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
 {
-    UINT16 nTextLen = aText.Len();
-    UINT16 nFormatLen = 0;
-    if ( nTextLen && !nFormatLen )
-        nFormatLen = 8 * 2; // length of CONTINUE record, not count of formats
-    rStrm << nGrbit << nRot << UINT32(0) << UINT16(0)
-        << nTextLen << nFormatLen << UINT32(0);
-}
+    DBG_ASSERT( mpString.get(), "XclTxo::SaveCont - missing string" );
 
+    sal_uInt16 nRunLen = 8 * mpString->GetFormatsCount();
+    // alignment
+    sal_uInt16 nFlags = 0;
+    ::insert_value( nFlags, meHorAlign, 1, 3 );
+    ::insert_value( nFlags, meVerAlign, 4, 3 );
+
+    rStrm << nFlags << static_cast< sal_uInt16 >( meRotation );
+    rStrm.WriteZeroBytes( 6 );
+    rStrm << mpString->Len() << nRunLen << sal_uInt32( 0 );
+}
 
 void XclTxo::Save( XclExpStream& rStrm )
 {
+    // Write the TXO part
     ExcRecord::Save( rStrm );
 
-    UINT16 nTextLen = aText.Len();
-    UINT16 nFormatLen = 0;
-    if ( nTextLen && !nFormatLen )
-        nFormatLen = 8 * 2; // length of CONTINUE record, not count of formats
-
     // CONTINUE records are only written if there is some text
-    if ( nTextLen )
+    if( !mpString->IsEmpty() )
     {
-        // CONTINUE text
-        rStrm.StartRecord( EXC_ID_CONT, aText.GetBufferSize() + 1 );
-        aText.WriteFlagField( rStrm );
-        aText.WriteBuffer( rStrm );
+        // CONTINUE for character array
+        rStrm.StartRecord( EXC_ID_CONT, mpString->GetBufferSize() + 1 );
+        rStrm << static_cast< sal_uInt8 >( mpString->GetFlagField() & EXC_STRF_16BIT ); // only Unicode flag
+        mpString->WriteBuffer( rStrm );
         rStrm.EndRecord();
 
-        // CONTINUE formatting runs
-        rStrm.StartRecord( EXC_ID_CONT, nFormatLen );
-        // write at least two dummy TXORUNs
-        rStrm
-            << UINT16(0)    // first character
-            << UINT16(0)    // normal font
-            << UINT32(0)    // Reserved
-            << nTextLen
-            << UINT16(0)    // normal font
-            << UINT32(0)    // Reserved
-            ;
+        // CONTINUE for formatting runs
+        rStrm.StartRecord( EXC_ID_CONT, 8 * mpString->GetFormatsCount() );
+        const XclFormatRunVec& rFormats = mpString->GetFormats();
+        for( XclFormatRunVec::const_iterator aIter = rFormats.begin(), aEnd = rFormats.end(); aIter != aEnd; ++aIter )
+            rStrm << *aIter << sal_uInt32( 0 );
         rStrm.EndRecord();
     }
 }
 
-
 UINT16 XclTxo::GetNum() const
 {
-    return 0x01B6;
+    return EXC_ID_TXO;
 }
-
 
 ULONG XclTxo::GetLen() const
 {
@@ -855,7 +829,7 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
             };
             XclExpUniString aName( xOleStg->GetUserName() );
             UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
-            UINT16 nFmlaLen = sizeof(pData) + aName.GetSize() + nPadLen;
+            UINT16 nFmlaLen = static_cast< sal_uInt16 >( sizeof(pData) + aName.GetSize() + nPadLen );
             UINT16 nSubRecLen = nFmlaLen + 6;
 
             // ftPictFmla subrecord, undocumented as usual
