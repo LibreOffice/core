@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-18 13:18:01 $
+ *  last change: $Author: sb $ $Date: 2002-06-20 09:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4181,6 +4181,15 @@ Window::~Window()
             if( mpFrameData->mxDropTargetListener.is() )
             {
                 OSL_TRACE( "removing drop target listener" );
+
+                Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                    Reference< XDragGestureRecognizer > (mpFrameData->mxDragSource, UNO_QUERY);
+                if( xDragGestureRecognizer.is() )
+                {
+                    xDragGestureRecognizer->removeDragGestureListener(
+                        Reference< XDragGestureListener > (mpFrameData->mxDropTargetListener, UNO_QUERY));
+                }
+
                 mpFrameData->mxDropTarget->removeDropTargetListener( mpFrameData->mxDropTargetListener );
                 mpFrameData->mxDropTargetListener.clear();
             }
