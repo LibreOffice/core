@@ -337,8 +337,14 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create frame
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Frame" ), 1, mpDispFrame );
-    if( !SUCCEEDED( hr ) ) return hr;
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Task" ), 1, mpDispFrame );
+    if( !SUCCEEDED( hr ) || !mpDispFrame )
+    {
+        // the interface com.sun.star.frame.Task is removed in 6.1
+        // but the interface com.sun.star.frame.Frame has some bugs in 6.0
+        hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Frame" ), 1, mpDispFrame );
+        if( !SUCCEEDED( hr ) ) return hr;
+    }
 
     // initialize frame
     CComVariant dummyResult;
