@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:10:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2518,7 +2518,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Left = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        Minimum = 0 ;
+        Minimum = -1999 ;
         Maximum = 1999 ;
         DecimalDigits = 2 ;
         Value = 0 ;
