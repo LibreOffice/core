@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleMenuItem.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-03-26 12:49:28 $
+ *  last change: $Date: 2003-03-26 13:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,8 @@ public class AccessibleMenuItem extends TestCase {
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
         tEnv.addObjRelation("EditOnly","Can't change or select Text in MenuBarItem");
+
+        tEnv.addObjRelation("Destroy", new Boolean(true));
 
         return tEnv;
 
