@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 09:40:42 $
+ *  last change: $Author: aw $ $Date: 2001-10-11 13:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -420,6 +424,10 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
     aPages(1024,32,32),
     aMaPag(1024,32,32)
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+#endif
+
     DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
@@ -430,6 +438,10 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, IN
     aMaPag(1024,32,32),
     aTablePath(rPath)
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+#endif
+
     DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
@@ -439,6 +451,10 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTa
     aPages(1024,32,32),
     aMaPag(1024,32,32)
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+#endif
+
     DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
@@ -449,6 +465,10 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, FA
     aMaPag(1024,32,32),
     aTablePath(rPath)
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+#endif
+
     DBG_CTOR(SdrModel,NULL);
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
@@ -457,12 +477,20 @@ SdrModel::SdrModel(const SdrModel& rSrcModel):
     aPages(1024,32,32),
     aMaPag(1024,32,32)
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::SdrModel(...)" );
+#endif
+
     // noch nicht implementiert
     DBG_ERROR("SdrModel::CopyCtor() ist noch nicht implementiert");
 }
 
 SdrModel::~SdrModel()
 {
+#ifdef TIMELOG
+    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "svx", "aw93748", "SdrModel::~SdrModel(...)" );
+#endif
+
     DBG_DTOR(SdrModel,NULL);
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
