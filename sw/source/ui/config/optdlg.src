@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 05:36:42 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2849,7 +2849,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "è‡ªå®šçš„è¿å­—ç¬¦(~Y)";
         Text[ russian ] = "Ïåğåíîñû ïîëüçîâàòåëÿ";
         Text[ polish ] = "Indywidualne znaki podzia³u";
-        Text[ japanese ] = "ï½¿ï¾Œï¾„ï¾Šï½²ï¾Œï¾(~Y)";
+        Text[ japanese ] = "ï¾•ï½°ï½»ï¾ï½°å®šç¾©ã®ï¾Šï½²ï¾Œï¾(~Y)";
         Text[ chinese_traditional ] = "è‡ªè¨‚çš„é€£å­—ç¬¦(~Y)";
         Text[ arabic ] = "æÇÕáÉ ÇÎÊíÇÑíÉ";
         Text[ greek ] = "¹~ğéá äéá÷ùñéóôéêÜ";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
