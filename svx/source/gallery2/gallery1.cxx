@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 16:14:53 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ SvStream& operator<<( SvStream& rOut, const GalleryImportThemeEntry& rEntry )
 
     rOut << ByteString( rEntry.aThemeName, RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aUIName, RTL_TEXTENCODING_UTF8 ) <<
-            ByteString( rEntry.aURL.GetMainURL(), RTL_TEXTENCODING_UTF8 ) <<
+            ByteString( rEntry.aURL.GetMainURL( INetURLObject::NO_DECODE ), RTL_TEXTENCODING_UTF8 ) <<
             ByteString( rEntry.aImportName, RTL_TEXTENCODING_UTF8 ) <<
             aDummy;
 
@@ -358,7 +358,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
     try
     {
         uno::Reference< XCommandEnvironment > xEnv;
-        Content                               aCnt( rBaseURL.GetMainURL(), xEnv );
+        Content                               aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
         aProps.getArray()[ 0 ] == OUString::createFromAscii( "Url" );
@@ -384,9 +384,9 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 
-                        Content aThmCnt( aThmURL.GetMainURL(), xEnv );
-                        Content aSdgCnt( aSdgURL.GetMainURL(), xEnv );
-                        Content aSdvCnt( aSdvURL.GetMainURL(), xEnv );
+                        Content aThmCnt( aThmURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                        Content aSdgCnt( aSdgURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
+                        Content aSdvCnt( aSdvURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
                         aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
 
@@ -447,7 +447,7 @@ void Gallery::ImplLoadImports()
 
     if( FileExists( aURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -497,7 +497,7 @@ void Gallery::ImplWriteImportList()
 {
     INetURLObject aURL( GetUserURL() );
     aURL.Append( ( String( "gallery.sdi", RTL_TEXTENCODING_UTF8 ) ) );
-    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 
     if( pOStm )
     {
@@ -621,7 +621,7 @@ BOOL Gallery::CreateImportTheme( const INetURLObject& rURL, const String& rImpor
 
     if( FileExists( aURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -817,7 +817,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
 
             if( FileExists( aURL ) )
             {
-                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_READ );
+                SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
                 if( pIStm )
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-24 09:14:49 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ void GalleryPreview::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 
 void GalleryPreview::PreviewSound( const INetURLObject& rURL )
 {
-    aSound.SetSoundName( rURL.GetMainURL() );
+    aSound.SetSoundName( rURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     if( rURL.GetProtocol() != INET_PROT_NOT_VALID )
         aSound.Play();

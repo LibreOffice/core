@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-08 13:56:40 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ GalleryTheme::~GalleryTheme()
 void GalleryTheme::ImplCreateSvDrawStorage()
 {
     if( !pThm->IsImported() )
-        aSvDrawStorageRef = new SvStorage( FALSE, GetSdvURL().GetMainURL(), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
+        aSvDrawStorageRef = new SvStorage( FALSE, GetSdvURL().GetMainURL( INetURLObject::NO_DECODE ), pThm->IsReadOnly() ? STREAM_READ : STREAM_STD_READWRITE );
     else
         aSvDrawStorageRef.Clear();
 }
@@ -139,7 +139,7 @@ void GalleryTheme::ImplCreateSvDrawStorage()
 
 BOOL GalleryTheme::ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, GalleryObject* pExistentEntry )
 {
-    SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL(), STREAM_WRITE );
+    SvStream*   pOStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
     BOOL        bRet = FALSE;
 
     if( pOStm )
@@ -180,7 +180,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
     if( pEntry )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetSdgURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -224,7 +224,7 @@ SgaObject* GalleryTheme::ImplReadSgaObject( GalleryObject* pEntry )
 
 void GalleryTheme::ImplRead()
 {
-    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL(), STREAM_READ );
+    SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
     if( pIStm )
     {
@@ -249,9 +249,9 @@ void GalleryTheme::ImplWrite()
         if( FileExists( aPathURL ) || CreateDir( aPathURL ) )
         {
 #ifdef UNX
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL(), STREAM_WRITE | STREAM_COPY_ON_SYMLINK | STREAM_TRUNC );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_COPY_ON_SYMLINK | STREAM_TRUNC );
 #else
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( GetThmURL().GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 #endif
 
             if( pOStm )
@@ -308,7 +308,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
     // read next possible number
     if( FileExists( aInfoFileURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -371,7 +371,7 @@ INetURLObject GalleryTheme::ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFor
     while( bExists );
 
     // write updated number
-    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL(), STREAM_WRITE );
+    SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aInfoFileURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
 
     if( pOStm )
     {
@@ -478,7 +478,7 @@ BOOL GalleryTheme::RemoveObject( ULONG nPos )
     if( pEntry )
     {
         if( SGA_OBJ_SVDRAW == pEntry->eObjKind )
-            aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL() );
+            aSvDrawStorageRef->Remove( pEntry->aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
         delete pEntry;
         ImplSetModified( TRUE );
@@ -664,8 +664,8 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         DBG_ASSERT( aInURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
         DBG_ASSERT( aTmpURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL(), STREAM_READ );
-        SvStream* pTmpStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aInURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        SvStream* pTmpStm = ::utl::UcbStreamHelper::CreateStream( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 
         if( pIStm && pTmpStm )
         {
@@ -714,7 +714,7 @@ void GalleryTheme::Actualize( const Link& rActualizeLink, GalleryProgress* pProg
         ULONG nStorErr = 0;
 
         {
-            SvStorageRef aTempStorageRef( new SvStorage( FALSE, aTmpURL.GetMainURL(), STREAM_STD_READWRITE ) );
+            SvStorageRef aTempStorageRef( new SvStorage( FALSE, aTmpURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE ) );
             aSvDrawStorageRef->CopyTo( aTempStorageRef );
             nStorErr = aSvDrawStorageRef->GetError();
         }
@@ -743,7 +743,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, BO
 
     if( FileExists( rURL ) )
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -943,7 +943,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
         }
 
         const INetURLObject aURL( ImplCreateUniqueURL( SGA_OBJ_BMP, nExportFormat ) );
-        SvStream*           pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL(), STREAM_WRITE | STREAM_TRUNC );
+        SvStream*           pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
 
         if( pOStm )
         {
@@ -972,7 +972,7 @@ BOOL GalleryTheme::InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos )
 
         if( bRet )
         {
-            const SgaObjectBmp aObjBmp( aURL.GetMainURL() );
+            const SgaObjectBmp aObjBmp( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
             InsertObject( aObjBmp, nInsertPos );
         }
     }
@@ -1137,7 +1137,7 @@ BOOL GalleryTheme::InsertTransferable( const ::com::sun::star::uno::Reference< :
 
                 try
                 {
-                    Content     aCnt( aURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+                    Content     aCnt( aURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
                     sal_Bool    bFolder;
 
                     aCnt.getPropertyValue( OUString::createFromAscii( "IsFolder" ) ) >>= bFolder;
@@ -1269,27 +1269,27 @@ SvStream& GalleryTheme::WriteData( SvStream& rOStm ) const
         }
         else
         {
-            aPath = pObj->aURL.GetMainURL();
-            bRel = ( ( aPath.Erase( aRelURL1.GetMainURL().Len() ) ) == aRelURL1.GetMainURL() );
+            aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+            bRel = ( ( aPath.Erase( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() ) ) == aRelURL1.GetMainURL( INetURLObject::NO_DECODE ) );
 
-            if( bRel && ( pObj->aURL.GetMainURL().Len() > ( aRelURL1.GetMainURL().Len() + 1 ) ) )
+            if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).Len() > ( aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() + 1 ) ) )
             {
-                aPath = pObj->aURL.GetMainURL();
-                aPath = aPath.Erase( 0, aRelURL1.GetMainURL().Len() );
+                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+                aPath = aPath.Erase( 0, aRelURL1.GetMainURL( INetURLObject::NO_DECODE ).Len() );
             }
             else
             {
-                aPath = pObj->aURL.GetMainURL();
+                aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                bRel = ( ( aPath.Erase( aRelURL2.GetMainURL().Len() ) ) == aRelURL2.GetMainURL() );
+                bRel = ( ( aPath.Erase( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() ) ) == aRelURL2.GetMainURL( INetURLObject::NO_DECODE ) );
 
-                if( bRel && ( pObj->aURL.GetMainURL().Len() > ( aRelURL2.GetMainURL().Len() + 1 ) ) )
+                if( bRel && ( pObj->aURL.GetMainURL( INetURLObject::NO_DECODE ).Len() > ( aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() + 1 ) ) )
                 {
-                    aPath = pObj->aURL.GetMainURL();
-                    aPath = aPath.Erase( 0, aRelURL2.GetMainURL().Len() );
+                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
+                    aPath = aPath.Erase( 0, aRelURL2.GetMainURL( INetURLObject::NO_DECODE ).Len() );
                 }
                 else
-                    aPath = pObj->aURL.GetMainURL();
+                    aPath = pObj->aURL.GetMainURL( INetURLObject::NO_DECODE );
             }
         }
 
@@ -1375,7 +1375,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
             if( bRel )
             {
                 aFileName.SearchAndReplaceAll( '\\', '/' );
-                aPath = aRelURL1.GetMainURL();
+                aPath = aRelURL1.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( aFileName.GetChar( 0 ) != '/' )
                     aPath += '/';
@@ -1386,7 +1386,7 @@ SvStream& GalleryTheme::ReadData( SvStream& rIStm )
 
                 if( !FileExists( pObj->aURL ) )
                 {
-                    aPath = aRelURL2.GetMainURL();
+                    aPath = aRelURL2.GetMainURL( INetURLObject::NO_DECODE );
 
                     if( aFileName.GetChar( 0 ) != '/' )
                         aPath += '/';

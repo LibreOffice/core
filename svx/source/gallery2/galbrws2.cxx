@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-03 10:51:01 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,9 +167,9 @@ void GalleryBackgroundPopup::Select()
     Menu::Select();
 
     const INetURLObject aURL( mpTheme->GetObjectURL( mnObjectPos ) );
-    const SvxBrushItem  aBrushItem( aURL.GetMainURL(), String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
+    const SvxBrushItem  aBrushItem( aURL.GetMainURL( INetURLObject::NO_DECODE ), String(), GPOS_TILED, SID_GALLERY_BG_BRUSH );
     const SfxUInt16Item aPosItem( SID_GALLERY_BG_POS, GetCurItemId() - 1 );
-    const SfxStringItem aPathItem( SID_FILE_NAME, aURL.GetMainURL() );
+    const SfxStringItem aPathItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->Execute( SID_GALLERY_BG_BRUSH,
                               SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -732,7 +732,7 @@ String GalleryBrowser2::GetItemText( const GalleryTheme& rTheme, const SgaObject
 
         if( !aTitle.Len() )
         {
-            aTitle = aURL.GetMainURL();
+            aTitle = aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
             aTitle = aTitle.GetToken( aTitle.GetTokenCount( '/' ) - 1, '/' );
         }
 

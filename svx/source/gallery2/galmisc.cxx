@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-10 11:08:59 $
+ *  last change: $Author: ka $ $Date: 2001-07-30 13:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ USHORT SGAImport( const INetURLObject& rURL, Graphic& rGraphic,
                   String& rFilterName, BOOL bShowProgress )
 {
     USHORT      nRet = SGA_IMPORT_NONE;
-    SfxMedium   aMedium( rURL.GetMainURL(), STREAM_READ, TRUE );
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, TRUE );
     String      aFilterName;
 
     aMedium.SetTransferPriority( SFX_TFPRIO_VISIBLE_HIGHRES_GRAPHIC | SFX_TFPRIO_SYNCHRON );
@@ -162,7 +162,7 @@ USHORT SGAImport( const INetURLObject& rURL, Graphic& rGraphic,
         GalleryProgress*    pProgress = bShowProgress ? new GalleryProgress( pGraphicFilter ) : NULL;
         USHORT              nFormat;
 
-        if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL(), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
+        if( !pGraphicFilter->ImportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ), *pIStm, GRFILTER_FORMAT_DONTKNOW, &nFormat ) )
         {
             rFilterName = pGraphicFilter->GetImportFormatName( nFormat );
             nRet = SGA_IMPORT_FILE;
@@ -226,7 +226,7 @@ BOOL SGAIsSoundFile( const INetURLObject& rURL )
     }
     else
     {
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL(), STREAM_READ );
+        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
 
         if( pIStm )
         {
@@ -291,17 +291,17 @@ String GetReducedString( const INetURLObject& rURL )
 {
     String aStr;
 
-    if ( rURL.GetMainURL().Len() > 30 )
+    if ( rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Len() > 30 )
     {
         const String aName( rURL.GetName() );
 
-        aStr = rURL.GetMainURL().Copy( 0, 30 - aName.Len() - 4 );
+        aStr = rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ).Copy( 0, 30 - aName.Len() - 4 );
         aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
         aStr += '/';
         aStr += aName;
     }
     else
-        aStr = rURL.GetMainURL();
+        aStr = rURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
     return aStr;
 }
@@ -313,9 +313,9 @@ String GetSvDrawStreamNameFromURL( const INetURLObject& rSvDrawObjURL )
     String aRet;
 
     if( rSvDrawObjURL.GetProtocol() == INET_PROT_PRIV_SOFFICE &&
-        rSvDrawObjURL.GetMainURL().GetTokenCount( '/' ) == 3 )
+        rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).GetTokenCount( '/' ) == 3 )
     {
-        aRet = rSvDrawObjURL.GetMainURL().GetToken( 2, '/' );
+        aRet = rSvDrawObjURL.GetMainURL( INetURLObject::NO_DECODE ).GetToken( 2, '/' );
     }
 
     return aRet;
@@ -331,7 +331,7 @@ BOOL FileExists( const INetURLObject& rURL )
     {
         try
         {
-            Content     aCnt( rURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+            Content     aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
             OUString    aTitle;
 
             aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
@@ -363,7 +363,7 @@ BOOL CreateDir( const INetURLObject& rURL )
             uno::Reference< XCommandEnvironment >   aCmdEnv;
             INetURLObject                           aNewFolderURL( rURL );
             INetURLObject                           aParentURL( aNewFolderURL ); aParentURL.removeSegment();
-            Content                                 aParent( aParentURL.GetMainURL(), aCmdEnv );
+            Content                                 aParent( aParentURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv );
             uno::Sequence< OUString >               aProps( 1 );
             uno::Sequence< uno::Any >               aValues( 1 );
 
@@ -371,7 +371,7 @@ BOOL CreateDir( const INetURLObject& rURL )
             aValues.getArray()[ 0 ] = uno::makeAny( OUString( aNewFolderURL.GetName() ) );
 
             bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ),
-                                             aProps, aValues, Content( aNewFolderURL.GetMainURL(), aCmdEnv ) );
+                                             aProps, aValues, Content( aNewFolderURL.GetMainURL( INetURLObject::NO_DECODE ), aCmdEnv ) );
         }
         catch( const ContentCreationException& )
         {
@@ -394,10 +394,10 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
 
     try
     {
-        Content aDestPath( rDstURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+        Content aDestPath( rDstURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
 
         aDestPath.executeCommand( OUString::createFromAscii( "transfer" ),
-                                  uno::makeAny( TransferInfo( sal_False, rSrcURL.GetMainURL(),
+                                  uno::makeAny( TransferInfo( sal_False, rSrcURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                 rDstURL.GetName(), NameClash::OVERWRITE ) ) );
         bRet = TRUE;
     }
@@ -423,7 +423,7 @@ BOOL KillFile( const INetURLObject& rURL )
     {
         try
         {
-            Content aCnt( rURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
+            Content aCnt( rURL.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< XCommandEnvironment >() );
             aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
         }
         catch( const ContentCreationException& )
@@ -658,7 +658,7 @@ sal_Bool GalleryTransferable::GetData( const ::com::sun::star::datatransfer::Dat
     }
     else if( ( FORMAT_FILE == nFormat ) && mpURL )
     {
-        bRet = SetString( mpURL->GetMainURL(), rFlavor );
+        bRet = SetString( mpURL->GetMainURL( INetURLObject::NO_DECODE ), rFlavor );
     }
     else if( ( SOT_FORMATSTR_ID_SVXB == nFormat ) && mpGraphicObject )
     {
