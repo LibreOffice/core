@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationDemo.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:56:29 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,25 +40,25 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XServiceInfo;
 
-// property access
-import com.sun.star.beans.*;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Size;
 
-// name access
-import com.sun.star.container.*;
-import com.sun.star.text.*;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 
-// application specific classes
-import com.sun.star.drawing.*;
+import com.sun.star.container.XNamed;
 
-// presentation specific classes
-import com.sun.star.presentation.*;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XDrawPage;
 
-// Point, Size, ..
-import com.sun.star.awt.*;
+import com.sun.star.presentation.XPresentation;
+import com.sun.star.presentation.XPresentationSupplier;
+
 
 
 // __________ Implementation __________
@@ -80,22 +80,19 @@ public class PresentationDemo
         XComponent xDrawDoc = null;
         try
         {
-            String sConnection;
-            if ( args.length >= 1 )
-                sConnection = args[ 1 ];
-            else
-                sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
-            XMultiServiceFactory xServiceFactory =
-                Helper.connect( sConnection );
+            // get the remote office context of a running office (a new office
+            // instance is started if necessary)
+            com.sun.star.uno.XComponentContext xOfficeContext = Helper.connect();
 
             // suppress Presentation Autopilot when opening the document
-            // properties are the same as described for com.sun.star.document.MediaDescriptor
+            // properties are the same as described for
+            // com.sun.star.document.MediaDescriptor
             PropertyValue[] pPropValues = new PropertyValue[ 1 ];
             pPropValues[ 0 ] = new PropertyValue();
             pPropValues[ 0 ].Name = "Silent";
             pPropValues[ 0 ].Value = new Boolean( true );
 
-            xDrawDoc = Helper.createDocument( xServiceFactory,
+            xDrawDoc = Helper.createDocument( xOfficeContext,
                 "private:factory/simpress", "_blank", 0, pPropValues );
 
 
@@ -122,10 +119,11 @@ public class PresentationDemo
             xShapePropSet = ShapeHelper.createAndInsertShape( xDrawDoc,
                 xShapes,new Point( 1000, 1000 ), new Size( 5000, 5000 ),
                     "com.sun.star.drawing.RectangleShape" );
-            xShapePropSet.setPropertyValue(
-                "Effect", com.sun.star.presentation.AnimationEffect.WAVYLINE_FROM_BOTTOM );
+            xShapePropSet.setPropertyValue("Effect",
+                com.sun.star.presentation.AnimationEffect.WAVYLINE_FROM_BOTTOM );
 
-            /* the following three properties provokes that the shape is dimmed to red
+            /* the following three properties provokes that the shape is dimmed
+               to red
                after the animation has been finished */
             xShapePropSet.setPropertyValue( "DimHide", new Boolean( false ) );
             xShapePropSet.setPropertyValue( "DimPrevious", new Boolean( true ) );
@@ -169,8 +167,8 @@ public class PresentationDemo
             ShapeHelper.addPortion( xShape, "to first page", true );
             xShapePropSet = (XPropertySet)
                 UnoRuntime.queryInterface( XPropertySet.class, xShape );
-            xShapePropSet.setPropertyValue(
-                "Effect", com.sun.star.presentation.AnimationEffect.FADE_FROM_BOTTOM );
+            xShapePropSet.setPropertyValue("Effect",
+                com.sun.star.presentation.AnimationEffect.FADE_FROM_BOTTOM );
             xShapePropSet.setPropertyValue(
                 "OnClick", com.sun.star.presentation.ClickAction.FIRSTPAGE );
 
@@ -183,8 +181,9 @@ public class PresentationDemo
             ShapeHelper.addPortion( xShape, "to the second page", true );
             xShapePropSet = (XPropertySet)
                 UnoRuntime.queryInterface( XPropertySet.class, xShape );
-            xShapePropSet.setPropertyValue(
-                "Effect", com.sun.star.presentation.AnimationEffect.FADE_FROM_BOTTOM );
+            xShapePropSet.setPropertyValue("Effect",
+                com.sun.star.presentation.AnimationEffect.FADE_FROM_BOTTOM );
+
             xShapePropSet.setPropertyValue(
                 "OnClick", com.sun.star.presentation.ClickAction.BOOKMARK );
             // set the name of page two, and use it with the bookmark action
