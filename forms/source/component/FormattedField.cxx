@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 13:13:32 $
+ *  last change: $Author: oj $ $Date: 2001-08-10 07:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1187,8 +1187,8 @@ sal_Bool OFormattedModel::_commit()
             {
                 return sal_False;
             }
-            m_aSaveValue = aNewValue;
         }
+        m_aSaveValue = aNewValue;
     }
     return sal_True;
 }
