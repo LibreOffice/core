@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProtocolHandler.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-09-04 11:53:26 $
+ *  last change: $Author: as $ $Date: 2002-09-05 11:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,28 +80,13 @@
     The generic dispatch mechanism on a <type>Frame</type>
     search for such registered protocol handler and use it if it agrees with
     the dispatched URL.
+    </p>
 
+    <p>
     Supported URLs must match follow format: <protocol scheme>:<protocol specific part>
     If a handler provides optional arguments ("?") or jump marks ("#") depends from his
-    defintion and implementation. The generic dispatch provider will use <protocol scheme>
-    to detect right handler only.
-    </p>
-
-    <p>
-    Sometimes it can be usefull for a handler object, to know something about the
-    environment, in which it runs - especily the frame. For this case the generic
-    code, which search and instanciate the protocol handler, will call createInstanceWithArguments()
-    at the uno factory to create the service. It depends then from the handler implementation, how it get these data.
-    Following parameters are passed to the service:
-    <ul>
-    <li>sequence< any >[0] => the frame for which this ProtocolHandler was created [com.sun.star.frame.XFrame]</li>
-    </ul>
-    </p>
-
-    <p>
-    Please note: if this mechanism is used it seams not usefull (nor possible) to implement a ProtocolHandler
-    as a singleton. Otherwhise the implementation can't distinguish between different environments
-    and her corresponding dispatch requests.
+    defintion and implementation. The generic dispatch provider will use registered
+    URL pattern to detect right handler.
     </p>
  */
 service ProtocolHandler
@@ -116,6 +101,27 @@ service ProtocolHandler
         </p>
         */
         interface XDispatchProvider;
+
+        //-------------------------------------------------------------------------
+        /** initialize the new handler instance with some context informations
+
+        <p>
+        Sometimes it can be usefull for a handler object, to know something about the
+        environment, in which it runs - especily the frame. For this case the generic
+        code (which uses the handler) will ask for this optional interface and use it, if it exist.
+        Following parameters are passed to the service:
+        <ul>
+        <li>sequence< any >[0] => the frame for which this ProtocolHandler was created [com.sun.star.frame.XFrame]</li>
+        </ul>
+        </p>
+
+        <p>
+        Please note: if this mechanism is used it seams not usefull (nor possible) to implement a ProtocolHandler
+        as a singleton. Otherwhise the implementation can't distinguish between different environments
+        and her corresponding dispatch requests.
+        </p>
+        */
+        [optional] interface ::com::sun::star::lang::XInitialization;
 };
 
 //=============================================================================
