@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:48:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,20 +59,11 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLCONST_HXX
 #define SC_XLCONST_HXX
 
 #ifndef SC_ADDRESS_HXX
 #include "address.hxx"
-#endif
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-#ifndef _SOLAR_H_
-#include <tools/solar.h>
 #endif
 
 // Common =====================================================================
@@ -93,27 +84,26 @@ enum XclBiff
 
 // Excel sheet dimensions -----------------------------------------------------
 
-const sal_uInt16 EXC_MAXCOL2                = 255;
-const sal_uInt16 EXC_MAXROW2                = 16383;
-const sal_uInt16 EXC_MAXTAB2                = 0;
+const SCCOL EXC_MAXCOL2                     = 255;
+const SCROW EXC_MAXROW2                     = 16383;
+const SCTAB EXC_MAXTAB2                     = 0;
 
-const sal_uInt16 EXC_MAXCOL3                = EXC_MAXCOL2;
-const sal_uInt16 EXC_MAXROW3                = EXC_MAXROW2;
-const sal_uInt16 EXC_MAXTAB3                = EXC_MAXTAB2;
+const SCCOL EXC_MAXCOL3                     = EXC_MAXCOL2;
+const SCROW EXC_MAXROW3                     = EXC_MAXROW2;
+const SCTAB EXC_MAXTAB3                     = EXC_MAXTAB2;
 
-const sal_uInt16 EXC_MAXCOL4                = EXC_MAXCOL3;
-const sal_uInt16 EXC_MAXROW4                = EXC_MAXROW3;
-const sal_uInt16 EXC_MAXTAB4                = 32767;
+const SCCOL EXC_MAXCOL4                     = EXC_MAXCOL3;
+const SCROW EXC_MAXROW4                     = EXC_MAXROW3;
+const SCTAB EXC_MAXTAB4                     = 32767;
 
-const sal_uInt16 EXC_MAXCOL5                = EXC_MAXCOL4;
-const sal_uInt16 EXC_MAXROW5                = EXC_MAXROW4;
-const sal_uInt16 EXC_MAXTAB5                = EXC_MAXTAB4;
+const SCCOL EXC_MAXCOL5                     = EXC_MAXCOL4;
+const SCROW EXC_MAXROW5                     = EXC_MAXROW4;
+const SCTAB EXC_MAXTAB5                     = EXC_MAXTAB4;
 
-const sal_uInt16 EXC_MAXCOL8                = EXC_MAXCOL5;
-const sal_uInt16 EXC_MAXROW8                = 65535;
-const sal_uInt16 EXC_MAXTAB8                = EXC_MAXTAB5;
+const SCCOL EXC_MAXCOL8                     = EXC_MAXCOL5;
+const SCROW EXC_MAXROW8                     = 65535;
+const SCTAB EXC_MAXTAB8                     = EXC_MAXTAB5;
 
-const SCTAB  SCNOTAB                        = SCTAB_MAX;  /// An invalid Calc sheet index, for common use.
 const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel sheet index, for common use.
 
 // Storage/stream names -------------------------------------------------------
@@ -127,11 +117,15 @@ const sal_uInt16 EXC_NOTAB                  = 0xFFFF;     /// An invalid Excel s
 // String import/export -------------------------------------------------------
 
 /** Flags used to specify import/export mode of strings. */
-typedef sal_uInt16                          XclStrFlags;
+typedef sal_uInt16 XclStrFlags;
+
 const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string settings.
 const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 only.
 const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
 const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
+
+const sal_uInt16 EXC_STR_MAXLEN_BIFF2       = 0x00FF;
+const sal_uInt16 EXC_STR_MAXLEN             = 0xFFFF;
 
 const sal_uInt8 EXC_STRF_16BIT              = 0x01;
 const sal_uInt8 EXC_STRF_FAREAST            = 0x04;
@@ -177,6 +171,17 @@ const sal_uInt8 EXC_CACHEDVAL_STRING        = 0x02;
 const sal_uInt8 EXC_CACHEDVAL_BOOL          = 0x04;
 const sal_uInt8 EXC_CACHEDVAL_ERROR         = 0x10;
 
+// RK values ------------------------------------------------------------------
+
+const sal_Int32 EXC_RK_100FLAG              = 0x00000001;
+const sal_Int32 EXC_RK_INTFLAG              = 0x00000002;
+const sal_Int32 EXC_RK_VALUEMASK            = 0xFFFFFFFC;
+
+const sal_Int32 EXC_RK_DBL                  = 0x00000000;
+const sal_Int32 EXC_RK_DBL100               = EXC_RK_100FLAG;
+const sal_Int32 EXC_RK_INT                  = EXC_RK_INTFLAG;
+const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
+
 // Measures -------------------------------------------------------------------
 
 const sal_Int32 EXC_POINTS_PER_INCH         = 72;
@@ -187,10 +192,6 @@ const sal_uInt8 EXC_ROT_TOP_BOTTOM          = 180;      /// Vertical rotation to
 const sal_uInt8 EXC_ROT_STACKED             = 0xFF;     /// Characters vertically stacked.
 
 // Records (ordered by lowest record ID) ======================================
-
-// (0x0007, 0x0207) STRING ----------------------------------------------------
-
-const sal_uInt16 EXC_ID_STRING              = 0x0207;
 
 // (0x0009, 0x0209, 0x0409, 0x0809) BOF ---------------------------------------
 
@@ -206,14 +207,12 @@ const sal_uInt16 EXC_BOF_BIFF8              = 0x0600;
 
 const sal_uInt16 EXC_ID_EOF                 = 0x000A;
 
-// (0x001C) NOTE --------------------------------------------------------------
-
-const sal_uInt16 EXC_ID_NOTE                = 0x001C;
-const sal_uInt16 EXC_NOTE_VISIBLE           = 0x0002;
-
-// (0x0012, 0x0019) PROTECT and WINDOWPROTECT --------------------
+// (0x0012) PROTECT -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
+
+// (0x0019) WINDOWPROTECT -----------------------------------------------------
+
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 
 // (0x003D) WINDOW1 -----------------------------------------------------------
@@ -221,28 +220,6 @@ const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 const sal_uInt16 EXC_ID_WINDOW1             = 0x003D;
 const sal_uInt16 EXC_WIN1_DEFAULTFLAGS      = 0x0038;   /// Default flags for export.
 const sal_uInt16 EXC_WIN1_TABBARRATIO       = 600;      /// Sheet tab bar takes 60% of window width.
-
-// (0x0055) DEFCOLWIDTH -------------------------------------------------------
-
-const sal_uInt16 EXC_ID_DEFCOLWIDTH         = 0x0055;
-
-// (0x007D) COLINFO -----------------------------------------------------------
-
-const sal_uInt16 EXC_ID_COLINFO             = 0x007D;
-
-const sal_uInt16 EXC_COLINFO_HIDDEN         = 0x0001;
-const sal_uInt16 EXC_COLINFO_COLLAPSED      = 0x1000;
-
-// (0x007E) RK ----------------------------------------------------------------
-
-const sal_Int32 EXC_RK_100FLAG              = 0x00000001;
-const sal_Int32 EXC_RK_INTFLAG              = 0x00000002;
-const sal_Int32 EXC_RK_VALUEMASK            = 0xFFFFFFFC;
-
-const sal_Int32 EXC_RK_DBL                  = 0x00000000;
-const sal_Int32 EXC_RK_DBL100               = EXC_RK_100FLAG;
-const sal_Int32 EXC_RK_INT                  = EXC_RK_INTFLAG;
-const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
 
 // (0x0081) WSBOOL ------------------------------------------------------------
 
