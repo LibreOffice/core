@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-07 14:48:58 $
+ *  last change: $Author: kz $ $Date: 2001-08-14 15:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/08/07 14:48:58  kz
+ *  Merge SRC638: 07.08.01 - 16:48:26
+ *
  *  Revision 1.13  2001/07/13 20:47:36  kz
  *  Merge SRC638: 13.07.01 - 22:46:26
  *
@@ -393,6 +396,7 @@ String STR_ALL_TABLES_AND_VIEWS
  *
  *  Revision 1.0 28.09.00 13:36:13  fs
  ************************************************************************/
+
 
 
 
