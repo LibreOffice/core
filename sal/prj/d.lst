@@ -16,8 +16,8 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\inc\systools\win32\*.h %_DEST%\inc%_EXT%\systools\win32\*.h
 ..\inc\systools\unx\*.h %_DEST%\inc%_EXT%\systools\unx\*.h
 
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
-..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
+..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.dylib.* %_DEST%\lib%_EXT%\*.dylib.*
@@ -41,7 +41,6 @@ mkdir: %_DEST%\inc%_EXT%\systools\unx
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 
 ..\%__SRC%\inc\udkversion.h %_DEST%\inc%_EXT%\sal\udkversion.h
-
 
 
 linklib: libsal.so.*.*.*
