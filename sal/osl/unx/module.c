@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-11 19:20:10 $
+ *  last change: $Author: pliao $ $Date: 2001-05-15 20:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,6 +426,8 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
         if( ! pSym )
             fprintf( stderr, "osl_getsymbol: cannot get Symbol %s for reason: %s\n",
                      pszSymbolName, dlerror() );
+        else
+            fprintf( stderr, "osl_getsymbol: got Symbol %s \n", pszSymbolName);
 #endif
 
         return pSym;
