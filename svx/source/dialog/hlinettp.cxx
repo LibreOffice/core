@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-18 14:50:23 $
+ *  last change: $Author: sj $ $Date: 2002-02-19 16:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,22 +119,17 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     // Find Path to Std-Doc
     String aStrBasePaths( SvtPathOptions().GetTemplatePath() );
-    INetURLObject aURL;
-    aURL.SetSmartProtocol( INET_PROT_FILE );
-    BOOL bFound = FALSE;
-    for( xub_StrLen n = 0; n<aStrBasePaths.GetTokenCount() && !bFound; n++ )
+    for( xub_StrLen n = 0; n < aStrBasePaths.GetTokenCount(); n++ )
     {
-        String aTmp( aStrBasePaths.GetToken( n ) );
-        aURL.SetSmartURL( aStrBasePaths.GetToken( n ) );
-
+        INetURLObject aURL( aStrBasePaths.GetToken( n ) );
         aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_SUBPATH ) ) );
         aURL.Append( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( STD_DOC_NAME ) ) );
-        bFound = FileExists( aURL );
+        if ( FileExists( aURL ) )
+        {
+            maStrStdDocURL = aURL.GetMainURL();
+            break;
+        }
     }
-    if( bFound )
-        maStrStdDocURL = aURL.GetFull();
-
-
     SetExchangeSupport ();
 
     ///////////////////////////////////////
@@ -146,7 +141,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maEdPassword.Show( FALSE );
     maCbAnonymous.Show( FALSE );
     maBtTarget.Enable( FALSE );
-    maBtBrowse.Enable( maStrStdDocURL==aEmptyStr?FALSE:TRUE);
+    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 
     ///////////////////////////////////////
     // overload handlers
@@ -354,7 +349,7 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
     else
         maBtTarget.Enable( TRUE );
 
-    maBtBrowse.Enable( maStrStdDocURL==aEmptyStr?FALSE:TRUE);
+    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 }
 
 /*************************************************************************
@@ -451,7 +446,7 @@ void SvxHyperlinkInternetTp::ActivatePage( const SfxItemSet& rItemSet )
     if ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() )
         ShowMarkWnd ();
 
-    maBtBrowse.Enable( maStrStdDocURL==aEmptyStr?FALSE:TRUE);
+    maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 }
 
 int SvxHyperlinkInternetTp::DeactivatePage( SfxItemSet* pSet)
@@ -920,15 +915,10 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
     SfxBoolItem aSilent( SID_SILENT, TRUE );
     SfxBoolItem aReadOnly( SID_DOC_READONLY, TRUE );
 
-    GetDispatcher()->Execute(   SID_OPENDOC,
-                                SFX_CALLMODE_ASYNCHRON |
-                                SFX_CALLMODE_RECORD,
-                                &aName,
-                                &aNewView,
-                                &aSilent,
-                                &aReadOnly,
-                                &aRefererItem,
-                                0L );
+    SfxBoolItem aBrowse( SID_BROWSE, TRUE );
+
+    const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
+    (((SvxHpLinkDlg*)mpDialog)->GetBindings())->Execute( SID_OPENDOC, ppItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
 
     return( 0L );
 }
