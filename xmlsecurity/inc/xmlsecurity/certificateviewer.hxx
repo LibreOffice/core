@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:33:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,12 @@ private:
     OKButton            maOkBtn;
     HelpButton          maHelpBtn;
 
+    BOOL                mbCheckForPrivateKey;
+
     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
     cssu::Reference< dcss::security::XCertificate > mxCert;
 public:
-        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert );
+        CertificateViewer( Window* pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment, const cssu::Reference< dcss::security::XCertificate >& rXCert, BOOL bCheckForPrivateKey );
     virtual             ~CertificateViewer();
 };
 
