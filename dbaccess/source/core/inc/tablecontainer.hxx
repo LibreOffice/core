@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 09:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBA_CORE_TABLECONTAINER_HXX_
 #define _DBA_CORE_TABLECONTAINER_HXX_
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -102,6 +102,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
 #ifndef _DBA_CONFIGNODE_HXX_
 #include "confignode.hxx"
 #endif
@@ -117,12 +120,13 @@
 class WildCard;
 namespace dbaccess
 {
-    typedef ::cppu::ImplHelper1< ::com::sun::star::util::XFlushable > OTableContainer_Base;
+    typedef ::cppu::ImplHelper2< ::com::sun::star::util::XFlushable,
+                                 ::com::sun::star::container::XContainerListener> OTableContainer_Base;
 
     //==========================================================================
     //= IWarningsContainer
     //==========================================================================
-    class IWarningsContainer
+    class SAL_NO_VTABLE IWarningsContainer
     {
     public:
         virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
@@ -217,6 +221,12 @@ namespace dbaccess
         // XDrop
         virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        // XContainerListener
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_

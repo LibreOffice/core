@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:01:26 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 09:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,10 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
 
     if(m_xMasterTables.is())
     {
+        // we have to listen at the mastertables because it could happen that another inserts new tables
+        Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
+        if(xCont.is())
+            xCont->addContainerListener(this);
         sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
         sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
@@ -377,6 +381,9 @@ void OTableContainer::disposing()
 //  m_aElements.clear();
 //      //  !!! do this before clearing the map which the vector elements refer to !!!
 //  m_aNameMap.clear();
+    Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
+    if(xCont.is())
+        xCont->removeContainerListener(this);
     m_xMasterTables = NULL;
     m_xMetaData     = NULL;
     m_xConnection   = NULL;
@@ -773,12 +780,6 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
             ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
             if(pDecoTable)
             {
-                Reference<XColumnsSupplier> xColsSup;
-                if(m_xMasterTables->hasByName(sComposedName))
-                    m_xMasterTables->getByName(sComposedName) >>= xColsSup;
-                if(xColsSup.is())
-                    pDecoTable->setTable(xColsSup);
-
                 pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
             }
             else
@@ -827,8 +828,11 @@ void SAL_CALL OTableContainer::dropByName( const ::rtl::OUString& elementName ) 
         Reference< XStatement > xStmt = m_xConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+
+        OCollection::dropByName(elementName);
     }
-    OCollection::dropByName(elementName);
+    // we don't need to call dropByName when we have xMasterTables
+
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableContainer::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
@@ -840,14 +844,42 @@ void SAL_CALL OTableContainer::dropByIndex( sal_Int32 index ) throw(SQLException
     dropByName((*m_aElements[index]).first);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OTableContainer::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTableContainer::acquire() throw(RuntimeException)
 {
     m_rParent.acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OTableContainer::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OTableContainer::release() throw(RuntimeException)
 {
     m_rParent.release();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    ::rtl::OUString sName;
+    if((Event.Accessor >>= sName) && !hasByName(sName) && m_xMasterTables->hasByName(sName))
+    {
+        Reference<XPropertySet> xProp(createObject(sName),UNO_QUERY);
+        OCollection::appendByDescriptor(xProp);
+
+    }
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
+{
+    ::osl::MutexGuard aGuard(m_rMutex);
+    ::rtl::OUString sName;
+    if((Event.Accessor >>= sName) && hasByName(sName) && !m_xMasterTables->hasByName(sName))
+        OCollection::dropByName(sName);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OTableContainer::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+{
 }
 // -----------------------------------------------------------------------------
 
