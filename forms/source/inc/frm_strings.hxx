@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:18:15 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,6 +294,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_PASSWORD,                 "Password" );
     FORMS_CONSTASCII_STRING( PROPERTY_DISPATCHURLINTERNAL,      "DispatchURLInternal" );
     FORMS_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,"PersistenceMaxTextLength" );
+    FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
     FORMS_CONSTASCII_STRING( PROPERTY_BACKGROUNDCOLOR,          "BackgroundColor"   );
