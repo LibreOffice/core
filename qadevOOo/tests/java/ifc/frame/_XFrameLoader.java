@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFrameLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:26:11 $
+ *  last change:$Date: 2003-09-08 10:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,20 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFrameLoader;
 import com.sun.star.frame.XLoadEventListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-import util.SOfficeFactory;
 
 
 /**
