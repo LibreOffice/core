@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Date: 2003-01-27 16:27:27 $
+#   last change: $Date: 2003-03-31 16:23:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME = OOoRunner
 PACKAGE = basicrunner$/basichelper
-TARGET  = $(PRJNAME)
+TARGET = runner_basichelper
 
 # --- Settings -----------------------------------------------------
 
@@ -72,7 +72,7 @@ TARGET  = $(PRJNAME)
 
 # --- Files --------------------------------------------------------
 
-JARFILES       = sandbox.jar ridl.jar jurt.jar unoil.jar 
+JARFILES       = sandbox.jar ridl.jar jurt.jar unoil.jar
 JAVAFILES      = AttributeList.java DocumentHandler.java Filter.java \
                  Connector.java DispatchProviderInterceptor.java \
                  ThreadRunner.java

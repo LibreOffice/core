@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2003-03-26 14:53:52 $
+#   last change: $Date: 2003-03-31 16:22:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..
 
 PRJNAME = OOoRunner
 PACKAGE = base
-TARGET  = $(PRJNAME)
+TARGET = runner_base
 
 # --- Settings -----------------------------------------------------
 
@@ -72,8 +72,9 @@ TARGET  = $(PRJNAME)
 
 # --- Files --------------------------------------------------------
 
-JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar 
-JAVAFILES =	TestBase.java java_complex.java java_fat.java basic_fat.java
+JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar
+JAVAFILES =	TestBase.java java_complex.java java_fat.java basic_fat.java \
+            java_fat_service.java
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------

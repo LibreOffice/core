@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Date: 2003-01-27 16:27:31 $
+#   last change: $Date: 2003-03-31 16:24:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,9 +62,9 @@
 
 PRJ=..$/..
 
-PRJNAME = Runner
+PRJNAME = OOoRunner
 PACKAGE = helper
-TARGET  = $(PRJNAME)
+TARGET = runner_helper
 
 # --- Settings -----------------------------------------------------
 
