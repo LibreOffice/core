@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:50:15 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
+#endif
+#ifndef _SV_NATIVEWIDGET_HXX
+#include <salnativewidgets.hxx>
 #endif
 
 #ifndef _SV_RC_H
@@ -305,7 +308,28 @@ void PushButton::ImplInitSettings( BOOL bFont,
     }
 
     if ( bBackground )
-        SetBackground();
+    {
+        Window* pParent = GetParent();
+        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+            || IsNativeControlSupported( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL ) )
+        {
+            EnableChildTransparentMode( TRUE );
+            SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+            SetPaintTransparent( TRUE );
+            SetBackground();
+        }
+        else
+        {
+            EnableChildTransparentMode( FALSE );
+            SetParentClipMode( 0 );
+            SetPaintTransparent( FALSE );
+
+            if ( IsControlBackground() )
+                SetBackground( GetControlBackground() );
+            else
+                SetBackground( pParent->GetBackground() );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -845,20 +869,105 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     Rectangle               aRect( aPoint, aOutSz );
     Rectangle               aInRect = aRect;
     Rectangle               aTextRect;
+    BOOL                    bNativeOK = FALSE;
 
     // adjust style if button should be rendered 'pressed'
     if ( mbPressed )
         nButtonStyle |= BUTTON_DRAW_PRESSED;
 
-    // draw PushButtonFrame, aInRect has content size afterwards
-    if( ! bLayout )
-        ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
-
-    // draw content
-    ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
-
-    if( ! bLayout )
+    // TODO: move this to Window class or make it a member !!!
+    ControlType aCtrlType = 0;
+    switch( GetParent()->GetType() )
     {
+        case WINDOW_LISTBOX:
+        case WINDOW_MULTILISTBOX:
+        case WINDOW_TREELISTBOX:
+            aCtrlType = CTRL_LISTBOX;
+            break;
+
+        case WINDOW_COMBOBOX:
+        case WINDOW_PATTERNBOX:
+        case WINDOW_NUMERICBOX:
+        case WINDOW_METRICBOX:
+        case WINDOW_CURRENCYBOX:
+        case WINDOW_DATEBOX:
+        case WINDOW_TIMEBOX:
+        case WINDOW_LONGCURRENCYBOX:
+            aCtrlType = CTRL_COMBOBOX;
+            break;
+        default:
+            break;
+    }
+
+    BOOL bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && !GetText().Len() );
+
+    if( bDropDown && (aCtrlType == CTRL_COMBOBOX || aCtrlType == CTRL_LISTBOX ) )
+    {
+        if( GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) )
+        {
+            if( !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
+                // skip painting if the button was already drawn by the theme
+                bNativeOK = TRUE;
+            else
+            {
+                // let the theme draw it, note we then need support
+                // for CTRL_LISTBOX/PART_BUTTON_DOWN and CTRL_COMBOBOX/PART_BUTTON_DOWN
+
+                ImplControlValue    aControlValue;
+                Region              aCtrlRegion( aInRect );
+                ControlState        nState = 0;
+
+                if ( mbPressed )                        nState |= CTRL_STATE_PRESSED;
+                if ( mnButtonState & BUTTON_DRAW_PRESSED )  nState |= CTRL_STATE_PRESSED;
+                if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
+                if ( mnButtonState & BUTTON_DRAW_DEFAULT )  nState |= CTRL_STATE_DEFAULT;
+                if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+
+                if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
+                    nState |= CTRL_STATE_ROLLOVER;
+
+                bNativeOK = DrawNativeControl( aCtrlType, PART_BUTTON_DOWN, aCtrlRegion, nState,
+                                                aControlValue, rtl::OUString() );
+            }
+        }
+    }
+
+    if( bNativeOK )
+        return;
+
+    if ( (bNativeOK=IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
+    {
+        ImplControlValue aControlValue;
+        Region           aCtrlRegion( aInRect );
+        ControlState     nState = 0;
+
+        if ( mbPressed )                        nState |= CTRL_STATE_PRESSED;
+        if ( mnButtonState & BUTTON_DRAW_PRESSED ) nState |= CTRL_STATE_PRESSED;
+        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
+        if ( mnButtonState & BUTTON_DRAW_DEFAULT )  nState |= CTRL_STATE_DEFAULT;
+        if ( Window::IsEnabled() )              nState |= CTRL_STATE_ENABLED;
+
+        if ( IsMouseOver() && aInRect.IsInside( GetPointerPosPixel() ) )
+            nState |= CTRL_STATE_ROLLOVER;
+
+        bNativeOK = DrawNativeControl( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                         aControlValue, rtl::OUString()/*PushButton::GetText()*/ );
+
+        // draw frame into invisible window to have aInRect modified correctly
+        // but do not shift the inner rect for pressed buttons (ie remove BUTTON_DRAW_PRESSED)
+        // this assumes the theme has enough visual cues to signalize the button was pressed
+        //Window aWin( this );
+        //ImplDrawPushButtonFrame( &aWin, aInRect, nButtonStyle & ~BUTTON_DRAW_PRESSED );
+
+        // looks better this way as symbols were displaced slightly using the above approach
+        aInRect.Top()+=4;
+        aInRect.Bottom()-=4;
+        aInRect.Left()+=4;
+        aInRect.Right()-=4;
+
+        // draw content using the same aInRect as non-native VCL would do
+        ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
+
         maFocusRect = aTextRect;
         if( !maFocusRect.IsEmpty() )
         {
@@ -867,8 +976,32 @@ void PushButton::ImplDrawPushButton( bool bLayout )
             maFocusRect.Right()++;
             maFocusRect.Bottom()++;
             if ( HasFocus() )
-            {
                 ShowFocus( maFocusRect );
+        }
+    }
+
+    if ( bNativeOK == FALSE )
+    {
+        // draw PushButtonFrame, aInRect has content size afterwards
+        if( ! bLayout )
+            ImplDrawPushButtonFrame( this, aInRect, nButtonStyle );
+
+        // draw content
+        ImplDrawPushButtonContent( this, 0, aInRect, aTextRect, bLayout );
+
+        if( ! bLayout )
+        {
+            maFocusRect = aTextRect;
+            if( !maFocusRect.IsEmpty() )
+            {
+                maFocusRect.Left()--;
+                maFocusRect.Top()--;
+                maFocusRect.Right()++;
+                maFocusRect.Bottom()++;
+                if ( HasFocus() )
+                {
+                    ShowFocus( maFocusRect );
+                }
             }
         }
     }
@@ -878,10 +1011,62 @@ void PushButton::ImplDrawPushButton( bool bLayout )
 
 void PushButton::ImplSetDefButton( BOOL bSet )
 {
+    Size aSize( GetSizePixel() );
+    Point aPos( GetPosPixel() );
+    int dLeft(0), dRight(0), dTop(0), dBottom(0);
+    BOOL bSetPos = FALSE;
+
+    if ( (IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
+    {
+        Region aBoundingRgn, aContentRgn;
+        Rectangle aCtrlRect( 0, 0, 80, 20 ); // use a constant size to avoid accumulating
+                                             // will not work if the theme has dynamic adornment sizes
+        ImplControlValue aControlValue;
+        Region           aCtrlRegion( aCtrlRect );
+        ControlState     nState = CTRL_STATE_DEFAULT|CTRL_STATE_ENABLED;
+
+        // get native size of a 'default' button
+        // and adjust the VCL button if more space for adornment is required
+        if( GetNativeControlRegion( CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                nState, aControlValue, rtl::OUString(),
+                                aBoundingRgn, aContentRgn ) )
+        {
+            Rectangle aCont(aContentRgn.GetBoundRect());
+            Rectangle aBound(aBoundingRgn.GetBoundRect());
+
+            dLeft = aCont.Left() - aBound.Left();
+            dTop = aCont.Top() - aBound.Top();
+            dRight = aBound.Right() - aCont.Right();
+            dBottom = aBound.Bottom() - aCont.Bottom();
+            bSetPos = dLeft || dTop || dRight || dBottom;
+        }
+    }
+
     if ( bSet )
+    {
+        if( !(mnButtonState & BUTTON_DRAW_DEFAULT) && bSetPos )
+        {
+            // adjust pos/size when toggling from non-default to default
+            aPos.Move(-dLeft, -dTop);
+            aSize.Width() += dLeft + dRight;
+            aSize.Height() += dTop + dBottom;
+        }
         mnButtonState |= BUTTON_DRAW_DEFAULT;
+    }
     else
+    {
+        if( (mnButtonState & BUTTON_DRAW_DEFAULT) && bSetPos )
+        {
+            // adjust pos/size when toggling from default to non-default
+            aPos.Move(dLeft, dTop);
+            aSize.Width() -= dLeft + dRight;
+            aSize.Height() -= dTop + dBottom;
+        }
         mnButtonState &= ~BUTTON_DRAW_DEFAULT;
+    }
+    if( bSetPos )
+        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+
     Invalidate();
 }
 
@@ -1199,7 +1384,67 @@ void PushButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 long PushButton::PreNotify( NotifyEvent& rNEvt )
 {
-    return Button::PreNotify( rNEvt );
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
+        {
+            // trigger redraw as mouse over state has changed
+
+            // TODO: move this to Window class or make it a member !!!
+            ControlType aCtrlType = 0;
+            switch( GetParent()->GetType() )
+            {
+                case WINDOW_LISTBOX:
+                case WINDOW_MULTILISTBOX:
+                case WINDOW_TREELISTBOX:
+                    aCtrlType = CTRL_LISTBOX;
+                    break;
+
+                case WINDOW_COMBOBOX:
+                case WINDOW_PATTERNBOX:
+                case WINDOW_NUMERICBOX:
+                case WINDOW_METRICBOX:
+                case WINDOW_CURRENCYBOX:
+                case WINDOW_DATEBOX:
+                case WINDOW_TIMEBOX:
+                case WINDOW_LONGCURRENCYBOX:
+                    aCtrlType = CTRL_COMBOBOX;
+                    break;
+                default:
+                    break;
+            }
+
+            BOOL bDropDown = ( IsSymbol() && (GetSymbol()==SYMBOL_SPIN_DOWN) && !GetText().Len() );
+
+            if( bDropDown && GetParent()->IsNativeControlSupported( aCtrlType, PART_ENTIRE_CONTROL) &&
+                   !GetParent()->IsNativeControlSupported( aCtrlType, PART_BUTTON_DOWN) )
+            {
+                Window *pBorder = GetParent()->GetWindow( WINDOW_BORDER );
+                if(aCtrlType == CTRL_COMBOBOX)
+                {
+                    // only paint the button part to avoid flickering of the combobox text
+                    Point aPt;
+                    Rectangle aClipRect( aPt, GetOutputSizePixel() );
+                    aClipRect.SetPos(pBorder->ScreenToOutputPixel(OutputToScreenPixel(aClipRect.TopLeft())));
+                    pBorder->Invalidate( aClipRect );
+                }
+                else
+                {
+                    pBorder->Invalidate( INVALIDATE_NOERASE );
+                    pBorder->Update();
+                }
+            }
+            else if( IsNativeControlSupported(CTRL_PUSHBUTTON, PART_ENTIRE_CONTROL) )
+            {
+                Invalidate();
+            }
+        }
+    }
+
+    return nDone ? nDone : Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -1653,7 +1898,8 @@ void RadioButton::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+            || IsNativeControlSupported( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL ) )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -1687,7 +1933,31 @@ void RadioButton::DrawRadioButtonState( )
 void RadioButton::ImplDrawRadioButtonState()
 {
     USHORT nStyle = 0;
+    BOOL   bNativeOK = FALSE;
 
+    // no native drawing for image radio buttons
+    if ( !maImage && (bNativeOK=IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL)) == TRUE )
+    {
+        ImplControlValue            aControlValue( mbChecked ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
+        Rectangle                   aCtrlRect( maStateRect.TopLeft(), maStateRect.GetSize() );
+        Region                      aCtrlRegion( aCtrlRect );
+        ControlState                nState = 0;
+
+        if ( mnButtonState & BUTTON_DRAW_PRESSED )  nState |= CTRL_STATE_PRESSED;
+        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
+        if ( mnButtonState & BUTTON_DRAW_DEFAULT )  nState |= CTRL_STATE_DEFAULT;
+        if ( IsEnabled() )                      nState |= CTRL_STATE_ENABLED;
+
+        if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
+            nState |= CTRL_STATE_ROLLOVER;
+
+        bNativeOK = DrawNativeControl( CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                    aControlValue,rtl::OUString() );
+
+    }
+
+if ( bNativeOK == FALSE )
+{
     // kein Image-RadioButton
     if ( !maImage )
     {
@@ -1780,6 +2050,7 @@ void RadioButton::ImplDrawRadioButtonState()
             ShowFocus( maFocusRect );
     }
 }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1830,6 +2101,7 @@ void RadioButton::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
             rFocusRect = rMouseRect;
             rFocusRect.Left()--;
             rFocusRect.Right()++;
+            //rFocusRect.Bottom()++;  // provide space for mnemonic underline
 
             rMouseRect.Left()   = rPos.X();
             rStateRect.Left()   = rPos.X();
@@ -1928,10 +2200,11 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
     aImageSize.Width()  = CalcZoom( aImageSize.Width() );
     aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
+    // Draw control text
     ImplDraw( this, 0, Point(), GetOutputSizePixel(),
               aImageSize, IMPL_SEP_BUTTON_IMAGE, maStateRect, maMouseRect, maFocusRect, bLayout );
 
-    if( !bLayout )
+    if( !bLayout || (IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL)==TRUE) )
     {
         if ( !maImage )
         {
@@ -2372,7 +2645,29 @@ void RadioButton::DataChanged( const DataChangedEvent& rDCEvt )
 
 long RadioButton::PreNotify( NotifyEvent& rNEvt )
 {
-    return Button::PreNotify( rNEvt );
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        {
+            // trigger redraw if mouse over state has changed
+            if( IsNativeControlSupported(CTRL_RADIOBUTTON, PART_ENTIRE_CONTROL) )
+            {
+                if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
+                     !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
+                    ( maMouseRect.IsInside( GetLastPointerPosPixel()) &&
+                     !maMouseRect.IsInside( GetPointerPosPixel()) ) ||
+                     pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
+                {
+                    Invalidate( maStateRect );
+                }
+            }
+        }
+    }
+
+    return nDone ? nDone : Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -2636,7 +2931,8 @@ void CheckBox::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+        if ( ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+            || IsNativeControlSupported( CTRL_CHECKBOX, PART_ENTIRE_CONTROL ) )
         {
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -2676,18 +2972,46 @@ void CheckBox::ImplLoadRes( const ResId& rResId )
 
 void CheckBox::ImplDrawCheckBoxState()
 {
-    USHORT nStyle = mnButtonState;
-    if ( !IsEnabled() )
-        nStyle |= BUTTON_DRAW_DISABLED;
-    if ( meState == STATE_DONTKNOW )
-        nStyle |= BUTTON_DRAW_DONTKNOW;
-    else if ( meState == STATE_CHECK )
-        nStyle |= BUTTON_DRAW_CHECKED;
-    Image aImage = GetCheckImage( GetSettings(), nStyle );
-    if ( IsZoom() )
-        DrawImage( maStateRect.TopLeft(), maStateRect.GetSize(), aImage );
-    else
-        DrawImage( maStateRect.TopLeft(), aImage );
+    bool    bNativeOK = TRUE;
+
+    if ( (bNativeOK=IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL)) == TRUE )
+    {
+        ImplControlValue    aControlValue( meState == STATE_CHECK ? BUTTONVALUE_ON : BUTTONVALUE_OFF, rtl::OUString(), 0 );
+        Region              aCtrlRegion( maStateRect );
+        ControlState        nState = 0;
+
+        if ( HasFocus() )                       nState |= CTRL_STATE_FOCUSED;
+        if ( mnButtonState & BUTTON_DRAW_DEFAULT )  nState |= CTRL_STATE_DEFAULT;
+        if ( mnButtonState & BUTTON_DRAW_PRESSED )  nState |= CTRL_STATE_PRESSED;
+        if ( IsEnabled() )                      nState |= CTRL_STATE_ENABLED;
+
+        if ( meState == STATE_CHECK )
+            aControlValue.setTristateVal( BUTTONVALUE_ON );
+        else if ( meState == STATE_DONTKNOW )
+            aControlValue.setTristateVal( BUTTONVALUE_MIXED );
+
+        if ( IsMouseOver() && maMouseRect.IsInside( GetPointerPosPixel() ) )
+            nState |= CTRL_STATE_ROLLOVER;
+
+        bNativeOK = DrawNativeControl( CTRL_CHECKBOX, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                                 aControlValue, rtl::OUString() );
+    }
+
+    if ( bNativeOK == FALSE )
+    {
+        USHORT nStyle = mnButtonState;
+        if ( !IsEnabled() )
+            nStyle |= BUTTON_DRAW_DISABLED;
+        if ( meState == STATE_DONTKNOW )
+            nStyle |= BUTTON_DRAW_DONTKNOW;
+        else if ( meState == STATE_CHECK )
+            nStyle |= BUTTON_DRAW_CHECKED;
+        Image aImage = GetCheckImage( GetSettings(), nStyle );
+        if ( IsZoom() )
+            DrawImage( maStateRect.TopLeft(), maStateRect.GetSize(), aImage );
+        else
+            DrawImage( maStateRect.TopLeft(), aImage );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2736,11 +3060,11 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         rFocusRect = rMouseRect;
         rFocusRect.Left()--;
         rFocusRect.Right()++;
+        //rFocusRect.Bottom()++;  // provide space for mnemonic underline
 
+        rStateRect.Left()   = rPos.X();
+        rStateRect.Top()    = rMouseRect.Top();
         rMouseRect.Left()   = rPos.X();
-        // add 1 so that checkboxes with and without text are aligned
-        rStateRect.Left()   = rPos.X()+1;
-        rStateRect.Top()    = rMouseRect.Top()+1;
 
         long nTextHeight = GetTextHeight();
         if ( nTextHeight > rImageSize.Height() )
@@ -2755,17 +3079,22 @@ void CheckBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
         if ( nWinStyle & WB_CENTER )
             rStateRect.Left() = rPos.X()+((rSize.Width()-rImageSize.Width())/2);
         else if ( nWinStyle & WB_RIGHT )
-            rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width()-1;
+            rStateRect.Left() = rPos.X()+rSize.Width()-rImageSize.Width();
         else
-            rStateRect.Left() = rPos.X()+1;
+            rStateRect.Left() = rPos.X();
         if ( nWinStyle & WB_VCENTER )
             rStateRect.Top() = rPos.Y()+((rSize.Height()-rImageSize.Height())/2);
         else if ( nWinStyle & WB_BOTTOM )
-            rStateRect.Top() = rPos.Y()+rSize.Height()-rImageSize.Height()-1;
+            rStateRect.Top() = rPos.Y()+rSize.Height()-rImageSize.Height();
         else
-            rStateRect.Top() = rPos.Y()+1;
+            rStateRect.Top() = rPos.Y();
         rStateRect.Right()  = rStateRect.Left()+rImageSize.Width()-1;
         rStateRect.Bottom() = rStateRect.Top()+rImageSize.Height()-1;
+        // provide space for focusrect
+        // note: this assumes that the control's size was adjusted
+        // accordingly in Get/LoseFocus, so the onscreen position won't change
+        if( HasFocus() )
+            rStateRect.Move( 1, 1 );
         rMouseRect          = rStateRect;
 
         rFocusRect          = rStateRect;
@@ -3069,7 +3398,21 @@ void CheckBox::Resize()
 
 void CheckBox::GetFocus()
 {
-    ShowFocus( maFocusRect );
+    if ( !GetText().Len() || (mnButtonState & BUTTON_DRAW_NOTEXT) )
+    {
+        // increase button size to have space for focus rect
+        // checkboxes without text will draw focusrect around the check
+        // See CheckBox::ImplDraw()
+        Point aPos( GetPosPixel() );
+        Size aSize( GetSizePixel() );
+        aPos.Move(-1,-1);
+        aSize.Height() += 2;
+        aSize.Width() += 2;
+        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        ImplDrawCheckBox();
+    }
+    else
+        ShowFocus( maFocusRect );
     SetInputContext( InputContext( GetFont() ) );
     Button::GetFocus();
 }
@@ -3086,6 +3429,19 @@ void CheckBox::LoseFocus()
 
     HideFocus();
     Button::LoseFocus();
+
+    if ( !GetText().Len() || (mnButtonState & BUTTON_DRAW_NOTEXT) )
+    {
+        // decrease button size again (see GetFocus())
+        // checkboxes without text will draw focusrect around the check
+        Point aPos( GetPosPixel() );
+        Size aSize( GetSizePixel() );
+        aPos.Move(1,1);
+        aSize.Height() -= 2;
+        aSize.Width() -= 2;
+        SetPosSizePixel( aPos.X(), aPos.Y(), aSize.Width(), aSize.Height(), WINDOW_POSSIZE_ALL );
+        ImplDrawCheckBox();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -3162,7 +3518,29 @@ void CheckBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 long CheckBox::PreNotify( NotifyEvent& rNEvt )
 {
-    return Button::PreNotify( rNEvt );
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        {
+            // trigger redraw if mouse over state has changed
+            if( IsNativeControlSupported(CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
+            {
+                if( ( maMouseRect.IsInside( GetPointerPosPixel()) &&
+                     !maMouseRect.IsInside( GetLastPointerPosPixel()) ) ||
+                    ( maMouseRect.IsInside( GetLastPointerPosPixel()) &&
+                     !maMouseRect.IsInside( GetPointerPosPixel()) ) ||
+                    pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow() )
+                {
+                    Invalidate( maStateRect );
+                }
+            }
+        }
+    }
+
+    return nDone ? nDone : Button::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
