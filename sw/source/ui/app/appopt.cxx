@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:17:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,18 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             }
             break;
         }
+        case TP_OPTCAPTION_PAGE:
+        case RID_SW_TP_OPTCAPTION_PAGE:
+        {
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SW_TP_OPTCAPTION_PAGE );
+                if ( fnCreatePage )
+                    pRet = (*fnCreatePage)( pParent, rSet );
+            }
+        }
+        break;
     }
 
     DBG_ASSERT( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" )
