@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:15:22 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ ToolBox RID_BIB_TOOLBAR
             Text[ russian ] = "Èñêîìîå ïîíÿòèå";
             Text[ greek ] = "¼ñïò áíáæŞôçóçò";
             Text[ dutch ] = "Zoekbegrip";
-            Text[ french ] = "Élément recherché";
+            Text[ french ] = "Terme recherché";
             Text[ spanish ] = "Expresión de búsqueda";
             Text[ italian ] = "Termine ricercato";
             Text[ danish ] = "Søgeord";
