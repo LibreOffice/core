@@ -32,6 +32,7 @@ ul	unoil\com\sun\star\table				nmake	-	all	ul_table ul_awt NULL
 ul	unoil\com\sun\star\text					nmake	-	all	ul_text ul_frame ul_linguistic2 ul_table NULL
 ul	unoil\com\sun\star\sheet				nmake	-	all	ul_sheet ul_text NULL
 ul	unoil\com\sun\star\style				nmake	-	all	ul_style NULL
+ul	unoil\com\sun\star\system				nmake	-	all	ul_system NULL
 ul	unoil\com\sun\star\ucb					nmake	-	all	ul_ucb ul_cssutil ul_sdbc ul_task NULL
 ul	unoil\com\sun\star\sync					nmake	-	all	ul_sync ul_ucb NULL
 ul	unoil\com\sun\star\ui					nmake	-	all	ul_ui NULL
