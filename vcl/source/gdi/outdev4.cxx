@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:00 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
 #endif
+
+#include "pdfwriter_impl.hxx"
 
 // -----------
 // - Defines -
@@ -1483,10 +1485,16 @@ void OutputDevice::ImplDrawHatchLine( const Line& rLine, const PolyPolygon& rPol
 #ifndef REMOTE_APPSERVER
             for( long i = 0; i < nPCounter; i += 2 )
             {
-                const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
-                const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
-
-                mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
+                if( mpPDFWriter )
+                {
+                    mpPDFWriter->drawLine( pPtBuffer[ i ], pPtBuffer[ i+1 ] );
+                }
+                else
+                {
+                    const Point aPt1( ImplLogicToDevicePixel( pPtBuffer[ i ] ) );
+                    const Point aPt2( ImplLogicToDevicePixel( pPtBuffer[ i + 1 ] ) );
+                    mpGraphics->DrawLine( aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y(), this );
+                }
             }
 #endif
         }
