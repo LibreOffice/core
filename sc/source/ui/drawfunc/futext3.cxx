@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:40:23 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@
 #include "document.hxx"
 #include "editutil.hxx"
 #include "futext.hxx"
+#include "docsh.hxx"
 #include "globstr.hrc"
 
 //------------------------------------------------------------------------
@@ -343,7 +344,7 @@ void FuText::StopEditMode(BOOL bTextDirection)
 {
     BOOL bComment = FALSE;
     ScAddress aTabPos;
-    SvxWritingModeItem aWriteMode(com::sun::star::text::WritingMode_LR_TB);
+    BOOL bVertical = FALSE;
 
     SdrObject* pObject = pView->GetTextEditObject();
     if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
@@ -355,7 +356,7 @@ void FuText::StopEditMode(BOOL bTextDirection)
             bComment = TRUE;
         }
         const SfxItemSet& rSet = pObject->GetMergedItemSet();
-        aWriteMode = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION));
+        bVertical = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
     }
 
     ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
@@ -389,13 +390,10 @@ void FuText::StopEditMode(BOOL bTextDirection)
     {
         ScPostIt aNote(pDoc);
         BOOL bWas = pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
-        if(bTextDirection)    // Note must be visible to do this.
-            aNote.SetShown(TRUE);
 
-        //  Ignore if text unchanged and note not visibly indicated.
-        //  If not visible, the note must be new.
-        //  If called from a change in TextDirection mode then
-        //  always enter as we need to store the new ItemSet.
+        //  Ignore if text unchanged. If called from a change in
+        //  TextDirection mode then always enter as we need to
+        //  store the new EditTextObject.
 
         if ( eResult != SDRENDTEXTEDIT_UNCHANGED || !bWas || !aNote.IsShown() || bTextDirection)
         {
@@ -405,7 +403,9 @@ void FuText::StopEditMode(BOOL bTextDirection)
                 OutlinerParaObject* pParaObj = pObject->GetOutlinerParaObject();
                 if ( pParaObj )
                 {
+                    pParaObj->SetVertical(bVertical);
                     ScNoteEditEngine& rEE = pDoc->GetNoteEngine();
+                    rEE.SetVertical(bVertical);
                     const EditTextObject& rTextObj = pParaObj->GetTextObject();
                     rEE.SetText(rTextObj);
                     sal_uInt16 nCount = rEE.GetParagraphCount();
@@ -432,21 +432,21 @@ void FuText::StopEditMode(BOOL bTextDirection)
             }
             aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
             aNote.AutoStamp();
-            pCaption->SetMergedItem( SvxWritingModeItem(aWriteMode));
             aNote.SetItemSet(pCaption->GetMergedItemSet());
 
-            // Keep Notes visible if called from TextDirection.
-            BOOL bRemove = ((!aNote.IsShown() || aNote.IsEmpty() || !bWas ) && !bTextDirection);
+            BOOL bRemove = (!aNote.IsShown() || aNote.IsEmpty() || !bWas)  && !bTextDirection;
             if ( bRemove )
                 aNote.SetShown( FALSE );
             pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // with Undo
 
-            // But always remove if Note is empty regardless of text Direction.
-            if ( (bRemove && eResult != SDRENDTEXTEDIT_DELETED ) || aNote.IsEmpty())        // Object Delete ?
+            if ( bRemove && eResult != SDRENDTEXTEDIT_DELETED )     // Object Delete ?
             {
+                // Lock the internal layer here - UnLocked in SetInEditMode().
+                SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+                if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
+                    pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
+
                 SdrPage* pPage = pDrDoc->GetPage( static_cast<sal_uInt16>(aTabPos.Tab()) );
-                // ER 28.04.97 19:12 laut JOE ist hier RecalcObjOrdNums unnoetig
-//              pPage->RecalcObjOrdNums();
                 pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObject ) );
                 pPage->RemoveObject( pObject->GetOrdNum() );
                 // #39351# RemoveObject loescht nicht (analog zu anderen Containern)
@@ -455,6 +455,21 @@ void FuText::StopEditMode(BOOL bTextDirection)
         }
         if (pUndoMan)
             pUndoMan->LeaveListAction();
+
+        // This repaint should not be necessary but it cleans
+        // up the 'marks' left behind  by the note handles and outline
+        // now that notes can simultaineously have handles and edit active.
+        ScRange aDrawRange(pDoc->GetRange(aTabPos.Tab(), aNote.GetRectangle()));
+
+        // Set Start/End Row to previous/next row to allow for handles.
+        SCROW aStartRow = aDrawRange.aStart.Row();
+        if(aStartRow > 0)
+            aDrawRange.aStart.SetRow(aStartRow - 1);
+        SCROW aEndRow = aDrawRange.aEnd.Row();
+        if(aEndRow < MAXROW)
+            aDrawRange.aEnd.SetRow(aEndRow + 1);
+        ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
+        pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
     }
 }
 
@@ -510,6 +525,19 @@ void FuText::StopDragMode(SdrObject* pObject)
                         }
                     }
                     pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+                    // This repaint should not be necessary but it cleans
+                    // up the 'marks' left behind  by the note handles
+                    // now that notes can simultaineously have handles and edit active.
+                    ScRange aDrawRange(pDoc->GetRange(aTabPos.Tab(), aOldRect));
+                    // Set Start/End Row to previous/next row to allow for handles.
+                    SCROW aStartRow = aDrawRange.aStart.Row();
+                    if(aStartRow > 0)
+                        aDrawRange.aStart.SetRow(aStartRow - 1);
+                    SCROW aEndRow = aDrawRange.aEnd.Row();
+                    if(aEndRow < MAXROW)
+                        aDrawRange.aEnd.SetRow(aEndRow + 1);
+                    ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
+                    pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
                 }
             }
         }
