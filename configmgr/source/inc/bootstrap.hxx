@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:58 $
+ *  last change: $Author: jb $ $Date: 2001-04-05 14:31:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,8 @@ namespace configmgr
         sal_Bool            hasRegistry() const { return m_bFoundRegistry; }
         sal_Bool            hasUser() const;
         sal_Bool            hasPassword() const;
+        sal_Bool            hasLocale() const;
+        sal_Bool            hasAsyncSetting() const;
         sal_Bool            hasServer() const;
         sal_Bool            hasPort() const;
         sal_Bool            hasTimeout() const;
@@ -177,12 +179,14 @@ namespace configmgr
         ::rtl::OUString     getSessionType() const;
         ::rtl::OUString     getUser() const;
         ::rtl::OUString     getPassword() const;
+        ::rtl::OUString     getLocale() const;
         ::rtl::OUString     getSourcePath() const;
         ::rtl::OUString     getUpdatePath() const;
         ::rtl::OUString     getServer() const;
         ::rtl::OUString     getService() const;
         sal_Int32           getPort() const;
         sal_Int32           getTimeout() const;
+        sal_Bool            getAsyncSetting() const;
 
         // make sure this behaves as a user session
         void setUserSession();
@@ -198,6 +202,8 @@ namespace configmgr
         sal_Bool            isServiceRequired() const;
         void                setService(const ::rtl::OUString& _rService);
 
+        // set this to a wildcard locale
+        void                setAnyLocale();
 
         IConfigSession* ConnectionSettings::createConnection(
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const& _rxServiceMgr) const;
@@ -226,6 +232,7 @@ namespace configmgr
 
         ::rtl::OUString getStringSetting(const sal_Char* _pName) const;
         sal_Int32       getIntSetting(const sal_Char* _pName) const;
+        sal_Bool        getBoolSetting(const sal_Char* _pName) const;
         Setting         getSetting(const sal_Char* _pName) const;
         Setting         getMaybeSetting(const sal_Char* _pName) const;
 
