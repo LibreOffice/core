@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 14:02:21 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ public:
     virtual ~ZipPackageStream( void );
 
     void setZipEntry( const com::sun::star::packages::ZipEntry &rInEntry);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( com::sun::star::packages::ZipEntry &rEntry  )
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( )
         throw(::com::sun::star::uno::RuntimeException);
 
     // XInterface

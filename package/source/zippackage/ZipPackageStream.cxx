@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 14:04:03 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ void SAL_CALL ZipPackageStream::setInputStream( const Reference< io::XInputStrea
     aEntry.nTime = -1;
 }
 
-Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun::star::packages::ZipEntry &rEntry )
+Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( )
         throw(RuntimeException)
 {
     if (IsPackageMember())
@@ -159,7 +159,7 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun:
         try
         {
             xEncryptionData->aKey = rZipPackage.getEncryptionKey();
-            return rZipPackage.getZipFile().getRawStream(rEntry, xEncryptionData);
+            return rZipPackage.getZipFile().getRawStream(aEntry, xEncryptionData);
         }
         catch (packages::ZipException &)//rException)
         {
