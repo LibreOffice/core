@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 10:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -806,7 +806,7 @@ void PluginInputStream::load()
     {
         m_pContent =
             new ::ucb::Content(
-                               aUrl.GetMainURL(),
+                               aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI),
                                Reference< ::com::sun::star::ucb::XCommandEnvironment >()
                                );
         m_pContent->openStream( static_cast< XOutputStream* >( this ) );

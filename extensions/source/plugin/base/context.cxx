@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-11 11:54:19 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 10:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
         // the mimetype cannot be specified
         plugin->provideNewStream( ::rtl::OUString(),
                                   Reference< XActiveDataSource >(),
-                                  aURL.GetMainURL(),
+                                  aURL.GetMainURL(INetURLObject::DECODE_TO_IURI),
                                   0, 0, sal_False );
         return;
     }

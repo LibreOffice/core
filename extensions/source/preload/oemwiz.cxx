@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2002-11-25 19:54:38 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 10:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ namespace preload
         sFileName = URIHelper::SmartRelToAbs(sFileName);
         INetURLObject aURLObject(sFileName);
         aURLObject.removeSegment();
-        sFileName = aURLObject.GetMainURL();
+        sFileName = aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI);
         sFileName += rFileName;
 
         SfxMedium aMedium( sFileName,STREAM_READ, TRUE );
