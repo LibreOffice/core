@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2001-04-25 13:26:33 $
+#   last change: $Author: hr $ $Date: 2001-05-03 12:22:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.4 $ ';
+$id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -102,6 +102,7 @@ $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $umask              = 22;           # default file/directory creation mask
+$dest               = 0;            # optional destination path
 
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
@@ -160,6 +161,9 @@ sub do_dos {
         print "DOS: $line\n";
     }
     else {
+        # HACK: remove MACOSX stuff which is wrongly labled with dos
+        # better: fix broken d.lst
+        return if ( $line =~ /MACOSX/ && $^O ne 'darwin' );
         $line =~ s#/#\\#g if $^O eq 'MSWin32';
         system($line);
     }
@@ -202,13 +206,17 @@ sub do_touch {
 #### subroutines #####
 
 sub parse_options {
-    foreach $arg (@ARGV) {
+    my $arg;
+    while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/ and $opt_force = 1 and next;
         $arg =~ /^-minor$/ and $opt_minor = 1 and next;
         $arg =~ /^-check$/ and $opt_check = 1 and next;
-        print_error("invalid option $arg");
-        usage();
-        exit(1);
+        print_error("invalid option $arg") if ( $arg =~ /-/ );
+        if ( $arg =~ /-/ || $#ARGV > -1 ) {
+            usage();
+            exit(1);
+        }
+        $dest = $arg;
     }
 }
 
@@ -246,7 +254,7 @@ sub init_globals {
         }
     }
 
-    $dest = "$solarversion/$inpath";
+    $dest = "$solarversion/$inpath" if ( !$dest );
 
     # the following macros are obsolete, will be flagged as error
     # %__WORKSTAMP%
@@ -570,7 +578,7 @@ sub print_stats {
 }
 
 sub usage {
-    print STDERR "Usage:\ndeliver [-force] [-minor] [-check]\n";
+    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [destination-path]\n";
     print STDERR "Options:\n  -force\tcopy even if not newer\n";
     print STDERR "  -minor\tdeliver into minor\n";
     print STDERR "  -check\tjust print what would happen, no actual copying of files\n";
