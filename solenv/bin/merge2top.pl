@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: merge2top.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2002-01-18 17:53:40 $
+#   last change: $Author: hr $ $Date: 2002-04-17 16:08:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use File::Basename;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.1 $ ';
+$id_str = ' $Revision: 1.2 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -222,6 +222,11 @@ sub merge
 
     # ok, everything went well, remove comment file
     unlink($mergecommentfile);
+    # do top level update with -A switch to remove -kk sticky flag
+    my $rc = $archive->update('-A');
+    if ( $rc ne 'success' ) {
+        print STDERR "$script_name: '$file': PANIC: cleanup update failed for unknown reasons\n";
+    }
     return 1;
 }
 
