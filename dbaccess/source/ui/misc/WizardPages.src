@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:09 $
+ *  last change: $Author: gt $ $Date: 2002-08-30 14:59:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,9 +484,9 @@ TabPage TAB_WIZ_COLUMN_SELECT
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
             };
         };
     };
@@ -504,9 +504,9 @@ TabPage TAB_WIZ_COLUMN_SELECT
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
             };
         };
     };
@@ -523,9 +523,9 @@ TabPage TAB_WIZ_COLUMN_SELECT
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
             };
         };
     };
@@ -542,9 +542,9 @@ TabPage TAB_WIZ_COLUMN_SELECT
             };
             MaskColor = Color
             {
-                Red = 0xC000 ;
-                Green = 0xC000 ;
-                Blue = 0xC000 ;
+                Red   = 0xFFFF;
+                Green = 0x0000;
+                Blue  = 0xFFFF;
             };
         };
     };
