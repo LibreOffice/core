@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 06:36:41 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 07:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ public:
     Image                   GetImageHC () const { return aImageHC; }
     void                    SetText ( const String& rText ) { aText = rText; }
     String                  GetText () const { return aText; }
+    String                  GetDisplayText() const;
     void                    SetQuickHelpText( const String& rText ) { aQuickHelpText = rText; }
     String                  GetQuickHelpText() const { return aQuickHelpText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
@@ -403,6 +404,17 @@ public:
     void                SetSelectionMode( SelectionMode eMode );
 
     BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent );
+
+    Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
+
+    // ACCESSIBILITY ==========================================================
+
+    void                AddEventListener( const Link& rEventListener );
+    void                RemoveEventListener( const Link& rEventListener );
+
+    /** Creates and returns the accessible object of the Box. */
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif // _ICNVW_HXX

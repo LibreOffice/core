@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:52:58 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 07:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,9 @@ class SvxIconChoiceCtrl_Impl
     BOOL            bUpdateMode;
     BOOL            bEntryEditingEnabled;
     BOOL            bInDragDrop;
+
+    VclEventListeners   maEventListeners;
+
     void            ShowCursor( BOOL bShow );
 
     void            ImpArrange( BOOL bKeepPredecessors = FALSE );
@@ -572,6 +575,10 @@ public:
     Point           GetPopupMenuPosPixel() const;
 
     BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent );
+
+    void            CallEventListeners( ULONG nEvent, void* pData = NULL );
+    void            AddEventListener( const Link& rEventListener );
+    void            RemoveEventListener( const Link& rEventListener );
 };
 
 // ----------------------------------------------------------------------------------------------

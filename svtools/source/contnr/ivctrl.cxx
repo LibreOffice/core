@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 14:52:03 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 07:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,14 @@
 
 #include "ivctrl.hxx"
 #include "imivctl.hxx"
-
+#ifndef _SVTOOLS_ACCESSIBLEICONCHOICECTRL_HXX_
+#include "accessibleiconchoicectrl.hxx"
+#endif
 #ifndef _SV_BITMAPEX_HXX
 #include <vcl/bitmapex.hxx>
 #endif
+
+using namespace ::drafts::com::sun::star::accessibility;
 
 /*****************************************************************************
 |
@@ -135,6 +139,13 @@ void SvxIconChoiceCtrlEntry::LockPos( BOOL bLock )
     return cChar;
 }*/
 
+String SvxIconChoiceCtrlEntry::GetDisplayText() const
+{
+    String aDisplayText = aText;
+    aDisplayText.EraseAllChars( '~' );
+    return aDisplayText;
+}
+
 // ----------------------------------------------------------------------------
 
 SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
@@ -184,6 +195,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, const ResId& rResId ) :
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()
 {
+    _pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete _pImp;
 }
 
@@ -339,6 +351,9 @@ void SvtIconChoiceCtrl::GetFocus()
 {
     _pImp->GetFocus();
     Control::GetFocus();
+    ULONG nPos;
+    SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
+    _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
 }
 
 void SvtIconChoiceCtrl::LoseFocus()
@@ -440,11 +455,10 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( ULONG& rPos ) const
 
 void SvtIconChoiceCtrl::ClickIcon()
 {
-    /*
     ULONG nPos;
     SvxIconChoiceCtrlEntry* pSelectedEntry = GetSelectedEntry ( nPos );
-    */
     _aClickIconHdl.Call( this );
+    _pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pSelectedEntry );
 }
 BOOL SvtIconChoiceCtrl::IsEntryEditing() const
 {
@@ -585,3 +599,34 @@ BOOL SvtIconChoiceCtrl::HandleShortCutKey( const KeyEvent& r )
 {
     return _pImp->HandleShortCutKey( r );
 }
+
+Rectangle SvtIconChoiceCtrl::GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const
+{
+    return _pImp->CalcFocusRect( pEntry );
+}
+
+void SvtIconChoiceCtrl::AddEventListener( const Link& rEventListener )
+{
+    _pImp->AddEventListener( rEventListener );
+}
+
+void SvtIconChoiceCtrl::RemoveEventListener( const Link& rEventListener )
+{
+    _pImp->RemoveEventListener( rEventListener );
+}
+
+::com::sun::star::uno::Reference< XAccessible > SvtIconChoiceCtrl::CreateAccessible()
+{
+    Window* pParent = GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "SvTreeListBox::CreateAccessible - accessible parent not found" );
+
+    ::com::sun::star::uno::Reference< XAccessible > xAccessible;
+    if ( pParent )
+    {
+        ::com::sun::star::uno::Reference< XAccessible > xAccParent = pParent->GetAccessible();
+        if ( xAccParent.is() )
+            xAccessible = new svt::AccessibleIconChoiceCtrl( *this, xAccParent );
+    }
+    return xAccessible;
+}
+

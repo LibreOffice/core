@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 06:47:33 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 07:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4718,3 +4718,28 @@ BOOL SvxIconChoiceCtrl_Impl::HandleShortCutKey( const KeyEvent& rKEvt )
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------
+
+void SvxIconChoiceCtrl_Impl::CallEventListeners( ULONG nEvent, void* pData )
+{
+    VclWindowEvent aEvent( pView, nEvent, pData );
+
+    if ( !maEventListeners.empty() )
+        maEventListeners.Call( &aEvent );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxIconChoiceCtrl_Impl::AddEventListener( const Link& rEventListener )
+{
+    maEventListeners.push_back( rEventListener );
+}
+
+// -----------------------------------------------------------------------
+
+void SvxIconChoiceCtrl_Impl::RemoveEventListener( const Link& rEventListener )
+{
+    maEventListeners.remove( rEventListener );
+}
+

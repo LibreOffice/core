@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-12 14:32:47 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 07:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,6 +858,10 @@ void SvTreeListBox::GetFocus()
         Application::InsertAccel( &aInpEditAcc );
     pImp->GetFocus();
     SvLBox::GetFocus();
+
+    SvLBoxEntry* pEntry = FirstSelected();
+    if ( pEntry )
+        pImp->CallEventListeners( VCLEVENT_LISTBOX_SELECT, pEntry );
 }
 
 void SvTreeListBox::LoseFocus()
