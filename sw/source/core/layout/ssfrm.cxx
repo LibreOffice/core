@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-06 15:49:16 $
+ *  last change: $Author: ama $ $Date: 2001-11-09 13:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,110 @@ BOOL SwFrm::SetMaxRight( long nDeadline )
         return TRUE;
     }
     return FALSE;
+}
+
+void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+{
+    if( pPrv )
+    {
+        aFrm.Pos( pPrv->Frm().Pos() );
+        aFrm.Pos().Y() += pPrv->Frm().Height();
+    }
+    else
+    {
+        aFrm.Pos( pUp->Frm().Pos() );
+        aFrm.Pos() += pUp->Prt().Pos();
+    }
+    if( bNotify )
+        aFrm.Pos().Y() += 1;
+}
+
+void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+{
+    if( pPrv )
+    {
+        aFrm.Pos( pPrv->Frm().Pos() );
+        aFrm.Pos().Y() -= Frm().Height();
+    }
+    else
+    {
+        aFrm.Pos( pUp->Frm().Pos() );
+        aFrm.Pos() += pUp->Prt().Pos();
+    }
+    if( bNotify )
+        aFrm.Pos().Y() -= 1;
+}
+
+void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+{
+    if( pPrv )
+    {
+        aFrm.Pos( pPrv->Frm().Pos() );
+        aFrm.Pos().X() -= Frm().Width();
+    }
+    else
+    {
+        aFrm.Pos( pUp->Frm().Pos() );
+        aFrm.Pos() += pUp->Prt().Pos();
+    }
+    if( bNotify )
+        aFrm.Pos().X() -= 1;
+}
+
+void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+{
+    if( pPrv )
+    {
+        aFrm.Pos( pPrv->Frm().Pos() );
+        aFrm.Pos().X() += pPrv->Frm().Width();
+    }
+    else
+    {
+        aFrm.Pos( pUp->Frm().Pos() );
+        aFrm.Pos() += pUp->Prt().Pos();
+    }
+    if( bNotify )
+        aFrm.Pos().X() += 1;
+}
+
+void SwFrm::SetTopBottomMargins( long nTop, long nBot )
+{
+    if( nTop > Frm().Height() )
+        nTop = Frm().Height();
+    Prt().Top( nTop );
+    Prt().Height( Frm().Height() - nTop - nBot );
+    if( Prt().Height() < 0 )
+        Prt().Height( 0 );
+}
+
+void SwFrm::SetBottomTopMargins( long nBot, long nTop )
+{
+    if( nBot > Frm().Height() )
+        nBot = Frm().Height();
+    if( Frm().Height() < nTop + nBot )
+        nTop = Frm().Height() - nBot;
+    Prt().Top( nTop );
+    Prt().Height( Frm().Height() - nTop - nBot );
+}
+
+void SwFrm::SetLeftRightMargins( long nLeft, long nRight)
+{
+    if( nLeft > Frm().Width() )
+        nLeft = Frm().Width();
+    Prt().Left( nLeft );
+    Prt().Width( Frm().Width() - nLeft - nRight );
+    if( Prt().Width() < 0 )
+        Prt().Width( 0 );
+}
+
+void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
+{
+    if( nRight > Frm().Width() )
+        nRight = Frm().Width();
+    if( Frm().Width() < nRight + nLeft )
+        nLeft = Frm().Width() - nRight;
+    Prt().Left( nLeft );
+    Prt().Width( Frm().Width() - nLeft - nRight );
 }
 
 /*-----------------11.9.2001 11:11------------------

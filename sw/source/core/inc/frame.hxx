@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-22 11:01:10 $
+ *  last change: $Author: ama $ $Date: 2001-11-09 13:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,9 @@ struct SwCrsrMoveState;
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;
 typedef BOOL (SwFrm:: *SwFrmMax)( long );
+typedef void (SwFrm:: *SwFrmMakePos)( const SwFrm*, const SwFrm*, BOOL );
+typedef long (*SwOperator)( long, long );
+typedef void (SwFrm:: *SwFrmSet)( long, long );
 
 struct SwRectFnCollection
 {
@@ -235,10 +238,18 @@ struct SwRectFnCollection
     SwFrmGet      fnGetBottomMargin;
     SwFrmGet      fnGetLeftMargin;
     SwFrmGet      fnGetRightMargin;
+    SwFrmSet      fnSetXMargins;
+    SwFrmSet      fnSetYMargins;
     SwFrmGet      fnGetLimit;
     SwFrmMax      fnSetLimit;
     SwRectDist    fnCheckLimit;
     SwRectMax     fnOverStep;
+
+    SwFrmMakePos  fnMakePos;
+    SwOperator    fnXDiff;
+    SwOperator    fnYDiff;
+    SwOperator    fnXInc;
+    SwOperator    fnYInc;
 };
 
 typedef SwRectFnCollection* SwRectFn;
@@ -796,6 +807,10 @@ public:
     long GetBottomMargin() const;
     long GetLeftMargin() const;
     long GetRightMargin() const;
+    void SetTopBottomMargins( long, long );
+    void SetBottomTopMargins( long, long );
+    void SetLeftRightMargins( long, long );
+    void SetRightLeftMargins( long, long );
     long GetPrtLeft() const;
     long GetPrtBottom() const;
     long GetPrtRight() const;
@@ -804,6 +819,10 @@ public:
     BOOL SetMaxBottom( long );
     BOOL SetMaxRight( long );
     BOOL SetMinTop( long );
+    void MakeBelowPos( const SwFrm*, const SwFrm*, BOOL );
+    void MakeUpperPos( const SwFrm*, const SwFrm*, BOOL );
+    void MakeLeftPos( const SwFrm*, const SwFrm*, BOOL );
+    void MakeRightPos( const SwFrm*, const SwFrm*, BOOL );
     inline BOOL SwFrm::IsNeighbourFrm() const
         { return GetType() & FRM_NEIGHBOUR ? TRUE : FALSE; }
 #endif

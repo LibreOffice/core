@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 13:11:02 $
+ *  last change: $Author: ama $ $Date: 2001-11-09 13:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,6 +1109,7 @@ void SwFrm::SetDirFlags( BOOL bVert )
 {
     if( bVert )
     {
+        USHORT bInv = 0;
         if( bDerivedVert )
         {
             SwFrm* pAsk = IsFlyFrm() ?
@@ -1118,22 +1119,28 @@ void SwFrm::SetDirFlags( BOOL bVert )
                 bVertical = pAsk->IsVertical() ? 1 : 0;
                 bReverse  = pAsk->IsReverse()  ? 1 : 0;
             }
+            if( !pAsk || pAsk->bInvalidVert )
+                bInv = bInvalidVert;
         }
         else
             CheckDirection( bVert );
-        bInvalidVert = 0;
+        bInvalidVert = bInv;
     }
     else
     {
+        BOOL bInv = 0;
         if( bDerivedR2L )
         {
             SwFrm* pAsk = IsFlyFrm() ?
                           ((SwFlyFrm*)this)->GetAnchor() : GetUpper();
-            bRightToLeft = pAsk && pAsk->IsRightToLeft() ? 1 : 0;
+            if( pAsk )
+                bRightToLeft = pAsk->IsRightToLeft() ? 1 : 0;
+            if( !pAsk || pAsk->bInvalidR2L )
+                bInv = bInvalidR2L;
         }
         else
             CheckDirection( bVert );
-        bInvalidR2L = 0;
+        bInvalidR2L = bInv;
     }
 }
 

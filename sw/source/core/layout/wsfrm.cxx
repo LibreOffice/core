@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 13:53:00 $
+ *  last change: $Author: ama $ $Date: 2001-11-09 13:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,8 +1057,18 @@ void SwCntntFrm::Cut()
                 }
             }
         }
+#ifdef VERTICAL_LAYOUT
+        else
+        {
+            SWRECTFN( this )
+            long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+            if( nFrmHeight )
+                pUp->Shrink( nFrmHeight );
+        }
+#else
         else if ( Frm().Height() )
             pUp->Shrink( Frm().Height() PHEIGHT );
+#endif
     }
 }
 
@@ -2325,13 +2335,21 @@ SwTwips SwLayoutFrm::InnerHeight() const
         return 0;
     SwTwips nRet = 0;
     const SwFrm* pCnt = Lower();
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
     if( pCnt->IsColumnFrm() || pCnt->IsCellFrm() )
     {
         do
         {
             SwTwips nTmp = ((SwLayoutFrm*)pCnt)->InnerHeight();
             if( pCnt->GetValidPrtAreaFlag() )
+#ifdef VERTICAL_LAYOUT
+                nTmp += (pCnt->Frm().*fnRect->fnGetHeight)() -
+                        (pCnt->Prt().*fnRect->fnGetHeight)();
+#else
                 nTmp += pCnt->Frm().Height() - pCnt->Prt().Height();
+#endif
             if( nRet < nTmp )
                 nRet = nTmp;
             pCnt = pCnt->GetNext();
@@ -2341,11 +2359,21 @@ SwTwips SwLayoutFrm::InnerHeight() const
     {
         do
         {
+#ifdef VERTICAL_LAYOUT
+            nRet += (pCnt->Frm().*fnRect->fnGetHeight)();
+            if( pCnt->IsCntntFrm() && ((SwTxtFrm*)pCnt)->IsUndersized() )
+                nRet += ((SwTxtFrm*)pCnt)->GetParHeight() -
+                        (pCnt->Prt().*fnRect->fnGetHeight)();
+            if( pCnt->IsLayoutFrm() && !pCnt->IsTabFrm() )
+                nRet += ((SwLayoutFrm*)pCnt)->InnerHeight() -
+                        (pCnt->Prt().*fnRect->fnGetHeight)();
+#else
             nRet += pCnt->Frm().Height();
             if( pCnt->IsCntntFrm() && ((SwTxtFrm*)pCnt)->IsUndersized() )
                 nRet += ((SwTxtFrm*)pCnt)->GetParHeight() - pCnt->Prt().Height();
             if( pCnt->IsLayoutFrm() && !pCnt->IsTabFrm() )
                 nRet += ((SwLayoutFrm*)pCnt)->InnerHeight()-pCnt->Prt().Height();
+#endif
             pCnt = pCnt->GetNext();
         } while( pCnt );
 
@@ -3505,10 +3533,19 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         long nMinimum = nMinHeight;
         long nMaximum;
         BOOL bNoBalance = FALSE;
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( this )
+#endif
         if( IsSctFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            nMaximum = (Frm().*fnRect->fnGetHeight)() - nBorder -
+                       (Frm().*fnRect->fnCheckLimit)(
+                                        (GetUpper()->*fnRect->fnGetLimit)() );
+#else
             nMaximum = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
                        + GetUpper()->Prt().Height() - Frm().Top() - nBorder;
+#endif
             nMaximum += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
             if( nMaximum < nMinimum )
             {
@@ -3524,12 +3561,22 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                          GetBalancedColumns().GetValue();
             SwFrm* pAny = ContainsAny();
             if( bNoBalance ||
+#ifdef VERTICAL_LAYOUT
+                ( !(Frm().*fnRect->fnGetHeight)() && pAny ) )
+            {
+                long nTop = (this->*fnRect->fnGetTopMargin)();
+                (Frm().*fnRect->fnAddBottom)( nMaximum );
+                if( nTop > nMaximum )
+                    nTop = nMaximum;
+                (this->*fnRect->fnSetYMargins)( nTop, 0 );
+#else
                 ( !Frm().Height() && pAny ) ) // presumably a fresh one
             {
                 Frm().Height( nMaximum );
                 if( Prt().Top() > Frm().Height() )
                     Prt().Pos().Y() = Frm().Height();
                 Prt().Height( nMaximum - Prt().Top() );
+#endif
             }
             if( !pAny && !((SwSectionFrm*)this)->IsFtnLock() )
             {
@@ -3559,6 +3606,28 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             //Bei der Gelegenheit stellen wir auch gleich mal die
             //Breiten und Hoehen der Spalten ein (so sie denn falsch sind).
             SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
+#ifdef VERTICAL_LAYOUT
+            SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
+            USHORT nPrtWidth = (USHORT)nAvail;
+            for ( USHORT i = 0; i < nNumCols; ++i )
+            {
+                SwTwips nWidth = rCol.CalcColWidth( i, nPrtWidth );
+                if ( i == (nNumCols - 1) ) //Dem Letzten geben wir wie
+                    nWidth = nAvail;       //immer den Rest.
+                nWidth -= (pCol->Frm().*fnRect->fnGetWidth)();
+                if( nWidth )
+                {
+                    (pCol->Frm().*fnRect->fnAddBottom)( nWidth );
+                    pCol->_InvalidatePrt();
+                    if ( pCol->GetNext() )
+                        pCol->GetNext()->_InvalidatePos();
+                }
+                nWidth = (Prt().*fnRect->fnGetHeight)() -
+                         (pCol->Frm().*fnRect->fnGetHeight)();
+                if( nWidth )
+                {
+                    (pCol->Frm().*fnRect->fnAddBottom)( nWidth );
+#else
             SwTwips nAvail = Prt().Width();
             for ( USHORT i = 0; i < nNumCols; ++i )
             {
@@ -3575,6 +3644,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if ( pCol->Frm().Height() != Prt().Height() )
                 {
                     pCol->Frm().Height( Prt().Height() );
+#endif
                     pCol->_InvalidatePrt();
                 }
                 pCol->Calc();
@@ -3607,7 +3677,12 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             while( pCol )
             {
                 SwLayoutFrm* pLay = (SwLayoutFrm*)pCol->Lower();
+#ifdef VERTICAL_LAYOUT
+                SwTwips nInnerHeight = (pLay->Frm().*fnRect->fnGetHeight)() -
+                                       (pLay->Prt().*fnRect->fnGetHeight)();
+#else
                 SwTwips nInnerHeight = pLay->Frm().Height() - pLay->Prt().Height();
+#endif
                 if( pLay->Lower() )
                 {
                     bFoundLower = TRUE;
@@ -3622,9 +3697,16 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     pLay = (SwLayoutFrm*)pLay->GetNext();
                     ASSERT( pLay->IsFtnContFrm(),"FtnContainer exspected" );
                     nInnerHeight += pLay->InnerHeight();
+#ifdef VERTICAL_LAYOUT
+                    nInnerHeight = (pLay->Frm().*fnRect->fnGetHeight)() -
+                                   (pLay->Prt().*fnRect->fnGetHeight)();
+                }
+                nInnerHeight -= (pCol->Prt().*fnRect->fnGetHeight)();
+#else
                     nInnerHeight += pLay->Frm().Height() - pLay->Prt().Height();
                 }
                 nInnerHeight -= pCol->Prt().Height();
+#endif
                 if( nInnerHeight > nDiff )
                 {
                     nDiff = nInnerHeight;
@@ -3650,14 +3732,19 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if ( nDiff || ::lcl_IsFlyHeightClipped( this ) ||
                      ( IsSctFrm() && ((SwSectionFrm*)this)->CalcMinDiff( nMinDiff ) ) )
                 {
+#ifdef VERTICAL_LAYOUT
+                    long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+#else
+                    long nPrtHeight = Prt().Height();
+#endif
                     // Das Minimum darf nicht kleiner sein als unsere PrtHeight,
                     // solange noch etwas herausragt.
-                    if( nMinimum < Prt().Height() )
-                        nMinimum = Prt().Height();
+                    if( nMinimum < nPrtHeight )
+                        nMinimum = nPrtHeight;
                     // Es muss sichergestellt sein, dass das Maximum nicht kleiner
                     // als die PrtHeight ist, wenn noch etwas herausragt
-                    if( nMaximum < Prt().Height() )
-                        nMaximum = Prt().Height();  // Robust, aber kann das ueberhaupt eintreten?
+                    if( nMaximum < nPrtHeight )
+                        nMaximum = nPrtHeight;  // Robust, aber kann das ueberhaupt eintreten?
                     if( !nDiff ) // wenn nur Flys herausragen, wachsen wir um nMinDiff
                         nDiff = nMinDiff;
                     // Wenn wir um mehr als nMinDiff wachsen wollen, wird dies auf die
@@ -3670,41 +3757,51 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         // wachsen. Sonderfall: Wenn wir kleiner als die minimale Frmhoehe
                         // sind und die PrtHeight kleiner als nMinDiff ist, wachsen wir so,
                         // dass die PrtHeight hinterher genau nMinDiff ist.
-                        if ( Frm().Height() > nMinHeight || Prt().Height() >= nMinDiff )
+#ifdef VERTICAL_LAYOUT
+                        long nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+#else
+                        long nFrmHeight = Frm().Height();
+#endif
+                        if ( nFrmHeight > nMinHeight || nPrtHeight >= nMinDiff )
                             nDiff = Max( nDiff, nMinDiff );
                         else if( nDiff < nMinDiff )
-                            nDiff = nMinDiff - Prt().Height() + 1;
+                            nDiff = nMinDiff - nPrtHeight + 1;
                     }
                     // nMaximum ist eine Groesse, in der der Inhalt gepasst hat,
                     // oder der von der Umgebung vorgegebene Wert, deshalb
                     // brauchen wir nicht ueber diesen Wrt hinauswachsen.
-                    if( nDiff + Prt().Height() > nMaximum )
-                        nDiff = nMaximum - Prt().Height();
+                    if( nDiff + nPrtHeight > nMaximum )
+                        nDiff = nMaximum - nPrtHeight;
                 }
                 else if( nMaximum > nMinimum ) // Wir passen, haben wir auch noch Spielraum?
                 {
-                    if ( nMaximum < Prt().Height() )
-                        nDiff = nMaximum - Prt().Height(); // wir sind ueber eine funktionierende
+#ifdef VERTICAL_LAYOUT
+                    long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+#else
+                    long nPrtHeight = Prt().Height();
+#endif
+                    if ( nMaximum < nPrtHeight )
+                        nDiff = nMaximum - nPrtHeight; // wir sind ueber eine funktionierende
                         // Hoehe hinausgewachsen und schrumpfen wieder auf diese zurueck,
                         // aber kann das ueberhaupt eintreten?
                     else
                     {   // Wir haben ein neues Maximum, eine Groesse, fuer die der Inhalt passt.
-                        nMaximum = Prt().Height();
+                        nMaximum = nPrtHeight;
                         // Wenn der Freiraum in den Spalten groesser ist als nMinDiff und wir
                         // nicht dadurch wieder unter das Minimum rutschen, wollen wir ein wenig
                         // Luft herauslassen.
                         if( !bNoBalance && ( nMaxFree >= nMinDiff && (!nAllFree
-                            || nMinimum < Prt().Height() - nMinDiff ) ) )
+                            || nMinimum < nPrtHeight - nMinDiff ) ) )
                         {
                             nMaxFree /= nNumCols; // auf die Spalten verteilen
                             nDiff = nMaxFree < nMinDiff ? -nMinDiff : -nMaxFree; // mind. nMinDiff
-                            if( Prt().Height() + nDiff <= nMinimum ) // Unter das Minimum?
+                            if( nPrtHeight + nDiff <= nMinimum ) // Unter das Minimum?
                                 nDiff = ( nMinimum - nMaximum ) / 2; // dann lieber die Mitte
                         }
                         else if( nAllFree )
                         {
                             nDiff = -nAllFree;
-                            if( Prt().Height() + nDiff <= nMinimum ) // Less than minimum?
+                            if( nPrtHeight + nDiff <= nMinimum ) // Less than minimum?
                                 nDiff = ( nMinimum - nMaximum ) / 2; // Take the center
                         }
                     }
@@ -3712,8 +3809,16 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                 if( nDiff ) // jetzt wird geschrumpft oder gewachsen..
                 {
                     Size aOldSz( Prt().SSize() );
+#ifdef VERTICAL_LAYOUT
+                    long nTop = (this->*fnRect->fnGetTopMargin)();
+                    nDiff = (Prt().*fnRect->fnGetHeight)() + nDiff + nBorder -
+                            (Frm().*fnRect->fnGetHeight)();
+                    (Frm().*fnRect->fnAddBottom)( nDiff );
+                    (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
+#else
                     Prt().Height( Prt().Height() + nDiff );
                     Frm().Height( Prt().Height() + nBorder);
+#endif
                     ChgLowersProp( aOldSz );
                     NotifyFlys();
 
