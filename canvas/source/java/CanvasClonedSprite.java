@@ -67,8 +67,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -80,7 +80,7 @@ import sun.awt.*;
 
 public class CanvasClonedSprite
     extends com.sun.star.lib.uno.helper.ComponentBase
-    implements drafts.com.sun.star.rendering.XSprite,
+    implements com.sun.star.rendering.XSprite,
                 com.sun.star.lang.XServiceInfo,
                 SpriteBase
 {
@@ -206,7 +206,7 @@ public class CanvasClonedSprite
     //----------------------------------------------------------------------------------
 
     private static final String s_implName = "XSprite.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.Sprite";
+    private static final String s_serviceName = "com.sun.star.rendering.Sprite";
 
     //----------------------------------------------------------------------------------
 
