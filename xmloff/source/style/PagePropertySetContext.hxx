@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PagePropertySetContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ public:
                 const ::rtl::OUString& rLName,
                  const ::com::sun::star::uno::Reference<
                          ::com::sun::star::xml::sax::XAttributeList >& xAttrList,
+                 sal_uInt32 nFam,
                  ::std::vector< XMLPropertyState > &rProps,
                  const UniReference < SvXMLImportPropertyMapper > &rMap,
                  sal_Int32 nStartIndex, sal_Int32 nEndIndex,
