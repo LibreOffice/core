@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,13 @@
  ************************************************************************/
 
 #ifndef _MANIFEST_READER_HXX
-#include "ManifestReader.hxx"
+#include <ManifestReader.hxx>
+#endif
+#ifndef _MANIFEST_IMPORT_HXX
+#include <ManifestImport.hxx>
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -77,11 +77,11 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _MANIFEST_IMPORT_HXX
-#include <ManifestImport.hxx>
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 #include <vector>
 
@@ -103,29 +103,6 @@ ManifestReader::ManifestReader( const Reference < XMultiServiceFactory > & xNewF
 ManifestReader::~ManifestReader()
 {
 }
-Any SAL_CALL ManifestReader::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // My own interfaces
-                                        static_cast< XManifestReader*       > ( this ) );
-
-}
-
-void SAL_CALL ManifestReader::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ManifestReader::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
-
 Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream )
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -168,28 +145,46 @@ Reference < XInterface > SAL_CALL ManifestReader_createInstance( Reference< XMul
 {
     return *new ManifestReader( rServiceFactory );
 }
+#define SERVICE_NAME "com.sun.star.packages.manifest.comp.ManifestReader"
+OUString ManifestReader::static_getImplementationName()
+{
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+}
+
+sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServiceName)
+{
+    return rServiceName == getSupportedServiceNames()[0];
+}
+
+Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
+{
+    Sequence < OUString > aNames(1);
+    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return aNames;
+}
+#undef SERVICE_NAME
 
 OUString ManifestReader::getImplementationName()
+    throw (RuntimeException)
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.comp.ManifestReader" ) );
+    return static_getImplementationName();
 }
 
 sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
     throw (RuntimeException)
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return static_supportsService ( rServiceName );
 }
 
 Sequence < OUString > ManifestReader::getSupportedServiceNames()
+    throw (RuntimeException)
 {
-    Sequence < OUString > aNames(1);
-    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
-    return aNames;
+    return static_getSupportedServiceNames();
 }
 Reference < XSingleServiceFactory > ManifestReader::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
 {
     return cppu::createSingleFactory (rServiceFactory,
-                                           getImplementationName(),
+                                           static_getImplementationName(),
                                            ManifestReader_createInstance,
-                                           getSupportedServiceNames());
+                                           static_getSupportedServiceNames());
 }

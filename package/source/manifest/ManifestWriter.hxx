@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestWriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,43 +62,49 @@
 #ifndef _MANIFEST_WRITER_HXX
 #define _MANIFEST_WRITER_HXX
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTWRITER_HPP
 #include <com/sun/star/packages/manifest/XManifestWriter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
+} } }
 
-class ManifestWriter: public ::cppu::OWeakObject,
-                      public ::com::sun::star::packages::manifest::XManifestWriter
+class ManifestWriter: public ::cppu::WeakImplHelper2
+<
+    ::com::sun::star::packages::manifest::XManifestWriter,
+    ::com::sun::star::lang::XServiceInfo
+>
 {
-private:
+protected:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory;
 public:
     ManifestWriter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xNewFactory );
-    ~ManifestWriter();
+    virtual ~ManifestWriter();
+
     // XManifestWriter
     virtual void SAL_CALL writeManifestSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rStream, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& rSequence )
         throw (::com::sun::star::uno::RuntimeException);
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw();
-    virtual void SAL_CALL release(  )
-        throw();
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // Component constructor
-    static ::rtl::OUString getImplementationName();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();
+    static ::rtl::OUString static_getImplementationName();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & rServiceName)
+    virtual sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName)
         throw (com::sun::star::uno::RuntimeException);
 };
 #endif

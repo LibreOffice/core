@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestWriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,17 @@
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
-#ifndef _VOS_DIAGNOSE_H_
-#include <vos/diagnose.hxx>
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
 using namespace ::rtl;
@@ -99,29 +99,6 @@ ManifestWriter::~ManifestWriter()
 {
 }
 
-// XInterface methods
-Any SAL_CALL ManifestWriter::queryInterface( const Type& rType )
-    throw(RuntimeException)
-{
-    return ::cppu::queryInterface ( rType                                       ,
-                                        // OWeakObject interfaces
-                                        reinterpret_cast< XInterface*       > ( this )  ,
-                                        static_cast< XWeak*         > ( this )  ,
-                                        // My own interfaces
-                                        static_cast< XManifestWriter*       > ( this ) );
-
-}
-
-void SAL_CALL ManifestWriter::acquire(  )
-    throw()
-{
-    OWeakObject::acquire();
-}
-void SAL_CALL ManifestWriter::release(  )
-    throw()
-{
-    OWeakObject::release();
-}
 // XManifestWriter methods
 void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence )
         throw (RuntimeException)
@@ -143,26 +120,44 @@ Reference < XInterface > SAL_CALL ManifestWriter_createInstance( Reference< XMul
     return *new ManifestWriter( rServiceFactory );
 }
 
-OUString ManifestWriter::getImplementationName()
+#define SERVICE_NAME "com.sun.star.packages.manifest.comp.ManifestWriter"
+OUString ManifestWriter::static_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.comp.ManifestWriter" ) );
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+}
+
+sal_Bool SAL_CALL ManifestWriter::static_supportsService(OUString const & rServiceName)
+{
+    return rServiceName == getSupportedServiceNames()[0];
+}
+Sequence < OUString > ManifestWriter::static_getSupportedServiceNames()
+{
+    Sequence < OUString > aNames(1);
+    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+    return aNames;
+}
+#undef SERVICE_NAME
+
+OUString ManifestWriter::getImplementationName()
+    throw (RuntimeException)
+{
+    return static_getImplementationName();
 }
 
 sal_Bool SAL_CALL ManifestWriter::supportsService(OUString const & rServiceName)
     throw (RuntimeException)
 {
-    return rServiceName == getSupportedServiceNames()[0];
+    return static_supportsService ( rServiceName );
 }
 Sequence < OUString > ManifestWriter::getSupportedServiceNames()
+    throw (RuntimeException)
 {
-    Sequence < OUString > aNames(1);
-    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestWriter" ) );
-    return aNames;
+    return static_getSupportedServiceNames();
 }
 Reference < XSingleServiceFactory > ManifestWriter::createServiceFactory( Reference < XMultiServiceFactory > const & rServiceFactory )
 {
     return cppu::createSingleFactory (rServiceFactory,
-                                           getImplementationName(),
+                                           static_getImplementationName(),
                                            ManifestWriter_createInstance,
-                                           getSupportedServiceNames());
+                                           static_getSupportedServiceNames());
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestReader.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-19 14:09:35 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,42 +62,49 @@
 #ifndef _MANIFEST_READER_HXX
 #define _MANIFEST_READER_HXX
 
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _COM_SUN_STAR_PACKAGES_MANIFEST_XMANIFESTREADER_HPP
 #include <com/sun/star/packages/manifest/XManifestReader.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-class ManifestReader: public ::cppu::OWeakObject,
-                      public ::com::sun::star::packages::manifest::XManifestReader
+namespace com { namespace sun { namespace star {
+    namespace lang { class XMultiServiceFactory; class XSingleServiceFactory; }
+} } }
+
+class ManifestReader: public ::cppu::WeakImplHelper2
+<
+    ::com::sun::star::packages::manifest::XManifestReader,
+    ::com::sun::star::lang::XServiceInfo
+>
 {
-private:
+protected:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xFactory;
 public:
     ManifestReader( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xNewFactory );
-    ~ManifestReader();
+    virtual ~ManifestReader();
+
     // XManifestReader
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > SAL_CALL readManifestSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rStream )
         throw (::com::sun::star::uno::RuntimeException);
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
-        throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire(  )
-        throw();
-    virtual void SAL_CALL release(  )
-        throw();
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // Component constructor
-    static ::rtl::OUString getImplementationName();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();
+    static ::rtl::OUString static_getImplementationName();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & rServiceName)
+    virtual sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName)
         throw (com::sun::star::uno::RuntimeException);
 };
 #endif
