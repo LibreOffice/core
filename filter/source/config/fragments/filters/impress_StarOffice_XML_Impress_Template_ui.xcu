@@ -1,0 +1,7 @@
+    <node oor:name="impress_StarOffice_XML_Impress_Template" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">StarOffice 6.0/7 Presentation Template</value>
+            <value xml:lang="de">StarOffice 6.0/7 Präsentationsvorlage</value>
+            <value xml:lang="x-translate">StarOffice 6.0/7 Presentation Template</value>
+        </prop>
+    </node>
