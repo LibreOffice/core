@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-21 11:33:37 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 15:17:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -275,6 +275,10 @@ SHL1STDLIBS += -framework Cocoa
 
 .IF "$(GUIBASE)"=="unx"
 
+.IF "$(WITH_LIBSN)"=="YES"
+SHL1STDLIBS+=$(LIBSN_LIBS)
+.ENDIF
+
 # Solaris
 .IF "$(OS)"=="SOLARIS"
 
@@ -296,6 +300,10 @@ SHL1STDLIBS += -lXext -lSM -lICE -lX11
 .ENDIF          # "$(USE_XPRINT)" == "TRUE"
 .ENDIF          # "$(OS)"=="SOLARIS"
 .ENDIF          # "$(GUIBASE)"=="unx"
+
+.IF "$(OS)"=="MACOSX"
+SHL1STDLIBS += -lXinerama
+.ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 SHL1STDLIBS += -laudio
