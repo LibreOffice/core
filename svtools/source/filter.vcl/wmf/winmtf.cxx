@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-28 16:58:38 $
+ *  last change: $Author: ka $ $Date: 2001-11-30 16:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,11 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, INT32* pDXArry, sa
             aTmp.SetAlign( ALIGN_BOTTOM );
         else
             aTmp.SetAlign( ALIGN_TOP );
+
         mpGDIMetaFile->AddAction( new MetaFontAction( aTmp ) );
+        mpGDIMetaFile->AddAction( new MetaTextAlignAction( aTmp.GetAlign() ) );
+        mpGDIMetaFile->AddAction( new MetaTextColorAction( aTmp.GetColor() ) );
+        mpGDIMetaFile->AddAction( new MetaTextFillColorAction( aTmp.GetFillColor(), !aTmp.IsTransparent() ) );
     }
     if( mnTextAlign & ( TA_UPDATECP | TA_RIGHT_CENTER ) )
     {

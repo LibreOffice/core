@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cvtsvm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-18 17:55:45 $
+ *  last change: $Author: ka $ $Date: 2001-11-30 16:52:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     eActualCharSet = aFont.GetCharSet();
                     if ( eActualCharSet == RTL_TEXTENCODING_DONTKNOW )
                         eActualCharSet = gsl_getSystemTextEncoding();
+
                     rMtf.AddAction( new MetaFontAction( aFont ) );
+                    rMtf.AddAction( new MetaTextAlignAction( aFont.GetAlign() ) );
+                    rMtf.AddAction( new MetaTextColorAction( aFont.GetColor() ) );
+                    rMtf.AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
                 }
                 break;
 
