@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:11:07 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "ÀüÃ¼ ¿­ »èÁ¦(~C)";
         Text[ turkish ] = "S~ütunun tümünü sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eli~minar columnas completas";
     };
     RadioButton BTN_DELROWS
     {
@@ -162,6 +163,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "ÀüÃ¼ Çà »èÁ¦(~R)";
         Text[ turkish ] = "S~atýrýn tümünü sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Eliminar filas completas";
     };
     RadioButton BTN_CELLSLEFT
     {
@@ -191,6 +193,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "¼¿ ¿ÞÂÊÀ¸·Î ÀÌµ¿(~L)";
         Text[ turkish ] = "Hücreleri s~ola taþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Despla~zar celdas a la izquierda";
     };
     RadioButton BTN_CELLSUP
     {
@@ -220,6 +223,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "¼¿ À§ÂÊÀ¸·Î ÀÌµ¿(~U)";
         Text[ turkish ] = "Hücreleri y~ukarýya taþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Desplazar celdas hacia arriba";
     };
     GroupBox GB_FRAME
     {
@@ -248,6 +252,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     Text[ chinese_simplified ] = "É¾³ýµ¥Ôª¸ñ";
     Text[ russian ] = "Óäàëèòü ÿ÷åéêè";
@@ -259,6 +264,7 @@ ModalDialog RID_SCDLG_DELCELL
     Text[ korean ] = "¼¿ »èÁ¦";
     Text[ turkish ] = "Hücreleri sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar celdas";
 };
 ModalDialog RID_SCDLG_INSCELL
 {
@@ -330,6 +336,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "ÀüÃ¼ ¿­¡¡»ðÀÔ(~C)";
         Text[ turkish ] = "Tam s~ütun ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar ~columnas completas";
     };
     RadioButton BTN_INSROWS
     {
@@ -360,6 +367,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "ÀüÃ¼ Çà¡¡»ðÀÔ(~W)";
         Text[ turkish ] = "Tam s~atýr ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar ~filas completas";
     };
     RadioButton BTN_CELLSRIGHT
     {
@@ -389,6 +397,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "¼¿ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿(~R)";
         Text[ turkish ] = "Hücreleri s ~aða taþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazar celdas a la ~derecha";
     };
     RadioButton BTN_CELLSDOWN
     {
@@ -418,6 +427,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "¼¿ ¾Æ·¡·Î ÀÌµ¿(~D)";
         Text[ turkish ] = "Hücreleri ~aþaðý taþý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desplazar celdas hacia a~bajo";
     };
     GroupBox GB_FRAME
     {
@@ -446,6 +456,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     Text[ chinese_simplified ] = "²åÈëµ¥Ôª¸ñ";
     Text[ russian ] = "Âñòàâèòü ÿ÷åéêè";
@@ -457,6 +468,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text[ korean ] = "¼¿ »ðÀÔ";
     Text[ turkish ] = "Hücre ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar celdas";
 };
 
 Bitmap RID_SCTEAMDLGBMP1
@@ -534,6 +546,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¸ðµÎ¡¡»èÁ¦(~A)";
         Text[ turkish ] = "~Tümünü sil";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Eliminar ~todo";
     };
     CheckBox BTN_DELSTRINGS
     {
@@ -563,6 +576,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¹®ÀÚ¿­(~S)";
         Text[ turkish ] = "~Dize";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~adenas de caracteres";
     };
     CheckBox BTN_DELNUMBERS
     {
@@ -592,6 +606,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¼ýÀÚ(~N)";
         Text[ turkish ] = "~Sayý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Núm~eros";
     };
     CheckBox BTN_DELDATETIME
     {
@@ -621,6 +636,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "³¯Â¥ &½Ã°£(~D)";
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fecha y ~hora";
     };
     CheckBox BTN_DELFORMULAS
     {
@@ -650,6 +666,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¼ö½Ä(~F)";
         Text[ turkish ] = "~Formül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmu~las";
     };
     CheckBox BTN_DELATTRS
     {
@@ -679,6 +696,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¼­½Ä(~M)";
         Text[ turkish ] = "Forma~t";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Formatos";
     };
     CheckBox BTN_DELNOTES
     {
@@ -708,6 +726,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¸Þ¸ð(~E)";
         Text[ turkish ] = "~Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~otas";
     };
     CheckBox BTN_DELOBJECTS
     {
@@ -735,6 +754,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "°³Ã¼(~O)";
         Text[ turkish ] = "~Nesne";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Objeto~s";
     };
     GroupBox GB_FRAME
     {
@@ -763,6 +783,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     Text[ chinese_simplified ] = "É¾³ýÄÚÈÝ";
     Text[ russian ] = "Óäàëèòü ñîäåðæèìîå";
@@ -774,6 +795,7 @@ ModalDialog RID_SCDLG_DELCONT
     Text[ korean ] = "³»¿ë Áö¿ì±â";
     Text[ turkish ] = "Ýçerikleri sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar contenidos";
 };
 
 
@@ -847,6 +869,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¸ðµÎ ºÙ¿©³Ö±â(~P)";
         Text[ turkish ] = "~Tümünü yapýþtýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Pegar todo";
     };
     CheckBox BTN_INSSTRINGS
     {
@@ -876,6 +899,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¹®ÀÚ¿­(~S)";
         Text[ turkish ] = "~Dize";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "C~adenas de caracteres";
     };
     CheckBox BTN_INSNUMBERS
     {
@@ -905,6 +929,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¼ýÀÚ(~N)";
         Text[ turkish ] = "~Sayý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Núm~eros";
     };
     CheckBox BTN_INSDATETIME
     {
@@ -934,6 +959,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "ÀÏÀÚ & ½Ã°£(~D)";
         Text[ turkish ] = "~Tarih & Saat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fecha y ~hora";
     };
     CheckBox BTN_INSFORMULAS
     {
@@ -963,6 +989,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¼ö½Ä(~U)";
         Text[ turkish ] = "~Formül";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Fórmu~las";
     };
     CheckBox BTN_INSATTRS
     {
@@ -992,6 +1019,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¼­½Ä(~M)";
         Text[ turkish ] = "Forma~t";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Formatos";
     };
     CheckBox BTN_INSNOTES
     {
@@ -1021,6 +1049,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¸Þ¸ð(~O)";
         Text[ turkish ] = "~Not";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "N~otas";
     };
     GroupBox GB_FRAME
     {
@@ -1049,6 +1078,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Selección";
     };
     RadioButton BTN_OP_NOOP
     {
@@ -1075,6 +1105,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¾øÀ½(~E)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ning~una";
     };
     RadioButton BTN_OP_ADD
     {
@@ -1101,6 +1132,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "´õÇÏ±â(~A)";
         Text[ turkish ] = "~Topla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Sumar";
     };
     RadioButton BTN_OP_SUB
     {
@@ -1127,6 +1159,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "»©±â(~U)";
         Text[ turkish ] = "S~il";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "S~ustraer";
     };
     RadioButton BTN_OP_MUL
     {
@@ -1153,6 +1186,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "°öÇÏ±â(~Y)";
         Text[ turkish ] = "~Çarp";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Multiplicar";
     };
     RadioButton BTN_OP_DIV
     {
@@ -1179,6 +1213,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "³ª´©±â(~V)";
         Text[ turkish ] = "~Böl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Dividir";
     };
     GroupBox GB_OPERATION
     {
@@ -1205,6 +1240,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¿¬»ê";
         Text[ turkish ] = "Hesap iþlemleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Operaciones";
     };
     CheckBox BTN_SKIP_EMPTY
     {
@@ -1232,6 +1268,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "ºó ¼¿ ³Ñ¾î°¡±â(~K)";
         Text[ turkish ] = "~Boþ hücreleri atla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ignorar ~celdas vacías";
     };
     CheckBox BTN_TRANSPOSE
     {
@@ -1258,6 +1295,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "µÚ ¹Ù²Ù±â(~T)";
         Text[ turkish ] = "Dönüþtür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Transponer";
     };
     CheckBox BTN_LINK
     {
@@ -1285,6 +1323,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¿¬°á(~L)";
         Text[ turkish ] = "~Baðla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Vincular";
     };
     GroupBox GB_OPTIONS
     {
@@ -1311,6 +1350,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     RadioButton BTN_MV_NONE
     {
@@ -1337,6 +1377,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¹Ð¾î³»Áö ¸¶½Ê½Ã¿À.(~I)";
         Text[ turkish ] = "~Taþýma";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~No desplazar";
     };
     RadioButton BTN_MV_DOWN
     {
@@ -1363,6 +1404,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¾Æ·¡·Î(~W)";
         Text[ turkish ] = "~Aþaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia a~bajo";
     };
     RadioButton BTN_MV_RIGHT
     {
@@ -1389,6 +1431,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "S~aða";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hacia la de~recha";
     };
     GroupBox GB_MOVE
     {
@@ -1415,6 +1458,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ greek ] = "Ìåôáêßíçóç êåëéþí";
         Text[ korean ] = "¼¿ ÀÌµ¿";
         Text[ turkish ] = "Hücreleri taþý";
+        Text[ catalan ] = "Desplazar celdas";
     };
     Text[ chinese_simplified ] = "²åÈëÄÚÈÝ";
     Text[ russian ] = "Ñïåöèàëüíàÿ âñòàâêà";
@@ -1426,6 +1470,7 @@ ModalDialog RID_SCDLG_INSCONT
     Text[ korean ] = "¼±ÅÃÇÏ¿© ºÙ¿©³Ö±â";
     Text[ turkish ] = "Özel yapýþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pegado especial";
 };
 ModalDialog RID_SCDLG_MOVETAB
 {
@@ -1494,6 +1539,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ korean ] = "¹®¼­¿¡(~D)";
         Text[ turkish ] = "~Belgeye";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Al documento";
     };
     ListBox LB_DEST
     {
@@ -1531,6 +1577,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ korean ] = "¾Õ¿¡ »ðÀÔ(~I)";
         Text[ turkish ] = "~Öne ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar ~delante de";
     };
     ListBox LB_INSERT
     {
@@ -1567,6 +1614,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ korean ] = "º¹»ç(~C)";
         Text[ turkish ] = "~Kopyala";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Copiar";
     };
     String STR_NEWDOC
     {
@@ -1593,6 +1641,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ korean ] = "-»õ ¹®¼­ -";
         Text[ turkish ] = "- yeni belge -";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "- nuevo documento -";
     };
     Text[ chinese_simplified ] = "ÒÆ¶¯»ò¸´ÖÆ¹¤×÷±í";
     Text[ russian ] = "Ïåðåìåñòèòü/ñêîïèðîâàòü ëèñò";
@@ -1604,6 +1653,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text[ korean ] = "½ÃÆ® ÀÌµ¿/º¹»ç";
     Text[ turkish ] = "Sayfayý taþý/kopyala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Desplazar/Copiar hoja";
 };
 ModalDialog RID_SCDLG_STRINPUT
 {
@@ -1780,6 +1830,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
     };
     MetricField ED_VALUE
     {
@@ -1818,6 +1869,7 @@ ModalDialog RID_SCDLG_COL_MAN
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "~Standart deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~predetermin.";
     };
     Text[ russian ] = "Øèðèíà ñòîëáöà";
     Text[ polish ] = "Szerokoœæ kolumn";
@@ -1828,6 +1880,7 @@ ModalDialog RID_SCDLG_COL_MAN
     Text[ korean ] = "¿­ ³Êºñ";
     Text[ turkish ] = "Sütun geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de columna";
 };
 
 ModalDialog RID_SCDLG_COL_OPT
@@ -1900,6 +1953,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ korean ] = "Ãß°¡";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Adicional";
     };
     MetricField ED_VALUE
     {
@@ -1939,6 +1993,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "~Standart deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~predetermin.";
     };
     Text[ russian ] = "Îïòèìàëüíàÿ øèðèíà êîëîíêè";
     Text[ polish ] = "Optymalna szerokoœæ kolumn";
@@ -1949,6 +2004,7 @@ ModalDialog RID_SCDLG_COL_OPT
     Text[ korean ] = "ÃÖÀû ¿­ ³Êºñ";
     Text[ turkish ] = "En uygun sütun geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de columna óptimo";
 };
 
 ModalDialog RID_SCDLG_ROW_MAN
@@ -2021,6 +2077,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura";
     };
     MetricField ED_VALUE
     {
@@ -2060,6 +2117,7 @@ ModalDialog RID_SCDLG_ROW_MAN
         Text[ greek ] = "ÐñïåðéëåãìÝíç ôéìÞ";
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "~Standart deðer";
+        Text[ catalan ] = "Valor ~predetermin.";
     };
     Text[ russian ] = "Âûñîòà ñòðîê";
     Text[ polish ] = "Wysokoœæ wierszy";
@@ -2070,6 +2128,7 @@ ModalDialog RID_SCDLG_ROW_MAN
     Text[ korean ] = "Çà ³ôÀÌ";
     Text[ turkish ] = "Satýr yüksekliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura de fila";
 };
 
 ModalDialog RID_SCDLG_ROW_OPT
@@ -2142,6 +2201,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ korean ] = "Ãß°¡";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Adicional";
     };
     MetricField ED_VALUE
     {
@@ -2180,6 +2240,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text[ korean ] = "±âº»°ª(~D)";
         Text[ turkish ] = "~Standart deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~predetermin.";
     };
     Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòðîêè";
     Text[ polish ] = "Optymalna wysokoœæ wierszy";
@@ -2190,6 +2251,7 @@ ModalDialog RID_SCDLG_ROW_OPT
     Text[ korean ] = "ÃÖÀû Çà ³ôÀÌ";
     Text[ turkish ] = "En uygun satýr yüksekliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Altura de fila óptima";
 };
 
 
@@ -2261,6 +2323,7 @@ ModalDialog RID_SCDLG_SELECTDB
     Text[ greek ] = "ÅðéëïãÞ";
     Text[ korean ] = "¼±ÅÃ";
     Text[ turkish ] = "Seçim";
+    Text[ catalan ] = "Selección";
 };
 
 ModalDialog RID_SCDLG_SHOW_TAB
@@ -2339,6 +2402,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ korean ] = "¼û°ÜÁø¡¡½ÃÆ®";
         Text[ turkish ] = "Gizlenmiþ tablolar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Hojas ocultas";
     };
     Text[ chinese_simplified ] = "ÏÔÊ¾¹¤×÷±í";
     Text[ russian ] = "Ïîêàçàòü ëèñò";
@@ -2350,6 +2414,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     Text[ korean ] = "½ÃÆ® º¸ÀÌ±â";
     Text[ turkish ] = "Çalýþma sayfasýný göster";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar hoja de cálculo";
 };
 
 
@@ -2403,6 +2468,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "ÀÏ(~Y)";
         Text[ turkish ] = "~Gün";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Día";
     };
     RadioButton BTN_DAY_OF_WEEK
     {
@@ -2432,6 +2498,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¿äÀÏ(~W)";
         Text[ turkish ] = "~Ýþ günü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Día de la s~emana";
     };
     RadioButton BTN_MONTH
     {
@@ -2461,6 +2528,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¿ù(~M)";
         Text[ turkish ] = "A~y";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Mes";
     };
     RadioButton BTN_YEAR
     {
@@ -2490,6 +2558,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "³â(~E)";
         Text[ turkish ] = "Y~ýl";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Año";
     };
     GroupBox GB_TIME_UNIT
     {
@@ -2518,6 +2587,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "½Ã°£ ´ÜÀ§";
         Text[ turkish ] = "Zaman birimi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Unidad de tiempo";
     };
     RadioButton BTN_RIGHT
     {
@@ -2547,6 +2617,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¿À¸¥ÂÊ(~R)";
         Text[ turkish ] = "S~að";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Derec~ha";
     };
     RadioButton BTN_LEFT
     {
@@ -2576,6 +2647,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¿ÞÂÊ(~L)";
         Text[ turkish ] = "S~ol";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Izquierda";
     };
     RadioButton BTN_TOP
     {
@@ -2605,6 +2677,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "À§·Î(~U)";
         Text[ turkish ] = "~Yukarý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~rriba";
     };
     RadioButton BTN_BOTTOM
     {
@@ -2634,6 +2707,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¾Æ·¡·Î(~D)";
         Text[ turkish ] = "~Aþaðý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~bajo";
     };
     GroupBox GB_DIRECTION
     {
@@ -2662,6 +2736,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "¹æÇâ";
         Text[ turkish ] = "Yön";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Dirección";
     };
     RadioButton BTN_ARITHMETIC
     {
@@ -2691,6 +2766,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "»ê¼ú(~N)";
         Text[ turkish ] = "~Aritmetik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aritmétic~o";
     };
     RadioButton BTN_GEOMETRIC
     {
@@ -2720,6 +2796,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "±âÇÏÇÐÀû(~G)";
         Text[ turkish ] = "~Geometrik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Geométrico";
     };
     RadioButton BTN_DATE
     {
@@ -2749,6 +2826,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "³¯Â¥(~T)";
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fecha";
     };
     RadioButton BTN_AUTOFILL
     {
@@ -2779,6 +2857,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "ÀÚµ¿ Ã¤¿ì±â(~A)";
         Text[ turkish ] = "Otomatik~Doldur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Relleno automático";
     };
     GroupBox GB_TYPE
     {
@@ -2807,6 +2886,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "Çü½Ä";
         Text[ turkish ] = "Sýra türü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     FixedText FT_START_VALUE
     {
@@ -2833,6 +2913,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "½ÃÀÛ°ª(~S)";
         Text[ turkish ] = "~Baþlangýç deðeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~inicial";
     };
     Edit ED_START_VALUES
     {
@@ -2868,6 +2949,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "Á¾·á °ª(~V)";
         Text[ turkish ] = "~Bitiþ deðeri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor ~final";
     };
     Edit ED_END_VALUES
     {
@@ -2903,6 +2985,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "Áõ°¡(~C)";
         Text[ turkish ] = "~Artan";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "I~ncremento";
     };
     Edit ED_INCREMENT
     {
@@ -2937,6 +3020,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº °ª";
         Text[ turkish ] = "Geçersiz deðer";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Valor no válido";
     };
     OKButton BTN_OK
     {
@@ -2967,6 +3051,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ korean ] = "½Ã¸®Áî Ã¤¿ì±â";
     Text[ turkish ] = "Sýrayý doldur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rellenar series";
 };
 
 #define TXT_COLS \
@@ -2992,7 +3077,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ greek ] = "~ÓôÞëåò";  \
     Text[ korean ] = "¿­(~C)";  \
     Text[ turkish ] = "~Sütun"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Columnas";
 
 
 #define TXT_ROWS \
@@ -3018,7 +3104,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text[ greek ] = "~ÃñáììÝò"; \
     Text[ korean ] = "Çà(~R)";  \
     Text[ turkish ] = "S~atýr"; \
-    Text[ language_user1 ] = " ";
+    Text[ language_user1 ] = " ";   \
+    Text[ catalan ] = "~Filas";
 
 
 ModalDialog RID_SCDLG_GROUP
@@ -3097,6 +3184,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ korean ] = "ÀÇ¡¡È°¼ºÈ­";
         Text[ turkish ] = "Þunun için etkinleþtir:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Activar para";
     };
     String STR_UNGROUP
     {
@@ -3124,6 +3212,7 @@ ModalDialog RID_SCDLG_GROUP
         Text[ korean ] = "¿¡¡¡´ëÇØ ÇØÁ¦";
         Text[ turkish ] = "Þunun için etkinliðini kaldýr:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Desactivar para";
     };
     Text = "Gruppierung" ;
     Text [ ENGLISH ] = "Group" ;
@@ -3148,6 +3237,7 @@ ModalDialog RID_SCDLG_GROUP
     Text[ korean ] = "±×·ì¸¸µé±â";
     Text[ turkish ] = "Grup";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Agrupar";
 };
 
  // Ableitungen
@@ -3236,6 +3326,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "¸Ó¸®±Û(~E)";
         Text[ turkish ] = "~Üstbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Encabezamiento";
     };
     CheckBox BTN_LEFT
     {
@@ -3263,6 +3354,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "¿ÞÂÊ ¿­(~L)";
         Text[ turkish ] = "~Sol sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna ~izquierda";
     };
     CheckBox BTN_BOTTOM
     {
@@ -3291,6 +3383,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "¹Ù´Ú±Û(~F)";
         Text[ turkish ] = "~Altbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Pie de página";
     };
     CheckBox BTN_RIGHT
     {
@@ -3318,6 +3411,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "¿À¸¥ÂÊ ¿­(~R)";
         Text[ turkish ] = "~Sað sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Columna ~derecha";
     };
     OKButton BTN_OK
     {
@@ -3363,6 +3457,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ korean ] = "·ÎºÎÅÍ ÀÌ¸§ ¸¸µé±â";
         Text[ turkish ] = "Ad için kaynak";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre a partir de ";
     };
     Text = "Namen erzeugen" ;
     Text [ ENGLISH ] = "Create Names" ;
@@ -3385,6 +3480,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
     Text[ korean ] = "ÀÌ¸§ ¸¸µé±â";
     Text[ turkish ] = "Ad oluþtur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Crear nombre";
 };
 
 ModalDialog RID_SCDLG_NAMES_PASTE
@@ -3420,6 +3516,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ korean ] = "ÀÌ¸§ ºÙ¿©³Ö±â";
         Text[ turkish ] = "Ad yapýþtýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Insertar nombre";
     };
     ListBox LB_ENTRYLIST
     {
@@ -3475,6 +3572,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ korean ] = "¸ñ·Ï£¨L)(~L)";
         Text[ turkish ] = "~Liste";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Lista";
     };
     /* ### ACHTUNG: Neuer Text in Resource? Namen einfügen : Namen einf³gen */
     Text = "Namen einfügen" ;
@@ -3498,6 +3596,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     Text[ korean ] = "ÀÌ¸§ ºÙ¿©³Ö±â";
     Text[ turkish ] = "Ad yapýþtýr";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar nombre";
 };
 
 FloatingWindow RID_SCDLG_TEAM
@@ -3530,6 +3629,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ korean ] = "StarCalc ÆÀ";
     Text[ turkish ] = "StarCalc Ekibi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El equipo de %PRODUCTNAME Calc";
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW
@@ -3563,6 +3663,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ korean ] = "Ã³À½ ¿­À» ¶óº§·Î(~C)";
         Text[ turkish ] = "Etiket olarak ilk~sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Primera c~olumna como etiqueta";
     };
     CheckBox 2
     {
@@ -3589,6 +3690,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ korean ] = "Ã³À½ ÇàÀ» ¶óº§·Î(~R)";
         Text[ turkish ] = "Etiket olarak ilk~satýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Primera ~fila como etiqueta";
     };
     GroupBox 6
     {
@@ -3615,6 +3717,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ korean ] = "¶óº§";
         Text[ turkish ] = "Etiket";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Etiqueta";
     };
     OKButton 3
     {
@@ -3654,5 +3757,6 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ korean ] = "¼Ò½º µ¥ÀÌÅÍ ¹üÀ§ º¯°æ";
     Text[ turkish ] = "Kaynak verileri aralýðýný deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar datos fuente";
 };
 
