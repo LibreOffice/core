@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-18 12:55:28 $
+ *  last change: $Author: thb $ $Date: 2002-09-30 17:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1142,7 +1142,18 @@ BOOL Region::Intersect( const Rectangle& rRect )
         return TRUE;
     }
 
-    ImplPolyPolyRegionToBandRegion();
+    // #103137# Avoid banding for special cases
+    if ( mpImplRegion->mpPolyPoly )
+    {
+        // use the PolyPolygon:Clip method for rectangles, this is
+        // fairly simple (does not even use GPC) and saves us from
+        // unnecessary banding
+        mpImplRegion->mpPolyPoly->Clip( rRect );
+
+        return TRUE;
+    }
+    else
+        ImplPolyPolyRegionToBandRegion();
 
     // is region empty? -> nothing to do!
     if ( mpImplRegion == &aImplEmptyRegion )
