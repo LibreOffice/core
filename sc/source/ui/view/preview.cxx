@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #include "globstr.hrc"
 #include "sc.hrc"           // fuer ShellInvalidate
 #include "AccessibleDocumentPagePreview.hxx"
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -714,7 +717,9 @@ com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessibl
 {
     ScAccessibleDocumentPagePreview* pAccessible =
         new ScAccessibleDocumentPagePreview( GetAccessibleParentWindow()->GetAccessible(), pViewShell );
-    return pAccessible;
+    com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAccessible;
+    pAccessible->Init();
+    return xAccessible;
 }
 
 

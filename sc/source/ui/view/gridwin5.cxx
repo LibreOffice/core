@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:54:20 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
 
 
@@ -415,5 +418,9 @@ com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccess
         new ScAccessibleDocument(GetAccessibleParentWindow()->GetAccessible(),
             pViewData->GetViewShell(), eWhich);
 
-    return pAccessibleDocument;
+    com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAccessibleDocument;
+
+    pAccessibleDocument->Init();
+
+    return xAccessible;
 }
