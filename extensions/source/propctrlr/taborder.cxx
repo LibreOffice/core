@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taborder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-22 08:48:46 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ namespace pcr
             case FormComponentType::GRIDCONTROL:    nImageId = RID_SVXIMG_GRID; break;
             case FormComponentType::SCROLLBAR:      nImageId = RID_SVXIMG_SCROLLBAR; break;
             case FormComponentType::SPINBUTTON:     nImageId = RID_SVXIMG_SPINBUTTON; break;
+            case FormComponentType::NAVIGATIONBAR:  nImageId = RID_SVXIMG_NAVIGATIONBAR; break;
             default:
                 DBG_ERROR( "TabOrderDialog::GetImage: unknown control type" );
             }
