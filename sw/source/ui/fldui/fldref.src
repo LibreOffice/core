@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-17 08:27:08 $
+ *  last change: $Author: obo $ $Date: 2001-05-30 20:16:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ TabPage TP_FLD_REF
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÊýÖµ(~V)";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Warto?æ";
+        Text[ polish ] = "Wartoœæ";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÇáÞíãÉ";
