@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-11 15:05:50 $
+ *  last change: $Author: dvo $ $Date: 2002-09-13 12:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,22 +1003,20 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
     if( xDragSource.is() )
     {
-        // #102940# call into VCL required SolarMutex
+        /*
+         *    #96792# release mouse before actually starting DnD.
+         *    This is necessary for the X11 DnD implementation to work.
+         */
+        if( pWindow->IsMouseCaptured() )
+            pWindow->ReleaseMouse();
+
         const Point aPt( pWindow->GetPointerPosPixel() );
 
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
         try
         {
-            /*
-           *    #96792# release mouse before actually starting DnD.
-           *    This is necessary for the X11 DnD implementation to work.
-           */
-            if( pWindow->IsMouseCaptured() )
-                pWindow->ReleaseMouse();
-
             DragGestureEvent    aEvt;
-
             aEvt.DragAction = DNDConstants::ACTION_COPY;
             aEvt.DragOriginX = aPt.X();
             aEvt.DragOriginY = aPt.Y();
