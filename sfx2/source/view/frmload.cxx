@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:40:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,12 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
     const SfxFilter*  pFilter  = NULL;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-    if ( !aFilterName.Len() )
+
+    /* special mode: use already loaded model ...
+        In such case no filter name will be selected and no URL will be given!
+        Such informations are not neccessary. We have to create a new view only
+        and call setComponent() at the corresponding frame. */
+    if (!aFilterName.Len() && !xModel.is())
     {
         // try to find a filter with SFX filter detection using the typename
         SfxFilterFlags    nMust    = SFX_FILTER_IMPORT;
@@ -476,7 +481,8 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
                 if( pRequest->isApproved() )
                 {
                     aResSet.Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
-                    aResSet.Put( SfxBoolItem( SID_EDITDOC, sal_False ) );
+                    aResSet.Put( SfxBoolItem( SID_TEMPLATE, sal_True ) );
+                    aResSet.Put( SfxStringItem( SID_DOCINFO_TITLE, aDocName ) );
                     pLoader->ReleaseRef();
                     pLoader = LoadEnvironment_Impl::Create( aResSet );
                     pLoader->AddRef();
