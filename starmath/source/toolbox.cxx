@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-24 07:32:37 $
+ *  last change: $Author: tl $ $Date: 2002-08-30 12:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,8 +173,7 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     if (STATE_CHANGE_INITSHOW == nStateChange)
         AdjustPosition( Point() );
-    else
-        SfxFloatingWindow::StateChanged( nStateChange );
+    SfxFloatingWindow::StateChanged( nStateChange );
 }
 
 
