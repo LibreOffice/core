@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-27 16:13:35 $
+ *  last change: $Author: mba $ $Date: 2001-08-28 13:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1013,6 +1013,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, FALSE );
     String aFileName = pFileName->GetValue();
 
+    String aReferer;
+    SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
+    if ( pRefererItem )
+        aReferer = pRefererItem->GetValue();
+
     // Mark without URL cannot be handled by hyperlink code
     if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
     {
@@ -1064,15 +1069,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                     }
                     else if ( aINetProtocol == INET_PROT_FILE )
                     {
-                        String          aReferer;
-                        SfxApplication* pApp = SFX_APP();
-
-                        SFX_REQUEST_ARG( rReq, pRefererItem, SfxStringItem, SID_REFERER, FALSE );
-                        if ( pRefererItem )
-                            aReferer = pRefererItem->GetValue();
-
-                        // security => we have to check the url before executing!
-                        if ( pApp->IsSecureURL( aObj, &aReferer ) )
+                        // security reservation: => we have to check the referer before executing
+                        if ( SFX_APP()->IsSecureURL( String(), &aReferer ) )
                         {
                             ::rtl::OUString aSysPathFileName;
                             ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aURL.Complete, aSysPathFileName );
@@ -1114,6 +1112,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
             }
         }
+    }
+
+    if ( !SFX_APP()->IsSecureURL( aFileName, &aReferer ) )
+    {
+        SfxErrorContext aCtx( ERRCTX_SFX_OPENDOC, aFileName );
+        ErrorHandler::HandleError( ERRCODE_IO_ACCESSDENIED );
+        return;
     }
 
     SFX_REQUEST_ARG(rReq, pFrmItem, SfxFrameItem, SID_DOCFRAME, FALSE);
