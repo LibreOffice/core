@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:45:23 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 06:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1548,7 +1548,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 }
                 else if ( GetSelectRowCount() > 0 )
                 {
-                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, sal_False ) );
+                    ::Rectangle aColRect( GetFieldRectPixel( FirstSelectedRow(), HANDLE_ID, sal_True ) );
 
                     aMenuPos = aColRect.TopCenter();
                 }
