@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:59:12 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ String STR_SVT_FILEVIEW_COLUMN_TITLE
     Text[ hebrew ] = "‮כותרת‬";
     Text[ hindi ] = "शीर्षक";
     Text[ slovak ] = "Nadpis";
+    Text[ hungarian ] = "Cím";
+    Text[ slovenian ] = "Naslov";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_SIZE
@@ -127,6 +129,8 @@ String STR_SVT_FILEVIEW_COLUMN_SIZE
     Text[ hebrew ] = "‮גודל‬";
     Text[ hindi ] = "परिमाण";
     Text[ slovak ] = "Veľkosť";
+    Text[ hungarian ] = "Méret";
+    Text[ slovenian ] = "Velikost";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_DATE
@@ -158,6 +162,8 @@ String STR_SVT_FILEVIEW_COLUMN_DATE
     Text[ hebrew ] = "‮תאריך שינוי אחרון‬";
     Text[ hindi ] = "दिनांक सुधार किया";
     Text[ slovak ] = "Dátum zmeny";
+    Text[ hungarian ] = "Módosítás dátuma";
+    Text[ slovenian ] = "Spremenjeno dne";
 };
 
 String STR_SVT_FILEVIEW_COLUMN_TYPE
@@ -189,6 +195,8 @@ String STR_SVT_FILEVIEW_COLUMN_TYPE
     Text[ hebrew ] = "‮סוג‬";
     Text[ hindi ] = "वर्ग";
     Text[ slovak ] = "Typ";
+    Text[ hungarian ] = "Típus";
+    Text[ slovenian ] = "Vrsta";
 };
 
 String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
@@ -198,7 +206,7 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ portuguese ] = "Foi imposs�vel criar a pasta %1.";
     Text[ russian ] = "���������� ������� ����� %1.";
     Text[ greek ] = "��� ���� ������ � ���������� ��� ������� %1.";
-    Text[ dutch ] = "Map %1 kan niet worden gemaakt.";
+    Text[ dutch ] = "Map %1 kan niet worden aangemaakt.";
     Text[ french ] = "Impossible de cr�er le dossier %1 !";
     Text[ spanish ] = "No se pudo crear la carpeta %1.";
     Text[ finnish ] = "Kansion %1 luominen ei onnistunut.";
@@ -219,6 +227,8 @@ String STR_SVT_FILEVIEW_ERR_MAKEFOLDER
     Text[ hebrew ] = "‮לא ניתן ליצור תיקיה %1.‬";
     Text[ hindi ] = "%1 कोष्ठ को उत्पन्न नहीं कर सकते है ।";
     Text[ slovak ] = "Nedá sa vytvoriť adresár %1.";
+    Text[ hungarian ] = "A %1 mappa létrehozása nem sikerült";
+    Text[ slovenian ] = "Mape %1 ni bilo mogoče ustvariti.";
 };
 
 String STR_SVT_BYTES
@@ -250,6 +260,8 @@ String STR_SVT_BYTES
     Text[ hebrew ] = "‮בתים‬";
     Text[ hindi ] = "बइट्स";
     Text[ slovak ] = "Bajtov";
+    Text[ hungarian ] = "Byte";
+    Text[ slovenian ] = "Bajtov";
 };
 
 String STR_SVT_KB
@@ -281,6 +293,8 @@ String STR_SVT_KB
     Text[ hebrew ] = "KB";
     Text[ hindi ] = "KB";
     Text[ slovak ] = "kB";
+    Text[ hungarian ] = "KB";
+    Text[ slovenian ] = "KB";
 };
 
 String STR_SVT_MB
@@ -312,6 +326,8 @@ String STR_SVT_MB
     Text[ hebrew ] = "MB";
     Text[ hindi ] = "MB";
     Text[ slovak ] = "MB";
+    Text[ hungarian ] = "MB";
+    Text[ slovenian ] = "MB";
 };
 
 
@@ -344,6 +360,8 @@ String STR_SVT_GB
     Text[ hebrew ] = "GB";
     Text[ hindi ] = "GB";
     Text[ slovak ] = "GB";
+    Text[ hungarian ] = "GB";
+    Text[ slovenian ] = "GB";
 };
 
 // Images ---------------------------------------------------------------------
@@ -391,6 +409,8 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ hebrew ] = "‮מחיקה‬";
             Text[ hindi ] = "~Delete";
             Text[ slovak ] = "Vym~azať";
+            Text[ hungarian ] = "~Törlés";
+            Text[ slovenian ] = "~Izbriši";
         };
         MenuItem
         {
@@ -423,6 +443,8 @@ Menu RID_FILEVIEW_CONTEXTMENU
             Text[ hebrew ] = "‮שינוי שם‬";
             Text[ hindi ] = "~Rename";
             Text[ slovak ] = "P~remenovať";
+            Text[ hungarian ] = "Á~tnevezés";
+            Text[ slovenian ] = "P~reimenuj";
         };
     };
 };
@@ -492,6 +514,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ hebrew ] = "‮שורה:‬";
         Text[ hindi ] = "प्रविष्टि:";
         Text[ slovak ] = "Položka:";
+        Text[ hungarian ] = "Bejegyzés:";
+        Text[ slovenian ] = "Vnos:";
     };
 
     FixedText TXT_ENTRYNAME
@@ -510,7 +534,7 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text = "Sind Sie sicher, dass Sie die selektierten Daten l�schen wollen?" ;
         Text [ english_us ] = "Are you sure you want to delete the selected data?" ;
         Text [ swedish ] = "�r du s�ker p� att du vill radera de markerade data?" ;
-        Text [ danish ] = "Vil du virkelig slette de markerede data?" ;
+        Text [ danish ] = "Er du sikker p�, at du vil slette de markerede data?" ;
         Text [ italian ] = "Volete davvero cancellare i dati selezionati?" ;
         Text [ spanish ] = "�Desea realmente borrar los datos seleccionados?" ;
         Text [ french ] = "�tes vous s�r de vouloir supprimer les donn�es s�lectionn�es ?" ;
@@ -535,6 +559,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ hebrew ] = "‮האם אכן למחוק את הנתונים הנבחרים?‬";
         Text[ hindi ] = "आप चुने हुए ड़ॉटा को सचमुच में मिटाना चाहते है?";
         Text[ slovak ] = "Naozaj chcete vymazať vybrané dáta?";
+        Text[ hungarian ] = "Biztosan törli a kijelölt adatokat?";
+        Text[ slovenian ] = "Ali ste prepričani, da želite izbrisati izbrane podatke?";
     };
 
     PushButton BTN_YES
@@ -570,6 +596,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "Vy~mazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
 
     PushButton BTN_ALL
@@ -605,6 +633,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ hebrew ] = "‮מחיקת הכל‬";
         Text[ hindi ] = "~सब मिटाओ";
         Text[ slovak ] = "Vymaz~ať všetko";
+        Text[ hungarian ] = "Összes ~törlése";
+        Text[ slovenian ] = "Izbriši ~vse";
     };
 
     PushButton BTN_NO
@@ -639,6 +669,8 @@ ModalDialog DLG_SVT_QUERYDELETE
         Text[ hebrew ] = "‮לא למחוק‬";
         Text[ hindi ] = "मत मि~टाओ";
         Text[ slovak ] = "~Nemazať";
+        Text[ hungarian ] = "T~örlés visszavonása";
+        Text[ slovenian ] = "~Ne izbriši";
     };
 
     CancelButton BTN_CANCEL
@@ -651,7 +683,10 @@ ModalDialog DLG_SVT_QUERYDELETE
     Text[ hebrew ] = "‮אישור מחיקה‬";
     Text[ hindi ] = "मिटाना दृढ़ करो";
     Text[ slovak ] = "Potvrdiť vymazanie";
+    Text[ hungarian ] = "Törlés megerősítése";
+    Text[ slovenian ] = "Potrditev brisanja";
 };
+
 
 
 
