@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:45:54 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,7 @@ void SAL_CALL OfficeIPCThread::run()
                 // they are only allowed if the "-invisible" is currently not used!
                 bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
                 bDocRequestSent |= aCmdLineArgs.GetViewList( pRequest->aViewList );
+                bDocRequestSent |= aCmdLineArgs.GetStartList( pRequest->aStartList );
                 bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
                 bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
 
@@ -703,6 +704,7 @@ void OfficeIPCThread::ExecuteCmdLineRequests( ProcessDocumentsRequest& aRequest 
     // Create dispatch list for dispatch watcher
     AddToDispatchList( aDispatchList, aRequest.aOpenList, DispatchWatcher::REQUEST_OPEN, aEmpty );
     AddToDispatchList( aDispatchList, aRequest.aViewList, DispatchWatcher::REQUEST_VIEW, aEmpty );
+    AddToDispatchList( aDispatchList, aRequest.aStartList, DispatchWatcher::REQUEST_START, aEmpty );
     AddToDispatchList( aDispatchList, aRequest.aPrintList, DispatchWatcher::REQUEST_PRINT, aEmpty );
     AddToDispatchList( aDispatchList, aRequest.aPrintToList, DispatchWatcher::REQUEST_PRINTTO, aRequest.aPrinterName );
     AddToDispatchList( aDispatchList, aRequest.aForceOpenList, DispatchWatcher::REQUEST_FORCEOPEN, aEmpty );
