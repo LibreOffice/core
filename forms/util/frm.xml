@@ -1,165 +1,482 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
-
-<COMPONENTDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
-<Author>Frank Schoenheit</Author>
-
-<Name>com.sun.star.form.OButtonModel</Name>
-<Description>
-    This component provides the button.
-</Description>
-
-<SupportedService>com.sun.star.form.component.CommandButton</SupportedService>
-
-<Name>com.sun.star.form.OCheckBoxModel</Name>
-<Description>
-    This component provides the OCheckBoxModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseCheckBox</SupportedService>
-
-<Name>com.sun.star.form.OComboBoxModel</Name>
-<Description>
-    This component provides the OComboBoxModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseComboBox</SupportedService>
-
-<Name>com.sun.star.form.OCurrencyModel</Name>
-<Description>
-    This component provides the OCurrencyModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseCurrencyField</SupportedService>
-
-<Name>com.sun.star.form.ODateModel</Name>
-<Description>
-    This component provides the ODateModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseDateField</SupportedService>
-
-<Name>com.sun.star.form.OEditModel</Name>
-<Description>
-    This component provides the OEditModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseTextField</SupportedService>
-
-<Name>com.sun.star.form.OFileControlModel</Name>
-<Description>
-    This component provides the OFileControlModel.
-</Description>
-<SupportedService>com.sun.star.form.component.FileControl</SupportedService>
-
-<Name>com.sun.star.form.ODatabaseForm</Name>
-<Description>
-    This component provides the button.
-</Description>
-<SupportedService>com.sun.star.form.component.HTMLForm</SupportedService>
-
-<Name>com.sun.star.form.OFormsCollection</Name>
-<Description>
-    This component provides the button.
-</Description>
-<SupportedService>com.sun.star.form.Forms</SupportedService>
-
-<Name>com.sun.star.form.OGridControlModel</Name>
-<Description>
-    This component provides the OGridControlModel.
-</Description>
-<SupportedService>com.sun.star.form.component.GridControl</SupportedService>
-
-<Name>com.sun.star.form.OGroupBoxModel</Name>
-<Description>
-    This component provides the OGroupBoxModel.
-</Description>
-<SupportedService>com.sun.star.form.component.GroupBox</SupportedService>
-
-<Name>com.sun.star.form.OHiddenModel</Name>
-<Description>
-    This component provides the OHiddenModel.
-</Description>
-<SupportedService>com.sun.star.form.component.HiddenControl</SupportedService>
-
-<Name>com.sun.star.form.OImageButtonModel</Name>
-<Description>
-    This component provides the OImageButtonModel.
-</Description>
-<SupportedService>com.sun.star.form.component.ImageButton</SupportedService>
-
-<Name>com.sun.star.form.OImageControlModel</Name>
-<Description>
-    This component provides the OImageControlModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseImageControl</SupportedService>
-
-<Name>com.sun.star.form.OListBoxModel</Name>
-<Description>
-    This component provides the OListBoxModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseListBox</SupportedService>
-
-<Name>com.sun.star.form.ONumericModel</Name>
-<Description>
-    This component provides the ONumericModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseNumericField</SupportedService>
-
-<Name>com.sun.star.form.OPatternModel</Name>
-<Description>
-    This component provides the OPatternModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabasePatternField</SupportedService>
-
-<Name>com.sun.star.form.ORadioButtonModel</Name>
-<Description>
-    This component provides the RadioButtonModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseRadioButton</SupportedService>
-
-<Name>com.sun.star.form.OFixedTextModel</Name>
-<Description>
-    This component provides the button.
-</Description>
-<SupportedService>com.sun.star.form.component.FixedText</SupportedService>
-
-<Name>com.sun.star.form.OTimeModel</Name>
-<Description>
-    This component provides the OTimeModel.
-</Description>
-<SupportedService>com.sun.star.form.component.DatabaseTimeField</SupportedService>
-
-<Language>c++</Language>
-
-<Status StatusValue="final"/>
-
-<ModuleName>frm</ModuleName>
-
-<LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
-
-<ServiceDependency>...</ServiceDependency>
-
-<ProjectBuildDependency>sal</ProjectBuildDependency>
-<ProjectBuildDependency>osl</ProjectBuildDependency>
-<ProjectBuildDependency>one</ProjectBuildDependency>
-<ProjectBuildDependency>cppu</ProjectBuildDependency>
-<ProjectBuildDependency>cppuhelper</ProjectBuildDependency>
-<ProjectBuildDependency>tools</ProjectBuildDependency>
-<ProjectBuildDependency>vcl</ProjectBuildDependency>
-<ProjectBuildDependency>svtool</ProjectBuildDependency>
-<ProjectBuildDependency>sfx2</ProjectBuildDependency>
-<ProjectBuildDependency>vos</ProjectBuildDependency>
-<ProjectBuildDependency>unotools</ProjectBuildDependency>
-<ProjectBuildDependency>tk</ProjectBuildDependency>
-
-<RuntimeModuleDependency>sal</RuntimeModuleDependency>
-<RuntimeModuleDependency>osl</RuntimeModuleDependency>
-<RuntimeModuleDependency>one</RuntimeModuleDependency>
-<RuntimeModuleDependency>cppu</RuntimeModuleDependency>
-<RuntimeModuleDependency>cppuhelper</RuntimeModuleDependency>
-<RuntimeModuleDependency>tools</RuntimeModuleDependency>
-<RuntimeModuleDependency>vcl</RuntimeModuleDependency>
-<RuntimeModuleDependency>svtool</RuntimeModuleDependency>
-<RuntimeModuleDependency>sfx2</RuntimeModuleDependency>
-<RuntimeModuleDependency>vos</RuntimeModuleDependency>
-<RuntimeModuleDependency>unotools</RuntimeModuleDependency>
-<RuntimeModuleDependency>tk</RuntimeModuleDependency>
-
-
-</COMPONENTDESCRIPTION>
+<!DOCTYPE MODULEDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+<MODULEDESCRIPTION xmlns:xlink="http://www.w3.org/1999/xlink">
+    <ModuleName>frm</ModuleName>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OFormsCollection</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.Forms</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponents</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ODatabaseForm</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponents</SupportedService>
+        <SupportedService>com.sun.star.form.component.Form</SupportedService>
+        <SupportedService>com.sun.star.form.component.HTMLForm</SupportedService>
+        <SupportedService>com.sun.star.form.component.DataForm</SupportedService>
+        <SupportedService>com.sun.star.form.sdb.RowSet</SupportedService>
+        <SupportedService>com.sun.star.form.sdbc.RowSet</SupportedService>
+        <SupportedService>com.sun.star.form.sdb.ResultSet</SupportedService>
+        <SupportedService>com.sun.star.form.sdbcx.ResultSet</SupportedService>
+        <SupportedService>com.sun.star.form.sdbc.ResultSet</SupportedService>
+        <ServiceDependency>com.sun.star.util.URLTransformer</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OFixedTextModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.FixedText</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlFixedTextModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OHiddenModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.HiddenControl</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OFileControlModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.FileControl</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlFileControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OGroupBoxModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.GroupBox</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlGroupBoxModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OImageButtonModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.ImageButton</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlImageButtonModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OButtonModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.CommandButton</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlButtonModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OGridControlModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.GridControl</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ORadioButtonModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseRadioButton</SupportedService>
+        <SupportedService>com.sun.star.form.component.RadioButton</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlRadioButtonModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OCheckBoxModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseCheckBox</SupportedService>
+        <SupportedService>com.sun.star.form.component.CheckBox</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlCheckBoxModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OComboBoxModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseComboBox</SupportedService>
+        <SupportedService>com.sun.star.form.component.ComboBox</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlComboBoxModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OListBoxModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseListBox</SupportedService>
+        <SupportedService>com.sun.star.form.component.ListBox</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlListBoxModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OEditModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseTextField</SupportedService>
+        <SupportedService>com.sun.star.form.component.TextField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlEditModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+        <ServiceDependency>com.sun.star.util.NumberFormatter</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ODateModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseDateField</SupportedService>
+        <SupportedService>com.sun.star.form.component.DateField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlDateFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OTimeModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseTimeField</SupportedService>
+        <SupportedService>com.sun.star.form.component.TimeField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlTimeFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ONumericModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseNumericField</SupportedService>
+        <SupportedService>com.sun.star.form.component.NumericField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlNumericFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OCurrencyModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseCurrencyField</SupportedService>
+        <SupportedService>com.sun.star.form.component.CurrencyField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlCurrencyFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OPatternModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabasePatternField</SupportedService>
+        <SupportedService>com.sun.star.form.component.PatternField</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlPatternFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OImageControlModel</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseImageControl</SupportedService>
+        <SupportedService>com.sun.star.form.DataAwareControlModel</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlImageControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author>Frank Schoenheit</Author>
+        <Name>com.sun.star.comp.forms.OFormattedFieldWrapper</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.component.DatabaseFormattedField</SupportedService>
+        <SupportedService>com.sun.star.form.FormattedField</SupportedService>
+        <SupportedService>com.sun.star.form.FormComponent</SupportedService>
+        <SupportedService>com.sun.star.form.FormControlModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlFormattedFieldModel</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlModel</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ORadioButtonControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.RadioButton</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlRadioButton</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OCheckBoxControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.CheckBox</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlCheckBox</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OGroupBoxControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.GroupBox</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlGroupBox</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OListBoxControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.ListBox</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlListBox</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OComboBoxControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.ComboBox</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlComboBox</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OEditControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.TextField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlEdit</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ODateControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.DateField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlDateField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OTimeControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.TimeField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlTimeField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.ONumericControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.NumericField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlNumericField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OCurrencyControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.CurrencyField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlCurrencyField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OPatternControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.PatternField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlPatternField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author>Frank Schoenheit</Author>
+        <Name>com.sun.star.comp.forms.OFormattedControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.FormattedField</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlFormattedField</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OButtonControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.CommandButton</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlButton</SupportedService>
+        <ServiceDependency>com.sun.star.util.URLTransformer</ServiceDependency>
+        <ServiceDependency>com.sun.star.awt.Pointer</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OImageButtonControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.ImageButton</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlImageButton</SupportedService>
+        <ServiceDependency>com.sun.star.util.URLTransformer</ServiceDependency>
+        <ServiceDependency>com.sun.star.awt.Pointer</ServiceDependency>
+    </COMPONENTDESCRIPTION>
+    <COMPONENTDESCRIPTION>
+        <Author/>
+        <Name>com.sun.star.comp.forms.OImageControlControl</Name>
+        <Description/>
+        <LoaderName>com.sun.star.loader.SharedLibrary</LoaderName>
+        <Language>c++</Language>
+        <Status StatusValue="final"/>
+        <SupportedService>com.sun.star.form.control.ImageControl</SupportedService>
+        <SupportedService>com.sun.star.awt.UnoControlImageControl</SupportedService>
+    </COMPONENTDESCRIPTION>
+    <ProjectBuildDependency>sal</ProjectBuildDependency>
+    <ProjectBuildDependency>osl</ProjectBuildDependency>
+    <ProjectBuildDependency>one</ProjectBuildDependency>
+    <ProjectBuildDependency>cppu</ProjectBuildDependency>
+    <ProjectBuildDependency>cppuhelper</ProjectBuildDependency>
+    <ProjectBuildDependency>tools</ProjectBuildDependency>
+    <ProjectBuildDependency>vcl</ProjectBuildDependency>
+    <ProjectBuildDependency>svtool</ProjectBuildDependency>
+    <ProjectBuildDependency>sfx2</ProjectBuildDependency>
+    <ProjectBuildDependency>vos</ProjectBuildDependency>
+    <ProjectBuildDependency>unotools</ProjectBuildDependency>
+    <ProjectBuildDependency>toolkit</ProjectBuildDependency>
+    <RuntimeModuleDependency>sal</RuntimeModuleDependency>
+    <RuntimeModuleDependency>osl</RuntimeModuleDependency>
+    <RuntimeModuleDependency>one</RuntimeModuleDependency>
+    <RuntimeModuleDependency>cppu</RuntimeModuleDependency>
+    <RuntimeModuleDependency>cppuhelper</RuntimeModuleDependency>
+    <RuntimeModuleDependency>tools</RuntimeModuleDependency>
+    <RuntimeModuleDependency>vcl</RuntimeModuleDependency>
+    <RuntimeModuleDependency>svtool</RuntimeModuleDependency>
+    <RuntimeModuleDependency>sfx2</RuntimeModuleDependency>
+    <RuntimeModuleDependency>vos</RuntimeModuleDependency>
+    <RuntimeModuleDependency>unotools</RuntimeModuleDependency>
+    <RuntimeModuleDependency>toolkit</RuntimeModuleDependency>
+</MODULEDESCRIPTION>
