@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:42:47 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 08:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
             nAskFor = SQL_DYNAMIC_CURSOR_ATTRIBUTES2;
 
         SQLUINTEGER nValueLen = 0;
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,nAskFor,nValueLen,*(Reference< XInterface >*)this);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,nAskFor,nValueLen,NULL);
         if((nValueLen & SQL_CA2_SENSITIVITY_DELETIONS) != SQL_CA2_SENSITIVITY_DELETIONS)
             m_pSkipDeletedSet = new OSkipDeletedSet(this);
     }
@@ -204,7 +204,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     try
     {
         SQLUINTEGER nValueLen = 0;
-        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,*(Reference< XInterface >*)this);
+        OTools::GetInfo(m_pStatement->getOwnConnection(),m_aConnectionHandle,SQL_GETDATA_EXTENSIONS,nValueLen,NULL);
         m_bFetchData = !((SQL_GD_ANY_ORDER & nValueLen) == SQL_GD_ANY_ORDER && nCurType != SQL_CURSOR_FORWARD_ONLY);
     }
     catch(Exception&)
