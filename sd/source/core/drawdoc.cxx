@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:55:29 $
+ *  last change: $Author: kz $ $Date: 2000-10-06 12:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,23 +166,23 @@
 #ifndef SVX_LIGHT
 #include "../ui/inc/docshell.hxx"
 #include "../ui/inc/grdocsh.hxx"
-#include "../ui/inc/optsitem.hxx"
 #include "../ui/inc/dragserv.hxx"
 #include "../ui/inc/viewshel.hxx"
 #include "../ui/inc/grdocsh.hxx"
 #endif //!SVX_LIGHT
 #include "../ui/inc/frmview.hxx"
+#include "../ui/inc/optsitem.hxx"
 #else
 #ifndef SVX_LIGHT
 #include "docshell.hxx"
 #include "grdocsh.hxx"
 #include "sdresid.hxx"
-#include "optsitem.hxx"
 #include "dragserv.hxx"
 #include "viewshel.hxx"
 #include "grdocsh.hxx"
 #endif //!SVX_LIGHT
 #include "frmview.hxx"
+#include "optsitem.hxx"
 #endif
 
 using namespace ::com::sun::star;
