@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:22:44 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,17 @@ public:
     static XclExpStringPtr      CreateString(
                                     const XclExpRoot& rRoot,
                                     const SdrTextObj& rTextObj,
+                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
+                                    sal_uInt16 nMaxLen = 0xFFFF );
+
+    /** Creates a new formatted string from a edit text string.
+        @param rEditObj  The edittext object.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen The maximum number of characters to store in this string.
+        @return  The new string object. */
+    static XclExpStringPtr        CreateString(
+                                    const XclExpRoot& rRoot,
+                                    const EditTextObject& rEditObj,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
 };
