@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptContext.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 12:54:59 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:09:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -118,32 +118,35 @@ public class ScriptContext extends PropertySet implements XScriptContext
     {
         this.m_xDeskTop = xDesktop;
         this.m_xComponentContext = xmComponentContext;
-        try
+        if ( invocationCtxPropSet != null )
         {
-            m_xModel = ( XModel ) UnoRuntime.queryInterface(
-                XModel.class,
-                invocationCtxPropSet.getPropertyValue( DOC_REF ) );
-            m_sDocURI = ( String )
-                invocationCtxPropSet.getPropertyValue( DOC_URI );
+            try
+            {
+                m_xModel = ( XModel ) UnoRuntime.queryInterface(
+                    XModel.class,
+                    invocationCtxPropSet.getPropertyValue( DOC_REF ) );
+                m_sDocURI = ( String )
+                    invocationCtxPropSet.getPropertyValue( DOC_URI );
 
-            LogUtils.DEBUG( "DOC_REF query for URL = " + m_xModel.getURL() );
-            LogUtils.DEBUG( "DOC_URI query for URL = " + m_sDocURI );
+                LogUtils.DEBUG( "DOC_REF query for URL = " + m_xModel.getURL() );
+                LogUtils.DEBUG( "DOC_URI query for URL = " + m_sDocURI );
 
-            registerProperty( DOC_URI, new Type(String.class),
-            (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_sDocURI");
+                registerProperty( DOC_URI, new Type(String.class),
+                (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_sDocURI");
+            }
+            catch ( UnknownPropertyException upe )
+            {
+                LogUtils.DEBUG( LogUtils.getTrace( upe ) );
+            }
+            catch ( WrappedTargetException wte )
+            {
+                LogUtils.DEBUG( LogUtils.getTrace( wte ) );
+            }
+    /*        catch ( IllegalArgumentException iae )
+            {
+                LogUtils.DEBUG( LogUtils.getTrace( iae ) );
+            } */
         }
-        catch ( UnknownPropertyException upe )
-        {
-            upe.printStackTrace();
-        }
-        catch ( WrappedTargetException wte )
-        {
-            wte.printStackTrace();
-        }
-/*        catch ( IllegalArgumentException iae )
-        {
-            iae.printStackTrace();
-        } */
         registerProperty( HM_DOC_REF, new Type(XModel.class),
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xModel");
         registerProperty( HM_DESKTOP, new Type(XDesktop.class),
@@ -172,7 +175,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
             sc = new ScriptContext(xCtxt, xDesktop, invocationCtxPropSet);
         }
         catch ( Exception e ) {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
         }
         return sc;
     }
