@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FontRequest.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:25:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_rendering_FontRequest_idl__
+#define __com_sun_star_rendering_FontRequest_idl__
+
+#ifndef __com_sun_star_rendering_FontInfo_idl__
+#include <com/sun/star/rendering/FontInfo.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+module com { module sun { module star { module rendering {
+
+/** This structure contains all information necessary to describe a
+    font to be queried from XCanvas.<p>
+
+    Note: Outline fonts are to be requested as a special family, set
+    <member>FontInfo::FamilyName</member> appropriately. Emboss/relief
+    must be emulated by upper layers.<p>
+
+    Leave the <member>FontInfo::FamilyName</member> and
+    <member>FontInfo::StyleName</member> empty, if font selection
+    should only happen via the PANOSE description.
+
+    @since #110496#
+ */
+struct FontRequest
+{
+    /** The description of the font.<p>
+
+        This member contains the description of the font as returned
+        by the font listing methods.<p>
+     */
+    FontInfo                        FontDescription;
+
+    //-------------------------------------------------------------------------
+
+    /** The size of the font in <em>device</em> coordinate space.<p>
+
+        This value corresponds to the font height in Western scripts,
+        but is independent of the writing direction (see
+        <member>FontRequest::IsVertical</member> below). That
+        means, the value specified here is always measured orthogonal
+        to the text advancement (height for horizontal writing, and
+        width for vertical writing).<p>
+
+        When this value is negative, its absolute value is taken as
+        the character size of the font. If this value is positive,
+        it's taken as the cell size of the font.<p>
+
+        This member and the referenceAdvancement member are mutually
+        exclusive, one of them has to be set to 0 (which means don't
+        care). For distorted fonts, the render transformation must be
+        used.<p>
+    */
+    double                          CellSize;
+
+    //-------------------------------------------------------------------------
+
+    /** This value specifies the size of the font in the writing
+        direction (i.e. width for horizontal writing, and height for
+        vertical writing).<p>
+
+        It is equivalent to the referenceCharSize of the FontMetrics
+        structure.<p>
+
+        This member and the cellSize member are mutually exclusive,
+        one of them has to be set to 0 (which means don't care). For
+        distorted fonts, the font matrix must be used.<p>
+     */
+    double                          ReferenceAdvancement;
+
+    //-------------------------------------------------------------------------
+
+    /** The locale this font should be able to render.<p>
+
+        This member supplements the
+        <member>FontInfo::UnicodeRange0</member> entry with a specific
+        locale; this is e.g. important when selecting between
+        traditional and simplified chinese is necessary (since the
+        letters have the same unicode ranges and character values).<p>
+     */
+    ::com::sun::star::lang::Locale  Locale;
+
+};
+
+}; }; }; };
+
+#endif
