@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,14 +356,26 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
         }
         else
         {
-
             // TODO: Optimize number of frames which are set to 0 height
             while ( pTmp )
             {
                 // the frames have to be shrunk
-                pTmp->Shrink( (pTmp->Frm().*fnRect->fnGetHeight)() );
-                (pTmp->Prt().*fnRect->fnSetTop)( 0 );
-                (pTmp->Prt().*fnRect->fnSetHeight)( 0 );
+                if ( pTmp && pTmp->IsTabFrm() )
+                {
+                    SwRowFrm* pTmpRow = (SwRowFrm*)((SwTabFrm*)pTmp)->Lower();
+                    while ( pTmpRow )
+                    {
+                        lcl_ShrinkCellsAndAllContent( *pTmpRow );
+                        pTmpRow = (SwRowFrm*)pTmpRow->GetNext();
+                    }
+                }
+                else
+                {
+                    pTmp->Shrink( (pTmp->Frm().*fnRect->fnGetHeight)() );
+                    (pTmp->Prt().*fnRect->fnSetTop)( 0 );
+                    (pTmp->Prt().*fnRect->fnSetHeight)( 0 );
+                }
+
                 pTmp = pTmp->GetPrev();
             }
 
@@ -688,9 +700,12 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     bool bMoveLastLine = false;
     SwFrm* pTmpRow = rLastLine.GetPrev();
     const bool bHasMoreLines = pTmpRow && !rTab.IsInHeadline( *pTmpRow );
+    const bool bFwdMoveAllowed = rTab.GetIndPrev() ||
+                                    ( rTab.GetUpper()->IsInTab() &&
+                                      rTab.GetUpper()->FindTabFrm()->GetIndPrev() );
 
     if ( bHasMoreLines ||
-        ( !rTab.IsFollow() && rTab.GetIndPrev() && !rTab.GetFollow()->IsJoinLocked() ) )
+        ( !rTab.IsFollow() && bFwdMoveAllowed && !rTab.GetFollow()->IsJoinLocked() ) )
     {
         //
         // Check if each cell in the last line has at least on content frame.
@@ -794,97 +809,6 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
     return bRet;
 }
 
-//
-// Local helper function to calculate height of first text row
-//
-SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
-{
-    // Find corresponding split line in master table
-    const SwTabFrm* pTab = rSourceLine.FindTabFrm();
-    SWRECTFN( pTab )
-    const SwCellFrm* pCurrSourceCell = (SwCellFrm*)rSourceLine.Lower();
-
-    //
-    // 1. Case: rSourceLine is a follow flow line.
-    // In this case we have to return the minimum of the heights
-    // of the first lines in rSourceLine.
-    //
-    // 2. Case: rSourceLine is not a follow flow line.
-    // In this case we have to return the maximum of the heights
-    // of the first lines in rSourceLine.
-    //
-    bool bIsInFollowFlowLine = rSourceLine.IsInFollowFlowRow();
-    SwTwips nHeight = bIsInFollowFlowLine ? LONG_MAX : 0;
-
-    while ( pCurrSourceCell )
-    {
-        if ( pCurrSourceCell->Lower() && pCurrSourceCell->Lower()->IsRowFrm() )
-        {
-            SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
-            while ( pTmpSourceRow )
-            {
-                // TODO: recursion
-                pTmpSourceRow = (SwRowFrm*)pTmpSourceRow->GetNext();
-            }
-        }
-        else
-        {
-            const SwFrm *pTmp = pCurrSourceCell->Lower();
-            if ( pTmp && pTmp->IsTxtFrm() )
-            {
-                SwTxtFrm* pTxtFrm = (SwTxtFrm*)pTmp;
-                pTxtFrm->GetFormatted();
-                SwTwips nTmpHeight = pTxtFrm->FirstLineHeight();
-                if ( USHRT_MAX != nTmpHeight )
-                {
-                    const SwCellFrm* pPrevCell = pCurrSourceCell->GetPreviousCell();
-                    if ( pPrevCell )
-                    {
-                        // If we are in a split row, there may be some space
-                        // left in the cell frame of the master row.
-                        // We look for the minimum if all first line heights;
-                        SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
-                        const SwFrm* pFrm = pPrevCell->Lower();
-                        while ( pFrm )
-                        {
-                            nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
-                            pFrm = pFrm->GetNext();
-                        }
-
-                        if ( nReal > 0 )
-                            nTmpHeight -= nReal;
-                    }
-                    else
-                    {
-                        // pFirstRow is not a FollowFlowRow. In this case,
-                        // we look for the maximum of all first line heights:
-                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
-                        const SwBorderAttrs &rAttrs = *aAccess.Get();
-                        nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
-                    }
-                }
-
-                if ( bIsInFollowFlowLine )
-                {
-                    // minimum
-                    if ( nTmpHeight < nHeight )
-                        nHeight = nTmpHeight;
-                }
-                else
-                {
-                    // maximum
-                    if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
-                        nHeight = nTmpHeight;
-                }
-
-            }
-        }
-
-        pCurrSourceCell = (SwCellFrm*)pCurrSourceCell->GetNext();
-    }
-
-    return ( LONG_MAX == nHeight ) ? 0 : nHeight;
-}
 
 
 /*************************************************************************
@@ -1988,7 +1912,7 @@ void SwTabFrm::MakeAll()
             if ( 0 != GetFirstNonHeadlineRow() )
             {
                 SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
-                if( IsInSct() )
+                if( IsInSct() || GetUpper()->IsInTab() ) // TABLE IN TABLE)
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
                                         GetUpper()->Grow( LONG_MAX, TRUE ) );
 
@@ -2946,35 +2870,7 @@ BOOL SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReform
             return rReformat = TRUE;
         else if ( !bLockBackMove && nSpace > 0 )
         {
-            const USHORT nRepeat = GetTable()->GetRowsToRepeat();
-            SwTwips nTmpHeight = 0;
-            if ( !IsFollow() && nRepeat > 0 )
-                nTmpHeight = lcl_GetHeightOfRows( *this, nRepeat );
-
-            SwFrm* pFirstRow = GetFirstNonHeadlineRow();
-            ASSERT( pFirstRow, "FollowTable without Lower" )
-
-            // pFirst row is the first non-heading row.
-            // nTmpHeight is the height of the heading row if we are a follow.
-            if ( pFirstRow )
-            {
-                const bool bSplittable = ((SwRowFrm*)pFirstRow)->IsRowSplitAllowed();
-                const bool bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
-
-                if ( bDontSplit )
-                    nTmpHeight = (Frm().*fnRect->fnGetHeight)();
-                else if ( !bSplittable )
-                    nTmpHeight += (pFirstRow->Frm().*fnRect->fnGetHeight)();
-                else
-                {
-                    const bool bOldJoinLock = IsJoinLocked();
-                    LockJoin();
-                    nTmpHeight += lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
-                    if ( !bOldJoinLock )
-                        UnlockJoin();
-                }
-            }
-
+            const SwTwips nTmpHeight = CalcHeightOfFirstContentLine();
             return nTmpHeight < nSpace;
         }
     }
@@ -4207,5 +4103,145 @@ bool SwTable::IsHeadline( const SwTableLine& rLine ) const
 bool SwTabFrm::IsLayoutSplitAllowed() const
 {
     return GetFmt()->GetLayoutSplit().GetValue();
+}
+
+//
+// Local helper function to calculate height of first text row
+//
+SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
+{
+    // Find corresponding split line in master table
+    const SwTabFrm* pTab = rSourceLine.FindTabFrm();
+    SWRECTFN( pTab )
+    const SwCellFrm* pCurrSourceCell = (SwCellFrm*)rSourceLine.Lower();
+
+    //
+    // 1. Case: rSourceLine is a follow flow line.
+    // In this case we have to return the minimum of the heights
+    // of the first lines in rSourceLine.
+    //
+    // 2. Case: rSourceLine is not a follow flow line.
+    // In this case we have to return the maximum of the heights
+    // of the first lines in rSourceLine.
+    //
+    bool bIsInFollowFlowLine = rSourceLine.IsInFollowFlowRow();
+    SwTwips nHeight = bIsInFollowFlowLine ? LONG_MAX : 0;
+
+    while ( pCurrSourceCell )
+    {
+        if ( pCurrSourceCell->Lower() && pCurrSourceCell->Lower()->IsRowFrm() )
+        {
+            SwRowFrm* pTmpSourceRow = (SwRowFrm*)pCurrSourceCell->Lower();
+            while ( pTmpSourceRow )
+            {
+                // TODO: recursion
+                pTmpSourceRow = (SwRowFrm*)pTmpSourceRow->GetNext();
+            }
+        }
+        else
+        {
+            const SwFrm *pTmp = pCurrSourceCell->Lower();
+            if ( pTmp )
+            {
+                SwTwips nTmpHeight = USHRT_MAX;
+                if ( pTmp->IsTabFrm() )
+                {
+                    nTmpHeight = ((SwTabFrm*)pTmp)->CalcHeightOfFirstContentLine();
+                }
+                else if ( pTmp->IsTxtFrm() )
+                {
+                    SwTxtFrm* pTxtFrm = (SwTxtFrm*)pTmp;
+                    pTxtFrm->GetFormatted();
+                    nTmpHeight = pTxtFrm->FirstLineHeight();
+                }
+
+                if ( USHRT_MAX != nTmpHeight )
+                {
+                    const SwCellFrm* pPrevCell = pCurrSourceCell->GetPreviousCell();
+                    if ( pPrevCell )
+                    {
+                        // If we are in a split row, there may be some space
+                        // left in the cell frame of the master row.
+                        // We look for the minimum if all first line heights;
+                        SwTwips nReal = (pPrevCell->Prt().*fnRect->fnGetHeight)();
+                        const SwFrm* pFrm = pPrevCell->Lower();
+                        while ( pFrm )
+                        {
+                            nReal -= (pFrm->Frm().*fnRect->fnGetHeight)();
+                            pFrm = pFrm->GetNext();
+                        }
+
+                        if ( nReal > 0 )
+                            nTmpHeight -= nReal;
+                    }
+                    else
+                    {
+                        // pFirstRow is not a FollowFlowRow. In this case,
+                        // we look for the maximum of all first line heights:
+                        SwBorderAttrAccess aAccess( SwFrm::GetCache(), pCurrSourceCell );
+                        const SwBorderAttrs &rAttrs = *aAccess.Get();
+                        nTmpHeight += rAttrs.CalcTop() + rAttrs.CalcBottom();
+                    }
+                }
+
+                if ( bIsInFollowFlowLine )
+                {
+                    // minimum
+                    if ( nTmpHeight < nHeight )
+                        nHeight = nTmpHeight;
+                }
+                else
+                {
+                    // maximum
+                    if ( nTmpHeight > nHeight && USHRT_MAX != nTmpHeight )
+                        nHeight = nTmpHeight;
+                }
+
+            }
+        }
+
+        pCurrSourceCell = (SwCellFrm*)pCurrSourceCell->GetNext();
+    }
+
+    return ( LONG_MAX == nHeight ) ? 0 : nHeight;
+}
+
+//
+// Function to calculate height of first text row
+//
+SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
+{
+    SWRECTFN( this )
+
+    const USHORT nRepeat = GetTable()->GetRowsToRepeat();
+    SwTwips nTmpHeight = 0;
+    if ( !IsFollow() && nRepeat > 0 )
+        nTmpHeight = lcl_GetHeightOfRows( *this, nRepeat );
+
+    SwFrm* pFirstRow = GetFirstNonHeadlineRow();
+    ASSERT( pFirstRow, "FollowTable without Lower" )
+
+    // pFirstRow row is the first non-heading row.
+    // nTmpHeight is the height of the heading row if we are a follow.
+    if ( pFirstRow )
+    {
+        const bool bSplittable = ((SwRowFrm*)pFirstRow)->IsRowSplitAllowed();
+        const bool bDontSplit = !IsFollow() && !GetFmt()->GetLayoutSplit().GetValue();
+
+        if ( bDontSplit )
+            nTmpHeight = (Frm().*fnRect->fnGetHeight)();
+        else if ( !bSplittable )
+            nTmpHeight += (pFirstRow->Frm().*fnRect->fnGetHeight)();
+        else
+        {
+            const bool bOldJoinLock = IsJoinLocked();
+            ((SwTabFrm*)this)->LockJoin();
+            nTmpHeight += lcl_CalcHeightOfFirstContentLine( *(SwRowFrm*)pFirstRow );
+            if ( !bOldJoinLock )
+                ((SwTabFrm*)this)->UnlockJoin();
+        }
+    }
+
+    return nTmpHeight;
 }
 
