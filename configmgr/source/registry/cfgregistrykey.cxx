@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:18:08 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ namespace {
     inline
     bool isAscii(sal_Unicode ch)
     {
-        return 0 <= ch && ch < 128;
+        return 0 < ch && ch < 128;
     }
     inline
     bool isAscii(sal_Unicode const * ps, sal_Int32 nLen )
