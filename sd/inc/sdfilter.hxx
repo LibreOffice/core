@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdfilter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-13 12:01:15 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,26 +80,32 @@
 // ------------
 
 class SfxMedium;
-class SdDrawDocShell;
+namespace sd {
+class DrawDocShell;
+}
 class SdDrawDocument;
 class SfxProgress;
 namespace vos { class OModule; }
 
 class SdFilter
 {
-private:
+public:
+    SdFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell, sal_Bool bShowProgress );
+    ~SdFilter();
 
-    ::rtl::OUString             ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const;
+    virtual sal_Bool            Import();
+    virtual sal_Bool            Export();
+
+    sal_Bool                    IsProgress() const { return mbShowProgress; }
+    sal_Bool                    IsDraw() const { return mbIsDraw; }
+    sal_Bool                    IsImpress() const { return !mbIsDraw; }
 
 protected:
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             mxModel;
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >    mxStatusIndicator;
 
-protected:
-
     SfxMedium&                  mrMedium;
-    SdDrawDocShell&             mrDocShell;
+    ::sd::DrawDocShell&             mrDocShell;
     SdDrawDocument&             mrDocument;
     SfxProgress*                mpProgress;
     sal_Bool                    mbIsDraw : 1;
@@ -109,17 +115,10 @@ protected:
     void                        CreateStatusIndicator();
     void                        CreateProgress();
 
-public:
+private:
 
-                                SdFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress );
-                                ~SdFilter();
+    ::rtl::OUString             ImplGetFullLibraryName( const ::rtl::OUString& rLibraryName ) const;
 
-    virtual sal_Bool            Import();
-    virtual sal_Bool            Export();
-
-    sal_Bool                    IsProgress() const { return mbShowProgress; }
-    sal_Bool                    IsDraw() const { return mbIsDraw; }
-    sal_Bool                    IsImpress() const { return !mbIsDraw; }
 };
 
 #endif // _SD_SDFILTER_HXX
