@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.24 $
+ #  $Revision: 1.25 $
  #
- #  last change: $Author: obo $ $Date: 2004-03-17 10:46:07 $
+ #  last change: $Author: kz $ $Date: 2004-05-19 04:36:31 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -67,12 +67,10 @@ TARGET=uidlg
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-IMGLST_SRS=$(SRS)$/$(TARGET).srs
+
 # --- Files -------------------------------------
 
 # ... resource files ............................
-
-BMP_IN=$(PRJ)$/res
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
