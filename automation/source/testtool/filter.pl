@@ -3,9 +3,9 @@
 #*
 #*  $RCSfile: filter.pl,v $
 #*
-#*  $Revision: 1.1 $
+#*  $Revision: 1.2 $
 #*
-#*  last change: $Author: mh $ $Date: 2002-11-18 15:53:53 $
+#*  last change: $Author: rt $ $Date: 2003-12-01 18:18:24 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -70,9 +70,13 @@ $cread = $cfalse;
 # Berechnet den Ausdruck der durch den 1. Parameter Uebergeben wird.
 # Falls symbole nicht ersetzt werden koennen findet behandlung als Makro statt
 # Bricht im Fehlerfall das Programm ab
+#
+# computes the expression by the 1. Parameter handing over becomes.
+# If symbols not to be replaced can find treatment as macro instead of break off
+# in the event of an error the program
 sub calc_value {
   $_ = $_[0];
-  s/(\||\+|\-|\*|\/|\(|\)|\<=|\>=|\!=|\>{1,2}|\<{1,2}|\={1,2})/ $1 /g;          # Blanks um Operatoren einfuegen
+  s/(\||\+|\-|\*|\/|\(|\)|\<=|\>=|\!=|\>{1,2}|\<{1,2}|\={1,2})/ $1 /g;          # Insert blanks around operators
   s/^ *(.*) *$/$1/;                             # blanks vorn und hinten weg
   s/\( *[a-zA-Z]* *\)//;            # Casts auf Typen raus
   @ops = split;
@@ -80,13 +84,14 @@ sub calc_value {
   @neuop = "";
   foreach $op (@ops) {
     if ($op !~ /^(\||\+|\-|\*|\/|\(|\)|\>{1,2}|\<{1,2}|\<=|\>=|\!=|\={1,2}|\d+|0[xX][0-9a-fA-F]+)$/) {
-      print "ersetze $op durch ",$symbol {$op},"\n" if $debug;
-                                # Wenn kein Operand oder Zahl oder klammer
-      $op = $symbol {$op};      # zugriff auf assotiatives Array mit {}
+      print "replace $op through",$symbol {$op},"\n" if $debug;
+                                # If no operand or number or clip
+      $op = $symbol {$op};      # also accessed associative array also {}
+
     }                           # ersetzen des Symbols durch seinen Wert
     if ( defined ($op) ) {
       push(@neuop,$op);
-    } else {                    # Symbol nicht gefunden -> Als Text uebernehmen
+    } else {                    # Symbol not found -> Als Text uebernehmen
       print "aborting calc_value : \"$_\"\n" if $debug;
       return $_;
     }
@@ -94,17 +99,17 @@ sub calc_value {
   print @neuop,"\n" if $debug;
   $_ = join(" ",@neuop);
   print "$_\n" if $debug;
-  eval "\$value = $_";              # Eigentliche Berechnung des Wertes
-  if ($@) { die "$@ ($_)"; }        # Fehlermeldung in $@ auswerten (Abbruch)
+  eval "\$value = $_";              # Actual computation of the value
+  if ($@) { die "$@ ($_)"; }        # Error message in $ @ evaluate (abort)
   $value;
 }
 
-# liest einen Block
+# reads a block
 # Parameter:   FileHandle
-#              Flag $skip ob Block .bersprungen werden soll oder Interpretiert
-#              Flag $BlindSkip ob if oder else -Zweig (Dann untersuchen weiterer if-then-else)
-#              Liste der Regular expressions die das Blockende darstellen.
-#   bei #ifdef block waere das dann  ("^#else\$","^#endif\$")
+#              Flag $$skip whether block .bersprungen to become is or interpreted
+#              Flag $$BlindSkip whether if or else branch (then examines further if-then-else)
+#              those expressions represent the end of block.
+#   with # ifdef block would then be ("^#else\$", "^#endif\$")
 
 sub read_block {
 
@@ -112,16 +117,17 @@ sub read_block {
   print "reading block '$file' $skip $BlindSkip @patterns ",scalar(@_),"\n" if $debug;
   while (<$file>) {
     chop;
-    s/\s*$//;             # trailing whitespaces entfernen
-    s/\(USHORT\)//;             # (USHORT) entfernen
+    s/\s*$//;             # remove trailing whitespaces
+    s/\(USHORT\)//;             # remove (USHORT)
+    s/SAL_CONST_INT64(\([^)]+\))/\1/;             # remove (USHORT)
     print "Input : \"$_\"\n" if $debug;
-    s/\/\/.*//;         # Zeilenkommentar entfernen
+    s/\/\/.*//;         # Remove line comment
 #    s/\/\*.*?\*\///g;   # Kommentare inerhalb einer Zeile entfernen
 #   erst ab perl 5
-    s/\s+/ /g;          # Allen whitespace in einen blank aendern
-    s/ *$//;            # Whitespace am Ende entfernen
+    s/\s+/ /g;          # Change all whitespace into a single blank
+    s/ *$//;            # Remove whitespace at end
 
-# Testen ob letzte Zeile erreicht wurde
+# Tests whether last line is reached
 # Liefert auch im falle der ganzen Datei, also ohne RegExp das gewuenschte
 # Ergebnis.
 
