@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:55:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ InterfaceRef SAL_CALL ORadioButtonModel_CreateInstance(const Reference<XMultiSer
 DBG_NAME( ORadioButtonModel )
 //------------------------------------------------------------------
 ORadioButtonModel::ORadioButtonModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_CONTROL_RADIOBUTTON, sal_False, sal_True, sal_True )
+    :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_RADIOBUTTON, FRM_SUN_CONTROL_RADIOBUTTON, sal_False, sal_True, sal_True )
                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( ORadioButtonModel, NULL );
