@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:18:55 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 14:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,10 +748,13 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         return 0;
     //#111938# lock the SelectHdl_Impl to prevent multiple executes
     FlagSet_Impl aFlag(bInSelectHdl_Impl);
+    TabPage* pOldPage = NULL;
+    TabPage* pNewPage = NULL;
 
     if(pCurrentPageEntry && ((OptionsPageInfo *)pCurrentPageEntry->GetUserData())->pPage->IsVisible())
     {
         OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pCurrentPageEntry->GetUserData();
+        pOldPage = pPageInfo->pPage;
         OptionsGroupInfo* pGroupInfo = (OptionsGroupInfo *)aTreeLB.GetParent(pCurrentPageEntry)->GetUserData();
         int nLeave = SfxTabPage::LEAVE_PAGE;
         if(RID_SVXPAGE_COLOR != pPageInfo->nPageId &&
@@ -916,6 +919,7 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         pCurrentPageEntry = pEntry;
         if(!bForgetSelection)
             nLastDialogPageId = pPageInfo->nPageId;
+        pNewPage = pPageInfo->pPage;
     }
     else
     {
@@ -1009,6 +1013,14 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         SetText(sTmpTitle);
         pCurrentPageEntry = 0;
     }
+
+    // restore lost focus, if necessary
+    Window* pFocusWin = Application::GetFocusWindow();
+    // if the focused window is not the options treebox and the old page has the focus
+    if ( pFocusWin && pFocusWin != pBox && pOldPage && pOldPage->HasChildPathFocus() )
+        // then set the focus to the new page or if we are on a group set the focus to the options treebox
+        pNewPage ? pNewPage->GrabFocus() : pBox->GrabFocus();
+
     return 0;
 }
 
