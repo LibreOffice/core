@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,9 +511,10 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
-                sExp = ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() ?
-                         rNumFmt.GetBulletChar() :
-                         pNumRule->MakeNumString( *pNum ) );
+                if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
+                    sExp = rNumFmt.GetBulletChar();
+                else
+                    sExp = pNumRule->MakeNumString( *pNum );
             }
         }
     }
