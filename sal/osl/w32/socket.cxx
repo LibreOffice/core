@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:45:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,19 +146,6 @@ static DWORD ProtocolMap[]= {
     0                           /* osl_Socket_ProtocolInvalid */
 };
 
-/* reverse map */
-static oslProtocol osl_ProtocolFromNative(DWORD nativeType)
-{
-    oslProtocol i= (oslProtocol)0;
-    while(i != osl_Socket_ProtocolInvalid)
-    {
-        if(ProtocolMap[i] == nativeType)
-            return i;
-        i = (oslProtocol)((int)i +1);
-    }
-    return i;
-}
-
 /* macros */
 #define PROTOCOL_FROM_NATIVE(y) osl_ProtocolFromNative(y)
 #define PROTOCOL_TO_NATIVE(x)   ProtocolMap[x]
@@ -221,19 +208,6 @@ static DWORD OptionMap[]= {
     0                           /* osl_Socket_OptionInvalid */
 };
 
-/* reverse map */
-static oslSocketOption osl_SocketOptionFromNative(DWORD nativeType)
-{
-    oslSocketOption i= (oslSocketOption)0;
-    while(i != osl_Socket_OptionInvalid)
-    {
-        if(OptionMap[i] == nativeType)
-            return i;
-        i = (oslSocketOption)((int)i+1);
-    }
-    return i;
-}
-
 /* macros */
 #define OPTION_TO_NATIVE(x)     OptionMap[x]
 #define OPTION_FROM_NATIVE(y)   osl_SocketOptionFromNative(y)
@@ -247,19 +221,6 @@ static DWORD OptionLevelMap[]= {
     IPPROTO_TCP,                /* osl_Socket_LevelTcp */
     0                           /* osl_invalid_SocketLevel */
 };
-
-/* reverse map */
-static oslSocketOptionLevel osl_SocketOptionLevelFromNative(DWORD nativeType)
-{
-    oslSocketOptionLevel i= (oslSocketOptionLevel)0;
-    while(i != osl_Socket_LevelInvalid)
-    {
-        if(OptionLevelMap[i] == nativeType)
-            return i;
-        i = (oslSocketOptionLevel)((int)i +1);
-    }
-    return i;
-}
 
 /* macros */
 #define OPTION_LEVEL_TO_NATIVE(x)       OptionLevelMap[x]
@@ -277,21 +238,6 @@ static DWORD SocketMsgFlagMap[]= {
     MSG_MAXIOVLEN               /* osl_Socket_MsgMaxIOVLen */
 };
 
-/* reverse map */
-static oslSocketMsgFlag osl_SocketMsgFlagFromNative(DWORD nativeType)
-{
-    oslSocketMsgFlag i= (oslSocketMsgFlag)0;
-
-    while(i != osl_Socket_MsgInvalid)
-    {
-        if(SocketMsgFlagMap[i] == nativeType)
-            return i;
-
-        i = (oslSocketMsgFlag)((int)i + 1);
-    }
-    return i;
-}
-
 /* macros */
 #define MSG_FLAG_TO_NATIVE(x)       SocketMsgFlagMap[x]
 #define MSG_FLAG_FROM_NATIVE(y)     osl_SocketMsgFlagFromNative(y)
@@ -305,21 +251,6 @@ static DWORD SocketDirection[]= {
     SD_SEND,                    /* osl_Socket_DirWrite */
     SD_BOTH                     /* osl_Socket_DirReadwrite */
 };
-
-/* reverse map */
-static oslSocketDirection osl_SocketDirectionFromNative(DWORD nativeType)
-{
-    oslSocketDirection i= (oslSocketDirection)0;
-
-    while(i != osl_Socket_DirInvalid)
-    {
-        if(SocketDirection[i] == nativeType)
-            return i;
-        i =(oslSocketDirection)( (int)i +1 );
-    }
-
-    return i;
-}
 
 /* macros */
 #define DIRECTION_TO_NATIVE(x)      SocketDirection[x]
@@ -449,6 +380,8 @@ static void __osl_initSocketDialupImpl (oslSocketDialupImpl *pImpl)
 
         LeaveCriticalSection (&pImpl->m_hMutex);
     }
+#else
+    pImpl = pImpl; /* avoid warnings */
 #endif
 }
 
@@ -500,7 +433,7 @@ static sal_Bool __osl_querySocketDialupImpl (void)
     {
         DWORD dwFlags = 0;
 
-        result = (pDialupImpl->m_pfnGetConnectedState)(&dwFlags, 0);
+        result = (sal_Bool)(pDialupImpl->m_pfnGetConnectedState)(&dwFlags, 0);
         pDialupImpl->m_dwFlags |= dwFlags;
     }
 
@@ -529,7 +462,7 @@ static sal_Bool __osl_attemptSocketDialupImpl (void)
         result = sal_True;
         if (pDialupImpl->m_pfnAutodial)
         {
-            result = (pDialupImpl->m_pfnAutodial)(0, 0);
+            result = (sal_Bool)(pDialupImpl->m_pfnAutodial)(0, 0);
             if (result)
                 pDialupImpl->m_dwFlags |= INTERNET_CONNECTION_HANGUP;
             else
@@ -1888,7 +1821,7 @@ sal_Bool SAL_CALL osl_isNonBlockingMode(oslSocket pSocket)
     if (pSocket == NULL) /* ENOTSOCK */
         return sal_False;
 
-    return (pSocket->m_Flags & OSL_SOCKET_FLAGS_NONBLOCKING);
+    return (sal_Bool)((pSocket->m_Flags & OSL_SOCKET_FLAGS_NONBLOCKING) != 0);
 }
 
 /*****************************************************************************/
@@ -1919,7 +1852,7 @@ oslSocketType SAL_CALL osl_getSocketType(oslSocket pSocket)
 /* osl_getLastSocketErrorDescription  */
 /*****************************************************************************/
 void SAL_CALL osl_getLastSocketErrorDescription (
-    oslSocket  Socket,
+    oslSocket  /*Socket*/,
     rtl_uString **strError)
 {
     int error;
@@ -2142,7 +2075,7 @@ void SAL_CALL osl_getLastSocketErrorDescription (
 /*****************************************************************************/
 /* osl_getLastSocketError  */
 /*****************************************************************************/
-oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket)
+oslSocketError SAL_CALL osl_getLastSocketError(oslSocket /*Socket*/)
 {
     return ERROR_FROM_NATIVE(WSAGetLastError());
 }
