@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:32:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,13 +231,10 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     {
         if (m_pTreeView)
         {
-            ::dbaui::notifySystemWindow(this,m_pTreeView,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
             ::std::auto_ptr<Window> aTemp(m_pTreeView);
             m_pTreeView = NULL;
         }
         m_pTreeView = _pTreeView;
-        if ( m_pTreeView )
-            ::dbaui::notifySystemWindow(this,m_pTreeView,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
 }
 // -------------------------------------------------------------------------
@@ -359,8 +356,6 @@ SbaGridControl* UnoDataBrowserView::getVclControl() const
                     m_pVclControl = static_cast<SbaGridControl*>(pPeer->GetWindow());
                     pTHIS->startComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
                 }
-
-                ::dbaui::notifySystemWindow(pTHIS,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::AddWindow));
             }
         }
     }
@@ -389,7 +384,6 @@ void UnoDataBrowserView::GetFocus()
 void UnoDataBrowserView::_disposing( const ::com::sun::star::lang::EventObject& _rSource )
 {
     stopComponentListening(Reference<XComponent>(VCLUnoHelper::GetInterface(m_pVclControl),UNO_QUERY));
-    ::dbaui::notifySystemWindow(this,m_pVclControl,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
     m_pVclControl = NULL;
 }
 // -------------------------------------------------------------------------
@@ -403,7 +397,9 @@ long UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
             const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-            if( rKeyCode == KeyCode(KEY_E,TRUE,TRUE,FALSE) )
+            if (  ( rKeyCode == KeyCode( KEY_E, TRUE, TRUE, FALSE ) )
+               || ( rKeyCode == KeyCode( KEY_TAB, TRUE, FALSE, FALSE ) )
+               )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )
                     m_pVclControl->GrabFocus();
