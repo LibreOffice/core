@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 16:00:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
