@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2000-11-13 13:14:44 $
+ *  last change: $Author: jb $ $Date: 2000-11-13 14:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,9 +417,14 @@ namespace configmgr
                     OSL_ENSHURE(false, aStr.getStr());
                 }
             }
-            else
+            else if (i > 0 || pCurrent->getValueTypeClass() != uno::TypeClass_STRING)
             {
                 OSL_ENSHURE(false, "operator >>= failed.");
+            }
+            else
+            {
+                OSL_ENSHURE(_rArgs.getLength() < 2, "Too many arguments for legacy parameters.");
+                break;
             }
         }
         return true;
