@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: mh $ $Date: 2001-06-19 17:33:06 $
+#   last change: $Author: nf $ $Date: 2001-06-21 14:58:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1013,6 +1013,10 @@ SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
 .IF "$(UDK_MICRO)"!=""
 SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
 .ENDIF			# "$(UDK_MICRO)"!=""
+
+.IF "$(L10N-framework)"!=""
+SCPDEFS+=-DISO_CODE=$(L10N-framework)
+.ENDIF			# "$(L10N-framework)"!=""
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
