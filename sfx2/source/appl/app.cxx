@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:37:43 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,26 +258,6 @@ using namespace ::com::sun::star;
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
-
-static SvtSaveOptions *pSaveOptions = NULL;
-static SvtUndoOptions *pUndoOptions = NULL;
-static SvtHelpOptions *pHelpOptions = NULL;
-static SvtModuleOptions *pModuleOptions = NULL;
-static SvtHistoryOptions *pHistoryOptions = NULL;
-static SvtMenuOptions *pMenuOptions = NULL;
-static SvtAddXMLToStorageOptions *pXMLOptions = NULL;
-static SvtMiscOptions *pMiscOptions = NULL;
-static SvtUserOptions *pUserOptions = NULL;
-static SvtStartOptions *pStartOptions = NULL;
-static SvtSecurityOptions *pSecurityOptions = NULL;
-static SvtLocalisationOptions *pLocalisationOptions = NULL;
-static SvtInetOptions *pInetOptions = NULL;
-static SvtFontOptions *pFontOptions = NULL;
-static SvtInternalOptions *pInternalOptions = NULL;
-static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
-static SvtSysLocale *pSysLocale = NULL;
-static SvtExtendedSecurityOptions* pExtendedSecurityOptions = NULL;
-static framework::AddonsOptions* pAddonsOptions = NULL;
 static BasicDLL*       pBasic   = NULL;
 
 class SfxPropertyHandler : public PropertyHandler
@@ -489,29 +469,7 @@ SfxApplication::SfxApplication()
     SetName( DEFINE_CONST_UNICODE("StarOffice") );
     GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
 
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ precreate svtools options objects" );
-
-    pSaveOptions = new SvtSaveOptions;
-    pUndoOptions = new SvtUndoOptions;
-    pHelpOptions = new SvtHelpOptions;
-    pModuleOptions = new SvtModuleOptions;
-    pHistoryOptions = new SvtHistoryOptions;
-    pMenuOptions = new SvtMenuOptions;
-    pXMLOptions = new SvtAddXMLToStorageOptions;
-    pMiscOptions = new SvtMiscOptions;
-    pUserOptions = new SvtUserOptions;
-    pStartOptions = new SvtStartOptions;
-    pSecurityOptions = new SvtSecurityOptions;
-    pLocalisationOptions = new SvtLocalisationOptions;
-    pInetOptions = new SvtInetOptions;
-    pFontOptions = new SvtFontOptions;
-    pInternalOptions = new SvtInternalOptions;
-    pSysLocaleOptions = new SvtSysLocaleOptions;
-    pExtendedSecurityOptions = new SvtExtendedSecurityOptions;
-    pAddonsOptions = new framework::AddonsOptions;
     SvtViewOptions::AcquireOptions();
-
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
 
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
@@ -532,10 +490,6 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
-
-    // Create instance of SvtSysLocale _after_ setting the locale at the application,
-    // so that it can initialize itself correctly.
-    pSysLocale = new SvtSysLocale;
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
@@ -584,25 +538,6 @@ SfxApplication::~SfxApplication()
 
     // delete global options
     SvtViewOptions::ReleaseOptions();
-    delete pSaveOptions;
-    delete pUndoOptions;
-    delete pHelpOptions;
-    delete pModuleOptions;
-    delete pHistoryOptions;
-    delete pMenuOptions;
-    delete pXMLOptions;
-    delete pMiscOptions;
-    delete pUserOptions;
-    delete pStartOptions;
-    delete pSecurityOptions;
-    delete pLocalisationOptions;
-    delete pInetOptions;
-    delete pFontOptions;
-    delete pInternalOptions;
-    delete pSysLocaleOptions;
-    delete pSysLocale;
-    delete pExtendedSecurityOptions;
-    delete pAddonsOptions;
     delete pBasic;
 
     if ( !bDowning )
