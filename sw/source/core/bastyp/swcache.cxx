@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-16 18:41:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
 
 SwCache::~SwCache()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef MAC
     {
         ByteString sOut( aName ); sOut += '\n';
