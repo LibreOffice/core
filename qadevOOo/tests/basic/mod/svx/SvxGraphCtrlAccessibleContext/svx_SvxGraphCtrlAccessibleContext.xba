@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svx_SvxGraphCtrlAccessibleContext.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:02:44 $ 
+'*  last change:$Date: 2003-05-27 12:19:28 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -117,7 +117,7 @@ On Error Goto ErrHndl
         wait(2000)
         oWin = tk.getActiveTopWindow()
         xRoot = utils.at_getAccessibleObject(oWin)
-        oObj = utils.at_getAccessibleObjectForRole(xRoot,32)
+        oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PANEL)
         Out.Log("Implementation name: "+oObj.getImplementationName())
     else
         Out.Log("QueryDispatch FAILED. Cannot open ImageMapDialog...")
