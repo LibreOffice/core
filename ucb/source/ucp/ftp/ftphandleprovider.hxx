@@ -1,5 +1,5 @@
 #include <rtl/ustring.hxx>
-#include <curl/types.h>
+#include <curl/curl.h>
 
 namespace ftp {
 
