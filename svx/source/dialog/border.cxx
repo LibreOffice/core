@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-02-04 09:32:08 $
+ *  last change: $Author: os $ $Date: 2002-02-04 14:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,7 +1005,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     //------------------------------------------
     aBoxInfoItem.SetValid( VALID_TOP, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_TOP) ) );
     aBoxInfoItem.SetValid( VALID_BOTTOM, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM) )    );
-    aBoxInfoItem.SetValid( VALID_LEFT, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_left) ) );
+    aBoxInfoItem.SetValid( VALID_LEFT, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_LEFT) ) );
     aBoxInfoItem.SetValid( VALID_RIGHT, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT) ) );
     aBoxInfoItem.SetValid( VALID_HORI, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_HOR) ) );
     aBoxInfoItem.SetValid( VALID_VERT, !IS_DONT_CARE( aFrameSel.GetLine(SVX_FRMSELLINE_VER) ) );
@@ -1168,10 +1168,10 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
         {
 
             aFrameSel.HideLines();
-            aFrameSel.GetLeft()  .SetState( SVX_FRMLINESTATE_SHOW );
-            aFrameSel.GetRight() .SetState( SVX_FRMLINESTATE_SHOW );
-            aFrameSel.GetTop()   .SetState( SVX_FRMLINESTATE_SHOW );
-            aFrameSel.GetBottom().SetState( SVX_FRMLINESTATE_SHOW );
+            aFrameSel.GetLine(SVX_FRMSELLINE_LEFT)  .SetState( SVX_FRMLINESTATE_SHOW );
+            aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT) .SetState( SVX_FRMLINESTATE_SHOW );
+            aFrameSel.GetLine(SVX_FRMSELLINE_TOP)   .SetState( SVX_FRMLINESTATE_SHOW );
+            aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).SetState( SVX_FRMLINESTATE_SHOW );
             aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
             aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
             aFrameSel.SelectLine( SVX_FRMSELLINE_RIGHT );
@@ -1185,11 +1185,11 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             if ( bIsTableBorder ) // aussen/horizontal
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetLeft()  .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetRight() .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetTop()   .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetBottom().SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetHor()   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_LEFT)  .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT) .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_TOP)   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_HOR)   .SetState( SVX_FRMLINESTATE_SHOW );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_RIGHT );
@@ -1200,8 +1200,8 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             else // links/rechts
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetLeft() .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetRight().SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_LEFT) .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT).SetState( SVX_FRMLINESTATE_SHOW );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_RIGHT );
@@ -1214,12 +1214,12 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             if ( bIsTableBorder ) // aussen/hor./ver.
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetLeft()  .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetRight() .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetTop()   .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetBottom().SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetHor()   .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetVer()   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_LEFT)  .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT) .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_TOP)   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_HOR)   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_VER)   .SetState( SVX_FRMLINESTATE_SHOW );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_RIGHT );
@@ -1231,8 +1231,8 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             else // oben/unten
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetTop()   .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetBottom().SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_TOP)   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).SetState( SVX_FRMLINESTATE_SHOW );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_TOP );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_BOTTOM );
@@ -1245,12 +1245,12 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             if ( bIsTableBorder ) // Aussen setzen, innen Don't Care
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetLeft()  .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetRight() .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetTop()   .SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetBottom().SetState( SVX_FRMLINESTATE_SHOW );
-                aFrameSel.GetHor()   .SetState( SVX_FRMLINESTATE_DONT_CARE );
-                aFrameSel.GetVer()   .SetState( SVX_FRMLINESTATE_DONT_CARE );
+                aFrameSel.GetLine(SVX_FRMSELLINE_LEFT)  .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT) .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_TOP)   .SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_HOR)   .SetState( SVX_FRMLINESTATE_DONT_CARE );
+                aFrameSel.GetLine(SVX_FRMSELLINE_VER)   .SetState( SVX_FRMLINESTATE_DONT_CARE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_RIGHT );
@@ -1260,7 +1260,7 @@ IMPL_LINK( SvxBorderTabPage, SelPreHdl_Impl, void *, EMPTYARG )
             else // links (Absatz-Markierung)
             {
                 aFrameSel.HideLines();
-                aFrameSel.GetLeft().SetState( SVX_FRMLINESTATE_SHOW );
+                aFrameSel.GetLine(SVX_FRMSELLINE_LEFT).SetState( SVX_FRMLINESTATE_SHOW );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_NONE );
                 aFrameSel.SelectLine( SVX_FRMSELLINE_LEFT );
             }
@@ -1474,10 +1474,10 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
         {
             if(bLineSet)
             {
-                nValid = aFrameSel.GetTop().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_TOP : 0;
-                nValid |= aFrameSel.GetBottom().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_BOTTOM : 0;
-                nValid |= aFrameSel.GetLeft().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_LEFT : 0;
-                nValid |= aFrameSel.GetRight().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_RIGHT : 0;
+                nValid = aFrameSel.GetLine(SVX_FRMSELLINE_TOP).GetState() == SVX_FRMLINESTATE_SHOW ? VALID_TOP : 0;
+                nValid |= aFrameSel.GetLine(SVX_FRMSELLINE_BOTTOM).GetState() == SVX_FRMLINESTATE_SHOW ? VALID_BOTTOM : 0;
+                nValid |= aFrameSel.GetLine(SVX_FRMSELLINE_LEFT).GetState() == SVX_FRMLINESTATE_SHOW ? VALID_LEFT : 0;
+                nValid |= aFrameSel.GetLine(SVX_FRMSELLINE_RIGHT).GetState() == SVX_FRMLINESTATE_SHOW ? VALID_RIGHT : 0;
             }
             else
                 nValid = 0;
