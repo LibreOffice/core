@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:49:12 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,7 +1559,7 @@ DEBUG_TBLDLG_TCOLUMN(pTColumns, nAllCols);
 
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
-    rTabCols.SetLeft((USHORT)nLeft);
+    rTabCols.SetLeft(nLeft);
     if(bSingleLine)
     {
         // die unsichtbaren Trenner werden aus den alten TabCols genommen
@@ -1633,7 +1633,8 @@ DEBUG_TBLDLG_TCOLUMN(pOldTColumns, nAllCols);
     if(Abs((long)nOldRight - (long)rTabCols.GetRight()) < 3)
         rTabCols.SetRight(nOldRight);
 
-    if(rTabCols.GetRight() > rTabCols.GetRightMax())
+    if(GetRightSpace() >= 0 &&
+            rTabCols.GetRight() > rTabCols.GetRightMax())
         rTabCols.SetRight(rTabCols.GetRightMax());
     return bSingleLine;
 }
