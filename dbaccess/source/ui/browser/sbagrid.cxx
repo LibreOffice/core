@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:20:43 $
+ *  last change: $Author: fs $ $Date: 2001-06-11 11:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #endif
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
 #endif
 
 #ifndef _SBA_GRID_HXX
@@ -293,12 +296,15 @@
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
 #endif
-
 #ifndef _SVTOOLS_STRINGTRANSFER_HXX_
 #include <svtools/stringtransfer.hxx>
 #endif
+#ifndef _VCL_STDTEXT_HXX
+#include <vcl/stdtext.hxx>
+#endif
 
 
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -1357,84 +1363,33 @@ void SbaGridControl::SetBrowserAttrs()
     if (!xGridModel.is())
         return;
 
-    SvNumberFormatter* pFormatter = GetDatasourceFormatter();
-    if (!pFormatter)
-        return;
-
-    // build an itemset describing the current font
-    static SfxItemInfo aItemInfos[] =
+    try
     {
-        { 0, 0 },
-        { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_COLOR,          SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_WEIGHT,         SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_POSTURE,        SFX_ITEM_POOLABLE },
-        { 0, 0 },
-        { 0, 0 },
-        { SID_ATTR_CHAR_STRIKEOUT,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_UNDERLINE,      SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_WORDLINEMODE,   SFX_ITEM_POOLABLE }
-    };
-    static sal_uInt16 aAttrMap[] =
-    {
-        SBA_DEF_FONT, SID_ATTR_CHAR_WORDLINEMODE,
-        0
-    };
+        PropertyValue aArg;
+        aArg.Name = ::rtl::OUString::createFromAscii("IntrospectedObject");
+        aArg.Value <<= xGridModel;
+        Sequence< Any > aDialogArgs(1);
+        aDialogArgs[0] <<= aArg;
 
-    Font aFont = System::GetStandardFont(STDFONT_APP);
-    aFont.SetSize(Size(aFont.GetSize().Width(), 10));
-    sal_uInt32  nFontHeight = (sal_uInt32)PixelToLogic(aFont.GetSize(), MAP_TWIP).Height();
-
-    SfxPoolItem* pDefaults[] =
-    {
-        new SfxRangeItem( SBA_DEF_RANGEFONT, SBA_DEF_FONT, SBA_DEF_UNDERLINE ),
-        new SvxFontItem(aFont.GetFamily(), aFont.GetName(), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, SBA_DEF_FONT),
-        new SvxFontHeightItem(nFontHeight, 100, SBA_DEF_FONTHEIGHT ),
-        new SvxColorItem(aFont.GetColor(), SBA_DEF_FONTCOLOR ),
-        new SvxWeightItem(WEIGHT_NORMAL, SBA_DEF_FONTWEIGHT),
-        new SvxPostureItem( ITALIC_NONE, SBA_DEF_POSTURE ),
-        new SvxShadowedItem( sal_False, SBA_DEF_SHADOWED ),
-        new SvxContourItem( sal_False, SBA_DEF_CONTOUR ),
-        new SvxCrossedOutItem( STRIKEOUT_NONE, SBA_DEF_CROSSEDOUT ),
-        new SvxUnderlineItem( UNDERLINE_NONE, SBA_DEF_UNDERLINE ),
-        new SfxBoolItem( sal_False, SBA_DEF_WORDLINEMODE )
-    };
-
-    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("GridBrowserProperties"), SBA_DEF_RANGEFONT, SBA_DEF_UNDERLINE, aItemInfos, pDefaults);
-    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );
-    pPool->FreezeIdRanges();
-
-    SfxItemSet* pFontDescriptor = new SfxItemSet(*pPool, aAttrMap);
-
-    // initialize it with the current settings (font/color)
-    ::com::sun::star::awt::FontDescriptor aCurrentFont;
-    xGridModel->getPropertyValue(PROPERTY_FONT) >>= aCurrentFont;
-    if (!aCurrentFont.Name.getLength())
-        // the property is defaulted, so the control has the default font
-        aCurrentFont = BuildFontFromItems(pFontDescriptor, aFont);
-
-    BuildItemsFromFont(pFontDescriptor, aCurrentFont);
-    Any aColor = xGridModel->getPropertyValue(PROPERTY_TEXTCOLOR);
-    if (aColor.hasValue())
-        pFontDescriptor->Put(SvxColorItem((Color)::comphelper::getINT32(aColor), SBA_DEF_FONTCOLOR));
-
-    {   // want the dialog to be destroyed before our set
-        SbaSbAttrDlg aDlg(GetParent(), pFontDescriptor, pFormatter, TP_ATTR_CHAR, sal_True);
-        if (aDlg.Execute())
+        Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
+            ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"),
+            aDialogArgs
+            );
+        if (!xDialog.is())
         {
-            ::com::sun::star::awt::FontDescriptor aNewFont = BuildFontFromItems(aDlg.GetExampleSet(), GetFont());
-            xGridModel->setPropertyValue(PROPERTY_FONT, makeAny(aNewFont));
-
-            SFX_ITEMSET_GET(*aDlg.GetOutputItemSet(), pColor, SvxColorItem, SBA_DEF_FONTCOLOR, sal_True);
-            xGridModel->setPropertyValue(PROPERTY_TEXTCOLOR, makeAny((sal_Int32)pColor->GetValue().GetColor()));
+            ShowServiceNotAvailableError(this, ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"), sal_True);
+            return;
         }
-    }
 
-    delete pFontDescriptor;
-    delete pPool;
-    for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
-        delete pDefaults[i];
+        Reference< XExecutableDialog > xExecute(xDialog, UNO_QUERY);
+        OSL_ENSURE(xExecute.is(), "SbaGridControl::SetBrowserAttrs: missing an interface on the dialog!");
+        if (xExecute.is())
+            xExecute->execute();
+    }
+    catch(const Exception&)
+    {
+        OSL_ENSURE(sal_False, "SbaGridControl::SetBrowserAttrs: caught an exception while creating/executing the dialog!");
+    }
 }
 
 //---------------------------------------------------------------------------------------
