@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hdu $ $Date: 2001-06-12 10:34:23 $
+ *  last change: $Author: hdu $ $Date: 2001-07-06 13:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,9 @@ public:
     bool                  MapFile() { return mpFontFile->Map(); }
     void                  Unmap() { mpFontFile->Unmap(); }
 
-    const unsigned char*  GetBuffer() const { return mpFontFile->GetBuffer(); }
     int                   GetFileSize() const { return mpFontFile->GetSize(); }
+    const unsigned char*  GetBuffer() const { return mpFontFile->GetBuffer(); }
+    const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
     const ::rtl::OString* GetFontFileName() const { return mpFontFile->GetFileName(); }
     const ImplFontData&   GetFontData() const { return maFontData; }
@@ -172,6 +173,7 @@ friend GlyphCache;
 
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
 
 private:
