@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2001-07-31 06:54:34 $
+ *  last change: $Author: as $ $Date: 2001-08-27 10:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,10 +490,10 @@ class FilterCache   :   private ThreadHelpBase
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        static sal_Int32        m_nRefCount ;
-        static DataContainer*   m_pData     ;
-        static sal_Int32        m_nVersion  ;
-        static sal_Int16        m_nMode     ;
+        static sal_Int32        m_nRefCount         ;
+        static DataContainer*   m_pData             ;
+        static sal_Int32        m_nVersion          ;
+        static sal_Int16        m_nMode             ;
 
 };      //  class FilterCache
 

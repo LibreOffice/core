@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-07-20 08:05:54 $
+ *  last change: $Author: as $ $Date: 2001-08-27 10:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,9 @@ namespace framework{
 #define DEFAULT_FILTERCACHE_MODE                    CONFIG_MODE_DELAYED_UPDATE                                          /// ConfigItems could run in different modes: supported values are ... { CONFIG_MODE_IMMEDIATE_UPDATE, CONFIG_MODE_DELAYED_UPDATE, CONFIG_MODE_ALL_LOCALES }
 #define CFG_ENCODING_OPEN                           DECLARE_ASCII("[\'"                                             )   /// used to start encoding of set names
 #define CFG_ENCODING_CLOSE                          DECLARE_ASCII("\']"                                             )   /// used to finish encoding of set names
+#define PRODUCTNAME_VARIABLE                        DECLARE_ASCII("%productname%")
+#define PRODUCTNAME_VARLENGTH                       13
+#define PRODUCTNAME_FALLBACK                        DECLARE_ASCII("StarOffice"                                      )   /// fallback, if configuration can't give us current set product name ...
 
 //*****************************************************************************************************************
 // We know some default values ...
@@ -769,6 +772,7 @@ typedef StringHash                                                  PreferredHas
 typedef StringList                                                  OrderList                   ;
 
 typedef StringList::iterator                                        StringListIterator          ;
+typedef StringHash::iterator                                        StringHashIterator          ;
 typedef StringList::const_iterator                                  ConstStringListIterator     ;
 typedef StringHash::const_iterator                                  ConstStringHashIterator     ;
 typedef FileTypeHash::const_iterator                                ConstTypeIterator           ;
@@ -932,6 +936,9 @@ class FilterCFGAccess : public ::utl::ConfigItem
         void impl_saveContentHandlers  ( DataContainer&             rData           );
         void impl_saveProtocolHandlers ( DataContainer&             rData           );
 
+        void impl_setProductName       ( StringHash&                lValues         );
+        void impl_resetProductName     ( StringHash&                lValues         );
+
     //-------------------------------------------------------------------------------------------------------------
     //  debug checks
     //-------------------------------------------------------------------------------------------------------------
@@ -954,6 +961,7 @@ class FilterCFGAccess : public ::utl::ConfigItem
         sal_Int32       m_nKeyCountLoaders             ;
         sal_Int32       m_nKeyCountContentHandlers     ;
         sal_Int32       m_nKeyCountProtocolHandlers    ;
+        ::rtl::OUString m_sProductName                 ;
 };
 
 }       //  namespace framework
