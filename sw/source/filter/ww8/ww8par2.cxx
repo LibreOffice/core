@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:23:16 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 13:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,11 @@
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #endif
-#ifndef _FMTANCHR_HXX //autogen
+#ifndef _FMTANCHR_HXX
 #include <fmtanchr.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX
+#include <fmtrowsplt.hxx>
 #endif
 
 #ifndef WW_WWSTYLES_HXX
@@ -230,6 +233,7 @@ struct WW8TabBandDesc
     short nSwCols;      // SW: so viele Spalten fuer den Writer
     bool bLEmptyCol;    // SW: Links eine leere Zusatz-Spalte
     bool bREmptyCol;    // SW: dito rechts
+    bool bCantSplit;
     WW8_TCell* pTCs;
     BYTE nOverrideSpacing[MAX_COL + 1];
     short nOverrideValues[MAX_COL + 1][4];
@@ -1637,8 +1641,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
     wwSprmParser aSprmParser(pIo->GetFib().nVersion);
 
-    bool bCantSplit(false);
-
     // process pPap until end of table found
     do
     {
@@ -1670,7 +1672,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
                 switch( aSprmIter.GetAktId() )
                 {
                 case 0x3403:
-                    bCantSplit = *pParams;
+                    pNewBand->bCantSplit = *pParams;
+                    bClaimLineFmt = true;
                     break;
                 case 187:
                 case 0xD605:
@@ -1696,29 +1699,23 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
                     break;
                 case 182:
                 case 0x5400:
-                    if( nRows == 0 )
-                    {
-                        // sprmTJc  -  Justification Code
-                        eOri = aOriArr[ *pParams & 0x3 ];
-                    }
+                    // sprmTJc  -  Justification Code
+                    if (nRows == 0)
+                        eOri = aOriArr[*pParams & 0x3];
                     break;
                 case 0x560B:
                     bIsBiDi = SVBT16ToShort(pParams) ? true : false;
                     break;
                 case 184:
                 case 0x9602:
-                    {
-                        // sprmTDxaGapHalf
-                        pNewBand->nGapHalf = (INT16)SVBT16ToShort( pParams );
-                    }
+                    // sprmTDxaGapHalf
+                    pNewBand->nGapHalf = (INT16)SVBT16ToShort( pParams );
                     break;
                 case 189:
                 case 0x9407:
-                    {
-                        // sprmTDyaRowHeight
-                        pNewBand->nLineHeight = (INT16)SVBT16ToShort( pParams );
-                        bClaimLineFmt = true;
-                    }
+                    // sprmTDyaRowHeight
+                    pNewBand->nLineHeight = (INT16)SVBT16ToShort( pParams );
+                    bClaimLineFmt = true;
                     break;
                 case 190:
                 case 0xD608:
@@ -1827,11 +1824,6 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         }
         nBands++;
 
-        if (!bCantSplit)
-        {
-            pIo->maTracer.Log(sw::log::eRowCanSplit);
-            bCantSplit = true;
-        }
         pNewBand = new WW8TabBandDesc;
 
         nRows++;
@@ -3014,22 +3006,26 @@ void WW8TabDesc::AdjustNewBand()
         pTabLine->ClaimFrmFmt();            // noetig wg. Zeilenhoehe
         SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
 
-        if( pActBand->nLineHeight == 0 )    // 0 = Auto
+        if (pActBand->nLineHeight == 0)    // 0 = Auto
             aF.SetSizeType( ATT_VAR_SIZE );
         else
         {
-            if( pActBand->nLineHeight < 0 ) // Pos = min, Neg = exakt
+            if (pActBand->nLineHeight < 0) // Pos = min, Neg = exakt
             {
-                aF.SetSizeType( ATT_FIX_SIZE );
+                aF.SetSizeType(ATT_FIX_SIZE);
                 pActBand->nLineHeight = -pActBand->nLineHeight;
             }
-            if( pActBand->nLineHeight < MINLAY ) // nicht erlaubte Zeilenhoehe
+            if (pActBand->nLineHeight < MINLAY) // nicht erlaubte Zeilenhoehe
                 pActBand->nLineHeight = MINLAY;
 
-            aF.SetHeight( pActBand->nLineHeight );// Min- / Exakt-Hoehe setzen
+            aF.SetHeight(pActBand->nLineHeight);// Min- / Exakt-Hoehe setzen
         }
-        pTabLine->GetFrmFmt()->SetAttr( aF );
+        pTabLine->GetFrmFmt()->SetAttr(aF);
     }
+
+    //Word stores 1 for bCantSplit if the row cannot be split, we set true if
+    //we can split the row
+    pTabLine->GetFrmFmt()->SetAttr(SwFmtRowSplit(!pActBand->bCantSplit));
 
     short i;    // SW-Index
     short j;    // WW-Index
