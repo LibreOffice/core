@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:50:50 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,7 @@
                                 TODO
  **************************************************************************
 
- - support for encrypted streams needed?
- - Content::storeData: remove dummyfile workaround for creation of new folders
-
  *************************************************************************/
-
-#define STORAGE_CREATION_WORKAROUND 1
 
 #include "osl/diagnose.h"
 #include "osl/doublecheckedlocking.h"
@@ -555,6 +550,27 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        if ( eType == STREAM )
+        {
+            Uri aUri( m_xIdentifier->getContentIdentifier() );
+            Uri aParentUri( aUri.getParentUri() );
+            if ( aParentUri.isDocument() )
+            {
+                ucbhelper::cancelCommandExecution(
+                    uno::makeAny( star::ucb::UnsupportedCommandException(
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "insert command not supported by "
+                                            "streams that are direct children "
+                                            "of document root!" ) ),
+                                    static_cast< cppu::OWeakObject * >(
+                                        this ) ) ),
+                    Environment );
+                // Unreachable
+            }
+        }
+#endif
         star::ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
         {
@@ -716,24 +732,45 @@ Content::queryCreatableContentsInfo()
                     getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND );
 
-        uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        if ( m_aProps.getType() == DOCUMENT )
+        {
+            // streams cannot be created as direct children of document root
+            uno::Sequence< star::ucb::ContentInfo > aSeq( 1 );
 
-        // Folder.
-        aSeq.getArray()[ 0 ].Type
-            = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
-        aSeq.getArray()[ 0 ].Attributes
-            = star::ucb::ContentInfoAttribute::KIND_FOLDER;
-        aSeq.getArray()[ 0 ].Properties = aProps;
+            // Folder.
+            aSeq.getArray()[ 0 ].Type
+                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+            aSeq.getArray()[ 0 ].Attributes
+                = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+            aSeq.getArray()[ 0 ].Properties = aProps;
 
-        // Stream.
-        aSeq.getArray()[ 1 ].Type
-            = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
-        aSeq.getArray()[ 1 ].Attributes
-            = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
-              | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
-        aSeq.getArray()[ 1 ].Properties = aProps;
+            return aSeq;
+        }
+        else
+        {
+#endif
+            uno::Sequence< star::ucb::ContentInfo > aSeq( 2 );
 
-        return aSeq;
+            // Folder.
+            aSeq.getArray()[ 0 ].Type
+                = rtl::OUString::createFromAscii( TDOC_FOLDER_CONTENT_TYPE );
+            aSeq.getArray()[ 0 ].Attributes
+                = star::ucb::ContentInfoAttribute::KIND_FOLDER;
+            aSeq.getArray()[ 0 ].Properties = aProps;
+
+            // Stream.
+            aSeq.getArray()[ 1 ].Type
+                = rtl::OUString::createFromAscii( TDOC_STREAM_CONTENT_TYPE );
+            aSeq.getArray()[ 1 ].Attributes
+                = star::ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM
+                  | star::ucb::ContentInfoAttribute::KIND_DOCUMENT;
+            aSeq.getArray()[ 1 ].Properties = aProps;
+
+            return aSeq;
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        }
+#endif
     }
     else
     {
@@ -762,6 +799,16 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
             Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( TDOC_FOLDER_CONTENT_TYPE ) );
 
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+        // streams cannot be created as direct children of document root
+        if ( !bCreateFolder && ( m_aProps.getType() == DOCUMENT ) )
+        {
+            OSL_ENSURE( sal_False,
+                        "Content::createNewContent - streams cannot be "
+                        "created as direct children of document root!" );
+            return uno::Reference< star::ucb::XContent >();
+        }
+#endif
         if ( !bCreateFolder &&
              !Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( TDOC_STREAM_CONTENT_TYPE ) ) )
@@ -1679,6 +1726,18 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 
     Uri aUri( m_xIdentifier->getContentIdentifier() );
 
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+#if OSL_DEBUG_LEVEL > 0
+    if ( eType == STREAM )
+    {
+        Uri aParentUri( aUri.getParentUri() );
+        OSL_ENSURE( !aParentUri.isDocument(),
+                    "insert command not supported by streams that are direct "
+                    "children of document root!" );
+    }
+#endif
+#endif
+
     // Check, if all required properties were set.
     if ( eType == FOLDER )
     {
@@ -2015,7 +2074,7 @@ void Content::transfer(
     if ( !aScheme.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( TDOC_URL_SCHEME ":/" ) ) )
     {
-        // Invaild scheme.
+        // Invalid scheme.
         ucbhelper::cancelCommandExecution(
             uno::makeAny( star::ucb::InteractiveBadTransferURLException(
                             rtl::OUString(),
@@ -2082,6 +2141,63 @@ void Content::transfer(
             // Unreachable
         }
     }
+
+#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
+    if ( m_aProps.getType() == DOCUMENT )
+    {
+        bool bOK = false;
+
+        uno::Reference< embed::XStorage > xStorage
+            = m_pProvider->queryStorage(
+                aSourceUri.getParentUri(), READ_WRITE_NOCREATE );
+        if ( xStorage.is() )
+        {
+            try
+            {
+                if ( xStorage->isStreamElement( aSourceUri.getDecodedName() ) )
+                {
+                    ucbhelper::cancelCommandExecution(
+                        uno::makeAny( lang::IllegalArgumentException(
+                                        rtl::OUString::createFromAscii(
+                                            "Invalid source URI! "
+                                            "Streams cannot be created as "
+                                            "children of document root!" ),
+                                        static_cast< cppu::OWeakObject * >(
+                                            this ),
+                                        -1 ) ),
+                        xEnv );
+                    // Unreachable
+                }
+                bOK = true;
+            }
+            catch ( container::NoSuchElementException const & )
+            {
+                // handled below.
+            }
+            catch ( lang::IllegalArgumentException const & )
+            {
+                // handled below.
+            }
+            catch ( embed::InvalidStorageException const & )
+            {
+                // handled below.
+            }
+        }
+
+        if ( !bOK )
+        {
+            ucbhelper::cancelCommandExecution(
+                uno::makeAny( lang::IllegalArgumentException(
+                                    rtl::OUString::createFromAscii(
+                                        "Invalid source URI! "
+                                        "Unabale to determine source type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                xEnv );
+            // Unreachable
+        }
+    }
+#endif
 
     /////////////////////////////////////////////////////////////////////////
     // Copy data.
@@ -2392,16 +2508,6 @@ bool Content::loadData( ContentProvider* pProvider,
 }
 
 //=========================================================================
-
-#ifdef STORAGE_CREATION_WORKAROUND
-static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
-                const rtl::OUString & rUri,
-                ContentProvider * pProvider,
-                const uno::Reference< star::ucb::XCommandEnvironment > & xEnv )
-    throw ( star::ucb::CommandFailedException,
-            task::DocumentPasswordRequest );
-#endif /* STORAGE_CREATION_WORKAROUND */
-
 bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
                          const uno::Reference<
                             star::ucb::XCommandEnvironment >& xEnv )
@@ -2465,33 +2571,6 @@ bool Content::storeData( const uno::Reference< io::XInputStream >& xData,
             OSL_ENSURE( false, "Caught WrappedTargetException!" );
             return false;
         }
-
-#ifdef STORAGE_CREATION_WORKAROUND
-        // @@@ workaround(!) - current Storage API implementation does not
-        // support empty substorages (<-- MAV). Final solution will do.
-        // As a workaround we currently put a dummy file into the newly
-        // created substorage.
-        uno::Reference< io::XOutputStream > xOut;
-        if ( m_eState == TRANSIENT )
-        {
-            rtl::OUStringBuffer aDummyStreamUri( aUri.getUri() );
-            if ( aUri.getUri()[ aUri.getUri().getLength() - 1 ]
-                    != sal_Unicode( '/' ) )
-                aDummyStreamUri.appendAscii( "/" );
-
-            aDummyStreamUri.appendAscii(
-                "this_is_a_dummy_stream_just_there_as_a_workaround_for_a_"
-                "temporary_limitation_of_the_storage_api_implementation" );
-
-            // May throw CommandFailedException, DocumentPasswordRequest!
-            xOut = lcl_getTruncatedOutputStream(
-                    aDummyStreamUri.makeStringAndClear(), m_pProvider, xEnv );
-
-            OSL_ENSURE( xOut.is(), "No target data stream!" );
-
-            closeOutputStream( xOut );
-        }
-#endif /* STORAGE_CREATION_WORKAROUND */
 
         if ( !commitStorage( xStorage ) )
             return false;
