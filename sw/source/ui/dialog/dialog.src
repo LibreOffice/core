@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:50:53 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ CheckBox CB_USE_PASSWD
     Text [ dutch ] = "~Wachtwoord" ;
     Text [ spanish ] = "~Contraseña" ;
     Text [ english_us ] = "~Password" ;
-    Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+    Text[ chinese_simplified ] = "ÃÜÂë(~P)";
     Text[ russian ] = "Ïàðîëü";
     Text[ polish ] = "Has³o";
     Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
