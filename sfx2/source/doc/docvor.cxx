@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 08:05:52 $
+ *  last change: $Author: pb $ $Date: 2002-07-04 12:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,13 @@ friend class SfxOrganizeListBox_Impl;
 
     SuspendAccel*           pSuspend;
     SfxTemplateOrganizeDlg* pDialog;
+
+    SfxOrganizeListBox_Impl* pFocusBox;
+    Printer*                 pPrt;
+
+    // save pointer for asynchronous D&D
     SvLBox*                 pSourceView;
+    SvLBoxEntry*            pTargetEntry;
 
     SfxOrganizeListBox_Impl aLeftLb;
     ListBox                 aLeftTypLb;
@@ -177,8 +183,6 @@ friend class SfxOrganizeListBox_Impl;
 
     String                  aLastDir;
     SfxOrganizeMgr          aMgr;
-    SfxOrganizeListBox_Impl*pFocusBox;
-    Printer*                pPrt;
 
     SvStringsDtor*          GetAllFactoryURLs_Impl() const;
     sal_Bool                GetFactoryURL_Impl( String& rFactoryURL, String& rFileURL ) const;
@@ -204,22 +208,29 @@ public:
 //-------------------------------------------------------------------------
 
 SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
-                                          SfxDocumentTemplates* pTempl )
-:   aHelpBtn( pParent, ResId( BTN_HELP ) ),
-    pDialog( pParent ),
-    aOkBtn( pParent, ResId( BTN_OK ) ),
-    aLeftTypLb(  pParent, ResId( LB_LEFT_TYP ) ),
-    aRightTypLb( pParent, ResId( LB_RIGHT_TYP ) ),
-    aLeftLb( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
-    aRightLb( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
-    aFilesBtn( pParent, ResId( BTN_FILES ) ),
-    aAddressTemplateBtn( pParent, ResId( BTN_ADDRESSTEMPLATE ) ),
-    aEditAcc( ResId( ACC_EDIT ) ),
-    aEditBtn( pParent, ResId( BTN_EDIT ) ),
-    aMgr(&aLeftLb, &aRightLb, pTempl),
-    pFocusBox(0),
-    pPrt(0),
-    pSourceView( NULL )
+                                          SfxDocumentTemplates* pTempl ) :
+
+    pSuspend    ( NULL ),
+    pDialog     ( pParent ),
+    pFocusBox   ( NULL ),
+    pPrt        ( NULL ),
+    pSourceView ( NULL ),
+    pTargetEntry( NULL ),
+
+    aLeftLb     ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
+    aLeftTypLb  (  pParent, ResId( LB_LEFT_TYP ) ),
+
+    aRightLb    ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
+    aRightTypLb ( pParent, ResId( LB_RIGHT_TYP ) ),
+
+    aOkBtn              ( pParent, ResId( BTN_OK ) ),
+    aEditBtn            ( pParent, ResId( BTN_EDIT ) ),
+    aHelpBtn            ( pParent, ResId( BTN_HELP ) ),
+    aAddressTemplateBtn ( pParent, ResId( BTN_ADDRESSTEMPLATE ) ),
+    aFilesBtn           ( pParent, ResId( BTN_FILES ) ),
+
+    aEditAcc    ( ResId( ACC_EDIT ) ),
+    aMgr        ( &aLeftLb, &aRightLb, pTempl )
 
 {
     // update the SfxDocumentTemplates the manager works with
@@ -820,13 +831,15 @@ BOOL SfxOrganizeListBox_Impl::NotifyMoving(SvLBoxEntry *pTarget,
     if ( !pSourceBox )
         pSourceBox = pDlg->pSourceView;
     DBG_ASSERT( pSourceBox, "no source view" );
-    if(pSourceBox->GetModel()->GetDepth(pSource) <= GetDocLevel() &&
-        GetModel()->GetDepth(pTarget) <= GetDocLevel())
-        bOk = MoveOrCopyTemplates(pSourceBox, pSource, pTarget,
-                                  pNewParent, rIdx, FALSE);
+    if ( !pTarget )
+        pTarget = pDlg->pTargetEntry;
+
+    if ( pSourceBox->GetModel()->GetDepth( pSource ) <= GetDocLevel() &&
+                      GetModel()->GetDepth( pTarget ) <= GetDocLevel() )
+        bOk = MoveOrCopyTemplates( pSourceBox, pSource, pTarget, pNewParent, rIdx, FALSE );
     else
-        bOk = MoveOrCopyContents(pSourceBox, pSource, pTarget,
-                                  pNewParent, rIdx, FALSE);
+        bOk = MoveOrCopyContents(pSourceBox, pSource, pTarget, pNewParent, rIdx, FALSE );
+
     return bOk;
 }
 
@@ -877,13 +890,14 @@ BOOL SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
     if ( !pSourceBox )
         pSourceBox = pDlg->pSourceView;
     DBG_ASSERT( pSourceBox, "no source view" );
-    if(pSourceBox->GetModel()->GetDepth(pSource) <= GetDocLevel() &&
-        GetModel()->GetDepth(pTarget) <= GetDocLevel())
-        bOk = MoveOrCopyTemplates(pSourceBox, pSource, pTarget,
-                                  pNewParent, rIdx, TRUE);
+    if ( !pTarget )
+        pTarget = pDlg->pTargetEntry;
+    if ( pSourceBox->GetModel()->GetDepth( pSource ) <= GetDocLevel() &&
+                     GetModel()->GetDepth( pTarget ) <= GetDocLevel() )
+        bOk = MoveOrCopyTemplates( pSourceBox, pSource, pTarget, pNewParent, rIdx, TRUE );
     else
-        bOk = MoveOrCopyContents(pSourceBox, pSource, pTarget,
-                                  pNewParent, rIdx, TRUE );
+        bOk = MoveOrCopyContents( pSourceBox, pSource, pTarget, pNewParent, rIdx, TRUE );
+
     return bOk;
 }
 
@@ -904,7 +918,7 @@ BOOL SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection&  )
     if( VIEW_TEMPLATES == eViewType &&
         GetModel()->GetDepth(pEntry) < 2 &&  !IsStandard_Impl(pEntry))
     {
-        pDlg->pSuspend=new SuspendAccel(&pDlg->aEditAcc);
+        pDlg->pSuspend = new SuspendAccel( &pDlg->aEditAcc );
         return TRUE;
     }
     return FALSE;
@@ -932,7 +946,7 @@ BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rTe
 {
     DBG_ASSERT(pEntry, "kein Entry selektiert");
     delete pDlg->pSuspend;
-    pDlg->pSuspend=0;
+    pDlg->pSuspend = NULL;
     SvLBoxEntry* pParent = GetParent(pEntry);
     if( !rText.Len() )
     {
@@ -1061,6 +1075,7 @@ sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         // asynchronous, because of MessBoxes
         pDlg->pSourceView = GetSourceView();
+        pDlg->pTargetEntry = pTargetEntry;
         PostUserEvent( LINK( this, SfxOrganizeListBox_Impl, OnAsyncExecuteDrop ),
                        new ExecuteDropEvent( rEvt ) );
     }
@@ -1301,7 +1316,7 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEvent )
+    IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEvent )
 {
     DBG_ASSERT( pEvent, "invalid DropEvent" );
     if ( pEvent )
@@ -1312,6 +1327,7 @@ IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEven
         SvTreeListBox::ExecuteDrop( *pEvent, pSourceView );
         delete pEvent;
         pDlg->pSourceView = NULL;
+        pDlg->pTargetEntry = NULL;
     }
     return 0;
 }
@@ -1688,10 +1704,11 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl(USHORT nId)
             USHORT nRegion = 0, nIndex = 0;
             GetIndices_Impl( pFocusBox, pEntry, nRegion, nIndex );
             const SfxStringItem aName( SID_FILE_NAME, aMgr.GetTemplates()->GetPath( nRegion, nIndex ) );
+            const SfxStringItem aLongName( SID_FILE_LONGNAME, pFocusBox->GetEntryText( pEntry ) );
             const SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE( "private:user" ) );
 
             SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENTEMPLATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                                      &aName, &aReferer, 0L );
+                                      &aName, &aLongName, &aReferer, 0L );
             pDialog->EndDialog( RET_EDIT_STYLE );
             break;
         }
