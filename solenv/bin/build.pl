@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: vg $ $Date: 2004-03-11 09:51:31 $
+#   last change: $Author: vg $ $Date: 2004-03-18 12:08:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.99 $ ';
+    $id_str = ' $Revision: 1.100 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -397,8 +397,8 @@ sub dmake_dir {
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
-        _do_exit($? >> 8) if ($? && ($? != -1));
-        _do_exit(0);
+        _exit($? >> 8) if ($? && ($? != -1));
+        _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
         &print_error("Error $? occurred while making $BuildDir");
     };
