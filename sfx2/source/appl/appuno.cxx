@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-11 10:18:46 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 11:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,13 +1036,46 @@ SFX_IMPL_XSERVICEINFO( SfxMacroLoader, FRAMELOADER_SERVICENAME, "com.sun.star.co
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
 
 // -----------------------------------------------------------------------
-void SAL_CALL SfxMacroLoader::load (   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &                    rFrame      ,
-                                const ::rtl::OUString& rURL,
-                                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    rArgs       ,
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadEventListener > &        rListener   ) throw ( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL SfxMacroLoader::load (const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > &rFrame,
+                                    const ::rtl::OUString& rURL,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &rArgs,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLoadEventListener > &rListener )
+    throw ( ::com::sun::star::uno::RuntimeException )
+{
+    ErrCode nErr = loadMacro( rURL );
+
+    if ( rListener.is() )
+    {
+        // always call loadCancelled, because we didn't load a document but
+        // executed a macro instead!
+        rListener->loadCancelled( this ) ;
+    }
+}
+
+// -----------------------------------------------------------------------
+SfxMacroLoader::SfxMacroLoader( com::sun::star::uno::Reference < class com::sun::star::lang::XMultiServiceFactory > const &)
+{
+}
+
+// -----------------------------------------------------------------------
+SfxMacroLoader::~SfxMacroLoader()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SAL_CALL SfxMacroLoader::cancel(void) throw ( ::com::sun::star::uno::RuntimeException )
+{
+}
+
+
+// -----------------------------------------------------------------------
+ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
+    throw ( ::com::sun::star::uno::RuntimeException )
 {
     SfxApplication* pApp = SFX_APP();
-            pApp->EnterBasicCall();
+
+    pApp->EnterBasicCall();
 
     // macro:-::com::sun::star::util::URL analysiern
     // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
@@ -1135,33 +1168,9 @@ void SAL_CALL SfxMacroLoader::load (   const ::com::sun::star::uno::Reference< :
 
     pApp->LeaveBasicCall();
     SbxBase::ResetError();
-    if ( rListener.is() )
-    {
-/*
-        if( nErr == ERRCODE_NONE )
-            rListener->loadFinished (this) ;
-        else
-*/
-            rListener->loadCancelled( this ) ;
-    }
+
+    return nErr;
 }
-
-// -----------------------------------------------------------------------
-SfxMacroLoader::SfxMacroLoader( com::sun::star::uno::Reference < class com::sun::star::lang::XMultiServiceFactory > const &)
-{
-}
-
-// -----------------------------------------------------------------------
-SfxMacroLoader::~SfxMacroLoader()
-{
-}
-
-// -----------------------------------------------------------------------
-
-void SAL_CALL SfxMacroLoader::cancel(void) throw ( ::com::sun::star::uno::RuntimeException )
-{
-}
-
 
 
 // -----------------------------------------------------------------------
