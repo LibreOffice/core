@@ -1,7 +1,7 @@
 # This is the dmake version.
 
 # copied from settings.mk
-SOLARBINDIR=$(SOLARVERSION)$/$(INPATH)$/bin$(EXT_UPDMINOR)
+SOLARBINDIR=$(SOLARVERSION)$/$(INPATH)$/bin$(UPDMINOREXT)
 
 # Please modify the following lines to match your environment:
 #   If you use the run: target at the end of the file, then adapt port number.
