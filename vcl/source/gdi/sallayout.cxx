@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2002-08-06 08:49:15 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 11:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ int SalLayout::CalcAsianKerning( sal_Unicode c, bool bLeft, bool bVertical )
 
 // -----------------------------------------------------------------------
 
-bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
+bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolyVector& rVector ) const
 {
     bool bRet = false;
 
@@ -242,8 +242,7 @@ bool SalLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) 
 
         // insert outline at correct position
         aGlyphOutline.Move( aPos.X(), aPos.Y() );
-        for( int i = 0; i < aGlyphOutline.Count(); ++i )
-            rPolyPoly.Insert( aGlyphOutline[i] );
+        rVector.push_back(aGlyphOutline);
     }
 
     return bRet;
