@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XDragSourceListener.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: obr $ $Date: 2001-01-26 11:27:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
+#define __com_sun_star_datatransfer_dnd_XDragSourceListener_idl__
+
+#ifndef __com_sun_star_datatransfer_dnd_DragSourceDragEvent_idl__
+#include <com/sun/star/datatransfer/dnd/DragSourceDragEvent.idl>
+#endif
+
+#ifndef __com_sun_star_datatransfer_dnd_DragSourceDropEvent_idl__
+#include <com/sun/star/datatransfer/dnd/DragSourceDropEvent.idl>
+#endif
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module datatransfer { module dnd {
+
+//=============================================================================
+/** This interface must be implemented by any <type>DragGestureRecognizer</type>
+    implementation that a <type>DragSource</type> supports.
+*/
+
+[ uik(E6EFFA62-B551-11d4-82C90050-04D765F1), ident("XDragSourceListener",  0.1) ]
+interface XDragSourceListener: com::sun::star::lang::XEventListener
+{
+    //-------------------------------------------------------------------------
+    /** this method is invoked to signify that the Drag and Drop operation is
+        complete.
+
+        @param dsde
+        the DragSourceDropEvent
+    */
+
+    void dragDropEnd( [in] DragSourceDropEvent dsde );
+
+      //-------------------------------------------------------------------------
+    /** called as the hotspot enters a platform dependent drop site.
+
+        <p>NOTE: currently this notification can not be ensured by all
+        implementations. Do not rely on it ! </p>
+
+        @param dsde
+        the DragSourceDragEvent
+    */
+
+    void dragEnter( [in] DragSourceDragEvent dsde );
+
+      //-------------------------------------------------------------------------
+    /** called as the hotspot exits a platform dependent drop site.
+
+        <p>NOTE: currently this notification can not be ensured by all
+        implementations. Do not rely on it ! </p>
+
+        @param dse
+        the DragSourceEvent
+    */
+
+    void dragExit( [in] DragSourceEvent dse );
+
+      //-------------------------------------------------------------------------
+    /** called as the hotspot moves over a platform dependent drop site.
+
+        <p>NOTE: currently this notification can not be ensured by all
+        implementations. Do not rely on it ! </p>
+
+        @param dsde
+        the DragSourceEvent
+    */
+
+    void dragOver( [in] DragSourceDragEvent dsde );
+
+      //-------------------------------------------------------------------------
+    /** called when the user has modified the drop gesture.
+
+        @param dsde
+        the DragSourceEvent
+    */
+
+    void dropActionChanged( [in] DragSourceDragEvent dsde );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
