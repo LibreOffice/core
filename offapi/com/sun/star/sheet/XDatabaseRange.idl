@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseRange.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:14:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {  module sun {  module star {  module sheet {
 
     @see com::sun::star::sheet::DatabaseRange
  */
-interface XDatabaseRange: com::sun::star::uno::XInterface
+published interface XDatabaseRange: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
