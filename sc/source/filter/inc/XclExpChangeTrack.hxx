@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:07:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ protected:
     void                        SetAddAction( XclExpChTrAction* pAction );
     void                        AddDependentContents(
                                     const ScChangeAction& rAction,
-                                    RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     ScChangeTrack& rChangeTrack );
 
     inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
@@ -440,7 +440,7 @@ protected:
 public:
                                 XclExpChTrAction(
                                     const ScChangeAction& rAction,
-                                    const RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     sal_uInt16 nNewOpCode = EXC_CHTR_OP_UNKNOWN );
     virtual                     ~XclExpChTrAction();
@@ -496,18 +496,16 @@ struct XclExpChTrData
 
     void                        WriteFormula(
                                     XclExpStream& rStrm,
-                                    const RootData& rRootData,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     void                        Write(
                                     XclExpStream& rStrm,
-                                    const RootData& rRootData,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
 };
 
 //___________________________________________________________________
 // XclExpChTrCellContent - changed cell content
 
-class XclExpChTrCellContent : public XclExpChTrAction, private ExcRoot
+class XclExpChTrCellContent : public XclExpChTrAction, protected XclExpRoot
 {
 private:
     XclExpChTrData*             pOldData;
@@ -530,7 +528,7 @@ protected:
 public:
                                 XclExpChTrCellContent(
                                     const ScChangeActionContent& rAction,
-                                    RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrCellContent();
 
@@ -556,7 +554,7 @@ protected:
 public:
                                 XclExpChTrInsert(
                                     const ScChangeAction& rAction,
-                                    RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrInsert();
@@ -568,7 +566,7 @@ public:
 //___________________________________________________________________
 // XclExpChTrInsertTab - insert table
 
-class XclExpChTrInsertTab : public XclExpChTrAction, private ExcRoot
+class XclExpChTrInsertTab : public XclExpChTrAction, protected XclExpRoot
 {
 private:
     SCTAB                   nTab;
@@ -579,7 +577,7 @@ protected:
 public:
                                 XclExpChTrInsertTab(
                                     const ScChangeAction& rAction,
-                                    RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrInsertTab();
 
@@ -603,7 +601,7 @@ protected:
 public:
                                 XclExpChTrMoveRange(
                                     const ScChangeActionMove& rAction,
-                                    RootData& rRootData,
+                                    const XclExpRoot& rRoot,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer,
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrMoveRange();
@@ -660,7 +658,7 @@ public:
 //___________________________________________________________________
 // XclExpChangeTrack - exports the "Revision Log" stream
 
-class XclExpChangeTrack : private ExcRoot
+class XclExpChangeTrack : protected XclExpRoot
 {
 private:
     XclExpChTrRecordList        aRecList;
@@ -682,7 +680,7 @@ private:
     sal_Bool                    WriteUserNamesStream();
 
 public:
-                                XclExpChangeTrack( RootData* pRootData );
+                                XclExpChangeTrack( const XclExpRoot& rRoot );
                                 ~XclExpChangeTrack();
 
     void                        Write();
