@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:29:33 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 15:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,125 +117,6 @@ using namespace ::drafts::com::sun::star::chart2;
 namespace
 {
 
-uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString& rObjectCID
-                , const uno::Reference< frame::XModel >& xModel )
-{
-    if(!rObjectCID.getLength())
-        return NULL;
-    if(!xModel.is())
-        return NULL;
-
-    uno::Reference< beans::XPropertySet > xObjectProperties = NULL;
-    try
-    {
-        ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
-        rtl::OUString aParticleID = ObjectIdentifier::getParticleID( rObjectCID );
-        switch(eObjectType)
-        {
-            case OBJECTTYPE_PAGE:
-                {
-                    uno::Reference< XChartDocument > xChartDocument( xModel, uno::UNO_QUERY );
-                    if( xChartDocument.is())
-                        xObjectProperties.set( xChartDocument->getPageBackground() );
-                }
-                break;
-            case OBJECTTYPE_TITLE:
-                {
-                    if( TitleHelper::getIdentifierForTitle(TitleHelper::MAIN_TITLE).equals( aParticleID ) )
-                        xObjectProperties.set( TitleHelper::getTitle(TitleHelper::MAIN_TITLE,xModel), uno::UNO_QUERY );
-                }
-                break;
-            case OBJECTTYPE_LEGEND:
-                {
-                    uno::Reference< XDiagram > xDia( ChartModelHelper::findDiagram( xModel ) );
-                    if( xDia.is())
-                        xObjectProperties.set( xDia->getLegend(), uno::UNO_QUERY );
-                }
-                break;
-            case OBJECTTYPE_LEGEND_ENTRY:
-                    break;
-            case OBJECTTYPE_DIAGRAM:
-                     break;
-            case OBJECTTYPE_DIAGRAM_WALL:
-                {
-                    uno::Reference< XDiagram > xDia( ChartModelHelper::findDiagram( xModel ) );
-                    if( xDia.is())
-                        xObjectProperties.set( xDia->getWall() );
-                }
-                break;
-            case OBJECTTYPE_DIAGRAM_FLOOR:
-                    break;
-            case OBJECTTYPE_AXIS:
-                {
-                    uno::Reference< XAxisContainer > xAxisCnt( ChartModelHelper::findDiagram(xModel), uno::UNO_QUERY );
-                    if( xAxisCnt.is())
-                        xObjectProperties.set(
-                            xAxisCnt->getAxisByIdentifier( aParticleID ),
-                            uno::UNO_QUERY );
-                }
-                break;
-            case OBJECTTYPE_AXIS_UNITLABEL:
-                    break;
-            case OBJECTTYPE_GRID:
-                {
-                    uno::Reference< XGridContainer > xGridCnt( ChartModelHelper::findDiagram(xModel), uno::UNO_QUERY );
-                    if( xGridCnt.is())
-                        xObjectProperties.set(
-                            xGridCnt->getGridByIdentifier( aParticleID ),
-                            uno::UNO_QUERY );
-                }
-                break;
-            case OBJECTTYPE_DATA_LABELS:
-            case OBJECTTYPE_DATA_SERIES:
-                {
-                    uno::Reference< XDataSeries > xSeries =
-                        ChartModelHelper::getSeriesByIdentifier( aParticleID, xModel );
-                    if(xSeries.is())
-                        xObjectProperties = uno::Reference< beans::XPropertySet >(
-                                                xSeries, uno::UNO_QUERY );
-                    break;
-                }
-            case OBJECTTYPE_DATA_LABEL:
-            case OBJECTTYPE_DATA_POINT:
-                {
-                    rtl::OUString aSeriesID = ObjectIdentifier::getParentParticleID( rObjectCID );
-
-                    uno::Reference< XDataSeries > xSeries =
-                        ChartModelHelper::getSeriesByIdentifier( aSeriesID, xModel );
-                    if(xSeries.is())
-                    {
-                        sal_Int32 nIndex = aParticleID.toInt32();
-                        xObjectProperties = xSeries->getDataPointByIndex( nIndex );
-                    }
-                    break;
-                }
-            case OBJECTTYPE_DATA_ERRORS:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_X:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Y:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Z:
-                    break;
-            case OBJECTTYPE_DATA_FUNCTION:
-                    break;
-            case OBJECTTYPE_DATA_STOCK_RANGE:
-                    break;
-            case OBJECTTYPE_DATA_STOCK_LOSS:
-                    break;
-            case OBJECTTYPE_DATA_STOCK_GAIN:
-                    break;
-            default: //OBJECTTYPE_UNKNOWN
-                    break;
-        }
-    }
-    catch( uno::Exception& ex)
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-    return xObjectProperties;
-}
-
 ::comphelper::ItemConverter* createItemConverter(
     const ::rtl::OUString & aObjectCID
     , const uno::Reference< frame::XModel > & xModel
@@ -260,7 +141,8 @@ uno::Reference< beans::XPropertySet > getObjectPropertySet( const rtl::OUString&
     //-------------------------------------------------------------
     if( !bAffectsMultipleObjects )
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties= getObjectPropertySet( aObjectCID, xModel );
+        uno::Reference< beans::XPropertySet > xObjectProperties =
+            ObjectIdentifier::getObjectPropertySet( aObjectCID, xModel );
         if(!xObjectProperties.is())
             return NULL;
         //create itemconverter for a single object
@@ -394,13 +276,13 @@ rtl::OUString getTitleIDForSlotId( sal_Int32 nSlotID, const uno::Reference< XCha
             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::SUB_TITLE);
             break;
         case SID_DIAGRAM_TITLE_X:
-//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::X_AXIS_TITLE);
+             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::X_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_Y:
-//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Y_AXIS_TITLE);
+             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Y_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_Z:
-//             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Z_AXIS_TITLE);
+             aRet = TitleHelper::getIdentifierForTitle(TitleHelper::Z_AXIS_TITLE);
             break;
         case SID_DIAGRAM_TITLE_ALL:
             break;
@@ -669,7 +551,7 @@ void SAL_CALL ChartController::executeDispatch_ObjectToDefault()
         //-------------------------------------------------------------
         //get properties of selected object
         uno::Reference< beans::XPropertySet > xObjectProperties = NULL;
-        xObjectProperties = getObjectPropertySet( m_aSelectedObjectCID, getModel() );
+        xObjectProperties = ObjectIdentifier::getObjectPropertySet( m_aSelectedObjectCID, getModel() );
         if(!xObjectProperties.is())
             return;
 
