@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:19:02 $
+ *  last change: $Author: sj $ $Date: 2004-06-18 15:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,14 +872,17 @@ void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClip
 //-----------------------------------------------------------------------------------
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
-    mnBkMode            ( OPAQUE ),
-    maBkColor           ( COL_WHITE ),
+    mnLatestTextAlign   ( 0 ),
+    mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
     maLatestBkColor     ( 0x12345678 ),
-    maActPos            ( Point() ),
-    meRasterOp          ( ROP_OVERPAINT ),
-    mbNopMode           ( sal_False ),
+    maBkColor           ( COL_WHITE ),
+    mnLatestBkMode      ( 0 ),
+    mnBkMode            ( OPAQUE ),
     meLatestRasterOp    ( ROP_INVERT ),
+    meRasterOp          ( ROP_OVERPAINT ),
     mnEntrys            ( 16 ),
+    maActPos            ( Point() ),
+    mbNopMode           ( sal_False ),
     mnGfxMode           ( GM_COMPATIBLE ),
     mnMapMode           ( MM_TEXT ),
     mnDevOrgX           ( 0 ),
@@ -893,7 +896,8 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnPixX              ( 100 ),
     mnPixY              ( 100 ),
     mnMillX             ( 1 ),
-    mnMillY             ( 1 )
+    mnMillY             ( 1 ),
+    mpGDIMetaFile       ( &rGDIMetaFile )
 {
     mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_CLIPREGION ) );  // The original clipregion has to be on top
     maFont.SetCharSet( gsl_getSystemTextEncoding() );                   // of the stack so it can always be restored
