@@ -9,9 +9,22 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ShowFmExplorer" toolbar:helpid="helpid:10633" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:TabDialog" toolbar:helpid="helpid:10615" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AddField" toolbar:helpid="helpid:10623" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:AutoControlFocus" toolbar:helpid="helpid:10763" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:20349" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatGroup" toolbar:helpid="helpid:10454" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:FormatUngroup" toolbar:helpid="helpid:10455" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:EnterGroup" toolbar:helpid="helpid:27096" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:LeaveGroup" toolbar:helpid="helpid:27097" toolbar:text="" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:OpenReadOnly" toolbar:helpid="helpid:10709" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153" toolbar:text="" />
