@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryListEventFlags.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:15:31 $
+ *  last change: $Author: arellano $ $Date: 2001-04-03 18:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,19 +88,24 @@ constants DictionaryListEventFlags
     /** A positive entry was deleted from a dictionary of the
         dictionary list or a dictionary with positive entries
         was cleared.
+
+    <!-- Dennis: Should "dictionary list" be hyphenated? -->
     */
     const short DEL_POS_ENTRY = 2;
 
     //-------------------------------------------------------------------------
     /** A negative entry was added to a dictionary from the
         dictionary list.
-    */
+
+    <!-- Dennis: Should "dictionary list" be hyphenated? -->*/
     const short ADD_NEG_ENTRY = 4;
 
     //-------------------------------------------------------------------------
     /** A negative entry was deleted from a dictionary of the
         dictionary list or a dictionary with negative entries
         was cleared.
+
+    <!-- Dennis: Should "dictionary list" be hyphenated? -->
     */
     const short DEL_NEG_ENTRY = 8;
 
