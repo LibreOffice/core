@@ -3,5 +3,4 @@ eo	embeddedobj									usr1	-	all	eo_mkout NULL
 eo	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed NULL
 eo	embeddedobj\source\general					nmake	-	all	eo_general NULL
 eo	embeddedobj\source\msole					nmake	-	all	eo_msole NULL
-eo	embeddedobj\source\config					nmake	-	all	eo_config NULL
-eo	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general eo_msole eo_config NULL
+eo	embeddedobj\util							nmake	-	all	eo_util eo_commonembed eo_general eo_msole NULL
