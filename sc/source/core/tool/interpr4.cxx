@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-04-27 23:17:17 $
+ *  last change: $Author: er $ $Date: 2001-05-02 14:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ double ScInterpreter::GetCellValue( const ScAddress& rPos, const ScBaseCell* pCe
     USHORT nErr = nGlobalError;
     nGlobalError = 0;
     double nVal = GetCellValueOrZero( rPos, pCell );
-    if ( !nGlobalError || nGlobalError == errNoValue )
+    if ( !nGlobalError || nGlobalError == errCellNoValue )
         nGlobalError = nErr;
     return nVal;
 }
@@ -392,7 +392,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
                     }
                     else
                     {
-                        SetError(errNoValue);
+                        SetError(errCellNoValue);
                         fValue = 0.0;
                     }
                 }
@@ -415,8 +415,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             case  CELLTYPE_STRING:
             case  CELLTYPE_EDIT:
 #if 0
-// Xcl macht es so, aber dann gibt z.B. SUMME(A1:A2) was anderes als A1+A2.
-// In dem Fall muesste GetCellValue den errNoValue auch durchreichen.
+// Xcl does it, but SUM(A1:A2) differs from A1+A2. No good.
             {
                 String aStr;
                 if ( eType == CELLTYPE_STRING )
@@ -433,7 +432,7 @@ double ScInterpreter::GetCellValueOrZero( const ScAddress& rPos, const ScBaseCel
             break;
 #endif
             default:
-                SetError(errNoValue);
+                SetError(errCellNoValue);
                 fValue = 0.0;
         }
     }
