@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionimport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:42:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,10 +223,14 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     OUString aFilterUserData( getSubdata( 5, aComma, aData ) );
 
     OUString aAdapterService( getSubdata( 0, aDelim, aFilterUserData ) );
+    //Import/ExportService
+    pFilter->maImportService = getSubdata( 2, aDelim, aFilterUserData );
+    pFilter->maExportService = getSubdata( 3, aDelim, aFilterUserData );
     pFilter->maImportXSLT = getSubdata( 4, aDelim, aFilterUserData );
     pFilter->maExportXSLT = getSubdata( 5, aDelim, aFilterUserData );
     pFilter->maDTD = getSubdata( 6, aDelim, aFilterUserData );
     pFilter->maComment = getSubdata( 7, aDelim, aFilterUserData );
+
 
     pFilter->maImportTemplate = getSubdata( 7, aComma, aData );
 
