@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-27 08:58:45 $
+ *  last change: $Author: jp $ $Date: 2000-11-27 10:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,13 @@ SwCharDlg::SwCharDlg(Window* pParent, SwView& rVw, const SfxItemSet& rCoreSet,
     AddTabPage(TP_CHAR_EXT, SvxCharEffectsPage::Create, 0);
     AddTabPage(TP_CHAR_POS, SvxCharPositionPage::Create, 0);
     AddTabPage(TP_CHAR_TWOLN, SvxCharTwoLinesPage::Create, 0);
-
     AddTabPage(TP_CHAR_URL, SwCharURLPage::Create, 0);
     AddTabPage(TP_BACKGROUND,SvxBackgroundTabPage::Create,  0);
     if(bIsDrwTxtMode)
     {
-        RemoveTabPage(TP_CHAR_URL);
-        RemoveTabPage(TP_BACKGROUND);
+        RemoveTabPage( TP_CHAR_URL );
+        RemoveTabPage( TP_BACKGROUND );
+        RemoveTabPage( TP_CHAR_TWOLN );
     }
 }
 
@@ -429,6 +429,9 @@ IMPL_LINK( SwCharURLPage, EventHdl, PushButton *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/27 08:58:45  jp
+    Task #80425#: new tabpages
+
     Revision 1.2  2000/10/20 13:46:39  jp
     use correct INetURL-Decode enum
 
