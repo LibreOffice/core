@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:44:31 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,15 +306,15 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per le settimane dell'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderuger";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderveckan";
-        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ tygodni, 1 - tygodnie kalendarzowe";
+        Text[ polish ] = "Rodzaj obliczania ró¿nicy: 0 oznacza przedzia³, 1 - tygodnie kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means week interval, Mode=1 means by week of year";
-        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Í7“ú’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌT‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ japanese ] = "ŒvZ•û–@: Ó°ÄŞ=0 ‚Í7“ú’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌT‚ÅŒvZ‚³‚ê‚Ü‚·B";
         Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄĞÇÆÚÊı";
         Text[ chinese_traditional ] = "±o¥X®tÃBªºÃş«¬ Mode=0 ªí¥Ü¶¡¹j¡A Mode=1 ªí¥Ü¤@¦~ªº¬P´Á¼Æ";
         Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí ÇáİÇÕá ÇáÒãäí¡ mode=1 ÊÚäí İí ÃÓÇÈíÚ ÇáÊŞæíã";
         Text[ dutch ] = "Modus=0 betekent aantal , Modus=1 betekent in kalenderweken";
         Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄĞÇÆÚÊı";
-        Text[ greek ] = "Ôñüğïò õğïëïãéóìïı äéáöïñÜò: Ôñüğïò=0 óçìáßíåé äéÜóôçìá, Ôñüğïò=1 óçìáßíåé çìåñïëïãéáêİò åâäïìÜäåò";
+        Text[ greek ] = "Ôñüğïò õğïëïãéóìïı ôçò äéáöïñÜò: Ôñüğïò=0 óçìáßíåé äéÜóôçìá, Ôñüğïò=1 óçìáßíåé çìåñïëïãéáêİò åâäïìÜäåò";
         Text[ korean ] = "Â÷ÀÌ °è»ê ÇüÅÂ: ¸ğµå=0 Àº  °£°İÀ» ÀÇ¹ÌÇÏ°í, ¸ğµå=1 ÀÏÁ¤ÀÌ ÀÖ´Â ÁÖ¸¦ ÀÇ¹Ì";
         Text[ turkish ] = "Fark hesabı türü, tür=0 aralık, tür=1 ise takvim haftası cinsinden anlamına gelir";
     };
@@ -434,9 +434,9 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per i mesi dell'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalendermåneder";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalendermånaden";
-        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ miesiêczny, 1 - miesi¹ce kalendarzowe";
+        Text[ polish ] = "Rodzaj obliczania ró¿nicy: 0 oznacza przedzia³, 1 - miesi¹ce kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means month interval, Mode=1 means by month of year";
-        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌŒ‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ japanese ] = "ŒvZ•û–@: Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚ÌŒ‚ÅŒvZ‚³‚ê‚Ü‚·B";
         Text[ chinese_simplified ] = "µÃ³ö²î¶î Mode=0 ±íÊ¾¼ä¸ô£¬ Mode=1 ±íÊ¾Ò»ÄêµÄÔÂÊı";
         Text[ chinese_traditional ] = "±o¥X®tÃB Mode=0 ªí¥Ü¶¡¹j¡A Mode=1 ªí¥Ü¤@¦~ªº¤ë¼Æ";
         Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí ÇáİÇÕá ÇáÒãäí¡ mode=1 ÊÚäí İí ÃÔåÑ ÇáÊŞæíã";
@@ -562,9 +562,9 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per l'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderår";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderåren";
-        Text[ polish ] = "Obliczanie ró¿nicy. 0 oznacza przedzia³ lat, 1 - lata kalendarzowe";
+        Text[ polish ] = "Rodzaj obliczania ró¿nicy: 0 oznacza przedzia³, 1 - lata kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means year interval, Mode=1 means by calendar years";
-        Text[ japanese ] = "ŒvZ•û–@:Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚Ì”N‚ÅŒvZ‚³‚ê‚Ü‚·B";
+        Text[ japanese ] = "ŒvZ•û–@: Ó°ÄŞ=0 ‚Íˆê’è’PˆÊAÓ°ÄŞ=1 ‚Í¶ÚİÀŞ°‚Ì”N‚ÅŒvZ‚³‚ê‚Ü‚·B";
         Text[ chinese_simplified ] = "µÃ³ö²î¶îµÄÀàĞÍ Mode=0 ±íÊ¾Äê¼ä¸ô£¬ Mode=1 ±íÊ¾ĞÇÆÚÄêÊı";
         Text[ chinese_traditional ] = "±o¥X®tÃBªºÃş«¬ Mode=0 ªí¥Ü¦~¶¡¹j¡A Mode=1 ªí¥Ü¬P´Á¦~¼Æ";
         Text[ arabic ] = "ØÑíŞÉ ÍÓÇÈ ÇáİÑŞ: mode=0 ÊÚäí İÇÕá Òãäí¡ mode=1 ÊÚäí İí ÓäæÇÊ ÇáÊŞæíã";
@@ -773,7 +773,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ spanish ] = "Determina la cantidad de semanas en un año para una fecha";
         Text[ italian ] = "Restituisce il numero delle settimane dell'anno per una determinata data";
         Text[ danish ] = "Bestemmer antallet af dage i en måned til en dato";
-        Text[ swedish ] = "Bestämmer antalet veckor i året till ett datum";
+        Text[ swedish ] = "Bestämmer antalet veckor på året till ett datum";
         Text[ polish ] = "Oblicza liczbê tygodni w roku do podanej daty";
         Text[ portuguese_brazilian ] = "returns the number of weeks in the year for a date";
         Text[ japanese ] = "‚»‚Ì“ú•t‚ª‚»‚Ì”N‚Ì‰½T–Ú‚É‚ ‚½‚é‚©‚ğ•Ô‚µ‚Ü‚·B";
