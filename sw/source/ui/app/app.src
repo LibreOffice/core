@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2001-12-19 18:06:58 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1821,7 +1821,7 @@ String STR_UNBENANNT
     TEXT[ chinese_simplified ] = "æœªå‘½å";
     TEXT[ russian ] = "Áåç èìåíè";
     TEXT[ polish ] = "Bez tytu³u";
-    TEXT[ japanese ] = "ç„¡å";
+    TEXT[ japanese ] = "ç„¡é¡Œ";
     TEXT[ chinese_traditional ] = "æœªå‘½å";
     TEXT[ arabic ] = "ÈÏæä ÚäæÇä";
     TEXT[ dutch ] = "Naamloos";
@@ -2705,7 +2705,7 @@ String STR_TABLE_DEFNAME
     Text[ dutch ] = "Tabel";
     Text[ chinese_simplified ] = "è¡¨æ ¼";
     Text[ greek ] = "Ğßíáêáò";
-    Text[ korean ] = "í‘œ";
+    Text[ korean ] = "ì‹œíŠ¸";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabla";
@@ -3196,6 +3196,7 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text[ catalan ] = "desconocido";
     Text[ finnish ] = "tuntematon";
 };
+
 
 
 
