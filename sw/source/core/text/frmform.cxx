@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 10:31:12 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2092,7 +2092,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                     for( MSHORT i = 0; i < pObjs->Count(); ++i )
                     {
                         SdrObject *pO = (*pObjs)[i];
-                        if ( pO->IsWriterFlyFrame() )
+                        if ( pO->ISA(SwVirtFlyDrawObj) )
                         {
                             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
                             if( pFly->IsAutoPos() && !::IsInProgress( pFly ) )
