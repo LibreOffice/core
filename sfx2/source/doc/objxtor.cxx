@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include "arrdecl.hxx"
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -152,6 +156,7 @@
 #include "accmgr.hxx"
 #include "helpid.hrc"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 
@@ -331,27 +336,44 @@ sal_Bool SfxObjectShell::Close()
         if ( !pImp->bDisposing && GetProgress() )
             return sal_False;
 
-        // aus Document-Liste austragen
-        SfxApplication *pSfxApp = SFX_APP();
-        SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
-        const SfxObjectShell *pThis = this;
-        sal_uInt16 nPos = rDocs.GetPos(pThis);
-        if ( nPos < rDocs.Count() )
-            rDocs.Remove( nPos );
-        pImp->bInList = sal_False;
-
-        // Broadcasten (w"ahrend dessen festhalten)
         pImp->bClosing = sal_True;
-        SfxObjectShellRef aRef(this);
+        Reference< util::XCloseable > xCloseable( GetBaseModel(), UNO_QUERY );
+
+        if ( xCloseable.is() )
+        {
+            try
+            {
+                xCloseable->close( sal_True );
+            }
+            catch( Exception& )
+            {
+                pImp->bClosing = sal_False;
+            }
+        }
+
+        if ( pImp->bClosing )
+        {
+            // aus Document-Liste austragen
+            SfxApplication *pSfxApp = SFX_APP();
+            SfxObjectShellArr_Impl &rDocs = pSfxApp->GetObjectShells_Impl();
+            const SfxObjectShell *pThis = this;
+            sal_uInt16 nPos = rDocs.GetPos(pThis);
+            if ( nPos < rDocs.Count() )
+                rDocs.Remove( nPos );
+            pImp->bInList = sal_False;
+
+            // Broadcasten (w"ahrend dessen festhalten)
+            SfxObjectShellRef aRef(this);
 /*
-        // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine View
-        // mehr da ist!
-        if ( _pFactory && _pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
-            // Event nur bei echten Dokumenten
-            pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, this) );
+            // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine View
+            // mehr da ist!
+            if ( _pFactory && _pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
+                // Event nur bei echten Dokumenten
+                pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, this) );
 */
-        Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
-        //pImp->bClosing = sal_False;
+            Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
+            //pImp->bClosing = sal_False;
+        }
     }
 
     return sal_True;
