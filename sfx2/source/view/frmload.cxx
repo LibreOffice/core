@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:37:23 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 06:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@ sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, 
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxFrameLoader::load" );
+
+    if ( !rFrame.is() )
+        return sal_False;
 
     String rURL;
     String aTypeName;
