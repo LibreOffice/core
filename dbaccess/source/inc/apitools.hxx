@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:22:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-20 13:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,12 @@
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 //==================================================================================
@@ -246,6 +252,97 @@ protected:
 #define IMPLEMENT_SERVICE_INFO2_ABSTRACT(classname, serviceasciiname1, serviceasciiname2)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED2(classname, serviceasciiname1, serviceasciiname2)   \
+
+//==================================================================================
+//= XTypeProvider helpers
+
+//--------------------------------------------------------------------------
+#define DECLARE_IMPLEMENTATION_ID( )    \
+    virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
+
+//--------------------------------------------------------------------------
+#define DECLARE_GETTYPES( ) \
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+
+//--------------------------------------------------------------------------
+#define DECLARE_TYPEPROVIDER( ) \
+    DECLARE_GETTYPES( ) \
+    DECLARE_IMPLEMENTATION_ID( )
+
+//--------------------------------------------------------------------------
+#define IMPLEMENT_IMPLEMENTATION_ID( classname )    \
+::com::sun::star::uno::Sequence< sal_Int8 > classname::getImplementationId() throw (::com::sun::star::uno::RuntimeException)    \
+{   \
+    static ::cppu::OImplementationId* pId = 0;  \
+    if ( !pId ) \
+    {   \
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
+        if ( !pId ) \
+        {   \
+            static ::cppu::OImplementationId aId;   \
+            pId = &aId; \
+        }   \
+    }   \
+    return pId->getImplementationId();  \
+}
+
+//--------------------------------------------------------------------------
+#define IMPLEMENT_GETTYPES2( classname, baseclass1, baseclass2 )    \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
+    {   \
+        return  ::comphelper::concatSequences(  \
+            baseclass1::getTypes( ),    \
+            baseclass2::getTypes( ) \
+        );  \
+    }
+
+//--------------------------------------------------------------------------
+#define IMPLEMENT_GETTYPES3( classname, baseclass1, baseclass2, baseclass3 )    \
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > classname::getTypes() throw (::com::sun::star::uno::RuntimeException)    \
+    {   \
+        return  ::comphelper::concatSequences(  \
+            baseclass1::getTypes( ),    \
+            baseclass2::getTypes( ),    \
+            baseclass3::getTypes( ) \
+        );  \
+    }
+
+//--------------------------------------------------------------------------
+#define IMPLEMENT_TYPEPROVIDER2( classname, baseclass1, baseclass2 )    \
+    IMPLEMENT_IMPLEMENTATION_ID( )  \
+    IMPLEMENT_GETTYPES2( )
+
+//--------------------------------------------------------------------------
+#define IMPLEMENT_TYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 )    \
+    IMPLEMENT_IMPLEMENTATION_ID( )  \
+    IMPLEMENT_GETTYPES3( )
+
+//==================================================================================
+//= helper for declaring/implementing classes based on the OPropertyContainer and an OPropertyArrayUsageHelper
+//----------------------------------------------------------------------------------
+#define DECLARE_PROPERTYCONTAINER_DEFAULTS( )   \
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException); \
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper(); \
+    virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+
+//----------------------------------------------------------------------------------
+#define IMPLEMENT_PROPERTYCONTAINER_DEFAULTS( classname )   \
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >  SAL_CALL classname::getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException)  \
+    {   \
+        Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );    \
+        return xInfo;   \
+    }   \
+    ::cppu::IPropertyArrayHelper& classname::getInfoHelper()    \
+    {   \
+        return *const_cast<classname*>(this)->getArrayHelper(); \
+    }   \
+    ::cppu::IPropertyArrayHelper* classname::createArrayHelper( ) const \
+    {   \
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;    \
+        describeProperties(aProps); \
+        return new ::cppu::OPropertyArrayHelper(aProps);    \
+    }
+
 
 //==================================================================================
 //= helper for implementing the createArrayHelper
