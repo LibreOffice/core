@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-23 11:03:24 $
+ *  last change: $Author: ka $ $Date: 2001-08-23 14:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,21 +484,11 @@ void SdrGrafObj::ImpLinkAnmeldung()
 
     if( pLinkManager != NULL && pGraphicLink == NULL )
     {
-        // Nicht 2x Anmelden
-        if(aFileName.Len())
+        if( aFileName.Len() )
         {
             pGraphicLink = new SdrGraphicLink( this );
             pLinkManager->InsertFileLink( *pGraphicLink, OBJECT_CLIENT_GRF, aFileName, ( aFilterName.Len() ? &aFilterName : NULL ), NULL );
             pGraphicLink->Connect();
-
-#ifndef SVX_LIGHT
-            if( pModel && pModel->IsSwapGraphics() )
-            {
-                BOOL bIsChanged = pModel->IsChanged();
-                pGraphicLink->UpdateSynchron();
-                pModel->SetChanged( bIsChanged );
-            }
-#endif
         }
     }
 
