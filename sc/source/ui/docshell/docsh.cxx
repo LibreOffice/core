@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-27 19:19:54 $
+ *  last change: $Author: sab $ $Date: 2001-07-31 15:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
         //  until loading/saving only the styles in XML is implemented,
         //  load the whole file
 
-        bRet = LoadXML( NULL, pStor );
+        bRet = LoadXML( GetMedium(), pStor );
         InitItems();
     }
     else
