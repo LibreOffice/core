@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:10:52 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 21:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1568,14 +1568,14 @@ TabPage TP_STD_FONT
         Text [ french ] = "~Standard" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text[ chinese_simplified ] = "æ ‡å‡†(~S)";
+        Text[ chinese_simplified ] = "æ ‡å‡†(~F)";
         Text[ russian ] = "Ñòàíäàğò";
         Text[ polish ] = "Domyœlnie";
-        Text[ japanese ] = "æ¨™æº–(~S)";
-        Text[ chinese_traditional ] = "æ¨™æº–(~S)";
+        Text[ japanese ] = "æ¨™æº–(~F)";
+        Text[ chinese_traditional ] = "æ¨™æº–(~F)";
         Text[ arabic ] = "ŞíÇÓí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "í‘œì¤€(~S)";
+        Text[ korean ] = "í‘œì¤€(~F)";
         Text[ turkish ] = "~Standart";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Vakio";
@@ -2841,16 +2841,16 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese ] = "~Hífens opcionais" ;
         Text [ finnish ] = "~Valinnaiset tavuviivat" ;
         Text [ danish ] = "Bløde skilletegn" ;
-        Text [ french ] = "Traits d'union ~conditionnels" ;
-        Text [ swedish ] = "Mjuka bindestreck" ;
-        Text [ dutch ] = "Tij~delijke afbreektekens" ;
+        Text [ french ] = "Traits d'union ~utilisateur" ;
+        Text [ swedish ] = "An~vändardefinierade bindestreck" ;
+        Text [ dutch ] = "~Door gebruiker gedefinieerde afbreektekens" ;
         Text [ spanish ] = "Separación ma~nual" ;
         Text [ english_us ] = "Custom h~yphens" ;
-        Text[ chinese_simplified ] = "è½¯æ€§è¿å­—ç¬¦(~Y)";
+        Text[ chinese_simplified ] = "è‡ªå®šçš„è¿å­—ç¬¦(~Y)";
         Text[ russian ] = "Ìÿãêèå ïåğåíîñû";
-        Text[ polish ] = "Miêkkie znaki podzia³u";
+        Text[ polish ] = "Indywidualne znaki podzia³u";
         Text[ japanese ] = "ï½¿ï¾Œï¾„ï¾Šï½²ï¾Œï¾(~Y)";
-        Text[ chinese_traditional ] = "å¯é¸ç”¨çš„é€£å­—ç¬¦(~Y)";
+        Text[ chinese_traditional ] = "è‡ªè¨‚çš„é€£å­—ç¬¦(~Y)";
         Text[ arabic ] = "æÇÕáÉ ÇÎÊíÇÑíÉ";
         Text[ greek ] = "¹~ğéá äéá÷ùñéóôéêÜ";
         Text[ korean ] = "ì„ íƒì  í•˜ì´í”ˆ(~Y)";
@@ -3190,7 +3190,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ ENGLISH ] = "~Tab" ;
         Text [ english_us ] = "~Tabs" ;
         Text [ portuguese_brazilian ] = "~Tabulator" ;
-        Text [ swedish ] = "~Tabulator" ;
+        Text [ swedish ] = "Tabulat~or" ;
         Text [ danish ] = "Tabulator" ;
         Text [ italian ] = "Tabulazione" ;
         Text [ spanish ] = "~Tabulador" ;
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
