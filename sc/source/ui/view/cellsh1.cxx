@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:36:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case FID_USE_NAME:
             case FID_INSERT_NAME:
             case SID_SPELLING:
+            case SID_HANGUL_HANJA_CONVERSION:
 
             pScMod->InputEnterHandler();
             pTabViewShell->UpdateInputHandler();
@@ -1453,6 +1454,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_SPELLING:
             pTabViewShell->DoSpellingChecker();
+            break;
+
+        case SID_HANGUL_HANJA_CONVERSION:
+            pTabViewShell->DoHangulHanjaConversion();
             break;
 
         case SID_THESAURUS:
