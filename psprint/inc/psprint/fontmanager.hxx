@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:45:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,7 +613,7 @@ public:
     // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
     bool createFontSubset( fontID nFont,
                            const rtl::OUString& rOutFile,
-                           long* pGlyphIDs,
+                           sal_Int32* pGlyphIDs,
                            sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
                            int nGlyphs,
