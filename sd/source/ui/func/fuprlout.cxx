@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuprlout.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:05:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ FuPresentationLayout::FuPresentationLayout (
             DrawViewShell* pDrawViewSh =
                 static_cast<DrawViewShell*>(pViewShell);
             EditMode eMode = pDrawViewSh->GetEditMode();
-            BOOL bLayer = pDrawViewSh->GetLayerMode();
+            BOOL bLayer = pDrawViewSh->IsLayerModeActive();
             pDrawViewSh->ChangeEditMode( eMode, !bLayer );
             pDrawViewSh->ChangeEditMode( eMode, bLayer );
         }
