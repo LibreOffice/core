@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:37 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,10 @@ struct ScMyValidation
     com::sun::star::sheet::ValidationAlertStyle aAlertStyle;
     com::sun::star::sheet::ValidationType       aValidationType;
     com::sun::star::sheet::ConditionOperator    aOperator;
-    sal_Bool                    bShowErrorMessage : 1;
-    sal_Bool                    bShowImputMessage : 1;
-    sal_Bool                    bIgnoreBlanks : 1;
+    sal_Int16                   nShowList;
+    sal_Bool                    bShowErrorMessage;
+    sal_Bool                    bShowImputMessage;
+    sal_Bool                    bIgnoreBlanks;
 
                                 ScMyValidation();
                                 ~ScMyValidation();
@@ -123,6 +124,7 @@ private:
     const rtl::OUString         sEmptyString;
     const rtl::OUString         sERRALSTY;
     const rtl::OUString         sIGNOREBL;
+    const rtl::OUString         sSHOWLIST;
     const rtl::OUString         sTYPE;
     const rtl::OUString         sSHOWINP;
     const rtl::OUString         sSHOWERR;
