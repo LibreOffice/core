@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 12:26:53 $
+ *  last change: $Author: cl $ $Date: 2002-06-25 15:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ sal_Bool SdHTMLFilter::Export()
 {
     SfxItemSet      aArgs( mrDocument.GetPool(), ATTR_PUBLISH_START, ATTR_PUBLISH_END );
     SdPublishingDlg aDlg( mrDocShell.GetWindow(), mrDocument.GetDocumentType() );
-    sal_Bool        bRet = sal_False;
 
     if( aDlg.Execute() )
     {
@@ -114,9 +113,7 @@ sal_Bool SdHTMLFilter::Export()
         aDlg.FillItemSet( aArgs );
         aArgs.Put( SfxStringItem( ATTR_PUBLISH_LOCATION, mrMedium.GetName() ) );
         delete( new HtmlExport( &mrDocument, &mrDocShell, &aArgs ) );
-
-        bRet = sal_True;
     }
 
-    return bRet;
+    return true;
 }
