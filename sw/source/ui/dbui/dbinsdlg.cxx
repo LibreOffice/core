@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:44:14 $
+ *  last change: $Author: os $ $Date: 2002-08-07 14:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2040,6 +2040,18 @@ void SwInsertDBColAutoPilot::Load()
 
                 rtl::OUString sColumn;
                 pSubProps[0] >>= sColumn;
+                //check for existance of the loaded column name
+                sal_Bool bFound = sal_False;
+                for(sal_Int32 nRealColumn = 0; nRealColumn < aDBColumns.Count(); nRealColumn++)
+                {
+                    if(aDBColumns[nRealColumn]->sColumn == sColumn)
+                    {
+                        bFound = sal_True;
+                        break;
+                    }
+                }
+                if(!bFound)
+                    continue;
                 sal_Int16 nIndex;
                 pSubProps[1] >>= nIndex;
                 SwInsDBColumnPtr pInsDBColumn = new SwInsDBColumn(sColumn, nIndex);
@@ -2070,8 +2082,12 @@ void SwInsertDBColAutoPilot::Load()
             {
                 do {
                     String sEntry( sTmp.GetToken( 0, '\x0a', n ) );
-                    aLbTableCol.InsertEntry( sEntry );
-                    aLbTblDbColumn.RemoveEntry( sEntry );
+                    //preselect column - if they still exist!
+                    if(aLbTblDbColumn.GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
+                    {
+                        aLbTableCol.InsertEntry( sEntry );
+                        aLbTblDbColumn.RemoveEntry( sEntry );
+                    }
                 } while( n < sTmp.Len() );
 
                 if( !aLbTblDbColumn.GetEntryCount() )
@@ -2118,21 +2134,28 @@ void SwInsertDBColAutoPilot::Load()
             // jetzt noch die benutzerdefinierten Numberformat Strings in die
             // Shell kopieren. Nur diese sind dann als ID verfuegbar
             SvNumberFormatter& rNFmtr = *pView->GetWrtShell().GetNumberFormatter();
-            for( n = 0; n < pNewData->aDBColumns.Count() && n < pNewData->aDBColumns.Count(); ++n )
+            for( n = 0; n < aDBColumns.Count() ; ++n )
             {
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
-                const SwInsDBColumn& rGet = *pNewData->aDBColumns[ n ];
-                if( rGet.bHasFmt && !rGet.bIsDBFmt )
+                for( USHORT m = 0; m < pNewData->aDBColumns.Count() ; ++m )
                 {
-                    rSet.bIsDBFmt = FALSE;
-                    rSet.nUsrNumFmt = rNFmtr.GetEntryKey( rGet.sUsrNumFmt,
-                                                            rGet.eUsrNumFmtLng );
-                    if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
+                    const SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
+                    if(rGet.sColumn == rSet.sColumn)
                     {
-                        xub_StrLen nCheckPos;
-                        short nType;
-                        rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
-                                        rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                        if( rGet.bHasFmt && !rGet.bIsDBFmt )
+                        {
+                            rSet.bIsDBFmt = FALSE;
+                            rSet.nUsrNumFmt = rNFmtr.GetEntryKey( rGet.sUsrNumFmt,
+                                                                    rGet.eUsrNumFmtLng );
+                            if( NUMBERFORMAT_ENTRY_NOT_FOUND == rSet.nUsrNumFmt )
+                            {
+                                xub_StrLen nCheckPos;
+                                short nType;
+                                rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
+                                                rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                            }
+                        }
+                        break;
                     }
                 }
             }
