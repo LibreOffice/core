@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:31:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ class ConvertDataList;
 class ConvertData
 {
 protected:
-    friend ConvertDataList;
+    friend class ConvertDataList;
     double                  fConst;
     STRING                  aName;
     ConvertDataClass        eClass;
