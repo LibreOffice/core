@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:05:59 $
+ *  last change: $Author: obo $ $Date: 2003-04-10 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define TRANSLITERATION_NUMTOTEXT( name, number, type ) \
+#define TRANSLITERATION_NUMTOTEXT( name, number ) \
 NumToText##name::NumToText##name() \
 { \
         nNativeNumberMode = number; \

@@ -55,7 +55,7 @@ using namespace rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#define TRANSLITERATION_CHARTONUM( name, _number ) \
+#define TRANSLITERATION_CHARTONUM( name ) \
 CharToNum##name::CharToNum##name() \
 { \
         nNativeNumberMode = 0; \
