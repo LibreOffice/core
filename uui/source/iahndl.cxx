@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
+ *  last change: $Author: sb $ $Date: 2001-08-24 14:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,11 +329,20 @@ getContinuations(
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
     {
-        if (pAbort && !pAbort->is())
+        if (pApprove && !pApprove->is())
         {
-            *pAbort = star::uno::Reference< star::task::XInteractionAbort >(
-                          rContinuations[i], star::uno::UNO_QUERY);
-            if (pAbort->is())
+            *pApprove
+                = star::uno::Reference< star::task::XInteractionApprove >(
+                      rContinuations[i], star::uno::UNO_QUERY);
+            if (pApprove->is())
+                continue;
+        }
+        if (pDisapprove && !pDisapprove->is())
+        {
+            *pDisapprove
+                = star::uno::Reference< star::task::XInteractionDisapprove >(
+                      rContinuations[i], star::uno::UNO_QUERY);
+            if (pDisapprove->is())
                 continue;
         }
         if (pRetry && !pRetry->is())
@@ -341,6 +350,13 @@ getContinuations(
             *pRetry = star::uno::Reference< star::task::XInteractionRetry >(
                           rContinuations[i], star::uno::UNO_QUERY);
             if (pRetry->is())
+                continue;
+        }
+        if (pAbort && !pAbort->is())
+        {
+            *pAbort = star::uno::Reference< star::task::XInteractionAbort >(
+                          rContinuations[i], star::uno::UNO_QUERY);
+            if (pAbort->is())
                 continue;
         }
         if (pSupplyAuthentication && !pSupplyAuthentication->is())
@@ -1168,7 +1184,9 @@ UUIInteractionHandler::executeErrorDialog(
             break;
 
         case star::task::InteractionClassification_INFO:
-            if (nButtonMask == (WB_OK | WB_DEF_OK))
+            if ((nButtonMask & 0x01F00000) == WB_DEF_OK)
+                    //TODO! missing win bit button mask define (want to ignore
+                    // any default button settings)...
                 xBox.reset(new InfoBox(getParentProperty(),
                                        aText.makeStringAndClear()));
             else
@@ -1564,21 +1582,26 @@ UUIInteractionHandler::handleErrorRequest(
     //
     // Because the WinBits button combinations are quite restricted, not every
     // request can be served here.
+    //
+    // Finally, it seems to be better to leave default button determination to
+    // VCL (the favouring of CANCEL as default button seems to not always be
+    // what the user wants)...
     static WinBits const aButtonMask[16]
         = { 0,
-            WB_OK | WB_DEF_OK, // Abort
+            WB_OK /*| WB_DEF_OK*/, // Abort
             0,
-            WB_RETRY_CANCEL | WB_DEF_CANCEL, // Retry, Abort
-            0,
-            0,
+            WB_RETRY_CANCEL /*| WB_DEF_CANCEL*/, // Retry, Abort
             0,
             0,
-            WB_OK | WB_DEF_OK, // Approve
-            WB_OK_CANCEL | WB_DEF_CANCEL, // Approve, Abort
             0,
             0,
-            WB_YES_NO | WB_DEF_NO, // Approve, Disapprove
-            WB_YES_NO_CANCEL | WB_DEF_CANCEL, // Approve, Disapprove, Abort
+            WB_OK /*| WB_DEF_OK*/, // Approve
+            WB_OK_CANCEL /*| WB_DEF_CANCEL*/, // Approve, Abort
+            0,
+            0,
+            WB_YES_NO /*| WB_DEF_NO*/, // Approve, Disapprove
+            WB_YES_NO_CANCEL /*| WB_DEF_CANCEL*/,
+                // Approve, Disapprove, Abort
             0,
             0 };
     WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
