@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:29:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,8 @@ BOOL Bitmap::ImplPopArt( const BmpFilterParam* pFilterParam, const Link* pProgre
             qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
 
             // get last used entry
-            ULONG nFirstEntry, nLastEntry;
+            ULONG nFirstEntry;
+            ULONG nLastEntry = 0;
 
             for( n = 0; n < nEntryCount; n++ )
                 if( pPopArtTable[ n ].mnCount )
