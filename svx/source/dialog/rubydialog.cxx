@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 13:56:49 $
+ *  last change: $Author: os $ $Date: 2001-07-24 07:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,16 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
     }
     GetText();
     if(IsModified() && pImpl->xSelection.is())
-        pImpl->xSelection->setRubyList(pImpl->aRubyValues, aAutoDetectionCB.IsChecked());
+    {
+        try
+        {
+            pImpl->xSelection->setRubyList(pImpl->aRubyValues, aAutoDetectionCB.IsChecked());
+        }
+        catch(Exception& )
+        {
+            DBG_ERROR("Exception caught")
+        }
+    }
     return 0;
 }
 /* -----------------------------29.01.01 09:38--------------------------------
