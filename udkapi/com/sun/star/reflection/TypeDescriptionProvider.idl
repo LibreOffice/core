@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2002-12-03 17:20:50 $
+ *  last change: $Author: mi $ $Date: 2002-12-11 13:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,42 +116,6 @@ service TypeDescriptionProvider
 }; }; }; };
 
 /*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2002/11/11 08:30:09  kso
-    #104677# - Introduced/modified for Type Description Manager/Provider Enumeration
-               Interface.
-
-    Revision 1.8  2002/11/06 10:26:47  dbo
-    #104560# docu
-
-    Revision 1.7  2002/10/29 14:32:33  dbo
-    #104560# docu
-
-    Revision 1.6  2002/03/08 17:19:13  dbo
-    #96711# reviewed reflection API documentation
-
-    Revision 1.5  2001/11/16 15:02:57  mi
-    proofing by Richard Holt
-
-    Revision 1.4  2000/11/08 12:28:46  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:31  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:36  mi
-    documentation merged from XML
-
-    Revision 1.3  1999/11/18 11:49:58  mi
-    XComponent now in module lang
-
-    Revision 1.2  1999/11/15 16:05:40  dbo
-    doc added
-
-    Revision 1.1.1.1  1999/11/11 09:48:44  jsc
-    new
-
 
 =============================================================================*/
 #endif
