@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:10:34 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 12:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ jclass java_sql_DatabaseMetaData::getMyClass()
 }
 // -----------------------------------------------------------------------------
 java_sql_DatabaseMetaData::java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pConnection )
-    : java_lang_Object( pEnv, myObj ),ODatabaseMetaDataBase(_pConnection),m_pConnection(_pConnection)
+: java_lang_Object( pEnv, myObj ), ::connectivity::ODatabaseMetaDataBase(_pConnection),m_pConnection(_pConnection)
 {
 }
 // -------------------------------------------------------------------------
