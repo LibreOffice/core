@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 13:43:03 $
+ *  last change: $Author: ab $ $Date: 2001-06-18 12:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,10 @@ static Methods aMethods[] = {
 
 { "CLng",           SbxLONG,      1 | _FUNCTION, RTLNAME(CLng)              },
   { "expression",   SbxVARIANT },
+{ "ConvertFromUrl", SbxSTRING,    1 | _FUNCTION, RTLNAME(ConvertFromUrl)    },
+  { "Url",          SbxSTRING },
+{ "ConvertToUrl",   SbxSTRING,    1 | _FUNCTION, RTLNAME(ConvertToUrl)      },
+  { "SystemPath",   SbxSTRING },
 { "Cos",            SbxDOUBLE,    1 | _FUNCTION, RTLNAME(Cos)               },
   { "number",       SbxDOUBLE },
 { "CreateObject",   SbxOBJECT,    1 | _FUNCTION, RTLNAME( CreateObject )    },

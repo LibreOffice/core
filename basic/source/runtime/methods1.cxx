@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-17 13:42:39 $
+ *  last change: $Author: ab $ $Date: 2001-06-18 12:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@
 #ifndef _FSYS_HXX
 #include <tools/fsys.hxx>
 #endif
+#include <tools/urlobj.hxx>
+#include <osl/file.hxx>
 
 #ifdef OS2
 #define INCL_DOS
@@ -1301,5 +1303,37 @@ RTLFUNC(GlobalScope)
     refVar->PutObject( p );
 }
 
+// Helper functions to convert Url from/to system paths
+RTLFUNC(ConvertToUrl)
+{
+    if ( rPar.Count() == 2 )
+    {
+        String aStr = rPar.Get(1)->GetString();
+        INetURLObject aURLObj( aStr, INET_PROT_FILE );
+        OUString aFileURL = aURLObj.GetMainURL();
+        if( !aFileURL.getLength() )
+            ::osl::File::getFileURLFromSystemPath( aFileURL, aFileURL );
+        if( !aFileURL.getLength() )
+            aFileURL = aStr;
+        rPar.Get(0)->PutString( String(aFileURL) );
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+}
+
+RTLFUNC(ConvertFromUrl)
+{
+    if ( rPar.Count() == 2 )
+    {
+        String aStr = rPar.Get(1)->GetString();
+        OUString aSysPath;
+        ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
+        if( !aSysPath.getLength() )
+            aSysPath = aStr;
+        rPar.Get(0)->PutString( String(aSysPath) );
+    }
+    else
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+}
 
 
