@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 10:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module addin
         /// yearfrac.
         double getYearfrac(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nStartDate, [in] long nEndDate, [in] long nMode );
+                    [in] long StartDate, [in] long EndDate, [in] any Mode );
 
         /// edate.
         long getEdate(
@@ -112,7 +112,7 @@ module addin
         /// networkdays.
         long getNetworkdays(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nStartDate, [in] long nEndDate, [in] sequence< sequence<long> > aHolidays );
+                    [in] long StartDate, [in] long EndDate, [in] any Holidays );
 
         /// iseven.
         long getIseven( [in] long nValue );
@@ -157,52 +157,52 @@ module addin
         double getBessely( [in] double Num, [in] long Order );
 
         /// bin2oct.
-        string getBin2oct( [in] string BinaryNum, [in] long nPlaces );
+        string getBin2oct( [in] string BinaryNum, [in] any Places );
 
         /// bin2dec.
         double getBin2dec( [in] string BinaryNum );
 
         /// bin2hex.
-        string getBin2hex( [in] string BinaryNum, [in] long nPlaces );
+        string getBin2hex( [in] string BinaryNum, [in] any Places );
 
         /// oct2bin.
-        string getOct2bin( [in] string OctalNum, [in] long nPlaces );
+        string getOct2bin( [in] string OctalNum, [in] any Places );
 
         /// oct2dec.
         double getOct2dec( [in] string OctalNum );
 
         /// oct2hex.
-        string getOct2hex( [in] string OctalNum, [in] long nPlaces );
+        string getOct2hex( [in] string OctalNum, [in] any Places );
 
         /// dec2bin.
-        string getDec2bin( [in] long Value, [in] long nPlaces );
+        string getDec2bin( [in] long Value, [in] any Places );
 
         /// dec2oct.
-        string getDec2oct( [in] long Value, [in] long nPlaces );
+        string getDec2oct( [in] long Value, [in] any Places );
 
         /// dec2hex.
-        string getDec2hex( [in] double Value, [in] long nPlaces );
+        string getDec2hex( [in] double Value, [in] any Places );
 
         /// hex2bin.
-        string getHex2bin( [in] string HexadecimalValue, [in] long nPlaces );
+        string getHex2bin( [in] string HexadecimalValue, [in] any Places );
 
         /// hex2dec.
         double getHex2dec( [in] string HexadecimalValue );
 
         /// hex2oct.
-        string getHex2oct( [in] string HexadecimalValue, [in] long nPlaces );
+        string getHex2oct( [in] string HexadecimalValue, [in] any Places );
 
         /// delta.
-        long getDelta( [in] double Num1, [in] double Num2 );
+        long getDelta( [in] double Num1, [in] any Num2 );
 
         /// erf.
-        double getErf( [in] double LowerLimit, [in] double UpperLimit );
+        double getErf( [in] double LowerLimit, [in] any UpperLimit );
 
         /// erfc.
         double getErfc( [in] double LowerLimit );
 
         /// gestep.
-        long getGestep( [in] double Num, [in] double Step );
+        long getGestep( [in] double Num, [in] any Step );
 
         /// factdouble.
         double getFactdouble( [in] long Num );
@@ -259,7 +259,7 @@ module addin
         string getImsqrt( [in] string Num );
 
         /// complex.
-        string getComplex( [in] double Real, [in] double Imaginary, [in] string Suffix );
+        string getComplex( [in] double Real, [in] double Imaginary, [in] any Suffix );
 
         /// convert.
         double getConvert( [in] double Value, [in] string FromUnit, [in] string ToUnit );
@@ -286,7 +286,7 @@ module addin
         /// accrintm.
         double getAccrintm(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long Issue, [in] long Settlement, [in] double Rate, [in] double Value, [in] any Base );
+                    [in] long Issue, [in] long Settlement, [in] double Rate, [in] any Value, [in] any Base );
 
         /// received.
         double getReceived(

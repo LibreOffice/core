@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 10:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,11 @@ public:
 //    virtual double SAL_CALL       get_Test( constREFXPS&, sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE;
 
     virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE;
-    virtual double SAL_CALL     getYearfrac( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getYearfrac( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aMode ) THROWDEF_RTE_IAE;
     virtual sal_Int32 SAL_CALL  getEdate( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE;
     virtual sal_Int32 SAL_CALL  getWeeknum( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMode ) THROWDEF_RTE;
     virtual sal_Int32 SAL_CALL  getEomonth( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE;
-    virtual sal_Int32 SAL_CALL  getNetworkdays( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const SEQSEQ( sal_Int32 )& aHDay ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getNetworkdays( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE;
 
     virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) THROWDEF_RTE;
     virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) THROWDEF_RTE;
@@ -153,28 +153,28 @@ public:
     virtual double SAL_CALL     getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getBin2oct( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getBin2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getBin2hex( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getBin2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getOct2bin( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOct2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getOct2hex( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getOct2hex( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getDec2bin( sal_Int32 fNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2oct( sal_Int32 fNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getDec2hex( double fNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2bin( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2oct( sal_Int32 fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getDec2hex( double fNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual STRING SAL_CALL     getHex2bin( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2bin( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getHex2dec( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getHex2oct( const STRING& aNum, sal_Int32 nPlaces ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getHex2oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getDelta( double fNum1, double fNum2 ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE;
 
-    virtual double SAL_CALL     getErf( double fLowerLimit, double fUpperLimit ) THROWDEF_RTE;
+    virtual double SAL_CALL     getErf( double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE;
     virtual double SAL_CALL     getErfc( double fLowerLimit ) THROWDEF_RTE;
 
-    virtual sal_Int32 SAL_CALL  getGestep( double fNum, double fStep ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE;
 
     virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
 
@@ -196,14 +196,14 @@ public:
     virtual STRING SAL_CALL     getImsum( const STRING& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const STRING& rSuffix ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const ANY& rSuffix ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getConvert( double fVal, const STRING& aFromUnit, const STRING& aToUnit ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getAmordegrc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getAmorlinc( constREFXPS&, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer, double fRestVal, double fPer, double fRate, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getAccrint( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nFirstInter, sal_Int32 nSettle, double fRate, double fVal, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getAccrintm( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, double fVal, const ANY& rOptBase ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getAccrintm( constREFXPS& xOpt, sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const ANY& rVal, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getReceived( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fDisc, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getDisc( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getDuration( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fYield, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 10:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,7 +841,8 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 STRING ConvertFromDec( sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt16 nBase,
     sal_Int32 nPlaces, sal_Int32 nMaxPlaces ) THROWDEF_RTE_IAE
 {
-    if( nNum < nMin || nNum > nMax || nPlaces <= 0 || nPlaces > nMaxPlaces )
+    sal_Bool        bUsePlaces = nPlaces != -(2^31);
+    if( nNum < nMin || nNum > nMax || ( bUsePlaces && ( nPlaces <= 0 || nPlaces > nMaxPlaces ) ) )
         THROW_IAE;
 
     sal_Bool        bNeg = nNum < 0;
@@ -853,7 +854,7 @@ STRING ConvertFromDec( sal_Int64 nNum, sal_Int64 nMin, sal_Int64 nMax, sal_uInt1
     sal_Int32       nLen = aRet.getLength();
     if( !bNeg && nLen > nPlaces )
         THROW_IAE;
-    else if( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) )
+    else if( bUsePlaces && ( ( bNeg && nLen < nMaxPlaces ) || ( !bNeg && nLen < nPlaces ) ) )
     {
         sal_uInt32  nLeft = nPlaces - nLen;
         sal_Char*   p = new sal_Char[ nLeft + 1 ];

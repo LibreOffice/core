@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-22 14:23:17 $
+ *  last change: $Author: gt $ $Date: 2001-05-28 10:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,10 @@ double SAL_CALL AnalysisAddIn::getAccrint( constREFXPS& xOpt,
 
 
 double SAL_CALL AnalysisAddIn::getAccrintm( constREFXPS& xOpt,
-    sal_Int32 nIssue, sal_Int32 nSettle, double fRate, double fVal, const ANY& rOB ) THROWDEF_RTE_IAE
+    sal_Int32 nIssue, sal_Int32 nSettle, double fRate, const ANY& rVal, const ANY& rOB ) THROWDEF_RTE_IAE
 {
+    double      fVal = GetOpt( rVal, 1000.0 );
+
     if( fRate <= 0.0 || fVal <= 0.0 || nIssue >= nSettle )
         THROW_IAE;
 
