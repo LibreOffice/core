@@ -2,9 +2,9 @@
  *
  *  $RCSfile: activitiesqueue.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:44:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,26 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+// must be first
+#include <canvas/debug.hxx>
+
 #ifndef _CANVAS_VERBOSETRACE_HXX
 #include <canvas/verbosetrace.hxx>
 #endif
 
-#include "activity.hxx"
-#include "activitiesqueue.hxx"
+#ifndef BOOST_BIND_HPP_INCLUDED
+#include <boost/bind.hpp>
+#endif
+#ifndef BOOST_MEM_FN_HPP_INCLUDED
+#include <boost/mem_fn.hpp>
+#endif
+
+#include <algorithm>
+
+#include <slideshowexceptions.hxx>
+#include <activity.hxx>
+#include <activitiesqueue.hxx>
+
 
 using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star;
@@ -76,12 +87,24 @@ namespace presentation
 {
     namespace internal
     {
-        ActivitiesQueue::ActivitiesQueue( const ::cppcanvas::SpriteCanvasSharedPtr& rDisplayCanvas ) :
-            mpSpriteCanvas( rDisplayCanvas ),
+        ActivitiesQueue::ActivitiesQueue( const UnoViewContainer& rViews ) :
+            mpLayerManager(),
             maCurrentActivitiesWaiting(),
             maCurrentActivitiesReinsert(),
+            mrViews( rViews ),
             mbCurrentRoundNeedsScreenUpdate( false )
         {
+        }
+
+        ActivitiesQueue::~ActivitiesQueue()
+        {
+            // dispose all queues
+            ::std::for_each( maCurrentActivitiesWaiting.begin(),
+                             maCurrentActivitiesWaiting.end(),
+                             ::boost::mem_fn(&Disposable::dispose) );
+            ::std::for_each( maCurrentActivitiesReinsert.begin(),
+                             maCurrentActivitiesReinsert.end(),
+                             ::boost::mem_fn(&Disposable::dispose) );
         }
 
         bool ActivitiesQueue::addActivity( const ActivitySharedPtr& pActivity )
@@ -101,8 +124,14 @@ namespace presentation
         {
             VERBOSE_TRACE( "ActivitiesQueue: outer loop heartbeat" );
 
+            bool bPerformScreenUpdate( false );
+
+            // was:
+            // if( !maCurrentActivitiesWaiting.empty() )
+            // for low-prio activities
+
             // process list of activities
-            if( !maCurrentActivitiesWaiting.empty() )
+            while( !maCurrentActivitiesWaiting.empty() )
             {
                 // process topmost activity
                 ActivitySharedPtr pActivity( maCurrentActivitiesWaiting.front() );
@@ -114,18 +143,34 @@ namespace presentation
                 {
                     // fire up activity
                     bReinsert = pActivity->perform();
-
-                    OSL_ENSURE( bReinsert == pActivity->isActive(),
-                                "::presentation::internal::ActivitiesQueue: Inconsistent Activity state" );
                 }
-                catch(...)
+                catch( uno::Exception& )
                 {
                     // catch anything here, we don't want
                     // to leave this scope under _any_
                     // circumstance. Although, do _not_
                     // reinsert an activity that threw
                     // once.
-                    OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw, removing from ring" );
+
+                    // NOTE: we explicitely don't catch(...) here,
+                    // since this will also capture segmentation
+                    // violations and the like. In such a case, we
+                    // still better let our clients now...
+                    OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a uno::Exception, removing from ring" );
+                }
+                catch( SlideShowException& )
+                {
+                    // catch anything here, we don't want
+                    // to leave this scope under _any_
+                    // circumstance. Although, do _not_
+                    // reinsert an activity that threw
+                    // once.
+
+                    // NOTE: we explicitely don't catch(...) here,
+                    // since this will also capture segmentation
+                    // violations and the like. In such a case, we
+                    // still better let our clients now...
+                    OSL_TRACE( "::presentation::internal::ActivitiesQueue: Activity threw a SlideShowException, removing from ring" );
                 }
 
                 // always query need for screen updates. Note that
@@ -145,12 +190,9 @@ namespace presentation
             // reinsert
             if( maCurrentActivitiesWaiting.empty() )
             {
-                if( mbCurrentRoundNeedsScreenUpdate &&
-                    mpSpriteCanvas.get() != NULL )
+                if( mbCurrentRoundNeedsScreenUpdate )
                 {
-                    // flush rendered content to screen, in a
-                    // controlled, atomic update operation
-                    mpSpriteCanvas->updateScreen();
+                    bPerformScreenUpdate = true;
                 }
 
                 // always clear update flag. There's no need to update
@@ -168,6 +210,34 @@ namespace presentation
                     maCurrentActivitiesWaiting.swap( maCurrentActivitiesReinsert );
                 }
             }
+
+            // perform screen update (not only if one of the
+            // activities requested that, but also if the layer
+            // manager signals that it needs one. This frees us from
+            // introducing dummy activities, just to trigger screen
+            // updates. OTOH, this makes it necessary to always call
+            // BOTH event queue and activities queue, such that no
+            // pending update is unduly delayed)
+            if( bPerformScreenUpdate ||
+                (mpLayerManager.get() &&
+                 mpLayerManager->isUpdatePending() ) )
+            {
+                // call update() on the registered
+                // LayerManager. This will only update the
+                // backbuffer, not flush anything to screen
+                if( mpLayerManager.get() )
+                    mpLayerManager->update();
+
+                // call updateScreen() on all registered views (which
+                // will copy the backbuffers to the front). Do NOT use
+                // LayerManager::updateScreen(), we might need screen
+                // updates independent from a valid LayerManager.
+                ::std::for_each( mrViews.begin(),
+                                 mrViews.end(),
+                                 ::boost::mem_fn( &View::updateScreen ) );
+
+                VERBOSE_TRACE( "ActivitiesQueue: update done" );
+            }
         }
 
         bool ActivitiesQueue::isEmpty()
@@ -175,5 +245,20 @@ namespace presentation
             return maCurrentActivitiesWaiting.empty() && maCurrentActivitiesReinsert.empty();
         }
 
+        void ActivitiesQueue::setLayerManager( const LayerManagerSharedPtr& rMgr )
+        {
+            mpLayerManager = rMgr;
+        }
+
+        void ActivitiesQueue::clear()
+        {
+            ActivityQueue aTmp0;
+            maCurrentActivitiesWaiting.swap( aTmp0 );
+
+            ActivityQueue aTmp1;
+            maCurrentActivitiesReinsert.swap( aTmp1 );
+
+            mbCurrentRoundNeedsScreenUpdate = false;
+        }
     }
 }
