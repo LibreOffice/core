@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-22 19:21:42 $
+ *  last change: $Author: mtg $ $Date: 2001-08-30 14:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -990,9 +990,13 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                               ImplGetChars ( rMountPath ), ImplGetChars ( rFileName ), ImplGetChars ( sFullPath ) );
 #endif
             pFile = new File ( sFullPath );
+            sal_Bool bExists = sal_False;
             aRC = pFile->open ( osl_File_OpenFlag_Create | osl_File_OpenFlag_Write );
             if ( aRC == FileBase::E_EXIST )
+            {
                 aRC = pFile->open ( osl_File_OpenFlag_Write );
+                bExists = sal_True;
+            }
             if ( aRC != FileBase::E_None )
             {
                 if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
@@ -1000,6 +1004,11 @@ SegmentEnum ZipPackage::writeSegment ( const OUString &rFileName, OUString &rMou
                     delete pFile;
                     return e_Aborted;
                 }
+            }
+            else if ( bExists )
+            {
+                // Truncate to 0 if necessary
+                aRC = pFile->setSize ( 0 );
             }
         }
 #ifdef MTG_DEBUG
