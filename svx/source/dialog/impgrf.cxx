@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:59:53 $
+ *  last change: $Author: pb $ $Date: 2000-12-07 06:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,8 +511,8 @@ void SvxGraphicPrevWin_Impl::Paint( const Rectangle& )
                        nCount  = aMessage.GetTokenCount( sal_Unicode( ' ' ) ),
                        x       = 2,
                        y       = 2,
-                       nSpaceW = GetTextWidth( aStrSpace ),
-                       nCharH  = GetTextHeight();
+                       nSpaceW = (USHORT)GetTextWidth( aStrSpace ),
+                       nCharH  = (USHORT)GetTextHeight();
             for ( i = 0; i < nCount; i++ )
             {
                 String aWord = aMessage.GetToken( i, sal_Unicode( ' ' ) );
@@ -847,8 +847,7 @@ short SvxImportGraphicDialog::Execute()
 
     do
     {
-        InitSize( UniString::CreateFromAscii(
-                  RTL_CONSTASCII_STRINGPARAM( "ImpGrfDialogSize" ) ) );
+        InitSize( IMPGRF_CONFIGNAME );
         nRet = SfxFileDialog::Execute();
         String aGrfPath = GetPath();
 
