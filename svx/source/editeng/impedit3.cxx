@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-28 17:23:12 $
+ *  last change: $Author: mt $ $Date: 2001-12-13 13:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,10 +1201,14 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
         sal_uInt16 nTPos = pLine->GetStart();
         for ( sal_uInt16 nP = pLine->GetStartPortion(); nP <= pLine->GetEndPortion(); nP++ )
         {
-            SeekCursor( pNode, nTPos+1, aTmpFont );
-            aTmpFont.SetPhysFont( GetRefDevice() );
-            RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
             TextPortion* pTP = pParaPortion->GetTextPortions().GetObject( nP );
+            // #95819# problem with hard font height attribute, when everthing but the line break has this attribute
+            if ( pTP->GetKind() != PORTIONKIND_LINEBREAK )
+            {
+                SeekCursor( pNode, nTPos+1, aTmpFont );
+                aTmpFont.SetPhysFont( GetRefDevice() );
+                RecalcFormatterFontMetrics( aFormatterMetrics, aTmpFont );
+            }
             nTPos += pTP->GetLen();
         }
         sal_uInt16 nLineHeight = aFormatterMetrics.GetHeight();
