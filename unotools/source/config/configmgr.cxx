@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-26 09:25:59 $
+ *  last change: $Author: os $ $Date: 2000-10-13 13:58:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,11 +77,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
 #endif
 
 #include <list>
@@ -128,7 +125,7 @@ ConfigManager::ConfigManager() :
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
-    DBG_ASSERT(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive")
+    OSL_ENSHURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
@@ -168,7 +165,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            DBG_ERROR("AddConfigItem: already inserted!")
+            OSL_DEBUG_ONLY("AddConfigItem: already inserted!");
     }
 #endif
     OUString sPath = C2U(cConfigBaseURL);
@@ -193,9 +190,11 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
 #ifdef DBG_UTIL
     catch(Exception& rEx)
     {
-        ByteString sMsg("CreateInstance exception: ");
-        sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
-        DBG_ERROR(sMsg.GetBuffer())
+        OString sMsg("CreateInstance exception: ");
+        sMsg += OString(rEx.Message.getStr(),
+                    rEx.Message.getLength(),
+                     RTL_TEXTENCODING_ASCII_US);
+        OSL_DEBUG_ONLY(sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -207,7 +206,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
  ---------------------------------------------------------------------------*/
 void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
 {
-    DBG_ASSERT(!pMgrImpl->aItemList.empty(), "no ConfigItems available")
+    OSL_ENSHURE(!pMgrImpl->aItemList.empty(), "no ConfigItems available");
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
