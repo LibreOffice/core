@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinbutton.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:57:22 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include "FormComponent.hxx"
 #endif
 
-#ifndef FORMS_MODULE_HXX
-#include "formsmodule.hxx"
+#ifndef FRM_MODULE_HXX
+#include "frm_module.hxx"
 #endif
 
 //........................................................................
