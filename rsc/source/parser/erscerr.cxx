@@ -2,9 +2,9 @@
  *
  *  $RCSfile: erscerr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 11:24:52 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 14:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,17 +235,20 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "-lg<language>  Use a different language.\n" );
             StdLstOut( "-pp<filename>  Use a different Preprocessor.\n" );
             StdLstOut( "-rc<filename>  Use a different system resource compiler.\n" );
-            StdLstOut( "-fo<filename>  Renaming of the .res file.\n" );
-            StdLstOut( "-fs<filename>  Renaming of the .rc file.\n" );
+            StdLstOut( "-fs<filename>  Renaming of the .res file.\n" );
             StdLstOut( "-fp<filename>  Renaming of the .srs file.\n" );
             StdLstOut( "-fl<filename>  Listing file.\n" );
             StdLstOut( "-fh<filename>  Header file.\n" );
             StdLstOut( "-fc<filename>  Code file.\n" );
+            StdLstOut( "-ft<filename>  Touch a file when done in rsc2 (for dependencies)\n" );
             StdLstOut( "-CHARSET_...  Convert to this character set.\n" );
             StdLstOut( "-BIGENDIAN    Format of number values.\n" );
             StdLstOut( "-LITTLEENDIAN Format of number values.\n" );
             StdLstOut( "-SMART        Generate smart names (cxx, hxx).\n" );
             StdLstOut( "-SrsDefault   Only write one language to srs file.\n" );
+            StdLstOut( "\nwhen creating multiple .res files in one pass, please give these\n" );
+            StdLstOut( "three options in consecutive blocks:\n    -lg<language> -CHARSET_... -fs<filename>\n" );
+            StdLstOut( "a new block begins when any of these three options is used again.\n" );
             break;
 
         case ERR_UNKNOWNSW:
