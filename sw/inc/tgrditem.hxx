@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tgrditem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-06 16:04:40 $
+ *  last change: $Author: os $ $Date: 2002-02-07 15:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,15 @@ public:
     SwTextGrid GetGridType() const { return eGridType; }
     void SetGridType( SwTextGrid eNew ) { eGridType = eNew; }
 
+    BOOL IsRubyTextBelow() const { return bRubyTextBelow; }
     BOOL GetRubyTextBelow() const { return bRubyTextBelow; }
     void SetRubyTextBelow( BOOL bNew ) { bRubyTextBelow = bNew; }
 
+    BOOL IsPrintGrid() const { return bPrintGrid; }
     BOOL GetPrintGrid() const { return bPrintGrid; }
     void SetPrintGrid( BOOL bNew ) { bPrintGrid = bNew; }
 
+    BOOL IsDisplayGrid() const { return bDisplayGrid; }
     BOOL GetDisplayGrid() const { return bDisplayGrid; }
     void SetDisplayGrid( BOOL bNew ) { bDisplayGrid = bNew; }
 };
