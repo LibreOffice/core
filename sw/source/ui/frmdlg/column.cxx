@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ static const USHORT __FAR_DATA nLines[] = {
 };
 
 static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
-static const nVisCols = 3;
+static const USHORT nVisCols = 3;
 
 inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
@@ -540,6 +540,8 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     pColMgr(0),
     bLockUpdate(FALSE)
 {
+    USHORT i;
+
     FreeResource();
     SetExchangeSupport();
 
@@ -549,7 +551,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
                             | WB_ITEMBORDER
                             | WB_DOUBLEBORDER );
 
-    for(USHORT i = 0; i < 5; i++)
+    for( i = 0; i < 5; i++)
         aDefaultVS.InsertItem( i + 1, i );
 
     aDefaultVS.SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
@@ -741,7 +743,9 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, pField )
             // Ermitteln, ob die schmalste Spalte zu schmal ist
             // fuer den eingestellten Spaltenabstand
         long nMin = nColWidth[0];
-        for(USHORT i = 1; i < nCols; ++i)
+        USHORT i;
+
+        for( i = 1; i < nCols; ++i)
             nMin = Min(nMin, nColWidth[i]);
 
         BOOL bAutoWidth = aAutoWidthBox.IsChecked();
