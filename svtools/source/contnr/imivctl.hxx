@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-04 09:38:42 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 11:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,18 +516,6 @@ public:
     BOOL            IsEntryEditing() const { return (BOOL)(pCurEditedEntry!=0); }
     void            EditEntry( SvxIconChoiceCtrlEntry* pEntry );
     void            StopEntryEditing( BOOL bCancel );
-#ifndef TF_SVDATA
-    BOOL            QueryDrop( DropEvent& rDEvt );
-    void            QueryDropImpl(
-                        const DropEvent& rDEvt,
-                        BOOL bAllow,
-                        SvxIconChoiceCtrlEntry* pTarget );
-    BOOL            Drop( const DropEvent& rDEvt );
-    void            DropStartImpl( const DropEvent& );
-    void            DropEndImpl();
-    void            InitStartDrag( const CommandEvent& rDEvt );
-    void            MoveDraggedEntries( const DropEvent& rDEvt );
-#endif
     void            LockEntryPos( SvxIconChoiceCtrlEntry* pEntry, BOOL bLock );
     ULONG           GetEntryCount() const { return aEntries.Count(); }
     SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) { return (SvxIconChoiceCtrlEntry*)aEntries.GetObject(nPos); }

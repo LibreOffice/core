@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-04 09:38:42 $
+ *  last change: $Author: dv $ $Date: 2001-07-26 11:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,7 @@
 #ifndef _SV_LINEINFO_HXX
 #include <vcl/lineinfo.hxx>
 #endif
-#ifndef TF_SVDATA
-#ifndef _SV_DRAG_HXX
-#include <vcl/drag.hxx>
-#endif
-#endif
+
 #pragma hdrstop
 
 #include "ivctrl.hxx"
@@ -221,9 +217,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pCurView,
     aVisRectChangedTimer.SetTimeoutHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
 
     Clear( TRUE );
-#ifndef TF_SVDATA
-    pView->EnableDrop( TRUE );
-#endif
+
     SetGrid( Size(100, 70) );
 }
 
@@ -2784,247 +2778,7 @@ void SvxIconChoiceCtrl_Impl::Command( const CommandEvent& rCEvt )
             return;
 #endif
     }
-
-#ifndef TF_SVDATA
-    if( rCEvt.GetCommand() == COMMAND_STARTDRAG )
-    {
-        if( !GetSelectionCount() || pView->IsTracking() )
-            return;
-        InitStartDrag( rCEvt );
-        SotDataMemberObjectRef xObj = new SotDataMemberObject;
-        DropAction eAction = DragManager::ExecuteDrag( &xObj, DRAG_ALL );
-        DropEndImpl();
-    }
-#endif
 }
-
-#ifndef TF_SVDATA
-BOOL SvxIconChoiceCtrl_Impl::QueryDrop( DropEvent& rDEvt )
-{
-    SvxIconChoiceCtrlEntry* pTarget = 0;
-    if( !rDEvt.IsLeaveWindow() )
-    {
-        long nPixelToScrollX = 0;
-        long nPixelToScrollY = 0;
-        CalcScrollOffsets(
-            rDEvt.GetPosPixel(),
-            nPixelToScrollX,
-            nPixelToScrollY, TRUE );
-        pView->Scroll( nPixelToScrollX, nPixelToScrollY );
-        // Default-D&D verschiebt nur die Position auf der View!
-        pTarget = 0;
-    }
-    QueryDropImpl( rDEvt, TRUE, pTarget );
-    return TRUE;
-}
-
-BOOL SvxIconChoiceCtrl_Impl::Drop( const DropEvent& rDEvt )
-{
-    DropStartImpl( rDEvt );
-    if( rDEvt.GetAction() == DROP_MOVE )
-        MoveDraggedEntries( rDEvt );
-    DropEndImpl();
-    return TRUE;
-}
-
-
-void SvxIconChoiceCtrl_Impl::InitStartDrag( const CommandEvent& rCEvt )
-{
-    pView->EndTracking();
-    PrepareCommandEvent( rCEvt );
-    DELETEZ(pDraggedSelection);
-    SaveSelection( &pDraggedSelection );
-    HideEntryHighlightFrame();
-    ShowCursor( FALSE );
-    const Point& rPos = rCEvt.GetMousePosPixel();
-    aDDStartPos = pView->GetLogicPos( rPos );
-    SvxIconChoiceCtrlEntry* pEntry = GetEntry( aDDStartPos );
-    aDDPaintOffs = Point();
-    pPrevDropTarget = 0;
-    if( pEntry )
-    {
-        pPrevDropTarget = pEntry;
-        pEntry->SetFlags( ICNVIEW_FLAG_DROP_TARGET );
-        Point aEntryPos = GetEntryPos( pEntry );
-        aEntryPos = pView->GetPixelPos( aEntryPos );
-        aDDPaintOffs = rPos - aEntryPos;
-    }
-    bInDragDrop = TRUE;
-}
-
-void SvxIconChoiceCtrl_Impl::QueryDropImpl( const DropEvent& rDEvt, BOOL bAllow,
-    SvxIconChoiceCtrlEntry* pTarget )
-{
-    if( !bInDragDrop )
-    {
-        // jemand will von draussen etwas reinzuppeln
-        if( pTarget != pPrevDropTarget )
-        {
-            if( pPrevDropTarget )
-            {
-                pPrevDropTarget->ClearFlags( ICNVIEW_FLAG_DROP_TARGET );
-                PaintEntry( pPrevDropTarget );
-            }
-            if( pTarget )
-            {
-                pTarget->SetFlags( ICNVIEW_FLAG_DROP_TARGET );
-                PaintEntry( pTarget );
-            }
-            pPrevDropTarget = pTarget;
-        }
-        return;
-    }
-
-    BOOL bSingleSel = (BOOL)(pDraggedSelection->Count() == 1);
-
-    if( rDEvt.IsLeaveWindow() )
-    {
-        if( bSingleSel )
-            HideDDIcon();
-        if( pPrevDropTarget )
-        {
-            pPrevDropTarget->ClearFlags( ICNVIEW_FLAG_DROP_TARGET );
-            PaintEntry( pPrevDropTarget );
-        }
-        pPrevDropTarget = 0;
-        return;
-    }
-    Point aPointerPos( rDEvt.GetPosPixel() );
-    aPointerPos -= aDDPaintOffs;
-    if( pTarget != pPrevDropTarget )
-    {
-        if( bSingleSel )
-            HideDDIcon();
-        if( pPrevDropTarget )
-        {
-            pPrevDropTarget->ClearFlags( ICNVIEW_FLAG_DROP_TARGET );
-            PaintEntry( pPrevDropTarget );
-        }
-        if( pTarget )
-        {
-            pTarget->SetFlags( ICNVIEW_FLAG_DROP_TARGET );
-            PaintEntry( pTarget );
-        }
-        if( bSingleSel )
-        {
-            ShowDDIcon(
-                (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject(0),
-                aPointerPos );
-        }
-    }
-    else
-    {
-        if( bSingleSel )
-        {
-            HideShowDDIcon(
-                (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject(0),
-                aPointerPos );
-        }
-    }
-    pPrevDropTarget = pTarget;
-}
-
-void SvxIconChoiceCtrl_Impl::DropStartImpl( const DropEvent& )
-{
-    if( bInDragDrop && pDraggedSelection->Count() == 1 )
-        HideDDIcon();
-    // Vor dem Drop kommt kein QueryDrop mit LEAVE_WINDOW, deshalb
-    // die Targetemphasis hier wegnehmen!
-    if( pPrevDropTarget )
-    {
-        pPrevDropTarget->ClearFlags( ICNVIEW_FLAG_DROP_TARGET );
-        PaintEntry( pPrevDropTarget );
-    }
-    pPrevDropTarget = 0;
-}
-
-void SvxIconChoiceCtrl_Impl::DropEndImpl()
-{
-    DELETEZ(pDraggedSelection);
-    bInDragDrop = FALSE;
-}
-
-void SvxIconChoiceCtrl_Impl::MoveDraggedEntries( const DropEvent& rDEvt )
-{
-    ULONG nCur;
-
-    if( pDraggedSelection )
-    {
-        BOOL bAutoAdjust = IsAutoAdjust();
-        Point aDelta( pView->GetLogicPos( rDEvt.GetPosPixel() ) );
-        aDelta -= aDDStartPos;
-
-        // In the moment, the icon view (and CntIconView!) cannot handle
-        // negative entry positions correctly (scrollbars, persistence).
-        // Therefore we adjust the movement vector in order to keep all entries
-        // at non-negative positions
-        Point aOffs;
-        const ULONG nCount = pDraggedSelection->Count();
-        for( nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry* pEntry =
-                (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject( nCur );
-            if( !pEntry->IsPosLocked() )
-            {
-                Point aPos( GetEntryPos( pEntry ) );
-                aPos += aDelta;
-                if( aPos.X() < 0 && (aPos.X() < aOffs.X()) )
-                    aOffs.X() = (aPos.X() - LROFFS_WINBORDER);
-                if( aPos.Y() < 0 && (aPos.Y() < aOffs.Y()) )
-                    aOffs.Y() = (aPos.Y() - TBOFFS_WINBORDER);
-            }
-        }
-        aDelta -= aOffs;
-
-        if( !IsAutoArrange() )
-        {
-            const BOOL bOldUpdate = bUpdateMode;
-            if( bAutoAdjust )
-                bUpdateMode = FALSE;
-
-            for( nCur = 0; nCur < nCount; nCur++ )
-            {
-                SvxIconChoiceCtrlEntry* pEntry =
-                    (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject( nCur );
-                if( !pEntry->IsPosLocked() )
-                {
-                    Point aPos( GetEntryPos( pEntry ) );
-                    aPos += aDelta;
-                    SetEntryPos( pEntry, aPos, FALSE /*bAutoAdjust*/, FALSE );
-                    pEntry->SetFlags( ICNVIEW_FLAG_POS_MOVED );
-                }
-            }
-            if( bAutoAdjust )
-            {
-                for( nCur = 0; nCur < nCount; nCur++ )
-                {
-                    SvxIconChoiceCtrlEntry* pEntry =
-                        (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject( nCur );
-                    AdjustEntryAtGrid( pEntry );
-                }
-                bUpdateMode = bOldUpdate;
-            }
-            if( nCount )
-                nFlags |= F_MOVED_ENTRIES;
-        }
-        else
-        {
-            SvxIconChoiceCtrlEntry* pFirst = (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject( 0 );
-            Point aPos( GetEntryPos( pFirst ) );
-            aPos += aDelta;
-            SetEntryPos( pFirst, aPos, FALSE, TRUE );
-            // Liste von hinten aufrollen
-            for( nCur = nCount - 1; nCur > 0; nCur-- )
-            {
-                SvxIconChoiceCtrlEntry* pEntry =
-                    (SvxIconChoiceCtrlEntry*)pDraggedSelection->GetObject( nCur );
-                SetEntryPredecessor( pEntry, pFirst );
-            }
-        }
-    }
-    CheckScrollBars();
-}
-#endif
 
 void SvxIconChoiceCtrl_Impl::ToTop( SvxIconChoiceCtrlEntry* pEntry )
 {
