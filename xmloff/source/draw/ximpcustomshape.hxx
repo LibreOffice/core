@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpcustomshape.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:53:39 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,6 @@ class XMLEnhancedCustomShapeContext : public SvXMLImportContext
     SvXMLUnitConverter& mrUnitConverter;
     std::vector< com::sun::star::beans::PropertyValue >& mrCustomShapeGeometry;
 
-    std::vector< com::sun::star::beans::PropertyValue > maCallout;
     std::vector< com::sun::star::beans::PropertyValue > maExtrusion;
     std::vector< com::sun::star::beans::PropertyValue > maPath;
     std::vector< com::sun::star::beans::PropertyValue > maTextPath;
