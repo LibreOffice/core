@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:45:51 $
+ *  last change: $Author: rt $ $Date: 2003-05-27 16:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@ class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
 class SwCrsrShell;
+// OD 21.05.2003 #108789#
+class SwTxtFrm;
 
 #if defined(MSC)
 #define MA_FASTCALL __fastcall
@@ -282,7 +284,16 @@ class SwBorderAttrs : public SwCacheObj
 
     BOOL bCacheGetLine        :1; //GetTopLine(), GetBottomLine() cachen?
     BOOL bCachedGetTopLine    :1; //GetTopLine() gecached?
-    BOOL bCachedGetBottomLine :1; //GetTopLine() gecached?
+    BOOL bCachedGetBottomLine :1; //GetBottomLine() gecached?
+    // OD 21.05.2003 #108789# - booleans indicating, if values <bJoinedWithPrev>
+    //          and <bJoinedWithNext> are cached and valid.
+    //          Caching depends on value of <bCacheGetLine>.
+    mutable BOOL bCachedJoinedWithPrev :1;
+    mutable BOOL bCachedJoinedWithNext :1;
+    // OD 21.05.2003 #108789# - booleans indicating, if borders are joined
+    //          with previous/next frame.
+    BOOL bJoinedWithPrev :1;
+    BOOL bJoinedWithNext :1;
 
     //Die gecache'ten Werte, undefiniert bis sie einmal berechnet wurden.
     USHORT nTopLine,
@@ -309,8 +320,20 @@ class SwBorderAttrs : public SwCacheObj
     void _GetTopLine   ( const SwFrm *pFrm );
     void _GetBottomLine( const SwFrm *pFrm );
 
+    // OD 21.05.2003 #108789# - private methods to calculate cached values
+    // <bJoinedWithPrev> and <bJoinedWithNext>.
+    void _CalcJoinedWithPrev( const SwFrm& _rFrm );
+    void _CalcJoinedWithNext( const SwFrm& _rFrm );
+
+    // OD 21.05.2003 #108789# - internal helper method for methods
+    // <_CalcJoinedWithPrev> and <_CalcJoinedWithNext>.
+    BOOL _JoinWithCmp( const SwFrm& _rCallerFrm,
+                       const SwFrm& _rCmpFrm ) const;
+
      //Rechte und linke Linie sowie LRSpace gleich?
-    BOOL CmpLeftRight( const SwBorderAttrs &rAttrs, const SwFrm *pCaller,
+    // OD 21.05.2003 #108789# - change name of 1st parameter - "rAttrs" -> "rCmpAttrs".
+    BOOL CmpLeftRight( const SwBorderAttrs &rCmpAttrs,
+                       const SwFrm *pCaller,
                        const SwFrm *pCmp ) const;
 
 public:
@@ -344,6 +367,10 @@ public:
     inline USHORT GetTopLine   ( const SwFrm *pFrm ) const;
     inline USHORT GetBottomLine( const SwFrm *pFrm ) const;
     inline void   SetGetCacheLine( BOOL bNew ) const;
+    // OD 21.05.2003 #108789# - accessors for cached values <bJoinedWithPrev>
+    // and <bJoinedWithPrev>
+    BOOL JoinedWithPrev( const SwFrm& _rFrm ) const;
+    BOOL JoinedWithNext( const SwFrm& _rFrm ) const;
 };
 
 class SwBorderAttrAccess : public SwCacheAccess
@@ -420,6 +447,10 @@ inline void SwBorderAttrs::SetGetCacheLine( BOOL bNew ) const
     ((SwBorderAttrs*)this)->bCacheGetLine = bNew;
     ((SwBorderAttrs*)this)->bCachedGetBottomLine =
     ((SwBorderAttrs*)this)->bCachedGetTopLine = FALSE;
+    // OD 21.05.2003 #108789# - invalidate cache for values <bJoinedWithPrev>
+    // and <bJoinedWithNext>.
+    bCachedJoinedWithPrev = FALSE;
+    bCachedJoinedWithNext = FALSE;
 }
 
 inline USHORT SwBorderAttrs::CalcTopLine() const
@@ -464,5 +495,4 @@ inline BOOL SwBorderAttrs::IsLine() const
         ((SwBorderAttrs*)this)->_IsLine();
     return bIsLine;
 }
-
 #endif  //_FRMTOOL_HXX
