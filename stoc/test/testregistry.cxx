@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testregistry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-07 09:49:28 $
+ *  last change: $Author: dbo $ $Date: 2001-03-09 12:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,12 +627,14 @@ void test_DefaultRegistry()
             xRootKey->deleteKey(OUString( RTL_CONSTASCII_USTRINGPARAM("/AllFromTestreg2") ));
         }
 
-        Reference< XSimpleRegistry > xSimplReg( rSMgr->createInstance(L"com.sun.star.registry.SimpleRegistry"), UNO_QUERY );
+        Reference< XSimpleRegistry > xSimplReg(
+            rSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry") ) ), UNO_QUERY );
 
-        xSimplReg->open(L"testreg2.rdb", False, True);
+        xSimplReg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") ), sal_False, sal_True);
         xSimplReg->destroy();
 
-        xSimplReg->open(L"testreg.rdb", False, True);
+        xSimplReg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("testreg.rdb") ), sal_False, sal_True);
         xSimplReg->destroy();
     }
     catch(InvalidRegistryException&)
