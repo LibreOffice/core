@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hash.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:41 $
+ *  last change: $Author: mhu $ $Date: 2002-11-29 17:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ SvStringHashEntry::~SvStringHashEntry() { };
 |*    Beschreibung
 |*
 *************************************************************************/
-SvHashTable::SvHashTable( ULONG nMaxEntries )
+SvHashTable::SvHashTable( UINT32 nMaxEntries )
 {
     nMax = nMaxEntries;     // set max entries
     nFill = 0;              // no entries
