@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 12:47:38 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 13:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,7 +511,7 @@ INLINE_METHOD ::rtl::OUString FmSearchEngine::FormatField(const FieldInfo& rFiel
 {
     if (m_bUsingTextComponents)
     {
-        DBG_ASSERT(nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
+        DBG_ASSERT((sal_uInt32)nWhich < m_aControlTexts.size(), "FmSearchEngine::FormatField(sal_Int32) : invalid position !");
         DBG_ASSERT(m_aControlTexts[nWhich] != NULL, "FmSearchEngine::FormatField(sal_Int32) : invalid object in array !");
         DBG_ASSERT(m_aControlTexts[nWhich]->getControl().is(), "FmSearchEngine::FormatField : invalid control !");
 
@@ -522,7 +522,7 @@ INLINE_METHOD ::rtl::OUString FmSearchEngine::FormatField(const FieldInfo& rFiel
             nWhich = m_nCurrentFieldIndex;
         }
 
-        DBG_ASSERT((nWhich>=0) && (nWhich < m_aControlTexts.size()),
+        DBG_ASSERT((nWhich >= 0) && ((sal_uInt32)nWhich < m_aControlTexts.size()),
             "FmSearchEngine::FormatField : invalid argument nWhich !");
         return m_aControlTexts[m_nCurrentFieldIndex == -1 ? nWhich : m_nCurrentFieldIndex]->getCurrentText();
     }
@@ -635,12 +635,8 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
         if (!GetCaseSensitive())
-        {   // norm the string
-            String sNeedToAddOUStringVersionsToCharClassHelper(sCurrentCheck);
-                // TODO ....
-            m_aCharacterClassficator.toLower(sNeedToAddOUStringVersionsToCharClassHelper);
-            sCurrentCheck = sNeedToAddOUStringVersionsToCharClassHelper;
-        }
+            // norm the string
+            m_aCharacterClassficator.toLower_rtl(sCurrentCheck);
 
         // jetzt ist der Test einfach ...
         bFound = aSearchExpression.Matches(sCurrentCheck);
@@ -733,7 +729,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
 
         // (don't care about case here, this is done by the TextSearch object, 'cause we passed our case parameter to it)
 
-        xub_StrLen nStart = 0, nEnd = sCurrentCheck.getLength();
+        xub_StrLen nStart = 0, nEnd = (xub_StrLen)sCurrentCheck.getLength();
         bFound = aLocalEngine.SearchFrwrd(sCurrentCheck, &nStart, &nEnd);
             // das heisst hier 'forward' aber das bezieht sich nur auf die Suche innerhalb von sCurrentCheck, hat also mit
             // der Richtung meines Datensatz-Durchwanderns nix zu tun (darum kuemmert sich MoveField)
@@ -904,7 +900,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
     Reference< XInterface >  xCurrent;
-    for (int i=0; i<arrFields.size(); ++i)
+    for (sal_uInt32 i=0; i<arrFields.size(); ++i)
     {
         xCurrent = arrFields.at(i);
         DBG_ASSERT(xCurrent.is(), "FmSearchEngine::fillControlTexts : invalid field interface !");
@@ -1038,12 +1034,8 @@ void FmSearchEngine::SearchNextImpl()
     // die Parameter der Suche
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!GetCaseSensitive())
-    {   // norm the string
-        String sNeedToAddOUStringVersionsToCharClassHelper(strSearchExpression);
-            // TODO ....
-        m_aCharacterClassficator.toLower(sNeedToAddOUStringVersionsToCharClassHelper);
-        strSearchExpression = sNeedToAddOUStringVersionsToCharClassHelper;
-    }
+        // norm the string
+        m_aCharacterClassficator.toLower_rtl(strSearchExpression);
 
     if (!m_bRegular && !m_bLevenshtein)
     {   // 'normale' Suche fuehre ich auf jeden Fall ueber WildCards durch, muss aber vorher je nach Modus den ::rtl::OUString anpassen
@@ -1328,7 +1320,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::RebuildUsedFields : invalid cursor (no columns supplier) !");
         xFields = Reference< ::com::sun::star::container::XIndexAccess > (xSupplyCols->getColumns(), UNO_QUERY);
-        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject(nFieldIndex));
+        BuildAndInsertFieldInfo(xFields, m_arrFieldMapping.GetObject((sal_uInt16)nFieldIndex));
     }
 
     m_nCurrentFieldIndex = nFieldIndex;
