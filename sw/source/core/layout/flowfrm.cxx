@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:11:29 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 15:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1711,6 +1711,45 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                 if ( nDiff > 1 )
                 {
                     pNewUpper = rThis.GetLeaf( MAKEPAGE_NONE, FALSE );
+
+                    //
+                    // START OF HACK for #i14206#
+                    //
+
+                    // Get the bodyframe of the next page.
+                    // There was a loop in this situation:
+                    // Page 5: Section frame
+                    // Page 6: Empty body frame
+                    // Page 7: Tab frame with page break before.
+                    // Here, the tab frame moves to page 5. Therefore the
+                    // section frame on page 5 is invalidated. During further
+                    // formatting of the tab frame, it is moved to page 6
+                    // because of the page break. During formatting of
+                    // the section frame, the tab frame moves to page 7 again and so on.
+
+                    if ( SwFlowFrm::IsMoveBwdJump() && 2 == nDiff &&
+                         !((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage() &&
+                         pNewUpper && pNewUpper->IsPageBodyFrm() )
+                    {
+                        SwPageFrm* pNextPage = (SwPageFrm*)pNewUpper->GetUpper()->GetNext();
+                        if ( pNextPage )
+                        {
+                            SwFrm* pLayout = pNextPage->Lower();
+                            if ( pLayout && pLayout->IsHeaderFrm() )
+                                pLayout = pLayout->GetNext();
+
+                            if ( pLayout->IsBodyFrm() )
+                            {
+                                pNewUpper = (SwLayoutFrm*)pLayout;
+                                SwFlowFrm::SetMoveBwdJump( FALSE );
+                            }
+                        }
+                    }
+
+                    //
+                    // END OF HACK for #i14206#
+                    //
+
                     bCheckPageDescs = TRUE;
                 }
             }
