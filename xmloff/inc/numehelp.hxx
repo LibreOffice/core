@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 09:42:15 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,13 @@ typedef std::set<XMLNumberFormat, LessNumberFormat> XMLNumberFormatSet;
 class XMLNumberFormatAttributesExportHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > xNumberFormatsSupplier;
+    SvXMLExport*        pExport;
     rtl::OUString       sEmpty;
-    SvXMLExport&        rXMLExport;
     XMLNumberFormatSet  aNumberFormats;
 public :
-    XMLNumberFormatAttributesExportHelper(SvXMLExport& rXMLExport);
+    XMLNumberFormatAttributesExportHelper(::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier);
     ~XMLNumberFormatAttributesExportHelper();
+    SetExport(SvXMLExport* pExport) { this->pExport = pExport; }
 
     sal_Int16 GetCellType(const sal_Int32 nNumberFormat, rtl::OUString& sCurrency, sal_Bool& bIsStandard);
     void SetNumberFormatAttributes(const sal_Int32 nNumberFormat,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numehelp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 09:43:27 $
+ *  last change: $Author: sab $ $Date: 2001-05-23 11:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@ using namespace xmloff::token;
 #define XML_STANDARDFORMAT "StandardFormat"
 
 XMLNumberFormatAttributesExportHelper::XMLNumberFormatAttributesExportHelper(
-            SvXMLExport& rTempExport)
-    : rXMLExport(rTempExport),
-    xNumberFormatsSupplier(rTempExport.GetNumberFormatsSupplier()),
+            ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xTempNumberFormatsSupplier)
+    : pExport(NULL),
+    xNumberFormatsSupplier(xTempNumberFormatsSupplier),
     aNumberFormats()
 {
 }
@@ -141,17 +141,25 @@ sal_Int16 XMLNumberFormatAttributesExportHelper::GetCellType(const sal_Int32 nNu
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     const sal_Int32 nNumberFormat, const double& rValue, sal_uInt16 nNamespace, sal_Bool bExportValue)
 {
-    sal_Bool bIsStandard;
-    rtl::OUString sCurrency;
-    sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
-    WriteAttributes(rXMLExport, nTypeKey, rValue, sCurrency, nNamespace, bExportValue);
+    if (pExport)
+    {
+        sal_Bool bIsStandard;
+        rtl::OUString sCurrency;
+        sal_Int16 nTypeKey = GetCellType(nNumberFormat, sCurrency, bIsStandard);
+        WriteAttributes(*pExport, nTypeKey, rValue, sCurrency, nNamespace, bExportValue);
+    }
+    else
+        DBG_ERROR("no SvXMLExport given");
 }
 
 void XMLNumberFormatAttributesExportHelper::SetNumberFormatAttributes(
     const rtl::OUString& rValue, const rtl::OUString& rCharacters, sal_uInt16 nNamespace,
     sal_Bool bExportValue, sal_Bool bExportTypeAttribute)
 {
-    SetNumberFormatAttributes(rXMLExport, rValue, rCharacters, nNamespace, bExportValue, bExportTypeAttribute);
+    if (pExport)
+        SetNumberFormatAttributes(*pExport, rValue, rCharacters, nNamespace, bExportValue, bExportTypeAttribute);
+    else
+        DBG_ERROR("no SvXMLExport given");
 }
 
 void XMLNumberFormatAttributesExportHelper::WriteAttributes(SvXMLExport& rXMLExport,
