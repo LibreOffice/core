@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccidecom.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:16 $
+ *  last change: $Author: sj $ $Date: 2001-07-06 12:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,11 +902,10 @@ void CCIDecompressor::FillBits(BYTE * pTarget, USHORT nTargetBits,
                                USHORT nBitPos, USHORT nNumBits,
                                BYTE nBlackOrWhite)
 {
-
-    if (nBitPos+nNumBits>nTargetBits) {
-        if (nBitPos>=nTargetBits) return;
-        nNumBits=nTargetBits-nBitPos;
-    }
+    if ( nBitPos >= nTargetBits )
+        return;
+    if ( nBitPos + nNumBits > nTargetBits )
+        nNumBits = nTargetBits - nBitPos;
 
     pTarget+=nBitPos>>3;
     nBitPos&=7;
