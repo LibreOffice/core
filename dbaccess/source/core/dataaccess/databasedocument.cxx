@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:13:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 09:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::cppu;
 using namespace ::osl;
-
+namespace css = ::com::sun::star;
 //........................................................................
 namespace dbaccess
 {
@@ -145,12 +145,12 @@ void SAL_CALL ODatabaseSource::dispose(  ) throw (RuntimeException)
     OSubComponent::dispose();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::addEventListener( const Reference< XEventListener >& _xListener ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::addEventListener( const Reference< css::lang::XEventListener >& _xListener ) throw (RuntimeException)
 {
     OSubComponent::addEventListener(_xListener);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseSource::removeEventListener( const Reference< XEventListener >& _xListener ) throw (RuntimeException)
+void SAL_CALL ODatabaseSource::removeEventListener( const Reference< css::lang::XEventListener >& _xListener ) throw (RuntimeException)
 {
     OSubComponent::removeEventListener(_xListener);
 }
@@ -556,6 +556,25 @@ void SAL_CALL ODatabaseSource::setModified( sal_Bool _bModified ) throw (Propert
     }
 }
 // -----------------------------------------------------------------------------
+// ::com::sun::star::document::XEventBroadcaster
+void SAL_CALL ODatabaseSource::addEventListener(const css::uno::Reference< css::document::XEventListener >& _xListener ) throw (css::uno::RuntimeException)
+{
+    m_aDocEventListeners.addInterface(_xListener);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ODatabaseSource::removeEventListener( const css::uno::Reference< css::document::XEventListener >& _xListener ) throw (css::uno::RuntimeException)
+{
+    m_aDocEventListeners.removeInterface(_xListener);
+}
+// -----------------------------------------------------------------------------
+// ::com::sun::star::document::XEventListener
+void SAL_CALL ODatabaseSource::notifyEvent( const css::document::EventObject& aEvent ) throw (css::uno::RuntimeException)
+{
+    // used only to forward external events (e.g. for doc creation) from the frame loader
+    // to the global event broadcaster and all other interested doc event listener.
+    notifyEvent(aEvent.EventName);
+}
+// -----------------------------------------------------------------------------
 // ::com::sun::star::view::XPrintable
 Sequence< PropertyValue > SAL_CALL ODatabaseSource::getPrinter(  ) throw (RuntimeException)
 {
@@ -709,7 +728,7 @@ Reference<XStorage> ODatabaseSource::getStorage(const ::rtl::OUString& _sStorage
                 xStorage = xMyStorage->openStorageElement(_sStorageName, m_bDocumentReadOnly ? ElementModes::READ : nMode);
                 Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
                 if ( xBroad.is() )
-                    xBroad->addTransactionListener(this);
+                    xBroad->addTransactionListener(static_cast< css::embed::XTransactionListener* >(this));
                 aFind = m_aStorages.insert(TStorages::value_type(_sStorageName,xStorage)).first;
             }
             catch(Exception&)
@@ -1081,10 +1100,17 @@ void SAL_CALL ODatabaseSource::removeFlushListener( const Reference< ::com::sun:
 // -----------------------------------------------------------------------------
 void ODatabaseSource::notifyEvent(const ::rtl::OUString& _sEventName)
 {
-    if ( m_xDocEventBroadcaster.is() )
+    try
     {
-        ::com::sun::star::document::EventObject aEvent(*this, _sEventName);
-        m_xDocEventBroadcaster->notifyEvent(aEvent);
+        ResettableMutexGuard _rGuard(m_aMutex);
+        if (OComponentHelper::rBHelper.bDisposed)
+            throw DisposedException();
+
+        css::document::EventObject aEvt(*this, _sEventName);
+        NOTIFY_LISTERNERS(m_aDocEventListeners,css::document::XEventListener,notifyEvent)
+    }
+    catch(Exception&)
+    {
     }
 }
 // -----------------------------------------------------------------------------
@@ -1161,4 +1187,5 @@ void ODatabaseSource::commitStorages()
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
+
 
