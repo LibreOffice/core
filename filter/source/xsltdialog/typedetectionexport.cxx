@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetectionexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:31:40 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 const filter_info_impl* pFilter = (*aIter);
 
                 xAttrList = pAttrList = new AttributeList;
-                pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maType );
+                pAttrList->AddAttribute( sName, sCdataAttribute, pFilter->maFilterName );
                 xHandler->ignorableWhitespace ( sWhiteSpace );
                 xHandler->startElement( sNode, xAttrList );
                 addLocaleProperty( xHandler, sUIName, pFilter->maInterfaceName );
