@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:13 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SFX_OBJITEM_HXX //autogen
 #include <sfx2/objitem.hxx>
+#endif
+#ifndef _SFX_OBJSH_HXX //autogen
+#include <sfx2/objsh.hxx>
 #endif
 #ifndef _SVX_RULRITEM_HXX //autogen
 #include <svx/rulritem.hxx>
