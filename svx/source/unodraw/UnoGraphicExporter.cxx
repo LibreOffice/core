@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 13:55:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,11 +428,8 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     VirtualDevice*  pVDev = new VirtualDevice();
     MapMode         aMM( MAP_100TH_MM );
 
+    Point aPoint( 0, 0 );
     Size aPageSize(pPage->GetSize());
-    aPageSize.Width()  -= pPage->GetLftBorder();
-    aPageSize.Width()  -= pPage->GetRgtBorder();
-    aPageSize.Height() -= pPage->GetUppBorder();
-    aPageSize.Height() -= pPage->GetLwrBorder();
 
     // use scaling?
     if( nWidthPixel )
@@ -465,20 +462,11 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
     pView->SetGridVisible( FALSE );
     pView->SetHlplVisible( FALSE );
     pView->SetGlueVisible( FALSE );
-    pView->ShowPage(pPage, Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
+    pView->ShowPage(pPage, aPoint );
     SdrPageView* pPageView  = pView->GetPageView(pPage);
 
-//  DBG_ASSERT(pViewShell, "ViewShell nicht gefunden");
-//  FrameView* pFrameView   = pViewShell->GetFrameView();
-//  pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
-//  pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
-//  pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
-
-    Point aPoint( pPage->GetLftBorder(), pPage->GetUppBorder() );
     Region aRegion (Rectangle( aPoint, aPageSize ) );
     const Link aPaintProcLink( LINK(this, GraphicExporter, PaintProc ) );
-
-//  pView->InitRedraw(pVDev, aRegion, 0, &aPaintProcLink);
 
     for (USHORT i=0; i<pView->GetPageViewCount(); i++)
     {
