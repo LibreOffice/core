@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsimport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:04:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:20:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 #ifndef _XMLOFF_XFORMSIMPORT_HXX
 #define _XMLOFF_XFORMSIMPORT_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
+
 #include <tools/solar.h> // for USHORT
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -75,7 +83,7 @@ namespace com { namespace sun { namespace star {
 } } }
 
 /** create import context for xforms:model element. */
-SvXMLImportContext* createXFormsModelContext(
+XMLOFF_DLLPUBLIC SvXMLImportContext* createXFormsModelContext(
     SvXMLImport& rImport,
     USHORT nPrefix,
     const rtl::OUString& rLocalName );
