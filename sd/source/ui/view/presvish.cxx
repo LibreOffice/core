@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: af $ $Date: 2004-08-02 16:55:04 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,33 +363,33 @@ void PresentationViewShell::CreateFullScreenShow (
     ViewShell* pOriginShell,
     SfxRequest& rRequest)
 {
-    SFX_REQUEST_ARG (rRequest, pAlwaysOnTop, SfxBoolItem,
-        ATTR_PRESENT_ALWAYS_ON_TOP, FALSE);
-
-    WorkWindow* pWorkWindow = new WorkWindow (
-        NULL,
-        WB_HIDE | WB_CLIPCHILDREN);
     SdDrawDocument* pDoc = pOriginShell->GetDoc();
     SdPage* pCurrentPage = pOriginShell->GetActualPage();
+
+    SFX_REQUEST_ARG (rRequest, pAlwaysOnTop, SfxBoolItem,
+        ATTR_PRESENT_ALWAYS_ON_TOP, FALSE);
     bool bAlwaysOnTop =
         ((rRequest.GetSlot() !=  SID_REHEARSE_TIMINGS) && pAlwaysOnTop )
         ? pAlwaysOnTop->GetValue()
         : pDoc->GetPresAlwaysOnTop();
 
+    WorkWindow* pWorkWindow = new WorkWindow (
+        NULL,
+        WB_HIDE | WB_CLIPCHILDREN);
     pWorkWindow->StartPresentationMode (
         TRUE,
         bAlwaysOnTop ? PRESENTATION_HIDEALLAPPS : 0);
+    pWorkWindow->SetBackground(Wallpaper(COL_BLACK));
     if (pWorkWindow->IsVisible())
     {
-        //AF The bHidden paramter (the fourth one) was previously set to
-        // TRUE.  This does not work anymore for some unknown reason.  The
-        // ViewShellBase does then not get activated and the whole
-        // initialization process is not started: the screen becomes blank.
+        // The new frame is created hidden.  To make it visible and activate
+        // the new view shell--a prerequisite to process slot calls and
+        // initialize its panes--a GrabFocus() has to be called later on.
         SfxTopFrame* pNewFrame = SfxTopFrame::Create (
             pDoc->GetDocSh(),
             pWorkWindow,
             PRESENTATION_FACTORY_ID,
-            FALSE/*TRUE*/);
+            TRUE);
         pNewFrame->SetPresentationMode (TRUE);
 
         ViewShellBase* pBase = static_cast<ViewShellBase*>(
@@ -413,8 +413,11 @@ void PresentationViewShell::CreateFullScreenShow (
                 pOriginShell->GetFrameView(),
                 nStartPage,
                 rRequest);
-            pBase->LateInit();
             pBase->GetViewFrame()->Show();
+            // The following GrabFocus() is responsible for activating the
+            // new view shell.  Without it the screen remains blank (under
+            // Windows and some Linux variants.)
+            pBase->GetWindow()->GrabFocus();
         }
     }
 }
