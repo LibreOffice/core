@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:21:02 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,27 @@ ModalDialog RID_MACROCHOOSER
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Makros ~in " ;
         Text [ ENGLISH ] = "Macros ~in " ;
+        Text[ english_us ] = "Existing macros ~in:";
+        Text[ portuguese ] = "Macros ~in ";
+        Text[ russian ] = "Macros ~in ";
+        Text[ greek ] = "Macros ~in ";
+        Text[ dutch ] = "Macros ~in ";
+        Text[ french ] = "Macros ~in ";
+        Text[ spanish ] = "Macros ~in ";
+        Text[ finnish ] = "Macros ~in ";
+        Text[ italian ] = "Macros ~in ";
+        Text[ danish ] = "Macros ~in ";
+        Text[ swedish ] = "Macros ~in ";
+        Text[ polish ] = "Macros ~in ";
+        Text[ portuguese_brazilian ] = "Macros ~in ";
+        Text[ japanese ] = "Macros ~in ";
+        Text[ korean ] = "Macros ~in ";
+        Text[ chinese_simplified ] = "Macros ~in ";
+        Text[ chinese_traditional ] = "Macros ~in ";
+        Text[ turkish ] = "Macros ~in ";
+        Text[ arabic ] = "Macros ~in ";
+        Text[ catalan ] = "Macros ~in ";
+        Text[ thai ] = "Macros ~in ";
     };
     Control RID_CTRL_MACRO
     {
@@ -181,6 +202,27 @@ ModalDialog RID_MACROCHOOSER
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "M~akro speichern in" ;
         Text [ ENGLISH ] = "Save m~acros in" ;
+        Text[ english_us ] = "Save m~acro in";
+        Text[ portuguese ] = "Save m~acros in";
+        Text[ russian ] = "Save m~acros in";
+        Text[ greek ] = "Save m~acros in";
+        Text[ dutch ] = "Save m~acros in";
+        Text[ french ] = "Save m~acros in";
+        Text[ spanish ] = "Save m~acros in";
+        Text[ finnish ] = "Save m~acros in";
+        Text[ italian ] = "Save m~acros in";
+        Text[ danish ] = "Save m~acros in";
+        Text[ swedish ] = "Save m~acros in";
+        Text[ polish ] = "Save m~acros in";
+        Text[ portuguese_brazilian ] = "Save m~acros in";
+        Text[ japanese ] = "Save m~acros in";
+        Text[ korean ] = "Save m~acros in";
+        Text[ chinese_simplified ] = "Save m~acros in";
+        Text[ chinese_traditional ] = "Save m~acros in";
+        Text[ turkish ] = "Save m~acros in";
+        Text[ arabic ] = "Save m~acros in";
+        Text[ catalan ] = "Save m~acros in";
+        Text[ thai ] = "Save m~acros in";
     };
 
     FixedText RID_TXT_DESCRIPTION
@@ -340,6 +382,27 @@ ModalDialog RID_MACROCHOOSER
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Neue ~Bibliothek" ;
         Text [ English ] = "New ~libary" ;
+        Text[ english_us ] = "New ~Library";
+        Text[ portuguese ] = "New ~libary";
+        Text[ russian ] = "New ~libary";
+        Text[ greek ] = "New ~libary";
+        Text[ dutch ] = "New ~libary";
+        Text[ french ] = "New ~libary";
+        Text[ spanish ] = "New ~libary";
+        Text[ finnish ] = "New ~libary";
+        Text[ italian ] = "New ~libary";
+        Text[ danish ] = "New ~libary";
+        Text[ swedish ] = "New ~libary";
+        Text[ polish ] = "New ~libary";
+        Text[ portuguese_brazilian ] = "New ~libary";
+        Text[ japanese ] = "New ~libary";
+        Text[ korean ] = "New ~libary";
+        Text[ chinese_simplified ] = "New ~libary";
+        Text[ chinese_traditional ] = "New ~libary";
+        Text[ turkish ] = "New ~libary";
+        Text[ arabic ] = "New ~libary";
+        Text[ catalan ] = "New ~libary";
+        Text[ thai ] = "New ~libary";
     };
     PushButton RID_PB_NEWMOD
     {
@@ -347,6 +410,27 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 77 ) ;
         Text = "Neues M~odul" ;
         Text [ English ] = "New m~odule" ;
+        Text[ english_us ] = "New M~odule";
+        Text[ portuguese ] = "New m~odule";
+        Text[ russian ] = "New m~odule";
+        Text[ greek ] = "New m~odule";
+        Text[ dutch ] = "New m~odule";
+        Text[ french ] = "New m~odule";
+        Text[ spanish ] = "New m~odule";
+        Text[ finnish ] = "New m~odule";
+        Text[ italian ] = "New m~odule";
+        Text[ danish ] = "New m~odule";
+        Text[ swedish ] = "New m~odule";
+        Text[ polish ] = "New m~odule";
+        Text[ portuguese_brazilian ] = "New m~odule";
+        Text[ japanese ] = "New m~odule";
+        Text[ korean ] = "New m~odule";
+        Text[ chinese_simplified ] = "New m~odule";
+        Text[ chinese_traditional ] = "New m~odule";
+        Text[ turkish ] = "New m~odule";
+        Text[ arabic ] = "New m~odule";
+        Text[ catalan ] = "New m~odule";
+        Text[ thai ] = "New m~odule";
     };
     PushButton RID_PB_DEL
     {
@@ -616,7 +700,7 @@ String RID_STR_RECORD
     Text [ swedish ] = "R~egistrera" ;
     Text [ dutch ] = "~Opnemen" ;
     Text [ spanish ] = "~Grabar" ;
-    Text [ english_us ] = "~Record" ;
+    Text [ english_us ] = "~Save" ;
     Text[ chinese_simplified ] = "еЅ•е€¶(~R)";
     Text[ russian ] = "Записывать";
     Text[ polish ] = "Zarejestruj";
