@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 12:23:32 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:31:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,14 +122,14 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 # Normal C++ compilation flags
 CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double 
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
+PICSWITCH:=-fPIC
 # Other flags
-CFLAGSOBJGUIST=-fPIC -fno-common
-CFLAGSOBJCUIST=-fPIC -fno-common
-CFLAGSOBJGUIMT=-fPIC -fno-common
-CFLAGSOBJCUIMT=-fPIC -fno-common
-CFLAGSSLOGUIMT=-fPIC -fno-common
-CFLAGSSLOCUIMT=-fPIC -fno-common
+CFLAGSOBJGUIST=$(PICSWITCH) -fno-common
+CFLAGSOBJCUIST=$(PICSWITCH) -fno-common
+CFLAGSOBJGUIMT=$(PICSWITCH) -fno-common
+CFLAGSOBJCUIMT=$(PICSWITCH) -fno-common
+CFLAGSSLOGUIMT=$(PICSWITCH) -fno-common
+CFLAGSSLOCUIMT=$(PICSWITCH) -fno-common
 CFLAGSPROF=
 
 # Flag for including debugging information in object files
