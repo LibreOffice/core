@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:46:52 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Ope~nen";
             Text[ chinese_simplified ] = "΄ςΏª(~O)";
             Text[ greek ] = "Άν~οιγμα";
-            Text[ korean ] = "Ώ­±β(~O)";
+            Text[ korean ] = "Ώ­±β";
             Text[ turkish ] = "Aη";
             Text[ language_user1 ] = " ";
         };
@@ -119,7 +119,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Openen in n~ieuw venster";
             Text[ chinese_simplified ] = "ΚΉΣΓΠΒΚΣ΄°΄ςΏª(~W)";
             Text[ greek ] = "Άνοιγμα σε νέο ~παράθυρο";
-            Text[ korean ] = "»υΓΆΏ΅Ό­ Ώ­±β";
+            Text[ korean ] = "»υ΅΅ΓΆΏ΅Ό­ Ώ­±β";
             Text[ turkish ] = "Yeni bir pencerede aη";
             Text[ language_user1 ] = " ";
         };
@@ -175,7 +175,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Be~werken";
             Text[ chinese_simplified ] = "±ΰΌ­(~E)";
             Text[ greek ] = "~Επεξεργασία";
-            Text[ korean ] = "ΖνΑύ(~E)";
+            Text[ korean ] = "ΖνΑύ";
             Text[ turkish ] = "D~όzenle";
             Text[ language_user1 ] = " ";
         };
@@ -203,7 +203,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ chinese_simplified ] = "ΦΨΠΒΧ°Θλ(~L)";
             Text[ greek ] = "Επα~ναφόρτωση";
-            Text[ korean ] = "ΐη ·Ξµε(~L)";
+            Text[ korean ] = "ΐη ·Ξµε";
             Text[ turkish ] = "Yeniden yόkle";
             Text[ language_user1 ] = " ";
         };
@@ -259,7 +259,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~HTML - brontekst";
             Text[ chinese_simplified ] = "~HTML Τ΄ΞΔ±Ύ";
             Text[ greek ] = "Κείμενο προέλευσης HTM~L";
-            Text[ korean ] = "HT~ML ΌÒ½Ί";
+            Text[ korean ] = "HTML ΌÒ½ΊΕΨ½ΊΖ®";
             Text[ turkish ] = "HTM~L  kaynak kodu";
             Text[ language_user1 ] = " ";
         };
@@ -288,7 +288,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Stop";
             Text[ chinese_simplified ] = "ΤέΝ£";
             Text[ greek ] = "~Διακοπή";
-            Text[ korean ] = "ΑίΑφ(~S)";
+            Text[ korean ] = "Α¤Αφ";
             Text[ turkish ] = "Dur";
             Text[ language_user1 ] = " ";
         };
@@ -345,7 +345,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Vooruit";
             Text[ chinese_simplified ] = "ΟςΗ°(~F)";
             Text[ greek ] = "Εμπρό~ς";
-            Text[ korean ] = "ΎΥΐΈ·Ξ(~F)";
+            Text[ korean ] = "ΎΥΐΈ·Ξ";
             Text[ turkish ] = "έleri";
         };
         SEPARATOR
@@ -375,7 +375,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Koppeling ~toevoegen";
             Text[ chinese_simplified ] = "ΠΒΤφΑ΄½Σ(~A)";
             Text[ greek ] = "Προσθήκ~η σύνδεσης";
-            Text[ korean ] = "Ώ¬°α Γί°΅(~A)";
+            Text[ korean ] = "Ώ¬°α Γί°΅";
             Text[ turkish ] = "Baπlantύ ekle";
             Text[ language_user1 ] = " ";
         };
@@ -400,12 +400,12 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Δξαΰβθςό ρρϋλκσ νΰ πθρσνξκ";
             Text[ polish ] = "Dodaj ³Ήcze do grafiki";
             Text[ japanese ] = "}‚ΙΨέΈ‚π’Η‰Α‚·‚ι(~A)";
-            Text[ chinese_traditional ] = "·sΌWΉΟ¤ωªΊ±¶®|(~A)";
+            Text[ chinese_traditional ] = "·sΌWΉΟ§ΞªΊ±¶®|(~A)";
             Text[ arabic ] = "ΕΦΗέΙ ΗΡΚΘΗΨ αΥζΡΙ";
             Text[ dutch ] = "~Koppeling aan afbeelding toevoegen";
             Text[ chinese_simplified ] = "ΠΒΤφΝΌΠΞµΔΑ΄½Σ(~A)";
             Text[ greek ] = "Προσθήκη σύνδεσης σε γρα~φικό";
-            Text[ korean ] = "±ΧΈ²Ώ΅ Ώ¬°α Γί°΅(~A)";
+            Text[ korean ] = "±Χ·΅ΗΘΏ΅ Ώ¬°α Γί°΅";
             Text[ turkish ] = "Baπlantύyύ grafiπe ekle";
             Text[ language_user1 ] = " ";
         };
@@ -428,7 +428,7 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Ρξυπΰνθςό πθρσνξκ...";
             Text[ polish ] = "Zapisz grafikκ...";
             Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ•Ϋ‘¶...";
-            Text[ chinese_traditional ] = "ΐx¦sΉΟ¤ω(~S)...";
+            Text[ chinese_traditional ] = "ΐx¦sΉΟ§Ξ(~S)...";
             Text[ arabic ] = "...ΝέΩ ΗαΥζΡΙ";
             Text[ dutch ] = "Afbeelding ops~laan...";
             Text[ chinese_simplified ] = "΄ζΕΜΝΌΠΞ(~S)...";
@@ -472,7 +472,7 @@ Menu MN_READONLY_POPUP
                         Text[ dutch ] = "Als koppeling";
                         Text[ chinese_simplified ] = "Α΄½Σ";
                         Text[ greek ] = "Ως σύνδεση";
-                        Text[ korean ] = "Ώ¬°α·Ξ";
+                        Text[ korean ] = "ΈµΕ©·ΞΌ­";
                         Text[ turkish ] = "Baπlantύ olarak";
                     };
                     MenuItem
@@ -519,7 +519,7 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Δξαΰβθςό πθρσνξκ";
             Text[ polish ] = "Dodaj grafikκ";
             Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ’Η‰Α";
-            Text[ chinese_traditional ] = "·sΌWΉΟ¤ω(~D)";
+            Text[ chinese_traditional ] = "·sΌWΉΟ§Ξ(~D)";
             Text[ arabic ] = "ΕΦΗέΙ ΡΣζγ";
             Text[ dutch ] = "Afbeelding t~oevoegen";
             Text[ chinese_simplified ] = "ΠΒΤφΝΌΠΞ(~D)";
@@ -590,7 +590,7 @@ Menu MN_READONLY_POPUP
                         Text[ dutch ] = "Als koppeling";
                         Text[ chinese_simplified ] = "Α΄½Σ";
                         Text[ greek ] = "Ως σύνδεση";
-                        Text[ korean ] = "Ώ¬°α·Ξ";
+                        Text[ korean ] = "ΈµΕ©·ΞΌ­";
                         Text[ turkish ] = "Baπlantύ olarak";
                         Text[ language_user1 ] = " ";
                     };
@@ -672,7 +672,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Koppeling kopiλren";
             Text[ chinese_simplified ] = "Έ΄ΦΖΑ΄½Σ(~L)";
             Text[ greek ] = "Αντιγραφή ~σύνδεσης";
-            Text[ korean ] = "Ώ¬°α ΊΉ»η(~L)";
+            Text[ korean ] = "ΈµΕ© ΊΉ»η";
             Text[ turkish ] = "Baπlantύyύ kopyala";
             Text[ language_user1 ] = " ";
         };
@@ -698,12 +698,12 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Κξοθπξβΰςό πθρσνξκ";
             Text[ polish ] = "Kopiuj grafikκ";
             Text[ japanese ] = "ΈήΧΜ¨―Έ‚ΜΊΛί°(~G)";
-            Text[ chinese_traditional ] = "½Ζ»sΉΟ¤ω(~G)";
+            Text[ chinese_traditional ] = "½Ζ»sΉΟ§Ξ(~G)";
             Text[ arabic ] = "δΣΞ ΗαΥζΡΙ";
             Text[ dutch ] = "Afbeelding ko~piλren";
             Text[ chinese_simplified ] = "Έ΄ΦΖΝΌΠΞ(~G)";
             Text[ greek ] = "Αντιγραφή γραφι~κών";
-            Text[ korean ] = "±Χ·΅ΗΘ ΊΉ»η(~G)";
+            Text[ korean ] = "±Χ·΅ΗΘ ΊΉ»η";
             Text[ turkish ] = "Grafiπi kopyala";
             Text[ language_user1 ] = " ";
         };
@@ -727,7 +727,7 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Ηΰγπσηθςό πθρσνκθ";
             Text[ polish ] = "Za³aduj grafiki";
             Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ“Η‚έ‚έ(~L)";
-            Text[ chinese_traditional ] = "Έό¤JΉΟ¤ω";
+            Text[ chinese_traditional ] = "Έό¤JΉΟ§Ξ";
             Text[ arabic ] = "ΚΝγνα ΗαΥζΡ";
             Text[ dutch ] = "A~fbeeldingen laden";
             Text[ chinese_simplified ] = "Χ°ΘλΝΌΠΞ";
@@ -755,12 +755,12 @@ Menu MN_READONLY_POPUP
             Text[ russian ] = "Ξςκλώχθςό πθρσνκθ";
             Text[ polish ] = "Wy³Ήcz grafiki";
             Text[ japanese ] = "ΈήΧΜ¨―Έ‚Μ”ρ•\\¦(~O)";
-            Text[ chinese_traditional ] = "Ατ¤JΉΟ¤ω";
+            Text[ chinese_traditional ] = "Ατ¤JΉΟ§Ξ";
             Text[ arabic ] = "ΕΞέΗΑ ΗαΥζΡ";
             Text[ dutch ] = "~Afbeeldingen uitschakelen";
             Text[ chinese_simplified ] = "ÒώΘλΝΌΠΞ";
             Text[ greek ] = "~Απενεργοποίηση γραφικών";
-            Text[ korean ] = "±Χ·΅ΗΘ ΄έ±β";
+            Text[ korean ] = "±Χ·΅ΗΘ ΐϋΏλΗΨΑ¦";
             Text[ turkish ] = "Grafikleri kapat";
             Text[ language_user1 ] = " ";
         };
@@ -789,7 +789,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~PlugIns uitschakelen";
             Text[ chinese_simplified ] = "Κ§»ξ ~Plug-In";
             Text[ greek ] = "Απενεργοποίηση συνδεόμενων υ~πομονάδων";
-            Text[ korean ] = "ΗΓ·―±ΧΐΞ ΑΎ·α";
+            Text[ korean ] = "ΗΓ·―±ΧΐΞ ΐϋΏλΗΨΑ¦";
             Text[ turkish ] = "Plug-in'leri kapat";
             Text[ language_user1 ] = " ";
         };
@@ -813,12 +813,12 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ russian ] = "έκροξπς πθρσνκΰ";
     Text[ polish ] = "Eksport grafiki";
     Text[ japanese ] = "ΈήΧΜ¨―Έ΄Έ½Ξί°Δ";
-    Text[ chinese_traditional ] = "ΉΟ¤ω-Ώι¥X";
+    Text[ chinese_traditional ] = "Ώι¥XΉΟ§Ξ";
     Text[ arabic ] = "ΚΥΟνΡ ΥζΡ";
     Text[ dutch ] = "Afbeelding exporteren";
     Text[ chinese_simplified ] = "ΝΌΠΞ-Κδ³φ";
     Text[ greek ] = "Εξαγωγή γραφικών";
-    Text[ korean ] = "±Χ·΅ΗΘ ΊΈ³»±β";
+    Text[ korean ] = "±Χ·΅ΗΘ ³»ΊΈ³»±β";
     Text[ turkish ] = "Grafik ver";
     Text[ language_user1 ] = " ";
 };
@@ -839,12 +839,12 @@ String STR_CHAIN_OK
     Text[ russian ] = "Νΰζμθςε λεβσώ κλΰβθψσ μϋψθ δλÿ ρβÿηθ πΰμκθ.";
     Text[ polish ] = "Kliknij lewy przycisk myszy, by po³Ήczyζ ramki.";
     Text[ japanese ] = "g‚π‚Β‚Θ‚®‚½‚ί‚Ι¶‚ΜΟ³½Ξήΐέ‚πΈΨ―Έ‚µ‚Δ‰Ί‚³‚Ά";
-    Text[ chinese_traditional ] = "½Π±z«φ¥H¤U·ΖΉ«ªΊ¥ªΑδ΅M³sµ²°T®Ψ΅C";
+    Text[ chinese_traditional ] = "½Π±z«φ·ΖΉ«¥ªΑδ΅M³sµ²°T®Ψ΅C";
     Text[ arabic ] = ".ΗδήΡ ΘΗαÒΡ ΗαΓνΣΡ ααγΗζΣ αΡΘΨ ΗαίζΗΟΡ";
     Text[ dutch ] = "Gebruik de linker muistoets om het kader te koppelen.";
     Text[ chinese_simplified ] = "ΗλΔϊΝ¨Ήύ°΄»χΚσ±κΧσΌόΐ΄Α¬½ΣΏς΅£";
     Text[ greek ] = "Πατήστε το αριστερό πλήκτρο του ποντικιού για να συνδεθούν τα περιγράμματα.";
-    Text[ korean ] = "ΗΑ·ΉΐΣΏ΅ Ώ¬°αΗΟ±β ΐ§ΗΨΌ­ ΏήΒΚ Έ¶Ώμ½Ί ΉφΖ°ΐ» Ε¬Έ―ΗΟΌΌΏδ.";
+    Text[ korean ] = "ΗΑ·ΉΐΣΏ΅ Ώ¬°αΗΟ±β ΐ§ΗΨ ΏήΒΚ Έ¶Ώμ½Ί ΉφΖ°ΐ» Ε¬Έ―ΗΟ½Κ½ΓΏΐ.";
     Text[ turkish ] = "Ηerηeveler arasύ baπlantύ oluώturmak iηin sol fare tuώunu kullanύn.";
     Text[ language_user1 ] = " ";
 };
@@ -870,7 +870,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ dutch ] = "Het doelkader is niet leeg.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς²»ΚΗΏΥµΔ΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού δεν είναι κενό.";
-    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΜ ΊρΎξΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ ΊρΎξΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Hedef ηerηeve boώ deπil.";
     Text[ language_user1 ] = " ";
 };
@@ -896,7 +896,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ dutch ] = "Het doelkader is reeds gekoppeld.";
     Text[ chinese_simplified ] = "ÒΡΎ­Α΄½ΣΔΏ±κΏς΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού είναι ήδη συνδεδεμένο.";
-    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΜ ΐΜΉΜ Ώ¬°α µΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ ΐΜΉΜ Ώ¬°α µΗΎξ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Hedef ηerηeve baπlantύsύ oluώturulmuώ durumda.";
     Text[ language_user1 ] = " ";
 };
@@ -922,7 +922,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ dutch ] = "Het bronkader staat in een bereik waarin geen koppeling mogelijk is.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς΄¦ΣΪÒ»ΈφΞή·¨Α΄½ΣµΔΗψΣς΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού βρίσκεται σε μια περιοχή στην οποία είναι αδύνατον να δημιουργηθεί μία σύνδεση.";
-    Text[ korean ] = "Ώ¬°αΐ»  ΐ§ΗΡ ΈρΗ¥ ΗΑ·ΉΐΣΐΜ ΐ―ΘΏΗΟΑφ ΎΚΐΊ ΏµΏªΏ΅ ΐΦ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ΅΅Ώ¬°αΐΜ  ΊÒ°΅΄ΙΗΡ΅΅ΏµΏªΏ΅ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Hedef ηerηeve baπlantύ oluώturulamayacak bir alanda bulunuyor.";
     Text[ language_user1 ] = " ";
 };
@@ -948,7 +948,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ dutch ] = "Op de actuele positie kan geen doelkader worden gevonden.";
     Text[ chinese_simplified ] = "ΤΪµ±Η°µΔΞ»ΦΓΓ»ΣΠΥÒµ½ΔΏ±κΏς΅£";
     Text[ greek ] = "Δεν είναι δυνατόν να βρεθεί πλαίσιο προορισμού στην τρέχουσα θέση.";
-    Text[ korean ] = "ΗφΐηΐΗ ΐ§Δ΅Ώ΅Ό­ ΈρΗ¥ ΗΑ·ΉΐΣΐΜ Ήί°ίµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΗφΐηΐΗ ΐ§Δ΅Ώ΅Ό­ ΈρΗ¥ ΗΑ·ΉΐΣΐ»΅΅Γ£ΐ»Όφ΅΅Ύψ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Yόrόrlόkteki konumda hedef ηerηeve bulunamύyor.";
     Text[ language_user1 ] = " ";
 };
@@ -974,7 +974,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ dutch ] = "Het bronkader is reeds basis van een koppeling.";
     Text[ chinese_simplified ] = "ΥβΈφΐ΄Τ΄ΏςÒΡΎ­ΚΗÒ»ΈφΑ΄½ΣµΔΐ΄Τ΄Ώς΅£";
     Text[ greek ] = "Το πλαίσιο προέλευσης είναι ήδη η προέλευση μιας σύνδεσης.";
-    Text[ korean ] = "ΌÒ½Ί ΗΑ·ΉΐΣΐΊ ΐΜΉΜΏ¬°α ΐΗ ΌÒ½ΊΐΤ΄Ο΄Ω.";
+    Text[ korean ] = "ΌÒ½Ί ΗΑ·ΉΐΣΐΊ ΐΜΉΜΏ¬°αΐΗ ΌÒ½ΊΐΤ΄Ο΄Ω.";
     Text[ turkish ] = "Kaynak ηerηeve zaten bir baπlantύ zincirinin kaynaπύ.";
     Text[ language_user1 ] = " ";
 };
@@ -1130,7 +1130,7 @@ String STR_REDLINE_FMTCOLL
     Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
     Text[ chinese_simplified ] = "Ιθ¶¨¶ΞΒδΡωΚ½";
     Text[ greek ] = "Καθορίστηκε πρότυπο παραγράφου";
-    Text[ korean ] = "΄ά¶τ ΐ―Ηό ΑύΗΥ";
+    Text[ korean ] = "΄ά¶τ ΐ―Ηό Ό³Α¤";
     Text[ turkish ] = "Paragraf ώablonu belirlendi";
     Text[ language_user1 ] = " ";
 };
@@ -1209,7 +1209,7 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ΚδΘλΉβ±κ»ςΡ΅ΦΠµΘΔΪΘέΚΗÒ»ΈφΚά±£»¤µΔ΅£\nΞή·¨ΈόΈΔ·ΐΈ²Π΄µΔΔΪΘέ΅£";
     MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποποιήσεις.";
-    MESSAGE[ korean ] = "ΐΠ±β ΐόΏλ ³»ΏλΐΊ Ί―°ζµΙ Όφ Ύψ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΙ Όφ Ύψ½ΐ΄Ο΄Ω.";
+    MESSAGE[ korean ] = "Ύ²±β΅΅Έ¶Ε©΅΅¶Η΄Β΅΅Ό±ΕΓΐΊ΅΅ΊΈΘ£µΘ΅΅ΐ§Δ΅Ώ΅΅΅ΐΦ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΗΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Salt okunur bir iηerik deπiώtirilemez.\nYapύlan deπiώiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
 };
