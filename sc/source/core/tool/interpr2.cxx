@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:06:05 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1578,7 +1578,7 @@ void ScInterpreter::ScBackSolver()
                 if ( bTempCell )
                 {
                     if ( bHasNote )
-                        pVCell = new ScNoteCell( aNote );
+                        pVCell = new ScNoteCell( aNote, pDok );
                     else
                         pVCell = NULL;
                     pDok->PutCell( aVAdr, pVCell );
