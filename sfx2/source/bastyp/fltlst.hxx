@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-10-26 08:19:06 $
+ *  last change: $Author: rt $ $Date: 2001-11-08 09:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 //  includes
 //*****************************************************************************************************************
 #ifndef _SFX_FCONTNR_HXX
-#include <sfx2/fcontnr.hxx>
+#include <fcontnr.hxx>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
