@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:58:17 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "Choose a data source:";
         Text [ english_us ] = "Choose a data source:";
         Text[ portuguese ] = "Seleccionar fonte de dados:";
-        Text[ russian ] = "Выберите исходные данные:";
+        Text[ russian ] = "Выберите источник данных:";
         Text[ greek ] = "ЕрйлЭофе мйб рспЭлехуз дедпмЭнщн:";
         Text[ dutch ] = "Kies een gegevensbron:";
         Text[ french ] = "Choisissez une source de donnйes :";
@@ -173,7 +173,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ french ] = "Gйrer..." ;
         Text [ dutch ] = "Beheren..." ;
         Text[ chinese_simplified ] = "з®Ўзђ†...";
-        Text[ russian ] = "Организовать...";
+        Text[ russian ] = "Настройка...";
         Text[ polish ] = "Zarz№dzaj...";
         Text[ japanese ] = "з®Ўзђ†...";
         Text[ chinese_traditional ] = "з®Ўзђ†...";
@@ -183,7 +183,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ turkish ] = "Yцnet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Organitza...";
-        Text[ finnish ] = "Jдrjestд";
+        Text[ finnish ] = "Jдrjestд...";
         Text[ thai ] = "аё€аё±аё”аёЃаёІаёЈ...";
     };
     String STR_LOCAL_DATASOURCES
@@ -202,7 +202,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ spanish ] = "fuentes de datos locales" ;
         Text [ english_us ] = "local data sources" ;
         Text[ chinese_simplified ] = "жњ¬жњєзљ„ж•°жЌ®жєђ";
-        Text[ russian ] = "локальные исходные данные";
+        Text[ russian ] = "локальные источники данных";
         Text[ polish ] = "lokalne џrуdіa danych";
         Text[ japanese ] = "гѓ­гѓјг‚«гѓ«гѓ‡гѓјг‚їг‚Ѕгѓјг‚№";
         Text[ chinese_traditional ] = "жњ¬ж©џзљ„иі‡ж–™жєђ";
@@ -219,9 +219,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
         Text[ portuguese ] = "Ou foi impossнvel carregar a biblioteca #lib# do programa ou esta estб com defeito. A configuraзгo da fonte de dados ODBC nгo estб disponнvel.";
-        Text[ russian ] = "Библиотека программы #lib# не загружается или она повреждена. Выбор исходных данных ODBC недоступен.";
+        Text[ russian ] = "Невозможно загрузить библиотеку программы #lib# (вероятно она повреждена). Выбор источника данных ODBC недоступен.";
         Text[ greek ] = "З вйвлйпиЮкз фпх рспгсЬммбфпт #lib# ден Юфбн дхнбфьн нб цпсфщиеЯ Ю еЯнбй елбффщмбфйкЮ. З дйбмьсцщуз фщн рспелеэуещн фщн дедпмЭнщн фпх ODBC ден ? ";
-        Text[ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
+        Text[ dutch ] = "De programmabibliotheek #lib# kan niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
         Text[ french ] = "La bibliothиque de programme #lib# n'a pas pu кtre chargйe ou est dйfectueuse. La configuration de la source de donnйes ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizбs estй daсada. La configuraciуn de fuente de datos ODBC no estб disponible.";
         Text[ italian ] = "Impossibile caricare la libreria programma #lib# oppure и difettosa. La configurazione della sorgente dati ODBC non и disponibile.";
@@ -246,6 +246,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2002/09/05 13:58:17  kz
+ *  Merge SRX643: 05.09.02 - 15:54:59
+ *
  *  Revision 1.30  2002/08/19 07:47:22  oj
  *  #99473# change string resource files
  *
