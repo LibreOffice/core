@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-30 07:07:22 $
+ *  last change: $Author: rt $ $Date: 2001-11-01 21:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "å…ˆç·¨è¼¯å±¬æ€§(~E)";
         Text[ arabic ] = "ÊÍÑíÑ ÎÕÇÆÕ ÇáãÓÊäÏ ŞÈá ÇáÍİÙ";
         Text[ greek ] = "Åğåîåñã. ~éäéïôŞôùí åããñÜöïõ ğñéí ôçí áğïèŞêåõóç";
-        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ì •ë³´ ì‚¬ì „ í¸ì§‘(~E)";
+        Text[ korean ] = "ë¬¸ì„œ ë“±ë¡ì •ë³´ ë¯¸ë¦¬ í¸ì§‘(~E)";
         Text[ turkish ] = "Önce özellikleri düzenle";
         Text[ catalan ] = "Edi~tar propiedades previamente";
     };
@@ -233,7 +233,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ chinese_traditional ] = "è‡ªå‹•è£½ä½œå®‰å…¨å‚™ä»½(~W)";
         Text[ arabic ] = "Úãá äÓÎÉ ÇÍÊíÇØíÉ ÏæãÇğ";
         Text[ greek ] = "ĞÜíôá äçìéïõñãßá áíôéãñÜöïõ á~óöáëåßáò";
-        Text[ korean ] = "í•­ìƒ ë°±ì—… ë³µì‚¬í•˜ê¸°(~W)";
+        Text[ korean ] = "í•­ìƒ ë°±ì—… ë³µì‚¬(~W)";
         Text[ turkish ] = "~Her zaman yedekle";
         Text[ catalan ] = "Cre~ar siempre copia de seguridad";
     };
@@ -345,23 +345,23 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 260 - 12 - 12 , 8 ) ;
         Text = "XML-Format auf Größe optimieren (ohne Pretty Printing)" ;
         Text [ english ] = "Size optimization for XML format (no pretty printing)" ;
-        Text [ english_us ] = "Size optimization for XML files (no pretty printing)" ;
+        Text [ english_us ] = "Size optimization for XML format (no pretty printing)" ;
         Text[ portuguese ] = "Size optimization for XML files (no pretty printing)";
         Text[ russian ] = "Size optimization for XML files (no pretty printing)";
         Text[ greek ] = "Size optimization for XML files (no pretty printing)";
         Text[ dutch ] = "Grootte van ~XML-bestanden optimaliseren (zonder Pretty Printing)";
-        Text[ french ] = "Optimisation de la taille pour les fichiers ~XML (sans pretty printing)";
+        Text[ french ] = "Optimisation de la taille pour le format XML (sans pretty printing)";
         Text[ spanish ] = "Optimación del tamaño para los archivos ~XML (sin pretty printing)";
         Text[ finnish ] = "Size optimization for XML files (no pretty printing)";
         Text[ italian ] = "Size optimization for XML files (no pretty printing)";
         Text[ danish ] = "Size optimization for XML files (no pretty printing)";
-        Text[ swedish ] = "Storleksoptimering för ~XML-filer (utan pretty printing)";
+        Text[ swedish ] = "Storleksoptimering för XML-format (utan pretty printing)";
         Text[ polish ] = "Size optimization for XML files (no pretty printing)";
         Text[ portuguese_brazilian ] = "Size optimization for XML files (no pretty printing)";
-        Text[ japanese ] = "Size optimization for XML files (no pretty printing)";
+        Text[ japanese ] = "XML ï¾Œï½§ï½²ï¾™ï½»ï½²ï½½ï¾ã®æœ€é©åŒ–(pretty printing ãªã—)";
         Text[ korean ] = "Size optimization for XML files (no pretty printing)";
-        Text[ chinese_simplified ] = "Size optimization for XML files (no pretty printing)";
-        Text[ chinese_traditional ] = "Size optimization for XML files (no pretty printing)";
+        Text[ chinese_simplified ] = "æœ€ä½³åŒ– XML æ–‡ä»¶(æ—  Pretty Printing)";
+        Text[ chinese_traditional ] = "æœ€ä½³åŒ– XML æª”æ¡ˆ(ç„¡å‹å–„åˆ—å°)";
         Text[ turkish ] = "Size optimization for XML files (no pretty printing)";
         Text[ arabic ] = "Size optimization for XML files (no pretty printing)";
         Text[ catalan ] = "Size optimization for XML files (no pretty printing)";
@@ -469,7 +469,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ polish ] = "Domyœlny format pliku";
         Text[ portuguese_brazilian ] = "Standard file format";
         Text[ japanese ] = "æ¨™æº–ï¾Œï½§ï½²ï¾™å½¢å¼";
-        Text[ korean ] = "ê¸°ë³¸ íŒŒì¼ í¬ë§·";
+        Text[ korean ] = "ê¸°ë³¸ íŒŒì¼ í˜•ì‹";
         Text[ chinese_simplified ] = "æ ‡å‡†æ–‡ä»¶æ ¼å¼";
         Text[ chinese_traditional ] = "æ¨™æº–æª”æ¡ˆæ ¼å¼";
         Text[ turkish ] = "Standard file format";
@@ -691,10 +691,10 @@ TabPage RID_SFXPAGE_SAVE
         };
     StringList [ korean ] =
     {
-            < "ê¸€ã€€ë¬¸ì„œ" ;     APP_WRITER    ; > ;
+            < "ê¸€ ë¬¸ì„œ" ;     APP_WRITER    ; > ;
         < "HTMLí˜• ë¬¸ì„œ" ;    APP_WRITER_WEB;  > ;
-        < "í…Œì´ë¸” ë¬¸ì„œ" ; APP_CALC      ; > ;
-        < "ìŠ¬ë¼ì´ë“œì‡¼" ;     APP_IMPRESS   ; > ;
+        < "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ë¬¸ì„œ" ; APP_CALC      ; > ;
+        < "í”„ë¦¬ì  í…Œì´ì…˜" ;     APP_IMPRESS   ; > ;
         < "ê·¸ë¦¬ê¸°" ;        APP_DRAW      ; > ;
         < "ìˆ˜ì‹" ;           APP_MATH      ; > ;
         };
@@ -778,6 +778,26 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         "Sollen die Dateiformatänderungen übernommen werden?" ;
         Text [ English ] = "Saving with \"%1\" may cause information loss.\n"\
         "Should the changes be applied?" ;
+        Text[ english_us ] = "Using \"%1\" as default file format may cause information loss.\n";
+        Text[ portuguese ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ russian ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ greek ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ dutch ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ french ] = "L'application de \"%1\" comme format de fichier par défaut peut entraîner une perte d'information.\n";
+        Text[ spanish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ finnish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ italian ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ danish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ swedish ] = "Att använda \"%1\" som standarfilformat kan leda till att information går förlorad.\n";
+        Text[ polish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ portuguese_brazilian ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ japanese ] = "\"%1\" ã‚’æ¨™æº–ï¾Œï½§ï½²ï¾™æ›¸å¼ã¨ã—ã¦ä½¿ç”¨ã™ã‚‹ã¨ã€æƒ…å ±ãŒå¤±ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚\n";
+        Text[ korean ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ chinese_simplified ] = "å°† \"%1\" å½“æˆæ ‡å‡†æ–‡ä»¶æ ¼å¼æ¥å­˜ç›˜æ–‡ä»¶å¯èƒ½ä¼šå¼•èµ·æ•°æ®æµå¤±ã€‚\n";
+        Text[ chinese_traditional ] = "å°‡ \"%1\" ç•¶æˆæ¨™æº–æª”æ¡ˆæ ¼å¼ä¾†å„²å­˜æ–‡ä»¶å¯èƒ½æœƒå¼•èµ·è³‡æ–™æµå¤±ã€‚\n";
+        Text[ turkish ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ arabic ] = "Saving with \"%1\" may cause information loss.\n";
+        Text[ catalan ] = "Saving with \"%1\" may cause information loss.\n";
     };
 /*    CheckBox CB_DONT_SHOW_AGAIN
     {
@@ -799,6 +819,7 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Size = MAP_APPFONT( 50, 14 );
     };
 };
+
 
 
 
