@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:43:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
 #endif
 #ifndef _WLDCRD_HXX //autogen
 #include <tools/wldcrd.hxx>
@@ -645,7 +648,7 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void lcl_GroupAndClassify( SfxFilterMatcherIter& _rFilterMatcher, GroupedFilterList& _rAllFilters )
+    void lcl_GroupAndClassify( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rAllFilters )
     {
         _rAllFilters.clear();
 
@@ -843,7 +846,7 @@ namespace sfx2
 // =======================================================================
 
     //--------------------------------------------------------------------
-    sal_Bool lcl_hasAllFilesFilter( SfxFilterMatcherIter& _rFilterMatcher, String& /* [out] */ _rAllFilterName )
+    sal_Bool lcl_hasAllFilesFilter( TSortedFilterList& _rFilterMatcher, String& /* [out] */ _rAllFilterName )
     {
         ::rtl::OUString sUIName;
         sal_Bool        bHasAll = sal_False;
@@ -860,7 +863,7 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    void lcl_EnsureAllFilesEntry( SfxFilterMatcherIter& _rFilterMatcher, GroupedFilterList& _rFilters )
+    void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, GroupedFilterList& _rFilters )
     {
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         String sAllFilterName;
@@ -878,7 +881,7 @@ namespace sfx2
 
 #ifdef DISABLE_GROUPING_AND_CLASSIFYING
     //--------------------------------------------------------------------
-    void lcl_EnsureAllFilesEntry( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    void lcl_EnsureAllFilesEntry( TSortedFilterList& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
     {
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         String sAllFilterName;
@@ -971,7 +974,51 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void appendFiltersForSave( SfxFilterMatcherIter& _rFilterMatcher,
+    TSortedFilterList::TSortedFilterList(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration >& xFilterList)
+        : m_nIterator(0)
+    {
+        if (!xFilterList.is())
+            return;
+
+        m_lFilters.clear();
+        while(xFilterList->hasMoreElements())
+        {
+            ::comphelper::SequenceAsHashMap lFilterProps (xFilterList->nextElement());
+            ::rtl::OUString                 sFilterName  = lFilterProps.getUnpackedValueOrDefault(
+                                                             ::rtl::OUString::createFromAscii("Name"),
+                                                             ::rtl::OUString());
+            if (sFilterName.getLength())
+                m_lFilters.push_back(sFilterName);
+        }
+    }
+
+    //--------------------------------------------------------------------
+    const SfxFilter* TSortedFilterList::First()
+    {
+        m_nIterator = 0;
+        return impl_getFilter(m_nIterator);
+    }
+
+    //--------------------------------------------------------------------
+    const SfxFilter* TSortedFilterList::Next()
+    {
+        ++m_nIterator;
+        return impl_getFilter(m_nIterator);
+    }
+
+    //--------------------------------------------------------------------
+    const SfxFilter* TSortedFilterList::impl_getFilter(sal_Int32 nIndex)
+    {
+        if (nIndex<0 || nIndex>=(sal_Int32)m_lFilters.size())
+            return 0;
+        const ::rtl::OUString& sFilterName = m_lFilters[nIndex];
+        if (!sFilterName.getLength())
+            return 0;
+        return SfxFilter::GetFilterByName(String(sFilterName));
+    }
+
+    //--------------------------------------------------------------------
+    void appendFiltersForSave( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
                                ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
                                const ::rtl::OUString& _rFactory )
@@ -1043,7 +1090,7 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void appendExportFilters( SfxFilterMatcherIter& _rFilterMatcher,
+    void appendExportFilters( TSortedFilterList& _rFilterMatcher,
                               const Reference< XFilterManager >& _rxFilterManager,
                               ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
@@ -1203,7 +1250,7 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    void appendFiltersForOpen( SfxFilterMatcherIter& _rFilterMatcher,
+    void appendFiltersForOpen( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
                                ::rtl::OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
