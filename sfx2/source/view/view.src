@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:25:05 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,7 +598,7 @@ InfoBox MSG_CANT_CLOSE
     Message[ chinese_simplified ] = "ΔΏΗ°Ξή·¨ΉΨ±ΥΥβΈφΞΔΌώ£¬\nÒςΞªΥύΤΪΦ΄ΠΠÒ»Έφ΄ςΣ΅ΘΞΞρ΅£";
     Message[ russian ] = "Ηΰκπϋςό ύςξς δξκσμενς β νΰρςξÿωθι μξμενς νεβξημξζνξ,\nοξρκξλόκσ βϋοξλνÿεςρÿ εωε ξδνξ ηΰδΰνθε οεχΰςθ.";
     Message[ polish ] = "Dokumentu nie moΏna na razie zamknΉζ,\nponiewaΏ wykonywane jest polecenie wydruku.";
-    Message[ japanese ] = "σό’†‚Μ‚½‚ί\n΅Δή·­ÒέΔ‚π•Β‚¶‚ι‚±‚Ζ‚Ν‚Ε‚«‚ά‚Ή‚ρB";
+    Message[ japanese ] = "‚ά‚ΎσόΌή®Μή‚Μ—’†‚Ε‚·B\nΔή·­ÒέΔ‚π•Β‚¶‚ι‚±‚Ζ‚Ν‚Ε‚«‚ά‚Ή‚ρB";
     Message[ chinese_traditional ] = "¥Ώ¦b°υ¦ζ¤@­Σ¦C¦L¥τ°Θ΅A\n¦]¦ΉµLªkΓφ³¬³o­Σ¤ε¥σ΅C";
     Message[ greek ] = "Δεν είναι δυνατόν να κλείσετε αυτό το έγγραφο\n επειδή εκτελείται μια εργασία εκτύπωσης.";
     Message[ korean ] = "ΐΞΌβΐΫΎχΐΜ ΎΖΑχ ΑψΗΰΑίΐΜ±β ¶§Ή®Ώ΅ \n Ηφΐη Ή®Ό­Έ¦ ΄έΐ» Όφ Ύψ½ΐ΄Ο΄Ω.";
@@ -1007,7 +1007,7 @@ ErrorBox ERRBOX_SFX_NO_OUTBOX
     Message[ russian ] = "Δλÿ βϋαπΰννξγξ Βΰμθ δειρςβθÿ νεξαυξδθμΰ οΰοκΰ \"Ξςοπΰβλεννϋε\".\nΟπεζδε χεμ Βϋ οξβςξπθςε ύςσ ξοεπΰφθώ, ρξηδΰιςε, οξζΰλσιρςΰ, οΰοκσ \"Ξςοπΰβλεννϋε\".";
     Message[ polish ] = "Dla wybranej przez ciebie akcji potrzebna jest skrzynka nadawcza.\nProszκ utwσrz skrzynkκ nadawczΉ, zanim wykonasz ponownie tκ akcjκ.";
     Message[ japanese ] = "‘I‘π‚³‚κ‚½±ΈΌ®έ‚πΐs‚·‚ι‚Μ‚Ι‘—MΔΪ²‚ª•K—v‚Ε‚·B\n‚±‚Μ±ΈΌ®έ‚πΔΐs‚·‚ι‘O‚ΙA‘—MΔΪ²‚πi”[‚µ‚Δ‰Ί‚³‚ΆB";
-    Message[ chinese_traditional ] = "°υ¦ζ³o­ΣΎή§@­n¨D±z°tΈm¤@­Σ±H¥σ§X΅C\n½Π±z«Ψ¥ί¤@­Σ±H¥σ§X΅AµM¦Z¦b­«·s°υ¦ζ³o­Σ«ό¥O΅C";
+    Message[ chinese_traditional ] = "°υ¦ζ³o­Σ°Κ§@­n¨D±z°tΈm¤@­Σ±H¥σ§X΅C\n½Π±z«Ψ¥ί¤@­Σ±H¥σ§X΅AµM¦Z¦b­«·s°υ¦ζ³o­Σ°Κ§@΅C";
     Message[ greek ] = "Για να εκτελεστεί αυτή η ενέργεια απαιτείται ο φάκελος 'Εξερχόμενα'\nΠαρακαλώ δημιουργήστε αυτόν τον φάκελο πριν την επόμενη εκτέλεση αυτής της ενέργειας.";
     Message[ korean ] = "Ό±ΕΓΗΡ ΐΫΎχΏ΅΄Β ΊΈ³ΎΖνΑφΗΤΐΜ ΗΚΏδΗΥ΄Ο΄Ω. \nΐΜ ΐΫΎχΐ» ΐη½ΗΗΰΗΟ±β ΐόΏ΅ ΊΈ³ΎΖνΑφΗΤΐ» ΈΈµε½Κ½ΓΏΐ.";
     Message[ arabic ] = "ΚδένΠ ΗαΕΜΡΗΑ ΗαΠν ήγΚ ΘΗΞΚνΗΡε νΝΚΗΜ Εαμ ΣαΙ ΥΗΟΡΗΚ.\nΗαΡΜΗΑ ΕδΤΗΑ ΣαΙ ΥΗΟΡΗΚ΅ ήΘα γΝΗζαΙ ΚδένΠ εΠΗ ΗαΕΜΡΗΑ γΜΟΟΗπ.";
