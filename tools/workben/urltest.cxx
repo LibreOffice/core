@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:00:03 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 13:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,16 +140,18 @@ bool testRelToAbs(RelToAbsTest const * pTest, std::size_t nSize)
 {
     bool bSuccess = true;
     INetURLObject aBase;
+    String aTest;
     for (std::size_t i = 0; i < nSize; ++i)
     {
         if (pTest[i].m_pBase)
         {
             aBase.SetURL(pTest[i].m_pBase);
             if (!aBase.HasError())
-                printf("Base %s\n",
-                       ByteString(aBase.GetMainURL(INetURLObject::NO_DECODE),
-                                  RTL_TEXTENCODING_ISO_8859_1).
-                           GetBuffer());
+            {
+                aTest = aBase.GetMainURL(INetURLObject::NO_DECODE);
+                printf("Base %s\n", ByteString(aTest,
+                    RTL_TEXTENCODING_ISO_8859_1).GetBuffer());
+            }
         }
         if (aBase.HasError())
         {
@@ -159,8 +161,8 @@ bool testRelToAbs(RelToAbsTest const * pTest, std::size_t nSize)
         }
         INetURLObject aAbs;
         aBase.GetNewAbsURL(pTest[i].m_pRel, &aAbs);
-        ByteString aTheAbs(aAbs.GetMainURL(INetURLObject::NO_DECODE),
-                           RTL_TEXTENCODING_ISO_8859_1);
+        aTest = aAbs.GetMainURL(INetURLObject::NO_DECODE);
+        ByteString aTheAbs(aTest, RTL_TEXTENCODING_ISO_8859_1);
         if (aTheAbs.Equals(pTest[i].m_pAbs)
             || pTest[i].m_pAlt && aTheAbs.Equals(pTest[i].m_pAlt))
             printf("  ok %s -> %s\n", pTest[i].m_pRel, aTheAbs.GetBuffer());
@@ -225,23 +227,22 @@ bool testSetFSys(SetFSysTest const * pTest, std::size_t nSize)
         INetURLObject aUrl2;
         aUrl2.setFSysPath(aPath, pTest[i].m_eStyle);
         if (aUrl1.GetMainURL(INetURLObject::NO_DECODE).
-                      EqualsAscii(pTest[i].m_pUrl)
+                      equalsAscii(pTest[i].m_pUrl)
             && aUrl2.GetMainURL(INetURLObject::NO_DECODE).
-                         EqualsAscii(pTest[i].m_pUrl))
+                         equalsAscii(pTest[i].m_pUrl))
             printf("  ok %s %s -> %s\n",
                    ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
                    toString(pTest[i].m_eStyle), pTest[i].m_pUrl);
         else
         {
+            String aTestA = aUrl1.GetMainURL(INetURLObject::NO_DECODE);
+            String aTestB = aUrl2.GetMainURL(INetURLObject::NO_DECODE);
+
             printf(" BAD %s %s -> %s, %s (%s)\n",
                    ByteString(aPath, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
                    toString(pTest[i].m_eStyle),
-                   ByteString(aUrl1.GetMainURL(INetURLObject::NO_DECODE),
-                              RTL_TEXTENCODING_ISO_8859_1).
-                       GetBuffer(),
-                   ByteString(aUrl2.GetMainURL(INetURLObject::NO_DECODE),
-                              RTL_TEXTENCODING_ISO_8859_1).
-                       GetBuffer(),
+                   ByteString(aTestA, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
+                   ByteString(aTestB, RTL_TEXTENCODING_ISO_8859_1).GetBuffer(),
                    pTest[i].m_pUrl);
             bSuccess = false;
         }
@@ -271,7 +272,7 @@ public:
 void abbreviate(INetURLObject aObj)
 {
     star::uno::Reference< star::util::XStringWidth > xWidth(new StringWidth);
-    sal_Int32 nMax = aObj.GetMainURL(INetURLObject::NO_DECODE).Len() + 10;
+    sal_Int32 nMax = aObj.GetMainURL(INetURLObject::NO_DECODE).getLength() + 10;
     for (sal_Int32 i = -10; i <= nMax; ++i)
     {
         rtl::OString
@@ -499,15 +500,16 @@ main()
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i].in);
             else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         CompareToAscii(
+                         equalsAscii(
                              aTest[i].out == 0 ? aTest[i].in : aTest[i].out)
-                     != 0)
+                             != sal_True)
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s\n",
                        aTest[i].in,
-                       ByteString(aUrl.GetMainURL(
-                                      INetURLObject::DECODE_TO_IURI),
-                                  RTL_TEXTENCODING_ASCII_US).
-                           GetBuffer());
+                       ByteString(sTest, RTL_TEXTENCODING_ASCII_US).
+                       GetBuffer());
+            }
         }
     }
 
@@ -530,13 +532,13 @@ main()
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
             else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         CompareToAscii(aTest[i]) != 0)
+                         equalsAscii(aTest[i]) != sal_True)
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(
-                                      INetURLObject::DECODE_TO_IURI),
-                                  RTL_TEXTENCODING_ASCII_US).
-                           GetBuffer());
+                       ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+            }
         }
     }
 
@@ -557,13 +559,13 @@ main()
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
             else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         CompareToAscii(aTest[i]) != 0)
+                         equalsAscii(aTest[i]) != sal_True)
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(
-                                      INetURLObject::DECODE_TO_IURI),
-                                  RTL_TEXTENCODING_ASCII_US).
-                           GetBuffer());
+                       ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+            }
         }
     }
 
@@ -582,13 +584,13 @@ main()
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
             else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         CompareToAscii(aTest[i]) != 0)
+                         equalsAscii(aTest[i]) != sal_True)
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s\n",
                        aTest[i],
-                       ByteString(aUrl.GetMainURL(
-                                      INetURLObject::DECODE_TO_IURI),
-                                  RTL_TEXTENCODING_ASCII_US).
-                           GetBuffer());
+                       ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+            }
         }
     }
 
@@ -1128,15 +1130,16 @@ main()
                 ? !aUrl.HasError()
                 : (aUrl.HasError()
                    || (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                           CompareToAscii(aTest[i].m_pOutput)
-                       != 0)))
+                           equalsAscii(aTest[i].m_pOutput)
+                       != sal_True)))
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s != %s\n",
                        aTest[i].m_pInput,
                        aUrl.HasError() ? "<none>"
-                       : ByteString(aUrl.GetMainURL(
-                                        INetURLObject::DECODE_TO_IURI),
-                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       : ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
+            }
         }
     }
 
@@ -1159,15 +1162,16 @@ main()
                 ? !aUrl.HasError()
                 : (aUrl.HasError()
                    || (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                           CompareToAscii(aTest[i].m_pOutput)
-                       != 0)))
+                           equalsAscii(aTest[i].m_pOutput)
+                       != sal_True)))
+            {
+                String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s != %s\n",
                        aTest[i].m_pInput,
                        aUrl.HasError() ? "<none>"
-                       : ByteString(aUrl.GetMainURL(
-                                        INetURLObject::DECODE_TO_IURI),
-                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       : ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].m_pOutput == 0 ? "<none>" : aTest[i].m_pOutput);
+            }
         }
     }
 
@@ -1296,15 +1300,16 @@ main()
                      ? !aUri.HasError()
                      : (aUri.HasError()
                         || (aUri.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                                CompareToAscii(aTest[i].pUri)
-                            != 0)))
+                                equalsAscii(aTest[i].pUri)
+                            != sal_True)))
+            {
+                String sTest(aUri.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD ConcatData(%d, ..., %s) -> %s != %s\n",
                        static_cast< int >(aTest[i].eScheme), aTest[i].pPath,
                        aUri.HasError() ? "<none>"
-                       : ByteString(aUri.GetMainURL(
-                                        INetURLObject::DECODE_TO_IURI),
-                                    RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       : ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].pUri == 0 ? "<none>" : aTest[i].pUri);
+            }
         }
     }
 
