@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:20:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 
 #include "app.hrc"
 #include "strings.hrc"
+#include "glob.hrc"
 
 #include "app.hxx"
 #include "animobjs.hxx"
@@ -857,6 +858,30 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             }
 
             GetViewFrame()->GetBindings().Invalidate(SID_LAYER_DIALOG_WIN);
+            Cancel();
+            rReq.Ignore ();
+        }
+        break;
+
+        case SID_DISPLAY_MASTER_BACKGROUND:
+        case SID_DISPLAY_MASTER_OBJECTS:
+        {
+            // Determine current page and toggle visibility of layers
+            // associated with master page background or master page shapes.
+            SdPage* pPage = GetActualPage();
+            if (pPage != NULL
+                && GetDoc() != NULL)
+            {
+                SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
+                BYTE aLayerId;
+                if (nSId == SID_DISPLAY_MASTER_BACKGROUND)
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
+                else
+                    aLayerId = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+                aVisibleLayers.Set(aLayerId, !aVisibleLayers.IsSet(aLayerId));
+                pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
+            }
             Cancel();
             rReq.Ignore ();
         }
