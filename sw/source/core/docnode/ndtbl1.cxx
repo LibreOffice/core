@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:02:29 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
+#endif
+#ifndef _FMTTSPLT_HXX //autogen
+#include <fmtlsplt.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _TABCOL_HXX //autogen
 #include <tabcol.hxx>
@@ -284,7 +290,7 @@ BOOL _FindLine( const _FndLine*& rpLine, void* pPara )
     return TRUE;
 }
 
-void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
+void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor, bool bRemoveLines )
 {
     //Zuerst die selektierten Boxen einsammeln.
     SwSelBoxes aBoxes;
@@ -304,19 +310,22 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
     const _FndBox *pTmp = &aFndBox;
     ::_FindBox( pTmp, &aPara );
 
-    //Jetzt die Lines entfernen, die von einer gemeinsamen uebergeordneten Line
-    //erfasst werden.
-    for ( USHORT i = 0; i < rArr.Count(); ++i )
+    // Remove lines, that have a common superordinate row.
+    // (Not for row split)
+    if ( bRemoveLines )
     {
-        SwTableLine *pUpLine = (SwTableLine*)rArr[i];
-        for ( USHORT k = 0; k < rArr.Count(); ++k )
+        for ( USHORT i = 0; i < rArr.Count(); ++i )
         {
-            if ( k != i && ::lcl_IsAnLower( pUpLine, (SwTableLine*)rArr[k] ) )
+            SwTableLine *pUpLine = (SwTableLine*)rArr[i];
+            for ( USHORT k = 0; k < rArr.Count(); ++k )
             {
-                rArr.Remove( k );
-                if ( k <= i )
-                    --i;
-                --k;
+                if ( k != i && ::lcl_IsAnLower( pUpLine, (SwTableLine*)rArr[k] ) )
+                {
+                    rArr.Remove( k );
+                    if ( k <= i )
+                        --i;
+                    --k;
+                }
             }
         }
     }
@@ -324,9 +333,7 @@ void lcl_CollectLines( SvPtrarr &rArr, const SwCursor& rCursor )
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
-
-void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
+void lcl_ProcessRowAttr( SvPtrarr& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
 {
     SwFrmFmt *pNewFmt;
     if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
@@ -338,6 +345,26 @@ void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSi
         pNew->SetAttr( rNew );
         rFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), rFmtCmp.Count());
     }
+}
+
+//-----------------------------------------------------------------------------
+
+void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
+
+void lcl_ProcessRowSize( SvPtrarr &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
+{
+    lcl_ProcessRowAttr( rFmtCmp, pLine, rNew );
+/*
+    SwFrmFmt *pNewFmt;
+    if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
+        pLine->ChgFrmFmt( (SwTableLineFmt*)pNewFmt );
+    else
+    {
+        SwFrmFmt *pOld = pLine->GetFrmFmt();
+        SwFrmFmt *pNew = pLine->ClaimFrmFmt();
+        pNew->SetAttr( rNew );
+        rFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), rFmtCmp.Count());
+    }                                           */
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
     for ( USHORT i = 0; i < rBoxes.Count(); ++i )
         ::lcl_ProcessBoxSize( rFmtCmp, rBoxes[i], rNew );
@@ -357,6 +384,69 @@ void lcl_ProcessBoxSize( SvPtrarr &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize
     }
 }
 
+//-----------------------------------------------------------------------------
+
+/******************************************************************************
+ *              void SwDoc::SetRowSplit()
+ ******************************************************************************/
+void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
+{
+    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    if( pTblNd )
+    {
+        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
+        ::lcl_CollectLines( aRowArr, rCursor, false );
+
+        if( aRowArr.Count() )
+        {
+            if( DoesUndo() )
+            {
+                ClearRedo();
+                AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+            }
+
+            SvPtrarr aFmtCmp( Max( BYTE(255), BYTE(aRowArr.Count()) ), 255 );
+
+            for( USHORT i = 0; i < aRowArr.Count(); ++i )
+                ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
+
+            SwTblFmtCmp::Delete( aFmtCmp );
+            SetModified();
+        }
+    }
+}
+
+
+/******************************************************************************
+ *               SwTwips SwDoc::GetRowSplit() const
+ ******************************************************************************/
+void SwDoc::GetRowSplit( const SwCursor& rCursor, SwFmtRowSplit *& rpSz ) const
+{
+    rpSz = 0;
+
+    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    if( pTblNd )
+    {
+        SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
+        ::lcl_CollectLines( aRowArr, rCursor, false );
+
+        if( aRowArr.Count() )
+        {
+            rpSz = &(SwFmtRowSplit&)((SwTableLine*)aRowArr[0])->
+                                                GetFrmFmt()->GetRowSplit();
+
+            for ( USHORT i = 1; i < aRowArr.Count() && rpSz; ++i )
+            {
+                if ( (*rpSz).GetValue() != ((SwTableLine*)aRowArr[i])->GetFrmFmt()->GetRowSplit().GetValue() )
+                    rpSz = 0;
+            }
+            if ( rpSz )
+                rpSz = new SwFmtRowSplit( *rpSz );
+        }
+    }
+}
+
+
 /******************************************************************************
  *              void SwDoc::SetRowHeight( SwTwips nNew )
  ******************************************************************************/
@@ -366,7 +456,7 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
     if( pTblNd )
     {
         SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
-        ::lcl_CollectLines( aRowArr, rCursor );
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
         {
@@ -398,7 +488,7 @@ void SwDoc::GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const
     if( pTblNd )
     {
         SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
-        ::lcl_CollectLines( aRowArr, rCursor );
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
         {
@@ -423,7 +513,7 @@ BOOL SwDoc::BalanceRowHeight( const SwCursor& rCursor, BOOL bTstOnly )
     if( pTblNd )
     {
         SvPtrarr aRowArr( 25, 50 ); //Zum sammeln der Lines.
-        ::lcl_CollectLines( aRowArr, rCursor );
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( 1 < aRowArr.Count() )
         {
@@ -472,7 +562,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
     if( pTblNd )
     {
         SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
-        ::lcl_CollectLines( aRowArr, rCursor );
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
         {
@@ -486,6 +576,8 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
 
             for( USHORT i = 0; i < aRowArr.Count(); ++i )
             {
+                ::lcl_ProcessRowAttr( aFmtCmp, (SwTableLine*)aRowArr[i], rNew );
+/*
                 SwTableLine *pLine = (SwTableLine*)aRowArr[i];
 
                 SwFrmFmt *pNewFmt;
@@ -498,7 +590,7 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
                     SwFrmFmt *pNew = pLine->ClaimFrmFmt();
                     pNew->SetAttr( rNew );
                     aFmtCmp.Insert( new SwTblFmtCmp( pOld, pNew, 0 ), aFmtCmp.Count());
-                }
+                }*/
             }
 
             SwTblFmtCmp::Delete( aFmtCmp );
@@ -517,7 +609,7 @@ BOOL SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
     if( pTblNd )
     {
         SvPtrarr aRowArr( 25, 50 ); //Zum sammeln Lines.
-        ::lcl_CollectLines( aRowArr, rCursor );
+        ::lcl_CollectLines( aRowArr, rCursor, true );
 
         if( aRowArr.Count() )
         {
