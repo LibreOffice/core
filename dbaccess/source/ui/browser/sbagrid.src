@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-25 20:29:44 $
+ *  last change: $Author: kz $ $Date: 2001-10-31 21:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "ζ¬„ζ ΌεΌ(~F)...";
             Text[ arabic ] = "ΚδΣνή ΗαΓΪγΟΙ...";
             Text[ greek ] = "Μορ~φοποίηση στήλης...";
-            Text[ korean ] = "μ—΄ ν¬λ§·ν…(~F)...";
+            Text[ korean ] = "μ—΄ ν•μ‹ μ§€μ •(~F)...";
             Text[ turkish ] = "Sόtun formatύ...";
             Text[ catalan ] = "~Format de la columna...";
         };
@@ -184,7 +184,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ chinese_traditional ] = "ε·¥δ½θ΅¨ζ ΌεΌ...";
             Text[ arabic ] = "ΚδΣνή ΗαΜΟζα...";
             Text[ greek ] = "Μορφοποίηση πίνακα...";
-            Text[ korean ] = "ν‘ ν¬λ§·ν…...";
+            Text[ korean ] = "μ‹νΈ μ„μ‹ μ§€μ •...";
             Text[ turkish ] = "Tablo formatύ...";
             Text[ catalan ] = "Format de la taula...";
             Text[ finnish ] = "~Taulukon muotoilu";
@@ -237,7 +237,7 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ polish ] = "Cofniκcie: wpisywania danych";
     Text[ portuguese_brazilian ] = "Undo: input data";
     Text[ japanese ] = "ε…ƒγ«ζ»γ™: οΎƒοΎο½°οΎ€γ®ε…¥ε›";
-    Text[ korean ] = "μ‹¤ν–‰μ·¨μ†: λ°μ΄ν„° μ…λ ¥";
+    Text[ korean ] = "μ‹¤ν–‰ μ·¨μ†: λ°μ΄ν„° μ…λ ¥";
     Text[ chinese_simplified ] = "ζ’¤ι”€ε‘½δ»¤οΌθΎ“ε…¥ζ•°ζ®";
     Text[ chinese_traditional ] = "εΎ©εοΌθΌΈε…¥θ³‡ζ–™";
     Text[ arabic ] = "ΚΡΗΜΪ: ΕΟΞΗα ΘνΗδΗΚ";
@@ -268,7 +268,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ dutch ] = "Actuele record opslaan";
     Text[ chinese_simplified ] = "ε­η›ε½“ε‰η„ζ•°ζ®ζ΅η›®";
     Text[ greek ] = "Αποθήκευση τρέχουσας εγγραφής";
-    Text[ korean ] = "ν„μ¬μ  λ μ½”λ“ μ €μ¥";
+    Text[ korean ] = "ν„μ¬μ λ μ½”λ“ μ €μ¥";
     Text[ turkish ] = "Yόrόrlόkteki verileri kaydet";
     Text[ catalan ] = "Desa el registre actual";
     Text[ finnish ] = "Tallenna nykyinen tietue";
@@ -322,7 +322,7 @@ String STR_TBL_TITLE
     Text[ dutch ] = "Tabel #";
     Text[ chinese_simplified ] = "θ΅¨ζ Ό #";
     Text[ greek ] = "Πίνακας #";
-    Text[ korean ] = "ν‘ #";
+    Text[ korean ] = "μ‹νΈ #";
     Text[ chinese_traditional ] = "θ΅¨ζ Ό #";
     Text[ arabic ] = "ΗαΜΟζα #";
     Text[ turkish ] = "Tablo #";
@@ -374,7 +374,7 @@ String STR_OBJECT_ALREADY_EXISTS
     Text[ polish ] = "Nazwa # juΏ istnieje.";
     Text[ portuguese_brazilian ] = "The name # already exists.";
     Text[ japanese ] = "εε‰ # γ―γ™γ§γ«γ‚γ‚γΎγ™γ€‚";
-    Text[ korean ] = "The name # already exists.";
+    Text[ korean ] = "μ΄λ¦„ #μ΄(κ°€) μ΄λ―Έ μ΅΄μ¬ν•©λ‹λ‹¤.";
     Text[ chinese_simplified ] = "εη§° # ε·²η»ε­ε¨γ€‚";
     Text[ chinese_traditional ] = "εη¨± # ε·²η¶“ε­ε¨γ€‚";
     Text[ turkish ] = "The name # already exists.";
@@ -434,6 +434,7 @@ String STR_ERROR_OCCURED_WHILE_COPYING
     Text[ arabic ] = "A error occured. Would you like to continue the copying?";
     Text[ catalan ] = "A error occured. Would you like to continue the copying?";
 };
+
 
 
 
