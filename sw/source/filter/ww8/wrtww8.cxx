@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:55:35 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2510,7 +2510,7 @@ ULONG SwWW8Writer::WriteStorage()
 SwWW8Writer::SwWW8Writer(const String& rFltName)
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
     pBmpPal(0), pKeyMap(0), pOLEExp(0), pOCXExp(0), pOleMap(0), nUniqueList(0),
-    pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
+    mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0), pO(0)
 {
     bWrtWW8 = rFltName.EqualsAscii(FILTER_WW8);
 }
