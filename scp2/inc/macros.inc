@@ -279,7 +279,7 @@
 #define STD_WIN_W4WFILTER_FILE(id,name) \
     File id \
         PACKED_FILTER_FILE_BODY; \
-        Name            = WINW4WFILTERFILENAME(name) ; \
+        Name            = WINW4WFILTERFILENAME(name);  \
     End
 
 #define SOLSW4WFILTERFILENAME(name) STRING(CONCAT2(w4w, name))
