@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:40:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SD_PRINT_MANAGER_HXX
 #define SD_PRINT_MANAGER_HXX
 
@@ -154,6 +153,29 @@ private:
 
     /// Assignment operator not supported.
     PrintManager& operator= (const PrintManager&);
+
+    /** Make sure that the pages that are to be printed do fit to the
+        printer pages.  When the internal pages are larger then the printer
+        pages and no method of resolution has yet been provided then a
+        dialog is opened that asks for one.  These methods are
+        a) scale internal page down to the printer page,
+        b) crop internal page
+        c) print internal page on several printer pages.
+        @param pPrinter
+            The printer to print the pages on that are specified by the
+            msPageRange member.
+        @param bSilent
+            This flag, when set, tells the method not to wait for user
+            input, i.e. show a dialog.
+        @return
+            The returned flag indicates whether the method was successfull (<TRUE/>)
+            or whether the printing has to be aborted (<FALSE/>).  The later
+            one is the case only when the dialog is shown and the user
+            selects 'Cancel'.
+    */
+    bool FitPageToPrinterWithDialog (
+        SfxPrinter *pPrinter,
+        bool bSilent);
 };
 
 } // end of namespace sd
