@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:10:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,6 @@ struct ScMyShape
     ScAddress   aAddress;
     ScAddress   aEndAddress;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
-    sal_Int16   nLayerID;
 
     sal_Bool operator<(const ScMyShape& aShape) const;
 };
@@ -152,6 +151,34 @@ public:
     void                        AddNewShape(const ScMyShape& aShape);
     sal_Bool                    HasShapes() { return !aShapeList.empty(); }
     const ScMyShapeList*        GetShapes() { return &aShapeList; }
+    virtual void                SetCellData( ScMyCell& rMyCell );
+    virtual void                Sort();
+};
+
+struct ScMyNoteShape
+{
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape;
+    ScAddress aPos;
+
+    sal_Bool operator<(const ScMyNoteShape& aNote) const;
+};
+
+typedef std::list<ScMyNoteShape>    ScMyNoteShapeList;
+
+class ScMyNoteShapesContainer : ScMyIteratorBase
+{
+private:
+    ScMyNoteShapeList           aNoteShapeList;
+protected:
+    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+public:
+                                ScMyNoteShapesContainer();
+    virtual                     ~ScMyNoteShapesContainer();
+
+                                ScMyIteratorBase::UpdateAddress;
+    void                        AddNewNote(const ScMyNoteShape& aNote);
+    sal_Bool                    HasNotes() { return !aNoteShapeList.empty(); }
+    const ScMyNoteShapeList*    GetNotes() { return &aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
@@ -324,6 +351,7 @@ struct ScMyCell
     com::sun::star::uno::Reference<com::sun::star::table::XCell> xCell;
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetAnnotation> xAnnotation;
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xNoteShape;
     com::sun::star::table::CellAddress      aCellAddress;
     com::sun::star::table::CellRangeAddress aMergeRange;
     com::sun::star::table::CellRangeAddress aMatrixRange;
@@ -385,6 +413,7 @@ class ScMyNotEmptyCellsIterator
     ScMyExportAnnotationList            aAnnotations;
 
     ScMyShapesContainer*                pShapes;
+    ScMyNoteShapesContainer*            pNoteShapes;
     ScMyEmptyDatabaseRangesContainer*   pEmptyDatabaseRanges;
     ScMyMergedRangesContainer*          pMergedRanges;
     ScMyAreaLinksContainer*             pAreaLinks;
@@ -411,6 +440,8 @@ public:
 
     inline void                 SetShapes(ScMyShapesContainer* pNewShapes)
                                     { pShapes = pNewShapes; }
+    inline void                 SetNoteShapes(ScMyNoteShapesContainer* pNewNoteShapes)
+                                    { pNoteShapes = pNewNoteShapes; }
     inline void                 SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pNewEmptyDatabaseRanges)
                                     { pEmptyDatabaseRanges = pNewEmptyDatabaseRanges; }
     inline void                 SetMergedRanges(ScMyMergedRangesContainer* pNewMergedRanges)
