@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-15 10:50:28 $
+ *  last change: $Author: pl $ $Date: 2002-01-19 13:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,10 +199,6 @@ main( int argc, char **argv)
         CheckPlugin(argv[1]);
         exit(0);
     }
-#if ! ( defined DEBUG || defined DBG_UTIL )
-    fclose( stdout );
-    fclose( stderr );
-#endif
     nAppArguments = argc;
     pAppArguments = argv;
 
