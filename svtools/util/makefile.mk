@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.40 $
+#*  $Revision: 1.41 $
 #*
-#*  last change: $Author: mh $ $Date: 2002-08-26 09:56:23 $
+#*  last change: $Author: hro $ $Date: 2002-09-30 08:52:05 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -198,7 +198,6 @@ SHL1STDLIBS=$(TOOLSLIB)			\
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
         uwinapi.lib \
-        unicows.lib \
         $(LIBPRE) advapi32.lib	\
         $(LIBPRE) gdi32.lib
 .ENDIF
@@ -239,7 +238,6 @@ SHL2STDLIBS=$(TOOLSLIB) 	\
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
             uwinapi.lib \
-            unicows.lib \
             $(LIBPRE) advapi32.lib	\
             $(LIBPRE) gdi32.lib
 .ENDIF
