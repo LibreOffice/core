@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
+ *  last change: $Author: cmc $ $Date: 2001-12-20 15:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ private:
         int ReadVBAProject(const SvStorageRef &rxVBAStorage);
         int DecompressVBA(int index, SvStorageStreamRef &rxVBAStream);
         BYTE ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode);
-        void SkipTrickyMac(SvStorageStreamRef &xVBAProject);
+        BOOL SkipTrickyMac(SvStorageStreamRef &xVBAProject);
 };
 
 

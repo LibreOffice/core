@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-08-23 12:52:23 $
+ *  last change: $Author: cmc $ $Date: 2001-12-20 15:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@ http://www.virusbtn.com/vb2000/Programme/papers/bontchev.pdf
  *
  * cmc
  * */
+#define MACSKIP 20
 
-void VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
+BOOL VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
 {
+    BOOL bSkipped=TRUE;
     //For no particularly good reason that I can see this occurs on
     //occasion in macintosh xls documents, it looks like an object id
     xVBAProject->SeekRel(2);
@@ -112,8 +114,10 @@ void VBA_Impl::SkipTrickyMac(SvStorageStreamRef &xVBAProject)
         (0 == memcmp( aSeq, aKnownChunk, sizeof(aSeq)))
        ))
     {
-        xVBAProject->SeekRel(-20);
+        xVBAProject->SeekRel(-MACSKIP);
+        bSkipped=FALSE;
     }
+    return bSkipped;
 }
 
 
@@ -122,11 +126,15 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
     UINT16 nIdLen, nOut16;
     BYTE nType = 0, nOut8;
 
-    SkipTrickyMac(xVBAProject);
+    BOOL bSkippedMac = SkipTrickyMac(xVBAProject);
     *xVBAProject >> nIdLen;
 
     if (nIdLen < 6) //Error recovery
-        xVBAProject->SeekRel(-2);
+    {
+        xVBAProject->SeekRel(-2); //undo 2 byte len
+        if (bSkippedMac)
+            xVBAProject->SeekRel(-MACSKIP);   //Undo Mac skip
+    }
     else
         for(UINT16 i=0; i < nIdLen / (bIsUnicode ? 2 : 1); i++)
         {
@@ -146,7 +154,10 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject, BOOL bIsUnicode)
                 }
                 if ( nType == 0)
                 {
-                    xVBAProject->SeekRel(-8);   //Error recovery
+                    //Error recovery, 2byte len + 3 characters of used type
+                    xVBAProject->SeekRel(-(2 + 3 * (bIsUnicode ? 2 : 1)));
+                    if (bSkippedMac)
+                        xVBAProject->SeekRel(-MACSKIP);   //Undo Mac skip
                     break;
                 }
             }
@@ -252,17 +263,17 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     }
 
     /*
-    A sequence of string that are prepended with a len and then begin with G or H,
-    there are also those that begin with C or D. If a string begins with C or D,
-    it is really two strings, one right after the other.
-    Each string then has a 12 bytes suffix
+    A sequence of string that are prepended with a len and then begin with G
+    or H, there are also those that begin with C or D. If a string begins with
+    C or D, it is really two strings, one right after the other.  Each string
+    then has a 12 bytes suffix
 
-    Recognizing the end of the sequence is done by finding a str len of < 6 which
-    does not appear to be the beginning of an object id. Admittedly this isn't
-    a great test, but nothing in the header appears to count the number of strings,
-    and nothing else seems to match. So it'll have to do, its protected by a number
-    of secondry tests to prove its a valid string, and everything gives up if this
-    isn't proven.
+    Recognizing the end of the sequence is done by finding a str len of < 6
+    which does not appear to be the beginning of an object id. Admittedly this
+    isn't a great test, but nothing in the header appears to count the number
+    of strings, and nothing else seems to match. So it'll have to do, its
+    protected by a number of secondry tests to prove its a valid string, and
+    everything gives up if this isn't proven.
     */
     while (1)
     {
