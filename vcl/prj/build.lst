@@ -19,6 +19,7 @@ vc	vcl\os2\source\window					nmake	-	p	vc__winp vc_unot NULL
 vc	vcl\os2\source\src						nmake	-	p	vc__srcp vc_unot NULL
 vc	vcl\unx\source\app						nmake	-	u	vc__appu vc_unot NULL
 vc	vcl\unx\source\gdi						nmake	-	u	vc__gdiu vc_unot NULL
+vc	vcl\unx\source\gdi\getstyle				nmake	-	u	vc__gdus vc_unot NULL
 vc	vcl\unx\source\window					nmake	-	u	vc__winu vc_unot NULL
 vc	vcl\unx\source\src						nmake	-	u	vc__srcu vc_unot NULL
 vc	vcl\aqua\source\app						nmake	-	u	vc__appa vc_unot NULL
