@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:56:54 $
+#   last change: $Author: obo $ $Date: 2004-04-27 15:40:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sw
@@ -76,6 +75,7 @@ TARGET=lingu
 SLOFILES =  \
         $(SLO)$/hyp.obj \
         $(SLO)$/olmenu.obj \
+        $(SLO)$/sdrhhcwrap.obj \
         $(SLO)$/sdrspell.obj \
         $(SLO)$/hhcwrp.obj \
         $(SLO)$/splwrp.obj
