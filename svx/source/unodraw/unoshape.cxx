@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 12:40:05 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _B2D_MATRIX3D_HXX
 #include <goodies/matrix3d.hxx>
@@ -2345,6 +2348,12 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                             awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                             aVisArea = awt::Rectangle( 0, 0, aTmp.Width, aTmp.Height );
                         }
+                        catch ( embed::NoVisualAreaSizeException& )
+                        {
+                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
+                            aVisArea.Width = 5000;
+                            aVisArea.Height = 5000;
+                        }
                         catch ( uno::Exception& )
                         {
                             OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
@@ -2362,7 +2371,18 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 {
                     uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
                     if( xObj.is() ) // && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
-                        aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                    {
+                        try
+                        {
+                            aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+                        }
+                        catch ( embed::NoVisualAreaSizeException& )
+                        {
+                            OSL_ENSURE( sal_False, "Couldn't get the visual area of the object!\n" );
+                            aSize.Width = 5000;
+                            aSize.Height = 5000;
+                        }
+                    }
                 }
                 aAny <<= aSize;
                 break;
