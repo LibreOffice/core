@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-11-16 22:10:14 $
+ *  last change: $Author: ssa $ $Date: 2002-10-01 16:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,34 @@ String SV_HELPTEXT_CLOSE
     TEXT[ catalan ] = "Cerrar";
     TEXT[ finnish ] = "Sulje";
 };
-
+String SV_HELPTEXT_CLOSEDOCUMENT
+{
+    Text = "Dokument schließen";
+    Text [ english ] =  "Dokument schließen";
+    TEXT[ english_us ] = "Close Document";
+    TEXT[ portuguese ] = "Fechar documento";
+    TEXT[ russian ] = "Çàêğûòü äîêóìåíò";
+    TEXT[ dutch ] = "Document sluiten";
+    TEXT[ french ] = "Fermer le document";
+    TEXT[ spanish ] = "Cerrar documento";
+    TEXT[ italian ] = "Chiudi documento";
+    TEXT[ danish ] = "Luk dokument";
+    TEXT[ swedish ] = "Stäng dokument";
+    TEXT[ polish ] = "Zamknij dokument";
+    TEXT[ portuguese_brazilian ] = "DocumentClose";
+    TEXT[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’é–‰ã˜ã‚‹";
+    TEXT[ chinese_simplified ] = "å…³é—­æ–‡æ¡£";
+    TEXT[ chinese_traditional ] = "é—œé–‰æ–‡ä»¶";
+    TEXT[ arabic ] = "ÅÛáÇŞ ÇáãÓÊäÏ";
+    TEXT[ dutch ] = "Document sluiten";
+    TEXT[ chinese_simplified ] = "å…³é—­æ–‡æ¡£";
+    TEXT[ greek ] = "Êëåßóéìï åããñÜöïõ";
+    TEXT[ korean ] = "ë¬¸ì„œ ë‹«ê¸°";
+    TEXT[ turkish ] = "Belgeyi kapat";
+    TEXT[ catalan ] = "Tanca el document";
+    TEXT[ finnish ] = "Sulje asiakirja";
+    TEXT[ thai ] = "à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£";
+};
 String SV_HELPTEXT_MINIMIZE
 {
     Text = "Minimieren" ;
