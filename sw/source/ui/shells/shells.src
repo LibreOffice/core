@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:12:53 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,890 +66,156 @@ InfoBox MSG_NO_RULER
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    MESSAGE = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden." ;
-    MESSAGE [ English ] = "Thera are no bitmaps in the Gallery theme 'Rulers'." ;
-    Message [ portuguese ] = "Não existem imagens no tema 'Rulers' da Gallery." ;
-    Message [ english_us ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
-    Message [ portuguese_brazilian ] = "Não existem imagens bitmap no tema 'Réguas' da Galeria." ;
-    Message [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Rulers'." ;
-    Message [ danish ] = "Der findes ingen grafik i Galleritemaet 'Linealer'." ;
-    Message [ italian ] = "Nella gallery con argomento 'Ruler' non ci sono immagini." ;
-    Message [ spanish ] = "No hay imágenes en el tema de Gallery 'Rulers'." ;
-    Message [ french ] = "Il n'existe pas d'image pour le thème 'Rulers' dans la Gallery." ;
-    Message [ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor." ;
-    Message[ chinese_simplified ] = "åœ¨ç”»å»Šä¸»é¢˜'é•¿æ¡å½¢'å†…æ— ä»»ä½•å›¾å½¢ã€‚";
-    Message[ russian ] = "Â òåìå ãàëåğåè 'Ãğàíè÷íûå ëèíèè' ãğàôè÷åñêèõ îáúåêòîâ íå ñóùåñòâóåò.";
-    Message[ polish ] = "Temat Galerii 'Obramowania' jest pusty (nie ma w nim ¿adnych grafik)";
-    Message[ japanese ] = "ã‚®ãƒ£ãƒ©ãƒªãƒ†ãƒ¼ãƒã®ã€Œãƒ«ãƒ¼ãƒ©ãƒ¼ã€ã«ã€å›³ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Message[ chinese_traditional ] = "ç•«å»Šä¸»é¡Œ[é•·æ¢å½¢]å…§ç„¡ä»»ä½•åœ–å½¢ã€‚";
-    Message[ arabic ] = "áÇ ÊæÌÏ ÃíÉ ÕæÑ İí ãæÖæÚ ÇáÌÇáíÑí 'ãÓÇØÑ'.";
-    Message[ dutch ] = "Onder het gallery-onderwerp 'Rulers' komen geen afbeeldingen voor.";
-    Message[ chinese_simplified ] = "åœ¨ç”»å»Šä¸»é¢˜'é•¿æ¡å½¢'å†…æ— ä»»ä½•å›¾å½¢ã€‚";
-    Message[ greek ] = "Äåí õğÜñ÷ïõí ãñáöéêÜ óôç ÓõëëïãŞ ìå èİìá 'Rulers'.";
-    Message[ korean ] = "ê°¤ëŸ¬ë¦¬ ì£¼ì œ 'ëˆˆê¸ˆì'ì— ê·¸ë¦¼ì´ ì—†ìŠµë‹ˆë‹¤.";
-    Message[ turkish ] = "'Cetvel' galeri konusunda bit eşlem grafik mevcut değil.";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "No hi ha cap mapa de bits en la galeria de temes 'Rulers'.";
-    Message[ finnish ] = "Galleriateemassa Viivaimet ei ole bittikarttoja.";
-    Message[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸šà¸´à¸—à¹à¸¡à¹‡à¸›à¹ƒà¸™à¸Šà¸¸à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¸„à¸¥à¸±à¸‡à¸ à¸²à¸ 'à¹„à¸¡à¹‰à¸šà¸£à¸£à¸—à¸±à¸”'";
-    Message[ czech ] = "V Galerii 'ÄŒÃ¡ry' nejsou Å¾Ã¡dnÃ© obrÃ¡zky.";
-    Message[ hebrew ] = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden.";
-    Message[ hindi ] = "à¤—à¥‡à¤²à¤°à¥€ à¤ªà¥à¤°à¤•à¤°à¤£ 'à¤°à¥‚à¤²à¤°' à¤®à¥‡à¤‚ à¤•à¥‹à¤ˆ à¤¬à¤¿à¤Ÿà¤®à¥‰à¤ª à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Message[ slovak ] = "V GalÃ©rii 'ÄŒiary' nie sÃº Å¾iadne obrÃ¡zky.";
-    Message[ hungarian ] = "Nincsenek bitkÃ©pek a \"VonalzÃ³k (rulers)\" kÃ©ptÃ¡rban.";
-    Message[ slovenian ] = "V galerijski temi 'Ravnila' ni bitnih slik.";
+    Message [ de ] = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden." ;
+    Message [ en-US ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
+    Message [ x-comment ] = " ";
 };
 String STR_GRFILTER_OPENERROR
 {
-    Text = "Grafikdatei kann nicht geöffnet werden" ;
-    Text [ English ] = "Can't open graphic file" ;
-    Text [ norwegian ] = "Can't open graphic file" ;
-    Text [ italian ] = "Impossibile aprire il file grafico" ;
-    Text [ portuguese_brazilian ] = "Não foi possível abrir o arquivo da figura" ;
-    Text [ portuguese ] = "Impossível abrir ficheiro gráfico." ;
-    Text [ finnish ] = "Grafiikkatiedostoa ei voi avata." ;
-    Text [ danish ] = "Grafikfil kan ikke åbnes" ;
-    Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
-    Text [ swedish ] = "Grafikfil kan inte öppnas" ;
-    Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
-    Text [ spanish ] = "No es posible abrir el archivo gráfico" ;
-    Text [ english_us ] = "Graphics file cannot be opened" ;
-    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€å›¾å½¢æ–‡ä»¶";
-    Text[ russian ] = "Íåâîçìîæíî îòêğûòü ãğàôè÷åñêèé ôàéë";
-    Text[ polish ] = "Nie mo¿na otworzyæ pliku graficznego";
-    Text[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿåœ–å½¢æª”æ¡ˆ";
-    Text[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
-    Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
-    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€å›¾å½¢æ–‡ä»¶";
-    Text[ greek ] = "Äåí åßíáé äõíáôü ôï Üíïéãìá ôïõ áñ÷åßïõ ãñáöéêşí";
-    Text[ korean ] = "ê·¸ë¦¼ íŒŒì¼ì„ ì—´ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Grafik dosyası açılamıyor";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es pot obrir el fitxer de gràfics";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„à¹„à¸”à¹‰";
-    Text[ czech ] = "NenÃ­ moÅ¾nÃ© otevÅ™Ã­t grafickÃ½ soubor";
-    Text[ hebrew ] = "Grafikdatei kann nicht geÃ¶ffnet werden";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤–à¥‹à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
-    Text[ slovak ] = "Nie je moÅ¾nÃ© otvoriÅ¥ grafickÃ½ sÃºbor";
-    Text[ hungarian ] = "A kÃ©pfÃ¡jlt nem lehet megnyitni.";
-    Text[ slovenian ] = "GrafiÄne datoteke ni mogoÄe odpreti";
+    Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
+    Text [ en-US ] = "Graphics file cannot be opened" ;
+    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_IOERROR
 {
-    Text = "Grafikdatei kann nicht gelesen werden" ;
-    Text [ English ] = "Can't read graphic file" ;
-    Text [ norwegian ] = "Can't read graphic file" ;
-    Text [ italian ] = "Impossibile leggere il file grafico" ;
-    Text [ portuguese_brazilian ] = "Não foi possível ler o arquivo da figura" ;
-    Text [ portuguese ] = "Impossível ler o ficheiro gráfico." ;
-    Text [ finnish ] = "Grafiikkatiedostoa ei voi lukea." ;
-    Text [ danish ] = "Grafikfil kan ikke læses" ;
-    Text [ french ] = "Impossible de lire le fichier graphique !" ;
-    Text [ swedish ] = "Grafikfil kan inte läsas" ;
-    Text [ dutch ] = "Grafisch bestand is onleesbaar" ;
-    Text [ spanish ] = "No es posible leer el archivo gráfico" ;
-    Text [ english_us ] = "Graphics file cannot be read" ;
-    Text[ chinese_simplified ] = "æ— æ³•è¯»å–å›¾å½¢æ–‡ä»¶";
-    Text[ russian ] = "Íåâîçìîæíî ïğî÷èòàòü ãğàôè÷åñêèé ôàéë";
-    Text[ polish ] = "Nie mo¿na odczytaæ pliku graficznego";
-    Text[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã¯èª­ã‚ã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•è®€å–åœ–å½¢æª”æ¡ˆ";
-    Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
-    Text[ dutch ] = "Grafisch bestand is onleesbaar";
-    Text[ chinese_simplified ] = "æ— æ³•è¯»å–å›¾å½¢æ–‡ä»¶";
-    Text[ greek ] = "Äåí åßíáé äõíáôŞ ç áíÜãíùóç ôïõ áñ÷åßïõ ãñáöéêşí";
-    Text[ korean ] = "ê·¸ë¦¼ íŒŒì¼ì„ ì½ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Grafik dosyası okunamıyor";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es pot llegir el fitxer de gràfics";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¹ˆà¸²à¸™à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„à¹„à¸”à¹‰";
-    Text[ czech ] = "NenÃ­ moÅ¾nÃ© naÄÃ­st grafickÃ½ soubor";
-    Text[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤ªà¤¢à¤¼ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
-    Text[ slovak ] = "Nie je moÅ¾nÃ© naÄÃ­taÅ¥ grafickÃ½ sÃºbor";
-    Text[ hungarian ] = "A kÃ©pfÃ¡jl nem olvashatÃ³.";
-    Text[ slovenian ] = "GrafiÄne datoteke ni mogoÄe brati";
+    Text [ de ] = "Grafikdatei kann nicht gelesen werden" ;
+    Text [ en-US ] = "Graphics file cannot be read" ;
+    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_FORMATERROR
 {
-    Text = "Unbekanntes Grafikformat" ;
-    Text [ English ] = "Unknown graphic format" ;
-    Text [ norwegian ] = "Unknown graphic format" ;
-    Text [ italian ] = "Formato grafico sconosciuto" ;
-    Text [ portuguese_brazilian ] = "Formato da figura desconhecido." ;
-    Text [ portuguese ] = "Formato de gráfico desconhecido." ;
-    Text [ finnish ] = "Tuntematon grafiikkamuoto" ;
-    Text [ danish ] = "Ukendt grafikformat" ;
-    Text [ french ] = "Format d'image inconnu" ;
-    Text [ swedish ] = "Okänt grafikformat" ;
-    Text [ dutch ] = "Onbekende grafische-bestandsindeling" ;
-    Text [ spanish ] = "Formato de imagen desconocido" ;
-    Text [ english_us ] = "Unknown graphic format" ;
-    Text[ chinese_simplified ] = "ä¸æ˜çš„å›¾å½¢æ ¼å¼";
-    Text[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
-    Text[ polish ] = "Nieznany format graficzny";
-    Text[ japanese ] = "ä¸æ˜ãªå›³ã®æ›¸å¼";
-    Text[ chinese_traditional ] = "ä¸æ˜çš„åœ–å½¢æ ¼å¼";
-    Text[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
-    Text[ dutch ] = "Onbekende grafische-bestandsindeling";
-    Text[ chinese_simplified ] = "ä¸æ˜çš„å›¾å½¢æ ¼å¼";
-    Text[ greek ] = "¢ãíùóôç ìïñöŞ ãñáöéêşí";
-    Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” ê·¸ë¦¼ ì„œì‹";
-    Text[ turkish ] = "Bilinmeyen grafik formatı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Format d'imatge desconegut";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¸£à¸¹à¸›à¹à¸šà¸šà¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "NeznÃ¡mÃ½ grafickÃ½ formÃ¡t";
-    Text[ hebrew ] = "Unbekanntes Grafikformat";
-    Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤ à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤°à¤šà¤¨à¤¾";
-    Text[ slovak ] = "NeznÃ¡my grafickÃ½ formÃ¡t";
-    Text[ hungarian ] = "Ismeretlen kÃ©pformÃ¡tum";
-    Text[ slovenian ] = "Neznana oblika zapisa grafike";
+    Text [ de ] = "Unbekanntes Grafikformat" ;
+    Text [ en-US ] = "Unknown graphic format" ;
+    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_VERSIONERROR
 {
-    Text = "Die Version der Grafikdatei wird nicht unterstützt" ;
-    Text [ English ] = "Version of graphic file not supported" ;
-    Text [ norwegian ] = "Version of graphic file not supported" ;
-    Text [ italian ] = "Versione del file grafico non supportata" ;
-    Text [ portuguese_brazilian ] = "A versão do arquivo da figura não tem suporte." ;
-    Text [ portuguese ] = "Versão do ficheiro gráfico não suportada." ;
-    Text [ finnish ] = "Tätä grafiikkatiedoston versiota ei tueta." ;
-    Text [ danish ] = "Grafikfilens version understøttes ikke" ;
-    Text [ french ] = "Version du fichier graphique non supportée" ;
-    Text [ swedish ] = "Grafikfilens version stöds inte" ;
-    Text [ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund" ;
-    Text [ spanish ] = "No se acepta la versión del archivo gráfico" ;
-    Text [ english_us ] = "This graphic file version is not supported" ;
-    Text[ chinese_simplified ] = "ä¸æ”¯æŒè¿™ä¸ªç‰ˆæœ¬çš„å›¾å½¢æ–‡ä»¶";
-    Text[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
-    Text[ polish ] = "Ta wersja pliku graficznego nie jest obs³ugiwana";
-    Text[ japanese ] = "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã¯ã‚µãƒãƒ¼ãƒˆã•ã‚Œã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "ä¸æ”¯æ´é€™å€‹ç‰ˆæœ¬çš„åœ–å½¢æ–‡ä»¶";
-    Text[ arabic ] = "áÇ íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
-    Text[ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund";
-    Text[ chinese_simplified ] = "ä¸æ”¯æŒè¿™ä¸ªç‰ˆæœ¬çš„å›¾å½¢æ–‡ä»¶";
-    Text[ greek ] = "Äåí õğïóôçñßæåôáé ç İêäïóç áõôïı ôïõ áñ÷åßïõ ãñáöéêşí";
-    Text[ korean ] = "ì´ ê·¸ë˜í”½ íŒŒì¼ì˜ ë²„ì „ì€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Grafik dosyasınının versiyonu desteklenmiyor";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No es permet l'ús d'aquesta versió del fitxer de gràfics";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸™à¸±à¸šà¸ªà¸™à¸¸à¸™à¹€à¸§à¸­à¸£à¹Œà¸Šà¸±à¹ˆà¸™à¹à¸Ÿà¹‰à¸¡à¸à¸£à¸²à¸Ÿà¸´à¸„à¸™à¸µà¹‰";
-    Text[ czech ] = "Tato verze grafickÃ©ho souboru nenÃ­ podporovÃ¡na";
-    Text[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstÃ¼tzt";
-    Text[ hindi ] = "à¤‡à¤¸ à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¾à¤‡à¤² à¤†à¤µà¤°à¥à¤¤à¤¨ à¤¸à¤®à¤°à¥à¤¥à¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
-    Text[ slovak ] = "Tato verzia grafickÃ©ho sÃºboru nie je podporovnÃ¡";
-    Text[ hungarian ] = "Ez a kÃ©pfÃ¡jlverziÃ³ nem hasznÃ¡lhatÃ³.";
-    Text[ slovenian ] = "Ta rezliÄica grafiÄne datoteke ni podprta";
+    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
+    Text [ en-US ] = "This graphic file version is not supported" ;
+    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_FILTERERROR
 {
-    Text = "Grafikfilter nicht gefunden" ;
-    Text [ English ] = "Graphic filter not found" ;
-    Text [ norwegian ] = "Graphic filter not found" ;
-    Text [ italian ] = "Filtro grafico non trovato" ;
-    Text [ portuguese_brazilian ] = "O filtro da figura não foi encontrado" ;
-    Text [ portuguese ] = "Filtro de gráficos não encontrado." ;
-    Text [ finnish ] = "Grafiikkasuodatinta ei löytynyt" ;
-    Text [ danish ] = "Grafikfilter blev ikke fundet" ;
-    Text [ french ] = "Filtre graphique introuvable" ;
-    Text [ swedish ] = "Grafikfilter hittades inte" ;
-    Text [ dutch ] = "Afbeeldingsfilter niet gevonden" ;
-    Text [ spanish ] = "No se encontró el filtro de imagen" ;
-    Text [ english_us ] = "Graphics filter not found" ;
-    Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å›¾å½¢è¿‡æ»¤å™¨";
-    Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
-    Text[ polish ] = "Nie znaleziono filtru grafiki";
-    Text[ japanese ] = "ç”»åƒãƒ•ã‚£ãƒ«ã‚¿ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°åœ–å½¢éæ¿¾å™¨";
-    Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
-    Text[ dutch ] = "Afbeeldingsfilter niet gevonden";
-    Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°å›¾å½¢è¿‡æ»¤å™¨";
-    Text[ greek ] = "Äåí âñİèçêå ôï ößëôñï ãñáöéêşí";
-    Text[ korean ] = "ê·¸ë˜í”½ í•„í„°ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Grafik filtresi bulunamadı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No s'ha trobat el filtre gràfic";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸à¸šà¸•à¸±à¸§à¸à¸£à¸­à¸‡à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "GrafickÃ½ filtr nebyl nalezen";
-    Text[ hebrew ] = "Grafikfilter nicht gefunden";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤«à¤¿à¤²à¥à¤Ÿà¤° à¤¨à¤¹à¥€à¤‚ à¤®à¤¿à¤²à¤¾";
-    Text[ slovak ] = "GrafickÃ½ filter nebol nÃ¡jdenÃ½";
-    Text[ hungarian ] = "A grafikus szÅ±rÅ‘ nem talÃ¡lhatÃ³.";
-    Text[ slovenian ] = "GrafiÄnega filtra ni mogoÄe najti";
+    Text [ de ] = "Grafikfilter nicht gefunden" ;
+    Text [ en-US ] = "Graphics filter not found" ;
+    Text [ x-comment ] = " ";
 };
 String STR_GRFILTER_TOOBIG
 {
-    Text = "Nicht genug Speicher zum Einfügen der Grafik" ;
-    Text [ English ] = "Not enough memory to insert graphic" ;
-    Text [ norwegian ] = "Not enough memory to insert graphic" ;
-    Text [ italian ] = "Memoria insufficiente per inserirei l'immagine" ;
-    Text [ portuguese_brazilian ] = "Não há memória suficiente para inserir a imagem." ;
-    Text [ portuguese ] = "Memória insuficiente para inserir gráfico." ;
-    Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen." ;
-    Text [ danish ] = "Ikke tilstrækkelig hukommelse til at indsætte grafiken" ;
-    Text [ french ] = "Mémoire insuffisante pour l'insertion de l'image" ;
-    Text [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
-    Text [ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding" ;
-    Text [ spanish ] = "No hay suficiente memoria para insertar la imagen" ;
-    Text [ english_us ] = "Not enough memory to insert the picture." ;
-    Text[ chinese_simplified ] = "å†…å­˜ä¸å¤Ÿï¼Œæ— æ³•æ’å…¥å›¾å½¢";
-    Text[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ãğàôè÷åñêîãî îáúåêòà";
-    Text[ polish ] = "Za ma³o pamiêci, aby wstawiæ obraz";
-    Text[ japanese ] = "å›³ã®æŒ¿å…¥ã«å¿…è¦ãªãƒ‡ã‚£ã‚¹ã‚¯ç©ºãå®¹é‡ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ chinese_traditional ] = "è¨˜æ†¶é«”ä¸è¶³ï¼Œç„¡æ³•æ’å…¥åœ–å½¢";
-    Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
-    Text[ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding";
-    Text[ chinese_simplified ] = "å†…å­˜ä¸å¤Ÿï¼Œæ— æ³•æ’å…¥å›¾å½¢";
-    Text[ greek ] = "Ç ìíŞìç äåí åğáñêåß ãéá ôçí åéóáãùãŞ ôïõ ãñáöéêïı.";
-    Text[ korean ] = "ë©”ëª¨ë¦¬ê°€ ë¶€ì¡±í•˜ì—¬ ê·¸ë˜í”½ì„ ì‚½ì…í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Grafiğin eklenmesi için yeterli bellek yok";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No hi ha prou memòria per inserir la imatge.";
-    Text[ thai ] = "à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³à¹„à¸¡à¹ˆà¸à¸­à¹ƒà¸™à¸à¸²à¸£à¹à¸—à¸£à¸à¸£à¸¹à¸›à¸ à¸²à¸";
-    Text[ czech ] = "Nedostatek pamÄ›ti pro vloÅ¾enÃ­ obrÃ¡zku.";
-    Text[ hebrew ] = "Nicht genug Speicher zum EinfÃ¼gen der Grafik";
-    Text[ hindi ] = "à¤šà¤¿à¤¤à¥à¤° à¤œà¥‹à¤¡à¤¼à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤®à¥‡à¤®à¤°à¥€ à¤ªà¤°à¥à¤¯à¤¾à¤ªà¥à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Nedostatok pamÃ¤te na vloÅ¾enie obrÃ¡zku.";
-    Text[ hungarian ] = "A kÃ©p beillesztÃ©sÃ©hez kevÃ©s a memÃ³ria.";
-    Text[ slovenian ] = "Ni dovolj pomnilnika za vstavljanje slike.";
+    Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
+    Text [ en-US ] = "Not enough memory to insert the picture." ;
+    Text [ x-comment ] = " ";
 };
 String STR_INSERT_GRAPHIC
 {
-    Text = "Grafik einfügen" ;
-    Text [ English ] = "Insert graphic" ;
-    Text [ norwegian ] = "Insert graphic" ;
-    Text [ italian ] = "Inserisci immagine" ;
-    Text [ portuguese_brazilian ] = "Inserir Figura" ;
-    Text [ portuguese ] = "Inserir imagem" ;
-    Text [ finnish ] = "Lisää grafiikka" ;
-    Text [ danish ] = "Indsæt grafik" ;
-    Text [ french ] = "Insérer une image" ;
-    Text [ swedish ] = "Infoga grafik" ;
-    Text [ dutch ] = "Afbeelding invoegen" ;
-    Text [ spanish ] = "Insertar imagen" ;
-    Text [ english_us ] = "Insert Graphics" ;
-    Text[ chinese_simplified ] = "æ’å…¥å›¾å½¢";
-    Text[ russian ] = "Âñòàâèòü ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Wstaw grafikê";
-    Text[ japanese ] = "å›³ã®æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥åœ–å½¢";
-    Text[ arabic ] = "ÅÏÑÇÌ ÕæÑÉ";
-    Text[ dutch ] = "Afbeelding invoegen";
-    Text[ chinese_simplified ] = "æ’å…¥å›¾å½¢";
-    Text[ greek ] = "ÅéóáãùãŞ ãñáöéêïı";
-    Text[ korean ] = "ê·¸ë¦¼ ì‚½ì…";
-    Text[ turkish ] = "Grafik ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix un gràfic";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "VloÅ¾it obrÃ¡zek";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×ª ×’×¨×¤×™×§×”â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ obrÃ¡zok";
-    Text[ hungarian ] = "KÃ©p beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi grafiko";
+    Text [ de ] = "Grafik einfügen" ;
+    Text [ en-US ] = "Insert Graphics" ;
+    Text [ x-comment ] = " ";
 };
 String STR_NO_ADDRESSBOOK
 {
-    Text = "Kein Adressbuch vorhanden" ;
-    Text [ English ] = "No directory available" ;
-    Text [ dutch ] = "Geen adresboek beschikbaar" ;
-    Text [ english_us ] = "An Address Book does not exist" ;
-    Text [ italian ] = "Manca la Rubrica" ;
-    Text [ spanish ] = "No hay ninguna libreta de direcciones disponible" ;
-    Text [ french ] = "Aucun carnet d'adresses disponible" ;
-    Text [ swedish ] = "Ingen adressbok tillgänglig" ;
-    Text [ danish ] = "Der finde intet adressekartotek" ;
-    Text [ portuguese_brazilian ] = "Não existe um Livro de Endereços" ;
-    Text [ portuguese ] = "Não há livro de endereços disponível." ;
-    Text[ chinese_simplified ] = "é€šè®¯ç°¿ä¸å­˜åœ¨";
-    Text[ russian ] = "Àäğåñíîé êíèãè íå ñóùåñòâóåò";
-    Text[ polish ] = "Brak ksi¹¿ki adresowej";
-    Text[ japanese ] = "ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãŒã‚ã‚Šã¾ã›ã‚“";
-    Text[ chinese_traditional ] = "é€šè¨ŠéŒ„ä¸å­˜åœ¨";
-    Text[ arabic ] = "áÇ íæÌÏ ÏİÊÑ ÚäÇæíä";
-    Text[ dutch ] = "Geen adresboek beschikbaar";
-    Text[ chinese_simplified ] = "é€šè®¯ç°¿ä¸å­˜åœ¨";
-    Text[ greek ] = "Äåí õğÜñ÷åé âéâëßï äéåõèıíóåùí";
-    Text[ korean ] = "ì£¼ì†Œë¡ì´ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Adres defteri mevcut değil";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "No existeix cap llibreta d'adreces";
-    Text[ finnish ] = "Osoitekirjaa ei ole olemassa.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¸ªà¸¡à¸¸à¸”à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "DatabÃ¡ze kontaktÅ¯ neexistuje";
-    Text[ hebrew ] = "Kein Adressbuch vorhanden";
-    Text[ hindi ] = "à¤ªà¤¤à¤¾ à¤ªà¥à¤¸à¥à¤¤à¤• à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
-    Text[ slovak ] = "DatabÃ¡za kontaktov neexistuje";
-    Text[ hungarian ] = "A cÃ­mjegyzÃ©k nem lÃ©tezik";
-    Text[ slovenian ] = "Adresar ne obstaja";
+    Text [ de ] = "Kein Adressbuch vorhanden" ;
+    Text [ en-US ] = "An Address Book does not exist" ;
+    Text [ x-comment ] = " ";
 };
 String STR_NOTIZ_INSERT
 {
-    TEXT = "Notiz einfügen" ;
-    TEXT [ English ] = "Insert Note" ;
-    TEXT [ norwegian ] = "Sett inn Merknad" ;
-    TEXT [ italian ] = "Inserisci nota" ;
-    TEXT [ portuguese_brazilian ] = "Inserir Anotação" ;
-    TEXT [ portuguese ] = "Inserir anotação" ;
-    TEXT [ finnish ] = "Lisää huomautus" ;
-    TEXT [ danish ] = "Indsæt note" ;
-    TEXT [ french ] = "Insérer une note" ;
-    TEXT [ swedish ] = "Infoga anteckning" ;
-    TEXT [ dutch ] = "Aantekening invoegen" ;
-    TEXT [ spanish ] = "Insertar nota" ;
-    TEXT [ english_us ] = "Insert Note" ;
-    TEXT[ chinese_simplified ] = "æ’å…¥å¤‡æ³¨";
-    TEXT[ russian ] = "Âñòàâèòü ïğèìå÷àíèå";
-    TEXT[ polish ] = "Wstaw notatkê";
-    TEXT[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆã®æŒ¿å…¥";
-    TEXT[ chinese_traditional ] = "æ’å…¥å‚™è¨»";
-    TEXT[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
-    TEXT[ dutch ] = "Aantekening invoegen";
-    TEXT[ chinese_simplified ] = "æ’å…¥å¤‡æ³¨";
-    TEXT[ greek ] = "ÅéóáãùãŞ óçìåßùóçò";
-    TEXT[ korean ] = "ë©”ëª¨ ì‚½ì…";
-    TEXT[ turkish ] = "Not ekle";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Insereix una nota";
-    TEXT[ thai ] = "à¹à¸—à¸£à¸à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
-    TEXT[ czech ] = "VloÅ¾it poznÃ¡mku";
-    TEXT[ hebrew ] = "â€®×”×•×¡×¤×ª ×”×¢×¨×”â€¬";
-    TEXT[ hindi ] = "à¤¸à¥‚à¤šà¤¨à¤¾ à¤œà¥‹à¤¡à¤¼à¥‹";
-    TEXT[ slovak ] = "VloÅ¾iÅ¥ poznÃ¡mku";
-    TEXT[ hungarian ] = "Jegyzet beszÃºrÃ¡sa";
-    TEXT[ slovenian ] = "Vstavi opombo";
+    Text [ de ] = "Notiz einfügen" ;
+    Text [ en-US ] = "Insert Note" ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_COMMENT
 {
-    TEXT = "Kommentieren: " ;
-    TEXT [ English ] = "Comment: " ;
-    Text [ english_us ] = "Comment: " ;
-    Text [ portuguese_brazilian ] = "Comentário:" ;
-    Text [ swedish ] = "Kommentera:  " ;
-    Text [ danish ] = "Kommentar: " ;
-    Text [ italian ] = "Commento: " ;
-    Text [ spanish ] = "Comentario:  " ;
-    Text [ french ] = "Commentaire : " ;
-    Text [ dutch ] = "Opmerkingen:" ;
-    Text [ portuguese ] = "Comentário: " ;
-    Text[ chinese_simplified ] = "è¯„è¯­ï¼š ";
-    Text[ russian ] = "Êîììåíòàğèè:  ";
-    Text[ polish ] = "Komentarz:";
-    Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ: ";
-    Text[ chinese_traditional ] = "è©•èªï¼š ";
-    Text[ arabic ] = "ÊÚáíŞ: ";
-    Text[ dutch ] = "Opmerkingen:";
-    Text[ chinese_simplified ] = "è¯„è¯­ï¼š ";
-    Text[ greek ] = "Ó÷üëéï: ";
-    Text[ korean ] = "ì£¼: ";
-    Text[ turkish ] = "Açıklalama: ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Comentari: ";
-    Text[ finnish ] = "Kommentti: ";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™: ";
-    Text[ czech ] = "KomentÃ¡Å™: ";
-    Text[ hebrew ] = "â€®×”×¢×¨×•×ª:â€¬";
-    Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦: ";
-    Text[ slovak ] = "KomentÃ¡r: ";
-    Text[ hungarian ] = "MegjegyzÃ©s:";
-    Text[ slovenian ] = "Komentar:";
+    Text [ de ] = "Kommentieren: " ;
+    Text [ en-US ] = "Comment: " ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_INSERTED
 {
-    TEXT = "Einfügung" ;
-    TEXT [ English ] = "Inserted" ;
-    Text [ english_us ] = "Insertion" ;
-    Text [ portuguese_brazilian ] = "Inserção" ;
-    Text [ swedish ] = "Infogning" ;
-    Text [ danish ] = "Indsættelse" ;
-    Text [ italian ] = "Inserimento" ;
-    Text [ spanish ] = "Inserción" ;
-    Text [ french ] = "Insertion" ;
-    Text [ dutch ] = "Invoeging" ;
-    Text [ portuguese ] = "Inserido" ;
-    Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ russian ] = "Âñòàâêà";
-    Text[ polish ] = "Wstawka";
-    Text[ japanese ] = "æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ dutch ] = "Invoeging";
-    Text[ chinese_simplified ] = "æ’å…¥";
-    Text[ greek ] = "ÅéóáãùãŞ";
-    Text[ korean ] = "ì‚½ì…";
-    Text[ turkish ] = "Ekleme";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inserció";
-    Text[ finnish ] = "Lisäys";
-    Text[ thai ] = "à¹à¸—à¸£à¸";
-    Text[ czech ] = "VloÅ¾enÃ­";
-    Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-    Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¤¨à¤¾";
-    Text[ slovak ] = "VloÅ¾enie";
-    Text[ hungarian ] = "BeszÃºrÃ¡s";
-    Text[ slovenian ] = "Vstavek";
+    Text [ de ] = "Einfügung" ;
+    Text [ en-US ] = "Insertion" ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_DELETED
 {
-    TEXT = "Löschung" ;
-    TEXT [ English ] = "Deleted" ;
-    Text [ english_us ] = "Deletion" ;
-    Text [ portuguese_brazilian ] = "Exclusão" ;
-    Text [ swedish ] = "Radering" ;
-    Text [ danish ] = "Sletning" ;
-    Text [ italian ] = "Elimina" ;
-    Text [ spanish ] = "Borrar" ;
-    Text [ french ] = "Suppression" ;
-    Text [ dutch ] = "Gewist" ;
-    Text [ portuguese ] = "Eliminado" ;
-    Text[ chinese_simplified ] = "åˆ é™¤";
-    Text[ russian ] = "Óäàëåíèå";
-    Text[ polish ] = "Usuniêcie";
-    Text[ japanese ] = "å‰Šé™¤";
-    Text[ chinese_traditional ] = "åˆªé™¤";
-    Text[ arabic ] = "ÍĞİ";
-    Text[ dutch ] = "Gewist";
-    Text[ chinese_simplified ] = "åˆ é™¤";
-    Text[ greek ] = "ÄéáãñáöŞ";
-    Text[ korean ] = "ì‚­ì œ";
-    Text[ turkish ] = "Silme";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Supressió";
-    Text[ finnish ] = "Poisto";
-    Text[ thai ] = "à¸¥à¸š";
-    Text[ czech ] = "SmazÃ¡nÃ­";
-    Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-    Text[ hindi ] = "à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾";
-    Text[ slovak ] = "Zmazanie";
-    Text[ hungarian ] = "TÃ¶rlÃ©s";
-    Text[ slovenian ] = "Izbris";
+    Text [ de ] = "Löschung" ;
+    Text [ en-US ] = "Deletion" ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_AUTOFMT
 {
-    TEXT = "AutoFormat" ;
-    TEXT [ English ] = "AutoFormat" ;
-    TEXT[ italian ] = "Formattazione automatica";
-    TEXT[ portuguese_brazilian ] = "AutoFormatação";
-    TEXT[ portuguese ] = "AutoFormato";
-    TEXT[ danish ] = "AutoFormat";
-    TEXT[ french ] = "AutoFormat";
-    TEXT[ swedish ] = "Autoformat";
-    TEXT[ dutch ] = "AutoOpmaak";
-    TEXT[ spanish ] = "Formateado automático";
-    TEXT[ english_us ] = "AutoFormat";
-    TEXT[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
-    TEXT[ russian ] = "Àâòîôîğìàò";
-    TEXT[ polish ] = "Autoformatowanie";
-    TEXT[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
-    TEXT[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
-    TEXT[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
-    TEXT[ dutch ] = "AutoOpmaak";
-    TEXT[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
-    TEXT[ greek ] = "Áõôüìáôç ìïñöïğïßçóç";
-    TEXT[ korean ] = "ìë™ ì„œì‹";
-    TEXT[ turkish ] = "Otomatik formatlama";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Formatatge automàtic";
-    TEXT[ finnish ] = "Automaattinen muotoilu";
-    TEXT[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    TEXT[ czech ] = "AutomatickÃ½ formÃ¡t";
-    TEXT[ hebrew ] = "â€®×¢×™×¦×•×‘ ××•×˜×•××˜×™â€¬";
-    TEXT[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤°à¤šà¤¨à¤¾";
-    TEXT[ slovak ] = "AutomatickÃ½ formÃ¡t";
-    TEXT[ hungarian ] = "Automatikus formÃ¡zÃ¡s";
-    TEXT[ slovenian ] = "Samooblikovanje";
+    Text [ de ] = "AutoFormat" ;
+    Text [ en-US ] = "AutoFormat";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FORMATED
 {
-    Text = "Attributierung" ;
-    Text [ english ] = "Formatted" ;
-    Text [ english_us ] = "Formats" ;
-    Text [ portuguese_brazilian ] = "Formatos" ;
-    Text [ swedish ] = "Attributering" ;
-    Text [ danish ] = "Formateringer" ;
-    Text [ italian ] = "Attribuzione" ;
-    Text [ spanish ] = "Formateado" ;
-    Text [ french ] = "Formatage" ;
-    Text [ dutch ] = "Opmaak" ;
-    Text [ portuguese ] = "Formatado" ;
-    Text[ chinese_simplified ] = "å±æ€§";
-    Text[ russian ] = "Ôîğìàòû";
-    Text[ polish ] = "Formaty";
-    Text[ japanese ] = "å±æ€§";
-    Text[ chinese_traditional ] = "å±¬æ€§";
-    Text[ arabic ] = "ÊäÓíŞ";
-    Text[ language_user1 ] = " ";
-    Text[ dutch ] = "Opmaak";
-    Text[ chinese_simplified ] = "å±æ€§";
-    Text[ greek ] = "Ìïñöİò";
-    Text[ korean ] = "ì†ì„±";
-    Text[ turkish ] = "Formatlar";
-    Text[ catalan ] = "Formats";
-    Text[ finnish ] = "Muodot";
-    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-    Text[ czech ] = "FormÃ¡tovÃ¡nÃ­";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-    Text[ hindi ] = "à¤°à¤šà¤¨à¤¾à¤à¤";
-    Text[ slovak ] = "FormÃ¡ty";
-    Text[ hungarian ] = "FormÃ¡zÃ¡s";
-    Text[ slovenian ] = "Oblike";
+    Text [ de ] = "Attributierung" ;
+    Text [ en-US ] = "Formats" ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_TABLECHG
 {
-    Text = "Tabellenänderung" ;
-    Text [ english ] = "Changed table" ;
-    Text [ english_us ] = "Table Changes" ;
-    Text [ portuguese_brazilian ] = "Modificações da Tabela" ;
-    Text [ swedish ] = "Tabelländring" ;
-    Text [ danish ] = "Tabelændringer" ;
-    Text [ italian ] = "Modifica tabella" ;
-    Text [ spanish ] = "Modificación de tabla" ;
-    Text [ french ] = "Modification de tableau" ;
-    Text [ dutch ] = "Tabelwijziging" ;
-    Text [ portuguese ] = "Tabela modificada" ;
-    Text[ chinese_simplified ] = "ä¿®æ”¹è¡¨æ ¼";
-    Text[ russian ] = "Ğåäàêòèğîâàíèå òàáëèöû";
-    Text[ polish ] = "Zmiany w tabelach";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®å¤‰æ›´";
-    Text[ chinese_traditional ] = "ä¿®æ”¹è¡¨æ ¼";
-    Text[ arabic ] = "ÊÚÏíá ÇáÌÏæá";
-    Text[ dutch ] = "Tabelwijziging";
-    Text[ chinese_simplified ] = "ä¿®æ”¹è¡¨æ ¼";
-    Text[ greek ] = "Ôñïğïğïßçóç ğßíáêá";
-    Text[ korean ] = "í‘œ ë³€ê²½ ì‚¬í•­";
-    Text[ turkish ] = "Tablo değişikliği";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Canvis a la taula";
-    Text[ finnish ] = "Taulukon muutokset";
-    Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "ZmÄ›ny v tabulce";
-    Text[ hebrew ] = "â€®×©×™× ×•×™×™× ×‘×˜×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Zmeny v tabuÄ¾ke";
-    Text[ hungarian ] = "TÃ¡blÃ¡zat mÃ³dosÃ­tÃ¡sa";
-    Text[ slovenian ] = "Spremembe tabele";
+    Text [ de ] = "Tabellenänderung" ;
+    Text [ en-US ] = "Table Changes" ;
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FMTCOLLSET
 {
-    Text = "Absatzvorlage gesetzt" ;
-    Text [ english ] = "Paragraph Styles set" ;
-    Text[ italian ] = "Modello di paragrafo impostato";
-    Text[ portuguese_brazilian ] = "Estilos de Parágrafo Aplicados";
-    Text[ portuguese ] = "Estilo de parágrafo definido";
-    Text[ danish ] = "Anvendte afsnitstypografier";
-    Text[ french ] = "Le style de paragraphe a été défini";
-    Text[ swedish ] = "Styckeformatmall definierad";
-    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
-    Text[ spanish ] = "Aplicado estilo de párrafo";
-    Text[ english_us ] = "Applied Paragraph Styles";
-    Text[ chinese_simplified ] = "å·²ç»è®¾å®šäº†æ®µè½æ ·å¼";
-    Text[ russian ] = "Ïğèìåíåí ñòèëü àáçàöà";
-    Text[ polish ] = "Zastosowane style akapitu";
-    Text[ japanese ] = "æ®µè½ã‚¹ã‚¿ã‚¤ãƒ«ã®è¨­å®š";
-    Text[ chinese_traditional ] = "å·²ç»è¨­å®šäº†æ®µè½æ¨£å¼";
-    Text[ arabic ] = "Êã ÊÚííä äãØ ÇáİŞÑÉ";
-    Text[ dutch ] = "Alinea-opmaakprofiel gedefinieerd";
-    Text[ chinese_simplified ] = "å·²ç»è®¾å®šäº†æ®µè½æ ·å¼";
-    Text[ greek ] = "Ïñéóìüò ğñïôığïõ ğáñáãñÜöïõ";
-    Text[ korean ] = "ë‹¨ë½ ìŠ¤íƒ€ì¼ ì„¤ì •";
-    Text[ turkish ] = "Paragraf biçimi seçildi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "S'han aplicat els estils de paràgraf";
-    Text[ finnish ] = "Käytetyt kappaletyylit";
-    Text[ thai ] = "à¸›à¸£à¸°à¸¢à¸¸à¸à¸•à¹Œà¸¥à¸±à¸à¸©à¸“à¸°à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "PouÅ¾ity styly odstavce";
-    Text[ hebrew ] = "Absatzvorlage gesetzt";
-    Text[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¶à¥ˆà¤²à¤¿à¤¯à¤¾à¤";
-    Text[ slovak ] = "PouÅ¾itÃ© Å¡tÃ½ly odstavca";
-    Text[ hungarian ] = "Alkalmazott bekezdÃ©sstÃ­lusok";
-    Text[ slovenian ] = "Uporabljeni slogi odstavkov";
+    Text [ de ] = "Absatzvorlage gesetzt" ;
+    Text [ en-US ] = "Applied Paragraph Styles";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_TITLE
 {
-    Text = "AutoFormat" ;
-    Text [ English ] = "AutoFormat" ;
-    Text[ italian ] = "Formattazione automatica";
-    Text[ portuguese_brazilian ] = "AutoFormatação";
-    Text[ portuguese ] = "AutoFormato";
-    Text[ danish ] = "AutoFormat";
-    Text[ french ] = "AutoFormat";
-    Text[ swedish ] = "Autoformat";
-    Text[ dutch ] = "AutoOpmaak";
-    Text[ spanish ] = "Formateado automático";
-    Text[ english_us ] = "AutoFormat";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
-    Text[ russian ] = "Àâòîôîğìàò";
-    Text[ polish ] = "Autoformatowanie";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ";
-    Text[ chinese_traditional ] = "è‡ªå‹•æ ¼å¼";
-    Text[ arabic ] = "ÊäÓíŞ ÊáŞÇÆí";
-    Text[ dutch ] = "AutoOpmaak";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ ¼å¼";
-    Text[ greek ] = "Áõôüìáôç ìïñöïğïßçóç";
-    Text[ korean ] = "ìë™ ì„œì‹";
-    Text[ turkish ] = "Otomatik formatlama";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formatatge Automàtic";
-    Text[ finnish ] = "Automaattinen muotoilu";
-    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "AutomatickÃ½ formÃ¡t";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤°à¤šà¤¨à¤¾";
-    Text[ slovak ] = "AutomatickÃ½ formÃ¡t";
-    Text[ hungarian ] = "Automatikus formÃ¡zÃ¡s";
-    Text[ slovenian ] = "Samooblikovanje";
+    Text [ de ] = "AutoFormat" ;
+    Text [ en-US ] = "AutoFormat";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_MSG
 {
-    Text = "Das AutoFormat ist beendet.\nSie können jetzt alle Änderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen." ;
-    Text [ English ] = "AutoFormat completed.\nYou can accept or reject all changes, or\naccept or reject individual changes." ;
-    Text[ italian ] = "La formattazione automatica è terminata.\nPotete accettare o rifiutare tutte le modifiche oppure\naccettare o rifiutare singolarmente le modifiche.";
-    Text[ portuguese_brazilian ] = "AutoFormatação completada.\nPode-se aceitar ou rejeitar todas as modificações em bloco\nou uma por uma.";
-    Text[ portuguese ] = "Concluído AutoFormato.\nPoderá aceitar ou rejeitar todas as modificações de\numa só vez ou uma a uma.";
-    Text[ danish ] = "AutoFormat er fuldført.\nDu kan nu acceptere eller afvise alle ændringer,\neller acceptere eller afvise dem enkeltvis.";
-    Text[ french ] = "L'AutoFormat a terminé.\nVous pouvez choisir d'en accepter ou rejeter en une seule fois toutes les modifications, ou\n de vous faire afficher toutes les modifications pour les revoir.";
-    Text[ swedish ] = "Autoformatet är färdigt.\nDu kan acceptera eller avböja alla ändringar\neller acceptera eller avböja ändringar en och en.";
-    Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
-    Text[ spanish ] = "El Formateado automático ha concluido.\nAhora puede aceptar o rechazar todas las modificaciones,\na la vez o una por una.";
-    Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
-    Text[ chinese_simplified ] = "å·²ç»å®Œæˆè‡ªåŠ¨æ ¼å¼ã€‚\næ‚¨ç°åœ¨èƒ½å¤Ÿæ¥å—æˆ–æ‹’ç»æ‰€æœ‰çš„æ›´æ”¹ï¼Œæˆ–è€…\næ¥å—æˆ–æ‹’ç»å•ä¸ªæ›´æ”¹ã€‚";
-    Text[ russian ] = "Àâòîôîğìàòèğîâàíèå çàêîí÷åíî.\nÑåé÷àñ âû ìîæåòå ïğèíÿòü èëè îòêëîíèòü ñğàçó âñå èçìåíåíèÿ, èëè êàæäîå ïî îòäåëüíîñòè.";
-    Text[ polish ] = "Autoformatowanie zosta³o ukoñczone.\nMo¿na teraz zaakceptowaæ lub odrzuciæ wszystkie\nlub tylko okreœlone zmiany.";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãŒçµ‚äº†ã—ã¾ã—ãŸã€‚\nã™ã¹ã¦ã®å¤‰æ›´ã‚’å—ã‘å…¥ã‚Œã‚‹ã‹ã€å…ƒã«æˆ»ã™ã“ã¨ãŒã§ãã¾ã™ã€‚\nã¾ãŸã¯ã²ã¨ã¤ã²ã¨ã¤ã®å¤‰æ›´ã«ã¤ã„ã¦æ¤œè¨ã™ã‚‹ã“ã¨ã‚‚ã§ãã¾ã™ã€‚";
-    Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆè‡ªå‹•æ ¼å¼ã€‚\næ‚¨ç¾åœ¨èƒ½å¤ æ¥å—æˆ–æ‹’çµ•æ‰€æœ‰çš„è®Šæ›´ï¼Œæ‚¨ä¹Ÿèƒ½å¤ \næ¥å—æˆ–æ‹’çµ•å–®å€‹çš„è®Šæ›´ã€‚";
-    Text[ arabic ] = "ÊãøóÊ ÚãáíÉ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\níãßäß ÇáÂä ŞÈæá Ãæ ÑİÖ ÇáÊÛííÑÇÊ ßáåÇ¡\nÃæ ŞÈæá Ãæ ÑİÖ ßá ÊÛííÑ Úáì ÍÏå.";
-    Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
-    Text[ chinese_simplified ] = "å·²ç»å®Œæˆè‡ªåŠ¨æ ¼å¼ã€‚\næ‚¨ç°åœ¨èƒ½å¤Ÿæ¥å—æˆ–æ‹’ç»æ‰€æœ‰çš„æ›´æ”¹ï¼Œæˆ–è€…\næ¥å—æˆ–æ‹’ç»å•ä¸ªæ›´æ”¹ã€‚";
-    Text[ greek ] = "Ç Áõôüìáôç ìïñöïğïßçóç ïëïêëçñşèçêå.\nÌğïñåßôå íá áğïäå÷ôåßôå Ş íá áğïññßøåôå üëåò\nŞ ìåìïíùìİíåò áëëáãİò.";
-    Text[ korean ] = "ìë™ ì„œì‹ì´ ì¢…ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.\nì§€ê¸ˆ ë³€ê²½ ì‚¬í•­ì„ ëª¨ë‘ ì ìš©í•˜ê±°ë‚˜ ì·¨ì†Œí•  ìˆ˜ ìˆìœ¼ë©°\ní˜¹ì€ ê°œë³„ì ìœ¼ë¡œ ì ìš©í•˜ê±°ë‚˜ ì·¨ì†Œí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
-    Text[ turkish ] = "Otomatik formatlama tamamlandı.\nŞimdi değişiklikleri tümden veya tek tek\n kabul veya red edebilirsiniz.";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El formatatge automàtic ha acabat.\nPodeu acceptar-ne o rebutjar-ne tots els canvis\nalhora o bé un per un.";
-    Text[ finnish ] = "Automaattinen muotoilu valmis.\nVoit hyväksyä tai hylätä kaikki muutokset\ntai voit hyväksyä tai hylätä yksittäisiä muutoksia.";
-    Text[ thai ] = "à¸ˆà¸±à¸”à¸£à¸¹à¸›à¹à¸šà¸šà¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ\nà¸„à¸¸à¸“à¸ªà¸²à¸¡à¸²à¸£à¸–à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¹„à¸”à¹‰,\nà¸«à¸£à¸·à¸­à¸¢à¸­à¸¡à¸£à¸±à¸šà¸«à¸£à¸·à¸­à¸›à¸à¸´à¹€à¸ªà¸˜à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¹€à¸‰à¸à¸²à¸°";
-    Text[ czech ] = "AutomatickÃ© formÃ¡tovÃ¡nÃ­ dokonÄeno.\nMÅ¯Å¾ete pÅ™ijmout Äi odmÃ­tnout vÅ¡echny nebo pouze nÄ›kterÃ© zmÄ›ny.";
-    Text[ hebrew ] = "Das AutoFormat ist beendet.\nSie kÃ¶nnen jetzt alle Ã„nderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen.";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤°à¤šà¤¨à¤¾ à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤† à¥¤\nà¤†à¤ª à¤¸à¤¬ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¤…à¤¥à¤µà¤¾ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ,\nà¤…à¤¥à¤µà¤¾ à¤•à¥à¤› à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¤…à¤¥à¤µà¤¾ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "AutomatickÃ© formÃ¡tovanie dokonÄenÃ©.\nMÃ´Å¾ete prijaÅ¥ Äi odmietnuÅ¥ vÅ¡etky alebo len niektorÃ© zmeny.";
-    Text[ hungarian ] = "Az automatikus formÃ¡zÃ¡s befejezÅ‘dÃ¶tt.\nElfogadhatja vagy elutasÃ­thatja a vÃ¡ltoztatÃ¡sokat.";
-    Text[ slovenian ] = "Samooblikovanje je konÄano.\nLahko sprejmete ali zavrnete vse spremembe,\nali pa sprejmete ali zavrnete posamezne spremembe.";
+    Text [ de ] = "Das AutoFormat ist beendet.\nSie können jetzt alle Änderungen annehmen oder ablehnen,\noder sie einzeln annehmen oder ablehnen." ;
+    Text [ en-US ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_ACCEPT_ALL
 {
-    Text = "Alles ~annehmen" ;
-    Text [ English ] = "~Accept All" ;
-    Text[ italian ] = "~Accetta tutto";
-    Text[ portuguese_brazilian ] = "Aceitar Tudo";
-    Text[ portuguese ] = "~Aceitar tudo";
-    Text[ danish ] = "Accepter alle";
-    Text[ french ] = "Tout ~accepter";
-    Text[ swedish ] = "~Acceptera alla";
-    Text[ dutch ] = "~Alles accepteren";
-    Text[ spanish ] = "~Aceptar todo";
-    Text[ english_us ] = "Accept All";
-    Text[ chinese_simplified ] = "å…¨éƒ¨æ¥å—";
-    Text[ russian ] = "Ïğèíÿòü âñå";
-    Text[ polish ] = "Akceptuj wszystko";
-    Text[ japanese ] = "ã™ã¹ã¦å—ã‘å…¥ã‚Œã‚‹";
-    Text[ chinese_traditional ] = "å…¨éƒ¨æ¥å—";
-    Text[ arabic ] = "ŞÈæá Çáßá";
-    Text[ dutch ] = "~Alles accepteren";
-    Text[ chinese_simplified ] = "å…¨éƒ¨æ¥å—";
-    Text[ greek ] = "Áğïäï÷Ş üëùí";
-    Text[ korean ] = "ëª¨ë‘ ë™ì˜";
-    Text[ turkish ] = "Tümünü kabul et";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Accepta-ho tot";
-    Text[ finnish ] = "Hyväksy kaikki";
-    Text[ thai ] = "à¸¢à¸­à¸¡à¸£à¸±à¸šà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-    Text[ czech ] = "PÅ™ijmout vÅ¡e";
-    Text[ hebrew ] = "â€®×§×‘×œ×ª ×›×œ ×”×©×™× ×•×™×â€¬";
-    Text[ hindi ] = "à¤¸à¤¬ à¤¸à¥à¤µà¥€à¤•à¤¾à¤° à¤•à¤°à¥‹";
-    Text[ slovak ] = "PrijaÅ¥ vÅ¡etko";
-    Text[ hungarian ] = "Ã–sszes elfogadÃ¡sa";
-    Text[ slovenian ] = "Sprejmi vse";
+    Text [ de ] = "Alles ~annehmen" ;
+    Text [ en-US ] = "Accept All";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_REJECT_ALL
 {
-    Text = "Alles ableh~nen" ;
-    Text [ English ] = "~Reject All" ;
-    Text[ italian ] = "Rifiuta tutto";
-    Text[ portuguese_brazilian ] = "Rejeitar Tudo";
-    Text[ portuguese ] = "~Rejeitar tudo";
-    Text[ danish ] = "Afvis alle";
-    Text[ french ] = "~Tout rejeter";
-    Text[ swedish ] = "A~vböj allt";
-    Text[ dutch ] = "~Alles verwerpen";
-    Text[ spanish ] = "~Rechazar todo";
-    Text[ english_us ] = "Reject All";
-    Text[ chinese_simplified ] = "å…¨éƒ¨æ‹’ç»";
-    Text[ russian ] = "Îòêëîíèòü âñå";
-    Text[ polish ] = "Odrzuæ wszystko";
-    Text[ japanese ] = "ã™ã¹ã¦å…ƒã«æˆ»ã™";
-    Text[ chinese_traditional ] = "å…¨éƒ¨æ‹’çµ•";
-    Text[ arabic ] = "ÑİÖ Çáßá";
-    Text[ dutch ] = "~Alles verwerpen";
-    Text[ chinese_simplified ] = "å…¨éƒ¨æ‹’ç»";
-    Text[ greek ] = "Áğüññéøç üëùí";
-    Text[ korean ] = "ëª¨ë‘ ê±°ë¶€";
-    Text[ turkish ] = "Tümünü reddet";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rebutja'ls tots";
-    Text[ finnish ] = "Hylkää kaikki";
-    Text[ thai ] = "à¸›à¸à¸´à¹€à¸ªà¸˜à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-    Text[ czech ] = "OdmÃ­tnout vÅ¡e";
-    Text[ hebrew ] = "â€®×“×—×™×ª ×›×œ ×”×©×™× ×•×™×â€¬";
-    Text[ hindi ] = "à¤¸à¤¬ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
-    Text[ slovak ] = "OdmietnuÅ¥ vÅ¡etko";
-    Text[ hungarian ] = "Ã–sszes elutasÃ­tÃ¡sa";
-    Text[ slovenian ] = "Zavrni vse";
+    Text [ de ] = "Alles ableh~nen" ;
+    Text [ en-US ] = "Reject All";
+    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_EDIT
 {
-    Text = "Änderungen ~bearbeiten" ;
-    Text [ English ] = "Review ~Changes" ;
-    Text[ italian ] = "Modifica cambiamenti";
-    Text[ portuguese_brazilian ] = "Editar Modificações";
-    Text[ portuguese ] = "Editar ~modificações";
-    Text[ danish ] = "Rediger ændringer";
-    Text[ french ] = "É~diter les modifications";
-    Text[ swedish ] = "Redigera ~ändringar";
-    Text[ dutch ] = "Wijzigingen ~bewerken";
-    Text[ spanish ] = "Editar ~modificaciones";
-    Text[ english_us ] = "Edit Changes";
-    Text[ chinese_simplified ] = "ç¼–è¾‘æ›´æ”¹";
-    Text[ russian ] = "Àíàëèç èçìåíåíèé";
-    Text[ polish ] = "Edytuj zmiany";
-    Text[ japanese ] = "å¤‰æ›´ã®ç·¨é›†";
-    Text[ chinese_traditional ] = "ç·¨è¼¯è®Šæ›´";
-    Text[ arabic ] = "ÊÍÑíÑ ÇáÊÛííÑÇÊ";
-    Text[ dutch ] = "Wijzigingen ~bewerken";
-    Text[ chinese_simplified ] = "ç¼–è¾‘æ›´æ”¹";
-    Text[ greek ] = "Åğåîåñãáóßá áëëáãşí";
-    Text[ korean ] = "ë³€ê²½ì‚¬í•­ í¸ì§‘";
-    Text[ turkish ] = "Değişiklikleri düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Edita els canvis";
-    Text[ finnish ] = "Muokkaa muutoksia";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡";
-    Text[ czech ] = "Upravit zmÄ›ny";
-    Text[ hebrew ] = "Ã„nderungen ~bearbeiten";
-    Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ zmeny";
-    Text[ hungarian ] = "MegerÅ‘sÃ­tÃ©s egyenkÃ©nt >>";
-    Text[ slovenian ] = "Uredi spremembe";
+    Text [ de ] = "Änderungen ~bearbeiten" ;
+    Text [ en-US ] = "Edit Changes";
+    Text [ x-comment ] = " ";
 };
 QueryBox DLG_IMPORT_DBNAME
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    MESSAGE = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
-    MESSAGE [ English ] = "Should the database name be used as document default?" ;
-    Message [ dutch ] = "Moet de databasenaam als standaarddatabase voor het document worden overgenomen?" ;
-    Message [ english_us ] = "Use database name as default database for the document?" ;
-    Message [ italian ] = "Si vuole che il nome del database venga usato come database standard per il documento?" ;
-    Message [ spanish ] = "¿Desea adoptar el nombre de la base de datos como base de datos predeterminados para el documento?" ;
-    Message [ french ] = "Le nom de la base de données doit-il être utilisé comme nom de base de données par défaut ?" ;
-    Message [ swedish ] = "Ska databasnamnet övertas som standarddatabas för dokumentet?" ;
-    Message [ danish ] = "Skal databasenavnet overtages som standarddatabase for dokumentet?" ;
-    Message [ portuguese_brazilian ] = "Deseja usar o nome do banco de dados como banco de dados padrão para o documento?" ;
-    Message [ portuguese ] = "Deseja adoptar o nome da base de dados como base de dados padrão para o documento?" ;
-    Message[ chinese_simplified ] = "è¦è®©æ–‡ä»¶é‡‡ç”¨é»˜è®¤çš„æ•°æ®åº“åç§°ï¼Ÿ";
-    Message[ russian ] = "Èñïîëüçîâàòü áàçó äàííûõ êàê áàçó äàííûõ ïî óìîë÷àíèş äëÿ ıòîãî äîêóìåíòà?";
-    Message[ polish ] = "Czy nazwa bazy danych ma zostaæ zastosowana w dokumencie jako domyœlna baza danych?";
-    Message[ japanese ] = "ã“ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®åå‰ã‚’æ¨™æº–ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã¨ã—ã¦ã“ã®æ–‡æ›¸ã«ä½¿ç”¨ã—ã¾ã™ã‹ï¼Ÿ";
-    Message[ chinese_traditional ] = "è®“æ–‡ä»¶æ¡ç”¨é»˜èªçš„è³‡æ–™åº«åç¨±ï¼Ÿ";
-    Message[ arabic ] = "åá ÊÑíÏ ÇÓÊÎÏÇã ÇÓã ŞÇÚÏÉ ÇáÈíÇäÇÊ ßŞÇÚÏÉ ÈíÇäÇÊ ÇİÊÑÇÖíÉ ááãÓÊäÏ¿";
-    Message[ dutch ] = "Moet de databasenaam als standaarddatabase voor het document worden overgenomen?";
-    Message[ chinese_simplified ] = "è¦è®©æ–‡ä»¶é‡‡ç”¨é»˜è®¤çš„æ•°æ®åº“åç§°ï¼Ÿ";
-    Message[ greek ] = "Èİëåôå íá ÷ñçóéìïğïéçèåß ôï üíïìá ôçò âÜóçò äåäïìİíùí ùò âÜóç äåäïìİíùí ğñïåğéëïãŞò ãéá ôï İããñáöï;";
-    Message[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì´ë¦„ì„ ë¬¸ì„œì˜ ê¸°ë³¸ ë°ì´í„°ë² ì´ìŠ¤ë¡œ ì‚¬ìš©í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Message[ turkish ] = "Veritabanı adı, belge için öndeğer veritabanı olarak kullanılsın mı?";
-    Message[ language_user1 ] = " ";
-    Message[ catalan ] = "Voleu utilitzar el nom de la base de dades com a base de dades per defecte per al document?";
-    Message[ finnish ] = "Käytetäänkö tietokannan nimeä asiakirjan oletustietokantana?";
-    Message[ thai ] = "à¹ƒà¸Šà¹‰à¸Šà¸·à¹ˆà¸­à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹€à¸›à¹‡à¸™à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Message[ czech ] = "PouÅ¾Ã­t databÃ¡zi nÃ¡zvÅ¯ jako vÃ½chozÃ­ databÃ¡zi dokumentu?";
-    Message[ hebrew ] = "Soll der Datenbankname als Standarddatenbank fÃ¼r das Dokument Ã¼bernommen werden?";
-    Message[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤¨à¤¾à¤® à¤•à¥‹ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‡à¤²à¤¿à¤ à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤œà¥ˆà¤¸à¥‡ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤¨à¤¾ à¤¹à¥ˆ?";
-    Message[ slovak ] = "PouÅ¾iÅ¥ databÃ¡zu nÃ¡zvov ako vÃ½chodziu databÃ¡zu dokumentu?";
-    Message[ hungarian ] = "AlapÃ©rtelmezett adatbÃ¡ziskÃ©nt hasznÃ¡lja az adatbÃ¡zisnevet a dokumentumban?";
-    Message[ slovenian ] = "Ali naj bo zbirka podatkov uporabljena kot privzeta za dokument?";
+    Message [ de ] = "Soll der Datenbankname als Standarddatenbank für das Dokument übernommen werden?" ;
+    Message [ en-US ] = "Use database name as default database for the document?" ;
+    Message [ x-comment ] = " ";
 };
 String STR_PAGE
 {
-    TEXT = "Seite " ;
-    TEXT [ English ] = "Page " ;
-    TEXT [ norwegian ] = "Side " ;
-    TEXT [ italian ] = "Pagina " ;
-    TEXT [ portuguese_brazilian ] = "Página " ;
-    TEXT [ portuguese ] = "Página " ;
-    TEXT [ finnish ] = "Sivu " ;
-    TEXT [ danish ] = "Side " ;
-    TEXT [ french ] = "Page " ;
-    TEXT [ swedish ] = "Sida  " ;
-    TEXT [ dutch ] = "Pagina" ;
-    TEXT [ spanish ] = "Página  " ;
-    TEXT [ english_us ] = "Page " ;
-    TEXT[ chinese_simplified ] = "é¡µé¢ ";
-    TEXT[ russian ] = "Ñòğàíèöà  ";
-    TEXT[ polish ] = "Strona  ";
-    TEXT[ japanese ] = "ãƒšãƒ¼ã‚¸ ";
-    TEXT[ chinese_traditional ] = "é ";
-    TEXT[ arabic ] = "ÕİÍÉ ";
-    TEXT[ dutch ] = "Pagina";
-    TEXT[ chinese_simplified ] = "é¡µé¢ ";
-    TEXT[ greek ] = "Óåëßäá ";
-    TEXT[ korean ] = "í˜ì´ì§€ ";
-    TEXT[ turkish ] = "Sayfa ";
-    TEXT[ language_user1 ] = " ";
-    TEXT[ catalan ] = "Pàgina  ";
-    TEXT[ thai ] = "à¸«à¸™à¹‰à¸² ";
-    TEXT[ czech ] = "Strana ";
-    TEXT[ hebrew ] = "Seite";
-    TEXT[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ";
-    TEXT[ slovak ] = "Strana ";
-    TEXT[ hungarian ] = "Oldal: ";
-    TEXT[ slovenian ] = "Stran ";
+    Text [ de ] = "Seite " ;
+    Text [ en-US ] = "Page " ;
+    Text [ x-comment ] = " ";
 };
 String RID_TEXT_TOOLBOX
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textobjektleiste : Textleiste */
-    Text = "Textobjektleiste" ;
-    Text [ English ] = "Text object bar" ;
-    Text [ portuguese ] = "Barra de objectos de texto" ;
-    Text [ english_us ] = "Text Object Bar" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Texto" ;
-    Text [ swedish ] = "Textobjektlist" ;
-    Text [ danish ] = "Tekstobjektlinje" ;
-    Text [ italian ] = "Barra degli oggetti di testo" ;
-    Text [ spanish ] = "Barra de objetos de texto" ;
-    Text [ french ] = "Barre d'objets de texte" ;
-    Text [ dutch ] = "Tekstobjectbalk" ;
-    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü òåêñòà";
-    Text[ polish ] = "Pasek obiektów tekstowych";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
-    Text[ dutch ] = "Tekstobjectbalk";
-    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí êåéìİíïõ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Metin nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de text";
-    Text[ finnish ] = "Tekstin muotoilurivi";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Panel textu";
-    Text[ hebrew ] = "Textobjektleiste";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel textu";
-    Text[ hungarian ] = "SzÃ¶vegobjektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za besedilo";
+    Text [ de ] = "Textobjektleiste" ;
+    Text [ en-US ] = "Text Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_TEXT_TOOLBOX
 {
@@ -978,67 +244,13 @@ ToolBox RID_TEXT_TOOLBOX
         MN_TEXT_BACKGROUND
         MN_TEXT_DIALOGS(TRUE)
     };
-    ItemList[arabic] =
-    {
-        MN_TEMPLATE
-        MN_FONT
-        MN_TEXT1_RTL(TRUE)
-        MN_TEXT1_BLOCK
-        MN_TEXT_RTL_LTR
-        MN_TEXT_LINESPACE
-        MN_TEXT2
-        MN_TEXT_BACKGROUND
-        MN_TEXT_DIALOGS(TRUE)
-    };
-    ItemList[hebrew] =
-    {
-        MN_TEMPLATE
-        MN_FONT
-        MN_TEXT1_RTL(TRUE)
-        MN_TEXT1_BLOCK
-        MN_TEXT_RTL_LTR
-        MN_TEXT_LINESPACE
-        MN_TEXT2
-        MN_TEXT_BACKGROUND
-        MN_TEXT_DIALOGS(TRUE)
-    };
     Scroll = TRUE ;
 };
 String RID_TABLE_TOOLBOX
 {
-    Text = "Tabellenobjektleiste" ;
-    Text [ English ] = "Table objectbar" ;
-    Text [ norwegian ] = "Table" ;
-    Text [ italian ] = "Barra degli oggetti per tabelle" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Tabela" ;
-    Text [ portuguese ] = "Barra de objectos de tabela" ;
-    Text [ finnish ] = "Taulukon muotoilurivi" ;
-    Text [ danish ] = "Tabelobjektlinje" ;
-    Text [ french ] = "Barre d'objets de tableau" ;
-    Text [ swedish ] = "Tabellobjektlist" ;
-    Text [ dutch ] = "Tabelobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos para tablas" ;
-    Text [ english_us ] = "Table Object Bar" ;
-    Text[ chinese_simplified ] = "è¡¨æ ¼å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü òàáëèöû";
-    Text[ polish ] = "Pasek obiektów tabeli";
-    Text[ japanese ] = "è¡¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "è¡¨æ ¼ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÌÏæá";
-    Text[ dutch ] = "Tabelobjectbalk";
-    Text[ chinese_simplified ] = "è¡¨æ ¼å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğßíáêá";
-    Text[ korean ] = "í‘œ ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Tablo nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de la taula";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "Panel tabulek";
-    Text[ hebrew ] = "Tabellenobjektleiste";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel tabuliek";
-    Text[ hungarian ] = "TÃ¡blÃ¡zatobjektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za tabele";
+    Text [ de ] = "Tabellenobjektleiste" ;
+    Text [ en-US ] = "Table Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_TABLE_TOOLBOX
 {
@@ -1200,39 +412,9 @@ ToolBox RID_TABLE_TOOLBOX
 };
 String RID_FRAME_TOOLBOX
 {
-    Text = "Rahmenobjektleiste" ;
-    Text [ English ] = "Frame objectbar" ;
-    Text [ norwegian ] = "Ramme" ;
-    Text [ italian ] = "Barra degli oggetti per cornice" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Moldura" ;
-    Text [ portuguese ] = "Barra de molduras" ;
-    Text [ finnish ] = "Kehyksen muotoilurivi" ;
-    Text [ danish ] = "Rammeobjektlinje" ;
-    Text [ french ] = "Barre d'objets de cadre" ;
-    Text [ swedish ] = "Ramobjektlist" ;
-    Text [ dutch ] = "Kaderobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos de marco" ;
-    Text [ english_us ] = "Frame Object Bar" ;
-    Text[ chinese_simplified ] = "æ¡†å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü âğåçêè";
-    Text[ polish ] = "Pasek obiektów ramki";
-    Text[ japanese ] = "æ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "æ¡†ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáßÇÏÑ";
-    Text[ dutch ] = "Kaderobjectbalk";
-    Text[ chinese_simplified ] = "æ¡†å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ğëáéóßïõ";
-    Text[ korean ] = "í”„ë ˆì„ ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Çerçeve nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes del marc";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸à¸£à¸­à¸š";
-    Text[ czech ] = "Panel ohraniÄenÃ­";
-    Text[ hebrew ] = "Rahmenobjektleiste";
-    Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤® à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel ohraniÄenia";
-    Text[ hungarian ] = "Keretobjektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za okvire";
+    Text [ de ] = "Rahmenobjektleiste" ;
+    Text [ en-US ] = "Frame Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_FRAME_TOOLBOX
 {
@@ -1287,39 +469,9 @@ ToolBox RID_FRAME_TOOLBOX
 };
 String RID_GRAFIK_TOOLBOX
 {
-    Text = "Grafikobjektleiste" ;
-    Text [ English ] = "Graphic objectbar" ;
-    Text [ norwegian ] = "Graphic" ;
-    Text [ italian ] = "Barra degli oggetti grafici" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Figura" ;
-    Text [ portuguese ] = "Barra de gráficos" ;
-    Text [ finnish ] = "Grafiikan muotoilurivi" ;
-    Text [ danish ] = "Grafikobjektlinje" ;
-    Text [ french ] = "Barre d'objets graphiques" ;
-    Text [ swedish ] = "Grafikobjektlist" ;
-    Text [ dutch ] = "Objectbalk afbeeldingen" ;
-    Text [ spanish ] = "Barra de objetos gráficos" ;
-    Text [ english_us ] = "Graphics Object Bar" ;
-    Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ãğàôè÷åñêèõ îáúåêòîâ";
-    Text[ polish ] = "Pasek obiektów graficznych";
-    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "åœ–å½¢ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÕæÑÉ";
-    Text[ dutch ] = "Objectbalk afbeeldingen";
-    Text[ chinese_simplified ] = "å›¾å½¢å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ ãñáöéêşí áíôéêåéìİíùí";
-    Text[ korean ] = "ê·¸ë¦¼ ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Grafik nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes gràfics";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "Panel obrÃ¡zkÅ¯";
-    Text[ hebrew ] = "Grafikobjektleiste";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel obrÃ¡zkov";
-    Text[ hungarian ] = "KÃ©pobjektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za grafiko";
+    Text [ de ] = "Grafikobjektleiste" ;
+    Text [ en-US ] = "Graphics Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_GRAFIK_TOOLBOX
 {
@@ -1410,39 +562,9 @@ ToolBox RID_GRAFIK_TOOLBOX
 };
 String RID_OLE_TOOLBOX
 {
-    Text = "Objekt" ;
-    Text [ English ] = "Object" ;
-    Text [ norwegian ] = "Object" ;
-    Text [ italian ] = "Oggetto" ;
-    Text [ portuguese_brazilian ] = "Objeto" ;
-    Text [ portuguese ] = "Objecto" ;
-    Text [ finnish ] = "Objekti" ;
-    Text [ danish ] = "Objekt" ;
-    Text [ french ] = "Objet" ;
-    Text [ swedish ] = "Objekt" ;
-    Text [ dutch ] = "Object" ;
-    Text [ spanish ] = "Objeto" ;
-    Text [ english_us ] = "Object" ;
-    Text[ chinese_simplified ] = "å¯¹è±¡";
-    Text[ russian ] = "Îáúåêò";
-    Text[ polish ] = "Obiekt";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-    Text[ chinese_traditional ] = "ç‰©ä»¶";
-    Text[ arabic ] = "ßÇÆä";
-    Text[ dutch ] = "Object";
-    Text[ chinese_simplified ] = "å¯¹è±¡";
-    Text[ greek ] = "Áíôéêåßìåíï";
-    Text[ korean ] = "ê°œì²´";
-    Text[ turkish ] = "Nesne";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objecte";
-    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "Objekt";
-    Text[ hebrew ] = "â€®××•×‘×™×§×˜â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥";
-    Text[ slovak ] = "Objekt";
-    Text[ hungarian ] = "Objektum";
-    Text[ slovenian ] = "Predmet";
+    Text [ de ] = "Objekt" ;
+    Text [ en-US ] = "Object" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_OLE_TOOLBOX
 {
@@ -1483,39 +605,9 @@ ToolBox RID_OLE_TOOLBOX
 };
 String RID_DRAW_TOOLBOX
 {
-    Text = "Zeichenobjektleiste" ;
-    Text [ English ] = "Draw objectbar" ;
-    Text [ norwegian ] = "Draw" ;
-    Text [ italian ] = "Barra degli oggetti per disegno" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Desenho" ;
-    Text [ portuguese ] = "Barra de objectos de desenho" ;
-    Text [ finnish ] = "Piirroksen muotoilurivi" ;
-    Text [ danish ] = "Tegneobjektlinje" ;
-    Text [ french ] = "Barre d'objets de dessin" ;
-    Text [ swedish ] = "Ritobjektlist" ;
-    Text [ dutch ] = "Tekenobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos de dibujo" ;
-    Text [ english_us ] = "Draw Object Bar" ;
-    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü ğèñóíêà";
-    Text[ polish ] = "Pasek obiektów rysunkowych";
-    Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ÇáßÇÆäÇÊ ÇáÑÓæãíÉ";
-    Text[ dutch ] = "Tekenobjectbalk";
-    Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí ó÷åäßáóçò";
-    Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Çizim nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de dibuix";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸§à¸²à¸”à¸£à¸¹à¸›";
-    Text[ czech ] = "Panel kresby objektÅ¯";
-    Text[ hebrew ] = "Zeichenobjektleiste";
-    Text[ hindi ] = "à¤–à¥€à¤‚à¤šà¤¨à¥‡ à¤•à¤¾ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel kresliacich objektov";
-    Text[ hungarian ] = "Rajzobjektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za risanje";
+    Text [ de ] = "Zeichenobjektleiste" ;
+    Text [ en-US ] = "Draw Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_DRAW_TOOLBOX
 {
@@ -1678,38 +770,9 @@ ToolBox RID_DRAW_TOOLBOX
 };
 String RID_DRAWFORM_TOOLBOX
 {
-    Text = "Kontrollfeldleiste" ;
-    Text [ English ] = "Control bar" ;
-    Text [ portuguese ] = "Barra de controlos" ;
-    Text [ english_us ] = "Control Bar" ;
-    Text [ portuguese_brazilian ] = "Barra de Controle" ;
-    Text [ swedish ] = "Kontrollfältlist" ;
-    Text [ danish ] = "Kontrolelementlinje" ;
-    Text [ italian ] = "Barra dei campi di controllo" ;
-    Text [ spanish ] = "Barra de campos de control" ;
-    Text [ french ] = "Barre de contrôles" ;
-    Text [ dutch ] = "Controleveldbalk" ;
-    Text[ chinese_simplified ] = "æ§åˆ¶æ ";
-    Text[ russian ] = "Ïàíåëü ıëåìåíòîâ óïğàâëåíèÿ";
-    Text[ polish ] = "Pasek formantów";
-    Text[ japanese ] = "ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ãƒãƒ¼";
-    Text[ chinese_traditional ] = "æ§åˆ¶é …åˆ—";
-    Text[ arabic ] = "ÔÑíØ ÚäÇÕÑ ÇáÊÍßã";
-    Text[ dutch ] = "Controleveldbalk";
-    Text[ chinese_simplified ] = "æ§åˆ¶æ ";
-    Text[ greek ] = "ÃñáììŞ åëİã÷ïõ ğåäßùí";
-    Text[ korean ] = "ì»¨íŠ¸ë¡¤ ëª¨ìŒ";
-    Text[ turkish ] = "Kontrol çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra de control";
-    Text[ finnish ] = "Ohjausrivi";
-    Text[ thai ] = "à¹à¸–à¸šà¸„à¸§à¸šà¸„à¸¸à¸¡";
-    Text[ czech ] = "KontrolnÃ­ panel";
-    Text[ hebrew ] = "Kontrollfeldleiste";
-    Text[ hindi ] = "à¤¨à¤¿à¤¯à¤‚à¤¤à¥à¤°à¤£ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "KontrolnÃ½ panel";
-    Text[ hungarian ] = "VezÃ©rlÅ‘k eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Krmilna vrstica";
+    Text [ de ] = "Kontrollfeldleiste" ;
+    Text [ en-US ] = "Control Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_DRAWFORM_TOOLBOX
 {
@@ -1818,38 +881,9 @@ ToolBox RID_DRAWFORM_TOOLBOX
 };
 String RID_BEZIER_TOOLBOX
 {
-    Text = "Bezierobjektleiste" ;
-    Text [ English ] = "Bezier objectbar" ;
-    Text [ english_us ] = "Bézier Object Bar" ;
-    Text [ swedish ] = "Bézierobjektlist" ;
-    Text [ danish ] = "Bézierobjektlinje" ;
-    Text [ italian ] = "Barra degli oggetti di Bézier" ;
-    Text [ spanish ] = "Barra de objetos Bézier" ;
-    Text [ french ] = "Barre d'objets Bézier" ;
-    Text [ dutch ] = "Bézierobjectbalk" ;
-    Text [ portuguese ] = "Barra de objectos Bézier" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos Bézier" ;
-    Text[ chinese_simplified ] = "æ›²çº¿å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü îáúåêòîâ Áåçüå";
-    Text[ polish ] = "Pasek obiektów Béziera";
-    Text[ japanese ] = "ãƒ™ã‚¸ã‚§æ›²ç·šã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "æ›²ç·šç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ Bézier";
-    Text[ dutch ] = "Bézierobjectbalk";
-    Text[ chinese_simplified ] = "æ›²çº¿å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí Bezier";
-    Text[ korean ] = "ë² ì§€ì— ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Bezier nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes Bézier";
-    Text[ finnish ] = "Bézier-muotoilurivi";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸ Bà¹‰zier ";
-    Text[ czech ] = "Panel bÃ©zierovÃ½ch objektÅ¯";
-    Text[ hebrew ] = "Bezierobjektleiste";
-    Text[ hindi ] = "à¤¬à¥‡à¤œà¤¼à¤¿à¤¯à¤° à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "BÃ©zierova objektovÃ¡ liÅ¡ta";
-    Text[ hungarian ] = "BÃ©zier-objektum eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za Bezierove krivulje";
+    Text [ de ] = "Bezierobjektleiste" ;
+    Text [ en-US ] = "Bézier Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_BEZIER_TOOLBOX
 {
@@ -1953,38 +987,9 @@ ToolBox RID_BEZIER_TOOLBOX
 };
 String RID_DRAW_TEXT_TOOLBOX
 {
-    Text = "Textobjektleiste/Grafik" ;
-    Text [ norwegian ] = "Tegne tekstmodus" ;
-    Text [ italian ] = "Barra degli oggetti di testo/immagini" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Texto" ;
-    Text [ portuguese ] = "Barra de objectos de texto" ;
-    Text [ finnish ] = "Tekstin muotoilurivi" ;
-    Text [ danish ] = "Tekstobjektlinje" ;
-    Text [ french ] = "Barre d'objets de texte/Image" ;
-    Text [ swedish ] = "Textobjektlist/grafik" ;
-    Text [ dutch ] = "Tekstobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos de texto/imágenes" ;
-    Text [ english_us ] = "Text Object Bar/Graphics" ;
-    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü òåêñòà";
-    Text[ polish ] = "Pasek obiektów tekstowych";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼/å›³";
-    Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶åˆ—/åœ–å½¢";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáäÕ";
-    Text[ dutch ] = "Tekstobjectbalk";
-    Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí êåéìİíïõ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ ëª¨ìŒ/ê·¸ë¦¼";
-    Text[ turkish ] = "Metin Nesne Çubuğu/Grafikleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de text";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Panel textu";
-    Text[ hebrew ] = "Textobjektleiste/Grafik";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel textu";
-    Text[ hungarian ] = "SzÃ¶vegobjektum eszkÃ¶ztÃ¡r/KÃ©p";
-    Text[ slovenian ] = "Predmetna vrstica za besedilo/Grafike";
+    Text [ de ] = "Textobjektleiste/Grafik" ;
+    Text [ en-US ] = "Text Object Bar/Graphics" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_DRAW_TEXT_TOOLBOX
 {
@@ -2034,7 +1039,7 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
 
         MN_TEXT_DIALOGS(FALSE)
     };
-    ItemList[arabic] =
+    ItemList[ ar ] =
     {
         MN_FONT
         MN_TEXT1_RTL(FALSE)
@@ -2067,7 +1072,7 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
 
         MN_TEXT_DIALOGS(FALSE)
     };
-    ItemList[hebrew] =
+    ItemList[ he ] =
     {
         MN_FONT
         MN_TEXT1_RTL(FALSE)
@@ -2104,39 +1109,9 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
 };
 String RID_NUM_TOOLBOX
 {
-    Text = "Nummerierungsobjektleiste" ;
-    Text [ English ] = "Outlining objectbar" ;
-    Text [ norwegian ] = "+++Outlining" ;
-    Text [ italian ] = "Barra degli oggetti per la numerazione" ;
-    Text [ portuguese_brazilian ] = "Barra de Objetos de Numeração" ;
-    Text [ portuguese ] = "Barra de objectos de numeração" ;
-    Text [ finnish ] = "Numeroinnin muotoilurivi" ;
-    Text [ danish ] = "Nummereringsobjektlinje" ;
-    Text [ french ] = "Barre d'objets de numérotation" ;
-    Text [ swedish ] = "Numreringsobjektlist" ;
-    Text [ dutch ] = "Nummeringsobjectbalk" ;
-    Text [ spanish ] = "Barra de objetos de numeración" ;
-    Text [ english_us ] = "Numbering Object Bar" ;
-    Text[ chinese_simplified ] = "ç¼–å·å¯¹è±¡æ ";
-    Text[ russian ] = "Êîíòåêñòíàÿ ïàíåëü íóìåğàöèè";
-    Text[ polish ] = "Pasek obiektów numeracji";
-    Text[ japanese ] = "ç•ªå·ä»˜ã‘ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒãƒ¼";
-    Text[ chinese_traditional ] = "ç·¨è™Ÿç‰©ä»¶åˆ—";
-    Text[ arabic ] = "ÔÑíØ ßÇÆäÇÊ ÇáÊÑŞíã";
-    Text[ dutch ] = "Nummeringsobjectbalk";
-    Text[ chinese_simplified ] = "ç¼–å·å¯¹è±¡æ ";
-    Text[ greek ] = "ÃñáììŞ áíôéêåéìİíùí áñßèìçóçò";
-    Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ê°œì²´ ëª¨ìŒ";
-    Text[ turkish ] = "Numaralama nesne çubuğu";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Barra d'objectes de numeració";
-    Text[ thai ] = "à¹à¸–à¸šà¸§à¸±à¸•à¸–à¸¸à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
-    Text[ czech ] = "Panel ÄÃ­slovÃ¡nÃ­";
-    Text[ hebrew ] = "Nummerierungsobjektleiste";
-    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¤¾ à¤µà¤¸à¥à¤¤à¥ à¤ªà¤Ÿà¥à¤Ÿà¥€";
-    Text[ slovak ] = "Panel ÄÃ­slovania";
-    Text[ hungarian ] = "SzÃ¡mozÃ¡s eszkÃ¶ztÃ¡r";
-    Text[ slovenian ] = "Predmetna vrstica za oÅ¡tevilÄevanje";
+    Text [ de ] = "Nummerierungsobjektleiste" ;
+    Text [ en-US ] = "Numbering Object Bar" ;
+    Text [ x-comment ] = " ";
 };
 ToolBox RID_NUM_TOOLBOX
 {
@@ -2237,804 +1212,135 @@ ToolBox RID_NUM_TOOLBOX
 };
 String STR_SHELLNAME_TEXT
 {
-    Text = "Text" ;
-    Text [ ENGLISH ] = "Text" ;
-    Text [ dutch ] = "Tekst" ;
-    Text [ english_us ] = "Text" ;
-    Text [ italian ] = "Testo" ;
-    Text [ spanish ] = "Texto" ;
-    Text [ french ] = "Texte" ;
-    Text [ swedish ] = "Text" ;
-    Text [ danish ] = "Tekst" ;
-    Text [ portuguese_brazilian ] = "Texto" ;
-    Text [ portuguese ] = "Texto" ;
-    Text[ chinese_simplified ] = "æ–‡å­—";
-    Text[ russian ] = "Òåêñò";
-    Text[ polish ] = "Tekst";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "æ–‡å­—";
-    Text[ arabic ] = "äÕ";
-    Text[ dutch ] = "Tekst";
-    Text[ chinese_simplified ] = "æ–‡å­—";
-    Text[ greek ] = "Êåßìåíï";
-    Text[ korean ] = "í…ìŠ¤íŠ¸";
-    Text[ turkish ] = "Metin";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Text";
-    Text[ finnish ] = "Teksti";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Text";
-    Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-    Text[ slovak ] = "Text";
-    Text[ hungarian ] = "SzÃ¶veg";
-    Text[ slovenian ] = "Besedilo";
+    Text [ de ] = "Text" ;
+    Text [ en-US ] = "Text" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_TABLE
 {
-    Text = "Tabelle" ;
-    Text [ ENGLISH ] = "Table" ;
-    Text [ dutch ] = "Tabel" ;
-    Text [ english_us ] = "Table" ;
-    Text [ italian ] = "Tabella" ;
-    Text [ spanish ] = "Tabla" ;
-    Text [ french ] = "Tableau" ;
-    Text [ swedish ] = "Tabell" ;
-    Text [ danish ] = "Tabel" ;
-    Text [ portuguese_brazilian ] = "Tabela" ;
-    Text [ portuguese ] = "Tabela" ;
-    Text[ chinese_simplified ] = "è¡¨æ ¼";
-    Text[ russian ] = "Òàáëèöà";
-    Text[ polish ] = "Tabela";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
-    Text[ chinese_traditional ] = "è¡¨æ ¼";
-    Text[ arabic ] = "ÌÏæá";
-    Text[ dutch ] = "Tabel";
-    Text[ chinese_simplified ] = "è¡¨æ ¼";
-    Text[ greek ] = "Ğßíáêáò";
-    Text[ korean ] = "í‘œ";
-    Text[ turkish ] = "Tablo";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Taula";
-    Text[ finnish ] = "Taulukko";
-    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "Tabulka";
-    Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€";
-    Text[ slovak ] = "TabuÄ¾ka";
-    Text[ hungarian ] = "TÃ¡blÃ¡zat";
-    Text[ slovenian ] = "Tabela";
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_FRAME
 {
-    Text = "Rahmen" ;
-    Text [ ENGLISH ] = "Frame" ;
-    Text [ dutch ] = "Kader" ;
-    Text [ english_us ] = "Frame" ;
-    Text [ italian ] = "Cornice" ;
-    Text [ spanish ] = "Marco" ;
-    Text [ french ] = "Cadre" ;
-    Text [ swedish ] = "Ram" ;
-    Text [ danish ] = "Ramme" ;
-    Text [ portuguese_brazilian ] = "Moldura" ;
-    Text [ portuguese ] = "Moldura" ;
-    Text[ chinese_simplified ] = "æ¡†";
-    Text[ russian ] = "Ğàìêà";
-    Text[ polish ] = "Ramka";
-    Text[ japanese ] = "æ ";
-    Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
-    Text[ arabic ] = "ßÇÏÑ";
-    Text[ dutch ] = "Kader";
-    Text[ chinese_simplified ] = "æ¡†";
-    Text[ greek ] = "Ğëáßóéï";
-    Text[ korean ] = "í”„ë ˆì„";
-    Text[ turkish ] = "Çerçeve";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marc";
-    Text[ finnish ] = "Kehys";
-    Text[ thai ] = "à¸à¸£à¸­à¸š";
-    Text[ czech ] = "RÃ¡mec";
-    Text[ hebrew ] = "â€®××¡×’×¨×ªâ€¬";
-    Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤® ";
-    Text[ slovak ] = "RÃ¡mÄek";
-    Text[ hungarian ] = "Keret";
-    Text[ slovenian ] = "Okvir";
+    Text [ de ] = "Rahmen" ;
+    Text [ en-US ] = "Frame" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_GRAPHIC
 {
-    Text = "Grafik" ;
-    Text [ ENGLISH ] = "Graphic" ;
-    Text [ english_us ] = "Graphics" ;
-    Text [ italian ] = "Immagine" ;
-    Text [ spanish ] = "Imagen" ;
-    Text [ french ] = "Image" ;
-    Text [ dutch ] = "Afbeelding" ;
-    Text [ swedish ] = "Grafik" ;
-    Text [ danish ] = "Grafik" ;
-    Text [ portuguese_brazilian ] = "Figura" ;
-    Text [ portuguese ] = "Imagem" ;
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Grafika";
-    Text[ japanese ] = "å›³";
-    Text[ chinese_traditional ] = "åœ–å½¢";
-    Text[ arabic ] = "ÕæÑÉ";
-    Text[ dutch ] = "Afbeelding";
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ greek ] = "Ãñáöéêü";
-    Text[ korean ] = "ê·¸ë¦¼";
-    Text[ turkish ] = "Grafik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gràfic";
-    Text[ finnish ] = "Grafiikka";
-    Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "ObrÃ¡zky";
-    Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
-    Text[ slovak ] = "ObrÃ¡zky";
-    Text[ hungarian ] = "KÃ©p";
-    Text[ slovenian ] = "Grafika";
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphics" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_OBJECT
 {
-    Text = "Objekt" ;
-    Text [ ENGLISH ] = "Object" ;
-    Text [ english_us ] = "Object" ;
-    Text [ italian ] = "Oggetto" ;
-    Text [ spanish ] = "Objeto" ;
-    Text [ french ] = "Objet" ;
-    Text [ dutch ] = "Object" ;
-    Text [ swedish ] = "Objekt" ;
-    Text [ danish ] = "Objekt" ;
-    Text [ portuguese_brazilian ] = "Objeto" ;
-    Text [ portuguese ] = "Objecto" ;
-    Text[ chinese_simplified ] = "å¯¹è±¡";
-    Text[ russian ] = "Îáúåêò";
-    Text[ polish ] = "Obiekt";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-    Text[ chinese_traditional ] = "ç‰©ä»¶";
-    Text[ arabic ] = "ßÇÆä";
-    Text[ dutch ] = "Object";
-    Text[ chinese_simplified ] = "å¯¹è±¡";
-    Text[ greek ] = "Áíôéêåßìåíï";
-    Text[ korean ] = "ê°œì²´";
-    Text[ turkish ] = "Nesne";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objecte";
-    Text[ finnish ] = "Objekti";
-    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "Objekt";
-    Text[ hebrew ] = "â€®××•×‘×™×§×˜â€¬";
-    Text[ hindi ] = "à¤µà¤¸à¥à¤¤à¥";
-    Text[ slovak ] = "Objekt";
-    Text[ hungarian ] = "Objektum";
-    Text[ slovenian ] = "Predmet";
+    Text [ de ] = "Objekt" ;
+    Text [ en-US ] = "Object" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_LIST
 {
-    Text = "Liste" ;
-    Text [ ENGLISH ] = "List" ;
-    Text [ dutch ] = "Lijst" ;
-    Text [ english_us ] = "List" ;
-    Text [ italian ] = "Elenco" ;
-    Text [ spanish ] = "Lista" ;
-    Text [ french ] = "Liste" ;
-    Text [ swedish ] = "Lista" ;
-    Text [ danish ] = "Liste" ;
-    Text [ portuguese_brazilian ] = "Lista" ;
-    Text [ portuguese ] = "Lista" ;
-    Text[ chinese_simplified ] = "åˆ—è¡¨";
-    Text[ russian ] = "Ñïèñîê";
-    Text[ polish ] = "Lista";
-    Text[ japanese ] = "ãƒªã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "æ¸…å–®";
-    Text[ arabic ] = "ŞÇÆãÉ";
-    Text[ dutch ] = "Lijst";
-    Text[ chinese_simplified ] = "åˆ—è¡¨";
-    Text[ greek ] = "Ëßóôá";
-    Text[ korean ] = "ëª©ë¡";
-    Text[ turkish ] = "Liste";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Llista";
-    Text[ finnish ] = "Luettelo";
-    Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
-    Text[ czech ] = "Seznam";
-    Text[ hebrew ] = "Liste";
-    Text[ hindi ] = "à¤¸à¥‚à¤šà¥€";
-    Text[ slovak ] = "Zoznam";
-    Text[ hungarian ] = "Lista";
-    Text[ slovenian ] = "Seznam";
+    Text [ de ] = "Liste" ;
+    Text [ en-US ] = "List" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAW
 {
-    Text = "Zeichnung" ;
-    Text [ ENGLISH ] = "Drawing" ;
-    Text [ dutch ] = "Tekening" ;
-    Text [ english_us ] = "Drawing" ;
-    Text [ italian ] = "Disegno" ;
-    Text [ spanish ] = "Dibujo" ;
-    Text [ french ] = "Dessin" ;
-    Text [ swedish ] = "Teckning" ;
-    Text [ danish ] = "Tegning" ;
-    Text [ portuguese_brazilian ] = "Desenho" ;
-    Text [ portuguese ] = "Desenho" ;
-    Text[ chinese_simplified ] = "ç»˜å›¾";
-    Text[ russian ] = "Ğèñóíîê";
-    Text[ polish ] = "Rysunek";
-    Text[ japanese ] = "å›³å½¢æç”»";
-    Text[ chinese_traditional ] = "ç¹ªåœ–";
-    Text[ arabic ] = "ÑÓã";
-    Text[ dutch ] = "Tekening";
-    Text[ chinese_simplified ] = "ç»˜å›¾";
-    Text[ greek ] = "Ó÷İäéï";
-    Text[ korean ] = "ê·¸ë¦¬ê¸°";
-    Text[ turkish ] = "Çizim";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Dibuix";
-    Text[ finnish ] = "Piirros";
-    Text[ thai ] = "à¸§à¸²à¸”à¸£à¸¹à¸›";
-    Text[ czech ] = "Kresba";
-    Text[ hebrew ] = "â€®×¦×™×•×¨â€¬";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°";
-    Text[ slovak ] = "Kresba";
-    Text[ hungarian ] = "Rajz";
-    Text[ slovenian ] = "Risba";
+    Text [ de ] = "Zeichnung" ;
+    Text [ en-US ] = "Drawing" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAWFORM
 {
-    Text = "Forms" ;
-    Text [ ENGLISH ] = "Forms" ;
-    Text [ english_us ] = "Forms" ;
-    Text [ portuguese_brazilian ] = "Formulários" ;
-    Text [ swedish ] = "Forms" ;
-    Text [ danish ] = "Formularer" ;
-    Text [ italian ] = "Forms" ;
-    Text [ spanish ] = "Formas" ;
-    Text [ french ] = "Formulaires" ;
-    Text [ dutch ] = "Forms" ;
-    Text [ portuguese ] = "Formulários" ;
-    Text[ chinese_simplified ] = "è¡¨å•";
-    Text[ russian ] = "Ôîğìû";
-    Text[ polish ] = "Kszta³ty";
-    Text[ japanese ] = "ãƒ•ã‚©ãƒ¼ãƒ ";
-    Text[ chinese_traditional ] = "è¡¨å–®";
-    Text[ arabic ] = "äãÇĞÌ";
-    Text[ dutch ] = "Forms";
-    Text[ chinese_simplified ] = "è¡¨å•";
-    Text[ greek ] = "Öüñìåò";
-    Text[ korean ] = "ì–‘ì‹";
-    Text[ turkish ] = "Form";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Formularis";
-    Text[ finnish ] = "Lomakkeet";
-    Text[ thai ] = "à¹à¸šà¸š";
-    Text[ czech ] = "FormulÃ¡Å™e";
-    Text[ hebrew ] = "Forms";
-    Text[ hindi ] = "à¤«à¤¼à¥‰à¤°à¥à¤®";
-    Text[ slovak ] = "FormulÃ¡re";
-    Text[ hungarian ] = "Å°rlap";
-    Text[ slovenian ] = "Obrazci";
+    Text [ de ] = "Forms" ;
+    Text [ en-US ] = "Forms" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_BEZIER
 {
-    Text = "Bezier" ;
-    Text [ ENGLISH ] = "Bezier" ;
-    Text [ english_us ] = "Bézier" ;
-    Text [ portuguese_brazilian ] = "Bézier" ;
-    Text [ swedish ] = "Bézier" ;
-    Text [ danish ] = "Bézier" ;
-    Text [ italian ] = "Bezier" ;
-    Text [ spanish ] = "Bézier" ;
-    Text [ french ] = "Bézier" ;
-    Text [ dutch ] = "Bézier" ;
-    Text [ portuguese ] = "Bézier" ;
-    Text[ chinese_simplified ] = "æ›²çº¿";
-    Text[ russian ] = "Áåçüå";
-    Text[ polish ] = "Bézier";
-    Text[ japanese ] = "ãƒ™ã‚¸ã‚§æ›²ç·š";
-    Text[ chinese_traditional ] = "æ›²ç·š";
-    Text[ arabic ] = "Bézier";
-    Text[ dutch ] = "Bézier";
-    Text[ chinese_simplified ] = "æ›²çº¿";
-    Text[ greek ] = "Bezier";
-    Text[ korean ] = "ë² ì§€ì—";
-    Text[ turkish ] = "Bezier";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bézier";
-    Text[ finnish ] = "Bézier";
-    Text[ thai ] = "Bà¹‰zier";
-    Text[ czech ] = "BÃ©zierovy kÅ™ivky";
-    Text[ hebrew ] = "Bezier";
-    Text[ hindi ] = "à¤¬à¥‡à¤œà¤¼à¤¿à¤¯à¤°";
-    Text[ slovak ] = "BÃ©zierove krivky";
-    Text[ hungarian ] = "BÃ©zier";
-    Text[ slovenian ] = "Bezierova krivulja";
+    Text [ de ] = "Bezier" ;
+    Text [ en-US ] = "Bézier" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_DRAW_TEXT
 {
-    Text = "Zeichentext" ;
-    Text [ ENGLISH ] = "Draw text" ;
-    Text [ english_us ] = "Draw text" ;
-    Text [ italian ] = "Testo di disegno" ;
-    Text [ spanish ] = "Texto de dibujo" ;
-    Text [ french ] = "Texte dessiné" ;
-    Text [ dutch ] = "Tekentekst" ;
-    Text [ swedish ] = "Teckningstext" ;
-    Text [ danish ] = "Tegnetekst" ;
-    Text [ portuguese_brazilian ] = "Desenhar texto" ;
-    Text [ portuguese ] = "Texto de desenho" ;
-    Text[ chinese_simplified ] = "ç»˜å›¾æ–‡å­—";
-    Text[ russian ] = "Òåêñò ğèñóíêà";
-    Text[ polish ] = "Tekst rysunku";
-    Text[ japanese ] = "å›³å½¢æç”»ãƒ†ã‚­ã‚¹ãƒˆ";
-    Text[ chinese_traditional ] = "ç¹ªåœ–æ–‡å­—";
-    Text[ arabic ] = "äÕ ÑÓã";
-    Text[ dutch ] = "Tekentekst";
-    Text[ chinese_simplified ] = "ç»˜å›¾æ–‡å­—";
-    Text[ greek ] = "Êåßìåíï ó÷åäßïõ";
-    Text[ korean ] = "ë¬¸ì í…ìŠ¤íŠ¸";
-    Text[ turkish ] = "Çizim metni";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Text del dibuix";
-    Text[ finnish ] = "Piirrä teksti";
-    Text[ thai ] = "à¸§à¸²à¸”à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Text kresby";
-    Text[ hebrew ] = "Zeichentext";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤–à¥€à¤‚à¤šà¥‹";
-    Text[ slovak ] = "Text kresby";
-    Text[ hungarian ] = "Rajzfelirat";
-    Text[ slovenian ] = "Risano besedilo";
+    Text [ de ] = "Zeichentext" ;
+    Text [ en-US ] = "Draw text" ;
+    Text [ x-comment ] = " ";
 };
  //Strings fuer Gallery/Hintergrund
 String STR_SWBG_PARAGRAPH
 {
-    Text = "Absatz" ;
-    Text [ ENGLISH ] = "Paragraph" ;
-    Text [ english_us ] = "Paragraph" ;
-    Text [ portuguese_brazilian ] = "Parágrafo" ;
-    Text [ swedish ] = "Stycke" ;
-    Text [ danish ] = "Afsnit" ;
-    Text [ italian ] = "Paragrafo" ;
-    Text [ spanish ] = "Párrafo" ;
-    Text [ french ] = "Paragraphe" ;
-    Text [ dutch ] = "Alinea" ;
-    Text [ portuguese ] = "Parágrafo" ;
-    Text[ chinese_simplified ] = "æ®µè½";
-    Text[ russian ] = "Àáçàö";
-    Text[ polish ] = "Akapit";
-    Text[ japanese ] = "æ®µè½";
-    Text[ chinese_traditional ] = "æ®µè½";
-    Text[ arabic ] = "İŞÑÉ";
-    Text[ dutch ] = "Alinea";
-    Text[ chinese_simplified ] = "æ®µè½";
-    Text[ greek ] = "ĞáñÜãñáöïò";
-    Text[ korean ] = "ë‹¨ë½";
-    Text[ turkish ] = "Paragraf";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Paràgraf";
-    Text[ finnish ] = "Kappale";
-    Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "Odstavec";
-    Text[ hebrew ] = "â€®×¤×¡×§××•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦";
-    Text[ slovak ] = "Odstavec";
-    Text[ hungarian ] = "BekezdÃ©s";
-    Text[ slovenian ] = "Odstavek";
+    Text [ de ] = "Absatz" ;
+    Text [ en-US ] = "Paragraph" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_GRAPHIC
 {
-    Text = "Grafik" ;
-    Text [ ENGLISH ] = "Graphic" ;
-    Text [ english_us ] = "Graphics" ;
-    Text [ portuguese_brazilian ] = "Figura" ;
-    Text [ swedish ] = "Grafik" ;
-    Text [ danish ] = "Grafik" ;
-    Text [ italian ] = "Immagine" ;
-    Text [ spanish ] = "Imagen" ;
-    Text [ french ] = "Image" ;
-    Text [ dutch ] = "Afbeelding" ;
-    Text [ portuguese ] = "Imagem" ;
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ russian ] = "Ãğàôè÷åñêèé îáúåêò";
-    Text[ polish ] = "Grafika";
-    Text[ japanese ] = "å›³";
-    Text[ chinese_traditional ] = "åœ–å½¢";
-    Text[ arabic ] = "ÕæÑÉ";
-    Text[ dutch ] = "Afbeelding";
-    Text[ chinese_simplified ] = "å›¾å½¢";
-    Text[ greek ] = "Ãñáöéêü";
-    Text[ korean ] = "ê·¸ë¦¼";
-    Text[ turkish ] = "Grafik";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gràfics";
-    Text[ finnish ] = "Grafiikka";
-    Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
-    Text[ czech ] = "ObrÃ¡zky";
-    Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
-    Text[ slovak ] = "ObrÃ¡zky";
-    Text[ hungarian ] = "KÃ©p";
-    Text[ slovenian ] = "Grafika";
+    Text [ de ] = "Grafik" ;
+    Text [ en-US ] = "Graphics" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_OLE
 {
-    Text = "OLE Objekt" ;
-    Text [ ENGLISH ] = "OLE Object" ;
-    Text [ english_us ] = "OLE object" ;
-    Text [ portuguese_brazilian ] = "Objeto OLE" ;
-    Text [ swedish ] = "OLE-objekt" ;
-    Text [ danish ] = "OLE-objekt" ;
-    Text [ italian ] = "Oggetto OLE" ;
-    Text [ spanish ] = "Objeto OLE" ;
-    Text [ french ] = "Objet OLE" ;
-    Text [ dutch ] = "OLE-object" ;
-    Text [ portuguese ] = "Objecto OLE" ;
-    Text[ chinese_simplified ] = "OLE å¯¹è±¡";
-    Text[ russian ] = "OLE îáúåêò";
-    Text[ polish ] = "Obiekt OLE";
-    Text[ japanese ] = "OLE ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
-    Text[ chinese_traditional ] = "OLE ç‰©ä»¶";
-    Text[ arabic ] = "ßÇÆä OLE";
-    Text[ dutch ] = "OLE-object";
-    Text[ chinese_simplified ] = "OLE å¯¹è±¡";
-    Text[ greek ] = "Áíôéêåßìåíï OLE";
-    Text[ korean ] = "OLE ê°œì²´";
-    Text[ turkish ] = "OLE nesnesi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objecte OLE";
-    Text[ finnish ] = "OLE-objekti";
-    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸ OLE ";
-    Text[ czech ] = "Objekt OLE";
-    Text[ hebrew ] = "OLEâ€®××•×‘×™×§×˜ â€¬";
-    Text[ hindi ] = "OLE à¤µà¤¸à¥à¤¤à¥";
-    Text[ slovak ] = "Objekt OLE";
-    Text[ hungarian ] = "OLE-objektum";
-    Text[ slovenian ] = "OLE predmet";
+    Text [ de ] = "OLE Objekt" ;
+    Text [ en-US ] = "OLE object" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_FRAME
 {
-    Text = "Rahmen" ;
-    Text [ ENGLISH ] = "Frame" ;
-    Text [ english_us ] = "Frame" ;
-    Text [ portuguese_brazilian ] = "Moldura" ;
-    Text [ swedish ] = "Ram" ;
-    Text [ danish ] = "Ramme" ;
-    Text [ italian ] = "Cornice" ;
-    Text [ spanish ] = "Marco" ;
-    Text [ french ] = "Cadre" ;
-    Text [ dutch ] = "Kader" ;
-    Text [ portuguese ] = "Moldura" ;
-    Text[ chinese_simplified ] = "æ¡†";
-    Text[ russian ] = "Ğàìêà";
-    Text[ polish ] = "Ramka";
-    Text[ japanese ] = "æ ";
-    Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š";
-    Text[ arabic ] = "ßÇÏÑ";
-    Text[ dutch ] = "Kader";
-    Text[ chinese_simplified ] = "æ¡†";
-    Text[ greek ] = "Ğëáßóéï";
-    Text[ korean ] = "í”„ë ˆì„";
-    Text[ turkish ] = "Çerçeve";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Marc";
-    Text[ finnish ] = "Kehys";
-    Text[ thai ] = "à¸à¸£à¸­à¸š";
-    Text[ czech ] = "RÃ¡mec";
-    Text[ hebrew ] = "â€®××¡×’×¨×ªâ€¬";
-    Text[ hindi ] = "à¤«à¥à¤°à¥‡à¤® ";
-    Text[ slovak ] = "RÃ¡mÄek";
-    Text[ hungarian ] = "Keret";
-    Text[ slovenian ] = "Okvir";
+    Text [ de ] = "Rahmen" ;
+    Text [ en-US ] = "Frame" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE
 {
-    Text = "Tabelle" ;
-    Text [ ENGLISH ] = "Table" ;
-    Text [ english_us ] = "Table" ;
-    Text [ portuguese_brazilian ] = "Tabela" ;
-    Text [ swedish ] = "Tabell" ;
-    Text [ danish ] = "Tabel" ;
-    Text [ italian ] = "Tabella" ;
-    Text [ spanish ] = "Tabla" ;
-    Text [ french ] = "Tableau" ;
-    Text [ dutch ] = "Tabel" ;
-    Text [ portuguese ] = "Tabela" ;
-    Text[ chinese_simplified ] = "è¡¨æ ¼";
-    Text[ russian ] = "Òàáëèöà";
-    Text[ polish ] = "Tabela";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«";
-    Text[ chinese_traditional ] = "è¡¨æ ¼";
-    Text[ arabic ] = "ÌÏæá";
-    Text[ dutch ] = "Tabel";
-    Text[ chinese_simplified ] = "è¡¨æ ¼";
-    Text[ greek ] = "Ğßíáêáò";
-    Text[ korean ] = "í‘œ";
-    Text[ turkish ] = "Tablo";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Taula";
-    Text[ finnish ] = "Taulukko";
-    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡";
-    Text[ czech ] = "Tabulka";
-    Text[ hebrew ] = "â€®×˜×‘×œ×”â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€";
-    Text[ slovak ] = "TabuÄ¾ka";
-    Text[ hungarian ] = "TÃ¡blÃ¡zat";
-    Text[ slovenian ] = "Tabela";
+    Text [ de ] = "Tabelle" ;
+    Text [ en-US ] = "Table" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE_ROW
 {
-    Text = "Tabellenzeile" ;
-    Text [ ENGLISH ] = "Tablerow" ;
-    Text [ english_us ] = "Table row" ;
-    Text [ portuguese_brazilian ] = "Linha da tabela" ;
-    Text [ swedish ] = "Tabellrad" ;
-    Text [ danish ] = "Tabelrække" ;
-    Text [ italian ] = "Riga" ;
-    Text [ spanish ] = "Fila de la tabla" ;
-    Text [ french ] = "Ligne de tableau" ;
-    Text [ dutch ] = "Tabelrij" ;
-    Text [ portuguese ] = "Linha de tabela" ;
-    Text[ chinese_simplified ] = "è¡¨æ ¼è¡Œ";
-    Text[ russian ] = "Ñòğîêà òàáëèöû";
-    Text[ polish ] = "Wiersz tabeli";
-    Text[ japanese ] = "è¡¨ã®è¡Œ";
-    Text[ chinese_traditional ] = "è¡¨æ ¼åˆ—";
-    Text[ arabic ] = "Õİ ÌÏæá";
-    Text[ dutch ] = "Tabelrij";
-    Text[ chinese_simplified ] = "è¡¨æ ¼è¡Œ";
-    Text[ greek ] = "ÃñáììŞ ğßíáêá";
-    Text[ korean ] = "í‘œ í–‰";
-    Text[ turkish ] = "Tablo satırı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Fila de la taula";
-    Text[ finnish ] = "Taulukon rivi";
-    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡à¹à¸–à¸§";
-    Text[ czech ] = "Å˜Ã¡dek tabulky";
-    Text[ hebrew ] = "Tabellenzeile";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤ªà¤‚à¤•à¥à¤¤à¤¿";
-    Text[ slovak ] = "Riadok tabuÄ¾ky";
-    Text[ hungarian ] = "TÃ¡blÃ¡zat sora";
-    Text[ slovenian ] = "Vrstica tabele";
+    Text [ de ] = "Tabellenzeile" ;
+    Text [ en-US ] = "Table row" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_TABLE_CELL
 {
-    Text = "Tabellenzelle" ;
-    Text [ ENGLISH ] = "Tablecell" ;
-    Text [ english_us ] = "Table cell" ;
-    Text [ portuguese_brazilian ] = "Célula da tabela" ;
-    Text [ swedish ] = "Tabellcell" ;
-    Text [ danish ] = "Tabelcelle" ;
-    Text [ italian ] = "Cella" ;
-    Text [ spanish ] = "Celda de la tabla" ;
-    Text [ french ] = "Cellule de tableau" ;
-    Text [ dutch ] = "Tabelcel" ;
-    Text [ portuguese ] = "Célula de tabela" ;
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨å•å…ƒæ ¼";
-    Text[ russian ] = "ß÷åéêà òàáëèöû";
-    Text[ polish ] = "Komórka tabeli";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã®ã‚»ãƒ«";
-    Text[ chinese_traditional ] = "è¡¨æ ¼å„²å­˜æ ¼";
-    Text[ arabic ] = "ÎáíÉ ÌÏæá";
-    Text[ dutch ] = "Tabelcel";
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨å•å…ƒæ ¼";
-    Text[ greek ] = "Êåëß ğßíáêá";
-    Text[ korean ] = "í‘œ ì…€";
-    Text[ turkish ] = "Tablo hücresi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Cel·la de la taula";
-    Text[ finnish ] = "Taulukon solu";
-    Text[ thai ] = "à¸•à¸²à¸£à¸²à¸‡à¹€à¸‹à¸¥à¸¥à¹Œ";
-    Text[ czech ] = "BuÅˆka tabulky";
-    Text[ hebrew ] = "Tabellenzelle";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤£à¥€ à¤•à¥‹à¤·à¥à¤ ";
-    Text[ slovak ] = "Bunka tabuÄ¾ky";
-    Text[ hungarian ] = "Cella";
-    Text[ slovenian ] = "Celica tabele";
+    Text [ de ] = "Tabellenzelle" ;
+    Text [ en-US ] = "Table cell" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_PAGE
 {
-    Text = "Seite" ;
-    Text [ ENGLISH ] = "Page" ;
-    Text [ english_us ] = "Page" ;
-    Text [ portuguese_brazilian ] = "Página" ;
-    Text [ swedish ] = "Sida" ;
-    Text [ danish ] = "Side" ;
-    Text [ italian ] = "Pagina" ;
-    Text [ spanish ] = "Página" ;
-    Text [ french ] = "Page" ;
-    Text [ dutch ] = "Pagina" ;
-    Text [ portuguese ] = "Página" ;
-    Text[ chinese_simplified ] = "é¡µ";
-    Text[ russian ] = "Ñòğàíèöà";
-    Text[ polish ] = "Strona";
-    Text[ japanese ] = "ãƒšãƒ¼ã‚¸";
-    Text[ chinese_traditional ] = "é ";
-    Text[ arabic ] = "ÕİÍÉ";
-    Text[ dutch ] = "Pagina";
-    Text[ chinese_simplified ] = "é¡µ";
-    Text[ greek ] = "Óåëßäá";
-    Text[ korean ] = "í˜ì´ì§€";
-    Text[ turkish ] = "Sayfa";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Pàgina";
-    Text[ finnish ] = "Sivu";
-    Text[ thai ] = "à¸«à¸™à¹‰à¸²";
-    Text[ czech ] = "StrÃ¡nka";
-    Text[ hebrew ] = "â€®×“×£â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ ";
-    Text[ slovak ] = "StrÃ¡nka";
-    Text[ hungarian ] = "Oldal";
-    Text[ slovenian ] = "Stran";
+    Text [ de ] = "Seite" ;
+    Text [ en-US ] = "Page" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_HEADER
 {
-    Text = "Kopfzeile" ;
-    Text [ ENGLISH ] = "Header" ;
-    Text [ english_us ] = "Header" ;
-    Text [ portuguese_brazilian ] = "Cabeçalho" ;
-    Text [ swedish ] = "Sidhuvud" ;
-    Text [ danish ] = "Sidehoved" ;
-    Text [ italian ] = "Riga d'intestazione" ;
-    Text [ spanish ] = "Encabezamiento" ;
-    Text [ french ] = "En-tête" ;
-    Text [ dutch ] = "Koptekst" ;
-    Text [ portuguese ] = "Cabeçalho" ;
-    Text[ chinese_simplified ] = "é¡µçœ‰";
-    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
-    Text[ polish ] = "Nag³ówek";
-    Text[ japanese ] = "ãƒ˜ãƒƒãƒ€";
-    Text[ chinese_traditional ] = "é é¦–";
-    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
-    Text[ dutch ] = "Koptekst";
-    Text[ chinese_simplified ] = "é¡µçœ‰";
-    Text[ greek ] = "Êåöáëßäá";
-    Text[ korean ] = "ë¨¸ë¦¬ê¸€";
-    Text[ turkish ] = "Başlık";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Capçalera";
-    Text[ finnish ] = "Ylätunniste";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
-    Text[ czech ] = "ZÃ¡hlavÃ­";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×¢×œ×™×•× ×”â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-    Text[ slovak ] = "ZÃ¡hlavie";
-    Text[ hungarian ] = "Ã‰lÅ‘fej";
-    Text[ slovenian ] = "Glava";
+    Text [ de ] = "Kopfzeile" ;
+    Text [ en-US ] = "Header" ;
+    Text [ x-comment ] = " ";
 };
 String STR_SWBG_FOOTER
 {
-    Text = "Fußzeile" ;
-    Text [ ENGLISH ] = "Footer" ;
-    Text [ english_us ] = "Footer" ;
-    Text [ portuguese_brazilian ] = "Rodapé" ;
-    Text [ swedish ] = "Sidfot" ;
-    Text [ danish ] = "Sidefod" ;
-    Text [ italian ] = "Piè di pagina" ;
-    Text [ spanish ] = "Pie de página" ;
-    Text [ french ] = "Pied de page" ;
-    Text [ dutch ] = "Voettekst" ;
-    Text [ portuguese ] = "Rodapé" ;
-    Text[ chinese_simplified ] = "é¡µè„š";
-    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
-    Text[ polish ] = "Stopka";
-    Text[ japanese ] = "ãƒ•ãƒƒã‚¿";
-    Text[ chinese_traditional ] = "é å°¾";
-    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
-    Text[ dutch ] = "Voettekst";
-    Text[ chinese_simplified ] = "é¡µè„š";
-    Text[ greek ] = "Õğïóİëéäï";
-    Text[ korean ] = "ë°”ë‹¥ê¸€";
-    Text[ turkish ] = "Dipnot";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Peu de pàgina";
-    Text[ finnish ] = "Alatunniste";
-    Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
-    Text[ czech ] = "ZÃ¡patÃ­";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾";
-    Text[ slovak ] = "ZÃ¡pÃ¤tie";
-    Text[ hungarian ] = "Ã‰lÅ‘lÃ¡b";
-    Text[ slovenian ] = "Noga";
+    Text [ de ] = "Fußzeile" ;
+    Text [ en-US ] = "Footer" ;
+    Text [ x-comment ] = " ";
 };
  //Ende: Strings fuer Gallery/Hintergrund
 String STR_NAME_GROUP_LABEL
 {
-    Text = "Name";
-    Text [English] = "Name";
-    Text[ english_us ] = "Name";
-    Text[ portuguese ] = "Nome";
-    Text[ russian ] = "Èìÿ";
-    Text[ greek ] = "¼íïìá";
-    Text[ dutch ] = "Naam";
-    Text[ french ] = "Nom";
-    Text[ spanish ] = "Apellidos";
-    Text[ finnish ] = "Nimi";
-    Text[ italian ] = "Nome";
-    Text[ danish ] = "Navn";
-    Text[ swedish ] = "Namn";
-    Text[ polish ] = "Nazwa";
-    Text[ japanese ] = "åå‰";
-    Text[ korean ] = "ì´ë¦„";
-    Text[ chinese_simplified ] = "å§“æ°";
-    Text[ chinese_traditional ] = "å§“æ°";
-    Text[ turkish ] = "İsim";
-    Text[ arabic ] = "ÇáÇÓã";
-    Text[ catalan ] = "Nom";
-    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸§à¸±à¸•à¸–à¸¸";
-    Text[ czech ] = "JmÃ©no";
-    Text[ hebrew ] = "Name";
-    Text[ portuguese_brazilian ] = "Nome";
-    Text[ hindi ] = "Name";
-    Text[ slovak ] = "NÃ¡zov";
-    Text[ hungarian ] = "NÃ©v";
-    Text[ slovenian ] = "Ime";
+    Text [ de ] = "Name";
+    Text [ en-US ] = "Name";
 };
 String STR_NAME_GROUP_DIALOG
 {
-    Text = "Objekt benennen" ;
-    Text [ ENGLISH ] = "Name object" ;
-    Text[ english_us ] = "Name object";
-    Text[ portuguese ] = "Nomear objecto";
-    Text[ russian ] = "Ïğèñâîèòü èìÿ îáúåêòó";
-    Text[ greek ] = "Ïíïìáóßá áíôéêåéìİíïõ";
-    Text[ dutch ] = "Naam object";
-    Text[ french ] = "Nommer l'objet";
-    Text[ spanish ] = "Nombrar objeto";
-    Text[ finnish ] = "Nimeä objekti";
-    Text[ italian ] = "Nome oggetto";
-    Text[ danish ] = "Navngiv objekt";
-    Text[ swedish ] = "Namnge objekt";
-    Text[ polish ] = "Nazwa obiektu";
-    Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«åå‰ã‚’ä»˜ã‘ã‚‹";
-    Text[ korean ] = "ê°œì²´ ì´ë¦„ ì§€ì •";
-    Text[ chinese_simplified ] = "å‘½åå¯¹è±¡";
-    Text[ chinese_traditional ] = "å‘½åç‰©ä»¶";
-    Text[ turkish ] = "İsim nesnesi";
-    Text[ arabic ] = "ÊÓãíÉ ÇáßÇÆä";
-    Text[ catalan ] = "Anomena l'objecte";
-    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸Šà¸·à¹ˆà¸­";
-    Text[ czech ] = "Pojmenovat objekt";
-    Text[ hebrew ] = "Objekt benennen";
-    Text[ portuguese_brazilian ] = "Nomear o objeto";
-    Text[ hindi ] = "Name object";
-    Text[ slovak ] = "NÃ¡zov objektu";
-    Text[ hungarian ] = "Objektum neve";
-    Text[ slovenian ] = "Poimenuj predmet";
+    Text [ de ] = "Objekt benennen" ;
+    Text [ en-US ] = "Name object";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
