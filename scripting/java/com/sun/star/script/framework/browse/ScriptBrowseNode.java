@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:03:18 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,10 @@ public class ScriptBrowseNode extends PropertySet
     private Parcel parent;
     private String name;
     public String uri;
+    public String description;
     public boolean editable  = false;
     public boolean deletable = false;
+    public boolean renamable = false;
 
     public ScriptBrowseNode( ScriptProvider provider, Parcel parent,
         String name )
@@ -111,19 +113,27 @@ public class ScriptBrowseNode extends PropertySet
         {
             LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
         }
+
         uri = data.getShortFormScriptURL();
+        description = data.getDescription();
+
         if (provider.hasScriptEditor() == true)
         {
             this.editable  = true;
             this.deletable = true;
+            this.renamable = true;
         }
 
         registerProperty("Deletable", new Type(boolean.class),
             (short)0, "deletable");
         registerProperty("Editable", new Type(boolean.class),
             (short)0, "editable");
+        registerProperty("Renamable", new Type(boolean.class),
+            (short)0, "renamable");
         registerProperty("URI", new Type(String.class),
             (short)0, "uri");
+        registerProperty("DESCRIPTION", new Type(String.class),
+            (short)0, "description");
     }
 
 
@@ -145,6 +155,22 @@ public class ScriptBrowseNode extends PropertySet
 
     public String toString() {
         return getName();
+    }
+
+    public void updateURI( Parcel p ) {
+        parent = p;
+        ScriptMetaData data = null;
+        try
+        {
+            data = (ScriptMetaData)parent.getByName( name );
+        }
+
+        // TODO fix exception types to be caught here, should we rethrow?
+        catch (  Exception e )
+        {
+            LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
+        }
+        uri = data.getShortFormScriptURL();
     }
 
     // implementation of XInvocation interface
@@ -173,15 +199,8 @@ public class ScriptBrowseNode extends PropertySet
                     "Script not editable");
             }
 
-            if (aParams == null || aParams.length < 1 ||
-                AnyConverter.isObject(aParams[0]) == false)
-            {
-                throw new com.sun.star.lang.IllegalArgumentException(
-                    "XScriptContext not provided");
-            }
 
-            XScriptContext ctxt = (XScriptContext) AnyConverter.toObject(
-                new com.sun.star.uno.Type(XScriptContext.class), aParams[0]);
+            XScriptContext ctxt =  provider.getScriptingContext();
             ScriptMetaData data = null;
             try
             {
@@ -207,8 +226,9 @@ public class ScriptBrowseNode extends PropertySet
 
             try
             {
-                boolean goAhead = false;
+                boolean goAhead = true;
 
+                /* prompting in svx/source/dialogs/scriptdlg.cxx
                 String prompt = "Do you really want to delete this Script?";
                 String title = "Delete Script";
 
@@ -234,11 +254,10 @@ public class ScriptBrowseNode extends PropertySet
                     {
                         goAhead = false;
                     }
-                }
+                } */
 
                 if (goAhead == true)
                 {
-
                     parent.removeByName( name );
                     result = new Any(new Type(Boolean.class), Boolean.TRUE);
                 }
@@ -250,6 +269,54 @@ public class ScriptBrowseNode extends PropertySet
             // TODO Exception handling TBD
             catch (Exception e)
             {
+                LogUtils.DEBUG("** caught exception removing " + name + " ->" + e.toString() );
+                result = new Any(new Type(Boolean.class), Boolean.FALSE);
+
+                // throw new com.sun.star.reflection.InvocationTargetException(
+                //     "Error deleting script: " + e.getMessage());
+            }
+        }
+        else if (aFunctionName.equals("Renamable"))
+        {
+            if (!renamable)
+            {
+                throw new com.sun.star.reflection.InvocationTargetException(
+                    "Script not renamable");
+            }
+
+
+            try
+            {
+                boolean goAhead = true;
+
+                if (goAhead == true)
+                {
+                    String newName = (String) AnyConverter.toString(aParams[0]);
+                    ScriptMetaData oldData = (ScriptMetaData)parent.getByName( name );
+                    String oldSource = oldData.getSource();
+                    LogUtils.DEBUG("remove old script");
+                    parent.removeByName( name );
+                    LogUtils.DEBUG("now create renamed script");
+                    String languageName = newName + "." + provider.getScriptEditor().getExtension();
+                    String language = provider.getName();
+
+                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
+
+                    ScriptMetaData data = new ScriptMetaData( parent, entry, oldSource );
+                    parent.insertByName( languageName, data );
+                    uri = data.getShortFormScriptURL();
+                    name = languageName;
+                    result = new Any(new Type(XBrowseNode.class), this);
+                }
+                else
+                {
+                    result = new Any(new Type(Boolean.class), Boolean.FALSE);
+                }
+            }
+            // TODO Exception handling TBD
+            catch (Exception e)
+            {
+                LogUtils.DEBUG("** caught exception removing " + name + " ->" + e.toString() );
                 result = new Any(new Type(Boolean.class), Boolean.FALSE);
 
                 // throw new com.sun.star.reflection.InvocationTargetException(
