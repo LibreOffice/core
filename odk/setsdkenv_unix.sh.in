@@ -1,0 +1,222 @@
+#! /bin/sh
+
+# This script starts a new shell and sets all enviroment variables, which
+# are necessary for building the examples of the Office Development Kit.
+# The Script was developed for the operating systems Solaris and Linux.
+
+# The SDK name
+OO_SDK_NAME=@OO_SDK_NAME@
+
+# Installation directory of the Software Development Kit.
+# Example: OO_SDK_HOME=/work/StarOffice_SDK
+OO_SDK_HOME=@OO_SDK_HOME@
+
+# Office installation directory.
+# Example: OFFICE_HOME=/opt/staroffice
+OFFICE_HOME=@OFFICE_HOME@
+
+# Directory of the make command.
+# Example: OO_SDK_MAKE_HOME=/usr/bin
+OO_SDK_MAKE_HOME=@OO_SDK_MAKE_HOME@
+
+# Directory of the zip command.
+# Example: OO_SDK_ZIP_HOME=/usr/bin
+OO_SDK_ZIP_HOME=@OO_SDK_ZIP_HOME@
+
+# Directory of the C++ compiler.
+# Example: OO_SDK_CPP_HOME=/usr/bin
+OO_SDK_CPP_HOME=@OO_SDK_CPP_HOME@
+
+# Solaris only
+OO_SDK_CC_55_OR_HIGHER=@OO_SDK_CC_55_OR_HIGHER@
+
+# Directory of the Java SDK.
+# Example: OO_SDK_JAVA_HOME=/usr/local/j2sdk1.4.1_01
+OO_SDK_JAVA_HOME=@OO_SDK_JAVA_HOME@
+
+# Special output directory
+# Example: OO_SDK_OUTPUT_DIR=$HOME
+OO_SDK_OUTPUT_DIR=@OO_SDK_OUTPUT_DIR@
+
+# Environment variable to enable auto deployment of example components
+# Example: SDK_AUTO_DEPLOYMENT=YES
+SDK_AUTO_DEPLOYMENT=@SDK_AUTO_DEPLOYMENT@
+export SDK_AUTO_DEPLOYMENT
+
+# Check installation path for the StarOffice Development Kit.
+if [ -z "$OO_SDK_HOME" ]
+then
+    echo Error: Please insert a correct value for the variable OO_SDK_HOME.
+    exit 0
+fi
+
+export OO_SDK_HOME
+
+# Check installation path for the office.
+if [ -z "$OFFICE_HOME" ]
+then
+    echo Error: Please insert a correct value for the variable OFFICE_HOME.
+    exit 0
+fi
+
+# Set office program path.
+OFFICE_PROGRAM_PATH=$OFFICE_HOME/program
+export OFFICE_PROGRAM_PATH
+
+# Set UNO path, necessary to ensure that the cpp examples using the
+# new UNO bootstrap mechanism use the configured office installation.
+UNO_PATH=$OFFICE_PROGRAM_PATH
+export UNO_PATH
+
+OO_EXAMPLE_OUT=$OO_SDK_HOME
+# Prepare appropriate output directory.
+if [ -n "$OO_SDK_OUTPUT_DIR" ]
+then
+    OO_EXAMPLE_OUT=$OO_SDK_OUTPUT_DIR/$OO_SDK_NAME
+    export OO_SDK_OUTPUT_DIR
+fi
+
+# Get the operating system.
+sd_platform=`uname -s`
+
+# Set the directory name.
+case $sd_platform in
+  SunOS)
+    sd_proctype=`uname -p`
+    if [ "$sd_proctype" = "sparc" ]
+    then
+        directoryname=solsparc
+	platform='Solaris Sparc'
+    else
+        directoryname=solintel
+	platform='Solaris x86'
+    fi
+    exampleout=SOLARISexample.out
+    LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH
+    ;;
+
+  Darwin)
+    directoryname=macosx
+    exampleout=MACOSXexample.out
+    platform=MacOSX
+    DYLD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$DYLD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH
+    ;;
+
+  Linux)
+    directoryname=linux
+    exampleout=LINUXexample.out
+    platform=Linux
+    LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH
+    ;;
+  FreeBSD)
+    directoryname=freebsd
+    exampleout=FREEBSDexample.out
+    platform=FreeBSD
+    LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:$OFFICE_PROGRAM_PATH:.:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH
+
+    if [ -e "/sbin/sysctl" ]
+    then
+	OSVERSION=`/sbin/sysctl  -n kern.osreldate`
+    else
+	OSVERSION=`/usr/sbin/sysctl  -n kern.osreldate`
+    fi
+    if [ $OSVERSION -lt 500016 ]
+    then
+	PTHREAD_CFLAGS=-D_THREAD_SAFE
+	PTHREAD_LIBS=-pthread
+	export PTHREAD_CFLAGS
+	export PTHREAD_LIBS
+    elif [ $OSVERSION -lt 502102 ]
+    then
+	PTHREAD_CFLAGS=-D_THREAD_SAFE
+	PTHREAD_LIBS=-lc_r
+	export PTHREAD_CFLAGS
+	export PTHREAD_LIBS
+    else	
+	PTHREAD_LIBS=-pthread
+	export PTHREAD_LIBS
+    fi
+    ;;
+esac
+
+# Add directory of the SDK tools to the path.
+PATH=$OO_SDK_HOME/$directoryname/bin:$OO_EXAMPLE_OUT/$exampleout/bin:$OFFICE_PROGRAM_PATH:.:$PATH
+
+# Set the classpath
+if [ -n "$CLASSPATH" ]
+then
+CLASSPATH=$OFFICE_PROGRAM_PATH/classes/jurt.jar:$OFFICE_PROGRAM_PATH/classes/unoil.jar:$OFFICE_PROGRAM_PATH/classes/ridl.jar:$OFFICE_PROGRAM_PATH/classes/juh.jar:$CLASSPATH
+else
+CLASSPATH=$OFFICE_PROGRAM_PATH/classes/jurt.jar:$OFFICE_PROGRAM_PATH/classes/unoil.jar:$OFFICE_PROGRAM_PATH/classes/ridl.jar:$OFFICE_PROGRAM_PATH/classes/juh.jar
+fi
+export CLASSPATH
+
+
+# Add directory of the command make to the path, if necessary.
+if [ -n "$OO_SDK_MAKE_HOME" ]
+then
+    PATH=$OO_SDK_MAKE_HOME:$PATH
+    export OO_SDK_MAKE_HOME
+fi
+
+# Add directory of the zip tool to the path, if necessary.
+if [ -n "$OO_SDK_ZIP_HOME" ]
+then
+    PATH=$OO_SDK_ZIP_HOME:$PATH
+    export OO_SDK_ZIP_HOME
+fi
+
+# Add directory of the C++ tools to the path, if necessary.
+if [ -n "$OO_SDK_CPP_HOME" ]
+then
+    PATH=$OO_SDK_CPP_HOME:$PATH
+    export OO_SDK_CPP_HOME
+
+    if [ -n "$OO_SDK_CC_55_OR_HIGHER" ]
+    then
+	export OO_SDK_CC_55_OR_HIGHER
+    fi
+fi
+
+# Add directory of the Java tools to the path, if necessary.
+if [ -n "$OO_SDK_JAVA_HOME" ]
+then
+    PATH=$OO_SDK_JAVA_HOME/bin:$PATH
+#    JAVA_HOME=$OO_SDK_JAVA_HOME
+#    export JAVA_HOME
+    export OO_SDK_JAVA_HOME
+
+    export PATH
+#    UNO_JAVA_JFW_JREHOME=`sp2bv $OO_SDK_JAVA_HOME`
+#    UNO_JAVA_JFW_ENV_CLASSPATH=true
+#    UNO_JAVA_JFW_VENDOR_SETTINGS=`sp2bv $OFFICE_HOME/share/config/javavendors.xml`
+#    export UNO_JAVA_JFW_JREHOME
+#    export UNO_JAVA_JFW_ENV_CLASSPATH
+#    export UNO_JAVA_JFW_VENDOR_SETTINGS
+fi
+
+export PATH
+
+# Prepare shell with all necessary environment variables.
+echo 
+echo " ************************************************************************"
+echo " *"                                                  
+echo " * SDK environment is prepared for ${platform}"      
+echo " *"                                                  
+echo " * SDK = $OO_SDK_HOME"
+echo " * Office = $OFFICE_HOME"
+echo " * Make = $OO_SDK_MAKE_HOME"
+echo " * Zip = $OO_SDK_ZIP_HOME"
+echo " * C++ Compiler = $OO_SDK_CPP_HOME"
+echo " * Java = $OO_SDK_JAVA_HOME"
+echo " * Special Output directory = $OO_SDK_OUTPUT_DIR"
+echo " * Auto deployment = $SDK_AUTO_DEPLOYMENT"
+echo " *"
+echo " ************************************************************************"
+
+echo "]2;Shell prepared with the SDK environment"
+
