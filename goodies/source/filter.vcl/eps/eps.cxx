@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:35:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:28:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ PSWriter::~PSWriter()
 BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream,
                           PFilterCallback pcallback, void* pcallerdata, FilterConfigItem* pConfigItem )
 {
-    UINT32 nStreamPosition, nPSPosition;
+    UINT32 nStreamPosition = 0, nPSPosition = 0; // -Wall warning, unset, check
 
     mbStatus = TRUE;
     mnPreview = 0;
@@ -1336,7 +1336,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                                     */
                                     sal_uInt32 nCommentStartAction = nCurAction;
                                     sal_uInt32 nBitmapCount = 0;
-                                    sal_uInt32 nBitmapAction;
+                                    sal_uInt32 nBitmapAction = 0;
 
                                     sal_Bool bOk = sal_True;
                                     while( bOk && ( ++nCurAction < nCount ) )
@@ -2797,8 +2797,9 @@ extern "C" BOOL __LOADONCALLAPI DoExportDialog( FltCallDialogParameter& rPara )
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
