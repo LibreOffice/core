@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:42:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1562,9 +1562,11 @@ void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
  ---------------------------------------------------------------------------*/
 void SwNavigationPI::InitImageList()
 {
+    USHORT k;
+
     ImageList& rImgLst = aContentToolBox.GetDisplayBackground().GetColor().IsDark() ?
                 aContentImageListH : aContentImageList;
-    for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
+    for( k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
                     rImgLst.GetImage(aContentToolBox.GetItemId(k)));
 
