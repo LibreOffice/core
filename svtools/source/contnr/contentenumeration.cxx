@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentenumeration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,14 +266,25 @@ namespace svt
 
             try
             {
-                ::osl::MutexGuard aGuard( m_aMutex );
-
-                if ( !m_aFolder.aContent.get().is() )
-                    m_aFolder.aContent = Content( m_aFolder.sURL, m_xCommandEnv );
+                FolderDescriptor aFolder;
+                Reference< XCommandEnvironment > xEnvironment;
+                {
+                    ::osl::MutexGuard aGuard( m_aMutex );
+                    aFolder = m_aFolder;
+                    xEnvironment = m_xCommandEnv;
+                }
+                if ( !aFolder.aContent.get().is() )
+                {
+                    aFolder.aContent = Content( aFolder.sURL, xEnvironment );
+                    {
+                        ::osl::MutexGuard aGuard( m_aMutex );
+                        m_aFolder.aContent = aFolder.aContent;
+                    }
+                }
 
                 Reference< XDynamicResultSet > xDynResultSet;
                 ResultSetInclude eInclude = INCLUDE_FOLDERS_AND_DOCUMENTS;
-                xDynResultSet = m_aFolder.aContent.createDynamicCursor( aProps, eInclude );
+                xDynResultSet = aFolder.aContent.createDynamicCursor( aProps, eInclude );
 
                 if ( xDynResultSet.is() )
                     xResultSet = xDynResultSet->getStaticResultSet();
