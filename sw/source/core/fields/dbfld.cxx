@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:03:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _SVX_PAGEITEM_HXX
 #include <svx/pageitem.hxx>
+#endif
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -201,13 +204,13 @@ BOOL SwDBFieldType::QueryValue( com::sun::star::uno::Any& rAny, BYTE nMId ) cons
     nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
-    case FIELD_PROP_PAR2:
+    case FIELD_PROP_PAR1:
         rAny <<= aDBData.sDataSource;
         break;
-    case FIELD_PROP_PAR4:
+    case FIELD_PROP_PAR2:
         rAny <<= aDBData.sCommand;
         break;
-    case FIELD_PROP_PAR1:
+    case FIELD_PROP_PAR3:
         rAny <<= OUString(sColumn);
         break;
     case FIELD_PROP_SHORT1:
@@ -226,13 +229,13 @@ BOOL SwDBFieldType::PutValue( const com::sun::star::uno::Any& rAny, BYTE nMId )
     nMId &= ~CONVERT_TWIPS;
     switch( nMId )
     {
-    case FIELD_PROP_PAR2:
+    case FIELD_PROP_PAR1:
         rAny >>= aDBData.sDataSource;
         break;
-    case FIELD_PROP_PAR4:
+    case FIELD_PROP_PAR2:
         rAny >>= aDBData.sCommand;
         break;
-    case FIELD_PROP_PAR1:
+    case FIELD_PROP_PAR3:
         {
             String sTmp;
             ::GetString( rAny, sTmp );
