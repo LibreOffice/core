@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-14 21:22:35 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,7 +2057,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "B4 (JIS)l" ; PAPERSIZE_B4_JIS ; > ;
         < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
         < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "레터" ; PAPERSIZE_LETTER ; > ;
+        < "편지" ; PAPERSIZE_LETTER ; > ;
         < "리갈" ; PAPERSIZE_LEGAL ; > ;
         < "타블로이드" ; PAPERSIZE_TABLOID ; > ;
         < "사용자" ; PAPERSIZE_USER ; > ;
