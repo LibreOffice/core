@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2001-01-15 14:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-
+#ifndef _LABELCFG_HXX
+#include <labelcfg.hxx>
+#endif
 class SwLabRec;
 class SwLabRecs;
 class SwLabItem;
@@ -83,6 +85,7 @@ class Printer;
 
 class SwLabDlg : public SfxTabDialog
 {
+    SwLabelConfig   aLabelsCfg;
     SwNewDBMgr*     pNewDBMgr;
     SwLabPrtPage*   pPrtPage;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2000-12-21 12:12:16 $
+ *  last change: $Author: os $ $Date: 2001-01-15 14:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _SV_CONFIG_HXX //autogen
-#include <vcl/config.hxx>
 #endif
 #ifndef _SV_WAITOBJ_HXX //autogen
 #include <vcl/waitobj.hxx>
@@ -294,83 +291,12 @@ long SwLabRec::GetLong(const String& rStr, MetricField& rField)
     rField.Reformat();
     return GETFLDVAL( rField );
 }
-
 // --------------------------------------------------------------------------
-
-String lcl_GetLabelsIni()
-{
-    String sRet( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
-                    "labels.ini" )));
-    SvtPathOptions aOpt;
-    if( !aOpt.SearchFile( sRet, SvtPathOptions::PATH_USERCONFIG ))
-    {
-        sRet.Insert( INET_PATH_TOKEN, 0 );
-        SvtPathOptions aPathOpt;
-        sRet.Insert( aPathOpt.GetUserConfigPath(), 0 );
-    }
-    return sRet;
-}
-
-
 void SwLabDlg::_ReplaceGroup( const String &rMake, SwLabItem *pItem )
 {
     //Die alten Eintraege vernichten.
     pRecs->Remove( 1, pRecs->Count() - 1 );
-
-    // Etiketten aus labels.ini lesen, zum Konvertieren verwenden wir ein
-    // MetricField.
-    MetricField aField( this, WinBits(0) );
-    aField.SetUnit        (FUNIT_CM);
-    aField.SetDecimalDigits(3);
-    aField.SetMin         (0);
-    aField.SetMax         (LONG_MAX);
-    International aInter;
-    aInter.SetNumThousandSep( '.' );
-    aInter.SetNumDecimalSep ( ',' );
-    aField.SetInternational( aInter );
-
-    rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
-    Config aCfg( ::lcl_GetLabelsIni() );
-    aCfg.SetGroup( ByteString( rMake, eSysEnc ));
-
-    String aTmp( rMake );
-    aTmp += ';';
-    const sal_uInt16 nCount = aCfg.GetKeyCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        String aStr( aTmp );
-        aStr += String(aCfg.ReadKey( i ), eSysEnc);
-        SwLabRec* pRec = new SwLabRec( aStr, aField );
-        sal_Bool bDouble = sal_False;
-
-        for (sal_uInt16 nRecPos = 0; nRecPos < pRecs->Count(); nRecPos++)
-        {
-            if (pRec->aMake == pRecs->GetObject(nRecPos)->aMake &&
-                pRec->aType == pRecs->GetObject(nRecPos)->aType)
-            {
-                bDouble = sal_True;
-                break;
-            }
-        }
-
-        if (!bDouble)
-        {
-            pRecs->C40_INSERT( SwLabRec, pRec, pRecs->Count() );
-
-            if ( pRec->aMake == String(pItem->aMake) && pRec->aType == String(pItem->aType) )
-            {
-                pItem->lHDist  = pRec->lHDist;
-                pItem->lVDist  = pRec->lVDist;
-                pItem->lWidth  = pRec->lWidth;
-                pItem->lHeight = pRec->lHeight;
-                pItem->lLeft   = pRec->lLeft;
-                pItem->lUpper  = pRec->lUpper;
-                pItem->nCols   = pRec->nCols;
-                pItem->nRows   = pRec->nRows;
-                pItem->bCont   = pRec->bCont;
-            }
-        }
-    }
+    aLabelsCfg.FillLabels(OUString(rMake), *pRecs);
     aLstGroup = rMake;
 }
 
@@ -467,20 +393,16 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     if (!bDouble)
         pRecs->C40_INSERT( SwLabRec, pRec, 0 );
 
-    Config aCfg( ::lcl_GetLabelsIni() );
-    aCfg.SetGroup( "Labels" );
     sal_uInt16 nLstGroup = 0;
-    rtl_TextEncoding eSysEnc = gsl_getSystemTextEncoding();
-    const sal_uInt16 nGroups = aCfg.GetKeyCount();
-    for ( sal_uInt16 nGroup = 0; nGroup < nGroups; ++nGroup )
+    const Sequence<OUString>& rMan = aLabelsCfg.GetManufacturers();
+    const OUString* pMan = rMan.getConstArray();
+    for(sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++)
     {
-        String *pMake = new String( aCfg.ReadKey( nGroup ), eSysEnc );
-        pMake->EraseLeadingChars();
-        pMake->EraseTrailingChars();
-        aMakes.Insert( pMake, aMakes.Count() );
-        if ( *pMake == String(aItem.aLstMake) )
-            nLstGroup = nGroup;
+        aMakes.Insert( new String(pMan[nMan]), aMakes.Count() );
+        if ( pMan[nMan] == aItem.aLstMake )
+            nLstGroup = nMan;
     }
+
     if ( aMakes.Count() )
         _ReplaceGroup( *aMakes[nLstGroup], &aItem );
     if (pExampleSet)

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+#   last change: $Author: os $ $Date: 2001-01-15 14:05:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ CXXFILES = \
         envimg.cxx \
         envlop1.cxx \
         envprt.cxx \
+        labelcfg.cxx \
         label1.cxx \
         labfmt.cxx \
         labprt.cxx \
@@ -106,6 +107,7 @@ SLOFILES =  \
         $(SLO)$/envimg.obj  \
         $(SLO)$/envlop1.obj \
         $(SLO)$/envprt.obj  \
+        $(SLO)$/labelcfg.obj  \
         $(SLO)$/label1.obj  \
         $(SLO)$/labfmt.obj  \
         $(SLO)$/labprt.obj  \
