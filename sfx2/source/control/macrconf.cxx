@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:53 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,9 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -221,11 +223,11 @@ ErrCode SfxCallMacro( BasicManager* pMgr, const String& rCode,
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
+    pHelpText(0),
+    nRefCnt(0),
     bAppBasic(TRUE),
     nSlotId(0),
-    nRefCnt(0),
-    pSlot(0),
-    pHelpText(0)
+    pSlot(0)
 {
     if ( rURL.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
     {
@@ -255,24 +257,24 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
 }
 
 SfxMacroInfo::SfxMacroInfo( SfxObjectShell *pDoc ) :
+    pHelpText(0),
+    nRefCnt(0),
     bAppBasic(pDoc == NULL),
     nSlotId(0),
-    nRefCnt(0),
-    pSlot(0),
-    pHelpText(0)
+    pSlot(0)
 {}
 
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rLibName,
         const String& rModuleName, const String& rMethodName) :
+    pHelpText(0),
+    nRefCnt(0),
     aLibName(rLibName),
     aModuleName(rModuleName),
     aMethodName(rMethodName),
     nSlotId(0),
-    nRefCnt(0),
-    pSlot(0),
-    pHelpText(0)
+    pSlot(0)
 {
     bAppBasic = (pDoc == 0);
 }
@@ -280,10 +282,10 @@ SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rLibName,
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rQualifiedName )
-:   nSlotId(0),
+:   pHelpText(0),
     nRefCnt(0),
-    pSlot(0),
-    pHelpText(0)
+    nSlotId(0),
+    pSlot(0)
 {
     sal_uInt16 nCount = rQualifiedName.GetTokenCount('.');
     aMethodName = rQualifiedName.GetToken( nCount-1, '.' );
@@ -297,14 +299,14 @@ SfxMacroInfo::SfxMacroInfo(SfxObjectShell *pDoc, const String& rQualifiedName )
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(SfxMacroInfo& rOther) :
+    pHelpText(0),
+    nRefCnt(0),
     bAppBasic(rOther.bAppBasic),
     aLibName(rOther.aLibName),
     aModuleName(rOther.aModuleName),
     aMethodName(rOther.aMethodName),
     nSlotId(rOther.nSlotId),
-    pSlot(0),
-    nRefCnt(0),
-    pHelpText(0)
+    pSlot(0)
 {}
 
 //==========================================================================
