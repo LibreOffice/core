@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtlb.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:59:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:05:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ public:
     inline short    GetFormatType() const { return nCurrFormatType; }
     void            SetDefFormat(const ULONG nDefFmt);
     ULONG           GetFormat() const;
-    const String&   GetFormatStr() const;
 
     inline LanguageType GetCurLanguage() const { return eCurLanguage;}
     void                SetLanguage(LanguageType eSet)  { eCurLanguage = eSet;}
