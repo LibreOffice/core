@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hro $ $Date: 2000-09-27 12:16:02 $
+#   last change: $Author: tra $ $Date: 2000-11-22 14:16:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,14 +80,16 @@ USE_DEFFILE=TRUE
 .INCLUDE :  ..$/version.mk
 
 .IF "$(depend)" == ""
+
 # --- Files --------------------------------------------------------
 
 .IF "$(header)" == ""
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
 .IF "$(GUI)"=="WNT"
-LIB1FILES+=$(SLB)$/advapi9x.lib $(SLB)$/shell9x.lib $(SLB)$/kernel9x.lib $(SLB)$/user9x.lib $(SLB)$/comdlg9x.lib $(SLB)$/tools32.lib
+LIB1FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/tools32.lib $(LB)$/comdlg9x.lib 
 .ENDIF
+
 .IF "$(GUI)"!="WIN"
 LIB1FILES+=$(SLB)$/textenc.lib
 .ENDIF
@@ -153,6 +155,9 @@ SHL1STDLIBS=n:\toolkit4\lib\so32dll.lib\
 .ENDIF
 
 SHL1LIBS=   $(SLB)$/$(TARGET).lib
+.IF "$(GUI)"=="WNT"
+#-->SHL1LIBS+= $(LB)$/iadvapi9x.lib $(LB)$/ishell9x.lib $(LB)$/ikernel9x.lib $(LB)$/iuser9x.lib
+.ENDIF
 
 .IF "$(linkinc)" != ""
 SHL11FILE=$(MISC)$/sal.slo
