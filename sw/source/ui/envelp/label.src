@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:25:02 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 21:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ TabPage TP_LAB_LAB
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "~Påskrift" ;
         Text [ dutch ] = "~Tekst" ;
-        Text [ spanish ] = "Te~xto de etiqueta" ;
+        Text [ spanish ] = "Te~xto de la etiqueta" ;
         Text [ english_us ] = "Label text" ;
         Text[ chinese_simplified ] = "æ ‡ç­¾";
         Text[ russian ] = "Íàäïèñü";
@@ -492,7 +492,7 @@ TabPage TP_LAB_LAB
         Text [ french ] = "Inscription" ;
         Text [ swedish ] = "Påskrift" ;
         Text [ dutch ] = "Opschrift" ;
-        Text [ spanish ] = "Texto de etiqueta" ;
+        Text [ spanish ] = "Texto de la etiqueta" ;
         Text [ english_us ] = "Inscription" ;
         Text[ chinese_simplified ] = "æ ‡ç­¾";
         Text[ russian ] = "Íàäïèñü";
@@ -1333,7 +1333,7 @@ TabPage TP_BUSINESS_DATA
         Text[ greek ] = "Åôáéñßá 2ç ãñáììÞ";
         Text[ dutch ] = "Firma ~2e regel";
         Text[ french ] = "Société : ~2e ligne";
-        Text[ spanish ] = "Empresa ~2da línea";
+        Text[ spanish ] = "Empresa (~2ª línea)";
         Text[ italian ] = "Azienda (2ª riga)";
         Text[ danish ] = "Firma 2. linje";
         Text[ swedish ] = "Företag rad ~2";
