@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2002-06-28 12:08:14 $
+ *  last change: $Author: os $ $Date: 2002-07-04 14:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,6 +1063,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     aTimer.SetTimeoutHdl(LINK(this, SwView, TimeoutHdl));
     bAttrChgNotified = bAttrChgNotifiedWithRegistrations = sal_False;
     pDocSh->EnableSetModified( bOldModifyFlag );
+    InvalidateBorder();
 }
 
 /*--------------------------------------------------------------------
