@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-05 13:12:29 $
+ *  last change: $Author: pb $ $Date: 2002-07-05 13:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3825,7 +3825,7 @@
             <prop oor:name="IsWholeWordsOnly" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3835,7 +3835,7 @@
             <prop oor:name="IsBackwards" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3845,7 +3845,7 @@
             <prop oor:name="IsUseRegularExpression" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3855,7 +3855,7 @@
             <prop oor:name="IsSearchForStyles" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3865,7 +3865,7 @@
             <prop oor:name="IsSimilaritySearch" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3875,7 +3875,7 @@
             <prop oor:name="IsMatchCase" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3885,7 +3885,7 @@
             <prop oor:name="IsUseAsianOptions" oor:type="xs:boolean">
                 <!-- OldPath: -->
                 <!-- OldLocation: -->
-                <!-- Responsible: -->
+                <!-- Responsible: PB -->
                 <!-- UIHints: Edit/Find & Replace -->
                 <value>false</value>
                 <info>
@@ -3896,7 +3896,7 @@
                 <prop oor:name="IsMatchFullHalfWidthForms" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3906,7 +3906,7 @@
                 <prop oor:name="IsMatchHiraganaKatakana" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3916,7 +3916,7 @@
                 <prop oor:name="IsMatchContractions" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3926,7 +3926,7 @@
                 <prop oor:name="IsMatchMinusDashCho-on" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3936,7 +3936,7 @@
                 <prop oor:name="IsMatchRepeatCharMarks" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3946,7 +3946,7 @@
                 <prop oor:name="IsMatchVariantFormKanji" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3956,7 +3956,7 @@
                 <prop oor:name="IsMatchOldKanaForms" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3966,7 +3966,7 @@
                 <prop oor:name="IsMatch_DiZi_DuZu" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3976,7 +3976,7 @@
                 <prop oor:name="IsMatch_BaVa_HaFa" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3986,7 +3986,7 @@
                 <prop oor:name="IsMatch_TsiThiChi_DhiZi" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -3996,7 +3996,7 @@
                 <prop oor:name="IsMatch_HyuIyu_ByuVyu" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4006,7 +4006,7 @@
                 <prop oor:name="IsMatch_SeShe_ZeJe" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4016,7 +4016,7 @@
                 <prop oor:name="IsMatch_IaIya" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4026,7 +4026,7 @@
                 <prop oor:name="IsMatch_KiKu" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4036,7 +4036,7 @@
                 <prop oor:name="IsIgnorePunctuation" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4046,7 +4046,7 @@
                 <prop oor:name="IsIgnoreWhitespace" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4056,7 +4056,7 @@
                 <prop oor:name="IsIgnoreProlongedSoundMark" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
@@ -4066,7 +4066,7 @@
                 <prop oor:name="IsIgnoreMiddleDot" oor:type="xs:boolean">
                     <!-- OldPath: -->
                     <!-- OldLocation: -->
-                    <!-- Responsible: -->
+                    <!-- Responsible: OS -->
                     <!-- UIHints: Tools/Options/"Asian typography"-"Japanese Find" -->
                     <value>true</value>
                     <info>
