@@ -1,0 +1,5 @@
+"CopyImporter";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"CopyImporter";"com::sun::star::configuration::backend::XLayerImporter";"getTargetBackend()"
+"CopyImporter";"com::sun::star::configuration::backend::XLayerImporter";"setTargetBackend()"
+"CopyImporter";"com::sun::star::configuration::backend::XLayerImporter";"importLayer()"
+"CopyImporter";"com::sun::star::configuration::backend::XLayerImporter";"importLayerForEntity()"
