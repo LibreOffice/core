@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 15:42:27 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,7 @@ void OTableController::Execute(sal_uInt16 _nId)
                     // first we need a name for our query so ask the user
                     ::rtl::OUString sCatalog,sSchema;
                     sal_Bool bNew = 0 == m_sName.getLength();
-                    bNew = bNew || (ID_BROWSER_SAVEASDOC == _nId);
+                    bNew = bNew || m_bNew || (ID_BROWSER_SAVEASDOC == _nId);
                     if(bNew)
                     {
                         String aDefaultName;
@@ -409,6 +409,13 @@ void OTableController::Execute(sal_uInt16 _nId)
                                         xTables->getByName(sComposedName) >>= m_xTable;
                                     else
                                         m_xTable = NULL;
+                                }
+                                // be notified when the table is in disposing
+                                Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+                                if (xComponent.is())
+                                {
+                                    Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                                    xComponent->addEventListener(xEvtL);
                                 }
                             }
                             else if(m_xTable.is())
@@ -515,26 +522,7 @@ void SAL_CALL OTableController::initialize( const Sequence< Any >& aArguments ) 
             dispose();
         }
 
-        // get command from the query if a query name was supplied
-        if(m_sName.getLength())
-        {
-            Reference<XNameAccess> xNameAccess;
-            Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
-            if(xSup.is())
-            {
-                xNameAccess = xSup->getTables();
-                OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
-
-                Reference<XPropertySet> xProp;
-                if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
-                {
-                    m_xTable = xProp;
-                    Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
-                    m_bEditable = xAlter.is();
-                    m_bNew = sal_False;
-                }
-            }
-        }
+        assignTable();
         if(!m_xFormatter.is())
         {
             Reference< XChild> xChild(m_xConnection,UNO_QUERY);
@@ -642,10 +630,8 @@ SfxUndoManager* OTableController::getUndoMgr()
 void OTableController::setModified(sal_Bool _bModified)
 {
     m_bModified = _bModified;
-    InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
-    InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(RuntimeException)
@@ -654,6 +640,26 @@ void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(Run
     {
         // our connection was disposed so we need a new one
         createNewConnection(sal_True);
+        // remove from the table
+        Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+        if (xComponent.is())
+        {
+            Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+            xComponent->removeEventListener(xEvtL);
+        }
+        m_xTable    = NULL;
+        assignTable();
+        if(!m_xTable.is())
+        {
+            m_bNew      = sal_True;
+            setModified(sal_True);
+        }
+    }
+    else if(Reference<XPropertySet>(Source.Source,UNO_QUERY) == m_xTable)
+    {   // some deleted our table so we have a new one
+        m_xTable    = NULL;
+        m_bNew      = sal_True;
+        setModified(sal_True);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1360,6 +1366,37 @@ void OTableController::dropKey()
                 Reference<XDrop> xDrop(xKeys,UNO_QUERY);
                 xDrop->dropByIndex(i); // delete the key
                 break;
+            }
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void OTableController::assignTable()
+{
+    // get the table
+    if(m_sName.getLength())
+    {
+        Reference<XNameAccess> xNameAccess;
+        Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
+        if(xSup.is())
+        {
+            xNameAccess = xSup->getTables();
+            OSL_ENSURE(xNameAccess.is(),"no nameaccess for the queries!");
+
+            Reference<XPropertySet> xProp;
+            if(xNameAccess->hasByName(m_sName) && ::cppu::extractInterface(xProp,xNameAccess->getByName(m_sName)) && xProp.is())
+            {
+                m_xTable = xProp;
+                Reference<XAlterTable> xAlter(m_xTable,UNO_QUERY);
+                m_bEditable = xAlter.is();
+                m_bNew = sal_False;
+                // be notified when the table is in disposing
+                Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
+                if (xComponent.is())
+                {
+                    Reference<XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
+                    xComponent->addEventListener(xEvtL);
+                }
             }
         }
     }

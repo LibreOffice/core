@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 14:38:59 $
+ *  last change: $Author: oj $ $Date: 2001-03-12 14:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace dbaui
         sal_Bool        m_bOwnConnection;   // is true when we created our own connection
         sal_Bool        m_bNew;             // is true when we create a new table
 
+        void assignTable();                 // set the table if a name is given
         void loadData();
         void fillTypeInfo();        // fills a vector with type info
         void checkColumns() throw(::com::sun::star::sdbc::SQLException);        // check if we have double column names
