@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:23:16 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
+#ifndef _SFX_IMAGEMGR_HXX
+#include <sfx2/imagemgr.hxx>
+#endif
+#include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 #include "sddll.hxx"
 #ifndef SD_GRAPHIC_DOC_SHELL_HXX
@@ -90,7 +95,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 |* PopUp-Window
 |*
 \************************************************************************/
-
+/*
 SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
                                     SdResId aRIdWin, SdResId aRIdTbx,
                                     SfxBindings& rBindings ) :
@@ -159,16 +164,16 @@ void SdPopupWindowTbx::AdaptToCTL (void)
     aTbx.SetPosSizePixel( Point(), aSize );
     SetOutputSizePixel( aSize );
 }
-
+*/
 
 /*-------------------------------------------------------------------------*/
-
+/*
 SdPopupWindowTbx::~SdPopupWindowTbx()
 {
 }
-
+*/
 /*-------------------------------------------------------------------------*/
-
+/*
 SfxPopupWindow* SdPopupWindowTbx::Clone() const
 {
     SfxBindings& rBindings = (SfxBindings&)GetBindings();
@@ -178,9 +183,9 @@ SfxPopupWindow* SdPopupWindowTbx::Clone() const
 
     //return( SfxPopupWindow::Clone() );
 }
-
+*/
 /*-------------------------------------------------------------------------*/
-
+/*
 void SdPopupWindowTbx::Update()
 {
     AdaptToCTL();
@@ -189,16 +194,18 @@ void SdPopupWindowTbx::Update()
     aTbx.Activate( pBox );
     aTbx.Deactivate( pBox );
 }
-
+*/
 /*-------------------------------------------------------------------------*/
+/*
 void SdPopupWindowTbx::PopupModeEnd()
 {
     aTbx.GetToolBox().EndSelection();
 
     SfxPopupWindow::PopupModeEnd();
 }
-
+*/
 /*-------------------------------------------------------------------------*/
+/*
 IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
 {
     if( IsInPopupMode() )
@@ -216,16 +223,18 @@ IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
 
     return( 0L );
 }
-
+*/
 /*************************************************************************
 |*
 |* Klasse fuer Toolbox
 |*
 \************************************************************************/
 
-SdTbxControl::SdTbxControl( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-        SfxToolBoxControl( nId, rTbx, rBind )
+SdTbxControl::SdTbxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
+    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.Invalidate();
 }
 
 /*-------------------------------------------------------------------------*/
@@ -245,113 +254,64 @@ SfxPopupWindowType SdTbxControl::GetPopupWindowType() const
 
 SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 {
-    SdPopupWindowTbx *pWin = NULL;
-
-    switch( GetId() )
+    SfxPopupWindow *pWin = NULL;
+    rtl::OUString aToolBarResStr;
+    rtl::OUStringBuffer aTbxResName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" )));
+    switch( GetSlotId() )
     {
         case SID_OBJECT_ALIGN:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_ALIGNMENT ),
-                    SdResId( RID_ALIGNMENT_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "alignmentbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_ZOOM_TOOLBOX:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_ZOOM ),
-                    SdResId( RID_ZOOM_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "zoombar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_OBJECT_CHOOSE_MODE:
-        {
-            pWin = new SdPopupWindowTbx(  GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_CHOOSE_MODE ),
-                    SdResId( RID_CHOOSE_MODE_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "choosemodebar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_POSITION:
-        {
-            pWin = new SdPopupWindowTbx(  GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_POSITION ),
-                    SdResId( RID_POSITION_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "positionbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_TEXT:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_TEXT ),
-                    SdResId( RID_TEXT_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "textbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_RECTANGLES:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_RECTANGLES ),
-                    SdResId( RID_RECTANGLES_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "rectanglesbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_ELLIPSES:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_ELLIPSES ),
-                    SdResId( RID_ELLIPSES_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "ellipsesbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_LINES:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_LINES ),
-                    SdResId( RID_LINES_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "linesbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_ARROWS:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_ARROWS ),
-                    SdResId( RID_ARROWS_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "arrowsbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_3D_OBJECTS:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_3D_OBJECTS ),
-                    SdResId( RID_3D_OBJECTS_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "3dobjectsbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_CONNECTORS:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_CONNECTORS ),
-                    SdResId( RID_CONNECTORS_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "connectorsbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
-
         case SID_DRAWTBX_INSERT:
-        {
-            pWin = new SdPopupWindowTbx( GetId(), this->GetToolBox().GetAlign(),
-                    SdResId( RID_INSERT ),
-                    SdResId( RID_INSERT_TBX ), GetBindings() );
-        }
+            aTbxResName.appendAscii( "insertbar" );
+            aToolBarResStr = aTbxResName.makeStringAndClear();
         break;
     }
-    if( pWin )
-    {
-        pWin->StartPopupMode( &GetToolBox(), TRUE );
-        pWin->Update();
-        pWin->StartSelection();
-        pWin->Show();
-    }
+
+    if ( aToolBarResStr.getLength() > 0 )
+        createAndPositionSubToolBar( aToolBarResStr );
+
     return( pWin );
 }
 
@@ -379,7 +339,14 @@ void SdTbxControl::StateChanged( USHORT nSId,
             }
             else
             {
-                Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, rTbx.GetDisplayBackground().GetColor().IsDark(), SD_MOD() );
+                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                aSlotURL += rtl::OUString::valueOf( sal_Int32( nImage ));
+                Image aImage = GetImage( m_xFrame,
+                                         aSlotURL,
+                                         hasBigImages(),
+                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+
+//              Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, rTbx.GetDisplayBackground().GetColor().IsDark(), SD_MOD() );
                 // Es kann u.U. ein Default-Image zurueckgegeben werden,
                 // welches eine Breite von 0 haben soll
                 // if( aImage.GetSizePixel().Width() > 0 )
