@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-07 19:10:05 $
+ *  last change: $Author: mba $ $Date: 2000-12-08 17:33:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,10 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
     }
 
     // Return text with replaced substrings.
-    return aWorkText ;
+    OUString aSysPath;
+    if ( FileBase::getSystemPathFromNormalizedPath( aWorkText, aSysPath ) == FileBase::E_None )
+        aWorkText = aSysPath;
+    return aWorkText;
 }
 
 // -----------------------------------------------------------------------
@@ -850,7 +853,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                     {
                         // multi pathes
                         if ( pValues[nProp] >>= aTempStr )
-                            aFullPath = SubstituteAndConvert( aTempStr );
+                            aFullPath = SubstVar( aTempStr );
                         else
                         {
                             DBG_ERRORFILE( "any operator >>= failed" );
@@ -868,7 +871,7 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() : ConfigItem( ASCII_STR("Office.Commo
                             sal_Int32 nCount = aList.getLength();
                             for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
                             {
-                                aTempStr = SubstituteAndConvert( aList[ nPosition ] );
+                                aTempStr = SubstVar( aList[ nPosition ] );
                                 aFullPath += aTempStr;
                                 if ( nPosition < nCount-1 )
                                     aFullPath += OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
