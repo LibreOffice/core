@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:57:31 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@
 #ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
 #endif
+#include <sfx2/docfile.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -245,7 +246,8 @@ void ScDrawShell::ExecuteHLink( SfxRequest& rReq )
                                     aAny <<= rtl::OUString(rName);
                                     xPropSet->setPropertyValue( sPropLabel, aAny );
 
-                                    aAny <<= rtl::OUString(INetURLObject::RelToAbs(rURL));
+                                    ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pViewData->GetDocShell()->GetMedium()->GetBaseURL(), rURL );
+                                    aAny <<= aTmp;
                                     xPropSet->setPropertyValue( sPropTargetURL, aAny );
 
                                     if( rTarget.Len() )
