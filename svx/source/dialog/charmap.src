@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:51:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ turkish ] = "~Subset";
         Text[ arabic ] = "„Ã„Ê⁄… Ã“∆Ì…";
         Text[ catalan ] = "~¡rea";
+        Text[ finnish ] = "~Alijoukko";
     };
     ListBox LB_SUBSET
     {
@@ -198,6 +199,7 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ turkish ] = "Karakter:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Car·cter:";
+        Text[ finnish ] = "Merkit:";
     };
     Control CT_SHOWTEXT
     {
@@ -263,12 +265,14 @@ ModalDialog RID_SVXDLG_CHARMAP
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     Text[ greek ] = "≈È‰ÈÍÔﬂ ˜·Ò·ÍÙﬁÒÂÚ";
     Text[ korean ] = "∆Øºˆ±‚»£";
     Text[ turkish ] = "÷zel karakter";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "SÌmbolos";
+    Text[ finnish ] = "Erikoismerkit";
 };
 
 /*
@@ -301,6 +305,7 @@ String RID_SUBSETSTR_BASIC_LATIN
         Text[ turkish ] = "Basic Latin";
         Text[ arabic ] = "·« Ì‰Ì √”«”Ì";
         Text[ catalan ] = "LatÌn b·sico";
+        Text[ finnish ] = "Latina (perus)";
     };
 String RID_SUBSETSTR_LATIN_1
 {
@@ -325,6 +330,7 @@ String RID_SUBSETSTR_LATIN_1
         Text[ turkish ] = "Latin-1";
         Text[ arabic ] = "·« Ì‰Ì-1";
         Text[ catalan ] = "LatÌn-1";
+        Text[ finnish ] = "Latina-1";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_A
 {
@@ -349,6 +355,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_A
         Text[ turkish ] = "Latin Extended-A";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄A-";
         Text[ catalan ] = "LatÌn ampliado A";
+        Text[ finnish ] = "Latina (laajennus A)";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_B
 {
@@ -373,6 +380,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_B
         Text[ turkish ] = "Latin Extended-B";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄B-";
         Text[ catalan ] = "LatÌn ampliado B";
+        Text[ finnish ] = "Latina (laajennus B)";
     };
 String RID_SUBSETSTR_IPA_EXTENSIONS
 {
@@ -397,6 +405,7 @@ String RID_SUBSETSTR_IPA_EXTENSIONS
         Text[ turkish ] = "IPA Extensions";
         Text[ arabic ] = "„·Õﬁ« IPA ";
         Text[ catalan ] = "Ampliaciones fonÈticas";
+        Text[ finnish ] = "IPA-laajennukset";
     };
 String RID_SUBSETSTR_SPACING_MODIFIERS
 {
@@ -421,6 +430,7 @@ String RID_SUBSETSTR_SPACING_MODIFIERS
         Text[ turkish ] = "Spacing Modifier Letters";
         Text[ arabic ] = "√Õ—› „⁄œ¯· «·„”«›« ";
         Text[ catalan ] = "Caracteres modificadores de espacios";
+        Text[ finnish ] = "V‰limerkityksen muokkauskirjaimet";
     };
 String RID_SUBSETSTR_COMB_DIACRITICAL
 {
@@ -445,6 +455,7 @@ String RID_SUBSETSTR_COMB_DIACRITICAL
         Text[ turkish ] = "Combining Diacritical Marks";
         Text[ arabic ] = "÷„ ⁄·«„«  «· ‘ﬂÌ·";
         Text[ catalan ] = "CombinaciÛn de caracteres diacrÌticos";
+        Text[ finnish ] = "Yhdist‰v‰t diakriittiset merkit";
     };
 String RID_SUBSETSTR_BASIC_GREEK
 {
@@ -469,6 +480,7 @@ String RID_SUBSETSTR_BASIC_GREEK
         Text[ turkish ] = "Basic Greek";
         Text[ arabic ] = "ÌÊ‰«‰Ì √”«”Ì";
         Text[ catalan ] = "Griego b·sico";
+        Text[ finnish ] = "kreikka (perusteet)";
     };
 String RID_SUBSETSTR_GREEK_SYMS_COPTIC
 {
@@ -493,6 +505,7 @@ String RID_SUBSETSTR_GREEK_SYMS_COPTIC
         Text[ turkish ] = "Greek Symbols And Coptic";
         Text[ arabic ] = "—„Ê“ ÌÊ‰«‰Ì… Êﬁ»ÿÌ";
         Text[ catalan ] = "SÌmbolos griegos y copto";
+        Text[ finnish ] = "kreikkalaiset ja koptiset merkit";
     };
 String RID_SUBSETSTR_CYRILLIC
 {
@@ -517,6 +530,7 @@ String RID_SUBSETSTR_CYRILLIC
         Text[ turkish ] = "Cyrillic";
         Text[ arabic ] = "”Ì—Ì·Ì";
         Text[ catalan ] = "CirÌlico";
+        Text[ finnish ] = "kyrillinen";
     };
 String RID_SUBSETSTR_ARMENIAN
 {
@@ -541,6 +555,7 @@ String RID_SUBSETSTR_ARMENIAN
         Text[ turkish ] = "Armenian";
         Text[ arabic ] = "√—„‰Ì";
         Text[ catalan ] = "Armenio";
+        Text[ finnish ] = "armenia";
     };
 String RID_SUBSETSTR_HEBREW_EXTENDED
 {
@@ -565,6 +580,7 @@ String RID_SUBSETSTR_HEBREW_EXTENDED
         Text[ turkish ] = "Basic Hebrew";
         Text[ arabic ] = "⁄»—Ì √”«”Ì";
         Text[ catalan ] = "Hebreo b·sico";
+        Text[ finnish ] = "heprea (perusteet)";
     };
 String RID_SUBSETSTR_BASIC_HEBREW
 {
@@ -589,6 +605,7 @@ String RID_SUBSETSTR_BASIC_HEBREW
         Text[ turkish ] = "Hebrew Extended";
         Text[ arabic ] = "⁄»—Ì „Ê”¯⁄";
         Text[ catalan ] = "Hebreo ampliado";
+        Text[ finnish ] = "heprea (laajennettu)";
     };
 String RID_SUBSETSTR_BASIC_ARABIC
 {
@@ -613,6 +630,7 @@ String RID_SUBSETSTR_BASIC_ARABIC
         Text[ turkish ] = "Basic Arabic";
         Text[ arabic ] = "⁄—»Ì √”«”Ì";
         Text[ catalan ] = "Arabe b·sico";
+        Text[ finnish ] = "arabia (perusteet)";
     };
 String RID_SUBSETSTR_ARABIC_EXTENDED
 {
@@ -637,6 +655,7 @@ String RID_SUBSETSTR_ARABIC_EXTENDED
         Text[ turkish ] = "Arabic Extended";
         Text[ arabic ] = "⁄—»Ì „Ê”¯⁄";
         Text[ catalan ] = "Arabe ampliado";
+        Text[ finnish ] = "arabia (laajennettu)";
     };
 String RID_SUBSETSTR_DEVANAGARI
 {
@@ -661,6 +680,7 @@ String RID_SUBSETSTR_DEVANAGARI
         Text[ turkish ] = "Devanagari";
         Text[ arabic ] = "œÌ›«‰«€«—Ì";
         Text[ catalan ] = "Devanagari";
+        Text[ finnish ] = "devanagari";
     };
 String RID_SUBSETSTR_BENGALI
 {
@@ -685,6 +705,7 @@ String RID_SUBSETSTR_BENGALI
         Text[ turkish ] = "Bengali";
         Text[ arabic ] = "»‰€«·Ì";
         Text[ catalan ] = "BengalÌ";
+        Text[ finnish ] = "bengali";
     };
 String RID_SUBSETSTR_GURMUKHI
 {
@@ -709,6 +730,7 @@ String RID_SUBSETSTR_GURMUKHI
         Text[ turkish ] = "Gurmukhi";
         Text[ arabic ] = "€Ê—„ÊﬂÌ";
         Text[ catalan ] = "Gurmukhi";
+        Text[ finnish ] = "gurmukhi";
     };
 String RID_SUBSETSTR_GUJARATI
 {
@@ -733,6 +755,7 @@ String RID_SUBSETSTR_GUJARATI
         Text[ turkish ] = "Gujarati";
         Text[ arabic ] = "€ÊÃ«—« Ì";
         Text[ catalan ] = "Gujarati";
+        Text[ finnish ] = "gujarati";
     };
 String RID_SUBSETSTR_ORIYA
 {
@@ -757,6 +780,7 @@ String RID_SUBSETSTR_ORIYA
         Text[ turkish ] = "Oriya";
         Text[ arabic ] = "√Ê—Ì«";
         Text[ catalan ] = "Oriya";
+        Text[ finnish ] = "orija";
     };
 String RID_SUBSETSTR_TAMIL
 {
@@ -781,6 +805,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ turkish ] = "Tamil";
         Text[ arabic ] = " «„Ì·";
         Text[ catalan ] = "Tamil";
+        Text[ finnish ] = "tamili";
     };
 String RID_SUBSETSTR_TELUGU
 {
@@ -805,6 +830,7 @@ String RID_SUBSETSTR_TELUGU
         Text[ turkish ] = "Telugu";
         Text[ arabic ] = " Ì·Ê€Ê";
         Text[ catalan ] = "Telugu";
+        Text[ finnish ] = "telugu";
     };
 String RID_SUBSETSTR_KANNADA
 {
@@ -829,6 +855,7 @@ String RID_SUBSETSTR_KANNADA
         Text[ turkish ] = "Kannada";
         Text[ arabic ] = "ﬂ«‰«œ«";
         Text[ catalan ] = "Kannada";
+        Text[ finnish ] = "kannada";
     };
 String RID_SUBSETSTR_MALAYALAM
 {
@@ -853,6 +880,7 @@ String RID_SUBSETSTR_MALAYALAM
         Text[ turkish ] = "Malayalam";
         Text[ arabic ] = "„«·«Ì«·«„";
         Text[ catalan ] = "Malayalam";
+        Text[ finnish ] = "malayalam";
     };
 String RID_SUBSETSTR_THAI
 {
@@ -877,6 +905,7 @@ String RID_SUBSETSTR_THAI
         Text[ turkish ] = "Thai";
         Text[ arabic ] = "«· «ÌÌ…";
         Text[ catalan ] = "TailandÈs";
+        Text[ finnish ] = "thai";
     };
 String RID_SUBSETSTR_LAO
 {
@@ -901,6 +930,7 @@ String RID_SUBSETSTR_LAO
         Text[ turkish ] = "Lao";
         Text[ arabic ] = "«··«ÊÌ…";
         Text[ catalan ] = "Laosiano";
+        Text[ finnish ] = "lao";
     };
 String RID_SUBSETSTR_BASIC_GEORGIAN
 {
@@ -925,6 +955,7 @@ String RID_SUBSETSTR_BASIC_GEORGIAN
         Text[ turkish ] = "Basic Georgian";
         Text[ arabic ] = "«·ÃÊ—ÃÌ… «·√”«”Ì…";
         Text[ catalan ] = "Georgiano b·sico";
+        Text[ finnish ] = "georgia (perusteet)";
     };
 String RID_SUBSETSTR_GEORGIAN_EXTENDED
 {
@@ -949,6 +980,7 @@ String RID_SUBSETSTR_GEORGIAN_EXTENDED
         Text[ turkish ] = "Georgian Extended";
         Text[ arabic ] = "«·ÃÊ—ÃÌ… «·„Ê”¯⁄…";
         Text[ catalan ] = "Georgiano extendido";
+        Text[ finnish ] = "georgia (laajennettu)";
     };
 String RID_SUBSETSTR_HANGUL_JAMO
 {
@@ -973,6 +1005,7 @@ String RID_SUBSETSTR_HANGUL_JAMO
         Text[ turkish ] = "Hangul Jamo";
         Text[ arabic ] = "Â«‰€Ê· Ã«„Ê";
         Text[ catalan ] = "Hangul Jamo";
+        Text[ finnish ] = "hangul jamo";
     };
 String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
 {
@@ -997,6 +1030,7 @@ String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
         Text[ turkish ] = "Latin Extended Additional";
         Text[ arabic ] = "·« Ì‰Ì „Ê”¯⁄ ≈÷«›Ì";
         Text[ catalan ] = "LatÌn extendido adicional";
+        Text[ finnish ] = "latina (lis‰laajennus)";
     };
 String RID_SUBSETSTR_GREEK_EXTENDED
 {
@@ -1021,6 +1055,7 @@ String RID_SUBSETSTR_GREEK_EXTENDED
         Text[ turkish ] = "Greek Extended";
         Text[ arabic ] = "ÌÊ‰«‰Ì „Ê”¯⁄";
         Text[ catalan ] = "Griego ampliado";
+        Text[ finnish ] = "kreikka (laajennettu)";
     };
 String RID_SUBSETSTR_GENERAL_PUNCTUATION
 {
@@ -1045,6 +1080,7 @@ String RID_SUBSETSTR_GENERAL_PUNCTUATION
         Text[ turkish ] = "General Punctuation";
         Text[ arabic ] = "⁄·«„«   ‰ﬁÌÿ ⁄«„…";
         Text[ catalan ] = "PuntuaciÛn general";
+        Text[ finnish ] = "Yleinen v‰limerkitys";
     };
 String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
 {
@@ -1069,6 +1105,7 @@ String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
         Text[ turkish ] = "Superscripts And Subscripts";
         Text[ arabic ] = "„— ›⁄ Ê„‰Œ›÷";
         Text[ catalan ] = "Super y subÌndices";
+        Text[ finnish ] = "Yl‰- ja alaindeksit";
     };
 String RID_SUBSETSTR_CURRENCY_SYMBOLS
 {
@@ -1093,6 +1130,7 @@ String RID_SUBSETSTR_CURRENCY_SYMBOLS
         Text[ turkish ] = "Currency Symbols";
         Text[ arabic ] = "—„Ê“ «·⁄„·…";
         Text[ catalan ] = "SÌmbolos de monedas";
+        Text[ finnish ] = "Valuuttasymbolit";
     };
 String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
 {
@@ -1117,6 +1155,7 @@ String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
         Text[ turkish ] = "Combining Diacritical Marks For Symbols";
         Text[ arabic ] = "÷„ ⁄·«„«  «· ‘ﬂÌ· ··—„Ê“";
         Text[ catalan ] = "CombinaciÛn de sÌmbolos diacrÌticos";
+        Text[ finnish ] = "Yhdist‰v‰t diakriittiset merkit";
     };
 String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
 {
@@ -1141,6 +1180,7 @@ String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
         Text[ turkish ] = "Letterlike Symbols";
         Text[ arabic ] = "—„Ê“ ﬂ«·√Õ—›";
         Text[ catalan ] = "SÌmbolos tipo carta";
+        Text[ finnish ] = "Kirjainsymbolit";
     };
 String RID_SUBSETSTR_NUMBER_FORMS
 {
@@ -1165,6 +1205,7 @@ String RID_SUBSETSTR_NUMBER_FORMS
         Text[ turkish ] = "Number Forms";
         Text[ arabic ] = "‰„«–Ã √—ﬁ«„";
         Text[ catalan ] = "SÌmbolos numÈricos";
+        Text[ finnish ] = "Numeromuodot";
     };
 String RID_SUBSETSTR_ARROWS
 {
@@ -1189,6 +1230,7 @@ String RID_SUBSETSTR_ARROWS
         Text[ turkish ] = "Arrows";
         Text[ arabic ] = "√”Â„";
         Text[ catalan ] = "Flechas";
+        Text[ finnish ] = "Nuolet";
     };
 String RID_SUBSETSTR_MATH_OPERATORS
 {
@@ -1213,6 +1255,7 @@ String RID_SUBSETSTR_MATH_OPERATORS
         Text[ turkish ] = "Mathematical Operators";
         Text[ arabic ] = "⁄Ê«„·  ‘€Ì· —Ì«÷Ì…";
         Text[ catalan ] = "Operadores matem·ticos";
+        Text[ finnish ] = "Matemaattiset operaattorit";
     };
 String RID_SUBSETSTR_MISC_TECHNICAL
 {
@@ -1237,6 +1280,7 @@ String RID_SUBSETSTR_MISC_TECHNICAL
         Text[ turkish ] = "Miscellaneous Technical";
         Text[ arabic ] = "—„Ê“  ﬁ‰Ì… „ ‰Ê⁄…";
         Text[ catalan ] = "Diversos caracteres tÈcnicos";
+        Text[ finnish ] = "Sekalaiset tekniset merkit";
     };
 String RID_SUBSETSTR_CONTROL_PICTURES
 {
@@ -1261,6 +1305,7 @@ String RID_SUBSETSTR_CONTROL_PICTURES
         Text[ turkish ] = "Control Pictures";
         Text[ arabic ] = "«· Õﬂ„ »«·’Ê—";
         Text[ catalan ] = "SÌmbolos del teclado";
+        Text[ finnish ] = "Ohjauskuvat";
     };
 String RID_SUBSETSTR_OPTICAL_CHAR_REC
 {
@@ -1285,6 +1330,7 @@ String RID_SUBSETSTR_OPTICAL_CHAR_REC
         Text[ turkish ] = "Optical Character Recognition";
         Text[ arabic ] = " ⁄—› »’—Ì ⁄·Ï «·Õ—›";
         Text[ catalan ] = "Caracteres legibles por m·quina";
+        Text[ finnish ] = "Optinen merkkitunnistus";
     };
 String RID_SUBSETSTR_ENCLOSED_ALPHANUM
 {
@@ -1309,6 +1355,7 @@ String RID_SUBSETSTR_ENCLOSED_ALPHANUM
         Text[ turkish ] = "Enclosed Alphanumerics";
         Text[ arabic ] = "√»ÃœÌ —ﬁ„Ì ›Ì œ«∆—…";
         Text[ catalan ] = "Caracteres incluidos";
+        Text[ finnish ] = "Sis‰lletyt aakkosnumeeriset merkit";
     };
 String RID_SUBSETSTR_BOX_DRAWING
 {
@@ -1333,6 +1380,7 @@ String RID_SUBSETSTR_BOX_DRAWING
         Text[ turkish ] = "Box Drawing";
         Text[ arabic ] = "—”„ „—»⁄";
         Text[ catalan ] = "SÌmbolos de marco";
+        Text[ finnish ] = "Ruutupiirros";
     };
 String RID_SUBSETSTR_BLOCK_ELEMENTS
 {
@@ -1357,6 +1405,7 @@ String RID_SUBSETSTR_BLOCK_ELEMENTS
         Text[ turkish ] = "Block Elements";
         Text[ arabic ] = "⁄‰«’— «·ﬂ ·…";
         Text[ catalan ] = "SÌmbolos de bloque";
+        Text[ finnish ] = "Lohko-osat";
     };
 String RID_SUBSETSTR_GEOMETRIC_SHAPES
 {
@@ -1381,6 +1430,7 @@ String RID_SUBSETSTR_GEOMETRIC_SHAPES
         Text[ turkish ] = "Geometric Shapes";
         Text[ arabic ] = "√‘ﬂ«· Â‰œ”Ì…";
         Text[ catalan ] = "SÌmbolos geomÈtricos";
+        Text[ finnish ] = "Geometriset muodot";
     };
 String RID_SUBSETSTR_MISC_DINGBATS
 {
@@ -1405,6 +1455,7 @@ String RID_SUBSETSTR_MISC_DINGBATS
         Text[ turkish ] = "Miscellaneous Symbols";
         Text[ arabic ] = "—„Ê“ „Œ ·›…";
         Text[ catalan ] = "Diversos sÌmbolos";
+        Text[ finnish ] = "Sekalaiset merkit";
     };
 String RID_SUBSETSTR_DINGBATS
 {
@@ -1429,6 +1480,7 @@ String RID_SUBSETSTR_DINGBATS
         Text[ turkish ] = "Dingbats";
         Text[ arabic ] = "Dingbats";
         Text[ catalan ] = "Dingbats";
+        Text[ finnish ] = "Dingbat-leikkeet";
     };
 String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
 {
@@ -1453,6 +1505,7 @@ String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
         Text[ turkish ] = "CJK Symbols And Punctuation";
         Text[ arabic ] = "—„Ê“ Ê⁄·«„«   ‰ﬁÌÿ ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì…";
         Text[ catalan ] = "SÌmbolos y puntuaciÛn CJK";
+        Text[ finnish ] = "CJK-merkit ja -v‰limerkitys";
     };
 String RID_SUBSETSTR_HIRAGANA
 {
@@ -1477,6 +1530,7 @@ String RID_SUBSETSTR_HIRAGANA
         Text[ turkish ] = "Hiragana";
         Text[ arabic ] = "ÂÌ—«Ã«‰«";
         Text[ catalan ] = "Hiragana";
+        Text[ finnish ] = "hiragana";
     };
 String RID_SUBSETSTR_KATAKANA
 {
@@ -1501,6 +1555,7 @@ String RID_SUBSETSTR_KATAKANA
         Text[ turkish ] = "Katakana";
         Text[ arabic ] = "ﬂ« «ﬂ«‰«";
         Text[ catalan ] = "Katakana";
+        Text[ finnish ] = "katakana";
     };
 String RID_SUBSETSTR_BOPOMOFO
 {
@@ -1525,6 +1580,7 @@ String RID_SUBSETSTR_BOPOMOFO
         Text[ turkish ] = "Bopomofo";
         Text[ arabic ] = "»Ê»Ê„Ê›Ê";
         Text[ catalan ] = "Bopomofo";
+        Text[ finnish ] = "bopomofo";
     };
 String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
 {
@@ -1549,6 +1605,7 @@ String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
         Text[ turkish ] = "Hangul Compatibility Jamo";
         Text[ arabic ] = " Ê«›ﬁ Â«‰€Ê· „⁄ Ã«„Ê";
         Text[ catalan ] = "Jamo compatible con Hangul";
+        Text[ finnish ] = "hangul-yhteensopiva jamo";
     };
 String RID_SUBSETSTR_CJK_MISC
 {
@@ -1573,6 +1630,7 @@ String RID_SUBSETSTR_CJK_MISC
         Text[ turkish ] = "CJK Miscellaneous";
         Text[ arabic ] = "„ ›—ﬁ«  ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì…";
         Text[ catalan ] = "Diversos caracteres CJK";
+        Text[ finnish ] = "Sekalaiset CJK-merkit";
     };
 String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
 {
@@ -1597,6 +1655,7 @@ String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
         Text[ turkish ] = "Enclosed CJK Letters And Months";
         Text[ arabic ] = "√Õ—› Ê√‘Â— ’Ì‰Ì… ÊÌ«»«‰Ì… ÊﬂÊ—Ì… ›Ì œ«∆—…";
         Text[ catalan ] = "Caracteres y meses incluidos en CJK";
+        Text[ finnish ] = "Sis‰llytetyt CJK-kirjaimet ja kuukaudet";
     };
 String RID_SUBSETSTR_CJK_COMPATIBILITY
 {
@@ -1621,6 +1680,7 @@ String RID_SUBSETSTR_CJK_COMPATIBILITY
         Text[ turkish ] = "CJK Compatibility";
         Text[ arabic ] = " Ê«›ﬁ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
         Text[ catalan ] = "Compatibilidad CJK";
+        Text[ finnish ] = "CJK-yhteensopivuus";
     };
 String RID_SUBSETSTR_HANGUL
 {
@@ -1645,6 +1705,7 @@ String RID_SUBSETSTR_HANGUL
         Text[ turkish ] = "Hangul";
         Text[ arabic ] = "Hangul";
         Text[ catalan ] = "Hangul";
+        Text[ finnish ] = "hangul";
     };
 String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
 {
@@ -1669,6 +1730,7 @@ String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
         Text[ turkish ] = "CJK Unified Ideographs";
         Text[ arabic ] = "√ÌœÌÊ€—«„ „ Õœ ’Ì‰Ì ÊÌ«»«‰Ì ÊﬂÊ—Ì";
         Text[ catalan ] = "Ideogramas CJK unificados";
+        Text[ finnish ] = "Yhdistetyt CJK-symbolit";
     };
 String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
 {
@@ -1693,6 +1755,7 @@ String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
         Text[ turkish ] = "CJK Unified Ideographs Extension-A";
         Text[ arabic ] = "≈ÌœÌÊ€—«„ „ Õœ ’Ì‰Ì ÊÌ«»«‰Ì ÊﬂÊ—Ì° „·ÕﬁA-";
         Text[ catalan ] = "Ideogramas CJK unificados extensiÛn A";
+        Text[ finnish ] = "Yhdistetyt CJK-symbolit (laajennus A)";
     };
 String RID_SUBSETSTR_PRIVATE_USE_AREA
 {
@@ -1717,6 +1780,7 @@ String RID_SUBSETSTR_PRIVATE_USE_AREA
         Text[ turkish ] = "Private Use Area";
         Text[ arabic ] = "„‰ÿﬁ… «” ⁄„«· Œ«’";
         Text[ catalan ] = "SÌmbolos especÌficos de fuentes";
+        Text[ finnish ] = "Henkilˆkohtainen alue";
     };
 String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
 {
@@ -1741,6 +1805,7 @@ String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
         Text[ turkish ] = "CJK Compatibility Ideographs";
         Text[ arabic ] = " Ê«›ﬁ ≈ÌœÌÊ€—«„ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
         Text[ catalan ] = "Ideogramas de compatibilidad CJK";
+        Text[ finnish ] = "CJK-yhteensopivuussymbolit";
     };
 String RID_SUBSETSTR_ALPHA_PRESENTATION
 {
@@ -1765,6 +1830,7 @@ String RID_SUBSETSTR_ALPHA_PRESENTATION
         Text[ turkish ] = "Alphabetic Presentation Forms";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… √»ÃœÌ…";
         Text[ catalan ] = "Formas de presentaciÛn alfabÈticas";
+        Text[ finnish ] = "Aakkostetut esityslomakkeet";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_A
 {
@@ -1789,6 +1855,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_A
         Text[ turkish ] = "Arabic Presentation Forms-A";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… ⁄—»Ì…-A";
         Text[ catalan ] = "Formas A de presentaciÛn ·rabe";
+        Text[ finnish ] = "Arabiankieliset esityslomakkeet - A";
     };
 String RID_SUBSETSTR_COMBINING_HALF_MARKS
 {
@@ -1813,6 +1880,7 @@ String RID_SUBSETSTR_COMBINING_HALF_MARKS
         Text[ turkish ] = "Combining Half Marks";
         Text[ arabic ] = "÷„ ‰’› «·⁄·«„« ";
         Text[ catalan ] = "CombinaciÛn de medias marcas";
+        Text[ finnish ] = "Puolimerkkien yhdist‰minen";
     };
 String RID_SUBSETSTR_CJK_COMPAT_FORMS
 {
@@ -1837,6 +1905,7 @@ String RID_SUBSETSTR_CJK_COMPAT_FORMS
         Text[ turkish ] = "CJK Compatibility Forms";
         Text[ arabic ] = "‰„«–Ã  Ê«›ﬁ «·’Ì‰Ì… Ê«·Ì«»«‰Ì… Ê«·ﬂÊ—Ì…";
         Text[ catalan ] = "Formas de compatibilidad CJK";
+        Text[ finnish ] = "CJK-yhteensopivuuslomakkeet";
     };
 String RID_SUBSETSTR_SMALL_FORM_VARIANTS
 {
@@ -1861,6 +1930,7 @@ String RID_SUBSETSTR_SMALL_FORM_VARIANTS
         Text[ turkish ] = "Small Form Variants";
         Text[ arabic ] = "„ €Ì—«  ‰„Ê–Ã ’€Ì—";
         Text[ catalan ] = "Variantes de pequeÒas formas";
+        Text[ finnish ] = "Pienimuotoiset";
     };
 String RID_SUBSETSTR_ARABIC_PRESENT_B
 {
@@ -1885,6 +1955,7 @@ String RID_SUBSETSTR_ARABIC_PRESENT_B
         Text[ turkish ] = "Arabic Presentation Forms-B";
         Text[ arabic ] = "‰„«–Ã ⁄—Ê÷  ﬁœÌ„Ì… ⁄—»Ì…-B";
         Text[ catalan ] = "Formas B de presentaciÛn ·rabe";
+        Text[ finnish ] = "Arabiankieliset esityslomakkeet - B";
     };
 String RID_SUBSETSTR_HALFW_FULLW_FORMS
 {
@@ -1909,6 +1980,7 @@ String RID_SUBSETSTR_HALFW_FULLW_FORMS
         Text[ turkish ] = "Halfwidth And Fullwidth Forms";
         Text[ arabic ] = "‰„«–Ã »‰’› «·⁄—÷ Ê√Œ—Ï »⁄—÷ ﬂ«„·";
         Text[ catalan ] = "Formas anchas y medio anchas";
+        Text[ finnish ] = "Puoli- ja t‰ysilevyiset lomakkeet";
     };
 String RID_SUBSETSTR_SPECIALS
 {
@@ -1933,6 +2005,7 @@ String RID_SUBSETSTR_SPECIALS
         Text[ turkish ] = "Specials";
         Text[ arabic ] = "—„Ê“ Œ«’…";
         Text[ catalan ] = "SÌmbolos especiales";
+        Text[ finnish ] = "Erikoiset";
     };
 String RID_SUBSETSTR_HANGUL_GA
 {
@@ -1957,6 +2030,7 @@ String RID_SUBSETSTR_HANGUL_GA
         Text[ turkish ] = "Hangul Ga";
         Text[ arabic ] = "Hangul Ga";
         Text[ catalan ] = "Hangul Ga";
+        Text[ finnish ] = "hangul ga";
     };
 String RID_SUBSETSTR_HANGUL_NA
 {
@@ -1981,6 +2055,7 @@ String RID_SUBSETSTR_HANGUL_NA
         Text[ turkish ] = "Hangul Na";
         Text[ arabic ] = "Hangul Na";
         Text[ catalan ] = "Hangul Na";
+        Text[ finnish ] = "hangul na";
     };
 String RID_SUBSETSTR_HANGUL_DA
 {
@@ -2005,6 +2080,7 @@ String RID_SUBSETSTR_HANGUL_DA
         Text[ turkish ] = "Hangul Da";
         Text[ arabic ] = "Hangul Da";
         Text[ catalan ] = "Hangul Da";
+        Text[ finnish ] = "hangul da";
     };
 String RID_SUBSETSTR_HANGUL_RA
 {
@@ -2029,6 +2105,7 @@ String RID_SUBSETSTR_HANGUL_RA
         Text[ turkish ] = "Hangul Ra";
         Text[ arabic ] = "Hangul Ra";
         Text[ catalan ] = "Hangul Ra";
+        Text[ finnish ] = "hangul ra";
     };
 String RID_SUBSETSTR_HANGUL_MA
 {
@@ -2053,6 +2130,7 @@ String RID_SUBSETSTR_HANGUL_MA
         Text[ turkish ] = "Hangul Ma";
         Text[ arabic ] = "Hangul Ma";
         Text[ catalan ] = "Hangul Ma";
+        Text[ finnish ] = "hangul ma";
     };
 String RID_SUBSETSTR_HANGUL_BA
 {
@@ -2077,6 +2155,7 @@ String RID_SUBSETSTR_HANGUL_BA
         Text[ turkish ] = "Hangul Ba";
         Text[ arabic ] = "Hangul Ba";
         Text[ catalan ] = "Hangul Ba";
+        Text[ finnish ] = "hangul ba";
     };
 String RID_SUBSETSTR_HANGUL_SA
 {
@@ -2101,6 +2180,7 @@ String RID_SUBSETSTR_HANGUL_SA
         Text[ turkish ] = "Hangul Sa";
         Text[ arabic ] = "Hangul Sa";
         Text[ catalan ] = "Hangul Sa";
+        Text[ finnish ] = "hangul sa";
     };
 String RID_SUBSETSTR_HANGUL_AH
 {
@@ -2125,6 +2205,7 @@ String RID_SUBSETSTR_HANGUL_AH
         Text[ turkish ] = "Hangul Ah";
         Text[ arabic ] = "Hangul Ah";
         Text[ catalan ] = "Hangul Ah";
+        Text[ finnish ] = "hangul ah";
     };
 String RID_SUBSETSTR_HANGUL_JA
 {
@@ -2149,6 +2230,7 @@ String RID_SUBSETSTR_HANGUL_JA
         Text[ turkish ] = "Hangul Ja";
         Text[ arabic ] = "Hangul Ja";
         Text[ catalan ] = "Hangul Ja";
+        Text[ finnish ] = "hangul ja";
     };
 String RID_SUBSETSTR_HANGUL_CHA
 {
@@ -2173,6 +2255,7 @@ String RID_SUBSETSTR_HANGUL_CHA
         Text[ turkish ] = "Hangul Cha";
         Text[ arabic ] = "Hangul Cha";
         Text[ catalan ] = "Hangul Cha";
+        Text[ finnish ] = "hangul cha";
     };
 String RID_SUBSETSTR_HANGUL_KA
 {
@@ -2197,6 +2280,7 @@ String RID_SUBSETSTR_HANGUL_KA
         Text[ turkish ] = "Hangul Ka";
         Text[ arabic ] = "Hangul Ka";
         Text[ catalan ] = "Hangul Ka";
+        Text[ finnish ] = "hangul ka";
     };
 String RID_SUBSETSTR_HANGUL_TA
 {
@@ -2221,6 +2305,7 @@ String RID_SUBSETSTR_HANGUL_TA
         Text[ turkish ] = "Hangul Ta";
         Text[ arabic ] = "Hangul Ta";
         Text[ catalan ] = "Hangul Ta";
+        Text[ finnish ] = "hangul ta";
     };
 String RID_SUBSETSTR_HANGUL_PA
 {
@@ -2245,6 +2330,7 @@ String RID_SUBSETSTR_HANGUL_PA
         Text[ turkish ] = "Hangul Pa";
         Text[ arabic ] = "Hangul Pa";
         Text[ catalan ] = "Hangul Pa";
+        Text[ finnish ] = "hangul pa";
     };
 String RID_SUBSETSTR_HANGUL_HA
 {
@@ -2269,6 +2355,7 @@ String RID_SUBSETSTR_HANGUL_HA
         Text[ turkish ] = "Hangul Ha";
         Text[ arabic ] = "Hangul Ha";
         Text[ catalan ] = "Hangul Ha";
+        Text[ finnish ] = "hangul ha";
     };
 String RID_SUBSETSTR_YI
 {
@@ -2293,6 +2380,7 @@ String RID_SUBSETSTR_YI
         Text[ turkish ] = "Yi";
         Text[ arabic ] = "Yi";
         Text[ catalan ] = "Yi";
+        Text[ finnish ] = "yi";
     };
 String RID_SUBSETSTR_SINHALA
 {
@@ -2317,6 +2405,7 @@ String RID_SUBSETSTR_SINHALA
         Text[ turkish ] = "Sinhala";
         Text[ arabic ] = "”Ì‰Â«·«";
         Text[ catalan ] = "Sinhala";
+        Text[ finnish ] = "sinhala";
     };
 String RID_SUBSETSTR_TIBETAN
 {
@@ -2341,6 +2430,7 @@ String RID_SUBSETSTR_TIBETAN
         Text[ turkish ] = "Tibetan";
         Text[ arabic ] = "«· Ì» Ì…";
         Text[ catalan ] = "Tibetano";
+        Text[ finnish ] = "tiibet";
     };
 String RID_SUBSETSTR_MYANMAR
 {
@@ -2365,6 +2455,7 @@ String RID_SUBSETSTR_MYANMAR
         Text[ turkish ] = "Myanmar";
         Text[ arabic ] = "„Ì«‰„«—";
         Text[ catalan ] = "Birmano";
+        Text[ finnish ] = "myanmar";
     };
 String RID_SUBSETSTR_KHMER
 {
@@ -2389,6 +2480,7 @@ String RID_SUBSETSTR_KHMER
         Text[ turkish ] = "Khmer";
         Text[ arabic ] = "«·Œ„Ì—Ì…";
         Text[ catalan ] = "Khmer";
+        Text[ finnish ] = "khmeeri";
     };
 String RID_SUBSETSTR_OGHAM
 {
@@ -2413,6 +2505,7 @@ String RID_SUBSETSTR_OGHAM
         Text[ turkish ] = "Ogham";
         Text[ arabic ] = "«·√Ê€„Ì…";
         Text[ catalan ] = "Ogham";
+        Text[ finnish ] = "ogham";
     };
 String RID_SUBSETSTR_RUNIC
 {
@@ -2437,6 +2530,7 @@ String RID_SUBSETSTR_RUNIC
         Text[ turkish ] = "Runic";
         Text[ arabic ] = "—Ê‰Ì";
         Text[ catalan ] = "R˙nico";
+        Text[ finnish ] = "riimukirjoitus";
     };
 String RID_SUBSETSTR_SYRIAC
 {
@@ -2461,6 +2555,7 @@ String RID_SUBSETSTR_SYRIAC
         Text[ turkish ] = "Syriac";
         Text[ arabic ] = "«·”—Ì«‰Ì…";
         Text[ catalan ] = "Sirio";
+        Text[ finnish ] = "syyria";
     };
 String RID_SUBSETSTR_THAANA
 {
@@ -2485,6 +2580,7 @@ String RID_SUBSETSTR_THAANA
         Text[ turkish ] = "Thaana";
         Text[ arabic ] = " «‰«";
         Text[ catalan ] = "Thaana";
+        Text[ finnish ] = "thaana";
     };
 String RID_SUBSETSTR_ETHIOPIC
 {
@@ -2509,6 +2605,7 @@ String RID_SUBSETSTR_ETHIOPIC
         Text[ turkish ] = "Ethiopic";
         Text[ arabic ] = "«·Õ»‘Ì…";
         Text[ catalan ] = "EtÌope";
+        Text[ finnish ] = "etiopia";
     };
 String RID_SUBSETSTR_CHEROKEE
 {
@@ -2533,6 +2630,7 @@ String RID_SUBSETSTR_CHEROKEE
         Text[ turkish ] = "Cherokee";
         Text[ arabic ] = "‘Ì—ÊﬂÌ";
         Text[ catalan ] = "Cheroque";
+        Text[ finnish ] = "cherokee";
     };
 String RID_SUBSETSTR_CANADIAN_ABORIGINAL
 {
@@ -2557,6 +2655,7 @@ String RID_SUBSETSTR_CANADIAN_ABORIGINAL
         Text[ turkish ] = "Canadian Aboriginal Syllables";
         Text[ arabic ] = "„ﬁ«ÿ⁄ «·√—Ê„Ì «·ﬂ«‰«œÌÌ‰";
         Text[ catalan ] = "SÌlabas aborÌgenes canadienses";
+        Text[ finnish ] = "Kanadan alkuper‰iskansojen kirjainmerkit";
     };
 String RID_SUBSETSTR_MONGOLIAN
 {
@@ -2581,6 +2680,7 @@ String RID_SUBSETSTR_MONGOLIAN
         Text[ turkish ] = "Mongolian";
         Text[ arabic ] = "«·„€Ê·Ì…";
         Text[ catalan ] = "Mogol";
+        Text[ finnish ] = "mongolia";
     };
 };
 
