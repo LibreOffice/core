@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cessentl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:26:34 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@ namespace ary {
 
 
 CeEssentials::CeEssentials()
-    :   nId(0),
-        // sLocalName,
+    :   sLocalName(),
+        nId(0),
         nOwner(0),
         nLocation(0),
         pInfo(0)
@@ -85,8 +85,8 @@ CeEssentials::CeEssentials( Cid                 i_nId,
                             const udmstri &     i_sLocalName,
                             Cid                 i_nOwner,
                             Lid                 i_nLocation )
-    :   nId(i_nId),
-        sLocalName(i_sLocalName),
+    :   sLocalName(i_sLocalName),
+        nId(i_nId),
         nOwner(i_nOwner),
         nLocation(i_nLocation),
         pInfo(0)
