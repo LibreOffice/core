@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:07:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,16 @@ using namespace com::sun::star::uno;
 
 SwRead ReadRtf = 0, ReadAscii = 0, ReadSwg = 0, ReadSw3 = 0,
         ReadHTML = 0, ReadXML = 0;
+
+SwRead SwGetReaderSw3() // SW_DLLPUBLIC
+{
+    return ReadSw3;
+}
+
+SwRead SwGetReaderXML() // SW_DLLPUBLIC
+{
+    return ReadXML;
+}
 
 bool IsDocShellRegistered()
 {
