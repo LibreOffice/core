@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 19:36:28 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 10:37:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
                 //! get enum value from any???
-                nRet = *(Enum*)aAny.getValue();
+                nRet = *(sal_Int32*)aAny.getValue();
             }
             else
             {
@@ -194,7 +194,7 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 {
     sal_Int32 nRet = 0;
     if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
-        nRet = *(Enum*)aAny.getValue();
+        nRet = *(sal_Int32*)aAny.getValue();
     else
         aAny >>= nRet;
     return nRet;
