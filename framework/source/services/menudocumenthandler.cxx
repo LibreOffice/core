@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 07:51:25 $
+ *  last change: $Author: cd $ $Date: 2001-05-23 07:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <services/attributelist.hxx>
 #endif
 
+#ifndef __COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
+#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#endif
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -80,18 +84,36 @@ using namespace ::com::sun::star::xml::sax;
 
 const int ITEMID_START_VALUE = 1000;
 
-#define ELEMENT_MENUBAR         "menubar"
-#define ELEMENT_MENU            "menu"
-#define ELEMENT_MENUPOPUP       "menupopup"
-#define ELEMENT_MENUITEM        "menuitem"
-#define ELEMENT_MENUSEPARATOR   "menuseparator"
+#define XMLNS_MENU              "http://openoffice.org/2001/menu"
+#define XMLNS_PREFIX            "menu:"
 
-#define ATTRIBUTE_ID            "id"
-#define ATTRIBUTE_LABEL         "label"
-#define ATTRIBUTE_HELPID        "helpid"
-#define ATTRIBUTE_LINEBREAK     "linebreak"
+#define ELEMENT_MENUBAR         "http://openoffice.org/2001/menu^menubar"
+#define ELEMENT_MENU            "http://openoffice.org/2001/menu^menu"
+#define ELEMENT_MENUPOPUP       "http://openoffice.org/2001/menu^menupopup"
+#define ELEMENT_MENUITEM        "http://openoffice.org/2001/menu^menuitem"
+#define ELEMENT_MENUSEPARATOR   "http://openoffice.org/2001/menu^menuseparator"
+
+#define ELEMENT_NS_MENUBAR          "menu:menubar"
+#define ELEMENT_NS_MENU             "menu:menu"
+#define ELEMENT_NS_MENUPOPUP        "menu:menupopup"
+#define ELEMENT_NS_MENUITEM         "menu:menuitem"
+#define ELEMENT_NS_MENUSEPARATOR    "menu:menuseparator"
+
+#define ATTRIBUTE_ID            "http://openoffice.org/2001/menu^id"
+#define ATTRIBUTE_LABEL         "http://openoffice.org/2001/menu^label"
+#define ATTRIBUTE_HELPID        "http://openoffice.org/2001/menu^helpid"
+#define ATTRIBUTE_LINEBREAK     "http://openoffice.org/2001/menu^linebreak"
+
+#define ATTRIBUTE_NS_ID         "menu:id"
+#define ATTRIBUTE_NS_LABEL      "menu:label"
+#define ATTRIBUTE_NS_HELPID     "menu:helpid"
+#define ATTRIBUTE_NS_LINEBREAK  "menu:linebreak"
+
+#define ATTRIBUTE_XMLNS_MENU    "xmlns:menu"
 
 #define ATTRIBUTE_TYPE_CDATA    "CDATA"
+
+#define MENUBAR_DOCTYPE         "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
 
 
 // special popup menus (filled during runtime) must be saved as a menuitem!!!
@@ -164,7 +186,7 @@ throw(  SAXException, RuntimeException )
 
     if ( m_xLocator.is() )
     {
-        sprintf( buffer, "Line: %ld ", m_xLocator->getLineNumber() );
+        sprintf( buffer, "Line: %ld - ", m_xLocator->getLineNumber() );
         return OUString::createFromAscii( buffer );
     }
     else
@@ -702,16 +724,28 @@ throw ( SAXException, RuntimeException )
 
     m_xWriteDocumentHandler->startDocument();
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
+    // write DOCTYPE line!
+    Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
+    if ( xExtendedDocHandler.is() )
+    {
+        xExtendedDocHandler->unknown( OUString( RTL_CONSTASCII_USTRINGPARAM( MENUBAR_DOCTYPE )) );
+        m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
+    }
+
+    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_XMLNS_MENU )),
+                         m_aAttributeType,
+                         OUString( RTL_CONSTASCII_USTRINGPARAM( XMLNS_MENU )) );
+
+    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                          m_aAttributeType,
                          OUString( RTL_CONSTASCII_USTRINGPARAM( "menubar" )) );
 
-    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUBAR )), pList );
+    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUBAR )), pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
     WriteMenu( m_pMenuBar );
 
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUBAR )) );
+    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUBAR )) );
     m_xWriteDocumentHandler->endDocument();
 }
 
@@ -749,22 +783,22 @@ throw ( SAXException, RuntimeException )
                     aCommand += String::CreateFromInt32( nItemId );
                 }
 
-                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
+                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                                          m_aAttributeType,
                                          aCommand );
 
 //                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
-                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                             m_aAttributeType,
                                             pMenu->GetItemText( nItemId ) );
 
-                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )), xListMenu );
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )), xListMenu );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )), m_xEmptyList );
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )), m_xEmptyList );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )) );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )) );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
             }
             else
@@ -779,25 +813,25 @@ throw ( SAXException, RuntimeException )
                     aCommand += String::CreateFromInt32( nItemId );
                 }
 
-                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
+                pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                                          m_aAttributeType,
                                          aCommand );
 
 //                if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
-                    pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+                    pListMenu->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                                              m_aAttributeType,
                                              pMenu->GetItemText( nItemId ) );
 
-                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )), xListMenu );
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )), xListMenu );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )), m_xEmptyList );
+                m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )), m_xEmptyList );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
                 WriteMenu( pPopupMenu );
 
-                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUPOPUP )) );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUPOPUP )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENU )) );
+                m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENU )) );
                 m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
             }
         }
@@ -829,34 +863,34 @@ void OWriteMenuDocumentHandler::WriteMenuItem( Menu* pMenu, USHORT nItemId )
         aCommand += String::CreateFromInt32( nItemId );
     }
 
-    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_ID )),
+    pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_ID )),
                                 m_aAttributeType,
                                 aCommand );
 
     ULONG nHelpId = pMenu->GetHelpId( nItemId );
     if ( nHelpId > 0 )
     {
-        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_HELPID )),
+        pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_HELPID )),
                              m_aAttributeType,
                              OUString::valueOf( sal_Int64( nHelpId )) );
     }
 
 //    if ( pMenu->GetUserValue( nItemId ) & MENU_SAVE_LABEL )
-         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_LABEL )),
+         pList->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM( ATTRIBUTE_NS_LABEL )),
                              m_aAttributeType,
                              pMenu->GetItemText( nItemId ));
 
-    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUITEM )), xList );
+    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )), xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUITEM )) );
+    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUITEM )) );
 }
 
 
 void OWriteMenuDocumentHandler::WriteMenuSeparator()
 {
-    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUSEPARATOR )), m_xEmptyList );
+    m_xWriteDocumentHandler->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )), m_xEmptyList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
-    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_MENUSEPARATOR )) );
+    m_xWriteDocumentHandler->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM( ELEMENT_NS_MENUSEPARATOR )) );
 }
 
 } // namespace framework
