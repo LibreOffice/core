@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:40:49 $
+ *  last change: $Author: mh $ $Date: 2000-11-29 12:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
+
 #ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
 #include "connectivity/sdbcx/VView.hxx"
 #endif
