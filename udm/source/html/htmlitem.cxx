@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:29:36 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,11 @@ Image::Image( const String &   i_sSrc,
               const String &   i_sBorder )
     :   AnEmptyElement( "img" )
 {
-    *this << new AnAttribute("src",i_sSrc)
-          << new AnAttribute("width",i_sWidth)
-          << new AnAttribute("height",i_sHeight)
-          << new AnAttribute("align",i_sAlign)
-          << new AnAttribute("border",i_sBorder);
+    *this << new AnAttribute(String("src"),i_sSrc)
+          << new AnAttribute(String("width"),i_sWidth)
+          << new AnAttribute(String("height"),i_sHeight)
+          << new AnAttribute(String("align"),i_sAlign)
+          << new AnAttribute(String("border"),i_sBorder);
 }
 
 bool
@@ -172,13 +172,13 @@ Table::Table( const String &   i_sBorder,
     :   csi::xml::AnElement("table")
 {
     if ( i_sBorder.length() > 0 )
-        *this << new AnAttribute("border",i_sBorder);
+        *this << new AnAttribute(String("border"),i_sBorder);
     if ( i_sBorder.length() > 0 )
-        *this << new AnAttribute("width",i_sWidth);
+        *this << new AnAttribute(String("width"),i_sWidth);
     if ( i_sBorder.length() > 0 )
-        *this << new AnAttribute("cellpadding",i_sCellPadding);
+        *this << new AnAttribute(String("cellpadding"),i_sCellPadding);
     if ( i_sBorder.length() > 0 )
-        *this << new AnAttribute("cellspacing",i_sCellSpacing);
+        *this << new AnAttribute(String("cellspacing"),i_sCellSpacing);
 }
 
 TableRow &

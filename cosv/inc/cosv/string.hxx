@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:25:39 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,8 @@ class String
     // LIFECYCLE
                         String();
 
-    explicit            String(
+    /// Intentionally not explicit, smooth casting is intended.
+                        String(
                             const char *        i_str );
     /// @precond i_nLength <= strlen(i_str) or i_nLength == str::maxsize.
                         String(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:29:35 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ class Body : public csi::xml::AnElement
 {
   public:
                         Body()
-                                :   csi::xml::AnElement("body") {}
+                                :   csi::xml::AnElement( "body" ) {}
   private:
     virtual bool        LineBreakAfterBeginTag() const;
 };
@@ -135,7 +135,7 @@ class Label : public csi::xml::AnElement
                         Label(
                             const ::csv::String & i_sLabel )
                                 :   csi::xml::AnElement("a")
-                                { *this << new csi::xml::AnAttribute("name", i_sLabel); }
+                                { *this << new csi::xml::AnAttribute(String("name"), i_sLabel); }
   private:
     virtual bool        LineBreakAfterEndTag() const;
 };
@@ -242,7 +242,7 @@ class Link : public csi::xml::AnElement
                         Link(
                             const ::csv::String &i_sDestinaton )
                                 :   csi::xml::AnElement("a")
-                                { *this << new csi::xml::AnAttribute("href", i_sDestinaton); }
+                                { *this << new csi::xml::AnAttribute(String("href"), i_sDestinaton); }
 };
 
 class TableCell : public csi::xml::AnElement
@@ -364,7 +364,7 @@ class ClassAttr : public csi::xml::AnAttribute
   public:
                         ClassAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "class", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("class"), i_sValue ) {}
 };
 
 class StyleAttr : public csi::xml::AnAttribute
@@ -372,7 +372,7 @@ class StyleAttr : public csi::xml::AnAttribute
   public:
                         StyleAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "style", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("style"), i_sValue ) {}
 };
 
 class SizeAttr : public csi::xml::AnAttribute
@@ -380,7 +380,7 @@ class SizeAttr : public csi::xml::AnAttribute
   public:
                         SizeAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "size", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("size"), i_sValue ) {}
 };
 
 class ColorAttr : public csi::xml::AnAttribute
@@ -388,7 +388,7 @@ class ColorAttr : public csi::xml::AnAttribute
   public:
                         ColorAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "color", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("color"), i_sValue ) {}
 };
 
 class BgColorAttr : public csi::xml::AnAttribute
@@ -396,7 +396,7 @@ class BgColorAttr : public csi::xml::AnAttribute
   public:
                         BgColorAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "bgcolor", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("bgcolor"), i_sValue ) {}
 };
 
 class AlignAttr : public csi::xml::AnAttribute
@@ -404,7 +404,7 @@ class AlignAttr : public csi::xml::AnAttribute
   public:
                         AlignAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "align", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("align"), i_sValue ) {}
 };
 
 class WidthAttr : public csi::xml::AnAttribute
@@ -412,7 +412,7 @@ class WidthAttr : public csi::xml::AnAttribute
   public:
                         WidthAttr(
                             const ::csv::String & i_sValue )
-                            :   csi::xml::AnAttribute( "width", i_sValue ) {}
+                            :   csi::xml::AnAttribute( String("width"), i_sValue ) {}
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_namsp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:19 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <ary/cpp/c_namesp.hxx>
 #include <ary/cpp/c_rwgate.hxx>
 #include <semantic/callf.hxx>
+#include "x_parse.hxx"
 
 
 namespace cpp {
@@ -89,8 +90,10 @@ void
 PE_Namespace::Setup_StatusFunctions()
 {
     typedef CallFunction<PE_Namespace>::F_Tok   F_Tok;
-    static F_Tok stateF_start[] =           { &PE_Namespace::On_start_Identifier };
-    static INT16 stateT_start[] =           { Tid_Identifier };
+    static F_Tok stateF_start[] =           { &PE_Namespace::On_start_Identifier,
+                                              &PE_Namespace::On_start_SwBracket_Left };
+    static INT16 stateT_start[] =           { Tid_Identifier,
+                                              Tid_SwBracket_Left };
     static F_Tok stateF_gotName[] =         { &PE_Namespace::On_gotName_SwBracket_Left,
                                               &PE_Namespace::On_gotName_Assign };
     static INT16 stateT_gotName[] =         { Tid_SwBracket_Left,
@@ -129,9 +132,12 @@ PE_Namespace::TransferData()
 }
 
 void
-PE_Namespace::Hdl_SyntaxError( const char *)
+PE_Namespace::Hdl_SyntaxError( const char * i_sText)
 {
-    csv_assert(false);
+    throw X_Parser( X_Parser::x_UnexpectedToken,
+                    i_sText != 0 ? i_sText : "",
+                    Env().CurFileName(),
+                    Env().LineCount() );
 }
 
 void
@@ -141,6 +147,18 @@ PE_Namespace::On_start_Identifier(const char * i_sText)
     pStati->SetCur(gotName);
 
     sLocalName = i_sText;
+}
+
+void
+PE_Namespace::On_start_SwBracket_Left(const char * i_sText)
+{
+    SetTokenResult(done, pop_success);
+    pStati->SetCur(size_of_states);
+
+    sLocalName = "";    // Anonymous namespace, a name is created in
+                        //   Gate().CheckIn_Namespace() .
+
+    bPush = true;
 }
 
 void

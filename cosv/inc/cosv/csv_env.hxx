@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csv_env.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:08:45 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,13 +67,13 @@
 // BEGIN Compiler dependent defines regarding standard compliance,
 //   subject to changes:
 // #define CSV_NO_BOOL_TYPE       // States that no system type 'bool' exists
-// #define CSV_NO_MUTABLE           // No keyword mutable
-#define CSV_NO_EXPLICIT         // No keyword explicit
+// #define CSV_NO_MUTABLE         // No keyword mutable
+// #define CSV_NO_EXPLICIT        // No keyword explicit
 // #define CSV_NO_IOSTREAMS       // No iostreams
 // END Compiler dependent defines, subject to changes
 
 
-// BEGIN Compiler dependent defines, controlled by above defines
+// BEGIN Compiler dependant defines, controlled by above defines
 #ifdef CSV_NO_BOOL_TYPE
 typedef int     bool_int;
 #define bool    bool_int
@@ -89,6 +89,12 @@ typedef int     bool_int;
 #define explicit
 #endif  // CSV_NO_EXPLICIT
 // END Compiler dependent defines, controlled by above defines
+
+
+//*******       Include c-language-types        ************//
+// size_t, wchar_t
+#include <stdlib.h>
+
 
 
 //*******       Builtin types of exact length        ************//

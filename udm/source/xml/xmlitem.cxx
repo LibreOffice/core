@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:29:37 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,13 @@ AnElement::AnElement( const String &   i_sTagName )
 {
 }
 
+AnElement::AnElement( const char * i_sTagName )
+    :   sTagName( i_sTagName )
+        // pContent,
+        // aAttrs
+{
+}
+
 AnElement::~AnElement()
 {
 }
@@ -398,6 +405,12 @@ AnEmptyElement::AnEmptyElement( const String &   i_sTagName )
 {
 }
 
+AnEmptyElement::AnEmptyElement( const char * i_sTagName )
+    :   sTagName( i_sTagName )
+        // aAttrs
+{
+}
+
 AnEmptyElement::~AnEmptyElement()
 {
 
@@ -419,6 +432,12 @@ AnEmptyElement::inq_RefAttrs()
 //***************************     APureElement      **************************//
 
 APureElement::APureElement( const String &   i_sTagName )
+    :   sTagName( i_sTagName )
+        // pContent
+{
+}
+
+APureElement::APureElement( const char * i_sTagName )
     :   sTagName( i_sTagName )
         // pContent
 {
@@ -449,6 +468,11 @@ ASglTag::ASglTag( const String &   i_sTagName )
 {
 }
 
+ASglTag::ASglTag( const char *  i_sTagName )
+    :   sTagName( i_sTagName )
+{
+}
+
 ASglTag::~ASglTag()
 {
 }
@@ -463,6 +487,13 @@ ASglTag::inq_TagName() const
 //***************************       AnAttribute     **************************//
 AnAttribute::AnAttribute( const String &   i_sName,
                           const String &   i_sValue )
+    :   sName(i_sName),
+        sValue(i_sValue)
+{
+}
+
+AnAttribute::AnAttribute( const char * i_sName,
+                          const char * i_sValue )
     :   sName(i_sName),
         sValue(i_sValue)
 {
@@ -540,6 +571,11 @@ Text::do_WriteOut( csv::bostream & io_aFile ) const
 //***************************       XmlCode     **************************//
 
 XmlCode::XmlCode( const String &   i_sText )
+    :   sText(i_sText)
+{
+}
+
+XmlCode::XmlCode( const char *     i_sText )
     :   sText(i_sText)
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 08:29:35 $
+ *  last change: $Author: np $ $Date: 2002-06-25 15:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,8 @@ class AnElement : public Element
   public:
                         AnElement(
                             const ::csv::String& i_sTagName );
+                        AnElement(
+                            const char *         i_sTagName );
                         ~AnElement();
   private:
     // Interface Element
@@ -255,7 +257,7 @@ class AnElement : public Element
     virtual const AttrList *
                         inq_Attrs() const;
     // DATA
-    ::csv::String        sTagName;
+    ::csv::String       sTagName;
     Dyn< Item >         pContent;
     AttrList            aAttrs;
 };
@@ -266,6 +268,8 @@ class AnEmptyElement : public EmptyElement
   public:
                         AnEmptyElement(
                             const ::csv::String & i_sTagName );
+                        AnEmptyElement(
+                            const char * i_sTagName );
                         ~AnEmptyElement();
   private:
     // Interface Element:
@@ -284,6 +288,8 @@ class APureElement : public PureElement
   public:
                         APureElement(
                             const ::csv::String &   i_sTagName );
+                        APureElement(
+                            const char *            i_sTagName );
                         ~APureElement();
   private:
     // Interface Element:
@@ -302,6 +308,8 @@ class ASglTag : public SglTag
   public:
                         ASglTag(
                             const ::csv::String & i_sTagName );
+                        ASglTag(
+                            const char *          i_sTagName );
                         ~ASglTag();
   private:
     // Interface Element:
@@ -320,6 +328,9 @@ class AnAttribute : public Attribute
                         AnAttribute(
                             const ::csv::String & i_sName,
                             const ::csv::String & i_sValue );
+                        AnAttribute(
+                            const char *          i_sName,
+                            const char *          i_sValue );
                         ~AnAttribute();
   private:
     // Interface Attribute:
@@ -361,6 +372,8 @@ class XmlCode : public TextContent
   public:
                         XmlCode(
                             const ::csv::String & i_sText );
+                        XmlCode(
+                            const char *          i_sText );
                         ~XmlCode();
   private:
     virtual void        do_WriteOut(
