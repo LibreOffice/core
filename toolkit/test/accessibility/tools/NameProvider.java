@@ -11,25 +11,65 @@ import com.sun.star.accessibility.AccessibleRelationType;
 */
 public class NameProvider
 {
+    /** Return the name of the specified state.
+        @param nStateId
+            Id of the state for which to return its name.  This is one of
+            the ids listed in the <type>AccessibleStateType</const>
+            constants group.
+        @return
+            Returns the name of the specified state or an empty string if an
+            invalid / unknown state id was given.
+     */
     public static String getStateName (int nStateId)
     {
         return (String)maStateMap.get (new Integer(nStateId));
     }
 
+
+    /** Return the name of the specified event.
+        @param nEventId
+            Id of the event type for which to return its name.  This is one
+            of the ids listed in the <type>AccessibleEventId</const>
+            constants group.
+        @return
+            Returns the name of the specified event type or an empty string
+            if an invalid / unknown event id was given.
+     */
     public static String getEventName (int nEventId)
     {
         return (String)maEventMap.get (new Integer(nEventId));
     }
 
+
+    /** Return the name of the specified role.
+        @param nRole
+            Id of the role for which to return its name.  This is one of
+            the ids listed in the <type>AccessibleRole</const>
+            constants group.
+        @return
+            Returns the name of the specified role or an empty string if an
+            invalid / unknown role id was given.
+     */
     public static String getRoleName (int nRole)
     {
         return (String)maRoleMap.get (new Integer(nRole));
     }
 
+
+    /** Return the name of the specified relation.
+        @param nRelation
+            Id of the relation for which to return its name.  This is one of
+            the ids listed in the <type>AccessibleRelationType</const>
+            constants group.
+        @return
+            Returns the name of the specified relation type or an empty
+            string if an invalid / unknown role id was given.
+     */
     public static String getRelationName (int nRelation)
     {
         return (String)maRelationMap.get (new Integer(nRelation));
     }
+
 
     private static HashMap maStateMap = new HashMap();
     private static HashMap maEventMap = new HashMap();
@@ -67,7 +107,9 @@ public class NameProvider
         maStateMap.put (new Integer (AccessibleStateType.TRANSIENT), "TRANSIENT");
         maStateMap.put (new Integer (AccessibleStateType.VERTICAL), "VERTICAL");
         maStateMap.put (new Integer (AccessibleStateType.VISIBLE), "VISIBLE");
-        maStateMap.put (new Integer (AccessibleStateType.MANAGES_DESCENDANTS),"MANAGES_DESCENDANTS");
+        maStateMap.put (new Integer (AccessibleStateType.MANAGES_DESCENDANTS),
+            "MANAGES_DESCENDANTS");
+        //        maStateMap.put (new Integer (AccessibleStateType.INCONSISTENT),"INCONSISTENT");
 
 
         maEventMap.put (new Integer (0),
