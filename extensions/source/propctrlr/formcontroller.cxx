@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 06:30:10 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 06:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2288,6 +2288,12 @@ namespace pcr
                             case PROPERTY_ID_BOUNDCOLUMN:   pProperty->nMinValue = 1; break;
                         }
                         break;
+
+                    case PROPERTY_ID_DECIMAL_ACCURACY:
+                        pProperty->nMaxValue = 20;
+                        pProperty->nMinValue = 0;
+                        pProperty->bHaveMinMax = sal_True;
+                        break;
                 }
 
                 //////////////////////////////////////////////////////////////////////
@@ -2766,6 +2772,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2001/04/12 06:30:10  fs
+ *  #84694# +recalcConnection: show an error when trying to open a new connection
+ *
  *  Revision 1.14  2001/04/03 12:44:06  fs
  *  corrected SetQueries for list-/combo boxes
  *
