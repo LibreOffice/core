@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,8 +102,8 @@ InfoBox MSG_NO_RULER
     Message [ portuguese ] = "Não existem imagens no tema 'Rulers' da Gallery." ;
     Message [ english_us ] = "There are no bitmaps in the Gallery theme 'Rulers'." ;
     Message [ portuguese_brazilian ] = "Es sind keine Grafiken im Gallery-Thema 'Rulers' vorhanden." ;
-    Message [ swedish ] = "Det finns inga grafiker i Gallery-temat 'Rulers'." ;
-    Message [ danish ] = "Der findes ingen billeder i Gallery-emnet 'Rulers'." ;
+    Message [ swedish ] = "Det finns ingen grafik i Gallery-temat 'Rulers'." ;
+    Message [ danish ] = "Der findes ingen grafik i Gallery-emnet 'Rulers'." ;
     Message [ italian ] = "Nella gallery con argomento 'Ruler' non ci sono immagini." ;
     Message [ spanish ] = "No hay imágenes en el tema de Gallery 'Rulers'." ;
     Message [ french ] = "Il n'existe pas d'image pour le thème 'Rulers' dans la Gallery." ;
@@ -270,7 +270,7 @@ String STR_GRFILTER_TOOBIG
     Text [ portuguese_brazilian ] = "Mem¢ria insuficiente para inserir o gr fico" ;
     Text [ portuguese ] = "Memória insuficiente para inserir gráfico." ;
     Text [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
-    Text [ danish ] = "Ikke nok hukommelse til at indsætte billedet" ;
+    Text [ danish ] = "Ikke nok hukommelse til at indsætte grafiken" ;
     Text [ french ] = "Mémoire insuffisante pour l'insertion de l'image" ;
     Text [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
     Text [ dutch ] = "Niet genoeg geheugen voor het invoegen van de afbeelding" ;
@@ -298,7 +298,7 @@ String STR_INSERT_GRAPHIC
     Text [ portuguese_brazilian ] = "Inserir gr fico" ;
     Text [ portuguese ] = "Inserir imagem" ;
     Text [ finnish ] = "Lisää kuva" ;
-    Text [ danish ] = "Indsæt billede" ;
+    Text [ danish ] = "Indsæt grafik" ;
     Text [ french ] = "Insérer une image" ;
     Text [ swedish ] = "Infoga grafik" ;
     Text [ dutch ] = "Afbeelding invoegen" ;
@@ -361,7 +361,7 @@ String STR_NOTIZ_INSERT
     TEXT[ chinese_simplified ] = "²åÈë±¸×¢";
     TEXT[ russian ] = "Âñòàâèòü ïðèìå÷àíèå";
     TEXT[ polish ] = "Wstaw notatkê";
-    TEXT[ japanese ] = "ÒÓ‚ð‘}“ü";
+    TEXT[ japanese ] = "ÒÓ‚Ì‘}“ü";
     TEXT[ chinese_traditional ] = "´¡¤J³Æª`";
     TEXT[ arabic ] = "ÅÏÑÇÌ ãáÇÍÙÉ";
     TEXT[ dutch ] = "Aantekening invoegen";
@@ -404,7 +404,7 @@ String STR_REDLINE_INSERTED
     Text [ english_us ] = "Insertions" ;
     Text [ portuguese_brazilian ] = "Einfügung" ;
     Text [ swedish ] = "Infogning" ;
-    Text [ danish ] = "Indsat" ;
+    Text [ danish ] = "Indsættelse" ;
     Text [ italian ] = "Inserimento" ;
     Text [ spanish ] = "Inserción" ;
     Text [ french ] = "Insertion" ;
@@ -430,7 +430,7 @@ String STR_REDLINE_DELETED
     Text [ english_us ] = "Deletions" ;
     Text [ portuguese_brazilian ] = "Löschung" ;
     Text [ swedish ] = "Radering" ;
-    Text [ danish ] = "Slettet" ;
+    Text [ danish ] = "Sletning" ;
     Text [ italian ] = "Elimina" ;
     Text [ spanish ] = "Eliminación" ;
     Text [ french ] = "Suppression" ;
@@ -1955,7 +1955,7 @@ String STR_SHELLNAME_GRAPHIC
     Text [ french ] = "Image" ;
     Text [ dutch ] = "Afbeelding" ;
     Text [ swedish ] = "Grafik" ;
-    Text [ danish ] = "Billede" ;
+    Text [ danish ] = "Grafik" ;
     Text [ portuguese_brazilian ] = "Grafik" ;
     Text [ portuguese ] = "Imagem" ;
     Text[ chinese_simplified ] = "Í¼ÐÎ";
@@ -2161,7 +2161,7 @@ String STR_SWBG_GRAPHIC
     Text [ english_us ] = "Graphics" ;
     Text [ portuguese_brazilian ] = "Grafik" ;
     Text [ swedish ] = "Grafik" ;
-    Text [ danish ] = "Billede" ;
+    Text [ danish ] = "Grafik" ;
     Text [ italian ] = "Immagine" ;
     Text [ spanish ] = "Imagen" ;
     Text [ french ] = "Image" ;
