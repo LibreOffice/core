@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:07:48 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET = corereflection.uno
+TARGET = reflection.uno
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC = TRUE
 COMP1TYPELIST = corefl
