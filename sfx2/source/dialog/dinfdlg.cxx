@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: svesik $ $Date: 2002-08-30 18:50:17 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 08:46:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1061,6 +1061,25 @@ void SfxInternetPage::Reset( const SfxItemSet& rSet )
     }
 
     ChangeState( eNewState );
+
+    // #102907# ------------------------
+    if ( rInfo.IsReadOnly() )
+    {
+        aRBNoAutoUpdate.Disable();
+        aRBReloadUpdate.Disable();
+        aRBForwardUpdate.Disable();
+        aNFReload.Disable();
+        aNFAfter.Disable();
+        aEDForwardURL.Disable();
+        aPBBrowseURL.Disable();
+        aCBFrame.Disable();
+        aFTEvery.Disable();
+        aFTReloadSeconds.Disable();
+        aFTAfter.Disable();
+        aFTAfterSeconds.Disable();
+        aFTURL.Disable();
+        aFTFrame.Disable();
+    }
 }
 
 //------------------------------------------------------------------------
