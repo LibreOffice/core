@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-31 10:36:16 $
+ *  last change: $Author: ka $ $Date: 2001-05-31 10:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     DragSourceHelper( this ),
     mpTheme( NULL )
 {
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color aBackColor( Application::GetSettings().GetStyleSettings().GetLightColor() );
 
     SetHelpId( HID_GALLERY_WINDOW );
     SetBackground( Wallpaper( aBackColor ) );
