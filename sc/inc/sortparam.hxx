@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortparam.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:41:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_SORTPARAM_HXX
 #define SC_SORTPARAM_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -81,10 +85,10 @@ struct ScQueryParam;
 
 struct ScSortParam
 {
-    USHORT      nCol1;
-    USHORT      nRow1;
-    USHORT      nCol2;
-    USHORT      nRow2;
+    SCCOL       nCol1;
+    SCROW       nRow1;
+    SCCOL       nCol2;
+    SCROW       nRow2;
     BOOL        bHasHeader;
     BOOL        bByRow;
     BOOL        bCaseSens;
@@ -92,11 +96,11 @@ struct ScSortParam
     USHORT      nUserIndex;
     BOOL        bIncludePattern;
     BOOL        bInplace;
-    USHORT      nDestTab;
-    USHORT      nDestCol;
-    USHORT      nDestRow;
+    SCTAB       nDestTab;
+    SCCOL       nDestCol;
+    SCROW       nDestRow;
     BOOL        bDoSort[MAXSORT];
-    USHORT      nField[MAXSORT];
+    SCCOLROW    nField[MAXSORT];
     BOOL        bAscending[MAXSORT];
     ::com::sun::star::lang::Locale      aCollatorLocale;
     String      aCollatorAlgorithm;
@@ -106,7 +110,7 @@ struct ScSortParam
     /// SubTotals sort
     ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld );
     /// TopTen sort
-    ScSortParam( const ScQueryParam&, USHORT nCol );
+    ScSortParam( const ScQueryParam&, SCCOL nCol );
 
     ScSortParam&    operator=   ( const ScSortParam& r );
     BOOL            operator==  ( const ScSortParam& rOther ) const;
