@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-04-03 12:38:07 $
+ *  last change: $Author: os $ $Date: 2002-04-03 13:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,11 +309,18 @@ void SwView::ExecDraw(SfxRequest& rReq)
         NoRotate();
         if(rReq.GetModifier() == KEY_MOD1)
         {
-            pFuncPtr->CreateDefaultObject();
-            pFuncPtr->Deactivate();
-            SetDrawFuncPtr(NULL);
-            LeaveDrawCreate();
-            pWrtShell->EnterStdMode();
+            if(SID_OBJECT_SELECT == nDrawSfxId )
+            {
+                pWrtShell->GotoObj(TRUE);
+            }
+            else
+            {
+                pFuncPtr->CreateDefaultObject();
+                pFuncPtr->Deactivate();
+                SetDrawFuncPtr(NULL);
+                LeaveDrawCreate();
+                pWrtShell->EnterStdMode();
+            }
         }
     }
     else
