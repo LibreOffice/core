@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:09:37 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
     RES_COLUMNBALANCE,                              // 106
     RES_FRAMEDIR,                                   // 107
     RES_HEADER_FOOTER_EAT_SPACING,                  // 108
-    RES_FRMATR_DUMMY9,                              // 109
+    RES_ROW_SPLIT,                                  // 109
 RES_FRMATR_END
 };
 
