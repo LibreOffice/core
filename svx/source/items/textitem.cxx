@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:17:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1005,12 +1005,13 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                 aFontHeight.Height = fRoundPoints;
             }
 
-            aFontHeight.Prop = (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+            aFontHeight.Prop = (sal_Int16)(SFX_MAPUNIT_ABSOLUTE == ePropUnit ? 100 : nProp);
 
             float fRet = (float)(short)nProp;
             switch( ePropUnit )
             {
                 case SFX_MAPUNIT_RELATIVE:
+                case SFX_MAPUNIT_ABSOLUTE:
                     fRet = 0.;
                 break;
                 case SFX_MAPUNIT_100TH_MM:
@@ -1047,7 +1048,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         }
         break;
         case MID_FONTHEIGHT_PROP:
-            rVal <<= (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+            rVal <<= (sal_Int16)(SFX_MAPUNIT_ABSOLUTE == ePropUnit ? 100 : nProp);
         break;
         case MID_FONTHEIGHT_DIFF:
         {
@@ -1055,6 +1056,7 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             switch( ePropUnit )
             {
                 case SFX_MAPUNIT_RELATIVE:
+                case SFX_MAPUNIT_ABSOLUTE:
                     fRet = 0.;
                 break;
                 case SFX_MAPUNIT_100TH_MM:
@@ -1083,6 +1085,8 @@ sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUn
     short nDiff = 0;
     switch( eProp )
     {
+        case SFX_MAPUNIT_ABSOLUTE:
+            break;
         case SFX_MAPUNIT_RELATIVE:
             nRet *= 100;
             nRet /= nProp;
@@ -1124,8 +1128,6 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             if ( rVal >>= aFontHeight )
             {
                 // Height
-                ePropUnit = SFX_MAPUNIT_RELATIVE;
-                nProp = 100;
                 double fPoint = aFontHeight.Height;
                 if( fPoint < 0. || fPoint > 10000. )
                     return sal_False;
@@ -1135,6 +1137,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     nHeight = TWIP_TO_MM100(nHeight);   // umrechnen, wenn das Item 1/100mm enthaelt
 
                 nProp = aFontHeight.Prop;
+                ePropUnit = SFX_MAPUNIT_ABSOLUTE;
             }
             else
                 return sal_False;
@@ -1142,7 +1145,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         break;
         case MID_FONTHEIGHT:
         {
-            ePropUnit = SFX_MAPUNIT_RELATIVE;
+            ePropUnit = SFX_MAPUNIT_ABSOLUTE;
             nProp = 100;
             double fPoint;
             if(!(rVal >>= fPoint))
@@ -1214,8 +1217,8 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            if( SFX_MAPUNIT_RELATIVE != ePropUnit )
-            {
+            if(ePropUnit < SFX_MAPUNIT_RELATIVE) {
+
                 ( rText = String::CreateFromInt32( (short)nProp ) ) +=
                         SVX_RESSTR( GetMetricId( ePropUnit ) );
                 if( 0 <= (short)nProp )
@@ -1266,7 +1269,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, const USHORT nNewProp,
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
 #ifndef SVX_LIGHT
-    if( SFX_MAPUNIT_RELATIVE != eUnit )
+    if( eUnit < SFX_MAPUNIT_RELATIVE )
         nHeight = nNewHeight + ::ItemToControl( (short)nNewProp, eUnit,
                                                 SFX_FUNIT_TWIP );
     else
@@ -1286,7 +1289,7 @@ void SvxFontHeightItem::SetHeight( sal_uInt32 nNewHeight, USHORT nNewProp,
     DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
 
 #ifndef SVX_LIGHT
-    if( SFX_MAPUNIT_RELATIVE != eMetric )
+    if( eMetric < SFX_MAPUNIT_RELATIVE )
         nHeight = nNewHeight +
                 ::ControlToItem( ::ItemToControl((short)nNewProp, eMetric,
                                         SFX_FUNIT_TWIP ), SFX_FUNIT_TWIP,
