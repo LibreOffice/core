@@ -312,8 +312,11 @@ Function GetFormWizardPaths() as Boolean
 				If TexturePath &lt;&gt; &quot;&quot; Then
 					WorkPath = GetPathSettings(&quot;Work&quot;)
 					If WorkPath &lt;&gt; &quot;&quot; Then
-						GetFormWizardPaths = True
-						Exit Function
+						TempPath = GetPathSettings(&quot;Temp&quot;)
+						If TempPath &lt;&gt; &quot;&quot; Then
+							GetFormWizardPaths = True
+							Exit Function
+						End If
 					End If
 				End If
 			End If
@@ -340,4 +343,5 @@ Dim UIName as String
 	  	End If
 	next i
 	GetFilterName() = UIName
-End Function</script:module>
+End Function
+</script:module>
