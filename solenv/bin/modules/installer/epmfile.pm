@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:21:22 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:52:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -536,7 +536,7 @@ sub set_patch_state
 
 sub call_epm
 {
-    my ($epmname, $epmlistfilename, $allvariables, $packagename, $includepatharrayref) = @_;
+    my ($epmname, $epmlistfilename, $packagename) = @_;
 
     installer::logger::include_header_into_logfile("epm call for $packagename");
 
@@ -626,7 +626,7 @@ sub add_one_line_into_file
         push(@{$file}, $insertline);        # simply adding at the end of pkginfo file
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         # Adding behind the line beginning with: Group:
 
@@ -852,7 +852,7 @@ sub prepare_packages
         $newline = "BASEDIR\=" . $localrelocatablepath . "\n";
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         $filename =  $packagename . ".spec";
         $newline = "Prefix\:\ " . $localrelocatablepath . "\n";
@@ -869,7 +869,7 @@ sub prepare_packages
 
     # adding new "topdir" and removing old "topdir" in specfile
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_releaseversion_in_specfile($changefile, $variableshashref);
@@ -1083,7 +1083,7 @@ sub create_packages_without_epm
 
     # Linux: rpm -bb so8m35.spec    ( -> dependency check abklemmen? )
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         my $specfilename = $epmdir . $packagename . ".spec";
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
@@ -1194,7 +1194,7 @@ sub remove_temporary_epm_files
 #       }
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         my $removefile = $epmdir . $packagename . ".spec";
         my $destfile = $loggingdir . $packagename . ".spec.log";
@@ -1274,11 +1274,11 @@ sub create_new_directory_structure
 
     if ( $installer::globals::issolarisbuild )
     {
-        # my $directoryname = installer::systemactions::get_directoryname($newepmdir, "solaris");
-
         $newdir = "packages";
 
-        my $systemcall = "mv $localdir $newdir";
+        installer::systemactions::create_directory($newdir);
+
+        my $systemcall = "mv $localdir/* $newdir";  # moving the packages into the directory "packages"
 
         my $returnvalue = system($systemcall);
 
@@ -1299,9 +1299,11 @@ sub create_new_directory_structure
         my $localcall = "chmod 775 $newdir \>\/dev\/null 2\>\&1";
         system($localcall);
 
+        # and removing the empty directory
+        installer::systemactions::remove_empty_directory("$localdir");
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         # my $directoryname = installer::systemactions::get_directoryname($localdir, "linux");
 
@@ -1384,7 +1386,7 @@ sub put_childprojects_into_installset
             $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "solaris_x86" . $installer::globals::separator . $installer::globals::javafilename2;
             installer::systemactions::copy_one_file($sourcedirjava, $destdir);
         }
-        if ( $installer::globals::islinuxbuild )
+        if ( $installer::globals::islinuxrpmbuild )
         {
             $sourcedirjava = $sourcedir . $installer::globals::separator . "java2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::javafilename;
             installer::systemactions::copy_one_file($sourcedirjava, $destdir);
@@ -1393,9 +1395,9 @@ sub put_childprojects_into_installset
         # adding Ada
 
         if ( $installer::globals::issolarissparcbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "solaris_sparc" . $installer::globals::separator . $installer::globals::adafilename; }
-        if ( $installer::globals::islinuxbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::adafilename; }
+        if ( $installer::globals::islinuxrpmbuild ) { $sourcedirada = $sourcedir . $installer::globals::separator . "adabas2" . $installer::globals::separator . "linux" . $installer::globals::separator . $installer::globals::adafilename; }
 
-        if (( $installer::globals::issolarissparcbuild ) || ( $installer::globals::islinuxbuild ))
+        if (( $installer::globals::issolarissparcbuild ) || ( $installer::globals::islinuxrpmbuild ))
         {
             installer::systemactions::copy_one_file($sourcedirada, $destdir);
         }
@@ -1446,7 +1448,7 @@ sub put_java_installer_into_installset
 
     if ( $installer::globals::issolarissparcbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_sparc"; }
     if ( $installer::globals::issolarisx86build ) { $sourcedir = $sourcedir . $installer::globals::separator . "solaris_x86"; }
-    if ( $installer::globals::islinuxbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "linux"; }
+    if ( $installer::globals::islinuxrpmbuild ) { $sourcedir = $sourcedir . $installer::globals::separator . "linux"; }
 
     installer::systemactions::copy_directory_except_fileextension($sourcedir, $destdir, "xml");
 
@@ -1491,7 +1493,7 @@ sub put_systemintegration_into_installset
         }
     }
 
-    if ( $installer::globals::islinuxbuild )
+    if ( $installer::globals::islinuxrpmbuild )
     {
         my $productversion = $variables->{'PRODUCTVERSION'};
 
