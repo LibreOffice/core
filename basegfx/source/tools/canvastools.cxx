@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:40:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,35 +59,35 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
-#include <drafts/com/sun/star/geometry/RealSize2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALSIZE2D_HPP__
+#include <com/sun/star/geometry/RealSize2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
-#include <drafts/com/sun/star/geometry/RealPoint2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALPOINT2D_HPP__
+#include <com/sun/star/geometry/RealPoint2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
-#include <drafts/com/sun/star/geometry/RealRectangle2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALRECTANGLE2D_HPP__
+#include <com/sun/star/geometry/RealRectangle2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
-#include <drafts/com/sun/star/geometry/RealBezierSegment2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_REALBEZIERSEGMENT2D_HPP__
+#include <com/sun/star/geometry/RealBezierSegment2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
-#include <drafts/com/sun/star/geometry/AffineMatrix2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_AFFINEMATRIX2D_HPP_
+#include <com/sun/star/geometry/AffineMatrix2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_INTEGERSIZE2D_HPP__
-#include <drafts/com/sun/star/geometry/IntegerSize2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERSIZE2D_HPP__
+#include <com/sun/star/geometry/IntegerSize2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_INTEGERPOINT2D_HPP__
-#include <drafts/com/sun/star/geometry/IntegerPoint2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERPOINT2D_HPP__
+#include <com/sun/star/geometry/IntegerPoint2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_GEOMETRY_INTEGERRECTANGLE2D_HPP__
-#include <drafts/com/sun/star/geometry/IntegerRectangle2D.hpp>
+#ifndef _COM_SUN_STAR_GEOMETRY_INTEGERRECTANGLE2D_HPP__
+#include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
-#include <drafts/com/sun/star/rendering/XPolyPolygon2D.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XPOLYPOLYGON2D_HPP__
+#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
-#include <drafts/com/sun/star/rendering/XGraphicDevice.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XGRAPHICDEVICE_HPP__
+#include <com/sun/star/rendering/XGraphicDevice.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP__
@@ -115,7 +115,6 @@
 #include <limits>
 
 
-using namespace ::drafts::com::sun::star;
 using namespace ::com::sun::star;
 
 namespace basegfx

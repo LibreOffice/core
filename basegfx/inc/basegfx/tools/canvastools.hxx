@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:36:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #endif
 
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace geometry
+namespace com { namespace sun { namespace star { namespace geometry
 {
     struct AffineMatrix2D;
     struct RealPoint2D;
@@ -80,13 +80,13 @@ namespace drafts { namespace com { namespace sun { namespace star { namespace ge
     struct IntegerSize2D;
     struct IntegerRectangle2D;
     struct RealBezierSegment2D;
-} } } } }
+} } } }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XGraphicDevice;
     class  XPolyPolygon2D;
-} } } } }
+} } } }
 
 namespace com { namespace sun { namespace star { namespace awt
 {
@@ -112,64 +112,64 @@ namespace basegfx
         // Polygon conversions
         // ===================================================================
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
             xPolyPolygonFromB2DPolygon( const ::com::sun::star::uno::Reference<
-                                            ::drafts::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice,
+                                            ::com::sun::star::rendering::XGraphicDevice >&  xGraphicDevice,
                                         const ::basegfx::B2DPolygon&                                rPoly    );
 
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XPolyPolygon2D >
+        ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XPolyPolygon2D >
             xPolyPolygonFromB2DPolyPolygon( const ::com::sun::star::uno::Reference<
-                                                 ::drafts::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
+                                                 ::com::sun::star::rendering::XGraphicDevice >&     xGraphicDevice,
                                             const ::basegfx::B2DPolyPolygon&                            rPolyPoly    );
 
 
         ::basegfx::B2DPolygon polygonFromPoint2DSequence(
             const ::com::sun::star::uno::Sequence<
-                ::drafts::com::sun::star::geometry::RealPoint2D >& rPoints );
+                ::com::sun::star::geometry::RealPoint2D >& rPoints );
 
         ::basegfx::B2DPolyPolygon polyPolygonFromPoint2DSequenceSequence(
             const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::geometry::RealPoint2D > >& rPoints );
+                ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > >& rPoints );
 
         ::basegfx::B2DPolygon polygonFromBezier2DSequence(
             const ::com::sun::star::uno::Sequence<
-                ::drafts::com::sun::star::geometry::RealBezierSegment2D >& rPoints );
+                ::com::sun::star::geometry::RealBezierSegment2D >& rPoints );
 
         ::basegfx::B2DPolyPolygon polyPolygonFromBezier2DSequenceSequence(
             const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Sequence< ::drafts::com::sun::star::geometry::RealBezierSegment2D > >& rPoints );
+                ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealBezierSegment2D > >& rPoints );
 
 
         // Matrix conversions
         // ===================================================================
 
-        ::drafts::com::sun::star::geometry::AffineMatrix2D&
-            affineMatrixFromHomMatrix( ::drafts::com::sun::star::geometry::AffineMatrix2D&          matrix,
+        ::com::sun::star::geometry::AffineMatrix2D&
+            affineMatrixFromHomMatrix( ::com::sun::star::geometry::AffineMatrix2D&          matrix,
                                        const ::basegfx::B2DHomMatrix&                               transform);
 
         ::basegfx::B2DHomMatrix&
             homMatrixFromAffineMatrix( ::basegfx::B2DHomMatrix&                                     transform,
-                                       const ::drafts::com::sun::star::geometry::AffineMatrix2D&    matrix );
+                                       const ::com::sun::star::geometry::AffineMatrix2D&    matrix );
 
 
         // Geometry conversions
         // ===================================================================
 
-        ::drafts::com::sun::star::geometry::RealSize2D          size2DFromB2DSize( const ::basegfx::B2DVector& );
-        ::drafts::com::sun::star::geometry::RealPoint2D         point2DFromB2DPoint( const ::basegfx::B2DPoint& );
-        ::drafts::com::sun::star::geometry::RealRectangle2D     rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
+        ::com::sun::star::geometry::RealSize2D          size2DFromB2DSize( const ::basegfx::B2DVector& );
+        ::com::sun::star::geometry::RealPoint2D         point2DFromB2DPoint( const ::basegfx::B2DPoint& );
+        ::com::sun::star::geometry::RealRectangle2D     rectangle2DFromB2DRectangle( const ::basegfx::B2DRange& );
 
-        ::basegfx::B2DVector    b2DSizeFromRealSize2D( const ::drafts::com::sun::star::geometry::RealSize2D& );
-        ::basegfx::B2DPoint     b2DPointFromRealPoint2D( const ::drafts::com::sun::star::geometry::RealPoint2D& );
-        ::basegfx::B2DRange     b2DRectangleFromRealRectangle2D( const ::drafts::com::sun::star::geometry::RealRectangle2D& );
+        ::basegfx::B2DVector    b2DSizeFromRealSize2D( const ::com::sun::star::geometry::RealSize2D& );
+        ::basegfx::B2DPoint     b2DPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& );
+        ::basegfx::B2DRange     b2DRectangleFromRealRectangle2D( const ::com::sun::star::geometry::RealRectangle2D& );
 
-        ::drafts::com::sun::star::geometry::IntegerSize2D       integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
-        ::drafts::com::sun::star::geometry::IntegerPoint2D      integerPoint2DFromB2IPoint( const ::basegfx::B2IPoint& );
-        ::drafts::com::sun::star::geometry::IntegerRectangle2D  integerRectangle2DFromB2IRectangle( const ::basegfx::B2IRange& );
+        ::com::sun::star::geometry::IntegerSize2D       integerSize2DFromB2ISize( const ::basegfx::B2IVector& );
+        ::com::sun::star::geometry::IntegerPoint2D      integerPoint2DFromB2IPoint( const ::basegfx::B2IPoint& );
+        ::com::sun::star::geometry::IntegerRectangle2D  integerRectangle2DFromB2IRectangle( const ::basegfx::B2IRange& );
 
-        ::basegfx::B2IVector    b2ISizeFromIntegerSize2D( const ::drafts::com::sun::star::geometry::IntegerSize2D& );
-        ::basegfx::B2IPoint     b2IPointFromIntegerPoint2D( const ::drafts::com::sun::star::geometry::IntegerPoint2D& );
-        ::basegfx::B2IRange     b2IRectangleFromIntegerRectangle2D( const ::drafts::com::sun::star::geometry::IntegerRectangle2D& );
+        ::basegfx::B2IVector    b2ISizeFromIntegerSize2D( const ::com::sun::star::geometry::IntegerSize2D& );
+        ::basegfx::B2IPoint     b2IPointFromIntegerPoint2D( const ::com::sun::star::geometry::IntegerPoint2D& );
+        ::basegfx::B2IRange     b2IRectangleFromIntegerRectangle2D( const ::com::sun::star::geometry::IntegerRectangle2D& );
 
         ::com::sun::star::awt::Size         awtSizeFromB2ISize( const ::basegfx::B2IVector& );
         ::com::sun::star::awt::Point        awtPointFromB2IPoint( const ::basegfx::B2IPoint& );
