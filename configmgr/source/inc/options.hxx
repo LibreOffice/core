@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 16:02:53 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,23 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #define CONFIGMGR_MISC_OPTIONS_HXX_
 
+#ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
+#include "requestoptions.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
+#include <com/sun/star/uno/Any.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#include <rtl/ustring.hxx>
-#include <com/sun/star/uno/Any.hxx>
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
 
 namespace com { namespace sun { namespace star {
 
@@ -78,90 +88,117 @@ namespace com { namespace sun { namespace star {
 namespace configmgr
 {
     namespace css  = ::com::sun::star;
-    namespace uno  = css::uno;
-    namespace script = css::script;
 
-    namespace localehelper { void getAnyLocale(rtl::OUString& _rsString); }
     /**
        class OOptions is created one time per Configuration[update]Access
        all important options should stored in this class.
-       The object will be [weiterleiten] to all other objects so we only
+       The object will be forwarded to all other objects so we only
        need to extend this classobject and all other class can work with
        the new options or important options etc.
     */
 
-    class OOptions : public vos::OReference
+    class OOptions : public salhelper::SimpleReferenceObject
     {
-        uno::Reference< script::XTypeConverter > m_xConverter;  // typeconverter used
-        rtl::OUString   m_sLocale;                              // current locale used for data
-        rtl::OUString   m_sDefaultLocale;                       // default locale set for a user
-        rtl::OUString   m_sUser;                                // user key used (could be empty)
-        rtl::OUString   m_sDefaultUser;                         // user key used (could be empty)
-        sal_Int32       m_nCacheID;                             // set if data should not be fetched from the cache, but reloaded
-        bool            m_bLazyWrite;                           // true, if tree use lazy writing
-        bool            m_bForceWritable;                       // true, if write-protection should be ignored
+        typedef css::uno::Reference< css::script::XTypeConverter > TypeConverterRef;
+        TypeConverterRef m_xConverter;  // typeconverter used
+
+        RequestOptions  m_aRequestOptions;  // current options to use
+        RequestOptions  m_aDefaultOptions;  // default options used as base
+
+        bool            m_bLazyWrite;       // true, if tree use lazy writing
+        bool            m_bForceWritable;   // true, if write-protection should be ignored
     public:
-        OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
-            :m_xConverter(_xConverter)
-            ,m_nCacheID(0)
-            ,m_bLazyWrite(true)
-            ,m_bForceWritable(false)
+        typedef RequestOptions::Locale Locale;
+        typedef RequestOptions::Entity Entity;
+
+        explicit
+        OOptions(TypeConverterRef const & _xConverter)
+        : m_xConverter(_xConverter)
+        , m_aRequestOptions()
+        , m_aDefaultOptions()
+        , m_bLazyWrite(true)
+        , m_bForceWritable(false)
         {}
 
-        OOptions(const OOptions& _rOptions)
-            :m_xConverter(_rOptions.getTypeConverter())
-            ,m_sDefaultLocale(_rOptions.getDefaultLocale())
-            ,m_sDefaultUser(_rOptions.getDefaultUser())
-            ,m_sLocale(_rOptions.m_sLocale)
-            ,m_sUser(_rOptions.m_sUser)
-            ,m_nCacheID(0)                       // cache identity is not copied
-            ,m_bLazyWrite(_rOptions.m_bLazyWrite)
-            ,m_bForceWritable(_rOptions.m_bForceWritable)
+        explicit
+        OOptions(TypeConverterRef const & _xConverter, const RequestOptions& _aDefaultOptions)
+        : m_xConverter(_xConverter)
+        , m_aRequestOptions(_aDefaultOptions, true)
+        , m_aDefaultOptions(_aDefaultOptions)
+        , m_bLazyWrite(true)
+        , m_bForceWritable(false)
         {
-            if (!_rOptions.canUseCache()) this->setNoCache();
         }
 
-        uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
+        OOptions(const OOptions& _rOptions)
+        : m_xConverter(_rOptions.m_xConverter)
+        , m_aRequestOptions(_rOptions.m_aRequestOptions, true)
+        , m_aDefaultOptions(_rOptions.m_aDefaultOptions)
+        , m_bLazyWrite(_rOptions.m_bLazyWrite)
+        , m_bForceWritable(_rOptions.m_bForceWritable)
+        {
+        }
 
-        bool canUseCache() const { return m_nCacheID == 0; }
-        bool getLazyWrite() const {return m_bLazyWrite;}
-        bool isForcingWritable() const {return m_bForceWritable;}
+        TypeConverterRef getTypeConverter() const {return m_xConverter;}
 
+        bool isForSessionUser()     const { return ! m_aRequestOptions.hasEntity(); }
+        bool canUseCache()          const { return ! m_aRequestOptions.isForcingReload(); }
+        bool getLazyWrite()         const { return m_bLazyWrite; }
+        bool isForcingWritable()    const { return m_bForceWritable; }
 
-        rtl::OUString getLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
-        const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
-        sal_Bool hasDefaultLocale() const {return !m_sLocale.getLength() || m_sLocale == m_sDefaultLocale;}
+        Locale getLocale()          const { return m_aRequestOptions.getLocale(); }
+        Entity getUser()            const { return m_aRequestOptions.getEntity(); }
 
-        rtl::OUString getUser() const {return m_sUser.getLength() ? m_sUser : m_sDefaultUser;}
-        const rtl::OUString& getDefaultUser() const {return m_sDefaultUser;}
-        sal_Bool hasDefaultUser() const {return !m_sUser.getLength() || m_sUser == m_sDefaultUser;}
+        Locale getDefaultLocale()   const { return m_aDefaultOptions.getLocale(); }
+        Entity getDefaultUser()     const { return m_aDefaultOptions.getEntity(); }
 
-        void setNoCache(bool _bNoCache = true);
-        void setUser(const rtl::OUString& _rUser) {m_sUser = _rUser;}
-        void setDefaultUser(const rtl::OUString& _rUser) {m_sDefaultUser = _rUser;}
-        void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
-        void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
-        void setMultiLocaleMode() { localehelper::getAnyLocale(m_sLocale);}
-        void setMultiLocaleDefault() {  localehelper::getAnyLocale(m_sDefaultLocale);}
-        void setLazyWrite(bool _bLazyWrite) {m_bLazyWrite = _bLazyWrite;}
-        void setForceWritable(bool _bForce) { m_bForceWritable = _bForce;}
+        RequestOptions const & getRequestOptions() const
+        { return m_aRequestOptions; }
 
-        friend sal_Int32 compareCacheIdentity(OOptions const& lhs, OOptions const& rhs)
-        { return rhs.m_nCacheID - lhs.m_nCacheID; }
+        void setNoCache(bool _bNoCache = true)
+        { m_aRequestOptions.forceReload(_bNoCache); }
+
+        void setUser(const Entity & _rUser)
+        { m_aRequestOptions.setEntity(_rUser); }
+
+        void setDefaultUser(const Entity & _rUser)
+        {
+            m_aDefaultOptions.setEntity(_rUser);
+            if (!m_aRequestOptions.hasEntity())
+                m_aRequestOptions.setEntity(_rUser);
+        }
+
+        void setLocale(const Locale & _rLocale)
+        { m_aRequestOptions.setLocale(_rLocale); }
+
+        void setDefaultLocale(const Locale & _rLocale)
+        {
+            m_aDefaultOptions.setLocale(_rLocale);
+            if (!m_aRequestOptions.hasLocale())
+                m_aRequestOptions.setLocale(_rLocale);
+        }
+
+        void setMultiLocaleMode()
+        { m_aRequestOptions.setAllLocales(); }
+
+        void setMultiLocaleDefault()
+        {
+            m_aDefaultOptions.setAllLocales();
+            if (!m_aRequestOptions.hasLocale())
+                m_aRequestOptions.setAllLocales();
+        }
+
+        void setLazyWrite(bool _bLazyWrite) { m_bLazyWrite = _bLazyWrite; }
+        void setForceWritable(bool _bForce) { m_bForceWritable = _bForce; }
     };
+    typedef vos::ORef<OOptions> OptionsRef;
 
     struct ltOptions
     {
-        bool operator()(const ::vos::ORef<OOptions> &o1, const ::vos::ORef<OOptions> &o2) const
+        lessRequestOptions ltData;
+        bool operator()(OptionsRef const &o1, OptionsRef const &o2) const
         {
-            sal_Int32 nLt = o1->getUser().compareTo(o2->getUser());
-            if (nLt == 0)
-                nLt = o1->getLocale().compareTo(o2->getLocale());
-
-            if (nLt == 0)
-                nLt = compareCacheIdentity(*o1,*o2);
-
-            return nLt < 0 ? true : false;
+            return ltData(o1->getRequestOptions(),o2->getRequestOptions());
         }
     };
 } // namespace

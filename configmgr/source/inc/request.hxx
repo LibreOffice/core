@@ -2,9 +2,9 @@
  *
  *  $RCSfile: request.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-12 14:10:33 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,8 @@ namespace configmgr
             Name getTemplateName()      const { return m_aTemplateName; }
             Name getComponentName()     const { return m_aComponentName; }
 
-            static RequestOptions getOptions();
+            static RequestOptions getOptions()
+            { return RequestOptions::forAllLocales(); }
         };
 
         inline ComponentRequest getComponentRequest(TemplateRequest const & _aTR)
@@ -146,22 +147,32 @@ namespace configmgr
 
         class UpdateRequest
         {
+            typedef rtl::OUString RequestId;
+
             UpdateInstance  m_aUpdate;
             RequestOptions  m_aOptions;
+            RequestId       m_aRQID;
             bool            m_bForceFlush;
         public:
             explicit
-            UpdateRequest(UpdateInstance & _aUpdate, RequestOptions const & _aOptions)
+            UpdateRequest(  UpdateInstance & _aUpdate,
+                            RequestOptions const & _aOptions,
+                            RequestId const & _aRequestId)
             : m_aUpdate(_aUpdate)
             , m_aOptions(_aOptions)
             , m_bForceFlush( _aOptions.isForcingReload() )
+            , m_aRQID(_aRequestId)
             {}
 
             explicit
-            UpdateRequest(AbsolutePath const & _aRootpath, UpdateInstance::Data & _aUpdateData, RequestOptions const & _aOptions)
+            UpdateRequest(  AbsolutePath const & _aRootpath,
+                            UpdateInstance::Data & _aUpdateData,
+                            RequestOptions const & _aOptions,
+                            RequestId const & _aRequestId)
             : m_aUpdate(_aRootpath,_aUpdateData)
             , m_aOptions(_aOptions)
             , m_bForceFlush( _aOptions.isForcingReload() )
+            , m_aRQID(_aRequestId)
             {}
 
             void forceFlush() { m_bForceFlush = true; }
@@ -170,6 +181,8 @@ namespace configmgr
 
             UpdateInstance const & getUpdate()  const { return m_aUpdate; }
             RequestOptions const & getOptions() const { return m_aOptions; }
+
+            RequestId getRequestId() const { return m_aRQID; }
         };
 
         inline ComponentRequest getComponentRequest(UpdateRequest const & _aUR)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: requestoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-12 14:10:33 $
+ *  last change: $Author: jb $ $Date: 2002-03-15 11:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ namespace configmgr
         typedef rtl::OUString Locale;
         typedef rtl::OUString Entity;
     public:
+        // create Request options for all locales
+        static RequestOptions forAllLocales();
+
         /// Default constructor. Sets options to use defaults.
         RequestOptions()
         : m_sLocale()
