@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtextcontroldialogs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:33:36 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,9 @@ namespace svx
     {
         FreeResource();
 
-        AddTabPage( RID_SVXPAGE_CHAR_NAME, NULL );
-        AddTabPage( RID_SVXPAGE_CHAR_EFFECTS, NULL );
-        AddTabPage( RID_SVXPAGE_CHAR_POSITION, NULL );
+        AddTabPage( RID_SVXPAGE_CHAR_NAME);
+        AddTabPage( RID_SVXPAGE_CHAR_EFFECTS);
+        AddTabPage( RID_SVXPAGE_CHAR_POSITION);
     }
 
     //--------------------------------------------------------------------
