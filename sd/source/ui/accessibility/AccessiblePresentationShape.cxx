@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-04-10 12:19:16 $
+ *  last change: $Author: af $ $Date: 2002-04-11 13:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
             aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationHandoutShape"));
             break;
         default:
-            aDG.Initialize (::rtl::OUString::createFromAscii (
-                "Unknown accessible presentation shape"));
+            aDG.Initialize (::rtl::OUString::createFromAscii ("Unknown accessible presentation shape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {
