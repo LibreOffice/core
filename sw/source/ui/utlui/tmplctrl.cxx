@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmplctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:57:04 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,10 @@ void TemplatePopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwTemplateControl::SwTemplateControl( USHORT nId,
-                                                  StatusBar& rStb,
-                                                  SfxBindings& rBind ) :
-    SfxStatusBarControl( nId, rStb, rBind )
+SwTemplateControl::SwTemplateControl( USHORT nSlotId,
+                                      USHORT nId,
+                                      StatusBar& rStb ) :
+    SfxStatusBarControl( nSlotId, nId, rStb )
 {
 }
 
@@ -139,10 +139,9 @@ SwTemplateControl::~SwTemplateControl()
 
 // -----------------------------------------------------------------------
 
-void SwTemplateControl::StateChanged( const SfxPoolItem* pState )
+void SwTemplateControl::StateChanged(
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    SfxItemState eState = GetItemState(pState);
-
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
     else if ( pState->ISA( SfxStringItem ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:54:55 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,10 @@ void BookmarkPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SwBookmarkControl::SwBookmarkControl( USHORT nId,
-                                                  StatusBar& rStb,
-                                                  SfxBindings& rBind ) :
-    SfxStatusBarControl( nId, rStb, rBind )
+SwBookmarkControl::SwBookmarkControl( USHORT nSlotId,
+                                      USHORT nId,
+                                      StatusBar& rStb ) :
+    SfxStatusBarControl( nSlotId, nId, rStb )
 {
 }
 
@@ -147,10 +147,9 @@ SwBookmarkControl::~SwBookmarkControl()
 
 // -----------------------------------------------------------------------
 
-void SwBookmarkControl::StateChanged( const SfxPoolItem* pState )
+void SwBookmarkControl::StateChanged(
+    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    SfxItemState eState = GetItemState(pState);
-
     if( eState != SFX_ITEM_AVAILABLE || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), String() );
     else if ( pState->ISA( SfxStringItem ) )
