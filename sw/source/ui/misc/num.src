@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:22:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage TP_NUM_POSITION
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
         Text [ italian ] = "Livello" ;
-        Text [ portuguese_brazilian ] = "N?vel" ;
+        Text [ portuguese_brazilian ] = "Nível" ;
         Text [ portuguese ] = "Nível" ;
         Text [ finnish ] = "Taso" ;
         Text [ danish ] = "Niveau" ;
@@ -104,10 +104,13 @@ TabPage TP_NUM_POSITION
         Text[ arabic ] = "ÇáãÓÊæì";
         Text[ greek ] = "Åğßğåäï";
         Text[ korean ] = "ìˆ˜ì¤€";
-        Text[ turkish ] = "Düzey";
+        Text[ turkish ] = "Seviye";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nivell";
         Text[ thai ] = "à¸£à¸°à¸”à¸±à¸š";
+        Text[ czech ] = "ÃšroveÅˆ";
+        Text[ hebrew ] = "Ebene";
+        Text[ hindi ] = "à¤¸à¥à¤¤à¤°";
     };
     MultiListBox LB_LEVEL
     {
@@ -132,7 +135,7 @@ TabPage TP_NUM_POSITION
         Text [ dutch ] = "Positie en afstand" ;
         Text [ swedish ] = "Position och avstånd" ;
         Text [ danish ] = "Placering og afstand" ;
-        Text [ portuguese_brazilian ] = "Position" ;
+        Text [ portuguese_brazilian ] = "Posição e afastamento" ;
         Text [ portuguese ] = "Posição e espaçamento" ;
         Text[ chinese_simplified ] = "ä½ç½®å’Œé—´éš”";
         Text[ russian ] = "Ïîëîæåíèå è èíòåğâàë";
@@ -143,10 +146,13 @@ TabPage TP_NUM_POSITION
         Text[ greek ] = "Èİóç êáé áğüóôáóç";
         Text[ korean ] = "ìœ„ì¹˜ ë° ê°„ê²©";
         Text[ language_user1 ] = " ";
-        Text[ turkish ] = "Konum ve aralık";
+        Text[ turkish ] = "Yerleşim ve boşluklar";
         Text[ catalan ] = "Posició i espai";
         Text[ finnish ] = "Sijainti ja välit";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­ a rozteÄe";
+        Text[ hebrew ] = "Position und Abstand";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨ à¤”à¤° à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
     };
     FixedText FT_BORDERDIST
     {
@@ -161,7 +167,7 @@ TabPage TP_NUM_POSITION
         Text [ spanish ] = "~Sangría" ;
         Text [ french ] = "Retrait" ;
         Text [ dutch ] = "~Inspringing" ;
-        Text [ portuguese_brazilian ] = "Ab~stand Text <-> Rand" ;
+        Text [ portuguese_brazilian ] = "Recuo" ;
         Text [ portuguese ] = "A~vanço" ;
         Text[ chinese_simplified ] = "ç¼©è¿›";
         Text[ russian ] = "Îòñòóï";
@@ -176,6 +182,9 @@ TabPage TP_NUM_POSITION
         Text[ catalan ] = "Sagnat";
         Text[ finnish ] = "Sisennä";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡";
+        Text[ czech ] = "OdsazenÃ­";
+        Text[ hebrew ] = "â€®×©×•×œ×™×™×â€¬";
+        Text[ hindi ] = "à¤‡à¤¨à¥à¤¡à¥‡à¤¨à¥à¤Ÿ";
     };
     CheckBox CB_RELATIVE
     {
@@ -185,7 +194,7 @@ TabPage TP_NUM_POSITION
         Text [ ENGLISH ] = "Relati~ve" ;
         Text [ portuguese ] = "~Relativo" ;
         Text [ english_us ] = "Relati~ve" ;
-        Text [ portuguese_brazilian ] = "Relati~v" ;
+        Text [ portuguese_brazilian ] = "~Relativo" ;
         Text [ swedish ] = "Relati~vt" ;
         Text [ danish ] = "Relativ" ;
         Text [ italian ] = "Relativo" ;
@@ -194,17 +203,20 @@ TabPage TP_NUM_POSITION
         Text [ dutch ] = "Relati~ef" ;
         Text[ chinese_simplified ] = "ç›¸å¯¹çš„(~V)";
         Text[ russian ] = "Îòíîñèòåëüíî";
-        Text[ polish ] = "Wzglêd~ny";
+        Text[ polish ] = "Wzglêd~ne";
         Text[ japanese ] = "å‰ãƒ¬ãƒ™ãƒ«ã‹ã‚‰(~V)";
         Text[ chinese_traditional ] = "ç›¸å°çš„(~V)";
         Text[ arabic ] = "äÓÈí";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ó÷åôéêÜ";
         Text[ korean ] = "ë¹„ë¡€í•˜ì—¬(~V)";
-        Text[ turkish ] = "Orantılı";
+        Text[ turkish ] = "Görec~eli";
         Text[ catalan ] = "Relati~u";
         Text[ finnish ] = "~Suhteellinen";
         Text[ thai ] = "à¸ªà¸±à¸¡à¸à¸±à¸—~à¸˜à¹Œ";
+        Text[ czech ] = "RelativnÃ­";
+        Text[ hebrew ] = "Relati~v";
+        Text[ hindi ] = "à¤¸à¤®à¥à¤¬à¤¨à¥à¤§à¤¿~à¤¤";
     };
     MetricField MF_BORDERDIST
     {
@@ -237,21 +249,24 @@ TabPage TP_NUM_POSITION
         Text [ spanish ] = "~Distancia al texto" ;
         Text [ french ] = "~Écart du texte" ;
         Text [ dutch ] = "Afstand tot ~tekst" ;
-        Text [ portuguese_brazilian ] = "Einr~?kung" ;
+        Text [ portuguese_brazilian ] = "~Distância do texto" ;
         Text [ portuguese ] = "~Distância do texto" ;
         Text[ chinese_simplified ] = "è‡³æ–‡å­—çš„è·ç¦»(~X)";
         Text[ russian ] = "Ğàññòî~ÿíèå îò òåêñòà";
-        Text[ polish ] = "Odstêp od tekstu";
+        Text[ polish ] = "Od~stêp od tekstu";
         Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã¾ã§ã®é–“éš”(~X)";
         Text[ chinese_traditional ] = "è‡³æ–‡å­—çš„è·ç¦»(~X)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
         Text[ greek ] = "Áğüóôáóç áğü ~êåßìåíï";
         Text[ korean ] = "í…ìŠ¤íŠ¸ì™€ì˜ ê°„ê²©(~X)";
-        Text[ turkish ] = "Metin uzaklığı";
+        Text[ turkish ] = "Metine olan uzaklık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espai al te~xt";
         Text[ finnish ] = "Tekstin ti~la";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸–à¸¶à¸‡à¸‚à¹‰à¸­~à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "VzdÃ¡lenost k textu";
+        Text[ hebrew ] = "Abstand zum Te~xt";
+        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤‚à¤¤à¤°";
     };
     MetricField MF_INDENT
     {
@@ -281,24 +296,27 @@ TabPage TP_NUM_POSITION
         Text [ swedish ] = "~Minimiavstånd nummer <-> text" ;
         Text [ danish ] = "~Mindste afstand Tal <-> Tekst" ;
         Text [ italian ] = "Distanza minima testo <-> numerazione" ;
-        Text [ spanish ] = "Distancia mínima Número <-> Texto" ;
-        Text [ french ] = "Écart ~minimum numéro <-> texte" ;
+        Text [ spanish ] = "~Distancia mínima texto <-> numeración" ;
+        Text [ french ] = "Écart ~minimum numérotation <-> texte" ;
         Text [ dutch ] = "~Minimale afstand nummer <-> tekst" ;
-        Text [ portuguese_brazilian ] = "Abstand Te~xt <-> Numerierung" ;
+        Text [ portuguese_brazilian ] = "Distância ~mínima numeração <-> texto" ;
         Text [ portuguese ] = "Distância ~mínima número <-> texto" ;
         Text[ chinese_simplified ] = "ç¼–å·è‡³æ­£æ–‡çš„æœ€å°é—´éš”(~M)";
         Text[ russian ] = "Ìèí. èíòåğâàë íîìåğ <-> òåêñò";
-        Text[ polish ] = "Min. odstêp miêdzy numerem a tekstem";
+        Text[ polish ] = "Min. ~odstêp miêdzy numerem a tekstem";
         Text[ japanese ] = "ç•ªå·ã¨ãƒ†ã‚­ã‚¹ãƒˆã®æœ€å°é–“éš”(~M)";
         Text[ chinese_traditional ] = "ç·¨è™Ÿå’Œå…§æ–‡ä¹‹é–“çš„æœ€å°‘é–“éš”(~M)";
         Text[ arabic ] = "ÃŞá ãÓÇİÉ Èíä ÇáÑŞã <-> ÇáäÕ";
         Text[ greek ] = "ÅëÜ÷éóôç áğüóôáóç Áñéè~ìüò <-> Êåßìåíï";
         Text[ korean ] = "ë²ˆí˜¸ì™€ í…ìŠ¤íŠ¸ ì‚¬ì´ì˜ ìµœì†Œ ê°„ê²©(~M)";
-        Text[ turkish ] = "Asgari numara <-> metin aralığı";
+        Text[ turkish ] = "Asgari yer numaralaması <-> metin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Distància mínima Número <-> Text";
         Text[ finnish ] = "Numeroinnin ja tekstin ~välillä vähintään";
         Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡~à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸” <-> à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "MinimÃ¡lnÃ­ mezera mezi ÄÃ­slovÃ¡nÃ­m a textem";
+        Text[ hebrew ] = "~Mindestabstand Nummer <-> Text";
+        Text[ hindi ] = "~à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤® à¤…à¤‚à¤¤à¤° à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾ <-> à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
     };
     MetricField MF_NUMDIST
     {
@@ -331,7 +349,7 @@ TabPage TP_NUM_POSITION
         Text [ spanish ] = "~Alineación de la numeración" ;
         Text [ french ] = "~Alignement de la numérotation" ;
         Text [ dutch ] = "~Nummeringsopties" ;
-        Text [ portuguese_brazilian ] = "Ausri~chtung der Numerierung" ;
+        Text [ portuguese_brazilian ] = "~Alinhamento da numeração" ;
         Text [ portuguese ] = "A~linhamento da numeração" ;
         Text[ chinese_simplified ] = "ç¼–å·å¯¹é½(~A)";
         Text[ russian ] = "Â~ûğàâíèâàíèå íóìåğàöèè";
@@ -342,10 +360,13 @@ TabPage TP_NUM_POSITION
         Text[ arabic ] = "ãÍÇĞÇÉ ÇáÊÑŞíã";
         Text[ greek ] = "Óôïß÷éóç áñßèìçóçò";
         Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ë§ì¶¤(~A)";
-        Text[ turkish ] = "Numara hizalama";
+        Text[ turkish ] = "Numaralama ~ayarlaması";
         Text[ catalan ] = "~Alineament de la numeració";
         Text[ finnish ] = "Numeroinnin ~tasaus";
         Text[ thai ] = "~à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
+        Text[ czech ] = "ZarovnÃ¡nÃ­ ÄÃ­slovÃ¡nÃ­";
+        Text[ hebrew ] = "Ausri~chtung der Nummerierung";
+        Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤•à¤¾ ~à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤•à¤°à¤£";
     };
     ListBox LB_ALIGN
     {
@@ -373,9 +394,9 @@ TabPage TP_NUM_POSITION
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
+            < "Esquerda" ; > ;
+            < "Centralizado" ; > ;
+            < "Direita" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -434,7 +455,7 @@ TabPage TP_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej" ; > ;
-        < "Do œrodka" ; > ;
+        < "Poœrodku" ; > ;
         < "Z prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -470,7 +491,7 @@ TabPage TP_NUM_POSITION
     StringList [ turkish ] =
     {
             < "Sol" ; > ;
-        < "Orta" ; > ;
+        < "Ortalanmış" ; > ;
         < "Sağ" ; > ;
     };
     StringList [ language_user1 ] =
@@ -497,6 +518,24 @@ TabPage TP_NUM_POSITION
         < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ; > ;
         < "à¸‚à¸§à¸²" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Vlevo" ; > ;
+        < "Na stÅ™ed" ; > ;
+        < "Vpravo" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Links" ; > ;
+        < "Zentriert" ; > ;
+        < "Rechts" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤¬à¤¾à¤¯à¤¾à¤" ; > ;
+        < "à¤•à¥‡à¤¨à¥à¤¦à¥à¤°à¤¿à¤¤" ; > ;
+        < "à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾" ; > ;
+    };
     };
     PushButton PB_STANDARD
     {
@@ -505,7 +544,7 @@ TabPage TP_NUM_POSITION
         Text = "~Standard" ;
         Text [ ENGLISH ] = "~Standard" ;
         Text [ english_us ] = "~Default" ;
-        Text [ portuguese_brazilian ] = "~Standard" ;
+        Text [ portuguese_brazilian ] = "~Padrão" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ italian ] = "~Standard" ;
@@ -515,17 +554,20 @@ TabPage TP_NUM_POSITION
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
         Text[ russian ] = "Ïî óìîë÷àíèş";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "~Domyœlnie";
         Text[ japanese ] = "æ¨™æº–(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "æ¨™æº–(~D)";
         Text[ arabic ] = "ıŞíÇÓí";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "Ön değer";
         Text[ catalan ] = "~Valor per defecte";
         Text[ finnish ] = "~Oletus";
         Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+        Text[ czech ] = "VÃ½chozÃ­";
+        Text[ hebrew ] = "â€®×‘×¨×™×¨×ª ××—×“×œâ€¬";
+        Text[ hindi ] = "~à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿";
     };
     Window WIN_PREVIEW
     {
@@ -557,7 +599,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Bullets" ;
                 Text [ ENGLISH ] = "Bullets" ;
                 Text [ english_us ] = "Bullets" ;
-                Text [ portuguese_brazilian ] = "Bullets" ;
+                Text [ portuguese_brazilian ] = "Marcas" ;
                 Text [ swedish ] = "Punkter" ;
                 Text [ danish ] = "Punkttegn" ;
                 Text [ italian ] = "Punti" ;
@@ -578,6 +620,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
                 Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
+                Text[ czech ] = "OdrÃ¡Å¾ky";
+                Text[ hebrew ] = "Bullets";
+                Text[ hindi ] = "à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
             };
             PageItem
             {
@@ -585,7 +630,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Nummerierungsart" ;
                 Text [ ENGLISH ] = "Digits" ;
                 Text [ english_us ] = "Numbering type" ;
-                Text [ portuguese_brazilian ] = "Numerierungsart" ;
+                Text [ portuguese_brazilian ] = "Tipo de numeração" ;
                 Text [ swedish ] = "Numreringstyp" ;
                 Text [ danish ] = "Nummereringstype" ;
                 Text [ italian ] = "Tipo di numerazione" ;
@@ -595,17 +640,20 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text [ portuguese ] = "Tipo de numeração" ;
                 Text[ chinese_simplified ] = "ç¼–å·ç±»å‹";
                 Text[ russian ] = "Òèï íóìåğàöèè";
-                Text[ polish ] = "Rodzaj numeracji";
+                Text[ polish ] = "Typ numeracji";
                 Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
                 Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
                 Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìœ í˜•";
-                Text[ turkish ] = "Numaralama türü";
+                Text[ turkish ] = "Numaralama tipi";
                 Text[ language_user1 ] = "Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
                 Text[ catalan ] = "Tipus de numeració";
                 Text[ finnish ] = "Numerointityyppi";
                 Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
+                Text[ czech ] = "Typ ÄÃ­slovÃ¡nÃ­";
+                Text[ hebrew ] = "Nummerierungsart";
+                Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¥‡ à¤•à¤¾ à¤µà¤°à¥à¤—";
             };
             PageItem
             {
@@ -613,11 +661,11 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Gliederung" ;
                 Text [ ENGLISH ] = "Outline" ;
                 Text [ english_us ] = "Outline" ;
-                Text [ portuguese_brazilian ] = "Numerierung" ;
+                Text [ portuguese_brazilian ] = "Estrutura de Tópicos" ;
                 Text [ swedish ] = "Disposition" ;
                 Text [ danish ] = "Disposition" ;
                 Text [ italian ] = "Struttura" ;
-                Text [ spanish ] = "Esquema" ;
+                Text [ spanish ] = "Esquemas" ;
                 Text [ french ] = "Plan" ;
                 Text [ dutch ] = "Overzicht" ;
                 Text [ portuguese ] = "Esquema" ;
@@ -634,6 +682,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ catalan ] = "Contorn";
                 Text[ finnish ] = "Jäsennys";
                 Text[ thai ] = "à¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+                Text[ czech ] = "Osnova";
+                Text[ hebrew ] = "â€®××¡×’×¨×ªâ€¬";
+                Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾";
             };
             PageItem
             {
@@ -641,7 +692,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Grafiken" ;
                 Text [ ENGLISH ] = "Images" ;
                 Text [ english_us ] = "Graphics" ;
-                Text [ portuguese_brazilian ] = "Grafiken" ;
+                Text [ portuguese_brazilian ] = "Figura" ;
                 Text [ swedish ] = "Grafik" ;
                 Text [ danish ] = "Grafik" ;
                 Text [ italian ] = "Immagini" ;
@@ -651,7 +702,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text [ portuguese ] = "Imagens" ;
                 Text[ chinese_simplified ] = "å›¾å½¢";
                 Text[ russian ] = "Ğèñóíêè";
-                Text[ polish ] = "Grafiki";
+                Text[ polish ] = "Grafika";
                 Text[ japanese ] = "å›³";
                 Text[ chinese_traditional ] = "åœ–å½¢";
                 Text[ arabic ] = "ÕæÑ";
@@ -662,6 +713,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ catalan ] = "Imatges";
                 Text[ finnish ] = "Grafiikka";
                 Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
+                Text[ czech ] = "ObrÃ¡zky";
+                Text[ hebrew ] = "â€®×’×¨×¤×™×§×”â€¬";
+                Text[ hindi ] = "à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
             };
             PageItem
             {
@@ -669,7 +723,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Position" ;
                 Text [ ENGLISH ] = "Position" ;
                 Text [ english_us ] = "Position" ;
-                Text [ portuguese_brazilian ] = "Position" ;
+                Text [ portuguese_brazilian ] = "Posição" ;
                 Text [ swedish ] = "Position" ;
                 Text [ danish ] = "Placering" ;
                 Text [ italian ] = "Posizione" ;
@@ -690,6 +744,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ catalan ] = "Posició";
                 Text[ finnish ] = "Sijainti";
                 Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+                Text[ czech ] = "UmÃ­stÄ›nÃ­";
+                Text[ hebrew ] = "â€®××™×§×•×â€¬";
+                Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
             };
             PageItem
             {
@@ -698,7 +755,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text = "Optionen" ;
                 Text [ ENGLISH ] = "Customize" ;
                 Text [ english_us ] = "Options" ;
-                Text [ portuguese_brazilian ] = "~Optionen" ;
+                Text [ portuguese_brazilian ] = "Opções" ;
                 Text [ swedish ] = "Alternativ" ;
                 Text [ danish ] = "Indstillinger" ;
                 Text [ italian ] = "Opzioni" ;
@@ -719,6 +776,9 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ catalan ] = "Opcions";
                 Text[ finnish ] = "Asetukset";
                 Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
+                Text[ czech ] = "Volby";
+                Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+                Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
             };
         };
         Text[ english_us ] = "Numbering/Bullets";
@@ -752,23 +812,26 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text [ english_us ] = "~Remove" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~R)";
         Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~R)";
         Text[ chinese_traditional ] = "åˆªé™¤(~R)";
         Text[ arabic ] = "ÅÒÇáÉ";
         Text[ greek ] = "ÄéáãñáöŞ";
         Text[ korean ] = "ì œê±°(~R)";
-        Text[ turkish ] = "Kaldır";
+        Text[ turkish ] = "~Kaldır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "à¹€~à¸­à¸²à¸­à¸­à¸";
+        Text[ czech ] = "Odstranit";
+        Text[ hebrew ] = "â€®×”×¡×¨×”â€¬";
+        Text[ hindi ] = "~à¤¹à¤Ÿà¤¾à¤“";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
-    Text [ portuguese_brazilian ] = "Numerierung/Aufz?hlung" ;
+    Text [ portuguese_brazilian ] = "Numeração / Marcas" ;
     Text [ swedish ] = "Numrering/punktuppställning" ;
     Text [ danish ] = "Nummerering/punkttegn" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
-    Text [ spanish ] = "Numeración/Viñetas" ;
+    Text [ spanish ] = "Numeración y viñetas" ;
     Text [ french ] = "Numérotation/Puces" ;
     Text [ dutch ] = "Nummering/opsomming" ;
     Text [ portuguese ] = "Numeração & Marcas" ;
@@ -785,7 +848,19 @@ TabDialog DLG_SVXTEST_NUM_BULLET
     Text[ catalan ] = "Numeració/vinyetes";
     Text[ finnish ] = "Luettelomerkit ja numerointi";
     Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚/à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
+    Text[ czech ] = "ÄŒÃ­slovÃ¡nÃ­/odrÃ¡Å¾ky";
+    Text[ hebrew ] = "â€®×ª×‘×œ×™×˜×™×/××™×¡×¤×•×¨â€¬";
+    Text[ hindi ] = "à¤¸à¤‚à¤–à¥à¤¯à¤¾ à¤¦à¥‡à¤¨à¤¾/à¤¬à¥à¤²à¥à¤²à¥‡à¤Ÿà¥à¤¸";
 };
+
+
+
+
+
+
+
+
+
 
 
 
