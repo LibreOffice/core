@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 16:28:59 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 17:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3144,7 +3144,16 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             SetFillColor( rStyleSettings.GetShadowColor() );
         else
         {
-            SetFillColor( COL_LIGHTGREEN );
+            Color aFillColor( COL_LIGHTGREEN );
+            if ( rStyleSettings.IsHighContrastBlackAndWhite() )
+            {
+                if ( rStyleSettings.GetFaceColor().GetColor() == COL_WHITE )
+                    aFillColor = Color( COL_BLACK );
+                else
+                    aFillColor = Color( COL_WHITE );
+
+            }
+            SetFillColor( aFillColor );
             bBlack = TRUE;
         }
 
