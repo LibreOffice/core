@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-14 08:23:38 $
+#   last change: $Author: cp $ $Date: 2000-11-20 10:15:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -136,7 +136,6 @@ IDLFILES=\
     XStringMapping.idl\
     XStringEscape.idl\
     XTextSearch.idl\
-    XTransliteration.idl\
     XURLTransformer.idl\
     XUniqueIDFactory.idl\
     DataEditorEventType.idl\
@@ -145,7 +144,6 @@ IDLFILES=\
     XDataEditor.idl\
     MalformedNumberFormatException.idl\
     NotNumericException.idl\
-    XCollator.idl\
     XAtomServer.idl\
     AtomClassRequest.idl\
     AtomDescription.idl
