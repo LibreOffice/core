@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: mav $ $Date: 2003-12-01 08:41:14 $
+#   last change: $Author: kz $ $Date: 2004-10-04 19:59:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,20 +78,24 @@ SHL1TARGET= $(TARGET)
 SHL1IMPLIB= i$(TARGET)
 SHL1OBJS= \
         $(SLO)$/miscobj.obj\
+                $(SLO)$/specialobject.obj\
         $(SLO)$/persistence.obj\
         $(SLO)$/embedobj.obj\
+        $(SLO)$/inplaceobj.obj\
         $(SLO)$/visobj.obj\
         $(SLO)$/xcreator.obj\
         $(SLO)$/xfactory.obj\
         $(SLO)$/register.obj\
         $(SLO)$/convert.obj\
         $(SLO)$/docholder.obj\
+        $(SLO)$/confighelper.obj\
         $(SLO)$/closepreventer.obj\
         $(SLO)$/intercept.obj
 
 SHL1STDLIBS=\
     $(SALLIB)\
     $(CPPULIB)\
+    $(COMPHELPERLIB)\
     $(CPPUHELPERLIB)
 
 SHL1DEF= $(MISC)$/$(SHL1TARGET).def
