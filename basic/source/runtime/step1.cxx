@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:38 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,9 @@ void SbiRuntime::StepPRCHAR( USHORT nOp1 )
 
 void SbiRuntime::StepCLASS( USHORT nOp1 )
 {
+    bool bUsedForLValue = (nOp1 & 0x8000) != 0;
+    nOp1 &= 0x7fff;
+
     String aClass( pImg->GetString( nOp1 ) );
     SbxVariable* pVar = GetTOS();
     if( pVar->GetType() != SbxOBJECT )
@@ -382,8 +385,15 @@ void SbiRuntime::StepCLASS( USHORT nOp1 )
             if( pObj && !pObj->IsA( TYPE(SbxObject) ) )
                 pObj = NULL;
         }
-        if( !pObj || !pObj->IsClass( aClass ) )
+        if( !pObj )
+        {
+            if( !bUsedForLValue )
+                Error( SbERR_INVALID_USAGE_OBJECT );
+        }
+        else if( !pObj->IsClass( aClass ) )
+        {
             Error( SbERR_INVALID_USAGE_OBJECT );
+        }
     }
 }
 
@@ -402,8 +412,13 @@ void SbiRuntime::StepBASED( USHORT nOp1 )
 {
     SbxVariable* p1 = new SbxVariable;
     SbxVariableRef x2 = PopVar();
-    p1->PutInteger( nOp1 );
-    x2->Compute( SbxPLUS, *p1 );
+
+    // #109275 Check compatiblity mode
+    bool bCompatible = ((nOp1 & 0x8000) != 0);
+    USHORT uBase = (nOp1 & 1);      // Can only be 0 or 1
+    p1->PutInteger( uBase );
+    if( !bCompatible )
+        x2->Compute( SbxPLUS, *p1 );
     PushVar( x2 );  // erst die Expr
     PushVar( p1 );  // dann die Base
 }
