@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:06:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,9 +257,6 @@ public:
     void            GetNavigatorWinState(SfxItemSet& rSet);
 
     void            ExecEffectWin(SfxRequest& rReq);
-    void            GetEffectWinState(SfxItemSet& rSet);
-    void            UpdateEffectWindow();
-    void            AssignFromEffectWindow();
 
     void            Update3DWindow();
     void            AssignFrom3DWindow();
@@ -412,6 +409,8 @@ public:
     void ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable );
 
     virtual DrawController* GetController (void);
+
+    DrawView*   GetDrawView() const { return pDrView; }
 
 protected:
     DrawView* pDrView;
