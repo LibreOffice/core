@@ -672,13 +672,12 @@ public class AccessibilityTreeModel
 
     protected void addToCanvas (AccTreeNode aNode)
     {
-        return;
-        /*        XAccessibleContext xContext = aNode.getContext();
+        XAccessibleContext xContext = aNode.getContext();
         if ((maCanvas != null) && (xContext != null))
             maCanvas.addContext (
                 xContext,
                 new TreePath (createPath (aNode)));
-        */    }
+    }
 
     protected void removeFromCanvas( Object aObject )
     {
