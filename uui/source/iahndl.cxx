@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:08:58 $
+ *  last change: $Author: mav $ $Date: 2002-05-29 15:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,8 +166,23 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
 #include "com/sun/star/document/XInteractionFilterSelect.hpp"
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTEROPTIONS_HPP_
+#include "com/sun/star/document/XInteractionFilterOptions.hpp"
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_FILTEROPTIONSREQUEST_HPP_
+#include "com/sun/star/document/FilterOptionsRequest.hpp"
+#endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include "com/sun/star/container/XNameContainer.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
+#include <com/sun/star/document/XExporter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include "com/sun/star/uno/Any.hxx"
@@ -541,6 +556,14 @@ UUIInteractionHandler::handle(
         {
             handleAmbigousFilterRequest(aAmbigousFilterRequest,
                                         rRequest->getContinuations());
+            return;
+        }
+
+        star::document::FilterOptionsRequest aFilterOptionsRequest;
+        if (aAnyRequest >>= aFilterOptionsRequest)
+        {
+            handleFilterOptionsRequest(aFilterOptionsRequest,
+                                       rRequest->getContinuations());
             return;
         }
 
@@ -1786,6 +1809,108 @@ UUIInteractionHandler::handleAmbigousFilterRequest(
         }
     }
 }
+
+
+void
+UUIInteractionHandler::handleFilterOptionsRequest(
+    com::sun::star::document::FilterOptionsRequest const & rRequest,
+    com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((com::sun::star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort >            xAbort          ;
+    star::uno::Reference< star::document::XInteractionFilterOptions > xFilterOptions;
+
+    sal_Int32 nCount = rContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    {
+        if( ! xAbort.is() )
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+
+        if( ! xFilterOptions.is() )
+            xFilterOptions = star::uno::Reference< star::document::XInteractionFilterOptions >( rContinuations[nStep], star::uno::UNO_QUERY );
+    }
+
+    star::uno::Reference< star::container::XNameAccess > xFilterCFG;
+    if( m_xServiceFactory.is() )
+    {
+        xFilterCFG = star::uno::Reference< star::container::XNameAccess >(
+            m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+            star::uno::UNO_QUERY );
+    }
+
+    if( xFilterCFG.is() && rRequest.rProperties.getLength() )
+    {
+        try {
+            ::rtl::OUString aFilterName;
+            sal_Int32 nPropCount = rRequest.rProperties.getLength();
+               for( sal_Int32 ind = 0; ind < nPropCount; ++ind )
+            {
+                rtl::OUString tmp = rRequest.rProperties[ind].Name;
+                   if( rRequest.rProperties[ind].Name.equals( ::rtl::OUString::createFromAscii("FilterName")) )
+                {
+                    rRequest.rProperties[ind].Value >>= aFilterName;
+                    break;
+                }
+            }
+
+            star::uno::Sequence < star::beans::PropertyValue > aProps;
+            if( xFilterCFG->getByName( aFilterName ) >>= aProps )
+               {
+                   sal_Int32 nPropertyCount = aProps.getLength();
+                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                       {
+                        ::rtl::OUString aServiceName;
+                           aProps[nProperty].Value >>= aServiceName;
+                        if( aServiceName.getLength() )
+                        {
+                            star::uno::Reference< star::ui::dialogs::XExecutableDialog > xFilterDialog(
+                                        m_xServiceFactory->createInstance( aServiceName ),
+                                        star::uno::UNO_QUERY );
+                            star::uno::Reference< star::beans::XPropertyAccess > xFilterProperties(
+                                        xFilterDialog,
+                                        star::uno::UNO_QUERY );
+
+                            if( xFilterDialog.is() && xFilterProperties.is() )
+                            {
+                                star::uno::Reference< star::document::XExporter > xExporter(
+                                                xFilterDialog,
+                                                star::uno::UNO_QUERY );
+                                if( xExporter.is() )
+                                    xExporter->setSourceDocument( star::uno::Reference< star::lang::XComponent >(
+                                                    rRequest.rModel,
+                                                    star::uno::UNO_QUERY ) );
+
+                                xFilterProperties->setPropertyValues( rRequest.rProperties );
+
+                                if( xFilterDialog->execute() )
+                                {
+                                    xFilterOptions->setFilterOptions( xFilterProperties->getPropertyValues() );
+                                    xFilterOptions->select();
+                                    return;
+
+                                }
+                            }
+                        }
+                        break;
+                    }
+            }
+        }
+        catch( star::container::NoSuchElementException& )
+        {
+            // the filter name is unknown
+        }
+        catch( star::uno::Exception& )
+        {
+        }
+    }
+
+    xAbort->select();
+}
+
 
 void
 UUIInteractionHandler::handleErrorRequest(

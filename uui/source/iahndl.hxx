@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:08:58 $
+ *  last change: $Author: mav $ $Date: 2002-05-29 15:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@ namespace com { namespace sun { namespace star {
     namespace uno {
         class Any;
         class XInterface;
+    }
+    namespace document {
+        class FilterOptionsRequest;
     }
 } } }
 namespace rtl { class OUString; }
@@ -276,6 +279,15 @@ private:
     void
     handleAmbigousFilterRequest(
         com::sun::star::document::AmbigousFilterRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleFilterOptionsRequest(
+        com::sun::star::document::FilterOptionsRequest const & rRequest,
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &
