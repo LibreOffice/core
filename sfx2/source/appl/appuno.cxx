@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:15:06 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,8 +1416,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     rArgs = aSequ;
 }
 
-SFX_IMPL_XINTERFACE_4( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XInitialization )
-SFX_IMPL_XTYPEPROVIDER_4( SfxMacroLoader, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::lang::XInitialization  )
+SFX_IMPL_XINTERFACE_5( SfxMacroLoader, OWeakObject, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::frame::XSynchronousDispatch,::com::sun::star::lang::XInitialization )
+SFX_IMPL_XTYPEPROVIDER_5( SfxMacroLoader, ::com::sun::star::frame::XDispatchProvider, ::com::sun::star::frame::XNotifyingDispatch, ::com::sun::star::frame::XDispatch, ::com::sun::star::frame::XSynchronousDispatch,::com::sun::star::lang::XInitialization  )
 SFX_IMPL_XSERVICEINFO( SfxMacroLoader, PROTOCOLHANDLER_SERVICENAME, "com.sun.star.comp.sfx2.SfxMacroLoader" )
 SFX_IMPL_SINGLEFACTORY( SfxMacroLoader )
 
@@ -1495,7 +1495,8 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
         }
     }
 
-    ErrCode nErr = loadMacro( aURL.Complete, GetObjectShell_Impl() );
+    ::com::sun::star::uno::Any aAny;
+    ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
     if( xListener.is() )
     {
         // always call dispatchFinished(), because we didn't load a document but
@@ -1510,6 +1511,14 @@ void SAL_CALL SfxMacroLoader::dispatchWithNotification( const ::com::sun::star::
 
         xListener->dispatchFinished( aEvent ) ;
     }
+}
+
+::com::sun::star::uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue( const ::com::sun::star::util::URL& aURL,
+                                                                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lArgs ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet;
+    ErrCode nErr = loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1530,7 +1539,8 @@ void SAL_CALL SfxMacroLoader::dispatch( const ::com::sun::star::util::URL&      
         }
     }
 
-    ErrCode nErr = loadMacro( aURL.Complete, GetObjectShell_Impl() );
+    ::com::sun::star::uno::Any aAny;
+    ErrCode nErr = loadMacro( aURL.Complete, aAny, GetObjectShell_Impl() );
 }
 
 // -----------------------------------------------------------------------
@@ -1551,8 +1561,10 @@ void SAL_CALL SfxMacroLoader::removeStatusListener( const ::com::sun::star::uno:
 {
 }
 
+extern ::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
+
 // -----------------------------------------------------------------------
-ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* pSh )
+ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
     throw ( ::com::sun::star::uno::RuntimeException )
 {
     SfxApplication* pApp = SFX_APP();
@@ -1691,7 +1703,9 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                 SfxObjectShellRef rSh = pSh;
 
                 // execute function using its Sbx parent,
-                pMethod->GetParent()->Execute( aCall );
+                SbxVariable* pRet = pMethod->GetParent()->Execute( aCall );
+                //rRetval = sbxToUnoValue( pRet );
+
                 nErr = SbxBase::GetError();
                 if ( pCompVar )
                     // reset "ThisComponent" to prior value
