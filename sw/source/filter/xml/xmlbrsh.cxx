@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbrsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlkywd.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
 
@@ -236,11 +235,14 @@ void SwXMLBrushItemExport::exportXML( const SvxBrushItem& rItem )
 
       Source Code Control ::com::sun::star::chaos::System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.3 2001-06-15 17:16:59 dvo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlbrsh.cxx,v 1.4 2001-06-18 17:27:51 dvo Exp $
 
       Source Code Control ::com::sun::star::chaos::System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/06/15 17:16:59  dvo
+      #86004# changed SvXMLTokenMap to use XML tokens
+
       Revision 1.2  2000/12/02 10:57:15  mib
       #80795#: use packages
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _XMLOFF_XMLITMPR_HXX
 #include <xmloff/xmlexpit.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
@@ -145,22 +142,21 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 
-void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
+void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 {
     // <style:style ...>
     CheckAttrList();
 
     // style:family="..."
-    const sal_Char *pStr = pFamily;
     DBG_ASSERT( RES_FRMFMT==rFmt.Which(), "frame format expected" );
     if( RES_FRMFMT != rFmt.Which() )
         return;
-    DBG_ASSERT( pStr, "family must be specified" );
+    DBG_ASSERT( eFamily != XML_TOKEN_INVALID, "family must be specified" );
     // style:name="..."
     AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rFmt.GetName() );
 
-    if( pStr )
-        AddAttributeASCII( XML_NAMESPACE_STYLE, sXML_family, pStr );
+    if( eFamily != XML_TOKEN_INVALID )
+        AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, eFamily );
 
     // style:parent-style-name="..." (if its not the default only)
     const SwFmt* pParent = rFmt.DerivedFrom();
@@ -173,7 +169,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
             UCHAR_MAX == rFmt.GetPoolHlpFileId(), "help file ids aren't supported" );
 
     // style:master-page-name
-    if( RES_FRMFMT == rFmt.Which() && sXML_table == pStr )
+    if( RES_FRMFMT == rFmt.Which() && XML_TABLE == eFamily )
     {
         const SfxPoolItem *pItem;
         if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
@@ -190,7 +186,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
         }
     }
 
-    if( sXML_table_cell == pStr )
+    if( XML_TABLE_CELL == eFamily )
     {
         DBG_ASSERT(RES_FRMFMT == rFmt.Which(), "only frame format");
 
@@ -221,11 +217,11 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
                                   sal_True, sal_True );
 
         SvXMLItemMapEntriesRef xItemMap;
-        if( sXML_table == pStr )
+        if( XML_TABLE == eFamily )
             xItemMap = xTableItemMap;
-        else if( sXML_table_row == pStr )
+        else if( XML_TABLE_ROW == eFamily )
             xItemMap = xTableRowItemMap;
-        else if( sXML_table_cell == pStr )
+        else if( XML_TABLE_CELL == eFamily )
             xItemMap = xTableCellItemMap;
 
         if( xItemMap.Is() )

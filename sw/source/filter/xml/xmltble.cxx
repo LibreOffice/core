@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,6 @@
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -688,7 +684,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
 
         SwFrmFmt *pFrmFmt = pLine->GetFrmFmt();
         if( rExpRows.AddRow( *pFrmFmt, rNamePrefix, nLine ) )
-            ExportFmt( *pFrmFmt, sXML_table_row );
+            ExportFmt( *pFrmFmt, XML_TABLE_ROW );
 
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         sal_uInt16 nBoxes = rBoxes.Count();
@@ -718,7 +714,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 SwFrmFmt *pFrmFmt = pBox->GetFrmFmt();
                 if( rExpCells.AddCell( *pFrmFmt, rNamePrefix, nOldCol, nLine,
                                        bTop) )
-                    ExportFmt( *pFrmFmt, sXML_table_cell );
+                    ExportFmt( *pFrmFmt, XML_TABLE_CELL );
 
                 GetTextParagraphExport()->collectTextAutoStyles(
                     lcl_xml_CreateTableBoxTextRange( *pBoxSttNd )->getText(),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: dvo $ $Date: 2001-06-18 17:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,6 @@
 #ifndef _XMLOFF_XMLITMPR_HXX
 #include <xmloff/xmlexpit.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
@@ -156,7 +153,7 @@ protected:
 
     sal_uInt32 nAbsWidth;
 
-    void AddAttribute( sal_uInt16 nPrefix, const sal_Char *pLName,
+    void AddAttribute( sal_uInt16 nPrefix, enum XMLTokenEnum eLName,
                        const OUString& rValue,
                        const SvXMLNamespaceMap& rNamespaceMap,
                        SvXMLAttributeList& rAttrList ) const;
@@ -203,13 +200,13 @@ SwXMLTableItemMapper_Impl::~SwXMLTableItemMapper_Impl()
 }
 
 void SwXMLTableItemMapper_Impl::AddAttribute( sal_uInt16 nPrefix,
-        const sal_Char *pLName,
+        enum XMLTokenEnum eLName,
         const OUString& rValue,
         const SvXMLNamespaceMap& rNamespaceMap,
         SvXMLAttributeList& rAttrList ) const
 {
-    OUString sLName( OUString::createFromAscii(pLName) );
-    OUString sName( rNamespaceMap.GetQNameByKey( nPrefix, sLName ) );
+    OUString sName( rNamespaceMap.GetQNameByKey( nPrefix,
+                                                 GetXMLToken(eLName) ) );
     rAttrList.AddAttribute( sName, sCDATA, rValue );
 }
 
@@ -248,7 +245,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 if( bExport && rItem.exportXML( sValue, nMemberId,
                                                 rUnitConverter ) )
                 {
-                    AddAttribute( rEntry.nNameSpace, rEntry.pLocalName, sValue,
+                    AddAttribute( rEntry.nNameSpace, rEntry.eLocalName, sValue,
                                   rNamespaceMap, rAttrList );
                 }
             }
@@ -265,7 +262,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                 {
                     OUStringBuffer sBuffer;
                     rUnitConverter.convertMeasure( sBuffer, nAbsWidth );
-                    AddAttribute( rEntry.nNameSpace, rEntry.pLocalName,
+                    AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                   sBuffer.makeStringAndClear(),
                                   rNamespaceMap, rAttrList );
                 }
@@ -275,7 +272,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
                     OUString sValue;
                     if( rItem.exportXML( sValue, nMemberId, rUnitConverter ) )
                     {
-                        AddAttribute( rEntry.nNameSpace, rEntry.pLocalName,
+                        AddAttribute( rEntry.nNameSpace, rEntry.eLocalName,
                                       sValue, rNamespaceMap, rAttrList );
                     }
                 }
@@ -337,5 +334,5 @@ void SwXMLExport::ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth )
 {
     ((SwXMLTableItemMapper_Impl *)pTableItemMapper)
         ->SetAbsWidth( nAbsWidth );
-    ExportFmt( rFmt, sXML_table );
+    ExportFmt( rFmt, XML_TABLE );
 }
