@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-22 17:49:17 $
+ *  last change: $Author: sj $ $Date: 2002-07-04 11:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -611,48 +611,53 @@ void SVGActionWriter::ImplWritePolygon( const Polygon& rPoly, sal_Bool bLineOnly
 {
     if( rPoly.GetSize() )
     {
-        FastString                  aStyle;
-        FastString                  aPoints;
-        USHORT                      i = 0, nSize = rPoly.GetSize();
-        const NMSP_RTL::OUString    aBlank( B2UCONST( " " ) );
-
-        // points
-        while( i < nSize )
+        if( rPoly.HasFlags() )
+            ImplWritePolyPolygon( rPoly, bLineOnly, pStyle );
+        else
         {
-            const Point aPolyPoint( ImplMap( rPoly[ i ] ) );
+            FastString                  aStyle;
+            FastString                  aPoints;
+            USHORT                      i = 0, nSize = rPoly.GetSize();
+            const NMSP_RTL::OUString    aBlank( B2UCONST( " " ) );
 
-            aPoints += GetValueString( aPolyPoint.X(), mbDoublePoints );
-            aPoints += B2UCONST( "," );
-            aPoints += GetValueString( aPolyPoint.Y(), mbDoublePoints );
-
-            if( ++i < nSize )
-                aPoints += aBlank;
-        }
-
-        // style
-        if( bLineOnly )
-        {
-            aStyle += B2UCONST( "fill:none" );
-
-            if( pStyle )
+            // points
+            while( i < nSize )
             {
-                aStyle += B2UCONST( ";" );
-                aStyle += *pStyle;
+                const Point aPolyPoint( ImplMap( rPoly[ i ] ) );
+
+                aPoints += GetValueString( aPolyPoint.X(), mbDoublePoints );
+                aPoints += B2UCONST( "," );
+                aPoints += GetValueString( aPolyPoint.Y(), mbDoublePoints );
+
+                if( ++i < nSize )
+                    aPoints += aBlank;
             }
-        }
-        else if( pStyle )
-            aStyle += *pStyle;
 
-        // add point attribute
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPoints, aPoints.GetString() );
+            // style
+            if( bLineOnly )
+            {
+                aStyle += B2UCONST( "fill:none" );
 
-        // add style attribute
-        if( aStyle.GetLength() )
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
+                if( pStyle )
+                {
+                    aStyle += B2UCONST( ";" );
+                    aStyle += *pStyle;
+                }
+            }
+            else if( pStyle )
+                aStyle += *pStyle;
 
-        {
-            // write polyline/polygon element
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, bLineOnly ? aXMLElemPolyLine : aXMLElemPolygon, TRUE, TRUE );
+            // add point attribute
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPoints, aPoints.GetString() );
+
+            // add style attribute
+            if( aStyle.GetLength() )
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
+
+            {
+                // write polyline/polygon element
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, bLineOnly ? aXMLElemPolyLine : aXMLElemPolygon, TRUE, TRUE );
+            }
         }
     }
 }
@@ -664,15 +669,11 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
 {
     if( rPolyPoly.Count() )
     {
-        if( rPolyPoly.Count() == 1 )
+        if( ( rPolyPoly.Count() == 1 ) && ( rPolyPoly[ 0 ].HasFlags() == sal_False ) )
             ImplWritePolygon( rPolyPoly[ 0 ], bLineOnly, pStyle );
-        else if( bLineOnly )
-        {
-            for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
-                ImplWritePolygon( rPolyPoly[ (USHORT) i ], sal_False, pStyle );
-        }
         else
         {
+            FastString                  aStyle;
             FastString                  aPathData;
             const NMSP_RTL::OUString    aBlank( B2UCONST( " " ) );
             const NMSP_RTL::OUString    aComma( B2UCONST( "," ) );
@@ -689,32 +690,60 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
                     aPathData += GetValueString( ( aPolyPoint = ImplMap( rPoly[ 0 ] ) ).X(), mbDoublePoints );
                     aPathData += aComma;
                     aPathData += GetValueString( aPolyPoint.Y(), mbDoublePoints );
-                    aPathData += B2UCONST( " L " );
+                    sal_Char nCurrentMode = 0;
 
                     while( n < nSize )
                     {
-                        aPathData += GetValueString( ( aPolyPoint = ImplMap( rPoly[ n ] ) ).X(), mbDoublePoints );
-                        aPathData += aComma;
-                        aPathData += GetValueString( aPolyPoint.Y(), mbDoublePoints );
-
-                        if( ++n < nSize )
-                            aPathData += aBlank;
+                        aPathData += aBlank;
+                        if ( ( rPoly.GetFlags( n ) == POLY_CONTROL ) && ( ( n + 2 ) < nSize ) )
+                        {
+                            if ( nCurrentMode != 'C' )
+                            {
+                                nCurrentMode = 'C';
+                                aPathData += B2UCONST( "C " );
+                            }
+                            for ( int j = 0; j < 3; j++ )
+                            {
+                                if ( j )
+                                    aPathData += aBlank;
+                                aPathData += GetValueString( ( aPolyPoint = ImplMap( rPoly[ n++ ] ) ).X(), mbDoublePoints );
+                                aPathData += aComma;
+                                aPathData += GetValueString( aPolyPoint.Y(), mbDoublePoints );
+                            }
+                        }
+                        else
+                        {
+                            if ( nCurrentMode != 'L' )
+                            {
+                                nCurrentMode = 'L';
+                                aPathData += B2UCONST( "L " );
+                            }
+                            aPathData += GetValueString( ( aPolyPoint = ImplMap( rPoly[ n++ ] ) ).X(), mbDoublePoints );
+                            aPathData += aComma;
+                            aPathData += GetValueString( aPolyPoint.Y(), mbDoublePoints );
+                        }
                     }
-
                     aPathData += B2UCONST( " Z" );
 
                     if( i < ( nCount - 1 ) )
                         aPathData += aBlank;
                 }
             }
+            if( bLineOnly )
+            {
+                aStyle += B2UCONST( "fill:none" );
+                if( pStyle )
+                    aStyle += B2UCONST( ";" );
+            }
+            if( pStyle )
+                aStyle += *pStyle;
 
             // add style attribute
-            if( pStyle && pStyle->getLength() )
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
+            if( aStyle.GetLength() )
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
 
             // add path data attribute
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrD, aPathData.GetString() );
-
             {
                 // write polyline/polygon element
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, TRUE, TRUE );
