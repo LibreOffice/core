@@ -83,7 +83,7 @@ module com { module sun { module star { module auth {
 
     @since #107627#
  */
-interface XSSOManager : ::com::sun::star::uno::XInterface
+published interface XSSOManager : ::com::sun::star::uno::XInterface
 {
     /** retrieves the mechanism name of all security contexts created using
         this manager.
