@@ -10,10 +10,10 @@ application/vnd.oasis.opendocument.text-web:
 application/vnd.oasis.opendocument.text-master:
 	ext: odm
 
-application/vnd.oasis.opendocument.drawing:
+application/vnd.oasis.opendocument.graphics:
 	ext: odg
 
-application/vnd.oasis.opendocument.drawing-template:
+application/vnd.oasis.opendocument.graphics-template:
 	ext: otg
 
 application/vnd.oasis.opendocument.presentation:
