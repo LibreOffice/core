@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:31:54 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_ACCMGR_CXX
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
