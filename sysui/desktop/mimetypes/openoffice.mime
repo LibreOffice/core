@@ -1,35 +1,35 @@
-application/x-vnd.oasis.openoffice.text:
-	ext: oot
+application/vnd.oasis.opendocument.text:
+	ext: odt
 
-application/x-vnd.oasis.openoffice.text-template:
+application/vnd.oasis.opendocument.text-template:
 	ext: ott
 
-application/x-vnd.oasis.openoffice.text-web:
+application/vnd.oasis.opendocument.text-web:
 	ext: oth
 
-application/x-vnd.oasis.openoffice.text-master:
-	ext: oom
+application/vnd.oasis.opendocument.text-master:
+	ext: odm
 
-application/x-vnd.oasis.openoffice.drawing:
-	ext: ood
+application/vnd.oasis.opendocument.drawing:
+	ext: odg
 
-application/x-vnd.oasis.openoffice.drawing-template:
-	ext: otd
+application/vnd.oasis.opendocument.drawing-template:
+	ext: otg
 
-application/x-vnd.oasis.openoffice.presentation:
-	ext: oop
+application/vnd.oasis.opendocument.presentation:
+	ext: odp
 
-application/x-vnd.oasis.openoffice.presentation-template:
+application/vnd.oasis.opendocument.presentation-template:
 	ext: otp
 
-application/x-vnd.oasis.openoffice.spreadsheet:
-	ext: oos
+application/vnd.oasis.opendocument.spreadsheet:
+	ext: ods
 
-application/x-vnd.oasis.openoffice.spreadsheet-template:
+application/vnd.oasis.opendocument.spreadsheet-template:
 	ext: ots
 
-application/x-vnd.oasis.openoffice.formula:
-	ext: oof
+application/vnd.oasis.opendocument.formula:
+	ext: odf
 
-application/x-vnd.oasis.openoffice.database:
+application/vnd.oasis.opendocument.database:
 	ext: odb
