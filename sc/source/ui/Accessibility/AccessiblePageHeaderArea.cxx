@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:41 $
+ *  last change: $Author: sab $ $Date: 2002-07-04 08:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
 
 #ifndef _SC_ACCESSIBLEPAGEHEADERAREA_HXX
 #include "AccessiblePageHeaderArea.hxx"
@@ -72,6 +75,8 @@
 #ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
 #endif
+#include "prevwsh.hxx"
+#include "prevloc.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -91,6 +96,9 @@
 #endif
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -127,6 +135,8 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 {
     if (mpTextHelper)
         DELETEZ(mpTextHelper);
+    if (mpEditObj)
+        DELETEZ(mpEditObj);
 
     ScAccessibleContextBase::disposing();
 }
@@ -214,6 +224,85 @@ uno::Sequence<sal_Int8> SAL_CALL
 }
 
 //===== internal ==============================================================
+rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
+    throw(uno::RuntimeException)
+{
+    rtl::OUStringBuffer sBuffer(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This is a ")));
+    switch (meAdjust)
+    {
+    case SVX_ADJUST_LEFT :
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("left ")));
+        break;
+    case SVX_ADJUST_RIGHT:
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("right ")));
+        break;
+    case SVX_ADJUST_CENTER:
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("center ")));
+        break;
+    default:
+        DBG_ERRORFILE("wrong adjustment found");
+    }
+    sBuffer.append(rtl::OUString::createFromAscii( mbHeader ?
+        "header in a page preview of a Spreadsheet Document." :
+        "footer in a page preview of a Spreadsheet Document." ));
+
+    return sBuffer.makeStringAndClear();
+}
+
+rtl::OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleName(void)
+    throw (uno::RuntimeException)
+{
+    rtl::OUStringBuffer sBuffer(rtl::OUString::createFromAscii( mbHeader ?
+        "Spreadsheet Page Preview Header" : "Spreadsheet Page Preview Footer" ));
+
+    switch (meAdjust)
+    {
+    case SVX_ADJUST_LEFT :
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(left)")));
+        break;
+    case SVX_ADJUST_RIGHT:
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(right)")));
+        break;
+    case SVX_ADJUST_CENTER:
+        sBuffer.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(center)")));
+        break;
+    default:
+        DBG_ERRORFILE("wrong adjustment found");
+    }
+    return sBuffer.makeStringAndClear();
+}
+
+Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    Rectangle aCellRect(GetBoundingBox());
+    if (mpViewShell)
+    {
+        Window* pWindow = mpViewShell->GetWindow();
+        if (pWindow)
+        {
+            Rectangle aRect = pWindow->GetWindowExtentsRelative(NULL);
+            aCellRect.setX(aCellRect.getX() + aRect.getX());
+            aCellRect.setY(aCellRect.getY() + aRect.getY());
+        }
+    }
+    return aCellRect;
+}
+
+Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    Rectangle aRect;
+    if (mpViewShell)
+    {
+        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+        if ( mbHeader )
+            rData.GetHeaderPosition( aRect );
+        else
+            rData.GetFooterPosition( aRect );
+    }
+    return aRect;
+}
 
 void ScAccessiblePageHeaderArea::CreateTextHelper()
 {
