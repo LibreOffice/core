@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:28:53 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 14:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,7 +909,33 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
     USHORT nType = ScServiceProvider::GetProviderType(aNameStr);
     if ( nType != SC_SERVICE_INVALID )
     {
-        xRet = ScServiceProvider::MakeInstance( nType, pDocShell );
+        //  drawing layer tables must be kept as long as the model is alive
+        //  return stored instance if already set
+        switch ( nType )
+        {
+            case SC_SERVICE_GRADTAB:    xRet = xDrawGradTab;    break;
+            case SC_SERVICE_HATCHTAB:   xRet = xDrawHatchTab;   break;
+            case SC_SERVICE_BITMAPTAB:  xRet = xDrawBitmapTab;  break;
+            case SC_SERVICE_TRGRADTAB:  xRet = xDrawTrGradTab;  break;
+            case SC_SERVICE_MARKERTAB:  xRet = xDrawMarkerTab;  break;
+            case SC_SERVICE_DASHTAB:    xRet = xDrawDashTab;    break;
+        }
+
+        if ( !xRet.is() )
+        {
+            xRet = ScServiceProvider::MakeInstance( nType, pDocShell );
+
+            //  store created instance
+            switch ( nType )
+            {
+                case SC_SERVICE_GRADTAB:    xDrawGradTab = xRet;    break;
+                case SC_SERVICE_HATCHTAB:   xDrawHatchTab = xRet;   break;
+                case SC_SERVICE_BITMAPTAB:  xDrawBitmapTab = xRet;  break;
+                case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab = xRet;  break;
+                case SC_SERVICE_MARKERTAB:  xDrawMarkerTab = xRet;  break;
+                case SC_SERVICE_DASHTAB:    xDrawDashTab = xRet;    break;
+            }
+        }
     }
     else
     {

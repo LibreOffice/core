@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:27:32 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,12 @@ private:
     SfxItemPropertySet      aPropSet;
     ScDocShell*             pDocShell;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> xNumberAgg;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawGradTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawHatchTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawBitmapTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawTrGradTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
 
 public:
                             ScModelObj(ScDocShell* pDocSh);
