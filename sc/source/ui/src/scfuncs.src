@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 21:15:22 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4631,7 +4631,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Rate" ;
             Text[ chinese_simplified ] = "rate";
             Text[ russian ] = "Ïğîöåíò ñ êàïèòàëà";
-            Text[ polish ] = "Odsetki";
+            Text[ polish ] = "Odsetek";
             Text[ japanese ] = "—˜—¦";
             Text[ chinese_traditional ] = "rate";
             Text[ arabic ] = "Rate";
@@ -4953,7 +4953,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "tasa" ;
             Text [ english_us ] = "Rate" ;
             Text[ chinese_simplified ] = "rate";
-            Text[ russian ] = "Íîğìà";
+            Text[ russian ] = "Ñòàâêà";
             Text[ polish ] = "Odsetki";
             Text[ japanese ] = "—˜—¦";
             Text[ chinese_traditional ] = "rate";
@@ -5275,7 +5275,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "tasa" ;
             Text [ english_us ] = "Rate" ;
             Text[ chinese_simplified ] = "rate";
-            Text[ russian ] = "Íîğìà";
+            Text[ russian ] = "Ñòàâêà";
             Text[ polish ] = "Odsetki";
             Text[ japanese ] = "—˜‘§";
             Text[ chinese_traditional ] = "rate";
@@ -6299,7 +6299,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ spanish ] = "tasa" ;
             Text [ english_us ] = "Rate" ;
             Text[ chinese_simplified ] = "rate";
-            Text[ russian ] = "Íîğìà";
+            Text[ russian ] = "Ñòàâêà";
             Text[ polish ] = "Odsetki";
             Text[ japanese ] = "—˜—¦";
             Text[ chinese_traditional ] = "rate";
@@ -9922,7 +9922,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values." ;
             Text[ english_us ] = "Returns the modified internal rate of return for a series of investments.";
             Text[ portuguese ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
-            Text[ russian ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
+            Text[ russian ] = "Âû÷èñëÿåò ìîäèôèöèğîâàííóş âíóòğåííşş íîğìó ïğèáûëè ğÿäà èíâåñòèöèé.";
             Text[ greek ] = "Õğïëïãßæåé ôçí ôñïğïğïéçìİíç åóùôåñéêŞ ñïŞ åğéôïêßïõ ìéáò óåéñÜò åğåíäıóåùí.";
             Text[ dutch ] = "Geeft als resultaat de gemodificeerde interne rentevoet in een reeks van inversteringen.";
             Text[ french ] = "Calcule le taux de rentabilité interne pour une série d'investissements.";
@@ -9930,7 +9930,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "Restituisce il tasso di rendimento interno variato di una serie di investimenti";
             Text[ danish ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
             Text[ swedish ] = "Beräknar den modifierade interna räntesatsen för en investeringsserie.";
-            Text[ polish ] = "Oblicza zmodyfikowan¹ wewnêtrzn¹ stopê procentow¹ kolejnych inwestycji.";
+            Text[ polish ] = "Oblicza zmodyfikowan¹ wewnêtrzn¹ stopê procentow¹ szeregu inwestycji.";
             Text[ portuguese_brazilian ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
             Text[ japanese ] = "C³“à•”û‰v—¦‚ğ•Ô‚µ‚Ü‚·B";
             Text[ korean ] = "Returns the modified internal rate of return for a series of cash flows represented by the numbers in values.";
@@ -9951,7 +9951,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "values" ;
             Text[ english_us ] = "Values";
             Text[ portuguese ] = "values";
-            Text[ russian ] = "values";
+            Text[ russian ] = "Çíà÷åíèÿ";
             Text[ greek ] = "Ôéìİò";
             Text[ dutch ] = "waarden";
             Text[ french ] = "Valeurs";
@@ -9974,7 +9974,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return." ;
             Text[ english_us ] = "An array or reference to cells whose contents correspond to the payments.";
             Text[ portuguese ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
-            Text[ russian ] = "Ìàññèâ èëè ññûëêà íà ÿ÷åéêè, ñîäåğæèìîå êîòîğûõ ñîîòâåòñòâóåò ïëàòåæàì.  ";
+            Text[ russian ] = "Ìàññèâ èëè ññûëêà íà ÿ÷åéêè, ñîäåğæèìîå êîòîğûõ ñîîòâåòñòâóåò ïëàòåæàì.";
             Text[ greek ] = "Ìéá ìŞôñá Ş ìéá áíáöïñÜ óå êåëéÜ, ôùí ïğïßùí ôá ğåñéå÷üìåíá áíôéóôïé÷ïıí óôéò ğëçñùìİò.";
             Text[ dutch ] = "Matrix of celverwijzing naar cellen waarvan de inhoud overeenkomt met de betalingen.  ";
             Text[ french ] = "Une matrice ou une référence à des cellules dont le contenu correspond aux paiements. ";
@@ -9982,12 +9982,12 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "È una matrice o un riferimento a celle il cui contenuto corrisponde ai pagamenti. ";
             Text[ danish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ swedish ] = "Matris eller cellreferens till celler vars innehåll motsvarar betalningarna.";
-            Text[ polish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
+            Text[ polish ] = "Macierz lub odwo³anie komórek do komórek, których zawartoœci odpowiadaj¹ p³atnoœciom.  ";
             Text[ portuguese_brazilian ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ japanese ] = "”’l‚ª“ü—Í‚³‚ê‚½”z—ñA‚Ü‚½‚Í¾Ù”ÍˆÍ‚ğw’è‚µ‚Ü‚·B";
             Text[ korean ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
-            Text[ chinese_simplified ] = "º¬ÓĞÖ§¸¶½ğ¶îµÄµ¥Ôª¸ñ×é»òµ¥Ôª¸ñÒıÓÃ¡£";
-            Text[ chinese_traditional ] = "§t¦³¤ä¥Iª÷ÃBªºÀx¦s®æ¯x°}©ÎÀx¦s®æ°Ñ·Ó¡C ";
+            Text[ chinese_simplified ] = "·ûºÏÖ§¸¶½ğ¶îµÄµ¥Ôª¸ñ×é»òµ¥Ôª¸ñÒıÓÃ¡£";
+            Text[ chinese_traditional ] = "²Å¦X¤ä¥Iª÷ÃBªºÀx¦s®æ¯x°}©ÎÀx¦s®æ°Ñ·Ó¡C ";
             Text[ turkish ] = "is an array or a reference to cells that contain numbers for which you want to calculate the internal rate of return.";
             Text[ arabic ] = "Õİíİ Ãæ ãÑÌÚ Åáì ÎáÇíÇ ÊÊØÇÈŞ ãÍÊæíÇÊåÇ ãÚ ÇáÏİÚÇÊ. ";
         };
@@ -9995,9 +9995,9 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         {
             Text = "Investition" ;
             Text [ english ] = "invest_rate" ;
-            Text[ english_us ] = "invest_rate";
+            Text[ english_us ] = "investment";
             Text[ portuguese ] = "invest_rate";
-            Text[ russian ] = "invest_rate";
+            Text[ russian ] = "Èíâåñòèöèÿ";
             Text[ greek ] = "Åğİíäõóç";
             Text[ dutch ] = "investering";
             Text[ french ] = "Investissement";
@@ -10020,7 +10020,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "interest rate of investments (the negative values in the array)." ;
             Text[ english_us ] = "Interest rate for investments (the negative values in the array).";
             Text[ portuguese ] = "interest rate of investments (the negative values in the array).";
-            Text[ russian ] = "interest rate of investments (the negative values in the array).";
+            Text[ russian ] = "Íîğìà ïğèáûëè èíâåñòèöèè (îòğèöàòåëüíûå çíà÷åíèÿ ìàññèâà).";
             Text[ greek ] = "ÑïŞ åğéôïêßïõ ôùí åğåíäıóåùí (ïé áñíçôéêİò ôéìİò ôçò ìŞôñáò).";
             Text[ dutch ] = "rentevoet bij investeringen (de negatieve waarden in de matrix).";
             Text[ french ] = "Taux d'intérêt des investissements (les valeurs négatives de la matrice).";
@@ -10043,7 +10043,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "reinvest_rate" ;
             Text[ english_us ] = "reinvest_rate";
             Text[ portuguese ] = "reinvest_rate";
-            Text[ russian ] = "reinvest_rate";
+            Text[ russian ] = "Ğåèíâåñòèöèÿ";
             Text[ greek ] = "Åğáíåğİíäõóç";
             Text[ dutch ] = "reïnvestering";
             Text[ french ] = "Réinvestissement";
@@ -10066,7 +10066,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "interest rate of reinvestments (the positive values in the array)." ;
             Text[ english_us ] = "interest rate for reinvestments (the positive values in the array).";
             Text[ portuguese ] = "interest rate of reinvestments (the positive values in the array).";
-            Text[ russian ] = "interest rate of reinvestments (the positive values in the array).";
+            Text[ russian ] = "Íîğìà ïğèáûëè ğåèíâåñòèöèé(ïîëîæèòåëüíûå çíà÷åíèÿ ìàññèâà).";
             Text[ greek ] = "ÑïŞ åğéôïêßïõ ôçò åğáíáåğİíäõóçò (ïé èåôéêİò ôéìİò ôçò ìŞôñáò).";
             Text[ dutch ] = "Rentevoet bij reïnvesteringen (de positieve waarden in de matrix).";
             Text[ french ] = "Taux d'intérêt des réinvestissements (les valeurs positives de la matrice).";
@@ -10093,7 +10093,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Returns the amount of interest for constant redemption rates." ;
             Text[ english_us ] = "Returns the amount of interest for constant amortization rates.";
             Text[ portuguese ] = "Returns the amount of interest for constant redemption rates.";
-            Text[ russian ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ russian ] = "Âû÷èñëÿåò ğàçìåğ ïğîöåíòíîé ñòàâêè ïğè êîíñòàíòíûõ íîğìàõ ïîãàøåíèÿ.";
             Text[ greek ] = "Returns the amount of interest for constant redemption rates.";
             Text[ dutch ] = "Berekent de hoogte van de rente bij gelijkblijvende aflossingstermijnen.";
             Text[ french ] = "Calcule le montant des intérêts pour un taux d'amortissement constant.";
@@ -10101,7 +10101,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "Returns the amount of interest for constant redemption rates.";
             Text[ danish ] = "Returns the amount of interest for constant redemption rates.";
             Text[ swedish ] = "Beräknar andelen räntor vid konstanta amorteringar.";
-            Text[ polish ] = "Returns the amount of interest for constant redemption rates.";
+            Text[ polish ] = "Oblicza wysokoœæ odsetków w przypadku sta³ych rat amortyzacyjnych.";
             Text[ portuguese_brazilian ] = "Returns the amount of interest for constant redemption rates.";
             Text[ japanese ] = "Œ³‹à‹Ï“™•ÔÏ‚Ì”CˆÓ‚ÌŠú‚Ì—˜‘§‚ğ•Ô‚µ‚Ü‚·B";
             Text[ korean ] = "Returns the amount of interest for constant redemption rates.";
@@ -10122,7 +10122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "rate" ;
             Text[ english_us ] = "rate";
             Text[ portuguese ] = "rate";
-            Text[ russian ] = "rate";
+            Text[ russian ] = "Ïğîöåíò";
             Text[ greek ] = "rate";
             Text[ dutch ] = "rente";
             Text[ french ] = "Taux";
@@ -10130,7 +10130,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "rate";
             Text[ danish ] = "rate";
             Text[ swedish ] = "Ränta";
-            Text[ polish ] = "rate";
+            Text[ polish ] = "Odsetek";
             Text[ portuguese_brazilian ] = "rate";
             Text[ japanese ] = "—˜—¦";
             Text[ korean ] = "rate";
@@ -10145,7 +10145,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Interest rate of a single redemption rate." ;
             Text[ english_us ] = "Interest rate for a single amortization rate.";
             Text[ portuguese ] = "Interest rate of a single redemption rate.";
-            Text[ russian ] = "Interest rate of a single redemption rate.";
+            Text[ russian ] = "Ãîäîâîé ïğîöåíò çà îäíó íîğìó ïîãàøåíèÿ.";
             Text[ greek ] = "Interest rate of a single redemption rate.";
             Text[ dutch ] = "Rentevoet voor een aflossingstermijn.";
             Text[ french ] = "Taux d'intérêt pour une période d'amortissement.";
@@ -10153,7 +10153,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "Interest rate of a single redemption rate.";
             Text[ danish ] = "Interest rate of a single redemption rate.";
             Text[ swedish ] = "Räntesats för en amortering.";
-            Text[ polish ] = "Interest rate of a single redemption rate.";
+            Text[ polish ] = "Stopa procentowa raty amortyzacjynej.";
             Text[ portuguese_brazilian ] = "Interest rate of a single redemption rate.";
             Text[ japanese ] = "“Š‘ŠúŠÔ‚ğ’Ê‚¶‚Äˆê’è‚Ì—˜—¦‚ğw’è‚µ‚Ü‚·B";
             Text[ korean ] = "Interest rate of a single redemption rate.";
@@ -10168,7 +10168,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "period" ;
             Text[ english_us ] = "Period";
             Text[ portuguese ] = "period";
-            Text[ russian ] = "period";
+            Text[ russian ] = "Ïåğèîä";
             Text[ greek ] = "period";
             Text[ dutch ] = "termijn";
             Text[ french ] = "Périodes";
@@ -10191,7 +10191,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Count of amortization periods for the calculation of the interest." ;
             Text[ english_us ] = "Number of amortization periods for the calculation of the interest.";
             Text[ portuguese ] = "Count of amortization periods for the calculation of the interest.";
-            Text[ russian ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ russian ] = "Êîëè÷åñòâî ïåğèîäîâ ïîãàøåíèÿ äëÿ ğàñ÷åòà ïğîöåíòíîé ñòàâêè.";
             Text[ greek ] = "Count of amortization periods for the calculation of the interest.";
             Text[ dutch ] = "Aantal aflossingstermijnen voor de berekening van de rente.";
             Text[ french ] = "Nombre de périodes d'amortissement pour le calcul des intérêts.";
@@ -10199,7 +10199,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "Count of amortization periods for the calculation of the interest.";
             Text[ danish ] = "Count of amortization periods for the calculation of the interest.";
             Text[ swedish ] = "Antal amorteringar för beräkningen av räntor.";
-            Text[ polish ] = "Count of amortization periods for the calculation of the interest.";
+            Text[ polish ] = "Liczba okresów amortyzacji do obliczenia odsetków.";
             Text[ portuguese_brazilian ] = "Count of amortization periods for the calculation of the interest.";
             Text[ japanese ] = "‹à—˜x•¥Šz‚ğ‹‚ß‚éŠú‚ğ‚P`ŠúŠÔ‚Ì”ÍˆÍ‚Åw’è‚µ‚Ü‚·B";
             Text[ korean ] = "Count of amortization periods for the calculation of the interest.";
@@ -10214,7 +10214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "total_periods" ;
             Text[ english_us ] = "total_periods";
             Text[ portuguese ] = "total_periods";
-            Text[ russian ] = "total_periods";
+            Text[ russian ] = "Âñåãî_ïåğèîäîâ";
             Text[ greek ] = "total_periods";
             Text[ dutch ] = "gehele_termijn";
             Text[ french ] = "Durée_totale";
@@ -10237,7 +10237,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Sum total of amortization periods." ;
             Text[ english_us ] = "Sum total of amortization periods.";
             Text[ portuguese ] = "Sum total of amortization periods.";
-            Text[ russian ] = "Sum total of amortization periods.";
+            Text[ russian ] = "Îáùåå êîëè÷åñòâî ïåğèîäîâ ïîãàøåíèÿ.";
             Text[ greek ] = "Sum total of amortization periods.";
             Text[ dutch ] = "Ttotaal aantal aflossingstermijnen.";
             Text[ french ] = "Nombre total de périodes d'amortissement.";
@@ -10245,7 +10245,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ italian ] = "Sum total of amortization periods.";
             Text[ danish ] = "Sum total of amortization periods.";
             Text[ swedish ] = "Totalt antal amorteringsperioder.";
-            Text[ polish ] = "Sum total of amortization periods.";
+            Text[ polish ] = "£¹czna suma okresów amortyzacji.";
             Text[ portuguese_brazilian ] = "Sum total of amortization periods.";
             Text[ japanese ] = "“Š‘ŠúŠÔ‘S‘Ì‚Å‚Ìx•¥‰ñ”‚Ì‡Œv‚ğw’è‚µ‚Ü‚·B";
             Text[ korean ] = "Sum total of amortization periods.";
@@ -10260,7 +10260,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "invest" ;
             Text[ english_us ] = "invest";
             Text[ portuguese ] = "invest";
-            Text[ russian ] = "invest";
+            Text[ russian ] = "Èíâåñòèöèÿ";
             Text[ greek ] = "invest";
             Text[ dutch ] = "investering";
             Text[ french ] = "Investissement";
@@ -10283,7 +10283,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Amount of the investment." ;
             Text[ english_us ] = "Amount of the investment.";
             Text[ portuguese ] = "Amount of the investment.";
-            Text[ russian ] = "Amount of the investment.";
+            Text[ russian ] = "Ñóììà èíâåñòèöèè.";
             Text[ greek ] = "Amount of the investment.";
             Text[ dutch ] = "Bedrag van de investering.";
             Text[ french ] = "Montant de l'investissement.";
@@ -11982,7 +11982,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "Determines information about address, formatting or contents of a cell." ;
             Text[ english_us ] = "Determines information about address, formatting or contents of a cell.";
             Text[ portuguese ] = "Determines information about address, formatting or contents of a cell.";
-            Text[ russian ] = "Determines information about address, formatting or contents of a cell.";
+            Text[ russian ] = "Îïğåäåëÿåò èíôîğìàöèş îá àäğåñå, ôîğìàòèğîâàíèè èëè ñîäåğæèìîì ÿ÷åéêè.";
             Text[ greek ] = "Determines information about address, formatting or contents of a cell.";
             Text[ dutch ] = "Geeft als resultaat gegevens over adres, opmaak of inhoud van een cel.";
             Text[ french ] = "Renvoie des informations concernant la position, le format ou le contenu d'une cellule.";
@@ -12011,7 +12011,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "info_type" ;
             Text[ english_us ] = "info_type";
             Text[ portuguese ] = "info_type";
-            Text[ russian ] = "info_type";
+            Text[ russian ] = "Òèï_èíôîğìàöèè";
             Text[ greek ] = "Ôığïò_ğëçñïöïñßáò";
             Text[ dutch ] = "infotype";
             Text[ french ] = "Type_info";
@@ -12034,7 +12034,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "This text specifies the type of information." ;
             Text[ english_us ] = "String that specifies the type of information.";
             Text[ portuguese ] = "This text specifies the type of information.";
-            Text[ russian ] = "This text specifies the type of information.";
+            Text[ russian ] = "Ñòğîêà çíàêîâ, îïğåäåëÿşùàÿ òèï èíôîğìàöèè.";
             Text[ greek ] = "Êåßìåíï, ôï ïğïßï êáèïñßæåé ôïí ôığï ôçò ğëçñïöïñßáò";
             Text[ dutch ] = "Tekenreeks die bepalend is voor het soort gegevens.";
             Text[ french ] = "Chaîne de caractères déterminant le type d'information.";
@@ -12057,7 +12057,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "reference" ;
             Text[ english_us ] = "Reference";
             Text[ portuguese ] = "reference";
-            Text[ russian ] = "reference";
+            Text[ russian ] = "Ññûëêà";
             Text[ greek ] = "ÁíáöïñÜ";
             Text[ dutch ] = "referentie";
             Text[ french ] = "Référence";
@@ -12080,7 +12080,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english ] = "The position of the cell you want to examine." ;
             Text[ english_us ] = "The position of the cell you want to examine.";
             Text[ portuguese ] = "The position of the cell you want to examine.";
-            Text[ russian ] = "The position of the cell you want to examine.";
+            Text[ russian ] = "Ìåñòîíàõîæäåíèå ïğîâåğÿåìîé ÿ÷åéêè.";
             Text[ greek ] = "Ç èİóç ôïõ êåëéïı ğïõ ğñüêåéôáé íá åîåôáóôåß.";
             Text[ dutch ] = "De positie van de cel die u wilt onderzoeken.";
             Text[ french ] = "La position de la cellule à examiner.";
@@ -29214,7 +29214,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ spanish ] = "Modo" ;
             Text [ english_us ] = "mode" ;
             Text[ chinese_simplified ] = "tails";
-            Text[ russian ] = "Õâîñòû";
+            Text[ russian ] = "Ğåæèì";
             Text[ polish ] = "Tryb";
             Text[ japanese ] = "”ö•”";
             Text[ chinese_traditional ] = "tails";
@@ -34699,7 +34699,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ spanish ] = "Selecciona un área en el argumento ref desde el cual se devolverá la intersección entre fila y columna dadas." ;
             Text [ english_us ] = "The index of the subrange if referring to a multiple range." ;
             Text[ chinese_simplified ] = "Èç¹ûÊÇÒ»¸ö¶àÖØÇøÓò£¬ÄÇ¾ÍÊÇÒ»¸ö²¿·ÖÇøÓòµÄË÷Òı¡£";
-            Text[ russian ] = "Íîìåğ ÷àñòè äèàïàçîíà, â ñëó÷àå, åñëè ğå÷ü èäåò î öåëîì äèàïàçîíå.";
+            Text[ russian ] = "Íîìåğ îäíîãî äèàïàçîíà, â ñëó÷àå, åñëè ğå÷ü èäåò î íåñêîëüêèõ äèàïàçîíàõ.";
             Text[ polish ] = "Indeks obszaru czêœciowego, jeœli chodzi o obszar z³o¿ony.";
             Text[ japanese ] = "”ÍˆÍ‚É•¡”‚Ì—Ìˆæ‚ğ‘I‘ğ‚µ‚½ê‡A‚»‚Ì’†‚Ì1‚Â‚Ì—Ìˆæ‚ğ”’l‚Åw’èB";
             Text[ chinese_traditional ] = "¦pªG¬O¤@­Ó¦h­«°Ï°ì¡M¨º´N¬O¤@­Ó³¡¥÷°Ï°ìªº¯Á¤Ş¡C";
@@ -36612,7 +36612,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Text für die Textverkettung." ;
             Text [ danish ] = "Tekst som skal sammenkædes." ;
             Text [ french ] = "Élément de texte pour la concaténation." ;
-            Text [ swedish ] = "Text för textsammanlänkningen." ;
+            Text [ swedish ] = "Text för textlänkningen." ;
             Text [ dutch ] = "Tekst voor de samenvoeging." ;
             Text [ spanish ] = "Texto 1; texto 2 ;...son los textos que se agruparán en uno solo." ;
             Text [ english_us ] = "Text for the concatentation." ;
@@ -39939,7 +39939,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "Converts a number to roman." ;
             Text[ english_us ] = "Converts a number to a Roman numeral.";
             Text[ portuguese ] = "Converts a number to roman.";
-            Text[ russian ] = "Converts a number to roman.";
+            Text[ russian ] = "Ïğåîáğàçóåò ÷èñëî â ğèìñêîå.";
             Text[ greek ] = "Ìåôáôñİğåé İíáí áñéèìü óå ëáôéíéêü áñéèìü.";
             Text[ dutch ] = "Converteert een getal naar een Romeins cijfer.";
             Text[ french ] = "Convertit un nombre en chiffres romains.";
@@ -39968,7 +39968,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "number" ;
             Text[ english_us ] = "Number";
             Text[ portuguese ] = "number";
-            Text[ russian ] = "number";
+            Text[ russian ] = "×èñëî";
             Text[ greek ] = "Áñéèìüò";
             Text[ dutch ] = "getal";
             Text[ french ] = "Nombre";
@@ -39991,7 +39991,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "The number to be converted to roman must be in the range 0 - 3999." ;
             Text[ english_us ] = "The number to be converted to a Roman numeral must be in the 0 - 3999 range.";
             Text[ portuguese ] = "The number to be converted to roman must be in the range 0 - 3999.";
-            Text[ russian ] = "The number to be converted to roman must be in the range 0 - 3999.";
+            Text[ russian ] = "×èñëî, ïğåîáğàçóåìîå â ğèìñêîå, äîëæíî íàõîäèòüñÿ â ïğåäåëàõ îò 0 äî 3999.";
             Text[ greek ] = "Ï áñéèìüò ğïõ ğñüêåéôáé íá ìåôáôñáğåß óå ëáôéíéêü áñéèìü ğñİğåé íá İ÷åé ôéìŞ áğü 0 - 3999.";
             Text[ dutch ] = "Het getal dat moet worden geconverteerd naar een Romeins cijfer moet tussen 0 en 3999 liggen.";
             Text[ french ] = "Le nombre (compris entre 0 et 3999) à convertir en chiffres romains.";
@@ -39999,7 +39999,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ italian ] = "La cifra da convertire in numero romano dev'essere compresa tra 0 e 3999.";
             Text[ danish ] = "The number to be converted to roman must be in the range 0 - 3999.";
             Text[ swedish ] = "Talet som ska omvandlas till romerska siffror måste ligga i området 0 - 3999.";
-            Text[ polish ] = "Liczba, która ma byæ zmieniona na rzymsk¹, musi mieœciæ siê w zakresie 0 - 3999.";
+            Text[ polish ] = "Liczba, która ma byæ zamieniona na rzymsk¹, musi mieœciæ siê w zakresie 0 - 3999.";
             Text[ portuguese_brazilian ] = "The number to be converted to roman must be in the range 0 - 3999.";
             Text[ japanese ] = "Û°Ï”š‚É•ÏŠ·‚µ‚½‚¢ 0 ` 3999 ”ÍˆÍ‚Ì±×ËŞ±”š‚ğw’è‚µ‚Ü‚·B";
             Text[ korean ] = "The number to be converted to roman must be in the range 0 - 3999.";
@@ -40014,7 +40014,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "mode" ;
             Text[ english_us ] = "Mode";
             Text[ portuguese ] = "mode";
-            Text[ russian ] = "mode";
+            Text[ russian ] = "Ñïîñîá";
             Text[ greek ] = "ÊáôÜóôáóç";
             Text[ dutch ] = "modus";
             Text[ french ] = "Mode";
@@ -40037,7 +40037,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4." ;
             Text[ english_us ] = "The more this value increases, the more the Roman numeral is simplified. The value must be in the 0 - 4 range.";
             Text[ portuguese ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
-            Text[ russian ] = "The more this value increases the more is the roman number simplified. The value must be in the range 0 - 4.";
+            Text[ russian ] = "×åì áîëüøå ıòî çíà÷åíèå, òåì áîëüøå áóäåò óïğîùåíî ğèìñêîå ÷èñëî. İòî çíà÷åíèå äîëæíî íàõîäèòüñÿ â îáëàñòè îò 0 äî 4.";
             Text[ greek ] = "¼óï ìåãáëıôåñç åßíáé áõôŞ ç ôéìŞ, ôüóï ğåñéóóüôåñï áğëïğïéåßôáé ï ëáôéíéêüò áñéèìüò. Ç ôéìŞ ğñİğåé íá åßíáé áğü 0 - 4.";
             Text[ dutch ] = "Hoe hoger deze waarde is, hoe eenvoudiger het Romeinse getal wordt. De waarde moet tussen 0 en 4 liggen.";
             Text[ french ] = "Plus cette valeur (comprise entre 0 et 4) est élévée, plus le nombre en chiffres romains sera simplifié.";
@@ -40064,7 +40064,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "Calculates the value of a roman number." ;
             Text[ english_us ] = "Calculates the value of a Roman numeral.";
             Text[ portuguese ] = "Calculates the value of a roman number.";
-            Text[ russian ] = "Calculates the value of a roman number.";
+            Text[ russian ] = "Âû÷èñëÿåò çíà÷åíèå ğèìñêîãî ÷èñëà.";
             Text[ greek ] = "Õğïëïãßæåé ôçí ôéìŞ åíüò ñùìáúêïı áñéèìïı.";
             Text[ dutch ] = "Berekent de waarde van een Romeins cijfer.";
             Text[ french ] = "Calcule la valeur d'un nombre en chiffres romains.";
@@ -40093,7 +40093,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "text" ;
             Text[ english_us ] = "Text";
             Text[ portuguese ] = "text";
-            Text[ russian ] = "text";
+            Text[ russian ] = "Òåêñò";
             Text[ greek ] = "Êåßìåíï";
             Text[ dutch ] = "tekst";
             Text[ french ] = "Texte";
@@ -40116,7 +40116,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english ] = "The text that represents a roman number." ;
             Text[ english_us ] = "The text that represents a Roman numeral.";
             Text[ portuguese ] = "The text that represents a roman number.";
-            Text[ russian ] = "The text that represents a roman number.";
+            Text[ russian ] = "Òåêñò, ïğåäñòàâëÿşùèé ğèìñêîå ÷èñëî.";
             Text[ greek ] = "Ôï êåßìåíï ğïõ ğáñéóôÜíåé İíáí ëáôéíéêü áñéèìü.";
             Text[ dutch ] = "De tekst die een Romeins cijfer weergeeft.";
             Text[ french ] = "Le nombre en chiffres romains sous forme de texte.";
