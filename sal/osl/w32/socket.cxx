@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-16 09:52:08 $
+ *  last change: $Author: jbu $ $Date: 2001-04-27 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,16 +1281,6 @@ oslSocket SAL_CALL osl_createSocket (
     return pSocket;
 }
 
-/*****************************************************************************/
-/* osl_copySocket  */
-/*****************************************************************************/
-// @deprecated, to be removed !
-oslSocket SAL_CALL osl_copySocket(oslSocket Socket)
-{
-    osl_acquireSocket( Socket );
-    return Socket;
-}
-
 void SAL_CALL osl_acquireSocket( oslSocket pSocket )
 {
     osl_incrementInterlockedCount( &(pSocket->m_nRefCount) );
@@ -1303,13 +1293,6 @@ void SAL_CALL osl_releaseSocket( oslSocket pSocket )
         osl_closeSocket( pSocket );
         __osl_destroySocketImpl( pSocket );
     }
-}
-/*****************************************************************************/
-/* osl_destroySocket  */
-/*****************************************************************************/
-void SAL_CALL osl_destroySocket(oslSocket pSocket)
-{
-    osl_releaseSocket( pSocket );
 }
 
 /*****************************************************************************/
