@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animexp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:31:27 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
+#endif
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
 #endif
 
 #include <list>
@@ -272,7 +276,7 @@ struct XMLEffectHint
 {
     XMLActionKind   meKind;
     sal_Bool        mbTextEffect;
-    sal_Int32       mnShapeId;
+    Reference<XShape> mxShape;
 
     XMLEffect       meEffect;
     XMLEffectDirection  meDirection;
@@ -288,7 +292,7 @@ struct XMLEffectHint
     int operator<(const XMLEffectHint& rComp) const { return mnPresId < rComp.mnPresId; }
 
     XMLEffectHint()
-    :   meKind( XMLE_SHOW ), mbTextEffect( sal_False ), mnShapeId( -1 ),
+    :   meKind( XMLE_SHOW ), mbTextEffect( sal_False ),
         meEffect( EK_none ), meDirection( ED_none ), mnStartScale( -1 ),
         meSpeed( AnimationSpeed_SLOW ), maDimColor(0), mbPlayFull( sal_False ),
         mnPresId( 0 ), mnPathShapeId( -1 )
@@ -342,7 +346,7 @@ XMLAnimationsExporter::~XMLAnimationsExporter()
     mpImpl = NULL;
 }
 
-void XMLAnimationsExporter::prepare( Reference< XShape > xShape )
+void XMLAnimationsExporter::prepare( Reference< XShape > xShape, SvXMLExport& rExport )
 {
     try
     {
@@ -374,7 +378,7 @@ void XMLAnimationsExporter::prepare( Reference< XShape > xShape )
     }
 }
 
-void XMLAnimationsExporter::collect( Reference< XShape > xShape )
+void XMLAnimationsExporter::collect( Reference< XShape > xShape, SvXMLExport& rExport )
 {
     try
     {
@@ -410,8 +414,11 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
             {
                 aEffect.meKind = XMLE_PLAY;
 
-// strip        mpImpl->mxShapeExp->createShapeId( xShape );
-// strip        aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                if( !aEffect.mxShape.is() )
+                {
+                    rExport.getInterfaceToIdentifierMapper().registerReference( xShape );
+                    aEffect.mxShape = xShape;
+                }
 
                 mpImpl->maEffects.push_back( aEffect );
             }
@@ -426,8 +433,11 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
 
                     aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
 
-// strip            mpImpl->mxShapeExp->createShapeId( xShape );
-// strip            aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                    if( !aEffect.mxShape.is() )
+                    {
+                        rExport.getInterfaceToIdentifierMapper().registerReference( xShape );
+                        aEffect.mxShape = xShape;
+                    }
 
                     if( eEffect == AnimationEffect_PATH )
                     {
@@ -453,10 +463,10 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
                     aEffect.meKind = bIn ? XMLE_SHOW : XMLE_HIDE;
                     aEffect.mbTextEffect = sal_True;
 
-                    if( aEffect.mnShapeId == -1 )
+                    if( !aEffect.mxShape.is() )
                     {
-// strip                mpImpl->mxShapeExp->createShapeId( xShape );
-// strip                aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                        rExport.getInterfaceToIdentifierMapper().registerReference( xShape );
+                        aEffect.mxShape = xShape;
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
@@ -481,10 +491,10 @@ void XMLAnimationsExporter::collect( Reference< XShape > xShape )
                         aEffect.maDimColor.SetColor( nColor );
                     }
 
-                    if( aEffect.mnShapeId == -1 )
+                    if( !aEffect.mxShape.is() )
                     {
-// strip                mpImpl->mxShapeExp->createShapeId( xShape );
-// strip                aEffect.mnShapeId = mpImpl->mxShapeExp->getShapeId( xShape );
+                        rExport.getInterfaceToIdentifierMapper().registerReference( xShape );
+                        aEffect.mxShape = xShape;
                     }
 
                     mpImpl->maEffects.push_back( aEffect );
@@ -516,9 +526,9 @@ void XMLAnimationsExporter::exportAnimations( SvXMLExport& rExport )
         {
             XMLEffectHint& rEffect = *aIter;
 
-            DBG_ASSERT( rEffect.mnShapeId != -1, "shape id creation failed for animation effect?" );
+            DBG_ASSERT( rEffect.mxShape.is(), "shape id creation failed for animation effect?" );
 
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_SHAPE_ID, OUString::valueOf( rEffect.mnShapeId ) );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_SHAPE_ID, rExport.getInterfaceToIdentifierMapper().getIdentifier( rEffect.mxShape ) );
 
             if( rEffect.meKind == XMLE_DIM )
             {
