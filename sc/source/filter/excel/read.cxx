@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:08:11 $
+ *  last change: $Author: dr $ $Date: 2001-12-14 15:58:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ FltError ImportExcel::Read( void )
 
     FltError            eLastErr = eERR_OK;
     UINT16              nOpcode;
-    UINT16              nBofLevel;
+    UINT16              nBofLevel = 0;
     BOOL                bBiff4Workbook = FALSE;
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
@@ -1027,7 +1027,7 @@ FltError ImportExcel8::Read( void )
     CreateTmpCtrlStorage();
 
     UINT16              nOpcode;            // aktueller Opcode
-    UINT16              nBofLevel;
+    UINT16              nBofLevel = 0;
 
     const BOOL          bWithDrawLayer = pD->GetDrawLayer() != NULL;
 
