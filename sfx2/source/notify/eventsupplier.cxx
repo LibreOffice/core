@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-21 13:38:01 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 15:23:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,14 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef  _COM_SUN_STAR_UTL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UTL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -87,6 +95,7 @@
 #endif
 
 #include <svtools/securityoptions.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _SFX_EVENTSUPPLIER_HXX_
 #include "eventsupplier.hxx"
@@ -98,6 +107,8 @@
 #include "sfxsids.hrc"
 #include "sfxlocal.hrc"
 #include "docfile.hxx"
+#include "viewfrm.hxx"
+#include "frame.hxx"
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -309,6 +320,31 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const DOCEVENTOBJECT& aEvent ) throw(
             {
                 aGuard.clear();
                 SfxMacroLoader::loadMacro( aScript, mpObjShell );
+            }
+        }
+        else if ( aType.compareToAscii( "Service" ) == 0 )
+        {
+            if ( aScript.getLength() )
+            {
+                SfxViewFrame* pView = SfxViewFrame::GetFirst( mpObjShell );
+                ::com::sun::star::util::URL aURL;
+                aURL.Complete = aScript;
+                ::com::sun::star::uno::Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+                xTrans->parseStrict( aURL );
+
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xProv( pView->GetFrame()->GetFrameInterface(), UNO_QUERY );
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp;
+                if ( xProv.is() )
+                    xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
+                if ( xDisp.is() )
+                {
+                    ::com::sun::star::uno::Sequence <::com::sun::star::beans::PropertyValue > aArgs(1);
+                    ::com::sun::star::beans::PropertyValue* pArg = aArgs.getArray();
+                    pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+                    pArg[0].Value <<= ::rtl::OUString( mpObjShell->GetMedium()->GetName() );
+                    xDisp->dispatch( aURL, aArgs );
+                }
             }
         }
         else
