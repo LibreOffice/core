@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingProperties.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-23 14:11:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 // DocMerge from xml: service com::sun::star::text::LineNumberingProperties
 /** provides access to the settings of the line numbering.
  */
-service LineNumberingProperties
+published service LineNumberingProperties
 {
     //-------------------------------------------------------------------------
 
