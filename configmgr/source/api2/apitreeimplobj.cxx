@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:16:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,6 +529,10 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     // ensure our provider stays alive
     UnoInterfaceRef xKeepParentAlive(this->getParentComponent());
 
+    // #109077# If already disposed, we may have no source data or data lock
+    if (!isAlive())
+        return false;
+
     data::Accessor aSourceAccessor( getSourceData() );
 
     osl::MutexGuard aLocalGuard(getDataLock());
@@ -537,13 +541,14 @@ bool ApiTreeImpl::disposeTree(bool bForce)
         if (m_pParentTree != 0)
             return false;
 
+        // recheck after having the mutex
         checkAlive(); // may throw
     }
     else if (m_pParentTree)
         setParentTree(NULL);
 
     implDisposeTree(aSourceAccessor); // TODO: accessor from lock
-    OSL_ASSERT(!isAlive());
+    OSL_ASSERT(!isAlive()); // post condition
 
     return true;
 }
