@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-10 15:28:46 $
+#   last change: $Author: rt $ $Date: 2004-02-11 15:04:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -224,7 +224,7 @@ if (-d "$StartDir") {
     #check java docu, it is only a first and simple check
     # improvement required
     my $solar_java = $ENV{"SOLAR_JAVA"};
-    if (defined($solar_java) && $solar_java ne "";) {
+    if (defined($solar_java) && $solar_java ne "") {
         print "check java docu: ";
         if (-d "$StartDir/docs/java/ref") {
             if (! -e "$StartDir/docs/java/ref/index.html") {
