@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:42:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,9 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleText;
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
+ published interface XAccessibleText;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -83,7 +83,7 @@ module com { module sun { module star { module awt {
     @see com::sun::star::accessibility::XAccessibleExtendedComponent
     @since #103639#
 */
-service AccessibleComboBox
+published service AccessibleComboBox
 {
     /** This interface gives access to the structural information of a combo box:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDropDownComboBox.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:42:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,9 @@
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleAction;
-interface XAccessibleExtendedComponent;
-interface XAccessibleComponent;
+ published interface XAccessibleAction;
+ published interface XAccessibleExtendedComponent;
+ published interface XAccessibleComponent;
 
 }; }; }; };
 
@@ -87,7 +87,7 @@ module com { module sun { module star { module awt {
 
     @since #103639#
 */
-service AccessibleDropDownComboBox
+published service AccessibleDropDownComboBox
 {
     /** This interface gives access to the structural information of a dropdown combo box:
 
