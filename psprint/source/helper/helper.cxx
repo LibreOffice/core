@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-31 11:30:32 $
+ *  last change: $Author: pl $ $Date: 2002-07-10 11:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,18 +85,26 @@ static const ::rtl::OUString& getOfficePath( enum whichOfficePath ePath )
     if( ! bOnce )
     {
         bOnce = true;
-        ::rtl::OUString aIni;
+        rtl::OUString aIni;
         osl_getExecutableFile( &aIni.pData );
         aIni = aIni.copy( 0, aIni.lastIndexOf( '/' )+1 );
-        aIni += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
-        ::rtl::Bootstrap aBootstrap( aIni );
+        aIni += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "bootstrap" ) ) );
+        rtl::Bootstrap aBootstrap( aIni );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseInstallation" ) ), aNetPath );
         aBootstrap.getFrom( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserInstallation" ) ), aUserPath );
 
         if( ! aNetPath.compareToAscii( "file://", 7 ) )
-            aNetPath = aNetPath.copy( 7 );
+        {
+            rtl::OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( aNetPath.pData, &aSysPath.pData ) == osl_File_E_None )
+                aNetPath = aSysPath;
+        }
         if( ! aUserPath.compareToAscii( "file://", 7 ) )
-            aUserPath = aUserPath.copy( 7 );
+        {
+            rtl::OUString aSysPath;
+            if( osl_getSystemPathFromFileURL( aUserPath.pData, &aSysPath.pData ) == osl_File_E_None )
+                aUserPath = aSysPath;
+        }
     }
 
     switch( ePath )
