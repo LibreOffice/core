@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:50:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,6 +1602,8 @@ Text[ English_us ] = "Progress:";
     Text[ hindi ] = "प्रस्थान:";
     Text[ slovak ] = "Priebeh:";
 };
+
+
 
 
 
