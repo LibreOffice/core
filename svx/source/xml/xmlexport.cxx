@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:57:20 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ using namespace ::com::sun::star::uno;
 
 sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent )
 {
-    return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLOasisExporter" );
+    return SvxDrawingLayerExport( pModel, xOut, xComponent, "com.sun.star.comp.DrawingLayer.XMLExporter" );
 }
 
 sal_Bool SvxDrawingLayerExport( SdrModel* pModel, uno::Reference<io::XOutputStream> xOut, Reference< lang::XComponent > xComponent, const char* pExportService )
