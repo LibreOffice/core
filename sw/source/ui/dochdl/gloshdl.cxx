@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:38:59 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,28 @@ BOOL SwGlossaryHdl::HasShortName(const String& rShortName) const
     return bRet;
 }
 
+/* -----------------------------20.03.01 10:52--------------------------------
+
+ ---------------------------------------------------------------------------*/
+BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& rOld)
+{
+    if( rOld.IsOld() )
+    {
+        QueryBox aAsk( pWrtShell->GetView().GetWindow(), SW_RES( MSG_UPDATE_NEW_GLOS_FMT ) );
+        if( aAsk.Execute() == RET_YES )
+        {
+            if( rOld.ConvertToNew() )
+            {
+                InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
+                return FALSE;
+            }
+        }
+        else
+            return FALSE;
+    }
+    return TRUE;
+}
+
 /*------------------------------------------------------------------------
     Beschreibung:   Erzeugen eines Textbausteines
 ------------------------------------------------------------------------*/
@@ -502,20 +524,8 @@ BOOL SwGlossaryHdl::NewGlossary(const String& rName, const String& rShortName,
     //pTmp == 0 if the AutoText path setting is wrong
     if(!pTmp)
         return FALSE;
-    if( pTmp->IsOld() )
-    {
-        QueryBox aAsk( pWrtShell->GetView().GetWindow(), SW_RES( MSG_UPDATE_NEW_GLOS_FMT ) );
-        if( aAsk.Execute() == RET_YES )
-        {
-            if( pTmp->ConvertToNew() )
-            {
-                InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
-                return FALSE;
-            }
-        }
-        else
-            return FALSE;
-    }
+    if(!ConvertToNew(*pTmp))
+        return FALSE;
 
     String sOnlyTxt;
     String* pOnlyTxt = 0;
@@ -549,8 +559,9 @@ BOOL SwGlossaryHdl::DelGlossary(const String &rShortName)
     SwTextBlocks *pGlossary = pCurGrp ? pCurGrp
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     //pTmp == 0 if the AutoText path setting is wrong
-    if(!pGlossary)
+    if(!pGlossary || !ConvertToNew(*pGlossary))
         return FALSE;
+
     USHORT nIdx = pGlossary->GetIndex( rShortName );
     if( nIdx != (USHORT) -1 )
         pGlossary->Delete( nIdx );
@@ -893,6 +904,9 @@ BOOL SwGlossaryHdl::Rename(const String& rOldShort, const String& rNewShortName,
                                     : rStatGlossaries.GetGroupDoc(aCurGrp);
     if(pGlossary)
     {
+        if(!ConvertToNew(*pGlossary))
+            return FALSE;
+
         USHORT nIdx = pGlossary->GetIndex( rOldShort );
         USHORT nOldLongIdx = pGlossary->GetLongIndex( rNewName );
         USHORT nOldIdx = pGlossary->GetIndex( rNewShortName );
@@ -1007,6 +1021,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/08 15:38:59  os
+    #84732# skip invalid auto text groups
+
     Revision 1.3  2001/02/02 17:46:27  jp
     use new clipboard
 

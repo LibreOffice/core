@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-08 15:39:00 $
+ *  last change: $Author: os $ $Date: 2001-03-20 10:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,8 +585,8 @@ IMPL_LINK( SwGlossaryDlg, EnableHdl, Menu *, pMn )
     pMn->EnableItem(FN_GL_REPLACE, bSelection && bExists && !bIsOld );
     pMn->EnableItem(FN_GL_REPLACE_TEXT, bSelection && bExists && !bIsOld );
     pMn->EnableItem(FN_GL_EDIT, bExists );
-    pMn->EnableItem(FN_GL_RENAME, bExists && !bIsOld );
-    pMn->EnableItem(FN_GL_DELETE, bExists && !bIsOld );
+    pMn->EnableItem(FN_GL_RENAME, bExists  );
+    pMn->EnableItem(FN_GL_DELETE, bExists  );
     pMn->EnableItem(FN_GL_MACRO, bExists && !bIsOld  &&
                                     !pGlossaryHdl->IsReadOnly() );
 
