@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 08:26:14 $
+ *  last change: $Author: hr $ $Date: 2001-11-01 14:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,11 +914,13 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);
-            HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString(aStrTD), bValueData, fVal,nFormat, *pFormatter );
+            ByteString aTmpString(aStrTD);
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, bValueData, fVal,nFormat, *pFormatter );
         }
         catch(Exception&)
         {
-            HTMLOutFuncs::CreateTableDataOptionsValNum( ByteString(aStrTD), bValueData, fVal,nFormat, *pFormatter );
+            ByteString aTmpString(aStrTD);
+            HTMLOutFuncs::CreateTableDataOptionsValNum( aTmpString, bValueData, fVal,nFormat, *pFormatter );
         }
     }
 
