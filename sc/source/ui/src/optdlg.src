@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 21:13:55 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2888,17 +2888,17 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ russian ] = "Show overwrite ~warning when pasting data";
         Text[ greek ] = "Show overwrite ~warning when pasting data";
         Text[ dutch ] = "Show overwrite ~warning when pasting data";
-        Text[ french ] = "Show overwrite ~warning when pasting data";
+        Text[ french ] = "Afficher un avertissement au moment de l'insertion de donn�es (�crasement)";
         Text[ spanish ] = "Show overwrite ~warning when pasting data";
         Text[ finnish ] = "Show overwrite ~warning when pasting data";
-        Text[ italian ] = "Show overwrite ~warning when pasting data";
+        Text[ italian ] = "Mostra avviso di rischio di soprascrittura";
         Text[ danish ] = "Show overwrite ~warning when pasting data";
-        Text[ swedish ] = "Show overwrite ~warning when pasting data";
+        Text[ swedish ] = "Visa ~varning f�r att skriva �ver n�r data klistras in";
         Text[ polish ] = "Show overwrite ~warning when pasting data";
-        Text[ japanese ] = "Show overwrite ~warning when pasting data";
-        Text[ korean ] = "Show overwrite ~warning when pasting data";
-        Text[ chinese_simplified ] = "Show overwrite ~warning when pasting data";
-        Text[ chinese_traditional ] = "Show overwrite ~warning when pasting data";
+        Text[ japanese ] = "データを挿入する際、データ上書きの確認をする";
+        Text[ korean ] = "데이터를 붙여넣을 때 겹쳐쓰기 경고 표시";
+        Text[ chinese_simplified ] = "粘贴数据时显示改写警告";
+        Text[ chinese_traditional ] = "貼上資料時顯示覆寫警告";
         Text[ turkish ] = "Show overwrite ~warning when pasting data";
         Text[ arabic ] = "Show overwrite ~warning when pasting data";
     };
