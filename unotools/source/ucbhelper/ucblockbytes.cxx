@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:56:28 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include <unotools/ucblockbytes.hxx>
 #include <comphelper/processfactory.hxx>
 
-#ifndef _COMPHELPER_CONDITION_HXX_
-#include <comphelper/condition.hxx>
+#ifndef _SALHELPER_CONDITION_HXX_
+#include <salhelper/condition.hxx>
 #endif
 #ifndef _OSL_THREAD_HXX_
 #include <osl/thread.hxx>
@@ -133,6 +133,9 @@
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
 #include <com/sun/star/io/XActiveDataControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
@@ -382,12 +385,12 @@ public:
 
 
     class ConditionRes
-        : public comphelper::Condition
+        : public salhelper::Condition
     {
     public:
 
         ConditionRes(osl::Mutex& aMutex,Moderator& aModerator)
-            : comphelper::Condition(aMutex),
+            : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
         {
         }
@@ -423,12 +426,12 @@ public:
 
 
     class ConditionRep
-        : public comphelper::Condition
+        : public salhelper::Condition
     {
     public:
 
         ConditionRep(osl::Mutex& aMutex,Moderator& aModerator)
-            : comphelper::Condition(aMutex),
+            : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
         {
         }
@@ -800,7 +803,7 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
 {
     Result ret;
     try {
-        comphelper::ConditionWaiter aWaiter(m_aRes,milliSec);
+        salhelper::ConditionWaiter aWaiter(m_aRes,milliSec);
         ret.type = m_aResultType;
         ret.result = m_aResult;
         ret.ioErrorCode = m_nIOErrorCode;
@@ -808,7 +811,7 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
         // reset
         m_aResultType = NORESULT;
     }
-    catch(const comphelper::ConditionWaiter::timedout&)
+    catch(const salhelper::ConditionWaiter::timedout&)
     {
         ret.type = TIMEDOUT;
     }
@@ -819,7 +822,7 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
 
 void Moderator::setReply(ReplyType aReplyType )
 {
-    comphelper::ConditionModifier aMod(m_aRep);
+    salhelper::ConditionModifier aMod(m_aRep);
     m_aReplyType = aReplyType;
 }
 
@@ -830,13 +833,13 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
 
     do {
         {
-            comphelper::ConditionModifier aMod(m_aRes);
+            salhelper::ConditionModifier aMod(m_aRes);
             m_aResultType = INTERACTIONREQUEST;
             m_aResult <<= Request;
         }
 
         {
-            comphelper::ConditionWaiter aWait(m_aRep);
+            salhelper::ConditionWaiter aWait(m_aRep);
             aReplyType = m_aReplyType;
 
             // reset
@@ -865,13 +868,13 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
 void Moderator::push( const Any& Status )
 {
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = PROGRESSPUSH;
         m_aResult = Status;
     }
     ReplyType aReplyType;
     {
-        comphelper::ConditionWaiter aWait(m_aRep);
+        salhelper::ConditionWaiter aWait(m_aRep);
         aReplyType = m_aReplyType;
         m_aReplyType = NOREPLY;
     }
@@ -883,13 +886,13 @@ void Moderator::push( const Any& Status )
 void Moderator::update( const Any& Status )
 {
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = PROGRESSUPDATE;
         m_aResult = Status;
     }
     ReplyType aReplyType;
     {
-        comphelper::ConditionWaiter aWait(m_aRep);
+        salhelper::ConditionWaiter aWait(m_aRep);
         aReplyType = m_aReplyType;
         m_aReplyType = NOREPLY;
     }
@@ -901,12 +904,12 @@ void Moderator::update( const Any& Status )
 void Moderator::pop(  )
 {
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = PROGRESSPOP;
     }
     ReplyType aReplyType;
     {
-        comphelper::ConditionWaiter aWait(m_aRep);
+        salhelper::ConditionWaiter aWait(m_aRep);
         aReplyType = m_aReplyType;
         m_aReplyType = NOREPLY;
     }
@@ -918,13 +921,13 @@ void Moderator::pop(  )
 void Moderator::setStream(const Reference< XStream >& aStream)
 {
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = STREAM;
         m_aResult <<= aStream;
     }
     ReplyType aReplyType;
     {
-        comphelper::ConditionWaiter aWait(m_aRep);
+        salhelper::ConditionWaiter aWait(m_aRep);
         aReplyType = m_aReplyType;
         m_aReplyType = NOREPLY;
     }
@@ -936,13 +939,13 @@ void Moderator::setStream(const Reference< XStream >& aStream)
 void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 {
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = INPUTSTREAM;
         m_aResult <<= rxInputStream;
     }
     ReplyType aReplyType;
     {
-        comphelper::ConditionWaiter aWait(m_aRep);
+        salhelper::ConditionWaiter aWait(m_aRep);
         m_aReplyType = NOREPLY;
         m_aReplyType = NOREPLY;
     }
@@ -986,7 +989,7 @@ void SAL_CALL Moderator::run()
     }
 
     {
-        comphelper::ConditionModifier aMod(m_aRes);
+        salhelper::ConditionModifier aMod(m_aRes);
         m_aResultType = aResultType;
         m_aResult = aResult;
         m_nIOErrorCode = nIOErrorCode;
@@ -998,7 +1001,7 @@ void SAL_CALL Moderator::run()
 void SAL_CALL Moderator::onTerminated()
 {
     {
-        comphelper::ConditionWaiter aWaiter(m_aRep);
+        salhelper::ConditionWaiter aWaiter(m_aRep);
     }
      delete this;
 }
@@ -1428,6 +1431,15 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
+Reference < XStream > UcbLockBytes::getStream()
+{
+    vos::OClearableGuard aGuard( m_aMutex );
+    Reference < XStream > xStream( m_xSeekable, UNO_QUERY );
+    if ( xStream.is() )
+        m_bDontClose = sal_True;
+    return xStream;
+}
+
 //----------------------------------------------------------------------------
 
 sal_Bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
@@ -1728,13 +1740,20 @@ UcbLockBytesRef UcbLockBytes::CreateInputLockBytes( const Reference< XInputStrea
     return xLockBytes;
 }
 
-#if SUPD<640
-UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const Sequence < PropertyValue >& rProps,
-        const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
-#else
+UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference< XStream >& xStream )
+{
+    if( !xStream.is() )
+        return NULL;;
+
+    UcbLockBytesRef xLockBytes = new UcbLockBytes();
+    xLockBytes->setDontClose_Impl();
+    xLockBytes->setStream_Impl( xStream );
+    xLockBytes->terminate_Impl();
+    return xLockBytes;
+}
+
 UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xContent, const ::rtl::OUString& rReferer, const ::rtl::OUString& rMediaType,
         const Reference < XInputStream >& xPostData, const Reference < XInteractionHandler >& xInteractionHandler, UcbLockBytesHandler* pHandler )
-#endif
 {
     if( !xContent.is() )
         return NULL;;
