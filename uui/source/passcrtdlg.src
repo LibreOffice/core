@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:23:55 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ polish ] = "~Potwierd� has�o g��wne";
         Text[ portuguese_brazilian ] = "~Confirm master password";
         Text[ japanese ] = "ﾏｽﾀｰﾊﾟｽﾜｰﾄﾞの確認(~C)";
-        Text[ korean ] = "마스터 패스워드 확인(C)";
+        Text[ korean ] = "마스터 패스워드 확인(~C)";
         Text[ chinese_simplified ] = "确认主密码(~C)";
         Text[ chinese_traditional ] = "確認主密碼(~C)";
         Text[ turkish ] = "~Confirm master password";
@@ -176,7 +176,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
     Text[ swedish ] = "Definiera huvudl�senord";
     Text[ polish ] = "Zdefiniuj has�o g��wne";
     Text[ portuguese_brazilian ] = "Please enter master password";
-    Text[ japanese ] = "ﾏｽﾀｰﾊﾟｽﾜｰﾄﾞを入力してください。";
+    Text[ japanese ] = "ﾏｽﾀｰﾊﾟｽﾜｰﾄﾞの指定";
     Text[ korean ] = "마스터 패스워드를 입력하십시오";
     Text[ chinese_simplified ] = "指定主密码";
     Text[ chinese_traditional ] = "請輸入主密碼";
@@ -202,7 +202,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ swedish ] = "De b�da l�senorden st�mmer inte �verens, mata in l�senordet igen!";
     Text[ polish ] = "Podane has�a nie zgadzaj� si�! Nale�y wpisa� je ponownie.";
     Text[ portuguese_brazilian ] = "Passwords are different, please enter again!";
-    Text[ japanese ] = "入力した２つのﾊﾟｽﾜｰﾄﾞは一致しません。もう一度入力しなおしてください。";
+    Text[ japanese ] = "入力した2つのﾊﾟｽﾜｰﾄﾞは一致しません。もう一度入力しなおしてください。";
     Text[ korean ] = "패스워드가 다릅니다. 다시 입력하십시오!";
     Text[ chinese_simplified ] = "这两个密码不一致，请重新输入密码！";
     Text[ chinese_traditional ] = "這兩個密碼不一致，請重新輸入！";
@@ -210,6 +210,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again!";
     Text[ catalan ] = "Passwords are different, please enter again!";
 };
+
 
 
 
