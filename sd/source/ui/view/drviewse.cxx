@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-14 10:55:42 $
+ *  last change: $Author: aw $ $Date: 2001-05-18 17:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,6 +1427,10 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
         // #UndoRedo#
         case SID_UNDO :
         {
+            // #87227# end text edit if running, this may add an UNDO step.
+            if(pDrView->IsTextEdit())
+                pDrView->EndTextEdit();
+
             sal_uInt16 nNumber(1);
 
             const SfxItemSet* pReqArgs = rReq.GetArgs();
