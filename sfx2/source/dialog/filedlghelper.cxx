@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-17 16:11:24 $
+ *  last change: $Author: dv $ $Date: 2001-07-19 16:07:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ class FileDialogHelper_Impl : public WeakImplHelper1< XFilePickerListener >
 
     ErrCode                 mnError;
     sal_Bool                mbHasPassword   : 1;
+    sal_Bool                mbIsPwdEnabled  : 1;
     sal_Bool                mbHasVersions   : 1;
     sal_Bool                mbHasAutoExt    : 1;
     sal_Bool                mbHasLink       : 1;
@@ -378,6 +379,8 @@ void FileDialogHelper_Impl::enablePasswordBox()
     Reference< XFilterManager > xFltMgr( mxFileDlg, UNO_QUERY );
     OUString aFilterName = xFltMgr->getCurrentFilter();
 
+    mbIsPwdEnabled = sal_False;
+
     if ( mpMatcher )
     {
         const SfxFilter* pFilter = mpMatcher->GetFilter4UIName(
@@ -391,6 +394,7 @@ void FileDialogHelper_Impl::enablePasswordBox()
         try
         {
             xCtrlAccess->enableControl( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, bEnablePasswd );
+            mbIsPwdEnabled = bEnablePasswd;
         }
         catch( IllegalArgumentException ){}
     }
@@ -612,6 +616,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl( const short nDialogType,
     mnError         = ERRCODE_NONE;
     mbHasAutoExt    = sal_False;
     mbHasPassword   = sal_False;
+    mbIsPwdEnabled  = sal_False;
     mbHasVersions   = sal_False;
     mbHasPreview    = sal_False;
     mbShowPreview   = sal_False;
@@ -752,7 +757,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
         // check, wether or not we have to display a password box
-        if ( mbHasPassword && xCtrlAccess.is() )
+        if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try
             {
