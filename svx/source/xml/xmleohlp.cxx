@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change: $Author: mib $
  *
@@ -198,7 +198,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         nPos = rURLStr.lastIndexOf( '/' );
         if( -1 == nPos )
         {
-            rContainerStorageName = maDefaultContainerStorageName;
+            rContainerStorageName = OUString();
             rObjectStorageName = rURLStr.copy( nPathStart );
         }
         else if( nPos > nPathStart )
@@ -291,14 +291,22 @@ SvStorageRef SvXMLEmbeddedObjectHelper::ImplGetContainerStorage(
         ( rStorageName != maCurContainerStorageName ) )
     {
         if( mxContainerStorage.Is() &&
+            maCurContainerStorageName.getLength() > 0 &&
             EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode )
             mxContainerStorage->Commit();
 
-        StreamMode eMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
-                                ? STREAM_STD_READWRITE
-                                : STREAM_STD_READ;
-        mxContainerStorage = mpRootStorage->OpenUCBStorage( rStorageName,
-                                                            eMode );
+        if( rStorageName.getLength() > 0 )
+        {
+            StreamMode eMode = EMBEDDEDOBJECTHELPER_MODE_WRITE == meCreateMode
+                                    ? STREAM_STD_READWRITE
+                                    : STREAM_STD_READ;
+            mxContainerStorage = mpRootStorage->OpenUCBStorage( rStorageName,
+                                                                eMode );
+        }
+        else
+        {
+            mxContainerStorage = mpRootStorage;
+        }
         maCurContainerStorageName = rStorageName;
     }
 
@@ -356,34 +364,36 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         const SvGlobalName *pClassId )
 {
     SvStorageRef xDocStor( mpDocPersist->GetStorage() );
-
-    String aObjName( rObjName );
-    String aSrcObjName( aObjName );
-
-    // Is the object name unique?
-    if( mpDocPersist->GetObjectList() )
-    {
-        sal_uInt32 nCount = mpDocPersist->GetObjectList()->Count();
-        for( sal_uInt32 i = 0; i < nCount; i++ )
-        {
-            SvInfoObject* pTst = mpDocPersist->GetObjectList()->GetObject(i);
-            // TODO: unicode: is this correct?
-            if( aObjName.EqualsIgnoreCaseAscii( pTst->GetObjName() ) ||
-                aObjName.EqualsIgnoreCaseAscii( pTst->GetStorageName() ) )
-            {
-                aObjName = ImplGetUniqueName( xDocStor, "Obj" );
-                break;
-            }
-        }
-    }
-
     SvStorageRef xCntnrStor( ImplGetContainerStorage(
                                         rContainerStorageName ) );
     if( !xCntnrStor.Is() )
         return sal_False;
 
-    if( !xCntnrStor->CopyTo( aSrcObjName, xDocStor, aObjName ) )
-        return sal_False;
+    String aObjName( rObjName );
+    String aSrcObjName( aObjName );
+    if( xDocStor != xCntnrStor )
+    {
+
+        // Is the object name unique?
+        if( mpDocPersist->GetObjectList() )
+        {
+            sal_uInt32 nCount = mpDocPersist->GetObjectList()->Count();
+            for( sal_uInt32 i = 0; i < nCount; i++ )
+            {
+                SvInfoObject* pTst = mpDocPersist->GetObjectList()->GetObject(i);
+                // TODO: unicode: is this correct?
+                if( aObjName.EqualsIgnoreCaseAscii( pTst->GetObjName() ) ||
+                    aObjName.EqualsIgnoreCaseAscii( pTst->GetStorageName() ) )
+                {
+                    aObjName = ImplGetUniqueName( xDocStor, "Obj" );
+                    break;
+                }
+            }
+        }
+
+        if( !xCntnrStor->CopyTo( aSrcObjName, xDocStor, aObjName ) )
+            return sal_False;
+    }
 
     SvGlobalName aClassId;
     if( pClassId )
@@ -488,13 +498,17 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     }
     else
     {
-        if( mbDirect )
-            ImplWriteObject( aContainerStorageName, aObjectStorageName );
-        else
-            maEmbeddedObjectURLs.push_back( rURLStr );
+        // Objects are written using SfxObjectShell::SaveAs
+//      if( mbDirect )
+//          ImplWriteObject( aContainerStorageName, aObjectStorageName );
+//      else
+//          maEmbeddedObjectURLs.push_back( rURLStr );
         sRetURL = OUString( RTL_CONSTASCII_USTRINGPARAM("#./") );
-        sRetURL += aContainerStorageName;
-        sRetURL += OUString( '/' );
+        if( aContainerStorageName.getLength() )
+        {
+            sRetURL += aContainerStorageName;
+            sRetURL += OUString( '/' );
+        }
         sRetURL += aObjectStorageName;
     }
 
