@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:20:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ chinese_simplified ] = "结束程序之前一直记住密码(~R)";
     Text[ chinese_simplified ] = "结束程序之前一直记住密码(~R)";
     Text[ chinese_traditional ] = "結束程式之前一直記住密碼(~R)";
-    Text[ danish ] = "~Husk adgangskode til lukning af programmet";
+    Text[ danish ] = "~Husk adgangskode til programmet lukkes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan be�indigen van programma";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan be�indigen van programma";
     Text[ english_us ] = "~Remember password till end of session";
@@ -94,6 +94,8 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ hebrew ] = "Kennwort bis Applikationsende ~merken";
     Text[ hindi ] = "कूटशब्द को कार्य-काल के अंत तक ~स्मरण में रखो";
     Text[ slovak ] = "Za~pamätať si heslo do konca sedenia";
+    Text[ hungarian ] = "~Jelszó tárolása a munkamenet végéig";
+    Text[ slovenian ] = "~Zapomni si geslo do konca seje";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
@@ -104,7 +106,7 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ chinese_simplified ] = "保存密码(~R)";
     Text[ chinese_simplified ] = "保存密码(~R)";
     Text[ chinese_traditional ] = "儲存密碼(~R)";
-    Text[ danish ] = "~Gem adgangskode permanent";
+    Text[ danish ] = "~Husk adgangskode";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ dutch ] = "Wachtwoord ~opslaan";
     Text[ english_us ] = "~Remember password";
@@ -127,12 +129,24 @@ String STR_REMEMBERPASSWORD_PERSISTENT
     Text[ hebrew ] = "Kennwort dauerhaft ~speichern";
     Text[ hindi ] = "~कूटशब्द याद करो";
     Text[ slovak ] = "~Zapamätať si heslo";
+    Text[ hungarian ] = "~Jelszó tárolása";
+    Text[ slovenian ] = "~Zapomni si geslo";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23.72.1  2003/12/16 11:05:29  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.23.34.1  2003/11/24 13:10:54  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.23  2003/07/17 12:20:31  hr
+ *  INTEGRATION: CWS mergerc3 (1.22.6); FILE MERGED
+ *  2003/07/16 17:11:25 ihi 1.22.6.1: rc-3 merge all languages
+ *
  *  Revision 1.22.6.1  2003/07/16 17:11:25  ihi
  *  rc-3 merge all languages
  *
@@ -238,6 +252,8 @@ String STR_REMEMBERPASSWORD_PERSISTENT
  *
  *  Revision 1.0 25.10.00 14:10:52  fs
  ************************************************************************/
+
+
 
 
 
