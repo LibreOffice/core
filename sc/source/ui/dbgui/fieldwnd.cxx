@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:09:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ __EXPORT ScDPFieldWindow::~ScDPFieldWindow()
 
     if (pAccessible)
     {
-        com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (xTempAcc.is())
             pAccessible->dispose();
     }
@@ -371,7 +371,7 @@ void ScDPFieldWindow::SetSelection( long nIndex )
 
         if (pAccessible && HasFocus())
         {
-            com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
             if (xTempAcc.is())
                 pAccessible->FieldFocusChange(nOldSelected, nFieldSelected);
             else
@@ -567,7 +567,7 @@ void __EXPORT ScDPFieldWindow::GetFocus()
 
     if (pAccessible)
     {
-        com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (xTempAcc.is())
             pAccessible->GotFocus();
         else
@@ -583,7 +583,7 @@ void __EXPORT ScDPFieldWindow::LoseFocus()
 
     if (pAccessible)
     {
-        com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (xTempAcc.is())
             pAccessible->LostFocus();
         else
@@ -602,7 +602,7 @@ void ScDPFieldWindow::AddField( const String& rText, long nNewIndex )
 
         if (pAccessible)
         {
-            com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
             if (xTempAcc.is())
                 pAccessible->AddField(nNewIndex);
             else
@@ -621,7 +621,7 @@ void ScDPFieldWindow::DelField( long nDelIndex )
 
         if (pAccessible) // before decrement fieldcount
         {
-            com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
             if (xTempAcc.is())
                 pAccessible->RemoveField(nDelIndex);
             else
@@ -638,7 +638,7 @@ void ScDPFieldWindow::ClearFields()
 {
     if( eType == TYPE_SELECT )
     {
-        com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+        com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
         if (!xTempAcc.is() && pAccessible)
             pAccessible = NULL;
 
@@ -662,7 +662,7 @@ void ScDPFieldWindow::SetFieldText( const String& rText, long nIndex )
 
         if (pAccessible)
         {
-            com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
             if (xTempAcc.is())
                 pAccessible->FieldNameChange(nIndex);
             else
@@ -706,7 +706,7 @@ BOOL ScDPFieldWindow::AddField( const String& rText, const Point& rPos, long& rn
 
         if (pAccessible)
         {
-            com::sun::star::uno::Reference < drafts::com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
+            com::sun::star::uno::Reference < com::sun::star::accessibility::XAccessible > xTempAcc = xAccessible;
             if (xTempAcc.is())
                 pAccessible->AddField(nNewIndex);
             else
@@ -752,12 +752,12 @@ String ScDPFieldWindow::GetDescription()const
     return sDescription;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScDPFieldWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > ScDPFieldWindow::CreateAccessible()
 {
     pAccessible =
         new ScAccessibleDataPilotControl(GetAccessibleParentWindow()->GetAccessible(), this);
 
-    com::sun::star::uno::Reference < ::drafts::com::sun::star::accessibility::XAccessible > xReturn = pAccessible;
+    com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xReturn = pAccessible;
 
     pAccessible->Init();
     xAccessible = xReturn;
