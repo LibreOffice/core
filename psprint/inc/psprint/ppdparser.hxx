@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:17:50 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,10 +149,12 @@ public:
  */
 
 class PPDContext;
+class CUPSManager;
 
 class PPDParser
 {
     friend class PPDContext;
+    friend class CUPSManager;
 
     typedef ::std::hash_map< ::rtl::OUString, PPDKey*, ::rtl::OUStringHash > hash_type;
     typedef ::std::vector< PPDKey* > value_type;
